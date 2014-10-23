@@ -7,7 +7,7 @@ g! = rosenbrock_gradient!
 h! = rosenbrock_hessian!
 
 optimize(f, [0.0, 0.0])
-results = Optim.levenberg_marquardt(rosenbrock_lm, rosenbrock_gradient_lm, [0.0, 0.0], show_trace=true)
+results = Optim.levenberg_marquardt(rosenbrock_lm, rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
 println(results)
 
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector)
@@ -39,10 +39,10 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 lowerbounds = [-2, -2]
-upperbounds = [.5, .5]
-#upperbounds = [2, 2]
+# upperbounds = [.5, .5]
+upperbounds = [2, 2]
 sin_rosenbrock_lm = sinetransformfunction(rosenbrock_lm, lowerbounds, upperbounds)
 sin_rosenbrock_gradient_lm = sinetransformgradient(rosenbrock_gradient_lm, lowerbounds, upperbounds)
-results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, asinetransform([0.0, 0.0], lowerbounds, upperbounds), show_trace=true)
+results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, asinetransform([0.0, 0.0], lowerbounds, upperbounds), show_trace=false)
 println(results)
 println(sinetransform(results.minimum, lowerbounds, upperbounds))
