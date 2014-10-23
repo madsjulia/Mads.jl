@@ -11,12 +11,13 @@ results = Optim.levenberg_marquardt(rosenbrock_lm, rosenbrock_gradient_lm, [0.0,
 println(results)
 
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector)
-	sineparams = asind((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
-	return params
+	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
+	return sineparams
 end
 
 function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector)
-	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sind(sineparams)) * .5)
+	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5)
+	return params
 end
 
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector)
@@ -28,14 +29,14 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector)
-	function sinetransformedgradient(sineparams::Vector)
+	function sinetransformedg(sineparams::Vector)
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
 		straightgrad = g(params)
-		f(x) = (upperbounds - lowerbounds) .* (cosd(sineparams) * .5 * pi / 180)
-		transformgrad = (upperbounds - lowerbounds) .* f(params)
+		f(x) = cos(x) / 2
+		transformgrad = (upperbounds - lowerbounds) .* f(sineparams)
 		return straightgrad .* transformgrad
 	end
-	return sinetransformedgradient
+	return sinetransformedg
 end
 
 lowerbounds = [-2, -2]
@@ -43,6 +44,16 @@ lowerbounds = [-2, -2]
 upperbounds = [2, 2]
 sin_rosenbrock_lm = sinetransformfunction(rosenbrock_lm, lowerbounds, upperbounds)
 sin_rosenbrock_gradient_lm = sinetransformgradient(rosenbrock_gradient_lm, lowerbounds, upperbounds)
+a = asinetransform([0.0, 0.0], lowerbounds, upperbounds)
+println(a,"->", sinetransform(a, lowerbounds, upperbounds))
+a = asinetransform([2.0,2.0], lowerbounds, upperbounds)
+println(a,"->", sinetransform(a, lowerbounds, upperbounds))
+a = asinetransform([-2.0,-2.0], lowerbounds, upperbounds)
+println(a,"->", sinetransform(a, lowerbounds, upperbounds))
+a = sin_rosenbrock_lm(asinetransform([2.0,2.0], lowerbounds, upperbounds))
+println(a,"=",rosenbrock_lm([2.0,2.0]))
+a = sin_rosenbrock_lm(asinetransform([1.0,1.0], lowerbounds, upperbounds))
+println(a,"=",rosenbrock_lm([1.0,1.0]))
 results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, asinetransform([0.0, 0.0], lowerbounds, upperbounds), show_trace=false)
 println(results)
 println(sinetransform(results.minimum, lowerbounds, upperbounds))
