@@ -1,0 +1,14 @@
+Problem: { calibration, ldebug: 1, sindx: 0.1, single, eval: 5000, opt: "lm", particles, lmeigen: 1, ssr }
+Solution: external
+Parameters:
+- a    : { longname: "a", init: 1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+- b    : { longname: "b", init: -1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+Observations:
+- v1: {log: false, max: 20, min: -20, target: -3, weight: 1}
+- v2: {log: false, max: 20, min: -20, target: 1, weight: 1}
+- v3: {log: false, max: 20, min: -20, target: 5, weight: 1}
+- v4: {log: false, max: 20, min: -20, target: 9, weight: 1}
+Command: "julia linearmodel.jl"
+YAMLParameters: params.yaml
+YAMLPredictions:
+- predictions.yaml
