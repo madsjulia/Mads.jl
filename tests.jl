@@ -1,5 +1,6 @@
 using Optim
 using Mads
+using Gadfly
 
 function rosenbrock(x::Vector)
     return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
@@ -57,6 +58,15 @@ results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_l
 println(results)
 println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 
+md = Mads.loadmadsfile("test2.mads")
+results = Mads.calibrate(md)
+println(results)
+
+#=
 md = Mads.loadmadsfile("test.mads")
 results = Mads.calibrate(md)
 println(results)
+=#
+
+mcmcchain = Mads.bayessampling(md)
+plot(x=mcmcchain.samples[:,1], y=mcmcchain.samples[:,2])

@@ -4,6 +4,7 @@ using Optim
 #import YAML
 using PyCall
 @pyimport yaml
+import MCMC
 
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector)
 	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
@@ -72,21 +73,27 @@ function readyamlpredictions(filename::String)
 end
 
 function makemadscommandfunction(madsdata)
-	function madscommandfunction(parameters::Dict)
-		newdirname = "../temp_$(replace(replace(strftime(time()), ":", ""), " ", "_"))_$(myid())_$(rand(Int64))"
-		run(`mkdir $newdirname`)
-		currentdir = pwd()
-		run(`bash -c "ln -s $(currentdir)/* $newdirname"`)
-		for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
-			run(`rm -f $(newdirname)/$filename`)
+	if haskey(madsdata, "ForwardModel")
+		madscommandfunction = evalfile(madsdata["ForwardModel"])
+	elseif haskey(madsdata, "Command")
+		function madscommandfunction(parameters::Dict)
+			newdirname = "../temp_$(replace(replace(strftime(time()), ":", ""), " ", "_"))_$(myid())_$(rand(Int64))"
+			run(`mkdir $newdirname`)
+			currentdir = pwd()
+			run(`bash -c "ln -s $(currentdir)/* $newdirname"`)
+			for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
+				run(`rm -f $(newdirname)/$filename`)
+			end
+			dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters)
+			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
+			results = Dict()
+			for filename in madsdata["YAMLPredictions"]
+				results = merge(results, loadyamlfile("$(newdirname)/$filename"))
+			end
+			return results
 		end
-		dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters)
-		run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
-		results = Dict()
-		for filename in madsdata["YAMLPredictions"]
-			results = merge(results, loadyamlfile("$(newdirname)/$filename"))
-		end
-		return results
+	else
+		error("Can't make a madscommand function without an Include or a Command entry in the mads file")
 	end
 	return madscommandfunction
 end
@@ -121,11 +128,19 @@ function makemadscommandgradient(madsdata)
 	return madscommandgradient
 end
 
+function getparamkeys(madsdata)
+	return [k for k in keys(madsdata["Parameters"])]
+end
+
+function getobskeys(madsdata)
+	return [k for k in keys(madsdata["Observations"])]
+end
+
 function calibrate(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata)
-	obskeys = [k for k in keys(madsdata["Observations"])]
-	paramkeys = [k for k in keys(madsdata["Parameters"])]
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	initparams = Array(Float64, length(paramkeys))
 	lowerbounds = Array(Float64, length(paramkeys))
 	upperbounds = Array(Float64, length(paramkeys))
@@ -159,6 +174,27 @@ function calibrate(madsdata)
 	end
 	results = Optim.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=true)
 	return results
+end
+
+function makearrayloglikelihood(madsdata, loglikelihood)
+	f = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return arrayparameters::Vector -> loglikelihood(Dict(paramkeys, arrayparameters), f(Dict(paramkeys, arrayparameters)), madsdata["Observations"])
+end
+
+function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))#madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
+	madsloglikelihood = evalfile(madsdata["LogLikelihood"])
+	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
+	paramkeys = getparamkeys(madsdata)
+	initvals = Array(Float64, length(paramkeys))
+	for i = 1:length(paramkeys)
+		initvals[i] = madsdata["Parameters"][paramkeys[i]]["init"]
+	end
+	mcmcmodel = MCMC.model(arrayloglikelihood, init=initvals)
+	sampler = MCMC.RAM(1e-0, 0.3)
+	smc = MCMC.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
+	mcmcchain = MCMC.run(mcmcmodel, sampler, smc)
+	return mcmcchain
 end
 
 end
