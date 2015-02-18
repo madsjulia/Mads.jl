@@ -65,6 +65,29 @@ function loadmadsfile(filename::String)
 		end
 	end
 	madsdict["Observations"] = observations
+	if haskey(madsdict, "Templates")
+		templates = Array(Dict, length(madsdict["Templates"]))
+		i = 1
+		for tmpdict in madsdict["Templates"]
+			for key in keys(tmpdict)#this should only iterate once
+				templates[i] = tmpdict[key]
+			end
+			i += 1
+		end
+		madsdict["Templates"] = templates
+	end
+	if haskey(madsdict, "Instructions")
+		instructions = Array(Dict, length(madsdict["Instructions"]))
+		i = 1
+		for insdict in madsdict["Instructions"]
+			for key in keys(insdict)#this should only iterate once
+				instructions[i] = insdict[key]
+			end
+			i += 1
+		end
+		madsdict["Instructions"] = instructions
+	end
+
 	return madsdict
 end
 
@@ -195,6 +218,31 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))#madsloglikeli
 	smc = MCMC.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
 	mcmcchain = MCMC.run(mcmcmodel, sampler, smc)
 	return mcmcchain
+end
+
+function writeviatemplate(parameters, templatefilename, outputfilename)
+	tplfile = open(templatefilename)
+	line = readline(tplfile)#read the line that says "template $separator\n"
+	separator = line[end-1]
+	lines = readlines(tplfile)
+	close(tplfile)
+	outfile = open(outputfilename, "w")
+	for line in lines
+		splitline = split(line, separator)
+		@assert rem(length(splitline), 2) == 1#length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
+		for i = 1:int((length(splitline)-1)/2)
+			write(outfile, splitline[2 * i - 1])
+			write(outfile, string(parameters[splitline[2 * i]]["init"]))
+		end
+		write(outfile, splitline[end])
+	end
+	close(outfile)
+end
+
+function writetemplates(madsdata)
+	for template in madsdata["Templates"]
+		writeviatemplate(madsdata["Parameters"], template["tpl"], template["write"])
+	end
 end
 
 end
