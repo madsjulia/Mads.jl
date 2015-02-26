@@ -5,6 +5,7 @@ using Optim
 using PyCall
 @pyimport yaml
 import MCMC
+using Distributions
 
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector)
 	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
@@ -243,6 +244,201 @@ function writetemplates(madsdata)
 	for template in madsdata["Templates"]
 		writeviatemplate(madsdata["Parameters"], template["tpl"], template["write"])
 	end
+end
+
+function getdistributions(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	distributions = Dict()
+	for i in 1:length(paramkeys)
+		distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+	end
+	return distributions
+end
+
+function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e4))
+	#convert the distribution strings into actual distributions
+	paramkeys = getparamkeys(madsdata)
+	distributions = getdistributions(madsdata)
+	#find the mean and variance
+	f = makemadscommandfunction(madsdata)
+	results = Array(Dict, numsamples)
+	paramdict = Dict()
+	for i = 1:numsamples
+		for j in 1:length(paramkeys)
+			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
+		end
+		results[i] = f(paramdict)
+	end
+	obskeys = getobskeys(madsdata)
+	sum = Dict()
+	for i = 1:length(obskeys)
+		sum[obskeys[i]] = 0.
+	end
+	for j = 1:numsamples
+		for i = 1:length(obskeys)
+			sum[obskeys[i]] += results[j][obskeys[i]]
+		end
+	end
+	mean = Dict()
+	for i = 1:length(obskeys)
+		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
+	end
+	for i = 1:length(paramkeys)
+		sum[paramkeys[i]] = 0.
+	end
+	for j = 1:numsamples
+		for i = 1:length(obskeys)
+			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
+		end
+	end
+	variance = Dict()
+	for i = 1:length(obskeys)
+		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
+	end
+	#compute the first order sensitivities
+	fos = Dict()
+	for k = 1:length(obskeys)
+		fos[obskeys[k]] = Dict()
+	end
+	for i = 1:length(paramkeys)
+		cond_means = Array(Dict, numoneparamsamples)
+		for j = 1:numoneparamsamples
+			cond_means[j] = Dict()
+			for k = 1:length(obskeys)
+				cond_means[j][obskeys[k]] = 0.
+			end
+			paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
+			for k = 1:nummanyparamsamples
+				for m = 1:length(paramkeys)
+					if m != i
+						paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
+					end
+				end
+				results = f(paramdict)
+				for k = 1:length(obskeys)
+					cond_means[j][obskeys[k]] += results[obskeys[k]]
+				end
+			end
+			for k = 1:length(obskeys)
+				cond_means[j][obskeys[k]] /= nummanyparamsamples
+			end
+		end
+		v = Array(Float64, numoneparamsamples)
+		for k = 1:length(obskeys)
+			for m = 1:numoneparamsamples
+				v[m] = cond_means[m][obskeys[k]]
+			end
+			fos[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
+			println(fos)
+		end
+	end
+	#compute the total effect
+	te = Dict()
+	for k = 1:length(obskeys)
+		te[obskeys[k]] = Dict()
+	end
+	for i = 1:length(paramkeys)
+		cond_vars = Array(Dict, nummanyparamsamples)
+		cond_means = Array(Dict, nummanyparamsamples)
+		for j = 1:nummanyparamsamples
+			cond_vars[j] = Dict()
+			cond_means[j] = Dict()
+			for m = 1:length(obskeys)
+				cond_means[j][obskeys[m]] = 0.
+				cond_vars[j][obskeys[m]] = 0.
+			end
+			for m = 1:length(paramkeys)
+				if m != i
+					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
+				end
+			end
+			results = Array(Dict, numoneparamsamples)
+			for k = 1:numoneparamsamples
+				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
+				results[k] = f(paramdict)
+				for m = 1:length(obskeys)
+					cond_means[j][obskeys[m]] += results[k][obskeys[m]]
+				end
+			end
+			for m = 1:length(obskeys)
+				cond_means[j][obskeys[m]] /= numoneparamsamples
+			end
+			for k = 1:numoneparamsamples
+				for m = 1:length(obskeys)
+					cond_vars[j][obskeys[m]] += (results[k][obskeys[m]] - cond_means[j][obskeys[m]]) ^ 2
+				end
+			end
+			for m = 1:length(obskeys)
+				cond_vars[j][obskeys[m]] /= numoneparamsamples - 1
+			end
+		end
+		for j = 1:length(obskeys)
+			runningsum = 0.
+			for m = 1:nummanyparamsamples
+				runningsum += cond_vars[m][obskeys[j]]
+			end
+			te[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
+			println(te)
+		end
+	end
+	return mean, variance, fos, te
+end
+
+function saltelli(madsdata; N=int(1e6))
+	paramkeys = getparamkeys(madsdata)
+	obskeys = getobskeys(madsdata)
+	distributions = getdistributions(madsdata)
+	f = makemadscommandfunction(madsdata)
+	A = Array(Dict{String, Float64}, N)
+	B = Array(Dict{String, Float64}, N)
+	Ci = Dict{String, Float64}()
+	yA = Array(Dict{String, Float64}, N)
+	yB = Array(Dict{String, Float64}, N)
+	yC = Array(Dict{String, Float64}, N)
+	fos = Dict{String, Dict{String, Float64}}()#first order sensitivities
+	te = Dict{String, Dict{String, Float64}}()#total effect
+	for i = 1:length(obskeys)
+		fos[obskeys[i]] = Dict{String, Float64}()
+		te[obskeys[i]] = Dict{String, Float64}()
+	end
+	for i = 1:N
+		A[i] = Dict{String, Float64}()
+		B[i] = Dict{String, Float64}()
+		for j = 1:length(paramkeys)
+			A[i][paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
+			B[i][paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
+		end
+		yA[i] = f(A[i])
+		yB[i] = f(B[i])
+	end
+	for k = 1:length(paramkeys)
+		for i = 1:N
+			for j = 1:length(paramkeys)
+				if k != j
+					Ci[paramkeys[j]] = B[i][paramkeys[j]]
+				else
+					Ci[paramkeys[j]] = A[i][paramkeys[j]]
+				end
+			end
+			yC[i] = f(Ci)
+			#println("$(A[i]), $(B[i]), $(Ci)")
+			#println("$(yA[i]), $(yB[i]), $(yC[i])")
+		end
+		for i = 1:length(obskeys)
+			println("$(paramkeys[k]), $(obskeys[k])")
+			yAoneobs = map(k->yA[k][obskeys[i]], 1:N)
+			yBoneobs = map(k->yB[k][obskeys[i]], 1:N)
+			yConeobs = map(k->yC[k][obskeys[i]], 1:N)
+			f0 = .5 * (mean(yAoneobs) + mean(yBoneobs))
+			variance = .5 * ((dot(yAoneobs, yAoneobs) - f0^2) + (dot(yBoneobs, yBoneobs) - f0^2))
+			fos[obskeys[i]][paramkeys[k]] = (dot(yAoneobs, yConeobs) - f0 ^ 2) / variance
+			println("$(dot(yAoneobs, yConeobs)), $(f0), $(dot(yAoneobs, yAoneobs))")
+			te[obskeys[i]][paramkeys[k]] = 1 - (dot(yBoneobs, yConeobs) - f0 ^ 2) / variance
+		end
+	end
+	println(fos)
+	println(te)
+	return fos, te
 end
 
 end
