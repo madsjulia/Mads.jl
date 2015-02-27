@@ -96,27 +96,28 @@ function readyamlpredictions(filename::String) # read YAML predictions
 end
 
 function makemadscommandfunction(madsdata) # make MADS command function
-	if haskey(madsdata, "ForwardModel")
-		madscommandfunction = evalfile(madsdata["ForwardModel"])
+	if haskey(madsdata, "Model")
+		madscommandfunction = evalfile(madsdata["Model"])
 	elseif haskey(madsdata, "Command")
 		function madscommandfunction(parameters::Dict) # MADS command function
-			newdirname = "../temp_$(replace(replace(strftime(time()), ":", ""), " ", "_"))_$(myid())_$(rand(Int64))"
+			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M%S",time()))_$(rand(Uint32))_$(myid())"
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
-			run(`bash -c "ln -s $(currentdir)/* $newdirname"`)
+			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
 			for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
-				run(`rm -f $(newdirname)/$filename`)
+				run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 			end
-			dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters)
+			dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 			results = Dict()
 			for filename in madsdata["YAMLPredictions"]
 				results = merge(results, loadyamlfile("$(newdirname)/$filename"))
 			end
+      run(`rm -fR $newdirname`)
 			return results
 		end
 	else
-		error("Can't make a madscommand function without an Include or a Command entry in the mads file")
+		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 	end
 	return madscommandfunction
 end
