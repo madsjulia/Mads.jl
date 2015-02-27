@@ -4,20 +4,20 @@ using Optim
 #import YAML
 using PyCall
 @pyimport yaml
-import MCMC
+import Lora
 using Distributions
 
-function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector)
-	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
+function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector) # asine transformation
+	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1) # transformed parameters (sine parameter space)
 	return sineparams
 end
 
-function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector)
-	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5)
+function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector) # sine transformation
+	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5) # untransformed parameters (regular parameter space)
 	return params
 end
 
-function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector)
+function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
 		return f(params)
@@ -25,7 +25,7 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedf
 end
 
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector)
+function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector)
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
 		straightgrad = g(params)
@@ -36,21 +36,21 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedg
 end
 
-function loadyamlfile(filename::String)
+function loadyamlfile(filename::String) # load YAML file
 	f = open(filename)
-	#madsdict = YAML.load(f)
-	yamldata = yaml.load(f)#for now we use the python library because the julia library crashes
+	#madsdict = YAML.load(f) # crashes
+	yamldata = yaml.load(f) # for now we use the python library because the julia library crashes
 	close(f)
 	return yamldata
 end
 
-function dumpyamlfile(filename::String, yamldata)
+function dumpyamlfile(filename::String, yamldata) # dump YAML file
 	f = open(filename, "w")
 	write(f, yaml.dump(yamldata))
 	close(f)
 end
 
-function loadmadsfile(filename::String)
+function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
 	madsdict = loadyamlfile(filename)
 	parameters = Dict()
 	for paramdict in madsdict["Parameters"]
@@ -70,7 +70,7 @@ function loadmadsfile(filename::String)
 		templates = Array(Dict, length(madsdict["Templates"]))
 		i = 1
 		for tmpdict in madsdict["Templates"]
-			for key in keys(tmpdict)#this should only iterate once
+			for key in keys(tmpdict) # this should only iterate once
 				templates[i] = tmpdict[key]
 			end
 			i += 1
@@ -81,26 +81,25 @@ function loadmadsfile(filename::String)
 		instructions = Array(Dict, length(madsdict["Instructions"]))
 		i = 1
 		for insdict in madsdict["Instructions"]
-			for key in keys(insdict)#this should only iterate once
+			for key in keys(insdict) # this should only iterate once
 				instructions[i] = insdict[key]
 			end
 			i += 1
 		end
 		madsdict["Instructions"] = instructions
 	end
-
 	return madsdict
 end
 
-function readyamlpredictions(filename::String)
+function readyamlpredictions(filename::String) # read YAML predictions
 	return loadyamlfile(filename)
 end
 
-function makemadscommandfunction(madsdata)
+function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "ForwardModel")
 		madscommandfunction = evalfile(madsdata["ForwardModel"])
 	elseif haskey(madsdata, "Command")
-		function madscommandfunction(parameters::Dict)
+		function madscommandfunction(parameters::Dict) # MADS command function
 			newdirname = "../temp_$(replace(replace(strftime(time()), ":", ""), " ", "_"))_$(myid())_$(rand(Int64))"
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
@@ -122,9 +121,9 @@ function makemadscommandfunction(madsdata)
 	return madscommandfunction
 end
 
-function makemadscommandgradient(madsdata)
+function makemadscommandgradient(madsdata) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
-	function madscommandgradient(parameters::Dict)
+	function madscommandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
 		h = 1e-6
 		xph["noparametersvaried"] = parameters
@@ -169,9 +168,9 @@ function calibrate(madsdata)
 	lowerbounds = Array(Float64, length(paramkeys))
 	upperbounds = Array(Float64, length(paramkeys))
 	for i in 1:length(paramkeys)
-		initparams[i] = madsdata["Parameters"][paramkeys[i]]["init"]
-		lowerbounds[i] = madsdata["Parameters"][paramkeys[i]]["min"]
-		upperbounds[i] = madsdata["Parameters"][paramkeys[i]]["max"]
+		initparams[i] = madsdata["Parameters"][paramkeys[i]]["init"] # initial parameter values
+		lowerbounds[i] = madsdata["Parameters"][paramkeys[i]]["min"] # parameter bounds: minimum
+		upperbounds[i] = madsdata["Parameters"][paramkeys[i]]["max"] # parameter bounds: maximum
 	end
 	function f_lm(arrayparameters::Vector)
 		parameters = Dict(paramkeys, arrayparameters)
@@ -200,42 +199,42 @@ function calibrate(madsdata)
 	return results
 end
 
-function makearrayloglikelihood(madsdata, loglikelihood)
+function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	return arrayparameters::Vector -> loglikelihood(Dict(paramkeys, arrayparameters), f(Dict(paramkeys, arrayparameters)), madsdata["Observations"])
 end
 
-function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))#madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
-	madsloglikelihood = evalfile(madsdata["LogLikelihood"])
+function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
+	madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	paramkeys = getparamkeys(madsdata)
 	initvals = Array(Float64, length(paramkeys))
 	for i = 1:length(paramkeys)
 		initvals[i] = madsdata["Parameters"][paramkeys[i]]["init"]
 	end
-	mcmcmodel = MCMC.model(arrayloglikelihood, init=initvals)
-	sampler = MCMC.RAM(1e-0, 0.3)
-	smc = MCMC.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
-	mcmcchain = MCMC.run(mcmcmodel, sampler, smc)
+	mcmcmodel = Lora.model(arrayloglikelihood, init=initvals)
+	sampler = Lora.RAM(1e-0, 0.3)
+	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
+	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
 	return mcmcchain
 end
 
 function writeviatemplate(parameters, templatefilename, outputfilename)
-	tplfile = open(templatefilename)
-	line = readline(tplfile)#read the line that says "template $separator\n"
-	separator = line[end-1]
+	tplfile = open(templatefilename) # open template file
+	line = readline(tplfile) # read the first line that says "template $separator\n"
+	separator = line[end-1] # template separator
 	lines = readlines(tplfile)
 	close(tplfile)
 	outfile = open(outputfilename, "w")
 	for line in lines
-		splitline = split(line, separator)
-		@assert rem(length(splitline), 2) == 1#length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
+		splitline = split(line, separator) # two separators are needed for each parameter
+		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
 		for i = 1:int((length(splitline)-1)/2)
-			write(outfile, splitline[2 * i - 1])
-			write(outfile, string(parameters[splitline[2 * i]]["init"]))
+			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
+			write(outfile, string(parameters[splitline[2 * i]]["init"])) # replace the initial value for the parameter; splitline[2 * i] in this case is parameter ID
 		end
-		write(outfile, splitline[end])
+		write(outfile, splitline[end]) # write the rest of the line after the last separator
 	end
 	close(outfile)
 end
@@ -433,4 +432,4 @@ function saltelli(madsdata; N=int(1e6))
 	return fos, te
 end
 
-end
+end # Module end

@@ -1,5 +1,6 @@
 using Optim
-using Mads
+cd(dirname(@__FILE__))
+import Mads
 using Gadfly
 
 function rosenbrock(x::Vector)
@@ -58,7 +59,7 @@ results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_l
 println(results)
 println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 
-md = Mads.loadmadsfile("test2.mads")
+md = Mads.loadyamlmadsfile("test-internal.mads")
 results = Mads.calibrate(md)
 println(results)
 
