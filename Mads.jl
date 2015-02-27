@@ -389,12 +389,12 @@ function saltelli(madsdata; N=int(1e6))
 	obskeys = getobskeys(madsdata)
 	distributions = getdistributions(madsdata)
 	f = makemadscommandfunction(madsdata)
-	A = Array(Dict{String, Float64}, N)
-	B = Array(Dict{String, Float64}, N)
+	A = Array(Float64, (N, length(paramkeys)))
+	B = Array(Float64, (N, length(paramkeys)))
 	Ci = Dict{String, Float64}()
-	yA = Array(Dict{String, Float64}, N)
-	yB = Array(Dict{String, Float64}, N)
-	yC = Array(Dict{String, Float64}, N)
+	yA = Array(Float64, (N, length(obskeys)))
+	yB = Array(Float64, (N, length(obskeys)))
+	yC = Array(Float64, (N, length(obskeys)))
 	fos = Dict{String, Dict{String, Float64}}()#first order sensitivities
 	te = Dict{String, Dict{String, Float64}}()#total effect
 	for i = 1:length(obskeys)
@@ -402,42 +402,34 @@ function saltelli(madsdata; N=int(1e6))
 		te[obskeys[i]] = Dict{String, Float64}()
 	end
 	for i = 1:N
-		A[i] = Dict{String, Float64}()
-		B[i] = Dict{String, Float64}()
 		for j = 1:length(paramkeys)
-			A[i][paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
-			B[i][paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
+			A[i, j] = Distributions.rand(distributions[paramkeys[j]])
+			B[i, j] = Distributions.rand(distributions[paramkeys[j]])
 		end
-		yA[i] = f(A[i])
-		yB[i] = f(B[i])
+		result = f(Dict{String, Float64}(paramkeys, A[i, :]))
+		yA[i, :] = map(k->result[k], obskeys)
+		result = f(Dict{String, Float64}(paramkeys, B[i, :]))
+		yB[i, :] = map(k->result[k], obskeys)
 	end
-	for k = 1:length(paramkeys)
-		for i = 1:N
-			for j = 1:length(paramkeys)
-				if k != j
-					Ci[paramkeys[j]] = B[i][paramkeys[j]]
+	for i = 1:length(paramkeys)
+		for j = 1:N
+			for k = 1:length(paramkeys)
+				if k != i
+					Ci[paramkeys[k]] = B[j, k]
 				else
-					Ci[paramkeys[j]] = A[i][paramkeys[j]]
+					Ci[paramkeys[k]] = A[j, k]
 				end
 			end
-			yC[i] = f(Ci)
-			#println("$(A[i]), $(B[i]), $(Ci)")
-			#println("$(yA[i]), $(yB[i]), $(yC[i])")
+			result = f(Ci)
+			yC[j, :] = map(k->result[k], obskeys)
 		end
-		for i = 1:length(obskeys)
-			println("$(paramkeys[k]), $(obskeys[k])")
-			yAoneobs = map(k->yA[k][obskeys[i]], 1:N)
-			yBoneobs = map(k->yB[k][obskeys[i]], 1:N)
-			yConeobs = map(k->yC[k][obskeys[i]], 1:N)
-			f0 = .5 * (mean(yAoneobs) + mean(yBoneobs))
-			variance = .5 * ((dot(yAoneobs, yAoneobs) - f0^2) + (dot(yBoneobs, yBoneobs) - f0^2))
-			fos[obskeys[i]][paramkeys[k]] = (dot(yAoneobs, yConeobs) - f0 ^ 2) / variance
-			println("$(dot(yAoneobs, yConeobs)), $(f0), $(dot(yAoneobs, yAoneobs))")
-			te[obskeys[i]][paramkeys[k]] = 1 - (dot(yBoneobs, yConeobs) - f0 ^ 2) / variance
+		for j = 1:length(obskeys)
+			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
+			variance = .5 * ((dot(yA[:, j], yA[:, j]) - f0 ^ 2) + (dot(yB[:, j], yB[:, j]) - f0 ^ 2))
+			fos[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) - f0 ^ 2) / variance
+			te[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / variance
 		end
 	end
-	println(fos)
-	println(te)
 	return fos, te
 end
 
