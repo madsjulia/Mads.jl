@@ -1,6 +1,8 @@
 module MadsIO
 
+using Distributions
 using MadsYAML
+export loadyamlmadsfile
 
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Model")
@@ -10,7 +12,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M%S",time()))_$(rand(Uint32))_$(myid())"
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
-			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
+			run(`bash -c "ln -s $(currentdir)/* $newdirname; cp $(currentdir)/.juliarc.jl $newdirname"`) # link all the files in the current directory
 			for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
 				run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 			end

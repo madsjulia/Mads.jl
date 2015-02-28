@@ -2,14 +2,17 @@ using Optim
 using Gadfly
 cd(dirname(@__FILE__))
 using Mads
+using Distributions
 
 f = Mads.rosenbrock
 g! = Mads.rosenbrock_gradient!
 h! = Mads.rosenbrock_hessian!
 
 # internal opimization test
+println("TEST Nelder-Mead optimization (default) of the Rosenbrock function:")
+results = optimize(f, [0.0, 0.0])
+println(results)
 println("TEST Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
-optimize(f, [0.0, 0.0])
 results = Optim.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
 println(results)
 
@@ -36,28 +39,41 @@ results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_l
 println(results)
 println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 
+cd("examples/wells-short")
+println("TEST Levenberg-Marquardt optimization of an external call problem using wells:")
+mdwells = Mads.loadyamlmadsfile("w01_yaml.mads")
+# results = Mads.calibrate(mdwells) # TODO crashes
+println(results)
+cd("../..")
+
+#= WORKS but slow
+cd("tests")
 # external execution test
 println("TEST Levenberg-Marquardt optimization of an external call problem:")
 mdexternal = Mads.loadyamlmadsfile("test-external.mads")
 results = Mads.calibrate(mdexternal)
 println(results)
+cd("..")
+=#
 
 # internal execution test
 println("TEST Levenberg-Marquardt optimization of an internal call problem:")
-mdinternal = Mads.loadyamlmadsfile("test-internal.mads")
+mdinternal = Mads.loadyamlmadsfile("tests/test-internal.mads")
 results = Mads.calibrate(mdinternal)
 println(results)
 
+
 # Saltelli senstivity analysis test
 println("TEST Saltelli senstivity analysis:")
-mdsaltelli = Mads.loadyamlmadsfile("test-saltelli.mads")
+mdsaltelli = Mads.loadyamlmadsfile("tests/test-saltelli.mads")
 results = Mads.saltelli(mdsaltelli)
 println(results)
 println("TEST Saltelli senstivity analysis (brute force):")
+mdsaltelli = Mads.loadyamlmadsfile("tests/test-saltelli.mads")
 results = Mads.saltellibrute(mdsaltelli)
 println(results)
 
 # Bayesian sampling test
 println("TEST Bayesian sampling:")
-mcmcchain = Mads.bayessampling(mdexternal)
+mcmcchain = Mads.bayessampling(mdinternal)
 plot(x=mcmcchain.samples[:,1], y=mcmcchain.samples[:,2])

@@ -67,6 +67,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 	paramkeys = MadsIO.getparamkeys(madsdata)
 	#find the mean and variance
 	f = MadsIO.makemadscommandfunction(madsdata)
+  distributions = MadsIO.getdistributions(madsdata)
 	results = Array(Dict, numsamples)
 	paramdict = Dict()
 	for i = 1:numsamples

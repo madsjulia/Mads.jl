@@ -1,0 +1,26 @@
+Problem: { calibrate, opt: lm_levmar }
+Solution: external
+Parameters:
+- k: { init: 1, type: opt, log: no, step: 0.1, min: -5, max: 5 }
+- S: { init: 1, type: opt, log: no, step: 0.1, min: -5, max: 5 }
+Observations:
+- o1: 0.00
+- o2: 5.98
+- o3: 8.02
+- o4:  { target: 8.67, weight: 1, log: no, min: 8.62, max: 8.72 }
+- o5:  { target: 8.97, weight: 1, log: no, min: 8.92, max: 9.02 }
+- o6:  { target: 9.14, weight: 1, log: no, min: 9.09, max: 9.19 }
+- o7:  { target: 9.25, weight: 1, log: no, min: 9.20, max: 9.30 }
+- o8:  { target: 9.31, weight: 1, log: no, min: 9.26, max: 9.36 }
+- o9:  { target: 9.38, weight: 1, log: no, min: 9.33, max: 9.43 }
+- o10: { target: 9.41, weight: 1, log: no, min: 9.36, max: 9.46 }
+- o11: { target: 9.45, weight: 1, log: no, min: 9.40, max: 9.50 }
+Regularizations:
+- reg1: { equation: "2 + k",    target: 0, weight: 1, log: no, min: -1, max:  1 }
+- reg2: { equation: "4 + S",    target: 0, weight: 1, log: no, min: -1, max:  1 }
+- reg3: { equation: "o10 - o2", target: 4, weight: 1, log: no, min:  0, max: 10 }
+Command: "./wells w01 >& /dev/null"
+Templates:
+- tmp1: { tpl: w01.tpl, write: w01.wells }
+Instructions:
+- ins1: { ins: w01.inst, read: w01.s_point }
