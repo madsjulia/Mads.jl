@@ -39,29 +39,36 @@ results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_l
 println(results)
 println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 
-cd("examples/wells-short")
 println("TEST Levenberg-Marquardt optimization of an external call problem using wells:")
+cd("examples/wells-short")
 mdwells = Mads.loadyamlmadsfile("w01_yaml.mads")
 # results = Mads.calibrate(mdwells) # TODO crashes
-println(results)
 cd("../..")
+println(results)
 
 #= WORKS but slow
+# external execution test using YAML files
+println("TEST Levenberg-Marquardt optimization of an external call problem using YAML files:")
 cd("tests")
-# external execution test
-println("TEST Levenberg-Marquardt optimization of an external call problem:")
-mdexternal = Mads.loadyamlmadsfile("test-external.mads")
+mdexternal = Mads.loadyamlmadsfile("test-external-yaml.mads")
 results = Mads.calibrate(mdexternal)
-println(results)
 cd("..")
+println(results)
 =#
+
+# external execution test using ASCII files
+println("TEST Levenberg-Marquardt optimization of an external call problem using ASCII files:")
+cd("tests")
+mdexternal = Mads.loadyamlmadsfile("test-external-ascii.mads")
+results = Mads.calibrate(mdexternal)
+cd("..")
+println(results)
 
 # internal execution test
 println("TEST Levenberg-Marquardt optimization of an internal call problem:")
 mdinternal = Mads.loadyamlmadsfile("tests/test-internal.mads")
 results = Mads.calibrate(mdinternal)
 println(results)
-
 
 # Saltelli senstivity analysis test
 println("TEST Saltelli senstivity analysis:")

@@ -2,26 +2,46 @@ module MadsIO
 
 using Distributions
 using MadsYAML
+using MadsASCII
 export loadyamlmadsfile
 
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Model")
+    println("Internal model evaluation ...")
 		madscommandfunction = evalfile(madsdata["Model"])
 	elseif haskey(madsdata, "Command")
+    println("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M%S",time()))_$(rand(Uint32))_$(myid())"
+      # println("Temp directory ", newdirname)
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
 			run(`bash -c "ln -s $(currentdir)/* $newdirname; cp $(currentdir)/.juliarc.jl $newdirname"`) # link all the files in the current directory
-			for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
-				run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
-			end
-			MadsYAML.dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
+			if haskey(madsdata, "YAMLParameters") # YAML
+        for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
+				  run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+			  end
+        MadsYAML.dumpasciifile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
+      elseif haskey(madsdata, "ASCIIParameters") # ASCII
+			  for filename in vcat(madsdata["ASCIIPredictions"], madsdata["ASCIIParameters"])
+				  run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+			  end
+			  MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
+      end
+      # println("Execute ", madsdata["Command"])
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 			results = Dict()
-			for filename in madsdata["YAMLPredictions"]
-				results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
-			end
+      if haskey(madsdata, "YAMLPredictions") # YAML
+			  for filename in madsdata["YAMLPredictions"]
+				  results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
+			  end
+      elseif haskey(madsdata, "ASCIIPredictions") # ASCII
+        predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
+        obskeys = getobskeys(madsdata)
+        @assert length(obskeys) == length(predictions)
+        times = 1:length(obskeys)
+	      results = Dict{String, Float64}(map(i -> string("o", i), times), predictions)
+      end
       run(`rm -fR $newdirname`)
 			return results
 		end
