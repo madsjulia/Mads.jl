@@ -1,51 +1,22 @@
 using Optim
-cd(dirname(@__FILE__))
-import Mads
 using Gadfly
+cd(dirname(@__FILE__))
+using Mads
 
-function rosenbrock(x::Vector)
-    return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
-end
-
-function rosenbrock_lm(x::Vector)
-    [(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
-end
-
-function rosenbrock_gradient!(x::Vector, storage::Vector)
-    storage[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
-    storage[2] = 200.0 * (x[2] - x[1]^2)
-end
-
-function rosenbrock_gradient_lm(x::Vector)
-    storage = Array(Float64,2,2)
-    storage[1,1] = -2.0 * (1.0 - x[1])
-    storage[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]
-    storage[1,2] = 0.
-    storage[2,2] = 200.0 * (x[2] - x[1]^2)
-    return storage
-end
-
-function rosenbrock_hessian!(x::Vector, storage::Matrix)
-    storage[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
-    storage[1, 2] = -400.0 * x[1]
-    storage[2, 1] = -400.0 * x[1]
-    storage[2, 2] = 200.0
-end
-
-f = rosenbrock
-g! = rosenbrock_gradient!
-h! = rosenbrock_hessian!
+f = Mads.rosenbrock
+g! = Mads.rosenbrock_gradient!
+h! = Mads.rosenbrock_hessian!
 
 # internal opimization test
 println("TEST Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
 optimize(f, [0.0, 0.0])
-results = Optim.levenberg_marquardt(rosenbrock_lm, rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
+results = Optim.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
 println(results)
 
 lowerbounds = [-2, -2]
 upperbounds = [2, 2]
-sin_rosenbrock_lm = Mads.sinetransformfunction(rosenbrock_lm, lowerbounds, upperbounds)
-sin_rosenbrock_gradient_lm = Mads.sinetransformgradient(rosenbrock_gradient_lm, lowerbounds, upperbounds)
+sin_rosenbrock_lm = Mads.sinetransformfunction(Mads.rosenbrock_lm, lowerbounds, upperbounds)
+sin_rosenbrock_gradient_lm = Mads.sinetransformgradient(Mads.rosenbrock_gradient_lm, lowerbounds, upperbounds)
 
 println("TEST sine transformation:")
 a = Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds)
@@ -55,9 +26,9 @@ println("TEST Parameter transformation: ",a,"->", Mads.sinetransform(a, lowerbou
 a = Mads.asinetransform([-2.0,-2.0], lowerbounds, upperbounds)
 println("TEST Parameter transformation: ", a,"->", Mads.sinetransform(a, lowerbounds, upperbounds))
 a = sin_rosenbrock_lm(Mads.asinetransform([2.0,2.0], lowerbounds, upperbounds))
-println("TEST Parameter transformation in a function: ", a,"=",rosenbrock_lm([2.0,2.0]))
+println("TEST Parameter transformation in a function: ", a,"=", Mads.rosenbrock_lm([2.0,2.0]))
 a = sin_rosenbrock_lm(Mads.asinetransform([1.0,1.0], lowerbounds, upperbounds))
-println("TEST Parameter transformation in a function: ", a,"=",rosenbrock_lm([1.0,1.0]))
+println("TEST Parameter transformation in a function: ", a,"=", Mads.rosenbrock_lm([1.0,1.0]))
 
 # internal opimization test
 println("TEST Levenberg-Marquardt optimization of the Rosenbrock function with sine transformation:")
