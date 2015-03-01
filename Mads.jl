@@ -72,9 +72,9 @@ end
 
 @doc " Saltelli (brute force)" ->
 function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e4))
-	#convert the distribution strings into actual distributions
+	# convert the distribution strings into actual distributions
 	paramkeys = getparamkeys(madsdata)
-	#find the mean and variance
+	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
   distributions = getdistributions(madsdata)
 	results = Array(Dict, numsamples)
@@ -111,7 +111,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
-	#compute the first order sensitivities
+	# compute the first order sensitivities
 	fos = Dict()
 	for k = 1:length(obskeys)
 		fos[obskeys[k]] = Dict()
@@ -148,7 +148,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 			println(fos)
 		end
 	end
-	#compute the total effect
+	# compute the total effect
 	te = Dict()
 	for k = 1:length(obskeys)
 		te[obskeys[k]] = Dict()

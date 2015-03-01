@@ -47,9 +47,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
       elseif haskey(madsdata, "ASCIIPredictions") # ASCII
         predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
         obskeys = getobskeys(madsdata)
+        obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
         @assert length(obskeys) == length(predictions)
-        times = 1:length(obskeys)
-	      results = Dict{String, Float64}(map(i -> string("o", i), times), predictions)
+	      results = Dict{String, Float64}(obsid, predictions)
       end
       run(`rm -fR $newdirname`)
 			return results
@@ -124,14 +124,25 @@ function writeparameters(madsdata)
 	end
 end
 
-function readobservationsviainstructions(observations, instructionfilename, inputfilename)
-  #TODO
+function cmadsins_obs(obsid::Array{String,1}, instructionfilename::String, inputfilename::String)
+  n = length(observations)
+  obsval = Array(Float64, n)
+  debug = 1;
+  # int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
+  result = ccall( (:ins_obs_, "libmads"), Int32,
+                   (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
+                    n, &obsid, &obsval, &instructionfilename, &inputfilename, &debug)
+	observations = Dict{String, Float64}(obsid, obsval)
+  return observations
 end
 
 function readobservations(madsdata)
+  mo = madsdata["Observations"]
+  obsid=[convert(String,k) for k in keys(mo)]
 	for instruction in madsdata["Instructions"]
-		readobservationsviainstructions(madsdata["Observations"], instruction["ins"], instruction["read"])
+		observations = merge(observations,cmadsins_obs(obsid, instruction["ins"], instruction["read"]))
 	end
+  return observations
 end
 
 function getdistributions(madsdata)
