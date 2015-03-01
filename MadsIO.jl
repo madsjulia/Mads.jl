@@ -1,5 +1,3 @@
-module MadsIO
-
 using Distributions
 using MadsYAML
 using MadsASCII
@@ -12,7 +10,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	elseif haskey(madsdata, "Command")
     println("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
-			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M%S",time()))_$(rand(Uint32))_$(myid())"
+			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(@printf("%10d",rand(Uint32)))_$(myid())"
       # println("Temp directory ", newdirname)
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
@@ -144,5 +142,3 @@ function getdistributions(madsdata)
 	end
 	return distributions
 end
-
-end # Module end

@@ -1,7 +1,7 @@
 module Mads
 
-using MadsIO
 include("MadsLog.jl")
+include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
 using Optim
@@ -13,12 +13,12 @@ end
 # @document
 @docstrings
 
-@doc " Calibrate " ->
+@doc "Calibrate " ->
 function calibrate(madsdata)
-	f = MadsIO.makemadscommandfunction(madsdata)
-	g = MadsIO.makemadscommandgradient(madsdata)
-	obskeys = MadsIO.getobskeys(madsdata)
-	paramkeys = MadsIO.getparamkeys(madsdata)
+	f = makemadscommandfunction(madsdata)
+	g = makemadscommandgradient(madsdata)
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	initparams = Array(Float64, length(paramkeys))
 	lowerbounds = Array(Float64, length(paramkeys))
 	upperbounds = Array(Float64, length(paramkeys))
@@ -54,11 +54,11 @@ function calibrate(madsdata)
 	return results
 end
 
-@doc " Bayes Sampling " ->
+@doc "Bayes Sampling " ->
 function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	paramkeys = MadsIO.getparamkeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	initvals = Array(Float64, length(paramkeys))
 	for i = 1:length(paramkeys)
 		initvals[i] = madsdata["Parameters"][paramkeys[i]]["init"]
@@ -73,10 +73,10 @@ end
 @doc " Saltelli (brute force)" ->
 function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e4))
 	#convert the distribution strings into actual distributions
-	paramkeys = MadsIO.getparamkeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	#find the mean and variance
-	f = MadsIO.makemadscommandfunction(madsdata)
-  distributions = MadsIO.getdistributions(madsdata)
+	f = makemadscommandfunction(madsdata)
+  distributions = getdistributions(madsdata)
 	results = Array(Dict, numsamples)
 	paramdict = Dict()
 	for i = 1:numsamples
@@ -85,7 +85,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 		end
 		results[i] = f(paramdict)
 	end
-	obskeys = MadsIO.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	sum = Dict()
 	for i = 1:length(obskeys)
 		sum[obskeys[i]] = 0.
@@ -200,12 +200,12 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 	return mean, variance, fos, te
 end
 
-@doc " Saltelli " ->
+@doc "Saltelli " ->
 function saltelli(madsdata; N=int(1e6))
-	paramkeys = MadsIO.getparamkeys(madsdata)
-	obskeys = MadsIO.getobskeys(madsdata)
-	distributions = MadsIO.getdistributions(madsdata)
-	f = MadsIO.makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	obskeys = getobskeys(madsdata)
+	distributions = getdistributions(madsdata)
+	f = makemadscommandfunction(madsdata)
 	A = Array(Float64, (N, length(paramkeys)))
 	B = Array(Float64, (N, length(paramkeys)))
 	Ci = Dict{String, Float64}()
