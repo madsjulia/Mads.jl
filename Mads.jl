@@ -1,12 +1,19 @@
 module Mads
 
 using MadsIO
+include("MadsLog.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
 using Optim
 using Lora
 using Distributions
+if VERSION < v"0.4.0-dev"
+    using Docile # default for v > 0.4
+end
+# @document
+@docstrings
 
+@doc " Calibrate " ->
 function calibrate(madsdata)
 	f = MadsIO.makemadscommandfunction(madsdata)
 	g = MadsIO.makemadscommandgradient(madsdata)
@@ -47,6 +54,7 @@ function calibrate(madsdata)
 	return results
 end
 
+@doc " Bayes Sampling " ->
 function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -62,6 +70,7 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	return mcmcchain
 end
 
+@doc " Saltelli (brute force)" ->
 function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e4))
 	#convert the distribution strings into actual distributions
 	paramkeys = MadsIO.getparamkeys(madsdata)
@@ -191,6 +200,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 	return mean, variance, fos, te
 end
 
+@doc " Saltelli " ->
 function saltelli(madsdata; N=int(1e6))
 	paramkeys = MadsIO.getparamkeys(madsdata)
 	obskeys = MadsIO.getobskeys(madsdata)
