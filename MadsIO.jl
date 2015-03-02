@@ -8,10 +8,10 @@ function makemadscommandfunction(madsdata) # make MADS command function
     println("Internal model evaluation ...")
 		madscommandfunction = evalfile(madsdata["Model"])
 	elseif haskey(madsdata, "Command")
-    println("External command execution ...")
+    madsinfo("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
-			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(@printf("%10d",rand(Uint32)))_$(myid())"
-      # println("Temp directory ", newdirname)
+			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
+      madsinfo("Temp directory "*newdirname)
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
 			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
@@ -33,12 +33,12 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			  end
 			  MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
       end
-      # println("Execute ", madsdata["Command"])
+      madsinfo("Execute "*madsdata["Command"])
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 			results = Dict()
 			if haskey(madsdata, "Instructions") # Templates/Instructions
         cd(newdirname)
-        readobservations(madsdata)
+        results = readobservations(madsdata)
         cd(currentdir)
       elseif haskey(madsdata, "YAMLPredictions") # YAML
 			  for filename in madsdata["YAMLPredictions"]
@@ -91,11 +91,11 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 end
 
 function getparamkeys(madsdata)
-	return [k for k in keys(madsdata["Parameters"])]
+	return [convert(String,k) for k in keys(madsdata["Parameters"])]
 end
 
 function getobskeys(madsdata)
-	return [k for k in keys(madsdata["Observations"])]
+	return [convert(String,k) for k in keys(madsdata["Observations"])]
 end
 
 function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
@@ -110,7 +110,7 @@ function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
 		for i = 1:int((length(splitline)-1)/2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-      println( "Replacing ", strip(splitline[2 * i]), "->", parameters[strip(splitline[2 * i])]["init"] )
+      madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]["init"]) )
 			write(outfile, string(parameters[strip(splitline[2 * i])]["init"])) # replace the initial value for the parameter; splitline[2 * i] in this case is parameter ID
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
@@ -124,23 +124,25 @@ function writeparameters(madsdata)
 	end
 end
 
-function cmadsins_obs(obsid::Array{String,1}, instructionfilename::String, inputfilename::String)
-  n = length(observations)
-  obsval = Array(Float64, n)
+function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputfilename::String)
+  n = length(obsid)
+  obsval = Vector(Float64, n)
+  obscheck = Vector(Float64, n)
   debug = 1;
   # int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
-  result = ccall( (:ins_obs_, "libmads"), Int32,
-                   (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
-                    n, &obsid, &obsval, &instructionfilename, &inputfilename, &debug)
+  result = ccall( (:ins_obs, "libmads"), Int32,
+                   (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
+                    n, &obsid, &obsval, &obscheck, &instructionfilename, &inputfilename, debug)
+  madsinfo("here")
 	observations = Dict{String, Float64}(obsid, obsval)
   return observations
 end
 
 function readobservations(madsdata)
-  mo = madsdata["Observations"]
-  obsid=[convert(String,k) for k in keys(mo)]
+  obsid=getobskeys(madsdata)
+  observations = Dict()
 	for instruction in madsdata["Instructions"]
-		observations = merge(observations,cmadsins_obs(obsid, instruction["ins"], instruction["read"]))
+		observations = merge(observations, cmadsins_obs(obsid, instruction["ins"], instruction["read"]))
 	end
   return observations
 end
