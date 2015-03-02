@@ -1,5 +1,5 @@
 using Logging
-Logging.configure(level=DEBUG) # messages higher than specified level are printed
+Logging.configure(level=OFF) # messages higher than specified level are printed
 
 function madsdebug(message::String)
   debug(message) # level 0

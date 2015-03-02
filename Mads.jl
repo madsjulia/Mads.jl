@@ -8,7 +8,7 @@ using Optim
 using Lora
 using Distributions
 if VERSION < v"0.4.0-dev"
-    using Docile # default for v > 0.4
+	using Docile # default for v > 0.4
 end
 # @document
 @docstrings
@@ -76,7 +76,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 	paramkeys = getparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
-  distributions = getdistributions(madsdata)
+	distributions = getdistributions(madsdata)
 	results = Array(Dict, numsamples)
 	paramdict = Dict()
 	for i = 1:numsamples
