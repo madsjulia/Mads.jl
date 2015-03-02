@@ -126,13 +126,14 @@ end
 
 function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputfilename::String)
   n = length(obsid)
-  obsval = Vector(Float64, n)
-  obscheck = Vector(Float64, n)
+  obsval = Array(Float64, n)
+  obscheck = Array(Float64, n)
   debug = 1;
+  #asciiobsid = convert(Array{ASCIIString, 1}, obsid)
   # int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
-  result = ccall( (:ins_obs, "libmads"), Int32,
+  result = ccall( (:_ins_obs, "libmads"), Int32,
                    (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
-                    n, &obsid, &obsval, &obscheck, &instructionfilename, &inputfilename, debug)
+                    convert(Int32, n), convert(Ptr{Ptr{Uint8}}, pointer(obsid)), convert(Ptr{Float64}, pointer(obsval)), convert(Ptr{Float64}, pointer(obscheck)), convert(Ptr{Uint8}, pointer(instructionfilename)), convert(Ptr{Uint8}, pointer(inputfilename)), debug)
   madsinfo("here")
 	observations = Dict{String, Float64}(obsid, obsval)
   return observations
