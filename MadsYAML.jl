@@ -1,5 +1,5 @@
 module MadsYAML
-export loadyamlmadsfile
+export loadyamlmadsfile, dumpyamlmadsfile
 
 # import YAML
 using PyCall
@@ -59,6 +59,15 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		madsdict["Instructions"] = instructions
 	end
 	return madsdict
+end
+
+function dumpyamlmadsfile(filename::String, yamldata) # load MADS input file in YAML forma
+	#TODO we need to restore the "stupid" YAML structure of MADS file
+	#TODO we can also forget about it
+	#TODO it was originally impletemented to perform miltple independent runs with different parameter definitions for
+	# each parameter/observations but we never got there and most probably we will never will
+	#TODO we need to keep the order and not sort alphabetically parameters and observations
+	dumpyamlfile(filename, yamldata)
 end
 
 function readyamlpredictions(filename::String) # read YAML predictions

@@ -13,6 +13,13 @@ end
 # @document
 @docstrings
 
+@doc "Save calibraiton results" ->
+function savecalibrationresults(madsdata, results)
+#TODO map estimated parameters on a new madsdata structure
+#TODO save madsdata in yaml file using dumpyamlmadsfile
+#TODO save residuals, predictions, observations (yaml?)
+end
+
 @doc "Calibrate " ->
 function calibrate(madsdata)
 	f = makemadscommandfunction(madsdata)

@@ -1,7 +1,6 @@
 using Distributions
 using MadsYAML
 using MadsASCII
-export loadyamlmadsfile
 
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Model")
