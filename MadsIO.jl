@@ -56,7 +56,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				@assert length(obskeys) == length(predictions)
 				results = Dict{String, Float64}(obsid, predictions)
 			end
-			#run(`rm -fR $newdirname`)
+			run(`rm -fR $newdirname`)
 			return results
 		end
 	else
@@ -137,7 +137,7 @@ function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputf
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
 	result = ccall( (:ins_obs, "libmads"), Int32,
 									 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
-					 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
+										n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{String, Float64}(obsid, obsval)
 	println(observations)
 	return observations
