@@ -1,6 +1,3 @@
-using Logging
-Logging.configure(level=OFF) # messages higher than specified level are printed
-
 function madsdebug(message::String)
   debug(message) # level 0
 end
@@ -15,5 +12,4 @@ function madserr(message::String)
 end
 function madscrit(message::String)
   critical(message) # level 4
-  exit(1)
 end
