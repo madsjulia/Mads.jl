@@ -9,10 +9,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	elseif haskey(madsdata, "Command")
 		madsinfo("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
-			println(parameters)
+			madsinfo("""Parameters: $(parameters)""")
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
-			println(newdirname)
-			madsinfo("Temp directory "*newdirname)
+			madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
 			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
@@ -21,9 +20,8 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				cd(newdirname)
-				#writeparameters(madsdata["Parameters"])#this only looks at the initial parameters that were passed in when we called makemadscommandfunction -- we need to look at the variable 'parameters' that are passed in when we call madscommandfunction
 				for template in madsdata["Templates"]
-					writeparamtersviatemplate(parameters, template["tpl"], template["write"])#write the parameters
+					writeparamtersviatemplate(parameters, template["tpl"], template["write"]) # write the parameters
 				end
 				cd(currentdir)
 			elseif haskey(madsdata, "YAMLParameters") # YAML
@@ -37,13 +35,14 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				end
 				MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
 			end
-			madsinfo("Execute "*madsdata["Command"])
+			madsinfo("""Execute: $(madsdata["Command"])""")
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 			results = Dict()
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				cd(newdirname)
 				results = readobservations(madsdata)
 				cd(currentdir)
+				madsinfo("""Observations: $(results)""")
 			elseif haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in madsdata["YAMLPredictions"]
 					results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
@@ -138,7 +137,6 @@ function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputf
 									 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
 										n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{String, Float64}(obsid, obsval)
-	println(observations)
 	return observations
 end
 

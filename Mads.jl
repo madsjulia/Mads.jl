@@ -1,12 +1,17 @@
 module Mads
 
-include("MadsLog.jl")
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
+include("MadsLM.jl")
 using Optim
 using Lora
 using Distributions
+using Logging
+include("MadsLog.jl") # messages higher than specified level are printed
+# Logging.configure(level=OFF) # OFF
+# Logging.configure(level=CRITICAL) # ONLY CRITICAL
+Logging.configure(level=DEBUG)
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -57,7 +62,7 @@ function calibrate(madsdata)
 		end
 		return jacobian
 	end
-	results = Optim.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=true)
+	results = Mads.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=true)
 	return results
 end
 
