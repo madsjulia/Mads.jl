@@ -3,6 +3,7 @@ using Gadfly
 cd(dirname(@__FILE__))
 using Mads
 using Distributions
+Logging.configure(level=Logging.OFF)
 
 f = Mads.rosenbrock
 g! = Mads.rosenbrock_gradient!
