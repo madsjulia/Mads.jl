@@ -1,4 +1,4 @@
-function loglikelihood(parameters::Dict, predictions::Dict, observations::Dict)
+function loglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(parameters::T1, predictions::T2, observations::T3)
 	ssr = 0.::Float64
 	for i = 1:4
 		obsname = string("o", i)

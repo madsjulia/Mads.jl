@@ -57,7 +57,7 @@ function calibrate(madsdata)
 		end
 		return jacobian
 	end
-	results = Optim.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=true)
+	results = Optim.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=false)
 	return results
 end
 
@@ -152,7 +152,6 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 				v[m] = cond_means[m][obskeys[k]]
 			end
 			fos[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
-			println(fos)
 		end
 	end
 	# compute the total effect
@@ -201,7 +200,6 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 				runningsum += cond_vars[m][obskeys[j]]
 			end
 			te[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
-			println(te)
 		end
 	end
 	return mean, variance, fos, te

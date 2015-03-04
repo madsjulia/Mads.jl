@@ -4,6 +4,7 @@ export loadyamlmadsfile, dumpyamlmadsfile
 # import YAML
 using PyCall
 @pyimport yaml
+using DataStructures
 
 function loadyamlfile(filename::String) # load YAML file
 	f = open(filename)
@@ -22,14 +23,14 @@ end
 
 function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
 	madsdict = loadyamlfile(filename)
-	parameters = Dict()
+	parameters = OrderedDict()
 	for paramdict in madsdict["Parameters"]
 		for key in keys(paramdict)
 			parameters[key] = paramdict[key]
 		end
 	end
 	madsdict["Parameters"] = parameters
-	observations = Dict()
+	observations = OrderedDict()
 	for obsdict in madsdict["Observations"]
 		for key in keys(obsdict)
 			observations[key] = obsdict[key]

@@ -39,12 +39,14 @@ results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_l
 println(results)
 println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 
+#=
 println("TEST Levenberg-Marquardt optimization of an external call problem using wells:")
 cd("examples/wells-short")
 mdwells = Mads.loadyamlmadsfile("w01_yaml.mads")
 # results = Mads.calibrate(mdwells) # TODO crashes
 cd("../..")
 println(results)
+=#
 
 #= WORKS but slow
 # external execution test using YAML files
@@ -82,5 +84,6 @@ println(results)
 
 # Bayesian sampling test
 println("TEST Bayesian sampling:")
+mdinternal = Mads.loadyamlmadsfile("tests/test-internal.mads")
 mcmcchain = Mads.bayessampling(mdinternal)
 plot(x=mcmcchain.samples[:,1], y=mcmcchain.samples[:,2])

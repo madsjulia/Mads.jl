@@ -9,9 +9,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	elseif haskey(madsdata, "Command")
 		madsinfo("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
-			println(parameters)
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
-			println(newdirname)
 			madsinfo("Temp directory "*newdirname)
 			run(`mkdir $newdirname`)
 			currentdir = pwd()
@@ -138,7 +136,6 @@ function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputf
 									 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
 										n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{String, Float64}(obsid, obsval)
-	println(observations)
 	return observations
 end
 

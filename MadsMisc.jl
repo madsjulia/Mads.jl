@@ -1,3 +1,5 @@
+include("MadsIO.jl")
+
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector) # asine transformation
 	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1) # transformed parameters (sine parameter space)
 	return sineparams
@@ -28,7 +30,7 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
-	f = MadsIO.makemadscommandfunction(madsdata)
-	paramkeys = MadsIO.getparamkeys(madsdata)
+	f = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	return arrayparameters::Vector -> loglikelihood(Dict(paramkeys, arrayparameters), f(Dict(paramkeys, arrayparameters)), madsdata["Observations"])
 end
