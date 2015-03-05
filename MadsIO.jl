@@ -128,9 +128,9 @@ end
 
 function cmadsins_obs(obsid::Vector{String}, instructionfilename::String, inputfilename::String)
   n = length(obsid)
-  obsval = zeros(n) # in some cases ins_obs adds on to obsval, so we should probably initialize to zero
-  obscheck = -1 * ones(n) # i'm not exactly what 'obscheck' is supposed to do, but this makes things work (and should avoid the case where it is adding on -- i think)
-  debug = 0 # setting debug higher induces a bunch of tprintf's which causes ins_obs to crash
+  obsval = zeros(n) # initialize to 0
+  obscheck = -1 * ones(n) # initialize to -1
+  debug = 1 # setting debug level 0 or 1 works
   # int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
   result = ccall( (:ins_obs, "libmads"), Int32,
                    (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),

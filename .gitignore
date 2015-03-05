@@ -2,3 +2,4 @@
 *.s_point
 *.wells
 *.wells_debug
+output.dat
