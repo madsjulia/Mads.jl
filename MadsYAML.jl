@@ -7,6 +7,7 @@ using PyCall
 using DataStructures
 
 function loadyamlfile(filename::String) # load YAML file
+	yamldata = OrderedDict()
 	f = open(filename)
 	# yamldata = YAML.load(f) # works; however Julia YAML cannot write
 	yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump

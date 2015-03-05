@@ -44,7 +44,7 @@ println(Mads.sinetransform(results.minimum, lowerbounds, upperbounds))
 println("TEST Levenberg-Marquardt optimization of an external call problem using wells:")
 cd("examples/wells-short")
 mdwells = Mads.loadyamlmadsfile("w01_yaml.mads")
-# results = Mads.calibrate(mdwells) # TODO crashes
+results = Mads.calibrate(mdwells)
 cd("../..")
 println(results)
 =#
@@ -102,15 +102,13 @@ type GSL_Function
 	GSL_Function(f::Function) = new(gsl_function_wrap_c, f)
 end
 
-function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12,
-	maxintervals::Integer=10^7)
-	s = ccall((:gsl_integration_workspace_alloc,:libgsl), Ptr{Void}, (Csize_t,),
-	maxintervals)
+function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, maxintervals::Integer=10^7)
+	s = ccall((:gsl_integration_workspace_alloc,:libgsl), Ptr{Void}, (Csize_t,), maxintervals)
 	result = Array(Cdouble,1)
 	abserr = Array(Cdouble,1)
 	ccall((:gsl_integration_qag,:libgsl), Cint,
-	(Ptr{GSL_Function}, Cdouble, Cdouble, Cdouble, Csize_t, Cint, Ptr{Void}, Ptr{Cdouble}, Ptr{Cdouble}),
-	&GSL_Function(f), a, b, epsrel, maxintervals, 1, s, result, abserr)
+				(Ptr{GSL_Function}, Cdouble, Cdouble, Cdouble, Csize_t, Cint, Ptr{Void}, Ptr{Cdouble}, Ptr{Cdouble}),
+				&GSL_Function(f), a, b, epsrel, maxintervals, 1, s, result, abserr)
 	ccall((:gsl_integration_workspace_free,:libgsl), Void, (Ptr{Void},), s)
 	return (result[1], abserr[1])
 end
