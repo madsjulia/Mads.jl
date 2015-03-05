@@ -265,4 +265,63 @@ function saltelli(madsdata; N=int(1e6))
   return fos, te
 end
 
+names = ["saltelli", "saltellibrute"]
+
+for mi = 1:length(names)
+	q = quote
+		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(1e5))
+			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
+			fosall, teall = results[1]
+			for i = 2:numsaltellis
+				fos, te = results[i]
+				for obskey in keys(fos)
+					for paramkey in keys(fos[obskey])
+						fosall[obskey][paramkey] += fos[obskey][paramkey]
+						teall[obskey][paramkey] += te[obskey][paramkey]
+					end
+				end
+			end
+			for obskey in keys(fosall)
+				for paramkey in keys(fosall[obskey])
+					fosall[obskey][paramkey] /= numsaltellis
+					teall[obskey][paramkey] /= numsaltellis
+				end
+			end
+			return fosall, teall
+		end
+	end
+	eval(q)
+end
+
+function printsaltelli(madsdata, fos, te)
+	println("First order sensitivity")
+	print("\t")
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	for paramkey in paramkeys
+		print("\t$(paramkey)")
+	end
+	println()
+	for obskey in obskeys
+		print(obskey)
+		for paramkey in paramkeys
+			print("\t$(fos[obskey][paramkey])")
+		end
+		println()
+	end
+	println("\nTotal effect")
+	print("\t")
+	for paramkey in paramkeys
+		print("\t$(paramkey)")
+	end
+	println()
+	for obskey in obskeys
+		print(obskey)
+		for paramkey in paramkeys
+			print("\t$(te[obskey][paramkey])")
+		end
+		println()
+	end
+end
+
 end # Module end
