@@ -234,10 +234,13 @@ function saltelli(madsdata; N=int(1e6))
       B[i, j] = Distributions.rand(distributions[paramkeys[j]])
     end
   end
-  yA = Array(Float64, N)
-  yB = Array(Float64, N)
-  yA = hcat(yA, values(pmap(f,{Dict{String, Float64}(paramkeys, A[:, :])})))
-  yB = hcat(yB, values(pmap(f,{Dict{String, Float64}(paramkeys, B[:, :])})))
+  yA = Array(Float64, length(obskeys)) # there shoudl be better way
+  yB = Array(Float64, length(obskeys)) # we need to define vector length
+  println(yA);
+  # println(pmap(f,{Dict{String, Float64}(paramkeys, A[:, :])}))
+  yA = vcat(yA, pmap(f,{Dict{String, Float64}(paramkeys, A[:, :])}))
+  yB = vcat(yB, pmap(f,{Dict{String, Float64}(paramkeys, B[:, :])}))
+  madswarn("""$(yA)""");
   #yA[i, :] = map(k->result[k], obskeys)
   #yB[i, :] = map(k->result[k], obskeys)
   for i = 1:length(paramkeys)
