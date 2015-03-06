@@ -73,15 +73,21 @@ mdinternal = Mads.loadyamlmadsfile("tests/test-internal.mads")
 results = Mads.calibrate(mdinternal)
 println(results)
 
-# Saltelli senstivity analysis test
+# Saltelli senstivity analysis tests
+println("TEST Saltelli senstivity analysis:")
+mdsobol = Mads.loadyamlmadsfile("tests/test-sobol.mads")
+results = Mads.saltelli(mdsobol,N=int(1e4))
+Mads.saltelliprintresults(mdsaltelli,results)
 println("TEST Saltelli senstivity analysis:")
 mdsaltelli = Mads.loadyamlmadsfile("tests/test-saltelli.mads")
 results = Mads.saltelli(mdsaltelli)
-println(results)
+results = Mads.saltelliparallel(mdsaltelli,2)
+Mads.saltelliprintresults(mdsaltelli,results)
 println("TEST Saltelli senstivity analysis (brute force):")
 mdsaltelli = Mads.loadyamlmadsfile("tests/test-saltelli.mads")
 results = Mads.saltellibrute(mdsaltelli)
-println(results)
+results = Mads.saltellibruteparallel(mdsaltelli,2)
+Mads.saltelliprintresults(mdsaltelli,results)
 
 # Bayesian sampling test
 println("TEST Bayesian sampling:")
