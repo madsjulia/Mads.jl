@@ -218,11 +218,8 @@ function saltelli(madsdata; N=int(1e6))
 	f = makemadscommandfunction(madsdata)
 	A = Array(Float64, (N, length(paramkeys)))
 	B = Array(Float64, (N, length(paramkeys)))
-	Ci = Dict{String, Float64}()
-	# yA = Array(Float64, (N, length(obskeys)))
-	# yB = Array(Float64, (N, length(obskeys)))
-	yC = Array(Float64, (N, length(obskeys)))
-	fos = Dict{String, Dict{String, Float64}}() # f irst order sensitivities
+	C = Array(Float64, (N, length(paramkeys)))
+	fos = Dict{String, Dict{String, Float64}}() # first order sensitivities
 	te = Dict{String, Dict{String, Float64}}()	# total effect
 	for i = 1:length(obskeys)
 		fos[obskeys[i]] = Dict{String, Float64}()
@@ -234,27 +231,19 @@ function saltelli(madsdata; N=int(1e6))
 			B[i, j] = Distributions.rand(distributions[paramkeys[j]])
 		end
 	end
-	yA = Array(Float64, length(obskeys)) # there shoudl be better way
-	yB = Array(Float64, length(obskeys)) # we need to define vector length
-	println(yA);
-	# println(pmap(f,{Dict{String, Float64}(paramkeys, A[:, :])}))
-	yA = vcat(yA, pmap(f,{Dict{String, Float64}(paramkeys, A[:, :])}))
-	yB = vcat(yB, pmap(f,{Dict{String, Float64}(paramkeys, B[:, :])}))
-	madswarn("""$(yA)""");
-	#yA[i, :] = map(k->result[k], obskeys)
-	#yB[i, :] = map(k->result[k], obskeys)
+	yA = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, A[i, :])))), 1:size(A, 1))...)'
+	yB = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, B[i, :])))), 1:size(B, 1))...)'
 	for i = 1:length(paramkeys)
 		for j = 1:N
 			for k = 1:length(paramkeys)
 				if k != i
-					Ci[paramkeys[k]] = B[j, k]
+					C[j, k] = B[j, k]
 				else
-					Ci[paramkeys[k]] = A[j, k]
+					C[j, k] = A[j, k]
 				end
 			end
-			result = f(Ci)
-			yC[j, :] = map(k->result[k], obskeys)
 		end
+		yC = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, C[i, :])))), 1:size(C, 1))...)'
 		for j = 1:length(obskeys)
 			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
 			variance = .5 * ((dot(yA[:, j], yA[:, j]) - f0 ^ 2) + (dot(yB[:, j], yB[:, j]) - f0 ^ 2))

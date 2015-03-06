@@ -93,11 +93,13 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 end
 
 function getparamkeys(madsdata)
-  return [convert(String,k) for k in keys(madsdata["Parameters"])]
+	return collect(keys(madsdata["Parameters"]))
+  #return [convert(String,k) for k in keys(madsdata["Parameters"])]
 end
 
 function getobskeys(madsdata)
-  return [convert(String,k) for k in keys(madsdata["Observations"])]
+	return collect(keys(madsdata["Observations"]))
+  #return [convert(String,k) for k in keys(madsdata["Observations"])]
 end
 
 function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
