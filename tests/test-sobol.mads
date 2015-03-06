@@ -11,4 +11,4 @@ Parameters:
 - h : { longname: "parameter h", init: 0, type: opt, log: no, step: 0.1, min: 0.5, max: 0.5, dist: "Normal(-0.5, 0.5)" }
 Observations:
 - o1: { longname: "observation 1", log: false, max: 20, min: -20, target: 0, weight: 1}
-Model: tests/test-sobol.jl
+Model: test-sobol.jl

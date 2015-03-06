@@ -129,7 +129,7 @@ function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2
 			te[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
 		end
 	end
-	return mean, variance, fos, te
+	return fos, te
 end
 
 @doc "Saltelli " ->
@@ -254,6 +254,38 @@ function saltelliprintresults(madsdata, results)
 		println()
 	end
 	println("\nFirst order sensitivity")
+	print("\t")
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	for paramkey in paramkeys
+		print("\t$(paramkey)")
+	end
+	println()
+	for obskey in obskeys
+		print(obskey)
+		for paramkey in paramkeys
+			print("\t$(fos[obskey][paramkey])")
+		end
+		println()
+	end
+	println("\nTotal effect")
+	print("\t")
+	for paramkey in paramkeys
+		print("\t$(paramkey)")
+	end
+	println()
+	for obskey in obskeys
+		print(obskey)
+		for paramkey in paramkeys
+			print("\t$(te[obskey][paramkey])")
+		end
+		println()
+	end
+end
+
+function saltelliprintresults2(madsdata, results)
+	fos, te = results
+	println("First order sensitivity")
 	print("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)

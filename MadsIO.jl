@@ -9,7 +9,6 @@ if haskey(madsdata, "Model")
 elseif haskey(madsdata, "Command")
 	madsinfo("External command execution ...")
 	function madscommandfunction(parameters::Dict) # MADS command function
-		# cd("/Users/monty/codes/madsjulia/examples/wells-short")
 		newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
 		madsinfo("""Temp directory: $(newdirname)""")
 		run(`mkdir $newdirname`)
