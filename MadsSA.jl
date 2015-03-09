@@ -5,7 +5,7 @@ end
 @docstrings
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; numsamples=int(1e6), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e4))
+function saltellibrute(madsdata; numsamples=int(1e2), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e2))
 	# convert the distribution strings into actual distributions
 	paramkeys = getparamkeys(madsdata)
 	# find the mean and variance
