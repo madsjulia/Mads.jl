@@ -4,6 +4,7 @@ using Optim
 using Lora
 using Distributions
 using Logging
+import NLopt
 
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
@@ -46,14 +47,14 @@ function calibrate(madsdata)
 	function f_lm(arrayparameters::Vector)
 		parameters = Dict(paramkeys, arrayparameters)
 		resultdict = f(parameters)
-		squaredresiduals = Array(Float64, length(madsdata["Observations"]))
+		residuals = Array(Float64, length(madsdata["Observations"]))
 		i = 1
 		for obskey in obskeys
 			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			squaredresiduals[i] = diff * sqrt(madsdata["Observations"][obskey]["weight"])
+			residuals[i] = diff * sqrt(madsdata["Observations"][obskey]["weight"])
 			i += 1
 		end
-		return squaredresiduals
+		return residuals
 	end
 	function g_lm(arrayparameters::Vector)
 		parameters = Dict(paramkeys, arrayparameters)
@@ -84,6 +85,59 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
 	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
 	return mcmcchain
+end
+
+@doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach
+function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
+	const paramkeys = getparamkeys(madsdata)
+	const obskeys = getobskeys(madsdata)
+	parammins = Array(Float64, length(paramkeys))
+	parammaxs = Array(Float64, length(paramkeys))
+	paraminits = Array(Float64, length(paramkeys))
+	for i = 1:length(paramkeys)
+		parammins[i] = madsdata["Parameters"][paramkeys[i]]["min"]
+		parammaxs[i] = madsdata["Parameters"][paramkeys[i]]["max"]
+		paraminits[i] = madsdata["Parameters"][paramkeys[i]]["init"]
+	end
+	obs = Array(Float64, length(obskeys))
+	weights = Array(Float64, length(obskeys))
+	for i = 1:length(obskeys)
+		obs[i] = madsdata["Observations"][obskeys[i]]["target"]
+		weights[i] = madsdata["Observations"][obskeys[i]]["weight"]
+	end
+	fg = makemadscommandfunctionandgradient(madsdata)
+	function fg_nlopt(arrayparameters::Vector, grad::Vector)
+		parameters = Dict(paramkeys, arrayparameters)
+		resultdict, gradientdict = fg(parameters)
+		residuals = Array(Float64, length(madsdata["Observations"]))
+		ssr = 0
+		i = 1
+		for obskey in obskeys
+			residuals[i] = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
+			ssr += residuals[i] * residuals[i] * madsdata["Observations"][obskey]["weight"]
+			i += 1
+		end
+		if length(grad) > 0
+			i = 1
+			for paramkey in paramkeys
+				grad[i] = 0.
+				j = 1
+				for obskey in obskeys
+					grad[i] += 2 * residuals[j] * gradientdict[obskey][paramkey]
+					j += 1
+				end
+				i += 1
+			end
+		end
+		return ssr
+	end
+	opt = NLopt.Opt(algorithm, length(paramkeys))
+	NLopt.lower_bounds!(opt, parammins)
+	NLopt.upper_bounds!(opt, parammaxs)
+	NLopt.min_objective!(opt, fg_nlopt)
+	NLopt.maxeval!(opt, int(1e3))
+	minf, minx, ret = NLopt.optimize(opt, paraminits)
+	return minf, minx, ret
 end
 
 end # Module end

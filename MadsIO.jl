@@ -3,63 +3,63 @@ using MadsYAML
 using MadsASCII
 
 function makemadscommandfunction(madsdata) # make MADS command function
-if haskey(madsdata, "Model")
-	println("Internal model evaluation ...")
-	madscommandfunction = evalfile(madsdata["Model"])
-elseif haskey(madsdata, "Command")
-	madsinfo("External command execution ...")
-	function madscommandfunction(parameters::Dict) # MADS command function
-		newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
-		madsinfo("""Temp directory: $(newdirname)""")
-		run(`mkdir $newdirname`)
-		currentdir = pwd()
-		run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
-		if haskey(madsdata, "Templates") # Templates/Instructions
-			for filename in vcat(madsdata["Templates"][]["write"], madsdata["Instructions"][]["read"])
-			run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+	if haskey(madsdata, "Model")
+		println("Internal model evaluation ...")
+		madscommandfunction = evalfile(madsdata["Model"])
+	elseif haskey(madsdata, "Command")
+		madsinfo("External command execution ...")
+		function madscommandfunction(parameters::Dict) # MADS command function
+			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
+			madsinfo("""Temp directory: $(newdirname)""")
+			run(`mkdir $newdirname`)
+			currentdir = pwd()
+			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
+			if haskey(madsdata, "Templates") # Templates/Instructions
+				for filename in vcat(madsdata["Templates"][]["write"], madsdata["Instructions"][]["read"])
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+				cd(newdirname)
+				for template in madsdata["Templates"]
+					writeparamtersviatemplate(parameters, template["tpl"], template["write"]) # write the parameters
+				end
+				cd(currentdir)
+			elseif haskey(madsdata, "YAMLParameters") # YAML
+				for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+				MadsYAML.dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
+			elseif haskey(madsdata, "ASCIIParameters") # ASCII
+				for filename in vcat(madsdata["ASCIIPredictions"], madsdata["ASCIIParameters"])
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+				MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
 			end
-			cd(newdirname)
-			for template in madsdata["Templates"]
-			writeparamtersviatemplate(parameters, template["tpl"], template["write"]) # write the parameters
+			madsinfo("""Execute: $(madsdata["Command"])""")
+			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
+			results = Dict()
+			if haskey(madsdata, "Instructions") # Templates/Instructions
+				cd(newdirname)
+				results = readobservations(madsdata)
+				cd(currentdir)
+				madsinfo("""Observations: $(results)""")
+			elseif haskey(madsdata, "YAMLPredictions") # YAML
+				for filename in madsdata["YAMLPredictions"]
+					results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
+				end
+			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
+				predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
+				obskeys = getobskeys(madsdata)
+				obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
+				@assert length(obskeys) == length(predictions)
+				results = Dict{String, Float64}(obsid, predictions)
 			end
-			cd(currentdir)
-		elseif haskey(madsdata, "YAMLParameters") # YAML
-			for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
-			run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
-			end
-			MadsYAML.dumpasciifile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
-		elseif haskey(madsdata, "ASCIIParameters") # ASCII
-			for filename in vcat(madsdata["ASCIIPredictions"], madsdata["ASCIIParameters"])
-			run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
-			end
-			MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
+			run(`rm -fR $newdirname`)
+			return results
 		end
-		madsinfo("""Execute: $(madsdata["Command"])""")
-		run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
-		results = Dict()
-		if haskey(madsdata, "Instructions") # Templates/Instructions
-			cd(newdirname)
-			results = readobservations(madsdata)
-			cd(currentdir)
-			madsinfo("""Observations: $(results)""")
-		elseif haskey(madsdata, "YAMLPredictions") # YAML
-			for filename in madsdata["YAMLPredictions"]
-			results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
-			end
-		elseif haskey(madsdata, "ASCIIPredictions") # ASCII
-			predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
-			obskeys = getobskeys(madsdata)
-			obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
-			@assert length(obskeys) == length(predictions)
-			results = Dict{String, Float64}(obsid, predictions)
-		end
-		run(`rm -fR $newdirname`)
-		return results
+	else
+		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 	end
-else
-	error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
-end
-return madscommandfunction
+	return madscommandfunction
 end
 
 function makemadscommandgradient(madsdata) # make MADS command gradient function
@@ -70,26 +70,56 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 		xph["noparametersvaried"] = parameters
 		i = 2
 		for paramkey in keys(parameters)
-		xph[paramkey] = copy(parameters)
-		xph[paramkey][paramkey] += h
-		i += 1
+			xph[paramkey] = copy(parameters)
+			xph[paramkey][paramkey] += h
+			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
 		fevalsdict = Dict()
 		for feval in fevals
-		fevalsdict[feval[1]] = feval[2]
+			fevalsdict[feval[1]] = feval[2]
 		end
 		gradient = Dict()
 		resultkeys = keys(fevals[1][2])
 		for resultkey in resultkeys
-		gradient[resultkey] = Dict()
-		for paramkey in keys(parameters)
-			gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
-		end
+			gradient[resultkey] = Dict()
+			for paramkey in keys(parameters)
+				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+			end
 		end
 		return gradient
 	end
 	return madscommandgradient
+end
+
+function makemadscommandfunctionandgradient(madsdata)
+	f = makemadscommandfunction(madsdata)
+	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
+		xph = Dict()
+		h = 1e-6
+		xph["noparametersvaried"] = parameters
+		i = 2
+		for paramkey in keys(parameters)
+			xph[paramkey] = copy(parameters)
+			xph[paramkey][paramkey] += h
+			i += 1
+		end
+		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		fevalsdict = Dict()
+		for feval in fevals
+			fevalsdict[feval[1]] = feval[2]
+		end
+		gradient = Dict()
+		resultkeys = keys(fevals[1][2])
+		for resultkey in resultkeys
+			gradient[resultkey] = Dict()
+			for paramkey in keys(parameters)
+				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+			end
+		end
+		return fevalsdict["noparametersvaried"], gradient
+	end
+	return madscommandfunctionandgradient
 end
 
 function getparamkeys(madsdata)
