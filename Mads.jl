@@ -34,6 +34,7 @@ end
 function calibrate(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata)
+	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	initparams = Array(Float64, length(paramkeys))
@@ -67,7 +68,9 @@ function calibrate(madsdata)
 		end
 		return jacobian
 	end
-	results = Mads.levenberg_marquardt(f_lm, g_lm, initparams, show_trace=false)
+	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
+	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=true)
 	return results
 end
 
