@@ -31,9 +31,9 @@ function savecalibrationresults(madsdata, results)
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata)
+function calibrate(madsdata; maxIter=100)
 	f = makemadscommandfunction(madsdata)
-	g = makemadscommandgradient(madsdata)
+	g = makemadscommandgradient(madsdata, f)
 	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -70,8 +70,9 @@ function calibrate(madsdata)
 	end
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=true)
-	return results
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=true, maxIter=maxIter)
+	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
+	return minimum, results
 end
 
 @doc "Bayes Sampling " ->

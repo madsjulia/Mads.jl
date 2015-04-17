@@ -3,7 +3,9 @@ using MadsYAML
 using MadsASCII
 
 function makemadscommandfunction(madsdata) # make MADS command function
-	if haskey(madsdata, "Model")
+	if haskey(madsdata, "Dynamic model")
+		madscommandfunction = madsdata["Dynamic model"]
+	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
 		madscommandfunction = evalfile(madsdata["Model"])
 	elseif haskey(madsdata, "Command")
@@ -64,6 +66,10 @@ end
 
 function makemadscommandgradient(madsdata) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
+	return makemadscommandgradient(madsdata, f)
+end
+
+function makemadscommandgradient(madsdata, f::Function) # make MADS command gradient function
 	function madscommandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
 		h = 1e-6
@@ -90,36 +96,6 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 		return gradient
 	end
 	return madscommandgradient
-end
-
-function makemadscommandfunctionandgradient(madsdata)
-	f = makemadscommandfunction(madsdata)
-	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
-		xph = Dict()
-		h = 1e-6
-		xph["noparametersvaried"] = parameters
-		i = 2
-		for paramkey in keys(parameters)
-			xph[paramkey] = copy(parameters)
-			xph[paramkey][paramkey] += h
-			i += 1
-		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
-		fevalsdict = Dict()
-		for feval in fevals
-			fevalsdict[feval[1]] = feval[2]
-		end
-		gradient = Dict()
-		resultkeys = keys(fevals[1][2])
-		for resultkey in resultkeys
-			gradient[resultkey] = Dict()
-			for paramkey in keys(parameters)
-				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
-			end
-		end
-		return fevalsdict["noparametersvaried"], gradient
-	end
-	return madscommandfunctionandgradient
 end
 
 function getparamkeys(madsdata)
