@@ -18,7 +18,7 @@ end
 function dumpyamlfile(filename::String, yamldata) # dump YAML file
 	f = open(filename, "w")
 	# write(f, YAML.dump(yamldata)) # crashes
-	write(f, yaml.dump(yamldata)) # for now we use the python library because the YAML julia library cannot dump
+	write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
 	close(f)
 end
 
@@ -63,12 +63,21 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 	return madsdict
 end
 
-function dumpyamlmadsfile(filename::String, yamldata) # load MADS input file in YAML forma
+function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in YAML forma
 	#TODO we need to restore the "stupid" YAML structure of MADS file
 	#TODO we can also forget about it
 	#TODO it was originally impletemented to perform miltple independent runs with different parameter definitions for
 	# each parameter/observations but we never got there and most probably we will never will
 	#TODO we need to keep the order and not sort alphabetically parameters and observations
+	yamldata = copy(madsdata)
+	for obsorparam in ["Observations", "Parameters"]
+		yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
+		i = 1
+		for key in keys(madsdata[obsorparam])
+			yamldata[obsorparam][i] = {key=>madsdata[obsorparam][key]}
+			i += 1
+		end
+	end
 	dumpyamlfile(filename, yamldata)
 end
 

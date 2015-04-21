@@ -70,7 +70,7 @@ function calibrate(madsdata; maxIter=100)
 	end
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=true, maxIter=maxIter)
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=false, maxIter=maxIter)
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	return minimum, results
 end
