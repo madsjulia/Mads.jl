@@ -43,3 +43,30 @@ end
 function setdynamicmodel(madsdata, f::Function)
 	madsdata["Dynamic model"] = f
 end
+
+getparamsnames = ["min", "max", "init", "type"]
+getparamstypes = [Float64, Float64, Float64, Any]
+for i = 1:length(getparamsnames)
+	name = getparamsnames[i]
+	typ = getparamstypes[i]
+	q = quote
+		function $(symbol(string("getparams", name)))(madsdata, paramkeys)
+			retval = Array($(typ), length(paramkeys))
+			for i in 1:length(paramkeys)
+				retval[i] = madsdata["Parameters"][paramkeys[i]][$name]
+			end
+			return retval
+		end
+		function $(symbol(string("getparams", name)))(madsdata)
+			paramkeys = getparamkeys(madsdata)
+			return $(symbol(string("getparams", name)))(madsdata, paramkeys)
+		end
+	end
+	eval(q)
+end
+
+function getoptparamkeys(madsdata)
+	paramtypes = getparamstype(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return paramkeys[paramtypes .== "opt"]
+end

@@ -60,6 +60,7 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		end
 		madsdict["Instructions"] = instructions
 	end
+	madsdict["Filename"] = filename
 	return madsdict
 end
 

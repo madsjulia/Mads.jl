@@ -4,6 +4,7 @@ using MadsASCII
 
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Dynamic model")
+		println("Dynamic model evaluation")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
@@ -53,7 +54,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				obskeys = getobskeys(madsdata)
 				obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
 				@assert length(obskeys) == length(predictions)
-				results = OrderedDict{String, Float64}(obsid, predictions)
+				results = OrderedDict{String, Float64}(zip(obsid, predictions))
 			end
 			run(`rm -fR $newdirname`)
 			return results
