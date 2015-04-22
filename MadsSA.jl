@@ -1,3 +1,4 @@
+using DataStructures
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -5,13 +6,17 @@ end
 @docstrings
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; numsamples=int(1e2), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e2))
+function saltellibrute(madsdata; N=int(1e4))
+	#numsamples=int(1e2), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e2))
+	numsamples = int(sqrt(N))
+	numoneparamsamples = int(sqrt(N))
+	nummanyparamsamples = int(sqrt(N))
 	# convert the distribution strings into actual distributions
 	paramkeys = getparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getdistributions(madsdata)
-	results = Array(Dict, numsamples)
+	results = Array(OrderedDict, numsamples)
 	paramdict = Dict()
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
@@ -101,7 +106,7 @@ function saltellibrute(madsdata; numsamples=int(1e2), numoneparamsamples=int(1e2
 					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
 				end
 			end
-			results = Array(Dict, numoneparamsamples)
+			results = Array(OrderedDict, numoneparamsamples)
 			for k = 1:numoneparamsamples
 				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
 				results[k] = f(paramdict)
@@ -182,7 +187,7 @@ function saltelli(madsdata; N=int(100))
 			te[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
 		end
 	end
-	return meandata, variance, fos, te
+	return fos, te
 end
 
 names = ["saltelli", "saltellibrute"]
@@ -195,13 +200,13 @@ for mi = 1:length(names)
 				return
 			end
 			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
-			meanall, varianceall, fosall, teall = results[1]
+			fosall, teall = results[1]
 			for i = 2:numsaltellis
-				mean, variance, fos, te = results[i]
+				fos, te = results[i]
 				for obskey in keys(fos)
 					for paramkey in keys(fos[obskey])
-						meanall[obskey][paramkey] += mean[obskey][paramkey]
-						varianceall[obskey][paramkey] += variance[obskey][paramkey]
+						#meanall[obskey][paramkey] += mean[obskey][paramkey]
+						#varianceall[obskey][paramkey] += variance[obskey][paramkey]
 						fosall[obskey][paramkey] += fos[obskey][paramkey]
 						teall[obskey][paramkey] += te[obskey][paramkey]
 					end
@@ -209,20 +214,21 @@ for mi = 1:length(names)
 			end
 			for obskey in keys(fosall)
 				for paramkey in keys(fosall[obskey])
-					meanall[obskey][paramkey] /= numsaltellis
-					varianceall[obskey][paramkey] /= numsaltellis
+					#meanall[obskey][paramkey] /= numsaltellis
+					#varianceall[obskey][paramkey] /= numsaltellis
 					fosall[obskey][paramkey] /= numsaltellis
 					teall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			return meanall, varianceall, fosall, teall
+			return fosall, teall
 		end # end fuction
 	end # end quote
 	eval(q)
 end
 
 function saltelliprintresults(madsdata, results)
-	mean, variance, fos, te = results
+	fos, te = results
+	#=
 	println("Mean")
 	print("\t")
 	obskeys = getobskeys(madsdata)
@@ -253,6 +259,7 @@ function saltelliprintresults(madsdata, results)
 		end
 		println()
 	end
+	=#
 	println("\nFirst order sensitivity")
 	print("\t")
 	obskeys = getobskeys(madsdata)
