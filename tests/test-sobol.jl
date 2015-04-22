@@ -1,3 +1,4 @@
+using DataStructures
 function madsmodelrun(parameters::Dict) # Sobol Test
 	f = 1
 	i = 1
@@ -7,6 +8,7 @@ function madsmodelrun(parameters::Dict) # Sobol Test
 		f = f * b
 		i = i + 1
 	end
-	predictions = {"o1"=>f}
+	#predictions = {"o1"=>f}
+	predictions = OrderedDict{String, Float64}(zip(["o1"], [f]))
 	return predictions
 end

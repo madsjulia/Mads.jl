@@ -38,7 +38,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			end
 			madsinfo("""Execute: $(madsdata["Command"])""")
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
-			results = Dict()
+			results = OrderedDict()
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				cd(newdirname)
 				results = readobservations(madsdata)
@@ -53,7 +53,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				obskeys = getobskeys(madsdata)
 				obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
 				@assert length(obskeys) == length(predictions)
-				results = Dict{String, Float64}(obsid, predictions)
+				results = OrderedDict{String, Float64}(obsid, predictions)
 			end
 			run(`rm -fR $newdirname`)
 			return results
@@ -96,6 +96,36 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 		return gradient
 	end
 	return madscommandgradient
+end
+
+function makemadscommandfunctionandgradient(madsdata)
+	f = makemadscommandfunction(madsdata)
+	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
+		xph = Dict()
+		h = 1e-6
+		xph["noparametersvaried"] = parameters
+		i = 2
+		for paramkey in keys(parameters)
+			xph[paramkey] = copy(parameters)
+			xph[paramkey][paramkey] += h
+			i += 1
+		end
+		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		fevalsdict = Dict()
+		for feval in fevals
+			fevalsdict[feval[1]] = feval[2]
+		end
+		gradient = Dict()
+		resultkeys = keys(fevals[1][2])
+		for resultkey in resultkeys
+			gradient[resultkey] = Dict()
+			for paramkey in keys(parameters)
+				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+			end
+		end
+		return fevalsdict["noparametersvaried"], gradient
+	end
+	return madscommandfunctionandgradient
 end
 
 function getparamkeys(madsdata)
@@ -161,7 +191,11 @@ function getdistributions(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	distributions = Dict()
 	for i in 1:length(paramkeys)
-		distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+		if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
+			distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+		else
+			distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]]["min"], madsdata["Parameters"][paramkeys[i]]["max"])
+		end
 	end
 	return distributions
 end

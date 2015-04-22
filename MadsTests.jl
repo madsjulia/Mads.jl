@@ -3,19 +3,23 @@ Logging.configure(level=Logging.OFF)
 
 include("tests/optimization_rosenbrock.jl")
 
-cd("examples/wells-short")
-include("examples/wells-short/optimization_wells.jl")
-cd("../..")
+if isdefined(ARGS) && ARGS[1] == "doslowtests"
+	cd("examples/wells-short")
+	include("examples/wells-short/optimization_wells.jl")
+	cd("../..")
 
-# Optimization of external YAML problem
-cd("tests")
-include("tests/optimization_external_yaml_problem.jl") # WORKS but slow
-cd("..")
+	# Optimization of external YAML problem
+	cd("tests")
+	include("tests/optimization_external_yaml_problem.jl") # WORKS but slow
+	cd("..")
 
-# external execution test using ASCII files
-cd("tests")
-include("tests/optimization_external_ascii_problem.jl")
-cd("..")
+	# external execution test using ASCII files
+	cd("tests")
+	include("tests/optimization_external_ascii_problem.jl")
+	cd("..")
+else
+	warn("skipping slow tests")
+end
 
 # internal execution test
 include("tests/optimization_linear_problem.jl")
