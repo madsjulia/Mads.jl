@@ -71,6 +71,11 @@ function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in 
 	# each parameter/observations but we never got there and most probably we will never will
 	#TODO we need to keep the order and not sort alphabetically parameters and observations
 	yamldata = copy(madsdata)
+	hasdynamicmodel = false
+	if haskey(yamldata, "Dynamic model")
+		dynamicmodel = yamldata["Dynamic model"]
+		delete!(yamldata, "Dynamic model")
+	end
 	for obsorparam in ["Observations", "Parameters"]
 		yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
 		i = 1
@@ -78,6 +83,9 @@ function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in 
 			yamldata[obsorparam][i] = {key=>madsdata[obsorparam][key]}
 			i += 1
 		end
+	end
+	if hasdynamicmodel
+		yamldata["Dyanmic model"] = dynamicmodel
 	end
 	dumpyamlfile(filename, yamldata)
 end
