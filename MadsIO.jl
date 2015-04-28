@@ -156,8 +156,8 @@ function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
 		for i = 1:int((length(splitline)-1)/2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-			madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]["init"]) )
-			write(outfile, string(parameters[strip(splitline[2 * i])]["init"])) # splitline[2 * i] in this case is parameter ID
+			madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]) )
+			write(outfile, string(parameters[strip(splitline[2 * i])])) # splitline[2 * i] in this case is parameter ID
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
 	end
@@ -165,8 +165,10 @@ function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 end
 
 function writeparameters(madsdata)
+	paramsinit = getparamsinit(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	for template in madsdata["Templates"]
-		writeparamtersviatemplate(madsdata["Parameters"], template["tpl"], template["write"])
+		writeparamtersviatemplate(Dict(paramkeys, paramsinit), template["tpl"], template["write"])
 	end
 end
 
