@@ -26,14 +26,32 @@ end
 function montecarlo(madsdata; N=int(1e2))
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
+	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
+	nonlogoptparamkeys = getnonlogparamkeys(madsdata, optparamkeys)
 	paramtypes = getparamstype(madsdata)
-	optparamsmin = getparamsmin(madsdata, optparamkeys)
-	optparamsmax = getparamsmax(madsdata, optparamkeys)
-	optparams = BlackBoxOptim.Utils.latin_hypercube_sampling(optparamsmin, optparamsmax, N)
+	paramlogs = getparamslog(madsdata)
+	logoptparamsmin = log10(getparamsmin(madsdata, logoptparamkeys))
+	logoptparamsmax = log10(getparamsmax(madsdata, logoptparamkeys))
+	nonlogoptparamsmin = getparamsmin(madsdata, nonlogoptparamkeys)
+	nonlogoptparamsmax = getparamsmax(madsdata, nonlogoptparamkeys)
+	logoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(logoptparamsmin, logoptparamsmax, N)
+	nonlogoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(nonlogoptparamsmin, nonlogoptparamsmax, N)
 	paramdicts = Array(Dict, N)
 	params = getparamsinit(madsdata)
 	for i = 1:N
-		params[paramtypes .== "opt"] = optparams[i, :]
+		klog = 1
+		knonlog = 1
+		for j = 1:length(params)
+			if paramtypes[j] == "opt"
+				if paramlogs[j] == true || paramlogs[j] == "yes"
+					params[j] = 10 ^ logoptparams[i, klog]
+					klog += 1
+				else
+					params[j] = nonlogoptparams[i, knonlog]
+					knonlog += 1
+				end
+			end
+		end
 		paramdicts[i] = Dict(zip(paramkeys, params))
 	end
 	f = makemadscommandfunction(madsdata)
