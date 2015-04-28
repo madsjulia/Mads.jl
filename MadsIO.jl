@@ -18,7 +18,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			currentdir = pwd()
 			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
-				for filename in vcat(madsdata["Instructions"][]["write"])
+				for filename in vcat(madsdata["Instructions"][]["read"])
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
