@@ -134,6 +134,28 @@ function makemadscommandfunctionandgradient(madsdata)
 	return madscommandfunctionandgradient
 end
 
+function makemadsloglikelihood(madsdata)
+	if haskey(madsdata, "LogLikelihood")
+		println("Internal log likelihood")
+		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
+	else
+		println("External log likelihood")
+		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
+			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
+			wssr = 0.
+			for obsname in keys(predictions)
+				pred = predictions[obsname]
+				obs = observations[obsname]["target"]
+				weight = observations[obsname]["weight"]
+				diff = obs - pred
+				wssr += weight * diff * diff
+			end
+			return -wssr
+		end
+	end
+	return madsloglikelihood
+end
+
 function getparamkeys(madsdata)
 	return collect(keys(madsdata["Parameters"]))
 	#return [convert(String,k) for k in keys(madsdata["Parameters"])]

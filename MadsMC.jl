@@ -8,7 +8,7 @@ end
 
 @doc "Bayes Sampling " ->
 function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
-	madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
+	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	paramkeys = getparamkeys(madsdata)
 	initvals = Array(Float64, length(paramkeys))
@@ -20,6 +20,12 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
 	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
 	return mcmcchain
+end
+
+@doc "Brute force parallel Bayesian sampling " ->
+function bayessampling(madsdata, numsequences; nsteps=int(1e2), burnin=int(1e3))
+	mcmcchains = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin), 1:numsequences)
+	return mcmcchains
 end
 
 @doc "Do a forward Monte Carlo analysis " ->
