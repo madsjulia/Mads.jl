@@ -18,12 +18,14 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			currentdir = pwd()
 			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
-				for filename in vcat(madsdata["Instructions"][]["read"])
+				for instruction in madsdata["Instructions"]
+					filename = instruction["read"]
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "Templates") # Templates/Instructions
-				for filename in vcat(madsdata["Templates"][]["write"])
+				for template in madsdata["Templates"]
+					filename = template["write"]
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				cd(newdirname)
@@ -31,16 +33,28 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					writeparamtersviatemplate(parameters, template["tpl"], template["write"]) # write the parameters
 				end
 				cd(currentdir)
-			elseif haskey(madsdata, "YAMLParameters") # YAML
-				for filename in vcat(madsdata["YAMLPredictions"], madsdata["YAMLParameters"])
+			end
+			if haskey(madsdata, "YAMLParameters") # YAML
+				for filename in vcat(madsdata["YAMLParameters"])#the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				MadsYAML.dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
-			elseif haskey(madsdata, "ASCIIParameters") # ASCII
-				for filename in vcat(madsdata["ASCIIPredictions"], madsdata["ASCIIParameters"])
+			end
+			if haskey(madsdata, "YAMLPredictions") # YAML
+				for filename in vcat(madsdata["YAMLPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+			end
+			if haskey(madsdata, "ASCIIParameters") # ASCII
+				for filename in vcat(madsdata["ASCIIParameters"])#the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
+			end
+			if haskey(madsdata, "ASCIIPredictions") # ASCII
+				for filename in vcat(madsdata["ASCIIPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
 			end
 			madsinfo("""Execute: $(madsdata["Command"])""")
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
@@ -51,13 +65,13 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				cd(currentdir)
 				madsinfo("""Observations: $(results)""")
 			elseif haskey(madsdata, "YAMLPredictions") # YAML
-				for filename in madsdata["YAMLPredictions"]
+				for filename in vcat(madsdata["YAMLPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
 					results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
 				end
 			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
 				predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 				obskeys = getobskeys(madsdata)
-				obsid=[convert(String,k) for k in obskeys] # TODO make sure that yaml parsing preserves the order in the input file
+				obsid=[convert(String,k) for k in obskeys]
 				@assert length(obskeys) == length(predictions)
 				results = OrderedDict{String, Float64}(zip(obsid, predictions))
 			end
@@ -198,7 +212,7 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inp
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
 	obscheck = -1 * ones(n) # initialize to -1
-	debug = 1 # setting debug level 0 or 1 works
+	debug = 0 # setting debug level 0 or 1 works
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
 	result = ccall( (:ins_obs, "libmads"), Int32,
 					(Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
@@ -208,11 +222,14 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inp
 end
 
 function readobservations(madsdata)
-	obsid=getobskeys(madsdata)
-	observations = Dict()
+	obsids=getobskeys(madsdata)
+	observations = Dict(obsids, zeros(length(obsids)))
 	for instruction in madsdata["Instructions"]
-		obs = cmadsins_obs(obsid, instruction["ins"], instruction["read"])
-		observations = merge(observations, obs)
+		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
+		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once
+		for obsid in obsids
+			observations[obsid] += obs[obsid]
+		end
 	end
 	return observations
 end

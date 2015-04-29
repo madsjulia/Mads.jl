@@ -37,7 +37,11 @@ end
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	return arrayparameters::Vector -> loglikelihood(Dict(paramkeys, arrayparameters), f(Dict(paramkeys, arrayparameters)), madsdata["Observations"])
+	function arrayloglikelihood(arrayparameters::Vector)
+		predictions = f(Dict(paramkeys, arrayparameters))
+		loglikelihood(Dict(paramkeys, arrayparameters), predictions, madsdata["Observations"])
+	end
+	return arrayloglikelihood
 end
 
 function setdynamicmodel(madsdata, f::Function)
