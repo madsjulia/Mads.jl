@@ -65,16 +65,18 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 end
 
 function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in YAML forma
-	#TODO we need to restore the "stupid" YAML structure of MADS file
-	#TODO we can also forget about it
-	#TODO it was originally impletemented to perform miltple independent runs with different parameter definitions for
-	# each parameter/observations but we never got there and most probably we will never will
-	#TODO we need to keep the order and not sort alphabetically parameters and observations
 	yamldata = copy(madsdata)
-	hasdynamicmodel = false
-	if haskey(yamldata, "Dynamic model")
-		dynamicmodel = yamldata["Dynamic model"]
-		delete!(yamldata, "Dynamic model")
+	deletekeys = ["Dynamic model", "Filename"]
+	restore = Array(Bool, length(deletekeys))
+	restorevals = Array(Any, length(deletekeys))
+	i = 1
+	for deletekey in deletekeys
+		if haskey(yamldata, deletekey)
+			restore[i] = true
+			restorevals[i] = yamldata[deletekey]
+			delete!(yamldata, deletekey)
+		end
+		i += 1
 	end
 	for obsorparam in ["Observations", "Parameters"]
 		yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
@@ -84,8 +86,14 @@ function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in 
 			i += 1
 		end
 	end
-	if hasdynamicmodel
-		yamldata["Dyanmic model"] = dynamicmodel
+	for tplorins in ["Templates", "Instructions"]
+		yamldata[tplorins] = Array(Any, length(madsdata[tplorins]))
+		i = 1
+		keys = map(string, 1:length(madsdata[tplorins]))
+		for key in keys
+			yamldata[tplorins][i] = {key=>madsdata[tplorins][i]}
+			i += 1
+		end
 	end
 	dumpyamlfile(filename, yamldata)
 end

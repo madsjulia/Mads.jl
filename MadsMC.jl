@@ -16,7 +16,7 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 		initvals[i] = madsdata["Parameters"][paramkeys[i]]["init"]
 	end
 	mcmcmodel = Lora.model(arrayloglikelihood, init=initvals)
-	sampler = Lora.RAM(1e-0, 0.3)
+	sampler = Lora.RAM(1e-1, 0.3)
 	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
 	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
 	return mcmcchain
