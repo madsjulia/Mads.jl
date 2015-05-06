@@ -150,10 +150,10 @@ end
 
 function makemadsloglikelihood(madsdata)
 	if haskey(madsdata, "LogLikelihood")
-		println("Internal log likelihood")
+		madsinfo("Internal log likelihood")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
-		println("External log likelihood")
+		madsinfo("External log likelihood")
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
 			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 			wssr = 0.
