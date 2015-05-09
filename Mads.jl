@@ -4,6 +4,9 @@ using Optim
 using Lora
 using Distributions
 using Logging
+if VERSION < v"0.4.0-dev"
+	using Docile # default for v > 0.4
+end
 import NLopt
 
 include("MadsIO.jl")
@@ -18,13 +21,11 @@ include("MadsLog.jl") # messages higher than specified level are printed
 Logging.configure(level=DEBUG)
 madsinfolevel=0
 madsdebuglevel=0
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
+
 # @document
 @docstrings
 
-@doc "Save calibration results" ->
+@doc "TODO Save calibration results" ->
 function savecalibrationresults(madsdata, results)
 	#TODO map estimated parameters on a new madsdata structure
 	#TODO save madsdata in yaml file using dumpyamlmadsfile

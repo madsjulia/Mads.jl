@@ -2,6 +2,7 @@ using Distributions
 using MadsYAML
 using MadsASCII
 
+@doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Dynamic model")
 		println("Dynamic model evaluation")
@@ -84,11 +85,13 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	return madscommandfunction
 end
 
+@doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
 
+@doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata, f::Function) # make MADS command gradient function
 	function madscommandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
@@ -118,6 +121,7 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 	return madscommandgradient
 end
 
+@doc "Make MADS command function & gradient function" ->
 function makemadscommandfunctionandgradient(madsdata)
 	f = makemadscommandfunction(madsdata)
 	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
@@ -148,6 +152,7 @@ function makemadscommandfunctionandgradient(madsdata)
 	return madscommandfunctionandgradient
 end
 
+@doc "Make MADS loglikelihood function" ->
 function makemadsloglikelihood(madsdata)
 	if haskey(madsdata, "LogLikelihood")
 		madsinfo("Internal log likelihood")
@@ -170,16 +175,19 @@ function makemadsloglikelihood(madsdata)
 	return madsloglikelihood
 end
 
+@doc "Get keys for parameters" ->
 function getparamkeys(madsdata)
 	return collect(keys(madsdata["Parameters"]))
 	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
 end
 
+@doc "Get keys for observations" ->
 function getobskeys(madsdata)
 	return collect(keys(madsdata["Observations"]))
 	#return [convert(String,k) for k in keys(madsdata["Observations"])]
 end
 
+@doc "Write paramters via MADS template" ->
 function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -200,6 +208,7 @@ function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 	close(outfile)
 end
 
+@doc "Write paramters" ->
 function writeparameters(madsdata)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -208,6 +217,7 @@ function writeparameters(madsdata)
 	end
 end
 
+@doc "Call C MADS ins_obs() function from the MADS library" ->
 function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inputfilename::ASCIIString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
@@ -221,6 +231,7 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inp
 	return observations
 end
 
+@doc "Read observations" ->
 function readobservations(madsdata)
 	obsids=getobskeys(madsdata)
 	observations = Dict(obsids, zeros(length(obsids)))
@@ -234,6 +245,7 @@ function readobservations(madsdata)
 	return observations
 end
 
+@doc "Get distributions" ->
 function getdistributions(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	distributions = Dict()

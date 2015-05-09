@@ -93,6 +93,7 @@ for i = 1:length(getfunction)
 	end
 	eval(q)
 end
+
 function getoptparamkeys(madsdata)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)

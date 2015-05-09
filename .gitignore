@@ -1,4 +1,5 @@
 .DS_Store
+.project
 *.s_point
 *.wells
 *.wells_debug
