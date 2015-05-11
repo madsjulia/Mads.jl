@@ -19,8 +19,8 @@ include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
 Logging.configure(level=DEBUG)
-madsinfolevel=0
-madsdebuglevel=0
+madsverbositylevel = 1
+madsdebuglevel = 1
 
 # @document
 @docstrings

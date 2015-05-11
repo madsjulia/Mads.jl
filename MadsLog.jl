@@ -1,12 +1,15 @@
-function madsdebug(message::String; level=1)
-	if level > madsdebuglevel
+function madsoutput(message::String; level=0)
+	if level <= madsverbositylevel
+		print(message) # level 0
+	end
+end
+function madsdebug(message::String; level=0)
+	if level <= madsdebuglevel
 		debug(message) # level 0
 	end
 end
-function madsinfo(message::String; level=1)
-	if level > madsinfolevel
-		info(message) # level 1
-	end
+function madsinfo(message::String)
+	info(message) # level 1
 end
 function madswarn(message::String)
 	warn(message) # level 2

@@ -1,7 +1,7 @@
 # sse(x) gives the L2 norm of x
 sse(x) = (x'*x)[1]
 
-function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
+function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -36,13 +36,13 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
-		println("Parallel lambda search; number of parallel lambdas: ", np_lambda)
+		madsoutput("""Parallel lambda search; number of parallel lambdas = $np_lambda\n"""; level = 1)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first jacobian
 	f_calls += 1
 	best_residual = residual = sse(fcur)
-	println("Initial OF: ", residual)
+	madsoutput("""Initial OF: $residual\n"""; level = 1)
 
 	# Maintain a trace of the system.
 	tr = Optim.OptimizationTrace()
@@ -62,9 +62,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12
 			J = g(x) # TODO compute this in parallel
 			g_calls += 1
 			need_jacobian = false
-			println("New Jacobian", residual)
+			madsoutput("Jacobian #$g_calls\n"; level = 1)
 		end
-		println("Current Best OF: ", best_residual)
+		madsoutput("""Current Best OF: $best_residual\n"""; level = 1)
 		# we want to solve:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
@@ -83,33 +83,35 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12
 				lambda_down /= lambda_mu
 				lambda_current = lambda_p[npl] = lambda_down
 			end
-			@printf " #%02d lambda: %e " npl lambda_current
+			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
 			delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
 			predicted_residual = phi[npl] = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			@printf "OF predicted: %e" predicted_residual
+			madsoutput(@sprintf "OF predicted: %e" predicted_residual; level = 2)
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
-				println(" -> not good")
+				madsoutput(" -> not good"; level = 2)
 				if np_lambda == 1
-					madswarn("""Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)""")
+					madsoutput("""Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)"""; level = 3)
 				end
 			else
-				println(" -> ok")
+				madsoutput(" -> ok"; level = 2)
 			end
 		end
 
 		for npl = 1:np_lambda # TODO execute this in parallel
 			delta_x = vec(delta_xp[npl,:])
-			# println(" #", npl, " lambda : delta_x ", delta_x )
+			madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 )
 			trial_f = trial_fp[npl,:] = f(x + delta_x) # TODO pmap equivalent of func_set in MADS
 			f_calls += 1
 			residual = sse(trial_f)
-			@printf " #%02d lambda: %e OF: %e (%e)\n" npl lambda_p[npl] residual phi[npl]
+			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n" npl lambda_p[npl] residual phi[npl]; level = 2 )
 			phi[npl] = residual
 		end
 
 		npl_best = indmin(phi)
+		npl_worst = indmax(phi)
+		madsoutput(@sprintf "OF range in the arallel lambda search: min %e max %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
 		lambda = lambda_p[npl_best]
 		delta_x = vec(delta_xp[npl_best,:])
 		trial_f = vec(trial_fp[npl_best,:])
@@ -133,6 +135,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12
 			x_best = x
 			f_best = fcur
 			best_residual = residual
+		else
+			madsoutput("Currently lambda search did not improve the OF"; level = 1 )
 		end
 		iterCt += 1
 
@@ -150,7 +154,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-8, tolG=1e-12
 		# 2. Small step size: norm(delta_x) < tolX
 		if norm(J' * fcur, Inf) < tolG
 			g_converged = true
-		elseif norm(delta_x) < tolX*(tolX + norm(x))
+		end
+		if norm(delta_x) < tolX*(tolX + norm(x))
 			x_converged = true
 		end
 		converged = g_converged | x_converged
