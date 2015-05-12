@@ -33,7 +33,7 @@ function savecalibrationresults(madsdata, results)
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; maxIter=100)
+function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata, f)
 	#f, g = makemadscommandfunctionandgradient(madsdata)
@@ -67,7 +67,7 @@ function calibrate(madsdata; maxIter=100)
 	end
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds), show_trace=false, maxIter=maxIter)
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	return minimum, results
 end

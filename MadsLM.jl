@@ -2,6 +2,7 @@
 sse(x) = (x'*x)[1]
 
 function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
+	println("np_lambda $np_lambda")
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -111,7 +112,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 
 		npl_best = indmin(phi)
 		npl_worst = indmax(phi)
-		madsoutput(@sprintf "OF range in the arallel lambda search: min %e max %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
+		madsoutput(@sprintf "OF range in the parallel lambda search: min %e max %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
 		lambda = lambda_p[npl_best]
 		delta_x = vec(delta_xp[npl_best,:])
 		trial_f = vec(trial_fp[npl_best,:])
