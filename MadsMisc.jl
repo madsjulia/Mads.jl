@@ -38,7 +38,12 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 	f = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	function arrayloglikelihood(arrayparameters::Vector)
-		predictions = f(Dict(paramkeys, arrayparameters))
+		predictions = Dict()
+		try
+			predictions = f(Dict(paramkeys, arrayparameters))
+		catch DomainError#TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
+			return -Inf
+		end
 		loglikelihood(Dict(paramkeys, arrayparameters), predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood

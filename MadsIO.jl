@@ -162,6 +162,11 @@ function makemadsloglikelihood(madsdata)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
 			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 			wssr = 0.
+			for paramname in keys(params)
+				if params[paramname] < madsdata["Parameters"][paramname]["min"] || params[paramname] > madsdata["Parameters"][paramname]["max"]
+					return -Inf
+				end
+			end
 			for obsname in keys(predictions)
 				pred = predictions[obsname]
 				obs = observations[obsname]["target"]
