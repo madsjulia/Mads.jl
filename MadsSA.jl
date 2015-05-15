@@ -1,3 +1,4 @@
+using Mads
 using DataStructures
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
@@ -162,9 +163,9 @@ function saltelli(madsdata; N=int(100))
 			B[i, j] = Distributions.rand(distributions[paramkeys[j]])
 		end
 	end
-	madsinfo( """Computing model outputs to calculate total output mean and variance ... Sample A ...""" );
+	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yA = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, A[i, :])))), 1:size(A, 1))...)'
-	madsinfo( """Computing model outputs to calculate total output mean and variance ... Sample A ...""" );
+	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yB = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, B[i, :])))), 1:size(B, 1))...)'
 	for i = 1:length(paramkeys)
 		for j = 1:N
@@ -176,7 +177,7 @@ function saltelli(madsdata; N=int(100))
 				end
 			end
 		end
-		madsinfo( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])""" );
+		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, C[i, :])))), 1:size(C, 1))...)'
 		for j = 1:length(obskeys)
 			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
@@ -229,95 +230,95 @@ end
 function saltelliprintresults(madsdata, results)
 	fos, te = results
 	#=
-	println("Mean")
-	print("\t")
+	Mads.madsoutput("Mean\n")
+	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(mean[obskey][paramkey])")
+			Mads.madsoutput("\t$(mean[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
-	println("\nVariance")
-	print("\t")
+	Mads.madsoutput("\nVariance\n")
+	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(variance[obskey][paramkey])")
+			Mads.madsoutput("\t$(variance[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
 	=#
-	println("\nFirst order sensitivity")
-	print("\t")
+	Mads.madsoutput("\nFirst order sensitivity")
+	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(fos[obskey][paramkey])")
+			Mads.madsoutput("\t$(fos[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
-	println("\nTotal effect")
-	print("\t")
+	Mads.madsoutput("\nTotal effect")
+	Mads.madsoutput("\t")
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(te[obskey][paramkey])")
+			Mads.madsoutput("\t$(te[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
 end
 
 function saltelliprintresults2(madsdata, results)
 	fos, te = results
-	println("First order sensitivity")
-	print("\t")
+	Mads.madsoutput("First order sensitivity")
+	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(fos[obskey][paramkey])")
+			Mads.madsoutput("\t$(fos[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
-	println("\nTotal effect")
-	print("\t")
+	Mads.madsoutput("\nTotal effect")
+	Mads.madsoutput("\t")
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		Mads.madsoutput("\t$(paramkey)")
 	end
-	println()
+	Mads.madsoutput("\n")
 	for obskey in obskeys
-		print(obskey)
+		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			print("\t$(te[obskey][paramkey])")
+			Mads.madsoutput("\t$(te[obskey][paramkey])")
 		end
-		println()
+		Mads.madsoutput("\n")
 	end
 end

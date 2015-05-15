@@ -72,4 +72,3 @@ function montecarlo(madsdata; N=int(1e2))
 	MadsYAML.dumpyamlfile(outputfilename, outputdicts)
 	return outputdicts
 end
-
