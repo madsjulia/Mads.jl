@@ -139,7 +139,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 			f_best = fcur
 			best_residual = residual
 		else
-			madsoutput("Currently lambda search did not improve the OF"; level = 1 )
+			madsoutput("Lambda search did not improve the OF\n"; level = 1 )
 		end
 		iterCt += 1
 
