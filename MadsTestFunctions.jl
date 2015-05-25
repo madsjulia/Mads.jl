@@ -1,16 +1,20 @@
+@doc "Rosenbrock test function" ->
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
 end
 
+@doc "Rosenbrock test function for LM optimization (returns the 2 components separetely)" ->
 function rosenbrock_lm(x::Vector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
 end
 
+@doc "Parameter gradients of the Rosenbrock test function" ->
 function rosenbrock_gradient!(x::Vector, storage::Vector)
 	storage[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
 	storage[2] = 200.0 * (x[2] - x[1]^2)
 end
 
+@doc "Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)" ->
 function rosenbrock_gradient_lm(x::Vector)
 	storage = Array(Float64,2,2)
 	storage[1,1] = -2.0 * (1.0 - x[1])
@@ -20,6 +24,7 @@ function rosenbrock_gradient_lm(x::Vector)
 	return storage
 end
 
+@doc "Parameter Hessian of the Rosenbrock test function" ->
 function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
 	storage[1, 2] = -400.0 * x[1]

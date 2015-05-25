@@ -1,15 +1,18 @@
 include("MadsIO.jl")
 
+@doc "Arcsine transformation of model parameters" ->
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector) # asine transformation
 	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1) # transformed parameters (sine parameter space)
 	return sineparams
 end
 
+@doc "Sine transformation of model parameters" ->
 function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector) # sine transformation
 	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5) # untransformed parameters (regular parameter space)
 	return params
 end
 
+@doc "Sine transformation of a function" ->
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
@@ -18,6 +21,7 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedf
 end
 
+@doc "Sine transformation of a gradient function" ->
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector)
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
@@ -34,6 +38,7 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedg
 end
 
+@doc "Make a log likelihood array" ->
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -49,37 +54,40 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 	return arrayloglikelihood
 end
 
+@doc "Set Dynamic Model for MADS model calls using internal Julia functions" ->
 function setdynamicmodel(madsdata, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
-getparamsnames = ["min", "max", "init", "type", "log"]
-getparamstypes = [Float64, Float64, Float64, Any, Any]
+@doc "Create functions to get values of the MADS parameters" ->
+getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log"]
+getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any]
 for i = 1:length(getparamsnames)
-	name = getparamsnames[i]
-	typ = getparamstypes[i]
+	paramname = getparamsnames[i]
+	paramtype = getparamstypes[i]
 	q = quote
-		function $(symbol(string("getparams", name)))(madsdata, paramkeys)
-			retval = Array($(typ), length(paramkeys))
+		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
+			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
-				retval[i] = madsdata["Parameters"][paramkeys[i]][$name]
+				paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
 			end
-			return retval
+			return paramvalue # returns the parameter values
 		end
-		function $(symbol(string("getparams", name)))(madsdata)
-			paramkeys = getparamkeys(madsdata)
-			return $(symbol(string("getparams", name)))(madsdata, paramkeys)
+		function $(symbol(string("getparams", paramname)))(madsdata) # create a function to get each parameter name with 1 argument
+			paramkeys = getparamkeys(madsdata) # get parameter keys
+			return $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # call the function with 2 arguments
 		end
 	end
 	eval(q)
 end
 
+@doc "Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)" ->
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
 keywordvals = ["opt", true]
 for i = 1:length(getfunction)
 	q = quote
-		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
+		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvals[i])]
 		end
@@ -87,7 +95,7 @@ for i = 1:length(getfunction)
 			paramkeys = getparamkeys(madsdata)
 			return $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
-		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys)
+		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvals[i])]
 		end
@@ -99,6 +107,7 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
+@doc "Get keys for optimized parameters (redundant; already created above)" ->
 function getoptparamkeys(madsdata)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)

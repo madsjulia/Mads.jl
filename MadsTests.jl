@@ -18,7 +18,7 @@ if isdefined(ARGS) && ARGS[1] == "doslowtests"
 	include("tests/optimization_external_ascii_problem.jl")
 	cd("..")
 else
-	warn("skipping slow tests")
+	Mads.madswarn("skipping slow tests")
 end
 
 # internal execution test

@@ -6,6 +6,7 @@ using PyCall
 @pyimport yaml
 using DataStructures
 
+@doc "Load YAML file" ->
 function loadyamlfile(filename::String) # load YAML file
 	yamldata = OrderedDict()
 	f = open(filename)
@@ -15,6 +16,7 @@ function loadyamlfile(filename::String) # load YAML file
 	return yamldata
 end
 
+@doc "Dump YAML file" ->
 function dumpyamlfile(filename::String, yamldata) # dump YAML file
 	f = open(filename, "w")
 	# write(f, YAML.dump(yamldata)) # crashes
@@ -22,6 +24,7 @@ function dumpyamlfile(filename::String, yamldata) # dump YAML file
 	close(f)
 end
 
+@doc "Load YAML MADS file" ->
 function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
 	madsdict = loadyamlfile(filename)
 	parameters = OrderedDict()
@@ -64,6 +67,7 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 	return madsdict
 end
 
+@doc "Dump YAML MADS file" ->
 function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in YAML forma
 	yamldata = copy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
@@ -98,6 +102,7 @@ function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in 
 	dumpyamlfile(filename, yamldata)
 end
 
+@doc "Read predictions from YAML MADS file" ->
 function readyamlpredictions(filename::String) # read YAML predictions
 	return loadyamlfile(filename)
 end
