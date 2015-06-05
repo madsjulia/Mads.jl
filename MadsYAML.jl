@@ -1,4 +1,7 @@
 module MadsYAML
+if VERSION < v"0.4.0-dev"
+	using Docile # default for v > 0.4
+end
 export loadyamlmadsfile, dumpyamlmadsfile
 
 # import YAML
