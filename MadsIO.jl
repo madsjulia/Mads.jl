@@ -1,6 +1,7 @@
 using Distributions
 using MadsYAML
 using MadsASCII
+import R3Function
 
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
@@ -82,7 +83,18 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	else
 		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 	end
-	return madscommandfunction
+	if !haskey(madsdata, "Restart") || madsdata["Restart"] != false
+		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
+		if contains(madsdata["Filename"], "/")
+			rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
+		else
+			rootdir = string(rootname, "_restart")
+		end
+		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
+		return madscommandfunctionwithreuse
+	else
+		return madscommandfunction
+	end
 end
 
 @doc "Make MADS command gradient function" ->

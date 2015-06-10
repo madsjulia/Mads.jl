@@ -1,7 +1,7 @@
 # sse(x) gives the L2 norm of x
 sse(x) = (x'*x)[1]
 
-function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
+function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
 	println("np_lambda $np_lambda")
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x

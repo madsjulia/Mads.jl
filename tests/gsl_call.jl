@@ -1,4 +1,7 @@
 using Mads
+if VERSION < v"0.4.0-dev"
+	using Docile # default for v > 0.4
+end
 
 # Test callback funcitonality
 function gsl_function_wrap(x::Cdouble, params::Ptr{Void})
