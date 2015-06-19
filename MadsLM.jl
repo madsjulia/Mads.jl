@@ -1,6 +1,38 @@
 # sse(x) gives the L2 norm of x
 sse(x) = (x'*x)[1]
 
+function makelmfunctions(madsdata)
+	f = makemadscommandfunction(madsdata)
+	g = makemadscommandgradient(madsdata, f)
+	#f, g = makemadscommandfunctionandgradient(madsdata)
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	function f_lm(arrayparameters::Vector)
+		parameters = Dict(paramkeys, arrayparameters)
+		resultdict = f(parameters)
+		residuals = Array(Float64, length(madsdata["Observations"]))
+		i = 1
+		for obskey in obskeys
+			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
+			residuals[i] = diff * sqrt(madsdata["Observations"][obskey]["weight"])
+			i += 1
+		end
+		return residuals
+	end
+	function g_lm(arrayparameters::Vector)
+		parameters = Dict(paramkeys, arrayparameters)
+		gradientdict = g(parameters)
+		jacobian = Array(Float64, (length(obskeys), length(paramkeys)))
+		for i in 1:length(obskeys)
+			for j in 1:length(paramkeys)
+				jacobian[i, j] = gradientdict[obskeys[i]][paramkeys[j]]
+			end
+		end
+		return jacobian
+	end
+	return f_lm, g_lm
+end
+
 function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
 	println("np_lambda $np_lambda")
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
