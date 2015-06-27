@@ -92,8 +92,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	phi = Array(Float64, np_lambda)
 	while ( ~converged && iterCt < maxIter )
 		if need_jacobian
-			println("Jacobian time:")
-			@time J = g(x) # TODO compute this in parallel
+			#println("Jacobian time:")
+			#@time J = g(x) # TODO compute this in parallel
+			J = g(x) # TODO compute this in parallel
 			g_calls += 1
 			need_jacobian = false
 			madsoutput("Jacobian #$g_calls\n"; level = 1)
@@ -107,6 +108,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
 		DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		lambda_current = lambda_down = lambda_up = lambda
+		JpJ = J' * J
 		for npl = 1:np_lambda
 			if npl == 1 # first
 				lambda_current = lambda_p[npl] = lambda
@@ -118,8 +120,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 				lambda_current = lambda_p[npl] = lambda_down
 			end
 			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
-			println("Solve time:")
-			@time delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			print("Solve time: ")
+			@time delta_x = delta_xp[npl,:] = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			#delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
 			predicted_residual = phi[npl] = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
