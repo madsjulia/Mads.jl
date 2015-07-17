@@ -1,7 +1,39 @@
 # sse(x) gives the L2 norm of x
 sse(x) = (x'*x)[1]
 
-function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=1, show_trace=false)
+function makelmfunctions(madsdata)
+	f = makemadscommandfunction(madsdata)
+	g = makemadscommandgradient(madsdata, f)
+	#f, g = makemadscommandfunctionandgradient(madsdata)
+	obskeys = getobskeys(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	function f_lm(arrayparameters::Vector)
+		parameters = Dict(paramkeys, arrayparameters)
+		resultdict = f(parameters)
+		residuals = Array(Float64, length(madsdata["Observations"]))
+		i = 1
+		for obskey in obskeys
+			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
+			residuals[i] = diff * sqrt(madsdata["Observations"][obskey]["weight"])
+			i += 1
+		end
+		return residuals
+	end
+	function g_lm(arrayparameters::Vector)
+		parameters = Dict(paramkeys, arrayparameters)
+		gradientdict = g(parameters)
+		jacobian = Array(Float64, (length(obskeys), length(paramkeys)))
+		for i in 1:length(obskeys)
+			for j in 1:length(paramkeys)
+				jacobian[i, j] = gradientdict[obskeys[i]][paramkeys[j]]
+			end
+		end
+		return jacobian
+	end
+	return f_lm, g_lm
+end
+
+function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
 	println("np_lambda $np_lambda")
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
@@ -60,8 +92,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	phi = Array(Float64, np_lambda)
 	while ( ~converged && iterCt < maxIter )
 		if need_jacobian
-			println("Jacobian time:")
-			@time J = g(x) # TODO compute this in parallel
+			#println("Jacobian time:")
+			#@time J = g(x) # TODO compute this in parallel
+			J = g(x) # TODO compute this in parallel
 			g_calls += 1
 			need_jacobian = false
 			madsoutput("Jacobian #$g_calls\n"; level = 1)
@@ -75,6 +108,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
 		DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		lambda_current = lambda_down = lambda_up = lambda
+		JpJ = J' * J
 		for npl = 1:np_lambda
 			if npl == 1 # first
 				lambda_current = lambda_p[npl] = lambda
@@ -86,8 +120,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 				lambda_current = lambda_p[npl] = lambda_down
 			end
 			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
-			println("Solve time:")
-			@time delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			print("Solve time: ")
+			@time delta_x = delta_xp[npl,:] = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			#delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
 			predicted_residual = phi[npl] = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual

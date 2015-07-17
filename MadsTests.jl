@@ -1,6 +1,8 @@
 using Mads
 Logging.configure(level=Logging.OFF)
 
+#run(`rm -R tests/restart`)
+
 include("tests/optimization_rosenbrock.jl")
 
 if isdefined(ARGS) && ARGS[1] == "doslowtests"
@@ -23,7 +25,7 @@ end
 
 # internal execution test
 include("tests/optimization_linear_problem.jl")
-include("tests/optimization_linear_problem_nlopt.jl")
+#include("tests/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
 # senstivity
 include("tests/saltelli_sensitvity_analysis.jl")
 include("tests/saltelli_sensitvity_analysis_parallel.jl")
