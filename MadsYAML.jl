@@ -1,7 +1,5 @@
 module MadsYAML
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
+
 export loadyamlmadsfile, dumpyamlmadsfile
 
 # import YAML
@@ -25,7 +23,7 @@ end
 @doc "Dump YAML file" ->
 function dumpyamlfile(filename::String, yamldata) # dump YAML file
 	f = open(filename, "w")
-	# write(f, YAML.dump(yamldata)) # crashes
+	# write(f, yaml.dump(yamldata)) # crashes
 	write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
 	close(f)
 end
