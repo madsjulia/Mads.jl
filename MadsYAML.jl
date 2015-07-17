@@ -5,6 +5,9 @@ export loadyamlmadsfile, dumpyamlmadsfile
 using PyCall
 @pyimport yaml
 using DataStructures
+if VERSION < v"0.4.0-dev"
+	using Docile # default for v > 0.4
+end
 
 @doc "Load YAML file" ->
 function loadyamlfile(filename::String) # load YAML file
@@ -27,20 +30,33 @@ end
 @doc "Load YAML MADS file" ->
 function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
 	madsdict = loadyamlfile(filename)
-	parameters = OrderedDict()
-	for paramdict in madsdict["Parameters"]
-		for key in keys(paramdict)
-			parameters[key] = paramdict[key]
+	if haskey(madsdict, "Parameters")
+		parameters = OrderedDict()
+		for paramdict in madsdict["Parameters"]
+			for key in keys(paramdict)
+				parameters[key] = paramdict[key]
+			end
 		end
+		madsdict["Parameters"] = parameters
 	end
-	madsdict["Parameters"] = parameters
-	observations = OrderedDict()
-	for obsdict in madsdict["Observations"]
-		for key in keys(obsdict)
-			observations[key] = obsdict[key]
+	if haskey(madsdict, "Observations")
+		observations = OrderedDict()
+		for obsdict in madsdict["Observations"]
+			for key in keys(obsdict)
+				observations[key] = obsdict[key]
+			end
 		end
+		madsdict["Observations"] = observations
 	end
-	madsdict["Observations"] = observations
+	if haskey(madsdict, "Wells")
+		wells = OrderedDict()
+		for wellsdict in madsdict["Wells"]
+			for key in keys(wellsdict)
+				wells[key] = wellsdict[key]
+			end
+		end
+		madsdict["wells"] = wells
+	end
 	if haskey(madsdict, "Templates")
 		templates = Array(Dict, length(madsdict["Templates"]))
 		i = 1

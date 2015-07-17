@@ -1,4 +1,5 @@
 module MadsASCII
+using Docile
 
 @doc "Load ASCII file" ->
 function loadasciifile(filename::String) # load ASCII text file
