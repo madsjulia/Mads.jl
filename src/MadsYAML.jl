@@ -4,6 +4,7 @@ export loadyamlmadsfile, dumpyamlmadsfile
 
 # import YAML
 using PyCall
+using DataStructures
 @pyimport yaml
 using DataStructures
 if VERSION < v"0.4.0-dev"
@@ -33,37 +34,53 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 	madsdict = loadyamlfile(filename)
 	if haskey(madsdict, "Parameters")
 		parameters = OrderedDict()
-		for paramdict in madsdict["Parameters"]
-			for key in keys(paramdict)
-				parameters[key] = paramdict[key]
+		for dict in madsdict["Parameters"]
+			for key in keys(dict)
+				parameters[key] = dict[key]
 			end
 		end
 		madsdict["Parameters"] = parameters
 	end
-	if haskey(madsdict, "Observations")
+	if haskey(madsdict, "Wells")
+		wells = OrderedDict()
+		for dict in madsdict["Wells"]
+			for key in keys(dict)
+				wells[key] = dict[key]
+			end
+		end
+		madsdict["Wells"] = wells
+		println("wellkey")
 		observations = OrderedDict()
-		for obsdict in madsdict["Observations"]
-			for key in keys(obsdict)
-				observations[key] = obsdict[key]
+		for wellkey in collect(keys(madsdict["Wells"]))
+			for i in 1:length(madsdict["Wells"][wellkey]["obs"])
+				t = madsdict["Wells"][wellkey]["obs"][i][i]["t"]
+				obskey = wellkey * "_" * string(t)
+				data = OrderedDict()
+				data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
+				for datakey in keys(madsdict["Wells"][wellkey]["obs"][i][i])
+					if datakey != "c" && datakey != "t"
+						data[datakey] = madsdict["Wells"][wellkey]["obs"][i][i][datakey]
+					end
+				end
+				observations[obskey] = data
+			end
+		end
+		madsdict["Observations"] = observations
+	elseif haskey(madsdict, "Observations")
+		observations = OrderedDict()
+		for dict in madsdict["Observations"]
+			for key in keys(dict)
+				observations[key] = dict[key]
 			end
 		end
 		madsdict["Observations"] = observations
 	end
-	if haskey(madsdict, "Wells")
-		wells = OrderedDict()
-		for wellsdict in madsdict["Wells"]
-			for key in keys(wellsdict)
-				wells[key] = wellsdict[key]
-			end
-		end
-		madsdict["Wells"] = wells
-	end
 	if haskey(madsdict, "Templates")
 		templates = Array(Dict, length(madsdict["Templates"]))
 		i = 1
-		for tmpdict in madsdict["Templates"]
-			for key in keys(tmpdict) # this should only iterate once
-				templates[i] = tmpdict[key]
+		for dict in madsdict["Templates"]
+			for key in keys(dict) # this should only iterate once
+				templates[i] = dict[key]
 			end
 			i += 1
 		end
@@ -72,15 +89,16 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 	if haskey(madsdict, "Instructions")
 		instructions = Array(Dict, length(madsdict["Instructions"]))
 		i = 1
-		for insdict in madsdict["Instructions"]
-			for key in keys(insdict) # this should only iterate once
-				instructions[i] = insdict[key]
+		for dict in madsdict["Instructions"]
+			for key in keys(dict) # this should only iterate once
+				instructions[i] = dict[key]
 			end
 			i += 1
 		end
 		madsdict["Instructions"] = instructions
 	end
 	madsdict["Filename"] = filename
+	madsdatadict = madsdict
 	return madsdict
 end
 

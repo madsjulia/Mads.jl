@@ -1,11 +1,11 @@
 module Mads
 
-export calibrate
-
 using Optim
 using Lora
 using Distributions
 using Logging
+using DataStructures
+using HDF5
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -18,6 +18,7 @@ include("MadsMisc.jl")
 include("MadsSA.jl")
 include("MadsMC.jl")
 include("MadsLM.jl")
+include("MadsAnasol.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL

@@ -37,24 +37,24 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				cd(currentdir)
 			end
 			if haskey(madsdata, "YAMLParameters") # YAML
-				for filename in vcat(madsdata["YAMLParameters"])#the vcat is needed in case madsdata["..."] contains only one thing
+				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				MadsYAML.dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "YAMLPredictions") # YAML
-				for filename in vcat(madsdata["YAMLPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
+				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "ASCIIParameters") # ASCII
-				for filename in vcat(madsdata["ASCIIParameters"])#the vcat is needed in case madsdata["..."] contains only one thing
+				for filename in vcat(madsdata["ASCIIParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
-				for filename in vcat(madsdata["ASCIIPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
+				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
@@ -67,7 +67,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				cd(currentdir)
 				madsinfo("""Observations: $(results)""")
 			elseif haskey(madsdata, "YAMLPredictions") # YAML
-				for filename in vcat(madsdata["YAMLPredictions"])#the vcat is needed in case madsdata["..."] contains only one thing
+				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
 				end
 			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
@@ -198,10 +198,22 @@ function getparamkeys(madsdata)
 	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
 end
 
+@doc "Get keys for source parameters" ->
+function getsourcekeys(madsdata)
+	return collect(keys(madsdata["Sources"][1]["box"]))
+	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
+end
+
 @doc "Get keys for observations" ->
 function getobskeys(madsdata)
 	return collect(keys(madsdata["Observations"]))
 	#return [convert(String,k) for k in keys(madsdata["Observations"])]
+end
+
+@doc "Get keys for wells" ->
+function getwellkeys(madsdata)
+	return collect(keys(madsdata["Wells"]))
+	#return [convert(String,k) for k in keys(madsdata["Wells"])]
 end
 
 @doc "Write paramters via MADS template" ->
