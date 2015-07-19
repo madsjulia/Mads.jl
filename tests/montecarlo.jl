@@ -1,4 +1,4 @@
-import Mads
+using Mads
 
 Mads.madsinfo("TEST Monte Carlo on an external call problem:")
 md = Mads.loadyamlmadsfile("test-external-ascii.mads")
