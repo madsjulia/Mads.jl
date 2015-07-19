@@ -1,5 +1,7 @@
 module Mads
 
+export calibrate
+
 using Optim
 using Lora
 using Distributions
@@ -9,6 +11,7 @@ if VERSION < v"0.4.0-dev"
 end
 #import NLopt
 
+push!(LOAD_PATH, dirname(Base.source_path()))
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
