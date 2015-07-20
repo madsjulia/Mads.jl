@@ -33,7 +33,7 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
+function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false)
 	println("np_lambda $np_lambda")
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
@@ -90,8 +90,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	trial_fp = Array(Float64, (np_lambda, length(fcur)))
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
-	while ( ~converged && iterCt < maxIter )
-		if need_jacobian
+	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians)
+		if need_jacobian || alwaysDoJacobian
 			#println("Jacobian time:")
 			#@time J = g(x) # TODO compute this in parallel
 			J = g(x) # TODO compute this in parallel
