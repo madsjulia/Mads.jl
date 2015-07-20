@@ -1,4 +1,4 @@
-using Anasol
+import Anasol
 
 @doc "Compute concentration for a point (x,y,z,t)" ->
 function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
@@ -28,39 +28,46 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 end
 
 @doc "Compute concentration for all observation points" ->
-function computeconcentrations(parameters, madsdata) # TODO decide how to access madsdata ...
-	x = parameters["x"]
-	y = parameters["y"]
-	z = parameters["z"]
-	dx = parameters["dx"]
-	dy = parameters["dy"]
-	dz = parameters["dz"]
-	f = parameters["f"]
-	t0 = parameters["t0"]
-	t1 = parameters["t1"]
-	n = parameters["n"]
-	lambda = parameters["lambda"]
-	theta = parameters["theta"]
-	vx = parameters["vx"]
-	vy = parameters["vy"]
-	vz = parameters["vz"]
-	ax = parameters["ax"]
-	ay = parameters["ay"]
-	az = parameters["az"]
-	results = OrderedDict()
-	for wellkey in Mads.getwellkeys(madsdata)
-		wellx = madsdata["Wells"][wellkey]["x"]
-		welly = madsdata["Wells"][wellkey]["y"]
-		wellz0 = madsdata["Wells"][wellkey]["z0"]
-		wellz1 = madsdata["Wells"][wellkey]["z1"]
-		n = length(madsdata["Wells"][wellkey]["obs"])
+function makecomputeconcentrations(madsdata)
+	function computeconcentrations(parameters) # TODO decide how to access madsdata ...
+		n = parameters["n"]
+		lambda = parameters["lambda"]
+		theta = parameters["theta"]
+		vx = parameters["vx"]
+		vy = parameters["vy"]
+		vz = parameters["vz"]
+		ax = parameters["ax"]
+		ay = parameters["ay"]
+		az = parameters["az"]
 		c = OrderedDict()
-		for i in 1:length(madsdata["Wells"][wellkey]["obs"])
-			t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
-			c[t] = .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t))
-			# c[t] = contamination(wellx, welly, .5 * (wellz0 + wellz1), n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
+		for wellkey in Mads.getwellkeys(madsdata)
+			wellx = madsdata["Wells"][wellkey]["x"]
+			welly = madsdata["Wells"][wellkey]["y"]
+			wellz0 = madsdata["Wells"][wellkey]["z0"]
+			wellz1 = madsdata["Wells"][wellkey]["z1"]
+			n = length(madsdata["Wells"][wellkey]["obs"])
+			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
+				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
+				for i = 1:length(madsdata["Sources"])
+					x = parameters[string("source", i, "_", "x")]
+					y = parameters[string("source", i, "_", "y")]
+					z = parameters[string("source", i, "_", "z")]
+					dx = parameters[string("source", i, "_", "dx")]
+					dy = parameters[string("source", i, "_", "dy")]
+					dz = parameters[string("source", i, "_", "dz")]
+					f = parameters[string("source", i, "_", "f")]
+					t0 = parameters[string("source", i, "_", "t0")]
+					t1 = parameters[string("source", i, "_", "t1")]
+					if i == 1
+						c[string(wellkey, "_", t)] = .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t))
+					else
+						c[string(wellkey, "_", t)] += .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t))
+					end
+				end
+				# c[t] = contamination(wellx, welly, .5 * (wellz0 + wellz1), n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
+			end
 		end
-		results[wellkey] = c
+		return c
 	end
-	return results
+	return computeconcentrations
 end
