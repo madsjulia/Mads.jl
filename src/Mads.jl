@@ -10,8 +10,9 @@ if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
 #import NLopt
-
-push!(LOAD_PATH, dirname(Base.source_path()))
+if !in(dirname(Base.source_path()), LOAD_PATH)
+	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
+end
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")

@@ -41,6 +41,15 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		end
 		madsdict["Parameters"] = parameters
 	end
+	if haskey(madsdict, "Sources")
+		for i = 1:length(madsdict["Sources"])
+			sourcetype = collect(keys(madsdict["Sources"][i]))[1]
+			sourceparams = keys(madsdict["Sources"][i][sourcetype])
+			for sourceparam in sourceparams
+				madsdict["Parameters"][string("source", i, "_", sourceparam)] = madsdict["Sources"][i][sourcetype][sourceparam]
+			end
+		end
+	end
 	if haskey(madsdict, "Wells")
 		wells = OrderedDict()
 		for dict in madsdict["Wells"]
@@ -49,7 +58,6 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 			end
 		end
 		madsdict["Wells"] = wells
-		println("wellkey")
 		observations = OrderedDict()
 		for wellkey in collect(keys(madsdict["Wells"]))
 			for i in 1:length(madsdict["Wells"][wellkey]["obs"])

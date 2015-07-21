@@ -9,7 +9,7 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 	xtrans = xshift * cos(d) - yshift * sin(d)
 	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
-	sigma01 = sigma02 = sigma03 = 0.#point source
+	sigma01 = sigma02 = sigma03 = 0. # point source
 	#=
 	sigma01 = dx
 	sigma02 = dy
@@ -29,7 +29,7 @@ end
 
 @doc "Compute concentration for all observation points" ->
 function makecomputeconcentrations(madsdata)
-	function computeconcentrations(parameters) # TODO decide how to access madsdata ...
+	function computeconcentrations(parameters)
 		n = parameters["n"]
 		lambda = parameters["lambda"]
 		theta = parameters["theta"]
@@ -48,7 +48,7 @@ function makecomputeconcentrations(madsdata)
 			n = length(madsdata["Wells"][wellkey]["obs"])
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
-				for i = 1:length(madsdata["Sources"])
+				for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
 					x = parameters[string("source", i, "_", "x")]
 					y = parameters[string("source", i, "_", "y")]
 					z = parameters[string("source", i, "_", "z")]

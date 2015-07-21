@@ -18,7 +18,7 @@ function saltellibrute(madsdata; N=int(1e4))
 	f = makemadscommandfunction(madsdata)
 	distributions = getdistributions(madsdata)
 	results = Array(OrderedDict, numsamples)
-	paramdict = Dict()
+	paramdict = OrderedDict()
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
@@ -35,7 +35,7 @@ function saltellibrute(madsdata; N=int(1e4))
 			sum[obskeys[i]] += results[j][obskeys[i]]
 		end
 	end
-	mean = Dict()
+	mean = OrderedDict()
 	for i = 1:length(obskeys)
 		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
 	end
@@ -47,19 +47,19 @@ function saltellibrute(madsdata; N=int(1e4))
 			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
 		end
 	end
-	variance = Dict()
+	variance = OrderedDict()
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
 	# compute the first order sensitivities
-	fos = Dict()
+	fos = OrderedDict()
 	for k = 1:length(obskeys)
-		fos[obskeys[k]] = Dict()
+		fos[obskeys[k]] = OrderedDict()
 	end
 	for i = 1:length(paramkeys)
 		cond_means = Array(Dict, numoneparamsamples)
 		for j = 1:numoneparamsamples
-			cond_means[j] = Dict()
+			cond_means[j] = OrderedDict()
 			for k = 1:length(obskeys)
 				cond_means[j][obskeys[k]] = 0.
 			end
@@ -96,8 +96,8 @@ function saltellibrute(madsdata; N=int(1e4))
 		cond_vars = Array(Dict, nummanyparamsamples)
 		cond_means = Array(Dict, nummanyparamsamples)
 		for j = 1:nummanyparamsamples
-			cond_vars[j] = Dict()
-			cond_means[j] = Dict()
+			cond_vars[j] = OrderedDict()
+			cond_means[j] = OrderedDict()
 			for m = 1:length(obskeys)
 				cond_means[j][obskeys[m]] = 0.
 				cond_vars[j][obskeys[m]] = 0.
@@ -140,7 +140,7 @@ end
 
 @doc "Saltelli " ->
 function saltelli(madsdata; N=int(100))
-	paramkeys = getparamkeys(madsdata)
+	paramkeys = getparamkeys(madsdata) # TODO this should work for !null parameters only
 	obskeys = getobskeys(madsdata)
 	distributions = getdistributions(madsdata)
 	f = makemadscommandfunction(madsdata)
@@ -165,7 +165,7 @@ function saltelli(madsdata; N=int(100))
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yA = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, A[i, :])))), 1:size(A, 1))...)'
-	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
+	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
 	yB = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, B[i, :])))), 1:size(B, 1))...)'
 	for i = 1:length(paramkeys)
 		for j = 1:N
@@ -179,6 +179,7 @@ function saltelli(madsdata; N=int(100))
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(pmap(i->collect(values(f(Dict{String, Float64}(paramkeys, C[i, :])))), 1:size(C, 1))...)'
+		madsoutput( """Done\n""" );
 		for j = 1:length(obskeys)
 			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
 			meandata[obskeys[j]][paramkeys[i]] = f0;
