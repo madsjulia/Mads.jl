@@ -6,7 +6,7 @@ pwd()
 # Saltelli senstivity analysis tests
 Mads.madsinfo("TEST Saltelli senstivity analysis: Sobol test:")
 mdsobol = Mads.loadyamlmadsfile("test-sobol.mads")
-results = Mads.saltelli(mdsobol,N=int(1e4))
+results = Mads.saltelli(mdsobol,N=int(1e5))
 Mads.saltelliprintresults(mdsobol,results)
 Mads.madsinfo("TEST Saltelli senstivity analysis: Linear problem:")
 mdsaltelli = Mads.loadyamlmadsfile("test-saltelli.mads")

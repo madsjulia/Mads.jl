@@ -12,5 +12,5 @@ paramdict = OrderedDict(paramkeys, map(key->md["Parameters"][key]["init"], param
 computeconcentrations = Mads.makecomputeconcentrations(md)
 forward_preds = computeconcentrations(paramdict)
 #result = Mads.calibrate(md; show_trace=true)
-result = Mads.saltelli(md,N=int(1e2))
+result = Mads.saltelli(md,N=int(1e1))
 Mads.saltelliprintresults(md, result)
