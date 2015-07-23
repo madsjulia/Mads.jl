@@ -9,12 +9,10 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 	xtrans = xshift * cos(d) - yshift * sin(d)
 	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
-	sigma01 = sigma02 = sigma03 = 0.#point source
-	#=
+	#sigma01 = sigma02 = sigma03 = 0.#point source
 	sigma01 = dx
 	sigma02 = dy
 	sigma03 = dz
-	=#
 	v1 = vx
 	v2 = vy
 	v3 = vz
