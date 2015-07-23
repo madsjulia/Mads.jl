@@ -81,13 +81,6 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			return results
 		end
 	elseif haskey(madsdata, "Wells")
-		for i = 1:length(madsdata["Sources"])
-			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			sourceparams = keys(madsdata["Sources"][i][sourcetype])
-			for sourceparam in sourceparams
-				madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
-			end
-		end
 		return makecomputeconcentrations(madsdata)
 	else
 		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
