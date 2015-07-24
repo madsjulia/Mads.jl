@@ -1,5 +1,8 @@
 using Mads
 using DataStructures
+using DataFrames
+using Gadfly
+
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -8,7 +11,6 @@ end
 
 @doc "Saltelli (brute force)" ->
 function saltellibrute(madsdata; N=int(1e4))
-	#numsamples=int(1e2), numoneparamsamples=int(1e2), nummanyparamsamples=int(1e2))
 	numsamples = int(sqrt(N))
 	numoneparamsamples = int(sqrt(N))
 	nummanyparamsamples = int(sqrt(N))
@@ -301,7 +303,7 @@ function saltelliprintresults2(madsdata, results)
 	Mads.madsoutput("First order sensitivity")
 	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
-	paramkeys = getparamkeys(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
 		Mads.madsoutput("\t$(paramkey)")
 	end
@@ -326,4 +328,37 @@ function saltelliprintresults2(madsdata, results)
 		end
 		Mads.madsoutput("\n")
 	end
+end
+
+function plotwellSAresults(wellname, madsdata, result)
+	if !haskey(madsdata, "Wells")
+		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
+		return
+	end
+	o = madsdata["Wells"][wellname]["obs"]
+	paramkeys = getoptparamkeys(madsdata)
+	nP = length(paramkeys)
+	nT = length(o)
+	d = Array(Float64, nP + 2, nT)
+	for i in 1:nT
+		t = d[1,i] = o[i][i]["t"]
+		d[2,i] = o[i][i]["c"]
+		obskey = wellname * "_" * string(t)
+		j = 3
+		for paramkey in paramkeys
+			d[j,i] = result[obskey][paramkey]
+			j = j + 1
+		end
+	end
+	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), label="concentration", category="concentration")
+	df = Array(Any, nP) # DataFrames matrix needed for ploting
+	j = 3
+	for paramkey in paramkeys
+		println(paramkey)
+		df[j-2] = DataFrame(x=collect(d[1,:]), y=collect(d[j,:]), label="$paramkey", category="$paramkey")
+		j = j + 1
+	end
+	p = plot(vcat(dfc,df[1]), x="x", y="y", label=3, color="category", Geom.line, Geom.label,
+	Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+	draw(SVG(string("$wellname-SA-results.svg"), 8inch, 6inch), p)
 end
