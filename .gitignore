@@ -1,6 +1,9 @@
 .DS_Store
 .project
+*_restart
 *.s_point
 *.wells
 *.wells_debug
+*.svg
+*_[0-9]
 output.dat

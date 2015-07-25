@@ -1,11 +1,11 @@
 import Mads
 using DataStructures
 
-Base.source_path()
-cd(dirname(Base.source_path()))
-reload("../../src/MadsYAML.jl")
-reload("../../src/Mads.jl")
-pwd()
+#Base.source_path()
+#cd(dirname(Base.source_path()))
+#reload("../../src/MadsYAML.jl")
+#reload("../../src/Mads.jl")
+#pwd()
 const md = Mads.loadyamlmadsfile("w01.mads")
 paramkeys = Mads.getparamkeys(md)
 paramdict = OrderedDict(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys))

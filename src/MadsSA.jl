@@ -20,7 +20,7 @@ function saltellibrute(madsdata; N=int(1e4))
 	f = makemadscommandfunction(madsdata)
 	distributions = getdistributions(madsdata)
 	results = Array(OrderedDict, numsamples)
-	paramdict = OrderedDict()
+	paramdict = Dict()
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])

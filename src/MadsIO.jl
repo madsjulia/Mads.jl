@@ -1,7 +1,11 @@
 using Distributions
+using DataStructures
 using MadsYAML
 using MadsASCII
 import R3Function
+if VERSION < v"0.4.0-dev"
+	using Docile # default for v > 0.4
+end
 
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function

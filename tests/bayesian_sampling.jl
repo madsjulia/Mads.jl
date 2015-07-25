@@ -1,5 +1,4 @@
 using Mads
-#using Gadfly
 
 # Bayesian sampling test
 Mads.madsinfo("TEST Bayesian sampling with internal model:")
