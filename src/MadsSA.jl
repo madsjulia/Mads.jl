@@ -339,26 +339,37 @@ function plotwellSAresults(wellname, madsdata, result)
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
-	d = Array(Float64, nP + 2, nT)
+	d = Array(Float64, 2, nT)
+	fos = Array(Float64, nP, nT)
+	te = Array(Float64, nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i][i]["t"]
 		d[2,i] = o[i][i]["c"]
 		obskey = wellname * "_" * string(t)
-		j = 3
+		j = 1
 		for paramkey in paramkeys
-			d[j,i] = result[obskey][paramkey]
+			fos[j,i] = result[1][obskey][paramkey]
+			te[j,i] = result[2][obskey][paramkey]
 			j = j + 1
 		end
 	end
-	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), label="concentration", category="concentration")
-	df = Array(Any, nP) # DataFrames matrix needed for ploting
-	j = 3
+	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
+	pc = plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+	df = Array(Any, nP)
+	j = 1
 	for paramkey in paramkeys
 		println(paramkey)
-		df[j-2] = DataFrame(x=collect(d[1,:]), y=collect(d[j,:]), label="$paramkey", category="$paramkey")
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(te[j,:]), parameter="$paramkey")
 		j = j + 1
 	end
-	p = plot(vcat(dfc,df[1]), x="x", y="y", label=3, color="category", Geom.line, Geom.label,
-	Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
-	draw(SVG(string("$wellname-SA-results.svg"), 8inch, 6inch), p)
+	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect") )
+	j = 1
+	for paramkey in paramkeys
+		println(paramkey)
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
+		j = j + 1
+	end
+	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("First order senstivity") )
+	p = vstack(pc, pte, pfos)
+	draw(SVG(string("$wellname-SA-results.svg"), 6inch, 9inch), p)
 end
