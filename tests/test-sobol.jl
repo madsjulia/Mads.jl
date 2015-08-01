@@ -8,7 +8,6 @@ function madsmodelrun(parameters::Dict) # Sobol Test
 		f = f * b
 		i = i + 1
 	end
-	#predictions = {"o1"=>f}
-	predictions = OrderedDict{String, Float64}(zip(["o1"], [f]))
+	predictions = OrderedDict{String, Float64}(zip(["of"], [f]))
 	return predictions
 end
