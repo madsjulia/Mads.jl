@@ -9,6 +9,25 @@ end
 # @document
 @docstrings
 
+@doc "Local sensitivity analysis" ->
+function localsa(madsdata)
+	f_lm, g_lm = makelmfunctions(madsdata)
+	initparams = getparamsinit(madsdata)
+	rootname = join(split(madsdata["Filename"], ".")[1:end-1], ".")
+	J = g_lm(initparams)
+	println("Jacobian matrix $J")
+	JpJ = J' * J
+	covar = inv(JpJ)
+	stddev = sqrt(diag(covar))
+	correl = covar ./ (stddev * stddev')
+	eigenv, eigenm = eig(covar)
+	paramkeys = getparamkeys(madsdata)
+	eigenplot = spy(eigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"),
+Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+	draw(SVG("$(rootname).eigen.svg",10inch,10inch),eigenplot)
+	return eigenplot
+end
+
 @doc "Saltelli (brute force)" ->
 function saltellibrute(madsdata; N=int(1e4))
 	numsamples = int(sqrt(N))
