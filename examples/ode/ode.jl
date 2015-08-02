@@ -17,7 +17,7 @@ paramkeys = Mads.getparamkeys(md)
 # create parameter dictionary
 paramdict = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 # function to create a function for the ODE solver
-function makefunc(parameterdict::Dict)
+function makefunc(parameterdict::OrderedDict)
 	function func(t, y) # function needed by the ODE solver
 		# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
 		# ODE parameters
@@ -38,8 +38,9 @@ initialconditions = [1.,0.]
 t,y=ode4s(funcosc, initialconditions, times)
 ys = hcat(y...).' # vecorize the output and transpose with '
 
-writedlm("ode.results",ys[:,1])
-plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))
+#writedlm("ode.results",ys[:,1])
+p=plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))
+draw(SVG(string("ode-results.svg"),6inch,4inch),p)
 
 # create an observation dictionary in the MADS disctionary
 observations = OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
@@ -61,6 +62,24 @@ md["Observations"] = observationsdict
 
 # global SA
 saltelliresult = Mads.saltelli(md,N=int(1e3))
+Mads.plotobsSAresults(md,saltelliresult)
 
 # local SA
 localsaresult = Mads.localsa(md)
+
+# Manual SA
+paramdist=Mads.getdistributions(md)
+omegavalues = rand(paramdist["omega"],100)
+Y = Array(Float64,length(times),0)
+for i in 1:100
+  original = paramdict["omega"]
+  paramdict["omega"] = omegavalues[i]
+  funcosc = makefunc(paramdict)
+  t,y=ode4s(funcosc, initialconditions, times)
+  ys = hcat(y...).' # vecorize the output and transpose with '
+  Y = hcat( Y, ys[:,1])
+  paramdict["omega"] = original
+end
+p=Gadfly.plot([layer(y=Y[:,i],x=t, Geom.line,
+  Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+  for i in 1:size(Y)[2]]...)

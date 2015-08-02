@@ -1,7 +1,7 @@
 Problem: { }
 Solution: external
 Parameters:
-- omega : { longname: "omega", init: 0.2, type: opt, log: no, dist: "Uniform(0.1, 0.3)" }
+- omega : { longname: "omega", init: 0.3, type: opt, log: no, dist: "Uniform(0.1, 0.3)" }
 - k     : { longname: "k",     init: 0.1, type: opt, log: no, dist: "Uniform(0.01, 0.1)" }
 Model: examples/ode/ode-driver.jl
 Restart: false

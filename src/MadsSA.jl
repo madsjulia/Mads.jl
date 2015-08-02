@@ -417,8 +417,8 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			fos[j,i] = result[1][obskey][paramkey]
-			te[j,i] = result[2][obskey][paramkey]
+			fos[j,i] = result[1][obskey][paramkey] # first order sensitivity
+			te[j,i] = result[2][obskey][paramkey] # total effect
 			j += 1
 		end
 		i += 1
