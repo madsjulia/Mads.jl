@@ -1,0 +1,15 @@
+julia 0.3
+Anasol
+R3Function
+Lora
+HDF5
+Optim
+Logging
+Distributions
+DataStructures
+Docile
+PyCall
+PyPlot
+YAML
+Gadfly
+DataFrames

@@ -8,7 +8,7 @@ using DataStructures
 #pwd()
 const md = Mads.loadyamlmadsfile("w01.mads")
 paramkeys = Mads.getparamkeys(md)
-paramdict = OrderedDict(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys))
+paramdict = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 computeconcentrations = Mads.makecomputeconcentrations(md)
 forward_preds = computeconcentrations(paramdict)
 #result = Mads.calibrate(md; show_trace=true)
