@@ -15,17 +15,25 @@ function localsa(madsdata)
 	initparams = getparamsinit(madsdata)
 	rootname = join(split(madsdata["Filename"], ".")[1:end-1], ".")
 	J = g_lm(initparams)
-	println("Jacobian matrix $J")
+	writedlm("$(rootname).jacobian",J)
 	JpJ = J' * J
 	covar = inv(JpJ)
+	writedlm("$(rootname).covariance",covar)
 	stddev = sqrt(diag(covar))
 	correl = covar ./ (stddev * stddev')
+	writedlm("$(rootname).correlation",correl)
 	eigenv, eigenm = eig(covar)
+	writedlm("$(rootname).eigenmatrix",eigenm)
+	writedlm("$(rootname).eigenvalues",eigenv)
+	println(typeof(eigenv))
+	println(sizeof(eigenv))
+	println(log10(eigenv))
 	paramkeys = getparamkeys(madsdata)
-	eigenplot = spy(eigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"),
-Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
-	draw(SVG("$(rootname).eigen.svg",10inch,10inch),eigenplot)
-	return eigenplot
+	eigenmat = spy(eigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+	# eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	eigenplot = vstack(eigenmat, eigenval)
+	draw(SVG("$(rootname).eigen.svg",6inch,12inch),eigenplot)
 end
 
 @doc "Saltelli (brute force)" ->
@@ -369,7 +377,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		for paramkey in paramkeys
 			fos[j,i] = result[1][obskey][paramkey]
 			te[j,i] = result[2][obskey][paramkey]
-			j = j + 1
+			j += 1
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
@@ -377,18 +385,60 @@ function plotwellSAresults(wellname, madsdata, result)
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
-		println(paramkey)
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(te[j,:]), parameter="$paramkey")
-		j = j + 1
+		j += 1
 	end
-	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect") )
+	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
-		println(paramkey)
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
-		j = j + 1
+		j += 1
 	end
-	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("First order senstivity") )
+	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("First order senstivity"), Theme(key_position = :none) )
 	p = vstack(pc, pte, pfos)
 	draw(SVG(string("$wellname-SA-results.svg"), 6inch, 9inch), p)
+end
+
+function plotobsSAresults(madsdata, result)
+	if !haskey(madsdata, "Observations")
+		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
+		return
+	end
+	obsdict = madsdata["Observations"]
+	paramkeys = getoptparamkeys(madsdata)
+	nP = length(paramkeys)
+	nT = length(obsdict)
+	d = Array(Float64, 2, nT)
+	fos = Array(Float64, nP, nT)
+	te = Array(Float64, nP, nT)
+	i = 1
+	for obskey in keys(obsdict)
+		d[1,i] = obsdict[obskey]["time"]
+		d[2,i] = obsdict[obskey]["target"]
+		j = 1
+		for paramkey in paramkeys
+			fos[j,i] = result[1][obskey][paramkey]
+			te[j,i] = result[2][obskey][paramkey]
+			j += 1
+		end
+		i += 1
+	end
+	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
+	pd = plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
+	df = Array(Any, nP)
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(te[j,:]), parameter="$paramkey")
+		j += 1
+	end
+	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
+		j += 1
+	end
+	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("First order senstivity"), Theme(key_position = :none) )
+	p = vstack(pd, pte, pfos)
+	rootname = join(split(madsdata["Filename"], ".")[1:end-1], ".")
+	draw(SVG(string("$rootname-SA-results.svg"), 6inch, 9inch), p)
 end
