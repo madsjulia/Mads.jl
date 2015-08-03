@@ -8,6 +8,11 @@ if VERSION < v"0.4.0-dev"
 end
 
 @doc "Make MADS command function" ->
+function madsrootname(madsdata)
+	join(split(madsdata["Filename"], ".")[1:end-1], ".")
+end
+
+@doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Dynamic model")
 		println("Dynamic model evaluation")

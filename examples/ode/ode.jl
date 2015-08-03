@@ -1,5 +1,6 @@
 using Mads
 using ODE
+using JSON
 using Gadfly
 using DataStructures
 
@@ -62,6 +63,11 @@ md["Observations"] = observationsdict
 
 # global SA
 saltelliresult = Mads.saltelli(md,N=int(1e3))
+rootname = Mads.madsrootname(md)
+f = open("$rootname-SA-results.json", "w")
+JSON.print(f, saltelliresult)
+close(f)
+# saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
 Mads.plotobsSAresults(md,saltelliresult)
 
 # local SA

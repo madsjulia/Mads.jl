@@ -13,7 +13,7 @@ end
 function localsa(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	initparams = getparamsinit(madsdata)
-	rootname = join(split(madsdata["Filename"], ".")[1:end-1], ".")
+	rootname = madsrootname(madsdata)
 	J = g_lm(initparams)
 	writedlm("$(rootname).jacobian",J)
 	JpJ = J' * J
@@ -439,6 +439,6 @@ function plotobsSAresults(madsdata, result)
 	end
 	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("First order senstivity"), Theme(key_position = :none) )
 	p = vstack(pd, pte, pfos)
-	rootname = join(split(madsdata["Filename"], ".")[1:end-1], ".")
+	rootname = madsrootname(madsdata)
 	draw(SVG(string("$rootname-SA-results.svg"), 6inch, 9inch), p)
 end
