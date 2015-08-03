@@ -9,6 +9,38 @@ end
 # @document
 @docstrings
 
+#TODO add LHC sampling strategy
+@doc "Independent sampling of MADS Model parameters" ->
+function parametersample(madsdata, numsamples)
+	sample = OrderedDict()
+	paramdist = getdistributions(madsdata)
+	i = 1
+	for k in keys(paramdist)
+		values = Array(Float64,0)
+		if haskey(madsdata["Parameters"][k], "log")
+			flag = madsdata["Parameters"][k]["log"]
+			println(flag)
+			if flag == "yes" || flag == "true"
+				dist = paramdist[k]
+				if typeof(dist) == Uniform
+					dist.a = log10(dist.a)
+					dist.b = log10(dist.a)
+					values = 10.^rand(dist,numsamples)
+				elseif typeof(dist) == Normal
+					dist.μ = log10(dist.μ)
+					values = 10.^rand(dist,numsamples)
+				end
+			end
+		end
+		if sizeof(values) == 0
+			values = rand(paramdist[k],numsamples)
+		end
+		sample[k] = values
+		i += 1
+	end
+	return sample
+end
+
 @doc "Local sensitivity analysis" ->
 function localsa(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
@@ -18,8 +50,8 @@ function localsa(madsdata)
 	J = g_lm(initparams)
 	writedlm("$(rootname).jacobian",J)
 	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
-  draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
-  JpJ = J' * J
+	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
+	JpJ = J' * J
 	covar = inv(JpJ)
 	writedlm("$(rootname).covariance",covar)
 	stddev = sqrt(diag(covar))

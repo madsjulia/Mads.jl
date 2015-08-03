@@ -79,20 +79,20 @@ localsaresult = Mads.localsa(md)
 
 # Manual SA
 Mads.madsinfo("Manual SA ...")
-paramdist=Mads.getdistributions(md)
-for paramkey in keys(paramdist)
-  values = rand(paramdist[paramkey],100)
+numberofsamples = 100
+paramvalues=Mads.parametersample(md,numberofsamples)
+for paramkey in keys(paramvalues)
   Y = Array(Float64,length(times),0)
-  for i in 1:100
+  for i in 1:numberofsamples
     original = paramdict[paramkey]
-    paramdict[paramkey] = values[i]
+    paramdict[paramkey] = paramvalues[paramkey][i]
     funcosc = makefunc(paramdict)
     t,y=ode4s(funcosc, initialconditions, times)
-    ys = hcat(y...).' # vecorize the output and transpose with '
-    Y = hcat( Y, ys[:,1])
+    ys = hcat(y...)' # vecorize the output and transpose with '
+    Y = hcat(Y, ys[:,1])
     paramdict[paramkey] = original
   end
-  p=Gadfly.plot([layer(y=Y[:,paramkey],x=t, Geom.line,
+  p=Gadfly.plot([layer(x=t, y=Y[:,paramkey], Geom.line,
     Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][paramkey%6+1])))
     for paramkey in 1:size(Y)[2]]...)
   draw(SVG(string("$rootname-MSA-$paramkey.svg"),6inch,4inch),p)
