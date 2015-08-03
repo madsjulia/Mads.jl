@@ -9,6 +9,7 @@ end
 # @document
 @docstrings
 
+#TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
 function parametersample(madsdata, numsamples)
