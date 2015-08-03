@@ -12,11 +12,14 @@ end
 @doc "Local sensitivity analysis" ->
 function localsa(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
+	paramkeys = getparamkeys(madsdata)
 	initparams = getparamsinit(madsdata)
 	rootname = madsrootname(madsdata)
 	J = g_lm(initparams)
 	writedlm("$(rootname).jacobian",J)
-	JpJ = J' * J
+	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+  draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
+  JpJ = J' * J
 	covar = inv(JpJ)
 	writedlm("$(rootname).covariance",covar)
 	stddev = sqrt(diag(covar))
@@ -25,15 +28,11 @@ function localsa(madsdata)
 	eigenv, eigenm = eig(covar)
 	writedlm("$(rootname).eigenmatrix",eigenm)
 	writedlm("$(rootname).eigenvalues",eigenv)
-	println(typeof(eigenv))
-	println(sizeof(eigenv))
-	println(log10(eigenv))
-	paramkeys = getparamkeys(madsdata)
 	eigenmat = spy(eigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
 	# eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)
-	draw(SVG("$(rootname).eigen.svg",6inch,12inch),eigenplot)
+	draw(SVG("$(rootname)-eigen.svg",6inch,12inch),eigenplot)
 end
 
 @doc "Saltelli (brute force)" ->
