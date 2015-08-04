@@ -111,7 +111,7 @@ function saltellibrute(madsdata; N=int(1e4))
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
-	# compute the first order sensitivities
+	# compute the main effect (first order) sensitivities (indices)
 	fos = OrderedDict()
 	for k = 1:length(obskeys)
 		fos[obskeys[k]] = OrderedDict()
@@ -147,10 +147,10 @@ function saltellibrute(madsdata; N=int(1e4))
 			fos[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
 		end
 	end
-	# compute the total effect
-	te = Dict()
+	# compute the total effect sensitivities (indices)
+	tes = Dict()
 	for k = 1:length(obskeys)
-		te[obskeys[k]] = Dict()
+		tes[obskeys[k]] = Dict()
 	end
 	for i = 1:length(paramkeys)
 		cond_vars = Array(Dict, nummanyparamsamples)
@@ -192,10 +192,10 @@ function saltellibrute(madsdata; N=int(1e4))
 			for m = 1:nummanyparamsamples
 				runningsum += cond_vars[m][obskeys[j]]
 			end
-			te[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
+			tes[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
 		end
 	end
-	return fos, te
+	return fos, tes
 end
 
 @doc "Saltelli " ->
@@ -211,13 +211,13 @@ function saltelli(madsdata; N=int(100))
 	C = Array(Float64, (N, length(paramkeys)))
 	meandata = Dict{String, Dict{String, Float64}}() # mean
 	variance = Dict{String, Dict{String, Float64}}() # variance
-	fos = Dict{String, Dict{String, Float64}}() # first order sensitivities
-	te = Dict{String, Dict{String, Float64}}()	# total effect
+	fos = Dict{String, Dict{String, Float64}}() # main effect (first order) sensitivities
+	tes = Dict{String, Dict{String, Float64}}()	# total effect sensitivities
 	for i = 1:length(obskeys)
 		meandata[obskeys[i]] = Dict{String, Float64}()
 		variance[obskeys[i]] = Dict{String, Float64}()
 		fos[obskeys[i]] = Dict{String, Float64}()
-		te[obskeys[i]] = Dict{String, Float64}()
+		tes[obskeys[i]] = Dict{String, Float64}()
 	end
 	for key in paramkeys
 		delete!(paramalldict,key)
@@ -250,10 +250,10 @@ function saltelli(madsdata; N=int(100))
 			var = .5 * ((dot(yA[:, j], yA[:, j]) - f0 ^ 2) + (dot(yB[:, j], yB[:, j]) - f0 ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = var
 			fos[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) - f0 ^ 2) / var
-			te[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
+			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
 		end
 	end
-	return fos, te
+	return fos, tes
 end
 
 names = ["saltelli", "saltellibrute"]
@@ -266,15 +266,15 @@ for mi = 1:length(names)
 				return
 			end
 			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
-			fosall, teall = results[1]
+			fosall, tesall = results[1]
 			for i = 2:numsaltellis
-				fos, te = results[i]
+				fos, tes = results[i]
 				for obskey in keys(fos)
 					for paramkey in keys(fos[obskey])
 						#meanall[obskey][paramkey] += mean[obskey][paramkey]
 						#varianceall[obskey][paramkey] += variance[obskey][paramkey]
 						fosall[obskey][paramkey] += fos[obskey][paramkey]
-						teall[obskey][paramkey] += te[obskey][paramkey]
+						tesall[obskey][paramkey] += tes[obskey][paramkey]
 					end
 				end
 			end
@@ -293,7 +293,7 @@ for mi = 1:length(names)
 end
 
 function saltelliprintresults(madsdata, results)
-	fos, te = results
+	fos, tes = results
 	#=
 	Mads.madsoutput("Mean\n")
 	Mads.madsoutput("\t")
@@ -326,7 +326,7 @@ function saltelliprintresults(madsdata, results)
 		Mads.madsoutput("\n")
 	end
 	=#
-	Mads.madsoutput("\nFirst order sensitivity")
+	Mads.madsoutput("\nMain Effect Indices")
 	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
@@ -341,7 +341,7 @@ function saltelliprintresults(madsdata, results)
 		end
 		Mads.madsoutput("\n")
 	end
-	Mads.madsoutput("\nTotal effect")
+	Mads.madsoutput("\nTotal Effect Indices")
 	Mads.madsoutput("\t")
 	for paramkey in paramkeys
 		Mads.madsoutput("\t$(paramkey)")
@@ -350,15 +350,15 @@ function saltelliprintresults(madsdata, results)
 	for obskey in obskeys
 		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(te[obskey][paramkey])")
+			Mads.madsoutput("\t$(tes[obskey][paramkey])")
 		end
 		Mads.madsoutput("\n")
 	end
 end
 
 function saltelliprintresults2(madsdata, results)
-	fos, te = results
-	Mads.madsoutput("First order sensitivity")
+	fos, tes = results
+	Mads.madsoutput("Main Effect Indices")
 	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
@@ -373,7 +373,7 @@ function saltelliprintresults2(madsdata, results)
 		end
 		Mads.madsoutput("\n")
 	end
-	Mads.madsoutput("\nTotal effect")
+	Mads.madsoutput("\nTotal Effect Indices")
 	Mads.madsoutput("\t")
 	for paramkey in paramkeys
 		Mads.madsoutput("\t$(paramkey)")
@@ -382,7 +382,7 @@ function saltelliprintresults2(madsdata, results)
 	for obskey in obskeys
 		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(te[obskey][paramkey])")
+			Mads.madsoutput("\t$(tes[obskey][paramkey])")
 		end
 		Mads.madsoutput("\n")
 	end
@@ -399,7 +399,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	nT = length(o)
 	d = Array(Float64, 2, nT)
 	fos = Array(Float64, nP, nT)
-	te = Array(Float64, nP, nT)
+	tes = Array(Float64, nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i][i]["t"]
 		d[2,i] = o[i][i]["c"]
@@ -407,7 +407,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		j = 1
 		for paramkey in paramkeys
 			fos[j,i] = result[1][obskey][paramkey]
-			te[j,i] = result[2][obskey][paramkey]
+			tes[j,i] = result[2][obskey][paramkey]
 			j += 1
 		end
 	end
@@ -416,17 +416,17 @@ function plotwellSAresults(wellname, madsdata, result)
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(te[j,:]), parameter="$paramkey")
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	ptes = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("First order senstivity"), Theme(key_position = :none) )
-	p = vstack(pc, pte, pfos)
+	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+	p = vstack(pc, ptes, pfos)
 	draw(SVG(string("$wellname-SA-results.svg"), 6inch, 9inch), p)
 end
 
@@ -441,15 +441,15 @@ function plotobsSAresults(madsdata, result)
 	nT = length(obsdict)
 	d = Array(Float64, 2, nT)
 	fos = Array(Float64, nP, nT)
-	te = Array(Float64, nP, nT)
+	tes = Array(Float64, nP, nT)
 	i = 1
 	for obskey in keys(obsdict)
 		d[1,i] = obsdict[obskey]["time"]
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			fos[j,i] = result[1][obskey][paramkey] # first order sensitivity
-			te[j,i] = result[2][obskey][paramkey] # total effect
+			fos[j,i] = result[1][obskey][paramkey] # main effect (first order) sensitivity
+			tes[j,i] = result[2][obskey][paramkey] # total effect sensitivity
 			j += 1
 		end
 		i += 1
@@ -459,17 +459,17 @@ function plotobsSAresults(madsdata, result)
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(te[j,:]), parameter="$paramkey")
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pte = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	ptes = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("First order senstivity"), Theme(key_position = :none) )
-	p = vstack(pd, pte, pfos)
+	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+	p = vstack(pd, ptes, pfos)
 	rootname = madsrootname(madsdata)
 	draw(SVG(string("$rootname-SA-results.svg"), 6inch, 9inch), p)
 end
