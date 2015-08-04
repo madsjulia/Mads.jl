@@ -6,4 +6,7 @@
 *.wells_debug
 *.svg
 *_[0-9]
+*.dat
+*.json
+*.yaml
 output.dat
