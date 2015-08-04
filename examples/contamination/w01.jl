@@ -10,15 +10,15 @@ using DataStructures
 # pwd()
 
 # load MADS problem
-const md = Mads.loadyamlmadsfile("examples/contamination/w01.mads")
+md = Mads.loadyamlmadsfile("examples/contamination/w01short.mads")
 
 # get MADS rootname
 rootname = Mads.madsrootname(md)
 
-# gel all the parameters
+# get all the parameters
 paramkeys = Mads.getparamkeys(md)
 
-# gel the parameters that will be analyzed
+# get the parameters that will be analyzed
 optparamkeys = Mads.getoptparamkeys(md)
 
 # get all the parameter initial values
@@ -48,25 +48,28 @@ result = Mads.saltelli(md,N=int(1e1))
 # Mads.saltelliprintresults(md, result)
 
 # plot global SA results for a given observation point
-Mads.plotwellSAresults("w20a",md,result)
+Mads.plotwellSAresults("w1a",md,result)
 
 # parameter space exploration
 Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
 paramvalues=Mads.parametersample(md, numberofsamples)
-Y = Array(Float64,length(md["Observations"]),numberofsamples)
+Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
+stride = length(paramvalues)
+k = 0
 for paramkey in keys(paramvalues)
   for i in 1:numberofsamples
     original = paramdict[paramkey]
-    paramdict[paramkey] = paramvalues[paramkey][i]
+    paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
 		forward_preds = computeconcentrations(paramdict)
     paramdict[paramkey] = original
 		j = 1
 		for obskey in keys(forward_preds)
-			Y[j,i] = forward_preds[obskey]
+			Y[j,i + k] = forward_preds[obskey]
 			j += 1
 		end
   end
+	k += stride
 end
 
 # save model inputs (not recommended)
