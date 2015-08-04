@@ -39,7 +39,7 @@ Mads.madsinfo("Solve ODE ...")
 times = [0:.1:100]
 initialconditions = [1.,0.]
 t,y=ode4s(funcosc, initialconditions, times)
-ys = hcat(y...).' # vecorize the output and transpose with '
+ys = hcat(y...)' # vecorize the output and transpose with '
 
 #writedlm("$rootname-solution.dat",ys[:,1])
 p=plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))

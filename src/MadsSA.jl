@@ -16,25 +16,27 @@ function parametersample(madsdata, numsamples)
 	sample = OrderedDict()
 	paramdist = getdistributions(madsdata)
 	for k in keys(paramdist)
-		values = Array(Float64,0)
-		if haskey(madsdata["Parameters"][k], "log")
-			flag = madsdata["Parameters"][k]["log"]
-			if flag == "yes" || flag == "true"
-				dist = paramdist[k]
-				if typeof(dist) == Uniform
-					dist.a = log10(dist.a)
-					dist.b = log10(dist.a)
-					values = 10.^rand(dist,numsamples)
-				elseif typeof(dist) == Normal
-					dist.μ = log10(dist.μ)
-					values = 10.^rand(dist,numsamples)
+		if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
+			values = Array(Float64,0)
+			if haskey(madsdata["Parameters"][k], "log")
+				flag = madsdata["Parameters"][k]["log"]
+				if flag == "yes" || flag == "true"
+					dist = paramdist[k]
+					if typeof(dist) == Uniform
+						dist.a = log10(dist.a)
+						dist.b = log10(dist.a)
+						values = 10.^rand(dist,numsamples)
+					elseif typeof(dist) == Normal
+						dist.μ = log10(dist.μ)
+						values = 10.^rand(dist,numsamples)
+					end
 				end
 			end
+			if sizeof(values) == 0
+				values = rand(paramdist[k],numsamples)
+			end
+			sample[k] = values
 		end
-		if sizeof(values) == 0
-			values = rand(paramdist[k],numsamples)
-		end
-		sample[k] = values
 	end
 	return sample
 end
