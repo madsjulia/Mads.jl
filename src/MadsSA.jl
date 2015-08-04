@@ -23,12 +23,12 @@ function parametersample(madsdata, numsamples)
 				if flag == "yes" || flag == "true"
 					dist = paramdist[k]
 					if typeof(dist) == Uniform
-						dist.a = log10(dist.a)
-						dist.b = log10(dist.a)
-						values = 10.^rand(dist,numsamples)
+						a = log10(dist.a)
+						b = log10(dist.a)
+						values = 10^(a + (b - a) * rand(numsamples))
 					elseif typeof(dist) == Normal
-						dist.μ = log10(dist.μ)
-						values = 10.^rand(dist,numsamples)
+						μ = log10(dist.μ)
+						values = 10.^(μ + dist.σ * randn(numsamples))
 					end
 				end
 			end

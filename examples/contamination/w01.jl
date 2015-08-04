@@ -55,7 +55,6 @@ Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
 paramvalues=Mads.parametersample(md, numberofsamples)
 Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
-stride = length(paramvalues)
 k = 0
 for paramkey in keys(paramvalues)
   for i in 1:numberofsamples
@@ -69,7 +68,7 @@ for paramkey in keys(paramvalues)
 			j += 1
 		end
   end
-	k += stride
+	k += numberofsamples
 end
 
 # save model inputs (not recommended)
