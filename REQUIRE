@@ -1,6 +1,7 @@
 julia 0.3
 Anasol
 R3Function
+MPTools
 Lora
 HDF5
 Optim
@@ -11,5 +12,7 @@ Docile
 PyCall
 PyPlot
 YAML
+JSON
 Gadfly
 DataFrames
+BlackBoxOptim
