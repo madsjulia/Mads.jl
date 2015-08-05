@@ -293,7 +293,7 @@ for mi = 1:length(names)
 end
 
 function saltelliprintresults(madsdata, results)
-	fos, tes = results
+	fos, tes, N = results
 	#=
 	Mads.madsoutput("Mean\n")
 	Mads.madsoutput("\t")
@@ -357,7 +357,7 @@ function saltelliprintresults(madsdata, results)
 end
 
 function saltelliprintresults2(madsdata, results)
-	fos, tes = results
+	fos, tes, N = results
 	Mads.madsoutput("Main Effect Indices")
 	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
@@ -393,7 +393,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-  nsample=result[3]
+  nsample = result[3]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -436,7 +436,7 @@ function plotobsSAresults(madsdata, result)
 		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
 		return
 	end
-  nsample=result[3]
+  nsample = result[3]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
