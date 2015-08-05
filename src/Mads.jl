@@ -14,6 +14,7 @@ if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
 include("MadsYAML.jl")
+include("MadsASCII.jl")
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
@@ -41,14 +42,20 @@ end
 @doc "Calibrate " ->
 function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
 	f_lm, g_lm = makelmfunctions(madsdata)
-	initparams = getparamsinit(madsdata)
-	lowerbounds = getparamsmin(madsdata)
-	upperbounds = getparamsmax(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = getparamsinit(madsdata, optparamkeys)
+	lowerbounds = getparamsmin(madsdata, optparamkeys)
+	upperbounds = getparamsmax(madsdata, optparamkeys)
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
 	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
-	return minimum, results
+	nonoptparamkeys = getnonoptparamkeys(madsdata)
+	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	for i = 1:length(optparamkeys)
+		minimumdict[optparamkeys[i]] = minimum[i]
+	end
+	return minimumdict, results
 end
 
 #=

@@ -1,6 +1,5 @@
 using Distributions
 using DataStructures
-using MadsASCII
 import R3Function
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
@@ -58,7 +57,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				for filename in vcat(madsdata["ASCIIParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
-				MadsASCII.dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
+				dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
 				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
@@ -78,7 +77,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					results = merge(results, loadyamlfile("$(newdirname)/$filename"))
 				end
 			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
-				predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
+				predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 				obskeys = getobskeys(madsdata)
 				obsid=[convert(String,k) for k in obskeys]
 				@assert length(obskeys) == length(predictions)
@@ -116,14 +115,15 @@ end
 
 @doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata, f::Function) # make MADS command gradient function
+	optparamkeys = getoptparamkeys(madsdata)
 	function madscommandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
 		h = 1e-6
 		xph["noparametersvaried"] = parameters
 		i = 2
-		for paramkey in keys(parameters)
-			xph[paramkey] = copy(parameters)
-			xph[paramkey][paramkey] += h
+		for optparamkey in optparamkeys
+			xph[optparamkey] = copy(parameters)
+			xph[optparamkey][optparamkey] += h
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
@@ -135,8 +135,8 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 		resultkeys = keys(fevals[1][2])
 		for resultkey in resultkeys
 			gradient[resultkey] = Dict()
-			for paramkey in keys(parameters)
-				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+			for optparamkey in optparamkeys
+				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
 			end
 		end
 		return gradient
@@ -147,14 +147,15 @@ end
 @doc "Make MADS command function & gradient function" ->
 function makemadscommandfunctionandgradient(madsdata)
 	f = makemadscommandfunction(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
 	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
 		h = 1e-6
 		xph["noparametersvaried"] = parameters
 		i = 2
-		for paramkey in keys(parameters)
-			xph[paramkey] = copy(parameters)
-			xph[paramkey][paramkey] += h
+		for optparamkey in optparamkeys
+			xph[optparamkey] = copy(parameters)
+			xph[optparamkey][optparamkey] += h
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
@@ -166,8 +167,8 @@ function makemadscommandfunctionandgradient(madsdata)
 		resultkeys = keys(fevals[1][2])
 		for resultkey in resultkeys
 			gradient[resultkey] = Dict()
-			for paramkey in keys(parameters)
-				gradient[resultkey][paramkey] = (fevalsdict[paramkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+			for optparamkey in optparamkeys
+				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
 			end
 		end
 		return fevalsdict["noparametersvaried"], gradient

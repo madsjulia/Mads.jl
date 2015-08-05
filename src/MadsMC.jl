@@ -50,10 +50,10 @@ function montecarlo(madsdata; N=int(1e2))
 		for j = 1:length(params)
 			if paramtypes[j] == "opt"
 				if paramlogs[j] == true || paramlogs[j] == "yes"
-					params[j] = 10 ^ logoptparams[i, klog]
+					params[j] = 10 ^ logoptparams[klog, i]
 					klog += 1
 				else
-					params[j] = nonlogoptparams[i, knonlog]
+					params[j] = nonlogoptparams[knonlog, i]
 					knonlog += 1
 				end
 			end
@@ -69,6 +69,6 @@ function montecarlo(madsdata; N=int(1e2))
 		outputdicts[i]["Results"] = results[i]
 	end
 	outputfilename = string(madsdata["Filename"][1:end-5], ".mcresults.yaml")
-	MadsYAML.dumpyamlfile(outputfilename, outputdicts)
+	dumpyamlfile(outputfilename, outputdicts)
 	return outputdicts
 end

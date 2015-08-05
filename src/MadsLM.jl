@@ -6,9 +6,13 @@ function makelmfunctions(madsdata)
 	g = makemadscommandgradient(madsdata, f)
 	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
-	paramkeys = getparamkeys(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
 	function f_lm(arrayparameters::Vector)
-		parameters = Dict(paramkeys, arrayparameters)
+		parameters = copy(initparams)
+		for i = 1:length(arrayparameters)
+			parameters[optparamkeys[i]] = arrayparameters[i]
+		end
 		resultdict = f(parameters)
 		residuals = Array(Float64, length(madsdata["Observations"]))
 		i = 1
@@ -20,12 +24,15 @@ function makelmfunctions(madsdata)
 		return residuals
 	end
 	function g_lm(arrayparameters::Vector)
-		parameters = Dict(paramkeys, arrayparameters)
+		parameters = copy(initparams)
+		for i = 1:length(arrayparameters)
+			parameters[optparamkeys[i]] = arrayparameters[i]
+		end
 		gradientdict = g(parameters)
-		jacobian = Array(Float64, (length(obskeys), length(paramkeys)))
+		jacobian = Array(Float64, (length(obskeys), length(optparamkeys)))
 		for i in 1:length(obskeys)
-			for j in 1:length(paramkeys)
-				jacobian[i, j] = gradientdict[obskeys[i]][paramkeys[j]]
+			for j in 1:length(optparamkeys)
+				jacobian[i, j] = gradientdict[obskeys[i]][optparamkeys[j]]
 			end
 		end
 		return jacobian

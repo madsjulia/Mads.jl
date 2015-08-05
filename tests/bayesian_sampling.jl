@@ -2,7 +2,7 @@ using Mads
 
 # Bayesian sampling test
 Mads.madsinfo("TEST Bayesian sampling with internal model:")
-mdinternal = Mads.loadyamlmadsfile("test-internal.mads")
+mdinternal = Mads.loadyamlmadsfile("test-internal-linearmodel.mads")
 mcmcchain = Mads.bayessampling(mdinternal)
 #plot(x=mcmcchain.samples[:,1], y=mcmcchain.samples[:,2])
 Mads.madsinfo("TEST Bayesian sampling with external model:")

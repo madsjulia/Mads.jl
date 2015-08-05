@@ -1,5 +1,3 @@
-module MadsASCII
-
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -19,5 +17,3 @@ end
 function readasciipredictions(filename::String) # read ASCII text predictions
 	return loadasciifile(filename)
 end
-
-end # Module end
