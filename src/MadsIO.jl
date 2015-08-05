@@ -94,7 +94,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	end
 	if !haskey(madsdata, "Restart") || madsdata["Restart"] != false
 		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-		if contains(madsdata["Filename"], "/")
+		if haskey(madsdata, "RestartDir")
+			rootdir = madsdata["RestartDir"]
+		elseif contains(madsdata["Filename"], "/")
 			rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
 		else
 			rootdir = string(rootname, "_restart")
