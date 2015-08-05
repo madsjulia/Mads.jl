@@ -195,7 +195,7 @@ function saltellibrute(madsdata; N=int(1e4))
 			tes[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
 		end
 	end
-	return fos, tes
+	return fos, tes, N
 end
 
 @doc "Saltelli " ->
@@ -253,7 +253,7 @@ function saltelli(madsdata; N=int(100))
 			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
 		end
 	end
-	return fos, tes
+	return fos, tes, N
 end
 
 names = ["saltelli", "saltellibrute"]
@@ -286,7 +286,7 @@ for mi = 1:length(names)
 					teall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			return fosall, teall
+			return fosall, teall, N
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -393,6 +393,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
+  nsample=result[3]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -427,7 +428,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
 	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 	p = vstack(pc, ptes, pfos)
-	draw(SVG(string("$wellname-SA-results.svg"), 6inch, 9inch), p)
+	draw(SVG(string("$wellname-SA-results-nsample-$nsample.svg"), 6inch, 9inch), p)
 end
 
 function plotobsSAresults(madsdata, result)
@@ -435,6 +436,7 @@ function plotobsSAresults(madsdata, result)
 		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
 		return
 	end
+  nsample=result[3]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -471,5 +473,5 @@ function plotobsSAresults(madsdata, result)
 	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 	p = vstack(pd, ptes, pfos)
 	rootname = madsrootname(madsdata)
-	draw(SVG(string("$rootname-SA-results.svg"), 6inch, 9inch), p)
+	draw(SVG(string("$rootname-SA-results-nsample-$nsample.svg"), 6inch, 9inch), p)
 end
