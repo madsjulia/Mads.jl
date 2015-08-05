@@ -41,7 +41,8 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				end
 				cd(newdirname)
 				for template in madsdata["Templates"]
-					writeparamtersviatemplate(parameters, template["tpl"], template["write"]) # write the parameters
+					expressions = evaluatemadsexpressions(parameters, madsdata)
+					writeparamtersviatemplate(merge(parameters, expressions), template["tpl"], template["write"]) # write the parameters
 				end
 				cd(currentdir)
 			end

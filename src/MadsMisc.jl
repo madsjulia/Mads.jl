@@ -1,3 +1,4 @@
+import MPTools
 include("MadsIO.jl")
 
 @doc "Arcsine transformation of model parameters" ->
@@ -112,4 +113,26 @@ function getoptparamkeys(madsdata)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	return paramkeys[paramtypes .== "opt"]
+end
+
+@doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
+function evaluatemadsexpression(expressionstring, parameters)
+	expression = parse(expressionstring)
+	MPTools.populateexpression!(expression, parameters)
+	retval::Float64
+	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
+	return retval
+end
+
+@doc "Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
+function evaluatemadsexpressions(parameters, madsdata)
+	if haskey(madsdata, "Expressions")
+		expressions = Dict()
+		for exprname in keys(madsdata["Expressions"])
+			expressions[exprname] = evaluatemadsexpression(madsdata["Expressions"][exprname]["exp"], parameters)
+		end
+		return expressions
+	else
+		return Dict()
+	end
 end

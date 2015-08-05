@@ -36,7 +36,14 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		parameters = OrderedDict()
 		for dict in madsdict["Parameters"]
 			for key in keys(dict)
-				parameters[key] = dict[key]
+				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
+					parameters[key] = dict[key]
+				else
+					if !haskey(madsdict, "Expressions")
+						madsdict["Expressions"] = OrderedDict()
+					end
+					madsdict["Expressions"][key] = dict[key]
+				end
 			end
 		end
 		madsdict["Parameters"] = parameters
