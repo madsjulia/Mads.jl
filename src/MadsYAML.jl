@@ -1,5 +1,3 @@
-module MadsYAML
-
 export loadyamlmadsfile, dumpyamlmadsfile
 
 # import YAML
@@ -175,5 +173,3 @@ function dumpwellconcentrations(filename::String, madsdata)
 	end
 	close(outfile)
 end
-
-end # Module end

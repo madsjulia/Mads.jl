@@ -13,6 +13,7 @@ end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
+include("MadsYAML.jl")
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")

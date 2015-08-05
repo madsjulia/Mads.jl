@@ -1,6 +1,5 @@
 using Distributions
 using DataStructures
-using MadsYAML
 using MadsASCII
 import R3Function
 if VERSION < v"0.4.0-dev"
@@ -40,17 +39,15 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 				cd(newdirname)
-				for template in madsdata["Templates"]
-					expressions = evaluatemadsexpressions(parameters, madsdata)
-					writeparamtersviatemplate(merge(parameters, expressions), template["tpl"], template["write"]) # write the parameters
-				end
+				writeparameters(madsdata, parameters)
 				cd(currentdir)
 			end
+			#TODO move the writing into the "writeparameters" function
 			if haskey(madsdata, "YAMLParameters") # YAML
 				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
-				MadsYAML.dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
+				dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
@@ -78,7 +75,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				madsinfo("""Observations: $(results)""")
 			elseif haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					results = merge(results, MadsYAML.loadyamlfile("$(newdirname)/$filename"))
+					results = merge(results, loadyamlfile("$(newdirname)/$filename"))
 				end
 			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
 				predictions = MadsASCII.loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
@@ -228,12 +225,18 @@ function getwellkeys(madsdata)
 	#return [convert(String,k) for k in keys(madsdata["Wells"])]
 end
 
-@doc "Write paramters via MADS template" ->
-function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
+@doc "Write parameters via MADS template" ->
+function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
-	separator = line[end-1] # template separator
-	lines = readlines(tplfile)
+	if length(line) == length("template #\n")
+		separator = line[end-1] # template separator
+		lines = readlines(tplfile)
+	else
+		#it doesn't specify the separator -- assume it is '#'
+		separator = '#'
+		lines = [line; readlines(tplfile)]
+	end
 	close(tplfile)
 	outfile = open(outputfilename, "w")
 	for line in lines
@@ -249,14 +252,22 @@ function writeparamtersviatemplate(parameters, templatefilename, outputfilename)
 	close(outfile)
 end
 
-@doc "Write paramters" ->
+@doc "Write initial parameters" ->
 function writeparameters(madsdata)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
+	writeparameters(madsdata, Dict(paramkeys, paramsinit))
+end
+
+@doc "Write parameters" ->
+function writeparameters(madsdata, parameters)
+	expressions = evaluatemadsexpressions(parameters, madsdata)
+	paramsandexps = merge(parameters, expressions)
 	for template in madsdata["Templates"]
-		writeparamtersviatemplate(Dict(paramkeys, paramsinit), template["tpl"], template["write"])
+		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"])
 	end
 end
+
 
 @doc "Call C MADS ins_obs() function from the MADS library" ->
 function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inputfilename::ASCIIString)
