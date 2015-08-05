@@ -4,7 +4,7 @@ using Optim
 using Lora
 using Distributions
 using Logging
-using DataStructures
+import DataStructures
 using HDF5
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4

@@ -4,4 +4,4 @@ using Mads
 Mads.madsinfo("TEST Levenberg-Marquardt optimization of an external call problem using ASCII files:")
 mdexternal = Mads.loadyamlmadsfile("test-external-ascii.mads")
 results = Mads.calibrate(mdexternal)
-Mads.madsoutput("""$results\n"""")
+Mads.madsoutput("$results\n")

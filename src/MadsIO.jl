@@ -66,7 +66,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			end
 			madsinfo("""Execute: $(madsdata["Command"])""")
 			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
-			results = OrderedDict()
+			results = DataStructures.OrderedDict()
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				cd(newdirname)
 				results = readobservations(madsdata)
@@ -81,7 +81,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				obskeys = getobskeys(madsdata)
 				obsid=[convert(String,k) for k in obskeys]
 				@assert length(obskeys) == length(predictions)
-				results = OrderedDict{String, Float64}(zip(obsid, predictions))
+				results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
 			end
 			run(`rm -fR $newdirname`)
 			return results

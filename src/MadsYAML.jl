@@ -11,7 +11,7 @@ end
 
 @doc "Load YAML file" ->
 function loadyamlfile(filename::String) # load YAML file
-	yamldata = OrderedDict()
+	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	# yamldata = YAML.load(f) # works; however Julia YAML cannot write
 	yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
@@ -31,14 +31,14 @@ end
 function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
 	madsdict = loadyamlfile(filename)
 	if haskey(madsdict, "Parameters")
-		parameters = OrderedDict()
+		parameters = DataStructures.OrderedDict()
 		for dict in madsdict["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
 					parameters[key] = dict[key]
 				else
 					if !haskey(madsdict, "Expressions")
-						madsdict["Expressions"] = OrderedDict()
+						madsdict["Expressions"] = DataStructures.OrderedDict()
 					end
 					madsdict["Expressions"][key] = dict[key]
 				end
@@ -56,19 +56,19 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		end
 	end
 	if haskey(madsdict, "Wells")
-		wells = OrderedDict()
+		wells = DataStructures.OrderedDict()
 		for dict in madsdict["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
 			end
 		end
 		madsdict["Wells"] = wells
-		observations = OrderedDict()
+		observations = DataStructures.OrderedDict()
 		for wellkey in collect(keys(madsdict["Wells"]))
 			for i in 1:length(madsdict["Wells"][wellkey]["obs"])
 				t = madsdict["Wells"][wellkey]["obs"][i][i]["t"]
 				obskey = wellkey * "_" * string(t)
-				data = OrderedDict()
+				data = DataStructures.OrderedDict()
 				data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
 				for datakey in keys(madsdict["Wells"][wellkey]["obs"][i][i])
 					if datakey != "c" && datakey != "t"
@@ -80,7 +80,7 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 		end
 		madsdict["Observations"] = observations
 	elseif haskey(madsdict, "Observations")
-		observations = OrderedDict()
+		observations = DataStructures.OrderedDict()
 		for dict in madsdict["Observations"]
 			for key in keys(dict)
 				observations[key] = dict[key]

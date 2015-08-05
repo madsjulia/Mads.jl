@@ -125,12 +125,13 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 				lambda_down /= lambda_mu
 				lambda_current = lambda_p[npl] = lambda_down
 			end
+		end
+		function getphianddelta_x(npl)
+			lambda_current = lambda_p[npl]
 			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
-			print("Solve time: ")
-			@time delta_x = delta_xp[npl,:] = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
-			#delta_x = delta_xp[npl,:] = ( J' * J + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			delta_x = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
-			predicted_residual = phi[npl] = sse(J * delta_x + fcur)
+			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
 			madsoutput(@sprintf "OF predicted: %e" predicted_residual; level = 2)
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
@@ -141,26 +142,33 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 			else
 				madsoutput(" -> ok"; level = 2)
 			end
+			return predicted_residual, delta_x
 		end
+		phisanddelta_xs = pmap(getphianddelta_x, collect(1:np_lambda))
+		phi = map(x->x[1], phisanddelta_xs)
+		delta_xs = map(x->x[2], phisanddelta_xs)
 
-		for npl = 1:np_lambda # TODO execute this in parallel
-			delta_x = vec(delta_xp[npl,:])
+		function getobjfuncevalandtrial_f(npl)
+			delta_x = delta_xs[npl]
 			madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 )
-			trial_f = trial_fp[npl,:] = f(x + delta_x) # TODO pmap equivalent of func_set in MADS
-			f_calls += 1
-			residual = sse(trial_f)
+			trial_f = f(x + delta_x)
+			objfunceval = sse(trial_f)
 			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n" npl lambda_p[npl] residual phi[npl]; level = 2 )
-			phi[npl] = residual
+			return objfunceval, trial_f
 		end
+		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
+		f_calls += np_lambda
+		objfuncevals = map(x->x[1], objfuncevalsandtrial_fs)
+		trial_fs = map(x->x[2], objfuncevalsandtrial_fs)
 
-		npl_best = indmin(phi)
-		npl_worst = indmax(phi)
-		madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" phi[npl_best] phi[npl_worst]; level = 1 )
+		npl_best = indmin(objfuncevals)
+		npl_worst = indmax(objfuncevals)
+		madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 )
 		madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
 		lambda = lambda_p[npl_best]
-		delta_x = vec(delta_xp[npl_best,:])
-		trial_f = vec(trial_fp[npl_best,:])
-		trial_residual = phi[npl_best]
+		delta_x = vec(delta_xs[npl_best])
+		trial_f = vec(trial_fs[npl_best])
+		trial_residual = objfuncevals[npl_best]
 		predicted_residual = sse(J * delta_x + fcur)
 
 		# step quality = residual change / predicted residual change

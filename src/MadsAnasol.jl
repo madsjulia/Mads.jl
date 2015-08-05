@@ -37,7 +37,7 @@ function makecomputeconcentrations(madsdata)
 		ax = parameters["ax"]
 		ay = parameters["ay"]
 		az = parameters["az"]
-		c = OrderedDict()
+		c = DataStructures.OrderedDict()
 		for wellkey in Mads.getwellkeys(madsdata)
 			wellx = madsdata["Wells"][wellkey]["x"]
 			welly = madsdata["Wells"][wellkey]["y"]

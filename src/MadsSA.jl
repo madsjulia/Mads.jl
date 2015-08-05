@@ -13,7 +13,7 @@ end
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
 function parametersample(madsdata, numsamples)
-	sample = OrderedDict()
+	sample = DataStructures.OrderedDict()
 	paramdist = getdistributions(madsdata)
 	for k in keys(paramdist)
 		if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
@@ -77,7 +77,7 @@ function saltellibrute(madsdata; N=int(1e4))
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getdistributions(madsdata)
-	results = Array(OrderedDict, numsamples)
+	results = Array(DataStructures.OrderedDict, numsamples)
 	paramdict = Dict()
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
@@ -95,7 +95,7 @@ function saltellibrute(madsdata; N=int(1e4))
 			sum[obskeys[i]] += results[j][obskeys[i]]
 		end
 	end
-	mean = OrderedDict()
+	mean = DataStructures.OrderedDict()
 	for i = 1:length(obskeys)
 		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
 	end
@@ -107,19 +107,19 @@ function saltellibrute(madsdata; N=int(1e4))
 			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
 		end
 	end
-	variance = OrderedDict()
+	variance = DataStructures.OrderedDict()
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
 	# compute the main effect (first order) sensitivities (indices)
-	fos = OrderedDict()
+	fos = DataStructures.OrderedDict()
 	for k = 1:length(obskeys)
-		fos[obskeys[k]] = OrderedDict()
+		fos[obskeys[k]] = DataStructures.OrderedDict()
 	end
 	for i = 1:length(paramkeys)
 		cond_means = Array(Dict, numoneparamsamples)
 		for j = 1:numoneparamsamples
-			cond_means[j] = OrderedDict()
+			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
 				cond_means[j][obskeys[k]] = 0.
 			end
@@ -156,8 +156,8 @@ function saltellibrute(madsdata; N=int(1e4))
 		cond_vars = Array(Dict, nummanyparamsamples)
 		cond_means = Array(Dict, nummanyparamsamples)
 		for j = 1:nummanyparamsamples
-			cond_vars[j] = OrderedDict()
-			cond_means[j] = OrderedDict()
+			cond_vars[j] = DataStructures.OrderedDict()
+			cond_means[j] = DataStructures.OrderedDict()
 			for m = 1:length(obskeys)
 				cond_means[j][obskeys[m]] = 0.
 				cond_vars[j][obskeys[m]] = 0.
@@ -167,7 +167,7 @@ function saltellibrute(madsdata; N=int(1e4))
 					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
 				end
 			end
-			results = Array(OrderedDict, numoneparamsamples)
+			results = Array(DataStructures.OrderedDict, numoneparamsamples)
 			for k = 1:numoneparamsamples
 				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
 				results[k] = f(paramdict)
