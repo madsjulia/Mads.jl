@@ -56,7 +56,7 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 end
 
 @doc "Set Dynamic Model for MADS model calls using internal Julia functions" ->
-function setdynamicmodel(madsdata, f::Function)
+function setdynamicmodel(madsdata, f::Function) # TODO do we still need this
 	madsdata["Dynamic model"] = f
 end
 
