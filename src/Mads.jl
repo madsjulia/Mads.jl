@@ -39,6 +39,7 @@ function savecalibrationresults(madsdata, results)
 	#TODO save residuals, predictions, observations (yaml?)
 end
 
+
 @doc "Calibrate " ->
 function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
 	f_lm, g_lm = makelmfunctions(madsdata)
@@ -48,7 +49,13 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 	upperbounds = getparamsmax(madsdata, optparamkeys)
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
+	function calibratecallback(x_best)
+		outfile = open("iterationresults", "a+")
+		write(outfile, string("OF: ", sse(f_lm_sin(x_best)), "\n"))
+		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
+		close(outfile)
+	end
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	nonoptparamkeys = getnonoptparamkeys(madsdata)
 	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
