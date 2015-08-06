@@ -12,8 +12,8 @@ end
 
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
-	if haskey(madsdata, "Dynamic model")
-		println("Dynamic model evaluation")
+	if haskey(madsdata, "Dynamic model") # TODO do we still need "Dynamic model"?
+		println("Dynamic model evaluation ...")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
@@ -86,7 +86,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			run(`rm -fR $newdirname`)
 			return results
 		end
-	elseif haskey(madsdata, "Wells")
+	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
 		return makecomputeconcentrations(madsdata)
 	else
 		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")

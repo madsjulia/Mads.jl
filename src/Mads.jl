@@ -6,6 +6,7 @@ using Distributions
 using Logging
 import DataStructures
 using HDF5
+import NLopt
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -72,8 +73,7 @@ function forward(madsdata)
 	return f(initparams)
 end
 
-#=
-NLopt is too much of a pain to install at this point
+# NLopt is too much of a pain to install at this point
 @doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach
 function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	const paramkeys = getparamkeys(madsdata)
@@ -126,6 +126,5 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	minf, minx, ret = NLopt.optimize(opt, paraminits)
 	return minf, minx, ret
 end
-=#
 
 end # Module end

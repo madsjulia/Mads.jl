@@ -25,7 +25,7 @@ end
 
 # internal execution test
 include("optimization_linear_problem.jl")
-#include("tests/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
+# include("tests/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
 # senstivity
 include("saltelli_sensitvity_analysis.jl")
 include("saltelli_sensitvity_analysis_parallel.jl")
