@@ -65,6 +65,13 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 	return minimumdict, results
 end
 
+@doc "Do a forward run using the init values of the parameters " ->
+function forward(madsdata)
+	initparams = Dict(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata))
+	f = Mads.makemadscommandfunction(madsdata)
+	return f(initparams)
+end
+
 #=
 NLopt is too much of a pain to install at this point
 @doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach

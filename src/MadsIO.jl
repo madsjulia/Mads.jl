@@ -118,7 +118,7 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 	optparamkeys = getoptparamkeys(madsdata)
 	function madscommandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
-		h = 1e-6
+		h = sqrt(eps(Float32))
 		xph["noparametersvaried"] = parameters
 		i = 2
 		for optparamkey in optparamkeys
@@ -150,7 +150,7 @@ function makemadscommandfunctionandgradient(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
-		h = 1e-6
+		h = sqrt(eps(Float32))
 		xph["noparametersvaried"] = parameters
 		i = 2
 		for optparamkey in optparamkeys
