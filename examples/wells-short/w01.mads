@@ -20,3 +20,4 @@ Templates:
 - tmp1: { tpl: w01.tpl, write: w01.wells }
 Instructions:
 - ins1: { ins: w01.inst, read: w01.s_point }
+Restart: false
