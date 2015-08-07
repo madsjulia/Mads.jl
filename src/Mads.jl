@@ -10,12 +10,12 @@ import NLopt
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
-#import NLopt
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
 include("MadsYAML.jl")
 include("MadsASCII.jl")
+include("MadsJSON.jl")
 include("MadsIO.jl")
 include("MadsTestFunctions.jl")
 include("MadsMisc.jl")
@@ -43,6 +43,7 @@ end
 
 @doc "Calibrate " ->
 function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
+	rootname = madsrootname(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = getparamsinit(madsdata, optparamkeys)
@@ -51,7 +52,7 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
 	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
 	function calibratecallback(x_best)
-		outfile = open("iterationresults", "a+")
+		outfile = open("$rootname.iterationresults", "a+")
 		write(outfile, string("OF: ", sse(f_lm_sin(x_best)), "\n"))
 		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
 		close(outfile)

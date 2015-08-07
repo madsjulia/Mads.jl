@@ -407,8 +407,16 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			fos[j,i] = result[1][obskey][paramkey]
-			tes[j,i] = result[2][obskey][paramkey]
+			f = result[1][obskey][paramkey]
+			if isnan(f)
+				f = 0
+			end
+			fos[j,i] = f
+			t = result[1][obskey][paramkey]
+			if isnan(t)
+				t = 0
+			end
+			tes[j,i] = t
 			j += 1
 		end
 	end
@@ -420,12 +428,14 @@ function plotwellSAresults(wellname, madsdata, result)
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
+	println(df[1])
 	ptes = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
 		j += 1
 	end
+	println(df[1])
 	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 	p = vstack(pc, ptes, pfos)
 	draw(SVG(string("$wellname-SA-results-nsample-$nsample.svg"), 6inch, 9inch), p)

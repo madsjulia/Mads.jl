@@ -10,3 +10,4 @@
 *.json
 *.yaml
 output.dat
+*iterationresults

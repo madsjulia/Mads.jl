@@ -42,6 +42,17 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				cd(currentdir)
 			end
 			#TODO move the writing into the "writeparameters" function
+			if haskey(madsdata, "JSONParameters") # JSON
+				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+				dumpjsonfile("$(newdirname)/$(madsdata["JSONParameters"])", parameters) # create parameter files
+			end
+			if haskey(madsdata, "JSONPredictions") # JSON
+				for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+			end
 			if haskey(madsdata, "YAMLParameters") # YAML
 				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
@@ -64,27 +75,37 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
-			madsinfo("""Execute: $(madsdata["Command"])""")
-			run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
-			results = DataStructures.OrderedDict()
-			if haskey(madsdata, "Instructions") # Templates/Instructions
-				cd(newdirname)
-				results = readobservations(madsdata)
-				cd(currentdir)
-				madsinfo("""Observations: $(results)""")
-			elseif haskey(madsdata, "YAMLPredictions") # YAML
-				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					results = merge(results, loadyamlfile("$(newdirname)/$filename"))
+			if haskey(madsdata, "JuliaModel")
+				println("Internal Julia model evaluation ...")
+				madscommandfunction = evalfile(madsdata["JuliaModel"])
+				results = madscommandfunction(parameters)
+			else
+				madsinfo("""Execute: $(madsdata["Command"])""")
+				run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
+				results = DataStructures.OrderedDict()
+				if haskey(madsdata, "Instructions") # Templates/Instructions
+					cd(newdirname)
+					results = readobservations(madsdata)
+					cd(currentdir)
+					madsinfo("""Observations: $(results)""")
+				elseif haskey(madsdata, "JSONPredictions") # JSON
+					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
+						results = loadjsonfile("$(newdirname)/$filename")
+					end
+				elseif haskey(madsdata, "YAMLPredictions") # YAML
+					for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
+						results = merge(results, loadyamlfile("$(newdirname)/$filename"))
+					end
+				elseif haskey(madsdata, "ASCIIPredictions") # ASCII
+					predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
+					obskeys = getobskeys(madsdata)
+					obsid=[convert(String,k) for k in obskeys]
+					@assert length(obskeys) == length(predictions)
+					results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
 				end
-			elseif haskey(madsdata, "ASCIIPredictions") # ASCII
-				predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
-				obskeys = getobskeys(madsdata)
-				obsid=[convert(String,k) for k in obskeys]
-				@assert length(obskeys) == length(predictions)
-				results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
+				run(`rm -fR $newdirname`)
+				return results
 			end
-			run(`rm -fR $newdirname`)
-			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
 		return makecomputeconcentrations(madsdata)
