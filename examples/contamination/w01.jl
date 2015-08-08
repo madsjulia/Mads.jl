@@ -12,7 +12,12 @@ using ProgressMeter
 # pwd()
 
 # load MADS problem
-md = Mads.loadyamlmadsfile("examples/contamination/w01short.mads")
+md = Dict()
+try
+	md = Mads.loadyamlmadsfile("examples/contamination/w01short.mads")
+catch
+	md = Mads.loadyamlmadsfile("w01short.mads")
+end
 
 # get MADS rootname
 rootname = Mads.madsrootname(md)

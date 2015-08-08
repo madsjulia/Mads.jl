@@ -250,12 +250,14 @@ function saltelli(madsdata; N=int(100))
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
 		for j = 1:length(obskeys)
-			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
-			meandata[obskeys[j]][paramkeys[i]] = f0;
-			var = .5 * ((dot(yA[:, j], yA[:, j]) - f0 ^ 2) + (dot(yB[:, j], yB[:, j]) - f0 ^ 2))
-			variance[obskeys[j]][paramkeys[i]] = var
-			mes[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) - f0 ^ 2) / var
-			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
+			f0A = mean(yA[:, j])
+			f0B = mean(yB[:, j])
+			meandata[obskeys[j]][paramkeys[i]] = .5 * (f0A + f0B)
+			varA = dot(yA[:, j], yA[:, j]) / length(yA[:, j]) - f0A ^ 2
+			varB = dot(yB[:, j], yB[:, j]) / length(yB[:, j]) - f0B ^ 2
+			variance[obskeys[j]][paramkeys[i]] = .5 * (varA + varB)
+			mes[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) / length(yA[:, j]) - f0A ^ 2) / varA
+			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2) / varB
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "samplesize" => N, "method" => "saltellimap" ]
