@@ -2,6 +2,7 @@ using Mads
 using DataStructures
 using DataFrames
 using Gadfly
+using ProgressMeter
 
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
@@ -12,30 +13,32 @@ end
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
-function parametersample(madsdata, numsamples)
+function parametersample(madsdata, numsamples, parameterkey="")
 	sample = DataStructures.OrderedDict()
 	paramdist = getdistributions(madsdata)
 	for k in keys(paramdist)
-		if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
-			values = Array(Float64,0)
-			if haskey(madsdata["Parameters"][k], "log")
-				flag = madsdata["Parameters"][k]["log"]
-				if flag == "yes" || flag == "true"
-					dist = paramdist[k]
-					if typeof(dist) == Uniform
-						a = log10(dist.a)
-						b = log10(dist.a)
-						values = 10^(a + (b - a) * rand(numsamples))
-					elseif typeof(dist) == Normal
-						μ = log10(dist.μ)
-						values = 10.^(μ + dist.σ * randn(numsamples))
+		if parameterkey == "" || parameterkey == k
+			if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
+				values = Array(Float64,0)
+				if haskey(madsdata["Parameters"][k], "log")
+					flag = madsdata["Parameters"][k]["log"]
+					if flag == "yes" || flag == "true"
+						dist = paramdist[k]
+						if typeof(dist) == Uniform
+							a = log10(dist.a)
+							b = log10(dist.a)
+							values = 10^(a + (b - a) * Distributions.rand(numsamples))
+						elseif typeof(dist) == Normal
+							μ = log10(dist.μ)
+							values = 10.^(μ + dist.σ * Distributions.randn(numsamples))
+						end
 					end
 				end
+				if sizeof(values) == 0
+					values = Distributions.rand(paramdist[k],numsamples)
+				end
+				sample[k] = values
 			end
-			if sizeof(values) == 0
-				values = rand(paramdist[k],numsamples)
-			end
-			sample[k] = values
 		end
 	end
 	return sample
@@ -68,25 +71,25 @@ function localsa(madsdata)
 end
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=int(1e4))
+function saltellibrute(madsdata; N=int(1e4)) # TODO senstivity indeces become >1 as the sample size increases
 	numsamples = int(sqrt(N))
 	numoneparamsamples = int(sqrt(N))
 	nummanyparamsamples = int(sqrt(N))
 	# convert the distribution strings into actual distributions
-	paramkeys = getparamkeys(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getdistributions(madsdata)
 	results = Array(DataStructures.OrderedDict, numsamples)
-	paramdict = Dict()
+	paramdict = Dict( getparamkeys(madsdata), getparamsinit(madsdata) )
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
-			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]])
+			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample
 		end
-		results[i] = f(paramdict)
+		results[i] = f(paramdict) # this got to be slow to process
 	end
 	obskeys = getobskeys(madsdata)
-	sum = Dict()
+	sum = DataStructures.OrderedDict()
 	for i = 1:length(obskeys)
 		sum[obskeys[i]] = 0.
 	end
@@ -111,23 +114,24 @@ function saltellibrute(madsdata; N=int(1e4))
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
-	# compute the main effect (first order) sensitivities (indices)
-	fos = DataStructures.OrderedDict()
+	madsinfo("Compute the main effect (first order) sensitivities (indices)")
+	mes = DataStructures.OrderedDict()
 	for k = 1:length(obskeys)
-		fos[obskeys[k]] = DataStructures.OrderedDict()
+		mes[obskeys[k]] = DataStructures.OrderedDict()
 	end
 	for i = 1:length(paramkeys)
-		cond_means = Array(Dict, numoneparamsamples)
-		for j = 1:numoneparamsamples
+		madsinfo("""Parameter : $(paramkeys[i])""")
+		cond_means = Array(OrderedDict, numoneparamsamples)
+		@showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
 			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
 				cond_means[j][obskeys[k]] = 0.
 			end
-			paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
+			paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
 			for k = 1:nummanyparamsamples
 				for m = 1:length(paramkeys)
 					if m != i
-						paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
+						paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
 					end
 				end
 				results = f(paramdict)
@@ -141,21 +145,22 @@ function saltellibrute(madsdata; N=int(1e4))
 		end
 		v = Array(Float64, numoneparamsamples)
 		for k = 1:length(obskeys)
-			for m = 1:numoneparamsamples
-				v[m] = cond_means[m][obskeys[k]]
+			for j = 1:numoneparamsamples
+				v[j] = cond_means[j][obskeys[k]]
 			end
-			fos[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
+			mes[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
 		end
 	end
-	# compute the total effect sensitivities (indices)
-	tes = Dict()
+	madsinfo("Compute the total effect sensitivities (indices)") # TODO we should use the same samples for total and main effect
+	tes = DataStructures.OrderedDict()
 	for k = 1:length(obskeys)
-		tes[obskeys[k]] = Dict()
+		tes[obskeys[k]] = DataStructures.OrderedDict()
 	end
 	for i = 1:length(paramkeys)
-		cond_vars = Array(Dict, nummanyparamsamples)
-		cond_means = Array(Dict, nummanyparamsamples)
-		for j = 1:nummanyparamsamples
+		madsinfo("""Parameter : $(paramkeys[i])""")
+		cond_vars = Array(OrderedDict, nummanyparamsamples)
+		cond_means = Array(OrderedDict, nummanyparamsamples)
+		@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = DataStructures.OrderedDict()
 			cond_means[j] = DataStructures.OrderedDict()
 			for m = 1:length(obskeys)
@@ -164,12 +169,12 @@ function saltellibrute(madsdata; N=int(1e4))
 			end
 			for m = 1:length(paramkeys)
 				if m != i
-					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]])
+					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
 				end
 			end
 			results = Array(DataStructures.OrderedDict, numoneparamsamples)
 			for k = 1:numoneparamsamples
-				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]])
+				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
 				results[k] = f(paramdict)
 				for m = 1:length(obskeys)
 					cond_means[j][obskeys[m]] += results[k][obskeys[m]]
@@ -195,7 +200,7 @@ function saltellibrute(madsdata; N=int(1e4))
 			tes[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
 		end
 	end
-	return fos, tes, N
+	[ "mes" => mes, "tes" => tes, "samplesize" => N, "method" => "saltellibrute" ]
 end
 
 @doc "Saltelli " ->
@@ -211,12 +216,12 @@ function saltelli(madsdata; N=int(100))
 	C = Array(Float64, (N, length(paramkeys)))
 	meandata = Dict{String, Dict{String, Float64}}() # mean
 	variance = Dict{String, Dict{String, Float64}}() # variance
-	fos = Dict{String, Dict{String, Float64}}() # main effect (first order) sensitivities
+	mes = Dict{String, Dict{String, Float64}}() # main effect (first order) sensitivities
 	tes = Dict{String, Dict{String, Float64}}()	# total effect sensitivities
 	for i = 1:length(obskeys)
 		meandata[obskeys[i]] = Dict{String, Float64}()
 		variance[obskeys[i]] = Dict{String, Float64}()
-		fos[obskeys[i]] = Dict{String, Float64}()
+		mes[obskeys[i]] = Dict{String, Float64}()
 		tes[obskeys[i]] = Dict{String, Float64}()
 	end
 	for key in paramkeys
@@ -229,9 +234,9 @@ function saltelli(madsdata; N=int(100))
 		end
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = hcat(pmap(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, A[i, :]))))), 1:size(A, 1))...)'
+	yA = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, A[i, :]))))), 1:size(A, 1))...)'
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = hcat(pmap(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, B[i, :]))))), 1:size(B, 1))...)'
+	yB = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, B[i, :]))))), 1:size(B, 1))...)'
 	for i = 1:length(paramkeys)
 		for j = 1:N
 			for k = 1:length(paramkeys)
@@ -243,21 +248,20 @@ function saltelli(madsdata; N=int(100))
 			end
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
-		yC = hcat(pmap(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
+		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
 		for j = 1:length(obskeys)
 			f0 = .5 * (mean(yA[:, j]) + mean(yB[:, j]))
 			meandata[obskeys[j]][paramkeys[i]] = f0;
 			var = .5 * ((dot(yA[:, j], yA[:, j]) - f0 ^ 2) + (dot(yB[:, j], yB[:, j]) - f0 ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = var
-			fos[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) - f0 ^ 2) / var
+			mes[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) - f0 ^ 2) / var
 			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) - f0 ^ 2) / var
 		end
 	end
-	return fos, tes, N
+	[ "mes" => mes, "tes" => tes, "samplesize" => N, "method" => "saltellimap" ]
 end
 
 names = ["saltelli", "saltellibrute"]
-
 for mi = 1:length(names)
 	q = quote
 		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(100))
@@ -266,34 +270,37 @@ for mi = 1:length(names)
 				return
 			end
 			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
-			fosall, tesall = results[1]
+			mesall = results["mes"]
+			tesall = results["tes"]
 			for i = 2:numsaltellis
-				fos, tes = results[i]
-				for obskey in keys(fos)
-					for paramkey in keys(fos[obskey])
+				mes, tes = results[i]
+				for obskey in keys(mes)
+					for paramkey in keys(mes[obskey])
 						#meanall[obskey][paramkey] += mean[obskey][paramkey]
 						#varianceall[obskey][paramkey] += variance[obskey][paramkey]
-						fosall[obskey][paramkey] += fos[obskey][paramkey]
+						mesall[obskey][paramkey] += mes[obskey][paramkey]
 						tesall[obskey][paramkey] += tes[obskey][paramkey]
 					end
 				end
 			end
-			for obskey in keys(fosall)
-				for paramkey in keys(fosall[obskey])
+			for obskey in keys(mesall)
+				for paramkey in keys(mesall[obskey])
 					#meanall[obskey][paramkey] /= numsaltellis
 					#varianceall[obskey][paramkey] /= numsaltellis
-					fosall[obskey][paramkey] /= numsaltellis
-					teall[obskey][paramkey] /= numsaltellis
+					mesall[obskey][paramkey] /= numsaltellis
+					tesall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			return fosall, teall, N
+			[ "mes" => mesall, "tes" => tesall, "samplesize" => N, "method" => names[mi]*"_parallel" ]
 		end # end fuction
 	end # end quote
 	eval(q)
 end
 
 function saltelliprintresults(madsdata, results)
-	fos, tes, N = results
+	mes = results["mes"]
+	tes = results["tes"]
+	N = results["samplesize"]
 	#=
 	Mads.madsoutput("Mean\n")
 	Mads.madsoutput("\t")
@@ -337,7 +344,7 @@ function saltelliprintresults(madsdata, results)
 	for obskey in obskeys
 		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(fos[obskey][paramkey])")
+			Mads.madsoutput("\t$(mes[obskey][paramkey])")
 		end
 		Mads.madsoutput("\n")
 	end
@@ -357,7 +364,9 @@ function saltelliprintresults(madsdata, results)
 end
 
 function saltelliprintresults2(madsdata, results)
-	fos, tes, N = results
+	mes = results["mes"]
+	tes = results["tes"]
+	N = results["samplesize"]
 	Mads.madsoutput("Main Effect Indices")
 	Mads.madsoutput("\t")
 	obskeys = getobskeys(madsdata)
@@ -369,7 +378,7 @@ function saltelliprintresults2(madsdata, results)
 	for obskey in obskeys
 		Mads.madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(fos[obskey][paramkey])")
+			Mads.madsoutput("\t$(mes[obskey][paramkey])")
 		end
 		Mads.madsoutput("\n")
 	end
@@ -393,13 +402,13 @@ function plotwellSAresults(wellname, madsdata, result)
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-  nsample = result[3]
+  nsample = result["samplesize"]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
 	d = Array(Float64, 2, nT)
-	fos = Array(Float64, nP, nT)
+	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i][i]["t"]
@@ -407,30 +416,32 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			f = result[1][obskey][paramkey]
-			fos[j,i] = isnan(f) ? 0 : f
-			t = result[1][obskey][paramkey]
+			f = result["mes"][obskey][paramkey]
+			mes[j,i] = isnan(f) ? 0 : f
+			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
 			j += 1
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-	pc = plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+	pc = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	ptes = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-	p = vstack(pc, ptes, pfos)
-	draw(SVG(string("$wellname-SA-results-nsample-$nsample.svg"), 6inch, 9inch), p)
+	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+	p = vstack(pc, ptes, pmes)
+	rootname = madsrootname(madsdata)
+	method = result["method"]
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, 9inch), p)
 end
 
 function plotobsSAresults(madsdata, result)
@@ -438,13 +449,13 @@ function plotobsSAresults(madsdata, result)
 		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
 		return
 	end
-  nsample = result[3]
+  nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(obsdict)
 	d = Array(Float64, 2, nT)
-	fos = Array(Float64, nP, nT)
+	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	i = 1
 	for obskey in keys(obsdict)
@@ -452,30 +463,31 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			f = result[1][obskey][paramkey]
-			fos[j,i] = isnan(f) ? 0 : f
-			t = result[1][obskey][paramkey]
+			f = result["mes"][obskey][paramkey]
+			mes[j,i] = isnan(f) ? 0 : f
+			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
 			j += 1
 		end
 		i += 1
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
-	pd = plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
+	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	ptes = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(fos[j,:]), parameter="$paramkey")
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pfos = plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-	p = vstack(pd, ptes, pfos)
+	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+	p = vstack(pd, ptes, pmes)
 	rootname = madsrootname(madsdata)
-	draw(SVG(string("$rootname-SA-results-nsample-$nsample.svg"), 6inch, 9inch), p)
+	method = result["method"]
+	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 9inch), p)
 end

@@ -67,6 +67,8 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 				t = madsdict["Wells"][wellkey]["obs"][i][i]["t"]
 				obskey = wellkey * "_" * string(t)
 				data = DataStructures.OrderedDict()
+				data["well"] = wellkey
+				data["time"] = t
 				data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
 				for datakey in keys(madsdict["Wells"][wellkey]["obs"][i][i])
 					if datakey != "c" && datakey != "t"
@@ -77,7 +79,7 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 			end
 		end
 		madsdict["Observations"] = observations
-	elseif haskey(madsdict, "Observations")
+	elseif haskey(madsdict, "Observations") # TODO drop zero weight observations
 		observations = DataStructures.OrderedDict()
 		for dict in madsdict["Observations"]
 			for key in keys(dict)
