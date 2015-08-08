@@ -36,7 +36,10 @@ forward_preds = computeconcentrations(paramdict)
 # result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
-# result = Mads.saltelli(md,N=int(1e1))
+result = Mads.saltelli(md,N=int(5000))
+Mads.plotwellSAresults("w1a",md,result)
+result = Mads.saltellibrute(md,N=int(5000))
+Mads.plotwellSAresults("w1a",md,result)
 
 # save saltelli results
 # f = open("$rootname-SA-results.json", "w")
