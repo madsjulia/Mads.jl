@@ -71,7 +71,7 @@ function localsa(madsdata)
 end
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=int(1e4)) # TODO senstivity indeces become >1 as the sample size increases
+function saltellibrute(madsdata; N=int(1e4)) # TODO Saltelli (brute force) does not seem to work; not sure
 	numsamples = int(sqrt(N))
 	numoneparamsamples = int(sqrt(N))
 	nummanyparamsamples = int(sqrt(N))
@@ -153,8 +153,10 @@ function saltellibrute(madsdata; N=int(1e4)) # TODO senstivity indeces become >1
 	end
 	madsinfo("Compute the total effect sensitivities (indices)") # TODO we should use the same samples for total and main effect
 	tes = DataStructures.OrderedDict()
+	var = DataStructures.OrderedDict()
 	for k = 1:length(obskeys)
 		tes[obskeys[k]] = DataStructures.OrderedDict()
+		var[obskeys[k]] = DataStructures.OrderedDict()
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
@@ -198,9 +200,10 @@ function saltellibrute(madsdata; N=int(1e4)) # TODO senstivity indeces become >1
 				runningsum += cond_vars[m][obskeys[j]]
 			end
 			tes[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples / variance[obskeys[j]]
+			var[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "samplesize" => N, "method" => "saltellibrute" ]
+	[ "mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "method" => "saltellibrute" ]
 end
 
 @doc "Saltelli " ->
@@ -253,14 +256,18 @@ function saltelli(madsdata; N=int(100))
 			f0A = mean(yA[:, j])
 			f0B = mean(yB[:, j])
 			meandata[obskeys[j]][paramkeys[i]] = .5 * (f0A + f0B)
-			varA = dot(yA[:, j], yA[:, j]) / length(yA[:, j]) - f0A ^ 2
-			varB = dot(yB[:, j], yB[:, j]) / length(yB[:, j]) - f0B ^ 2
-			variance[obskeys[j]][paramkeys[i]] = .5 * (varA + varB)
-			mes[obskeys[j]][paramkeys[i]] = (dot(yA[:, j], yC[:, j]) / length(yA[:, j]) - f0A ^ 2) / varA
-			tes[obskeys[j]][paramkeys[i]] = 1 - (dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2) / varB
+			varA = abs(dot(yA[:, j], yA[:, j]) / length(yA[:, j]) - f0A ^ 2)
+			varB = abs(dot(yB[:, j], yB[:, j]) / length(yB[:, j]) - f0B ^ 2)
+			# varT = .5 * (varA + varB)
+			# varMax = max(varA, varB)
+			varP = abs((dot(yA[:, j], yC[:, j]) / length(yA[:, j]) - f0A ^ 2)) # we can get negarive values for varP which does not make sense
+			varPnot = abs((dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2))
+			variance[obskeys[j]][paramkeys[i]] = varP
+			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
+			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i so not think should be varB?
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "samplesize" => N, "method" => "saltellimap" ]
+	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "method" => "saltellimap" ]
 end
 
 names = ["saltelli", "saltellibrute"]
@@ -274,6 +281,7 @@ for mi = 1:length(names)
 			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
 			mesall = results["mes"]
 			tesall = results["tes"]
+			varall = results["var"]
 			for i = 2:numsaltellis
 				mes, tes = results[i]
 				for obskey in keys(mes)
@@ -282,6 +290,7 @@ for mi = 1:length(names)
 						#varianceall[obskey][paramkey] += variance[obskey][paramkey]
 						mesall[obskey][paramkey] += mes[obskey][paramkey]
 						tesall[obskey][paramkey] += tes[obskey][paramkey]
+						varall[obskey][paramkey] += var[obskey][paramkey]
 					end
 				end
 			end
@@ -291,9 +300,10 @@ for mi = 1:length(names)
 					#varianceall[obskey][paramkey] /= numsaltellis
 					mesall[obskey][paramkey] /= numsaltellis
 					tesall[obskey][paramkey] /= numsaltellis
+					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			[ "mes" => mesall, "tes" => tesall, "samplesize" => N, "method" => names[mi]*"_parallel" ]
+			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "method" => names[mi]*"_parallel" ]
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -412,6 +422,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	d = Array(Float64, 2, nT)
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
+	var = Array(Float64, nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i][i]["t"]
 		d[2,i] = o[i][i]["c"]
@@ -422,6 +433,8 @@ function plotwellSAresults(wellname, madsdata, result)
 			mes[j,i] = isnan(f) ? 0 : f
 			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
+			t = result["var"][obskey][paramkey]
+			var[j,i] = isnan(t) ? 0 : t
 			j += 1
 		end
 	end
@@ -440,10 +453,16 @@ function plotwellSAresults(wellname, madsdata, result)
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-	p = vstack(pc, ptes, pmes)
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		j += 1
+	end
+	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+	p = vstack(pc, ptes, pmes, pvar)
 	rootname = madsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, 9inch), p)
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, 12inch), p)
 end
 
 function plotobsSAresults(madsdata, result)
@@ -459,6 +478,7 @@ function plotobsSAresults(madsdata, result)
 	d = Array(Float64, 2, nT)
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
+	var = Array(Float64, nP, nT)
 	i = 1
 	for obskey in keys(obsdict)
 		d[1,i] = obsdict[obskey]["time"]
@@ -469,6 +489,8 @@ function plotobsSAresults(madsdata, result)
 			mes[j,i] = isnan(f) ? 0 : f
 			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
+			t = result["var"][obskey][paramkey]
+			var[j,i] = isnan(t) ? 0 : t
 			j += 1
 		end
 		i += 1
@@ -488,8 +510,19 @@ function plotobsSAresults(madsdata, result)
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-	p = vstack(pd, ptes, pmes)
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		j += 1
+	end
+	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+	p = vstack(pd, ptes, pmes, pvar)
 	rootname = madsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 9inch), p)
+	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 12inch), p)
+end
+
+@doc "Saltelli's eFAST " ->
+function efast(madsdata; N=int(100))
+	#TODO please add eFAST here
 end

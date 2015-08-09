@@ -5,6 +5,16 @@ if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
 
+@doc "Set MADS input file" ->
+function setmadsinputfile(filename)
+	global madsinputfile = filename
+end
+
+@doc "Get MADS input file" ->
+function getmadsinputfile()
+	return madsinputfile
+end
+
 @doc "Make MADS command function" ->
 function madsrootname(madsdata)
 	join(split(madsdata["Filename"], ".")[1:end-1], ".")

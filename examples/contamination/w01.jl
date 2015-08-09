@@ -4,23 +4,38 @@ using JSON
 using DataStructures
 using ProgressMeter
 
-# pwd()
-# Base.source_path()
-# cd(dirname(Base.source_path()))
-# reload("MadsYAML.jl")
 # reload("Mads.jl")
-# pwd()
+# Example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")
+Mads.madswarn("""Mads execution example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")""")
 
 # load MADS problem
+madsdirname = string((dirname(Base.source_path())))
+Mads.madsinfo("""Mads working directory: $(madsdirname)""")
+madsfilename = Mads.getmadsinputfile()
+if madsfilename == ""
+	madsfilename = "w01short.mads"
+	Mads.madswarn("""Mads input file is empty; default value $(madsfilename) will be used""")
+end
+madsfilenamelong = madsdirname * "/" * madsfilename
 md = Dict()
 try
-	md = Mads.loadyamlmadsfile("examples/contamination/w01short.mads")
+	md = Mads.loadyamlmadsfile(madsfilenamelong)
 catch
-	md = Mads.loadyamlmadsfile("w01short.mads")
+	Mads.madswarn("""Mads input file: $(madsfilenamelong) is missing! Try in the local directory ...""")
+	try
+		madsfilenamelong = madsfilename
+		md = Mads.loadyamlmadsfile(madsfilenamelong)
+	catch
+		Mads.madserr("""Mads input file: $(madsfilename) is missing; quit!""")
+		error("$(madsfilename) is missing")
+	end
 end
+
+Mads.madsinfo("""Mads Input file: $(madsfilenamelong)""")
 
 # get MADS rootname
 rootname = Mads.madsrootname(md)
+Mads.madsinfo("""Mads root name: $(rootname)""")
 
 # get all the parameters
 paramkeys = Mads.getparamkeys(md)
@@ -41,10 +56,10 @@ forward_preds = computeconcentrations(paramdict)
 # result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
-result = Mads.saltelli(md,N=int(5000))
-Mads.plotwellSAresults("w1a",md,result)
-result = Mads.saltellibrute(md,N=int(5000))
-Mads.plotwellSAresults("w1a",md,result)
+saltelliresultm = Mads.saltelli(md,N=int(500))
+Mads.plotwellSAresults("w1a",md,saltelliresultm)
+saltelliresultb = Mads.saltellibrute(md,N=int(500))
+Mads.plotwellSAresults("w1a",md,saltelliresultb)
 
 # save saltelli results
 # f = open("$rootname-SA-results.json", "w")
@@ -61,7 +76,7 @@ Mads.plotwellSAresults("w1a",md,result)
 # Mads.plotwellSAresults("w1a",md,result)
 
 Mads.madsinfo("Manual SA ...")
-numberofsamples = 100
+numberofsamples = 10
 paramvalues=Mads.parametersample(md,numberofsamples)
 for paramkey in keys(paramvalues)
 	t = Array(Float64,length(md["Observations"]))

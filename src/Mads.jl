@@ -1,12 +1,14 @@
 module Mads
 
+export madsinputfile
+
 using Optim
 using Lora
 using Distributions
 using Logging
-import DataStructures
+using DataStructures
 using HDF5
-import NLopt
+using NLopt
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
@@ -29,6 +31,7 @@ include("MadsLog.jl") # messages higher than specified level are printed
 Logging.configure(level=DEBUG)
 madsverbositylevel = 1
 madsdebuglevel = 1
+madsinputfile = ""
 
 # @document
 @docstrings
