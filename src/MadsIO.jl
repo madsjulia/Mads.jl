@@ -27,7 +27,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
-		madscommandfunction = evalfile(madsdata["Model"])
+		madscommandfunction = evalfile(joinpath(pwd(), madsdata["Model"]))
 	elseif haskey(madsdata, "Command")
 		madsinfo("External command execution ...")
 		function madscommandfunction(parameters::Dict) # MADS command function

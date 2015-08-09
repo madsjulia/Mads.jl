@@ -32,6 +32,7 @@ Logging.configure(level=DEBUG)
 madsverbositylevel = 1
 madsdebuglevel = 1
 madsinputfile = ""
+const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
 @docstrings
