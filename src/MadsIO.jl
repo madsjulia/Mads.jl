@@ -27,8 +27,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "MADS model")
 		println("MADS Internal model evaluation ...")
-		madscommandfunction = evalfile(joinpath(pwd(), madsdata["MADS model"]))
-		return madscommandfunction(madsdata)
+		#I'm sorry...
+		yetanothermakemadscommandfunction = evalfile(joinpath(pwd(), madsdata["MADS model"]))
+		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
 		madscommandfunction = evalfile(joinpath(pwd(), madsdata["Model"]))
@@ -220,22 +221,21 @@ function makemadsloglikelihood(madsdata)
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
 		madsinfo("External log likelihood")
+		distributions = getparamdistributions(madsdata)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
 			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
-			wssr = 0.
+			loglhood = 0.
 			for paramname in keys(params)
-				if params[paramname] < madsdata["Parameters"][paramname]["min"] || params[paramname] > madsdata["Parameters"][paramname]["max"]
-					return -Inf
-				end
+				loglhood += Distributions.loglikelihood(distributions[paramname], params[paramname])
 			end
 			for obsname in keys(predictions)
 				pred = predictions[obsname]
 				obs = observations[obsname]["target"]
 				weight = observations[obsname]["weight"]
 				diff = obs - pred
-				wssr += weight * diff * diff
+				loglhood -= weight * diff * diff
 			end
-			return -wssr
+			return loglhood
 		end
 	end
 	return madsloglikelihood
@@ -337,8 +337,8 @@ function readobservations(madsdata)
 	return observations
 end
 
-@doc "Get distributions" ->
-function getdistributions(madsdata)
+@doc "Get parameter distributions" ->
+function getparamdistributions(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	distributions = Dict()
 	for i in 1:length(paramkeys)

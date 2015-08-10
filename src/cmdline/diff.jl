@@ -63,4 +63,4 @@ end
 f1 = YAML.load_file(ARGS[2])
 f2 = YAML.load_file(ARGS[3])
 
-printdiff("", f1, f2, 4)
+printdiff("", f1, f2, 6)

@@ -1,12 +1,3 @@
-# import YAML
-using PyCall
-using DataStructures
-@pyimport yaml
-using DataStructures
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
-
 @doc "Load YAML file" ->
 function loadyamlfile(filename::String) # load YAML file
 	yamldata = DataStructures.OrderedDict()
@@ -69,7 +60,9 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 				data = DataStructures.OrderedDict()
 				data["well"] = wellkey
 				data["time"] = t
-				data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
+				if haskey(madsdict["Wells"][wellkey]["obs"][i][i], "c") && !haskey(madsdict["Wells"][wellkey]["obs"][i][i], "target")
+					data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
+				end
 				for datakey in keys(madsdict["Wells"][wellkey]["obs"][i][i])
 					if datakey != "c" && datakey != "t"
 						data[datakey] = madsdict["Wells"][wellkey]["obs"][i][i][datakey]

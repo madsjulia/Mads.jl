@@ -15,7 +15,7 @@ end
 @doc "Independent sampling of MADS Model parameters" ->
 function parametersample(madsdata, numsamples, parameterkey="")
 	sample = DataStructures.OrderedDict()
-	paramdist = getdistributions(madsdata)
+	paramdist = getparamdistributions(madsdata)
 	for k in keys(paramdist)
 		if parameterkey == "" || parameterkey == k
 			if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
@@ -79,7 +79,7 @@ function saltellibrute(madsdata; N=int(1e4)) # TODO Saltelli (brute force) does 
 	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
-	distributions = getdistributions(madsdata)
+	distributions = getparamdistributions(madsdata)
 	results = Array(DataStructures.OrderedDict, numsamples)
 	paramdict = Dict( getparamkeys(madsdata), getparamsinit(madsdata) )
 	for i = 1:numsamples
@@ -212,7 +212,7 @@ function saltelli(madsdata; N=int(100))
 	paramalldict = Dict(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys))
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
-	distributions = getdistributions(madsdata)
+	distributions = getparamdistributions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	A = Array(Float64, (N, length(paramkeys)))
 	B = Array(Float64, (N, length(paramkeys)))

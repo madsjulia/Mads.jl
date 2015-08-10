@@ -6,9 +6,12 @@ using Optim
 using Lora
 using Distributions
 using Logging
-using DataStructures
+import DataStructures
 using HDF5
 using NLopt
+using PyCall
+@pyimport yaml
+
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 	using Dates
@@ -131,6 +134,32 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	NLopt.maxeval!(opt, int(1e3))
 	minf, minx, ret = NLopt.optimize(opt, paraminits)
 	return minf, minx, ret
+end
+
+@doc "Make a version of the mads file where the targets are given by the model predictions" ->
+function maketruth(infilename::String, outfilename::String)
+	md = loadyamlmadsfile(infilename)
+	f = makemadscommandfunction(md)
+	result = f(Dict(getparamkeys(md), getparamsinit(md)))
+	outyaml = loadyamlfile(infilename)
+	if haskey(outyaml, "Observations")
+		for fullobs in outyaml["Observations"]
+			obskey = collect(keys(fullobs))[1]
+			obs = fullobs[obskey]
+			obs["target"] = result[obskey]
+		end
+	end
+	if haskey(outyaml, "Wells")
+		for fullwell in outyaml["Wells"]
+			wellname = collect(keys(fullwell))[1]
+			for fullobs in fullwell[wellname]["obs"]
+				obskey = collect(keys(fullobs))[1]
+				obs = fullobs[obskey]
+				obs["target"] = result[string(wellname, "_", obs["t"])]
+			end
+		end
+	end
+	dumpyamlfile(outfilename, outyaml)
 end
 
 end # Module end
