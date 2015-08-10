@@ -31,7 +31,7 @@ catch
 	end
 end
 
-Mads.madsinfo("""Mads Input file: $(madsfilenamelong)""")
+Mads.madsinfo("""Mads input file: $(madsfilenamelong)""")
 
 # get MADS rootname
 rootname = Mads.madsrootname(md)

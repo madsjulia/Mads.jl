@@ -11,6 +11,7 @@ using HDF5
 using NLopt
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
+	using Dates
 end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
