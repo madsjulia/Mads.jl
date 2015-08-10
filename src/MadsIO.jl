@@ -25,6 +25,10 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	if haskey(madsdata, "Dynamic model") # TODO do we still need "Dynamic model"?
 		println("Dynamic model evaluation ...")
 		madscommandfunction = madsdata["Dynamic model"]
+	elseif haskey(madsdata, "MADS model")
+		println("MADS Internal model evaluation ...")
+		madscommandfunction = evalfile(joinpath(pwd(), madsdata["MADS model"]))
+		return madscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
 		madscommandfunction = evalfile(joinpath(pwd(), madsdata["Model"]))
@@ -118,9 +122,11 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			end
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
+		println("MADS interal Anasol model evaluation for contaminant transport ...")
 		return makecomputeconcentrations(madsdata)
 	else
-		error("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
+		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
+		error("MADS input file problem")
 	end
 	if !haskey(madsdata, "Restart") || madsdata["Restart"] != false
 		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
