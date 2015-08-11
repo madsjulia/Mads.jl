@@ -2,15 +2,16 @@ module Mads
 
 export madsinputfile
 
+import DataStructures # import is needed for parallel calls
 using Optim
 using Lora
 using Distributions
 using Logging
-import DataStructures
-using HDF5
 using NLopt
+using HDF5 # HDF5 installation is problematic on some machines
 using PyCall
-@pyimport yaml
+@pyimport yaml # PyYAML installation is problematic on some machines
+# using YAML # use YAML if PyYAML is not available
 
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
@@ -47,7 +48,6 @@ function savecalibrationresults(madsdata, results)
 	#TODO save madsdata in yaml file using dumpyamlmadsfile
 	#TODO save residuals, predictions, observations (yaml?)
 end
-
 
 @doc "Calibrate " ->
 function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)

@@ -1,19 +1,40 @@
-@doc "Load YAML file" ->
-function loadyamlfile(filename::String) # load YAML file
-	yamldata = DataStructures.OrderedDict()
-	f = open(filename)
-	# yamldata = YAML.load(f) # works; however Julia YAML cannot write
-	yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
-	close(f)
-	return yamldata
-end
+if isdefined(:yaml) # using PyCall and PyYAML
+	@doc "Load YAML file" ->
+	function loadyamlfile(filename::String) # load YAML file
+		yamldata = DataStructures.OrderedDict()
+		f = open(filename)
+		# yamldata = YAML.load(f) # works; however Julia YAML cannot write
+		yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
+		close(f)
+		return yamldata
+	end
 
-@doc "Dump YAML file" ->
-function dumpyamlfile(filename::String, yamldata) # dump YAML file
-	f = open(filename, "w")
-	# write(f, yaml.dump(yamldata)) # crashes
-	write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
-	close(f)
+	@doc "Dump YAML file" ->
+	function dumpyamlfile(filename::String, yamldata) # dump YAML file
+		f = open(filename, "w")
+		# write(f, yaml.dump(yamldata)) # crashes
+		write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
+		close(f)
+	end
+elseif isdefined(:YAML) # using YAML in Julia
+	@doc "Load YAML file" ->
+	function loadyamlfile(filename::String) # load YAML file
+		yamldata = OrderedDict()
+		f = open(filename)
+		yamldata = YAML.load(f) # works; however Julia YAML cannot write
+		close(f)
+		return yamldata
+	end
+
+	@doc "Dump YAML file in JSON format" ->
+	function dumpyamlfile(filename::String, yamldata) # dump YAML file
+		f = open(filename, "w")
+		JSON.print(f, yamldata) # dump as a JSON file just in case
+		close(f)
+	end
+else
+	Mads.err("MADS needs YAML or PyYAML!")
+	error("Missing modules!")
 end
 
 @doc "Load YAML MADS file" ->
