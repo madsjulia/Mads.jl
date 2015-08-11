@@ -7,7 +7,7 @@ using Optim
 using Lora
 using Distributions
 using Logging
-using NLopt
+#using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
 using PyCall
 @pyimport yaml # PyYAML installation is problematic on some machines

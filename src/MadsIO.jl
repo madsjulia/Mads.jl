@@ -24,7 +24,7 @@ end
 
 @doc "Get MADS problem directory" ->
 function getmadsproblemdir(madsdata)
-	join(split(madsdata["Filename"], '/')[1:end - 1], '/')
+	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
 end
 
 @doc "Make MADS command function" ->
@@ -48,7 +48,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
 			madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
-			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the current directory
+			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
 					filename = instruction["read"]
