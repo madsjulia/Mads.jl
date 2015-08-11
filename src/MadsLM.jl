@@ -18,7 +18,7 @@ function makelmfunctions(madsdata)
 		i = 1
 		for obskey in obskeys
 			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			residuals[i] = diff * sqrt(madsdata["Observations"][obskey]["weight"])
+			residuals[i] = diff * madsdata["Observations"][obskey]["weight"]
 			i += 1
 		end
 		return residuals

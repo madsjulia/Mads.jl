@@ -110,7 +110,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 		i = 1
 		for obskey in obskeys
 			residuals[i] = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			ssr += residuals[i] * residuals[i] * madsdata["Observations"][obskey]["weight"]
+			ssr += residuals[i] * residuals[i] * madsdata["Observations"][obskey]["weight"] ^ 2
 			i += 1
 		end
 		if length(grad) > 0

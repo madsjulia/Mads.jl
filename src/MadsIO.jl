@@ -245,7 +245,7 @@ function makemadsloglikelihood(madsdata)
 				obs = observations[obsname]["target"]
 				weight = observations[obsname]["weight"]
 				diff = obs - pred
-				loglhood -= weight * diff * diff
+				loglhood -= weight * weight * diff * diff
 			end
 			return loglhood
 		end
