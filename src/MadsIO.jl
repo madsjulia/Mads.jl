@@ -235,11 +235,11 @@ function makemadsloglikelihood(madsdata)
 		madsinfo("External log likelihood")
 		distributions = getparamdistributions(madsdata)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
-			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 			loglhood = 0.
-			for paramname in keys(params)
-				loglhood += Distributions.loglikelihood(distributions[paramname], params[paramname])
+			for paramname in getoptparamkeys(madsdata)
+				loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1]#for some reason, loglikelihood accepts and returns arrays, not floats
 			end
+			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 			for obsname in keys(predictions)
 				pred = predictions[obsname]
 				obs = observations[obsname]["target"]

@@ -8,12 +8,13 @@ end
 
 @doc "Bayes Sampling " ->
 function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
+	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	paramkeys = getparamkeys(madsdata)
-	initvals = Array(Float64, length(paramkeys))
-	for i = 1:length(paramkeys)
-		initvals[i] = madsdata["Parameters"][paramkeys[i]]["init"]
+	optparamkeys = getoptparamkeys(madsdata)
+	initvals = Array(Float64, length(optparamkeys))
+	for i = 1:length(optparamkeys)
+		initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 	end
 	mcmcmodel = Lora.model(arrayloglikelihood, init=initvals)
 	sampler = Lora.RAM(1e-1, 0.3)

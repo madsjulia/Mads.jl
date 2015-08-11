@@ -16,7 +16,7 @@ Sources:
     dx: {init: 250, log: false, longname: 'Source x dimension [L]', max: 500, min: 1, type: opt}
     dy: {init: 100, log: false, longname: 'Source y dimension [L]', max: 500, min: 1, type: opt}
     dz: {init: 1, log: false, longname: 'Source z dimension [L]', max: 10, min: 1, type: null}
-    f: {init: 50000, log: true, longname: 'Contaminant flux [M/T]', max: 1.e6, min: 500, type: null}
+    f: {init: 50000, log: true, longname: 'Contaminant flux [M/T]', max: 1.0e+6, min: 500, type: null}
     t0: {init: 1990, log: false, longname: 'Start Time [T]', max: 2000, min: 1980, type: opt}
     t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: opt}
     x: {init: 0, log: false, longname: 'Source x coordinate [L]', max: 500, min: 0, type: opt}
@@ -25,48 +25,48 @@ Sources:
 Wells:
 - w1:
     obs:
-    - 1: {t: 2011, target: 2.0316238917513556, weight: 1}
-    - 2: {t: 2012, target: 2.7155697229588975, weight: 1}
-    - 3: {t: 2013, target: 3.556534319034769, weight: 1}
-    - 4: {t: 2014, target: 4.5713041777924035, weight: 1}
-    - 5: {t: 2015, target: 5.774509961533499, weight: 1}
-    - 6: {t: 2016, target: 7.177833439019592, weight: 1}
-    - 7: {t: 2017, target: 8.789259113478304, weight: 1}
-    - 8: {t: 2018, target: 10.612414490456711, weight: 1}
-    - 9: {t: 2019, target: 12.646043356959757, weight: 1}
-    - 10: {t: 2020, target: 14.883651985530895, weight: 1}
+    - 1: {t: 2011, target: 2.0316238917513556, weight: 0.1}
+    - 2: {t: 2012, target: 2.7155697229588975, weight: 0.1}
+    - 3: {t: 2013, target: 3.556534319034769, weight: 0.1}
+    - 4: {t: 2014, target: 4.5713041777924035, weight: 0.1}
+    - 5: {t: 2015, target: 5.774509961533499, weight: 0.1}
+    - 6: {t: 2016, target: 7.177833439019592, weight: 0.1}
+    - 7: {t: 2017, target: 8.789259113478304, weight: 0.1}
+    - 8: {t: 2018, target: 10.612414490456711, weight: 0.1}
+    - 9: {t: 2019, target: 12.646043356959757, weight: 0.1}
+    - 10: {t: 2020, target: 14.883651985530895, weight: 0.1}
     x: 1000
     y: -500
     z0: 3
     z1: 3
 - w2:
     obs:
-    - 1: {t: 2011, target: 611.8266043974022, weight: 1}
-    - 2: {t: 2012, target: 730.7159105334298, weight: 1}
-    - 3: {t: 2013, target: 860.7294156263886, weight: 1}
-    - 4: {t: 2014, target: 1000.8048842162573, weight: 1}
-    - 5: {t: 2015, target: 1149.5386408536265, weight: 1}
-    - 6: {t: 2016, target: 1305.219833177108, weight: 1}
-    - 7: {t: 2017, target: 1465.8804399967594, weight: 1}
-    - 8: {t: 2018, target: 1629.357873526369, weight: 1}
-    - 9: {t: 2019, target: 1793.366058723404, weight: 1}
-    - 10: {t: 2020, target: 1955.5704267628255, weight: 1}
+    - 1: {t: 2011, target: 611.8266043974022, weight: 0.001}
+    - 2: {t: 2012, target: 730.7159105334298, weight: 0.001}
+    - 3: {t: 2013, target: 860.7294156263886, weight: 0.001}
+    - 4: {t: 2014, target: 1000.8048842162573, weight: 0.001}
+    - 5: {t: 2015, target: 1149.5386408536265, weight: 0.001}
+    - 6: {t: 2016, target: 1305.219833177108, weight: 0.001}
+    - 7: {t: 2017, target: 1465.8804399967594, weight: 0.001}
+    - 8: {t: 2018, target: 1629.357873526369, weight: 0.001}
+    - 9: {t: 2019, target: 1793.366058723404, weight: 0.001}
+    - 10: {t: 2020, target: 1955.5704267628255, weight: 0.001}
     x: 1250
     y: 0
     z0: 3
     z1: 3
 - w3:
     obs:
-    - 1: {t: 2011, target: 98.66921541476849, weight: 1}
-    - 2: {t: 2012, target: 119.03789812660239, weight: 1}
-    - 3: {t: 2013, target: 141.5185666295641, weight: 1}
-    - 4: {t: 2014, target: 165.95067164566098, weight: 1}
-    - 5: {t: 2015, target: 192.10794563843558, weight: 1}
-    - 6: {t: 2016, target: 219.70302505783235, weight: 1}
-    - 7: {t: 2017, target: 248.39531876990176, weight: 1}
-    - 8: {t: 2018, target: 277.80165911633344, weight: 1}
-    - 9: {t: 2019, target: 307.50902387416437, weight: 1}
-    - 10: {t: 2020, target: 337.0884699966608, weight: 1}
+    - 1: {t: 2011, target: 98.66921541476849, weight: 0.005}
+    - 2: {t: 2012, target: 119.03789812660239, weight: 0.005}
+    - 3: {t: 2013, target: 141.5185666295641, weight: 0.005}
+    - 4: {t: 2014, target: 165.95067164566098, weight: 0.005}
+    - 5: {t: 2015, target: 192.10794563843558, weight: 0.005}
+    - 6: {t: 2016, target: 219.70302505783235, weight: 0.005}
+    - 7: {t: 2017, target: 248.39531876990176, weight: 0.005}
+    - 8: {t: 2018, target: 277.80165911633344, weight: 0.005}
+    - 9: {t: 2019, target: 307.50902387416437, weight: 0.005}
+    - 10: {t: 2020, target: 337.0884699966608, weight: 0.005}
     x: 1000
     y: 500
     z0: 3

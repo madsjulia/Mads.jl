@@ -39,24 +39,25 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedg
 end
 
-@doc "Make a log likelihood array" ->
+@doc "Make a log likelihood function that accepts an array containing the opt parameters' values" ->
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
-	paramkeys = getparamkeys(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = Dict()
 		try
-			predictions = f(Dict(paramkeys, arrayparameters))
+			predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
 		catch DomainError#TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
 			return -Inf
 		end
-		loglikelihood(Dict(paramkeys, arrayparameters), predictions, madsdata["Observations"])
+		loglikelihood(Dict(optparamkeys, arrayparameters), predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood
 end
 
 @doc "Set Dynamic Model for MADS model calls using internal Julia functions" ->
-function setdynamicmodel(madsdata, f::Function) # TODO do we still need this
+function setdynamicmodel(madsdata, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
