@@ -17,32 +17,38 @@ function getmadsinputfile()
 	return madsinputfile
 end
 
-@doc "Make MADS command function" ->
-function madsrootname(madsdata)
+@doc "Get MADS root name" ->
+function getmadsrootname(madsdata)
 	join(split(madsdata["Filename"], ".")[1:end-1], ".")
+end
+
+@doc "Get MADS problem directory" ->
+function getmadsproblemdir(madsdata)
+	join(split(madsdata["Filename"], '/')[1:end - 1], '/')
 end
 
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
+	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Dynamic model")
 		println("Dynamic model evaluation ...")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "MADS model")
-		println("MADS Internal model evaluation ...")
-		#I'm sorry...
-		yetanothermakemadscommandfunction = evalfile(joinpath(pwd(), madsdata["MADS model"]))
+		println("MADS model evaluation ...")
+		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		println("Internal model evaluation ...")
-		madscommandfunction = evalfile(joinpath(pwd(), madsdata["Model"]))
-	elseif haskey(madsdata, "Command")
-		madsinfo("External command execution ...")
+		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
+	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
+		madsinfo("External model evaluation ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
+			currentdir = pwd()
+			cd(madsproblemdir)
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
 			madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
-			currentdir = pwd()
-			run(`bash -c "ln -s $(currentdir)/* $newdirname"`) # link all the files in the current directory
+			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the current directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
 					filename = instruction["read"]
@@ -56,7 +62,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				end
 				cd(newdirname)
 				writeparameters(madsdata, parameters)
-				cd(currentdir)
+				cd(madsproblemdir)
 			end
 			#TODO move the writing into the "writeparameters" function
 			if haskey(madsdata, "JSONParameters") # JSON
@@ -92,18 +98,21 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
-			if haskey(madsdata, "JuliaModel")
-				println("Internal Julia model evaluation ...")
-				madscommandfunction = evalfile(madsdata["JuliaModel"])
-				results = madscommandfunction(parameters)
+			if haskey(madsdata, "Julia")
+				println("Execution of Julia model-evaluation script parsing model outputs ...")
+				cd(newdirname)
+				madscommandfunction = evalfile(joinpath(newdirname, madsdata["Julia"]))
+				results = madscommandfunction(madsdata)
+				cd(madsproblemdir)
 			else
+				println("Execution of external command ...")
 				madsinfo("""Execute: $(madsdata["Command"])""")
 				run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
 					cd(newdirname)
 					results = readobservations(madsdata)
-					cd(currentdir)
+					cd(madsproblemdir)
 					madsinfo("""Observations: $(results)""")
 				elseif haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
@@ -120,9 +129,10 @@ function makemadscommandfunction(madsdata) # make MADS command function
 					@assert length(obskeys) == length(predictions)
 					results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
 				end
-				run(`rm -fR $newdirname`)
-				return results
 			end
+			run(`rm -fR $newdirname`)
+			cd(currentdir) # restore to the original directory
+			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
 		println("MADS interal Anasol model evaluation for contaminant transport ...")
@@ -309,7 +319,6 @@ function writeparameters(madsdata, parameters)
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"])
 	end
 end
-
 
 @doc "Call C MADS ins_obs() function from the MADS library" ->
 function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inputfilename::ASCIIString)

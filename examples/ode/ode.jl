@@ -14,7 +14,7 @@ using DataStructures
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
 md = Mads.loadyamlmadsfile("examples/ode/ode.mads")
-rootname = Mads.madsrootname(md)
+rootname = Mads.getmadsrootname(md)
 # get parameter keys
 paramkeys = Mads.getparamkeys(md)
 # create parameter dictionary

@@ -34,7 +34,7 @@ end
 Mads.madsinfo("""Mads input file: $(madsfilenamelong)""")
 
 # get MADS rootname
-rootname = Mads.madsrootname(md)
+rootname = Mads.getmadsrootname(md)
 Mads.madsinfo("""Mads root name: $(rootname)""")
 
 # get all the parameters
