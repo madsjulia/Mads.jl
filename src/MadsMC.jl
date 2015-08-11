@@ -1,13 +1,28 @@
 import BlackBoxOptim
 import Lora
+import Compose
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
 # @document
 @docstrings
 
+function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String)
+	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
+	for i in 1:size(samples, 2)
+		for j in 1:size(samples, 2)
+			if i == j
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, Gadfly.Guide.xlabel(paramnames[i])))
+			else
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], Gadfly.Guide.xlabel(paramnames[i]), Gadfly.Guide.ylabel(paramnames[j])))
+			end
+		end
+	end
+	draw(SVG(filename, (3 * size(samples, 2))inch, (3 * size(samples, 2))inch), Compose.gridstack(cs))
+end
+
 @doc "Bayes Sampling " ->
-function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
+function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3), thinning=1)
 	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -18,7 +33,7 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3))
 	end
 	mcmcmodel = Lora.model(arrayloglikelihood, init=initvals)
 	sampler = Lora.RAM(1e-1, 0.3)
-	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin)
+	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
 	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
 	return mcmcchain
 end
