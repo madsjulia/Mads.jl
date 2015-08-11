@@ -39,5 +39,5 @@ Mads.setmadsinputfile(madsfile)
 
 # Should we put this at the top? I would like to keep the history even if there is an error.
 f = open("madsjl_cmdline_hist", "a+")
-write(f, join(["$(now()) :";"madsjl"; ARGS; "\n"], " "))
+write(f, join(["$(Dates.now()) :";"madsjl"; ARGS; "\n"], " "))
 close(f)

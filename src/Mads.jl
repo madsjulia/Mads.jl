@@ -51,7 +51,7 @@ end
 
 @doc "Calibrate " ->
 function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
-	rootname = madsrootname(madsdata)
+	rootname = getmadsrootname(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = getparamsinit(madsdata, optparamkeys)
