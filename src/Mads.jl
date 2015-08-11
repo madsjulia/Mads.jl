@@ -96,10 +96,12 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 		paraminits[i] = madsdata["Parameters"][paramkeys[i]]["init"]
 	end
 	obs = Array(Float64, length(obskeys))
-	weights = Array(Float64, length(obskeys))
+	weights = ones(Float64, length(obskeys))
 	for i = 1:length(obskeys)
 		obs[i] = madsdata["Observations"][obskeys[i]]["target"]
-		weights[i] = madsdata["Observations"][obskeys[i]]["weight"]
+		if haskey(madsdata["Observations"][obskeys[i]], "weight")
+			weights[i] = madsdata["Observations"][obskeys[i]]["weight"]
+		end
 	end
 	fg = makemadscommandfunctionandgradient(madsdata)
 	function fg_nlopt(arrayparameters::Vector, grad::Vector)
@@ -109,8 +111,8 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 		ssr = 0
 		i = 1
 		for obskey in obskeys
-			residuals[i] = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			ssr += residuals[i] * residuals[i] * madsdata["Observations"][obskey]["weight"] ^ 2
+			residuals[i] = resultdict[obskey] - obs[i]
+			ssr += residuals[i] * residuals[i] * weights[i] * weights[i]
 			i += 1
 		end
 		if length(grad) > 0

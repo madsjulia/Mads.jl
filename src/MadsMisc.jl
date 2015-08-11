@@ -1,4 +1,5 @@
 import MPTools
+using Distributions
 include("MadsIO.jl")
 
 @doc "Arcsine transformation of model parameters" ->
@@ -81,6 +82,22 @@ for i = 1:length(getparamsnames)
 		end
 	end
 	eval(q)
+end
+
+@doc "Set initial parameters in the MADS dictionary" ->
+function setparamsinit!(madsdata, paramdict::Dict)
+	paramkeys = getparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
+	end
+end
+
+@doc "Set normal parameter distributions in the MADS dictionary" ->
+function setparamsdistnormal!(madsdata, mean, stddev)
+	paramkeys = getparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
+	end
 end
 
 @doc "Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)" ->

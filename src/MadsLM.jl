@@ -18,7 +18,11 @@ function makelmfunctions(madsdata)
 		i = 1
 		for obskey in obskeys
 			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			residuals[i] = diff * madsdata["Observations"][obskey]["weight"]
+			weight = 1
+			if haskey(madsdata["Observations"][obskey], "weight")
+				weight = madsdata["Observations"][obskey]["weight"]
+			end
+			residuals[i] = diff * weight
 			i += 1
 		end
 		return residuals

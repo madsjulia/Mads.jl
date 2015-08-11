@@ -2,6 +2,7 @@ using Mads
 using DataStructures
 using DataFrames
 using Gadfly
+using Distributions
 using ProgressMeter
 
 if VERSION < v"0.4.0-dev"
@@ -58,17 +59,25 @@ function localsa(madsdata)
 	covar = inv(JpJ)
 	writedlm("$(rootname).covariance",covar)
 	stddev = sqrt(diag(covar))
+	f = open("$(rootname).stddev", "w")
+	for i in 1:length(paramkeys)
+		write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
+	end
+	close(f)
 	correl = covar ./ (stddev * stddev')
 	writedlm("$(rootname).correlation",correl)
 	eigenv, eigenm = eig(covar)
-	writedlm("$(rootname).stddev",stddev)
-	writedlm("$(rootname).eigenmatrix",eigenm)
-	writedlm("$(rootname).eigenvalues",eigenv)
-	eigenmat = spy(eigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
-	# eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-	eigenval = plot(x=1:length(eigenv), y=eigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	index=sortperm(eigenv)
+	sortedeigenv = eigenv[index]
+	sortedeigenm = eigenm[:,index]
+	writedlm("$(rootname).eigenmatrix",sortedeigenm)
+	writedlm("$(rootname).eigenvalues",sortedeigenv)
+	eigenmat = spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)
 	draw(SVG("$(rootname)-eigen.svg",6inch,12inch),eigenplot)
+	["eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev]
 end
 
 @doc "Saltelli (brute force)" ->
@@ -210,7 +219,7 @@ end
 @doc "Saltelli " ->
 function saltelli(madsdata; N=int(100))
 	paramallkeys = Mads.getparamkeys(madsdata)
-	paramalldict = Dict(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys))
+	paramalldict = Dict(paramallkeys, getparamsinit(madsdata))
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
 	distributions = getparamdistributions(madsdata)
@@ -265,7 +274,7 @@ function saltelli(madsdata; N=int(100))
 			varPnot = abs((dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = varP
 			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
-			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i so not think should be varB?
+			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "method" => "saltellimap" ]
@@ -440,7 +449,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-	pc = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
@@ -496,31 +505,34 @@ function plotobsSAresults(madsdata, result)
 		end
 		i += 1
 	end
+	mes = mes./maximum(mes,2) # normalize 0 to 1
+	tes = tes.-minimum(tes,2)
+	tes = tes./maximum(tes,2)
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
-	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
+	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
 		j += 1
 	end
-	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
-	p = vstack(pd, ptes, pmes, pvar)
+	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
+	p = vstack(pd, pmes, ptes, pvar)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 12inch), p)
+	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 16inch), p)
 end
 
 @doc "Saltelli's eFAST " ->
