@@ -53,7 +53,9 @@ function localsa(madsdata)
 	rootname = getmadsrootname(madsdata)
 	J = g_lm(initparams)
 	writedlm("$(rootname).jacobian",J)
-	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+  mscale = max(abs(minimum(J)), abs(maximum(J)))
+	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
+               Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
 	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
 	JpJ = J' * J
 	covar = inv(JpJ)
