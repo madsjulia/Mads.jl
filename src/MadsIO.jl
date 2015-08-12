@@ -177,7 +177,6 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
-		println(fevals)
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
