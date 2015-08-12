@@ -7,6 +7,7 @@ using Optim
 using Lora
 using Distributions
 using Logging
+import JSON
 #using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
 using PyCall

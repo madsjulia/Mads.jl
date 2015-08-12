@@ -101,8 +101,8 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			if haskey(madsdata, "Julia")
 				println("Execution of Julia model-evaluation script parsing model outputs ...")
 				cd(newdirname)
-				madscommandfunction = evalfile(joinpath(newdirname, madsdata["Julia"]))
-				results = madscommandfunction(madsdata)
+				juliamodel = evalfile(madsdata["JuliaModel"])#can we move this evalfile outside of madscommandfunction, and just into makemadscommandfunction, so it isn't evaluated everytime
+				results = juliamodel(parameters)
 				cd(madsproblemdir)
 			else
 				println("Execution of external command ...")
@@ -177,6 +177,7 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		println(fevals)
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
