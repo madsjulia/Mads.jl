@@ -53,9 +53,9 @@ function localsa(madsdata)
 	rootname = getmadsrootname(madsdata)
 	J = g_lm(initparams)
 	writedlm("$(rootname).jacobian",J)
-  mscale = max(abs(minimum(J)), abs(maximum(J)))
+	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
-               Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
+							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
 	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
 	JpJ = J' * J
 	covar = inv(JpJ)
@@ -229,15 +229,15 @@ function saltelli(madsdata; N=int(100))
 	A = Array(Float64, (N, length(paramkeys)))
 	B = Array(Float64, (N, length(paramkeys)))
 	C = Array(Float64, (N, length(paramkeys)))
-	meandata = Dict{String, Dict{String, Float64}}() # mean
-	variance = Dict{String, Dict{String, Float64}}() # variance
-	mes = Dict{String, Dict{String, Float64}}() # main effect (first order) sensitivities
-	tes = Dict{String, Dict{String, Float64}}()	# total effect sensitivities
+	meandata = OrderedDict{String, OrderedDict{String, Float64}}() # mean
+	variance = OrderedDict{String, OrderedDict{String, Float64}}() # variance
+	mes = OrderedDict{String, OrderedDict{String, Float64}}() # main effect (first order) sensitivities
+	tes = OrderedDict{String, OrderedDict{String, Float64}}()	# total effect sensitivities
 	for i = 1:length(obskeys)
-		meandata[obskeys[i]] = Dict{String, Float64}()
-		variance[obskeys[i]] = Dict{String, Float64}()
-		mes[obskeys[i]] = Dict{String, Float64}()
-		tes[obskeys[i]] = Dict{String, Float64}()
+		meandata[obskeys[i]] = OrderedDict{String, Float64}()
+		variance[obskeys[i]] = OrderedDict{String, Float64}()
+		mes[obskeys[i]] = OrderedDict{String, Float64}()
+		tes[obskeys[i]] = OrderedDict{String, Float64}()
 	end
 	for key in paramkeys
 		delete!(paramalldict,key)
@@ -280,6 +280,32 @@ function saltelli(madsdata; N=int(100))
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "method" => "saltellimap" ]
+end
+
+function computeparametersensitities(madsdata, saresults)
+	paramkeys = getoptparamkeys(madsdata)
+	obskeys = getobskeys(madsdata)
+	mes = saresults["mes"]
+	tes = saresults["tes"]
+	var = saresults["var"]
+	pvar = OrderedDict{String, Float64}() # parameter variance
+	pmes = OrderedDict{String, Float64}() # parameter main effect (first order) sensitivities
+	ptes = OrderedDict{String, Float64}()	# parameter total effect sensitivities
+	for i = 1:length(paramkeys)
+		pv = pm = pt = 0
+		for j = 1:length(obskeys)
+			v = var[obskeys[j]][paramkeys[i]]
+			m = mes[obskeys[j]][paramkeys[i]]
+			t = tes[obskeys[j]][paramkeys[i]]
+			pv += isnan(v) ? 0 : v
+			pm += isnan(m) ? 0 : m
+			pt += isnan(t) ? 0 : t
+		end
+		pvar[paramkeys[i]] = pv / length(obskeys)
+		pmes[paramkeys[i]] = pm / length(obskeys)
+		ptes[paramkeys[i]] = pt / length(obskeys)
+	end
+	[ "var" => pvar, "mes" => pmes, "tes" => ptes]
 end
 
 names = ["saltelli", "saltellibrute"]
@@ -426,7 +452,7 @@ function plotwellSAresults(wellname, madsdata, result)
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-  nsample = result["samplesize"]
+	nsample = result["samplesize"]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -441,12 +467,12 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			f = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(f) ? 0 : f
+			m = result["mes"][obskey][paramkey]
+			mes[j,i] = isnan(m) ? 0 : m
 			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
-			t = result["var"][obskey][paramkey]
-			var[j,i] = isnan(t) ? 0 : t
+			v = result["var"][obskey][paramkey]
+			var[j,i] = isnan(v) ? 0 : v
 			j += 1
 		end
 	end
@@ -482,7 +508,7 @@ function plotobsSAresults(madsdata, result)
 		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
 		return
 	end
-  nsample = result["samplesize"]
+	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -497,12 +523,12 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			f = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(f) ? 0 : f
+			m = result["mes"][obskey][paramkey]
+			mes[j,i] = isnan(m) ? 0 : m
 			t = result["tes"][obskey][paramkey]
 			tes[j,i] = isnan(t) ? 0 : t
-			t = result["var"][obskey][paramkey]
-			var[j,i] = isnan(t) ? 0 : t
+			v = result["var"][obskey][paramkey]
+			var[j,i] = isnan(v) ? 0 : v
 			j += 1
 		end
 		i += 1
@@ -537,7 +563,7 @@ function plotobsSAresults(madsdata, result)
 	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 16inch), p)
 end
 
-@doc "Saltelli's eFAST " ->
-function efast(madsdata; N=int(100))
-	#TODO please add eFAST here
-end
+#@doc "Saltelli's eFAST " ->
+#function efast(madsdata; N=int(100))
+#	#TODO please add eFAST here
+#end
