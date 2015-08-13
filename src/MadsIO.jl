@@ -30,6 +30,10 @@ end
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
+	if haskey(madsdata, "Julia")
+		println("Execution using Julia model-evaluation script parsing model outputs ...")
+		juliamodel = evalfile(madsdata["Julia"])
+	end
 	if haskey(madsdata, "Dynamic model")
 		println("Dynamic model evaluation ...")
 		madscommandfunction = madsdata["Dynamic model"]
@@ -101,8 +105,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			if haskey(madsdata, "Julia")
 				println("Execution of Julia model-evaluation script parsing model outputs ...")
 				cd(newdirname)
-				juliamodel = evalfile(madsdata["JuliaModel"])#can we move this evalfile outside of madscommandfunction, and just into makemadscommandfunction, so it isn't evaluated everytime
-				results = juliamodel(parameters)
+				results = juliamodel(madsdata) # this should be madsdata; not parameters
 				cd(madsproblemdir)
 			else
 				println("Execution of external command ...")
