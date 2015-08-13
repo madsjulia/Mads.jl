@@ -287,8 +287,8 @@ end
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
-	if length(line) == length("template #\n") && line[1:9] == "template "
-		separator = line[end-1] # template separator
+	if line[1:9] == "template "
+		separator = line[10] # template separator
 		lines = readlines(tplfile)
 	else
 		#it doesn't specify the separator -- assume it is '#'
