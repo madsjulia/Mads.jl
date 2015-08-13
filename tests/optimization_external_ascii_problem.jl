@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 # external execution test using ASCII files
 Mads.madsinfo("TEST Levenberg-Marquardt optimization of an external call problem using ASCII files:")

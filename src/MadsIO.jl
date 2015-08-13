@@ -101,8 +101,8 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			if haskey(madsdata, "Julia")
 				println("Execution of Julia model-evaluation script parsing model outputs ...")
 				cd(newdirname)
-				madscommandfunction = evalfile(joinpath(newdirname, madsdata["Julia"]))
-				results = madscommandfunction(madsdata)
+				juliamodel = evalfile(madsdata["JuliaModel"])#can we move this evalfile outside of madscommandfunction, and just into makemadscommandfunction, so it isn't evaluated everytime
+				results = juliamodel(parameters)
 				cd(madsproblemdir)
 			else
 				println("Execution of external command ...")
