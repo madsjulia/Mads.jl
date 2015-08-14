@@ -100,6 +100,13 @@ function setparamsdistnormal!(madsdata, mean, stddev)
 	end
 end
 
+function setobsweights!(madsdata, value::Float64)
+	obskeys = getobskeys(madsdata)
+	for i in 1:length(obskeys)
+		madsdata["Observations"][obskeys[i]]["weight"] = value
+	end
+end
+
 @doc "Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)" ->
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]

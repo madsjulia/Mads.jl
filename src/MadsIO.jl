@@ -334,8 +334,8 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inp
 	debug = 0 # setting debug level 0 or 1 works
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
 	result = ccall( (:ins_obs, "libmads"), Int32,
-					(Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
-					n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
+								 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
+								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{String, Float64}(obsid, obsval)
 	return observations
 end

@@ -88,3 +88,87 @@ function montecarlo(madsdata; N=int(1e2))
 	dumpyamlfile(outputfilename, outputdicts)
 	return outputdicts
 end
+
+@doc "Convert parameter array to a parameter dictionary of arrays" ->
+function paramarray2dict(madsdata, array)
+	paramkeys = getparamkeys(madsdata)
+	dict = OrderedDict()
+	for i in 1:length(paramkeys)
+		dict[paramkeys[i]] = array[:,i]
+	end
+	return dict
+end
+
+@doc "Create spaghetti plots for all the parameters separtely " ->
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; keyword="")
+	rootname = getmadsrootname(madsdata)
+	func = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	numberofsamples = length(paramdictarray[paramkeys[1]])
+	obskeys = Mads.getobskeys(madsdata)
+	nT = length(obskeys)
+	t = Array(Float64, nT )
+	d = Array(Float64, nT )
+	for i in 1:nT
+		t[i] = madsdata["Observations"][obskeys[i]]["time"]
+		d[i] = madsdata["Observations"][obskeys[i]]["target"]
+	end
+	for paramkey in keys(paramdictarray)
+		Y = Array(Float64,nT,numberofsamples)
+		for i in 1:numberofsamples
+			original = paramdict[paramkey]
+			paramdict[paramkey] = paramdictarray[paramkey][i]
+			result = func(paramdict)
+			for j in 1:nT
+				Y[j,i] = result[obskeys[j]]
+			end
+			paramdict[paramkey] = original
+		end
+		p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=3pt)),
+										[layer(x=t, y=Y[:,i], Geom.line,
+													 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+										 for i in 1:numberofsamples]...)
+		if keyword == ""
+			Gadfly.draw(SVG(string("$rootname-$paramkey-$numberofsamples.svg"),6inch,4inch),p)
+		else
+			Gadfly.draw(SVG(string("$rootname-$keyword-$paramkey-$numberofsamples.svg"),6inch,4inch),p)
+		end
+	end
+end
+
+@doc "Create a spaghetti plot " ->
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword="")
+	rootname = getmadsrootname(madsdata)
+	func = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	numberofsamples = length(paramdictarray[paramkeys[1]])
+	obskeys = Mads.getobskeys(madsdata)
+	nT = length(obskeys)
+	t = Array(Float64, nT )
+	d = Array(Float64, nT )
+	for i in 1:nT
+		t[i] = madsdata["Observations"][obskeys[i]]["time"]
+		d[i] = madsdata["Observations"][obskeys[i]]["target"]
+	end
+	Y = Array(Float64,nT,numberofsamples)
+	for i in 1:numberofsamples
+		for paramkey in keys(paramdictarray)
+			paramdict[paramkey] = paramdictarray[paramkey][i]
+		end
+		result = func(paramdict)
+		for j in 1:nT
+			Y[j,i] = result[obskeys[j]]
+		end
+	end
+	p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=3pt)),
+									[layer(x=t, y=Y[:,i], Geom.line,
+												 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+									 for i in 1:numberofsamples]...)
+	if keyword == ""
+		Gadfly.draw(SVG(string("$rootname-$numberofsamples.svg"),6inch,4inch),p)
+	else
+		Gadfly.draw(SVG(string("$rootname-$keyword-$numberofsamples.svg"),6inch,4inch),p)
+	end
+end
