@@ -1,7 +1,3 @@
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
-
 @doc "Load ASCII file" ->
 function loadasciifile(filename::String) # load ASCII text file
 	data = open(readdlm, filename)

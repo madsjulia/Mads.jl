@@ -277,7 +277,7 @@ function saltelli(madsdata; N=int(100))
 			variance[obskeys[j]][paramkeys[i]] = varP
 			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
       if varA < eps(Float64) && varP < eps(Float64)
-        mes[obskeys[j]][paramkeys[i]] = 0;
+        mes[obskeys[j]][paramkeys[i]] = NaN;
       end
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
 		end
