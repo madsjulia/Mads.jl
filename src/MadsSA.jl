@@ -494,21 +494,21 @@ function plotwellSAresults(wellname, madsdata, result)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
@@ -554,21 +554,21 @@ function plotobsSAresults(madsdata, result)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
-		nan2na!(df[j])
+		deleteNaN!(df[j])
 		j += 1
 	end
 	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
@@ -589,8 +589,8 @@ function nothing2nan(df::DataFrame)
 	end
 end
 
-@doc "Convert NaN's to NA's" ->
-function nan2na!(df::DataFrame)
+@doc "Delete rows with NaN" ->
+function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
 			deleterows!(df,find(isnan(df[i][:])))
