@@ -482,24 +482,9 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			if typeof(result["mes"][obskey][paramkey]) == Nothing
-				mes[j,i] = 0
-			else
-				m = result["mes"][obskey][paramkey]
-				mes[j,i] = isnan(m) ? 0 : m
-			end
-			if typeof(result["tes"][obskey][paramkey]) == Nothing
-				tes[j,i] = 0
-			else
-				t = result["tes"][obskey][paramkey]
-				tes[j,i] = isnan(t) ? 0 : t
-			end
-			if typeof(result["var"][obskey][paramkey]) == Nothing
-				var[j,i] = 0
-			else
-				v = result["var"][obskey][paramkey]
-				var[j,i] = isnan(v) ? 0 : v
-			end
+			mes[j,i] = result["mes"][obskey][paramkey]
+			tes[j,i] = result["tes"][obskey][paramkey]
+			var[j,i] = result["var"][obskey][paramkey]
 			j += 1
 		end
 	end
@@ -509,18 +494,21 @@ function plotwellSAresults(wellname, madsdata, result)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
@@ -550,24 +538,9 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			if typeof(result["mes"][obskey][paramkey]) == Nothing
-				mes[j,i] = 0
-			else
-				m = result["mes"][obskey][paramkey]
-				mes[j,i] = isnan(m) ? 0 : m
-			end
-			if typeof(result["tes"][obskey][paramkey]) == Nothing
-				tes[j,i] = 0
-			else
-				t = result["tes"][obskey][paramkey]
-				tes[j,i] = isnan(t) ? 0 : t
-			end
-			if typeof(result["var"][obskey][paramkey]) == Nothing
-				var[j,i] = 0
-			else
-				v = result["var"][obskey][paramkey]
-				var[j,i] = isnan(v) ? 0 : v
-			end
+			mes[j,i] = result["mes"][obskey][paramkey]
+			tes[j,i] = result["tes"][obskey][paramkey]
+			var[j,i] = result["var"][obskey][paramkey]
 			j += 1
 		end
 		i += 1
@@ -581,18 +554,21 @@ function plotobsSAresults(madsdata, result)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		nan2na!(df[j])
 		j += 1
 	end
 	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
@@ -600,6 +576,26 @@ function plotobsSAresults(madsdata, result)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
 	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 16inch), p)
+end
+
+@doc "Convert Nothing's to NaN's" ->
+function nothing2nan(df::DataFrame)
+	for i in 1:length(df)
+		for j in 1:length(df[i])
+			if typeof(result["mes"][obskey][paramkey]) == Nothing
+				df[i][j] = NA
+			end
+		end
+	end
+end
+
+@doc "Convert NaN's to NA's" ->
+function nan2na!(df::DataFrame)
+	for i in 1:length(df)
+		if typeof(df[i][1]) <: Number
+			deleterows!(df,find(isnan(df[i][:])))
+		end
+	end
 end
 
 #@doc "Saltelli's eFAST " ->
