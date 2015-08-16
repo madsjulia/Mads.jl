@@ -276,6 +276,9 @@ function saltelli(madsdata; N=int(100))
 			varPnot = abs((dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = varP
 			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
+      if varA < eps(Float64) && varP < eps(Float64)
+        mes[obskeys[j]][paramkeys[i]] = 0;
+      end
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
 		end
 	end
@@ -533,9 +536,9 @@ function plotobsSAresults(madsdata, result)
 		end
 		i += 1
 	end
-	mes = mes./maximum(mes,2) # normalize 0 to 1
+	# mes = mes./maximum(mes,2) # normalize 0 to 1
 	tes = tes.-minimum(tes,2)
-	tes = tes./maximum(tes,2)
+	# tes = tes./maximum(tes,2)
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
 	df = Array(Any, nP)
