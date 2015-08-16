@@ -297,9 +297,21 @@ function computeparametersensitities(madsdata, saresults)
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)
-			v = var[obskeys[j]][paramkeys[i]]
-			m = mes[obskeys[j]][paramkeys[i]]
-			t = tes[obskeys[j]][paramkeys[i]]
+			if typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Nothing
+				m = 0
+			else
+				m = saresults["mes"][obskeys[j]][paramkeys[i]]
+			end
+			if typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Nothing
+				t = 0
+			else
+				t = saresults["tes"][obskeys[j]][paramkeys[i]]
+			end
+			if typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Nothing
+				v = 0
+			else
+				v = saresults["var"][obskeys[j]][paramkeys[i]]
+			end
 			pv += isnan(v) ? 0 : v
 			pm += isnan(m) ? 0 : m
 			pt += isnan(t) ? 0 : t
@@ -470,12 +482,24 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			m = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(m) ? 0 : m
-			t = result["tes"][obskey][paramkey]
-			tes[j,i] = isnan(t) ? 0 : t
-			v = result["var"][obskey][paramkey]
-			var[j,i] = isnan(v) ? 0 : v
+			if typeof(result["mes"][obskey][paramkey]) == Nothing
+				mes[j,i] = 0
+			else
+				m = result["mes"][obskey][paramkey]
+				mes[j,i] = isnan(m) ? 0 : m
+			end
+			if typeof(result["tes"][obskey][paramkey]) == Nothing
+				tes[j,i] = 0
+			else
+				t = result["tes"][obskey][paramkey]
+				tes[j,i] = isnan(t) ? 0 : t
+			end
+			if typeof(result["var"][obskey][paramkey]) == Nothing
+				var[j,i] = 0
+			else
+				v = result["var"][obskey][paramkey]
+				var[j,i] = isnan(v) ? 0 : v
+			end
 			j += 1
 		end
 	end
@@ -526,12 +550,24 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			m = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(m) ? 0 : m
-			t = result["tes"][obskey][paramkey]
-			tes[j,i] = isnan(t) ? 0 : t
-			v = result["var"][obskey][paramkey]
-			var[j,i] = isnan(v) ? 0 : v
+			if typeof(result["mes"][obskey][paramkey]) == Nothing
+				mes[j,i] = 0
+			else
+				m = result["mes"][obskey][paramkey]
+				mes[j,i] = isnan(m) ? 0 : m
+			end
+			if typeof(result["tes"][obskey][paramkey]) == Nothing
+				tes[j,i] = 0
+			else
+				t = result["tes"][obskey][paramkey]
+				tes[j,i] = isnan(t) ? 0 : t
+			end
+			if typeof(result["var"][obskey][paramkey]) == Nothing
+				var[j,i] = 0
+			else
+				v = result["var"][obskey][paramkey]
+				var[j,i] = isnan(v) ? 0 : v
+			end
 			j += 1
 		end
 		i += 1
