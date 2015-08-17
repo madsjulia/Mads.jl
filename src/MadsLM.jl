@@ -72,7 +72,6 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	converged = false
 	x_converged = false
 	g_converged = false
-	need_jacobian = true
 	iterCt = 0
 	x = x0
 	delta_x = copy(x0)
@@ -101,14 +100,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
 	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians)
-		if need_jacobian || alwaysDoJacobian
-			#println("Jacobian time:")
-			#@time J = g(x) # TODO compute this in parallel
-			J = g(x) # TODO compute this in parallel
-			g_calls += 1
-			need_jacobian = false
-			madsoutput("Jacobian #$g_calls\n"; level = 1)
-		end
+		J = g(x)
+		g_calls += 1
+		madsoutput("Jacobian #$g_calls\n"; level = 1)
 		madsoutput("""Current Best OF: $best_residual\n"""; level = 1)
 		# we want to solve:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
@@ -177,24 +171,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 
 		# step quality = residual change / predicted residual change
 		rho = (trial_residual - residual) / (predicted_residual - residual)
-		if rho > MIN_STEP_QUALITY # accept the new lambda
-			x += delta_x
-			fcur = trial_f
-			residual = trial_residual
-			# increase trust region radius
-			lambda = max(lambda/lambda_mu, MIN_LAMBDA)
-			need_jacobian = true
-		else # reject the new lambda
-			# decrease trust region radius
-			lambda = min(lambda_mu*lambda, MAX_LAMBDA)
-		end
-		if best_residual > residual # check for BEST OF
-			x_best = x
-			f_best = fcur
-			best_residual = residual
-		else
-			madsoutput("Lambda search did not improve the OF\n"; level = 1 )
-		end
+		x += delta_x
+		fcur = trial_f
+		best_residual = objfuncevals[npl_best]
+		x_best = x
+		f_best = fcur
 		iterCt += 1
 
 		# show state
