@@ -49,31 +49,33 @@ end
 function localsa(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	paramkeys = getparamkeys(madsdata)
+	nP = length(paramkeys)
 	initparams = getparamsinit(madsdata)
 	rootname = getmadsrootname(madsdata)
 	J = g_lm(initparams)
-	writedlm("$(rootname).jacobian",J)
+	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
 							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
 	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
 	JpJ = J' * J
 	covar = inv(JpJ)
-	writedlm("$(rootname).covariance",covar)
-	stddev = sqrt(diag(covar))
-	f = open("$(rootname).stddev", "w")
-	for i in 1:length(paramkeys)
+	writedlm("$(rootname)-covariance.dat", covar)
+	stddev = sqrt(abs(diag(covar)))
+	f = open("$(rootname)-stddev.dat", "w")
+	for i in 1:nP
 		write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
 	end
 	close(f)
-	correl = covar ./ (stddev * stddev')
-	writedlm("$(rootname).correlation",correl)
+	correl = covar ./ diag(covar)
+	writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
+  eigenv = abs(eigenv)
 	index=sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = eigenm[:,index]
-	writedlm("$(rootname).eigenmatrix",sortedeigenm)
-	writedlm("$(rootname).eigenvalues",sortedeigenv)
+	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
+	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	eigenmat = spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
@@ -276,6 +278,9 @@ function saltelli(madsdata; N=int(100))
 			varPnot = abs((dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = varP
 			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
+      if varA < eps(Float64) && varP < eps(Float64)
+        mes[obskeys[j]][paramkeys[i]] = NaN;
+      end
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
 		end
 	end
@@ -294,9 +299,21 @@ function computeparametersensitities(madsdata, saresults)
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)
-			v = var[obskeys[j]][paramkeys[i]]
-			m = mes[obskeys[j]][paramkeys[i]]
-			t = tes[obskeys[j]][paramkeys[i]]
+			if typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Nothing
+				m = 0
+			else
+				m = saresults["mes"][obskeys[j]][paramkeys[i]]
+			end
+			if typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Nothing
+				t = 0
+			else
+				t = saresults["tes"][obskeys[j]][paramkeys[i]]
+			end
+			if typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Nothing
+				v = 0
+			else
+				v = saresults["var"][obskeys[j]][paramkeys[i]]
+			end
 			pv += isnan(v) ? 0 : v
 			pm += isnan(m) ? 0 : m
 			pt += isnan(t) ? 0 : t
@@ -467,40 +484,58 @@ function plotwellSAresults(wellname, madsdata, result)
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
-			m = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(m) ? 0 : m
-			t = result["tes"][obskey][paramkey]
-			tes[j,i] = isnan(t) ? 0 : t
-			v = result["var"][obskey][paramkey]
-			var[j,i] = isnan(v) ? 0 : v
+			mes[j,i] = result["mes"][obskey][paramkey]
+			tes[j,i] = result["tes"][obskey][paramkey]
+			var[j,i] = result["var"][obskey][paramkey]
 			j += 1
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
+  pp = Array(Any, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+  push!(pp, pc)
+  vsize = 4inch
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+    push!(pp, ptes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+    push!(pp, pmes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
-	p = vstack(pc, ptes, pmes, pvar)
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+  	pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+    push!(pp, pvar)
+    vsize += 4inch
+  end
+  p = vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, 12inch), p)
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
 function plotobsSAresults(madsdata, result)
@@ -523,44 +558,94 @@ function plotobsSAresults(madsdata, result)
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
 		for paramkey in paramkeys
-			m = result["mes"][obskey][paramkey]
-			mes[j,i] = isnan(m) ? 0 : m
-			t = result["tes"][obskey][paramkey]
-			tes[j,i] = isnan(t) ? 0 : t
-			v = result["var"][obskey][paramkey]
-			var[j,i] = isnan(v) ? 0 : v
+			mes[j,i] = result["mes"][obskey][paramkey]
+			tes[j,i] = result["tes"][obskey][paramkey]
+			var[j,i] = result["var"][obskey][paramkey]
 			j += 1
 		end
 		i += 1
 	end
-	mes = mes./maximum(mes,2) # normalize 0 to 1
+	# mes = mes./maximum(mes,2) # normalize 0 to 1
 	tes = tes.-minimum(tes,2)
-	tes = tes./maximum(tes,2)
+	# tes = tes./maximum(tes,2)
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
+  pp = Array(Any, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
+  push!(pp, pd)
+  vsize = 4inch
 	df = Array(Any, nP)
 	j = 1
-	for paramkey in paramkeys
+ 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	ptes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
+    push!(pp, ptes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	pmes = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
+    push!(pp, pmes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
 		j += 1
 	end
-	pvar = Gadfly.plot(vcat(df...), x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
-	p = vstack(pd, pmes, ptes, pvar)
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
+	  push!(pp, pvar)
+    vsize += 4inch
+  end
 	rootname = getmadsrootname(madsdata)
+  p = vstack(pp...)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, 16inch), p)
+	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, vsize), p)
+end
+
+@doc "Convert Nothing's to NaN's in a dictionary" ->
+function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
+	for i in keys(dict)
+		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
+			for j in keys(dict[i])
+				if typeof(dict[i][j]) == Nothing
+					dict[i][j] = NaN
+				end
+				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedDict
+					for k = keys(dict[i][j])
+						if typeof(dict[i][j][k]) == Nothing
+							dict[i][j][k] = NaN
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+@doc "Delete rows with NaN" ->
+function deleteNaN!(df::DataFrame)
+	for i in 1:length(df)
+		if typeof(df[i][1]) <: Number
+			deleterows!(df,find(isnan(df[i][:])))
+      if length(df[i]) == 0
+        return
+      end
+		end
+	end
 end
 
 #@doc "Saltelli's eFAST " ->
