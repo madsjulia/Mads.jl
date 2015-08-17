@@ -49,32 +49,33 @@ end
 function localsa(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	paramkeys = getparamkeys(madsdata)
+	nP = length(paramkeys)
 	initparams = getparamsinit(madsdata)
 	rootname = getmadsrootname(madsdata)
 	J = g_lm(initparams)
-	writedlm("$(rootname)-jacobian.dat",J)
+	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
 							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
 	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
 	JpJ = J' * J
 	covar = inv(JpJ)
-	writedlm("$(rootname)-covariance.dat",covar)
+	writedlm("$(rootname)-covariance.dat", covar)
 	stddev = sqrt(abs(diag(covar)))
-	f = open("$(rootname).stddev", "w")
-	for i in 1:length(paramkeys)
+	f = open("$(rootname)-stddev.dat", "w")
+	for i in 1:nP
 		write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
 	end
 	close(f)
 	correl = covar ./ diag(covar)
-	writedlm("$(rootname)-correlation.dat",correl)
+	writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
   eigenv = abs(eigenv)
 	index=sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = eigenm[:,index]
-	writedlm("$(rootname)-eigenmatrix.dat",sortedeigenm)
-	writedlm("$(rootname)-eigenvalues.dat",sortedeigenv)
+	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
+	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	eigenmat = spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
@@ -615,12 +616,21 @@ function plotobsSAresults(madsdata, result)
 	Gadfly.draw(SVG(string("$rootname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
-@doc "Convert Nothing's to NaN's" ->
-function nothing2nan(df::DataFrame)
-	for i in 1:length(df)
-		for j in 1:length(df[i])
-			if typeof(result["mes"][obskey][paramkey]) == Nothing
-				df[i][j] = NaN
+@doc "Convert Nothing's to NaN's in a dictionary" ->
+function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
+	for i in keys(dict)
+		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
+			for j in keys(dict[i])
+				if typeof(dict[i][j]) == Nothing
+					dict[i][j] = NaN
+				end
+				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedDict
+					for k = keys(dict[i][j])
+						if typeof(dict[i][j][k]) == Nothing
+							dict[i][j][k] = NaN
+						end
+					end
+				end
 			end
 		end
 	end
