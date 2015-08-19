@@ -127,7 +127,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 		function getphianddelta_x(npl)
 			lambda_current = lambda_p[npl]
 			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
-			delta_x = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
+			u, s, v = svd(JpJ + sqrt(lambda_current) * DtD)
+			delta_x = ( v * inv(diagm(s)) * u' ) * -J' * fcur
+			# delta_x = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual

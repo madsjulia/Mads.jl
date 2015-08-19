@@ -59,7 +59,9 @@ function localsa(madsdata)
 							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
 	draw(SVG("$(rootname)-jacobian.svg",6inch,12inch),jacmat)
 	JpJ = J' * J
-	covar = inv(JpJ)
+	# covar = inv(JpJ) # produces resulut similar to svd
+	u, s, v = svd(JpJ)
+	covar = ( v * inv(diagm(s)) * u' )
 	writedlm("$(rootname)-covariance.dat", covar)
 	stddev = sqrt(abs(diag(covar)))
 	f = open("$(rootname)-stddev.dat", "w")
