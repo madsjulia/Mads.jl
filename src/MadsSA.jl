@@ -332,15 +332,15 @@ for mi = 1:length(names)
 	q = quote
 		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(100))
 			if numsaltellis < 1
-				madserr("""Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)""")
+				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
 			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
-			mesall = results["mes"]
-			tesall = results["tes"]
-			varall = results["var"]
+			mesall = results[1]["mes"]
+			tesall = results[1]["tes"]
+			varall = results[1]["var"]
 			for i = 2:numsaltellis
-				mes, tes = results[i]
+				mes, tes, var = results[i]["mes"], results[i]["tes"], results[i]["var"]
 				for obskey in keys(mes)
 					for paramkey in keys(mes[obskey])
 						#meanall[obskey][paramkey] += mean[obskey][paramkey]
@@ -360,7 +360,7 @@ for mi = 1:length(names)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "method" => names[mi]*"_parallel" ]
+			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "method" => $(names[mi])*"_parallel" ]
 		end # end fuction
 	end # end quote
 	eval(q)

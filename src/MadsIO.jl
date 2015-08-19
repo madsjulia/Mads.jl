@@ -167,13 +167,29 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata, f::Function) # make MADS command gradient function
+function makemadscommandgradient(madsdata, f)
+	fg = makemadscommandfunctionandgradient(madsdata, f)
+	function madscommandgradient(parameters::Dict)
+		forwardrun, gradient = fg(parameters)
+		return gradient
+	end
+	return madscommandgradient
+end
+
+@doc "Make MADS command function & gradient function" ->
+function makemadscommandfunctionandgradient(madsdata)
+	f = makemadscommandfunction(madsdata)
+	return makemadscommandfunctionandgradient(madsdata, f)
+end
+
+@doc "Make MADS command function and gradient function" ->
+function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lowerbounds = getparamsmin(madsdata, optparamkeys)
 	upperbounds = getparamsmax(madsdata, optparamkeys)
 	dx = ( upperbounds - lowerbounds ) ./ 100 # MADS.c uses constant dx in sin space; here we make a trick
 	# h = sqrt(eps(Float32))
-	function madscommandgradient(parameters::Dict) # MADS command gradient function
+	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
 		xph = Dict()
 		xph["noparametersvaried"] = parameters # TODO in the case of LM, we typically we already know this
 		i = 1
@@ -195,38 +211,6 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 			for optparamkey in optparamkeys
 				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / dx[i]
 				i += 1
-			end
-		end
-		return gradient
-	end
-	return madscommandgradient
-end
-
-@doc "Make MADS command function & gradient function" ->
-function makemadscommandfunctionandgradient(madsdata)
-	f = makemadscommandfunction(madsdata)
-	optparamkeys = getoptparamkeys(madsdata)
-	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
-		xph = Dict()
-		h = sqrt(eps(Float32))
-		xph["noparametersvaried"] = parameters
-		i = 2
-		for optparamkey in optparamkeys
-			xph[optparamkey] = copy(parameters)
-			xph[optparamkey][optparamkey] += h
-			i += 1
-		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
-		fevalsdict = Dict()
-		for feval in fevals
-			fevalsdict[feval[1]] = feval[2]
-		end
-		gradient = Dict()
-		resultkeys = keys(fevals[1][2])
-		for resultkey in resultkeys
-			gradient[resultkey] = Dict()
-			for optparamkey in optparamkeys
-				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
 			end
 		end
 		return fevalsdict["noparametersvaried"], gradient
