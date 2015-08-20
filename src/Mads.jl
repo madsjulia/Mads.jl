@@ -66,7 +66,7 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
 		close(outfile)
 	end
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	nonoptparamkeys = getnonoptparamkeys(madsdata)
 	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))

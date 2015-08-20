@@ -171,9 +171,12 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 	optparamkeys = getoptparamkeys(madsdata)
 	lowerbounds = getparamsmin(madsdata, optparamkeys)
 	upperbounds = getparamsmax(madsdata, optparamkeys)
-	dx = ( upperbounds - lowerbounds ) ./ 100 # MADS.c uses constant dx in sin space; here we make a trick
+	lineardx = ( upperbounds - lowerbounds ) ./ 100 # MADS.c uses constant dx in sin space; here we make a trick
 	# h = sqrt(eps(Float32))
-	function madscommandgradient(parameters::Dict) # MADS command gradient function
+	function madscommandgradient(parameters::Dict; dx=Array(Float64,0)) # MADS command gradient function
+		if sizeof(dx) == 0
+			dx = lineradx
+		end
 		xph = Dict()
 		xph["noparametersvaried"] = parameters # TODO in the case of LM, we typically we already know this
 		i = 1
@@ -194,6 +197,7 @@ function makemadscommandgradient(madsdata, f::Function) # make MADS command grad
 			i = 1
 			for optparamkey in optparamkeys
 				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / dx[i]
+				# println("$optparamkey $resultkey : ", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], " ", dx[i], "=", gradient[resultkey][optparamkey])
 				i += 1
 			end
 		end

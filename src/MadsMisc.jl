@@ -24,17 +24,13 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 @doc "Sine transformation of a gradient function" ->
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a gradient function
+function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector; sindx = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector)
+		#TODO option needed to control sindx
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
-		result = g(params)
-		f(x) = cos(x) / 2
-		transformgrad = (upperbounds - lowerbounds) .* f(sineparams)
-		for i = 1:size(result, 1)
-			for j = 1:size(result, 2)
-				result[i, j] *= transformgrad[j]
-			end
-		end
+		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds)
+		lineardx = dxparams - params
+		result = g(params; dx = lineardx)
 		return result
 	end
 	return sinetransformedg

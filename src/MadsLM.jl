@@ -27,12 +27,12 @@ function makelmfunctions(madsdata)
 		end
 		return residuals
 	end
-	function g_lm(arrayparameters::Vector)
+	function g_lm(arrayparameters::Vector; dx=Array(Float64,0))
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
-		gradientdict = g(parameters)
+		gradientdict = g(parameters; dx=dx)
 		jacobian = Array(Float64, (length(obskeys), length(optparamkeys)))
 		for i in 1:length(obskeys)
 			for j in 1:length(optparamkeys)
@@ -44,7 +44,7 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=x_best->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=x_best->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -101,6 +101,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; tolX=1e-3, tolG=1e-6,
 	phi = Array(Float64, np_lambda)
 	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians)
 		J = g(x)
+		if root != ""
+			writedlm("$(root)-lmjacobian.dat", J)
+		end
 		g_calls += 1
 		madsoutput("Jacobian #$g_calls\n"; level = 1)
 		madsoutput("""Current Best OF: $best_residual\n"""; level = 1)
