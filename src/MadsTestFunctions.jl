@@ -15,7 +15,7 @@ function rosenbrock_gradient!(x::Vector, storage::Vector)
 end
 
 @doc "Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)" ->
-function rosenbrock_gradient_lm(x::Vector)
+function rosenbrock_gradient_lm(x::Vector; dx=false)
 	storage = Array(Float64,2,2)
 	storage[1,1] = -2.0 * (1.0 - x[1])
 	storage[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]

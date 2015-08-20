@@ -170,7 +170,7 @@ end
 function makemadscommandgradient(madsdata, f)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Dict; dx=Array(Float64,0))
-		forwardrun, gradient = fg(parameters)
+		forwardrun, gradient = fg(parameters; dx=dx)
 		return gradient
 	end
 	return madscommandgradient

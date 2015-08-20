@@ -30,7 +30,7 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
 		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds)
 		lineardx = dxparams - params
-		result = g(params; dx = lineardx)
+		result = g(params; dx=lineardx)
 		return result
 	end
 	return sinetransformedg
