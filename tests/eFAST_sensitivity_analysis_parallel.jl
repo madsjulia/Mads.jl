@@ -1,0 +1,35 @@
+## eFAST_sensitivity_analysis_parallel.jl
+# Test problem for eFAST algorithm embedded in Mads
+
+# Loading packages (some must be loaded on every processor)
+@everywhere using Distributions
+@everywhere using Docile
+@everywhere using ProgressMeter
+#using DataStructures
+using Mads
+using JSON
+
+## Necessary modules (no matter if we are reading from mads or using as a standalone)
+@everywhere include("/Users/jlaughli/Desktop/Julia Code/eFAST_distributeX.jl");
+#include("/Users/jlaughli/Desktop/Julia Code/eFAST_getCompFreq.jl");
+#include("/Users/jlaughli/Desktop/Julia Code/eFAST_optimalSearch.jl");
+@everywhere include("/Users/jlaughli/Desktop/Julia Code/eFAST_Parallel_kL.jl")
+
+# Saltelli senstivity analysis tests
+# FOR SOME REASON USING MADS WON'T LOAD THESE (for me)!
+#include("/Users/jlaughli/codes/mads.jl/src/MadsAnasol.jl");
+#include("/Users/jlaughli/codes/mads.jl/src/MadsIO.jl")
+include("/Users/jlaughli/codes/mads.jl/src/MadsYAML_noPyYAML.jl")
+@everywhere include("/Users/jlaughli/codes/mads.jl/src/MadsLog.jl")
+
+Mads.madsinfo("TEST eFAST senstivity analysis:")
+
+# Load in .mads data file to analyze
+md = MadsYAML.loadyamlmadsfile("/Users/jlaughli/Desktop/Julia Code/examples/contamination/w01_w1a_w10a_w20a.mads")
+
+# Run eFAST algorithm and calculate results
+resultsefast = Mads.efast(md,N=int(1e3), M=4, gamma=2)
+
+# Print results (sensitivity indices)
+#Mads.saltelliprintresults(md,resultsefast)
+
