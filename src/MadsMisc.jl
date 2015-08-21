@@ -66,16 +66,22 @@ function setdynamicmodel(madsdata, f::Function)
 end
 
 @doc "Create functions to get values of the MADS parameters" ->
-getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log"]
-getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any]
+getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step"]
+getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64]
+getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32))]
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]
+	paramdefault = getparamsdefault[i]
 	q = quote
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
-				paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
+				if haskey( madsdata["Parameters"][paramkeys[i]], $paramname)
+					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
+				else
+					paramvalue[i] = $(paramdefault)
+				end
 			end
 			return paramvalue # returns the parameter values
 		end
