@@ -99,6 +99,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	trial_fp = Array(Float64, (np_lambda, length(fcur)))
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
+	first = true
 	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians)
 		J = g(x)
 		if root != ""
@@ -114,8 +115,12 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		# Where we have used the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
 		DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
-		lambda_current = lambda_down = lambda_up = lambda
 		JpJ = J' * J
+		if first
+			lambda = min(1e4, max(diag(JpJ)...)) * tolX * 100;
+		end
+		lambda_current = lambda_down = lambda_up = lambda
+		madswarn(@sprintf "Iteration %02d: Starting lambda: %f" iterCt lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first
 				lambda_current = lambda_p[npl] = lambda
@@ -129,14 +134,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		end
 		function getphianddelta_x(npl)
 			lambda_current = lambda_p[npl]
-			madsoutput(@sprintf "#%02d lambda: %e\n" npl lambda_current; level = 2)
+			madswarn(@sprintf "#%02d lambda: %f" npl lambda_current)
 			u, s, v = svd(JpJ + sqrt(lambda_current) * DtD)
 			delta_x = ( v * inv(diagm(s)) * u' ) * -J' * fcur
 			# delta_x = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
 			# if the linear assumption is valid, our new residual should be:
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			madsoutput(@sprintf "OF predicted: %e" predicted_residual; level = 2)
+			madswarn(@sprintf "#%02d OF    : %f" npl predicted_residual)
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
 				madsoutput(" -> not good"; level = 2)
 				if np_lambda == 1
@@ -168,7 +173,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		npl_worst = indmax(objfuncevals)
 		madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 )
 		madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
-		lambda = lambda_p[npl_best]
+		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])
 		trial_residual = objfuncevals[npl_best]
