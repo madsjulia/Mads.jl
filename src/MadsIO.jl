@@ -213,7 +213,7 @@ function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS c
 			i = 1
 			for optparamkey in optparamkeys
 				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / dx[i]
-				# println("$optparamkey $resultkey : ", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], " ", dx[i], "=", gradient[resultkey][optparamkey])
+				# println("$optparamkey $resultkey : (", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], ") / ", dx[i], "=", gradient[resultkey][optparamkey])
 				i += 1
 			end
 		end

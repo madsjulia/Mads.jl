@@ -31,6 +31,13 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds)
 		lineardx = dxparams - params
 		result = g(params; dx=lineardx)
+		lineardx ./= sindx
+		for j = 1:size(result, 2)
+			for i = 1:size(result, 1)
+				# println(result[i, j])
+				result[i, j] *= lineardx[j]
+			end
+		end
 		return result
 	end
 	return sinetransformedg
