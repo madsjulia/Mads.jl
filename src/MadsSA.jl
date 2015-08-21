@@ -1096,7 +1096,7 @@ paramkeys     = Mads.getoptparamkeys(md)
 # All the observation sites and time points we will analyze them at
 obskeys       = Mads.getobskeys(md)
 # Get distributions for the parameters we will be performing SA on
-distributions = Mads.getdistributions(md)
+distributions = Mads.getparamdistributions(md)
 
 # Function for model output
 f = Mads.makemadscommandfunction(md)
