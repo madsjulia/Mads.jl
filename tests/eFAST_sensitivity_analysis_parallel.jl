@@ -29,7 +29,21 @@ md = MadsYAML.loadyamlmadsfile("/Users/jlaughli/Desktop/Julia Code/examples/cont
 
 # Run eFAST algorithm and calculate results
 resultsefast = Mads.efast(md,N=int(1e3), M=4, gamma=2)
+# N might change after running efast due to optimization algorithm
+N = resultsefast["samplesize"];
 
 # Print results (sensitivity indices)
 #Mads.saltelliprintresults(md,resultsefast)
+
+# get MADS rootname
+rootname = Mads.madsrootname(md)
+Mads.madsinfo("""Mads root name: $(rootname)""")
+
+# Save eFAST results as JSON file
+ f = open("$rootname-eFAST-results-N=$N.json", "w")
+ JSON.print(f, resultsefast)
+ close(f)
+
+# Load eFAST results
+# saltelliresult = JSON.parsefile("$rootname-eFAST-results.json"; ordered=true, use_mmap=true)
 
