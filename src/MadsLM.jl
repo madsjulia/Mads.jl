@@ -74,6 +74,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	g_converged = false
 	iterCt = 0
 	x = x0
+	nP = length(x)
+	DtDidentity = eye(nP)
 	delta_x = copy(x0)
 	f_calls = 0
 	g_calls = 0
@@ -114,10 +116,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		#    (J'*J + lambda*DtD) * delta_x == -J^T * f(x), where DtD = diagm(sum(J.^2,1))
 		# Where we have used the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
-		DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
+		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		JpJ = J' * J
 		if first
-			lambda = min(1e4, max(diag(JpJ)...)) * tolX * 100;
+			lambda = min(1e4, max(diag(JpJ)...)) * tolX;
+			first = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
 		madswarn(@sprintf "Iteration %02d: Starting lambda: %f" iterCt lambda_current)
@@ -134,14 +137,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		end
 		function getphianddelta_x(npl)
 			lambda_current = lambda_p[npl]
-			madswarn(@sprintf "#%02d lambda: %f" npl lambda_current)
-			u, s, v = svd(JpJ + sqrt(lambda_current) * DtD)
-			delta_x = ( v * inv(diagm(s)) * u' ) * -J' * fcur
-			# delta_x = ( JpJ + sqrt(lambda_current) * DtD ) \ -J' * fcur # TODO replace with SVD
-			# if the linear assumption is valid, our new residual should be:
+			madswarn(@sprintf "#%02d lambda: %e" npl lambda_current)
+			u, s, v = svd(JpJ + lambda_current * DtDidentity)
+			delta_x = (v * inv(diagm(s)) * u') * -J' * fcur
+			println(delta_x)
+			# delta_x = (JpJ + lambda_current * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			madswarn(@sprintf "#%02d OF    : %f" npl predicted_residual)
+			madswarn(@sprintf "#%02d OF (est): %f" npl predicted_residual)
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
 				madsoutput(" -> not good"; level = 2)
 				if np_lambda == 1
@@ -161,7 +164,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 )
 			trial_f = f(x + delta_x)
 			objfunceval = sse(trial_f)
-			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n" npl lambda_p[npl] residual phi[npl]; level = 2 )
+			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)" npl lambda_p[npl] residual phi[npl]; level = 2 )
 			return objfunceval, trial_f
 		end
 		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
