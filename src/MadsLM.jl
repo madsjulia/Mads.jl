@@ -44,7 +44,7 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=x_best->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -74,6 +74,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	g_converged = false
 	iterCt = 0
 	x = x0
+	best_x = x0
 	nP = length(x)
 	DtDidentity = eye(nP)
 	delta_x = copy(x0)
@@ -85,6 +86,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first jacobian
 	f_calls += 1
+	best_f = fcur
 	best_residual = residual = sse(fcur)
 	madsoutput("""Initial OF: $residual\n"""; level = 1)
 
@@ -117,6 +119,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		# Where we have used the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
 		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
+		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if first
 			lambda = min(1e4, max(diag(JpJ)...)) * tolX;
@@ -186,9 +189,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		rho = (trial_residual - residual) / (predicted_residual - residual)
 		x += delta_x
 		fcur = trial_f
-		best_residual = objfuncevals[npl_best]
-		x_best = x
-		f_best = fcur
+		if objfuncevals[npl_best] < best_residual
+			best_residual = objfuncevals[npl_best]
+			best_x = x
+			best_f = fcur
+		end
 		iterCt += 1
 
 		# show state
@@ -199,7 +204,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			push!(tr, os)
 			println(os)
 		end
-		callback(x_best)
+		callback(best_x)
 
 		# check convergence criteria:
 		# 1. Small gradient: norm(J^T * fcur, Inf) < tolG
@@ -212,5 +217,5 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		end
 		converged = g_converged | x_converged
 	end
-	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, x, sse(fcur), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
+	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, sse(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
 end
