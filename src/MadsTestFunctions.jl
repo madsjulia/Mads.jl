@@ -45,7 +45,7 @@ function makerosenbrock(N)
 end
 
 function makerosenbrock_gradient(N)
-	function rosenbrock_gradient_lm(x::Vector)
+	function rosenbrock_gradient_lm(x::Vector; dx=false)
 		result = zeros(eltype(x), (2 * (N - 1), N))
 		for i = 1:N - 1
 			result[2 * i - 1, i] = -1
