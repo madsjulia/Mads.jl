@@ -1,7 +1,7 @@
 import Anasol
 
 @doc "Compute concentration for a point (x,y,z,t)" ->
-function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
+function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff)
 	d = -theta * pi / 180
 	xshift = wellx - x
 	yshift = welly - y
@@ -20,9 +20,14 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 	sigma1 = sqrt(ax * speed * 2)
 	sigma2 = sqrt(ay * speed * 2)
 	sigma3 = sqrt(az * speed * 2)
-	H1 = H2 = H3 = 0. # these parameters will be ignored
+	H1 = H2 = H3 = H
 	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
-	return 1e6 * f * Anasol.long_bbb_ddd_iir_c([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1) / n
+	if usefff
+		anasolresult = Anasol.long_fff_ddd_iir_c([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	else
+		anasolresult = Anasol.long_bbb_ddd_iir_c([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	end
+	return 1e6 * f * anasolresult / n
 end
 
 @doc "Compute concentration for all observation points" ->
@@ -37,6 +42,13 @@ function makecomputeconcentrations(madsdata)
 		ax = parameters["ax"]
 		ay = parameters["ay"]
 		az = parameters["az"]
+		if haskey(parameters, "ts_dsp") && parameters["ts_dsp"] != 1.
+			usefff = true
+			H = 0.5 * parameters["ts_dsp"]
+		else
+			H = 0.5
+			usefff = false
+		end
 		c = DataStructures.OrderedDict()
 		for wellkey in Mads.getwellkeys(madsdata)
 			wellx = madsdata["Wells"][wellkey]["x"]
@@ -57,9 +69,9 @@ function makecomputeconcentrations(madsdata)
 					t0 = parameters[string("source", i, "_", "t0")]
 					t1 = parameters[string("source", i, "_", "t1")]
 					if i == 1
-						c[string(wellkey, "_", t)] = .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t))
+						c[string(wellkey, "_", t)] = .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
 					else
-						c[string(wellkey, "_", t)] += .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t))
+						c[string(wellkey, "_", t)] += .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
 					end
 				end
 				# c[t] = contamination(wellx, welly, .5 * (wellz0 + wellz1), n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
