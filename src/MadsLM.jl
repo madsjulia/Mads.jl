@@ -44,6 +44,36 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm
 end
 
+function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
+	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
+	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
+	return deltax
+end
+
+function naive_lm_iteration(f::Function, g::Function, x0::Vector, f0::Vector, lambdas::Vector)
+	J = g(x0)#get jacobian
+	Jp = J'
+	JpJ = Jp * J
+	deltaxs = pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas)#get the deltax for each lambda
+	fs = pmap(deltax->f(x0 + deltax), deltaxs)#get the residuals for each deltax
+	sses = pmap(sse, fs)#get the sum of squared residuals for each forward run
+	bestindex = indmin(sses)#find the best forward run
+	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
+end
+
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, lambda=100., lambda_mu = 10., np_lambda=10)
+	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
+	currentx = x0
+	currentf = f(x0)
+	currentsse = Inf
+	for iternum = 1:maxIter
+		currentx, currentsse, currentf = naive_lm_iteration(f, g, currentx, currentf, lambdas)
+		@show currentx
+		@show currentsse
+	end
+	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), 1 + np_lambda * maxIter, maxIter)
+end
+
 function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
@@ -167,7 +197,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 )
 			trial_f = f(x + delta_x)
 			objfunceval = sse(trial_f)
-			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)" npl lambda_p[npl] residual phi[npl]; level = 2 )
+			madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl]; level = 2 )
 			return objfunceval, trial_f
 		end
 		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
@@ -178,7 +208,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
 		madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 )
-		madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 )
+		madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 )
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])
