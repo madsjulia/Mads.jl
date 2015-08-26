@@ -289,6 +289,7 @@ function saltelli(madsdata; N=int(100))
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "method" => "saltellimap" ]
 end
 
+@doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
 function computeparametersensitities(madsdata, saresults)
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
@@ -327,6 +328,7 @@ function computeparametersensitities(madsdata, saresults)
 	[ "var" => pvar, "mes" => pmes, "tes" => ptes]
 end
 
+@doc "Parallelization" ->
 names = ["saltelli", "saltellibrute"]
 for mi = 1:length(names)
 	q = quote
@@ -366,7 +368,8 @@ for mi = 1:length(names)
 	eval(q)
 end
 
-function saltelliprintresults(madsdata, results)
+@doc "Print the sensitivity analysis results" ->
+function printSAresults(madsdata, results)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
@@ -432,6 +435,7 @@ function saltelliprintresults(madsdata, results)
 	end
 end
 
+@doc "Print the sensitivity analysis results (method 2)" ->
 function saltelliprintresults2(madsdata, results)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -466,12 +470,15 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
+@doc "Plot the sensitivity analysis results for each well (wells class epxpected)" ->
 function plotwellSAresults(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
+	rootname = getmadsrootname(madsdata)
 	nsample = result["samplesize"]
+	method = result["method"]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -506,7 +513,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
   vdf = vcat(df...)
   if length(vdf[1]) > 0
-	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :none) )
     push!(pp, ptes)
     vsize += 4inch
   end
@@ -530,16 +537,15 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
   vdf = vcat(df...)
   if length(vdf[1]) > 0
-  	pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+  	pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance") )
     push!(pp, pvar)
     vsize += 4inch
   end
   p = vstack(pp...)
-	rootname = getmadsrootname(madsdata)
-	method = result["method"]
 	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
+@doc "Plot the sensitivity analysis results for the observations" ->
 function plotobsSAresults(madsdata, result)
 	if !haskey(madsdata, "Observations")
 		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
@@ -687,8 +693,8 @@ function efast(md; N=int(100), M=6, gamma=4, plotresults=0)
 # 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
 #			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
 #			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
-# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the 
-# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as 
+# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
+# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as
 #			 in mads (2 columns)
 # M:         Max # of harmonics
 # n:         Total # of input parameters
@@ -885,12 +891,12 @@ function eFAST_Parallel_kL(kL)
   	W_vec   = zeros(1,nprime); 	   # W_vec (Frequencies)
 	phi_mat = zeros(nprime,Ns);    # Phi matrix (phase shift corresponding to each resample)
 
-	
+
 	## Creating W_vec (kth element is Wi)
 	W_vec[k] = Wi;
 	## Edge cases
 	# As long as nprime!=1 our W_vec will have complementary frequencies
-	if nprime !=1		
+	if nprime !=1
 		if k != 1
 			W_vec[1:(k-1)] = W_comp[1:(k-1)];
 		end
@@ -924,7 +930,7 @@ function eFAST_Parallel_kL(kL)
 	# It is not important to us in calculating sensitivity so we only save it
 	# for long enough to calculate Y.
 	# QUESTION do we need LHC sampling?
-	X = eFAST_distributeX(X, nprime, InputData, ismads); 
+	X = eFAST_distributeX(X, nprime, InputData, ismads);
 
 	# Pre-allocating Model Output
 	Y = zeros(Ns, ny);
@@ -1058,7 +1064,7 @@ plotresults = 0;
 # Different values of P will determine how program is parallelized
 # If P > 1 -> Program will parallelize resamplings & parameters
 # If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
-# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing 
+# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 # the model output quicker.
 P = nprocs();
 
@@ -1301,8 +1307,8 @@ if ismads == 1
 		end
 
 		return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast" ]
-	
-		# Plot results as .svg file	
+
+		# Plot results as .svg file
 		if plotresults == 1
 			madsinfo("""Plotting eFAST results as .svg file ... """)
 			Mads.plotwellSAresults("w1a",md,resultsefast)
