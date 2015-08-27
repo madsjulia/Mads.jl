@@ -87,7 +87,10 @@ function localsa(madsdata)
 end
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=int(1e4)) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata; N=int(1e4), seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+	if seed != 0
+		srand(seed)
+	end
 	numsamples = int(sqrt(N))
 	numoneparamsamples = int(sqrt(N))
 	nummanyparamsamples = int(sqrt(N))
@@ -219,12 +222,15 @@ function saltellibrute(madsdata; N=int(1e4)) # TODO Saltelli (brute force) does 
 			var[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "method" => "saltellibrute" ]
+	[ "mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute" ]
 end
 
 @doc "Saltelli " ->
-function saltelli(madsdata; N=int(100))
-	paramallkeys = Mads.getparamkeys(madsdata)
+function saltelli(madsdata; N=int(100), seed=0)
+	if seed != 0
+		srand(seed)
+	end
+	paramallkeys = getparamkeys(madsdata)
 	paramalldict = Dict(paramallkeys, getparamsinit(madsdata))
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
@@ -286,7 +292,7 @@ function saltelli(madsdata; N=int(100))
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "method" => "saltellimap" ]
+	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap" ]
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -332,7 +338,10 @@ end
 names = ["saltelli", "saltellibrute"]
 for mi = 1:length(names)
 	q = quote
-		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(100))
+		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(100), seed=0)
+			if seed != 0
+				srand(seed)
+			end
 			if numsaltellis < 1
 				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
@@ -362,7 +371,7 @@ for mi = 1:length(names)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "method" => $(names[mi])*"_parallel" ]
+			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(names[mi])*"_parallel" ]
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -374,64 +383,64 @@ function printSAresults(madsdata, results)
 	tes = results["tes"]
 	N = results["samplesize"]
 	#=
-	Mads.madsoutput("Mean\n")
-	Mads.madsoutput("\t")
+	madsoutput("Mean\n")
+	madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(mean[obskey][paramkey])")
+			madsoutput("\t$(mean[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
-	Mads.madsoutput("\nVariance\n")
-	Mads.madsoutput("\t")
+	madsoutput("\nVariance\n")
+	madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(variance[obskey][paramkey])")
+			madsoutput("\t$(variance[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
 	=#
-	Mads.madsoutput("\nMain Effect Indices")
-	Mads.madsoutput("\t")
+	madsoutput("\nMain Effect Indices")
+	madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(mes[obskey][paramkey])")
+			madsoutput("\t$(mes[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
-	Mads.madsoutput("\nTotal Effect Indices")
-	Mads.madsoutput("\t")
+	madsoutput("\nTotal Effect Indices")
+	madsoutput("\t")
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(tes[obskey][paramkey])")
+			madsoutput("\t$(tes[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
 end
 
@@ -440,40 +449,40 @@ function saltelliprintresults2(madsdata, results)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
-	Mads.madsoutput("Main Effect Indices")
-	Mads.madsoutput("\t")
+	madsoutput("Main Effect Indices")
+	madsoutput("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(mes[obskey][paramkey])")
+			madsoutput("\t$(mes[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
-	Mads.madsoutput("\nTotal Effect Indices")
-	Mads.madsoutput("\t")
+	madsoutput("\nTotal Effect Indices")
+	madsoutput("\t")
 	for paramkey in paramkeys
-		Mads.madsoutput("\t$(paramkey)")
+		madsoutput("\t$(paramkey)")
 	end
-	Mads.madsoutput("\n")
+	madsoutput("\n")
 	for obskey in obskeys
-		Mads.madsoutput(obskey)
+		madsoutput(obskey)
 		for paramkey in paramkeys
-			Mads.madsoutput("\t$(tes[obskey][paramkey])")
+			madsoutput("\t$(tes[obskey][paramkey])")
 		end
-		Mads.madsoutput("\n")
+		madsoutput("\n")
 	end
 end
 
 @doc "Plot the sensitivity analysis results for each well (wells class epxpected)" ->
 function plotwellSAresults(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
-		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
+		madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	rootname = getmadsrootname(madsdata)
@@ -548,7 +557,7 @@ end
 @doc "Plot the sensitivity analysis results for the observations" ->
 function plotobsSAresults(madsdata, result)
 	if !haskey(madsdata, "Observations")
-		Mads.madserror("There is no 'Observations' data in the MADS input dataset")
+		madserror("There is no 'Observations' data in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]
@@ -657,7 +666,7 @@ function deleteNaN!(df::DataFrame)
 end
 
 @doc "Saltelli's eFAST " ->
-function efast(md; N=int(100), M=6, gamma=4, plotresults=0)
+function efast(md; N=int(100), M=6, gamma=4, plotresults=0, seed=0)
 #
 #
 #
@@ -721,6 +730,9 @@ function efast(md; N=int(100), M=6, gamma=4, plotresults=0)
 # Y:         2-d array of model output (Ns x Nr) (Or higher dimension if we are running mads or user defines dynamic system)
 #
 ##
+	if seed != 0
+		srand(seed)
+	end
 
 ################################### BEGIN - DEFINING MODULES ###################################
 
@@ -1094,18 +1106,18 @@ P = nprocs();
 
 ## I/O if we are reading from mads
 # Keys for all parameters
-paramallkeys  = Mads.getparamkeys(md)
+paramallkeys  = getparamkeys(md)
 # Values of this dictionary are intial values
 paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
 # Only the parameters we wish to analyze
-paramkeys     = Mads.getoptparamkeys(md)
+paramkeys     = getoptparamkeys(md)
 # All the observation sites and time points we will analyze them at
-obskeys       = Mads.getobskeys(md)
+obskeys       = getobskeys(md)
 # Get distributions for the parameters we will be performing SA on
-distributions = Mads.getparamdistributions(md)
+distributions = getparamdistributions(md)
 
 # Function for model output
-f = Mads.makemadscommandfunction(md)
+f = makemadscommandfunction(md)
 
 # This is here to delete parameters of interest from paramalldict
 # The parameters of interest will be calculated by eFAST_distributeX
@@ -1306,12 +1318,12 @@ if ismads == 1
 			end
 		end
 
-		return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast" ]
+		return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "seed" => seed, "method" => "efast" ]
 
 		# Plot results as .svg file
 		if plotresults == 1
 			madsinfo("""Plotting eFAST results as .svg file ... """)
-			Mads.plotwellSAresults("w1a",md,resultsefast)
+			plotwellSAresults("w1a",md,resultsefast)
 		end
 end #END if plotresults
 
