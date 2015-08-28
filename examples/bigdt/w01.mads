@@ -21,10 +21,10 @@ Sources:
     t0: {init: 1990, log: false, longname: 'Start Time [T]', max: 2000, min: 1980, type: null}
     t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: null}
 Choices:
-- {name: 2010, Parameters: {source1_t1: 2010}}
-- {name: 2015, Parameters: {source1_t1: 2015}}
-- {name: 2020, Parameters: {source1_t1: 2020}}
-- {name: 2025, Parameters: {source1_t1: 2025}}
+- {name: "Source terminated in 2010", Parameters: {source1_t1: 2010}}
+- {name: "Source terminated in 2015", Parameters: {source1_t1: 2015}}
+- {name: "Source terminated in 2020", Parameters: {source1_t1: 2020}}
+- {name: "Source terminated in 2025", Parameters: {source1_t1: 2025}}
 Performance Goals:
 - {name: "goal1", exp: "w2_2021", lessthan: 3000.}
 - {name: "goal2", exp: "w2_2022", lessthan: 3000.}
