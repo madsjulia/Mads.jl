@@ -6,6 +6,7 @@ syntax: glob
 *.wells
 *.wells_debug
 *.svg
+*.png
 *_[0-9]
 *.dat
 *.json

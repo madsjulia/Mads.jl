@@ -75,7 +75,8 @@ function makemakearrayconditionalloglikelihood(madsdata::Associative)
 	end
 end
 
-function plotrobustnesscurves(madsdata::Associative, maxfailureprobs::Matrix, horizons::Vector, filename::String)
+function plotrobustnesscurves(madsdata::Associative, maxfailureprobs::Matrix, horizons::Vector, filename::String; format="")
+	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
 	df = DataFrame(horizon=[], maxfailureprob=[], Choice=[])
 	for i = 1:size(maxfailureprobs, 2)
@@ -84,6 +85,6 @@ function plotrobustnesscurves(madsdata::Associative, maxfailureprobs::Matrix, ho
 	end
 	#p = Gadfly.plot(layers..., Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Max probability of failure"))
 	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choice", Geom.line, Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Max probability of failure"), Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
-	Gadfly.draw(Gadfly.SVG(filename, 4Gadfly.inch, 3Gadfly.inch), p)
+	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
 	return nothing
 end
