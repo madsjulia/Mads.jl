@@ -3,6 +3,7 @@ module Mads
 export madsinputfile
 
 import DataStructures # import is needed for parallel calls
+import Distributions
 using Optim
 using Lora
 using Distributions

@@ -1,5 +1,3 @@
-using Distributions
-using DataStructures
 if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
@@ -219,29 +217,40 @@ function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS c
 	return madscommandfunctionandgradient
 end
 
+function makelogprior(madsdata)
+	distributions = getparamdistributions(madsdata)
+	function logprior(params::Associative)
+		loglhood = 0.
+		for paramname in getoptparamkeys(madsdata)
+			loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
+		end
+		return loglhood
+	end
+end
+
 @doc "Make MADS loglikelihood function" ->
-function makemadsloglikelihood(madsdata)
+function makemadsloglikelihood(madsdata; weightfactor = 1.)
 	if haskey(madsdata, "LogLikelihood")
 		madsinfo("Internal log likelihood")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
 		madsinfo("External log likelihood")
-		distributions = getparamdistributions(madsdata)
+		logprior = makelogprior(madsdata)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
-			loglhood = 0.
-			for paramname in getoptparamkeys(madsdata)
-				loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
-			end
+			loglhood = logprior(params)
 			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 			for obsname in keys(predictions)
 				pred = predictions[obsname]
-				obs = observations[obsname]["target"]
-				diff = obs - pred
-				weight = 1
-				if haskey(observations[obsname], "weight")
-					weight = observations[obsname]["weight"]
+				if haskey(observations[obsname], "target")
+					obs = observations[obsname]["target"]
+					diff = obs - pred
+					weight = 1
+					if haskey(observations[obsname], "weight")
+						weight = observations[obsname]["weight"]
+					end
+					weight *= weightfactor
+					loglhood -= weight * weight * diff * diff
 				end
-				loglhood -= weight * weight * diff * diff
 			end
 			return loglhood
 		end
