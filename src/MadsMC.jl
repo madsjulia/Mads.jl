@@ -7,7 +7,8 @@ end
 # @document
 @docstrings
 
-function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String)
+function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String; format="")
+	filename, format = setimagefileformat(filename, format)
 	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
@@ -18,7 +19,9 @@ function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::Strin
 			end
 		end
 	end
-	draw(SVG(filename, (3 * size(samples, 2))inch, (3 * size(samples, 2))inch), Compose.gridstack(cs))
+	hsize = (3 * size(samples, 2))inch
+	vsize = (3 * size(samples, 2))inch
+	draw( eval( (symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 end
 
 @doc "Bayes Sampling " ->
@@ -100,7 +103,7 @@ function paramarray2dict(madsdata, array)
 end
 
 @doc "Create spaghetti plots for all the parameters separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; keyword="")
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="" )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -126,19 +129,21 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; keyword="")
 			paramdict[paramkey] = original
 		end
 		p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=3pt)),
-										[layer(x=t, y=Y[:,i], Geom.line,
-													 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-										 for i in 1:numberofsamples]...)
+								[layer(x=t, y=Y[:,i], Geom.line,
+								 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+								 for i in 1:numberofsamples]...)
 		if keyword == ""
-			Gadfly.draw(SVG(string("$rootname-$paramkey-$numberofsamples.svg"),6inch,4inch),p)
+			filename = string("$rootname-$paramkey-$numberofsamples")
 		else
-			Gadfly.draw(SVG(string("$rootname-$keyword-$paramkey-$numberofsamples.svg"),6inch,4inch),p)
+			filename = string("$rootname-$keyword-$paramkey-$numberofsamples")
 		end
+		filename, format = setimagefileformat(filename, format)
+		draw( eval( (symbol(format)))(filename, 6inch,4inch), p)
 	end
 end
 
 @doc "Create a spaghetti plot " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword="")
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", format="")
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -163,12 +168,14 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword="")
 		end
 	end
 	p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=3pt)),
-									[layer(x=t, y=Y[:,i], Geom.line,
-												 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-									 for i in 1:numberofsamples]...)
+					[layer(x=t, y=Y[:,i], Geom.line,
+					 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					 for i in 1:numberofsamples]...)
 	if keyword == ""
-		Gadfly.draw(SVG(string("$rootname-$numberofsamples.svg"),6inch,4inch),p)
+		filename = "$rootname-$numberofsamples"
 	else
-		Gadfly.draw(SVG(string("$rootname-$keyword-$numberofsamples.svg"),6inch,4inch),p)
+		filename = "$rootname-$keyword-$numberofsamples"
 	end
+	filename, format = setimagefileformat(filename, format)
+	draw( eval( (symbol(format)) )(filename, 6inch,4inch), p)
 end
