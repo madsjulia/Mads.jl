@@ -4,6 +4,8 @@ export madsinputfile
 
 import DataStructures # import is needed for parallel calls
 import Distributions
+import Gadfly
+import Compose
 using Optim
 using Lora
 using Distributions
@@ -32,6 +34,7 @@ include("MadsSA.jl")
 include("MadsMC.jl")
 include("MadsLM.jl")
 include("MadsAnasol.jl")
+include("MadsBIG.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL

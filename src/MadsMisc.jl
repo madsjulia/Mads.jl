@@ -43,6 +43,29 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 	return sinetransformedg
 end
 
+@doc "Make a version of f that accepts an array containing the opt parameters' values" ->
+function makearrayfunction(madsdata, f)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	function arrayfunction(arrayparameters::Vector)
+		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+	end
+	return arrayfunction
+end
+
+@doc "Make a conditional log likelihood function that accepts an array containing the opt parameters' values" ->
+function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
+	f = makemadscommandfunction(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	function arrayconditionalloglikelihood(arrayparameters::Vector)
+		predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
+		return cll
+	end
+	return arrayconditionalloglikelihood
+end
+
 @doc "Make a log likelihood function that accepts an array containing the opt parameters' values" ->
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
@@ -152,7 +175,7 @@ end
 @doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
-	MPTools.populateexpression!(expression, parameters)
+	expression = MPTools.populateexpression(expression, parameters)
 	retval::Float64
 	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
 	return retval

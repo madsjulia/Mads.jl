@@ -142,7 +142,10 @@ function makemadscommandfunction(madsdata) # make MADS command function
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 		error("MADS input file problem")
 	end
-	if !haskey(madsdata, "Restart") || madsdata["Restart"] != false
+	if haskey(madsdata, "Restart") && madsdata["Restart"] == "memory"
+		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
+		return madscommandfunctionwithreuse
+	elseif !haskey(madsdata, "Restart") || madsdata["Restart"] != false
 		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
 		if haskey(madsdata, "RestartDir")
 			rootdir = madsdata["RestartDir"]
@@ -228,31 +231,38 @@ function makelogprior(madsdata)
 	end
 end
 
+function makemadsconditionalloglikelihood(madsdata; weightfactor=1.)
+	function conditionalloglikelihood(predictions::Associative, observations::Associative)
+		loglhood = 0.
+		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
+		for obsname in keys(predictions)
+			pred = predictions[obsname]
+			if haskey(observations[obsname], "target")
+				obs = observations[obsname]["target"]
+				diff = obs - pred
+				weight = 1
+				if haskey(observations[obsname], "weight")
+					weight = observations[obsname]["weight"]
+				end
+				weight *= weightfactor
+				loglhood -= weight * weight * diff * diff
+			end
+		end
+		return loglhood
+	end
+end
+
 @doc "Make MADS loglikelihood function" ->
-function makemadsloglikelihood(madsdata; weightfactor = 1.)
+function makemadsloglikelihood(madsdata; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
 		madsinfo("Internal log likelihood")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
 		madsinfo("External log likelihood")
 		logprior = makelogprior(madsdata)
+		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
-			loglhood = logprior(params)
-			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
-			for obsname in keys(predictions)
-				pred = predictions[obsname]
-				if haskey(observations[obsname], "target")
-					obs = observations[obsname]["target"]
-					diff = obs - pred
-					weight = 1
-					if haskey(observations[obsname], "weight")
-						weight = observations[obsname]["weight"]
-					end
-					weight *= weightfactor
-					loglhood -= weight * weight * diff * diff
-				end
-			end
-			return loglhood
+			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
 	end
 	return madsloglikelihood
