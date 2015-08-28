@@ -24,20 +24,46 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 @doc "Sine transformation of a gradient function" ->
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a gradient function
+function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector; sindx = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector)
+		#TODO option needed to control sindx
 		params = sinetransform(sineparams, lowerbounds, upperbounds)
-		result = g(params)
-		f(x) = cos(x) / 2
-		transformgrad = (upperbounds - lowerbounds) .* f(sineparams)
-		for i = 1:size(result, 1)
-			for j = 1:size(result, 2)
-				result[i, j] *= transformgrad[j]
+		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds)
+		lineardx = dxparams - params
+		result = g(params; dx=lineardx)
+		lineardx ./= sindx
+		for j = 1:size(result, 2)
+			for i = 1:size(result, 1)
+				# println(result[i, j])
+				result[i, j] *= lineardx[j]
 			end
 		end
 		return result
 	end
 	return sinetransformedg
+end
+
+@doc "Make a version of f that accepts an array containing the opt parameters' values" ->
+function makearrayfunction(madsdata, f)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	function arrayfunction(arrayparameters::Vector)
+		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+	end
+	return arrayfunction
+end
+
+@doc "Make a conditional log likelihood function that accepts an array containing the opt parameters' values" ->
+function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
+	f = makemadscommandfunction(madsdata)
+	optparamkeys = getoptparamkeys(madsdata)
+	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	function arrayconditionalloglikelihood(arrayparameters::Vector)
+		predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
+		return cll
+	end
+	return arrayconditionalloglikelihood
 end
 
 @doc "Make a log likelihood function that accepts an array containing the opt parameters' values" ->
@@ -63,16 +89,22 @@ function setdynamicmodel(madsdata, f::Function)
 end
 
 @doc "Create functions to get values of the MADS parameters" ->
-getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log"]
-getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any]
+getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step"]
+getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64]
+getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32))]
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]
+	paramdefault = getparamsdefault[i]
 	q = quote
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
-				paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
+				if haskey( madsdata["Parameters"][paramkeys[i]], $paramname)
+					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
+				else
+					paramvalue[i] = $(paramdefault)
+				end
 			end
 			return paramvalue # returns the parameter values
 		end
@@ -143,7 +175,7 @@ end
 @doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
-	MPTools.populateexpression!(expression, parameters)
+	expression = MPTools.populateexpression(expression, parameters)
 	retval::Float64
 	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
 	return retval

@@ -1,4 +1,4 @@
-Problem: { calibration, ldebug: 1, sindx: 0.1, single, eval: 5000, opt: "lm", particles, lmeigen: 1, ssr }
+Problem: { }
 Solution: external
 Parameters:
 - a : { longname: "parameter a", init:  1, type: opt, log: no, step: 0.1, min: -10, max: 10 }

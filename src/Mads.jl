@@ -3,6 +3,9 @@ module Mads
 export madsinputfile
 
 import DataStructures # import is needed for parallel calls
+import Distributions
+import Gadfly
+import Compose
 using Optim
 using Lora
 using Distributions
@@ -31,6 +34,7 @@ include("MadsSA.jl")
 include("MadsMC.jl")
 include("MadsLM.jl")
 include("MadsAnasol.jl")
+include("MadsBIG.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
@@ -51,7 +55,7 @@ function savecalibrationresults(madsdata, results)
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false)
+function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = getmadsrootname(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -66,7 +70,11 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
 		close(outfile)
 	end
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+	if usenaive
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+	else
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+	end
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	nonoptparamkeys = getnonoptparamkeys(madsdata)
 	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))

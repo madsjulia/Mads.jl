@@ -1,5 +1,3 @@
-using Distributions
-using DataStructures
 if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
@@ -173,7 +171,10 @@ function makemadscommandfunction(madsdata) # make MADS command function
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 		error("MADS input file problem")
 	end
-	if !haskey(madsdata, "Restart") || madsdata["Restart"] != false
+	if haskey(madsdata, "Restart") && madsdata["Restart"] == "memory"
+		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
+		return madscommandfunctionwithreuse
+	elseif !haskey(madsdata, "Restart") || madsdata["Restart"] != false
 		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
 		if haskey(madsdata, "RestartDir")
 			rootdir = madsdata["RestartDir"]
@@ -196,31 +197,10 @@ function makemadscommandgradient(madsdata) # make MADS command gradient function
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata, f::Function) # make MADS command gradient function
-	optparamkeys = getoptparamkeys(madsdata)
-	function madscommandgradient(parameters::Dict) # MADS command gradient function
-		xph = Dict()
-		h = sqrt(eps(Float32))
-		xph["noparametersvaried"] = parameters
-		i = 2
-		for optparamkey in optparamkeys
-			xph[optparamkey] = copy(parameters)
-			xph[optparamkey][optparamkey] += h
-			i += 1
-		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
-		fevalsdict = Dict()
-		for feval in fevals
-			fevalsdict[feval[1]] = feval[2]
-		end
-		gradient = Dict()
-		resultkeys = keys(fevals[1][2])
-		for resultkey in resultkeys
-			gradient[resultkey] = Dict()
-			for optparamkey in optparamkeys
-				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
-			end
-		end
+function makemadscommandgradient(madsdata, f)
+	fg = makemadscommandfunctionandgradient(madsdata, f)
+	function madscommandgradient(parameters::Dict; dx=Array(Float64,0))
+		forwardrun, gradient = fg(parameters; dx=dx)
 		return gradient
 	end
 	return madscommandgradient
@@ -229,18 +209,26 @@ end
 @doc "Make MADS command function & gradient function" ->
 function makemadscommandfunctionandgradient(madsdata)
 	f = makemadscommandfunction(madsdata)
+	return makemadscommandfunctionandgradient(madsdata, f)
+end
+
+@doc "Make MADS command function and gradient function" ->
+function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
-	function madscommandfunctionandgradient(parameters::Dict) # MADS command gradient function
+	lineardx = getparamsstep(madsdata, optparamkeys)
+	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0)) # MADS command gradient function
+		if sizeof(dx) == 0
+			dx = lineardx
+		end
 		xph = Dict()
-		h = sqrt(eps(Float32))
-		xph["noparametersvaried"] = parameters
-		i = 2
-		for optparamkey in optparamkeys
+		xph["noparametersvaried"] = parameters # TODO in the case of LM, we typically we already know this
+		i = 1
+		for optparamkey in optparamkeys # TODO make sure that the order matches; WE SHOULD USE ONLY OrderedDict
 			xph[optparamkey] = copy(parameters)
-			xph[optparamkey][optparamkey] += h
+			xph[optparamkey][optparamkey] += dx[i]
 			i += 1
 		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph) # TODO we shoud not computer xph["noparametersvaried"] if already available
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
@@ -249,8 +237,11 @@ function makemadscommandfunctionandgradient(madsdata)
 		resultkeys = keys(fevals[1][2])
 		for resultkey in resultkeys
 			gradient[resultkey] = Dict()
+			i = 1
 			for optparamkey in optparamkeys
-				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / h
+				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / dx[i]
+				# println("$optparamkey $resultkey : (", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], ") / ", dx[i], "=", gradient[resultkey][optparamkey])
+				i += 1
 			end
 		end
 		return fevalsdict["noparametersvaried"], gradient
@@ -258,31 +249,49 @@ function makemadscommandfunctionandgradient(madsdata)
 	return madscommandfunctionandgradient
 end
 
-@doc "Make MADS loglikelihood function" ->
-function makemadsloglikelihood(madsdata)
-	if haskey(madsdata, "LogLikelihood")
-		madsinfo("Internal log likelihood")
-		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
-	else
-		madsinfo("External log likelihood")
-		distributions = getparamdistributions(madsdata)
-		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
-			loglhood = 0.
-			for paramname in getoptparamkeys(madsdata)
-				loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
-			end
-			#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
-			for obsname in keys(predictions)
-				pred = predictions[obsname]
+function makelogprior(madsdata)
+	distributions = getparamdistributions(madsdata)
+	function logprior(params::Associative)
+		loglhood = 0.
+		for paramname in getoptparamkeys(madsdata)
+			loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
+		end
+		return loglhood
+	end
+end
+
+function makemadsconditionalloglikelihood(madsdata; weightfactor=1.)
+	function conditionalloglikelihood(predictions::Associative, observations::Associative)
+		loglhood = 0.
+		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
+		for obsname in keys(predictions)
+			pred = predictions[obsname]
+			if haskey(observations[obsname], "target")
 				obs = observations[obsname]["target"]
 				diff = obs - pred
 				weight = 1
 				if haskey(observations[obsname], "weight")
 					weight = observations[obsname]["weight"]
 				end
+				weight *= weightfactor
 				loglhood -= weight * weight * diff * diff
 			end
-			return loglhood
+		end
+		return loglhood
+	end
+end
+
+@doc "Make MADS loglikelihood function" ->
+function makemadsloglikelihood(madsdata; weightfactor=1.)
+	if haskey(madsdata, "LogLikelihood")
+		madsinfo("Internal log likelihood")
+		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
+	else
+		madsinfo("External log likelihood")
+		logprior = makelogprior(madsdata)
+		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
+		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
+			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
 	end
 	return madsloglikelihood
@@ -316,7 +325,7 @@ end
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
-	if line[1:9] == "template "
+	if length(line) >= 10 && line[1:9] == "template "
 		separator = line[10] # template separator
 		lines = readlines(tplfile)
 	else
