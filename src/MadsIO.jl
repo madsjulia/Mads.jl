@@ -34,31 +34,31 @@ end
 
 @doc "Get file name extension" ->
 function getextension(filename)
-  split(filename, ".")[end]
+	split(filename, ".")[end]
 end
 
 @doc "Set image file format" ->
 function setimagefileformat(filename, format)
-  extension = uppercase(getextension(filename))
-  if format == ""
-    format = extension
-  end
-  if ismatch(r"^PNG|PDF|PS|SVG", format)
-    if format != extension
-      filename = filename*"."*lowercase(format)
-    end
-  elseif format == "EPS"
-    if !ismatch(r"^EPS|PS", extension)
-      filename = filename*".eps"
-    end
-    format = "PS"
-  else
-    if "SVG" != extension
-      filename = filename*".svg"
-    end
-    format = "SVG"
-  end
-  return filename, format
+	extension = uppercase(getextension(filename))
+	if format == ""
+		format = extension
+	end
+	if ismatch(r"^PNG|PDF|PS|SVG", format)
+		if format != extension
+			filename = filename*"."*lowercase(format)
+		end
+	elseif format == "EPS"
+		if !ismatch(r"^EPS|PS", extension)
+			filename = filename*".eps"
+		end
+		format = "PS"
+	else
+		if "SVG" != extension
+			filename = filename*".svg"
+		end
+		format = "SVG"
+	end
+	return filename, format
 end
 
 @doc "Get MADS problem directory" ->
@@ -272,17 +272,14 @@ function plotmadsproblem(madsdata; format="", filename="")
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
-			println(size(dfw)[1])
-			if size(dfw)[1] > 0
-				for i = 1:size(dfw)[1]
-					if dfw[1][i] == x && dfw[2][i] == y
-						match = true
-						break
-					end
+			for i = 1:size(dfw)[1]
+				if dfw[1][i] == x && dfw[2][i] == y
+					match = true
+					break
 				end
 			end
 			if !match
-				push!(dfw, (x, x, wellkey, "Wells"))
+				push!(dfw, (x, y, wellkey, "Wells"))
 			end
 		end
 	end
@@ -298,12 +295,11 @@ function plotmadsproblem(madsdata; format="", filename="")
 	xmax = xmax + dx / 6
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
-	println(dfw)
 	p = plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
-			 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-			 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill("orange"), Compose.stroke("orange"))),
-			 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-			 Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+					 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
+					 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill("orange"), Compose.stroke("orange"))),
+					 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
+					 Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
