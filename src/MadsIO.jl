@@ -282,7 +282,7 @@ function plotmadsproblem(madsdata; format="", filename="")
 				end
 			end
 			if !match
-				push!(dfw, (madsdata["Wells"][wellkey]["x"], madsdata["Wells"][wellkey]["y"], wellkey, "Wells"))
+				push!(dfw, (x, x, wellkey, "Wells"))
 			end
 		end
 	end
