@@ -37,7 +37,6 @@ function getextension(filename)
   split(filename, ".")[end]
 end
 
-
 @doc "Set image file format" ->
 function setimagefileformat(filename, format)
   extension = uppercase(getextension(filename))
@@ -208,6 +207,7 @@ function allwellson!(madsdata)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = true
 	end
+	wells2observations!(madsdata)
 end
 
 @doc "Turn on a specific well" ->
@@ -221,6 +221,8 @@ function wellon!(madsdata, wellname::String)
 	end
 	if error
 		Mads.err("""Well name $wellname does not match existing well names!""")
+	else
+		wells2observations!(madsdata)
 	end
 end
 
@@ -229,6 +231,7 @@ function allwellsoff!(madsdata)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = false
 	end
+	wells2observations!(madsdata)
 end
 
 @doc "Turn off a specific well" ->
@@ -242,6 +245,8 @@ function welloff!(madsdata, wellname::String)
 	end
 	if error
 		Mads.err("""Well name $wellname does not match existing well names!""")
+	else
+		wells2observations!(madsdata)
 	end
 end
 

@@ -51,30 +51,35 @@ function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
 end
 
 function naive_lm_iteration(f::Function, g::Function, x0::Vector, f0::Vector, lambdas::Vector)
-	J = g(x0)#get jacobian
+	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
-	deltaxs = pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas)#get the deltax for each lambda
-	fs = pmap(deltax->f(x0 + deltax), deltaxs)#get the residuals for each deltax
-	sses = pmap(sse, fs)#get the sum of squared residuals for each forward run
-	bestindex = indmin(sses)#find the best forward run
+	deltaxs = pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
+	fs = pmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
+	sses = pmap(sse, fs) # get the sum of squared residuals for each forward run
+	bestindex = indmin(sses) # find the best forward run
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101,  lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
 	currentsse = Inf
+	nEval = 1
 	for iternum = 1:maxIter
 		currentx, currentsse, currentf = naive_lm_iteration(f, g, currentx, currentf, lambdas)
+		nEval += np_lambda * maxIter
+		if maxEval < nEval
+			break
+		end
 		@show currentx
 		@show currentsse
 	end
-	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), 1 + np_lambda * maxIter, maxIter)
+	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxEval=1001, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -134,7 +139,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
 	first = true
-	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians)
+	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians && f_calls < maxEval)
 		J = g(x)
 		if root != ""
 			writedlm("$(root)-lmjacobian.dat", J)
