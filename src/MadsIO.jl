@@ -266,11 +266,24 @@ function plotmadsproblem(madsdata; format="", filename="")
 			end
 		end
 	end
-	println(rectangles)
 	dfw = DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
-			push!(dfw, (madsdata["Wells"][wellkey]["x"], madsdata["Wells"][wellkey]["y"], wellkey, "Wells"))
+			match = false
+			x = madsdata["Wells"][wellkey]["x"]
+			y = madsdata["Wells"][wellkey]["y"]
+			println(size(dfw)[1])
+			if size(dfw)[1] > 0
+				for i = 1:size(dfw)[1]
+					if dfw[1][i] == x && dfw[2][i] == y
+						match = true
+						break
+					end
+				end
+			end
+			if !match
+				push!(dfw, (madsdata["Wells"][wellkey]["x"], madsdata["Wells"][wellkey]["y"], wellkey, "Wells"))
+			end
 		end
 	end
 	xo = rectangles[:,1] + rectangles[:,3]
@@ -285,7 +298,8 @@ function plotmadsproblem(madsdata; format="", filename="")
 	xmax = xmax + dx / 6
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
-	p = plot(dfw, x="x", y="y", label=3, color="category", Geom.point, Geom.label,
+	println(dfw)
+	p = plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
 			 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
 			 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill("orange"), Compose.stroke("orange"))),
 			 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
