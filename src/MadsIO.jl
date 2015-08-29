@@ -20,10 +20,23 @@ function getmadsrootname(madsdata)
 	join(split(madsdata["Filename"], ".")[1:end-1], ".")
 end
 
+@doc "Get MADS problem dir" ->
+function getmadsdir()
+	source_path = Base.source_path()
+	if typeof(source_path) == Nothing
+		problemdir = ""
+	else
+		problemdir = string((dirname(source_path))) * "/"
+		Mads.madsinfo("Problem directory: $(problemdir)")
+	end
+	return problemdir
+end
+
 @doc "Get file name extension" ->
 function getextension(filename)
   split(filename, ".")[end]
 end
+
 
 @doc "Set image file format" ->
 function setimagefileformat(filename, format)
@@ -46,7 +59,7 @@ function setimagefileformat(filename, format)
     end
     format = "SVG"
   end
-  return filename, format 
+  return filename, format
 end
 
 @doc "Get MADS problem directory" ->
@@ -188,6 +201,123 @@ function makemadscommandfunction(madsdata) # make MADS command function
 	else
 		return madscommandfunction
 	end
+end
+
+@doc "Turn on all Wells" ->
+function allwellson!(madsdata)
+	for wellkey in collect(keys(madsdata["Wells"]))
+		madsdata["Wells"][wellkey]["on"] = true
+	end
+end
+
+@doc "Turn on a specific well" ->
+function wellon!(madsdata, wellname::String)
+	error = true
+	for wellkey in collect(keys(madsdata["Wells"]))
+		if wellname == wellkey
+			madsdata["Wells"][wellkey]["on"] = true
+			error = false
+		end
+	end
+	if error
+		Mads.err("""Well name $wellname does not match existing well names!""")
+	end
+end
+
+@doc "Turn off all Wells" ->
+function allwellsoff!(madsdata)
+	for wellkey in collect(keys(madsdata["Wells"]))
+		madsdata["Wells"][wellkey]["on"] = false
+	end
+end
+
+@doc "Turn off a specific well" ->
+function welloff!(madsdata, wellname::String)
+	error = true
+	for wellkey in collect(keys(madsdata["Wells"]))
+		if wellname == wellkey
+			madsdata["Wells"][wellkey]["on"] = false
+			error = false
+		end
+	end
+	if error
+		Mads.err("""Well name $wellname does not match existing well names!""")
+	end
+end
+
+@doc "Plot MADS problem" ->
+function plotmadsproblem(madsdata; format="", filename="")
+	if haskey(madsdata, "Sources")
+		rectangles = Array(Float64, 0, 4)
+		for i = 1:length(madsdata["Sources"])
+			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
+			if sourcetype == "box"
+				rectangle = Array(Float64, 4)
+				rectangle[1] = madsdata["Sources"][i][sourcetype]["x"]["init"] - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
+				rectangle[2] = madsdata["Sources"][i][sourcetype]["y"]["init"] - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
+				rectangle[3] = madsdata["Sources"][i][sourcetype]["dx"]["init"]
+				rectangle[4] = madsdata["Sources"][i][sourcetype]["dy"]["init"]
+				rectangles = vcat(rectangles, rectangle')
+			end
+		end
+	end
+	println(rectangles)
+	dfw = DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
+	for wellkey in collect(keys(madsdata["Wells"]))
+		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+			push!(dfw, (madsdata["Wells"][wellkey]["x"], madsdata["Wells"][wellkey]["y"], wellkey, "Wells"))
+		end
+	end
+	xo = rectangles[:,1] + rectangles[:,3]
+	yo = rectangles[:,2] + rectangles[:,4]
+	xmin = min(dfw[1]..., rectangles[:,1]...)
+	ymin = min(dfw[2]..., rectangles[:,2]...)
+	xmax = max(dfw[1]..., xo...)
+	ymax = max(dfw[2]..., yo...)
+	dx = xmax - xmin
+	dy = ymax - ymin
+	xmin = xmin - dx / 6
+	xmax = xmax + dx / 6
+	ymin = ymin - dy / 6
+	ymax = ymax + dy / 6
+	p = plot(dfw, x="x", y="y", label=3, color="category", Geom.point, Geom.label,
+			 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
+			 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill("orange"), Compose.stroke("orange"))),
+			 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
+			 Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+	if filename == ""
+		rootname = getmadsrootname(madsdata)
+		filename = "$rootname-problemsetup"
+	end
+	filename, format = setimagefileformat(filename, format)
+	Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), p)
+	p
+end
+
+@doc "Convert Wells to Observations class" ->
+function wells2observations!(madsdata)
+	observations = DataStructures.OrderedDict()
+	for wellkey in collect(keys(madsdata["Wells"]))
+		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
+				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
+				obskey = wellkey * "_" * string(t)
+				data = DataStructures.OrderedDict()
+				data["well"] = wellkey
+				data["time"] = t
+				if haskey(madsdata["Wells"][wellkey]["obs"][i][i], "c") && !haskey(madsdata["Wells"][wellkey]["obs"][i][i], "target")
+					data["target"] = madsdata["Wells"][wellkey]["obs"][i][i]["c"]
+				end
+				for datakey in keys(madsdata["Wells"][wellkey]["obs"][i][i])
+					if datakey != "c" && datakey != "t"
+						data[datakey] = madsdata["Wells"][wellkey]["obs"][i][i][datakey]
+					end
+				end
+				observations[obskey] = data
+			end
+		end
+	end
+	madsdata["Observations"] = observations
 end
 
 @doc "Make MADS command gradient function" ->

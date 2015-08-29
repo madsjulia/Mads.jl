@@ -19,6 +19,7 @@ using PyCall
 
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
+	using Lexicon
 	using Dates
 end
 if !in(dirname(Base.source_path()), LOAD_PATH)
@@ -47,7 +48,7 @@ const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 # @document
 @docstrings
 
-@doc "TODO Save calibration results" ->
+@doc "Save calibration results" ->
 function savecalibrationresults(madsdata, results)
 	#TODO map estimated parameters on a new madsdata structure
 	#TODO save madsdata in yaml file using dumpyamlmadsfile

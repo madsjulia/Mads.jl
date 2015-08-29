@@ -39,94 +39,74 @@ end
 
 @doc "Load YAML MADS file" ->
 function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
-	madsdict = loadyamlfile(filename)
-	if haskey(madsdict, "Parameters")
+	madsdata = loadyamlfile(filename)
+	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
-		for dict in madsdict["Parameters"]
+		for dict in madsdata["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
 					parameters[key] = dict[key]
 				else
-					if !haskey(madsdict, "Expressions")
-						madsdict["Expressions"] = DataStructures.OrderedDict()
+					if !haskey(madsdata, "Expressions")
+						madsdata["Expressions"] = DataStructures.OrderedDict()
 					end
-					madsdict["Expressions"][key] = dict[key]
+					madsdata["Expressions"][key] = dict[key]
 				end
 			end
 		end
-		madsdict["Parameters"] = parameters
+		madsdata["Parameters"] = parameters
 	end
-	if haskey(madsdict, "Sources")
-		for i = 1:length(madsdict["Sources"])
-			sourcetype = collect(keys(madsdict["Sources"][i]))[1]
-			sourceparams = keys(madsdict["Sources"][i][sourcetype])
+	if haskey(madsdata, "Sources")
+		for i = 1:length(madsdata["Sources"])
+			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
+			sourceparams = keys(madsdata["Sources"][i][sourcetype])
 			for sourceparam in sourceparams
-				madsdict["Parameters"][string("source", i, "_", sourceparam)] = madsdict["Sources"][i][sourcetype][sourceparam]
+				madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
 			end
 		end
 	end
-	if haskey(madsdict, "Wells")
+	if haskey(madsdata, "Wells")
 		wells = DataStructures.OrderedDict()
-		for dict in madsdict["Wells"]
+		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
 			end
 		end
-		madsdict["Wells"] = wells
+		madsdata["Wells"] = wells
+		Mads.wells2observations!(madsdata)
+	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
 		observations = DataStructures.OrderedDict()
-		for wellkey in collect(keys(madsdict["Wells"]))
-			for i in 1:length(madsdict["Wells"][wellkey]["obs"])
-				t = madsdict["Wells"][wellkey]["obs"][i][i]["t"]
-				obskey = wellkey * "_" * string(t)
-				data = DataStructures.OrderedDict()
-				data["well"] = wellkey
-				data["time"] = t
-				if haskey(madsdict["Wells"][wellkey]["obs"][i][i], "c") && !haskey(madsdict["Wells"][wellkey]["obs"][i][i], "target")
-					data["target"] = madsdict["Wells"][wellkey]["obs"][i][i]["c"]
-				end
-				for datakey in keys(madsdict["Wells"][wellkey]["obs"][i][i])
-					if datakey != "c" && datakey != "t"
-						data[datakey] = madsdict["Wells"][wellkey]["obs"][i][i][datakey]
-					end
-				end
-				observations[obskey] = data
-			end
-		end
-		madsdict["Observations"] = observations
-	elseif haskey(madsdict, "Observations") # TODO drop zero weight observations
-		observations = DataStructures.OrderedDict()
-		for dict in madsdict["Observations"]
+		for dict in madsdata["Observations"]
 			for key in keys(dict)
 				observations[key] = dict[key]
 			end
 		end
-		madsdict["Observations"] = observations
+		madsdata["Observations"] = observations
 	end
-	if haskey(madsdict, "Templates")
-		templates = Array(Dict, length(madsdict["Templates"]))
+	if haskey(madsdata, "Templates")
+		templates = Array(Dict, length(madsdata["Templates"]))
 		i = 1
-		for dict in madsdict["Templates"]
+		for dict in madsdata["Templates"]
 			for key in keys(dict) # this should only iterate once
 				templates[i] = dict[key]
 			end
 			i += 1
 		end
-		madsdict["Templates"] = templates
+		madsdata["Templates"] = templates
 	end
-	if haskey(madsdict, "Instructions")
-		instructions = Array(Dict, length(madsdict["Instructions"]))
+	if haskey(madsdata, "Instructions")
+		instructions = Array(Dict, length(madsdata["Instructions"]))
 		i = 1
-		for dict in madsdict["Instructions"]
+		for dict in madsdata["Instructions"]
 			for key in keys(dict) # this should only iterate once
 				instructions[i] = dict[key]
 			end
 			i += 1
 		end
-		madsdict["Instructions"] = instructions
+		madsdata["Instructions"] = instructions
 	end
-	madsdict["Filename"] = filename
-	madsdatadict = madsdict
-	return madsdict
+	madsdata["Filename"] = filename
+	return madsdata
 end
 
 @doc "Dump YAML MADS file" ->

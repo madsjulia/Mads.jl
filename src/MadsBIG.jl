@@ -75,7 +75,11 @@ function makemakearrayconditionalloglikelihood(madsdata::Associative)
 	end
 end
 
-function plotrobustnesscurves(madsdata::Associative, maxfailureprobs::Matrix, horizons::Vector, filename::String; format="")
+function plotrobustnesscurves(madsdata::Associative, maxfailureprobs::Matrix, horizons::Vector; filename="", format="")
+	if filename == ""
+		rootname = Mads.madsrootname(madsdata)
+		filename =  rootname * "-robustness"
+	end
 	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
 	df = DataFrame(horizon=[], maxfailureprob=[], Choice=[])
