@@ -178,11 +178,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			madswarn(@sprintf "#%02d lambda: %e" npl lambda_current)
 			u, s, v = svd(JpJ + lambda_current * DtDidentity)
 			delta_x = (v * inv(diagm(s)) * u') * -J' * fcur
-			println(delta_x)
+			# println(delta_x)
 			# delta_x = (JpJ + lambda_current * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			madswarn(@sprintf "#%02d OF (est): %f" npl predicted_residual)
+			madsoutput(@sprintf "#%02d OF (est): %f" npl predicted_residual; level = 4)
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
 				madsoutput(" -> not good"; level = 2)
 				if np_lambda == 1
@@ -253,4 +253,26 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		converged = g_converged | x_converged
 	end
 	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, sse(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
+end
+
+function plotmatches(madsdata, result; filename="", format="")
+	rootname = getmadsrootname(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
+	nT = length(obskeys)
+	c = Array(Float64, nT)
+	t = Array(Float64, nT)
+	d = Array(Float64, nT)
+	for i in 1:nT
+		t[i] = madsdata["Observations"][obskeys[i]]["time"]
+		d[i] = madsdata["Observations"][obskeys[i]]["target"]
+		c[i] = result[obskeys[i]]
+	end
+	p=Gadfly.plot(layer(x=t,y=c,Geom.line,Theme(default_color=color("blue"),line_width=3pt)),
+		layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=6pt)))
+	if filename == ""
+		filename = "$rootname-match"
+	end
+	filename, format = setimagefileformat(filename, format)
+	Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), p)
+	p
 end

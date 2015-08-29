@@ -1,7 +1,5 @@
 module Mads
 
-export madsinputfile
-
 import DataStructures # import is needed for parallel calls
 import Distributions
 import Gadfly
@@ -11,7 +9,7 @@ using Lora
 using Distributions
 using Logging
 import JSON
-#using NLopt
+using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
 using PyCall
 @pyimport yaml # PyYAML installation is problematic on some machines
@@ -40,13 +38,22 @@ include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
 Logging.configure(level=DEBUG)
-madsverbositylevel = 1
-madsdebuglevel = 1
-madsinputfile = ""
+verbositylevel = 1
+debuglevel = 1
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
 @docstrings
+
+@doc "Set MADS debug level" ->
+function setdebuglevel(level::Int)
+	global debuglevel = level
+end
+
+@doc "Set MADS verbosity level" ->
+function setverbositylevel(level::Int)
+	global verbositylevel = level
+end
 
 @doc "Save calibration results" ->
 function savecalibrationresults(madsdata, results)

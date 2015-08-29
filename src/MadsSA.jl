@@ -47,20 +47,20 @@ end
 
 @doc "Local sensitivity analysis" ->
 function localsa(madsdata; format="")
-	if format == ""
-		format = uppercase(a[end-2:end])
-	end
-	f_lm, g_lm = makelmfunctions(madsdata)
-	paramkeys = getparamkeys(madsdata)
-	nP = length(paramkeys)
-	initparams = getparamsinit(madsdata)
 	rootname = getmadsrootname(madsdata)
+	f_lm, g_lm = makelmfunctions(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
+	nP = length(paramkeys)
+	initparams = getparamsinit(madsdata, paramkeys)
 	J = g_lm(initparams)
 	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
 							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
-	draw(PDF("$(rootname)-jacobian.pdf",6inch,12inch),jacmat)
+	filename = "$(rootname)-jacobian"
+	filename, format = setimagefileformat(filename, format)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
+	Mads.info("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
 	# covar = inv(JpJ) # produces resulut similar to svd
 	u, s, v = svd(JpJ)
@@ -76,16 +76,19 @@ function localsa(madsdata; format="")
 	writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
 	eigenv = abs(eigenv)
-	index=sortperm(eigenv)
+	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
-	sortedeigenm = eigenm[:,index]
+	sortedeigenm = real(eigenm[:,index])
 	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	eigenmat = spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)
-	draw(PDF("$(rootname)-eigen.pdf",6inch,12inch),eigenplot)
+	filename = "$(rootname)-eigen"
+	filename, format = setimagefileformat(filename, format)
+	Gadfly.draw( eval(symbol(format))(filename,6inch,12inch), eigenplot)
+	Mads.info("""Eigen matrix plot saved in $filename""")
 	["eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev]
 end
 

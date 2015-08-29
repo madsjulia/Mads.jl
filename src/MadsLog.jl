@@ -1,12 +1,12 @@
 @doc "MADS output" ->
 function madsoutput(message::String; level=0)
-	if level <= madsverbositylevel
+	if level <= verbositylevel
 		print(message) # level 0
 	end
 end
 @doc "MADS debug messages" ->
 function madsdebug(message::String; level=0)
-	if level <= madsdebuglevel
+	if level <= debuglevel
 		debug(message) # level 0
 	end
 end
