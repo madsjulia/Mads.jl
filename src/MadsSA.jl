@@ -27,8 +27,8 @@ function parametersample(madsdata, numsamples, parameterkey="")
 						dist = paramdist[k]
 						if typeof(dist) == Uniform
 							a = log10(dist.a)
-							b = log10(dist.a)
-							values = 10^(a + (b - a) * Distributions.rand(numsamples))
+							b = log10(dist.b)
+							values = 10.^(a + (b - a) * Distributions.rand(numsamples))
 						elseif typeof(dist) == Normal
 							μ = log10(dist.μ)
 							values = 10.^(μ + dist.σ * Distributions.randn(numsamples))
