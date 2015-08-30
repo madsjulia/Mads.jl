@@ -13,7 +13,7 @@ using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
 using PyCall
 @pyimport yaml # PyYAML installation is problematic on some machines
-# using YAML # use YAML if PyYAML is not available
+using YAML # use YAML if PyYAML is not available
 
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4

@@ -3,8 +3,9 @@ if isdefined(:yaml) # using PyCall and PyYAML
 	function loadyamlfile(filename::String) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
-		# yamldata = YAML.load(f) # works; however Julia YAML cannot write
-		yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
+		yamldata = YAML.load(f) # works better; "1e6" correctly interpreted as a number
+		#TODO do not use yaml.load(f); "1e6" interpreted as a string
+		# yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
 		close(f)
 		return yamldata
 	end

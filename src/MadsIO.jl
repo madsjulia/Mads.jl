@@ -295,7 +295,7 @@ function plotmadsproblem(madsdata; format="", filename="")
 	xmax = xmax + dx / 6
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
-	p = plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
+	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
 					 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
 					 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill("orange"), Compose.stroke("orange"))),
 					 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
@@ -305,7 +305,7 @@ function plotmadsproblem(madsdata; format="", filename="")
 		filename = "$rootname-problemsetup"
 	end
 	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), p)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
 	p
 end
 
