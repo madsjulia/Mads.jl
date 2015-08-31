@@ -10,7 +10,7 @@ Parameters:
 - ay: {init: 15, log: true, longname: 'Dispersivity y [L]', max: 30, min: 1, type: null}
 - az: {init: 0.3, log: true, longname: 'Dispersivity z [L]', max: 1, min: 0.1, type: null}
 Sources:
-- box:
+- box: {
     x: {init: 0, log: false, longname: 'Source x coordinate [L]', max: 500, min: 0, type: null}
     y: {init: 100, log: false, longname: 'Source y coordinate [L]', max: 500, min: -500, type: null}
     z: {init: 0, log: false, longname: 'Source z coordinate [L]', max: 100, min: 0, type: null}
@@ -19,7 +19,7 @@ Sources:
     dz: {init: 1, log: false, longname: 'Source z dimension [L]', max: 10, min: 1, type: null}
     f: {init: 50000, log: true, longname: 'Contaminant flux [M/T]', max: 1.0e+6, min: 500, type: null}
     t0: {init: 1990, log: false, longname: 'Start Time [T]', max: 2000, min: 1980, type: null}
-    t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: null}
+    t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: null} }
 Choices:
 - {name: "Source terminated in 2010", Parameters: {source1_t1: 2010}}
 - {name: "Source terminated in 2015", Parameters: {source1_t1: 2015}}

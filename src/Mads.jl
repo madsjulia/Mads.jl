@@ -62,8 +62,27 @@ function savecalibrationresults(madsdata, results)
 	#TODO save residuals, predictions, observations (yaml?)
 end
 
+@doc "Calibrate with random initial guesses" ->
+function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+	paramkeys = Mads.getparamkeys(madsdata)
+	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
+	paramsoptdict = paramdict
+	paramoptvalues = Mads.parametersample(madsdata, numberofsamples)
+	bestresult = Any()
+	bestphi = Inf
+	for i in 1:numberofsamples
+		for paramkey in keys(paramoptvalues)
+			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
+		end
+		Mads.setparamsinit!(madsdata, paramsoptdict)
+		result = Mads.calibrate(madsdata; quiet=true, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+
+	end
+	Mads.setparamsinit!(madsdata, paramdict)
+end
+
 @doc "Calibrate " ->
-function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibrate(madsdata; quiet=false, tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = getmadsrootname(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -81,7 +100,7 @@ function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, la
 	if usenaive
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); quiet=true, root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
 	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
 	nonoptparamkeys = getnonoptparamkeys(madsdata)

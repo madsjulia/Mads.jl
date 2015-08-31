@@ -1,4 +1,5 @@
 import MPTools
+using DataStructures
 using Distributions
 include("MadsIO.jl")
 
@@ -117,7 +118,14 @@ for i = 1:length(getparamsnames)
 end
 
 @doc "Set initial parameters in the MADS dictionary" ->
-function setparamsinit!(madsdata, paramdict::Dict)
+function setparamsinit!(madsdata::Dict, paramdict::Dict)
+	od = OrderedDict() #TODO better way to do this?!
+	od = merge(od, paramdict)
+	setparamsinit!(madsdata, od)
+end
+
+@doc "Set initial parameters in the MADS dictionary" ->
+function setparamsinit!(madsdata::Dict, paramdict::OrderedDict)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
