@@ -111,7 +111,7 @@ function loadyamlmadsfile(filename::String) # load MADS input file in YAML forma
 end
 
 @doc "Dump YAML MADS file" ->
-function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in YAML forma
+function dumpyamlmadsfile(madsdata, filename::String) # load MADS input file in YAML forma
 	yamldata = copy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
 	restore = Array(Bool, length(deletekeys))
@@ -133,13 +133,15 @@ function dumpyamlmadsfile(filename::String, madsdata) # load MADS input file in 
 			i += 1
 		end
 	end
-	for tplorins in ["Templates", "Instructions"]
-		yamldata[tplorins] = Array(Any, length(madsdata[tplorins]))
-		i = 1
-		keys = map(string, 1:length(madsdata[tplorins]))
-		for key in keys
-			yamldata[tplorins][i] = {key=>madsdata[tplorins][i]}
-			i += 1
+	if haskey(yamldata, "Templates") || haskey(yamldata, "Instructions")
+		for tplorins in ["Templates", "Instructions"]
+			yamldata[tplorins] = Array(Any, length(madsdata[tplorins]))
+			i = 1
+			keys = map(string, 1:length(madsdata[tplorins]))
+			for key in keys
+				yamldata[tplorins][i] = {key=>madsdata[tplorins][i]}
+				i += 1
+			end
 		end
 	end
 	dumpyamlfile(filename, yamldata)
