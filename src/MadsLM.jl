@@ -177,8 +177,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			lambda_current = lambda_p[npl]
 			madswarn(@sprintf "#%02d lambda: %e" npl lambda_current)
 			u, s, v = svd(JpJ + lambda_current * DtDidentity)
+			s = map(i->max(eps(Float32), i), s)
 			delta_x = (v * inv(diagm(s)) * u') * -J' * fcur
-			# println(delta_x)
 			# delta_x = (JpJ + lambda_current * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
