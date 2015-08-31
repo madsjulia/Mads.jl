@@ -126,15 +126,17 @@ function dumpyamlmadsfile(madsdata, filename::String) # load MADS input file in 
 		i += 1
 	end
 	for obsorparam in ["Observations", "Parameters"]
-		yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
-		i = 1
-		for key in keys(madsdata[obsorparam])
-			yamldata[obsorparam][i] = {key=>madsdata[obsorparam][key]}
-			i += 1
+		if haskey(yamldata, obsorparam)
+			yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
+			i = 1
+			for key in keys(madsdata[obsorparam])
+				yamldata[obsorparam][i] = {key=>madsdata[obsorparam][key]}
+				i += 1
+			end
 		end
 	end
-	if haskey(yamldata, "Templates") || haskey(yamldata, "Instructions")
-		for tplorins in ["Templates", "Instructions"]
+	for tplorins in ["Templates", "Instructions"]
+		if haskey(yamldata, tplorins)
 			yamldata[tplorins] = Array(Any, length(madsdata[tplorins]))
 			i = 1
 			keys = map(string, 1:length(madsdata[tplorins]))
