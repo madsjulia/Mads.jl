@@ -55,11 +55,12 @@ function localsa(madsdata; format="")
 	J = g_lm(initparams)
 	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	jacmat = spy(J, Scale.x_discrete(labels = i->paramkeys[i]), Scale.y_discrete, Guide.YLabel("Observations"), Guide.XLabel("Parameters"),
-							 Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red")), minvalue = -mscale, maxvalue = mscale))
+	jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->paramkeys[i]), Gadfly.Scale.y_discrete,
+											Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
+											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Gadfly.Colorant, "green"), parse(Gadfly.Colorant, "yellow"), parse(Gadfly.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 	filename = "$(rootname)-jacobian"
 	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
+	# Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
 	Mads.info("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
 	# covar = inv(JpJ) # produces resulut similar to svd
@@ -81,9 +82,11 @@ function localsa(madsdata; format="")
 	sortedeigenm = real(eigenm[:,index])
 	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	eigenmat = spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete, Guide.YLabel("Parameters"), Guide.XLabel("Eigenvectors"), Scale.ContinuousColorScale(Scale.lab_gradient(color("green"), color("yellow"), color("red"))))
+	eigenmat = Gadfly.spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete,
+												Guide.YLabel("Parameters"),  Guide.XLabel("Eigenvectors"),
+												Scale.ContinuousColorScale(Scale.lab_gradient(parse(Gadfly.Colorant, "green"), parse(Gadfly.Colorant, "yellow"), parse(Gadfly.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-	eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)
 	filename = "$(rootname)-eigen"
 	filename, format = setimagefileformat(filename, format)
@@ -281,15 +284,23 @@ function saltelli(madsdata; N=int(100), seed=0)
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
 		for j = 1:length(obskeys)
-			f0A = mean(yA[:, j])
-			f0B = mean(yB[:, j])
+			yAnonan = isnan(yA[:,j])
+			yBnonan = isnan(yB[:,j])
+			yCnonan = isnan(yC[:,j])
+			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
+			nnonnans = length(yA[nonan,j])
+			if nnonnans < N
+				Mads.warn("""There are $(N-nnonnans) NaN's""")
+			end
+			f0A = mean(yA[nonan,j])
+			f0B = mean(yB[nonan,j])
 			meandata[obskeys[j]][paramkeys[i]] = .5 * (f0A + f0B)
-			varA = abs(dot(yA[:, j], yA[:, j]) / length(yA[:, j]) - f0A ^ 2)
-			varB = abs(dot(yB[:, j], yB[:, j]) / length(yB[:, j]) - f0B ^ 2)
+			varA = abs(dot(yA[nonan,j], yA[nonan,j]) / nnonnans - f0A ^ 2)
+			varB = abs(dot(yB[nonan,j], yB[nonan,j]) / nnonnans - f0B ^ 2)
 			# varT = .5 * (varA + varB)
 			# varMax = max(varA, varB)
-			varP = abs((dot(yA[:, j], yC[:, j]) / length(yA[:, j]) - f0A ^ 2)) # we can get negarive values for varP which does not make sense
-			varPnot = abs((dot(yB[:, j], yC[:, j]) / length(yB[:, j]) - f0B ^ 2))
+			varP = abs((dot(yA[nonan, j], yC[nonan, j]) / nnonnans - f0A ^ 2)) # we can get negative values for varP which does not make sense
+			varPnot = abs((dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = varP
 			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
 			if varA < eps(Float64) && varP < eps(Float64)
