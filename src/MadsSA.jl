@@ -565,7 +565,7 @@ function plotwellSAresults(wellname, madsdata, result)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
-function plotobsSAresults(madsdata, result)
+function plotobsSAresults(madsdata, result; filename="", format="")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' data in the MADS input dataset")
 		return

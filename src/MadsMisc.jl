@@ -124,6 +124,32 @@ function setparamsinit!(madsdata::Dict, paramdict::Dict)
 	setparamsinit!(madsdata, od)
 end
 
+@doc "Set all parameters ON" ->
+function setallparamson!(madsdata::Dict)
+	paramkeys = getparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["type"] = "opt"
+	end
+end
+
+@doc "Set all parameters OFF" ->
+function setallparamsoff!(madsdata::Dict)
+	paramkeys = getparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["type"] = nothing
+	end
+end
+
+@doc "Set a parameter ON" ->
+function setparamon!(madsdata::Dict, paramkey)
+		madsdata["Parameters"][paramkey]["type"] = "opt";
+end
+
+@doc "Set a parameter OFF" ->
+function setparamoff!(madsdata::Dict, paramkey)
+		madsdata["Parameters"][paramkey]["type"] = nothing
+end
+
 @doc "Set initial parameters in the MADS dictionary" ->
 function setparamsinit!(madsdata::Dict, paramdict::OrderedDict)
 	paramkeys = getparamkeys(madsdata)
