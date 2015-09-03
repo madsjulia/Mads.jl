@@ -307,6 +307,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 				mes[obskeys[j]][paramkeys[i]] = NaN;
 			end
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
+			# println("f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap" ]
