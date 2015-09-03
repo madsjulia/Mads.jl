@@ -130,7 +130,7 @@ function dumpyamlmadsfile(madsdata, filename::String) # load MADS input file in 
 			yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
 			i = 1
 			for key in keys(madsdata[obsorparam])
-				yamldata[obsorparam][i] = {key=>madsdata[obsorparam][key]}
+				yamldata[obsorparam][i] = @Compat.compat Dict(key=>madsdata[obsorparam][key])
 				i += 1
 			end
 		end
@@ -141,7 +141,7 @@ function dumpyamlmadsfile(madsdata, filename::String) # load MADS input file in 
 			i = 1
 			keys = map(string, 1:length(madsdata[tplorins]))
 			for key in keys
-				yamldata[tplorins][i] = {key=>madsdata[tplorins][i]}
+				yamldata[tplorins][i] = @Compat.compat Dict(key=>madsdata[tplorins][i])
 				i += 1
 			end
 		end

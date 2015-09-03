@@ -5,6 +5,7 @@ import Distributions
 import Gadfly
 import Compose
 import Colors
+import Compat
 using Optim
 using Lora
 using Distributions

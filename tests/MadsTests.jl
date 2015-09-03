@@ -28,8 +28,8 @@ include("optimization_linear_problem.jl")
 include("optimization_linear_problem+template.jl")
 # include("tests/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
 # senstivity
-include("saltelli_sensitvity_analysis.jl")
-include("saltelli_sensitvity_analysis_parallel.jl")
+#include("saltelli_sensitvity_analysis.jl")
+#include("saltelli_sensitvity_analysis_parallel.jl")
 include("bayesian_sampling.jl")
 include("montecarlo.jl")
 include("gsl_call.jl")

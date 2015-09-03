@@ -100,7 +100,7 @@ function localsa(madsdata; format="")
 	filename, format = setimagefileformat(filename, format)
 	Gadfly.draw( eval(symbol(format))(filename,6inch,12inch), eigenplot)
 	Mads.info("""Eigen matrix plot saved in $filename""")
-	["eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev]
+	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
 @doc "Saltelli (brute force)" ->
@@ -239,7 +239,7 @@ function saltellibrute(madsdata; N=int(1e4), seed=0) # TODO Saltelli (brute forc
 			var[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute" ]
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
 @doc "Saltelli " ->
@@ -325,7 +325,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 			println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 	end
-	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap" ]
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -364,7 +364,7 @@ function computeparametersensitities(madsdata, saresults)
 		pmes[paramkeys[i]] = pm / length(obskeys)
 		ptes[paramkeys[i]] = pt / length(obskeys)
 	end
-	[ "var" => pvar, "mes" => pmes, "tes" => ptes]
+	@Compat.compat Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
 end
 
 @doc "Parallelization" ->
@@ -404,7 +404,7 @@ for mi = 1:length(names)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			[ "mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(names[mi])*"_parallel" ]
+			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(names[mi])*"_parallel")
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -1329,7 +1329,7 @@ function efast(md; N=int(100), M=6, gamma=4, plotresults=0, seed=0)
 	end
 
 	# Storing constants inside of a cell
-	constCell = {P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, ismads, paramalldict,paramkeys, f};
+	constCell = @Compat.compat Any[P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, ismads, paramalldict,paramkeys, f];
 
 	## Sends arguments to processors p
 	function sendto(p; args...)
@@ -1405,7 +1405,7 @@ function efast(md; N=int(100), M=6, gamma=4, plotresults=0, seed=0)
 			end
 		end
 
-		return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "seed" => seed, "method" => "efast" ]
+		return resultsefast = @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "seed" => seed, "method" => "efast")
 
 		# Plot results as .svg file
 		if plotresults == 1
