@@ -15,7 +15,11 @@ end
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
 function parametersample(madsdata, numsamples, parameterkey="")
-	sample = DataStructures.OrderedDict()
+	if parameterkey == ""
+		sample = DataStructures.OrderedDict()
+	else
+		sample = Any
+	end
 	paramdist = getparamdistributions(madsdata)
 	for k in keys(paramdist)
 		if parameterkey == "" || parameterkey == k
@@ -36,9 +40,13 @@ function parametersample(madsdata, numsamples, parameterkey="")
 					end
 				end
 				if sizeof(values) == 0
-					values = Distributions.rand(paramdist[k],numsamples)
+					values = Distributions.rand(paramdist[k], numsamples)
 				end
-				sample[k] = values
+				if parameterkey == ""
+					sample[k] = values
+				else
+					sample = values
+				end
 			end
 		end
 	end
@@ -245,8 +253,8 @@ function saltelli(madsdata; N=int(100), seed=0)
 	obskeys = getobskeys(madsdata)
 	distributions = getparamdistributions(madsdata)
 	f = makemadscommandfunction(madsdata)
-	A = Array(Float64, (N, length(paramkeys)))
-	B = Array(Float64, (N, length(paramkeys)))
+	A = Array(Float64, (N, 0))
+	B = Array(Float64, (N, 0))
 	C = Array(Float64, (N, length(paramkeys)))
 	meandata = OrderedDict{String, OrderedDict{String, Float64}}() # mean
 	variance = OrderedDict{String, OrderedDict{String, Float64}}() # variance
@@ -261,11 +269,11 @@ function saltelli(madsdata; N=int(100), seed=0)
 	for key in paramkeys
 		delete!(paramalldict,key)
 	end
-	for i = 1:N
-		for j = 1:length(paramkeys)
-			A[i, j] = Distributions.rand(distributions[paramkeys[j]])
-			B[i, j] = Distributions.rand(distributions[paramkeys[j]])
-		end
+	for j = 1:length(paramkeys)
+		s1 = Mads.parametersample(madsdata, N, paramkeys[j])
+		s2 = Mads.parametersample(madsdata, N, paramkeys[j])
+		A = [A s1]
+		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yA = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, A[i, :]))))), 1:size(A, 1))...)'
@@ -290,7 +298,9 @@ function saltelli(madsdata; N=int(100), seed=0)
 			yCnonan = isnan(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
 			nanindices = find(~nonan)
+			# println("$nanindices")
 			nnans = length(nanindices)
+			nnonnans = N - warned_nnans
 			if nnans > 0
 				if warned_nnans != nnans
 					Mads.warn("""There are $(nnans) NaN's""")
@@ -312,7 +322,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 				mes[obskeys[j]][paramkeys[i]] = NaN;
 			end
 			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
-			# println("f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
+			println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap" ]
@@ -617,9 +627,9 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
 	push!(pp, pd)
 	if debug
-		println(dfc)
-		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
-		writetable("dfc.txt", dfc)
+		# println(dfc)
+		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
+		# writetable("dfc.txt", dfc)
 	end
 	vsize = 4inch
 	df = Array(Any, nP)
@@ -631,11 +641,16 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	end
 	vdf = vcat(df...)
 	if debug
-		println(vdf)
-		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
-		writetable("tes.txt", vdf)
+		# println(vdf)
+		println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("tes.txt", vdf)
 	end
 	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.warn("""TES Values larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
@@ -647,11 +662,16 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 		j += 1
 	end
 	if debug
-		println(vdf)
-		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
-		writetable("mes.txt", vdf)
+		# println(vdf)
+		println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("mes.txt", vdf)
 	end
 	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.warn("""MES Values larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
 		push!(pp, pmes)
 		vsize += 4inch
@@ -664,11 +684,16 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	end
 	vdf = vcat(df...)
 	if debug
-		println(vdf)
-		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
-		writetable("var.txt", vdf)
+		# println(vdf)
+		println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("var.txt", vdf)
 	end
 	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.warn("""Variance alues larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
 		push!(pp, pvar)
 		vsize += 4inch
@@ -708,6 +733,20 @@ function deleteNaN!(df::DataFrame)
 			deleterows!(df, find(isnan(df[i][:])))
 			if length(df[i]) == 0
 				return
+			end
+		end
+	end
+end
+
+@doc "Scale down values larger than max(Float32) so that Gadfly can plot the data" ->
+function maxtorealmaxFloat32!(df::DataFrame)
+	limit = realmax(Float32) / 10
+	for i in 1:length(df)
+		if typeof(df[i][1]) <: Number
+			for j in 1:length(df[i])
+				if df[i][j] > limit
+					df[i][j] = limit
+				end
 			end
 		end
 	end
