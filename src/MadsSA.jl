@@ -283,14 +283,19 @@ function saltelli(madsdata; N=int(100), seed=0)
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
+		warned_nnans = 0
 		for j = 1:length(obskeys)
 			yAnonan = isnan(yA[:,j])
 			yBnonan = isnan(yB[:,j])
 			yCnonan = isnan(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
-			nnonnans = length(yA[nonan,j])
-			if nnonnans < N
-				Mads.warn("""There are $(N-nnonnans) NaN's""")
+			nanindices = find(~nonan)
+			nnans = length(nanindices)
+			if nnans > 0
+				if warned_nnans != nnans
+					Mads.warn("""There are $(nnans) NaN's""")
+					warned_nnans = nnans
+				end
 			end
 			f0A = mean(yA[nonan,j])
 			f0B = mean(yB[nonan,j])
@@ -577,9 +582,9 @@ function plotwellSAresults(wellname, madsdata, result)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
-function plotobsSAresults(madsdata, result; filename="", format="")
+function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	if !haskey(madsdata, "Observations")
-		madserror("There is no 'Observations' data in the MADS input dataset")
+		madserror("There is no 'Observations' class in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]
@@ -611,6 +616,11 @@ function plotobsSAresults(madsdata, result; filename="", format="")
 	pp = Array(Any, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
 	push!(pp, pd)
+	if debug
+		println(dfc)
+		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
+		writetable("dfc.txt", dfc)
+	end
 	vsize = 4inch
 	df = Array(Any, nP)
 	j = 1
@@ -620,6 +630,11 @@ function plotobsSAresults(madsdata, result; filename="", format="")
 		j += 1
 	end
 	vdf = vcat(df...)
+	if debug
+		println(vdf)
+		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
+		writetable("tes.txt", vdf)
+	end
 	if length(vdf[1]) > 0
 		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
 		push!(pp, ptes)
@@ -631,7 +646,11 @@ function plotobsSAresults(madsdata, result; filename="", format="")
 		deleteNaN!(df[j])
 		j += 1
 	end
-	vdf = vcat(df...)
+	if debug
+		println(vdf)
+		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
+		writetable("mes.txt", vdf)
+	end
 	if length(vdf[1]) > 0
 		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
 		push!(pp, pmes)
@@ -644,13 +663,18 @@ function plotobsSAresults(madsdata, result; filename="", format="")
 		j += 1
 	end
 	vdf = vcat(df...)
+	if debug
+		println(vdf)
+		# println("xmax $(max(dfc[1])) xmin $(min(dfc[1]))")
+		writetable("var.txt", vdf)
+	end
 	if length(vdf[1]) > 0
 		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
 		push!(pp, pvar)
 		vsize += 4inch
 	end
 	rootname = getmadsrootname(madsdata)
-	p = vstack(pp...)
+	p = Gadfly.vstack(pp...)
 	method = result["method"]
 	filename = "$rootname-$method-$nsample"
 	filename, format = setimagefileformat(filename, format)
@@ -681,7 +705,7 @@ end
 function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
-			deleterows!(df,find(isnan(df[i][:])))
+			deleterows!(df, find(isnan(df[i][:])))
 			if length(df[i]) == 0
 				return
 			end
