@@ -631,7 +631,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	if debug
 		# println(dfc)
 		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
-		# writetable("dfc.txt", dfc)
+		# writetable("dfc.dat", dfc)
 	end
 	vsize = 4inch
 	df = Array(Any, nP)
@@ -645,7 +645,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	if debug
 		# println(vdf)
 		println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("tes.txt", vdf)
+		# writetable("tes.dat", vdf)
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
@@ -666,7 +666,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	if debug
 		# println(vdf)
 		println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("mes.txt", vdf)
+		# writetable("mes.dat", vdf)
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
@@ -688,7 +688,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	if debug
 		# println(vdf)
 		println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("var.txt", vdf)
+		# writetable("var.dat", vdf)
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
