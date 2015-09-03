@@ -539,7 +539,7 @@ end
 
 @doc "Get parameter distributions" ->
 function getparamdistributions(madsdata)
-	paramkeys = getparamkeys(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
 	distributions = Dict()
 	for i in 1:length(paramkeys)
 		if haskey(madsdata["Parameters"][paramkeys[i]], "dist")

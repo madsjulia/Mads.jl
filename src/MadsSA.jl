@@ -15,42 +15,43 @@ end
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
 function parametersample(madsdata, numsamples, parameterkey="")
-	if parameterkey == ""
-		sample = DataStructures.OrderedDict()
+	if parameterkey != ""
+		return paramrand(madsdata, parameterkey; numsamples=numsamples)
 	else
-		sample = Any
+		sample = DataStructures.OrderedDict()
+		paramdist = getparamdistributions(madsdata)
+		for k in keys(paramdist)
+			sample[k] = paramrand(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+		end
+		return sample
 	end
-	paramdist = getparamdistributions(madsdata)
-	for k in keys(paramdist)
-		if parameterkey == "" || parameterkey == k
-			if haskey(madsdata["Parameters"][k], "type") && typeof(madsdata["Parameters"][k]["type"]) != Nothing
-				values = Array(Float64,0)
-				if haskey(madsdata["Parameters"][k], "log")
-					flag = madsdata["Parameters"][k]["log"]
-					if flag == "yes" || flag == "true"
-						dist = paramdist[k]
-						if typeof(dist) == Uniform
-							a = log10(dist.a)
-							b = log10(dist.b)
-							values = 10.^(a + (b - a) * Distributions.rand(numsamples))
-						elseif typeof(dist) == Normal
-							μ = log10(dist.μ)
-							values = 10.^(μ + dist.σ * Distributions.randn(numsamples))
-						end
+end
+
+@doc "Random numbers for a MADS Model parameters" ->
+function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
+	if length(paramdist) == 0
+		paramdist = getparamdistributions(madsdata)
+	end
+	if haskey( madsdata["Parameters"], parameterkey )
+		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Nothing
+			if haskey(madsdata["Parameters"][parameterkey], "log")
+				flag = madsdata["Parameters"][parameterkey]["log"]
+				if flag == "yes" || flag == "true"
+					dist = paramdist[parameterkey]
+					if typeof(dist) == Uniform
+						a = log10(dist.a)
+						b = log10(dist.b)
+						return 10.^(a + (b - a) * Distributions.rand(numsamples))
+					elseif typeof(dist) == Normal
+						μ = log10(dist.μ)
+						return 10.^(μ + dist.σ * Distributions.randn(numsamples))
 					end
 				end
-				if sizeof(values) == 0
-					values = Distributions.rand(paramdist[k], numsamples)
-				end
-				if parameterkey == ""
-					sample[k] = values
-				else
-					sample = values
-				end
 			end
+			return Distributions.rand(paramdist[parameterkey], numsamples)
 		end
 	end
-	return sample
+	return nothing
 end
 
 @doc "Local sensitivity analysis" ->
@@ -317,12 +318,13 @@ function saltelli(madsdata; N=int(100), seed=0)
 			varP = abs((dot(yA[nonan, j], yC[nonan, j]) / nnonnans - f0A ^ 2)) # we can get negative values for varP which does not make sense
 			varPnot = abs((dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B ^ 2))
 			variance[obskeys[j]][paramkeys[i]] = varP
-			mes[obskeys[j]][paramkeys[i]] = varP / varA # varT or varA? i think it should be varA
 			if varA < eps(Float64) && varP < eps(Float64)
 				mes[obskeys[j]][paramkeys[i]] = NaN;
+			else
+				mes[obskeys[j]][paramkeys[i]] = min(1, max(0, varP / varA)) # varT or varA? i think it should be varA
 			end
-			tes[obskeys[j]][paramkeys[i]] = 1 - varPnot / varB # varT or varA; i think it should be varA; i do not think should be varB?
-			println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
+			tes[obskeys[j]][paramkeys[i]] = min(1, max(0, 1 - varPnot / varB)) # varT or varA; i think it should be varA; i do not think should be varB?
+			# println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 	end
 	[ "mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap" ]
