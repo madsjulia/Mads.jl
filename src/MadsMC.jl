@@ -4,7 +4,7 @@ if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
 # @document
-@docstrings
+#@docstrings
 
 function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String; format="")
 	filename, format = setimagefileformat(filename, format)

@@ -9,7 +9,7 @@ if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
 # @document
-@docstrings
+#@docstrings
 
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy

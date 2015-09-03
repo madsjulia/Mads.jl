@@ -4,6 +4,7 @@ import DataStructures # import is needed for parallel calls
 import Distributions
 import Gadfly
 import Compose
+import Colors
 using Optim
 using Lora
 using Distributions
@@ -43,7 +44,7 @@ debuglevel = 1
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
-@docstrings
+#@docstrings
 
 @doc "Set MADS debug level" ->
 function setdebuglevel(level::Int)
