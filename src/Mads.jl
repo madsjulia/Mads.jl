@@ -42,6 +42,7 @@ include("MadsLog.jl") # messages higher than specified level are printed
 Logging.configure(level=DEBUG)
 verbositylevel = 1
 debuglevel = 1
+modelruns = 0
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
@@ -55,6 +56,11 @@ end
 @doc "Set MADS verbosity level" ->
 function setverbositylevel(level::Int)
 	global verbositylevel = level
+end
+
+@doc "Reset the model runs count" ->
+function resetmodelruns()
+	global modelruns = 0
 end
 
 @doc "Save calibration results" ->

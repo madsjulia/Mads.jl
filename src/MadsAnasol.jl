@@ -77,6 +77,7 @@ function makecomputeconcentrations(madsdata)
 				# c[t] = contamination(wellx, welly, .5 * (wellz0 + wellz1), n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
 			end
 		end
+		global modelruns += 1
 		return c
 	end
 	return computeconcentrations

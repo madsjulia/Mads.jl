@@ -82,7 +82,7 @@ function makemakearrayconditionalloglikelihood(madsdata::Associative)
 	end
 end
 
-function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename="", format="")
+function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename="", format="", maxprob=1.0, maxhoriz=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]
 	horizons = bigdtresults["horizons"]
 	if filename == ""
@@ -92,12 +92,16 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
 	df = DataFrame(horizon=[], maxfailureprob=[], Choices=[])
+	maxhoriz = min(maxhoriz, max(horizons...))
 	for i = 1:size(maxfailureprobs, 2)
 		df = vcat(df, DataFrame(horizon=horizons, maxfailureprob=maxfailureprobs[:, i], Choices=madsdata["Choices"][i]["name"]))
 		#layers[i] = Gadfly.layer(x=horizons, y=maxfailureprobs[:, i], Geom.line)
 	end
 	#p = Gadfly.plot(layers..., Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"))
-	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choices", Geom.line, Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"), Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
+	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choices", Geom.line,
+									Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"),
+									Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
+									Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
 	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
 	p
 end

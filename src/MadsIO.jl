@@ -174,6 +174,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			end
 			run(`rm -fR $newdirname`)
 			cd(currentdir) # restore to the original directory
+			global modelruns += 1
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
