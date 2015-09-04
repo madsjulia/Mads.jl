@@ -66,7 +66,7 @@ function localsa(madsdata; format="")
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->paramkeys[i]), Gadfly.Scale.y_discrete,
 											Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
-											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Gadfly.Colorant, "green"), parse(Gadfly.Colorant, "yellow"), parse(Gadfly.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
+											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 	filename = "$(rootname)-jacobian"
 	filename, format = setimagefileformat(filename, format)
 	# Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
@@ -93,7 +93,7 @@ function localsa(madsdata; format="")
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	eigenmat = Gadfly.spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete,
 												Guide.YLabel("Parameters"),  Guide.XLabel("Eigenvectors"),
-												Scale.ContinuousColorScale(Scale.lab_gradient(parse(Gadfly.Colorant, "green"), parse(Gadfly.Colorant, "yellow"), parse(Gadfly.Colorant, "red"))))
+												Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)

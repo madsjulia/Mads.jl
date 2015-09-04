@@ -127,9 +127,9 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 			end
 			paramdict[paramkey] = original
 		end
-		p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Gadfly.Colorant, "red"),default_point_size=3pt)),
+		p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
 								[layer(x=t, y=Y[:,i], Geom.line,
-								 Theme(default_color=parse(Gadfly.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+								 Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 								 for i in 1:numberofsamples]...)
 		if keyword == ""
 			filename = string("$rootname-$paramkey-$numberofsamples")
@@ -166,9 +166,9 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", form
 			Y[j,i] = result[obskeys[j]]
 		end
 	end
-	p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Gadfly.Colorant, "red"),default_point_size=3pt)),
+	p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
 					[layer(x=t, y=Y[:,i], Geom.line,
-					 Theme(default_color=parse(Gadfly.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					 Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					 for i in 1:numberofsamples]...)
 	if keyword == ""
 		filename = "$rootname-$numberofsamples"
