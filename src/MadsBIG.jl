@@ -51,7 +51,33 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		end
 		return true
 	end
-	return BIGUQ.BigDT(makeloglikelihood, logprior, nominalparams, likelihoodparamsmin, likelihoodparamsmax, performancegoalsatisfied)
+	function gethorizonoffailure(arrayparams::Vector)
+		paramdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+		optparams = Dict(getoptparamkeys(madsdata), arrayparams)
+		merge!(paramdict, optparams)
+		predictions = f(paramdict)
+		paramsandpredictionsdict = merge(paramdict, predictions)
+		horizonoffailure = Inf
+		for performancegoal in madsdata["Performance Goals"]
+			expval = evaluatemadsexpression(performancegoal["exp"], paramsandpredictionsdict)
+			if haskey(performancegoal, "lessthan")
+				if expval * performancegoal["lessthan"] >= 0#if they have the same sign
+					horizonoffailure = max(0., min(horizonoffailure, performancegoal["lessthan"] / expval - 1))
+				else#they have the opposite sign
+					horizonoffailure = max(0., min(horizonoffailure, 1 - performancegoal["lessthan"] / expval))
+				end
+			end
+			if haskey(performancegoal, "greaterthan")
+				if expval * performancegoal["greaterthan"] >= 0#if they have the same sign
+					horizonoffailure = max(0., min(horizonoffailure, performancegoal["greaterthan"] / expval - 1))
+				else#they have the opposite sign
+					horizonoffailure = max(0., min(horizonoffailure, 1 - performancegoal["greaterthan"] / expval))
+				end
+			end
+		end
+		return horizonoffailure
+	end
+	return BIGUQ.BigDT(makeloglikelihood, logprior, nominalparams, likelihoodparamsmin, likelihoodparamsmax, performancegoalsatisfied, gethorizonoffailure)
 end
 
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
