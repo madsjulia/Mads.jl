@@ -72,7 +72,7 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
 		maxfailureprobs[:, i], horizons, badlikelihoodparams = BIGUQ.getrobustnesscurve(bigdt, maxHorizon, numlikelihoods; getfailureprobfnct=getfailureprobs, numhorizons=numhorizons)
 	end
-	[ "maxfailureprobs" => maxfailureprobs, "horizons" => horizons ]
+	return @Compat.compat Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
 end
 
 function makemakearrayconditionalloglikelihood(madsdata::Associative)

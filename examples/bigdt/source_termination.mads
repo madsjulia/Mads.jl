@@ -21,21 +21,31 @@ Sources:
     t0: {init: 1985, log: false, longname: 'Start Time [T]', max: 2000, min: 1980, type: null}
     t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: null}
 Choices:
-- {name: "Source terminated in 2005", Parameters: {source1_t1: 2005}}
-- {name: "Source terminated in 2010", Parameters: {source1_t1: 2010}}
 - {name: "Source terminated in 2015", Parameters: {source1_t1: 2015}}
 - {name: "Source terminated in 2020", Parameters: {source1_t1: 2020}}
+- {name: "Source terminated in 2025", Parameters: {source1_t1: 2025}}
+- {name: "Source terminated in 2030", Parameters: {source1_t1: 2030}}
 Performance Goals:
-- {name: "goal2021", exp: "w2_2016", lessthan: 3000}
-- {name: "goal2022", exp: "w2_2017", lessthan: 3000}
-- {name: "goal2023", exp: "w2_2018", lessthan: 3000}
-- {name: "goal2024", exp: "w2_2019", lessthan: 3000}
-- {name: "goal2025", exp: "w2_2020", lessthan: 3000}
-- {name: "goal2026", exp: "w2_2021", lessthan: 3000}
-- {name: "goal2027", exp: "w2_2022", lessthan: 3000}
-- {name: "goal2028", exp: "w2_2023", lessthan: 3000}
-- {name: "goal2029", exp: "w2_2024", lessthan: 3000}
-- {name: "goal2030", exp: "w2_2025", lessthan: 3000}
+- {name: "goal2016", exp: "w2_2016", lessthan: 2500}
+- {name: "goal2017", exp: "w2_2017", lessthan: 2500}
+- {name: "goal2018", exp: "w2_2018", lessthan: 2500}
+- {name: "goal2019", exp: "w2_2019", lessthan: 2500}
+- {name: "goal2020", exp: "w2_2020", lessthan: 2500}
+- {name: "goal2021", exp: "w2_2021", lessthan: 2500}
+- {name: "goal2022", exp: "w2_2022", lessthan: 2500}
+- {name: "goal2023", exp: "w2_2023", lessthan: 2500}
+- {name: "goal2024", exp: "w2_2024", lessthan: 2500}
+- {name: "goal2025", exp: "w2_2025", lessthan: 2500}
+- {name: "goal2026", exp: "w2_2026", lessthan: 2500}
+- {name: "goal2027", exp: "w2_2027", lessthan: 2500}
+- {name: "goal2028", exp: "w2_2028", lessthan: 2500}
+- {name: "goal2029", exp: "w2_2029", lessthan: 2500}
+- {name: "goal2030", exp: "w2_2030", lessthan: 2500}
+- {name: "goal2031", exp: "w2_2031", lessthan: 2500}
+- {name: "goal2032", exp: "w2_2032", lessthan: 2500}
+- {name: "goal2033", exp: "w2_2033", lessthan: 2500}
+- {name: "goal2034", exp: "w2_2034", lessthan: 2500}
+- {name: "goal2035", exp: "w2_2035", lessthan: 2500}
 Wells:
 - w1:
     obs:
@@ -75,6 +85,16 @@ Wells:
     - 18: {t: 2023}
     - 19: {t: 2024}
     - 20: {t: 2025}
+    - 21: {t: 2026}
+    - 22: {t: 2027}
+    - 23: {t: 2028}
+    - 24: {t: 2029}
+    - 25: {t: 2030}
+    - 26: {t: 2031}
+    - 27: {t: 2032}
+    - 28: {t: 2033}
+    - 29: {t: 2034}
+    - 30: {t: 2035}
     x: 1250
     y: 0
     z0: 3

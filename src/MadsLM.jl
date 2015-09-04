@@ -128,7 +128,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 	# Maintain a trace of the system.
 	tr = Optim.OptimizationTrace()
 	if !quiet && show_trace
-		d = {"lambda" => lambda}
+		d = @Compat.compat Dict("lambda" => lambda)
 		os = Optim.OptimizationState(iterCt, sse(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
@@ -246,7 +246,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		# show state
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
-			d = {"g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda}
+			d = @Compat.compat Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
 			os = Optim.OptimizationState(iterCt, sse(fcur), gradnorm, d)
 			push!(tr, os)
 			println(os)
