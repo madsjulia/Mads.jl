@@ -92,11 +92,17 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 	getfailureprobs = BIGUQ.makegetfailureprobabilities_mc(modelparams)
 	maxfailureprobs = Array(Float64, numhorizons, length(madsdata["Choices"]))
 	local horizons::Array{Float64, 1}
+	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.info("Choices:")
 	@showprogress 1 "Computing ... " for i = 1:length(madsdata["Choices"])
 		Mads.info("Choice #$i: $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
-		maxfailureprobs[:, i], horizons, badlikelihoodparams = BIGUQ.getrobustnesscurve(bigdt, maxHorizon, numlikelihoods; getfailureprobfnct=getfailureprobs, numhorizons=numhorizons)
+		if length(likelihoodparams) == 0
+			minlikelihoodparams = bigdt.likelihoodparamsmin(maxHorizon)
+			maxlikelihoodparams = bigdt.likelihoodparamsmax(maxHorizon)
+			likelihoodparams = BlackBoxOptim.Utils.latin_hypercube_sampling(minlikelihoodparams, maxlikelihoodparams, numlikelihoods)
+		end
+		maxfailureprobs[:, i], horizons, badlikelihoodparams = BIGUQ.getrobustnesscurve(bigdt, maxHorizon, numlikelihoods; getfailureprobfnct=getfailureprobs, numhorizons=numhorizons, likelihoodparams=likelihoodparams)
 	end
 	return @Compat.compat Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
 end
