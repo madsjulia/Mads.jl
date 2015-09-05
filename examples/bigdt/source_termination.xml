@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <Restart>memory</Restart>
+    <Sources>
+        <box>
+            <dz>
+                <longname>Source z dimension [L]</longname>
+                <init>1</init>
+                <log>false</log>
+                <min>1</min>
+                <max>10</max>
+                <type />
+            </dz>
+            <f>
+                <longname>Contaminant flux [M/T]</longname>
+                <init>50000</init>
+                <log>true</log>
+                <min>500</min>
+                <max>1000000</max>
+                <type />
+            </f>
+            <t0>
+                <longname>Start Time [T]</longname>
+                <init>1985</init>
+                <log>false</log>
+                <min>1980</min>
+                <max>2000</max>
+                <type />
+            </t0>
+            <x>
+                <longname>Source x coordinate [L]</longname>
+                <init>0</init>
+                <log>false</log>
+                <min>0</min>
+                <max>500</max>
+                <type />
+            </x>
+            <dy>
+                <longname>Source y dimension [L]</longname>
+                <init>100</init>
+                <log>false</log>
+                <min>1</min>
+                <max>500</max>
+                <type />
+            </dy>
+            <dx>
+                <longname>Source x dimension [L]</longname>
+                <init>250</init>
+                <log>false</log>
+                <min>1</min>
+                <max>500</max>
+                <type />
+            </dx>
+            <z>
+                <longname>Source z coordinate [L]</longname>
+                <init>0</init>
+                <log>false</log>
+                <min>0</min>
+                <max>100</max>
+                <type />
+            </z>
+            <t1>
+                <longname>End Time [T]</longname>
+                <init>2005</init>
+                <log>false</log>
+                <min>2000</min>
+                <max>2030</max>
+                <type />
+            </t1>
+            <y>
+                <longname>Source y coordinate [L]</longname>
+                <init>100</init>
+                <log>false</log>
+                <min>-500</min>
+                <max>500</max>
+                <type />
+            </y>
+        </box>
+    </Sources>
+    <Parameters>
+        <n>
+            <longname>Porosity [L3/L3]</longname>
+            <init>0.1</init>
+            <log>false</log>
+            <min>0</min>
+            <max>1</max>
+            <type />
+        </n>
+        <rf>
+            <longname>Retardation Factor [-]</longname>
+            <init>1</init>
+            <log>true</log>
+            <min>1</min>
+            <max>10</max>
+            <type />
+        </rf>
+        <lambda>
+            <longname>Half-life decay [1/T]</longname>
+            <init>0</init>
+            <log>true</log>
+            <min>0</min>
+            <max>1</max>
+            <type />
+        </lambda>
+        <theta>
+            <longname>Flow Angle [degrees]</longname>
+            <init>0</init>
+            <log>false</log>
+            <min>-30</min>
+            <max>30</max>
+            <type />
+        </theta>
+        <vx>
+            <longname>Pore x velocity [L/T]</longname>
+            <init>30</init>
+            <log>true</log>
+            <min>25</min>
+            <max>35</max>
+            <type>opt</type>
+        </vx>
+        <vy>
+            <longname>Pore y velocity [L/T]</longname>
+            <init>0</init>
+            <log>false</log>
+            <min>-10</min>
+            <max>10</max>
+            <type />
+        </vy>
+        <vz>
+            <longname>Pore z velocity [L/T]</longname>
+            <init>0</init>
+            <log>false</log>
+            <min>0</min>
+            <max>1</max>
+            <type />
+        </vz>
+        <ax>
+            <longname>Dispersivity x [L]</longname>
+            <init>70</init>
+            <log>true</log>
+            <min>35</min>
+            <max>140</max>
+            <type>opt</type>
+        </ax>
+        <ay>
+            <longname>Dispersivity y [L]</longname>
+            <init>15</init>
+            <log>true</log>
+            <min>1</min>
+            <max>30</max>
+            <type />
+        </ay>
+        <az>
+            <longname>Dispersivity z [L]</longname>
+            <init>0.3</init>
+            <log>true</log>
+            <min>0.1</min>
+            <max>1</max>
+            <type />
+        </az>
+        <source1_dz>
+            <longname>Source z dimension [L]</longname>
+            <init>1</init>
+            <log>false</log>
+            <min>1</min>
+            <max>10</max>
+            <type />
+        </source1_dz>
+        <source1_f>
+            <longname>Contaminant flux [M/T]</longname>
+            <init>50000</init>
+            <log>true</log>
+            <min>500</min>
+            <max>1000000</max>
+            <type />
+        </source1_f>
+        <source1_t0>
+            <longname>Start Time [T]</longname>
+            <init>1985</init>
+            <log>false</log>
+            <min>1980</min>
+            <max>2000</max>
+            <type />
+        </source1_t0>
+        <source1_x>
+            <longname>Source x coordinate [L]</longname>
+            <init>0</init>
+            <log>false</log>
+            <min>0</min>
+            <max>500</max>
+            <type />
+        </source1_x>
+        <source1_dy>
+            <longname>Source y dimension [L]</longname>
+            <init>100</init>
+            <log>false</log>
+            <min>1</min>
+            <max>500</max>
+            <type />
+        </source1_dy>
+        <source1_dx>
+            <longname>Source x dimension [L]</longname>
+            <init>250</init>
+            <log>false</log>
+            <min>1</min>
+            <max>500</max>
+            <type />
+        </source1_dx>
+        <source1_z>
+            <longname>Source z coordinate [L]</longname>
+            <init>0</init>
+            <log>false</log>
+            <min>0</min>
+            <max>100</max>
+            <type />
+        </source1_z>
+        <source1_t1>
+            <longname>End Time [T]</longname>
+            <init>2005</init>
+            <log>false</log>
+            <min>2000</min>
+            <max>2030</max>
+            <type />
+        </source1_t1>
+        <source1_y>
+            <longname>Source y coordinate [L]</longname>
+            <init>100</init>
+            <log>false</log>
+            <min>-500</min>
+            <max>500</max>
+            <type />
+        </source1_y>
+    </Parameters>
+    <Wells>
+        <w1>
+            <obs>
+                <1>
+                    <weight>0.001</weight>
+                    <t>2006</t>
+                    <target>2.0316238917513556</target>
+                </1>
+            </obs>
+            <obs>
+                <2>
+                    <weight>0.001</weight>
+                    <t>2007</t>
+                    <target>2.7155697229588975</target>
+                </2>
+            </obs>
+            <obs>
+                <3>
+                    <weight>0.001</weight>
+                    <t>2008</t>
+                    <target>3.556534319034769</target>
+                </3>
+            </obs>
+            <obs>
+                <4>
+                    <weight>0.001</weight>
+                    <t>2009</t>
+                    <target>4.5713041777924035</target>
+                </4>
+            </obs>
+            <obs>
+                <5>
+                    <weight>0.001</weight>
+                    <t>2010</t>
+                    <target>5.774509961533499</target>
+                </5>
+            </obs>
+            <obs>
+                <6>
+                    <weight>0.001</weight>
+                    <t>2011</t>
+                    <target>7.177833439019592</target>
+                </6>
+            </obs>
+            <obs>
+                <7>
+                    <weight>0.001</weight>
+                    <t>2012</t>
+                    <target>8.789259113478304</target>
+                </7>
+            </obs>
+            <obs>
+                <8>
+                    <weight>0.001</weight>
+                    <t>2013</t>
+                    <target>10.612414490456711</target>
+                </8>
+            </obs>
+            <obs>
+                <9>
+                    <weight>0.001</weight>
+                    <t>2014</t>
+                    <target>12.646043356959757</target>
+                </9>
+            </obs>
+            <obs>
+                <10>
+                    <weight>0.001</weight>
+                    <t>2015</t>
+                    <target>14.883651985530895</target>
+                </10>
+            </obs>
+            <z1>3</z1>
+            <x>1000</x>
+            <z0>3</z0>
+            <y>-500</y>
+        </w1>
+        <w2>
+            <obs>
+                <1>
+                    <weight>0.001</weight>
+                    <t>2006</t>
+                    <target>611.8266043974022</target>
+                </1>
+            </obs>
+            <obs>
+                <2>
+                    <weight>0.001</weight>
+                    <t>2007</t>
+                    <target>730.7159105334298</target>
+                </2>
+            </obs>
+            <obs>
+                <3>
+                    <weight>0.001</weight>
+                    <t>2008</t>
+                    <target>860.7294156263886</target>
+                </3>
+            </obs>
+            <obs>
+                <4>
+                    <weight>0.001</weight>
+                    <t>2009</t>
+                    <target>1000.8048842162573</target>
+                </4>
+            </obs>
+            <obs>
+                <5>
+                    <weight>0.001</weight>
+                    <t>2010</t>
+                    <target>1149.5386408536265</target>
+                </5>
+            </obs>
+            <obs>
+                <6>
+                    <weight>0.001</weight>
+                    <t>2011</t>
+                    <target>1305.219833177108</target>
+                </6>
+            </obs>
+            <obs>
+                <7>
+                    <weight>0.001</weight>
+                    <t>2012</t>
+                    <target>1465.8804399967594</target>
+                </7>
+            </obs>
+            <obs>
+                <8>
+                    <weight>0.001</weight>
+                    <t>2013</t>
+                    <target>1629.357873526369</target>
+                </8>
+            </obs>
+            <obs>
+                <9>
+                    <weight>0.001</weight>
+                    <t>2014</t>
+                    <target>1793.366058723404</target>
+                </9>
+            </obs>
+            <obs>
+                <10>
+                    <weight>0.001</weight>
+                    <t>2015</t>
+                    <target>1955.5704267628255</target>
+                </10>
+            </obs>
+            <obs>
+                <11>
+                    <t>2016</t>
+                </11>
+            </obs>
+            <obs>
+                <12>
+                    <t>2017</t>
+                </12>
+            </obs>
+            <obs>
+                <13>
+                    <t>2018</t>
+                </13>
+            </obs>
+            <obs>
+                <14>
+                    <t>2019</t>
+                </14>
+            </obs>
+            <obs>
+                <15>
+                    <t>2020</t>
+                </15>
+            </obs>
+            <obs>
+                <16>
+                    <t>2021</t>
+                </16>
+            </obs>
+            <obs>
+                <17>
+                    <t>2022</t>
+                </17>
+            </obs>
+            <obs>
+                <18>
+                    <t>2023</t>
+                </18>
+            </obs>
+            <obs>
+                <19>
+                    <t>2024</t>
+                </19>
+            </obs>
+            <obs>
+                <20>
+                    <t>2025</t>
+                </20>
+            </obs>
+            <obs>
+                <21>
+                    <t>2026</t>
+                </21>
+            </obs>
+            <obs>
+                <22>
+                    <t>2027</t>
+                </22>
+            </obs>
+            <obs>
+                <23>
+                    <t>2028</t>
+                </23>
+            </obs>
+            <obs>
+                <24>
+                    <t>2029</t>
+                </24>
+            </obs>
+            <obs>
+                <25>
+                    <t>2030</t>
+                </25>
+            </obs>
+            <obs>
+                <26>
+                    <t>2031</t>
+                </26>
+            </obs>
+            <obs>
+                <27>
+                    <t>2032</t>
+                </27>
+            </obs>
+            <obs>
+                <28>
+                    <t>2033</t>
+                </28>
+            </obs>
+            <obs>
+                <29>
+                    <t>2034</t>
+                </29>
+            </obs>
+            <obs>
+                <30>
+                    <t>2035</t>
+                </30>
+            </obs>
+            <z1>3</z1>
+            <x>1250</x>
+            <z0>3</z0>
+            <y>0</y>
+        </w2>
+        <w3>
+            <obs>
+                <1>
+                    <weight>0.001</weight>
+                    <t>2006</t>
+                    <target>98.66921541476849</target>
+                </1>
+            </obs>
+            <obs>
+                <2>
+                    <weight>0.001</weight>
+                    <t>2007</t>
+                    <target>119.03789812660239</target>
+                </2>
+            </obs>
+            <obs>
+                <3>
+                    <weight>0.001</weight>
+                    <t>2008</t>
+                    <target>141.5185666295641</target>
+                </3>
+            </obs>
+            <obs>
+                <4>
+                    <weight>0.001</weight>
+                    <t>2009</t>
+                    <target>165.95067164566098</target>
+                </4>
+            </obs>
+            <obs>
+                <5>
+                    <weight>0.001</weight>
+                    <t>2010</t>
+                    <target>192.10794563843558</target>
+                </5>
+            </obs>
+            <obs>
+                <6>
+                    <weight>0.001</weight>
+                    <t>2011</t>
+                    <target>219.70302505783235</target>
+                </6>
+            </obs>
+            <obs>
+                <7>
+                    <weight>0.001</weight>
+                    <t>2012</t>
+                    <target>248.39531876990176</target>
+                </7>
+            </obs>
+            <obs>
+                <8>
+                    <weight>0.001</weight>
+                    <t>2013</t>
+                    <target>277.80165911633344</target>
+                </8>
+            </obs>
+            <obs>
+                <9>
+                    <weight>0.001</weight>
+                    <t>2014</t>
+                    <target>307.50902387416437</target>
+                </9>
+            </obs>
+            <obs>
+                <10>
+                    <weight>0.001</weight>
+                    <t>2015</t>
+                    <target>337.0884699966608</target>
+                </10>
+            </obs>
+            <z1>3</z1>
+            <x>1000</x>
+            <z0>3</z0>
+            <y>500</y>
+        </w3>
+    </Wells>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2016</name>
+        <exp>w2_2016</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2017</name>
+        <exp>w2_2017</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2018</name>
+        <exp>w2_2018</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2019</name>
+        <exp>w2_2019</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2020</name>
+        <exp>w2_2020</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2021</name>
+        <exp>w2_2021</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2022</name>
+        <exp>w2_2022</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2023</name>
+        <exp>w2_2023</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2024</name>
+        <exp>w2_2024</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2025</name>
+        <exp>w2_2025</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2026</name>
+        <exp>w2_2026</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2027</name>
+        <exp>w2_2027</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2028</name>
+        <exp>w2_2028</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2029</name>
+        <exp>w2_2029</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2030</name>
+        <exp>w2_2030</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2031</name>
+        <exp>w2_2031</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2032</name>
+        <exp>w2_2032</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2033</name>
+        <exp>w2_2033</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2034</name>
+        <exp>w2_2034</exp>
+    </Performance Goals>
+    <Performance Goals>
+        <lessthan>2500</lessthan>
+        <name>goal2035</name>
+        <exp>w2_2035</exp>
+    </Performance Goals>
+    <Observations>
+        <w1_2006>
+            <well>w1</well>
+            <time>2006</time>
+            <weight>0.001</weight>
+            <target>2.0316238917513556</target>
+        </w1_2006>
+        <w1_2007>
+            <well>w1</well>
+            <time>2007</time>
+            <weight>0.001</weight>
+            <target>2.7155697229588975</target>
+        </w1_2007>
+        <w1_2008>
+            <well>w1</well>
+            <time>2008</time>
+            <weight>0.001</weight>
+            <target>3.556534319034769</target>
+        </w1_2008>
+        <w1_2009>
+            <well>w1</well>
+            <time>2009</time>
+            <weight>0.001</weight>
+            <target>4.5713041777924035</target>
+        </w1_2009>
+        <w1_2010>
+            <well>w1</well>
+            <time>2010</time>
+            <weight>0.001</weight>
+            <target>5.774509961533499</target>
+        </w1_2010>
+        <w1_2011>
+            <well>w1</well>
+            <time>2011</time>
+            <weight>0.001</weight>
+            <target>7.177833439019592</target>
+        </w1_2011>
+        <w1_2012>
+            <well>w1</well>
+            <time>2012</time>
+            <weight>0.001</weight>
+            <target>8.789259113478304</target>
+        </w1_2012>
+        <w1_2013>
+            <well>w1</well>
+            <time>2013</time>
+            <weight>0.001</weight>
+            <target>10.612414490456711</target>
+        </w1_2013>
+        <w1_2014>
+            <well>w1</well>
+            <time>2014</time>
+            <weight>0.001</weight>
+            <target>12.646043356959757</target>
+        </w1_2014>
+        <w1_2015>
+            <well>w1</well>
+            <time>2015</time>
+            <weight>0.001</weight>
+            <target>14.883651985530895</target>
+        </w1_2015>
+        <w2_2006>
+            <well>w2</well>
+            <time>2006</time>
+            <weight>0.001</weight>
+            <target>611.8266043974022</target>
+        </w2_2006>
+        <w2_2007>
+            <well>w2</well>
+            <time>2007</time>
+            <weight>0.001</weight>
+            <target>730.7159105334298</target>
+        </w2_2007>
+        <w2_2008>
+            <well>w2</well>
+            <time>2008</time>
+            <weight>0.001</weight>
+            <target>860.7294156263886</target>
+        </w2_2008>
+        <w2_2009>
+            <well>w2</well>
+            <time>2009</time>
+            <weight>0.001</weight>
+            <target>1000.8048842162573</target>
+        </w2_2009>
+        <w2_2010>
+            <well>w2</well>
+            <time>2010</time>
+            <weight>0.001</weight>
+            <target>1149.5386408536265</target>
+        </w2_2010>
+        <w2_2011>
+            <well>w2</well>
+            <time>2011</time>
+            <weight>0.001</weight>
+            <target>1305.219833177108</target>
+        </w2_2011>
+        <w2_2012>
+            <well>w2</well>
+            <time>2012</time>
+            <weight>0.001</weight>
+            <target>1465.8804399967594</target>
+        </w2_2012>
+        <w2_2013>
+            <well>w2</well>
+            <time>2013</time>
+            <weight>0.001</weight>
+            <target>1629.357873526369</target>
+        </w2_2013>
+        <w2_2014>
+            <well>w2</well>
+            <time>2014</time>
+            <weight>0.001</weight>
+            <target>1793.366058723404</target>
+        </w2_2014>
+        <w2_2015>
+            <well>w2</well>
+            <time>2015</time>
+            <weight>0.001</weight>
+            <target>1955.5704267628255</target>
+        </w2_2015>
+        <w2_2016>
+            <well>w2</well>
+            <time>2016</time>
+        </w2_2016>
+        <w2_2017>
+            <well>w2</well>
+            <time>2017</time>
+        </w2_2017>
+        <w2_2018>
+            <well>w2</well>
+            <time>2018</time>
+        </w2_2018>
+        <w2_2019>
+            <well>w2</well>
+            <time>2019</time>
+        </w2_2019>
+        <w2_2020>
+            <well>w2</well>
+            <time>2020</time>
+        </w2_2020>
+        <w2_2021>
+            <well>w2</well>
+            <time>2021</time>
+        </w2_2021>
+        <w2_2022>
+            <well>w2</well>
+            <time>2022</time>
+        </w2_2022>
+        <w2_2023>
+            <well>w2</well>
+            <time>2023</time>
+        </w2_2023>
+        <w2_2024>
+            <well>w2</well>
+            <time>2024</time>
+        </w2_2024>
+        <w2_2025>
+            <well>w2</well>
+            <time>2025</time>
+        </w2_2025>
+        <w2_2026>
+            <well>w2</well>
+            <time>2026</time>
+        </w2_2026>
+        <w2_2027>
+            <well>w2</well>
+            <time>2027</time>
+        </w2_2027>
+        <w2_2028>
+            <well>w2</well>
+            <time>2028</time>
+        </w2_2028>
+        <w2_2029>
+            <well>w2</well>
+            <time>2029</time>
+        </w2_2029>
+        <w2_2030>
+            <well>w2</well>
+            <time>2030</time>
+        </w2_2030>
+        <w2_2031>
+            <well>w2</well>
+            <time>2031</time>
+        </w2_2031>
+        <w2_2032>
+            <well>w2</well>
+            <time>2032</time>
+        </w2_2032>
+        <w2_2033>
+            <well>w2</well>
+            <time>2033</time>
+        </w2_2033>
+        <w2_2034>
+            <well>w2</well>
+            <time>2034</time>
+        </w2_2034>
+        <w2_2035>
+            <well>w2</well>
+            <time>2035</time>
+        </w2_2035>
+        <w3_2006>
+            <well>w3</well>
+            <time>2006</time>
+            <weight>0.001</weight>
+            <target>98.66921541476849</target>
+        </w3_2006>
+        <w3_2007>
+            <well>w3</well>
+            <time>2007</time>
+            <weight>0.001</weight>
+            <target>119.03789812660239</target>
+        </w3_2007>
+        <w3_2008>
+            <well>w3</well>
+            <time>2008</time>
+            <weight>0.001</weight>
+            <target>141.5185666295641</target>
+        </w3_2008>
+        <w3_2009>
+            <well>w3</well>
+            <time>2009</time>
+            <weight>0.001</weight>
+            <target>165.95067164566098</target>
+        </w3_2009>
+        <w3_2010>
+            <well>w3</well>
+            <time>2010</time>
+            <weight>0.001</weight>
+            <target>192.10794563843558</target>
+        </w3_2010>
+        <w3_2011>
+            <well>w3</well>
+            <time>2011</time>
+            <weight>0.001</weight>
+            <target>219.70302505783235</target>
+        </w3_2011>
+        <w3_2012>
+            <well>w3</well>
+            <time>2012</time>
+            <weight>0.001</weight>
+            <target>248.39531876990176</target>
+        </w3_2012>
+        <w3_2013>
+            <well>w3</well>
+            <time>2013</time>
+            <weight>0.001</weight>
+            <target>277.80165911633344</target>
+        </w3_2013>
+        <w3_2014>
+            <well>w3</well>
+            <time>2014</time>
+            <weight>0.001</weight>
+            <target>307.50902387416437</target>
+        </w3_2014>
+        <w3_2015>
+            <well>w3</well>
+            <time>2015</time>
+            <weight>0.001</weight>
+            <target>337.0884699966608</target>
+        </w3_2015>
+    </Observations>
+    <Choices>
+        <name>Source terminated in 2015</name>
+        <Parameters>
+            <source1_t1>2015</source1_t1>
+        </Parameters>
+    </Choices>
+    <Choices>
+        <name>Source terminated in 2020</name>
+        <Parameters>
+            <source1_t1>2020</source1_t1>
+        </Parameters>
+    </Choices>
+    <Choices>
+        <name>Source terminated in 2025</name>
+        <Parameters>
+            <source1_t1>2025</source1_t1>
+        </Parameters>
+    </Choices>
+    <Choices>
+        <name>Source terminated in 2030</name>
+        <Parameters>
+            <source1_t1>2030</source1_t1>
+        </Parameters>
+    </Choices>
+    <Filename>/Users/monty/codes/mads.jl/examples/bigdt/source_termination.mads</Filename>
+</root>
