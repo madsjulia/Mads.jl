@@ -65,7 +65,9 @@ The likelihood functions differ in the variance.
 The set of possible concentrations at w2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
 The set of variances is
 
-where   is the nominal variance (500; the nominal standard deviation is ~22) and   is the horizon of uncertainty.
+$$\sum x$$
+
+where $\sigma$  is the nominal variance (500; the nominal standard deviation is ~22) and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ### Robustness:
