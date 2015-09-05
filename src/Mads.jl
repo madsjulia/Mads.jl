@@ -43,6 +43,7 @@ Logging.configure(level=DEBUG)
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0
+madsinputfile = ""
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
@@ -76,7 +77,7 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.parametersample(madsdata, numberofsamples)
-	bestresult = Any()
+	bestresult = Array(Any,2)
 	bestphi = Inf
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
@@ -84,9 +85,15 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
 		result = Mads.calibrate(madsdata; quiet=true, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
-
+		phi = result[2].f_minimum
+		println(phi)
+		if phi < bestphi
+			bestresult = result
+			bestphi = phi
+		end
 	end
 	Mads.setparamsinit!(madsdata, paramdict)
+	return bestresult
 end
 
 @doc "Calibrate " ->

@@ -157,7 +157,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if first
-			lambda = min(1e4, max(diag(JpJ)...)) * tolX;
+			lambda = min(1e4, max(1, diag(JpJ)...)) * tolX;
 			first = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
