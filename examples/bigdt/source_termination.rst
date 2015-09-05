@@ -77,9 +77,9 @@ The set of variances is
 
 .. math::
    
-   α_t(i) = P(O_1, O_2, … O_t, q_t = S_i λ)
+   { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 }
 
-where σ is the nominal variance (500; the nominal standard deviation is ~22)
+where $σ_0^2$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22)
 and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
