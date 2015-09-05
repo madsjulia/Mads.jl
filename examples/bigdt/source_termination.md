@@ -3,7 +3,7 @@
 
 ### Model setup:
 
-![alt text] (./source_termination-problemsetup.svg)
+![] (source_termination-problemsetup.png)
 
 * Contaminant source (orange rectangle)
 * 3 monitoring wells
@@ -11,18 +11,24 @@
 We know some of the properties of the source (location, size, strength, release start time, etc.).
 We know concentrations observed at the 3 monitoring wells (10 annual measurements per well from 2006-2015).
 We do NOT know
+
 *	groundwater flow velocity
 *	longitudinal dispersion of the plume
+
 Inverse modeling can be used to estimate these parameters.
 However, there are uncertainties with the estimates that inverse modeling does not consider.
 Because of these uncertainties, we perform a decision analysis rather than a simple inverse analysis.
 
 ###Uncertainties:
+
 ####Probabilistic uncertainties:
+
 *	prior probabilities about unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)
 *	measurement errors of the observed concentrations
 *	posterior probabilities about unknown model parameters (informed through Bayes theorem accounting for the impact of observed concentrations to constrain the prior model-parameter probabilities)
+
 ####Non-probabilistic uncertainties:
+
 *	conceptual uncertainties in the applied model
 *	uncertainties in the statistical model characterizing the discrepancies (residuals) between model predictions and concentration observations; typically the discrepancies (residuals) are considered to be normally distributed with some fixed variance (e.g. in the case of Bayesian decision analysis); the Information-gap decision approach allows for (1) deviations from the assumption of normality or (2) deviations from the assumed variance.
 
@@ -31,6 +37,7 @@ Because of these uncertainties, we perform a decision analysis rather than a sim
 Future concentrations at monitoring well w2 (from 2016 till 2025) are less than MCL of 2500 ppb
 
 ###Scenarios:
+
 * Terminate the source in 2015 (now)
 * Terminate the source in 2020 (in 5 years)
 * Terminate the source in 2025 (in 10 years)
@@ -66,7 +73,11 @@ Figures representing robustness of model predictions:
 
 (a) Complete robustness curves
 
+![] (source_termination-robustness-1000.png)
+
 (b) Zoomed-in robustness curves
+
+![] (source_termination-robustness-zoom-1000.png)
 
 Discussion of the results: We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500ppb.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
