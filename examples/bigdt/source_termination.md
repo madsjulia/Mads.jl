@@ -67,7 +67,7 @@ The set of variances is
 
 $$\sum x$$
 
-where $\sigma$  is the nominal variance (500; the nominal standard deviation is ~22) and $h$ is the horizon of uncertainty.
+where $\sigma$ is the nominal variance (500; the nominal standard deviation is ~22) and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ### Robustness:

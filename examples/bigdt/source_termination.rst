@@ -76,9 +76,10 @@ The set of possible concentrations at w2 is the set of concentrations whose rela
 The set of variances is
 
 .. math::
+   
+   α_t(i) = P(O_1, O_2, … O_t, q_t = S_i λ)
 
-
-where $\sigma$  is the nominal variance (500; the nominal standard deviation is ~22)
+where σ is the nominal variance (500; the nominal standard deviation is ~22)
 and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
