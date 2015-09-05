@@ -94,11 +94,11 @@ Figures representing robustness of model predictions:
 
 (a) Complete robustness curves
 
-.. image:: ./source_termination-robustness-1000.svg
+.. image:: ./source_termination-robustness-1000.png
 
 (b) Zoomed-in robustness curves
 
-.. image:: ./source_termination-robustness-zoom-1000.svg
+.. image:: ./source_termination-robustness-zoom-1000.png
 
 Discussion of the results:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
