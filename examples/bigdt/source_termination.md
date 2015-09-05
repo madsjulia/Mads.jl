@@ -6,6 +6,7 @@
 ![] (source_termination-problemsetup.png)
 
 * Contaminant source (orange rectangle)
+
 * 3 monitoring wells
 
 We know some of the properties of the source (location, size, strength, release start time, etc.).
@@ -13,45 +14,49 @@ We know concentrations observed at the 3 monitoring wells (10 annual measurement
 We do NOT know
 
 *	groundwater flow velocity
+
 *	longitudinal dispersion of the plume
 
 Inverse modeling can be used to estimate these parameters.
 However, there are uncertainties with the estimates that inverse modeling does not consider.
 Because of these uncertainties, we perform a decision analysis rather than a simple inverse analysis.
 
-###Uncertainties:
+### Uncertainties:
 
-####Probabilistic uncertainties:
+#### Probabilistic uncertainties:
 
 *	prior probabilities about unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)
+
 *	measurement errors of the observed concentrations
+
 *	posterior probabilities about unknown model parameters (informed through Bayes theorem accounting for the impact of observed concentrations to constrain the prior model-parameter probabilities)
 
-####Non-probabilistic uncertainties:
+#### Non-probabilistic uncertainties:
 
 *	conceptual uncertainties in the applied model
+
 *	uncertainties in the statistical model characterizing the discrepancies (residuals) between model predictions and concentration observations; typically the discrepancies (residuals) are considered to be normally distributed with some fixed variance (e.g. in the case of Bayesian decision analysis); the Information-gap decision approach allows for (1) deviations from the assumption of normality or (2) deviations from the assumed variance.
 
-###Goal
+### Goal
 
 Future concentrations at monitoring well w2 (from 2016 till 2025) are less than MCL of 2500 ppb
 
-###Scenarios:
+### Scenarios:
 
 * Terminate the source in 2015 (now)
 * Terminate the source in 2020 (in 5 years)
 * Terminate the source in 2025 (in 10 years)
 * Terminate the source in 2030 (in 15 years)
 
-###Task:
+### Task:
 
 Evaluate the robustness of future concentrations at w2 being below 2500 ppb with respect to the uncertainties in the model and the statistical methods.
 
-###Method:
+### Method:
 
 Bayesian Information Gap Decision Theory (BIG-DT)
 
-###Horizon (level) of uncertainty:
+### Horizon (level) of uncertainty:
 
 Horizon (level) of uncertainty is a non-negative index that defines
 (1) a set of possible concentrations at w2 (including possibilities not predicted by the model) and
@@ -63,11 +68,11 @@ The set of variances is
 where   is the nominal variance (500; the nominal standard deviation is ~22) and   is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
-###Robustness:
+### Robustness:
 
 The horizon (level) of uncertainty at which the maximum acceptable probability of failure is reached
 
-###Results:
+### Results:
 
 Figures representing robustness of model predictions:
 
@@ -79,7 +84,9 @@ Figures representing robustness of model predictions:
 
 ![] (source_termination-robustness-zoom-1000.png)
 
-Discussion of the results: We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500ppb.
+### Discussion of the results:
+
+We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500ppb.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
 The zero-horizon of uncertainty estimate also corresponds to the result obtained using a Bayesian decision analysis that does not account for non-probabilistic (information gap) uncertainties.
 
@@ -97,11 +104,11 @@ Their decision can also rely on
 (1) risk assessment (e.g., differences in the exposure times depending on when the source is terminated) and
 (2) financial constraints (e.g., costs associated with the source termination over different time frames).
 
-###Model:
+### Model:
 
 Analytical solution (coded in Mads.jl).
 
-###Model runs:
+### Model runs:
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using Mads.jl.
