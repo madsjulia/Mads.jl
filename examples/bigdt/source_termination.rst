@@ -7,7 +7,7 @@ Contaminant Source Termination
 Model setup:
 ~~~~~~~~~~~~
 
-.. image:: ./source_termination-problemsetup.svg
+.. image:: source_termination-problemsetup.png
 
 -  Contaminant source (orange rectangle)
 -  3 monitoring wells
@@ -94,11 +94,11 @@ Figures representing robustness of model predictions:
 
 (a) Complete robustness curves
 
-.. image:: ./source_termination-robustness-1000.png
+.. image:: source_termination-robustness-1000.png
 
 (b) Zoomed-in robustness curves
 
-.. image:: ./source_termination-robustness-zoom-1000.png
+.. image:: source_termination-robustness-zoom-1000.png
 
 Discussion of the results:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
