@@ -157,11 +157,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if first
-			lambda = min(1e4, max(1, diag(JpJ)...)) * tolX;
+			lambda = min(1e4, max(eps(Float32), diag(JpJ)...)) * tolX;
 			first = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		!quiet && madswarn(@sprintf "Iteration %02d: Starting lambda: %f" iterCt lambda_current);
+		!quiet && Mads.madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first
 				lambda_current = lambda_p[npl] = lambda
@@ -175,7 +175,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		end
 		function getphianddelta_x(npl)
 			lambda_current = lambda_p[npl]
-			!quiet && madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
+			!quiet && Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
 			u, s, v = svd(JpJ + lambda_current * DtDidentity)
 			is = similar(s)
 			for i=1:length(s)
