@@ -67,7 +67,7 @@ The set of variances is
 
 \[ \{ \sigma^2: \frac{\sigma^2_0}{10^h} ≤ \sigma^2 ≤ 10^h \sigma^2_0 \\} \]
 
-where \( \sigma^2_0\) is the nominal variance (500; the nominal standard deviation \( \sigma_0 \) is ~22) and
+where \( \sigma^2_0\) $\omega = d\phi / dt$ is the nominal variance (500; the nominal standard deviation \( \sigma_0 \) is ~22) and
 \( h \) is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
