@@ -79,7 +79,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="", tolX=1e-3, tolG=1e-6, maxEval=1001, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="", tolX=1e-3, tolG=1e-6, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -91,7 +91,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 	#   tolG - search tolerance in gradient
 	#   maxIter - maximum number of iterations
 	#   lambda - (inverse of) initial trust region radius
-	#   lambda_mu - lambda multiplication factor
+	#   lambda_mu - lambda decrease factor
+	#   lambda_nu - lambda multiplication factor
 	#   np_lambda - number of parallel lambdas to test
 	#   show_trace - print a status summary on each iteration if true
 	# returns: x, J
@@ -157,15 +158,15 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if first
-			lambda = min(1e4, max(eps(Float32), diag(JpJ)...)) * tolX;
+			lambda = min(1e4, max(lambda, diag(JpJ)...)) * tolX;
 			first = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		!quiet && Mads.madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
+		!quiet && madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first
 				lambda_current = lambda_p[npl] = lambda
-			elseif npl % 2 == 0 # even up
+			elseif npl % 2 == 1 # even up
 				lambda_up *= lambda_mu
 				lambda_current = lambda_p[npl] = lambda_up
 			else # odd down
@@ -175,7 +176,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		end
 		function getphianddelta_x(npl)
 			lambda_current = lambda_p[npl]
-			!quiet && Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
+			!quiet && madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
 			u, s, v = svd(JpJ + lambda_current * DtDidentity)
 			is = similar(s)
 			for i=1:length(s)
@@ -214,7 +215,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 			!quiet && madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 );
 			trial_f = f(x + delta_x)
 			objfunceval = sse(trial_f)
-			!quiet && madsoutput(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl]; level = 2 );
+			!quiet && madswarn(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl] );
 			return objfunceval, trial_f
 		end
 		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
@@ -225,7 +226,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
 		!quiet && madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 );
-		!quiet && madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 );
+		!quiet && madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 );
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])
@@ -240,6 +241,10 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 			best_residual = objfuncevals[npl_best]
 			best_x = x
 			best_f = fcur
+			lambda *= lambda_nu
+		else
+			lambda /= lambda_mu
+			lambda_nu *= 2
 		end
 		iterCt += 1
 
