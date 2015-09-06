@@ -4,12 +4,11 @@ using JSON
 using DataStructures
 using ProgressMeter
 
-# reload("Mads.jl")
 # Example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")
 Mads.madswarn("""Mads execution example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")""")
 
 # load MADS problem
-madsdirname = string((dirname(Base.source_path())))
+madsdirname = Mads.getmadsdir()
 Mads.madsinfo("""Mads working directory: $(madsdirname)""")
 madsfilename = Mads.getmadsinputfile()
 if madsfilename == ""
@@ -53,7 +52,7 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 forward_preds = computeconcentrations(paramdict)
 
 # solve the inverse problem
-# result = Mads.calibrate(md; show_trace=true)
+result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
 saltelliresultm = Mads.saltelli(md,N=int(500))
