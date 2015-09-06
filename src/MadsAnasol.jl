@@ -33,7 +33,7 @@ end
 @doc "Compute concentration for all observation points" ->
 function makecomputeconcentrations(madsdata)
 	function computeconcentrations(parameters)
-		n = parameters["n"]
+		porosity = parameters["n"]
 		lambda = parameters["lambda"]
 		theta = parameters["theta"]
 		vx = parameters["vx"]
@@ -55,7 +55,6 @@ function makecomputeconcentrations(madsdata)
 			welly = madsdata["Wells"][wellkey]["y"]
 			wellz0 = madsdata["Wells"][wellkey]["z0"]
 			wellz1 = madsdata["Wells"][wellkey]["z1"]
-			n = length(madsdata["Wells"][wellkey]["obs"])
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
 				for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
@@ -69,9 +68,9 @@ function makecomputeconcentrations(madsdata)
 					t0 = parameters[string("source", i, "_", "t0")]
 					t1 = parameters[string("source", i, "_", "t1")]
 					if i == 1
-						c[string(wellkey, "_", t)] = .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
+						c[string(wellkey, "_", t)] = .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
 					else
-						c[string(wellkey, "_", t)] += .5 * (contamination(wellx, welly, wellz0, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
+						c[string(wellkey, "_", t)] += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff) + contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, usefff))
 					end
 				end
 				# c[t] = contamination(wellx, welly, .5 * (wellz0 + wellz1), n, lambda, theta, vx, vy, vz, ax, ay, az, x, y, z, dx, dy, dz, f, t0, t1, t)
