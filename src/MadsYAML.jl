@@ -1,11 +1,13 @@
-if isdefined(:yaml) # using PyCall and PyYAML
+if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 	@doc "Load YAML file" ->
-	function loadyamlfile(filename::String) # load YAML file
+	function loadyamlfile(filename::String; julia=false) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
-		# yamldata = YAML.load(f) # works better; "1e6" correctly interpreted as a number
-		#TODO do not use yaml.load(f); "1e6" interpreted as a string
-		yamldata = yaml.load(f) # for now we use the python library because the YAML julia library cannot dump
+		if julia
+			yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
+		else
+			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
+		end
 		close(f)
 		return yamldata
 	end
@@ -13,13 +15,12 @@ if isdefined(:yaml) # using PyCall and PyYAML
 	@doc "Dump YAML file" ->
 	function dumpyamlfile(filename::String, yamldata) # dump YAML file
 		f = open(filename, "w")
-		# write(f, yaml.dump(yamldata)) # crashes
 		write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
 		close(f)
 	end
 elseif isdefined(:YAML) # using YAML in Julia
 	@doc "Load YAML file" ->
-	function loadyamlfile(filename::String) # load YAML file
+	function loadyamlfile(filename::String; julia=true) # load YAML file
 		yamldata = OrderedDict()
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
@@ -34,13 +35,13 @@ elseif isdefined(:YAML) # using YAML in Julia
 		close(f)
 	end
 else
-	Mads.err("MADS needs YAML or PyYAML!")
-	error("Missing modules!")
+	Mads.err("MADS needs YAML (and optionally PyYAML)!")
+	throw("Missing modules!")
 end
 
 @doc "Load YAML MADS file" ->
-function loadyamlmadsfile(filename::String) # load MADS input file in YAML format
-	madsdata = loadyamlfile(filename)
+function loadyamlmadsfile(filename::String; julia=false) # load MADS input file in YAML format
+	madsdata = loadyamlfile(filename; julia=julia)
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
 		for dict in madsdata["Parameters"]
