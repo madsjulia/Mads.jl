@@ -626,7 +626,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	# tes = tes./maximum(tes,2)
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
-	pd = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("x"), Guide.YLabel("y") )
+	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
 	push!(pp, pd)
 	if debug
 		# println(dfc)
@@ -790,8 +790,8 @@ function efast(md; N=int(100), M=6, gamma=4, plotresults=0, Seed=0, issvr = 0, t
 # 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
 #			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
 #			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
-# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the 
-# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as 
+# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
+# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as
 #			 in mads (2 columns)
 # M:         Max # of harmonics
 # n:         Total # of input parameters
@@ -1000,7 +1000,7 @@ function eFAST_Parallel_kL(kL)
 		issvr = 0; directOutput = 0;
 	else
 		(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict,paramkeys,issvr,directOutput, f, Seed) = constCell;
-	end	
+	end
 
 
 
@@ -1015,12 +1015,12 @@ function eFAST_Parallel_kL(kL)
   	W_vec   = zeros(1,nprime); 	   # W_vec (Frequencies)
 	phi_mat = zeros(nprime,Ns);    # Phi matrix (phase shift corresponding to each resample)
 
-	
+
 	## Creating W_vec (kth element is Wi)
 	W_vec[k] = Wi;
 	## Edge cases
 	# As long as nprime!=1 our W_vec will have complementary frequencies
-	if nprime !=1		
+	if nprime !=1
 		if k != 1
 			W_vec[1:(k-1)] = W_comp[1:(k-1)];
 		end
@@ -1058,7 +1058,7 @@ function eFAST_Parallel_kL(kL)
 	# It is not important to us in calculating sensitivity so we only save it
 	# for long enough to calculate Y.
 	# QUESTION do we need LHC sampling?
-	X = eFAST_distributeX(X, nprime, InputData, ismads); 
+	X = eFAST_distributeX(X, nprime, InputData, ismads);
 
 	# Pre-allocating Model Output
 	Y = zeros(Ns, ny);
@@ -1072,7 +1072,7 @@ function eFAST_Parallel_kL(kL)
 		## CALCULATING MODEL OUTPUT (SVR)
 		# If we are using svrobj as our surrogate model function, calculate Y as such:
 		elseif issvr == 1
-			## Need to convert data into SVR form 
+			## Need to convert data into SVR form
 			# Boolean determining whether inputs are in log scale or not!   ACCORDING TO NATALIA WE SHOULD NOT HAVE TO SCALE
 			islog = 0;
 			X_svr = Array(Float64,(Ns*ny,nprime+1));
@@ -1096,7 +1096,7 @@ function eFAST_Parallel_kL(kL)
 			   predictedY[idx] = predictSVR(X_svr[idx,:], svrobj[i]);
 			end;
 
-		
+
 			# Converting Y back to format we use for eFAST
 			Y = reshape(predictedY',(ny,Ns))';
 
@@ -1384,7 +1384,7 @@ Ns_total = N;       # Total Number of samples over all search curves (minimum fo
 # 1 for MADS, 0 for standalone. Basically determines IO of script.
 ismads         = 1;
 # 1 if we are reading model output directly (e.g. from .csv), 0 if we are using some sort of script to calculate model output
-directOutput   = 0; 
+directOutput   = 0;
 # 1 if we are using svr model function (svrobj) to calculate Y
 #issvr          = 1; #defined in function
 # Plot results as .svg file
@@ -1410,7 +1410,7 @@ end
 # Different values of P will determine how program is parallelized
 # If P > 1 -> Program will parallelize resamplings & parameters
 # If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
-# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing 
+# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 # the model output quicker.
 P = nprocs();
 
@@ -1730,7 +1730,7 @@ elseif issvr == 0
 	return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => Seed]
 end
 
-# Plot results as .svg file	
+# Plot results as .svg file
 if plotresults == 1
 	madsinfo("""Plotting eFAST results as .svg file ... """)
 	Mads.plotwellSAresults("w10a",md,resultsefast)
