@@ -107,7 +107,8 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
-	numberofsamples = length(paramdictarray[paramkeys[1]])
+	paramoptkeys = getoptparamkeys(madsdata)
+	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
 	t = Array(Float64, nT )
@@ -116,8 +117,10 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 		t[i] = madsdata["Observations"][obskeys[i]]["time"]
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
 	end
-	for paramkey in keys(paramdictarray)
-		Y = Array(Float64,nT,numberofsamples)
+	madsoutput("\nSensitivty analysis spaghetti plots for each selected model parameter (type != null) ...")
+	for paramkey in paramoptkeys
+		madsoutput("\nParameter: $paramkey ... ")
+		Y = Array(Float64, nT, numberofsamples)
 		for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
