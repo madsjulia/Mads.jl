@@ -101,7 +101,7 @@ function paramarray2dict(madsdata, array)
 	return dict
 end
 
-@doc "Create spaghetti plots for all the parameters separtely " ->
+@doc "Generate spaghetti plots for each model parameter separtely " ->
 function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="" )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
@@ -117,11 +117,11 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 		t[i] = madsdata["Observations"][obskeys[i]]["time"]
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
 	end
-	madsoutput("\nSensitivty analysis spaghetti plots for each selected model parameter (type != null) ...")
+	madsoutput("Sensitivty analysis spaghetti plots for each selected model parameter (type != null) ...")
 	for paramkey in paramoptkeys
-		madsoutput("\nParameter: $paramkey ... ")
+		madsoutput("Parameter: $paramkey ...\n")
 		Y = Array(Float64, nT, numberofsamples)
-		for i in 1:numberofsamples
+		@showprogress 4 "Computing ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
 			result = func(paramdict)
@@ -130,27 +130,29 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 			end
 			paramdict[paramkey] = original
 		end
-		p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
-								[layer(x=t, y=Y[:,i], Geom.line,
-								 Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-								 for i in 1:numberofsamples]...)
+		p = Gadfly.plot(Gadfly.layer( x=t, y=d, Gadfly.Geom.point,
+								Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)),
+								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
+								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+								for i in 1:numberofsamples]...)
 		if keyword == ""
 			filename = string("$rootname-$paramkey-$numberofsamples")
 		else
 			filename = string("$rootname-$keyword-$paramkey-$numberofsamples")
 		end
 		filename, format = setimagefileformat(filename, format)
-		draw( eval( (symbol(format)))(filename, 6inch,4inch), p)
+		draw( eval( Gadfly.(symbol(format)))(filename, 6inch,4inch), p)
 	end
 end
 
-@doc "Create a spaghetti plot " ->
+@doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
 function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", format="")
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
-	numberofsamples = length(paramdictarray[paramkeys[1]])
+	paramoptkeys = getoptparamkeys(madsdata)
+	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
 	t = Array(Float64, nT )
@@ -160,8 +162,9 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", form
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
 	end
 	Y = Array(Float64,nT,numberofsamples)
-	for i in 1:numberofsamples
-		for paramkey in keys(paramdictarray)
+	madsoutput("Monte-Carlo spaghetti plots for all the selected model parameter (type != null) ...\n")
+	@showprogress 4 "Computing ..." for i in 1:numberofsamples
+		for paramkey in paramoptkeys
 			paramdict[paramkey] = paramdictarray[paramkey][i]
 		end
 		result = func(paramdict)
@@ -169,15 +172,16 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", form
 			Y[j,i] = result[obskeys[j]]
 		end
 	end
-	p = Gadfly.plot(layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
-					[layer(x=t, y=Y[:,i], Geom.line,
-					 Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-					 for i in 1:numberofsamples]...)
+	p = Gadfly.plot(layer(x=t, y=d, Gadfly.Geom.point,
+					Gadfly.Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
+					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					for i in 1:numberofsamples]... )
 	if keyword == ""
 		filename = "$rootname-$numberofsamples"
 	else
 		filename = "$rootname-$keyword-$numberofsamples"
 	end
 	filename, format = setimagefileformat(filename, format)
-	draw( eval( (symbol(format)) )(filename, 6inch,4inch), p)
+	draw( eval( Gadfly.(symbol(format)) )(filename, 6inch,4inch), p)
 end
