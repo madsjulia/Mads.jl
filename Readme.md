@@ -56,7 +56,6 @@ Pkg.add("Lora");
 Pkg.add("HDF5");
 Pkg.add("Optim");
 Pkg.add("NLopt");
-Pkg.add("BlackBoxOptim");
 Pkg.add("Logging");
 Pkg.add("Distributions");
 Pkg.add("DataStructures");
@@ -71,10 +70,7 @@ Pkg.add("YAML");
 Pkg.add("JSON");
 Pkg.add("Gadfly");
 Pkg.add("DataFrames");
-
-Also Pkg.clone("") the following packages:
-
-Pkg.clone("BlackBoxOptim")
+Pkg.clone("BlackBoxOptim");
 
 ### Run examples
 
