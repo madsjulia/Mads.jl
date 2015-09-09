@@ -67,4 +67,6 @@ Pkg.clone("git@gitlab.com:omalled/R3Function.jl.git")
 
 Pkg.clone("git@gitlab.com:omalled/MPToools.jl.git")
 
+Pkg.clone("git@gitlab.com:omalled/BIGUQ.jl.git")
+
 Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
