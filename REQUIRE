@@ -11,6 +11,11 @@ BlackBoxOptim
 Logging
 Distributions
 DataStructures
+ForwardDiff
+ODE
+Sundials
+ProgressMeter
+LightXML
 Docile
 PyCall
 PyPlot
