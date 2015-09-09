@@ -46,7 +46,7 @@ JSON
 Gadfly
 DataFrames
 
-by copy and pasting the following lines:
+by copy and pasting the following line:
 
 Pkg.add("Lora")
 Pkg.add("HDF5")
@@ -77,13 +77,13 @@ Pkg.clone("BlackBoxOptim")
 In julia REPL, do the following commants:
 
 reload("Mads.jl") # if there are still missing packages, add them
+
 reload("examples/bigdt/bigdt.jl") # to peform bigdt analysis
 
 Global installation
 ------------------
 
-Pkg.clone("git@gitlab.com:omalled/Anasol.jl.git")
-Pkg.clone("git@gitlab.com:omalled/R3Function.jl.git")
-Pkg.clone("git@gitlab.com:omalled/MPToools.jl.git")
-Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
-
+* Pkg.clone("git@gitlab.com:omalled/Anasol.jl.git")
+* Pkg.clone("git@gitlab.com:omalled/R3Function.jl.git")
+* Pkg.clone("git@gitlab.com:omalled/MPToools.jl.git")
+* Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
