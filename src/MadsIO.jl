@@ -527,7 +527,7 @@ end
 @doc "Read observations" ->
 function readobservations(madsdata)
 	obsids=getobskeys(madsdata)
-	observations = Dict(obsids, zeros(length(obsids)))
+	observations = OrderedDict(obsids, zeros(length(obsids)))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
 		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once
@@ -541,7 +541,7 @@ end
 @doc "Get parameter distributions" ->
 function getparamdistributions(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
-	distributions = Dict()
+	distributions = OrderedDict()
 	for i in 1:length(paramkeys)
 		if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
 			distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))

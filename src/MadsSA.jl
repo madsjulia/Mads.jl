@@ -292,7 +292,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
 		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
-		warned_nnans = 0
+		maxnnans = 0
 		for j = 1:length(obskeys)
 			yAnonan = isnan(yA[:,j])
 			yBnonan = isnan(yB[:,j])
@@ -301,13 +301,10 @@ function saltelli(madsdata; N=int(100), seed=0)
 			nanindices = find(~nonan)
 			# println("$nanindices")
 			nnans = length(nanindices)
-			nnonnans = N - warned_nnans
-			if nnans > 0
-				if warned_nnans != nnans
-					Mads.warn("""There are $(nnans) NaN's""")
-					warned_nnans = nnans
-				end
+			if nnans > maxnnans
+				maxnnans = nnans
 			end
+			nnonnans = N - nnans
 			f0A = mean(yA[nonan,j])
 			f0B = mean(yB[nonan,j])
 			meandata[obskeys[j]][paramkeys[i]] = .5 * (f0A + f0B)
@@ -325,6 +322,9 @@ function saltelli(madsdata; N=int(100), seed=0)
 			end
 			tes[obskeys[j]][paramkeys[i]] = min(1, max(0, 1 - varPnot / varB)) # varT or varA; i think it should be varA; i do not think should be varB?
 			# println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
+		end
+		if maxnnans > 0
+			Mads.warn("""There are $(maxnnans) NaN's""")
 		end
 	end
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
