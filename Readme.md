@@ -28,29 +28,7 @@ git clone git@gitlab.com:omalled/BIGUQ.jl.git
 
 ### Add more packages
 
-Start julia and Pkg.add("") the following packages:
-
-Lora
-HDF5
-Optim
-NLopt
-BlackBoxOptim
-Logging
-Distributions
-DataStructures
-ForwardDiff
-ODE
-ProgressMeter
-LightXML
-Docile
-PyCall
-PyPlot
-YAML
-JSON
-Gadfly
-DataFrames
-
-by copy and pasting the following line:
+Start julia and add the following packages:
 
 Pkg.add("Lora");
 Pkg.add("HDF5");
