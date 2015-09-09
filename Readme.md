@@ -56,7 +56,7 @@ In julia REPL, do the following commants:
 
 reload("Mads.jl") # if there are still missing packages, add them
 
-reload("examples/bigdt/bigdt.jl") # to peform bigdt analysis
+reload("Mads.jl/examples/bigdt/bigdt.jl") # to peform bigdt analysis
 
 Global installation
 ------------------
