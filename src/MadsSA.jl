@@ -514,15 +514,13 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-@doc "Plot the sensitivity analysis results for each well (wells class epxpected)" ->
+@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
 function plotwellSAresults(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
-		madserror("There is no 'Wells' data in the MADS input dataset")
+		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-	rootname = getmadsrootname(madsdata)
 	nsample = result["samplesize"]
-	method = result["method"]
 	o = madsdata["Wells"][wellname]["obs"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -544,10 +542,10 @@ function plotwellSAresults(wellname, madsdata, result)
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-	pp = Array(Any, 0)
+  pp = Array(Any, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
-	push!(pp, pc)
-	vsize = 4inch
+  push!(pp, pc)
+  vsize = 4inch
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
@@ -555,42 +553,40 @@ function plotwellSAresults(wellname, madsdata, result)
 		deleteNaN!(df[j])
 		j += 1
 	end
-	vdf = vcat(df...)
-	if length(vdf[1]) > 0
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :none) )
-		push!(pp, ptes)
-		vsize += 4inch
-	end
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+    push!(pp, ptes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
-	vdf = vcat(df...)
-	if length(vdf[1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-		push!(pp, pmes)
-		vsize += 4inch
-	end
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+	  pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+    push!(pp, pmes)
+    vsize += 4inch
+  end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
-	vdf = vcat(df...)
-	if length(vdf[1]) > 0
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance") )
-		push!(pp, pvar)
-		vsize += 4inch
-	end
-	p = vstack(pp...)
+  vdf = vcat(df...)
+  if length(vdf[1]) > 0
+  	pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+    push!(pp, pvar)
+    vsize += 4inch
+  end
+  p = vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	filename = "$rootname-$wellname-$method-$nsample"
-	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
@@ -1498,9 +1494,17 @@ if truncateRanges ==1
 			percentvalue   = percentDict["$(paramkeys[k])"]
 
 			if logdistribution == 1
-				InputData[k,2] = Uniform(log(initvalue - initvalue*percentvalue), log(initvalue + initvalue*percentvalue))
+				if paramkeys[k] == "source1_t0"
+					InputData[k,2] = Uniform(log(initvalue - 2*initvalue*percentvalue), log(initvalue))
+				else
+					InputData[k,2] = Uniform(log(initvalue - initvalue*percentvalue), log(initvalue + initvalue*percentvalue))
+				end
 			else
-				InputData[k,2] = Uniform(initvalue - initvalue*percentvalue, initvalue + initvalue*percentvalue)
+				if paramkeys[k] == "source1_t0"
+					InputData[k,2] = Uniform(initvalue - 2*initvalue*percentvalue, initvalue)
+				else
+					InputData[k,2] = Uniform(initvalue - initvalue*percentvalue, initvalue + initvalue*percentvalue)
+				end
 			end
 		end
 
@@ -1743,4 +1747,118 @@ end
 # println("Sti: $Sti")
 
 end
+
+
+
+
+@doc "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)" ->
+function plotSAresults_monty(wellname, madsdata, result)
+	if !haskey(madsdata, "Wells")
+		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
+		return
+	end
+	nsample = result["samplesize"]
+	o = madsdata["Wells"][wellname]["obs"]
+	paramkeys = Mads.getoptparamkeys(madsdata)
+	nP = length(paramkeys)
+	nT = length(o)
+	d = Array(Float64, 2, nT)
+	tes = Array(Float64, nP, nT)
+
+	# Deleting "Nothings" from results (tes[1:3])
+	for zz=1:3
+		for k = 1:7
+		    result["tes"]["$(wellname)_$zz"][paramkeys[k]] = NaN;
+		end
+	end
+
+	# Setting tes/concentration matrices
+	for i in 1:nT
+		t = d[1,i] = o[i][i]["t"]
+		d[2,i] = o[i][i]["c"]
+		obskey = wellname * "_" * string(t)
+		j = 1
+		for paramkey in paramkeys
+			tes[j,i] = result["tes"][obskey][paramkey]
+			j += 1
+		end
+	end
+
+	## Calculating concentration from initial values (using model)
+	paramallkeys  = Mads.getparamkeys(madsdata);
+	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys)));
+	f 			  = Mads.makemadscommandfunction(madsdata);
+
+	Ytemp = f(paramalldict)
+
+	# Since md might include more wells then wellname, this finds results only for wellname
+	wstr = Array(String,(50,1));
+	for i = 1:50
+		wstr[i] = wellname*"_$i";
+	end
+
+	# Finding concentration just for wellname
+	Y = zeros(50,1);
+	for i = 1:50
+		Y[i] = Ytemp[wstr[i]]
+	end
+
+
+	# Concentrations will be normalized to be from 0 to 1
+	maxconcentration = maximum(Y);
+	# Normalizing concentration
+	Y = Y./maxconcentration;
+	# Rounding maxconcentration to 3 sig figs
+	maxconcentration = signif(maxconcentration,3);
+
+	# Data frame for concentration
+	dfc = DataFrame(x=[1:50], y = Y[:], parameter="c")
+
+	# Changing paramkeys so they don't include "source1_"
+	for k = 1:nP
+		if length(paramkeys[k]) > 6
+			if paramkeys[k][1:6] == "source"
+				paramkeys[k] = paramkeys[k][9:end]
+			end
+		end
+	end
+
+	# Data frame for total effect
+	df = Array(Any, nP)
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		#deleteNaN!(df[j])
+		j += 1
+	end
+	vdf = vcat(df...)
+
+	# Setting default colors for parameters	
+	a = Gadfly.Scale.color_discrete_hue()
+	# index 6 is grey
+	if nP >= 6
+		pcolors = a.f(nP+1)
+		pcolors = vcat(pcolors[6], pcolors[1:5], pcolors[7:nP+1])
+	else
+		pcolors = a.f(nP+6)
+		pcolors = vcat(pcolors[6], pcolors[1:nP])
+	end
+
+	# Combining dataframes
+  	bigdf = vcat(dfc,vdf)
+
+  	# Plotting
+	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect/Normalized Concentration"),
+  	Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
+  	Gadfly.Scale.color_discrete_manual(pcolors...));
+
+	# Creating .svg file for plot (in current directory)
+	rootname = Mads.getmadsrootname(madsdata)
+	method = result["method"]
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes);
+end
+
+
+
+
 
