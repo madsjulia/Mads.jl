@@ -1493,6 +1493,7 @@ if truncateRanges ==1
 			initvalue 	   = paramalldict["$(paramkeys[k])"]
 			percentvalue   = percentDict["$(paramkeys[k])"]
 
+			# Special case for source1_t0 since initial value == max value
 			if logdistribution == 1
 				if paramkeys[k] == "source1_t0"
 					InputData[k,2] = Uniform(log(initvalue - 2*initvalue*percentvalue), log(initvalue))
