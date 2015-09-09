@@ -52,25 +52,25 @@ DataFrames
 
 by copy and pasting the following line:
 
-Pkg.add("Lora")
-Pkg.add("HDF5")
-Pkg.add("Optim")
-Pkg.add("NLopt")
-Pkg.add("BlackBoxOptim")
-Pkg.add("Logging")
-Pkg.add("Distributions")
-Pkg.add("DataStructures")
-Pkg.add("ForwardDiff")
-Pkg.add("ODE")
-Pkg.add("ProgressMeter")
-Pkg.add("LightXML")
-Pkg.add("Docile")
-Pkg.add("PyCall")
-Pkg.add("PyPlot")
-Pkg.add("YAML")
-Pkg.add("JSON")
-Pkg.add("Gadfly")
-Pkg.add("DataFrames")
+Pkg.add("Lora");
+Pkg.add("HDF5");
+Pkg.add("Optim");
+Pkg.add("NLopt");
+Pkg.add("BlackBoxOptim");
+Pkg.add("Logging");
+Pkg.add("Distributions");
+Pkg.add("DataStructures");
+Pkg.add("ForwardDiff");
+Pkg.add("ODE");
+Pkg.add("ProgressMeter");
+Pkg.add("LightXML");
+Pkg.add("Docile");
+Pkg.add("PyCall");
+Pkg.add("PyPlot");
+Pkg.add("YAML");
+Pkg.add("JSON");
+Pkg.add("Gadfly");
+Pkg.add("DataFrames");
 
 Also Pkg.clone("") the following packages:
 
