@@ -11,10 +11,10 @@ using Lora
 using Distributions
 using Logging
 import JSON
-#using NLopt
-#using HDF5 # HDF5 installation is problematic on some machines
-#using PyCall
-#@pyimport yaml # PyYAML installation is problematic on some machines
+using NLopt
+using HDF5 # HDF5 installation is problematic on some machines
+using PyCall
+@pyimport yaml # PyYAML installation is problematic on some machines
 using YAML # use YAML if PyYAML is not available
 
 if VERSION < v"0.4.0-dev"
@@ -35,7 +35,7 @@ include("MadsSA.jl")
 include("MadsMC.jl")
 include("MadsLM.jl")
 include("MadsAnasol.jl")
-#include("MadsBIG.jl")
+include("MadsBIG.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
