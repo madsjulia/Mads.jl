@@ -1,5 +1,5 @@
 import Mads
-using Gadfly
+import Gadfly
 using JSON
 using DataStructures
 using ProgressMeter
@@ -51,6 +51,13 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 # compute concentrataions based on the initial values
 forward_preds = computeconcentrations(paramdict)
 
+Mads.madsinfo("Manual SA ...")
+numberofsamples = 10
+paramvalues=Mads.parametersample(md, numberofsamples)
+Mads.allwellsoff!(md)
+Mads.wellon!(md, "w20a")
+Mads.spaghettiplots(md, paramvalues, keyword="w20a")
+
 # solve the inverse problem
 result = Mads.calibrate(md; show_trace=true)
 
@@ -73,29 +80,6 @@ Mads.plotwellSAresults("w1a",md,saltelliresultb)
 
 # plot global SA results for a given observation point
 # Mads.plotwellSAresults("w1a",md,result)
-
-Mads.madsinfo("Manual SA ...")
-numberofsamples = 10
-paramvalues=Mads.parametersample(md,numberofsamples)
-for paramkey in keys(paramvalues)
-	t = Array(Float64,length(md["Observations"]))
-	Y = Array(Float64,length(md["Observations"]),numberofsamples)
-	@showprogress 1 "Computing ..." for i in 1:numberofsamples
-		original = paramdict[paramkey]
-		paramdict[paramkey] = paramvalues[paramkey][i]
-		forward_preds = computeconcentrations(paramdict)
-		j = 1
-		for obskey in keys(forward_preds)
-			Y[j,i] = forward_preds[obskey]
-			j += 1
-		end
-		paramdict[paramkey] = original
-	end
-	p=Gadfly.plot([layer(x=1:50, y=Y[:,i], Geom.line,
-                 Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-								 for i in 1:numberofsamples]...)
-	Gadfly.draw(SVG(string("$rootname-MSA-$paramkey-$numberofsamples.svg"),6inch,4inch),p)
-end
 
 # parameter space exploration
 # Mads.madsinfo("Parameter space exploration ...")
