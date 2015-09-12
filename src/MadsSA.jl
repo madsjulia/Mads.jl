@@ -248,9 +248,13 @@ function saltelli(madsdata; N=int(100), seed=0)
 	if seed != 0
 		srand(seed)
 	end
+	madsoutput("Number of samples: $N\n")
 	paramallkeys = getparamkeys(madsdata)
 	paramalldict = Dict(paramallkeys, getparamsinit(madsdata))
 	paramkeys = getoptparamkeys(madsdata)
+	nP = length(paramkeys)
+	madsoutput("Number of model paramters to be analyzed: $(nP) \n")
+	madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n")
 	obskeys = getobskeys(madsdata)
 	distributions = getparamdistributions(madsdata)
 	f = makemadscommandfunction(madsdata)
