@@ -249,44 +249,45 @@ function saltelli(madsdata; N=int(100), seed=0)
 		srand(seed)
 	end
 	madsoutput("Number of samples: $N\n")
-	paramallkeys = getparamkeys(madsdata)
-	paramalldict = Dict(paramallkeys, getparamsinit(madsdata))
-	paramkeys = getoptparamkeys(madsdata)
-	nP = length(paramkeys)
+	paramallkeys = Mads.getparamkeys(madsdata)
+	paramalldict = Dict(zip(paramallkeys, Mads.getparamsinit(madsdata)))
+	paramoptkeys = Mads.getoptparamkeys(madsdata)
+	nP = length(paramoptkeys)
 	madsoutput("Number of model paramters to be analyzed: $(nP) \n")
 	madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n")
-	obskeys = getobskeys(madsdata)
-	distributions = getparamdistributions(madsdata)
-	f = makemadscommandfunction(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
+	nO = length(obskeys)
+	distributions = Mads.getparamdistributions(madsdata)
+	f = Mads.makemadscommandfunction(madsdata)
 	A = Array(Float64, (N, 0))
 	B = Array(Float64, (N, 0))
-	C = Array(Float64, (N, length(paramkeys)))
+	C = Array(Float64, (N, nP))
 	meandata = OrderedDict{String, OrderedDict{String, Float64}}() # mean
 	variance = OrderedDict{String, OrderedDict{String, Float64}}() # variance
 	mes = OrderedDict{String, OrderedDict{String, Float64}}() # main effect (first order) sensitivities
 	tes = OrderedDict{String, OrderedDict{String, Float64}}()	# total effect sensitivities
-	for i = 1:length(obskeys)
+	for i = 1:nO
 		meandata[obskeys[i]] = OrderedDict{String, Float64}()
 		variance[obskeys[i]] = OrderedDict{String, Float64}()
 		mes[obskeys[i]] = OrderedDict{String, Float64}()
 		tes[obskeys[i]] = OrderedDict{String, Float64}()
 	end
-	for key in paramkeys
+	for key in paramoptkeys
 		delete!(paramalldict,key)
 	end
-	for j = 1:length(paramkeys)
-		s1 = Mads.parametersample(madsdata, N, paramkeys[j])
-		s2 = Mads.parametersample(madsdata, N, paramkeys[j])
+	for j = 1:nP
+		s1 = Mads.parametersample(madsdata, N, paramoptkeys[j])
+		s2 = Mads.parametersample(madsdata, N, paramoptkeys[j])
 		A = [A s1]
 		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, A[i, :]))))), 1:size(A, 1))...)'
+	yA = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :])))))), 1:N)...)'
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, B[i, :]))))), 1:size(B, 1))...)'
-	for i = 1:length(paramkeys)
+	yB = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :])))))), 1:N)...)'
+	for i = 1:nP
 		for j = 1:N
-			for k = 1:length(paramkeys)
+			for k = 1:nP
 				if k != i
 					C[j, k] = B[j, k]
 				else
@@ -294,10 +295,13 @@ function saltelli(madsdata; N=int(100), seed=0)
 				end
 			end
 		end
-		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramkeys[i])\n""" );
-		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, C[i, :]))))), 1:size(C, 1))...)'
+		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
+		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :])))))), 1:N)...)'
 		maxnnans = 0
-		for j = 1:length(obskeys)
+		println(size(yA))
+		println(size(yB))
+		println(size(yC))
+		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
 			yBnonan = isnan(yB[:,j])
 			yCnonan = isnan(yC[:,j])
@@ -311,20 +315,20 @@ function saltelli(madsdata; N=int(100), seed=0)
 			nnonnans = N - nnans
 			f0A = mean(yA[nonan,j])
 			f0B = mean(yB[nonan,j])
-			meandata[obskeys[j]][paramkeys[i]] = .5 * (f0A + f0B)
+			meandata[obskeys[j]][paramoptkeys[i]] = .5 * (f0A + f0B)
 			varA = abs(dot(yA[nonan,j], yA[nonan,j]) / nnonnans - f0A ^ 2)
 			varB = abs(dot(yB[nonan,j], yB[nonan,j]) / nnonnans - f0B ^ 2)
 			# varT = .5 * (varA + varB)
 			# varMax = max(varA, varB)
 			varP = abs((dot(yA[nonan, j], yC[nonan, j]) / nnonnans - f0A ^ 2)) # we can get negative values for varP which does not make sense
 			varPnot = abs((dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B ^ 2))
-			variance[obskeys[j]][paramkeys[i]] = varP
+			variance[obskeys[j]][paramoptkeys[i]] = varP
 			if varA < eps(Float64) && varP < eps(Float64)
-				mes[obskeys[j]][paramkeys[i]] = NaN;
+				mes[obskeys[j]][paramoptkeys[i]] = NaN;
 			else
-				mes[obskeys[j]][paramkeys[i]] = min(1, max(0, varP / varA)) # varT or varA? i think it should be varA
+				mes[obskeys[j]][paramoptkeys[i]] = min(1, max(0, varP / varA)) # varT or varA? i think it should be varA
 			end
-			tes[obskeys[j]][paramkeys[i]] = min(1, max(0, 1 - varPnot / varB)) # varT or varA; i think it should be varA; i do not think should be varB?
+			tes[obskeys[j]][paramoptkeys[i]] = min(1, max(0, 1 - varPnot / varB)) # varT or varA; i think it should be varA; i do not think should be varB?
 			# println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 		if maxnnans > 0
@@ -702,8 +706,10 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 	end
 	rootname = getmadsrootname(madsdata)
 	p = Gadfly.vstack(pp...)
-	method = result["method"]
-	filename = "$rootname-$method-$nsample"
+	if filename == ""
+		method = result["method"]
+		filename = "$rootname-$method-$nsample"
+	end
 	filename, format = setimagefileformat(filename, format)
 	Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
 end
@@ -1838,7 +1844,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	end
 	vdf = vcat(df...)
 
-	# Setting default colors for parameters	
+	# Setting default colors for parameters
 	a = Gadfly.Scale.color_discrete_hue()
 	# index 6 is grey
 	if nP >= 6
