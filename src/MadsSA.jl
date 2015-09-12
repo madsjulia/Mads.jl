@@ -298,9 +298,6 @@ function saltelli(madsdata; N=int(100), seed=0)
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
 		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :])))))), 1:N)...)'
 		maxnnans = 0
-		println(size(yA))
-		println(size(yB))
-		println(size(yC))
 		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
 			yBnonan = isnan(yB[:,j])
