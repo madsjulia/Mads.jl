@@ -282,9 +282,9 @@ function saltelli(madsdata; N=int(100), seed=0)
 		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :])))))), 1:N)...)'
+	yA = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :]))))))), 1:N)...)'
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :])))))), 1:N)...)'
+	yB = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :]))))))), 1:N)...)'
 	for i = 1:nP
 		for j = 1:N
 			for k = 1:nP
@@ -296,7 +296,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 			end
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
-		yC = hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :])))))), 1:N)...)'
+		yC = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :]))))))), 1:N)...)'
 		maxnnans = 0
 		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
