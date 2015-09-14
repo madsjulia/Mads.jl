@@ -21,5 +21,6 @@ PyCall
 PyPlot
 YAML
 JSON
+JLD
 Gadfly
 DataFrames
