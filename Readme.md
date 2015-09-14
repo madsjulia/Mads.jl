@@ -47,6 +47,8 @@ Pkg.add("PyPlot");
 Pkg.add("YAML");
 Pkg.add("JSON");
 Pkg.add("Gadfly");
+Pkg.add("JLD");
+Pkg.add("DataFrames");
 Pkg.add("DataFrames");
 Pkg.clone("BlackBoxOptim");
 
