@@ -68,13 +68,21 @@ function localsa(madsdata; format="")
 											Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 	filename = "$(rootname)-jacobian"
-	filename, format = setimagefileformat(filename, format)
-	# Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
+	filename, format = Mads.setimagefileformat(filename, format)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
 	Mads.info("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
-	# covar = inv(JpJ) # produces resulut similar to svd
-	u, s, v = svd(JpJ)
-	covar = ( v * inv(diagm(s)) * u' )
+	try
+		u, s, v = svd(JpJ)
+		covar = ( v * inv(diagm(s)) * u' )
+	catch "LAPACKException(12)"
+		try
+			covar = inv(JpJ)
+		catch "SingularException(4)"
+			Mads.err("""Singular covariance matrix! Local sensitivity analysis fails.""")
+			return
+		end
+	end
 	writedlm("$(rootname)-covariance.dat", covar)
 	stddev = sqrt(abs(diag(covar)))
 	f = open("$(rootname)-stddev.dat", "w")
@@ -98,7 +106,7 @@ function localsa(madsdata; format="")
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	eigenplot = vstack(eigenmat, eigenval)
 	filename = "$(rootname)-eigen"
-	filename, format = setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw( eval(symbol(format))(filename,6inch,12inch), eigenplot)
 	Mads.info("""Eigen matrix plot saved in $filename""")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
@@ -654,7 +662,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 			maxtorealmaxFloat32!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Total Effect"), Theme(key_position = :none) ) # only none and default works
+		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time (seconds)"), Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
 	end
@@ -675,7 +683,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 			maxtorealmaxFloat32!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Main Effect"), Theme(key_position = :none) ) # only none and default works
+		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time (seconds)"), Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
 	end
@@ -697,7 +705,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 			maxtorealmaxFloat32!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works
+		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4inch
 	end
@@ -707,7 +715,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
 	end
-	filename, format = setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
 end
 

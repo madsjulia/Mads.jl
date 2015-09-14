@@ -7,7 +7,6 @@ end
 #@docstrings
 
 function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String; format="")
-	filename, format = setimagefileformat(filename, format)
 	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
@@ -20,7 +19,12 @@ function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::Strin
 	end
 	hsize = (3 * size(samples, 2))inch
 	vsize = (3 * size(samples, 2))inch
-	draw( eval( (symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
+	filename, format = Mads.setimagefileformat(filename, format)
+	try
+		Gadfly.draw( eval( (Gadfly.symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
+	catch "At least one finite value must be provided to formatter."
+		Mads.warn("Gadfly fails!")
+	end
 end
 
 @doc "Bayes Sampling " ->
@@ -102,7 +106,7 @@ function paramarray2dict(madsdata, array)
 end
 
 @doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="" )
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filename="", keyword="" )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -135,18 +139,24 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
 								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 								for i in 1:numberofsamples]...)
-		if keyword == ""
-			filename = string("$rootname-$paramkey-$numberofsamples")
-		else
-			filename = string("$rootname-$keyword-$paramkey-$numberofsamples")
+		if filename == ""
+			if keyword == ""
+				filename = string("$rootname-$paramkey-$numberofsamples")
+			else
+				filename = string("$rootname-$keyword-$paramkey-$numberofsamples")
+			end
 		end
-		filename, format = setimagefileformat(filename, format)
-		draw( eval( Gadfly.(symbol(format)))(filename, 6inch,4inch), p)
+		filename, format = Mads.setimagefileformat(filename, format)
+		try
+			Gadfly.draw( eval( Gadfly.(symbol(format)))(filename, 6inch,4inch), p)
+		catch "At least one finite value must be provided to formatter."
+			Mads.warn("Gadfly fails!")
+		end
 	end
 end
 
 @doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", format="")
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="")
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -177,11 +187,17 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", form
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]... )
-	if keyword == ""
-		filename = "$rootname-$numberofsamples"
-	else
-		filename = "$rootname-$keyword-$numberofsamples"
+	if filename == ""
+		if keyword == ""
+			filename = "$rootname-$numberofsamples"
+		else
+			filename = "$rootname-$keyword-$numberofsamples"
+		end
 	end
 	filename, format = setimagefileformat(filename, format)
-	draw( eval( Gadfly.(symbol(format)) )(filename, 6inch,4inch), p)
+	try
+		Gadfly.draw( eval( Gadfly.(symbol(format)) )(filename, 6inch,4inch), p)
+	catch "At least one finite value must be provided to formatter."
+		Mads.warn("Gadfly fails!")
+	end
 end

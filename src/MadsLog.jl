@@ -25,4 +25,5 @@ end
 @doc "MADS critical error messages" ->
 function madscrit(message::String)
 	Logging.critical(message) # level 4
+	throw("Mads quits!")
 end
