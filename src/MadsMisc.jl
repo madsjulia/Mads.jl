@@ -47,7 +47,7 @@ end
 @doc "Make a version of f that accepts an array containing the opt parameters' values" ->
 function makearrayfunction(madsdata, f)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
 		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
 	end
