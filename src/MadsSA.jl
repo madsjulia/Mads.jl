@@ -603,7 +603,7 @@ function plotwellSAresults(wellname, madsdata, result)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
-function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
+function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false)
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -662,7 +662,10 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 			maxtorealmaxFloat32!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time (seconds)"), Guide.YLabel("Total Effect") ) # only none and default works
+		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
+											 Gadfly.Theme(line_width=1.5pt),
+											 Guide.XLabel("Time (seconds)"),
+											 Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
 	end
@@ -683,7 +686,10 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 			maxtorealmaxFloat32!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time (seconds)"), Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
+		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
+											 Gadfly.Theme(line_width=1.5pt),
+											 Gadfly.Guide.XLabel("Time (seconds)"),
+											 Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
 	end
@@ -715,8 +721,18 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false)
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
+	if !separate_files
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
+	else
+		filename_orig = filename
+		filename = filename_orig * "-total_effect"
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), ptes)
+		filename = filename_orig * "-main_effect"
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), pmes)
+	end
 end
 
 @doc "Convert Nothing's to NaN's in a dictionary" ->
