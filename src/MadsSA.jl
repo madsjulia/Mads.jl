@@ -1494,8 +1494,7 @@ ny     = length(obskeys);
 if truncateRanges ==1
 	##### Truncated ranges Boian asked for (ranges were too large for SVR)
 		############## FORCED INPUT ##############
-	percentDict = ["vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10];
-
+	@Compat.compat percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
 	#Increasing ranges
 	if increaserange == 1
 		#percentDict = ["vx"=>.40, "ax"=>.95, "ts_dsp"=>.60, "source1_f"=>.20, "source1_t0"=>.40, "source1_x"=>.10, "source1_t1"=>.20];
@@ -1645,9 +1644,9 @@ end
 ## Storing constants inside of a cell
 # Less constants if not mads
 if ismads == 0
-	constCell = {ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData,issvr,Seed}
+	@Compat.compat constCell = [ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, Seed]
 else
-	constCell = {ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict,paramkeys,issvr,directOutput, f, Seed};
+	@Compat.compat constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, Seed]
 end
 
 ## Sends arguments to processors p
@@ -1744,10 +1743,10 @@ end
 #"seed" => Seed
 if issvr == 1
 	println("returning resultsefastsvr")
-	return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => Seed]
+	return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => Seed)
 elseif issvr == 0
 	println("returning resultsefast")
-	return resultsefast = ["mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => Seed]
+	return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => Seed)
 end
 
 # Plot results as .svg file
@@ -1755,17 +1754,10 @@ if plotresults == 1
 	madsinfo("""Plotting eFAST results as .svg file ... """)
 	Mads.plotwellSAresults("w10a",md,resultsefast)
 end
-
-
-
 ## Displaying Results
 # println("Si: $Si")
 # println("Sti: $Sti")
-
 end
-
-
-
 
 @doc "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)" ->
 function plotSAresults_monty(wellname, madsdata, result)
