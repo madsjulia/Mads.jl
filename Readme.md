@@ -6,7 +6,7 @@ Local installation
 
 ### Create a .juliarc file
 
-Add the following line in the .juliarc file in your home directory
+Add the following line in the `.juliarc.jl` file in your home directory
 
 `push!(LOAD_PATH, ENV["HOME"]*"/codes")`
 
