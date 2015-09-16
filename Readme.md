@@ -42,6 +42,7 @@ Pkg.add("ODE");
 Pkg.add("ProgressMeter");
 Pkg.add("LightXML");
 Pkg.add("Docile");
+Pkg.add("Lexicon");
 Pkg.add("PyCall");
 Pkg.add("PyPlot");
 Pkg.add("YAML");
