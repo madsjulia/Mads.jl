@@ -73,3 +73,19 @@ Pkg.clone("git@gitlab.com:omalled/MPToools.jl.git")
 Pkg.clone("git@gitlab.com:omalled/BIGUQ.jl.git")
 
 Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
+
+Installation behind a firewall
+------------------------------
+
+Add in .gitconfig:
+
+[url "https://"]
+        insteadOf = git://
+        
+Set proxies:
+
+export ftp_proxy=http://proxyout.<your_site>:8080
+export rsync_proxy=http://proxyout.<your_site>:8080
+export http_proxy=http://proxyout.<your_site>:8080
+export https_proxy=http://proxyout.<your_site>:8080
+export no_proxy=.<your_site>
