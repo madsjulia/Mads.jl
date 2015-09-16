@@ -23,7 +23,7 @@ function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::Strin
 	try
 		Gadfly.draw( eval( (Gadfly.symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
-		Mads.warn("Gadfly fails!")
+		Mads.madswarn("Gadfly fails!")
 	end
 end
 
@@ -150,7 +150,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filena
 		try
 			Gadfly.draw( eval( Gadfly.(symbol(format)))(filename, 6inch,4inch), p)
 		catch "At least one finite value must be provided to formatter."
-			Mads.warn("Gadfly fails!")
+			Mads.madswarn("Gadfly fails!")
 		end
 	end
 end
@@ -198,6 +198,6 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 	try
 		Gadfly.draw( eval( Gadfly.(symbol(format)) )(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."
-		Mads.warn("Gadfly fails!")
+		Mads.madswarn("Gadfly fails!")
 	end
 end

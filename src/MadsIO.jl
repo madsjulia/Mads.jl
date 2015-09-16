@@ -1,3 +1,5 @@
+using Gadfly
+
 if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
@@ -298,7 +300,10 @@ function plotmadsproblem(madsdata; format="", filename="")
 	ymax = ymax + dy / 6
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
 					 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-					 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]), Compose.fill(parse(Colors.Colorant, "orange")), Compose.stroke(parse(Colors.Colorant, "orange")))),
+					 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
+																						Compose.fill(parse(Colors.Colorant, "orange")),
+																						Compose.fillopacity(0.2),
+																						Compose.stroke(parse(Colors.Colorant, "orange")))),
 					 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
 					 Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""

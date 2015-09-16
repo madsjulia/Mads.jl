@@ -113,13 +113,13 @@ function localsa(madsdata; format="")
 end
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=int(1e4), seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata; N=Int(1e4), seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
 	end
-	numsamples = int(sqrt(N))
-	numoneparamsamples = int(sqrt(N))
-	nummanyparamsamples = int(sqrt(N))
+	numsamples = Int(sqrt(N))
+	numoneparamsamples = Int(sqrt(N))
+	nummanyparamsamples = Int(sqrt(N))
 	# convert the distribution strings into actual distributions
 	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
@@ -252,7 +252,7 @@ function saltellibrute(madsdata; N=int(1e4), seed=0) # TODO Saltelli (brute forc
 end
 
 @doc "Saltelli " ->
-function saltelli(madsdata; N=int(100), seed=0)
+function saltelli(madsdata; N=Int(100), seed=0)
 	if seed != 0
 		srand(seed)
 	end
@@ -329,7 +329,7 @@ function saltelli(madsdata; N=int(100), seed=0)
 			varPnot = abs((dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B ^ 2))
 			variance[obskeys[j]][paramoptkeys[i]] = varP
 			if varA < eps(Float64) && varP < eps(Float64)
-				mes[obskeys[j]][paramoptkeys[i]] = NaN;
+				mes[obskeys[j]][paramoptkeys[i]] = NaN
 			else
 				mes[obskeys[j]][paramoptkeys[i]] = min(1, max(0, varP / varA)) # varT or varA? i think it should be varA
 			end
@@ -386,7 +386,7 @@ end
 names = ["saltelli", "saltellibrute"]
 for mi = 1:length(names)
 	q = quote
-		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=int(100), seed=0)
+		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=Int(100), seed=0)
 			if seed != 0
 				srand(seed)
 			end
@@ -555,10 +555,10 @@ function plotwellSAresults(wellname, madsdata, result)
 		end
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-  pp = Array(Any, 0)
+	pp = Array(Any, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
-  push!(pp, pc)
-  vsize = 4inch
+	push!(pp, pc)
+	vsize = 4inch
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
@@ -566,37 +566,37 @@ function plotwellSAresults(wellname, madsdata, result)
 		deleteNaN!(df[j])
 		j += 1
 	end
-  vdf = vcat(df...)
-  if length(vdf[1]) > 0
-	  ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
-    push!(pp, ptes)
-    vsize += 4inch
-  end
+	vdf = vcat(df...)
+	if length(vdf[1]) > 0
+		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+		push!(pp, ptes)
+		vsize += 4inch
+	end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
-  vdf = vcat(df...)
-  if length(vdf[1]) > 0
-	  pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
-    push!(pp, pmes)
-    vsize += 4inch
-  end
+	vdf = vcat(df...)
+	if length(vdf[1]) > 0
+		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+		push!(pp, pmes)
+		vsize += 4inch
+	end
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
-  vdf = vcat(df...)
-  if length(vdf[1]) > 0
-  	pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
-    push!(pp, pvar)
-    vsize += 4inch
-  end
-  p = vstack(pp...)
+	vdf = vcat(df...)
+	if length(vdf[1]) > 0
+		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+		push!(pp, pvar)
+		vsize += 4inch
+	end
+	p = vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
 	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
@@ -766,368 +766,274 @@ function maxtorealmaxFloat32!(df::DataFrame)
 end
 
 ## eFAST
-@doc "Saltelli's eFAST" ->
-function efast(md; N=int(100), M=6, gamma=4, plotresults=0, Seed=0, issvr = 0, truncateRanges = 0)
-#
-#
-#
-#    MAKE SURE TO UTILIZE PARALLEL COMPUTING:
-#    Either:
-#      - Load julia using ./julia -p n
-#      - addprocs(n) before running this main script
-#     *n is the number of processors
-#
-#
-#
-#
-#
-## eFAST_Main_Parallel.jl
-# This is the main script for eFAST (utilizing Parallel Computing)
-#
-# GSA of Sobol Function
-#
-# Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method
-#
-#
-# Important variables used:
-#
-# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
-# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
-# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
-# AVci:      Sum of complementary variance indices (divided by # of resamples to get mean, Vci)
-# AVi:       Sum of main effect variance indices (divided by # of resamples to get mean, Vi)
-# ismads:    Boolean that tells us whether our system is analyzed in mads or as a standalone
-# InputData: Different size depending on whether we are analyzing a mads system or using eFAST as a standalone.  If analyzing a mads problem,
-# 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
-#			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
-#			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
-# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
-# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as
-#			 in mads (2 columns)
-# M:         Max # of harmonics
-# n:         Total # of input parameters
-# nprime:    # of input parameters that we are ANALYZING
-# ny:        # of outputs our model returns (if ny == 1 then system is not dynamic (model output is scalar))
-# Nr:        # of resamples
-# Ns:        Sample points along a single search curve (Ns_total = Ns*Nr)
-# Ns_total:  Total amount of sample points including all resamples (computational cost
-#            of calculating all main and total indices is C=Ns_total*nprime)
-# phi:       Random phase shift between (0 2pi)
-# P:         P = nprocs(); (Number of processors
-# resultvec: Components of resultvec are [AV, AVi, AVci] which correspond to "all" (sum) of total variance, variance component for
-#            parameter i, and complementary variance for parameter i.  Sum is over ALL RESAMPLES (so resultvec is divided by Nr at end).
-#            If system has dynamic output (i.e. ny>1) then each component of resultvec will have length ny.
-# resultmat: When looping with parameters on the outside, an extra dimension is needed in order to store all results. Analogous to resultvec
-#            but holds all results for every parameter.
-# Si:        "Main effect" sensitivity index for parameter i
-# Sti:       "Total effect" sensitivity index for parameter i
-# Wi:        Maximum frequency, corresponds to parameter we are attempting to analyze
-#            (So to calculate all indices, each parameter will be assigned Wi at some point)
-# W_comp:    Vector of complementary frequencies
-# W_vec:     Vector of all frequencies including Wi and complementary frequencies.
-# X:         2-d array of model input (Ns x n)
-# Y:         2-d array of model output (Ns x Nr) (Or higher dimension if we are running mads or user defines dynamic system)
-#
-##
-
-	if Seed != 0
-		srand(Seed)
-	end
-
-## Setting pathfiles
-efastpath = "/n/srv/jlaughli/Desktop/Julia Code/";
-
-
-################################### BEGIN - DEFINING MODULES ###################################
-
-function eFAST_getCompFreq(Wi, nprime, M)
-
-## Special case if n' == 1 -> W_comp is the null set
-if nprime == 1
-    W_comp = []; Wcmax = 0;
-    return W_comp, Wcmax
-end
-
-
-
-
-# Max complementary frequency (to avoid interference) with Wi
-Wcmax = floor(1/M*(Wi/2));
-
-
-##
-# CASE 1: Very small Wcmax
-# (W_comp is all ones)
-if Wi <= nprime-1
-    W_comp = ones(1,nprime-1);
-
-##
-# CASE 2: Wcmax < nprime - 1
-# (W_comp has a step size of 1, might need to repeat W_comp frequencies to
-# avoid going over Wcmax)
-	elseif Wcmax < nprime-1
-    step   = 1;
-    loops  = ceil((nprime-1)/Wcmax); #loops rounded up
-    W_comp = [];                #initializing W_comp
-    for i = 1:loops
-        W_comp = [W_comp, [1:step:Wcmax]];
-    end
-    # Reducing W_comp to a vector of size nprime
-    W_comp = W_comp[1:(nprime-1)];
-
-## Most typical case:
-# CASE 3: wcmax >= nprime -1
-
-	elseif Wcmax >= nprime-1
-    step   = round(Wcmax/(nprime-1));
-    W_comp = 1 : step : step*(nprime-1);
-	end
-Wcmax = int(Wcmax);
-return W_comp, Wcmax
-end
-
-
-function eFAST_optimalSearch(Ns_total,M,gamma)
-
-
-	## Main Loop
-	# Iterate through different integer values of Nr (# of resamples)
-	# If loop finishes, script will adjust Ns upwards to obtain an optimal
-	# Nr/Wi pairing
-	Nr = 0; Wi = 0;
-	for Nr = 1:50
-		Wi = (Ns_total/Nr - 1)/(gamma*M);        #Based on Nyquist Freq
-
-		# Based on (Saltelli 1999), Wi/Nr should be between 16-64
-		# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
-		if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi) == floor(Wi)
-			Ns = Ns_total/Nr;
-
-			# Checking to see that Ns is odd
-			if mod(Ns,2) != 1
-				Ns += 1
-				Ns_total = Ns*Nr
-			end
-
-			return int64(Nr), int64(Wi), int64(Ns), int64(Ns_total)
-		end
-	end
-
+@doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
+function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges = 0)
+	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
+	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
+	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
+	# AVci:      Sum of complementary variance indices (divided by # of resamples to get mean, Vci)
+	# AVi:       Sum of main effect variance indices (divided by # of resamples to get mean, Vi)
+	# ismads:    Boolean that tells us whether our system is analyzed in mads or as a standalone
+	# InputData: Different size depending on whether we are analyzing a mads system or using eFAST as a standalone.  If analyzing a mads problem,
+	# 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
+	#			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
+	#			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
+	# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
+	# 			 parameter is being analyzed or not (1 for yes, 0 for no).  After passing through eFASt_interpretDAta.jl InputData will be the same as
+	#			 in mads (2 columns)
+	# M:         Max # of harmonics
+	# n:         Total # of input parameters
+	# nprime:    # of input parameters that we are ANALYZING
+	# ny:        # of outputs our model returns (if ny == 1 then system is not dynamic (model output is scalar))
+	# Nr:        # of resamples
+	# Ns:        Sample points along a single search curve (Ns_total = Ns*Nr)
+	# Ns_total:  Total amount of sample points including all resamples (computational cost
+	#            of calculating all main and total indices is C=Ns_total*nprime)
+	# phi:       Random phase shift between (0 2pi)
+	# P:         P = nprocs(); (Number of processors
+	# resultvec: Components of resultvec are [AV, AVi, AVci] which correspond to "all" (sum) of total variance, variance component for
+	#            parameter i, and complementary variance for parameter i.  Sum is over ALL RESAMPLES (so resultvec is divided by Nr at end).
+	#            If system has dynamic output (i.e. ny>1) then each component of resultvec will have length ny.
+	# resultmat: When looping with parameters on the outside, an extra dimension is needed in order to store all results. Analogous to resultvec
+	#            but holds all results for every parameter.
+	# Si:        "Main effect" sensitivity index for parameter i
+	# Sti:       "Total effect" sensitivity index for parameter i
+	# Wi:        Maximum frequency, corresponds to parameter we are attempting to analyze
+	#            (So to calculate all indices, each parameter will be assigned Wi at some point)
+	# W_comp:    Vector of complementary frequencies
+	# W_vec:     Vector of all frequencies including Wi and complementary frequencies.
+	# X:         2-d array of model input (Ns x n)
+	# Y:         2-d array of model output (Ns x Nr) (Or higher dimension if we are running mads or user defines dynamic system)
+	#
 	##
-	# Main loop could not find optimal Wi/Nr pairing based on given Ns & M
-	# If script reaches this point, this loop adjusts Ns (upwards) to obtain
-	# optimal Nr/Wi pairing.
 
-	# Freezing original Ns value given
-	Ns0 = Ns_total;
+	if seed != 0
+		srand(seed)
+	end
 
-	for Nr = 1:100
-		for Ns_total = Ns0+1 : 1 : Ns0+5000
-			Wi = (Ns_total/Nr-1)/(gamma*M);
-			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi) == floor(Wi)
-				Ns = Ns_total/Nr;
+	## Setting pathfiles
+	efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
 
-				# Checking to see that Ns is odd
-				if mod(Ns,2) != 1
+	function eFAST_getCompFreq(Wi, nprime, M)
+		if nprime == 1 # Special case if n' == 1 -> W_comp is the null set
+			W_comp = []
+			Wcmax = 0
+			return W_comp, Wcmax
+		end
+		# Max complementary frequency (to avoid interference) with Wi
+		Wcmax = Int(floor(1 / M * (Wi / 2)))
+		if Wi <= nprime - 1 # CASE 1: Very small Wcmax (W_comp is all ones)
+			W_comp = ones(1, nprime - 1)
+		elseif Wcmax < nprime - 1 # CASE 2: Wcmax < nprime - 1
+			step   = 1
+			loops  = ceil((nprime - 1) / Wcmax) #loops rounded up
+			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
+			W_comp = []
+			for i = 1:loops
+				W_comp = [W_comp, [1:step:Wcmax]]
+			end
+			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
+		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case
+			step   = round(Wcmax / (nprime - 1))
+			W_comp = 1 : step : step * (nprime - 1)
+		end
+		return W_comp, Wcmax
+	end
+
+	function eFAST_optimalSearch(Ns_total, M, gamma)
+		# Iterate through different integer values of Nr (# of resamples)
+		# If loop finishes, script will adjust Ns upwards to obtain an optimal
+		for Nr = 1:50
+			Wi = (Ns_total / Nr - 1) / (gamma * M)        # Based on Nyquist Freq
+			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
+			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
+			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
+				Wi = Int(Wi)
+				Ns = Int(Ns_total / Nr)
+				if iseven(Ns)
 					Ns += 1
-					Ns_total = Ns*Nr
+					Ns_total = Ns * Nr
 				end
-
-				println("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!");
-				println("Ns_total = $(Ns*Nr) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
-				return int64(Nr), int64(Wi), int64(Ns), int64(Ns_total)
+				return Nr, Wi, Ns, Ns_total
 			end
 		end
-	end
-
-	##
-	# If script reaches this section of code, adjustments must be made to Ns,
-	# boundaries
-	println("ERROR! Change bounds of eFAST_optimalSearch.m or choose different Ns/M");
-
-end
-
-
-
-
-
-function eFAST_distributeX(X, nprime, InputData, ismads)
-
-
-## If we are using this as a standalone (reading input from csv):
-if ismads == 0
-    # Store X (which only contains transformations for parameters of interst)
-    # in temporary array so we can create larger X including parameters we hold constant.
-    tempX = X;
-    X = zeros(Ns,n);
-    for k = 1:n
-        # If the value we assigned to parameter k is a distribution, apply said distribution to its search curve
-        # Otherwise, set it as a constant (for parameters we are not analyzing)
-        if issubtype(typeof(InputData[k,2]), Distribution)
-          X[:,k] = quantile(InputData[k,2],tempX[:,k]);
-        else
-          X[:,k] = InputData[k,2];
-        end #End if
-    end # End k=1:n
-end # End if ismads==0
-
-
-
-## If we are using this as part of mads (reading input from mads):
-if ismads == 1
-# Attributing data matrix to vectors
-# dist provides all necessary information on distribution (type, min, max, mean, std)
-(name, dist) = (InputData[:,1], InputData[:,2])
-
-    for k = 1:nprime
-      # If parameter is one we are analyzing then we will assign numbers according to its probability dist
-      # Otherwise, we will simply set it at a constant (i.e. its initial value)
-      # This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
-      if issubtype(typeof(InputData[k,2]), Distribution)
-        # dist contains all data about distribution so this will apply any necessary distributions to X
-        X[:,k] = quantile(dist[k],X[:,k]);
-      else
-        println("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
-        return
-      end # End if
-    end # End k=1:nprime (looping over parameters of interest)
-
-end # End if ismads==1 statement
-
-return X
-end # End function
-
-
-
-
-function eFAST_Parallel_kL(kL)
-	# 0 -> We are removing the phase shift FOR SVR
-	phase = 1;
-
-	## Redistributing constCell
-	ismads = constCell[1]
-	if ismads == 0
-		(ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData,issvr, Seed) = constCell;
-		issvr = 0; directOutput = 0;
-	else
-		(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict,paramkeys,issvr,directOutput, f, Seed) = constCell;
-	end
-
-
-
-	# If we want to use a seed for our random phis
-	# +kL because we want to have the same string of seeds for any initial seed
-	srand(Seed+kL)
-
-	# Determining which parameter we are on
-	k = int(ceil(kL/Nr));
-
-	# Initializing
-  	W_vec   = zeros(1,nprime); 	   # W_vec (Frequencies)
-	phi_mat = zeros(nprime,Ns);    # Phi matrix (phase shift corresponding to each resample)
-
-
-	## Creating W_vec (kth element is Wi)
-	W_vec[k] = Wi;
-	## Edge cases
-	# As long as nprime!=1 our W_vec will have complementary frequencies
-	if nprime !=1
-		if k != 1
-			W_vec[1:(k-1)] = W_comp[1:(k-1)];
+		# If the loop above could not find optimal Wi/Nr pairing based on given Ns & M
+		# If script reaches this point, this loop adjusts Ns (upwards) to obtain
+		# optimal Nr/Wi pairing.
+		Ns0 = Ns_total # Freezing original Ns value given
+		for Nr = 1:100
+			for Ns_total = Ns0 + 1:1:Ns0 + 5000
+				Wi = (Ns_total / Nr - 1) / ( gamma * M)
+				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
+					Wi = Int(Wi)
+					Ns = Int(Ns_total / Nr)
+					if iseven(Ns)
+						Ns += 1
+						Ns_total = Ns * Nr
+					end
+					println("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!")
+					println("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
+					return Nr, Wi, Ns, Ns_total
+				end
+			end
 		end
-		if k != nprime
-			W_vec[(k+1):nprime] = W_comp[k:(nprime-1)];
+		# If script reaches this section of code, adjustments must be made to Ns boundaries
+		err("ERROR! Change bounds of eFAST_optimalSearch.m or choose different Ns/M")
+	end
+
+	function eFAST_distributeX(X, nprime, InputData, ismads)
+		if !ismads ## If we are using this as a standalone (reading input from csv):
+			# Store X (which only contains transformations for parameters of interst)
+			# in temporary array so we can create larger X including parameters we hold constant.
+			tempX = X
+			X = zeros(Ns,n)
+			for k = 1:n
+				# If the value we assigned to parameter k is a distribution, apply said distribution to its search curve
+				# Otherwise, set it as a constant (for parameters we are not analyzing)
+				if issubtype(typeof(InputData[k,2]), Distribution)
+					X[:,k] = quantile(InputData[k,2],tempX[:,k])
+				else
+					X[:,k] = InputData[k,2]
+				end #End if
+			end # End k=1:n
+		else # If we are using this as part of mads (reading input from mads):
+			# Attributing data matrix to vectors
+			# dist provides all necessary information on distribution (type, min, max, mean, std)
+			(name, dist) = (InputData[:,1], InputData[:,2])
+			for k = 1:nprime
+				# If parameter is one we are analyzing then we will assign numbers according to its probability dist
+				# Otherwise, we will simply set it at a constant (i.e. its initial value)
+				# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
+				if issubtype(typeof(InputData[k,2]), Distribution)
+					# dist contains all data about distribution so this will apply any necessary distributions to X
+					X[:,k] = quantile(dist[k],X[:,k])
+				else
+					println("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
+					return
+				end # End if
+			end # End k=1:nprime (looping over parameters of interest)
 		end
+		return X
 	end
 
+	function eFAST_Parallel_kL(kL)
+		# 0 -> We are removing the phase shift FOR SVR
+		phase = 1
 
-	# Slight inefficiency as it creates a phi_mat every time (rather than Nr times)
-	# Random Phase Shift
-	phi = rand(1,nprime)*2*pi;
-	for j = 1:Ns
-		phi_mat[:,j] = phi';
-	end
+		## Redistributing constCell
+		ismads = constCell[1]
+		if ismads == 0
+			(ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed) = constCell
+			issvr = 0; directOutput = 0
+		else
+			(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict,paramkeys,issvr,directOutput, f, seed) = constCell
+		end
 
+		# If we want to use a seed for our random phis
+		# +kL because we want to have the same string of seeds for any initial seed
+		srand(seed+kL)
 
-	## Preallocate/Initialize
-	A     = 0;
-	B     = 0;                          # Fourier coefficients
-	Wi 	  = maximum(W_vec)				# Maximum frequency (i.e. the frequency for our parameter of interest)
-	Wcmax = maximum(W_comp)				# Maximum frequency in complementary set
+		# Determining which parameter we are on
+		k = Int(ceil(kL/Nr))
 
+		# Initializing
+		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
+		phi_mat = zeros(nprime,Ns)    # Phi matrix (phase shift corresponding to each resample)
 
-	# Adding on the random phase shift
-	alpha = W_vec'*S_vec' + phi_mat;    # W*S + phi
-	# If we want a simpler system this removes the phase shift
-	if phase == 0
-		alpha = W_vec'*S_vec';
-	end
-	X = .5 + asin(sin(alpha'))/pi;   	# Transformation function Saltelli suggests
+		## Creating W_vec (kth element is Wi)
+		W_vec[k] = Wi
+		## Edge cases
+		# As long as nprime!=1 our W_vec will have complementary frequencies
+		if nprime !=1
+			if k != 1
+				W_vec[1:(k-1)] = W_comp[1:(k-1)]
+			end
+			if k != nprime
+				W_vec[(k+1):nprime] = W_comp[k:(nprime-1)]
+			end
+		end
 
-	# In this function we assign probability distributions to parameters we are analyzing
-	# and set parameters that we aren't analyzing to constants.
-	# It is not important to us in calculating sensitivity so we only save it
-	# for long enough to calculate Y.
-	# QUESTION do we need LHC sampling?
-	X = eFAST_distributeX(X, nprime, InputData, ismads);
+		# Slight inefficiency as it creates a phi_mat every time (rather than Nr times)
+		# Random Phase Shift
+		phi = rand(1,nprime) * 2 * pi
+		for j = 1:Ns
+			phi_mat[:,j] = phi'
+		end
 
-	# Pre-allocating Model Output
-	Y = zeros(Ns, ny);
+		## Preallocate/Initialize
+		A     = 0
+		B     = 0                          # Fourier coefficients
+		Wi 	  = maximum(W_vec)				# Maximum frequency (i.e. the frequency for our parameter of interest)
+		Wcmax = maximum(W_comp)				# Maximum frequency in complementary set
 
+		# Adding on the random phase shift
+		alpha = W_vec' * S_vec' + phi_mat    # W*S + phi
+		# If we want a simpler system this removes the phase shift
+		if phase == 0
+			alpha = W_vec'*S_vec'
+		end
+		X = .5 + asin(sin(alpha'))/pi   	# Transformation function Saltelli suggests
 
-	# IF WE ARE READING OUTPUT OF MODEL DIRECTLY!
-	if directOutput==1
-		println("Output taken directly from data file. Parameter k = $k ($(paramkeys[k])) ...")
-		Y = OutputData[:,:,k];
+		# In this function we assign probability distributions to parameters we are analyzing
+		# and set parameters that we aren't analyzing to constants.
+		# It is not important to us in calculating sensitivity so we only save it
+		# for long enough to calculate Y.
+		# QUESTION do we need LHC sampling?
+		X = eFAST_distributeX(X, nprime, InputData, ismads)
 
-		## CALCULATING MODEL OUTPUT (SVR)
-		# If we are using svrobj as our surrogate model function, calculate Y as such:
-		elseif issvr == 1
+		# Pre-allocating Model Output
+		Y = zeros(Ns, ny)
+
+		# IF WE ARE READING OUTPUT OF MODEL DIRECTLY!
+		if directOutput==1
+			println("Output taken directly from data file. Parameter k = $k ($(paramkeys[k])) ...")
+			Y = OutputData[:,:,k]
+			## CALCULATING MODEL OUTPUT (SVR)
+			# If we are using svrobj as our surrogate model function, calculate Y as such:
+		elseif issvr
 			## Need to convert data into SVR form
 			# Boolean determining whether inputs are in log scale or not!   ACCORDING TO NATALIA WE SHOULD NOT HAVE TO SCALE
-			islog = 0;
-			X_svr = Array(Float64,(Ns*ny,nprime+1));
-			predictedY = zeros(size(X_svr,1));
+			islog = 0
+			X_svr = Array(Float64,(Ns*ny,nprime+1))
+			predictedY = zeros(size(X_svr,1))
 			for i = 1:Ns
-			  for j = 1:ny
-			    X_svr[50*(i-1) + j, 1:nprime] = X[i,:];
-			    X_svr[50*(i-1) + j, nprime+1] = j;
-			  end
+				for j = 1:ny
+					X_svr[50*(i-1) + j, 1:nprime] = X[i,:]
+					X_svr[50*(i-1) + j, nprime+1] = j
+				end
 			end
 
 			# Converting X to log scale
 			if islog == 1
-				X_svr[:,(1:nprime)] = log(X_svr[:,(1:nprime)]);
+				X_svr[:,(1:nprime)] = log(X_svr[:,(1:nprime)])
 			end
 
 			# Compute model output
 			println("Computing surrogate model (SVR) for parameter k = $k ($(paramkeys[k])) ...")
 			for i = 1 : ny
-			   idx = find( x-> (x == i), X_svr[:,(nprime+1)])
-			   predictedY[idx] = predictSVR(X_svr[idx,:], svrobj[i]);
-			end;
-
+				idx = find( x-> (x == i), X_svr[:,(nprime+1)])
+				predictedY[idx] = predictSVR(X_svr[idx,:], svrobj[i])
+			end
 
 			# Converting Y back to format we use for eFAST
-			Y = reshape(predictedY',(ny,Ns))';
+			Y = reshape(predictedY',(ny,Ns))'
 
-
-		## CALCULATING MODEL OUTPUT (Mads)
-		# If we are analyzing a mads problem, we calculate our model output as such:
+			## CALCULATING MODEL OUTPUT (Mads)
+			# If we are analyzing a mads problem, we calculate our model output as such:
 		elseif ismads == 1
 			if P <= Nr*nprime+(Nr+1)
 
 				### Adding transformations of X and Y from svrobj into here to accurately compare runtimes of mads and svr
-				#X_svr = Array(Float64,(Ns*ny,nprime+1));
-				#predictedY = zeros(size(X_svr,1));
+				#X_svr = Array(Float64,(Ns*ny,nprime+1))
+				#predictedY = zeros(size(X_svr,1))
 				#for i = 1:Ns
 				#  for j = 1:ny
-				#    X_svr[50*(i-1) + j, 1:nprime] = X[i,:];
-				#    X_svr[50*(i-1) + j, nprime+1] = j;
+				#    X_svr[50*(i-1) + j, 1:nprime] = X[i,:]
+				#    X_svr[50*(i-1) + j, nprime+1] = j
 				#  end
 				#end
 				#if islog == 1
-				#	X_svr[:,(1:nprime)] = log(X_svr[:,(1:nprime)]);
+				#	X_svr[:,(1:nprime)] = log(X_svr[:,(1:nprime)])
 				#end
 				#println("x_svr reshaped test")
 
@@ -1141,13 +1047,13 @@ function eFAST_Parallel_kL(kL)
 
 			else
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-	      #madsinfo("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ... """)
-	      		println("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...");
+				#madsinfo("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ... """)
+				println("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...")
 				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, X[i, :]))))), 1:size(X, 1))...)'
 			end #End if (processors)
 
-		## CALCULATING MODEL OUTPUT (Standalone)
-		# If we are using this program as a standalone, we enter our model function here:
+			## CALCULATING MODEL OUTPUT (Standalone)
+			# If we are using this program as a standalone, we enter our model function here:
 		elseif ismads == 0
 			# If # of processors is <= Nr*nprime+(Nr+1) compute model ouput serially
 			if P <= Nr*nprime+(Nr+1)
@@ -1158,348 +1064,306 @@ function eFAST_Parallel_kL(kL)
 				end
 
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-				else
-					println("Calculating model output (not mads or svr) from .jl file in parallel - Parameter k = $k ($(paramkeys[k])) ...")
-					Y = zeros(1,ny);
-					Y = @parallel (vcat) for j = 1:Ns
-						defineModel_Sobol(X[j,:]);
-					end #End Parallel for loop
+			else
+				println("Calculating model output (not mads or svr) from .jl file in parallel - Parameter k = $k ($(paramkeys[k])) ...")
+				Y = zeros(1,ny)
+				Y = @parallel (vcat) for j = 1:Ns
+					defineModel_Sobol(X[j,:])
+				end #End Parallel for loop
 			end #End if (processors)
+		end #End if isdefined(:OutputData)
 
-	end #End if isdefined(:OutputData)
+		## CALCULATING FOURIER COEFFICIENTS
+		## If length(Y[1,:]) == 1, system is *not dynamic* and we don't need to add an extra dimension
+		if ny == 1
+			# These will be the sums of variances over all resamplings (Nr loops)
+			AVi = AVci = AV = 0                     # Initializing Variances to 0
 
-
-	## CALCULATING FOURIER COEFFICIENTS
-	## If length(Y[1,:]) == 1, system is *not dynamic* and we don't need to add an extra dimension
-	if ny == 1
-		# These will be the sums of variances over all resamplings (Nr loops)
-		AVi = 0; AVci = 0; AV = 0;                     # Initializing Variances to 0
-
-		println("Calculating Fourier coefficients for observations ... ")
-		## Calculating Si and Sti (main and total sensitivity indices)
-		# Subtract the average value from Y
-		Y[:] = (Y[:] - mean(Y[:]))';
-
-		## Calculating Fourier coefficients associated with MAIN INDICES
-		# p corresponds to the harmonics of Wi
-		for p = 1 : 1 : M
-			A = dot(Y[:],cos(Wi*p*S_vec));
-			B = dot(Y[:],sin(Wi*p*S_vec));
-			AVi  = AVi + A^2 + B^2;
-		end
-		# 1/Ns taken out of both A and B for optimization!
-		AVi = AVi/(Ns^2);
-
-		## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
-		for j = 1 : 1 : Wcmax*M
-			A = dot(Y[:],cos(j*S_vec));
-			B = dot(Y[:],sin(j*S_vec));
-			AVci = AVci + A^2 + B^2;
-		end
-		AVci = AVci/(Ns^2);
-
-		## Total Variance
-		# By definition of variance: V(Y) = (Y - mean(Y))^2
-		AV = dot(Y[:],Y[:])/Ns;
-
-		# Storing results in a vector format
-		resultvec = [AV AVi AVci];
-	elseif ny > 1
-		## If system is dynamic, we must add an extra dimension to calculate sensitivity indices for each point
-		# These will be the sums of variances over all resamplings (Nr loops)
-		AV   = zeros(ny,1);                   # Initializing Variances to 0
-		AVi  = zeros(ny,1);
-		AVci = zeros(ny,1);
-
-		## Calculating Si and Sti (main and total sensitivity indices)
-		# Looping over each point in time
-		@showprogress 2 "Calculating Fourier coefficients for observations ... "  for i = 1:ny
+			println("Calculating Fourier coefficients for observations ... ")
+			## Calculating Si and Sti (main and total sensitivity indices)
 			# Subtract the average value from Y
-			Y[:,i] = (Y[:,i] - mean(Y[:,i]))';
-
+			Y[:] = (Y[:] - mean(Y[:]))'
 			## Calculating Fourier coefficients associated with MAIN INDICES
 			# p corresponds to the harmonics of Wi
 			for p = 1 : 1 : M
-				A = dot(Y[:,i],cos(Wi*p*S_vec));
-				B = dot(Y[:,i],sin(Wi*p*S_vec));
-				AVi[i]  = AVi[i] + A^2 + B^2;
+				A = dot(Y[:], cos(Wi*p*S_vec))
+				B = dot(Y[:], sin(Wi*p*S_vec))
+				AVi += A^2 + B^2
 			end
 			# 1/Ns taken out of both A and B for optimization!
-			AVi[i] = AVi[i]/(Ns^2);
-
+			AVi = AVi / Ns^2
 			## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
-			for j = 1 : 1 : Wcmax*M
-				A = dot(Y[:,i],cos(j*S_vec));
-				B = dot(Y[:,i],sin(j*S_vec));
-				AVci[i] = AVci[i] + A^2 + B^2;
+			for j = 1 : Wcmax * M
+				A = dot(Y[:], cos(j * S_vec))
+				B = dot(Y[:], sin(j * S_vec))
+				AVci = AVci + A^2 + B^2
 			end
-			AVci[i] = AVci[i]/(Ns^2);
-
-			## Total Variance
-			# By definition of variance: V(Y) = (Y - mean(Y))^2
-			AV[i] = dot(Y[:,i],Y[:,i])/Ns;
-		end #END for i = 1:ny
-
-		# Storing results in matrix format
-		resultvec = hcat(AV, AVi, AVci);
-	end #END if length(Y[1,:]) > 1
-
-	# resultvec will be an array of size (ny,3)
-	return resultvec
-
-
-end
-
-
-# Define the following if we are using svrobj
-if issvr == 1
-
-
-	function svrJSONConvert(svrobjJSON::Array{Any,1})
-
-	     svrobjJSON = svrobjJSON[1];
-	     totalSVRObject = size(svrobjJSON,1);
-
-	     svrobj = Array(svrOutput, totalSVRObject, 1);
-	     for svrObjectI = 1 : totalSVRObject
-	       alpha = float(svrobjJSON[svrObjectI]["alpha"]);
-	       b = float(svrobjJSON[svrObjectI]["b"]);
-	       kernel = svrobjJSON[svrObjectI]["kernelType"];
-	       varargin = float(svrobjJSON[svrObjectI]["varargin"]);
-
-	       train_data = Array(Float64, size(svrobjJSON[svrObjectI]["train_data"][1],1), size(svrobjJSON[svrObjectI]["train_data"],1));
-
-	       for i = 1 : size(svrobjJSON[svrObjectI]["train_data"], 1)
-	           train_data[:,i] = float(svrobjJSON[svrObjectI]["train_data"][i]);
-	       end
-
-	      if ( kernel == "gaussian" )
-	        lambda = varargin[1];
-	        kernel_function(x,y) = exp(-lambda*norm(x.feature-y.feature,2)^2);
-	      elseif ( kernel == "spline" )
-	        error("Spline kernel is not implemented!");
-	        # kernel_function(a,b) = prod(arrayfun(@(x,y) 1 + x*y+x*y*min(x,y)-(x+y)/2*min(x,y)^2+1/3*min(x,y)^3,a.feature,b.feature));
-	      elseif ( kernel == "periodic" )
-	        l = varargin[1];
-	        p = varargin[2];
-	        kernel_function(x,y) = exp(-2*sin(pi*norm(x.feature-y.feature,2)/p)^2/l^2);
-	      elseif ( kernel == "tangent" )
-	        a = varargin[1];
-	        c = varargin[2];
-	        kernel_function(x,y) = prod(tanh(a*x.feature'*y.feature+c));
-	      else
-	        err
-	      end
-
-	      svrobj[svrObjectI] = svrOutput(alpha, b, kernel_function, kernel, train_data, varargin);
-	    end
-
-	    return totalSVRObject, svrobj;
+			AVci = AVci / Ns^2
+			## Total Variance By definition of variance: V(Y) = (Y - mean(Y))^2
+			AV = dot(Y[:], Y[:]) / Ns
+			# Storing results in a vector format
+			resultvec = [AV AVi AVci]
+		elseif ny > 1
+			## If system is dynamic, we must add an extra dimension to calculate sensitivity indices for each point
+			# These will be the sums of variances over all resamplings (Nr loops)
+			AV   = zeros(ny,1)                   # Initializing Variances to 0
+			AVi  = zeros(ny,1)
+			AVci = zeros(ny,1)
+			## Calculating Si and Sti (main and total sensitivity indices)
+			# Looping over each point in time
+			@showprogress 2 "Calculating Fourier coefficients for observations ... "  for i = 1:ny
+				# Subtract the average value from Y
+				Y[:,i] = (Y[:,i] - mean(Y[:,i]))'
+				## Calculating Fourier coefficients associated with MAIN INDICES
+				# p corresponds to the harmonics of Wi
+				for p = 1:M
+					A = dot(Y[:,i], cos(Wi * p * S_vec))
+					B = dot(Y[:,i], sin(Wi * p * S_vec))
+					AVi[i]  = AVi[i] + A^2 + B^2
+				end
+				# 1/Ns taken out of both A and B for optimization!
+				AVi[i] = AVi[i] / Ns^2
+				## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
+				for j = 1:Wcmax * M
+					A = dot(Y[:,i], cos(j * S_vec))
+					B = dot(Y[:,i], sin(j * S_vec))
+					AVci[i] = AVci[i] + A^2 + B^2
+				end
+				AVci[i] = AVci[i] / Ns^2
+				## Total Variance By definition of variance: V(Y) = (Y - mean(Y))^2
+				AV[i] = dot(Y[:,i], Y[:,i]) / Ns
+			end #END for i = 1:ny
+			# Storing results in matrix format
+			resultvec = hcat(AV, AVi, AVci)
+		end #END if length(Y[1,:]) > 1
+		return resultvec # resultvec will be an array of size (ny,3)
 	end
 
+	# Define the following if we are using svrobj
+	if issvr
+		function svrJSONConvert(svrobjJSON::Array{Any,1})
+			svrobjJSON = svrobjJSON[1]
+			totalSVRObject = size(svrobjJSON,1)
+			svrobj = Array(svrOutput, totalSVRObject, 1)
+			for svrObjectI = 1 : totalSVRObject
+				alpha = float(svrobjJSON[svrObjectI]["alpha"])
+				b = float(svrobjJSON[svrObjectI]["b"])
+				kernel = svrobjJSON[svrObjectI]["kernelType"]
+				varargin = float(svrobjJSON[svrObjectI]["varargin"])
+				train_data = Array(Float64, size(svrobjJSON[svrObjectI]["train_data"][1],1), size(svrobjJSON[svrObjectI]["train_data"],1))
+				for i = 1 : size(svrobjJSON[svrObjectI]["train_data"], 1)
+					train_data[:,i] = float(svrobjJSON[svrObjectI]["train_data"][i])
+				end
+				if kernel == "gaussian"
+					lambda = varargin[1]
+					kernel_function(x,y) = exp(-lambda*norm(x.feature-y.feature,2)^2)
+				elseif kernel == "spline"
+					error("Spline kernel is not implemented!")
+					# kernel_function(a,b) = prod(arrayfun(@(x,y) 1 + x*y+x*y*min(x,y)-(x+y)/2*min(x,y)^2+1/3*min(x,y)^3,a.feature,b.feature))
+				elseif kernel == "periodic"
+					l = varargin[1]
+					p = varargin[2]
+					kernel_function(x,y) = exp(-2*sin(pi*norm(x.feature-y.feature,2)/p)^2/l^2)
+				elseif kernel == "tangent"
+					a = varargin[1]
+					c = varargin[2]
+					kernel_function(x,y) = prod(tanh(a*x.feature'*y.feature+c))
+				else
+					throw("Error!")
+				end
+				svrobj[svrObjectI] = svrOutput(alpha, b, kernel_function, kernel, train_data, varargin)
+			end
+			return totalSVRObject, svrobj
+		end
+
+		# ***************************************************************************************************
+		# SVR prediction function based on svrOutput object
+		# ***************************************************************************************************
+		function predictSVR(data::Array{Float64,2}, svrobj::svrOutput)
+			n_predict = size(x, 1)
+			output = Array(Float64, n_predict)
+			for i = 1:n_predict
+				output[i] = svr_eval(data[i,:], svrobj)
+			end
+			return output
+		end
+
+		function predictSVR(data::Array{Float64,1}, svrobj::svrOutput)
+			n_predict = size(x, 1)
+			output = Array(Float64, n_predict)
+			for i = 1:n_predict
+				output[i] = svr_eval(data[i,:], svrobj)
+			end
+			return output
+		end
+
+		function svr_eval(x::Array{Float64,2}, svrobj::svrOutput)
+			n_predict = size(x, 1)
+			sx = Array(svrFeature, n_predict)
+			for i = 1:n_predict
+				sx[i] = svrFeature(vec(x[i,:]))
+			end
+			n_train = size(svrobj.train_data, 1)
+			sy = Array(svrFeature, n_train)
+			for i = 1:n_train
+				sy[i] = svrFeature(vec(svrobj.train_data[i,:]))
+			end
+			f = 0
+			for i = 1:n_train
+				f += svrobj.alpha[i] * svrobj.kernel( sx[1], sy[i])
+			end
+			f = f #+ svrobj.b
+			f = f / 2
+			return f
+		end
+
+		function svr_eval(x::Float64, svrobj::svrOutput)
+			n_predict = size(x, 1)
+			sx = Array(svrFeature, n_predict)
+			for i = 1:n_predict
+				sx[i] = svrFeature([x[i,]])
+			end
+			n_train = size(svrobj.train_data, 1)
+			sy =Array(svrFeature, n_train)
+			for i = 1:n_train
+				sy[i] = svrFeature([svrobj.train_data[i,]])
+			end
+			f = 0
+			for i = 1:n_train
+				f += svrobj.alpha[i] * svrobj.kernel( sx[1], sy[i])
+			end
+			f = f #+ svrobj.b
+			f = f / 2
+			return f
+		end
+	end
+	################################### END - DEFINING MODULES ###################################
+
+	##
+	## Set GSA Parameters
+	##
+	#M        = 6          # Max # of Harmonics (usually set to 4 or 6)
+	# Lower values of M tend to underestimate main sensitivity indices.
+	Ns_total = N       # Total Number of samples over all search curves (minimum for eFAST method is 65)
+	# Choosing a small Ns will increase speed but decrease accuracy
+	# Ns_total = 65 will only work if M=4 and gamma = 2 (Wi >= 8 is the actual constraint)
+	#gamma    = 4          # To adjust equation Wi = (Ns_total/Nr - 1)/(gamma*M)
+	# Saltelli 1999 suggests gamma = 2 or 4; higher gammas typically give more accurate results
+	# and are even *sometmies* faster.
+	##
+	##
+	##
 
 
-	# ***************************************************************************************************
-	# SVR prediction function based on svrOutput object
-	# ***************************************************************************************************
-	function predictSVR(data::Array{Float64,2}, svrobj::svrOutput)
-	   output = zeros(size(data,1));
-
-	   for i = 1 : size(data, 1)
-	      output[i] = svr_eval(data[i,:], svrobj);
-	   end
-	   return output;
+	# Are we reading from a .mads file or are we running this as a standalone (input: .csv, output: .exe)?
+	# 1 for MADS, 0 for standalone. Basically determines IO of script.
+	ismads         = 1
+	# 1 if we are reading model output directly (e.g. from .csv), 0 if we are using some sort of script to calculate model output
+	directOutput   = 0
+	# 1 if we are using svr model function (svrobj) to calculate Y
+	#issvr          = 1 #defined in function
+	# Plot results as .svg file
+	# plotresults    = 0 #defined in function
+	# Truncate ranges of parameter space (for SVR)
+	if issvr
+		truncateRanges = 1
+		increaserange  = 0
 	end
 
-	function predictSVR(data::Array{Float64,1}, svrobj::svrOutput)
-	   output = zeros(size(data,1));
+	###### For convenience - Sets booleans automatically (uncomment to use)
+	## Reading from SVR surrogate model on wells
+	#(ismads, directOutput, issvr, plotresults, truncateRanges) = (1,0,1,0,1)
+	## Calculating SA of wells using mads model (NOT SVR)
+	#(ismads, directOutput, issvr, plotresults, truncateRanges) = (1,0,0,0,1)
+	## Using Sobol function
+	#(ismads, directOutput, issvr, plotresults, truncateRanges) = (0,0,0,0,0)
 
-	   for i = 1 : size(data, 1)
-	      output[i] = svr_eval(data[i,:], svrobj);
-	   end
-	   return output;
+
+
+
+	# Number of processors (for parallel computing)
+	# Different values of P will determine how program is parallelized
+	# If P > 1 -> Program will parallelize resamplings & parameters
+	# If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
+	# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
+	# the model output quicker.
+	P = nprocs()
+
+	## Packages
+	#using DataStructures
+	# Provides distributions for parameters
+	#@everywhere using Distributions
+	#require("DataStructures")
+	########## Although it would be nice to have this inside the if statement of ismads == 1, for some reason julia won't compile
+	# Need to add this in if version is < 0.4 so we can use @doc macro
+	#if VERSION < v"0.4.0-dev"
+	#@everywhere using Docile # default for v > 0.4
+	#end
+
+	## Setting pathfiles
+	#@everywhere efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
+	#@everywhere madspath  = "/n/srv/jlaughli/codes/Mads.jl/src/"
+
+	#import Mads
+	#if ~isdefined(:MPTools) | ~isdefined(:Anasol) | ~isdefined(:Mads)
+	#	include("/n/srv/jlaughli/codes/mptools.jl/src/MPTools.jl")
+	#	include(madspath*"MadsAnasol.jl")
+	#	include(madspath*"Mads.jl")
+	#end
+	#using Mads
+	#@everywhere using ProgressMeter
+	## Necessary modules (no matter if we are reading from mads or using as a standalone)
+	#@everywhere include(efastpath*"eFAST_distributeX.jl")
+	#include(efastpath*"eFAST_getCompFreq.jl")
+	#include(efastpath*"eFAST_optimalSearch.jl")
+	#@everywhere include(efastpath*"eFAST_Parallel_kL.jl")
+	#@everywhere include(madspath*"MadsLog.jl")
+
+
+	paramallkeys  = getparamkeys(md)
+	# Values of this dictionary are intial values
+	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
+	# Only the parameters we wish to analyze
+	paramkeys     = getoptparamkeys(md)
+	# All the observation sites and time points we will analyze them at
+	obskeys       = getobskeys(md)
+	# Get distributions for the parameters we will be performing SA on
+	distributions = getparamdistributions(md)
+
+	# Function for model output
+	f = makemadscommandfunction(md)
+
+	# Pre-allocating InputData Matrix
+	InputData = Array(Any,length(paramkeys),2)
+
+	### InputData will hold PROBABILITY DISTRIBUTIONS for the parameters we are analyzing (Other parameters stored in paramalldict)
+	for i = 1:length(paramkeys)
+		InputData[i,1] = paramkeys[i]
+		InputData[i,2] = distributions[paramkeys[i]]
 	end
 
-
-
-	 function svr_eval(x::Array{Float64,2}, svrobj::svrOutput)
-	     n_predict = size(x, 1);
-	     sx = Array(svrFeature, n_predict);
-	     for i = 1 : n_predict
-	         sx[i] = svrFeature(vec(x[i,:]));
-	     end
-
-	     n_train = size(svrobj.train_data, 1);
-	     sy =Array(svrFeature, n_train);
-	     for i=1:n_train
-	         sy[i] = svrFeature(vec(svrobj.train_data[i,:]));
-	     end
-
-	     f = 0.00;
-	     for i=1 : n_train
-	       f = f + svrobj.alpha[i] * svrobj.kernel( sx[1], sy[i]);
-	     end
-
-	     f = f #+ svrobj.b;
-	     f = f / 2;
-	     return f;
-	  end
-
-	  function svr_eval(x::Float64, svrobj::svrOutput)
-	     n_predict = size(x, 1);
-	     sx = Array(svrFeature, n_predict);
-	     for i = 1 : n_predict
-	         sx[i] = svrFeature([x[i,]]);
-	     end
-
-	     n_train = size(svrobj.train_data, 1);
-	     sy =Array(svrFeature, n_train);
-	     for i=1:n_train
-	         sy[i] = svrFeature([svrobj.train_data[i,]]);
-	     end
-
-	     f = 0.00;
-	     for i=1 : n_train
-	       f = f + svrobj.alpha[i] * svrobj.kernel( sx[1], sy[i]);
-	     end
-
-	     f = f #+ svrobj.b;
-	     f = f / 2;
-	     return f;
-	  end
-end
-
-
-################################### END - DEFINING MODULES ###################################
+	# Total number of parameters
+	n      = length(paramallkeys)
+	# Number of parameters we are analyzing
+	nprime = length(paramkeys)
+	# ny > 1 means system is dynamic (model output is a vector)
+	ny     = length(obskeys)
 
 
 
-
-##
-## Set GSA Parameters
-##
-#M        = 6;          # Max # of Harmonics (usually set to 4 or 6)
-# Lower values of M tend to underestimate main sensitivity indices.
-Ns_total = N;       # Total Number of samples over all search curves (minimum for eFAST method is 65)
-# Choosing a small Ns will increase speed but decrease accuracy
-# Ns_total = 65 will only work if M=4 and gamma = 2 (Wi >= 8 is the actual constraint)
-#gamma    = 4;          # To adjust equation Wi = (Ns_total/Nr - 1)/(gamma*M)
-# Saltelli 1999 suggests gamma = 2 or 4; higher gammas typically give more accurate results
-# and are even *sometmies* faster.
-##
-##
-##
+	##### Truncate paramkeys here
+	#paramkeys = paramkeys[1:2]
 
 
-# Are we reading from a .mads file or are we running this as a standalone (input: .csv, output: .exe)?
-# 1 for MADS, 0 for standalone. Basically determines IO of script.
-ismads         = 1;
-# 1 if we are reading model output directly (e.g. from .csv), 0 if we are using some sort of script to calculate model output
-directOutput   = 0;
-# 1 if we are using svr model function (svrobj) to calculate Y
-#issvr          = 1; #defined in function
-# Plot results as .svg file
-# plotresults    = 0; #defined in function
-# Truncate ranges of parameter space (for SVR)
-if issvr == 1
-	truncateRanges = 1;
-	increaserange  = 0;
-end
-
-###### For convenience - Sets booleans automatically (uncomment to use)
-## Reading from SVR surrogate model on wells
-#(ismads, directOutput, issvr, plotresults, truncateRanges) = (1,0,1,0,1);
-## Calculating SA of wells using mads model (NOT SVR)
-#(ismads, directOutput, issvr, plotresults, truncateRanges) = (1,0,0,0,1);
-## Using Sobol function
-#(ismads, directOutput, issvr, plotresults, truncateRanges) = (0,0,0,0,0);
-
-
-
-
-# Number of processors (for parallel computing)
-# Different values of P will determine how program is parallelized
-# If P > 1 -> Program will parallelize resamplings & parameters
-# If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
-# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
-# the model output quicker.
-P = nprocs();
-
-## Packages
-#using DataStructures
-# Provides distributions for parameters
-#@everywhere using Distributions
-#require("DataStructures")
-########## Although it would be nice to have this inside the if statement of ismads == 1, for some reason julia won't compile
-# Need to add this in if version is < 0.4 so we can use @doc macro
-#if VERSION < v"0.4.0-dev"
-#@everywhere using Docile # default for v > 0.4
-#end
-
-## Setting pathfiles
-#@everywhere efastpath = "/n/srv/jlaughli/Desktop/Julia Code/";
-#@everywhere madspath  = "/n/srv/jlaughli/codes/Mads.jl/src/";
-
-#import Mads
-#if ~isdefined(:MPTools) | ~isdefined(:Anasol) | ~isdefined(:Mads)
-#	include("/n/srv/jlaughli/codes/mptools.jl/src/MPTools.jl")
-#	include(madspath*"MadsAnasol.jl");
-#	include(madspath*"Mads.jl")
-#end
-#using Mads
-#@everywhere using ProgressMeter
-## Necessary modules (no matter if we are reading from mads or using as a standalone)
-#@everywhere include(efastpath*"eFAST_distributeX.jl");
-#include(efastpath*"eFAST_getCompFreq.jl");
-#include(efastpath*"eFAST_optimalSearch.jl");
-#@everywhere include(efastpath*"eFAST_Parallel_kL.jl")
-#@everywhere include(madspath*"MadsLog.jl")
-
-
-paramallkeys  = getparamkeys(md)
-# Values of this dictionary are intial values
-paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
-# Only the parameters we wish to analyze
-paramkeys     = getoptparamkeys(md)
-# All the observation sites and time points we will analyze them at
-obskeys       = getobskeys(md)
-# Get distributions for the parameters we will be performing SA on
-distributions = getparamdistributions(md)
-
-# Function for model output
-f = makemadscommandfunction(md)
-
-# Pre-allocating InputData Matrix
-InputData = Array(Any,length(paramkeys),2);
-
-### InputData will hold PROBABILITY DISTRIBUTIONS for the parameters we are analyzing (Other parameters stored in paramalldict)
-for i = 1:length(paramkeys)
-	InputData[i,1] = paramkeys[i];
-	InputData[i,2] = distributions[paramkeys[i]]
-end
-
-# Total number of parameters
-n      = length(paramallkeys);
-# Number of parameters we are analyzing
-nprime = length(paramkeys);
-# ny > 1 means system is dynamic (model output is a vector)
-ny     = length(obskeys);
-
-
-
-##### Truncate paramkeys here
-#paramkeys = paramkeys[1:2];
-
-
-if truncateRanges ==1
-	##### Truncated ranges Boian asked for (ranges were too large for SVR)
+	if truncateRanges ==1
+		##### Truncated ranges Boian asked for (ranges were too large for SVR)
 		############## FORCED INPUT ##############
-	@Compat.compat percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
-	#Increasing ranges
-	if increaserange == 1
-		#percentDict = ["vx"=>.40, "ax"=>.95, "ts_dsp"=>.60, "source1_f"=>.20, "source1_t0"=>.40, "source1_x"=>.10, "source1_t1"=>.20];
-		percentDict["source1_t1"] = .40;
-	end
+		@Compat.compat percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
+		#Increasing ranges
+		if increaserange == 1
+			#percentDict = ["vx"=>.40, "ax"=>.95, "ts_dsp"=>.60, "source1_f"=>.20, "source1_t0"=>.40, "source1_x"=>.10, "source1_t1"=>.20]
+			percentDict["source1_t1"] = .40
+		end
 
 		logdistribution = 1
 		for k = 1:length(paramkeys)
@@ -1525,238 +1389,223 @@ if truncateRanges ==1
 
 
 		##########################################
-end
-
-# This is here to delete parameters of interest from paramalldict
-# The parameters of interest will be calculated by eFAST_distributeX
-# We utilize the "merge" function to combine the two when we are calculating model output
-for key in paramkeys
-	delete!(paramalldict,key)
-end
-
-
-## Here we define additional parameters (importantly, the frequency for our "Group of Interest", Wi)
-# This function chooses an optimal Nr/Wi pair (based on Saltelli 1999)
-# Adjusts Ns (upwards) if necessary
-(Nr, Wi, Ns, Ns_total) = eFAST_optimalSearch(Ns_total,M,gamma);
-
-
-forced = 0;
-if forced == 1
-## Forced inputs here:
-# Note: Ns must be odd, eFAST_optimalSearch.jl will adjust for this if necessary but if you use a forced input
-# make sure to keep this in mind.
-# Ns =
-Wi = int(100);
-Nr = int(ceil(Ns_total/(gamma*M*Wi+1)));
-
-Ns       = int((gamma*M*Wi+1));
-	if mod(Ns,2) != 1
-		Ns += 1
 	end
-Ns_total = int(Ns*Nr);
-println("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
-end
 
-
-## For debugging and/or graphs
-# step  = (M*Wi - 1)/Ns;
-# omega = 1 : step : M*Wi - step;  # Frequency domain, can be used to plot power spectrum
-
-## Error Check (Wi=8 is the minimum frequency required for eFAST. Ns_total must be at least 65 to satisfy this criterion)
-if Wi<8
-println("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
-return
-end
-
-
-## If our output is read directly from some sort of data file rather than using a model function
-
-# svrtruncate is simply a boolean to truncate output .csv file (NOT INPUT RANGES)!! (For some reason model output is listed in second column)
-# Do NOT set this boolean to 1 unless if output is from surrogate model
-svrtruncate = 0
-if directOutput == 1
-	# Reading in data
-	tempOutputData = Array(Any,(Ns*ny, 1, nprime))
-	OutputData     = Array(Any,(Ns, ny, nprime))
-	if svrtruncate == 1
-		tempOutputData = Array(Any,(Ns*ny, 2,nprime))
+	# This is here to delete parameters of interest from paramalldict
+	# The parameters of interest will be calculated by eFAST_distributeX
+	# We utilize the "merge" function to combine the two when we are calculating model output
+	for key in paramkeys
+		delete!(paramalldict,key)
 	end
+
+
+	## Here we define additional parameters (importantly, the frequency for our "Group of Interest", Wi)
+	# This function chooses an optimal Nr/Wi pair (based on Saltelli 1999)
+	# Adjusts Ns (upwards) if necessary
+	(Nr, Wi, Ns, Ns_total) = eFAST_optimalSearch(Ns_total,M,gamma)
+
+
+	forced = 0
+	if forced == 1
+		## Forced inputs here:
+		# Note: Ns must be odd, eFAST_optimalSearch.jl will adjust for this if necessary but if you use a forced input
+		# make sure to keep this in mind.
+		# Ns =
+		Wi = Int(100)
+		Nr = Int(ceil(Ns_total/(gamma*M*Wi+1)))
+
+		Ns       = Int((gamma*M*Wi+1))
+		if mod(Ns,2) != 1
+			Ns += 1
+		end
+		Ns_total = Int(Ns*Nr)
+		println("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
+	end
+
+
+	## For debugging and/or graphs
+	# step  = (M*Wi - 1)/Ns
+	# omega = 1 : step : M*Wi - step  # Frequency domain, can be used to plot power spectrum
+
+	## Error Check (Wi=8 is the minimum frequency required for eFAST. Ns_total must be at least 65 to satisfy this criterion)
+	if Wi<8
+		println("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
+		return
+	end
+
+
+	## If our output is read directly from some sort of data file rather than using a model function
+
+	# svrtruncate is simply a boolean to truncate output .csv file (NOT INPUT RANGES)!! (For some reason model output is listed in second column)
+	# Do NOT set this boolean to 1 unless if output is from surrogate model
+	svrtruncate = 0
+	if directOutput == 1
+		# Reading in data
+		tempOutputData = Array(Any,(Ns*ny, 1, nprime))
+		OutputData     = Array(Any,(Ns, ny, nprime))
+		if svrtruncate == 1
+			tempOutputData = Array(Any,(Ns*ny, 2,nprime))
+		end
+		for k = 1:nprime
+			#OutputDataSource = "/Users/jlaughli/Desktop/Julia Code/For SVR/After 8-20-15/eFAST/svr results/res_eFAST_$(paramkeys[k])_5%_mads_output_N=625_predicted.csv"
+			OutputDataSource = "/Users/jlaughli/Desktop/Julia Code/Data/For Testing/eFAST_$(paramkeys[k])_5%_mads_output_N=625.csv"
+			tempOutputData[:,:,k] = readcsv(OutputDataSource)
+		end
+		if svrtruncate == 1
+			tempOutputData = tempOutputData[:,2,:]
+		end
+
+		for k = 1:nprime
+			OutputData[:,:,k] = reshape(tempOutputData[:,:,k], (ny,Ns))'
+		end
+		ny = Int(length(OutputData[1,:,1]))
+		# Converting data into similar format (PROB NEED TO ADD IN PHASE SHIFT HERE, change OutputData to a 3d array)
+	end
+
+
+
+
+
+	##
+	##
+	## Begin eFAST analysis:
+	##
+	##
+
+	## Start timer
+	tic()
+
+
+	madsinfo("""Begin eFAST analysis ... """)
+
+	# This script determines complementary frequencies
+	(W_comp, Wcmax) = eFAST_getCompFreq(Wi, nprime, M)
+
+	# New domain [-pi pi] spaced by Ns points
+	S_vec = linspace(-pi, pi, Ns)
+
+	## Preallocation
+	resultmat = zeros(nprime,3,Nr)   # Matrix holding all results (decomposed variance)
+	Var       = zeros(ny,nprime)     # Output variance
+	Si        = zeros(ny,nprime)     # Main sensitivity indices
+	Sti       = zeros(ny,nprime)     # Total sensitivity indices
+	W_vec     = zeros(1,nprime)      # W_vec (Frequencies)
+
+	########## DIFFERENT CASES DEPENDING ON # OF PROCESSORS
+	#if P <= nprime*Nr + 1
+	# Parallelized over n AND Nr
+
+	#if P > nprime*Nr + 1
+	# nprocs() is quite high, we choose to parallelize over n, Nr, AND also model output
+
+
+	if P>1
+		madsinfo("""Parallelizing resamplings AND parameters""")
+	else
+		madsinfo("""No Parallelization!""")
+	end
+
+	## Storing constants inside of a cell
+	# Less constants if not mads
+	if ismads == 0
+		@Compat.compat constCell = [ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed]
+	else
+		@Compat.compat constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed]
+	end
+
+	## Sends arguments to processors p
+	function sendto(p; args...)
+		for i in p
+			for (nm, val) in args
+				@spawnat(i, eval(Main, Expr(:(=), nm, val)))
+			end
+		end
+	end
+
+
+	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
+	if P > Nr*nprime + 1
+		# We still may need to send f to workers only calculating model output??
+		sendto(collect(2:nprime*Nr), constCell = constCell)
+		# If there are less workers than resamplings*parameters, we send to all workers available
+	elseif P > 1
+		sendto(workers(), constCell = constCell)
+	end
+
+	## If we are using svrobj as our model function:
+	if issvr
+		# Include necessary functions on every processor to calculate svrobj
+		svrObjFileName = "svr_objects_trained_with_c_1.0e6_eps_0.1"
+		totalSVRObjects, svrobj = svrJSONConvert(JSON.parsefile(string(efastpath*"svrobj/well10a/",svrObjFileName,".json")))
+
+
+		# Send svrobj to all processors
+		sendto(workers(), svrobj = svrobj)
+		sendto(workers(), totalSVRObjects = totalSVRObjects)
+	end
+
+
+	## If we are reading output directly from file
+	if directOutput == 1
+		sendto(workers(), OutputData   = OutputData)
+	end
+
+
+
+
+	### Calculating decomposed variances in parallel ###
+	allresults = pmap((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
+
+
+	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime
-		#OutputDataSource = "/Users/jlaughli/Desktop/Julia Code/For SVR/After 8-20-15/eFAST/svr results/res_eFAST_$(paramkeys[k])_5%_mads_output_N=625_predicted.csv";
-		OutputDataSource = "/Users/jlaughli/Desktop/Julia Code/Data/For Testing/eFAST_$(paramkeys[k])_5%_mads_output_N=625.csv";
-		tempOutputData[:,:,k] = readcsv(OutputDataSource)
+		# Sum of variances across all resamples
+		resultvec = sum(allresults[(1:Nr) + Nr*(k-1)])
+
+		## Calculating Sensitivity indices (main and total)
+		V        = resultvec[:,1]/Nr
+		Vi       = 2*resultvec[:,2]/Nr
+		Vci      = 2*resultvec[:,3]/Nr
+		# Main effect indices (i.e. decomposed varinace, before normalization)
+		Var[:,k] = Vi
+		# Normalizing vs mean over loops
+		Si[:,k]  = Vi./V
+		Sti[:,k] = 1 - Vci./V
 	end
-	if svrtruncate == 1
-		tempOutputData = tempOutputData[:,2,:];
-	end
+	madsinfo("""End eFAST analysis ... """)
+	madsinfo("""Elapsed time for eFAST is $(toc())""") ## End timer & display elapsed time
 
-	for k = 1:nprime
-		OutputData[:,:,k] = reshape(tempOutputData[:,:,k], (ny,Ns))'
-	end
-	ny = int(length(OutputData[1,:,1]));
-	# Converting data into similar format (PROB NEED TO ADD IN PHASE SHIFT HERE, change OutputData to a 3d array)
-end
-
-
-
-
-
-##
-##
-## Begin eFAST analysis:
-##
-##
-
-## Start timer
-tic();
-
-
-madsinfo("""Begin eFAST analysis ... """)
-
-# This script determines complementary frequencies
-(W_comp, Wcmax) = eFAST_getCompFreq(Wi, nprime, M);
-
-# New domain [-pi pi] spaced by Ns points
-S_vec = linspace(-pi, pi, Ns);
-
-## Preallocation
-resultmat = zeros(nprime,3,Nr);  # Matrix holding all results (decomposed variance)
-Var       = zeros(ny,nprime)     # Output variance
-Si        = zeros(ny,nprime)     # Main sensitivity indices
-Sti       = zeros(ny,nprime)     # Total sensitivity indices
-W_vec     = zeros(1,nprime);     # W_vec (Frequencies)
-
-########## DIFFERENT CASES DEPENDING ON # OF PROCESSORS
-#if P <= nprime*Nr + 1
-# Parallelized over n AND Nr
-
-#if P > nprime*Nr + 1
-# nprocs() is quite high, we choose to parallelize over n, Nr, AND also model output
-
-
-if P>1
-	madsinfo("""Parallelizing resamplings AND parameters""")
-else
-	madsinfo("""No Parallelization!""")
-end
-
-## Storing constants inside of a cell
-# Less constants if not mads
-if ismads == 0
-	@Compat.compat constCell = [ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, Seed]
-else
-	@Compat.compat constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, Seed]
-end
-
-## Sends arguments to processors p
-function sendto(p; args...)
-	for i in p
-	    for (nm, val) in args
-	        @spawnat(i, eval(Main, Expr(:(=), nm, val)))
-	    end
-	end
-end
-
-
-## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
-if P > Nr*nprime + 1
-	# We still may need to send f to workers only calculating model output??
-	sendto(collect(2:nprime*Nr), constCell = constCell);
-# If there are less workers than resamplings*parameters, we send to all workers available
-elseif P > 1
-	sendto(workers(), constCell = constCell);
-end
-
-## If we are using svrobj as our model function:
-if issvr == 1
-	# Include necessary functions on every processor to calculate svrobj
-	svrObjFileName = "svr_objects_trained_with_c_1.0e6_eps_0.1";
-	totalSVRObjects, svrobj = svrJSONConvert(JSON.parsefile(string(efastpath*"svrobj/well10a/",svrObjFileName,".json")));
-
-
-	# Send svrobj to all processors
-	sendto(workers(), svrobj = svrobj)
-	sendto(workers(), totalSVRObjects = totalSVRObjects)
-end
-
-
-## If we are reading output directly from file
-if directOutput == 1
-	sendto(workers(), OutputData   = OutputData)
-end
-
-
-
-
-### Calculating decomposed variances in parallel ###
-allresults = pmap((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr);
-
-
-## Summing & normalizing decomposed variances to obtain sensitivity indices
-for k = 1:nprime
-	# Sum of variances across all resamples
-	resultvec = sum(allresults[(1:Nr) + Nr*(k-1)]);
-
-	## Calculating Sensitivity indices (main and total)
-	V        = resultvec[:,1]/Nr
-	Vi       = 2*resultvec[:,2]/Nr
-	Vci      = 2*resultvec[:,3]/Nr
-	# Main effect indices (i.e. decomposed varinace, before normalization)
-	Var[:,k] = Vi
-	# Normalizing vs mean over loops
-	Si[:,k]  = Vi./V
-	Sti[:,k] = 1 - Vci./V
-end
-
-
-
-
-##
-##
-## End eFAST analysis:
-##
-##
-madsinfo("""End eFAST analysis ... """)
-
-
-## End timer & display elapsed time
-println("Elapsed time for eFAST is $(toc())");
-
-# Save results as dictionary
-tes = DataStructures.OrderedDict()
-mes = DataStructures.OrderedDict()
-var = DataStructures.OrderedDict()
-for j = 1:length(obskeys)
-	tes[obskeys[j]] = DataStructures.OrderedDict()
-	mes[obskeys[j]] = DataStructures.OrderedDict()
-	var[obskeys[j]] = DataStructures.OrderedDict()
-end
-for k = 1:length(paramkeys)
+	# Save results as dictionary
+	tes = DataStructures.OrderedDict()
+	mes = DataStructures.OrderedDict()
+	var = DataStructures.OrderedDict()
 	for j = 1:length(obskeys)
-		var[obskeys[j]][paramkeys[k]] = Var[j,k]
-		tes[obskeys[j]][paramkeys[k]] = Sti[j,k]
-		mes[obskeys[j]][paramkeys[k]] = Si[j,k]
+		tes[obskeys[j]] = DataStructures.OrderedDict()
+		mes[obskeys[j]] = DataStructures.OrderedDict()
+		var[obskeys[j]] = DataStructures.OrderedDict()
 	end
-end
+	for k = 1:length(paramkeys)
+		for j = 1:length(obskeys)
+			var[obskeys[j]][paramkeys[k]] = Var[j,k]
+			tes[obskeys[j]][paramkeys[k]] = Sti[j,k]
+			mes[obskeys[j]][paramkeys[k]] = Si[j,k]
+		end
+	end
 
-#"seed" => Seed
-if issvr == 1
-	println("returning resultsefastsvr")
-	return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => Seed)
-elseif issvr == 0
-	println("returning resultsefast")
-	return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => Seed)
-end
+	if issvr
+		println("returning resultsefastsvr")
+		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
+	else
+		println("returning resultsefast")
+		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => seed)
+	end
 
-# Plot results as .svg file
-if plotresults == 1
-	madsinfo("""Plotting eFAST results as .svg file ... """)
-	Mads.plotwellSAresults("w10a",md,resultsefast)
-end
-## Displaying Results
-# println("Si: $Si")
-# println("Sti: $Sti")
+	# Plot results as .svg file
+	if plotresults
+		madsinfo("""Plotting eFAST results as .svg file ... """)
+		Mads.plotwellSAresults("w10a",md,resultsefast)
+	end
+
 end
 
 @doc "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)" ->
@@ -1776,7 +1625,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	# Deleting "Nothings" from results (tes[1:3])
 	for zz=1:3
 		for k = 1:7
-		    result["tes"]["$(wellname)_$zz"][paramkeys[k]] = NaN;
+			result["tes"]["$(wellname)_$zz"][paramkeys[k]] = NaN
 		end
 	end
 
@@ -1793,31 +1642,31 @@ function plotSAresults_monty(wellname, madsdata, result)
 	end
 
 	## Calculating concentration from initial values (using model)
-	paramallkeys  = Mads.getparamkeys(madsdata);
-	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys)));
-	f 			  = Mads.makemadscommandfunction(madsdata);
+	paramallkeys  = Mads.getparamkeys(madsdata)
+	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys)))
+	f 			  = Mads.makemadscommandfunction(madsdata)
 
 	Ytemp = f(paramalldict)
 
 	# Since md might include more wells then wellname, this finds results only for wellname
-	wstr = Array(String,(50,1));
+	wstr = Array(String,(50,1))
 	for i = 1:50
-		wstr[i] = wellname*"_$i";
+		wstr[i] = wellname*"_$i"
 	end
 
 	# Finding concentration just for wellname
-	Y = zeros(50,1);
+	Y = zeros(50,1)
 	for i = 1:50
 		Y[i] = Ytemp[wstr[i]]
 	end
 
 
 	# Concentrations will be normalized to be from 0 to 1
-	maxconcentration = maximum(Y);
+	maxconcentration = maximum(Y)
 	# Normalizing concentration
-	Y = Y./maxconcentration;
+	Y = Y./maxconcentration
 	# Rounding maxconcentration to 3 sig figs
-	maxconcentration = signif(maxconcentration,3);
+	maxconcentration = signif(maxconcentration,3)
 
 	# Data frame for concentration
 	dfc = DataFrame(x=[1:50], y = Y[:], parameter="c")
@@ -1853,17 +1702,17 @@ function plotSAresults_monty(wellname, madsdata, result)
 	end
 
 	# Combining dataframes
-  	bigdf = vcat(dfc,vdf)
+	bigdf = vcat(dfc,vdf)
 
-  	# Plotting
+	# Plotting
 	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect/Normalized Concentration"),
-  	Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
-  	Gadfly.Scale.color_discrete_manual(pcolors...));
+										 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
+										 Gadfly.Scale.color_discrete_manual(pcolors...))
 
 	# Creating .svg file for plot (in current directory)
 	rootname = Mads.getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes);
+	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes)
 end
 
 
