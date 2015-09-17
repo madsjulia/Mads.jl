@@ -284,8 +284,8 @@ function plotmatches(madsdata, result; filename="", format="")
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
 		c[i] = result[obskeys[i]]
 	end
-	p=Gadfly.plot(layer(x=t,y=c,Geom.line,Theme(default_color=color("blue"),line_width=3pt)),
-		layer(x=t,y=d,Geom.point,Theme(default_color=color("red"),default_point_size=6pt)))
+	p=Gadfly.plot(layer(x=t,y=c,Geom.line,Theme(default_color=parse(Colors.Colorant, "blue"),line_width=3pt)),
+		layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=6pt)))
 	if filename == ""
 		filename = "$rootname-match"
 	end

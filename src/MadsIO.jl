@@ -36,7 +36,13 @@ end
 
 @doc "Get file name extension" ->
 function getextension(filename)
-	split(filename, ".")[end]
+	d = split(filename, "/")
+	s = split(d[end], ".")
+	if length(s) > 1
+		return s[end]
+	else
+		return ""
+	end
 end
 
 @doc "Set image file format" ->

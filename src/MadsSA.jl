@@ -720,9 +720,11 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if filename == ""
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
+		println(filename)
 	end
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
+		println(filename)
 		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
 	else
 		filename_orig = filename
