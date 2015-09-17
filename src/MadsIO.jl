@@ -19,7 +19,7 @@ end
 
 @doc "Get MADS root name" ->
 function getmadsrootname(madsdata)
-	join(split(madsdata["Filename"], ".")[1:end-1], ".")
+	getrootname(madsdata["Filename"])
 end
 
 @doc "Get MADS problem dir" ->
@@ -32,6 +32,13 @@ function getmadsdir()
 		Mads.madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir
+end
+
+@doc "Get file name root " ->
+function getrootname(filename)
+	d = split(filename, "/")
+	s = split(d[end], ".")
+	return join(d[1:end-1], "/") * "/" * s[1]
 end
 
 @doc "Get file name extension" ->
@@ -48,21 +55,22 @@ end
 @doc "Set image file format" ->
 function setimagefileformat(filename, format)
 	extension = uppercase(getextension(filename))
+	root = getrootname(filename)
 	if format == ""
 		format = extension
 	end
 	if ismatch(r"^PNG|PDF|PS|SVG", format)
 		if format != extension
-			filename = filename*"."*lowercase(format)
+			filename = root * "." * lowercase(format)
 		end
 	elseif format == "EPS"
 		if !ismatch(r"^EPS|PS", extension)
-			filename = filename*".eps"
+			filename = root * ".eps"
 		end
 		format = "PS"
 	else
 		if "SVG" != extension
-			filename = filename*".svg"
+			filename = root * ".svg"
 		end
 		format = "SVG"
 	end

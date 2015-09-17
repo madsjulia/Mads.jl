@@ -728,11 +728,12 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		println(filename)
 		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
 	else
-		filename_orig = filename
-		filename = filename_orig * "-total_effect"
+		filename_root = Mads.getrootname(filename)
+		filename_ext = Mads.getextension(filename)
+		filename = filename_root * "-total_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), ptes)
-		filename = filename_orig * "-main_effect"
+		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), pmes)
 	end
