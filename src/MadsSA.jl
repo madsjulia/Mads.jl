@@ -72,6 +72,7 @@ function localsa(madsdata; format="")
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
 	Mads.info("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
+	covar = Array(Float64, 0)
 	try
 		u, s, v = svd(JpJ)
 		covar = ( v * inv(diagm(s)) * u' )
