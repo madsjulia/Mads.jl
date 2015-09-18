@@ -55,8 +55,12 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 end
 
 @doc "Local sensitivity analysis" ->
-function localsa(madsdata; format="")
-	rootname = getmadsrootname(madsdata)
+function localsa(madsdata; format="", filename="")
+	if filename ==""
+		rootname = Mads.getmadsrootname(madsdata)
+	else
+		rootname = Mads.getrootname(filename)
+	end
 	f_lm, g_lm = makelmfunctions(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
@@ -529,7 +533,7 @@ function saltelliprintresults2(madsdata, results)
 end
 
 @doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
-function plotwellSAresults(wellname, madsdata, result)
+function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]" )
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
@@ -557,7 +561,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
 	pp = Array(Any, 0)
-	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel("Time [years]"), Guide.YLabel("Concentration [ppb]") )
+	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
 	push!(pp, pc)
 	vsize = 4inch
 	df = Array(Any, nP)
@@ -569,7 +573,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 		push!(pp, ptes)
 		vsize += 4inch
 	end
@@ -581,7 +585,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 		push!(pp, pmes)
 		vsize += 4inch
 	end
@@ -593,7 +597,7 @@ function plotwellSAresults(wellname, madsdata, result)
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
 		push!(pp, pvar)
 		vsize += 4inch
 	end
@@ -604,7 +608,7 @@ function plotwellSAresults(wellname, madsdata, result)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
-function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false)
+function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -636,7 +640,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	# tes = tes./maximum(tes,2)
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
-	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel("x"), Guide.YLabel("y") )
+	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
 	push!(pp, pd)
 	if debug
 		# println(dfc)
@@ -665,7 +669,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
 											 Gadfly.Theme(line_width=1.5pt),
-											 Guide.XLabel("Time (seconds)"),
+											 Guide.XLabel(xtitle),
 											 Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
@@ -689,7 +693,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
 											 Gadfly.Theme(line_width=1.5pt),
-											 Gadfly.Guide.XLabel("Time (seconds)"),
+											 Guide.XLabel(xtitle),
 											 Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
@@ -712,7 +716,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			maxtorealmaxFloat32!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel("x"), Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
+		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4inch
 	end
@@ -1725,7 +1729,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	bigdf = vcat(dfc,vdf)
 
 	# Plotting
-	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel("Time [years]"), Guide.YLabel("Total Effect/Normalized Concentration"),
+	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect/Normalized Concentration"),
 										 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
 										 Gadfly.Scale.color_discrete_manual(pcolors...))
 

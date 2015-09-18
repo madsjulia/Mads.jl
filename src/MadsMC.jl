@@ -106,7 +106,7 @@ function paramarray2dict(madsdata, array)
 end
 
 @doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filename="", keyword="" )
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filename="", keyword="", xtitle="X", ytitle="Y" )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -136,6 +136,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filena
 		end
 		p = Gadfly.plot(Gadfly.layer( x=t, y=d, Gadfly.Geom.point,
 								Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)),
+								Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
 								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 								for i in 1:numberofsamples]...)
@@ -156,7 +157,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filena
 end
 
 @doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="")
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y")
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -184,6 +185,7 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 	end
 	p = Gadfly.plot(layer(x=t, y=d, Gadfly.Geom.point,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
+					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]... )
