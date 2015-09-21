@@ -2,7 +2,7 @@ using DataStructures
 function madsmodelrun(parameters::Dict) # Sobol Test
 	f = 1
 	i = 1
-	for d in collect(keys(parameters))
+	for d in sort(collect(keys(parameters))) # TODO fix parameter order; sort use here is funny
 		a = ( i > 2 ) ? 3 : 0
 		b = ( abs( 4.0 * ( parameters[d] + 0.5 ) - 2 ) + a ) / ( 1 + a );
 		f = f * b

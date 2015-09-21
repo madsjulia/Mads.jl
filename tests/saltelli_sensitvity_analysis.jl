@@ -3,7 +3,7 @@ using Mads
 problemdir = Mads.getmadsdir()
 Mads.madsinfo("TEST Saltelli senstivity analysis: Sobol test:")
 mdsobol = Mads.loadyamlmadsfile(problemdir * "test-sobol.mads")
-results = Mads.saltelli(mdsobol, N=int(1e3))
+results = Mads.saltelli(mdsobol, N=int(5000))
 Mads.printSAresults(mdsobol, results)
 Mads.madsinfo("TEST Saltelli senstivity analysis: Linear problem:")
 mdsaltelli = Mads.loadyamlmadsfile(problemdir * "test-saltelli.mads")
