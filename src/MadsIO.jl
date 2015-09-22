@@ -54,6 +54,7 @@ end
 
 @doc "Set image file format" ->
 function setimagefileformat(filename, format)
+	format = uppercase(format)
 	extension = uppercase(getextension(filename))
 	root = getrootname(filename)
 	if format == ""

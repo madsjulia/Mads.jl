@@ -74,7 +74,7 @@ function localsa(madsdata; format="", filename="")
 	filename = "$(rootname)-jacobian"
 	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
-	Mads.info("""Jacobian matrix plot saved in $filename""")
+	Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
 	covar = Array(Float64, 0)
 	try
@@ -108,12 +108,17 @@ function localsa(madsdata; format="", filename="")
 												Guide.YLabel("Parameters"),  Guide.XLabel("Eigenvectors"),
 												Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.point, Theme(default_point_size=10pt), Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-	eigenplot = vstack(eigenmat, eigenval)
-	filename = "$(rootname)-eigen"
+	filename = "$(rootname)-eigenmatrix"
 	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw( eval(symbol(format))(filename,6inch,12inch), eigenplot)
-	Mads.info("""Eigen matrix plot saved in $filename""")
+	Gadfly.draw( eval(symbol(format))(filename,6inch,6inch), eigenmat)
+	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
+	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10,
+												 Geom.bar, Theme(default_point_size=10pt),
+												 Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	filename = "$(rootname)-eigenvalues"
+	filename, format = Mads.setimagefileformat(filename, format)
+	Gadfly.draw( eval(symbol(format))(filename,6inch,4inch), eigenval)
+	Mads.madsinfo("""Eigen values plot saved in $filename""")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
@@ -275,13 +280,17 @@ function saltelli(madsdata; N=Int(100), seed=0)
 	A = Array(Float64, (N, 0))
 	B = Array(Float64, (N, 0))
 	C = Array(Float64, (N, nP))
-	meandata = OrderedDict{String, OrderedDict{String, Float64}}() # mean
 	variance = OrderedDict{String, OrderedDict{String, Float64}}() # variance
+	varianceA = OrderedDict{String, OrderedDict{String, Float64}}() # variance
+	varianceB = OrderedDict{String, OrderedDict{String, Float64}}() # variance
+	variancenP = OrderedDict{String, OrderedDict{String, Float64}}() # variance
 	mes = OrderedDict{String, OrderedDict{String, Float64}}() # main effect (first order) sensitivities
 	tes = OrderedDict{String, OrderedDict{String, Float64}}()	# total effect sensitivities
 	for i = 1:nO
-		meandata[obskeys[i]] = OrderedDict{String, Float64}()
 		variance[obskeys[i]] = OrderedDict{String, Float64}()
+		varianceA[obskeys[i]] = OrderedDict{String, Float64}()
+		varianceB[obskeys[i]] = OrderedDict{String, Float64}()
+		variancenP[obskeys[i]] = OrderedDict{String, Float64}()
 		mes[obskeys[i]] = OrderedDict{String, Float64}()
 		tes[obskeys[i]] = OrderedDict{String, Float64}()
 	end
@@ -295,13 +304,13 @@ function saltelli(madsdata; N=Int(100), seed=0)
 		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :]))))))), 1:N)...)'
+	yA = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :]))))))), 1:N)...)'
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :]))))))), 1:N)...)'
+	yB = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :]))))))), 1:N)...)'
 	for i = 1:nP
 		for j = 1:N
 			for k = 1:nP
-				if k != i
+				if k == i
 					C[j, k] = B[j, k]
 				else
 					C[j, k] = A[j, k]
@@ -309,13 +318,14 @@ function saltelli(madsdata; N=Int(100), seed=0)
 			end
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
-		yC = hcat(map(i->float(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :]))))))), 1:N)...)'
+		yC = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :]))))))), 1:N)...)'
 		maxnnans = 0
 		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
 			yBnonan = isnan(yB[:,j])
 			yCnonan = isnan(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
+			yT = vcat( yA[nonan,j], yB[nonan,j] ) # this should not include C
 			nanindices = find(~nonan)
 			# println("$nanindices")
 			nnans = length(nanindices)
@@ -323,29 +333,49 @@ function saltelli(madsdata; N=Int(100), seed=0)
 				maxnnans = nnans
 			end
 			nnonnans = N - nnans
-			f0A = mean(yA[nonan,j])
-			f0B = mean(yB[nonan,j])
-			meandata[obskeys[j]][paramoptkeys[i]] = .5 * (f0A + f0B)
-			varA = abs(dot(yA[nonan,j], yA[nonan,j]) / nnonnans - f0A ^ 2)
-			varB = abs(dot(yB[nonan,j], yB[nonan,j]) / nnonnans - f0B ^ 2)
-			# varT = .5 * (varA + varB)
-			# varMax = max(varA, varB)
-			varP = abs((dot(yA[nonan, j], yC[nonan, j]) / nnonnans - f0A ^ 2)) # we can get negative values for varP which does not make sense
-			varPnot = abs((dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B ^ 2))
-			variance[obskeys[j]][paramoptkeys[i]] = varP
-			if varA < eps(Float64) && varP < eps(Float64)
-				mes[obskeys[j]][paramoptkeys[i]] = NaN
-			else
-				mes[obskeys[j]][paramoptkeys[i]] = min(1, max(0, varP / varA)) # varT or varA? i think it should be varA
-			end
-			tes[obskeys[j]][paramoptkeys[i]] = min(1, max(0, 1 - varPnot / varB)) # varT or varA; i think it should be varA; i do not think should be varB?
+			# f0T = mean(yT)
+			f0A = mean( yA[nonan,j] )
+			f0B = mean( yB[nonan,j] )
+			f0C = mean( yC[nonan,j] )
+			varT = var( yT )
+			# varA = abs( ( dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
+			varA = var( yA[nonan,j] ) # this is faster
+			# varB = abs( ( dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
+			varB = var( yB[nonan,j] ) # this is faster
+			varC = var( yC[nonan,j] ) # this is faster
+			varP = abs( ( dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
+			varP2 = abs( ( dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			varP3 = abs( mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
+			varP4 = mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
+			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
+			varPnot = abs( ( dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
+			varPnot2 = abs( ( dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			varPnot3 = mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
+			expPnot =  mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
+			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
+			variance[obskeys[j]][paramoptkeys[i]] = varP3
+			variancenP[obskeys[j]][paramoptkeys[i]] = varPnot3
+# 			if varA < eps(Float64) && varP < eps(Float64)
+# 				tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
+# 			else
+# 				mes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, varP / varA ) ) # varT or varA? i think it should be varA
+# 				tes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, 1 - varPnot / varB) ) # varT or varA; i think it should be varA; i do not think should be varB?
+# 			end
+			# mes[obskeys[j]][paramoptkeys[i]] = varP / varT
+			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varT
+			varianceA[obskeys[j]][paramoptkeys[i]] = varT
+			# varianceB[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varB
+			varianceB[obskeys[j]][paramoptkeys[i]] = varC
+			mes[obskeys[j]][paramoptkeys[i]] = varP3 / varA
+			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varB
+			tes[obskeys[j]][paramoptkeys[i]] = expPnot / varB
 			# println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 		if maxnnans > 0
-			Mads.warn("""There are $(maxnnans) NaN's""")
+			Mads.madswarn("""There are $(maxnnans) NaN's""")
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "varA" => varianceA, "varB" => varianceB, "varnP" => variancenP, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -467,34 +497,43 @@ function printSAresults(madsdata, results)
 		madsoutput("\n")
 	end
 	=#
-	madsoutput("\nMain Effect Indices")
-	madsoutput("\t")
+	madsoutput("\nMain Effect Indices\n")
+	madsoutput("obs")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
 		madsoutput("\t$(paramkey)")
 	end
+	madsoutput("\tSum")
 	madsoutput("\n")
 	for obskey in obskeys
 		madsoutput(obskey)
+		sum = 0
 		for paramkey in paramkeys
-			madsoutput("\t$(mes[obskey][paramkey])")
+			sum += mes[obskey][paramkey]
+			madsoutput("\t$(@sprintf("%f",mes[obskey][paramkey]))")
 		end
+		madsoutput("\t$(sum)")
 		madsoutput("\n")
 	end
-	madsoutput("\nTotal Effect Indices")
-	madsoutput("\t")
+	madsoutput("\nTotal Effect Indices\n")
+	madsoutput("obs")
 	for paramkey in paramkeys
 		madsoutput("\t$(paramkey)")
 	end
+	madsoutput("\tSum")
 	madsoutput("\n")
 	for obskey in obskeys
 		madsoutput(obskey)
+		sum = 0
 		for paramkey in paramkeys
-			madsoutput("\t$(tes[obskey][paramkey])")
+			sum += tes[obskey][paramkey]
+			madsoutput("\t$(@sprintf("%f",tes[obskey][paramkey]))")
 		end
+		madsoutput("\t$(sum)")
 		madsoutput("\n")
 	end
+	madsoutput("\n")
 end
 
 @doc "Print the sensitivity analysis results (method 2)" ->
@@ -622,6 +661,9 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	var = Array(Float64, nP, nT)
+	varA = Array(Float64, nP, nT)
+	varB = Array(Float64, nP, nT)
+	varnP = Array(Float64, nP, nT)
 	i = 1
 	for obskey in keys(obsdict)
 		d[1,i] = obsdict[obskey]["time"]
@@ -631,23 +673,28 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			mes[j,i] = result["mes"][obskey][paramkey]
 			tes[j,i] = result["tes"][obskey][paramkey]
 			var[j,i] = result["var"][obskey][paramkey]
+			varA[j,i] = result["varA"][obskey][paramkey]
+			varB[j,i] = result["varB"][obskey][paramkey]
+			varnP[j,i] = result["varnP"][obskey][paramkey]
 			j += 1
 		end
 		i += 1
 	end
 	# mes = mes./maximum(mes,2) # normalize 0 to 1
-	tes = tes.-minimum(tes,2)
-	# tes = tes./maximum(tes,2)
+	tes = tes .- minimum( tes ) # normalize 0 to 1
+	tes = tes ./ maximum( tes ) # normalize 0 to 1
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
-	push!(pp, pd)
+	# push!(pp, pd)
 	if debug
 		# println(dfc)
 		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
 		# writetable("dfc.dat", dfc)
 	end
-	vsize = 4inch
+	# vsize = 4inch
+	vsize = 0inch
+	###################################################### TES
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
@@ -659,27 +706,30 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if debug
 		# println(vdf)
 		println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("tes.dat", vdf)
+		writetable("tes.dat", vdf)
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.warn("""TES Values larger than $(realmax(Float32))""")
+			Mads.madswarn("""TES values larger than $(realmax(Float32))""")
 			maxtorealmaxFloat32!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
 											 Gadfly.Theme(line_width=1.5pt),
+											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 											 Guide.XLabel(xtitle),
 											 Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
 	end
+	###################################################### MES
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
+	vdf = vcat(df...)
 	if debug
 		# println(vdf)
 		println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
@@ -687,17 +737,19 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.warn("""MES Values larger than $(realmax(Float32))""")
+			Mads.madswarn("""MES values larger than $(realmax(Float32))""")
 			maxtorealmaxFloat32!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
 											 Gadfly.Theme(line_width=1.5pt),
+											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 											 Guide.XLabel(xtitle),
 											 Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
 	end
+	###################################################### VAR
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
@@ -712,7 +764,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.warn("""Variance alues larger than $(realmax(Float32))""")
+			Mads.madswarn("""Variance values larger than $(realmax(Float32))""")
 			maxtorealmaxFloat32!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
@@ -720,8 +772,80 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		push!(pp, pvar)
 		vsize += 4inch
 	end
+	###################################################### VARA
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varA[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
+		j += 1
+	end
+	vdf = vcat(df...)
+	if debug
+		# println(vdf)
+		println("VARA xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("var.dat", vdf)
+	end
+	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.madswarn("""Variance values larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("VARA xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
+		pvarA = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VarianceA") ) # only none and default works: , Theme(key_position = :none)
+		push!(pp, pvarA)
+		vsize += 4inch
+	end
+	###################################################### VARB
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varB[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
+		j += 1
+	end
+	vdf = vcat(df...)
+	if debug
+		# println(vdf)
+		println("VARB xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("var.dat", vdf)
+	end
+	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.madswarn("""Variance alues larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("VARB xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
+		pvarb = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VarianceB") ) # only none and default works: , Theme(key_position = :none)
+		push!(pp, pvarb)
+		vsize += 4inch
+	end
+	###################################################### VARnP
+	j = 1
+	for paramkey in paramkeys
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varnP[j,:]), parameter="$paramkey")
+		deleteNaN!(df[j])
+		j += 1
+	end
+	vdf = vcat(df...)
+	if debug
+		# println(vdf)
+		println("VARnP xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		# writetable("var.dat", vdf)
+	end
+	if length(vdf[1]) > 0
+		if max(vdf[2]...) > realmax(Float32)
+			Mads.madswarn("""Variance alues larger than $(realmax(Float32))""")
+			maxtorealmaxFloat32!(vdf)
+			println("VARnP xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		end
+		pvarnp = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VariancenP") ) # only none and default works: , Theme(key_position = :none)
+		push!(pp, pvarnp)
+		vsize += 4inch
+	end
+	######################################################
 	rootname = getmadsrootname(madsdata)
-	p = Gadfly.vstack(pp...)
+	p1 = Gadfly.vstack(pp[1:3]...)
+	p2 = Gadfly.vstack(pp[4:6]...)
+	p = Gadfly.hstack(p1,p2)
 	if filename == ""
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
@@ -730,7 +854,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
 		println(filename)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize), p)
+		Gadfly.draw(eval(symbol(format))(filename, 6inch * 2, vsize / 2 ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
@@ -768,7 +892,7 @@ function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
 			deleterows!(df, find(isnan(df[i][:])))
-			if length(df[i]) == 0
+			if size(df)[1] == 0
 				return
 			end
 		end
@@ -1532,9 +1656,9 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 	## Storing constants inside of a cell
 	# Less constants if not mads
 	if ismads == 0
-		@Compat.compat constCell = [ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed]
+		constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed]
 	else
-		@Compat.compat constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed]
+		constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed]
 	end
 
 	## Sends arguments to processors p
@@ -1645,14 +1769,12 @@ function plotSAresults_monty(wellname, madsdata, result)
 	nT = length(o)
 	d = Array(Float64, 2, nT)
 	tes = Array(Float64, nP, nT)
-
 	# Deleting "Nothings" from results (tes[1:3])
 	for zz=1:3
 		for k = 1:7
 			result["tes"]["$(wellname)_$zz"][paramkeys[k]] = NaN
 		end
 	end
-
 	# Setting tes/concentration matrices
 	for i in 1:nT
 		t = d[1,i] = o[i][i]["t"]
@@ -1664,37 +1786,29 @@ function plotSAresults_monty(wellname, madsdata, result)
 			j += 1
 		end
 	end
-
-	## Calculating concentration from initial values (using model)
+	# Calculating concentration from initial values (using model)
 	paramallkeys  = Mads.getparamkeys(madsdata)
 	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->madsdata["Parameters"][key]["init"], paramallkeys)))
 	f 			  = Mads.makemadscommandfunction(madsdata)
-
 	Ytemp = f(paramalldict)
-
 	# Since md might include more wells then wellname, this finds results only for wellname
 	wstr = Array(String,(50,1))
 	for i = 1:50
 		wstr[i] = wellname*"_$i"
 	end
-
 	# Finding concentration just for wellname
 	Y = zeros(50,1)
 	for i = 1:50
 		Y[i] = Ytemp[wstr[i]]
 	end
-
-
 	# Concentrations will be normalized to be from 0 to 1
 	maxconcentration = maximum(Y)
 	# Normalizing concentration
 	Y = Y./maxconcentration
 	# Rounding maxconcentration to 3 sig figs
 	maxconcentration = signif(maxconcentration,3)
-
 	# Data frame for concentration
 	dfc = DataFrame(x=[1:50], y = Y[:], parameter="c")
-
 	# Changing paramkeys so they don't include "source1_"
 	for k = 1:nP
 		if length(paramkeys[k]) > 6
@@ -1703,7 +1817,6 @@ function plotSAresults_monty(wellname, madsdata, result)
 			end
 		end
 	end
-
 	# Data frame for total effect
 	df = Array(Any, nP)
 	j = 1
@@ -1713,7 +1826,6 @@ function plotSAresults_monty(wellname, madsdata, result)
 		j += 1
 	end
 	vdf = vcat(df...)
-
 	# Setting default colors for parameters
 	a = Gadfly.Scale.color_discrete_hue()
 	# index 6 is grey
@@ -1724,22 +1836,14 @@ function plotSAresults_monty(wellname, madsdata, result)
 		pcolors = a.f(nP+6)
 		pcolors = vcat(pcolors[6], pcolors[1:nP])
 	end
-
 	# Combining dataframes
 	bigdf = vcat(dfc,vdf)
-
 	# Plotting
 	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect/Normalized Concentration"),
 										 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
 										 Gadfly.Scale.color_discrete_manual(pcolors...))
-
 	# Creating .svg file for plot (in current directory)
 	rootname = Mads.getmadsrootname(madsdata)
 	method = result["method"]
 	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes)
 end
-
-
-
-
-
