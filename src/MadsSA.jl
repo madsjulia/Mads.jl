@@ -334,27 +334,26 @@ function saltelli(madsdata; N=Int(100), seed=0)
 			end
 			nnonnans = N - nnans
 			# f0T = mean(yT)
-			f0A = mean( yA[nonan,j] )
-			f0B = mean( yB[nonan,j] )
-			f0C = mean( yC[nonan,j] )
+			# f0A = mean( yA[nonan,j] )
+			# f0B = mean( yB[nonan,j] )
+			# f0C = mean( yC[nonan,j] )
 			varT = var( yT )
 			# varA = abs( ( dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
-			varA = var( yA[nonan,j] ) # this is faster
+			# varA = var( yA[nonan,j] ) # this is faster
 			# varB = abs( ( dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
-			varB = var( yB[nonan,j] ) # this is faster
-			varC = var( yC[nonan,j] ) # this is faster
-			varP = abs( ( dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
-			varP2 = abs( ( dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			# varB = var( yB[nonan,j] ) # this is faster
+			varC = var( yC[nonan,j] )
+			# varP = abs( ( dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
+			# varP2 = abs( ( dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
 			varP3 = abs( mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
-			varP4 = mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
+			# varP4 = mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
 			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
-			varPnot = abs( ( dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
-			varPnot2 = abs( ( dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
-			varPnot3 = mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
+			# varPnot = abs( ( dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
+			# varPnot2 = abs( ( dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			# varPnot3 = mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
 			expPnot =  mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
 			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
-			variance[obskeys[j]][paramoptkeys[i]] = varP3
-			variancenP[obskeys[j]][paramoptkeys[i]] = varPnot3
+			variance[obskeys[j]][paramoptkeys[i]] = varC
 # 			if varA < eps(Float64) && varP < eps(Float64)
 # 				tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
 # 			else
@@ -363,19 +362,19 @@ function saltelli(madsdata; N=Int(100), seed=0)
 # 			end
 			# mes[obskeys[j]][paramoptkeys[i]] = varP / varT
 			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varT
-			varianceA[obskeys[j]][paramoptkeys[i]] = varT
+			# varianceA[obskeys[j]][paramoptkeys[i]] = varT
 			# varianceB[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varB
-			varianceB[obskeys[j]][paramoptkeys[i]] = varC
-			mes[obskeys[j]][paramoptkeys[i]] = varP3 / varA
+			# varianceB[obskeys[j]][paramoptkeys[i]] = varC
+			mes[obskeys[j]][paramoptkeys[i]] = varP3 / varT
 			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varB
-			tes[obskeys[j]][paramoptkeys[i]] = expPnot / varB
+			tes[obskeys[j]][paramoptkeys[i]] = expPnot / varT
 			# println("N $N nnonnans $nnonnans f0A $f0A f0B $f0B varA $varA varB $varB varP $varP varPnot $varPnot mes $(varP / varA) tes $(1 - varPnot / varB)")
 		end
 		if maxnnans > 0
 			Mads.madswarn("""There are $(maxnnans) NaN's""")
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "varA" => varianceA, "varB" => varianceB, "varnP" => variancenP, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -661,9 +660,6 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	var = Array(Float64, nP, nT)
-	varA = Array(Float64, nP, nT)
-	varB = Array(Float64, nP, nT)
-	varnP = Array(Float64, nP, nT)
 	i = 1
 	for obskey in keys(obsdict)
 		d[1,i] = obsdict[obskey]["time"]
@@ -673,20 +669,24 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			mes[j,i] = result["mes"][obskey][paramkey]
 			tes[j,i] = result["tes"][obskey][paramkey]
 			var[j,i] = result["var"][obskey][paramkey]
-			varA[j,i] = result["varA"][obskey][paramkey]
-			varB[j,i] = result["varB"][obskey][paramkey]
-			varnP[j,i] = result["varnP"][obskey][paramkey]
 			j += 1
 		end
 		i += 1
 	end
 	# mes = mes./maximum(mes,2) # normalize 0 to 1
-	tes = tes .- minimum( tes ) # normalize 0 to 1
-	tes = tes ./ maximum( tes ) # normalize 0 to 1
+	mintes = minimum( tes )
+	if mintes < 0
+		tes = tes - mintes # normalize 0 to 1
+	end
+	maxtes = maximum( tes )
+	if maxtes > 1
+		tes = tes / maxtes # normalize 0 to 1
+	end
+	###################################################### DATA
 	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
-	# push!(pp, pd)
+	push!(pp, pd)
 	if debug
 		# println(dfc)
 		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
@@ -772,80 +772,12 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		push!(pp, pvar)
 		vsize += 4inch
 	end
-	###################################################### VARA
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varA[j,:]), parameter="$paramkey")
-		deleteNaN!(df[j])
-		j += 1
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("VARA xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("var.dat", vdf)
-	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""Variance values larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
-			println("VARA xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		end
-		pvarA = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VarianceA") ) # only none and default works: , Theme(key_position = :none)
-		push!(pp, pvarA)
-		vsize += 4inch
-	end
-	###################################################### VARB
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varB[j,:]), parameter="$paramkey")
-		deleteNaN!(df[j])
-		j += 1
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("VARB xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("var.dat", vdf)
-	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""Variance alues larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
-			println("VARB xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		end
-		pvarb = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VarianceB") ) # only none and default works: , Theme(key_position = :none)
-		push!(pp, pvarb)
-		vsize += 4inch
-	end
-	###################################################### VARnP
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(varnP[j,:]), parameter="$paramkey")
-		deleteNaN!(df[j])
-		j += 1
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("VARnP xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		# writetable("var.dat", vdf)
-	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""Variance alues larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
-			println("VARnP xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
-		end
-		pvarnp = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output VariancenP") ) # only none and default works: , Theme(key_position = :none)
-		push!(pp, pvarnp)
-		vsize += 4inch
-	end
 	######################################################
 	rootname = getmadsrootname(madsdata)
-	p1 = Gadfly.vstack(pp[1:3]...)
-	p2 = Gadfly.vstack(pp[4:6]...)
-	p = Gadfly.hstack(p1,p2)
+	# p1 = Gadfly.vstack(pp[1:3]...)
+	# p2 = Gadfly.vstack(pp[4:6]...)
+	# p = Gadfly.hstack(p1,p2)
+	p = Gadfly.vstack(pp...)
 	if filename == ""
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
@@ -854,7 +786,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
 		println(filename)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch * 2, vsize / 2 ), p)
+		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
