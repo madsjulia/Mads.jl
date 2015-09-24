@@ -229,7 +229,7 @@ function allwellson!(madsdata)
 end
 
 @doc "Turn on a specific well" ->
-function wellon!(madsdata, wellname::String)
+function wellon!(madsdata, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey
@@ -253,7 +253,7 @@ function allwellsoff!(madsdata)
 end
 
 @doc "Turn off a specific well" ->
-function welloff!(madsdata, wellname::String)
+function welloff!(madsdata, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey

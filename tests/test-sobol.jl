@@ -1,5 +1,5 @@
 using DataStructures
-function madsmodelrun(parameters::Dict) # Sobol Test
+function madsmodelrun(parameters::Associative) # Sobol Test
 	f = 1
 	i = 1
 	for d in sort(collect(keys(parameters))) # TODO fix parameter order; sort use here is funny
@@ -8,6 +8,6 @@ function madsmodelrun(parameters::Dict) # Sobol Test
 		f = f * b
 		i = i + 1
 	end
-	predictions = OrderedDict{String, Float64}(zip(["of"], [f]))
+	predictions = DataStructures.OrderedDict(zip(["of"], [f]))
 	return predictions
 end

@@ -5,8 +5,9 @@ using Gadfly
 using Distributions
 using ProgressMeter
 
-if VERSION < v"0.4.0-dev"
+if VERSION < v"0.4.0-rc"
 	using Docile # default for v > 0.4
+	typealias AbstractString String
 end
 # @document
 #@docstrings
@@ -33,7 +34,7 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 		paramdist = getparamdistributions(madsdata)
 	end
 	if haskey( madsdata["Parameters"], parameterkey )
-		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Nothing
+		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Void
 			if haskey(madsdata["Parameters"][parameterkey], "log")
 				flag = madsdata["Parameters"][parameterkey]["log"]
 				if flag == "yes" || flag == "true"
@@ -123,13 +124,13 @@ function localsa(madsdata; format="", filename="")
 end
 
 @doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=Int(1e4), seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
 	end
-	numsamples = Int(sqrt(N))
-	numoneparamsamples = Int(sqrt(N))
-	nummanyparamsamples = Int(sqrt(N))
+	numsamples = @Compat.compat int(sqrt(N))
+	numoneparamsamples = @Compat.compat int(sqrt(N))
+	nummanyparamsamples = @Compat.compat int(sqrt(N))
 	# convert the distribution strings into actual distributions
 	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
@@ -262,7 +263,7 @@ function saltellibrute(madsdata; N=Int(1e4), seed=0) # TODO Saltelli (brute forc
 end
 
 @doc "Saltelli " ->
-function saltelli(madsdata; N=Int(100), seed=0)
+function saltelli(madsdata; N=100, seed=0)
 	if seed != 0
 		srand(seed)
 	end
@@ -280,19 +281,13 @@ function saltelli(madsdata; N=Int(100), seed=0)
 	A = Array(Float64, (N, 0))
 	B = Array(Float64, (N, 0))
 	C = Array(Float64, (N, nP))
-	variance = OrderedDict{String, OrderedDict{String, Float64}}() # variance
-	varianceA = OrderedDict{String, OrderedDict{String, Float64}}() # variance
-	varianceB = OrderedDict{String, OrderedDict{String, Float64}}() # variance
-	variancenP = OrderedDict{String, OrderedDict{String, Float64}}() # variance
-	mes = OrderedDict{String, OrderedDict{String, Float64}}() # main effect (first order) sensitivities
-	tes = OrderedDict{String, OrderedDict{String, Float64}}()	# total effect sensitivities
+	variance = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}() # variance
+	mes = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}() # main effect (first order) sensitivities
+	tes = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}()	# total effect sensitivities
 	for i = 1:nO
-		variance[obskeys[i]] = OrderedDict{String, Float64}()
-		varianceA[obskeys[i]] = OrderedDict{String, Float64}()
-		varianceB[obskeys[i]] = OrderedDict{String, Float64}()
-		variancenP[obskeys[i]] = OrderedDict{String, Float64}()
-		mes[obskeys[i]] = OrderedDict{String, Float64}()
-		tes[obskeys[i]] = OrderedDict{String, Float64}()
+		variance[obskeys[i]] = OrderedDict{AbstractString, Float64}()
+		mes[obskeys[i]] = OrderedDict{AbstractString, Float64}()
+		tes[obskeys[i]] = OrderedDict{AbstractString, Float64}()
 	end
 	for key in paramoptkeys
 		delete!(paramalldict,key)
@@ -384,23 +379,23 @@ function computeparametersensitities(madsdata, saresults)
 	mes = saresults["mes"]
 	tes = saresults["tes"]
 	var = saresults["var"]
-	pvar = OrderedDict{String, Float64}() # parameter variance
-	pmes = OrderedDict{String, Float64}() # parameter main effect (first order) sensitivities
-	ptes = OrderedDict{String, Float64}()	# parameter total effect sensitivities
+	pvar = OrderedDict{AbstractString, Float64}() # parameter variance
+	pmes = OrderedDict{AbstractString, Float64}() # parameter main effect (first order) sensitivities
+	ptes = OrderedDict{AbstractString, Float64}()	# parameter total effect sensitivities
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)
-			if typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Nothing
+			if typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Void
 				m = 0
 			else
 				m = saresults["mes"][obskeys[j]][paramkeys[i]]
 			end
-			if typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Nothing
+			if typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Void
 				t = 0
 			else
 				t = saresults["tes"][obskeys[j]][paramkeys[i]]
 			end
-			if typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Nothing
+			if typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Void
 				v = 0
 			else
 				v = saresults["var"][obskeys[j]][paramkeys[i]]
@@ -420,7 +415,7 @@ end
 names = ["saltelli", "saltellibrute"]
 for mi = 1:length(names)
 	q = quote
-		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=Int(100), seed=0)
+		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
 			if seed != 0
 				srand(seed)
 			end
@@ -799,17 +794,17 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	end
 end
 
-@doc "Convert Nothing's to NaN's in a dictionary" ->
+@doc "Convert Void's to NaN's in a dictionary" ->
 function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
 			for j in keys(dict[i])
-				if typeof(dict[i][j]) == Nothing
+				if typeof(dict[i][j]) == Void
 					dict[i][j] = NaN
 				end
 				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedDict
 					for k = keys(dict[i][j])
-						if typeof(dict[i][j][k]) == Nothing
+						if typeof(dict[i][j][k]) == Void
 							dict[i][j][k] = NaN
 						end
 					end
@@ -847,7 +842,7 @@ end
 
 ## eFAST
 @doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
-function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges = 0)
+function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -901,7 +896,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 			return W_comp, Wcmax
 		end
 		# Max complementary frequency (to avoid interference) with Wi
-		Wcmax = Int(floor(1 / M * (Wi / 2)))
+		Wcmax = @Compat.compat int(floor(1 / M * (Wi / 2)))
 		if Wi <= nprime - 1 # CASE 1: Very small Wcmax (W_comp is all ones)
 			W_comp = ones(1, nprime - 1)
 		elseif Wcmax < nprime - 1 # CASE 2: Wcmax < nprime - 1
@@ -928,8 +923,8 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
 			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-				Wi = Int(Wi)
-				Ns = Int(Ns_total / Nr)
+				Wi = @Compat.compat int(Wi)
+				Ns = @Compat.compat int(Ns_total / Nr)
 				if iseven(Ns)
 					Ns += 1
 					Ns_total = Ns * Nr
@@ -945,8 +940,8 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 			for Ns_total = Ns0 + 1:1:Ns0 + 5000
 				Wi = (Ns_total / Nr - 1) / ( gamma * M)
 				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-					Wi = Int(Wi)
-					Ns = Int(Ns_total / Nr)
+					Wi = @Compat.compat int(Wi)
+					Ns = @Compat.compat int(Ns_total / Nr)
 					if iseven(Ns)
 						Ns += 1
 						Ns_total = Ns * Nr
@@ -962,7 +957,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 	end
 
 	function eFAST_distributeX(X, nprime, InputData, ismads)
-		if !ismads ## If we are using this as a standalone (reading input from csv):
+		if ismads == 0 ## If we are using this as a standalone (reading input from csv):
 			# Store X (which only contains transformations for parameters of interst)
 			# in temporary array so we can create larger X including parameters we hold constant.
 			tempX = X
@@ -999,7 +994,6 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 	function eFAST_Parallel_kL(kL)
 		# 0 -> We are removing the phase shift FOR SVR
 		phase = 1
-
 		## Redistributing constCell
 		ismads = constCell[1]
 		if ismads == 0
@@ -1014,7 +1008,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		srand(seed+kL)
 
 		# Determining which parameter we are on
-		k = Int(ceil(kL/Nr))
+		k = @Compat.compat int(ceil(kL/Nr))
 
 		# Initializing
 		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
@@ -1065,6 +1059,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		Y = zeros(Ns, ny)
 
 		# IF WE ARE READING OUTPUT OF MODEL DIRECTLY!
+
 		if directOutput==1
 			println("Output taken directly from data file. Parameter k = $k ($(paramkeys[k])) ...")
 			Y = OutputData[:,:,k]
@@ -1102,7 +1097,6 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 			# If we are analyzing a mads problem, we calculate our model output as such:
 		elseif ismads == 1
 			if P <= Nr*nprime+(Nr+1)
-
 				### Adding transformations of X and Y from svrobj into here to accurately compare runtimes of mads and svr
 				#X_svr = Array(Float64,(Ns*ny,nprime+1))
 				#predictedY = zeros(size(X_svr,1))
@@ -1118,18 +1112,15 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 				#println("x_svr reshaped test")
 
 				# If # of processors is <= Nr*nprime+(Nr+1) compute model ouput serially
-				#madsinfo("""Compute model ouput in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ... """)
+				madsinfo("""Compute model ouput in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ... """)
 				@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
-					Y[i,:] = collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, X[i, :])))))
+					Y[i,:] = collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :]))))))
 				end
-
-
-
 			else
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-				#madsinfo("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ... """)
+				madsinfo("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ... """)
 				println("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...")
-				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,Dict{String, Float64}(paramkeys, X[i, :]))))), 1:size(X, 1))...)'
+				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end #End if (processors)
 
 			## CALCULATING MODEL OUTPUT (Standalone)
@@ -1142,7 +1133,6 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 					# Replace this with whatever model we are analyzing
 					Y[i,:] = defineModel_Sobol(X[i,:])
 				end
-
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 			else
 				println("Calculating model output (not mads or svr) from .jl file in parallel - Parameter k = $k ($(paramkeys[k])) ...")
@@ -1429,11 +1419,8 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 	# ny > 1 means system is dynamic (model output is a vector)
 	ny     = length(obskeys)
 
-
-
 	##### Truncate paramkeys here
 	#paramkeys = paramkeys[1:2]
-
 
 	if truncateRanges ==1
 		##### Truncated ranges Boian asked for (ranges were too large for SVR)
@@ -1466,9 +1453,6 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 				end
 			end
 		end
-
-
-		##########################################
 	end
 
 	# This is here to delete parameters of interest from paramalldict
@@ -1478,12 +1462,11 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		delete!(paramalldict,key)
 	end
 
-
 	## Here we define additional parameters (importantly, the frequency for our "Group of Interest", Wi)
 	# This function chooses an optimal Nr/Wi pair (based on Saltelli 1999)
 	# Adjusts Ns (upwards) if necessary
-	(Nr, Wi, Ns, Ns_total) = eFAST_optimalSearch(Ns_total,M,gamma)
 
+	Nr, Wi, Ns, Ns_total = eFAST_optimalSearch(Ns_total, M, gamma)
 
 	forced = 0
 	if forced == 1
@@ -1491,14 +1474,14 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		# Note: Ns must be odd, eFAST_optimalSearch.jl will adjust for this if necessary but if you use a forced input
 		# make sure to keep this in mind.
 		# Ns =
-		Wi = Int(100)
-		Nr = Int(ceil(Ns_total/(gamma*M*Wi+1)))
+		Wi = @Compat.compat int(100)
+		Nr = @Compat.compat int(ceil(Ns_total/(gamma*M*Wi+1)))
 
-		Ns       = Int((gamma*M*Wi+1))
+		Ns       = @Compat.compat int((gamma*M*Wi+1))
 		if mod(Ns,2) != 1
 			Ns += 1
 		end
-		Ns_total = Int(Ns*Nr)
+		Ns_total = @Compat.compat int(Ns*Nr)
 		println("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
 	end
 
@@ -1538,7 +1521,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		for k = 1:nprime
 			OutputData[:,:,k] = reshape(tempOutputData[:,:,k], (ny,Ns))'
 		end
-		ny = Int(length(OutputData[1,:,1]))
+		ny = @Compat.compat int(length(OutputData[1,:,1]))
 		# Converting data into similar format (PROB NEED TO ADD IN PHASE SHIFT HERE, change OutputData to a 3d array)
 	end
 
@@ -1588,9 +1571,9 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 	## Storing constants inside of a cell
 	# Less constants if not mads
 	if ismads == 0
-		constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed]
+		constCell = Any[ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed]
 	else
-		constCell = [ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed]
+		constCell = Any[ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed]
 	end
 
 	## Sends arguments to processors p
@@ -1604,7 +1587,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 
 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
-	if P > Nr*nprime + 1
+	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
 		sendto(collect(2:nprime*Nr), constCell = constCell)
 		# If there are less workers than resamplings*parameters, we send to all workers available
@@ -1618,39 +1601,33 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		svrObjFileName = "svr_objects_trained_with_c_1.0e6_eps_0.1"
 		totalSVRObjects, svrobj = svrJSONConvert(JSON.parsefile(string(efastpath*"svrobj/well10a/",svrObjFileName,".json")))
 
-
 		# Send svrobj to all processors
 		sendto(workers(), svrobj = svrobj)
 		sendto(workers(), totalSVRObjects = totalSVRObjects)
 	end
-
 
 	## If we are reading output directly from file
 	if directOutput == 1
 		sendto(workers(), OutputData   = OutputData)
 	end
 
-
-
-
 	### Calculating decomposed variances in parallel ###
 	allresults = pmap((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
-
 
 	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime
 		# Sum of variances across all resamples
-		resultvec = sum(allresults[(1:Nr) + Nr*(k-1)])
+		resultvec = sum(allresults[(1:Nr) + Nr * ( k - 1 )])
 
 		## Calculating Sensitivity indices (main and total)
-		V        = resultvec[:,1]/Nr
-		Vi       = 2*resultvec[:,2]/Nr
-		Vci      = 2*resultvec[:,3]/Nr
+		V        = resultvec[:,1] / Nr
+		Vi       = 2 * resultvec[:,2] / Nr
+		Vci      = 2 * resultvec[:,3] / Nr
 		# Main effect indices (i.e. decomposed varinace, before normalization)
 		Var[:,k] = Vi
 		# Normalizing vs mean over loops
-		Si[:,k]  = Vi./V
-		Sti[:,k] = 1 - Vci./V
+		Si[:,k]  = Vi ./ V
+		Sti[:,k] = 1 - Vci ./ V
 	end
 	madsinfo("""End eFAST analysis ... """)
 	madsinfo("""Elapsed time for eFAST is $(toc())""") ## End timer & display elapsed time
@@ -1677,7 +1654,7 @@ function efast(md; N=Int(100), M=6, gamma=4, plotresults=false, seed=0, issvr=fa
 		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
 	else
 		println("returning resultsefast")
-		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(wells)", "seed" => seed)
+		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
 	end
 
 	# Plot results as .svg file
@@ -1701,7 +1678,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	nT = length(o)
 	d = Array(Float64, 2, nT)
 	tes = Array(Float64, nP, nT)
-	# Deleting "Nothings" from results (tes[1:3])
+	# Deleting "Voids" from results (tes[1:3])
 	for zz=1:3
 		for k = 1:7
 			result["tes"]["$(wellname)_$zz"][paramkeys[k]] = NaN
@@ -1724,7 +1701,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	f 			  = Mads.makemadscommandfunction(madsdata)
 	Ytemp = f(paramalldict)
 	# Since md might include more wells then wellname, this finds results only for wellname
-	wstr = Array(String,(50,1))
+	wstr = Array(AbstractString,(50,1))
 	for i = 1:50
 		wstr[i] = wellname*"_$i"
 	end

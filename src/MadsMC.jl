@@ -6,7 +6,7 @@ end
 # @document
 #@docstrings
 
-function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::String; format="")
+function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::AbstractString; format="")
 	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)

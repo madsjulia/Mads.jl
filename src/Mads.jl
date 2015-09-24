@@ -17,10 +17,11 @@ using PyCall
 @pyimport yaml # PyYAML installation is problematic on some machines
 using YAML # use YAML if PyYAML is not available
 
-if VERSION < v"0.4.0-dev"
+if VERSION < v"0.4.0-rc"
 	using Docile # default for v > 0.4
 	using Lexicon
 	using Dates
+	typealias AbstractString String
 end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
@@ -190,7 +191,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 end
 
 @doc "Make a version of the mads file where the targets are given by the model predictions" ->
-function maketruth(infilename::String, outfilename::String)
+function maketruth(infilename::AbstractString, outfilename::AbstractString)
 	md = loadyamlmadsfile(infilename)
 	f = makemadscommandfunction(md)
 	result = f(Dict(getparamkeys(md), getparamsinit(md)))
