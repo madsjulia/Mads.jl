@@ -218,6 +218,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 			!quiet && madswarn(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl] );
 			return objfunceval, trial_f
 		end
+
 		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
 		f_calls += np_lambda
 		objfuncevals = map(x->x[1], objfuncevalsandtrial_fs)
@@ -248,7 +249,6 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		end
 		iterCt += 1
 
-		# show state
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
 			d = @Compat.compat Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
@@ -259,12 +259,10 @@ function levenberg_marquardt(f::Function, g::Function, x0; quiet=false, root="",
 		callback(best_x)
 
 		# check convergence criteria:
-		# 1. Small gradient: norm(J^T * fcur, Inf) < tolG
-		# 2. Small step size: norm(delta_x) < tolX
-		if norm(J' * fcur, Inf) < tolG
+		if norm(J' * fcur, Inf) < tolG # Small gradient: norm(J^T * fcur, Inf) < tolG
 			g_converged = true
 		end
-		if norm(delta_x) < tolX*(tolX + norm(x))
+		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
 			x_converged = true
 		end
 		converged = g_converged | x_converged

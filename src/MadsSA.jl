@@ -299,9 +299,9 @@ function saltelli(madsdata; N=100, seed=0)
 		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :]))))))), 1:N)...)'
+	yA = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :])))))), 1:N)...)')
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :]))))))), 1:N)...)'
+	yB = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :])))))), 1:N)...)')
 	for i = 1:nP
 		for j = 1:N
 			for k = 1:nP
@@ -313,7 +313,7 @@ function saltelli(madsdata; N=100, seed=0)
 			end
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
-		yC = hcat(map(i->float64(collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :]))))))), 1:N)...)'
+		yC = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :])))))), 1:N)...)')
 		maxnnans = 0
 		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
@@ -1650,10 +1650,9 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	end
 
 	if issvr
-		println("returning resultsefastsvr")
+		println("returning results efast analysis of SVR model")
 		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
 	else
-		println("returning resultsefast")
 		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
 	end
 

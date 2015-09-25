@@ -1,3 +1,18 @@
+@doc "Rosenbrock test function (more difficult to solve)" ->
+function rosenbrock2_lm(x)
+	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
+end
+
+@doc "Parameter gradients of the Rosenbrock test function" ->
+function rosenbrock2_gradient_lm(x)
+	j = Array(Float64,2,2)
+	j[1, 1] = -20.0 * x[1]
+	j[1, 2] =  10.0
+	j[2, 1] =  -1.0
+	j[2, 2] =   0.0
+	return j
+end
+
 @doc "Rosenbrock test function" ->
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
