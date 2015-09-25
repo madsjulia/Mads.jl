@@ -87,21 +87,21 @@ end
 function makemadscommandfunction(madsdata) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
-		println("Execution using Julia model-evaluation script parsing model outputs ...")
+		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...")
 		juliamodel = evalfile(madsdata["Julia"])
 	end
 	if haskey(madsdata, "Dynamic model")
-		println("Dynamic model evaluation ...")
+		Mads.madsoutput("Dynamic model evaluation ...")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "MADS model")
-		println("MADS model evaluation ...")
+		Mads.madsoutput("MADS model evaluation ...")
 		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
-		println("Internal model evaluation ...")
+		Mads.madsoutput("Internal model evaluation ...")
 		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
-		madsinfo("External model evaluation ...")
+		Mads.madsoutput("External model evaluation ...")
 		function madscommandfunction(parameters::Dict) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
@@ -195,7 +195,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
-		println("MADS interal Anasol model evaluation for contaminant transport ...")
+		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...")
 		return makecomputeconcentrations(madsdata)
 	else
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")

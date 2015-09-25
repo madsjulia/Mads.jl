@@ -267,13 +267,13 @@ function saltelli(madsdata; N=100, seed=0)
 	if seed != 0
 		srand(seed)
 	end
-	madsoutput("Number of samples: $N\n")
+	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
 	paramalldict = Dict(zip(paramallkeys, Mads.getparamsinit(madsdata)))
 	paramoptkeys = Mads.getoptparamkeys(madsdata)
 	nP = length(paramoptkeys)
-	madsoutput("Number of model paramters to be analyzed: $(nP) \n")
-	madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n")
+	Mads.madsoutput("Number of model paramters to be analyzed: $(nP) \n");
+	Mads.madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n");
 	obskeys = Mads.getobskeys(madsdata)
 	nO = length(obskeys)
 	distributions = Mads.getparamdistributions(madsdata)
@@ -298,7 +298,7 @@ function saltelli(madsdata; N=100, seed=0)
 		A = [A s1]
 		B = [B s2]
 	end
-	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
+	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yA = Array(Float64, N, length(obskeys))
 	for i = 1:N
 		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
@@ -306,7 +306,7 @@ function saltelli(madsdata; N=100, seed=0)
 			yA[i, j] = feval[obskeys[j]]
 		end
 	end
-	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
+	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
 	yB = Array(Float64, N, length(obskeys))
 	for i = 1:N
 		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
@@ -324,7 +324,7 @@ function saltelli(madsdata; N=100, seed=0)
 				end
 			end
 		end
-		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
+		Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
 		yC = Array(Float64, N, length(obskeys))
 		for j = 1:N
 			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
@@ -860,7 +860,7 @@ end
 
 ## eFAST
 @doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
-function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -964,14 +964,14 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 						Ns += 1
 						Ns_total = Ns * Nr
 					end
-					println("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!")
-					println("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
+					Mads.madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!");
+					Mads.madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns");
 					return Nr, Wi, Ns, Ns_total
 				end
 			end
 		end
 		# If script reaches this section of code, adjustments must be made to Ns boundaries
-		err("ERROR! Change bounds of eFAST_optimalSearch.m or choose different Ns/M")
+		err("ERROR! Change bounds in eFAST_optimalSearch or choose different Ns/M")
 	end
 
 	function eFAST_distributeX(X, nprime, InputData, ismads)
@@ -1130,14 +1130,14 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 				#println("x_svr reshaped test")
 
 				# If # of processors is <= Nr*nprime+(Nr+1) compute model ouput serially
-				madsinfo("""Compute model ouput in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ... """)
+				Mads.madsoutput("""Compute model ouput in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
 				@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
 					Y[i,:] = collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :]))))))
 				end
 			else
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-				madsinfo("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ... """)
-				println("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...")
+				Mads.madsoutput("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
+				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
 				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end #End if (processors)
 
@@ -1167,7 +1167,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			# These will be the sums of variances over all resamplings (Nr loops)
 			AVi = AVci = AV = 0                     # Initializing Variances to 0
 
-			println("Calculating Fourier coefficients for observations ... ")
+			Mads.madsoutput("Calculating Fourier coefficients for observations ...\n")
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Subtract the average value from Y
 			Y[:] = (Y[:] - mean(Y[:]))'
@@ -1199,7 +1199,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			AVci = zeros(ny,1)
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Looping over each point in time
-			@showprogress 2 "Calculating Fourier coefficients for observations ... "  for i = 1:ny
+			@showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
 				Y[:,i] = (Y[:,i] - mean(Y[:,i]))'
 				## Calculating Fourier coefficients associated with MAIN INDICES
@@ -1503,7 +1503,6 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 		println("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
 	end
 
-
 	## For debugging and/or graphs
 	# step  = (M*Wi - 1)/Ns
 	# omega = 1 : step : M*Wi - step  # Frequency domain, can be used to plot power spectrum
@@ -1513,7 +1512,6 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 		println("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
 		return
 	end
-
 
 	## If our output is read directly from some sort of data file rather than using a model function
 
@@ -1543,19 +1541,10 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 		# Converting data into similar format (PROB NEED TO ADD IN PHASE SHIFT HERE, change OutputData to a 3d array)
 	end
 
-
-
-
-
-	##
-	##
 	## Begin eFAST analysis:
-	##
-	##
 
 	## Start timer
 	tic()
-
 
 	madsinfo("""Begin eFAST analysis ... """)
 
@@ -1579,11 +1568,10 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	#if P > nprime*Nr + 1
 	# nprocs() is quite high, we choose to parallelize over n, Nr, AND also model output
 
-
 	if P>1
-		madsinfo("""Parallelizing resamplings AND parameters""")
+		madsinfo("""Parallelizing resamplings AND parameters""");
 	else
-		madsinfo("""No Parallelization!""")
+		madsinfo("""No Parallelization!""");
 	end
 
 	## Storing constants inside of a cell
@@ -1602,7 +1590,6 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			end
 		end
 	end
-
 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
@@ -1647,8 +1634,8 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 		Si[:,k]  = Vi ./ V
 		Sti[:,k] = 1 - Vci ./ V
 	end
-	madsinfo("""End eFAST analysis ... """)
-	madsinfo("""Elapsed time for eFAST is $(toc())""") ## End timer & display elapsed time
+	Mads.madsinfo("""End eFAST analysis ... """);
+	Mads.madsinfo("""Elapsed time for eFAST is $(toc())"""); ## End timer & display elapsed time
 
 	# Save results as dictionary
 	tes = DataStructures.OrderedDict()

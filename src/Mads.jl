@@ -41,6 +41,7 @@ include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
 Logging.configure(level=DEBUG)
+quiet = false
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0
@@ -49,6 +50,16 @@ const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
 #@docstrings
+
+@doc "Make MADS quiet" ->
+function quieton()
+	global quiet = true
+end
+
+@doc "Make MADS not quiet" ->
+function quietoff()
+	global quiet = false
+end
 
 @doc "Set MADS debug level" ->
 function setdebuglevel(level::Int)
