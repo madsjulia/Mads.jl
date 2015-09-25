@@ -299,9 +299,21 @@ function saltelli(madsdata; N=100, seed=0)
 		B = [B s2]
 	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
-	yA = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, A[i, :])))))), 1:N)...)')
+	yA = Array(Float64, N, length(obskeys))
+	for i = 1:N
+		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
+		for j = 1:length(obskeys)
+			yA[i, j] = feval[obskeys[j]]
+		end
+	end
 	madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, B[i, :])))))), 1:N)...)')
+	yB = Array(Float64, N, length(obskeys))
+	for i = 1:N
+		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
+		for j = 1:length(obskeys)
+			yB[i, j] = feval[obskeys[j]]
+		end
+	end
 	for i = 1:nP
 		for j = 1:N
 			for k = 1:nP
@@ -313,7 +325,13 @@ function saltelli(madsdata; N=100, seed=0)
 			end
 		end
 		madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
-		yC = convert(Array{Float64,2}, hcat(map(i->collect(values(f(merge(paramalldict,Dict(zip(paramoptkeys, C[i, :])))))), 1:N)...)')
+		yC = Array(Float64, N, length(obskeys))
+		for j = 1:N
+			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
+			for k = 1:length(obskeys)
+				yC[j, k] = feval[obskeys[k]]
+			end
+		end
 		maxnnans = 0
 		for j = 1:nO
 			yAnonan = isnan(yA[:,j])
@@ -896,7 +914,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			return W_comp, Wcmax
 		end
 		# Max complementary frequency (to avoid interference) with Wi
-		Wcmax = @Compat.compat int(floor(1 / M * (Wi / 2)))
+		Wcmax = floor(Int, 1 / M * (Wi / 2))
 		if Wi <= nprime - 1 # CASE 1: Very small Wcmax (W_comp is all ones)
 			W_comp = ones(1, nprime - 1)
 		elseif Wcmax < nprime - 1 # CASE 2: Wcmax < nprime - 1
