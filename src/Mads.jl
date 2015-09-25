@@ -46,6 +46,7 @@ verbositylevel = 1
 debuglevel = 1
 modelruns = 0
 madsinputfile = ""
+create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
@@ -53,12 +54,20 @@ const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 @doc "Make MADS quiet" ->
 function quieton()
-	global quiet = true
+	global quiet = true;
 end
 
 @doc "Make MADS not quiet" ->
 function quietoff()
-	global quiet = false
+	global quiet = false;
+end
+
+function create_tests_on()
+	global create_tests = true;
+end
+
+function create_tests_off()
+	global create_tests = false;
 end
 
 @doc "Set MADS debug level" ->

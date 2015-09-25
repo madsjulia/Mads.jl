@@ -1635,7 +1635,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		Sti[:,k] = 1 - Vci ./ V
 	end
 	Mads.madsinfo("""End eFAST analysis ... """);
-	Mads.madsinfo("""Elapsed time for eFAST is $(toc())"""); ## End timer & display elapsed time
+	Mads.madsinfo("""Elapsed time for eFAST is $(toq())"""); ## End timer & display elapsed time
 
 	# Save results as dictionary
 	tes = DataStructures.OrderedDict()

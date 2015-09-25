@@ -25,7 +25,7 @@ end
 @doc "Get MADS problem dir" ->
 function getmadsdir()
 	source_path = Base.source_path()
-	if typeof(source_path) == Nothing
+	if typeof(source_path) == Void
 		problemdir = ""
 	else
 		problemdir = string((dirname(source_path))) * "/"
