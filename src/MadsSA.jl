@@ -36,8 +36,7 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 	if haskey( madsdata["Parameters"], parameterkey )
 		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Void
 			if haskey(madsdata["Parameters"][parameterkey], "log")
-				flag = madsdata["Parameters"][parameterkey]["log"]
-				if flag == "yes" || flag == "true"
+				if madsdata["Parameters"][parameterkey]["log"]
 					dist = paramdist[parameterkey]
 					if typeof(dist) == Uniform
 						a = log10(dist.a)
