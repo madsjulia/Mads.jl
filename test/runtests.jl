@@ -1,4 +1,5 @@
 using Mads
+using Base.Test
 
 mads_tests = ["sa-efast.jl", "optim-lm.jl"]
 

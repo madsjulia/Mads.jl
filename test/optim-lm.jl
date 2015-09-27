@@ -1,4 +1,5 @@
 using Mads
+using Base.Test
 
 Mads.quieton()
 
