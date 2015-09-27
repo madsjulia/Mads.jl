@@ -87,26 +87,26 @@ end
 function makemadscommandfunction(madsdata) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
-		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...")
+		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
 		juliamodel = evalfile(madsdata["Julia"])
 	end
 	if haskey(madsdata, "Dynamic model")
-		Mads.madsoutput("Dynamic model evaluation ...")
+		Mads.madsoutput("Dynamic model evaluation ...\n")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "MADS model")
-		Mads.madsoutput("MADS model evaluation ...")
+		Mads.madsoutput("MADS model evaluation ...\n")
 		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
-		Mads.madsoutput("Internal model evaluation ...")
+		Mads.madsoutput("Internal model evaluation ...\n")
 		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
-		Mads.madsoutput("External model evaluation ...")
+		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Dict) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
 			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
-			madsinfo("""Temp directory: $(newdirname)""")
+			Mads.madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
 			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -159,20 +159,20 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				end
 			end
 			if haskey(madsdata, "Julia")
-				println("Execution of Julia model-evaluation script parsing model outputs ...")
+				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
 				results = juliamodel(madsdata) # this should be madsdata; not parameters
 				cd(madsproblemdir)
 			else
-				println("Execution of external command ...")
-				madsinfo("""Execute: $(madsdata["Command"])""")
+				Mads.madsoutput("Execution of external command ...\n")
+				Mads.madsinfo("""Execute: $(madsdata["Command"])""")
 				run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
 					cd(newdirname)
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
-					madsinfo("""Observations: $(results)""")
+					Mads.madsinfo("""Observations: $(results)""")
 				elseif haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 						results = loadjsonfile("$(newdirname)/$filename")
@@ -195,7 +195,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
-		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...")
+		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata)
 	else
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
@@ -450,10 +450,10 @@ end
 @doc "Make MADS loglikelihood function" ->
 function makemadsloglikelihood(madsdata; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
-		madsinfo("Internal log likelihood")
+		Mads.madsinfo("Internal log likelihood")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
-		madsinfo("External log likelihood")
+		Mads.madsinfo("External log likelihood")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
@@ -506,7 +506,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
 		for i = 1:int((length(splitline)-1)/2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-			madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]) )
+			Mads.madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]) )
 			write(outfile, string(parameters[strip(splitline[2 * i])])) # splitline[2 * i] in this case is parameter ID
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator

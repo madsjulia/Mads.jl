@@ -93,7 +93,7 @@ function savecalibrationresults(madsdata, results)
 end
 
 @doc "Calibrate with random initial guesses" ->
-function calibraterandom(madsdata, numberofsamples; quiet=true, tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
@@ -105,7 +105,9 @@ function calibraterandom(madsdata, numberofsamples; quiet=true, tolX=1e-3, tolG=
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		result = Mads.calibrate(madsdata; quiet=quiet, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		Mads.quieton()
+		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		Mads.quietoff()
 		phi = result[2].f_minimum
 		println(phi)
 		if phi < bestphi
@@ -118,29 +120,33 @@ function calibraterandom(madsdata, numberofsamples; quiet=true, tolX=1e-3, tolG=
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; quiet=false, tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = getmadsrootname(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = getparamsinit(madsdata, optparamkeys)
 	lowerbounds = getparamsmin(madsdata, optparamkeys)
 	upperbounds = getparamsmax(madsdata, optparamkeys)
-	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
-	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
+	logtransformed = getparamslog(madsdata, optparamkeys)
+	indexlogtransformed = find(logtransformed)
+	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
+	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	function calibratecallback(x_best)
 		outfile = open("$rootname.iterationresults", "a+")
 		write(outfile, string("OF: ", sse(f_lm_sin(x_best)), "\n"))
-		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
+		write(outfile, string(Dict(zip(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
 		close(outfile)
 	end
 	if usenaive
-		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); quiet=quiet, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); quiet=quiet, root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
-	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
+	minimum = sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = getnonoptparamkeys(madsdata)
-	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	minimumdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimum[i]
 	end

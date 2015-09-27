@@ -860,7 +860,7 @@ end
 
 ## eFAST
 @doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
-function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)

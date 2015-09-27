@@ -67,6 +67,26 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 			end
 		end
 	end
+	if haskey(madsdata, "Parameters")
+		parameters = madsdata["Parameters"]
+		for key in keys(parameters)
+			if haskey(parameters[key], "log")
+				flag = parameters[key]["log"]
+				if flag == "yes" || flag == true
+					parameters[key]["log"] = true
+					for v in ["init", "init_max", "init_min", "max", "min", "step"]
+						if haskey(parameters[key], v)
+							if parameters[key][v] < 0
+								Mads.err("""The field $v for Parameter $key cannot be log-transformed; it is negative!""")
+							end
+						end
+					end
+				else
+					parameters[key]["log"] = false
+				end
+			end
+		end
+	end
 	if haskey(madsdata, "Wells")
 		wells = DataStructures.OrderedDict()
 		for dict in madsdata["Wells"]
