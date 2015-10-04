@@ -76,6 +76,7 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 					parameters[key]["log"] = true
 					for v in ["init", "init_max", "init_min", "max", "min", "step"]
 						if haskey(parameters[key], v)
+							parameters[key][v] = float(parameters[key][v])
 							if parameters[key][v] < 0
 								Mads.err("""The field $v for Parameter $key cannot be log-transformed; it is negative!""")
 							end

@@ -7,7 +7,7 @@ function makelmfunctions(madsdata)
 	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function f_lm(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -79,7 +79,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -280,7 +280,6 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			g_converged = true
 		end
 		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
-			@show norm(delta_x) norm(x)
 			x_converged = true
 		end
 		if best_residual < tolOF # Small objective fuction < tolOF
@@ -292,7 +291,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 end
 
 function plotmatches(madsdata, result; filename="", format="")
-	rootname = getmadsrootname(madsdata)
+	rootname = Mads.getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
 	c = Array(Float64, nT)

@@ -38,7 +38,12 @@ end
 function getrootname(filename)
 	d = split(filename, "/")
 	s = split(d[end], ".")
-	return join(d[1:end-1], "/") * "/" * s[1]
+	if length(d) > 1
+		r = join(d[1:end-1], "/") * "/" * s[1]
+	else
+		r = "./" * s[1]
+	end
+	return r
 end
 
 @doc "Get file name extension" ->
@@ -105,7 +110,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 		function madscommandfunction(parameters::Dict) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
-			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
+			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
 			Mads.madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
 			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
@@ -184,9 +189,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				elseif haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 					obskeys = getobskeys(madsdata)
-					obsid=[convert(String,k) for k in obskeys]
+					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
-					results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
+					results = DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions))
 				end
 			end
 			run(`rm -fR $newdirname`)
@@ -284,7 +289,7 @@ function plotmadsproblem(madsdata; format="", filename="")
 			end
 		end
 	end
-	dfw = DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
+	dfw = DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
 			match = false
@@ -466,25 +471,25 @@ end
 @doc "Get keys for parameters" ->
 function getparamkeys(madsdata)
 	return collect(keys(madsdata["Parameters"]))
-	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
 @doc "Get keys for source parameters" ->
 function getsourcekeys(madsdata)
 	return collect(keys(madsdata["Sources"][1]["box"]))
-	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
 @doc "Get keys for observations" ->
 function getobskeys(madsdata)
 	return collect(keys(madsdata["Observations"]))
-	#return [convert(String,k) for k in keys(madsdata["Observations"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Observations"])]
 end
 
 @doc "Get keys for wells" ->
 function getwellkeys(madsdata)
 	return collect(keys(madsdata["Wells"]))
-	#return [convert(String,k) for k in keys(madsdata["Wells"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
 end
 
 @doc "Write parameters via MADS template" ->
@@ -531,7 +536,7 @@ function writeparameters(madsdata, parameters)
 end
 
 @doc "Call C MADS ins_obs() function from the MADS library" ->
-function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inputfilename::ASCIIString)
+function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
 	obscheck = -1 * ones(n) # initialize to -1
@@ -540,14 +545,14 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inp
 	result = ccall( (:ins_obs, "libmads"), Int32,
 								 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
 								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
-	observations = Dict{String, Float64}(obsid, obsval)
+	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
 	return observations
 end
 
 @doc "Read observations" ->
 function readobservations(madsdata)
 	obsids=getobskeys(madsdata)
-	observations = OrderedDict(obsids, zeros(length(obsids)))
+	observations = OrderedDict(zip(obsids, zeros(length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
 		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once

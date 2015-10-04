@@ -15,7 +15,9 @@ if madsfilename == ""
 	madsfilename = "w01short.mads"
 	Mads.madswarn("""Mads input file is empty; default value $(madsfilename) will be used""")
 end
-madsfilenamelong = madsdirname * "/" * madsfilename
+if madsdirname != ""
+	madsfilenamelong = madsdirname * madsfilename
+end
 md = Dict()
 try
 	md = Mads.loadyamlmadsfile(madsfilenamelong)
