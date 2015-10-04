@@ -41,7 +41,7 @@ include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
 Logging.configure(level=DEBUG)
-quiet = false
+quiet = true
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0

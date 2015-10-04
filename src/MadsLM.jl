@@ -79,7 +79,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -108,6 +108,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	converged = false
 	x_converged = false
 	g_converged = false
+	of_converged = false
 	iterCt = 0
 	x = x0
 	best_x = x0
@@ -140,7 +141,8 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
 	first = true
-	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians && f_calls < maxEval)
+	maxJacobians = max(maxJacobians, maxIter)
+	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		J = g(x)
 		if root != ""
 			writedlm("$(root)-lmjacobian.dat", J)
@@ -158,7 +160,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if first
-			lambda = min(1e4, max(lambda, diag(JpJ)...)) * tolX;
+			lambda = min(1e4, max(lambda, diag(JpJ)...)) * lambda_scale;
 			first = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
@@ -265,7 +267,10 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
 			x_converged = true
 		end
-		converged = g_converged | x_converged
+		if best_residual < tolOF # Small objective fuction < tolOF
+			of_converged = true
+		end
+		converged = g_converged | x_converged | of_converged
 	end
 	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, sse(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
 end
