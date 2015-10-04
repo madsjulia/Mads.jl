@@ -103,6 +103,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	const MAX_LAMBDA = 1e16 # minimum trust region radius
 	const MIN_LAMBDA = 1e-16 # maximum trust region radius
 	const MIN_STEP_QUALITY = 1e-3
+  const GOOD_STEP_QUALITY = 0.75
 	const MIN_DIAGONAL = 1e-6 # lower bound on values of diagonal matrix used to regularize the trust region step
 
 	converged = false
@@ -121,7 +122,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		Mads.madsoutput("""Parallel lambda search; number of parallel lambdas = $np_lambda\n"""; level = 1);
 	end
 
-	fcur = f(x) # TODO execute the initial estimate in parallel with the first jacobian
+	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = sse(fcur)
@@ -140,15 +141,19 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	trial_fp = Array(Float64, (np_lambda, length(fcur)))
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
-	first = true
+	first_lambda = true
 	maxJacobians = max(maxJacobians, maxIter)
+	compute_jacobian = true
 	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
-		J = g(x)
-		if root != ""
-			writedlm("$(root)-lmjacobian.dat", J)
+		if compute_jacobian
+			J = g(x)
+			if root != ""
+				writedlm("$(root)-lmjacobian.dat", J)
+			end
+			g_calls += 1
+			Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
+			compute_jacobian = false
 		end
-		g_calls += 1
-		Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
 		Mads.madsoutput("""Current Best OF: $best_residual\n"""; level = 1);
 		# we want to solve:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
@@ -159,14 +164,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
-		if first
+		if first_lambda
 			lambda = min(1e4, max(lambda, diag(JpJ)...)) * lambda_scale;
-			first = false
+			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
 		Mads.madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
 		for npl = 1:np_lambda
-			if npl == 1 # first
+			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
 			elseif npl % 2 == 1 # even up
 				lambda_up *= lambda_mu
@@ -176,10 +181,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 				lambda_current = lambda_p[npl] = lambda_down
 			end
 		end
+
 		function getphianddelta_x(npl)
-			lambda_current = lambda_p[npl]
-			Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
-			u, s, v = svd(JpJ + lambda_current * DtDidentity)
+			lambda = lambda_p[npl]
+			Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda);
+			u, s, v = svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
 			for i=1:length(s)
 				if abs(s[i]) > eps(Float64)
@@ -194,7 +200,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			end
 			# s = map(i->max(eps(Float32), i), s)
 			delta_x = (v * spdiagm(is) * u') * -J' * fcur
-			# delta_x = (JpJ + lambda_current * DtDidentity) \ -J' * fcur # TODO replace with SVD
+			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
 			Mads.madsoutput(@sprintf "#%02d OF (est): %f" npl predicted_residual; level = 4);
@@ -208,6 +214,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			end
 			return predicted_residual, delta_x
 		end
+
 		phisanddelta_xs = pmap(getphianddelta_x, collect(1:np_lambda))
 		phi = map(x->x[1], phisanddelta_xs)
 		delta_xs = map(x->x[2], phisanddelta_xs)
@@ -238,18 +245,26 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 
 		# step quality = residual change / predicted residual change
 		rho = (trial_residual - residual) / (predicted_residual - residual)
-		x += delta_x
-		fcur = trial_f
+		if rho > MIN_STEP_QUALITY
+			x += delta_x
+			fcur = trial_f
+			residual = trial_residual
+			if rho > GOOD_STEP_QUALITY
+				lambda = max(lambda / lambda_mu, MIN_LAMBDA) # increase trust region radius
+			end
+			compute_jacobian = true
+		else
+			lambda = min(lambda_nu * lambda, MAX_LAMBDA) # decrease trust region radius
+			if np_lambda > 1
+				compute_jacobian = true
+			end
+		end
+
 		if objfuncevals[npl_best] < best_residual
 			best_residual = objfuncevals[npl_best]
 			best_x = x
 			best_f = fcur
-			lambda *= lambda_nu
-		else
-			lambda /= lambda_mu
-			lambda_nu *= 2
 		end
-		iterCt += 1
 
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
@@ -265,6 +280,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			g_converged = true
 		end
 		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
+			@show norm(delta_x) norm(x)
 			x_converged = true
 		end
 		if best_residual < tolOF # Small objective fuction < tolOF
