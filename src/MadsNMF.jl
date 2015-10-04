@@ -13,12 +13,12 @@ W, H, p, s = NMFk.execute(X, 20, nk)
 
 W_size = nS * nk
 W_logtransformed = trues(nS * nk)
-W_lowerbounds = ones(nS * nk) * 1e-6
+W_lowerbounds = ones(nS * nk) * 1e-15
 W_upperbounds = ones(nS * nk) * 10
 W_init = ones(nS * nk) * 0.5
 H_size = nP * nk
 H_logtransformed = trues(nP * nk)
-H_lowerbounds = ones(nP * nk) * 1e-6
+H_lowerbounds = ones(nP * nk) * 1e-15
 H_upperbounds = ones(nP * nk) * 10
 H_init = ones(nP * nk)
 nParam = W_size + H_size
