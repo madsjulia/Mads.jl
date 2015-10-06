@@ -922,7 +922,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
 			W_comp = []
 			for i = 1:loops
-				W_comp = [W_comp, [1:step:Wcmax]]
+				W_comp = [W_comp; [1:step:Wcmax]]
 			end
 			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
 		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case
@@ -940,8 +940,8 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
 			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-				Wi = @Compat.compat int(Wi)
-				Ns = @Compat.compat int(Ns_total / Nr)
+				Wi = @Compat.compat Int(Wi)
+				Ns = @Compat.compat Int(Ns_total / Nr)
 				if iseven(Ns)
 					Ns += 1
 					Ns_total = Ns * Nr
@@ -1025,7 +1025,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 		srand(seed+kL)
 
 		# Determining which parameter we are on
-		k = @Compat.compat int(ceil(kL/Nr))
+		k = @Compat.compat Int(ceil(kL/Nr))
 
 		# Initializing
 		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
