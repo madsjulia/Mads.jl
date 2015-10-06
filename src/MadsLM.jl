@@ -61,7 +61,7 @@ function naive_lm_iteration(f::Function, g::Function, x0::Vector, f0::Vector, la
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101,  lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)

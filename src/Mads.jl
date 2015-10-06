@@ -120,7 +120,7 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; tolX=1e-3, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibrate(madsdata; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -155,7 +155,7 @@ end
 
 @doc "Do a forward run using the init values of the parameters " ->
 function forward(madsdata)
-	initparams = Dict(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata))
+	initparams = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	f = Mads.makemadscommandfunction(madsdata)
 	return f(initparams)
 end
@@ -183,7 +183,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	end
 	fg = makemadscommandfunctionandgradient(madsdata)
 	function fg_nlopt(arrayparameters::Vector, grad::Vector)
-		parameters = Dict(paramkeys, arrayparameters)
+		parameters = Dict(zip(paramkeys, arrayparameters))
 		resultdict, gradientdict = fg(parameters)
 		residuals = Array(Float64, length(madsdata["Observations"]))
 		ssr = 0
@@ -220,7 +220,7 @@ end
 function maketruth(infilename::AbstractString, outfilename::AbstractString)
 	md = loadyamlmadsfile(infilename)
 	f = makemadscommandfunction(md)
-	result = f(Dict(getparamkeys(md), getparamsinit(md)))
+	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]

@@ -127,16 +127,16 @@ function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) d
 	if seed != 0
 		srand(seed)
 	end
-	numsamples = @Compat.compat int(sqrt(N))
-	numoneparamsamples = @Compat.compat int(sqrt(N))
-	nummanyparamsamples = @Compat.compat int(sqrt(N))
+	numsamples = round(Int,sqrt(N))
+	numoneparamsamples = numsamples
+	nummanyparamsamples = numsamples
 	# convert the distribution strings into actual distributions
 	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
 	results = Array(DataStructures.OrderedDict, numsamples)
-	paramdict = Dict( getparamkeys(madsdata), getparamsinit(madsdata) )
+	paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample
