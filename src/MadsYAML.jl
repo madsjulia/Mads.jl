@@ -85,6 +85,9 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 				else
 					parameters[key]["log"] = false
 				end
+				if haskey(parameters[key], "min") && haskey(parameters[key], "max") && !haskey(parameters[key], "dist")
+					parameters[key]["dist"] = "Uniform($(parameters[key]["min"]),$(parameters[key]["max"]))"
+				end
 			end
 		end
 	end

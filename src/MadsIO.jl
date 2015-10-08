@@ -480,6 +480,45 @@ function getsourcekeys(madsdata)
 	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
+@doc "Show parameters" ->
+function showallparameters(madsdata)
+	pardict = madsdata["Parameters"]
+	parkeys = Mads.getparamkeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for parkey in parkeys
+		s = @sprintf "%-10s = %15g" parkey pardict[parkey]["init"]
+		push!(p, s)
+	end
+	display(p)
+end
+
+@doc "Show parameters" ->
+function showparameters(madsdata)
+	pardict = madsdata["Parameters"]
+	parkeys = Mads.getoptparamkeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for parkey in parkeys
+		s = @sprintf "%-10s init = %15g log = %5s  Distribution = %s" parkey pardict[parkey]["init"] pardict[parkey]["log"] pardict[parkey]["dist"]
+		push!(p, s)
+	end
+	display(p)
+end
+
+
+@doc "Show observations" ->
+function showobservations(madsdata)
+	obsdict = madsdata["Observations"]
+	obskeys = Mads.getobskeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for obskey in obskeys
+		if obsdict[obskey]["weight"] > eps(Float16)
+			s = @sprintf "%-10s target = %15g weight = %15g" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
+			push!(p, s)
+		end
+	end
+	display(p)
+end
+
 @doc "Get keys for observations" ->
 function getobskeys(madsdata)
 	return collect(keys(madsdata["Observations"]))
