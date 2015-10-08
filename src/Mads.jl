@@ -146,18 +146,25 @@ function calibrate(madsdata; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, max
 	end
 	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
-	minimumdict = Dict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	minimumdict = OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimum[i]
 	end
 	return minimumdict, results
 end
 
-@doc "Do a forward run using the init values of the parameters " ->
-function forward(madsdata)
-	initparams = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+@doc "Do a forward run using the initial or provided values for the model parameters " ->
+function forward(madsdata; paramvalues=Void)
+	if paramvalues == Void
+		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	end
+	forward(madsdata, paramvalues)
+end
+
+@doc "Do a forward run using provided values for the model parameters " ->
+function forward(madsdata, paramvalues)
 	f = Mads.makemadscommandfunction(madsdata)
-	return f(initparams)
+	return f(paramvalues)
 end
 
 # NLopt is too much of a pain to install at this point

@@ -292,22 +292,57 @@ end
 
 function plotmatches(madsdata, result; filename="", format="")
 	rootname = Mads.getmadsrootname(madsdata)
-	obskeys = Mads.getobskeys(madsdata)
-	nT = length(obskeys)
-	c = Array(Float64, nT)
-	t = Array(Float64, nT)
-	d = Array(Float64, nT)
-	for i in 1:nT
-		t[i] = madsdata["Observations"][obskeys[i]]["time"]
-		d[i] = madsdata["Observations"][obskeys[i]]["target"]
-		c[i] = result[obskeys[i]]
+	vsize = 0inch
+	pl = Gadfly.Plot{}
+	if haskey(madsdata, "Wells")
+		pp = Array(Gadfly.Plot{}, 0)
+		p = Gadfly.Plot{}
+		for wellname in keys(madsdata["Wells"])
+			if !( haskey(madsdata["Wells"][wellname], "on") && !madsdata["Wells"][wellname]["on"] )
+				o = madsdata["Wells"][wellname]["obs"]
+				nT = length(o)
+				c = Array(Float64, nT)
+				t = Array(Float64, nT)
+				d = Array(Float64, nT)
+				for i in 1:nT
+					time = t[i] = o[i][i]["t"]
+					d[i] = o[i][i]["c"]
+					obskey = wellname * "_" * string(time)
+					c[i] = result[obskey]
+				end
+				p = Gadfly.plot(Guide.title(wellname),layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+				push!(pp, p)
+				vsize += 4inch
+			end
+		end
+		if length(pp) > 1
+			pl = Gadfly.vstack(pp...)
+		else
+			pl = p
+		end
+	elseif haskey(madsdata, "Observations")
+		obskeys = Mads.getobskeys(madsdata)
+		nT = length(obskeys)
+		c = Array(Float64, nT)
+		t = Array(Float64, nT)
+		d = Array(Float64, nT)
+		for i in 1:nT
+			t[i] = madsdata["Observations"][obskeys[i]]["time"]
+			d[i] = madsdata["Observations"][obskeys[i]]["target"]
+			c[i] = result[obskeys[i]]
+		end
+		pl = Gadfly.plot(layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+					layer(x=t, y=d ,Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		vsize = 4inch
 	end
-	p=Gadfly.plot(layer(x=t,y=c,Geom.line,Theme(default_color=parse(Colors.Colorant, "blue"),line_width=3pt)),
-		layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=6pt)))
 	if filename == ""
 		filename = "$rootname-match"
 	end
 	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), p)
-	p
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+	if typeof(pl) == Gadfly.Plot{}
+		display( pl )
+		pl
+	end
 end

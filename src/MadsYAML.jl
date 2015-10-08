@@ -9,7 +9,7 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		end
 		close(f)
-		return yamldata
+		return yamldata # this is not OrderedDict()
 	end
 
 	@doc "Dump YAML file" ->
@@ -21,11 +21,11 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 elseif isdefined(:YAML) # using YAML in Julia
 	@doc "Load YAML file" ->
 	function loadyamlfile(filename::AbstractString; julia=true) # load YAML file
-		yamldata = OrderedDict()
+		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
 		close(f)
-		return yamldata
+		return yamldata # this is not OrderedDict()
 	end
 
 	@doc "Dump YAML file in JSON format" ->
@@ -41,7 +41,7 @@ end
 
 @doc "Load YAML MADS file" ->
 function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS input file in YAML format
-	madsdata = loadyamlfile(filename; julia=julia)
+	madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
 		for dict in madsdata["Parameters"]
@@ -93,6 +93,7 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
+				wells["on"] = true
 			end
 		end
 		madsdata["Wells"] = wells

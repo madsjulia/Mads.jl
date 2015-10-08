@@ -651,10 +651,11 @@ function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", 
 		push!(pp, pvar)
 		vsize += 4inch
 	end
-	p = vstack(pp...)
+	p = Gadfly.vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
+	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
+	p
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
@@ -797,8 +798,8 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	end
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
-		println(filename)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize ), p)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
+		p
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
@@ -807,7 +808,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), pmes)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
 	end
 end
 
