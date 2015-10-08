@@ -298,7 +298,7 @@ function plotmatches(madsdata, result; filename="", format="")
 		pp = Array(Gadfly.Plot{}, 0)
 		p = Gadfly.Plot{}
 		for wellname in keys(madsdata["Wells"])
-			if !( haskey(madsdata["Wells"][wellname], "on") && !madsdata["Wells"][wellname]["on"] )
+			if madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nT = length(o)
 				c = Array(Float64, nT)
@@ -342,7 +342,6 @@ function plotmatches(madsdata, result; filename="", format="")
 	filename, format = setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
 	if typeof(pl) == Gadfly.Plot{}
-		display( pl )
 		pl
 	end
 end

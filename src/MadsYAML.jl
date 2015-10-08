@@ -93,7 +93,7 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
-				wells["on"] = true
+				wells[key]["on"] = true
 			end
 		end
 		madsdata["Wells"] = wells

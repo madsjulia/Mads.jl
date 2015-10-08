@@ -291,7 +291,7 @@ function plotmadsproblem(madsdata; format="", filename="")
 	end
 	dfw = DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	for wellkey in collect(keys(madsdata["Wells"]))
-		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+		if madsdata["Wells"][wellkey]["on"]
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
@@ -339,7 +339,7 @@ end
 function wells2observations!(madsdata)
 	observations = DataStructures.OrderedDict()
 	for wellkey in collect(keys(madsdata["Wells"]))
-		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+		if madsdata["Wells"][wellkey]["on"]
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
 				obskey = wellkey * "_" * string(t)

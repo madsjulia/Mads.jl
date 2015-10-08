@@ -110,14 +110,14 @@ function localsa(madsdata; format="", filename="")
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenmatrix"
 	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw( eval(symbol(format))(filename,6inch,6inch), eigenmat)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
 	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10,
 												 Geom.bar, Theme(default_point_size=10pt),
 												 Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenvalues"
 	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw( eval(symbol(format))(filename,6inch,4inch), eigenval)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
 	Mads.madsinfo("""Eigen values plot saved in $filename""")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
@@ -582,14 +582,31 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
-function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]" )
+@doc "Plot the sensitivity analysis results for all wells (wells class expected)" ->
+function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-	nsample = result["samplesize"]
+	for wellname in keys(madsdata["Wells"])
+		if madsdata["Wells"][wellname]["on"]
+			plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle)
+		end
+	end
+end
+
+@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
+function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+	if !haskey(madsdata, "Wells")
+		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
+		return
+	end
+	if !haskey(madsdata["Wells"], wellname)
+		Mads.madserror("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
+		return
+	end
 	o = madsdata["Wells"][wellname]["obs"]
+	nsample = result["samplesize"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
@@ -655,7 +672,6 @@ function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", 
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
 	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
-	p
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
@@ -799,13 +815,12 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
-		p
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), ptes)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
@@ -958,7 +973,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			for Ns_total = Ns0 + 1:1:Ns0 + 5000
 				Wi = (Ns_total / Nr - 1) / ( gamma * M)
 				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-					Wi = @Compat.compat int(Wi)
+					Wi = round(Int, Wi)
 					Ns = @Compat.compat int(Ns_total / Nr)
 					if iseven(Ns)
 						Ns += 1
@@ -1664,7 +1679,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	# Plot results as .svg file
 	if plotresults
 		madsinfo("""Plotting eFAST results as .svg file ... """)
-		Mads.plotwellSAresults("w10a",md,resultsefast)
+		Mads.plotwellSAresults(md,resultsefast,"w10a")
 	end
 
 end

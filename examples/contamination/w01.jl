@@ -65,9 +65,9 @@ result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
 saltelliresultm = Mads.saltelli(md,N=500)
-Mads.plotwellSAresults("w1a",md,saltelliresultm)
+Mads.plotwellSAresults(md,saltelliresultm,"w1a")
 saltelliresultb = Mads.saltellibrute(md,N=500)
-Mads.plotwellSAresults("w1a",md,saltelliresultb)
+Mads.plotwellSAresults(md,saltelliresultb,"w1a")
 
 # save saltelli results
 # f = open("$rootname-SA-results.json", "w")
@@ -81,7 +81,7 @@ Mads.plotwellSAresults("w1a",md,saltelliresultb)
 # Mads.saltelliprintresults(md, result)
 
 # plot global SA results for a given observation point
-# Mads.plotwellSAresults("w1a",md,result)
+# Mads.plotwellSAresults(md,result,"w1a")
 
 # parameter space exploration
 # Mads.madsinfo("Parameter space exploration ...")
