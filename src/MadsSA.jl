@@ -386,7 +386,7 @@ function saltelli(madsdata; N=100, seed=0)
 			Mads.madswarn("""There are $(maxnnans) NaN's""")
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -1632,7 +1632,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	end
 
 	### Calculating decomposed variances in parallel ###
-	allresults = pmap((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
+	allresults = map((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
 
 	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime

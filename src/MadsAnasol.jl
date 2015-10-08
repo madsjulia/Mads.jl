@@ -48,42 +48,44 @@ function makecomputeconcentrations(madsdata)
 		end
 		c = DataStructures.OrderedDict()
 		for wellkey in Mads.getwellkeys(madsdata)
-			wellx = madsdata["Wells"][wellkey]["x"]
-			welly = madsdata["Wells"][wellkey]["y"]
-			wellz0 = madsdata["Wells"][wellkey]["z0"]
-			wellz1 = madsdata["Wells"][wellkey]["z1"]
-			if abs( wellz0 - wellz0 ) > 0.1
-				screen = true
-			else
-				wellz = (wellz0 + wellz0) / 2
-				screen = false
-			end
-			for o in 1:length(madsdata["Wells"][wellkey]["obs"])
-				t = madsdata["Wells"][wellkey]["obs"][o][o]["t"]
-				conc = 0
-				for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
-					if haskey( madsdata["Sources"][i], "box" )
-						anasolfunction = anasolfunctionroot * "bbb_iir_c"
-					elseif haskey( madsdata["Sources"][i], "gauss" )
-						anasolfunction = anasolfunctionroot * "ddd_iir_c"
-					end
-					x = parameters[string("source", i, "_", "x")]
-					y = parameters[string("source", i, "_", "y")]
-					z = parameters[string("source", i, "_", "z")]
-					dx = parameters[string("source", i, "_", "dx")]
-					dy = parameters[string("source", i, "_", "dy")]
-					dz = parameters[string("source", i, "_", "dz")]
-					f = parameters[string("source", i, "_", "f")]
-					t0 = parameters[string("source", i, "_", "t0")]
-					t1 = parameters[string("source", i, "_", "t1")]
-					if screen
-						conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
-							contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
-					else
-						conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
-					end
+			if madsdata["Wells"][wellkey]["on"]
+				wellx = madsdata["Wells"][wellkey]["x"]
+				welly = madsdata["Wells"][wellkey]["y"]
+				wellz0 = madsdata["Wells"][wellkey]["z0"]
+				wellz1 = madsdata["Wells"][wellkey]["z1"]
+				if abs( wellz0 - wellz0 ) > 0.1
+					screen = true
+				else
+					wellz = (wellz0 + wellz0) / 2
+					screen = false
 				end
-				c[string(wellkey, "_", t)] = conc
+				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
+					t = madsdata["Wells"][wellkey]["obs"][o][o]["t"]
+					conc = 0
+					for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
+						if haskey( madsdata["Sources"][i], "box" )
+							anasolfunction = anasolfunctionroot * "bbb_iir_c"
+						elseif haskey( madsdata["Sources"][i], "gauss" )
+							anasolfunction = anasolfunctionroot * "ddd_iir_c"
+						end
+						x = parameters[string("source", i, "_", "x")]
+						y = parameters[string("source", i, "_", "y")]
+						z = parameters[string("source", i, "_", "z")]
+						dx = parameters[string("source", i, "_", "dx")]
+						dy = parameters[string("source", i, "_", "dy")]
+						dz = parameters[string("source", i, "_", "dz")]
+						f = parameters[string("source", i, "_", "f")]
+						t0 = parameters[string("source", i, "_", "t0")]
+						t1 = parameters[string("source", i, "_", "t1")]
+						if screen
+							conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
+								contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
+						else
+							conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
+						end
+					end
+					c[string(wellkey, "_", t)] = conc
+				end
 			end
 		end
 		global modelruns += 1
