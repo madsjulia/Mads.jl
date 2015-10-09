@@ -487,12 +487,16 @@ function showallparameters(madsdata)
 	p = Array(ASCIIString, 0)
 	for parkey in parkeys
 		s = @sprintf "%-10s = %15g" parkey pardict[parkey]["init"]
+		if pardict[parkey]["type"] != nothing
+			s *= " <- optimizable "
+			s *= @sprintf "log = %5s  Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
+		end
 		push!(p, s)
 	end
 	display(p)
 end
 
-@doc "Show parameters" ->
+@doc "Show optimizable parameters" ->
 function showparameters(madsdata)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)

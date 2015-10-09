@@ -1,9 +1,12 @@
 using Mads
 
 md = Mads.loadyamlmadsfile("w01.mads") # load Mads input file into Julia Dictionary
-rootname = Mads.getmadsrootname(md)
+rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("""Mads root name: $(rootname)""")
 display(md) # show the content of the Mads input file
+Mads.showallparameters(md) # show all the model parameters
+Mads.showparameters(md) # show all the adjustable model parameters
+Mads.showobservations(md) # show all the observations
 
 # use all wells
 Mads.plotmadsproblem(md) # display the well locations and the initial source location
