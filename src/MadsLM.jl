@@ -333,7 +333,7 @@ function plotmatches(madsdata, result; filename="", format="")
 			c[i] = result[obskeys[i]]
 		end
 		pl = Gadfly.plot(layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					layer(x=t, y=d ,Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+					layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
 		vsize = 4inch
 	end
 	if filename == ""
