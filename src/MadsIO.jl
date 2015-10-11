@@ -19,7 +19,7 @@ end
 
 @doc "Get MADS root name" ->
 function getmadsrootname(madsdata)
-	getrootname(madsdata["Filename"])
+	return getrootname(madsdata["Filename"])
 end
 
 @doc "Get MADS problem dir" ->
@@ -61,7 +61,7 @@ end
 function setimagefileformat(filename, format)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
-	root = getrootname(filename)
+	root = Mads.getrootname(filename)
 	if format == ""
 		format = extension
 	end
@@ -508,6 +508,27 @@ function showparameters(madsdata)
 	display(p)
 end
 
+@doc "Create observations" ->
+function createobservations!(madsdata, t, c; logtransform=false, weight_type="constant", weight=1 )
+	@assert length(t) == length(c)
+	observationsdict = OrderedDict()
+	for i in 1:length(t)
+		obskey = string("o", t[i])
+		data = OrderedDict()
+		data["target"] = c[i]
+		if weight_type == "constant"
+			data["weight"] = weight
+		else
+			data["weight"] = 1 / c[i]
+		end
+		data["time"] = t[i]
+		data["log"] = logtransform
+		data["min"] = 0
+		data["max"] = 1
+		observationsdict[obskey] = data
+	end
+	madsdata["Observations"] = observationsdict
+end
 
 @doc "Show observations" ->
 function showobservations(madsdata)

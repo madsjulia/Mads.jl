@@ -106,7 +106,7 @@ function paramarray2dict(madsdata, array)
 end
 
 @doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y" )
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -114,6 +114,13 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+	end
 	nT = length(obskeys)
 	if !haskey( madsdata, "Wells" )
 		t = Array(Float64, nT)
@@ -138,8 +145,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 			paramdict[paramkey] = original
 		end
 		if !haskey( madsdata, "Wells" )
-			pl = Gadfly.plot(Gadfly.layer( x=t, y=d, Gadfly.Geom.point,
-								Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)),
+			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 								Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
 								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
@@ -162,8 +168,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 						d[i] = o[i][i]["c"]
 					end
 					endj += nTw
-					p = Gadfly.plot(Gadfly.layer( x=t, y=d, Gadfly.Geom.point,
-										Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)),
+					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 										Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 										[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
 										Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
@@ -187,14 +192,14 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 		filename, format = Mads.setimagefileformat(filename, format)
 		try
 			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
-		catch "At least one finite value must be provided to formatter."
+		catch "At least one finite value must be provided to formatter.":$
 			Mads.madswarn("Gadfly fails!")
 		end
 	end
 end
 
 @doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y")
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -205,6 +210,13 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 	nT = length(obskeys)
 	t = Array(Float64, nT )
 	d = Array(Float64, nT )
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+	end
 	for i in 1:nT
 		t[i] = madsdata["Observations"][obskeys[i]]["time"]
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
@@ -220,17 +232,16 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 			Y[j,i] = result[obskeys[j]]
 		end
 	end
-	p = Gadfly.plot(layer(x=t, y=d, Gadfly.Geom.point,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
+	p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]... )
 	if filename == ""
 		if keyword == ""
-			filename = "$rootname-$numberofsamples"
+			filename = "$rootname-$numberofsamples-spaghetti"
 		else
-			filename = "$rootname-$keyword-$numberofsamples"
+			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
 	filename, format = setimagefileformat(filename, format)

@@ -802,7 +802,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		vsize += 4inch
 	end
 	######################################################
-	rootname = getmadsrootname(madsdata)
+	rootname = Mads.getmadsrootname(madsdata)
 	# p1 = Gadfly.vstack(pp[1:3]...)
 	# p2 = Gadfly.vstack(pp[4:6]...)
 	# p = Gadfly.hstack(p1,p2)
@@ -810,7 +810,6 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if filename == ""
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
-		println(filename)
 	end
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
