@@ -8,10 +8,10 @@ using Base.Test
 @everywhere fjmodel2(M, x) = M * x
 
 nP = 100
-nO = 100000
+nO = 1000000
 x = rand(nP)
 M = ones(nO, nP)
-M[end,:] = 100000
+M[:,end] = 100000
 o_c = Array(Float64, nO)
 @time fcmodel2(nP, x, M, nO, o_c)
 @time o_julia = fjmodel2(M, x)

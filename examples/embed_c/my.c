@@ -37,11 +37,17 @@ int my_c_model2(long int n_x, double *x, double *M, long int n_o, double *o)
 		printf("\n");
 	}
 	*/
-	for(j = 0; j < n_o; j++)
+	for(i = 0; i < n_x; i++)
 	{
-		o[j] = 0;
-		for(i = 0; i < n_x; i++)
-			o[j] += M[j + i * n_o] * x[i];
+		int ii = i * n_o;
+		double xi = x[i];
+		for(j = 0; j < n_o; j++)
+		{
+			if(i == 0)
+				o[j] = M[j] * xi;
+			else
+				o[j] += M[j + ii] * xi;
+		}
 	}
 	/*
 	for(j = 0; j < n_o; j++)
