@@ -85,6 +85,18 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
+@doc "Set number of processors" ->
+function setnprocs(np)
+	n = np - nprocs()
+	if n > 0
+		addprocs(n)
+	elseif n < 0
+		rmprocs(workers()[end+n+1:end])
+	end
+	sleep(1)
+	madsoutput("Number of processors is $(nprocs()) $(workers())\n")
+end
+
 @doc "Save calibration results" ->
 function savecalibrationresults(madsdata, results)
 	#TODO map estimated parameters on a new madsdata structure
