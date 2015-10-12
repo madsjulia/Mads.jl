@@ -91,9 +91,7 @@ plot(cos(x))
 legend(["sin","cos"],loc="lower left")
 
 a = 47
-title("a title, a = $(a)"), xlabel("the x-axis label"), ylabel ("the y-axislabel")
-
-@show a
+title("Title, a = $(a)"), xlabel("the x-axis label"), ylabel ("the y-axislabel")
 
 figure()
 title("A title with latex,\$\\alpha + \\beta\$, a = $(a)")
