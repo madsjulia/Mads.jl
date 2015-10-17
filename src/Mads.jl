@@ -13,6 +13,7 @@ using Logging
 import JSON
 using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
+using Conda
 using PyCall
 @pyimport yaml # PyYAML installation is problematic on some machines
 using YAML # use YAML if PyYAML is not available
@@ -50,7 +51,7 @@ create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
-#@docstrings
+# @docstrings
 
 @doc "Make MADS quiet" ->
 function quieton()

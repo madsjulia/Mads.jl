@@ -17,6 +17,7 @@ Sundials
 ProgressMeter
 LightXML
 Docile
+Conda
 PyCall
 PyPlot
 YAML
