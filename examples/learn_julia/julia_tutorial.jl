@@ -12,7 +12,7 @@ A = B
 B[3] = 42
 A
 
-# Chinease can be used
+# Chinese can be used
 朱莉婭 = 5
 朱莉婭 * 4
 whos()
@@ -87,7 +87,7 @@ PyPlot.plot(S, label = "sv's of B",color="magenta", linestyle="dashed", marker="
 PyPlot.legend()
 
 PyPlot.figure()
-x = 0:0.1:25
+x = linspace(0, 25, 100)
 PyPlot.plot(x, sin(x))
 PyPlot.plot(y, cos(x))
 PyPlot.legend(["sin","cos"],loc="lower left")

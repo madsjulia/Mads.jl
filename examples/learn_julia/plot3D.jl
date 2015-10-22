@@ -1,5 +1,4 @@
 using PyPlot
-using Distributions
 using QuantEcon
 
 PyPlot.svg(true)
@@ -10,11 +9,14 @@ y = x
 
 zcos = Array(Float64, n, n)
 fcos(x, y) = cos(x^2 + y^2) / (1 + x^2 + y^2)
+# zcos computed using for loops
 for i in 1:n
     for j in 1:n
         zcos[j, i] = fcos(x[i], y[j])
     end
 end
+# zcos computed using broadcastbroadcast
+zcos = broadcast(fcos, x', y)
 
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig[:gca](projection="3d")

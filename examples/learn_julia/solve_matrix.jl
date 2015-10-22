@@ -1,4 +1,4 @@
-# Numpy vs Julia
+# Julia vs Python Numpy
 
 # >>> a = numpy.array([[3,1], [1,2]])
 

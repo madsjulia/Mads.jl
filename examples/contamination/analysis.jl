@@ -45,3 +45,6 @@ run(`open w01-w13a_w20a-calib-match.svg`)
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues=Mads.parametersample(md, 10)
 Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
+run(`open w01-w13a_w20a-vx-10-spaghetti.svg`)
+run(`open w01-w13a_w20a-source1_t0-10-spaghetti.svg`)
+run(`open w01-w13a_w20a-source1_t1-10-spaghetti.svg`)

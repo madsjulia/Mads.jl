@@ -1,80 +1,23 @@
-# Welcome.
+# Comment
 
-# This is a regular file, which you can edit as much as you want,
-# then save for later or discard. You can open a fresh copy by
-# pressing `Ctrl-Space` and typing `tutorial` followed by `Enter`.
-
-# Use the "toggle console" command to see any output. If you have
-# issues, please let me know at
-# http://discuss.junolab.org/
-
-# ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-
-# In Juno we'll be using the Julia language. This is a Julia file and
-# lines beginning with `#` are comments.
-
-# Here's a very simple code block:
-
+# Expression
 3 * 6 + 4
+pi
+r = sin(pi / 2)
 
-# We can evaluate code by right clicking on it and selecting "Evaluate".
-# You should see the result, "22", pop up next to the code.
+# Chinese can be used
+朱莉婭 = 5
+r = 朱莉婭 * 4
 
-# It's quicker to use Ctrl-Enter (or Cmd-Enter on Mac). Try adding "+2"
-# to this line and then evaluating.
-
-2
-
-# We can also define our own functions, such as this one which doubles a
-# number:
-
+# Function
 function double(x)
-  return 2x
+  return 2 * x
 end
-
-# Click anywhere on the function definition and press `Ctrl-Enter`
-# again. You should see a tick pop up next to the "end" to show that
-# the function has been defined.
-
-# Now we can call our function:
+double(x) = 2 * x
 
 double(10)
 
-# After evaluating this you should see the result "20" pop up. You may
-# also notice that the "10" becomes underlined. Try clicking and
-# dragging it from side to side to double another number.
-
-# We can do more advanced things, like dealing with matrices. Try
-
 x = rand(5, 5)
-
-# If you evaluate this you'll see "Matrix Float64, 5×5" pop up next to it.
-# A bold header like this indicates that you can click on the box
-# to expand it and see the whole matrix.
-
-# If you're not sure what a function does it's easy to find out. Just right
-# click on the function's name (like "rand" above) and click "Toggle Docs".
-# The shortcut for this is Ctrl-D. You can also remove the documentation
-# by right clicking and selecting "Remove result".
-
-# Let's try installing a package, then do some visualisation.
-
-# Pkg.add("Images")
-
-# If you start to type `Images` between the quotes, you should see the
-# autocomplete pop up with a list of packages. Select `Images` with tab
-# and evaluate to install the package. You'll see a working indicator
-# in the bottom-left corner as the package is loaded. Type `Ctrl-Space`
-# followed `toggle console` and `Enter` to see the output.
-
-# Now you can load the package.
-
-using Images
-
-# Let's try visualising this function. You can type latex symbols by
-# typing a `\` and selecting from the autocomplete, e.g. `\phi` or `\le`.
-
-# You can use `Shift-Enter` to quickly evaluate definitions.
 
 const ϕ = golden
 
@@ -88,21 +31,12 @@ function foo(z)
   return max
 end
 
-# Let's try this out – play around with the numbers!
-
 foo(0)
 foo(0.1+0.5im)
 
-# Let's apply foo to a grid of numbers. Don't worry too much if you don't
-# understand this code, but make sure to evaluate it. (Bonus points for
-# using that Ctrl-D trick here, though)
-
 foo(x, y) = foo(x + y*im)
 
-foo_grid(n) =
-  broadcast(foo,
-            linspace(-0.5, 1, n)',
-            linspace(-1, 0.5, n))
+foo_grid(n) = broadcast(foo, linspace(-0.5, 1, n)', linspace(-1, 0.5, n))
 
 # Can you see the pattern?
 
@@ -110,18 +44,5 @@ foo_grid(10)
 
 # Let's try it as an image:
 
+using Images
 convert(Image, scale(foo_grid(500), 1/80))
-
-# It's a Julia set, of course!
-
-# If you expand the image you can also click on the `Dictionary`
-# field to see some interesting properties about it (if that's the
-# kind of thing that floats your goat).
-
-# If you want to learn more about Julia, take a look at
-# http://julialang.org/learning/
-
-# There is also the Julia manual and the Juno documentation, both
-# of which are available from the help menu above.
-
-# Enjoy!
