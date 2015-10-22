@@ -78,11 +78,11 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = Dict()
 		try
-			predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+			predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 		catch DomainError #TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
 			return -Inf
 		end
-		loglikelihood(Dict(optparamkeys, arrayparameters), predictions, madsdata["Observations"])
+		loglikelihood(Dict(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood
 end
