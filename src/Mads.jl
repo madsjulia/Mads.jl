@@ -237,7 +237,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	NLopt.lower_bounds!(opt, parammins)
 	NLopt.upper_bounds!(opt, parammaxs)
 	NLopt.min_objective!(opt, fg_nlopt)
-	NLopt.maxeval!(opt, int(1e3))
+	NLopt.maxeval!(opt, round(Int, 1e3))
 	minf, minx, ret = NLopt.optimize(opt, paraminits)
 	return minf, minx, ret
 end

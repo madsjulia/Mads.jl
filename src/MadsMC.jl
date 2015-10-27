@@ -28,7 +28,7 @@ function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::Abstr
 end
 
 @doc "Bayes Sampling " ->
-function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3), thinning=1)
+function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3), thinning=1)
 	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -45,13 +45,13 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3), thinning=1)
 end
 
 @doc "Brute force parallel Bayesian sampling " ->
-function bayessampling(madsdata, numsequences; nsteps=int(1e2), burnin=int(1e3))
+function bayessampling(madsdata, numsequences; nsteps=round(Int, 1e2), burnin=round(Int, 1e3))
 	mcmcchains = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin), 1:numsequences)
 	return mcmcchains
 end
 
 @doc "Do a forward Monte Carlo analysis " ->
-function montecarlo(madsdata; N=int(1e2))
+function montecarlo(madsdata; N=round(Int, 1e2))
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
