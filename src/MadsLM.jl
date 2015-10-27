@@ -103,7 +103,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 	const MAX_LAMBDA = 1e16 # minimum trust region radius
 	const MIN_LAMBDA = 1e-16 # maximum trust region radius
 	const MIN_STEP_QUALITY = 1e-3
-  const GOOD_STEP_QUALITY = 0.75
+	const GOOD_STEP_QUALITY = 0.75
 	const MIN_DIAGONAL = 1e-6 # lower bound on values of diagonal matrix used to regularize the trust region step
 
 	converged = false
@@ -222,13 +222,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 		function getobjfuncevalandtrial_f(npl)
 			delta_x = delta_xs[npl]
 			Mads.madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 );
-			trial_f = f(x + delta_x)
+			trial_f = f(x + delta_x)#this crashes if we call this function via pmap
 			objfunceval = sse(trial_f)
 			Mads.madswarn(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl] );
 			return objfunceval, trial_f
 		end
 
-		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
+		#objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
+		objfuncevalsandtrial_fs = map(getobjfuncevalandtrial_f, collect(1:np_lambda))
 		f_calls += np_lambda
 		objfuncevals = map(x->x[1], objfuncevalsandtrial_fs)
 		trial_fs = map(x->x[2], objfuncevalsandtrial_fs)
