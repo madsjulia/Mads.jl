@@ -58,8 +58,14 @@ delete!(md_new["Sources"][1], "box") # delete the unneeded box source
 md_new["Parameters"]["vx"]["init"] = 25 # change the velocity
 md_new["Parameters"]["source1_t0"]["init"] = 4 # change the release time
 md_new["Parameters"]["source1_t1"]["init"] = 5 # change the termination time
+md_new["Parameters"]["source1_dx"]["init"] = 0 # set a point source
+md_new["Parameters"]["source1_dy"]["init"] = 0 # set a point source
+md_new["Parameters"]["source1_dz"]["init"] = 0 # set a point source
 md_new["Sources"][1]["gauss"]["t0"]["init"] = 4 # change the release time
 md_new["Sources"][1]["gauss"]["t1"]["init"] = 5 # change the termination time
+md_new["Sources"][1]["gauss"]["dx"]["init"] = 0 # set a point source
+md_new["Sources"][1]["gauss"]["dy"]["init"] = 0 # set a point source
+md_new["Sources"][1]["gauss"]["dz"]["init"] = 0 # set a point source
 new_forward_predictions = Mads.forward(md_new) # execute a forward model simulation
 Mads.setobservationtargets!(md_new, new_forward_predictions) # set calibration targets to match the forward model predictions
 Mads.plotmatches(md_new, new_forward_predictions, filename=rootname * "-new-problem.svg")
