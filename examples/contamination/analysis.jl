@@ -56,10 +56,10 @@ Mads.setparamsinit!(md_new, inverse_parameters) # set the initial guesses to the
 md_new["Sources"][1]["gauss"] = md_new["Sources"][1]["box"] # create a Gaussian source based on the existing box source
 delete!(md_new["Sources"][1], "box") # delete the unneeded box source
 md_new["Parameters"]["vx"]["init"] = 25 # change the velocity
-md_new["Parameters"]["source1_t0"]["init"] = 4 # change release time
-md_new["Parameters"]["source1_t1"]["init"] = 5 # change termination time
-md_new["Sources"][1]["gauss"]["t0"]["init"] = 4 # change release time
-md_new["Sources"][1]["gauss"]["t1"]["init"] = 5 # change termination time
+md_new["Parameters"]["source1_t0"]["init"] = 4 # change the release time
+md_new["Parameters"]["source1_t1"]["init"] = 5 # change the termination time
+md_new["Sources"][1]["gauss"]["t0"]["init"] = 4 # change the release time
+md_new["Sources"][1]["gauss"]["t1"]["init"] = 5 # change the termination time
 new_forward_predictions = Mads.forward(md_new) # execute a forward model simulation
 Mads.setobservationtargets!(md_new, new_forward_predictions) # set calibration targets to match the forward model predictions
 Mads.plotmatches(md_new, new_forward_predictions, filename=rootname * "-new-problem.svg")
@@ -69,4 +69,4 @@ Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads inp
 # Calibrate with random initial guesses
 Mads.allwellsoff!(md_new) # turn off all wells
 Mads.wellon!(md_new, "w13a") # use well w13a
-Mads.calibraterandom(md_new, 10)
+Mads.calibraterandom(md_new, 10) # calibrate 10 times with random initial guesses

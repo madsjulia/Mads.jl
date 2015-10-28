@@ -105,14 +105,14 @@ function setnprocs(np)
 end
 
 @doc "Save calibration results" ->
-function savecalibrationresults(madsdata, results)
+function savecalibrationresults(madsdata::Associative, results)
 	#TODO map estimated parameters on a new madsdata structure
 	#TODO save madsdata in yaml file using dumpyamlmadsfile
 	#TODO save residuals, predictions, observations (yaml?)
 end
 
 @doc "Calibrate with random initial guesses" ->
-function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
@@ -132,7 +132,7 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
 		phi = result[2].f_minimum
 		Mads.quietoff()
-		Mads.madsinfo("""Random realization #$i: OF = $phi""")
+		Mads.madsinfo("""Random initial guess #$i: OF = $phi""")
 		if !quietchange
 			Mads.quieton()
 		end
@@ -149,7 +149,7 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -183,7 +183,7 @@ function calibrate(madsdata; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, max
 end
 
 @doc "Do a forward run using the initial or provided values for the model parameters " ->
-function forward(madsdata; paramvalues=Void)
+function forward(madsdata::Associative; paramvalues=Void)
 	if paramvalues == Void
 		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	end
@@ -191,14 +191,14 @@ function forward(madsdata; paramvalues=Void)
 end
 
 @doc "Do a forward run using provided values for the model parameters " ->
-function forward(madsdata, paramvalues)
+function forward(madsdata::Associative, paramvalues)
 	f = Mads.makemadscommandfunction(madsdata)
 	return f(paramvalues)
 end
 
 # NLopt is too much of a pain to install at this point
 @doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach
-function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
+function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS)
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
 	parammins = Array(Float64, length(paramkeys))
@@ -279,7 +279,6 @@ function maketruth(infilename::AbstractString, outfilename::AbstractString)
 end
 
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
-# (You can delete this if you want!)
 type svrOutput
 	alpha::Array{Float64,1}
 	b::Float64
