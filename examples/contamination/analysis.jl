@@ -48,3 +48,11 @@ Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 run(`open w01-w13a_w20a-vx-10-spaghetti.svg`)
 run(`open w01-w13a_w20a-source1_t0-10-spaghetti.svg`)
 run(`open w01-w13a_w20a-source1_t1-10-spaghetti.svg`)
+
+# Create new problem based on the estimated model parameters
+Mads.allwellson!(md) # turn on all wells
+inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
+Mads.setobservationtargets!(md, inverse_predictions) # set calibration targets to match the forward model predictions
+Mads.plotmatches(md, inverse_predictions, filename=rootname * "-new-problem.svg")
+run(`open w01-new-problem.svg`)
+Mads.dumpyamlmadsfile(md, "w01-new-problem.mads") # write out a new mads input file
