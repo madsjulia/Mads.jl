@@ -119,20 +119,30 @@ function calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxIte
 	paramoptvalues = Mads.parametersample(madsdata, numberofsamples)
 	bestresult = Array(Any,2)
 	bestphi = Inf
+	quietchange = false
+	if !Mads.quiet
+		Mads.quieton()
+		quietchange = true
+	end
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		Mads.quieton()
 		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
-		Mads.quietoff()
 		phi = result[2].f_minimum
-		println(phi)
+		Mads.quietoff()
+		Mads.madsinfo("""Random realization #$i: OF = $phi""")
+		if !quietchange
+			Mads.quieton()
+		end
 		if phi < bestphi
 			bestresult = result
 			bestphi = phi
 		end
+	end
+	if quietchange
+		Mads.quietoff()
 	end
 	Mads.setparamsinit!(madsdata, paramdict)
 	return bestresult
