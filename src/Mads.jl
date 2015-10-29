@@ -6,17 +6,17 @@ import Gadfly
 import Compose
 import Colors
 import Compat
-using Optim
-using Lora
-using Distributions
-using Logging
+import Optim
+import Lora
+import Distributions
+import Logging
 import JSON
-using NLopt
-using HDF5 # HDF5 installation is problematic on some machines
-using Conda
-using PyCall
-@pyimport yaml # PyYAML installation is problematic on some machines
-using YAML # use YAML if PyYAML is not available
+import NLopt
+import HDF5 # HDF5 installation is problematic on some machines
+import Conda
+import PyCall
+@PyCall.pyimport yaml # PyYAML installation is problematic on some machines
+import YAML # use YAML if PyYAML is not available
 
 if VERSION < v"0.4.0-rc"
 	using Docile # default for v > 0.4
@@ -41,7 +41,7 @@ include("MadsBIG.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
-Logging.configure(level=DEBUG)
+Logging.configure(level=Logging.DEBUG)
 quiet = true
 verbositylevel = 1
 debuglevel = 1
