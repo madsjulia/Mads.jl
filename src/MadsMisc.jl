@@ -21,8 +21,7 @@ end
 @doc "Sine transformation of a function" ->
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
-		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
-		return f(params)
+		return f(sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed))
 	end
 	return sinetransformedf
 end

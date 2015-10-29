@@ -937,7 +937,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
 			W_comp = []
 			for i = 1:loops
-				W_comp = [W_comp; [1:step:Wcmax]]
+				W_comp = [W_comp; collect(1:step:Wcmax)]
 			end
 			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
 		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case

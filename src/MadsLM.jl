@@ -4,7 +4,6 @@ sse(x) = (x'*x)[1]
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata, f)
-	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -115,7 +114,6 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 	best_x = x0
 	nP = length(x)
 	DtDidentity = eye(nP)
-	delta_x = copy(x0)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
@@ -219,20 +217,9 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 		phi = map(x->x[1], phisanddelta_xs)
 		delta_xs = map(x->x[2], phisanddelta_xs)
 
-		function getobjfuncevalandtrial_f(npl)
-			delta_x = delta_xs[npl]
-			Mads.madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 );
-			trial_f = f(x + delta_x)#this crashes if we call this function via pmap
-			objfunceval = sse(trial_f)
-			Mads.madswarn(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl] );
-			return objfunceval, trial_f
-		end
-
-		#objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
-		objfuncevalsandtrial_fs = map(getobjfuncevalandtrial_f, collect(1:np_lambda))
+		trial_fs = pmap(f, map(dx->x + dx, delta_xs))
 		f_calls += np_lambda
-		objfuncevals = map(x->x[1], objfuncevalsandtrial_fs)
-		trial_fs = map(x->x[2], objfuncevalsandtrial_fs)
+		objfuncevals = map(sse, trial_fs)
 
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
