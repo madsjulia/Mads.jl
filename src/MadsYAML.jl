@@ -9,6 +9,7 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		end
 		close(f)
+		yamldata["Filename"] = filename
 		return yamldata # this is not OrderedDict()
 	end
 
@@ -25,6 +26,7 @@ elseif isdefined(:YAML) # using YAML in Julia
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
 		close(f)
+		yamldata["Filename"] = filename
 		return yamldata # this is not OrderedDict()
 	end
 
@@ -138,26 +140,31 @@ end
 
 @doc "Dump YAML MADS file" ->
 function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input file in YAML forma
-	yamldata = copy(madsdata)
+	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
 	restore = Array(Bool, length(deletekeys))
 	restorevals = Array(Any, length(deletekeys))
 	i = 1
 	for deletekey in deletekeys
 		if haskey(yamldata, deletekey)
-			restore[i] = true
+			restore[i] = true #TODO is this needed?
 			restorevals[i] = yamldata[deletekey]
 			delete!(yamldata, deletekey)
 		end
 		i += 1
 	end
-	for obsorparam in ["Observations", "Parameters"]
+	if haskey(yamldata, "Wells")
+		if haskey(yamldata, "Observations")
+			delete!(yamldata, "Observations")
+		end
+	end
+	for obsorparam in ["Observations", "Parameters", "Wells"]
 		if haskey(yamldata, obsorparam)
-			yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
-			i = 1
+			yamldata[obsorparam] = Array(Any, 0)
 			for key in keys(madsdata[obsorparam])
-				yamldata[obsorparam][i] = @Compat.compat Dict(key=>madsdata[obsorparam][key])
-				i += 1
+				if !ismatch(r"source[1-9]*_", key)
+					push!( yamldata[obsorparam], @Compat.compat Dict(key=>madsdata[obsorparam][key]))
+				end
 			end
 		end
 	end
