@@ -51,7 +51,7 @@ function makearrayfunction(madsdata, f)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
-		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		return f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 	end
 	return arrayfunction
 end
@@ -60,9 +60,9 @@ end
 function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayconditionalloglikelihood(arrayparameters::Vector)
-		predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
 	end
@@ -73,7 +73,7 @@ end
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = Dict()
 		try
