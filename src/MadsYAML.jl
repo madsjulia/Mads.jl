@@ -9,7 +9,8 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		end
 		close(f)
-		return yamldata
+		yamldata["Filename"] = filename
+		return yamldata # this is not OrderedDict()
 	end
 
 	@doc "Dump YAML file" ->
@@ -21,11 +22,12 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 elseif isdefined(:YAML) # using YAML in Julia
 	@doc "Load YAML file" ->
 	function loadyamlfile(filename::AbstractString; julia=true) # load YAML file
-		yamldata = OrderedDict()
+		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
 		close(f)
-		return yamldata
+		yamldata["Filename"] = filename
+		return yamldata # this is not OrderedDict()
 	end
 
 	@doc "Dump YAML file in JSON format" ->
@@ -41,7 +43,7 @@ end
 
 @doc "Load YAML MADS file" ->
 function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS input file in YAML format
-	madsdata = loadyamlfile(filename; julia=julia)
+	madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
 		for dict in madsdata["Parameters"]
@@ -67,11 +69,36 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 			end
 		end
 	end
+	if haskey(madsdata, "Parameters")
+		parameters = madsdata["Parameters"]
+		for key in keys(parameters)
+			if haskey(parameters[key], "log")
+				flag = parameters[key]["log"]
+				if flag == "yes" || flag == true
+					parameters[key]["log"] = true
+					for v in ["init", "init_max", "init_min", "max", "min", "step"]
+						if haskey(parameters[key], v)
+							parameters[key][v] = float(parameters[key][v])
+							if parameters[key][v] < 0
+								Mads.err("""The field $v for Parameter $key cannot be log-transformed; it is negative!""")
+							end
+						end
+					end
+				else
+					parameters[key]["log"] = false
+				end
+				if haskey(parameters[key], "min") && haskey(parameters[key], "max") && !haskey(parameters[key], "dist")
+					parameters[key]["dist"] = "Uniform($(parameters[key]["min"]),$(parameters[key]["max"]))"
+				end
+			end
+		end
+	end
 	if haskey(madsdata, "Wells")
 		wells = DataStructures.OrderedDict()
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
+				wells[key]["on"] = true
 			end
 		end
 		madsdata["Wells"] = wells
@@ -113,26 +140,31 @@ end
 
 @doc "Dump YAML MADS file" ->
 function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input file in YAML forma
-	yamldata = copy(madsdata)
+	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
 	restore = Array(Bool, length(deletekeys))
 	restorevals = Array(Any, length(deletekeys))
 	i = 1
 	for deletekey in deletekeys
 		if haskey(yamldata, deletekey)
-			restore[i] = true
+			restore[i] = true #TODO is this needed?
 			restorevals[i] = yamldata[deletekey]
 			delete!(yamldata, deletekey)
 		end
 		i += 1
 	end
-	for obsorparam in ["Observations", "Parameters"]
+	if haskey(yamldata, "Wells")
+		if haskey(yamldata, "Observations")
+			delete!(yamldata, "Observations")
+		end
+	end
+	for obsorparam in ["Observations", "Parameters", "Wells"]
 		if haskey(yamldata, obsorparam)
-			yamldata[obsorparam] = Array(Any, length(madsdata[obsorparam]))
-			i = 1
+			yamldata[obsorparam] = Array(Any, 0)
 			for key in keys(madsdata[obsorparam])
-				yamldata[obsorparam][i] = @Compat.compat Dict(key=>madsdata[obsorparam][key])
-				i += 1
+				if !ismatch(r"source[1-9]*_", key)
+					push!( yamldata[obsorparam], @Compat.compat Dict(key=>madsdata[obsorparam][key]))
+				end
 			end
 		end
 	end

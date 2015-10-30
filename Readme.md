@@ -26,13 +26,14 @@ git clone git@gitlab.com:omalled/BIGUQ.jl.git
 
 Start julia and add the following packages:
 
+Pkg.add("DataFrames");
+Pkg.add("Logging");
+Pkg.add("Distributions");
+Pkg.add("DataStructures");
 Pkg.add("Lora");
 Pkg.add("HDF5");
 Pkg.add("Optim");
 Pkg.add("NLopt");
-Pkg.add("Logging");
-Pkg.add("Distributions");
-Pkg.add("DataStructures");
 Pkg.add("ForwardDiff");
 Pkg.add("ODE");
 Pkg.add("ProgressMeter");
@@ -41,17 +42,16 @@ Pkg.add("Docile");
 Pkg.add("Lexicon");
 Pkg.add("PyCall");
 Pkg.add("PyPlot");
+Pkg.add("Conda");
 Pkg.add("YAML");
 Pkg.add("JSON");
 Pkg.add("Gadfly");
 Pkg.add("JLD");
-Pkg.add("DataFrames");
-Pkg.add("DataFrames");
 Pkg.clone("BlackBoxOptim");
 
 ### Run examples
 
-In julia REPL, do the following commants:
+In julia REPL, do the following commands:
 
 `reload("Mads.jl")` # if there are still missing packages, add them
 

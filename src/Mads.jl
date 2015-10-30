@@ -6,16 +6,17 @@ import Gadfly
 import Compose
 import Colors
 import Compat
-using Optim
-using Lora
-using Distributions
-using Logging
+import Optim
+import Lora
+import Distributions
+import Logging
 import JSON
-using NLopt
-using HDF5 # HDF5 installation is problematic on some machines
-using PyCall
-@pyimport yaml # PyYAML installation is problematic on some machines
-using YAML # use YAML if PyYAML is not available
+import NLopt
+import HDF5 # HDF5 installation is problematic on some machines
+import Conda
+import PyCall
+@PyCall.pyimport yaml # PyYAML installation is problematic on some machines
+import YAML # use YAML if PyYAML is not available
 
 if VERSION < v"0.4.0-rc"
 	using Docile # default for v > 0.4
@@ -40,8 +41,8 @@ include("MadsBIG.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
 # Logging.configure(level=OFF) # OFF
 # Logging.configure(level=CRITICAL) # ONLY CRITICAL
-Logging.configure(level=DEBUG)
-quiet = false
+Logging.configure(level=Logging.DEBUG)
+quiet = true
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0
@@ -50,7 +51,7 @@ create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 # @document
-#@docstrings
+# @docstrings
 
 @doc "Make MADS quiet" ->
 function quieton()
@@ -85,78 +86,119 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
+@doc "Set number of processors / threads" ->
+function setnprocs(np, nt)
+	n = np - nprocs()
+	if n > 0
+		addprocs(n)
+	elseif n < 0
+		rmprocs(workers()[end+n+1:end])
+	end
+	blas_set_num_threads(nt)
+	sleep(1)
+	madsoutput("Number of processors is $(nprocs()) $(workers())\n")
+end
+
+@doc "Set number of processors" ->
+function setnprocs(np)
+	setnprocs(np, np)
+end
+
 @doc "Save calibration results" ->
-function savecalibrationresults(madsdata, results)
+function savecalibrationresults(madsdata::Associative, results)
 	#TODO map estimated parameters on a new madsdata structure
 	#TODO save madsdata in yaml file using dumpyamlmadsfile
 	#TODO save residuals, predictions, observations (yaml?)
 end
 
 @doc "Calibrate with random initial guesses" ->
-function calibraterandom(madsdata, numberofsamples; quiet=true, tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.parametersample(madsdata, numberofsamples)
 	bestresult = Array(Any,2)
 	bestphi = Inf
+	quietchange = false
+	if !Mads.quiet
+		Mads.quieton()
+		quietchange = true
+	end
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		result = Mads.calibrate(madsdata; quiet=quiet, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
 		phi = result[2].f_minimum
-		println(phi)
+		Mads.quietoff()
+		Mads.madsinfo("""Random initial guess #$i: OF = $phi""")
+		if !quietchange
+			Mads.quieton()
+		end
 		if phi < bestphi
 			bestresult = result
 			bestphi = phi
 		end
+	end
+	if quietchange
+		Mads.quietoff()
 	end
 	Mads.setparamsinit!(madsdata, paramdict)
 	return bestresult
 end
 
 @doc "Calibrate " ->
-function calibrate(madsdata; quiet=false, tolX=1e-3, tolG=1e-6, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
-	rootname = getmadsrootname(madsdata)
-	f_lm, g_lm = makelmfunctions(madsdata)
-	optparamkeys = getoptparamkeys(madsdata)
-	initparams = getparamsinit(madsdata, optparamkeys)
-	lowerbounds = getparamsmin(madsdata, optparamkeys)
-	upperbounds = getparamsmax(madsdata, optparamkeys)
-	f_lm_sin = sinetransformfunction(f_lm, lowerbounds, upperbounds)
-	g_lm_sin = sinetransformgradient(g_lm, lowerbounds, upperbounds)
+function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+	rootname = Mads.getmadsrootname(madsdata)
+	f_lm, g_lm = Mads.makelmfunctions(madsdata)
+	optparamkeys = Mads.getoptparamkeys(madsdata)
+	initparams = Mads.getparamsinit(madsdata, optparamkeys)
+	lowerbounds = Mads.getparamsmin(madsdata, optparamkeys)
+	upperbounds = Mads.getparamsmax(madsdata, optparamkeys)
+	logtransformed = Mads.getparamslog(madsdata, optparamkeys)
+	indexlogtransformed = find(logtransformed)
+	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
+	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	function calibratecallback(x_best)
 		outfile = open("$rootname.iterationresults", "a+")
 		write(outfile, string("OF: ", sse(f_lm_sin(x_best)), "\n"))
-		write(outfile, string(Dict(optparamkeys, sinetransform(x_best, lowerbounds, upperbounds)), "\n"))
+		write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
 		close(outfile)
 	end
 	if usenaive
-		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); quiet=quiet, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds); quiet=quiet, root=rootname, tolX=tolX, tolG=tolG, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
-	minimum = sinetransform(results.minimum, lowerbounds, upperbounds)
-	nonoptparamkeys = getnonoptparamkeys(madsdata)
-	minimumdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
+	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
+	minimumdict = OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimum[i]
 	end
 	return minimumdict, results
 end
 
-@doc "Do a forward run using the init values of the parameters " ->
-function forward(madsdata)
-	initparams = Dict(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata))
+@doc "Do a forward run using the initial or provided values for the model parameters " ->
+function forward(madsdata::Associative; paramvalues=Void)
+	if paramvalues == Void
+		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	end
+	forward(madsdata, paramvalues)
+end
+
+@doc "Do a forward run using provided values for the model parameters " ->
+function forward(madsdata::Associative, paramvalues)
 	f = Mads.makemadscommandfunction(madsdata)
-	return f(initparams)
+	return f(paramvalues)
 end
 
 # NLopt is too much of a pain to install at this point
 @doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach
-function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
+function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS)
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
 	parammins = Array(Float64, length(paramkeys))
@@ -177,7 +219,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	end
 	fg = makemadscommandfunctionandgradient(madsdata)
 	function fg_nlopt(arrayparameters::Vector, grad::Vector)
-		parameters = Dict(paramkeys, arrayparameters)
+		parameters = Dict(zip(paramkeys, arrayparameters))
 		resultdict, gradientdict = fg(parameters)
 		residuals = Array(Float64, length(madsdata["Observations"]))
 		ssr = 0
@@ -205,7 +247,7 @@ function calibratenlopt(madsdata; algorithm=:LD_LBFGS)
 	NLopt.lower_bounds!(opt, parammins)
 	NLopt.upper_bounds!(opt, parammaxs)
 	NLopt.min_objective!(opt, fg_nlopt)
-	NLopt.maxeval!(opt, int(1e3))
+	NLopt.maxeval!(opt, round(Int, 1e3))
 	minf, minx, ret = NLopt.optimize(opt, paraminits)
 	return minf, minx, ret
 end
@@ -214,7 +256,7 @@ end
 function maketruth(infilename::AbstractString, outfilename::AbstractString)
 	md = loadyamlmadsfile(infilename)
 	f = makemadscommandfunction(md)
-	result = f(Dict(getparamkeys(md), getparamsinit(md)))
+	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]
@@ -237,7 +279,6 @@ function maketruth(infilename::AbstractString, outfilename::AbstractString)
 end
 
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
-# (You can delete this if you want!)
 type svrOutput
 	alpha::Array{Float64,1}
 	b::Float64

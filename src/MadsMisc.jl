@@ -4,32 +4,34 @@ using Distributions
 include("MadsIO.jl")
 
 @doc "Arcsine transformation of model parameters" ->
-function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector) # asine transformation
-	sineparams = asin((params - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1) # transformed parameters (sine parameter space)
+function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
+	sineparams = copy(params)
+	sineparams[indexlogtransformed] = log10(sineparams[indexlogtransformed])
+	sineparams = asin((sineparams - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
 	return sineparams
 end
 
 @doc "Sine transformation of model parameters" ->
-function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector) # sine transformation
+function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
 	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5) # untransformed parameters (regular parameter space)
+	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
 	return params
 end
 
 @doc "Sine transformation of a function" ->
-function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector) # sine transformation a function
+function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
-		params = sinetransform(sineparams, lowerbounds, upperbounds)
-		return f(params)
+		return f(sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed))
 	end
 	return sinetransformedf
 end
 
 @doc "Sine transformation of a gradient function" ->
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector; sindx = 0.1) # sine transformation a gradient function
+function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector)
 		#TODO option needed to control sindx
-		params = sinetransform(sineparams, lowerbounds, upperbounds)
-		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds)
+		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
+		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
 		lineardx = dxparams - params
 		result = g(params; dx=lineardx)
 		lineardx ./= sindx
@@ -49,7 +51,7 @@ function makearrayfunction(madsdata, f)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
-		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		return f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 	end
 	return arrayfunction
 end
@@ -58,9 +60,9 @@ end
 function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayconditionalloglikelihood(arrayparameters::Vector)
-		predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
 	end
@@ -71,15 +73,15 @@ end
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = Dict()
 		try
-			predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+			predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 		catch DomainError #TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
 			return -Inf
 		end
-		loglikelihood(Dict(optparamkeys, arrayparameters), predictions, madsdata["Observations"])
+		loglikelihood(Dict(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood
 end

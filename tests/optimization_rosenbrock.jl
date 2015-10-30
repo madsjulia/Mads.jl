@@ -19,10 +19,11 @@ results = Optim.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient
 Mads.madsoutput("""$results\n""")
 
 Mads.madsinfo("TEST Sine transformation of parameter space:")
+indexlogtransformed = []
 lowerbounds = [-2, -2]
 upperbounds = [2, 2]
-sin_rosenbrock_lm = Mads.sinetransformfunction(Mads.rosenbrock_lm, lowerbounds, upperbounds)
-sin_rosenbrock_gradient_lm = Mads.sinetransformgradient(Mads.rosenbrock_gradient_lm, lowerbounds, upperbounds)
+sin_rosenbrock_lm = Mads.sinetransformfunction(Mads.rosenbrock_lm, lowerbounds, upperbounds, indexlogtransformed)
+sin_rosenbrock_gradient_lm = Mads.sinetransformgradient(Mads.rosenbrock_gradient_lm, lowerbounds, upperbounds, indexlogtransformed)
 Mads.madsoutput("TEST sine transformation:")
 a = Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds)
 Mads.madsoutput("TEST Parameter transformation: $a -> $Mads.sinetransform(a, lowerbounds, upperbounds)\n")

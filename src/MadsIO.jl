@@ -18,8 +18,8 @@ function getmadsinputfile()
 end
 
 @doc "Get MADS root name" ->
-function getmadsrootname(madsdata)
-	getrootname(madsdata["Filename"])
+function getmadsrootname(madsdata::Associative)
+	return getrootname(madsdata["Filename"])
 end
 
 @doc "Get MADS problem dir" ->
@@ -38,7 +38,12 @@ end
 function getrootname(filename)
 	d = split(filename, "/")
 	s = split(d[end], ".")
-	return join(d[1:end-1], "/") * "/" * s[1]
+	if length(d) > 1
+		r = join(d[1:end-1], "/") * "/" * s[1]
+	else
+		r = "./" * s[1]
+	end
+	return r
 end
 
 @doc "Get file name extension" ->
@@ -56,7 +61,7 @@ end
 function setimagefileformat(filename, format)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
-	root = getrootname(filename)
+	root = Mads.getrootname(filename)
 	if format == ""
 		format = extension
 	end
@@ -79,34 +84,34 @@ function setimagefileformat(filename, format)
 end
 
 @doc "Get MADS problem directory" ->
-function getmadsproblemdir(madsdata)
+function getmadsproblemdir(madsdata::Associative)
 	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
 end
 
 @doc "Make MADS command function" ->
-function makemadscommandfunction(madsdata) # make MADS command function
+function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
-		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...")
+		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
 		juliamodel = evalfile(madsdata["Julia"])
 	end
 	if haskey(madsdata, "Dynamic model")
-		Mads.madsoutput("Dynamic model evaluation ...")
+		Mads.madsoutput("Dynamic model evaluation ...\n")
 		madscommandfunction = madsdata["Dynamic model"]
 	elseif haskey(madsdata, "MADS model")
-		Mads.madsoutput("MADS model evaluation ...")
+		Mads.madsoutput("MADS model evaluation ...\n")
 		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
-		Mads.madsoutput("Internal model evaluation ...")
+		Mads.madsoutput("Internal model evaluation ...\n")
 		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
-		Mads.madsoutput("External model evaluation ...")
+		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Dict) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
-			newdirname = "../$(split(pwd(),"/")[end])_$(strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
-			madsinfo("""Temp directory: $(newdirname)""")
+			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
+			Mads.madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
 			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -159,20 +164,20 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				end
 			end
 			if haskey(madsdata, "Julia")
-				println("Execution of Julia model-evaluation script parsing model outputs ...")
+				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
 				results = juliamodel(madsdata) # this should be madsdata; not parameters
 				cd(madsproblemdir)
 			else
-				println("Execution of external command ...")
-				madsinfo("""Execute: $(madsdata["Command"])""")
+				Mads.madsoutput("Execution of external command ...\n")
+				Mads.madsinfo("""Execute: $(madsdata["Command"])""")
 				run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
 					cd(newdirname)
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
-					madsinfo("""Observations: $(results)""")
+					Mads.madsinfo("""Observations: $(results)""")
 				elseif haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 						results = loadjsonfile("$(newdirname)/$filename")
@@ -184,9 +189,9 @@ function makemadscommandfunction(madsdata) # make MADS command function
 				elseif haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 					obskeys = getobskeys(madsdata)
-					obsid=[convert(String,k) for k in obskeys]
+					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
-					results = DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions))
+					results = DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions))
 				end
 			end
 			run(`rm -fR $newdirname`)
@@ -195,7 +200,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
-		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...")
+		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata)
 	else
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
@@ -221,7 +226,7 @@ function makemadscommandfunction(madsdata) # make MADS command function
 end
 
 @doc "Turn on all Wells" ->
-function allwellson!(madsdata)
+function allwellson!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = true
 	end
@@ -229,7 +234,7 @@ function allwellson!(madsdata)
 end
 
 @doc "Turn on a specific well" ->
-function wellon!(madsdata, wellname::AbstractString)
+function wellon!(madsdata::Associative, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey
@@ -245,7 +250,7 @@ function wellon!(madsdata, wellname::AbstractString)
 end
 
 @doc "Turn off all Wells" ->
-function allwellsoff!(madsdata)
+function allwellsoff!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = false
 	end
@@ -269,7 +274,7 @@ function welloff!(madsdata, wellname::AbstractString)
 end
 
 @doc "Plot MADS problem" ->
-function plotmadsproblem(madsdata; format="", filename="")
+function plotmadsproblem(madsdata::Associative; format="", filename="")
 	if haskey(madsdata, "Sources")
 		rectangles = Array(Float64, 0, 4)
 		for i = 1:length(madsdata["Sources"])
@@ -284,9 +289,9 @@ function plotmadsproblem(madsdata; format="", filename="")
 			end
 		end
 	end
-	dfw = DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
+	dfw = DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	for wellkey in collect(keys(madsdata["Wells"]))
-		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+		if madsdata["Wells"][wellkey]["on"]
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
@@ -331,16 +336,17 @@ function plotmadsproblem(madsdata; format="", filename="")
 end
 
 @doc "Convert Wells to Observations class" ->
-function wells2observations!(madsdata)
+function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
 	for wellkey in collect(keys(madsdata["Wells"]))
-		if !( haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"] )
+		if madsdata["Wells"][wellkey]["on"]
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
 				obskey = wellkey * "_" * string(t)
 				data = DataStructures.OrderedDict()
 				data["well"] = wellkey
 				data["time"] = t
+				data["index"] = i
 				if haskey(madsdata["Wells"][wellkey]["obs"][i][i], "c") && !haskey(madsdata["Wells"][wellkey]["obs"][i][i], "target")
 					data["target"] = madsdata["Wells"][wellkey]["obs"][i][i]["c"]
 				end
@@ -357,13 +363,13 @@ function wells2observations!(madsdata)
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata) # make MADS command gradient function
+function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata, f)
+function makemadscommandgradient(madsdata::Associative, f)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Dict; dx=Array(Float64,0))
 		forwardrun, gradient = fg(parameters; dx=dx)
@@ -373,13 +379,13 @@ function makemadscommandgradient(madsdata, f)
 end
 
 @doc "Make MADS command function & gradient function" ->
-function makemadscommandfunctionandgradient(madsdata)
+function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
 end
 
 @doc "Make MADS command function and gradient function" ->
-function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS command gradient function
+function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0)) # MADS command gradient function
@@ -415,8 +421,8 @@ function makemadscommandfunctionandgradient(madsdata, f::Function) # make MADS c
 	return madscommandfunctionandgradient
 end
 
-function makelogprior(madsdata)
-	distributions = getparamdistributions(madsdata)
+function makelogprior(madsdata::Associative)
+	distributions = getparamdistributions(madsdata::Associative)
 	function logprior(params::Associative)
 		loglhood = 0.
 		for paramname in getoptparamkeys(madsdata)
@@ -426,7 +432,7 @@ function makelogprior(madsdata)
 	end
 end
 
-function makemadsconditionalloglikelihood(madsdata; weightfactor=1.)
+function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.)
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
@@ -448,12 +454,12 @@ function makemadsconditionalloglikelihood(madsdata; weightfactor=1.)
 end
 
 @doc "Make MADS loglikelihood function" ->
-function makemadsloglikelihood(madsdata; weightfactor=1.)
+function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
-		madsinfo("Internal log likelihood")
+		Mads.madsinfo("Internal log likelihood")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
-		madsinfo("External log likelihood")
+		Mads.madsinfo("External log likelihood")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
@@ -464,27 +470,125 @@ function makemadsloglikelihood(madsdata; weightfactor=1.)
 end
 
 @doc "Get keys for parameters" ->
-function getparamkeys(madsdata)
+function getparamkeys(madsdata::Associative)
 	return collect(keys(madsdata["Parameters"]))
-	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
 @doc "Get keys for source parameters" ->
-function getsourcekeys(madsdata)
+function getsourcekeys(madsdata::Associative)
 	return collect(keys(madsdata["Sources"][1]["box"]))
-	#return [convert(String,k) for k in keys(madsdata["Parameters"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
+end
+
+@doc "Show parameters" ->
+function showallparameters(madsdata::Associative)
+	pardict = madsdata["Parameters"]
+	parkeys = Mads.getparamkeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for parkey in parkeys
+		s = @sprintf "%-10s = %15g" parkey pardict[parkey]["init"]
+		if pardict[parkey]["type"] != nothing
+			s *= " <- optimizable "
+			s *= @sprintf "log = %5s  Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
+		end
+		push!(p, s)
+	end
+	display(p)
+end
+
+@doc "Show optimizable parameters" ->
+function showparameters(madsdata::Associative)
+	pardict = madsdata["Parameters"]
+	parkeys = Mads.getoptparamkeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for parkey in parkeys
+		s = @sprintf "%-10s init = %15g log = %5s  Distribution = %s" parkey pardict[parkey]["init"] pardict[parkey]["log"] pardict[parkey]["dist"]
+		push!(p, s)
+	end
+	display(p)
+end
+
+@doc "Create observations" ->
+function createobservations!(madsdata::Associative, t, c; logtransform=false, weight_type="constant", weight=1 )
+	@assert length(t) == length(c)
+	observationsdict = OrderedDict()
+	for i in 1:length(t)
+		obskey = string("o", t[i])
+		data = OrderedDict()
+		data["target"] = c[i]
+		if weight_type == "constant"
+			data["weight"] = weight
+		else
+			data["weight"] = 1 / c[i]
+		end
+		data["time"] = t[i]
+		data["log"] = logtransform
+		data["min"] = 0
+		data["max"] = 1
+		observationsdict[obskey] = data
+	end
+	madsdata["Observations"] = observationsdict
+end
+
+@doc "Set observations (calibration targets)" ->
+function setobservationtargets!(madsdata::Associative, predictions::Associative)
+	observationsdict = madsdata["Observations"]
+	if haskey(madsdata, "Wells")
+		wellsdict = madsdata["Wells"]
+	end
+	for k in keys(predictions)
+		observationsdict[k]["target"] = predictions[k]
+		if haskey( observationsdict[k], "well" )
+			well = observationsdict[k]["well"]
+			i = observationsdict[k]["index"]
+			wellsdict[well]["obs"][i][i]["c"] = predictions[k]
+		end
+	end
+end
+
+@doc "Create and save a new mads problem based on provided observations (calibration targets)" ->
+function createmadsproblem(madsdata::Associative, predictions::Associative, filename::AbstractString)
+	newmadsdata = deepcopy(madsdata)
+	observationsdict = newmadsdata["Observations"]
+	if haskey(newmadsdata, "Wells")
+		wellsdict = newmadsdata["Wells"]
+	end
+	for k in keys(predictions)
+		observationsdict[k]["target"] = predictions[k]
+		if haskey( observationsdict[k], "well" )
+			well = observationsdict[k]["well"]
+			i = observationsdict[k]["index"]
+			wellsdict[well]["obs"][i][i]["c"] = predictions[k]
+		end
+	end
+	Mads.dumpyamlmadsfile(newmadsdata, filename)
+end
+
+@doc "Show observations" ->
+function showobservations(madsdata::Associative)
+	obsdict = madsdata["Observations"]
+	obskeys = Mads.getobskeys(madsdata)
+	p = Array(ASCIIString, 0)
+	for obskey in obskeys
+		if obsdict[obskey]["weight"] > eps(Float16)
+			s = @sprintf "%-10s target = %15g weight = %15g" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
+			push!(p, s)
+		end
+	end
+	display(p)
 end
 
 @doc "Get keys for observations" ->
-function getobskeys(madsdata)
+function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
-	#return [convert(String,k) for k in keys(madsdata["Observations"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Observations"])]
 end
 
 @doc "Get keys for wells" ->
-function getwellkeys(madsdata)
+function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
-	#return [convert(String,k) for k in keys(madsdata["Wells"])]
+	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
 end
 
 @doc "Write parameters via MADS template" ->
@@ -504,9 +608,9 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	for line in lines
 		splitline = split(line, separator) # two separators are needed for each parameter
 		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
-		for i = 1:int((length(splitline)-1)/2)
+		for i = 1:div(length(splitline)-1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-			madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]) )
+			Mads.madsinfo( "Replacing "*strip(splitline[2 * i])*" -> "*string(parameters[strip(splitline[2 * i])]) )
 			write(outfile, string(parameters[strip(splitline[2 * i])])) # splitline[2 * i] in this case is parameter ID
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
@@ -515,14 +619,14 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 end
 
 @doc "Write initial parameters" ->
-function writeparameters(madsdata)
+function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	writeparameters(madsdata, Dict(paramkeys, paramsinit))
 end
 
 @doc "Write parameters" ->
-function writeparameters(madsdata, parameters)
+function writeparameters(madsdata::Associative, parameters)
 	expressions = evaluatemadsexpressions(parameters, madsdata)
 	paramsandexps = merge(parameters, expressions)
 	for template in madsdata["Templates"]
@@ -531,23 +635,23 @@ function writeparameters(madsdata, parameters)
 end
 
 @doc "Call C MADS ins_obs() function from the MADS library" ->
-function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::ASCIIString, inputfilename::ASCIIString)
+function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
 	obscheck = -1 * ones(n) # initialize to -1
 	debug = 0 # setting debug level 0 or 1 works
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
 	result = ccall( (:ins_obs, "libmads"), Int32,
-								 (Int32, Ptr{Ptr{Uint8}}, Ptr{Float64}, Ptr{Float64}, Ptr{Uint8}, Ptr{Uint8}, Int32),
+								 (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
 								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
-	observations = Dict{String, Float64}(obsid, obsval)
+	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
 	return observations
 end
 
 @doc "Read observations" ->
-function readobservations(madsdata)
+function readobservations(madsdata::Associative)
 	obsids=getobskeys(madsdata)
-	observations = OrderedDict(obsids, zeros(length(obsids)))
+	observations = OrderedDict(zip(obsids, zeros(length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
 		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once
@@ -559,7 +663,7 @@ function readobservations(madsdata)
 end
 
 @doc "Get parameter distributions" ->
-function getparamdistributions(madsdata)
+function getparamdistributions(madsdata::Associative)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedDict()
 	for i in 1:length(paramkeys)

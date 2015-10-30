@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="101.6mm" viewBox="0 0 152.4 101.6"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot yscalable" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-2">
+    <text x="84.07" y="89.99" text-anchor="middle" dy="0.6em">Eigenvectors</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-3">
+    <text x="52.41" y="83.32" text-anchor="middle" dy="0.6em">1</text>
+    <text x="115.74" y="83.32" text-anchor="middle" dy="0.6em">2</text>
+  </g>
+  <g clip-path="url(#fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-5)" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-4">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-6">
+      <rect x="20.74" y="5" width="126.65" height="77.32"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-7">
+      <path fill="none" d="M20.74,80.32 L 147.4 80.32"/>
+      <path fill="none" d="M20.74,65.65 L 147.4 65.65"/>
+      <path fill="none" d="M20.74,50.99 L 147.4 50.99"/>
+      <path fill="none" d="M20.74,36.33 L 147.4 36.33"/>
+      <path fill="none" d="M20.74,21.66 L 147.4 21.66"/>
+      <path fill="none" d="M20.74,7 L 147.4 7"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-8">
+      <path fill="none" d="M84.07,5 L 84.07 82.32"/>
+    </g>
+    <g class="plotpanel" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-9">
+      <g shape-rendering="crispEdges" stroke-width="0.3" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-10">
+        <g stroke="#000000" stroke-opacity="0.000" fill="#00BFFF" class="geometry" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-11">
+          <rect x="20.72" y="7" width="63.38" height="60.78"/>
+          <rect x="84.05" y="7" width="63.38" height="49.1"/>
+        </g>
+      </g>
+    </g>
+  </g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-12">
+    <text x="19.74" y="80.32" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">-5</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="19.74" y="65.65" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">-4</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="19.74" y="50.99" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">-3</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="19.74" y="36.33" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">-2</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="19.74" y="21.66" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">-1</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="19.74" y="7" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">0</tspan><tspan dy="0.498000em"></tspan></text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-13">
+    <text x="8.81" y="41.66" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.81, 43.66)">Eigenvalues</text>
+  </g>
+</g>
+<defs>
+<clipPath id="fig-0603d0aeed3c4ee9ba1c8facca5e55b4-element-5">
+  <path d="M20.74,5 L 147.4 5 147.4 82.32 20.74 82.32" />
+</clipPath
+></defs>
+</svg>

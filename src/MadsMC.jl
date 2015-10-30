@@ -21,14 +21,14 @@ function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::Abstr
 	vsize = (3 * size(samples, 2))inch
 	filename, format = Mads.setimagefileformat(filename, format)
 	try
-		Gadfly.draw( eval( (Gadfly.symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
+		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
 end
 
 @doc "Bayes Sampling " ->
-function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3), thinning=1)
+function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3), thinning=1)
 	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -45,13 +45,13 @@ function bayessampling(madsdata; nsteps=int(1e2), burnin=int(1e3), thinning=1)
 end
 
 @doc "Brute force parallel Bayesian sampling " ->
-function bayessampling(madsdata, numsequences; nsteps=int(1e2), burnin=int(1e3))
+function bayessampling(madsdata, numsequences; nsteps=round(Int, 1e2), burnin=round(Int, 1e3))
 	mcmcchains = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin), 1:numsequences)
 	return mcmcchains
 end
 
 @doc "Do a forward Monte Carlo analysis " ->
-function montecarlo(madsdata; N=int(1e2))
+function montecarlo(madsdata; N=round(Int, 1e2))
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -106,7 +106,7 @@ function paramarray2dict(madsdata, array)
 end
 
 @doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filename="", keyword="", xtitle="X", ytitle="Y" )
+function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -114,16 +114,26 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filena
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
-	nT = length(obskeys)
-	t = Array(Float64, nT )
-	d = Array(Float64, nT )
-	for i in 1:nT
-		t[i] = madsdata["Observations"][obskeys[i]]["time"]
-		d[i] = madsdata["Observations"][obskeys[i]]["target"]
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
 	end
-	madsoutput("Sensitivty analysis spaghetti plots for each selected model parameter (type != null) ...")
+	nT = length(obskeys)
+	if !haskey( madsdata, "Wells" )
+		t = Array(Float64, nT)
+		d = Array(Float64, nT)
+		for i in 1:nT
+			t[i] = madsdata["Observations"][obskeys[i]]["time"]
+			d[i] = madsdata["Observations"][obskeys[i]]["target"]
+		end
+	end
+	vsize = 0inch
+	Mads.madsoutput("Sensitivty analysis spaghetti plots for each selected model parameter (type != null) ...\n")
 	for paramkey in paramoptkeys
-		madsoutput("Parameter: $paramkey ...\n")
+		Mads.madsoutput("Parameter: $paramkey ...\n")
 		Y = Array(Float64, nT, numberofsamples)
 		@showprogress 4 "Computing ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
@@ -134,30 +144,62 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", filena
 			end
 			paramdict[paramkey] = original
 		end
-		p = Gadfly.plot(Gadfly.layer( x=t, y=d, Gadfly.Geom.point,
-								Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)),
+		if !haskey( madsdata, "Wells" )
+			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 								Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
 								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 								for i in 1:numberofsamples]...)
-		if filename == ""
-			if keyword == ""
-				filename = string("$rootname-$paramkey-$numberofsamples")
-			else
-				filename = string("$rootname-$keyword-$paramkey-$numberofsamples")
+			vsize = 4inch
+		else
+			pp = Array(Gadfly.Plot{}, 0)
+			p = Gadfly.Plot{}
+			vsize = 0inch
+			startj = 1
+			endj  = 0
+			for wellname in keys(madsdata["Wells"])
+				if madsdata["Wells"][wellname]["on"]
+					o = madsdata["Wells"][wellname]["obs"]
+					nTw = length(o)
+					t = Array(Float64, nTw)
+					d = Array(Float64, nTw)
+					for i in 1:nTw
+						t[i] = o[i][i]["t"]
+						d[i] = o[i][i]["c"]
+					end
+					endj += nTw
+					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+										Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+										[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+										Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+										for i in 1:numberofsamples]...)
+					push!(pp, p)
+					vsize += 4inch
+					startj = endj + 1
+				end
 			end
+			if length(pp) > 1
+				pl = Gadfly.vstack(pp...)
+			else
+				pl = p
+			end
+		end
+		if keyword == ""
+			filename = string("$rootname-$paramkey-$numberofsamples-spaghetti")
+		else
+			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		end
 		filename, format = Mads.setimagefileformat(filename, format)
 		try
-			Gadfly.draw( eval( Gadfly.(symbol(format)))(filename, 6inch,4inch), p)
-		catch "At least one finite value must be provided to formatter."
+			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
+		catch "At least one finite value must be provided to formatter.":$
 			Mads.madswarn("Gadfly fails!")
 		end
 	end
 end
 
 @doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y")
+function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -168,6 +210,13 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 	nT = length(obskeys)
 	t = Array(Float64, nT )
 	d = Array(Float64, nT )
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+	end
 	for i in 1:nT
 		t[i] = madsdata["Observations"][obskeys[i]]["time"]
 		d[i] = madsdata["Observations"][obskeys[i]]["target"]
@@ -183,22 +232,21 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 			Y[j,i] = result[obskeys[j]]
 		end
 	end
-	p = Gadfly.plot(layer(x=t, y=d, Gadfly.Geom.point,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=3pt)),
+	p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]... )
 	if filename == ""
 		if keyword == ""
-			filename = "$rootname-$numberofsamples"
+			filename = "$rootname-$numberofsamples-spaghetti"
 		else
-			filename = "$rootname-$keyword-$numberofsamples"
+			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
 	filename, format = setimagefileformat(filename, format)
 	try
-		Gadfly.draw( eval( Gadfly.(symbol(format)) )(filename, 6inch,4inch), p)
+		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end

@@ -4,10 +4,9 @@ sse(x) = (x'*x)[1]
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata, f)
-	#f, g = makemadscommandfunctionandgradient(madsdata)
 	obskeys = getobskeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function f_lm(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -61,7 +60,7 @@ function naive_lm_iteration(f::Function, g::Function, x0::Vector, f0::Vector, la
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101,  lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
@@ -79,7 +78,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, tolG=1e-6, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -103,24 +102,25 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	const MAX_LAMBDA = 1e16 # minimum trust region radius
 	const MIN_LAMBDA = 1e-16 # maximum trust region radius
 	const MIN_STEP_QUALITY = 1e-3
+	const GOOD_STEP_QUALITY = 0.75
 	const MIN_DIAGONAL = 1e-6 # lower bound on values of diagonal matrix used to regularize the trust region step
 
 	converged = false
 	x_converged = false
 	g_converged = false
+	of_converged = false
 	iterCt = 0
 	x = x0
 	best_x = x0
 	nP = length(x)
 	DtDidentity = eye(nP)
-	delta_x = copy(x0)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
 		Mads.madsoutput("""Parallel lambda search; number of parallel lambdas = $np_lambda\n"""; level = 1);
 	end
 
-	fcur = f(x) # TODO execute the initial estimate in parallel with the first jacobian
+	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = sse(fcur)
@@ -139,14 +139,19 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 	trial_fp = Array(Float64, (np_lambda, length(fcur)))
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
-	first = true
-	while ( ~converged && iterCt < maxIter && g_calls < maxJacobians && f_calls < maxEval)
-		J = g(x)
-		if root != ""
-			writedlm("$(root)-lmjacobian.dat", J)
+	first_lambda = true
+	maxJacobians = max(maxJacobians, maxIter)
+	compute_jacobian = true
+	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
+		if compute_jacobian
+			J = g(x)
+			if root != ""
+				writedlm("$(root)-lmjacobian.dat", J)
+			end
+			g_calls += 1
+			Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
+			compute_jacobian = false
 		end
-		g_calls += 1
-		Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
 		Mads.madsoutput("""Current Best OF: $best_residual\n"""; level = 1);
 		# we want to solve:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
@@ -157,14 +162,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
-		if first
-			lambda = min(1e4, max(lambda, diag(JpJ)...)) * tolX;
-			first = false
+		if first_lambda
+			lambda = min(1e4, max(lambda, diag(JpJ)...)) * lambda_scale;
+			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
 		Mads.madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
 		for npl = 1:np_lambda
-			if npl == 1 # first
+			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
 			elseif npl % 2 == 1 # even up
 				lambda_up *= lambda_mu
@@ -174,10 +179,11 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 				lambda_current = lambda_p[npl] = lambda_down
 			end
 		end
+
 		function getphianddelta_x(npl)
-			lambda_current = lambda_p[npl]
-			Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda_current);
-			u, s, v = svd(JpJ + lambda_current * DtDidentity)
+			lambda = lambda_p[npl]
+			Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda);
+			u, s, v = svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
 			for i=1:length(s)
 				if abs(s[i]) > eps(Float64)
@@ -192,7 +198,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			end
 			# s = map(i->max(eps(Float32), i), s)
 			delta_x = (v * spdiagm(is) * u') * -J' * fcur
-			# delta_x = (JpJ + lambda_current * DtDidentity) \ -J' * fcur # TODO replace with SVD
+			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = sse(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
 			Mads.madsoutput(@sprintf "#%02d OF (est): %f" npl predicted_residual; level = 4);
@@ -206,23 +212,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 			end
 			return predicted_residual, delta_x
 		end
+
 		phisanddelta_xs = pmap(getphianddelta_x, collect(1:np_lambda))
 		phi = map(x->x[1], phisanddelta_xs)
 		delta_xs = map(x->x[2], phisanddelta_xs)
 
-		function getobjfuncevalandtrial_f(npl)
-			delta_x = delta_xs[npl]
-			Mads.madsoutput("""# $npl lambda: Parameter change: $delta_x\n"""; level = 3 );
-			trial_f = f(x + delta_x)
-			objfunceval = sse(trial_f)
-			Mads.madswarn(@sprintf "#%02d lambda: %e OF: %e (predicted %e)\n\n" npl lambda_p[npl] objfunceval phi[npl] );
-			return objfunceval, trial_f
-		end
-
-		objfuncevalsandtrial_fs = pmap(getobjfuncevalandtrial_f, collect(1:np_lambda))
+		trial_fs = pmap(f, map(dx->x + dx, delta_xs))
 		f_calls += np_lambda
-		objfuncevals = map(x->x[1], objfuncevalsandtrial_fs)
-		trial_fs = map(x->x[2], objfuncevalsandtrial_fs)
+		objfuncevals = map(sse, trial_fs)
 
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
@@ -236,18 +233,26 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 
 		# step quality = residual change / predicted residual change
 		rho = (trial_residual - residual) / (predicted_residual - residual)
-		x += delta_x
-		fcur = trial_f
+		if rho > MIN_STEP_QUALITY
+			x += delta_x
+			fcur = trial_f
+			residual = trial_residual
+			if rho > GOOD_STEP_QUALITY
+				lambda = max(lambda / lambda_mu, MIN_LAMBDA) # increase trust region radius
+			end
+			compute_jacobian = true
+		else
+			lambda = min(lambda_nu * lambda, MAX_LAMBDA) # decrease trust region radius
+			if np_lambda > 1
+				compute_jacobian = true
+			end
+		end
+
 		if objfuncevals[npl_best] < best_residual
 			best_residual = objfuncevals[npl_best]
 			best_x = x
 			best_f = fcur
-			lambda *= lambda_nu
-		else
-			lambda /= lambda_mu
-			lambda_nu *= 2
 		end
-		iterCt += 1
 
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
@@ -265,29 +270,66 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-3, t
 		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
 			x_converged = true
 		end
-		converged = g_converged | x_converged
+		if best_residual < tolOF # Small objective fuction < tolOF
+			of_converged = true
+		end
+		converged = g_converged | x_converged | of_converged
 	end
 	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, sse(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
 end
 
 function plotmatches(madsdata, result; filename="", format="")
-	rootname = getmadsrootname(madsdata)
-	obskeys = Mads.getobskeys(madsdata)
-	nT = length(obskeys)
-	c = Array(Float64, nT)
-	t = Array(Float64, nT)
-	d = Array(Float64, nT)
-	for i in 1:nT
-		t[i] = madsdata["Observations"][obskeys[i]]["time"]
-		d[i] = madsdata["Observations"][obskeys[i]]["target"]
-		c[i] = result[obskeys[i]]
+	rootname = Mads.getmadsrootname(madsdata)
+	vsize = 0inch
+	pl = Gadfly.Plot{}
+	if haskey(madsdata, "Wells")
+		pp = Array(Gadfly.Plot{}, 0)
+		p = Gadfly.Plot{}
+		for wellname in keys(madsdata["Wells"])
+			if madsdata["Wells"][wellname]["on"]
+				o = madsdata["Wells"][wellname]["obs"]
+				nT = length(o)
+				c = Array(Float64, nT)
+				t = Array(Float64, nT)
+				d = Array(Float64, nT)
+				for i in 1:nT
+					time = t[i] = o[i][i]["t"]
+					d[i] = o[i][i]["c"]
+					obskey = wellname * "_" * string(time)
+					c[i] = result[obskey]
+				end
+				p = Gadfly.plot(Guide.title(wellname),layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+				push!(pp, p)
+				vsize += 4inch
+			end
+		end
+		if length(pp) > 1
+			pl = Gadfly.vstack(pp...)
+		else
+			pl = p
+		end
+	elseif haskey(madsdata, "Observations")
+		obskeys = Mads.getobskeys(madsdata)
+		nT = length(obskeys)
+		c = Array(Float64, nT)
+		t = Array(Float64, nT)
+		d = Array(Float64, nT)
+		for i in 1:nT
+			t[i] = madsdata["Observations"][obskeys[i]]["time"]
+			d[i] = madsdata["Observations"][obskeys[i]]["target"]
+			c[i] = result[obskeys[i]]
+		end
+		pl = Gadfly.plot(layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+					layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		vsize = 4inch
 	end
-	p=Gadfly.plot(layer(x=t,y=c,Geom.line,Theme(default_color=parse(Colors.Colorant, "blue"),line_width=3pt)),
-		layer(x=t,y=d,Geom.point,Theme(default_color=parse(Colors.Colorant, "red"),default_point_size=6pt)))
 	if filename == ""
 		filename = "$rootname-match"
 	end
 	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), p)
-	p
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+	if typeof(pl) == Gadfly.Plot{}
+		pl
+	end
 end

@@ -15,7 +15,9 @@ if madsfilename == ""
 	madsfilename = "w01short.mads"
 	Mads.madswarn("""Mads input file is empty; default value $(madsfilename) will be used""")
 end
-madsfilenamelong = madsdirname * "/" * madsfilename
+if madsdirname != ""
+	madsfilenamelong = madsdirname * madsfilename
+end
 md = Dict()
 try
 	md = Mads.loadyamlmadsfile(madsfilenamelong)
@@ -55,17 +57,17 @@ Mads.madsinfo("Manual SA ...")
 numberofsamples = 10
 paramvalues=Mads.parametersample(md, numberofsamples)
 Mads.allwellsoff!(md)
-Mads.wellon!(md, "w20a")
-Mads.spaghettiplots(md, paramvalues, keyword="w20a")
+Mads.wellon!(md, "w1a")
+Mads.spaghettiplots(md, paramvalues, keyword="w1a")
 
 # solve the inverse problem
 result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
-saltelliresultm = Mads.saltelli(md,N=int(500))
-Mads.plotwellSAresults("w1a",md,saltelliresultm)
-saltelliresultb = Mads.saltellibrute(md,N=int(500))
-Mads.plotwellSAresults("w1a",md,saltelliresultb)
+saltelliresultm = Mads.saltelli(md,N=500)
+Mads.plotwellSAresults(md,saltelliresultm,"w1a")
+saltelliresultb = Mads.saltellibrute(md,N=500)
+Mads.plotwellSAresults(md,saltelliresultb,"w1a")
 
 # save saltelli results
 # f = open("$rootname-SA-results.json", "w")
@@ -79,7 +81,7 @@ Mads.plotwellSAresults("w1a",md,saltelliresultb)
 # Mads.saltelliprintresults(md, result)
 
 # plot global SA results for a given observation point
-# Mads.plotwellSAresults("w1a",md,result)
+# Mads.plotwellSAresults(md,result,"w1a")
 
 # parameter space exploration
 # Mads.madsinfo("Parameter space exploration ...")

@@ -4,28 +4,25 @@ using JSON
 using Gadfly
 using DataStructures
 
-# Base.source_path()
-# cd(dirname(Base.source_path()))
-# reload("../../src/MadsYAML.jl")
-# reload("../../src/Mads.jl")
-# pwd()
-# cd("codes/mads.jl")
-
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
-md = Mads.loadyamlmadsfile("examples/ode/ode.mads")
+md = Mads.loadyamlmadsfile("ode.mads")
 rootname = Mads.getmadsrootname(md)
+
 # get parameter keys
 paramkeys = Mads.getparamkeys(md)
+Mads.showparameters(md)
+
 # create parameter dictionary
 paramdict = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+
 # function to create a function for the ODE solver
 function makefunc(parameterdict::OrderedDict)
+  # ODE parameters
+  omega = parameterdict["omega"]
+  k = parameterdict["k"]
   function func(t, y) # function needed by the ODE solver
     # ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
-    # ODE parameters
-    omega = parameterdict["omega"]
-    k = parameterdict["k"]
     f = similar(y)
     f[1] = y[2] # u' = v
     f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
@@ -33,67 +30,42 @@ function makefunc(parameterdict::OrderedDict)
   end
   return func
 end
+
 # create a function for the ODE solver
 funcosc = makefunc(paramdict)
 Mads.madsinfo("Solve ODE ...")
 times = [0:.1:100]
 initialconditions = [1.,0.]
-t,y=ode4s(funcosc, initialconditions, times)
-ys = hcat(y...)' # vecorize the output and transpose with '
+t, y = ode23s(funcosc, initialconditions, times, points=:specified)
+ys = hcat(y...)' # vecorize the output and transpose it with '
 
 #writedlm("$rootname-solution.dat",ys[:,1])
-p=plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))
+p = plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))
 draw(SVG(string("$rootname-solution.svg"),6inch,4inch),p)
 
+# create an observation dictionary in the MADS dictionary
 Mads.madsinfo("Create MADS Observations ...")
-# create an observation dictionary in the MADS disctionary
-observations = OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
-observationsdict = OrderedDict()
-i = 1
-for t in times
-  obskey = string("o", t)
-  data = OrderedDict()
-  data["target"] = ys[i,1]
-  data["weight"] = 1
-  data["time"] = t
-  data["log"] = "false"
-  data["min"] = 0
-  data["max"] = 1
-  observationsdict[obskey] = data
-  i += 1
-end
-md["Observations"] = observationsdict
+Mads.createobservations!(md, t, ys[:,1])
+Mads.showobservations(md)
 
 # global SA
+srand(20151001)
 Mads.madsinfo("Global SA ...")
-saltelliresult = Mads.saltelli(md,N=int(1e3))
+saltelliresult = Mads.saltelli(md, N=10)
 f = open("$rootname-SA-results.json", "w")
 JSON.print(f, saltelliresult)
 close(f)
 # saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
-Mads.plotobsSAresults(md,saltelliresult)
+Mads.plotobsSAresults(md, saltelliresult; xtitle = "Time", ytitle = "State variable")
 
 # local SA
 Mads.madsinfo("Local SA ...")
 localsaresult = Mads.localsa(md)
 
-# Manual SA
-Mads.madsinfo("Manual SA ...")
-numberofsamples = 100
-paramvalues=Mads.parametersample(md,numberofsamples)
-for paramkey in keys(paramvalues)
-  Y = Array(Float64,length(times),0)
-  for i in 1:numberofsamples
-    original = paramdict[paramkey]
-    paramdict[paramkey] = paramvalues[paramkey][i]
-    funcosc = makefunc(paramdict)
-    t,y=ode4s(funcosc, initialconditions, times)
-    ys = hcat(y...)' # vecorize the output and transpose with '
-    Y = hcat(Y, ys[:,1])
-    paramdict[paramkey] = original
-  end
-  p=Gadfly.plot([layer(x=t, y=Y[:,paramkey], Geom.line,
-    Theme(default_color=color(["red" "blue" "green" "cyan" "magenta" "yellow"][paramkey%6+1])))
-    for paramkey in 1:size(Y)[2]]...)
-  draw(SVG(string("$rootname-MSA-$paramkey.svg"),6inch,4inch),p)
-end
+# Spaghetti plots
+srand(20151001)
+Mads.madsinfo("Spaghetti plots over the prior ranges ...")
+numberofsamples = 10
+paramvalues=Mads.parametersample(md, numberofsamples)
+Mads.spaghettiplot(md, paramvalues; obs_plot_dots=false)
+Mads.spaghettiplots(md, paramvalues; obs_plot_dots=false)

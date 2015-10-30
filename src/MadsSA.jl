@@ -36,8 +36,7 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 	if haskey( madsdata["Parameters"], parameterkey )
 		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Void
 			if haskey(madsdata["Parameters"][parameterkey], "log")
-				flag = madsdata["Parameters"][parameterkey]["log"]
-				if flag == "yes" || flag == "true"
+				if madsdata["Parameters"][parameterkey]["log"]
 					dist = paramdist[parameterkey]
 					if typeof(dist) == Uniform
 						a = log10(dist.a)
@@ -117,7 +116,7 @@ function localsa(madsdata; format="", filename="")
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenmatrix"
 	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw( eval(symbol(format))(filename,6inch,6inch), eigenmat)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
 	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 												 Gadfly.Geom.bar,
@@ -125,7 +124,7 @@ function localsa(madsdata; format="", filename="")
 												 Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenvalues"
 	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw( eval(symbol(format))(filename,6inch,4inch), eigenval)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
 	Mads.madsinfo("""Eigen values plot saved in $filename""")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
@@ -135,16 +134,16 @@ function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) d
 	if seed != 0
 		srand(seed)
 	end
-	numsamples = @Compat.compat int(sqrt(N))
-	numoneparamsamples = @Compat.compat int(sqrt(N))
-	nummanyparamsamples = @Compat.compat int(sqrt(N))
+	numsamples = round(Int,sqrt(N))
+	numoneparamsamples = numsamples
+	nummanyparamsamples = numsamples
 	# convert the distribution strings into actual distributions
 	paramkeys = getoptparamkeys(madsdata)
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
 	results = Array(DataStructures.OrderedDict, numsamples)
-	paramdict = Dict( getparamkeys(madsdata), getparamsinit(madsdata) )
+	paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample
@@ -394,7 +393,7 @@ function saltelli(madsdata; N=100, seed=0)
 			Mads.madswarn("""There are $(maxnnans) NaN's""")
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltellimap")
+	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
 @doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
@@ -590,14 +589,31 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
-function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]" )
+@doc "Plot the sensitivity analysis results for all wells (wells class expected)" ->
+function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
-	nsample = result["samplesize"]
+	for wellname in keys(madsdata["Wells"])
+		if madsdata["Wells"][wellname]["on"]
+			plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle)
+		end
+	end
+end
+
+@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
+function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+	if !haskey(madsdata, "Wells")
+		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
+		return
+	end
+	if !haskey(madsdata["Wells"], wellname)
+		Mads.madserror("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
+		return
+	end
 	o = madsdata["Wells"][wellname]["obs"]
+	nsample = result["samplesize"]
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
@@ -659,10 +675,10 @@ function plotwellSAresults(wellname, madsdata, result; xtitle = "Time [years]", 
 		push!(pp, pvar)
 		vsize += 4inch
 	end
-	p = vstack(pp...)
+	p = Gadfly.vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
+	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
 @doc "Plot the sensitivity analysis results for the observations" ->
@@ -793,7 +809,7 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		vsize += 4inch
 	end
 	######################################################
-	rootname = getmadsrootname(madsdata)
+	rootname = Mads.getmadsrootname(madsdata)
 	# p1 = Gadfly.vstack(pp[1:3]...)
 	# p2 = Gadfly.vstack(pp[4:6]...)
 	# p = Gadfly.hstack(p1,p2)
@@ -801,21 +817,19 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	if filename == ""
 		method = result["method"]
 		filename = "$rootname-$method-$nsample"
-		println(filename)
 	end
 	if !separate_files
 		filename, format = Mads.setimagefileformat(filename, format)
-		println(filename)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, vsize ), p)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), ptes)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(eval(symbol(format))(filename, 6inch, 4inch), pmes)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
 	end
 end
 
@@ -867,7 +881,7 @@ end
 
 ## eFAST
 @doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
-function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -930,7 +944,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
 			W_comp = []
 			for i = 1:loops
-				W_comp = [W_comp, [1:step:Wcmax]]
+				W_comp = [W_comp; collect(1:step:Wcmax)]
 			end
 			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
 		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case
@@ -948,8 +962,8 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
 			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-				Wi = @Compat.compat int(Wi)
-				Ns = @Compat.compat int(Ns_total / Nr)
+				Wi = @Compat.compat Int(Wi)
+				Ns = @Compat.compat Int(Ns_total / Nr)
 				if iseven(Ns)
 					Ns += 1
 					Ns_total = Ns * Nr
@@ -965,7 +979,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			for Ns_total = Ns0 + 1:1:Ns0 + 5000
 				Wi = (Ns_total / Nr - 1) / ( gamma * M)
 				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-					Wi = @Compat.compat int(Wi)
+					Wi = round(Int, Wi)
 					Ns = @Compat.compat int(Ns_total / Nr)
 					if iseven(Ns)
 						Ns += 1
@@ -1033,7 +1047,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		srand(seed+kL)
 
 		# Determining which parameter we are on
-		k = @Compat.compat int(ceil(kL/Nr))
+		k = @Compat.compat Int(ceil(kL/Nr))
 
 		# Initializing
 		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
@@ -1624,7 +1638,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	end
 
 	### Calculating decomposed variances in parallel ###
-	allresults = pmap((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
+	allresults = map((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
 
 	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime
@@ -1671,7 +1685,7 @@ function efast(md; quiet=false, N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	# Plot results as .svg file
 	if plotresults
 		madsinfo("""Plotting eFAST results as .svg file ... """)
-		Mads.plotwellSAresults("w10a",md,resultsefast)
+		Mads.plotwellSAresults(md,resultsefast,"w10a")
 	end
 
 end

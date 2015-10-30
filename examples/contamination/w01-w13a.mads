@@ -1,0 +1,88 @@
+Problem: { }
+Solution: internal
+Sources:
+- box: {
+  x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, step: 25, min: 210, max: 1460 },
+  y  : { longname: "Source y coordinate [L]", init: 1450, type: null, log: no, step: 25, min: 1230, max: 1930 },
+  z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
+  dx : { longname: "Source x dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
+  dy : { longname: "Source y dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
+  dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
+  f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1e+25, min: 0.01, max: 100 },
+  t0 : { longname: "Start Time [T]", init: 5, type: opt, log: no, step: 1, min: 0, max: 5 },
+  t1 : { longname: "End Time [T]", init: 15, type: opt, log: no, step: 1, min: 5, max: 40 } }
+Parameters:
+- n       : { longname: "Porosity [L3/L3]", init: 0.1, type: null, log: no, step: 0.1, min: 0, max: 1 }
+- rf      : { longname: "Retardation Factor [-]", init: 1, type: null, log: yes, step: 1, min: 1, max: 10 }
+- lambda  : { longname: "Half-life decay [1/T]", init: 0, type: null, log: yes, step: 1, min: 0, max: 1 }
+- theta   : { longname: "Flow Angle [degrees]", init: 0, type: null, log: no, step: 5, min: -30, max: 30 }
+- vx      : { longname: "Pore x velocity [L/T]", init: 30, type: opt, log: yes, step: 10, min: 0.01, max: 200 }
+- vy      : { longname: "Pore y velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
+- vz      : { longname: "Pore z velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
+- ax      : { longname: "Dispersivity x [L]", init: 70, type: null, log: yes, step: 10, min: 10, max: 140 }
+- ay      : { longname: "Dispersivity y [L]", init: 15, type: null, log: yes, step: 10, min: 1, max: 30 }
+- az      : { longname: "Dispersivity z [L]", init: 0.3, type: null, log: yes, step: 1.25893, min: 0.1, max: 1 }
+- ts_dsp  : { longname: "Time Scale Dispersivity [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- ts_adv  : { longname: "Time Scale Advection [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- ts_rct  : { longname: "Time Scale Reaction [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- alpha   : { longname: "Levy alpha [-]", init: 2, type: null, log: no, step: 0.1, min: 1.1, max: 2 }
+- beta    : { longname: "Levy beta [-]", init: 0, type: null, log: no, step: 0.1, min: -1, max: 1 }
+- nlc0    : { longname: "NLC 0 [T]", init: 0, type: null, log: no, step: 0.1, min: -1, max: 1 }
+- nlc1    : { longname: "NLC 1 [T]", init: 1, type: null, log: no, step: 1, min: 0.1, max: 10 }
+Wells:
+- w13a  : { x: 1608, y: 1491, z0: 3, z1: 3, obs: [
+ 1: { t: 1, c: 0, weight: 1, log: no, min: 0, max: 1e+06 },
+ 2: { t: 2, c: 0, weight: 1, log: no, min: 0, max: 1e+06 },
+ 3: { t: 3, c: 0, weight: 1, log: no, min: 0, max: 1e+06 },
+ 4: { t: 4, c: 0, weight: 1, log: no, min: 0, max: 1e+06 },
+ 5: { t: 5, c: 0, weight: 1, log: no, min: 0, max: 1e+06 },
+ 6: { t: 6, c: 2.75877e-16, weight: 1, log: no, min: 0, max: 1e+06 },
+ 7: { t: 7, c: 2.27102e-06, weight: 1, log: no, min: 0, max: 1e+06 },
+ 8: { t: 8, c: 0.00466548, weight: 1, log: no, min: 0, max: 1e+06 },
+ 9: { t: 9, c: 0.209927, weight: 1, log: no, min: 0, max: 1e+06 },
+ 10: { t: 10, c: 2.03463, weight: 1, log: no, min: 0, max: 1e+06 },
+ 11: { t: 11, c: 9.12646, weight: 1, log: no, min: 0, max: 1e+06 },
+ 12: { t: 12, c: 26.3249, weight: 1, log: no, min: 0, max: 1e+06 },
+ 13: { t: 13, c: 57.5895, weight: 1, log: no, min: 0, max: 1e+06 },
+ 14: { t: 14, c: 104.755, weight: 1, log: no, min: 0, max: 1e+06 },
+ 15: { t: 15, c: 167.453, weight: 1, log: no, min: 0, max: 1e+06 },
+ 16: { t: 16, c: 243.691, weight: 1, log: no, min: 0, max: 1e+06 },
+ 17: { t: 17, c: 330.577, weight: 1, log: no, min: 0, max: 1e+06 },
+ 18: { t: 18, c: 424.915, weight: 1, log: no, min: 0, max: 1e+06 },
+ 19: { t: 19, c: 523.438, weight: 1, log: no, min: 0, max: 1e+06 },
+ 20: { t: 20, c: 622.009, weight: 1, log: no, min: 0, max: 1e+06 },
+ 21: { t: 21, c: 714.721, weight: 1, log: no, min: 0, max: 1e+06 },
+ 22: { t: 22, c: 794.955, weight: 1, log: no, min: 0, max: 1e+06 },
+ 23: { t: 23, c: 857.421, weight: 1, log: no, min: 0, max: 1e+06 },
+ 24: { t: 24, c: 899.345, weight: 1, log: no, min: 0, max: 1e+06 },
+ 25: { t: 25, c: 920.488, weight: 1, log: no, min: 0, max: 1e+06 },
+ 26: { t: 26, c: 922.499, weight: 1, log: no, min: 0, max: 1e+06 },
+ 27: { t: 27, c: 908.138, weight: 1, log: no, min: 0, max: 1e+06 },
+ 28: { t: 28, c: 880.622, weight: 1, log: no, min: 0, max: 1e+06 },
+ 29: { t: 29, c: 843.161, weight: 1, log: no, min: 0, max: 1e+06 },
+ 30: { t: 30, c: 798.699, weight: 1, log: no, min: 0, max: 1e+06 },
+ 31: { t: 31, c: 749.771, weight: 1, log: no, min: 0, max: 1e+06 },
+ 32: { t: 32, c: 698.468, weight: 1, log: no, min: 0, max: 1e+06 },
+ 33: { t: 33, c: 646.451, weight: 1, log: no, min: 0, max: 1e+06 },
+ 34: { t: 34, c: 594.99, weight: 1, log: no, min: 0, max: 1e+06 },
+ 35: { t: 35, c: 545.025, weight: 1, log: no, min: 0, max: 1e+06 },
+ 36: { t: 36, c: 497.216, weight: 1, log: no, min: 0, max: 1e+06 },
+ 37: { t: 37, c: 452.002, weight: 1, log: no, min: 0, max: 1e+06 },
+ 38: { t: 38, c: 409.646, weight: 1, log: no, min: 0, max: 1e+06 },
+ 39: { t: 39, c: 370.275, weight: 1, log: no, min: 0, max: 1e+06 },
+ 40: { t: 40, c: 333.917, weight: 1, log: no, min: 0, max: 1e+06 },
+ 41: { t: 41, c: 300.523, weight: 1, log: no, min: 0, max: 1e+06 },
+ 42: { t: 42, c: 269.992, weight: 1, log: no, min: 0, max: 1e+06 },
+ 43: { t: 43, c: 242.188, weight: 1, log: no, min: 0, max: 1e+06 },
+ 44: { t: 44, c: 216.954, weight: 1, log: no, min: 0, max: 1e+06 },
+ 45: { t: 45, c: 194.117, weight: 1, log: no, min: 0, max: 1e+06 },
+ 46: { t: 46, c: 173.501, weight: 1, log: no, min: 0, max: 1e+06 },
+ 47: { t: 47, c: 154.932, weight: 1, log: no, min: 0, max: 1e+06 },
+ 48: { t: 48, c: 138.237, weight: 1, log: no, min: 0, max: 1e+06 },
+ 49: { t: 49, c: 123.252, weight: 1, log: no, min: 0, max: 1e+06 },
+ 50: { t: 50, c: 109.821, weight: 1, log: no, min: 0, max: 1e+06 } ] }
+Grid: { time: 50,
+xcount: 33, ycount: 19, zcount: 1,
+xmin: 700, ymin: 1000, zmin: 0,
+xmax: 2300, ymax: 1900, zmax: 50 }
+Time: { start: 1, end: 50, step: 1 }

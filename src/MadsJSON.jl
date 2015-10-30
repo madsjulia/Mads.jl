@@ -4,7 +4,7 @@ end
 
 @doc "Load JSON file" ->
 function loadjsonfile(filename::AbstractString) # load JSON text file
-	data = JSON.parsefile(filename; ordered=true, use_mmap=true)
+	data = JSON.parsefile(filename; dicttype=DataStructures.OrderedDict, use_mmap=true)
 	return data
 end
 

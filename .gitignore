@@ -20,6 +20,10 @@ wells
 .project
 .cproject
 *.exe
+*.o
+*.dylib
+*.so
+*.so.1
 *.results
 *.intermediate_residuals
 *.intermediate_results
