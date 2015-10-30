@@ -90,9 +90,9 @@ function setdynamicmodel(madsdata, f::Function)
 end
 
 @doc "Create functions to get values of the MADS parameters" ->
-getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step"]
-getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64]
-getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32))]
+getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
+getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
+getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]
