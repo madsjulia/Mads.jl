@@ -60,7 +60,7 @@ function makecomputeconcentrations(madsdata)
 					screen = false
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
-					t = madsdata["Wells"][wellkey]["obs"][o][o]["t"]
+					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
 					conc = 0
 					for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
 						if haskey( madsdata["Sources"][i], "box" )

@@ -615,8 +615,8 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	tes = Array(Float64, nP, nT)
 	var = Array(Float64, nP, nT)
 	for i in 1:nT
-		t = d[1,i] = o[i][i]["t"]
-		d[2,i] = o[i][i]["c"]
+		t = d[1,i] = o[i]["t"]
+		d[2,i] = o[i]["c"]
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys
@@ -1704,8 +1704,8 @@ function plotSAresults_monty(wellname, madsdata, result)
 	end
 	# Setting tes/concentration matrices
 	for i in 1:nT
-		t = d[1,i] = o[i][i]["t"]
-		d[2,i] = o[i][i]["c"]
+		t = d[1,i] = o[i]["t"]
+		d[2,i] = o[i]["c"]
 		obskey = wellname * "_" * string(t)
 		j = 1
 		for paramkey in paramkeys

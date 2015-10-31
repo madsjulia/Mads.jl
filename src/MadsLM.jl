@@ -306,8 +306,8 @@ function plotmatches(madsdata, result; filename="", format="")
 				t = Array(Float64, nT)
 				d = Array(Float64, nT)
 				for i in 1:nT
-					time = t[i] = o[i][i]["t"]
-					d[i] = o[i][i]["c"]
+					time = t[i] = o[i]["t"]
+					d[i] = o[i]["c"]
 					obskey = wellname * "_" * string(time)
 					c[i] = result[obskey]
 				end

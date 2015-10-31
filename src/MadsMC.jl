@@ -164,8 +164,8 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 					t = Array(Float64, nTw)
 					d = Array(Float64, nTw)
 					for i in 1:nTw
-						t[i] = o[i][i]["t"]
-						d[i] = o[i][i]["c"]
+						t[i] = o[i]["t"]
+						d[i] = o[i]["c"]
 					end
 					endj += nTw
 					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),

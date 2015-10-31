@@ -18,8 +18,8 @@ function getmadsinputfile()
 end
 
 @doc "Get MADS root name" ->
-function getmadsrootname(madsdata::Associative)
-	return getrootname(madsdata["Filename"])
+function getmadsrootname(madsdata::Associative; first=true)
+	return getrootname(madsdata["Filename"]; first=first)
 end
 
 @doc "Get MADS problem dir" ->
@@ -35,13 +35,16 @@ function getmadsdir()
 end
 
 @doc "Get file name root " ->
-function getrootname(filename)
+function getrootname(filename::AbstractString; first=true)
 	d = split(filename, "/")
 	s = split(d[end], ".")
-	if length(d) > 1
-		r = join(d[1:end-1], "/") * "/" * s[1]
+	if !first && length(s) > 1
+		r = join(s[1:end-1], ".")
 	else
-		r = "./" * s[1]
+		r = s[1]
+	end
+	if length(d) > 1
+		r = join(d[1:end-1], "/") * "/" * r
 	end
 	return r
 end
@@ -341,18 +344,18 @@ function wells2observations!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if madsdata["Wells"][wellkey]["on"]
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
-				t = madsdata["Wells"][wellkey]["obs"][i][i]["t"]
+				t = madsdata["Wells"][wellkey]["obs"][i]["t"]
 				obskey = wellkey * "_" * string(t)
 				data = DataStructures.OrderedDict()
 				data["well"] = wellkey
 				data["time"] = t
 				data["index"] = i
-				if haskey(madsdata["Wells"][wellkey]["obs"][i][i], "c") && !haskey(madsdata["Wells"][wellkey]["obs"][i][i], "target")
-					data["target"] = madsdata["Wells"][wellkey]["obs"][i][i]["c"]
+				if haskey(madsdata["Wells"][wellkey]["obs"][i], "c") && !haskey(madsdata["Wells"][wellkey]["obs"][i], "target")
+					data["target"] = madsdata["Wells"][wellkey]["obs"][i]["c"]
 				end
-				for datakey in keys(madsdata["Wells"][wellkey]["obs"][i][i])
+				for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])
 					if datakey != "c" && datakey != "t"
-						data[datakey] = madsdata["Wells"][wellkey]["obs"][i][i][datakey]
+						data[datakey] = madsdata["Wells"][wellkey]["obs"][i][datakey]
 					end
 				end
 				observations[obskey] = data
@@ -542,7 +545,7 @@ function setobservationtargets!(madsdata::Associative, predictions::Associative)
 		if haskey( observationsdict[k], "well" )
 			well = observationsdict[k]["well"]
 			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i][i]["c"] = predictions[k]
+			wellsdict[well]["obs"][i]["c"] = predictions[k]
 		end
 	end
 end
@@ -559,7 +562,7 @@ function createmadsproblem(madsdata::Associative, predictions::Associative, file
 		if haskey( observationsdict[k], "well" )
 			well = observationsdict[k]["well"]
 			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i][i]["c"] = predictions[k]
+			wellsdict[well]["obs"][i]["c"] = predictions[k]
 		end
 	end
 	Mads.dumpyamlmadsfile(newmadsdata, filename)

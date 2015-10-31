@@ -15,6 +15,7 @@ using NLopt
 using HDF5 # HDF5 installation is problematic on some machines
 using Conda
 using PyCall
+using PyPlot
 @pyimport yaml # PyYAML installation is problematic on some machines
 using YAML # use YAML if PyYAML is not available
 
@@ -194,6 +195,122 @@ end
 function forward(madsdata::Associative, paramvalues)
 	f = Mads.makemadscommandfunction(madsdata)
 	return f(paramvalues)
+end
+
+@doc "Do a forward run over a 3D grid using the initial or provided values for the model parameters " ->
+function forwardgrid(madsdata::Associative; paramvalues=Void)
+	if paramvalues == Void
+		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	end
+	forwardgrid(madsdata, paramvalues)
+end
+
+@doc "Do a forward run over a 3D grid using provided values for the model parameters " ->
+function forwardgrid(madsdatain::Associative, paramvalues)
+	madsdata = copy(madsdatain)
+	f = Mads.makemadscommandfunction(madsdata)
+	nx = madsdata["Grid"]["xcount"]
+	ny = madsdata["Grid"]["ycount"]
+	nz = madsdata["Grid"]["zcount"]
+	xmin = madsdata["Grid"]["xmin"]
+	ymin = madsdata["Grid"]["ymin"]
+	zmin = madsdata["Grid"]["zmin"]
+	xmax = madsdata["Grid"]["xmax"]
+	ymax = madsdata["Grid"]["ymax"]
+	zmax = madsdata["Grid"]["zmax"]
+	time = madsdata["Grid"]["time"]
+	if nx == 1
+		dx = 0
+	else
+		dx = ( xmax - xmin ) / ( nx - 1 )
+	end
+	if ny == 1
+		dy = 0
+	else
+		dy = ( ymax - ymin ) / ( ny - 1 )
+	end
+	if nz == 1
+		dz = 0
+	else
+		dz = ( zmax - zmin ) / ( nz - 1 )
+	end
+	x = xmin
+	dictwells = Dict()
+	for i in 1:nx
+		x += dx
+		y = ymin
+		for j in 1:ny
+			y += dy
+			z = zmin
+			for k in 1:nz
+				z += dz
+				wellname = "w_$(i)_$(j)_$(k)"
+				dictwells[wellname] = Dict()
+				dictwells[wellname]["x"] = x
+				dictwells[wellname]["y"] = y
+				dictwells[wellname]["z0"] = z
+				dictwells[wellname]["z1"] = z
+				dictwells[wellname]["on"] = true
+				arrayobs = Array(Dict, 0)
+				dictobs = Dict()
+				dictobs["t"] = time
+				dictobs["c"] = 0
+				dictobs["weight"] = 1
+				push!(arrayobs, dictobs)
+				dictwells[wellname]["obs"] = arrayobs
+			end
+		end
+	end
+	madsdata["Wells"] = dictwells
+	Mads.wells2observations!(madsdata)
+	forward_results = f(paramvalues)
+	s = Array(Float64, nx, ny, nz)
+	for i in 1:nx
+		for j in 1:ny
+			for k in 1:nz
+				obsname = "w_$(i)_$(j)_$(k)_$(time)"
+				s[i, j, k] = forward_results[obsname]
+			end
+		end
+	end
+	return s
+end
+
+@doc "Plot a 3D grid solution " ->
+function plotgrid(madsdata::Associative, s::Array{Float64})
+	@pyimport matplotlib.ticker as mt
+	@pyimport matplotlib.colors as mcc
+	probname = Mads.getmadsrootname(madsdata; first=false)
+	xmin = madsdata["Grid"]["xmin"]
+	ymin = madsdata["Grid"]["ymin"]
+	xmax = madsdata["Grid"]["xmax"]
+	ymax = madsdata["Grid"]["ymax"]
+	t = madsdata["Grid"]["time"]
+	x = Array(Float64, 0)
+	y = Array(Float64, 0)
+	c = Array(Float64, 0)
+	l = Array(AbstractString, 0)
+	for w in keys(madsdata["Wells"])
+		push!(x, madsdata["Wells"][w]["x"])
+		push!(y, madsdata["Wells"][w]["y"])
+		push!(c, madsdata["Wells"][w]["obs"][end]["c"])
+		push!(l, w)
+	end
+	PyPlot.figure(figsize=(8, 6))
+	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
+	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[1e-3,1e-2,1e-1,1,10,100,1000,10000], locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
+	PyPlot.colorbar(shrink=0.5, cmap="jet")
+	PyPlot.title("$probname Time = $t")
+	PyPlot.scatter(x, y, marker="o", c=c, s=70, cmap="jet", norm=mcc.LogNorm())
+	for i = 1:length(l)
+		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
+	end
+end
+
+@doc "Plot a 3D grid solution " ->
+function plotgrid(madsdata::Associative)
+	s = forwardgrid(madsdata)
+	plotgrid(madsdata, s)
 end
 
 # NLopt is too much of a pain to install at this point

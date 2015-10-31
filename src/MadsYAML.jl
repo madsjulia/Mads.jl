@@ -99,6 +99,11 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 			for key in keys(dict)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
+				for i = 1:length(wells[key]["obs"])
+					for keys in keys(wells[key]["obs"][i])
+						wells[key]["obs"][i] = wells[key]["obs"][i][keys]
+					end
+				end
 			end
 		end
 		madsdata["Wells"] = wells
@@ -157,26 +162,36 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input 
 		if haskey(yamldata, "Observations")
 			delete!(yamldata, "Observations")
 		end
+		for well in keys(yamldata["Wells"])
+			delete!(yamldata["Wells"][well], "on" )
+			for i = 1:length(yamldata["Wells"][well]["obs"])
+				dict = @Compat.compat Dict(i=>yamldata["Wells"][well]["obs"][i])
+				yamldata["Wells"][well]["obs"][i] = dict
+			end
+			@show yamldata["Wells"][well]
+		end
 	end
 	for obsorparam in ["Observations", "Parameters", "Wells"]
 		if haskey(yamldata, obsorparam)
-			yamldata[obsorparam] = Array(Any, 0)
-			for key in keys(madsdata[obsorparam])
+			a = Array(Any, 0)
+			for key in keys(yamldata[obsorparam])
 				if !ismatch(r"source[1-9]*_", key)
-					push!( yamldata[obsorparam], @Compat.compat Dict(key=>madsdata[obsorparam][key]))
+					push!( a, @Compat.compat Dict(key=>yamldata[obsorparam][key]))
 				end
 			end
+			yamldata[obsorparam] = a
 		end
 	end
 	for tplorins in ["Templates", "Instructions"]
 		if haskey(yamldata, tplorins)
-			yamldata[tplorins] = Array(Any, length(madsdata[tplorins]))
+			a = Array(Any, length(yamldata[tplorins]))
 			i = 1
-			keys = map(string, 1:length(madsdata[tplorins]))
+			keys = map(string, 1:length(yamldata[tplorins]))
 			for key in keys
-				yamldata[tplorins][i] = @Compat.compat Dict(key=>madsdata[tplorins][i])
+				a[i] = @Compat.compat Dict(key=>yamldata[tplorins][i])
 				i += 1
 			end
+			yamldata[tplorins] = a
 		end
 	end
 	dumpyamlfile(filename, yamldata)
@@ -198,8 +213,8 @@ function dumpwellconcentrations(filename::AbstractString, madsdata)
 		z1 = madsdata["Wells"]["$n"]["z1"]
 		o = madsdata["Wells"]["$n"]["obs"]
 		for i in 1:length(o)
-			c = o[i][i]["c"]
-			t = o[i][i]["t"]
+			c = o[i]["c"]
+			t = o[i]["t"]
 			write(outfile, "$n, $x, $y, $z0, $t, $c\n")
 		end
 	end
