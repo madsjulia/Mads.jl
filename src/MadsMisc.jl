@@ -21,8 +21,7 @@ end
 @doc "Sine transformation of a function" ->
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
-		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
-		return f(params)
+		return f(sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed))
 	end
 	return sinetransformedf
 end
@@ -52,7 +51,7 @@ function makearrayfunction(madsdata, f)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
-		return f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		return f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 	end
 	return arrayfunction
 end
@@ -61,9 +60,9 @@ end
 function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayconditionalloglikelihood(arrayparameters::Vector)
-		predictions = f(merge(initparams, Dict(optparamkeys, arrayparameters)))
+		predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
 	end
@@ -74,7 +73,7 @@ end
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = Dict()
 		try
@@ -93,9 +92,9 @@ function setdynamicmodel(madsdata, f::Function)
 end
 
 @doc "Create functions to get values of the MADS parameters" ->
-getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step"]
-getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64]
-getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32))]
+getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
+getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
+getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]

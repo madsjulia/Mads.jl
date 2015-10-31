@@ -63,13 +63,18 @@ function localsa(madsdata; format="", filename="")
 	end
 	f_lm, g_lm = makelmfunctions(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
+	plotlabels = getparamsplotname(madsdata)
+	if plotlabels[1] == ""
+		plotlabels = paramkeys
+	end
 	nP = length(paramkeys)
 	initparams = getparamsinit(madsdata, paramkeys)
 	J = g_lm(initparams)
 	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->paramkeys[i]), Gadfly.Scale.y_discrete,
+	jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
 											Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
+											Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 	filename = "$(rootname)-jacobian"
 	filename, format = Mads.setimagefileformat(filename, format)
@@ -104,17 +109,19 @@ function localsa(madsdata; format="", filename="")
 	sortedeigenm = real(eigenm[:,index])
 	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	eigenmat = Gadfly.spy(sortedeigenm, Scale.y_discrete(labels = i->paramkeys[i]), Scale.x_discrete,
-												Guide.YLabel("Parameters"),  Guide.XLabel("Eigenvectors"),
-												Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
+	eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
+												Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
+												Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+												Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenmatrix"
 	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
 	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
-	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10,
-												 Geom.bar, Theme(default_point_size=10pt),
-												 Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
+												 Gadfly.Geom.bar,
+												 Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+												 Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenvalues"
 	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
@@ -683,6 +690,10 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
+	plotlabels = getparamsplotname(madsdata)
+	if plotlabels[1] == ""
+		plotlabels = paramkeys
+	end
 	nP = length(paramkeys)
 	nT = length(obsdict)
 	d = Array(Float64, 2, nT)
@@ -725,11 +736,9 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 	vsize = 0inch
 	###################################################### TES
 	df = Array(Any, nP)
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+	for j in 1:length(plotlabels)
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
-		j += 1
 	end
 	vdf = vcat(df...)
 	if debug
@@ -743,20 +752,18 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			maxtorealmaxFloat32!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
-											 Gadfly.Theme(line_width=1.5pt),
+		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
+											 Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-											 Guide.XLabel(xtitle),
-											 Guide.YLabel("Total Effect") ) # only none and default works
+											 Gadfly.Guide.XLabel(xtitle),
+											 Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
 	end
 	###################################################### MES
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+	for j in 1:length(plotlabels)
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
-		j += 1
 	end
 	vdf = vcat(df...)
 	if debug
@@ -770,20 +777,18 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			maxtorealmaxFloat32!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter",
-											 Gadfly.Theme(line_width=1.5pt),
+		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
+											 Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-											 Guide.XLabel(xtitle),
+											 Gadfly.Guide.XLabel(xtitle),
 											 Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
 	end
 	###################################################### VAR
-	j = 1
-	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+	for j in 1:length(plotlabels)
+		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
-		j += 1
 	end
 	vdf = vcat(df...)
 	if debug
@@ -797,7 +802,9 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 			maxtorealmaxFloat32!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
+		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
+											 Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+											 Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4inch
 	end
@@ -937,7 +944,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
 			W_comp = []
 			for i = 1:loops
-				W_comp = [W_comp; [1:step:Wcmax]]
+				W_comp = [W_comp; collect(1:step:Wcmax)]
 			end
 			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
 		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case

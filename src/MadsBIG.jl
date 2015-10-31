@@ -27,8 +27,8 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return [-horizon]
 	end
 	function performancegoalsatisfied(arrayparams::Vector, horizon::Real)
-		paramdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
-		optparams = Dict(getoptparamkeys(madsdata), arrayparams)
+		paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		optparams = Dict(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)
@@ -52,8 +52,8 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return true
 	end
 	function gethorizonoffailure(arrayparams::Vector)
-		paramdict = Dict(getparamkeys(madsdata), getparamsinit(madsdata))
-		optparams = Dict(getoptparamkeys(madsdata), arrayparams)
+		paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		optparams = Dict(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)
