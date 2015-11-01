@@ -34,8 +34,8 @@ function makelmfunctions(madsdata)
 		end
 		residuals = (results .- targets) .* weights
 		if ssdr
-			rmax = ( results .- maxs ) .* weights
-			rmin = ( results .- mins ) .* weights
+			rmax = (results .- maxs) .* weights
+			rmin = (results .- mins) .* weights
 			rmax[rmax .< 0] = 0
 			rmin[rmin .> 0] = 0
 			residuals .+= (rmax .+ rmin)
