@@ -70,7 +70,7 @@ function montecarlo(madsdata; N=round(Int, 1e2))
 		klog = 1
 		knonlog = 1
 		for j = 1:length(params)
-			if paramtypes[j] == "opt"
+			if paramtypes[j] != nohting
 				if paramlogs[j] == true || paramlogs[j] == "yes"
 					params[j] = 10 ^ logoptparams[klog, i]
 					klog += 1

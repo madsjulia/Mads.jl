@@ -152,7 +152,7 @@ end
 @doc "Calibrate " ->
 function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = Mads.getmadsrootname(madsdata)
-	f_lm, g_lm = Mads.makelmfunctions(madsdata)
+	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	initparams = Mads.getparamsinit(madsdata, optparamkeys)
 	lowerbounds = Mads.getparamsmin(madsdata, optparamkeys)
@@ -165,14 +165,14 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	function calibratecallback(x_best)
 		outfile = open("$rootname.iterationresults", "a+")
-		write(outfile, string("OF: ", sse(f_lm_sin(x_best)), "\n"))
+		write(outfile, string("OF: ", o_lm(f_lm_sin(x_best)), "\n"))
 		write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
 		close(outfile)
 	end
 	if usenaive
-		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, o_lm, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, o_lm, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
 	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
@@ -298,7 +298,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 	end
 	PyPlot.figure(figsize=(8, 6))
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
-	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[1e-3,1e-2,1e-1,1,10,100,1000,10000], locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
+	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000], locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
 	PyPlot.title("$probname Time = $t")
 	PyPlot.scatter(x, y, marker="o", c=c, s=70, cmap="jet", norm=mcc.LogNorm())
@@ -310,6 +310,12 @@ end
 @doc "Plot a 3D grid solution " ->
 function plotgrid(madsdata::Associative)
 	s = forwardgrid(madsdata)
+	plotgrid(madsdata, s)
+end
+
+@doc "Plot a 3D grid solution " ->
+function plotgrid(madsdata::Associative, parameters::Associative)
+	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s)
 end
 

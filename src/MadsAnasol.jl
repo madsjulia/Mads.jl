@@ -29,6 +29,16 @@ end
 
 @doc "Compute concentration for all observation points" ->
 function makecomputeconcentrations(madsdata)
+	disp_tied = false
+	background = 0
+	if haskey(madsdata, "Problem")
+		if haskey(madsdata["Problem"], "disp_tied")
+			disp_tied = true
+		end
+		if haskey(madsdata["Problem"], "background")
+			background = madsdata["Problem"]["background"]
+		end
+	end
 	function computeconcentrations(parameters)
 		porosity = parameters["n"]
 		lambda = parameters["lambda"]
@@ -37,8 +47,13 @@ function makecomputeconcentrations(madsdata)
 		vy = parameters["vy"]
 		vz = parameters["vz"]
 		ax = parameters["ax"]
-		ay = parameters["ay"]
-		az = parameters["az"]
+		if disp_tied
+			ay = ax / parameters["ay"]
+			az = ay / parameters["az"]
+		else
+			ay = parameters["ay"]
+			az = parameters["az"]
+		end
 		if haskey(parameters, "ts_dsp") && parameters["ts_dsp"] != 1.
 			H = 0.5 * parameters["ts_dsp"]
 			anasolfunctionroot = "long_fff_"
@@ -61,30 +76,34 @@ function makecomputeconcentrations(madsdata)
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
 					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					conc = 0
-					for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
-						if haskey( madsdata["Sources"][i], "box" )
-							anasolfunction = anasolfunctionroot * "bbb_iir_c"
-						elseif haskey( madsdata["Sources"][i], "gauss" )
-							anasolfunction = anasolfunctionroot * "ddd_iir_c"
+					if madsdata["Wells"][wellkey]["obs"][o]["weight"] > eps(Float64)
+						conc = background
+						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
+							if haskey( madsdata["Sources"][i], "box" )
+								anasolfunction = anasolfunctionroot * "bbb_iir_c"
+							elseif haskey( madsdata["Sources"][i], "gauss" )
+								anasolfunction = anasolfunctionroot * "ddd_iir_c"
+							end
+							x = parameters[string("source", i, "_", "x")]
+							y = parameters[string("source", i, "_", "y")]
+							z = parameters[string("source", i, "_", "z")]
+							dx = parameters[string("source", i, "_", "dx")]
+							dy = parameters[string("source", i, "_", "dy")]
+							dz = parameters[string("source", i, "_", "dz")]
+							f = parameters[string("source", i, "_", "f")]
+							t0 = parameters[string("source", i, "_", "t0")]
+							t1 = parameters[string("source", i, "_", "t1")]
+							if screen
+								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
+																contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
+							else
+								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
+							end
 						end
-						x = parameters[string("source", i, "_", "x")]
-						y = parameters[string("source", i, "_", "y")]
-						z = parameters[string("source", i, "_", "z")]
-						dx = parameters[string("source", i, "_", "dx")]
-						dy = parameters[string("source", i, "_", "dy")]
-						dz = parameters[string("source", i, "_", "dz")]
-						f = parameters[string("source", i, "_", "f")]
-						t0 = parameters[string("source", i, "_", "t0")]
-						t1 = parameters[string("source", i, "_", "t1")]
-						if screen
-							conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
-								contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
-						else
-							conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
-						end
+						c[string(wellkey, "_", t)] = conc
+					else
+						c[string(wellkey, "_", t)] = 0
 					end
-					c[string(wellkey, "_", t)] = conc
 				end
 			end
 		end

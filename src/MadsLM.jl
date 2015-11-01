@@ -1,10 +1,25 @@
-# sse(x) gives the L2 norm of x
-sse(x) = (x'*x)[1]
-
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata, f)
+	o(x) = (x'*x)[1] # L2 norm of x
+	ssdr = false
+	if haskey(madsdata, "Problem")
+		if haskey(madsdata["Problem"], "ssdr")
+			ssdr = true
+		end
+		if haskey(madsdata["Problem"], "sar")
+			function o(x::Vector)
+				o(x) = sum(abs(x))
+			end
+		end
+	end
 	obskeys = getobskeys(madsdata)
+	weights = Mads.getobsweight(madsdata)
+	targets = Mads.getobstarget(madsdata)
+	if ssdr
+		mins = Mads.getobsmin(madsdata)
+		maxs = Mads.getobsmax(madsdata)
+	end
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function f_lm(arrayparameters::Vector)
@@ -13,16 +28,17 @@ function makelmfunctions(madsdata)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		residuals = Array(Float64, length(madsdata["Observations"]))
-		i = 1
+		results = Array(Float64, 0)
 		for obskey in obskeys
-			diff = resultdict[obskey] - madsdata["Observations"][obskey]["target"]
-			weight = 1
-			if haskey(madsdata["Observations"][obskey], "weight")
-				weight = madsdata["Observations"][obskey]["weight"]
-			end
-			residuals[i] = diff * weight
-			i += 1
+			push!(results, resultdict[obskey]) # preserve the expected order
+		end
+		residuals = (results .- targets) .* weights
+		if ssdr
+			rmax = ( results .- maxs ) .* weights
+			rmin = ( results .- mins ) .* weights
+			rmax[rmax .< 0] = 0
+			rmin[rmin .> 0] = 0
+			residuals .+= (rmax .+ rmin)
 		end
 		return residuals
 	end
@@ -40,7 +56,7 @@ function makelmfunctions(madsdata)
 		end
 		return jacobian
 	end
-	return f_lm, g_lm
+	return f_lm, g_lm, o
 end
 
 function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
@@ -49,25 +65,25 @@ function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
 	return deltax
 end
 
-function naive_lm_iteration(f::Function, g::Function, x0::Vector, f0::Vector, lambdas::Vector)
+function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f0::Vector, lambdas::Vector)
 	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
 	deltaxs = pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
 	fs = pmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
-	sses = pmap(sse, fs) # get the sum of squared residuals for each forward run
+	sses = pmap(o, fs) # get the sum of squared residuals for each forward run
 	bestindex = indmin(sses) # find the best forward run
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, o::Function, x0::Vector; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
 	currentsse = Inf
 	nEval = 1
 	for iternum = 1:maxIter
-		currentx, currentsse, currentf = naive_lm_iteration(f, g, currentx, currentf, lambdas)
+		currentx, currentsse, currentf = naive_lm_iteration(f, g, o, currentx, currentf, lambdas)
 		nEval += np_lambda * maxIter
 		if maxEval < nEval
 			break
@@ -78,7 +94,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector; maxIter
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -123,14 +139,14 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
 	f_calls += 1
 	best_f = fcur
-	best_residual = residual = sse(fcur)
+	best_residual = residual = o(fcur)
 	Mads.madsoutput("""Initial OF: $residual\n"""; level = 1);
 
 	# Maintain a trace of the system.
 	tr = Optim.OptimizationTrace()
 	if !Mads.quiet && show_trace
 		d = @Compat.compat Dict("lambda" => lambda)
-		os = Optim.OptimizationState(iterCt, sse(fcur), NaN, d)
+		os = Optim.OptimizationState(iterCt, o(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
 	end
@@ -199,7 +215,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 			# s = map(i->max(eps(Float32), i), s)
 			delta_x = (v * spdiagm(is) * u') * -J' * fcur
 			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
-			predicted_residual = sse(J * delta_x + fcur)
+			predicted_residual = o(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
 			Mads.madsoutput(@sprintf "#%02d OF (est): %f" npl predicted_residual; level = 4);
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
@@ -219,7 +235,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 
 		trial_fs = pmap(f, map(dx->x + dx, delta_xs))
 		f_calls += np_lambda
-		objfuncevals = map(sse, trial_fs)
+		objfuncevals = map(o, trial_fs)
 
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
@@ -229,7 +245,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])
 		trial_residual = objfuncevals[npl_best]
-		predicted_residual = sse(J * delta_x + fcur)
+		predicted_residual = o(J * delta_x + fcur)
 
 		# step quality = residual change / predicted residual change
 		rho = (trial_residual - residual) / (predicted_residual - residual)
@@ -257,7 +273,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
 			d = @Compat.compat Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
-			os = Optim.OptimizationState(iterCt, sse(fcur), gradnorm, d)
+			os = Optim.OptimizationState(iterCt, o(fcur), gradnorm, d)
 			push!(tr, os)
 			println(os)
 		end
@@ -275,7 +291,7 @@ function levenberg_marquardt(f::Function, g::Function, x0; root="", tolX=1e-4, t
 		end
 		converged = g_converged | x_converged | of_converged
 	end
-	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, sse(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
+	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, o(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
 end
 
 function plotmatches(madsdata, result; filename="", format="")

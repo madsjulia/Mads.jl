@@ -119,6 +119,34 @@ for i = 1:length(getparamsnames)
 	eval(q)
 end
 
+@doc "Create functions to get values of the MADS observations" ->
+getobsnames = ["min", "max", "log", "weight", "target"]
+getobstypes = [Float64, Float64, Any, Float64, Float64]
+getobsdefault = [-Inf32, Inf32, nothing, 1, 0]
+for i = 1:length(getobsnames)
+	obsname = getobsnames[i]
+	obstype = getobstypes[i]
+	obsdefault = getobsdefault[i]
+	q = quote
+		function $(symbol(string("getobs", obsname)))(madsdata, obskeys) # create a function to get each parameter name with 2 arguments
+			obsvalue = Array($(obstype), length(obskeys))
+			for i in 1:length(obskeys)
+				if haskey( madsdata["Observations"][obskeys[i]], $obsname)
+					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsname]
+				else
+					obsvalue[i] = $(obsdefault)
+				end
+			end
+			return obsvalue # returns the parameter values
+		end
+		function $(symbol(string("getobs", obsname)))(madsdata) # create a function to get each parameter name with 1 argument
+			obskeys = getobskeys(madsdata) # get observation keys
+			return $(symbol(string("getobs", obsname)))(madsdata, obskeys) # call the function with 2 arguments
+		end
+	end
+	eval(q)
+end
+
 @doc "Set initial parameters in the MADS dictionary" ->
 function setparamsinit!(madsdata::Dict, paramdict::Dict)
 	od = OrderedDict() #TODO better way to do this?!
@@ -178,12 +206,12 @@ end
 @doc "Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)" ->
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
-keywordvals = ["opt", true]
+keywordvalsNOT = [nothing, false]
 for i = 1:length(getfunction)
 	q = quote
 		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
-			return paramkeys[paramtypes .== $(keywordvals[i])]
+			return paramkeys[paramtypes .!= $(keywordvalsNOT[i])]
 		end
 		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata)
 			paramkeys = getparamkeys(madsdata)
@@ -191,7 +219,7 @@ for i = 1:length(getfunction)
 		end
 		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
-			return paramkeys[paramtypes .!= $(keywordvals[i])]
+			return paramkeys[paramtypes .== $(keywordvalsNOT[i])]
 		end
 		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata)
 			paramkeys = getparamkeys(madsdata)
@@ -205,7 +233,7 @@ end
 function getoptparamkeys(madsdata)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	return paramkeys[paramtypes .== "opt"]
+	return paramkeys[paramtypes .!= nothing]
 end
 
 @doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
