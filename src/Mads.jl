@@ -51,8 +51,8 @@ madsinputfile = ""
 create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
-# @document
-# @docstrings
+#@document
+#@docstrings
 
 @doc "Make MADS quiet" ->
 function quieton()
@@ -276,10 +276,10 @@ function forwardgrid(madsdatain::Associative, paramvalues)
 	return s
 end
 
-@doc "Plot a 3D grid solution " ->
+@doc "Plot a 3D grid solution based on s " ->
 function plotgrid(madsdata::Associative, s::Array{Float64})
-	@pyimport matplotlib.ticker as mt
-	@pyimport matplotlib.colors as mcc
+	@PyCall.pyimport matplotlib.ticker as mt
+	@PyCall.pyimport matplotlib.colors as mcc
 	probname = Mads.getmadsrootname(madsdata; first=false)
 	xmin = madsdata["Grid"]["xmin"]
 	ymin = madsdata["Grid"]["ymin"]
