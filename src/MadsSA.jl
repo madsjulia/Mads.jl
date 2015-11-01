@@ -15,12 +15,12 @@ end
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 @doc "Independent sampling of MADS Model parameters" ->
-function parametersample(madsdata, numsamples, parameterkey="")
+function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
 	else
 		sample = DataStructures.OrderedDict()
-		paramdist = getparamdistributions(madsdata)
+		paramdist = getparamdistributions(madsdata; init_dist=init_dist)
 		for k in keys(paramdist)
 			sample[k] = paramrand(madsdata, k; numsamples=numsamples, paramdist=paramdist)
 		end

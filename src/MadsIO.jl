@@ -666,14 +666,23 @@ function readobservations(madsdata::Associative)
 end
 
 @doc "Get parameter distributions" ->
-function getparamdistributions(madsdata::Associative)
+function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedDict()
+	distkey = "dist"
+	minkey = "min"
+	maxkay = "max"
 	for i in 1:length(paramkeys)
-		if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
-			distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+		if init_dist
+			distkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_dist") ? "init_dist" : "dist"
+			distkey = haskey(madsdata["Parameters"][paramkeys[i]], "dist") ? "dist" : ""
+			minkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_min") ? "init_dist" : "min"
+			maxkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_max") ? "init_dist" : "max"
+		end
+		if distkey != ""
+			distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]][distkey]))
 		else
-			distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]]["min"], madsdata["Parameters"][paramkeys[i]]["max"])
+			distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
 		end
 	end
 	return distributions

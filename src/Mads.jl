@@ -117,7 +117,7 @@ function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
-	paramoptvalues = Mads.parametersample(madsdata, numberofsamples)
+	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=true)
 	bestresult = Array(Any,2)
 	bestphi = Inf
 	quietchange = false

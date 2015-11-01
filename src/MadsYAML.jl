@@ -168,7 +168,6 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input 
 				dict = @Compat.compat Dict(i=>yamldata["Wells"][well]["obs"][i])
 				yamldata["Wells"][well]["obs"][i] = dict
 			end
-			@show yamldata["Wells"][well]
 		end
 	end
 	for obsorparam in ["Observations", "Parameters", "Wells"]
