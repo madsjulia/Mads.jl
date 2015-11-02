@@ -115,6 +115,10 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
+	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
+	w, h = PyPlot.plt[:figaspect](0.5)
+	PyPlot.figure(2, figsize=(w, h))
+	PyPlot.subplot(111, aspect=1)
 end
 
 @doc "Plot a 3D grid solution " ->
