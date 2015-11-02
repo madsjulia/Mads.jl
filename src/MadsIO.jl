@@ -60,32 +60,6 @@ function getextension(filename)
 	end
 end
 
-@doc "Set image file format" ->
-function setimagefileformat(filename, format)
-	format = uppercase(format)
-	extension = uppercase(getextension(filename))
-	root = Mads.getrootname(filename)
-	if format == ""
-		format = extension
-	end
-	if ismatch(r"^PNG|PDF|PS|SVG", format)
-		if format != extension
-			filename = root * "." * lowercase(format)
-		end
-	elseif format == "EPS"
-		if !ismatch(r"^EPS|PS", extension)
-			filename = root * ".eps"
-		end
-		format = "PS"
-	else
-		if "SVG" != extension
-			filename = root * ".svg"
-		end
-		format = "SVG"
-	end
-	return filename, format
-end
-
 @doc "Get MADS problem directory" ->
 function getmadsproblemdir(madsdata::Associative)
 	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
@@ -276,68 +250,6 @@ function welloff!(madsdata, wellname::AbstractString)
 	end
 end
 
-@doc "Plot MADS problem" ->
-function plotmadsproblem(madsdata::Associative; format="", filename="")
-	if haskey(madsdata, "Sources")
-		rectangles = Array(Float64, 0, 4)
-		for i = 1:length(madsdata["Sources"])
-			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			if sourcetype == "box"
-				rectangle = Array(Float64, 4)
-				rectangle[1] = madsdata["Sources"][i][sourcetype]["x"]["init"] - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
-				rectangle[2] = madsdata["Sources"][i][sourcetype]["y"]["init"] - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
-				rectangle[3] = madsdata["Sources"][i][sourcetype]["dx"]["init"]
-				rectangle[4] = madsdata["Sources"][i][sourcetype]["dy"]["init"]
-				rectangles = vcat(rectangles, rectangle')
-			end
-		end
-	end
-	dfw = DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
-	for wellkey in collect(keys(madsdata["Wells"]))
-		if madsdata["Wells"][wellkey]["on"]
-			match = false
-			x = madsdata["Wells"][wellkey]["x"]
-			y = madsdata["Wells"][wellkey]["y"]
-			for i = 1:size(dfw)[1]
-				if dfw[1][i] == x && dfw[2][i] == y
-					match = true
-					break
-				end
-			end
-			if !match
-				push!(dfw, (x, y, wellkey, "Wells"))
-			end
-		end
-	end
-	xo = rectangles[:,1] + rectangles[:,3]
-	yo = rectangles[:,2] + rectangles[:,4]
-	xmin = min(dfw[1]..., rectangles[:,1]...)
-	ymin = min(dfw[2]..., rectangles[:,2]...)
-	xmax = max(dfw[1]..., xo...)
-	ymax = max(dfw[2]..., yo...)
-	dx = xmax - xmin
-	dy = ymax - ymin
-	xmin = xmin - dx / 6
-	xmax = xmax + dx / 6
-	ymin = ymin - dy / 6
-	ymax = ymax + dy / 6
-	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
-									Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-									Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-																									 Compose.fill(parse(Colors.Colorant, "orange")),
-																									 Compose.fillopacity(0.2),
-																									 Compose.stroke(parse(Colors.Colorant, "orange")))),
-									Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-									Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
-	if filename == ""
-		rootname = getmadsrootname(madsdata)
-		filename = "$rootname-problemsetup"
-	end
-	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
-	p
-end
-
 @doc "Convert Wells to Observations class" ->
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
@@ -403,7 +315,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 			xph[optparamkey][optparamkey] += dx[i]
 			i += 1
 		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph) # TODO we shoud not computer xph["noparametersvaried"] if already available
+		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph) # TODO we shoud not compute xph["noparametersvaried"] if already available
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]

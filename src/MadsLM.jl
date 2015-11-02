@@ -1,6 +1,5 @@
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
-	g = makemadscommandgradient(madsdata, f)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	if Mads.haskeyword(madsdata, "sar")
 		function o(x::Vector)
@@ -38,6 +37,7 @@ function makelmfunctions(madsdata)
 		end
 		return residuals
 	end
+	g = makemadscommandgradient(madsdata, f)
 	function g_lm(arrayparameters::Vector; dx=Array(Float64,0))
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -100,6 +100,7 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 	# available options:
 	#   tolX - search tolerance in x
 	#   tolG - search tolerance in gradient
+	#   tolOF - search tolerance in objective function
 	#   maxIter - maximum number of iterations
 	#   lambda - (inverse of) initial trust region radius
 	#   lambda_mu - lambda decrease factor
@@ -166,7 +167,7 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 			compute_jacobian = false
 		end
 		Mads.madsoutput("""Current Best OF: $best_residual\n"""; level = 1);
-		# we want to solve:
+		# Solve for:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
 		#    (J'*J + lambda*DtD) * delta_x == -J^T * f(x), where DtD = diagm(sum(J.^2,1))
@@ -289,60 +290,4 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 		converged = g_converged | x_converged | of_converged
 	end
 	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, o(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
-end
-
-function plotmatches(madsdata, result; filename="", format="")
-	rootname = Mads.getmadsrootname(madsdata)
-	vsize = 0inch
-	pl = Gadfly.Plot{}
-	if haskey(madsdata, "Wells")
-		pp = Array(Gadfly.Plot{}, 0)
-		p = Gadfly.Plot{}
-		for wellname in keys(madsdata["Wells"])
-			if madsdata["Wells"][wellname]["on"]
-				o = madsdata["Wells"][wellname]["obs"]
-				nT = length(o)
-				c = Array(Float64, nT)
-				t = Array(Float64, nT)
-				d = Array(Float64, nT)
-				for i in 1:nT
-					time = t[i] = o[i]["t"]
-					d[i] = o[i]["c"]
-					obskey = wellname * "_" * string(time)
-					c[i] = result[obskey]
-				end
-				p = Gadfly.plot(Guide.title(wellname),layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-				push!(pp, p)
-				vsize += 4inch
-			end
-		end
-		if length(pp) > 1
-			pl = Gadfly.vstack(pp...)
-		else
-			pl = p
-		end
-	elseif haskey(madsdata, "Observations")
-		obskeys = Mads.getobskeys(madsdata)
-		nT = length(obskeys)
-		c = Array(Float64, nT)
-		t = Array(Float64, nT)
-		d = Array(Float64, nT)
-		for i in 1:nT
-			t[i] = madsdata["Observations"][obskeys[i]]["time"]
-			d[i] = madsdata["Observations"][obskeys[i]]["target"]
-			c[i] = result[obskeys[i]]
-		end
-		pl = Gadfly.plot(layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-		vsize = 4inch
-	end
-	if filename == ""
-		filename = "$rootname-match"
-	end
-	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
-	if typeof(pl) == Gadfly.Plot{}
-		pl
-	end
 end
