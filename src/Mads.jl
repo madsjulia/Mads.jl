@@ -87,6 +87,16 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
+@doc "Check for a Mads keyword" ->
+function haskeyword(madsdata::Associative, keyword::AbstractString)
+	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
+end
+
+@doc "Check for a Mads keyword in a Mads class" ->
+function haskeyword(madsdata::Associative, class::AbstractString, keyword::AbstractString)
+	return haskey(madsdata[class], keyword) ? true : false
+end
+
 @doc "Set number of processors / threads" ->
 function setnprocs(np, nt)
 	n = np - nprocs()
@@ -117,7 +127,7 @@ function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
-	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=true)
+	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	bestresult = Array(Any,2)
 	bestphi = Inf
 	quietchange = false

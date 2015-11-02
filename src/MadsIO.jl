@@ -322,13 +322,13 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
-					 Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-					 Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-																						Compose.fill(parse(Colors.Colorant, "orange")),
-																						Compose.fillopacity(0.2),
-																						Compose.stroke(parse(Colors.Colorant, "orange")))),
-					 Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-					 Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+									Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
+									Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
+																									 Compose.fill(parse(Colors.Colorant, "orange")),
+																									 Compose.fillopacity(0.2),
+																									 Compose.stroke(parse(Colors.Colorant, "orange")))),
+									Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
+									Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
@@ -669,21 +669,25 @@ end
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedDict()
-	distkey = "dist"
-	minkey = "min"
-	maxkay = "max"
 	for i in 1:length(paramkeys)
 		if init_dist
-			distkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_dist") ? "init_dist" : "dist"
-			distkey = haskey(madsdata["Parameters"][paramkeys[i]], "dist") ? "dist" : ""
-			minkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_min") ? "init_dist" : "min"
-			maxkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_max") ? "init_dist" : "max"
-		end
-		if distkey != ""
-			distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]][distkey]))
+			if haskey(madsdata["Parameters"][paramkeys[i]], "init_dist")
+				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+				continue
+			else
+				minkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_min") ? "init_dist" : "min"
+				maxkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_max") ? "init_dist" : "max"
+			end
 		else
-			distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
+			if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
+				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				continue
+			else
+				minkey = "min"
+				maxkey = "max"
+			end
 		end
+		distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
 	end
 	return distributions
 end

@@ -29,15 +29,10 @@ end
 
 @doc "Compute concentration for all observation points" ->
 function makecomputeconcentrations(madsdata)
-	disp_tied = false
+	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
-	if haskey(madsdata, "Problem")
-		if haskey(madsdata["Problem"], "disp_tied")
-			disp_tied = true
-		end
-		if haskey(madsdata["Problem"], "background")
+	if haskeyword(madsdata, "background")
 			background = madsdata["Problem"]["background"]
-		end
 	end
 	function computeconcentrations(parameters)
 		porosity = parameters["n"]

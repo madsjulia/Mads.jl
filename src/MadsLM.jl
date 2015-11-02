@@ -1,17 +1,13 @@
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	g = makemadscommandgradient(madsdata, f)
-	o(x) = (x'*x)[1] # L2 norm of x
-	ssdr = false
-	if haskey(madsdata, "Problem")
-		if haskey(madsdata["Problem"], "ssdr")
-			ssdr = true
+	ssdr = Mads.haskeyword(madsdata, "ssdr")
+	if Mads.haskeyword(madsdata, "sar")
+		function o(x::Vector)
+			o(x) = sum(abs(x))
 		end
-		if haskey(madsdata["Problem"], "sar")
-			function o(x::Vector)
-				o(x) = sum(abs(x))
-			end
-		end
+	else # L2 norm of x
+		o(x) = (x'*x)[1]
 	end
 	obskeys = getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
