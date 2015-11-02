@@ -117,7 +117,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 	end
 	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
 	w, h = PyPlot.plt[:figaspect](0.5)
-	PyPlot.figure(2, figsize=(w, h))
+	PyPlot.figure(figsize=(w, h))
 	PyPlot.subplot(111, aspect=1)
 end
 
