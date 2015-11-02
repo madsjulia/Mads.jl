@@ -113,7 +113,7 @@ function savecalibrationresults(madsdata::Associative, results)
 end
 
 @doc "Calibrate with random initial guesses" ->
-function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
@@ -130,7 +130,7 @@ function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, maxJacobians=100, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
 		phi = result[2].f_minimum
 		Mads.quietoff()
 		Mads.madsinfo("""Random initial guess #$i: OF = $phi""")
