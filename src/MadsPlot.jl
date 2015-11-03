@@ -106,9 +106,11 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 		push!(c, madsdata["Wells"][w]["obs"][end]["c"])
 		push!(l, w)
 	end
-	PyPlot.figure(figsize=(8, 6))
+	w, h = PyPlot.plt[:figaspect](0.5)
+	PyPlot.figure(figsize=(w, h))
+	PyPlot.subplot(111, aspect=1)
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
-	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000,30000,100000], locator=mt.LogLocator(), axis="scaling", origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
+	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000,30000,100000], set_aspect="equal", set_aspect="auto", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
 	PyPlot.title("$probname Time = $t")
 	PyPlot.scatter(x, y, marker="o", c=c, s=70, cmap="jet", norm=mcc.LogNorm())
@@ -116,9 +118,6 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
 	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
-	w, h = PyPlot.plt[:figaspect](0.5)
-	PyPlot.figure(figsize=(w, h))
-	PyPlot.subplot(111, aspect=1)
 end
 
 @doc "Plot a 3D grid solution " ->

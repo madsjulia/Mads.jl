@@ -12,6 +12,7 @@ import Distributions
 import Logging
 import JSON
 import NLopt
+import MPTools
 import HDF5 # HDF5 installation is problematic on some machines
 import Conda
 import PyCall
@@ -41,6 +42,8 @@ include("MadsCalibrate.jl")
 include("MadsLM.jl")
 include("MadsSA.jl")
 include("MadsMC.jl")
+include("MadsParameters.jl")
+include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")

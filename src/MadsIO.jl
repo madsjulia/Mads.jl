@@ -202,81 +202,6 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	end
 end
 
-@doc "Turn on all Wells" ->
-function allwellson!(madsdata::Associative)
-	for wellkey in collect(keys(madsdata["Wells"]))
-		madsdata["Wells"][wellkey]["on"] = true
-	end
-	wells2observations!(madsdata)
-end
-
-@doc "Turn on a specific well" ->
-function wellon!(madsdata::Associative, wellname::AbstractString)
-	error = true
-	for wellkey in collect(keys(madsdata["Wells"]))
-		if wellname == wellkey
-			madsdata["Wells"][wellkey]["on"] = true
-			error = false
-		end
-	end
-	if error
-		Mads.err("""Well name $wellname does not match existing well names!""")
-	else
-		wells2observations!(madsdata)
-	end
-end
-
-@doc "Turn off all Wells" ->
-function allwellsoff!(madsdata::Associative)
-	for wellkey in collect(keys(madsdata["Wells"]))
-		madsdata["Wells"][wellkey]["on"] = false
-	end
-	wells2observations!(madsdata)
-end
-
-@doc "Turn off a specific well" ->
-function welloff!(madsdata, wellname::AbstractString)
-	error = true
-	for wellkey in collect(keys(madsdata["Wells"]))
-		if wellname == wellkey
-			madsdata["Wells"][wellkey]["on"] = false
-			error = false
-		end
-	end
-	if error
-		Mads.err("""Well name $wellname does not match existing well names!""")
-	else
-		wells2observations!(madsdata)
-	end
-end
-
-@doc "Convert Wells to Observations class" ->
-function wells2observations!(madsdata::Associative)
-	observations = DataStructures.OrderedDict()
-	for wellkey in collect(keys(madsdata["Wells"]))
-		if madsdata["Wells"][wellkey]["on"]
-			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
-				t = madsdata["Wells"][wellkey]["obs"][i]["t"]
-				obskey = wellkey * "_" * string(t)
-				data = DataStructures.OrderedDict()
-				data["well"] = wellkey
-				data["time"] = t
-				data["index"] = i
-				if haskey(madsdata["Wells"][wellkey]["obs"][i], "c") && !haskey(madsdata["Wells"][wellkey]["obs"][i], "target")
-					data["target"] = madsdata["Wells"][wellkey]["obs"][i]["c"]
-				end
-				for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])
-					if datakey != "c" && datakey != "t"
-						data[datakey] = madsdata["Wells"][wellkey]["obs"][i][datakey]
-					end
-				end
-				observations[obskey] = data
-			end
-		end
-	end
-	madsdata["Observations"] = observations
-end
-
 @doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
@@ -384,84 +309,6 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	return madsloglikelihood
 end
 
-@doc "Get keys for parameters" ->
-function getparamkeys(madsdata::Associative)
-	return collect(keys(madsdata["Parameters"]))
-	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
-end
-
-@doc "Get keys for source parameters" ->
-function getsourcekeys(madsdata::Associative)
-	return collect(keys(madsdata["Sources"][1]["box"]))
-	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
-end
-
-@doc "Show parameters" ->
-function showallparameters(madsdata::Associative)
-	pardict = madsdata["Parameters"]
-	parkeys = Mads.getparamkeys(madsdata)
-	p = Array(ASCIIString, 0)
-	for parkey in parkeys
-		s = @sprintf "%-10s = %15g" parkey pardict[parkey]["init"]
-		if pardict[parkey]["type"] != nothing
-			s *= " <- optimizable "
-			s *= @sprintf "log = %5s  Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
-		end
-		push!(p, s)
-	end
-	display(p)
-end
-
-@doc "Show optimizable parameters" ->
-function showparameters(madsdata::Associative)
-	pardict = madsdata["Parameters"]
-	parkeys = Mads.getoptparamkeys(madsdata)
-	p = Array(ASCIIString, 0)
-	for parkey in parkeys
-		s = @sprintf "%-10s init = %15g log = %5s  Distribution = %s" parkey pardict[parkey]["init"] pardict[parkey]["log"] pardict[parkey]["dist"]
-		push!(p, s)
-	end
-	display(p)
-end
-
-@doc "Create observations" ->
-function createobservations!(madsdata::Associative, t, c; logtransform=false, weight_type="constant", weight=1 )
-	@assert length(t) == length(c)
-	observationsdict = OrderedDict()
-	for i in 1:length(t)
-		obskey = string("o", t[i])
-		data = OrderedDict()
-		data["target"] = c[i]
-		if weight_type == "constant"
-			data["weight"] = weight
-		else
-			data["weight"] = 1 / c[i]
-		end
-		data["time"] = t[i]
-		data["log"] = logtransform
-		data["min"] = 0
-		data["max"] = 1
-		observationsdict[obskey] = data
-	end
-	madsdata["Observations"] = observationsdict
-end
-
-@doc "Set observations (calibration targets)" ->
-function setobservationtargets!(madsdata::Associative, predictions::Associative)
-	observationsdict = madsdata["Observations"]
-	if haskey(madsdata, "Wells")
-		wellsdict = madsdata["Wells"]
-	end
-	for k in keys(predictions)
-		observationsdict[k]["target"] = predictions[k]
-		if haskey( observationsdict[k], "well" )
-			well = observationsdict[k]["well"]
-			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i]["c"] = predictions[k]
-		end
-	end
-end
-
 @doc "Create and save a new mads problem based on provided observations (calibration targets)" ->
 function createmadsproblem(madsdata::Associative, predictions::Associative, filename::AbstractString)
 	newmadsdata = deepcopy(madsdata)
@@ -478,32 +325,6 @@ function createmadsproblem(madsdata::Associative, predictions::Associative, file
 		end
 	end
 	Mads.dumpyamlmadsfile(newmadsdata, filename)
-end
-
-@doc "Show observations" ->
-function showobservations(madsdata::Associative)
-	obsdict = madsdata["Observations"]
-	obskeys = Mads.getobskeys(madsdata)
-	p = Array(ASCIIString, 0)
-	for obskey in obskeys
-		if obsdict[obskey]["weight"] > eps(Float16)
-			s = @sprintf "%-10s target = %15g weight = %15g" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
-			push!(p, s)
-		end
-	end
-	display(p)
-end
-
-@doc "Get keys for observations" ->
-function getobskeys(madsdata::Associative)
-	return collect(keys(madsdata["Observations"]))
-	#return [convert(AbstractString,k) for k in keys(madsdata["Observations"])]
-end
-
-@doc "Get keys for wells" ->
-function getwellkeys(madsdata::Associative)
-	return collect(keys(madsdata["Wells"]))
-	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
 end
 
 @doc "Write parameters via MADS template" ->
@@ -575,31 +396,4 @@ function readobservations(madsdata::Associative)
 		end
 	end
 	return observations
-end
-
-@doc "Get parameter distributions" ->
-function getparamdistributions(madsdata::Associative; init_dist=false)
-	paramkeys = getoptparamkeys(madsdata)
-	distributions = OrderedDict()
-	for i in 1:length(paramkeys)
-		if init_dist
-			if haskey(madsdata["Parameters"][paramkeys[i]], "init_dist")
-				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
-				continue
-			else
-				minkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_min") ? "init_dist" : "min"
-				maxkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_max") ? "init_dist" : "max"
-			end
-		else
-			if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
-				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
-				continue
-			else
-				minkey = "min"
-				maxkey = "max"
-			end
-		end
-		distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
-	end
-	return distributions
 end
