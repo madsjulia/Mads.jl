@@ -6,27 +6,6 @@ end
 # @document
 #@docstrings
 
-function scatterplotsamples(samples::Matrix, paramnames::Vector, filename::AbstractString; format="")
-	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
-	for i in 1:size(samples, 2)
-		for j in 1:size(samples, 2)
-			if i == j
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, Gadfly.Guide.xlabel(paramnames[i])))
-			else
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], Gadfly.Guide.xlabel(paramnames[i]), Gadfly.Guide.ylabel(paramnames[j])))
-			end
-		end
-	end
-	hsize = (3 * size(samples, 2))inch
-	vsize = (3 * size(samples, 2))inch
-	filename, format = Mads.setimagefileformat(filename, format)
-	try
-		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
-	catch "At least one finite value must be provided to formatter."
-		Mads.madswarn("Gadfly fails!")
-	end
-end
-
 @doc "Bayes Sampling " ->
 function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3), thinning=1)
 	#TODO make it sample only over the opt params
