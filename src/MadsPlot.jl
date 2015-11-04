@@ -87,7 +87,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 end
 
 @doc "Plot a 3D grid solution based on s " ->
-function plotgrid(madsdata::Associative, s::Array{Float64})
+function plotgrid(madsdata::Associative, s::Array{Float64}; hastitle=true, title="", filename="", format="")
 	@PyCall.pyimport matplotlib.ticker as mt
 	@PyCall.pyimport matplotlib.colors as mcc
 	probname = Mads.getmadsrootname(madsdata; first=false)
@@ -112,7 +112,13 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
 	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000,30000,100000], set_aspect="equal", set_aspect="auto", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
-	PyPlot.title("$probname Time = $t")
+	if hastitle
+		if title == ""
+			PyPlot.title("$probname Time = $t")
+		else
+			PyPlot.title(title)
+		end
+	end
 	PyPlot.scatter(x, y, marker="o", c=c, s=70, cmap="jet", norm=mcc.LogNorm())
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
@@ -121,18 +127,18 @@ function plotgrid(madsdata::Associative, s::Array{Float64})
 end
 
 @doc "Plot a 3D grid solution " ->
-function plotgrid(madsdata::Associative)
+function plotgrid(madsdata::Associative; hastitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata)
-	plotgrid(madsdata, s)
+	plotgrid(madsdata, s; hastitle=hastitle, title=title, filename=filename, format=format)
 end
 
 @doc "Plot a 3D grid solution " ->
-function plotgrid(madsdata::Associative, parameters::Associative)
+function plotgrid(madsdata::Associative, parameters::Associative; hastitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata, parameters)
-	plotgrid(madsdata, s)
+	plotgrid(madsdata, s; hastitle=hastitle, title=title, filename=filename, format=format)
 end
 
-function plotmatches(madsdata, result; filename="", format="")
+function plotmatches(madsdata::Associative, result::Associative; filename="", format="")
 	rootname = Mads.getmadsrootname(madsdata)
 	vsize = 0inch
 	pl = Gadfly.Plot{}
@@ -143,17 +149,33 @@ function plotmatches(madsdata, result; filename="", format="")
 			if madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nT = length(o)
-				c = Array(Float64, nT)
-				t = Array(Float64, nT)
-				d = Array(Float64, nT)
+				c = Array(Float64, 0)
+				d = Array(Float64, 0)
+				tc = Array(Float64, 0)
+				td = Array(Float64, 0)
 				for i in 1:nT
-					time = t[i] = o[i]["t"]
-					d[i] = o[i]["c"]
-					obskey = wellname * "_" * string(time)
-					c[i] = result[obskey]
+					time = o[i]["t"]
+					push!(td, time)
+					push!(d, o[i]["c"])
+					if o[i]["weight"] > eps(Float64)
+						obskey = wellname * "_" * string(time)
+						push!(tc, time)
+						push!(c, result[obskey])
+					end
 				end
-				p = Gadfly.plot(Guide.title(wellname),layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+				if length(c) > 1
+					p = Gadfly.plot(Guide.title(wellname),
+							layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+				else
+					continue
+					p = Gadfly.plot(Guide.title(wellname),
+							layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
+					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+				end
+				@show wellname
+				@show tc
+				@show c
 				push!(pp, p)
 				vsize += 4inch
 			end
@@ -166,16 +188,25 @@ function plotmatches(madsdata, result; filename="", format="")
 	elseif haskey(madsdata, "Observations")
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
-		c = Array(Float64, nT)
-		t = Array(Float64, nT)
-		d = Array(Float64, nT)
+		c = Array(Float64, 0)
+		t = Array(Float64, 0)
+		d = Array(Float64, 0)
 		for i in 1:nT
-			t[i] = madsdata["Observations"][obskeys[i]]["time"]
-			d[i] = madsdata["Observations"][obskeys[i]]["target"]
-			c[i] = result[obskeys[i]]
+			if madsdata["Observations"][obskeys[i]]["weight"] > eps(Float64)
+				push!(t, madsdata["Observations"][obskeys[i]]["time"])
+				push!(d, madsdata["Observations"][obskeys[i]]["target"])
+				push!(c, result[obskeys[i]])
+			end
 		end
-		pl = Gadfly.plot(layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		if length(c) > 1
+			pl = Gadfly.plot(Guide.title(wellname),
+						layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		else
+			pl = Gadfly.plot(Guide.title(wellname),
+						layer(x=t, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
+						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		end
 		vsize = 4inch
 	end
 	if filename == ""
