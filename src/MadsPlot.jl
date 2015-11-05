@@ -110,7 +110,8 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	PyPlot.figure(figsize=(w, h))
 	PyPlot.subplot(111, aspect=1)
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
-	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000,30000,100000], set_aspect="equal", set_aspect="auto", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
+	levels = [10,30,100,300,1000,3000,10000,30000,100000]
+	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=levels, set_aspect="equal", set_aspect="auto", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
 	if addtitle
 		if title == ""
@@ -119,7 +120,12 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 			PyPlot.title(title)
 		end
 	end
-	PyPlot.scatter(x, y, marker="o", c=c, s=70, cmap="jet", norm=mcc.LogNorm())
+	plotx = [x[1]; x[1]; x]
+	ploty = [y[1]; y[1]; y]
+	plotc = [minimum(levels); maximum(levels); map(x->min(maximum(levels), max(minimum(levels), x)), c)]
+	alpha = ones(length(plotx))
+	alpha[1] = alpha[2] = 0#make the two points corresponding to the minimum and maximum of the levels transparent
+	PyPlot.scatter(plotx, ploty, marker="o", c=log10(plotc), s=70, cmap="jet")
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
