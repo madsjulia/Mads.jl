@@ -66,7 +66,7 @@ function makecomputeconcentrations(madsdata)
 				if abs( wellz1 - wellz0 ) > 0.1
 					screen = true
 				else
-					wellz = (wellz0 + wellz0) / 2
+					wellz = (wellz1 + wellz0) / 2
 					screen = false
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
