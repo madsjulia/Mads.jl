@@ -87,7 +87,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 end
 
 @doc "Plot a 3D grid solution based on s " ->
-function plotgrid(madsdata::Associative, s::Array{Float64}; hastitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
 	@PyCall.pyimport matplotlib.ticker as mt
 	@PyCall.pyimport matplotlib.colors as mcc
 	probname = Mads.getmadsrootname(madsdata; first=false)
@@ -112,7 +112,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; hastitle=true, title
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
 	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=[10,30,100,300,1000,3000,10000,30000,100000], set_aspect="equal", set_aspect="auto", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], cmap="jet", set_under="w" )
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
-	if hastitle
+	if addtitle
 		if title == ""
 			PyPlot.title("$probname Time = $t")
 		else
@@ -127,15 +127,15 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; hastitle=true, title
 end
 
 @doc "Plot a 3D grid solution " ->
-function plotgrid(madsdata::Associative; hastitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata)
-	plotgrid(madsdata, s; hastitle=hastitle, title=title, filename=filename, format=format)
+	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
 @doc "Plot a 3D grid solution " ->
-function plotgrid(madsdata::Associative, parameters::Associative; hastitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata, parameters)
-	plotgrid(madsdata, s; hastitle=hastitle, title=title, filename=filename, format=format)
+	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
 function plotmatches(madsdata::Associative, result::Associative; filename="", format="")
