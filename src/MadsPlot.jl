@@ -144,6 +144,17 @@ function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true,
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
+function plotmatches(madsdata_in::Associative)
+	madsdata = deepcopy(madsdata_in)
+	if haskey(madsdata, "Wells")
+		setwellweights!(madsdata, 1)
+	elseif haskey(madsdata, "Observations")
+		setobsweights!(madsdata, 1)
+	end
+	r = forward(madsdata)
+	plotmatches(madsdata_in, r)
+end
+
 function plotmatches(madsdata::Associative, result::Associative; filename="", format="")
 	rootname = Mads.getmadsrootname(madsdata)
 	vsize = 0inch
@@ -161,29 +172,30 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				td = Array(Float64, 0)
 				for i in 1:nT
 					time = o[i]["t"]
-					push!(td, time)
-					push!(d, o[i]["c"])
+					obskey = wellname * "_" * string(time)
 					if o[i]["weight"] > eps(Float64)
-						obskey = wellname * "_" * string(time)
+						push!(td, time)
+						push!(d, o[i]["c"])
+					end
+					if result[obskey] > eps(Float64)
 						push!(tc, time)
 						push!(c, result[obskey])
 					end
 				end
-				if length(c) > 1
+				npp = length(c)
+				if npp > 1
 					p = Gadfly.plot(Guide.title(wellname),
 							layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-				else
-					continue
-					p = Gadfly.plot(Guide.title(wellname),
+					vsize += 4inch
+					push!(pp, p)
+				else npp = 1
+						p = Gadfly.plot(Guide.title(wellname),
 							layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+					vsize += 4inch
+					push!(pp, p)
 				end
-				@show wellname
-				@show tc
-				@show c
-				push!(pp, p)
-				vsize += 4inch
 			end
 		end
 		if length(pp) > 1
@@ -195,25 +207,32 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
 		c = Array(Float64, 0)
-		t = Array(Float64, 0)
+		tc = Array(Float64, 0)
 		d = Array(Float64, 0)
+		td = Array(Float64, 0)
 		for i in 1:nT
+			time = madsdata["Observations"][obskeys[i]]["time"]
 			if madsdata["Observations"][obskeys[i]]["weight"] > eps(Float64)
-				push!(t, madsdata["Observations"][obskeys[i]]["time"])
+				push!(tc, time)
 				push!(d, madsdata["Observations"][obskeys[i]]["target"])
+			end
+			if result[obskey[i]] > eps(Float64)
+				push!(tc, time)
 				push!(c, result[obskeys[i]])
 			end
 		end
-		if length(c) > 1
+		npp = length(c)
+		if npp > 1
 			pl = Gadfly.plot(Guide.title(wellname),
-						layer(x=t, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-		else
+						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+			vsize = 4inch
+		elseif npp == 1
 			pl = Gadfly.plot(Guide.title(wellname),
-						layer(x=t, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
-						layer(x=t, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
+						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+			vsize = 4inch
 		end
-		vsize = 4inch
 	end
 	if filename == ""
 		filename = "$rootname-match"

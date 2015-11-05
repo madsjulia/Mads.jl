@@ -38,11 +38,21 @@ for i = 1:length(getobsnames)
 	eval(q)
 end
 
-function setobsweights!(madsdata, value::Float64)
+function setobsweights!(madsdata, value::Number)
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		madsdata["Observations"][obskeys[i]]["weight"] = value
 	end
+end
+
+function setwellweights!(madsdata, value::Number)
+	wellkeys = getwellkeys(madsdata)
+	for i in 1:length(wellkeys)
+		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+			madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] = value
+		end
+	end
+	setobsweights!(madsdata, value)
 end
 
 @doc "Show observations" ->
