@@ -167,8 +167,8 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				o = madsdata["Wells"][wellname]["obs"]
 				nT = length(o)
 				c = Array(Float64, 0)
-				d = Array(Float64, 0)
 				tc = Array(Float64, 0)
+				d = Array(Float64, 0)
 				td = Array(Float64, 0)
 				for i in 1:nT
 					time = o[i]["t"]

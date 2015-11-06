@@ -1,16 +1,8 @@
-using Mads
 using DataStructures
 using DataFrames
 using Gadfly
 using Distributions
 using ProgressMeter
-
-if VERSION < v"0.4.0-rc"
-	using Docile # default for v > 0.4
-	typealias AbstractString String
-end
-# @document
-#@docstrings
 
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy

@@ -1,5 +1,3 @@
-using Gadfly
-
 if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
