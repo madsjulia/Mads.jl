@@ -47,8 +47,12 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	indexlogtransformed = find(logtransformed)
 	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+	sindx = 0.1
+	if Mads.haskeyword(madsdata, "sindx")
+		sindx = madsdata["Problem"]["sindx"]
+	end
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
-	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed)
+	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	function calibratecallback(x_best)
 		outfile = open("$rootname.iterationresults", "a+")
 		write(outfile, string("OF: ", o_lm(f_lm_sin(x_best)), "\n"))
