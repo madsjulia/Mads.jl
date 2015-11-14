@@ -148,7 +148,7 @@ end
 @doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
-	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict())
+	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		forwardrun, gradient = fg(parameters; dx=dx, center=center)
 		return gradient
 	end
@@ -172,7 +172,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)
 	end
-	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) # MADS command gradient function
+	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		if sizeof(dx) == 0
 			dx = lineardx
 		end

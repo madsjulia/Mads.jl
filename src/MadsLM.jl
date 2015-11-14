@@ -38,7 +38,7 @@ function makelmfunctions(madsdata)
 		return residuals
 	end
 	g = makemadscommandgradient(madsdata, f)
-	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center::Associative=Dict())
+	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
