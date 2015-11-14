@@ -1,3 +1,7 @@
+if isdefined(:HDF5) # HDF5 installation is problematic on some machines
+	import R3Function
+end
+
 @doc "Make MADS command function" ->
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
@@ -136,15 +140,15 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
+function makemadscommandgradient(madsdata::Associative; center::Associative=Dict()) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
-	return makemadscommandgradient(madsdata, f)
+	return makemadscommandgradient(madsdata, f; center=center)
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata::Associative, f)
-	fg = makemadscommandfunctionandgradient(madsdata, f)
-	function madscommandgradient(parameters::Dict; dx=Array(Float64,0))
+function makemadscommandgradient(madsdata::Associative, f::Function; center::Associative=Dict())
+	fg = makemadscommandfunctionandgradient(madsdata, f; center=center)
+	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center=center)
 		forwardrun, gradient = fg(parameters; dx=dx)
 		return gradient
 	end
@@ -152,13 +156,13 @@ function makemadscommandgradient(madsdata::Associative, f)
 end
 
 @doc "Make MADS command function & gradient function" ->
-function makemadscommandfunctionandgradient(madsdata::Associative)
+function makemadscommandfunctionandgradient(madsdata::Associative; center::Associative=Dict())
 	f = makemadscommandfunction(madsdata)
-	return makemadscommandfunctionandgradient(madsdata, f)
+	return makemadscommandfunctionandgradient(madsdata, f; center=center)
 end
 
 @doc "Make MADS command function and gradient function" ->
-function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
+function makemadscommandfunctionandgradient(madsdata::Associative, f::Function; center::Associative=Dict()) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0)) # MADS command gradient function
@@ -166,17 +170,22 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 			dx = lineardx
 		end
 		xph = Dict()
-		xph["noparametersvaried"] = parameters # TODO in the case of LM, we typically we already know this
+		if length(center) == 0
+			xph["noparametersvaried"] = parameters
+		end
 		i = 1
-		for optparamkey in optparamkeys # TODO make sure that the order matches; WE SHOULD USE ONLY OrderedDict
+		for optparamkey in optparamkeys
 			xph[optparamkey] = copy(parameters)
-			xph[optparamkey][optparamkey] += dx[i]
+			xph[optparamkey][optparamkey] += dx[i] # TODO make sure that the order matches
 			i += 1
 		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph) # TODO we shoud not compute xph["noparametersvaried"] if already available
+		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
+		end
+		if length(center) > 0
+			fevalsdict["noparametersvaried"] = center
 		end
 		gradient = Dict()
 		resultkeys = keys(fevals[1][2])

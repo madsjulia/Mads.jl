@@ -1,7 +1,3 @@
-if isdefined(:HDF5) # HDF5 installation is problematic on some machines
-	import R3Function
-end
-
 if VERSION < v"0.4.0-dev"
 	using Docile # default for v > 0.4
 end
