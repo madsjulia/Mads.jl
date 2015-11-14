@@ -140,32 +140,39 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata::Associative; center::Associative=Dict()) # make MADS command gradient function
+function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
-	return makemadscommandgradient(madsdata, f; center=center)
+	return makemadscommandgradient(madsdata, f)
 end
 
 @doc "Make MADS command gradient function" ->
-function makemadscommandgradient(madsdata::Associative, f::Function; center::Associative=Dict())
-	fg = makemadscommandfunctionandgradient(madsdata, f; center=center)
-	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center=center)
-		forwardrun, gradient = fg(parameters; dx=dx)
+function makemadscommandgradient(madsdata::Associative, f::Function)
+	fg = makemadscommandfunctionandgradient(madsdata, f)
+	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict())
+		forwardrun, gradient = fg(parameters; dx=dx, center=center)
 		return gradient
 	end
 	return madscommandgradient
 end
 
 @doc "Make MADS command function & gradient function" ->
-function makemadscommandfunctionandgradient(madsdata::Associative; center::Associative=Dict())
+function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
-	return makemadscommandfunctionandgradient(madsdata, f; center=center)
+	return makemadscommandfunctionandgradient(madsdata, f)
 end
 
 @doc "Make MADS command function and gradient function" ->
-function makemadscommandfunctionandgradient(madsdata::Associative, f::Function; center::Associative=Dict()) # make MADS command gradient function
+function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
-	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0)) # MADS command gradient function
+	obskeys = getobskeys(madsdata)
+	weights = Mads.getobsweight(madsdata)
+	ssdr = Mads.haskeyword(madsdata, "ssdr")
+	if ssdr
+		mins = Mads.getobsmin(madsdata)
+		maxs = Mads.getobsmax(madsdata)
+	end
+	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) # MADS command gradient function
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
@@ -188,15 +195,26 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function; 
 			fevalsdict["noparametersvaried"] = center
 		end
 		gradient = Dict()
-		resultkeys = keys(fevals[1][2])
-		for resultkey in resultkeys
-			gradient[resultkey] = Dict()
+		k = 1
+		for obskey in obskeys
+			gradient[obskey] = Dict()
 			i = 1
+			c = fevalsdict["noparametersvaried"][obskey]
+			if ssdr
+					c += ( mins[k] < c ) ? mins[k] - c : 0
+					c += ( c > maxs[k] ) ? c - maxs[k] : 0
+			end
 			for optparamkey in optparamkeys
-				gradient[resultkey][optparamkey] = (fevalsdict[optparamkey][resultkey] - fevalsdict["noparametersvaried"][resultkey]) / dx[i]
+				o = fevalsdict[optparamkey][obskey]
+				if ssdr
+					o += ( mins[k] < o ) ? mins[k] - o : 0
+					o += ( o > maxs[k] ) ? o - maxs[k] : 0
+				end
+				gradient[obskey][optparamkey] = weights[k] * (o - c) / dx[i]
 				# println("$optparamkey $resultkey : (", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], ") / ", dx[i], "=", gradient[resultkey][optparamkey])
 				i += 1
 			end
+			k += 1
 		end
 		return fevalsdict["noparametersvaried"], gradient
 	end
