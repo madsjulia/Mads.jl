@@ -10,14 +10,14 @@ Parameters:
 - ay: {init: 15, log: true, longname: 'Dispersivity y [L]', max: 30, min: 1, type: null}
 - az: {init: 0.3, log: true, longname: 'Dispersivity z [L]', max: 1, min: 0.1, type: null}
 Sources:
-- box:
+- gauss:
     x: {init: 0, log: false, longname: 'Source x coordinate [L]', max: 500, min: 0, type: null}
     y: {init: 100, log: false, longname: 'Source y coordinate [L]', max: 500, min: -500, type: null}
     z: {init: 0, log: false, longname: 'Source z coordinate [L]', max: 100, min: 0, type: null}
     dx: {init: 250, log: false, longname: 'Source x dimension [L]', max: 500, min: 1, type: null}
     dy: {init: 100, log: false, longname: 'Source y dimension [L]', max: 500, min: 1, type: null}
     dz: {init: 1, log: false, longname: 'Source z dimension [L]', max: 10, min: 1, type: null}
-    f: {init: 50000, log: true, longname: 'Contaminant flux [M/T]', max: 1.0e+6, min: 500, type: null}
+    f: {init: 500, log: true, longname: 'Contaminant flux [M/T]', max: 1.0e+6, min: 500, type: null}
     t0: {init: 1985, log: false, longname: 'Start Time [T]', max: 2000, min: 1980, type: null}
     t1: {init: 2005, log: false, longname: 'End Time [T]', max: 2030, min: 2000, type: null}
 Choices:
@@ -26,26 +26,26 @@ Choices:
 - {name: "Source terminated in 2025", Parameters: {source1_t1: 2025}}
 - {name: "Source terminated in 2030", Parameters: {source1_t1: 2030}}
 Performance Goals:
-- {name: "goal2016", exp: "w2_2016", lessthan: 2500}
-- {name: "goal2017", exp: "w2_2017", lessthan: 2500}
-- {name: "goal2018", exp: "w2_2018", lessthan: 2500}
-- {name: "goal2019", exp: "w2_2019", lessthan: 2500}
-- {name: "goal2020", exp: "w2_2020", lessthan: 2500}
-- {name: "goal2021", exp: "w2_2021", lessthan: 2500}
-- {name: "goal2022", exp: "w2_2022", lessthan: 2500}
-- {name: "goal2023", exp: "w2_2023", lessthan: 2500}
-- {name: "goal2024", exp: "w2_2024", lessthan: 2500}
-- {name: "goal2025", exp: "w2_2025", lessthan: 2500}
-- {name: "goal2026", exp: "w2_2026", lessthan: 2500}
-- {name: "goal2027", exp: "w2_2027", lessthan: 2500}
-- {name: "goal2028", exp: "w2_2028", lessthan: 2500}
-- {name: "goal2029", exp: "w2_2029", lessthan: 2500}
-- {name: "goal2030", exp: "w2_2030", lessthan: 2500}
-- {name: "goal2031", exp: "w2_2031", lessthan: 2500}
-- {name: "goal2032", exp: "w2_2032", lessthan: 2500}
-- {name: "goal2033", exp: "w2_2033", lessthan: 2500}
-- {name: "goal2034", exp: "w2_2034", lessthan: 2500}
-- {name: "goal2035", exp: "w2_2035", lessthan: 2500}
+- {name: "goal2016", exp: "w2_2016", lessthan: 8000}
+- {name: "goal2017", exp: "w2_2017", lessthan: 8000}
+- {name: "goal2018", exp: "w2_2018", lessthan: 8000}
+- {name: "goal2019", exp: "w2_2019", lessthan: 8000}
+- {name: "goal2020", exp: "w2_2020", lessthan: 8000}
+- {name: "goal2021", exp: "w2_2021", lessthan: 8000}
+- {name: "goal2022", exp: "w2_2022", lessthan: 8000}
+- {name: "goal2023", exp: "w2_2023", lessthan: 8000}
+- {name: "goal2024", exp: "w2_2024", lessthan: 8000}
+- {name: "goal2025", exp: "w2_2025", lessthan: 8000}
+- {name: "goal2026", exp: "w2_2026", lessthan: 8000}
+- {name: "goal2027", exp: "w2_2027", lessthan: 8000}
+- {name: "goal2028", exp: "w2_2028", lessthan: 8000}
+- {name: "goal2029", exp: "w2_2029", lessthan: 8000}
+- {name: "goal2030", exp: "w2_2030", lessthan: 8000}
+- {name: "goal2031", exp: "w2_2031", lessthan: 8000}
+- {name: "goal2032", exp: "w2_2032", lessthan: 8000}
+- {name: "goal2033", exp: "w2_2033", lessthan: 8000}
+- {name: "goal2034", exp: "w2_2034", lessthan: 8000}
+- {name: "goal2035", exp: "w2_2035", lessthan: 8000}
 Wells:
 - w1:
     obs:

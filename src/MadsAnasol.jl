@@ -71,7 +71,7 @@ function makecomputeconcentrations(madsdata)
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
 					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					if madsdata["Wells"][wellkey]["obs"][o]["weight"] > eps(Float64)
+					#if madsdata["Wells"][wellkey]["obs"][o]["weight"] > eps(Float64)
 						conc = background
 						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
 							if haskey( madsdata["Sources"][i], "box" )
@@ -96,9 +96,9 @@ function makecomputeconcentrations(madsdata)
 							end
 						end
 						c[string(wellkey, "_", t)] = conc
-					else
-						c[string(wellkey, "_", t)] = 0
-					end
+					#else
+					#	c[string(wellkey, "_", t)] = 0
+					#end
 				end
 			end
 		end
