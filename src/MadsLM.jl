@@ -2,11 +2,11 @@ function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	if Mads.haskeyword(madsdata, "sar")
-		function o(x::Vector)
-			o(x) = sum(abs(x))
+		function o_lm(x::Vector)
+			sum(abs(x))
 		end
 	else # L2 norm of x
-		o(x) = (x'*x)[1]
+		o_lm(x) = (x'*x)[1]
 	end
 	obskeys = getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
@@ -15,7 +15,9 @@ function makelmfunctions(madsdata)
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)
 	end
-	optparamkeys = getoptparamkeys(madsdata)
+	nO = length(obskeys)
+	optparamkeys = Mads.getoptparamkeys(madsdata)
+	nP = length(optparamkeys)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function f_lm(arrayparameters::Vector)
 		parameters = copy(initparams)
@@ -37,22 +39,32 @@ function makelmfunctions(madsdata)
 		end
 		return residuals
 	end
-	g = makemadscommandgradient(madsdata, f)
-	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
-		parameters = copy(initparams)
-		for i = 1:length(arrayparameters)
-			parameters[optparamkeys[i]] = arrayparameters[i]
+	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0)) #TODO we need the center; this is not working
+		if sizeof(dx) == 0
+			dx = lineardx
 		end
-		gradientdict = g(parameters; dx=dx, center=center)
-		jacobian = Array(Float64, (length(obskeys), length(optparamkeys)))
-		for i in 1:length(obskeys)
-			for j in 1:length(optparamkeys)
-				jacobian[i, j] = gradientdict[obskeys[i]][optparamkeys[j]]
+		p = Vector{Float64}[]
+		for i in 1:nP
+			a = copy(arrayparameters)
+			a[i] += dx[i]
+			push!(p, a)
+		end
+		if sizeof(center) == 0
+			push!(p, arrayparameters)
+		end
+		fevals = pmap(f_lm, p)
+		if sizeof(center) == 0
+			center = fevals[nP+1]
+		end
+		jacobian = Array(Float64, (nO, nP))
+		for j in 1:nO
+			for i in 1:nP
+				jacobian[j, i] = ( fevals[i][j] - center[j] ) / dx[i]
 			end
 		end
 		return jacobian
 	end
-	return f_lm, g_lm, o
+	return f_lm, g_lm, o_lm
 end
 
 function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
@@ -158,7 +170,7 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 	compute_jacobian = true
 	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = g(x)
+			J = g(x, center=fcur)
 			if root != ""
 				writedlm("$(root)-lmjacobian.dat", J)
 			end
@@ -245,6 +257,12 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 		trial_residual = objfuncevals[npl_best]
 		predicted_residual = o(J * delta_x + fcur)
 
+		if objfuncevals[npl_best] < best_residual
+			best_residual = trial_residual
+			best_x = x + delta_x
+			best_f = fcur
+		end
+
 		# step quality = residual change / predicted residual change
 		rho = (trial_residual - residual) / (predicted_residual - residual)
 		if rho > MIN_STEP_QUALITY
@@ -258,14 +276,11 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 		else
 			lambda = min(lambda_nu * lambda, MAX_LAMBDA) # decrease trust region radius
 			if np_lambda > 1
+				x += delta_x
+				fcur = trial_f
+				residual = trial_residual
 				compute_jacobian = true
 			end
-		end
-
-		if objfuncevals[npl_best] < best_residual
-			best_residual = objfuncevals[npl_best]
-			best_x = x
-			best_f = fcur
 		end
 
 		if show_trace

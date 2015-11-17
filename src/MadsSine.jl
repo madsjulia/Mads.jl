@@ -23,16 +23,15 @@ end
 
 @doc "Sine transformation of a gradient function" ->
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx = 0.1) # sine transformation a gradient function
-	function sinetransformedg(sineparams::Vector)
-		#TODO option needed to control sindx
+	function sinetransformedg(sineparams::Vector; center=Array(Float64,0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
 		lineardx = dxparams - params
-		result = g(params; dx=lineardx)
+		result = g(params; dx=lineardx, center=center)
 		lineardx ./= sindx
-		for j = 1:size(result, 2)
-			for i = 1:size(result, 1)
-				# println(result[i, j])
+		for i = 1:size(result, 1)
+			for j = 1:size(result, 2)
+			# println(result[i, j])
 				result[i, j] *= lineardx[j]
 			end
 		end
