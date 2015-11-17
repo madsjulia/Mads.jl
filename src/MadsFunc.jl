@@ -241,7 +241,7 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.
 			if haskey(observations[obsname], "target")
 				obs = observations[obsname]["target"]
 				diff = obs - pred
-				weight = 1
+				weight = 1.
 				if haskey(observations[obsname], "weight")
 					weight = observations[obsname]["weight"]
 				end
