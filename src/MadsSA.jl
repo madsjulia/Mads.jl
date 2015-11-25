@@ -53,8 +53,8 @@ function localsa(madsdata; format="", filename="")
 	else
 		rootname = Mads.getrootname(filename)
 	end
-	f_lm, g_lm = makelmfunctions(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
+	f_lm, g_lm = makelmfunctions(madsdata)
 	plotlabels = getparamsplotname(madsdata)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys

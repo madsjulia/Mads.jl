@@ -17,6 +17,7 @@ function makelmfunctions(madsdata)
 	end
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
+	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function f_lm(arrayparameters::Vector)
