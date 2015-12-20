@@ -728,7 +728,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 				Wi = (Ns_total / Nr - 1) / ( gamma * M)
 				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
 					Wi = round(Int, Wi)
-					Ns = @Compat.compat int(Ns_total / Nr)
+					Ns = round(Int, Ns_total / Nr)
 					if iseven(Ns)
 						Ns += 1
 						Ns_total = Ns * Nr

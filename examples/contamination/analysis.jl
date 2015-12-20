@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 md = Mads.loadyamlmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname

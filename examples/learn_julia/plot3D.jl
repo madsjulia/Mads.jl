@@ -28,3 +28,36 @@ PyPlot.gcf()
 PyPlot.clf()
 PyPlot.surf(zcos)
 PyPlot.gcf()
+
+NN=10
+X=zeros(NN,NN,NN)
+X[1,1,1] = 1
+X[NN,NN,NN] = -1
+x = collect(linspace(1, NN, NN))
+y = x
+z = x   
+fig = PyPlot.figure(figsize=(8, 6))
+ax = fig[:gca](projection="3d")
+ax[:set_xlim](1, NN)
+ax[:set_ylim](1, NN)
+ax[:set_zlim](1, NN)
+xgrid, ygrid = QuantEcon.meshgrid(x, y)
+ax[:contourf](xgrid, ygrid, slice(X,:,:,1), [-1, -0.5, 0, 0.5, 1], zdir="z", offset=1)
+xgrid, zgrid = QuantEcon.meshgrid(x, z)
+ax[:contourf](xgrid, slice(X,:,:,10), zgrid, [-1, -0.5, 0, 0.5, 1], zdir="y", offset=10)
+ygrid, zgrid = QuantEcon.meshgrid(y, z)
+cax=ax[:contourf](slice(X,1,:,:), ygrid, zgrid, [-1, -0.5, 0, 0.5, 1], zdir="x", offset=1)
+PyPlot.colorbar(cax)
+PyPlot.draw()
+
+X=rand(NN,NN,NN)
+xgrid, ygrid = QuantEcon.meshgrid(x, y)
+ax[:contourf](xgrid, ygrid, slice(X,:,:,1), 100, vmin=0, vmax=1, zdir="z", offset=1)
+xgrid, zgrid = QuantEcon.meshgrid(x, z)
+ax[:contourf](xgrid, slice(X,:,:,10), zgrid, 100, vmin=0, vmax=1, zdir="y", offset=10)
+ygrid, zgrid = QuantEcon.meshgrid(y, z)
+cax=ax[:contourf](slice(X,1,:,:), ygrid, zgrid, 100, vmin=0, vmax=1, zdir="x", offset=1)
+PyPlot.colorbar(cax)
+PyPlot.draw()
+
+

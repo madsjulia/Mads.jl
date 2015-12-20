@@ -24,7 +24,7 @@ end
 end
 @everywhere fcmxv_bad(n_x, x, M, n_o, o) = ccall( (:my_c_mxv_bad, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
 @everywhere fcmxv(n_x, x, M, n_o, o) = ccall( (:my_c_mxv, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
-@everywhere fjmxv(M, x) = M * x
+@everywhere fjmxv(M, x) = M .* x
 
 # sqrt comparison
 println("sqrt ...")
