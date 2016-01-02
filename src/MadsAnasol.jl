@@ -10,7 +10,7 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 	xtrans = xshift * cos(d) - yshift * sin(d)
 	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
-	#sigma01 = sigma02 = sigma03 = 0.#point source
+	#sigma01 = sigma02 = sigma03 = 0. #point source
 	sigma01 = dx
 	sigma02 = dy
 	sigma03 = dz
@@ -106,4 +106,51 @@ function makecomputeconcentrations(madsdata)
 		return c
 	end
 	return computeconcentrations
+end
+
+@doc "Compute injected/reduced contaminant mass" ->
+function computemass(madsdata; time = 0)
+	if time == 0
+		grid_time = madsdata["Grid"]["time"]
+		if grid_time > 0
+			time = grid_time
+		end
+	end
+	parameters = madsdata["Parameters"]
+	lambda = parameters["lambda"]["init"]	
+	if lambda > eps(Float64)
+		compute_reduction = true
+	else
+		mr = 0
+		compute_reduction = false
+	end
+	mass_injected = 0
+	mass_reduced = 0
+	for i = 1:length(madsdata["Sources"])
+		f = parameters[string("source", i, "_", "f")]["init"]
+		t0 = parameters[string("source", i, "_", "t0")]["init"]
+		t1 = parameters[string("source", i, "_", "t1")]["init"]
+		#=
+		if i == 1
+			f = 10
+			t0 = 1960
+			t1 = 1963
+		else
+			f = 10
+			t0 = 2010
+			t1 = 2100
+		end
+		=#
+		if time > t0
+			tmin = min(time, t1)
+			mi = f * (tmin - t0)
+			if compute_reduction
+				mr = (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
+			end
+			@show t0, t1, tmin, mi, mr
+			mass_injected += mi
+			mass_reduced += mr
+		end
+	end
+	return mass_injected, mass_reduced
 end
