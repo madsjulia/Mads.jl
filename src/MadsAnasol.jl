@@ -28,7 +28,7 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 end
 
 @doc "Compute concentration for all observation points" ->
-function makecomputeconcentrations(madsdata)
+function makecomputeconcentrations(madsdata::Associative)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
 	if haskeyword(madsdata, "background")
@@ -109,7 +109,7 @@ function makecomputeconcentrations(madsdata)
 end
 
 @doc "Compute injected/reduced contaminant mass" ->
-function computemass(madsdata; time = 0)
+function computemass(madsdata::Associative; time = 0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
 		if grid_time > 0
@@ -146,6 +146,8 @@ function computemass(madsdata; time = 0)
 			mi = f * (tmin - t0)
 			if compute_reduction
 				mr = (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
+			else
+				mr = mi
 			end
 			@show t0, t1, tmin, mi, mr
 			mass_injected += mi
@@ -153,4 +155,24 @@ function computemass(madsdata; time = 0)
 		end
 	end
 	return mass_injected, mass_reduced
+end
+
+function computemass(madsfiles; time = 0, path = ".")
+	mf = searchdir(madsfiles)
+	nf = length(mf)
+	lambda = Array(Float64, 0)
+	mass_injected = Array(Float64, 0)
+	mass_reduced = Array(Float64, 0)
+	for i = 1:nf
+		md = Mads.loadyamlmadsfile(mf[i])
+		l = md["Parameters"]["lambda"]["init"]
+		if l < eps(Float64)
+			l = 1e-32
+		end
+		push!(lambda, l)
+		mi, mr = Mads.computemass(md)
+		push!(mass_injected, mi)
+		push!(mass_reduced, mr)
+	end
+	return lambda, mass_injected, mass_reduced
 end
