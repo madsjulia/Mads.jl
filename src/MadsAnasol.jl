@@ -118,12 +118,8 @@ function computemass(madsdata::Associative; time = 0)
 	end
 	parameters = madsdata["Parameters"]
 	lambda = parameters["lambda"]["init"]	
-	if lambda > eps(Float64)
-		compute_reduction = true
-	else
-		mr = 0
-		compute_reduction = false
-	end
+	compute_reduction = lambda > eps(Float64) ? true : false
+	mr = 0
 	mass_injected = 0
 	mass_reduced = 0
 	for i = 1:length(madsdata["Sources"])
@@ -145,9 +141,7 @@ function computemass(madsdata::Associative; time = 0)
 			tmin = min(time, t1)
 			mi = f * (tmin - t0)
 			if compute_reduction
-				mr = (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
-			else
-				mr = mi
+				mr = mi - (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
 			end
 			@show t0, t1, tmin, mi, mr
 			mass_injected += mi
@@ -160,19 +154,19 @@ end
 function computemass(madsfiles; time = 0, path = ".")
 	mf = searchdir(madsfiles)
 	nf = length(mf)
-	lambda = Array(Float64, 0)
-	mass_injected = Array(Float64, 0)
-	mass_reduced = Array(Float64, 0)
+	lambda = Array(Float64, nf)
+	mass_injected = Array(Float64, nf)
+	mass_reduced = Array(Float64, nf)
 	for i = 1:nf
 		md = Mads.loadyamlmadsfile(mf[i])
 		l = md["Parameters"]["lambda"]["init"]
 		if l < eps(Float64)
 			l = 1e-32
 		end
-		push!(lambda, l)
-		mi, mr = Mads.computemass(md)
-		push!(mass_injected, mi)
-		push!(mass_reduced, mr)
+		lambda[i] = l
+		mi, mr = Mads.computemass(md, time=time)
+		mass_injected[i] = mi
+		mass_reduced[i] = mr
 	end
 	return lambda, mass_injected, mass_reduced
 end
