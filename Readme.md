@@ -4,13 +4,9 @@ Installation
 Local installation
 -------------------
 
-### Create a .juliarc file
+### Clone some packages in a local directory
 
-Add the following line in the `.juliarc.jl` file in your home directory
-
-`push!(LOAD_PATH, ENV["HOME"]*"/codes")`
-
-### Clone some packages in the codes directory
+Here the local directory is called `codes`
 
 ```
 mkdir codes
@@ -21,6 +17,14 @@ git clone git@gitlab.com:omalled/R3Function.jl.git
 git clone git@gitlab.com:omalled/MPTools.jl.git
 git clone git@gitlab.com:omalled/BIGUQ.jl.git
 ```
+
+### Create a .juliarc.jl file
+
+Add the following line in the `.juliarc.jl` file in your home directory
+
+`push!(LOAD_PATH, ENV["HOME"]*"/codes")`
+
+If the file does not exist create one.
 
 ### Add more packages
 
