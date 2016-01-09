@@ -72,6 +72,9 @@ In julia REPL, do the following commands:
 
 `using Mads` # if there are still missing packages, add them
 
+`include("Mads.jl/examples/contamination/analysis.jl")` # to peform various analyses
+related to contaminant transport
+
 `include("Mads.jl/examples/bigdt/bigdt.jl")` # to peform bigdt analysis
 
 If you make changes in MADS code, you will need to do
