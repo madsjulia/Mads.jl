@@ -226,7 +226,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-			vsize = 4inch
+			vsize += 4inch
 		elseif npp == 1
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
