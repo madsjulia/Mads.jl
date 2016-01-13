@@ -489,17 +489,17 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		vsize += 4inch
 	end
 	######################################################
-	rootname = Mads.getmadsrootname(madsdata)
-	# p1 = Gadfly.vstack(pp[1:3]...)
-	# p2 = Gadfly.vstack(pp[4:6]...)
-	# p = Gadfly.hstack(p1,p2)
-	p = Gadfly.vstack(pp...)
 	if filename == ""
 		method = result["method"]
+		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$rootname-$method-$nsample"
 	end
 	if !separate_files
+		# p1 = Gadfly.vstack(pp[1:3]...)
+		# p2 = Gadfly.vstack(pp[4:6]...)
+		# p = Gadfly.hstack(p1,p2)
 		filename, format = Mads.setimagefileformat(filename, format)
+		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
