@@ -121,6 +121,76 @@ function writeparameters(madsdata::Associative, parameters)
 	end
 end
 
+function instline2regexs(instline::AbstractString)
+	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
+	regex = r"@[^@]*@|w|![^!]*!"
+	offset = 1
+	regexs = Regex[]
+	obsnames = AbstractString[]
+	getparamhere = Bool[]
+	while offset <= length(instline) && ismatch(regex, instline, offset)
+		m = match(regex, instline, offset)
+		if m == nothing
+			error("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
+		end
+		offset = m.offset + length(m.match)
+		if m.match[1] == '@'
+			push!(regexs, Regex(string("\\h*", m.match[2:end - 1])))
+			push!(getparamhere, false)
+		elseif m.match[1] == '!'
+			push!(regexs, floatregex)
+			push!(obsnames, m.match[2:end - 1])
+			push!(getparamhere, true)
+		elseif m.match == "w"
+			push!(regexs, r"\h+")
+			push!(getparamhere, false)
+		else
+			error("Unknown instruction file instruction: $(m.match)")
+		end
+	end
+	return regexs, obsnames, getparamhere
+end
+function obslineismatch(obsline::AbstractString, regexs::Array{Regex, 1})
+	bigregex = Regex(string(map(x->x.pattern, regexs)...))
+	return ismatch(bigregex, obsline)
+end
+function regexs2obs(obsline, regexs, obsnames, getparamhere)
+	offset = 1
+	obsnameindex = 1
+	obsdict = Dict{AbstractString, Float64}()
+	for i = 1:length(regexs)
+		m = match(regexs[i], obsline, offset)
+		if getparamhere[i]
+			obsdict[obsnames[obsnameindex]] = parse(Float64, m.match)
+			obsnameindex += 1
+		end
+		offset = m.offset + length(m.match)
+	end
+	return obsdict
+end
+function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractString)
+	instfile = open(instructionfilename, "r")
+	obsfile = open(inputfilename, "r")
+	obslineitr = eachline(obsfile)
+	state = start(obslineitr)
+	obsdict = Dict{AbstractString, Float64}()
+	for instline in eachline(instfile)
+		regexs, obsnames, getparamhere = instline2regexs(instline)
+		gotmatch = false
+		while !gotmatch && !done(obslineitr, state)
+			obsline, state = next(obslineitr, state)
+			if obslineismatch(obsline, regexs)
+				merge!(obsdict, regexs2obs(obsline, regexs, obsnames, getparamhere))
+				gotmatch = true
+			end
+		end
+		if !gotmatch
+			error("Didn't get a match for instruction file ($instructionfilename) line:\n$instline")
+		end
+	end
+	return obsdict
+end
+
 @doc "Call C MADS ins_obs() function from the MADS library" ->
 function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
