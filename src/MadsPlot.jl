@@ -226,7 +226,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-			vsize = 4inch
+			vsize += 4inch
 		elseif npp == 1
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
@@ -253,9 +253,15 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, Gadfly.Guide.xlabel(plotlabels[i])))
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, 
+					Gadfly.Guide.xlabel(plotlabels[i]),
+					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt) 
+					))
 			else
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j])))
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], 
+					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
+					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt)
+					))
 			end
 		end
 	end
@@ -489,17 +495,17 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		vsize += 4inch
 	end
 	######################################################
-	rootname = Mads.getmadsrootname(madsdata)
-	# p1 = Gadfly.vstack(pp[1:3]...)
-	# p2 = Gadfly.vstack(pp[4:6]...)
-	# p = Gadfly.hstack(p1,p2)
-	p = Gadfly.vstack(pp...)
 	if filename == ""
 		method = result["method"]
+		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$rootname-$method-$nsample"
 	end
 	if !separate_files
+		# p1 = Gadfly.vstack(pp[1:3]...)
+		# p2 = Gadfly.vstack(pp[4:6]...)
+		# p = Gadfly.hstack(p1,p2)
 		filename, format = Mads.setimagefileformat(filename, format)
+		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)

@@ -11,9 +11,9 @@ import Lora
 import Distributions
 import Logging
 import JSON
-import NLopt
+# import NLopt # creates problems on some machines
 import MPTools
-import HDF5 # HDF5 installation is problematic on some machines
+import HDF5 # HDF5 installation might be problematic on some machines
 import Conda
 import PyCall
 import PyPlot

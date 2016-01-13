@@ -60,6 +60,10 @@ function getmadsproblemdir(madsdata::Associative)
 	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
 end
 
+@doc "Get matching files in a directory " ->
+searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
+searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
+
 @doc "Create and save a new mads problem based on provided observations (calibration targets)" ->
 function createmadsproblem(madsdata::Associative, predictions::Associative, filename::AbstractString)
 	newmadsdata = deepcopy(madsdata)

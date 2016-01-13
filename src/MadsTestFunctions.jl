@@ -71,3 +71,207 @@ function makerosenbrock_gradient(N)
 	end
 	return rosenbrock_gradient_lm
 end
+
+
+
+########################################
+## Function: Powell Function          ##
+########################################
+
+function makepowell(N)                                                                   
+    function powell(x::Vector)                                       
+        result = Array(eltype(x),N)
+        for i = 1:(N/4)
+            result[4*i-3] = x[4*i-3] + 10*x[4*i-2]
+            result[4*i-2] = sqrt(5) * (x[4*i-1] - x[4*i])
+            result[4*i-1] = ( x[4*i-2] - 2*x[4*i-1]  )^2
+            result[4*i]   = sqrt(10) * ( x[4*i-3] - x[4*i]  )^2
+        end
+        return result
+    end
+    return powell
+end
+    
+
+function makepowell_gradient(N)                      
+    function powell_gradient(x::Vector)
+        result = zeros(eltype(x), N, N)
+        for i= 1:(N/4)
+            result[4*i-3, 4*i-3] = 1
+            result[4*i, 4*i-3]   = 2*sqrt(10)*(x[4*i-3] - x[4*i])
+
+            result[4*i-3, 4*i-2] = 10
+            result[4*i-1, 4*i-2] = 2*( x[4*i-2] - 2*x[4*i-1] )
+
+            result[4*i-2, 4*i-1] = sqrt(5)
+            result[4*i-1, 4*i-1] = -4*( x[4*i-2] - 2*x[4*i-1] )
+
+            result[4*i-2, 4*i]   = -sqrt(5)
+            result[4*i, 4*i]     = -2*sqrt(10)*(x[4*i-3] - x[4*i] )
+        end
+        return result
+    end
+        
+    return powell_gradient             
+end
+
+
+
+###############################################
+#############  Sphere Function  ###############
+###############################################
+
+function makesphere(N)
+    function sphere(x::Vector)
+        result = Array(eltype(x), N)
+        for i = 1:N
+            result[i] = x[i]
+        end
+
+        return result
+    end
+
+    return sphere
+    
+end
+
+
+function makesphere_gradient(N)
+    function sphere_gradient(x::Vector)
+        result = zeros(eltype(x), N, N)
+        for i=1:N
+            result[i, i] = 1
+        end
+        return result
+    end
+
+    return sphere_gradient
+end
+
+
+###############################################
+##########  Dixon-Price Function  #############
+###############################################
+
+function makedixonprice(N)
+    function dixonprice(x::Vector)
+        result = Array(eltype(x), N)
+        result[1] = x[1] - 1
+        for i=2:N
+            result[i] = sqrt(i)*(2*x[i]^2 - x[i-1])
+        end
+
+        return result
+    end
+
+    return dixonprice
+end
+
+
+function makedixonprice_gradient(N)
+
+    function dixonprice_gradient(x::Vector)
+        result = zeros(eltype(x), N, N)
+
+        result[1, 1] = sqrt(2)
+ 
+        for i=2:N
+            result[i-1, i] = -sqrt(2*i)
+            result[i, i]   = 4*sqrt(2*i)*x[i]
+        end
+        
+        return result
+    end
+
+    return dixonprice_gradient
+    
+end
+
+
+###############################################
+##########  Sum-squares Function  #############
+###############################################
+
+function makesumsquares(N)
+    function sumsquares(x::Vector)
+        result = Array(eltype(x), N)
+
+        for i=1:N
+            result[i] = sqrt(i)*x[i]
+        end
+
+        return result
+    end
+
+    return sumsquares
+end
+
+
+function makesumsquares_gradient(N)
+
+    function sumsquares_gradient(x::Vector)
+        result = zeros(eltype(x), N, N)
+
+        for i=1:N
+            result[i, i] = sqrt(2*i)
+        end
+
+        return result
+    end
+
+    return sumsquares_gradient
+end
+
+
+###############################################
+##  Rotated Hyper-Ellipsoid Function  #########
+###############################################
+
+
+function makerotatedhyperellipsoid(N)
+
+    function rotatedhyperellipsoid(x::Vector)
+
+        result = Array(eltype(x), N)
+
+        result[1] = x[1]
+        for i =2:N
+            sum = 0
+            for j = 1:i
+                sum = sum + x[j]^2
+            end
+            result[i] = sqrt(sum)
+        end
+
+        return result
+    end
+
+    return rotatedhyperellipsoid
+        
+end
+
+
+function makerotatedhyperellipsoid_gradient(N)
+    function rotatedhyperellipsoid_gradient(x::Vector)
+        result = zeros(eltype(x), N, N)
+
+        result[1, 1] = sqrt(2)
+
+        for i = 2:N
+            sum = 0
+            for j = 1:i
+                sum = sum + x[j]^2
+            end
+
+            for j = 1:i
+                result[j, i] = sqrt(2)*x[j]*sum^(-0.5)
+            end
+
+        end
+
+        return result
+
+    end
+
+    return rotatedhyperellipsoid_gradient
+end    
