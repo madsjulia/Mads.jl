@@ -195,26 +195,6 @@ function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractStr
 	return obsdict
 end
 
-@doc "Read observations" ->
-function readobservations(madsdata::Associative)
-	obsids=getobskeys(madsdata)
-	observations = OrderedDict(zip(obsids, fill(NaN, length(obsids))))
-	obscount = Dict(zip(obsids, zeros(Int, length(obsids))))
-	for instruction in madsdata["Instructions"]
-		obs = ins_obs(instruction["ins"], instruction["read"])
-		for k in keys(obs)
-			obscount[k] += 1
-			observations[k] = obs[k]
-		end
-	end
-	for k in keys(obscount)
-		if obscount[k] != 1
-			error("got observation, $k, $(obscount[k]) times")
-		end
-	end
-	return observations
-end
-
 @doc "Call C MADS ins_obs() function from the MADS library" ->
 function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
@@ -226,6 +206,26 @@ function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputf
 								 (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
 								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
+	return observations
+end
+
+@doc "Read observations" ->
+function readobservations(madsdata::Associative)
+	obsids = getobskeys(madsdata)
+	observations = Dict()
+	obscount = Dict(zip(obsids, zeros(Int, length(obsids))))
+	for instruction in madsdata["Instructions"]
+		obs = ins_obs(instruction["ins"], instruction["read"])
+		for k in keys(obs)
+			obscount[k] += 1
+			observations[k] = obs[k]
+		end
+	end
+	for k in keys(obscount)
+		if obscount[k] != 1
+			warn("got observation, $k, $(obscount[k]) times")
+		end
+	end
 	return observations
 end
 
