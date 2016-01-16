@@ -69,19 +69,19 @@ Monte Carlo analysis of a given `madsdata` class
 
 `montecarlo(madsdata; N=100)`
 
-Description:
-
-Usage:
-
 Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+
+- `N` : number of samples (default = 100)
 
 Returns:
 
-Details:
+- `outputdicts` : parameter dictionary containing the data arrays
 
-References:
+Dumps:
 
-See Also:
+- YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
 
 """
 function montecarlo(madsdata::Associative; N=100)
@@ -123,7 +123,8 @@ function montecarlo(madsdata::Associative; N=100)
 		outputdicts[i]["Parameters"] = paramdicts[i]
 		outputdicts[i]["Results"] = results[i]
 	end
-	outputfilename = string(madsdata["Filename"][1:end-5], ".mcresults.yaml")
+	#rootname = Mads.getmadsrootname(madsdata)
+	#outputfilename = rootname * ".mcresults.yaml"
 	dumpyamlfile(outputfilename, outputdicts)
 	return outputdicts
 end
@@ -138,25 +139,32 @@ function paramarray2dict(madsdata::Associative, array)
 	return dict
 end
 
-
 """
-Generate spaghetti plots for each model parameter separtely in a given `madsdata` class
+Generate separate spaghetti plots for each `selected` (`type: opt`) model parameter in a given `madsdata` class
 
-`montecarlo(madsdata; N=round(Int, 1e2))`
-
-Description:
-
-Usage:
+`spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )`
 
 Arguments:
 
-Returns:
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 
-Details:
+- `paramdictarray` : parameter dictionary containing the data arrays to be plotted
 
-References:
+- `keyword` : keyword to be added in the file name used to output the produced plots
 
-See Also:
+- `format` : output plot format (`png`, `pdf`, etc.)
+
+- `xtitle` : `x` axis title
+
+- `ytitle` : `y` axis title
+
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Returns: `none`
+
+Dumps:
+
+- Images files (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 
 """
 function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
@@ -251,8 +259,37 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 	end
 end
 
-"Generate Monte-Carlo spaghetti plots for all the selected model parameter "
-function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+"""
+Generate a combined spaghetti plot for the `selected` (`type: opt`) model parameter in a given `madsdata` class
+
+`spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+
+- `paramdictarray` : dictionary containing the parameter data arrays to be plotted
+
+- `filename` : output file name used to output the produced plots
+
+- `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
+
+- `format` : output plot format (`png`, `pdf`, etc.)
+
+- `xtitle` : `x` axis title
+
+- `ytitle` : `y` axis title
+
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Returns: `none`
+
+Dumps:
+
+- Images files (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+
+"""
+function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)

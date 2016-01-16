@@ -12,10 +12,10 @@ Here the local directory is called `codes`
 mkdir codes
 cd codes
 git clone git@gitlab.com:mads/Mads.jl.git
-git clone git@gitlab.com:omalled/Anasol.jl.git
-git clone git@gitlab.com:omalled/R3Function.jl.git
-git clone git@gitlab.com:omalled/MPTools.jl.git
-git clone git@gitlab.com:omalled/BIGUQ.jl.git
+git clone git@gitlab.com:mads/Anasol.jl.git
+git clone git@gitlab.com:mads/R3Function.jl.git
+git clone git@gitlab.com:mads/MPTools.jl.git
+git clone git@gitlab.com:mads/BIGUQ.jl.git
 ```
 
 ### Create a .juliarc.jl file
@@ -26,7 +26,19 @@ Add the following line in the `.juliarc.jl` file in your home directory
 
 If the file does not exist create one.
 
-### Add more packages
+Global installation
+------------------
+
+```
+Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
+Pkg.clone("git@gitlab.com:mads/Anasol.jl.git")
+Pkg.clone("git@gitlab.com:mads/R3Function.jl.git")
+Pkg.clone("git@gitlab.com:mads/MPTools.jl.git")
+Pkg.clone("git@gitlab.com:mads/BIGUQ.jl.git")
+```
+
+Installation of packages
+------------------------
 
 Start julia and add the following packages:
 
@@ -70,7 +82,8 @@ brew install libyaml
 sudo pip install yaml
 ```
 
-### Run examples
+Run examples
+------------
 
 In julia REPL, do the following commands:
 
@@ -84,17 +97,6 @@ related to contaminant transport
 If you make changes in MADS code, you will need to do
 
 `reload("Mads.jl")` # to update the code in Julia
-
-Global installation
-------------------
-
-```
-Pkg.clone("git@gitlab.com:omalled/Anasol.jl.git")
-Pkg.clone("git@gitlab.com:omalled/R3Function.jl.git")
-Pkg.clone("git@gitlab.com:omalled/MPTools.jl.git")
-Pkg.clone("git@gitlab.com:omalled/BIGUQ.jl.git")
-Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
-```
 
 Installation behind a firewall
 ------------------------------
