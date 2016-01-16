@@ -1,5 +1,20 @@
-"Make a version of f that accepts an array containing the opt parameters' values"
-function makearrayfunction(madsdata, f)
+"""
+Make a version of the function `f` that accepts an array containing the optimal parameters' values
+
+`makearrayfunction(madsdata, f)`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `f` : ...
+
+Returns:
+
+- `arrayfunction` : function accepting an array containing the optimal parameters' values
+
+
+"""
+function makearrayfunction(madsdata::Associative, f::Function)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
@@ -9,7 +24,7 @@ function makearrayfunction(madsdata, f)
 end
 
 "Make a conditional log likelihood function that accepts an array containing the opt parameters' values"
-function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
+function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -22,7 +37,7 @@ function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 end
 
 "Make a log likelihood function that accepts an array containing the opt parameters' values"
-function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
+function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -39,7 +54,7 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 end
 
 "Set Dynamic Model for MADS model calls using internal Julia functions"
-function setdynamicmodel(madsdata, f::Function)
+function setdynamicmodel(madsdata::Associative, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
@@ -53,7 +68,7 @@ function evaluatemadsexpression(expressionstring, parameters)
 end
 
 "Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
-function evaluatemadsexpressions(parameters, madsdata)
+function evaluatemadsexpressions(madsdata::Associative, parameters)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()
 		for exprname in keys(madsdata["Expressions"])

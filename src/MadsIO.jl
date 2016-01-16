@@ -142,7 +142,7 @@ end
 
 "Write parameters"
 function writeparameters(madsdata::Associative, parameters)
-	expressions = evaluatemadsexpressions(parameters, madsdata)
+	expressions = evaluatemadsexpressions(madsdata, parameters)
 	paramsandexps = merge(parameters, expressions)
 	for template in madsdata["Templates"]
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"])
