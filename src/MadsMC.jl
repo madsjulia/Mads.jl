@@ -14,6 +14,7 @@ Arguments:
 - `thinning` :   
 
 Returns:
+
 - `mcmcchain` : 
 
 """
@@ -47,6 +48,7 @@ Arguments:
 - `thinning` : 
 
 Returns:
+
 - `mcmcchain` : 
 
 """
@@ -66,6 +68,7 @@ Arguments:
 - `N` : number of samples (default = 100)
 
 Returns:
+
 - `outputdicts` : parameter dictionary containing the data arrays
 
 Dumps:

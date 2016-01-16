@@ -88,24 +88,6 @@ end
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
 
-"Create and save a new mads problem based on provided observations (calibration targets)"
-function createmadsproblem(madsdata::Associative, predictions::Associative, filename::AbstractString)
-	newmadsdata = deepcopy(madsdata)
-	observationsdict = newmadsdata["Observations"]
-	if haskey(newmadsdata, "Wells")
-		wellsdict = newmadsdata["Wells"]
-	end
-	for k in keys(predictions)
-		observationsdict[k]["target"] = predictions[k]
-		if haskey( observationsdict[k], "well" )
-			well = observationsdict[k]["well"]
-			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i]["c"] = predictions[k]
-		end
-	end
-	Mads.dumpyamlmadsfile(newmadsdata, filename)
-end
-
 "Write parameters via MADS template"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file

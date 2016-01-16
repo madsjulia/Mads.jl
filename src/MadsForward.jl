@@ -1,54 +1,53 @@
-"Make a version of the mads file where the targets are given by the model predictions"
-function maketruth(infilename::AbstractString, outfilename::AbstractString)
-	md = loadmadsfile(infilename)
-	f = makemadscommandfunction(md)
-	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
-	outyaml = loadyamlfile(infilename)
-	if haskey(outyaml, "Observations")
-		for fullobs in outyaml["Observations"]
-			obskey = collect(keys(fullobs))[1]
-			obs = fullobs[obskey]
-			obs["target"] = result[obskey]
-		end
-	end
-	if haskey(outyaml, "Wells")
-		for fullwell in outyaml["Wells"]
-			wellname = collect(keys(fullwell))[1]
-			for fullobs in fullwell[wellname]["obs"]
-				obskey = collect(keys(fullobs))[1]
-				obs = fullobs[obskey]
-				obs["target"] = result[string(wellname, "_", obs["t"])]
-			end
-		end
-	end
-	dumpyamlfile(outfilename, outyaml)
-end
+"""
+Perform a forward run using the initial or provided values for the model parameters
 
+`forward(madsdata)`
+`forward(madsdata, paramvalues)`
 
-"Do a forward run using the initial or provided values for the model parameters "
-function forward(madsdata::Associative; paramvalues=Void)
-	if paramvalues == Void
-		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	end
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `paramvalues` : dictionary of model parameter values
+
+Returns:
+
+- `obsvalues` : dictionary of model predictions
+
+"""
+
+function forward(madsdata::Associative)
+	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forward(madsdata, paramvalues)
 end
 
-"Do a forward run using provided values for the model parameters "
-function forward(madsdata::Associative, paramvalues)
+function forward(madsdata::Associative, paramvalues::Associative)
 	f = Mads.makemadscommandfunction(madsdata)
 	return f(paramvalues)
 end
 
-"Do a forward run over a 3D grid using the initial or provided values for the model parameters "
-function forwardgrid(madsdata::Associative; paramvalues=Void)
-	if paramvalues == Void
-		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	end
+"""
+Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
+
+`forwardgrid(madsdata)`
+`forwardgrid(madsdata, paramvalues))`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `paramvalues` : dictionary of model parameter values
+
+Returns:
+
+- `array3d` : 3D array with model predictions along a 3D grid
+
+"""
+
+function forwardgrid(madsdata::Associative)
+	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forwardgrid(madsdata, paramvalues)
 end
 
-"Do a forward run over a 3D grid using provided values for the model parameters "
-function forwardgrid(madsdatain::Associative, paramvalues)
+function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	madsdata = copy(madsdatain)
 	f = Mads.makemadscommandfunction(madsdata)
 	nx = madsdata["Grid"]["xcount"]
