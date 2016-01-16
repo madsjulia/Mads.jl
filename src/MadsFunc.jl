@@ -92,20 +92,23 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
 					Mads.madsinfo("""Observations: $(results)""")
-				elseif haskey(madsdata, "JSONPredictions") # JSON
+				end
+				if haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = loadjsonfile("$(newdirname)/$filename")
+						results = merge(results, loadjsonfile("$(newdirname)/$filename"))
 					end
-				elseif haskey(madsdata, "YAMLPredictions") # YAML
+				end
+				if haskey(madsdata, "YAMLPredictions") # YAML
 					for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 						results = merge(results, loadyamlfile("$(newdirname)/$filename"))
 					end
-				elseif haskey(madsdata, "ASCIIPredictions") # ASCII
+				end
+				if haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 					obskeys = getobskeys(madsdata)
 					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
-					results = DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions))
+					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
 			run(`rm -fR $newdirname`)

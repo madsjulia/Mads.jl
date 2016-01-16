@@ -85,7 +85,7 @@ function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
-function naive_levenberg_marquardt(f::Function, g::Function, o::Function, x0::Vector; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Function=x->(x'*x)[1]; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
@@ -103,7 +103,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, o::Function, x0::Ve
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -171,7 +171,12 @@ function levenberg_marquardt(f::Function, g::Function, o::Function, x0; root="",
 	compute_jacobian = true
 	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = g(x, center=fcur)
+			J = Array(Float64, 1, 1)
+			try
+				J = g(x, center=fcur)
+			catch#many functions don't accept a "center", if they don't try it without -- this is super hack-y
+				J = g(x)
+			end
 			if root != ""
 				writedlm("$(root)-lmjacobian.dat", J)
 			end
