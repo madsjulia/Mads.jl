@@ -6,32 +6,21 @@ Calibrate with random initial guesses
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `numberofsamples` : number of random initial samples
-
 - `tolX` : parameter space tolerance
-
 - `tolG` : parameter space update tolerance
-
 - `maxEval` : maximum number of model evaluations
-
 - `maxIter` : maximum number of optimization iterations
-
 - `maxJacobians` : maximum number of Jacobian solves
-
 - `lambda` : initial Levenberg-Marquardt lambda 
-
 - `lambda_mu` : lambda multiplication factor [10]
-
 - `np_lambda` : number of parallel lambda solves
-
 - `show_trace` : shows solution trace [default=false]
-
 - `usenaive` : use naive Levenberg-Marquardt solver
 
 Returns:
 
-- `bestresult` : optimal results tuple: [1] model parameter dictionary; [2] optimization algorithm results (e.g. bestresult[2].minimum)
+- `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
 
 """
 function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
@@ -78,30 +67,21 @@ Calibrate
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `tolX` : parameter space tolerance
-
 - `tolG` : parameter space update tolerance
-
 - `maxEval` : maximum number of model evaluations
-
 - `maxIter` : maximum number of optimization iterations
-
 - `maxJacobians` : maximum number of Jacobian solves
-
 - `lambda` : initial Levenberg-Marquardt lambda 
-
 - `lambda_mu` : lambda multiplication factor [10]
-
 - `np_lambda` : number of parallel lambda solves
-
 - `show_trace` : shows solution trace [default=false]
-
 - `usenaive` : use naive Levenberg-Marquardt solver
 
 Returns:
 
-- `bestresult` : optimal results tuple: [1] model parameter dictionary; [2] optimization algorithm results (e.g. bestresult[2].minimum)
+- `minimumdict` : model parameter dictionary with the optimal values at the minimum
+- `results` : optimization algorithm results (e.g. results.minimum)
 
 """
 function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)

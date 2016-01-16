@@ -1,39 +1,43 @@
 import Anasol
 import ProgressMeter
 
-"Compute concentration for a point (x,y,z,t)"
-function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
-	anasolfunction = eval(parse("Anasol.$anasolfunction"))
-	d = -theta * pi / 180
-	xshift = wellx - x
-	yshift = welly - y
-	ztrans = wellz - z
-	xtrans = xshift * cos(d) - yshift * sin(d)
-	ytrans = xshift * sin(d) + yshift * cos(d)
-	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
-	#sigma01 = sigma02 = sigma03 = 0. #point source
-	sigma01 = dx
-	sigma02 = dy
-	sigma03 = dz
-	v1 = vx
-	v2 = vy
-	v3 = vz
-	speed = sqrt(vx * vx + vy * vy + vz * vz)
-	sigma1 = sqrt(ax * speed * 2)
-	sigma2 = sqrt(ay * speed * 2)
-	sigma3 = sqrt(az * speed * 2)
-	H1 = H2 = H3 = H
-	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
-	anasolresult = anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
-	return 1e6 * f * anasolresult / n
-end
+"""
+Create a function to compute concentrations for all the observation points using Anasol
 
-"Compute concentration for all the observation points in a given `madsdata` class"
+`makecomputeconcentrations(madsdata)`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+
+Returns:
+
+- `computeconcentrations` : function to compute concentrations; `computeconcentrations` returns a dictionary of observations and model preducted concentrations
+
+Example:
+
+```
+computeconcentrations = Mads.makecomputeconcentrations(madsdata)
+paramkeys = Mads.getparamkeys(madsdata)
+paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+forward_preds = computeconcentrations(paramdict)
+```
+
+or
+
+`computeconcentrations()`
+
+"""
 function makecomputeconcentrations(madsdata::Associative)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
 	if haskeyword(madsdata, "background")
 			background = madsdata["Problem"]["background"]
+	end
+	function computeconcentrations()
+		paramkeys = Mads.getparamkeys(madsdata)
+		paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+		computeconcentrations(paramdict)
 	end
 	function computeconcentrations(parameters)
 		porosity = parameters["n"]
@@ -109,7 +113,79 @@ function makecomputeconcentrations(madsdata::Associative)
 	return computeconcentrations
 end
 
-"Compute injected/reduced contaminant mass for a given `madsdata` class"
+"""
+Compute concentration for a point in space and time (x,y,z,t)
+
+`contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")`
+
+Arguments:
+
+- `wellx`
+- `welly`
+- `wellz`
+- `n`
+- `lambda`
+- `theta`
+- `vx`
+- `vy`
+- `vz`
+- `ax`
+- `ay`
+- `az`
+- `H`
+- `x`
+- `y`
+- `z`
+- `dx`
+- `dy`
+- `dz`
+- `f`
+- `t0`
+- `t1`
+- `t`
+- `anasolfunction` : "long_bbb_ddd_iir_c"
+
+"""
+function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
+	anasolfunction = eval(parse("Anasol.$anasolfunction"))
+	d = -theta * pi / 180
+	xshift = wellx - x
+	yshift = welly - y
+	ztrans = wellz - z
+	xtrans = xshift * cos(d) - yshift * sin(d)
+	ytrans = xshift * sin(d) + yshift * cos(d)
+	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
+	#sigma01 = sigma02 = sigma03 = 0. #point source
+	sigma01 = dx
+	sigma02 = dy
+	sigma03 = dz
+	v1 = vx
+	v2 = vy
+	v3 = vz
+	speed = sqrt(vx * vx + vy * vy + vz * vz)
+	sigma1 = sqrt(ax * speed * 2)
+	sigma2 = sqrt(ay * speed * 2)
+	sigma3 = sqrt(az * speed * 2)
+	H1 = H2 = H3 = H
+	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
+	anasolresult = anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	return 1e6 * f * anasolresult / n
+end
+
+"""
+Compute injected/reduced contaminant mass
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `time` : computational time
+
+Returns:
+
+- `mass_injected` : total injected mass
+- `mass_reduced` : total reduced mass
+
+"""
 function computemass(madsdata::Associative; time = 0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
@@ -152,7 +228,23 @@ function computemass(madsdata::Associative; time = 0)
 	return mass_injected, mass_reduced
 end
 
-"Compute injected/reduced contaminant mass for a given set of mads input files"
+
+"""
+Compute injected/reduced contaminant mass for a given set of mads input files
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `time` : computational time
+- `path` : search mads for the mads input files (string or regular expression accepted)
+
+Returns:
+
+- `lambda` : array with all the lambda values
+- `mass_injected` : array with associated total injected mass
+- `mass_reduced` : array with associated total reduced mass
+
+"""
 function computemass(madsfiles; time = 0, path = ".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
@@ -175,7 +267,22 @@ function computemass(madsfiles; time = 0, path = ".")
 	return lambda, mass_injected, mass_reduced
 end
 
-"Plot injected/reduced contaminant mass"
+"""
+Plot injected/reduced contaminant mass
+
+Arguments:
+
+- `lambda` : array with all the lambda values
+- `mass_injected` : array with associated total injected mass
+- `mass_reduced` : array with associated total reduced mass
+- `filename` : output filename for the generated plot
+- `format` : output plot format (`png`, `pdf`, etc.)
+
+Returns: `none`
+
+Dumps:
+
+"""
 function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString; format="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Guide.xlabel("Reaction Rate Constant [1/d]"), Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)
 	display(p1)

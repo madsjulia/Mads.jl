@@ -9,15 +9,11 @@ Bayes Sampling
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
-- `nsteps` : 
-
-- `burnin` : 
-
-- `thinning` : 
+- `nsteps` :  
+- `burnin` :  
+- `thinning` :   
 
 Returns:
-
 - `mcmcchain` : 
 
 """
@@ -45,17 +41,12 @@ Brute force parallel Bayesian sampling
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `numsequences` :
-
 - `nsteps` : 
-
 - `burnin` : 
-
 - `thinning` : 
 
 Returns:
-
 - `mcmcchain` : 
 
 """
@@ -72,11 +63,9 @@ Monte Carlo analysis
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `N` : number of samples (default = 100)
 
 Returns:
-
 - `outputdicts` : parameter dictionary containing the data arrays
 
 Dumps:
@@ -147,24 +136,18 @@ Generate separate spaghetti plots for each `selected` (`type != null`) model par
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `paramdictarray` : parameter dictionary containing the data arrays to be plotted
-
 - `keyword` : keyword to be added in the file name used to output the produced plots
-
 - `format` : output plot format (`png`, `pdf`, etc.)
-
 - `xtitle` : `x` axis title
-
 - `ytitle` : `y` axis title
-
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
 
 Returns: `none`
 
 Dumps:
 
-- Images files (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
+- Image files (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 
 """
 function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
@@ -267,26 +250,19 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
-
 - `paramdictarray` : dictionary containing the parameter data arrays to be plotted
-
 - `filename` : output file name used to output the produced plots
-
 - `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
-
 - `format` : output plot format (`png`, `pdf`, etc.)
-
 - `xtitle` : `x` axis title
-
 - `ytitle` : `y` axis title
-
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
 
 Returns: `none`
 
 Dumps:
 
-- Images files (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+- Image files (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 
 """
 function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
