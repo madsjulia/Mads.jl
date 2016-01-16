@@ -1,7 +1,7 @@
 import Anasol
 import ProgressMeter
 
-@doc "Compute concentration for a point (x,y,z,t)" ->
+"Compute concentration for a point (x,y,z,t)"
 function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
 	anasolfunction = eval(parse("Anasol.$anasolfunction"))
 	d = -theta * pi / 180
@@ -28,7 +28,7 @@ function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay
 	return 1e6 * f * anasolresult / n
 end
 
-@doc "Compute concentration for all observation points" ->
+"Compute concentration for all the observation points in a given `madsdata` class"
 function makecomputeconcentrations(madsdata::Associative)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
@@ -109,7 +109,7 @@ function makecomputeconcentrations(madsdata::Associative)
 	return computeconcentrations
 end
 
-@doc "Compute injected/reduced contaminant mass" ->
+"Compute injected/reduced contaminant mass for a given `madsdata` class"
 function computemass(madsdata::Associative; time = 0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
@@ -152,7 +152,7 @@ function computemass(madsdata::Associative; time = 0)
 	return mass_injected, mass_reduced
 end
 
-@doc "Compute injected/reduced contaminant mass" ->
+"Compute injected/reduced contaminant mass for a given set of mads input files"
 function computemass(madsfiles; time = 0, path = ".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
@@ -161,7 +161,7 @@ function computemass(madsfiles; time = 0, path = ".")
 	mass_injected = Array(Float64, nf)
 	mass_reduced = Array(Float64, nf)
 	@showprogress 1 "Computing reducted mass ..." for i = 1:nf
-		md = Mads.loadyamlmadsfile(path * "/" * mf[i])
+		md = Mads.loadmadsfile(path * "/" * mf[i])
 		l = md["Parameters"]["lambda"]["init"]
 		if l < eps(Float64)
 			l = 1e-32
@@ -175,7 +175,7 @@ function computemass(madsfiles; time = 0, path = ".")
 	return lambda, mass_injected, mass_reduced
 end
 
-@doc "Plot injected/reduced contaminant mass" ->
+"Plot injected/reduced contaminant mass"
 function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString; format="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Guide.xlabel("Reaction Rate Constant [1/d]"), Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)
 	display(p1)

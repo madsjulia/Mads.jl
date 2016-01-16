@@ -25,7 +25,7 @@ using JSON
 Mads.madsinfo("TEST eFAST senstivity analysis:")
 
 # Load in .mads data file to analyze
-md = Mads.loadyamlmadsfile("/home/jlaughli/Julia Code/examples/contamination/w01_w1a_w10a_w20a.mads")
+md = Mads.loadmadsfile("/home/jlaughli/Julia Code/examples/contamination/w01_w1a_w10a_w20a.mads")
 
 # Run eFAST algorithm and calculate results
 resultsefast = Mads.efast(md,N=int(15000), M=6, gamma=4)

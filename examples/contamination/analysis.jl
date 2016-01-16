@@ -3,7 +3,7 @@ import Mads
 currentdir = pwd()
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 cd(madsdirname)
-md = Mads.loadyamlmadsfile("w01.mads") # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("""Mads root name: $(rootname)""")
 display(md) # show the content of the Mads input file

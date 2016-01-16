@@ -6,7 +6,7 @@ Mads.quieton()
 
 problemdir = Mads.getmadsdir()
 
-mdsobol = Mads.loadyamlmadsfile(problemdir * "../tests/test-sobol.mads")
+mdsobol = Mads.loadmadsfile(problemdir * "../tests/test-sobol.mads")
 sa_results = Mads.efast(mdsobol, N=385, seed=2015)
 
 if Mads.create_tests

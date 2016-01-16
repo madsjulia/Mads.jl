@@ -1,23 +1,48 @@
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
+"""
+Load MADS input file defining a MADS class set
+
+`loadmadsfile(filename; julia=false)`
+
+Arguments:
+
+- `filename` : input file name (e.g. `input_file_name.mads`)
+
+- `julia` : if `true`, force using `julia` parsing fuctions; if `false` (default), use `python` parsing functions [boolean]
+
+Returns:
+
+- `madsdata` : Loaded Mads data class
+
+Example: `md = loadmadsfile("input_file_name.mads")`
+
+"""
+function loadmadsfile(filename::AbstractString; julia::Bool=false)
+	loadyamlmadsfile(filename; julia=julia)
 end
 
-@doc "Set MADS input file" ->
+"Save calibration results"
+function savecalibrationresults(madsdata::Associative, results)
+	#TODO map estimated parameters on a new madsdata structure
+	#TODO save madsdata in yaml file using dumpyamlmadsfile
+	#TODO save residuals, predictions, observations (yaml?)
+end
+
+"Set MADS input file"
 function setmadsinputfile(filename)
 	global madsinputfile = filename
 end
 
-@doc "Get MADS input file" ->
+"Get MADS input file"
 function getmadsinputfile()
 	return madsinputfile
 end
 
-@doc "Get MADS root name" ->
+"Get MADS root name"
 function getmadsrootname(madsdata::Associative; first=true)
 	return getrootname(madsdata["Filename"]; first=first)
 end
 
-@doc "Get MADS problem dir" ->
+"Get MADS problem dir"
 function getmadsdir()
 	source_path = Base.source_path()
 	if typeof(source_path) == Void
@@ -29,7 +54,7 @@ function getmadsdir()
 	return problemdir
 end
 
-@doc "Get file name root " ->
+"Get file name root "
 function getrootname(filename::AbstractString; first=true)
 	d = split(filename, "/")
 	s = split(d[end], ".")
@@ -44,7 +69,7 @@ function getrootname(filename::AbstractString; first=true)
 	return r
 end
 
-@doc "Get file name extension" ->
+"Get file name extension"
 function getextension(filename)
 	d = split(filename, "/")
 	s = split(d[end], ".")
@@ -55,16 +80,16 @@ function getextension(filename)
 	end
 end
 
-@doc "Get MADS problem directory" ->
+"Get MADS problem directory"
 function getmadsproblemdir(madsdata::Associative)
 	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
 end
 
-@doc "Get matching files in a directory " ->
+"Get matching files in a directory "
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
 
-@doc "Create and save a new mads problem based on provided observations (calibration targets)" ->
+"Create and save a new mads problem based on provided observations (calibration targets)"
 function createmadsproblem(madsdata::Associative, predictions::Associative, filename::AbstractString)
 	newmadsdata = deepcopy(madsdata)
 	observationsdict = newmadsdata["Observations"]
@@ -82,7 +107,7 @@ function createmadsproblem(madsdata::Associative, predictions::Associative, file
 	Mads.dumpyamlmadsfile(newmadsdata, filename)
 end
 
-@doc "Write parameters via MADS template" ->
+"Write parameters via MADS template"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -109,14 +134,14 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	close(outfile)
 end
 
-@doc "Write initial parameters" ->
+"Write initial parameters"
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	writeparameters(madsdata, Dict(paramkeys, paramsinit))
 end
 
-@doc "Write parameters" ->
+"Write parameters"
 function writeparameters(madsdata::Associative, parameters)
 	expressions = evaluatemadsexpressions(parameters, madsdata)
 	paramsandexps = merge(parameters, expressions)
@@ -125,7 +150,7 @@ function writeparameters(madsdata::Associative, parameters)
 	end
 end
 
-@doc "Call C MADS ins_obs() function from the MADS library" ->
+"Call C MADS ins_obs() function from the MADS library"
 function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
@@ -139,7 +164,7 @@ function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, 
 	return observations
 end
 
-@doc "Read observations" ->
+"Read observations"
 function readobservations(madsdata::Associative)
 	obsids=getobskeys(madsdata)
 	observations = OrderedDict(zip(obsids, zeros(length(obsids))))

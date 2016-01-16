@@ -28,7 +28,7 @@ function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, 
 	return (result[1], abserr[1])
 end
 
-mdinternal = Mads.loadyamlmadsfile("test-internal-linearmodel.mads")
+mdinternal = Mads.loadmadsfile("test-internal-linearmodel.mads")
 f = Mads.makemadscommandfunction(mdinternal)
 f2(x) = f(["a"=>0., "b"=>x])["o1"]
 println(gsl_integration_qag(f2, 0, 1))

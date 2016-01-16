@@ -1,13 +1,27 @@
 import BlackBoxOptim
 import Lora
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
-# @document
-#@docstrings
 
-@doc "Bayes Sampling " ->
-function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3), thinning=1)
+"""
+Bayes Sampling of a given `madsdata` class
+
+`bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+
+- `nsteps` : 
+
+- `burnin` : 
+
+- `thinning` : 
+
+Returns:
+
+- `mcmcchain` : 
+
+"""
+function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
 	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -23,14 +37,54 @@ function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3),
 	return mcmcchain
 end
 
-@doc "Brute force parallel Bayesian sampling " ->
-function bayessampling(madsdata, numsequences; nsteps=round(Int, 1e2), burnin=round(Int, 1e3))
-	mcmcchains = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin), 1:numsequences)
-	return mcmcchains
+"""
+Brute force parallel Bayesian sampling of a given the `madsdata` class
+
+`bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
+
+Arguments:
+
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+
+- `numsequences` :
+
+- `nsteps` : 
+
+- `burnin` : 
+
+- `thinning` : 
+
+Returns:
+
+- `mcmcchain` : 
+
+"""
+function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
+	mcmcchain = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+	return mcmcchain
 end
 
-@doc "Do a forward Monte Carlo analysis " ->
-function montecarlo(madsdata; N=round(Int, 1e2))
+"""
+Monte Carlo analysis of a given `madsdata` class
+
+`montecarlo(madsdata; N=100)`
+
+Description:
+
+Usage:
+
+Arguments:
+
+Returns:
+
+Details:
+
+References:
+
+See Also:
+
+"""
+function montecarlo(madsdata::Associative; N=100)
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -74,8 +128,8 @@ function montecarlo(madsdata; N=round(Int, 1e2))
 	return outputdicts
 end
 
-@doc "Convert parameter array to a parameter dictionary of arrays" ->
-function paramarray2dict(madsdata, array)
+"Convert parameter array to a parameter dictionary of arrays"
+function paramarray2dict(madsdata::Associative, array)
 	paramkeys = getparamkeys(madsdata)
 	dict = OrderedDict()
 	for i in 1:length(paramkeys)
@@ -84,8 +138,28 @@ function paramarray2dict(madsdata, array)
 	return dict
 end
 
-@doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
+
+"""
+Generate spaghetti plots for each model parameter separtely in a given `madsdata` class
+
+`montecarlo(madsdata; N=round(Int, 1e2))`
+
+Description:
+
+Usage:
+
+Arguments:
+
+Returns:
+
+Details:
+
+References:
+
+See Also:
+
+"""
+function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -177,8 +251,8 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 	end
 end
 
-@doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+"Generate Monte-Carlo spaghetti plots for all the selected model parameter "
+function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)

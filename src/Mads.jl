@@ -1,3 +1,6 @@
+"""
+MADS: Model Analysis & Decision Support
+"""
 module Mads
 
 import DataStructures # import is needed for parallel calls
@@ -61,42 +64,6 @@ madsinputfile = ""
 create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
-#@document
-#@docstrings
-
-@doc "Save calibration results" ->
-function savecalibrationresults(madsdata::Associative, results)
-	#TODO map estimated parameters on a new madsdata structure
-	#TODO save madsdata in yaml file using dumpyamlmadsfile
-	#TODO save residuals, predictions, observations (yaml?)
-end
-
-@doc "Make a version of the mads file where the targets are given by the model predictions" ->
-function maketruth(infilename::AbstractString, outfilename::AbstractString)
-	md = loadyamlmadsfile(infilename)
-	f = makemadscommandfunction(md)
-	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
-	outyaml = loadyamlfile(infilename)
-	if haskey(outyaml, "Observations")
-		for fullobs in outyaml["Observations"]
-			obskey = collect(keys(fullobs))[1]
-			obs = fullobs[obskey]
-			obs["target"] = result[obskey]
-		end
-	end
-	if haskey(outyaml, "Wells")
-		for fullwell in outyaml["Wells"]
-			wellname = collect(keys(fullwell))[1]
-			for fullobs in fullwell[wellname]["obs"]
-				obskey = collect(keys(fullobs))[1]
-				obs = fullobs[obskey]
-				obs["target"] = result[string(wellname, "_", obs["t"])]
-			end
-		end
-	end
-	dumpyamlfile(outfilename, outyaml)
-end
-
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
 type svrOutput
 	alpha::Array{Float64,1}
@@ -113,4 +80,27 @@ type svrFeature
 	feature::Array{Float64,1}
 end
 
-end # Module end
+#=
+TODO IMPORTANT
+
+MADS function documnetation should include the following sections:
+"""
+Description:
+
+Usage:
+
+Arguments:
+
+Returns:
+
+Examples:
+
+Details:
+
+References:
+
+See Also:
+"""
+=#
+
+end
