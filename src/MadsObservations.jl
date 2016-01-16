@@ -1,16 +1,16 @@
-@doc "Get keys for observations" ->
+"Get keys for observations"
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Observations"])]
 end
 
-@doc "Get keys for wells" ->
+"Get keys for wells"
 function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
 end
 
-@doc "Create functions to get values of the MADS observations" ->
+"Create functions to get values of the MADS observations"
 getobsnames = ["min", "max", "log", "weight", "target"]
 getobstypes = [Float64, Float64, Any, Float64, Float64]
 getobsdefault = [-Inf32, Inf32, nothing, 1, 0]
@@ -55,7 +55,7 @@ function setwellweights!(madsdata, value::Number)
 	setobsweights!(madsdata, value)
 end
 
-@doc "Show observations" ->
+"Show observations"
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = Mads.getobskeys(madsdata)
@@ -69,7 +69,7 @@ function showobservations(madsdata::Associative)
 	display(p)
 end
 
-@doc "Create observations" ->
+"Create observations"
 function createobservations!(madsdata::Associative, t, c; logtransform=false, weight_type="constant", weight=1 )
 	@assert length(t) == length(c)
 	observationsdict = OrderedDict()
@@ -91,7 +91,7 @@ function createobservations!(madsdata::Associative, t, c; logtransform=false, we
 	madsdata["Observations"] = observationsdict
 end
 
-@doc "Set observations (calibration targets)" ->
+"Set observations (calibration targets)"
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
 	if haskey(madsdata, "Wells")
@@ -107,7 +107,7 @@ function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	end
 end
 
-@doc "Turn on all Wells" ->
+"Turn on all Wells"
 function allwellson!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = true
@@ -115,7 +115,7 @@ function allwellson!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-@doc "Turn on a specific well" ->
+"Turn on a specific well"
 function wellon!(madsdata::Associative, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -131,7 +131,7 @@ function wellon!(madsdata::Associative, wellname::AbstractString)
 	end
 end
 
-@doc "Turn off all Wells" ->
+"Turn off all Wells"
 function allwellsoff!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = false
@@ -139,7 +139,7 @@ function allwellsoff!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-@doc "Turn off a specific well" ->
+"Turn off a specific well"
 function welloff!(madsdata, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -155,7 +155,7 @@ function welloff!(madsdata, wellname::AbstractString)
 	end
 end
 
-@doc "Convert Wells to Observations class" ->
+"Convert Wells to Observations class"
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
 	for wellkey in collect(keys(madsdata["Wells"]))

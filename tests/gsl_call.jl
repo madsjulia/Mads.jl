@@ -16,7 +16,7 @@ type GSL_Function
 	GSL_Function(f::Function) = new(gsl_function_wrap_c, f)
 end
 
-@doc "GSL call of QAG adaptive integration" ->
+"GSL call of QAG adaptive integration"
 function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, maxintervals::Integer=10^7)
 	s = ccall((:gsl_integration_workspace_alloc,:libgsl), Ptr{Void}, (Csize_t,), maxintervals)
 	result = Array(Cdouble,1)

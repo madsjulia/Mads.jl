@@ -6,7 +6,7 @@ using ProgressMeter
 
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
-@doc "Independent sampling of MADS Model parameters" ->
+"Independent sampling of MADS Model parameters"
 function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
@@ -20,7 +20,7 @@ function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
 	end
 end
 
-@doc "Random numbers for a MADS Model parameters" ->
+"Random numbers for a MADS Model parameters"
 function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 	if length(paramdist) == 0
 		paramdist = getparamdistributions(madsdata)
@@ -46,7 +46,7 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 	return nothing
 end
 
-@doc "Local sensitivity analysis" ->
+"Local sensitivity analysis"
 function localsa(madsdata; format="", filename="")
 	if filename ==""
 		rootname = Mads.getmadsrootname(madsdata)
@@ -121,7 +121,7 @@ function localsa(madsdata; format="", filename="")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
-@doc "Saltelli (brute force)" ->
+"Saltelli (brute force)"
 function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
@@ -260,7 +260,7 @@ function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) d
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
-@doc "Saltelli " ->
+"Saltelli "
 function saltelli(madsdata; N=100, seed=0)
 	if seed != 0
 		srand(seed)
@@ -388,7 +388,7 @@ function saltelli(madsdata; N=100, seed=0)
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
-@doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
+"Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range"
 function computeparametersensitities(madsdata, saresults)
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
@@ -427,7 +427,7 @@ function computeparametersensitities(madsdata, saresults)
 	@Compat.compat Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
 end
 
-@doc "Parallelization" ->
+"Parallelization"
 names = ["saltelli", "saltellibrute"]
 for mi = 1:length(names)
 	q = quote
@@ -470,7 +470,7 @@ for mi = 1:length(names)
 	eval(q)
 end
 
-@doc "Print the sensitivity analysis results" ->
+"Print the sensitivity analysis results"
 function printSAresults(madsdata, results)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -546,7 +546,7 @@ function printSAresults(madsdata, results)
 	madsoutput("\n")
 end
 
-@doc "Print the sensitivity analysis results (method 2)" ->
+"Print the sensitivity analysis results (method 2)"
 function saltelliprintresults2(madsdata, results)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -581,7 +581,7 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-@doc "Convert Void's to NaN's in a dictionary" ->
+"Convert Void's to NaN's in a dictionary"
 function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
@@ -601,7 +601,7 @@ function nothing2nan!(dict) # TODO generalize using while loop and recursive cal
 	end
 end
 
-@doc "Delete rows with NaN" ->
+"Delete rows with NaN"
 function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
@@ -613,7 +613,7 @@ function deleteNaN!(df::DataFrame)
 	end
 end
 
-@doc "Scale down values larger than max(Float32) so that Gadfly can plot the data" ->
+"Scale down values larger than max(Float32) so that Gadfly can plot the data"
 function maxtorealmaxFloat32!(df::DataFrame)
 	limit = realmax(Float32) / 10
 	for i in 1:length(df)
@@ -628,7 +628,7 @@ function maxtorealmaxFloat32!(df::DataFrame)
 end
 
 ## eFAST
-@doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
+"Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method"
 function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1152,7 +1152,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	#@everywhere using Distributions
 	#require("DataStructures")
 	########## Although it would be nice to have this inside the if statement of ismads == 1, for some reason julia won't compile
-	# Need to add this in if version is < 0.4 so we can use @doc macro
+	# Need to add this in if version is < 0.4 so we can use macro
 	#if VERSION < v"0.4.0-dev"
 	#@everywhere using Docile # default for v > 0.4
 	#end
@@ -1438,7 +1438,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 
 end
 
-@doc "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)" ->
+"Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"
 function plotSAresults_monty(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")

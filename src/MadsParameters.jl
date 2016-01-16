@@ -1,16 +1,16 @@
-@doc "Get keys for parameters" ->
+"Get keys for parameters"
 function getparamkeys(madsdata::Associative)
 	return collect(keys(madsdata["Parameters"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
-@doc "Get keys for source parameters" ->
+"Get keys for source parameters"
 function getsourcekeys(madsdata::Associative)
 	return collect(keys(madsdata["Sources"][1]["box"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Parameters"])]
 end
 
-@doc "Create functions to get values of the MADS parameters" ->
+"Create functions to get values of the MADS parameters"
 getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
 getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
 getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
@@ -38,14 +38,14 @@ for i = 1:length(getparamsnames)
 	eval(q)
 end
 
-@doc "Set initial parameters in the MADS dictionary" ->
+"Set initial parameters in the MADS dictionary"
 function setparamsinit!(madsdata::Dict, paramdict::Dict)
 	od = OrderedDict() #TODO better way to do this?!
 	od = merge(od, paramdict)
 	setparamsinit!(madsdata, od)
 end
 
-@doc "Set all parameters ON" ->
+"Set all parameters ON"
 function setallparamson!(madsdata::Dict)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -53,7 +53,7 @@ function setallparamson!(madsdata::Dict)
 	end
 end
 
-@doc "Set all parameters OFF" ->
+"Set all parameters OFF"
 function setallparamsoff!(madsdata::Dict)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -61,17 +61,17 @@ function setallparamsoff!(madsdata::Dict)
 	end
 end
 
-@doc "Set a parameter ON" ->
+"Set a parameter ON"
 function setparamon!(madsdata::Dict, paramkey)
 		madsdata["Parameters"][paramkey]["type"] = "opt";
 end
 
-@doc "Set a parameter OFF" ->
+"Set a parameter OFF"
 function setparamoff!(madsdata::Dict, paramkey)
 		madsdata["Parameters"][paramkey]["type"] = nothing
 end
 
-@doc "Set initial parameters in the MADS dictionary" ->
+"Set initial parameters in the MADS dictionary"
 function setparamsinit!(madsdata::Dict, paramdict::OrderedDict)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -79,14 +79,14 @@ function setparamsinit!(madsdata::Dict, paramdict::OrderedDict)
 	end
 end
 
-@doc "Set normal parameter distributions in the MADS dictionary" ->
+"Set normal parameter distributions in the MADS dictionary"
 function setparamsdistnormal!(madsdata, mean, stddev)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
 	end
 end
-@doc "Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)" ->
+"Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
 keywordvalsNOT = [nothing, false]
@@ -112,14 +112,14 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
-@doc "Get keys for optimized parameters (redundant; already created above)" ->
+"Get keys for optimized parameters (redundant; already created above)"
 function getoptparamkeys(madsdata)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	return paramkeys[paramtypes .!= nothing]
 end
 
-@doc "Show optimizable parameters" ->
+"Show optimizable parameters"
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
@@ -131,7 +131,7 @@ function showparameters(madsdata::Associative)
 	display(p)
 end
 
-@doc "Show parameters" ->
+"Show parameters"
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
@@ -147,7 +147,7 @@ function showallparameters(madsdata::Associative)
 	display(p)
 end
 
-@doc "Get parameter distributions" ->
+"Get parameter distributions"
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedDict()

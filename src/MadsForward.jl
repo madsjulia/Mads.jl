@@ -24,6 +24,15 @@ function maketruth(infilename::AbstractString, outfilename::AbstractString)
 	dumpyamlfile(outfilename, outyaml)
 end
 
+
+"Do a forward run using the initial or provided values for the model parameters "
+function forward(madsdata::Associative; paramvalues=Void)
+	if paramvalues == Void
+		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	end
+	forward(madsdata, paramvalues)
+end
+
 "Do a forward run using provided values for the model parameters "
 function forward(madsdata::Associative, paramvalues)
 	f = Mads.makemadscommandfunction(madsdata)

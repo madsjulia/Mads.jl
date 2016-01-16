@@ -1,4 +1,4 @@
-@doc "Set image file format" ->
+"Set image file format"
 function setimagefileformat(filename, format)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
@@ -24,7 +24,7 @@ function setimagefileformat(filename, format)
 	return filename, format
 end
 
-@doc "Plot MADS problem" ->
+"Plot MADS problem"
 function plotmadsproblem(madsdata::Associative; format="", filename="")
 	if haskey(madsdata, "Sources")
 		rectangles = Array(Float64, 0, 4)
@@ -86,7 +86,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 	p
 end
 
-@doc "Plot a 3D grid solution based on s " ->
+"Plot a 3D grid solution based on s "
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
 	@PyCall.pyimport matplotlib.ticker as mt
 	@PyCall.pyimport matplotlib.colors as mcc
@@ -132,13 +132,13 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
 end
 
-@doc "Plot a 3D grid solution " ->
+"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-@doc "Plot a 3D grid solution " ->
+"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
@@ -275,7 +275,7 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	end
 end
 
-@doc "Plot the sensitivity analysis results for all wells (wells class expected)" ->
+"Plot the sensitivity analysis results for all wells (wells class expected)"
 function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
@@ -288,7 +288,7 @@ function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "
 	end
 end
 
-@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
+"Plot the sensitivity analysis results for each well (wells class expected)"
 function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
@@ -367,7 +367,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
-@doc "Plot the sensitivity analysis results for the observations" ->
+"Plot the sensitivity analysis results for the observations"
 function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")

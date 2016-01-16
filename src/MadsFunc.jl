@@ -2,7 +2,7 @@ if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
 
-@doc "Make MADS command function" ->
+"Make MADS command function"
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
@@ -139,13 +139,13 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	end
 end
 
-@doc "Make MADS command gradient function" ->
+"Make MADS command gradient function"
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
 
-@doc "Make MADS command gradient function" ->
+"Make MADS command gradient function"
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
@@ -155,13 +155,13 @@ function makemadscommandgradient(madsdata::Associative, f::Function)
 	return madscommandgradient
 end
 
-@doc "Make MADS command function & gradient function" ->
+"Make MADS command function & gradient function"
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
 end
 
-@doc "Make MADS command function and gradient function" ->
+"Make MADS command function and gradient function"
 function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
@@ -253,7 +253,7 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.
 	end
 end
 
-@doc "Make MADS loglikelihood function" ->
+"Make MADS loglikelihood function"
 function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
 		Mads.madsinfo("Internal log likelihood")

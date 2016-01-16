@@ -1,4 +1,4 @@
-@doc "Make a version of f that accepts an array containing the opt parameters' values" ->
+"Make a version of f that accepts an array containing the opt parameters' values"
 function makearrayfunction(madsdata, f)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -8,7 +8,7 @@ function makearrayfunction(madsdata, f)
 	return arrayfunction
 end
 
-@doc "Make a conditional log likelihood function that accepts an array containing the opt parameters' values" ->
+"Make a conditional log likelihood function that accepts an array containing the opt parameters' values"
 function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -21,7 +21,7 @@ function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	return arrayconditionalloglikelihood
 end
 
-@doc "Make a log likelihood function that accepts an array containing the opt parameters' values" ->
+"Make a log likelihood function that accepts an array containing the opt parameters' values"
 function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -38,12 +38,12 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 	return arrayloglikelihood
 end
 
-@doc "Set Dynamic Model for MADS model calls using internal Julia functions" ->
+"Set Dynamic Model for MADS model calls using internal Julia functions"
 function setdynamicmodel(madsdata, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
-@doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
+"Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
 	expression = MPTools.populateexpression(expression, parameters)
@@ -52,7 +52,7 @@ function evaluatemadsexpression(expressionstring, parameters)
 	return retval
 end
 
-@doc "Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
+"Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
 function evaluatemadsexpressions(parameters, madsdata)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()

@@ -2,7 +2,7 @@ import BlackBoxOptim
 import Lora
 
 """
-Bayes Sampling of a given `madsdata` class
+Bayes Sampling
 
 `bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
 
@@ -38,7 +38,7 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 end
 
 """
-Brute force parallel Bayesian sampling of a given the `madsdata` class
+Brute force parallel Bayesian sampling
 
 `bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
 
@@ -65,7 +65,7 @@ function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000
 end
 
 """
-Monte Carlo analysis of a given `madsdata` class
+Monte Carlo analysis
 
 `montecarlo(madsdata; N=100)`
 
@@ -140,7 +140,7 @@ function paramarray2dict(madsdata::Associative, array)
 end
 
 """
-Generate separate spaghetti plots for each `selected` (`type: opt`) model parameter in a given `madsdata` class
+Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
 
 `spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )`
 
@@ -260,7 +260,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 end
 
 """
-Generate a combined spaghetti plot for the `selected` (`type: opt`) model parameter in a given `madsdata` class
+Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
 
 `spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)`
 
