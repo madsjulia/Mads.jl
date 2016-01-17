@@ -26,17 +26,35 @@ function setverbositylevel(level::Int)
 	global verbositylevel = level
 end
 
-"Reset the model runs count"
+"Reset the model runs count to be equal to zero"
 function resetmodelruns()
 	global modelruns = 0
 end
 
-"Check for a Mads keyword"
+"""
+Check for a `keyword` in a class within the Mads dictionary `madsdata`
+
+- `Mads.haskeyword(madsdata, keyword)`
+- `Mads.haskeyword(madsdata, class, keyword)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
+- `keyword` : dictionary key
+
+Returns: `true` or `false`
+
+Examples:
+
+- `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
+- `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
+"""
+
 function haskeyword(madsdata::Associative, keyword::AbstractString)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
 
-"Check for a Mads keyword in a Mads class"
 function haskeyword(madsdata::Associative, class::AbstractString, keyword::AbstractString)
 	return haskey(madsdata[class], keyword) ? true : false
 end

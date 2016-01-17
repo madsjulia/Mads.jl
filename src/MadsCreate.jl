@@ -10,7 +10,7 @@ Arguments:
 
 - `infilename` : input Mads file
 - `outfilename` : output Mads file
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `predictions` : dictionary of model predictions
 
 Returns: `none`

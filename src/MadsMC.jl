@@ -8,7 +8,7 @@ Bayes Sampling
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `nsteps` :  
 - `burnin` :  
 - `thinning` :   
@@ -41,7 +41,7 @@ Brute force parallel Bayesian sampling
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `numsequences` :
 - `nsteps` : 
 - `burnin` : 
@@ -64,7 +64,7 @@ Monte Carlo analysis
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `N` : number of samples (default = 100)
 
 Returns:
@@ -121,7 +121,9 @@ function montecarlo(madsdata::Associative; N=100)
 	return outputdicts
 end
 
-"Convert parameter array to a parameter dictionary of arrays"
+"""
+Convert parameter array to a parameter dictionary of arrays
+"""
 function paramarray2dict(madsdata::Associative, array)
 	paramkeys = getparamkeys(madsdata)
 	dict = OrderedDict()
@@ -138,7 +140,7 @@ Generate separate spaghetti plots for each `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `paramdictarray` : parameter dictionary containing the data arrays to be plotted
 - `keyword` : keyword to be added in the file name used to output the produced plots
 - `format` : output plot format (`png`, `pdf`, etc.)
@@ -236,7 +238,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 		else
 			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		end
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = Mads.setimagefileformat!(filename, format)
 		try
 			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter.":$
@@ -252,7 +254,7 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `paramdictarray` : dictionary containing the parameter data arrays to be plotted
 - `filename` : output file name used to output the produced plots
 - `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
@@ -313,7 +315,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filen
 			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."

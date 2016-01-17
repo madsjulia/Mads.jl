@@ -8,7 +8,7 @@ Create a function to compute concentrations for all the observation points using
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 
 Returns:
 
@@ -181,7 +181,7 @@ Compute injected/reduced contaminant mass
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `time` : computational time
 
 Returns:
@@ -298,7 +298,7 @@ function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString;
 	display(p2)
 	p3 = Gadfly.plot(x=mass_injected, y=mass_reduced./mass_injected, Guide.xlabel("Mass Injected [kg]"), Guide.ylabel("Fraction of the Reduced Mass [-]"), Geom.point, Scale.x_log10, Scale.y_log10)
 	display(p3)
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	p = Gadfly.vstack(p1, p2, p3)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 8inch), p)
 	return

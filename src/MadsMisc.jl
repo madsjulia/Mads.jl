@@ -5,7 +5,7 @@ Make a version of the function `f` that accepts an array containing the optimal 
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `f` : ...
 
 Returns:

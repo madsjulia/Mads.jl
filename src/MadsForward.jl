@@ -6,7 +6,7 @@ Perform a forward run using the initial or provided values for the model paramet
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `paramvalues` : dictionary of model parameter values
 
 Returns:
@@ -33,7 +33,7 @@ Perform a forward run over a 3D grid defined in `madsdata` using the initial or 
 
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 - `paramvalues` : dictionary of model parameter values
 
 Returns:
