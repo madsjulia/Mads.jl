@@ -26,9 +26,6 @@ paramkeys = Mads.getparamkeys(madsdata)
 paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 forward_preds = computeconcentrations(paramdict)
 ```
-
-
-
 """
 function makecomputeconcentrations(madsdata::Associative)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
@@ -146,7 +143,6 @@ Arguments:
 - `t1`
 - `t`
 - `anasolfunction` : "long_bbb_ddd_iir_c"
-
 """
 function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
 	anasolfunction = eval(parse("Anasol.$anasolfunction"))
