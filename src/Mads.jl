@@ -32,6 +32,7 @@ end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
+include("MadsCreate.jl")
 include("MadsIO.jl")
 include("MadsYAML.jl")
 include("MadsASCII.jl")

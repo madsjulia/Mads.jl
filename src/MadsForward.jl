@@ -1,8 +1,8 @@
 """
 Perform a forward run using the initial or provided values for the model parameters
 
-`forward(madsdata)`
-`forward(madsdata, paramvalues)`
+- `forward(madsdata)`
+- `forward(madsdata, paramvalues)`
 
 Arguments:
 
@@ -28,8 +28,8 @@ end
 """
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-`forwardgrid(madsdata)`
-`forwardgrid(madsdata, paramvalues))`
+- `forwardgrid(madsdata)`  
+- `forwardgrid(madsdata, paramvalues))`
 
 Arguments:
 

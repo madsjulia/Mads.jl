@@ -1,7 +1,7 @@
 """
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
-`makearrayfunction(madsdata, f)`
+`Mads.makearrayfunction(madsdata, f)`
 
 Arguments:
 

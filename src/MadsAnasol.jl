@@ -4,7 +4,7 @@ import ProgressMeter
 """
 Create a function to compute concentrations for all the observation points using Anasol
 
-`makecomputeconcentrations(madsdata)`
+`Mads.makecomputeconcentrations(madsdata)`
 
 Arguments:
 
@@ -12,9 +12,13 @@ Arguments:
 
 Returns:
 
-- `computeconcentrations` : function to compute concentrations; `computeconcentrations` returns a dictionary of observations and model preducted concentrations
+- `computeconcentrations` : function to compute concentrations; `computeconcentrations` returns a dictionary of observations and model predicted concentrations
 
-Example:
+Examples:
+
+`computeconcentrations()`
+
+or
 
 ```
 computeconcentrations = Mads.makecomputeconcentrations(madsdata)
@@ -23,9 +27,7 @@ paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["ini
 forward_preds = computeconcentrations(paramdict)
 ```
 
-or
 
-`computeconcentrations()`
 
 """
 function makecomputeconcentrations(madsdata::Associative)
@@ -116,7 +118,7 @@ end
 """
 Compute concentration for a point in space and time (x,y,z,t)
 
-`contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")`
+`Mads.contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")`
 
 Arguments:
 
@@ -175,6 +177,8 @@ end
 """
 Compute injected/reduced contaminant mass
 
+`Mads.computemass(madsdata; time = 0)`
+
 Arguments:
 
 - `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
@@ -232,11 +236,13 @@ end
 """
 Compute injected/reduced contaminant mass for a given set of mads input files
 
+`Mads.computemass(madsfiles; time = 0, path = ".")`
+
 Arguments:
 
-- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsfiles` : matching pattern for Mads input files (string or regular expression accepted)
 - `time` : computational time
-- `path` : search mads for the mads input files (string or regular expression accepted)
+- `path` : search directory for the mads input files 
 
 Returns:
 
@@ -269,6 +275,8 @@ end
 
 """
 Plot injected/reduced contaminant mass
+
+- `Mads.plotmass(lambda, mass_injected, mass_reduced, filename="file_name")`
 
 Arguments:
 

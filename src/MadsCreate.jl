@@ -1,21 +1,26 @@
-"""
-Create a new version of a mads file `infilename` and save it as `outfilename` where the observation targets are computed based on the model predictions
 
-`createtruth(infilename, outfilename)`
-`createtruth(infilename::AbstractString, outfilename::AbstractString)
+"""
+Create a new Mads problem where the observation targets are computed based on the model predictions
+
+- `Mads.createmadsproblem(infilename, outfilename)`
+- `Mads.createmadsproblem(madsdata, outfilename)`
+- `Mads.createmadsproblem(madsdata, predictions, outfilename)
 
 Arguments:
 
 - `infilename` : input Mads file
 - `outfilename` : output Mads file
+- `madsdata` : Mads data class loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `predictions` : dictionary of model predictions
 
 Returns: `none`
 
 """
-function createtruth(infilename::AbstractString, outfilename::AbstractString)
-	md = loadmadsfile(infilename)
-	f = makemadscommandfunction(md)
-	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
+
+function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
+	madsdata = Mads.loadmadsfile(infilename)
+	f = Mads.makemadscommandfunction(madsdata)
+	result = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]
@@ -34,8 +39,29 @@ function createtruth(infilename::AbstractString, outfilename::AbstractString)
 			end
 		end
 	end
-	dumpyamlfile(outfilename, outyaml)
+	Mads.dumpyamlfile(outfilename, outyaml)
 	return
 end
 
-function createtruth(infilename::AbstractString, outfilename::AbstractString)
+function createmadsproblem(madsdata::Associative, outfilename::AbstractString)
+	f = Mads.makemadscommandfunction(madsdata)
+	predictions = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	createmadsproblem(madsdata, predictions, outfilename)
+end
+
+function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)
+	newmadsdata = deepcopy(madsdata)
+	observationsdict = newmadsdata["Observations"]
+	if haskey(newmadsdata, "Wells")
+		wellsdict = newmadsdata["Wells"]
+	end
+	for k in keys(predictions)
+		observationsdict[k]["target"] = predictions[k]
+		if haskey( observationsdict[k], "well" )
+			well = observationsdict[k]["well"]
+			i = observationsdict[k]["index"]
+			wellsdict[well]["obs"][i]["c"] = predictions[k]
+		end
+	end
+	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
+end

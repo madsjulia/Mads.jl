@@ -1,7 +1,9 @@
 """
 Load MADS input file defining a MADS class set
 
-`loadmadsfile(filename; julia=false)`
+- `Mads.loadmadsfile(filename)`
+- `Mads.loadmadsfile(filename; julia=false)`
+- `Mads.loadmadsfile(filename; julia=true)`
 
 Arguments:
 
@@ -26,22 +28,70 @@ function savecalibrationresults(madsdata::Associative, results)
 	#TODO save residuals, predictions, observations (yaml?)
 end
 
-"Set MADS input file"
-function setmadsinputfile(filename)
+"""
+Set a default MADS input file
+
+`Mads.setmadsinputfile(filename)`
+
+Arguments:
+
+- `filename` : input file name (e.g. `input_file_name.mads`)
+
+"""
+function setmadsinputfile(filename::AbstractString)
 	global madsinputfile = filename
 end
 
-"Get MADS input file"
+"""
+Get the default MADS input file set as a MADS global variable using `setmadsinputfile(filename)`
+
+`Mads.getmadsinputfile()`
+
+Arguments: `none`
+
+Returns:
+
+- `filename` : input file name (e.g. `input_file_name.mads`)
+
+"""
 function getmadsinputfile()
 	return madsinputfile
 end
 
-"Get MADS root name"
+"""
+Get the MADS problem root name
+
+`madsrootname = Mads.getmadsrootname(madsdata)`
+
+"""
 function getmadsrootname(madsdata::Associative; first=true)
 	return getrootname(madsdata["Filename"]; first=first)
 end
 
-"Get MADS problem dir"
+"""
+Get the directory where the Mads data file is located
+
+`Mads.getmadsproblemdir(madsdata)`
+
+Example:
+
+```
+madsdata = Mads.loadmadsproblemdir("../../a.mads")
+madsproblemdir = Mads.getmadsproblemdir(madsdata)
+```
+
+where `madsproblemdir` = `"../../"`
+"""
+function getmadsproblemdir(madsdata::Associative)
+	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
+end
+
+"""
+Get the directory where currently Mads is running
+
+`problemdir = Mads.getmadsdir()`
+
+"""
 function getmadsdir()
 	source_path = Base.source_path()
 	if typeof(source_path) == Void
@@ -53,7 +103,17 @@ function getmadsdir()
 	return problemdir
 end
 
-"Get file name root "
+"""
+Get file name root
+
+Example:
+
+```
+r = Mads.getrootname("a.rnd.dat") # r = "a"
+r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
+
+```
+"""
 function getrootname(filename::AbstractString; first=true)
 	d = split(filename, "/")
 	s = split(d[end], ".")
@@ -68,7 +128,16 @@ function getrootname(filename::AbstractString; first=true)
 	return r
 end
 
-"Get file name extension"
+"""
+Get file name extension
+
+Example:
+
+```
+ext = Mads.getextension("a.mads") # ext = "mads" 
+```
+
+"""
 function getextension(filename)
 	d = split(filename, "/")
 	s = split(d[end], ".")
@@ -79,12 +148,22 @@ function getextension(filename)
 	end
 end
 
-"Get MADS problem directory"
-function getmadsproblemdir(madsdata::Associative)
-	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
-end
+"""
+Get files in the current directory or in a directory difined by `path` matching pattern `key` which cann be a string or regular expression
 
-"Get matching files in a directory "
+- `Mads.searchdir(key)`
+- `Mads.searchdir(key; path = ".")`
+
+Arguments:
+
+- `key` : matching pattern for Mads input files (string or regular expression accepted)
+- `path` : search directory for the mads input files
+
+Returns:
+
+- `filename` : an array with file names matching the pattern in the specified directory
+
+"""
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
 
@@ -204,25 +283,6 @@ function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractStr
 	return obsdict
 end
 
-"Call C MADS ins_obs() function from the MADS library"
-function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
-	#TODO is this needed?!
-end
-
-"Call C MADS ins_obs() function from the MADS library"
-function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
-	n = length(obsid)
-	obsval = zeros(n) # initialize to 0
-	obscheck = -1 * ones(n) # initialize to -1
-	debug = 0 # setting debug level 0 or 1 works
-	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
-	result = ccall( (:ins_obs, "libmads"), Int32,
-								 (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
-								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
-	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
-	return observations
-end
-
 "Read observations"
 function readobservations(madsdata::Associative)
 	obsids = getobskeys(madsdata)
@@ -243,7 +303,7 @@ function readobservations(madsdata::Associative)
 	return observations
 end
 
-"Read observations" 
+"Read observations using C Mads library" 
 function readobservations_cmads(madsdata::Associative)
 	obsids=getobskeys(madsdata)
 	observations = OrderedDict(zip(obsids, zeros(length(obsids))))
@@ -254,5 +314,24 @@ function readobservations_cmads(madsdata::Associative)
 			observations[obsid] += obs[obsid]
 		end
 	end
+	return observations
+end
+
+"Call C MADS ins_obs() function from the MADS library"
+function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
+	#TODO is this needed?!
+end
+
+"Call C MADS ins_obs() function from the MADS library"
+function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
+	n = length(obsid)
+	obsval = zeros(n) # initialize to 0
+	obscheck = -1 * ones(n) # initialize to -1
+	debug = 0 # setting debug level 0 or 1 works
+	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
+	result = ccall( (:ins_obs, "libmads"), Int32,
+								 (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
+								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
+	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
 	return observations
 end

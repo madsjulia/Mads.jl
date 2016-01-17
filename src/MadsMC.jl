@@ -4,7 +4,7 @@ import Lora
 """
 Bayes Sampling
 
-`bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
+`Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
 
 Arguments:
 
@@ -37,7 +37,7 @@ end
 """
 Brute force parallel Bayesian sampling
 
-`bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
+`Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
 
 Arguments:
 
@@ -60,7 +60,7 @@ end
 """
 Monte Carlo analysis
 
-`montecarlo(madsdata; N=100)`
+`Mads.montecarlo(madsdata; N=100)`
 
 Arguments:
 
@@ -134,7 +134,7 @@ end
 """
 Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
 
-`spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )`
+`Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )`
 
 Arguments:
 
@@ -248,7 +248,7 @@ end
 """
 Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
 
-`spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)`
+`Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)`
 
 Arguments:
 
@@ -313,7 +313,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filen
 			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
-	filename, format = setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."
