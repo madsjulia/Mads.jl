@@ -32,6 +32,7 @@ end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
+include("MadsHelp.jl")
 include("MadsCreate.jl")
 include("MadsIO.jl")
 include("MadsYAML.jl")
@@ -80,30 +81,5 @@ end
 type svrFeature
 	feature::Array{Float64,1}
 end
-
-#=
-TODO IMPORTANT
-
-MADS function documnetation should include the following sections:
-"""
-Description:
-
-Usage:
-
-Arguments:
-
-Returns:
-
-Dumps:
-
-Examples:
-
-Details:
-
-References:
-
-See Also:
-"""
-=#
 
 end
