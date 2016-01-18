@@ -23,6 +23,13 @@ See Also:
 """
 =#
 
+
+"""
+MADS Getting started
+
+MADS data dictionary is typically loaded from YAML MADS input file.
+
+"""
 function help()
-	#TODO
+	@doc Mads.help
 end

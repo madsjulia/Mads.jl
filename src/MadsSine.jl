@@ -22,7 +22,7 @@ function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Ve
 end
 
 "Sine transformation of a gradient function"
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx = 0.1) # sine transformation a gradient function
+function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector; center=Array(Float64,0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)

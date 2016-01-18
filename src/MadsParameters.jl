@@ -33,7 +33,7 @@ Returns:
 function getparamdict(madsdata::Associative)
 	if haskey( madsdata, "Parameters" )
 		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = OrderedDict(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys))
+		paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		return paramdict
 	end
 end
@@ -102,7 +102,6 @@ Arguments:
 - `madsdata` : Mads data dictionary
 - `paramdict` : dictionary with initial model parameter values
 """
-
 function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -144,7 +143,15 @@ function setparamsdistnormal!(madsdata::Associative, mean, stddev)
 	end
 end
 
-"Create functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"
+"Set uniform parameter distributions in the MADS dictionary"
+function setparamsdistuniform!(madsdata::Associative, min, max)
+	paramkeys = getparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
+	end
+end
+
+"Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
 keywordvalsNOT = [nothing, false]
@@ -170,7 +177,7 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
-"Get keys for optimized parameters (redundant)"
+"Get keys for optimized parameters"
 function getoptparamkeys(madsdata::Associative)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)
