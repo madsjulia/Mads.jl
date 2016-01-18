@@ -318,11 +318,6 @@ function readobservations_cmads(madsdata::Associative)
 end
 
 "Call C MADS ins_obs() function from the MADS library"
-function cmadsins_obs(obsid::Array{Any,1}, instructionfilename::AbstractString, inputfilename::AbstractString)
-	#TODO is this needed?!
-end
-
-"Call C MADS ins_obs() function from the MADS library"
 function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
