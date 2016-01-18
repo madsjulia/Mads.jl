@@ -73,6 +73,7 @@ for i = 1:length(getparamsnames)
 	paramtype = getparamstypes[i]
 	paramdefault = getparamsdefault[i]
 	q = quote
+		@doc "Get an array with specific values for all the MADS model parameters" ->
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
@@ -135,7 +136,17 @@ function setparamoff!(madsdata::Associative, parameterkey)
 		madsdata["Parameters"][parameterkey]["type"] = nothing
 end
 
-"Set normal parameter distributions in the MADS dictionary"
+"""
+Set normal parameter distributions for all the model parameters in the MADS data dictionary
+
+`Mads.setparamsdistnormal!(madsdata, mean, stddev)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `mean` : array with the mean values
+- `stddev` : array with the standard deviation values
+"""
 function setparamsdistnormal!(madsdata::Associative, mean, stddev)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -143,7 +154,17 @@ function setparamsdistnormal!(madsdata::Associative, mean, stddev)
 	end
 end
 
-"Set uniform parameter distributions in the MADS dictionary"
+"""
+Set uniform parameter distributions for all the model parameters in the MADS data dictionary
+
+`Mads.setparamsdistuniform!(madsdata, min, max)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `min` : array with the minimum values
+- `max` : array with the maximum values
+"""
 function setparamsdistuniform!(madsdata::Associative, min, max)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
@@ -157,6 +178,7 @@ keywordname = ["opt", "log"]
 keywordvalsNOT = [nothing, false]
 for i = 1:length(getfunction)
 	q = quote
+		@doc "Get parameters in the Mads data dictionary that are optimized or log-transformed (opt/log)" ->
 		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvalsNOT[i])]
@@ -165,6 +187,7 @@ for i = 1:length(getfunction)
 			paramkeys = getparamkeys(madsdata)
 			return $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
+		@doc "Get parameters in the Mads data dictionary that are NOT optimized or log-transformed (opt/log)" ->
 		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvalsNOT[i])]
@@ -177,14 +200,14 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
-"Get keys for optimized parameters"
+"Get keys for optimizable parameters in the Mads data dictionary"
 function getoptparamkeys(madsdata::Associative)
 	paramtypes = getparamstype(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	return paramkeys[paramtypes .!= nothing]
 end
 
-"Show optimizable parameters"
+"Show optimizable parameters in the Mads data dictionary"
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
@@ -196,7 +219,7 @@ function showparameters(madsdata::Associative)
 	display(p)
 end
 
-"Show parameters"
+"Show all parameters in the Mads data dictionary"
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
@@ -212,7 +235,16 @@ function showallparameters(madsdata::Associative)
 	display(p)
 end
 
-"Get parameter distributions"
+"""
+Get distributions of all parameters in the Mads data dictionary
+
+`Mads.getparamdistributions(madsdata; init_dist=false)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `init_dist` : if true, use the initialization distributions (if defined)
+"""
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedDict()

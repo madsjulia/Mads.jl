@@ -72,12 +72,6 @@ function makerosenbrock_gradient(N)
 	return rosenbrock_gradient_lm
 end
 
-
-
-########################################
-## Function: Powell Function          ##
-########################################
-
 function makepowell(N)                                                                   
     function powell(x::Vector)                                       
         result = Array(eltype(x),N)
@@ -92,7 +86,6 @@ function makepowell(N)
     return powell
 end
     
-
 function makepowell_gradient(N)                      
     function powell_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
@@ -115,12 +108,6 @@ function makepowell_gradient(N)
     return powell_gradient             
 end
 
-
-
-###############################################
-#############  Sphere Function  ###############
-###############################################
-
 function makesphere(N)
     function sphere(x::Vector)
         result = Array(eltype(x), N)
@@ -135,7 +122,6 @@ function makesphere(N)
     
 end
 
-
 function makesphere_gradient(N)
     function sphere_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
@@ -147,11 +133,6 @@ function makesphere_gradient(N)
 
     return sphere_gradient
 end
-
-
-###############################################
-##########  Dixon-Price Function  #############
-###############################################
 
 function makedixonprice(N)
     function dixonprice(x::Vector)
@@ -166,7 +147,6 @@ function makedixonprice(N)
 
     return dixonprice
 end
-
 
 function makedixonprice_gradient(N)
 
@@ -186,11 +166,6 @@ function makedixonprice_gradient(N)
     return dixonprice_gradient
     
 end
-
-
-###############################################
-##########  Sum-squares Function  #############
-###############################################
 
 function makesumsquares(N)
     function sumsquares(x::Vector)
@@ -222,12 +197,6 @@ function makesumsquares_gradient(N)
     return sumsquares_gradient
 end
 
-
-###############################################
-##  Rotated Hyper-Ellipsoid Function  #########
-###############################################
-
-
 function makerotatedhyperellipsoid(N)
 
     function rotatedhyperellipsoid(x::Vector)
@@ -249,7 +218,6 @@ function makerotatedhyperellipsoid(N)
     return rotatedhyperellipsoid
         
 end
-
 
 function makerotatedhyperellipsoid_gradient(N)
     function rotatedhyperellipsoid_gradient(x::Vector)

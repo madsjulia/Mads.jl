@@ -15,7 +15,6 @@ Returns:
 - `madsdata` : Loaded Mads data class
 
 Example: `md = loadmadsfile("input_file_name.mads")`
-
 """
 function loadmadsfile(filename::AbstractString; julia::Bool=false)
 	loadyamlmadsfile(filename; julia=julia)
@@ -36,7 +35,6 @@ Set a default MADS input file
 Arguments:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
-
 """
 function setmadsinputfile(filename::AbstractString)
 	global madsinputfile = filename
@@ -52,7 +50,6 @@ Arguments: `none`
 Returns:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
-
 """
 function getmadsinputfile()
 	return madsinputfile
@@ -62,7 +59,6 @@ end
 Get the MADS problem root name
 
 `madsrootname = Mads.getmadsrootname(madsdata)`
-
 """
 function getmadsrootname(madsdata::Associative; first=true)
 	return getrootname(madsdata["Filename"]; first=first)
@@ -90,7 +86,6 @@ end
 Get the directory where currently Mads is running
 
 `problemdir = Mads.getmadsdir()`
-
 """
 function getmadsdir()
 	source_path = Base.source_path()
@@ -136,7 +131,6 @@ Example:
 ```
 ext = Mads.getextension("a.mads") # ext = "mads" 
 ```
-
 """
 function getextension(filename)
 	d = split(filename, "/")
@@ -162,7 +156,6 @@ Arguments:
 Returns:
 
 - `filename` : an array with file names matching the pattern in the specified directory
-
 """
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))

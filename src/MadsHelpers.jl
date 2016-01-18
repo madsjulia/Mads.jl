@@ -39,7 +39,7 @@ Check for a `keyword` in a class within the Mads dictionary `madsdata`
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
 - `keyword` : dictionary key
 

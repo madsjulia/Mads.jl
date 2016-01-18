@@ -27,7 +27,9 @@ See Also:
 """
 MADS Getting started
 
-MADS data dictionary is typically loaded from YAML MADS input file.
+MADS data dictionary is typically loaded from YAML MADS input file. For example,
+
+`madsdata = Mads.loadmadsfiles("input_file_name.mads")`
 
 """
 function help()

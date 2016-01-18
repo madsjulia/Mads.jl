@@ -8,7 +8,7 @@ Bayes Sampling
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `nsteps` :  
 - `burnin` :  
 - `thinning` :   
@@ -16,7 +16,6 @@ Arguments:
 Returns:
 
 - `mcmcchain` : 
-
 """
 function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
 	#TODO make it sample only over the opt params
@@ -41,7 +40,7 @@ Brute force parallel Bayesian sampling
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `numsequences` :
 - `nsteps` : 
 - `burnin` : 
@@ -50,7 +49,6 @@ Arguments:
 Returns:
 
 - `mcmcchain` : 
-
 """
 function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
 	mcmcchain = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
@@ -64,7 +62,7 @@ Monte Carlo analysis
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `N` : number of samples (default = 100)
 
 Returns:
@@ -74,7 +72,6 @@ Returns:
 Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
-
 """
 function montecarlo(madsdata::Associative; N=100)
 	paramkeys = getparamkeys(madsdata)
@@ -140,7 +137,7 @@ Generate separate spaghetti plots for each `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `paramdictarray` : parameter dictionary containing the data arrays to be plotted
 - `keyword` : keyword to be added in the file name used to output the produced plots
 - `format` : output plot format (`png`, `pdf`, etc.)
@@ -254,7 +251,7 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `paramdictarray` : dictionary containing the parameter data arrays to be plotted
 - `filename` : output file name used to output the produced plots
 - `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)

@@ -8,7 +8,7 @@ Create a function to compute concentrations for all the observation points using
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 
 Returns:
 
@@ -109,6 +109,7 @@ function makecomputeconcentrations(madsdata::Associative)
 		global modelruns += 1
 		return c
 	end
+	@doc "Computes concentrations at all the observation points in the MADS data dictionary" computeconcentrations
 	return computeconcentrations
 end
 
@@ -177,14 +178,13 @@ Compute injected/reduced contaminant mass
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `time` : computational time
 
 Returns:
 
 - `mass_injected` : total injected mass
 - `mass_reduced` : total reduced mass
-
 """
 function computemass(madsdata::Associative; time = 0)
 	if time == 0
@@ -245,7 +245,6 @@ Returns:
 - `lambda` : array with all the lambda values
 - `mass_injected` : array with associated total injected mass
 - `mass_reduced` : array with associated total reduced mass
-
 """
 function computemass(madsfiles; time = 0, path = ".")
 	mf = searchdir(madsfiles, path=path)
@@ -282,10 +281,7 @@ Arguments:
 - `filename` : output filename for the generated plot
 - `format` : output plot format (`png`, `pdf`, etc.)
 
-Returns: `none`
-
-Dumps:
-
+Dumps: image file with name `filename` and in specified `format`
 """
 function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString; format="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Guide.xlabel("Reaction Rate Constant [1/d]"), Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)

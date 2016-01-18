@@ -5,7 +5,7 @@ Calibrate with random initial guesses
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `numberofsamples` : number of random initial samples
 - `tolX` : parameter space tolerance
 - `tolG` : parameter space update tolerance
@@ -66,7 +66,7 @@ Calibrate
 
 Arguments:
 
-- `madsdata` : Mads data dictionary loaded using `madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+- `madsdata` : Mads data dictionary
 - `tolX` : parameter space tolerance
 - `tolG` : parameter space update tolerance
 - `maxEval` : maximum number of model evaluations
