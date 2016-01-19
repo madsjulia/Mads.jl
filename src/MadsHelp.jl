@@ -26,10 +26,17 @@ See Also:
 
 """
 MADS Getting started
+--------------------
 
-MADS data dictionary is typically loaded from a YAML MADS input file. For example,
+MADS data dictionary is typically loaded from a YAML MADS input file. The loading of a MADS file can be done as follows:
 
-`madsdata = Mads.loadmadsfiles("input_file_name.mads")`
+`madsdata = Mads.loadmadsfiles("<input_file_name>.mads")`
+
+For example, you can do:
+
+`madsdata = Mads.loadmadsfile("Mads.jl/examples/contamination/w01.mads")`
+
+where `examples/contamination/w01.mads` is located in the Mads.jl repository.
 
 Typically, MADS data dictionary includes several classes:
 
@@ -41,6 +48,9 @@ Typically, MADS data dictionary includes several classes:
 
 `Mads.showobservations(madsdata)` will list all the observations.
 
+MADS can perform various types of analyses:
+
+- `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis.
 """
 function help()
 	@doc Mads.help

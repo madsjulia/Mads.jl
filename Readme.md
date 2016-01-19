@@ -1,12 +1,12 @@
 Installation
 ============
 
-Local installation
+Local MADS installation
 -------------------
 
 ### Clone some packages in a local directory
 
-Here the local directory is called `codes`
+Below the local directory is called `codes`
 
 ```
 mkdir codes
@@ -26,7 +26,7 @@ Add the following line in the `.juliarc.jl` file in your home directory
 
 If the file does not exist create one.
 
-Global installation
+Global MADS installation
 ------------------
 
 ```
@@ -37,10 +37,10 @@ Pkg.clone("git@gitlab.com:mads/MPTools.jl.git")
 Pkg.clone("git@gitlab.com:mads/BIGUQ.jl.git")
 ```
 
-Installation of packages
-------------------------
+Installation of MADS packages
+-----------------------------
 
-Start julia and add the following packages:
+Start Julia and add the following packages:
 
 Pkg.add("DataFrames");
 Pkg.add("Logging");
@@ -75,30 +75,43 @@ using Conda;
 Conda.add("yaml");
 ```
 
-To install YAML library globaly (not recommended), you will need to run:
+To install YAML library globally (not recommended), you will need to run:
 
 ```
 brew install libyaml
 sudo pip install yaml
 ```
 
-Run examples
+Run MADS examples
 ------------
 
-In julia REPL, do the following commands:
+In Julia REPL, do the following commands:
 
 `using Mads` # if there are still missing packages, add them
 
-`include("Mads.jl/examples/contamination/analysis.jl")` # to peform various analyses
-related to contaminant transport
+To explore a getting-started instructions, execute:
 
-`include("Mads.jl/examples/bigdt/bigdt.jl")` # to peform bigdt analysis
+`Mads.help()`
 
-If you make changes in MADS code, you will need to do
+There are various examples located in `Mads.jl/examples`.
 
-`reload("Mads.jl")` # to update the code in Julia
+For example, execute
 
-Installation behind a firewall
+`include("Mads.jl/examples/contamination/analysis.jl")`
+
+to perform various analyses related to contaminant transport, or execute
+
+`include("Mads.jl/examples/bigdt/bigdt.jl")`
+
+to perform BIGDT analysis
+
+If you make changes in the MADS code, you will need to do
+
+`reload("Mads.jl")` 
+
+to update the MADS code in Julia.
+
+Installation of MADS behind a firewall
 ------------------------------
 
 Add in .gitconfig:
@@ -118,7 +131,7 @@ export https_proxy=http://proxyout.<your_site>:8080
 export no_proxy=.<your_site>
 ```
 
-For example, if you are doing this at LANL you will neet to execute the 
+For example, if you are doing this at LANL you will need to execute the 
 following lines in your bash command-line environment:
 
 ```

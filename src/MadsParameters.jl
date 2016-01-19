@@ -64,16 +64,18 @@ function getsourcekeys(madsdata::Associative)
 	return sourcekeys
 end
 
-"Create functions to get values of the MADS parameters"
+"MADS parameter variable names"
 getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
 getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
 getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
+index = 0
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]
 	paramdefault = getparamsdefault[i]
+	index = i
 	q = quote
-		@doc "Get an array with specific values for all the MADS model parameters" ->
+		@doc "Get an array with `$(getparamsnames[index])` values for all the MADS model parameters" ->
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
@@ -172,13 +174,16 @@ function setparamsdistuniform!(madsdata::Associative, min, max)
 	end
 end
 
-"Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"
+["Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"]
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
+funcname = ["optimized", "log-transformed"]
 keywordvalsNOT = [nothing, false]
+index = 0
 for i = 1:length(getfunction)
+	index = i
 	q = quote
-		@doc "Get parameters in the Mads data dictionary that are optimized or log-transformed (opt/log)" ->
+		@doc "Get the keys in the MADS data dictionary for parameters that are $(funcname[index]) (`$(keywordname[index])`)" ->
 		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvalsNOT[i])]
@@ -187,7 +192,7 @@ for i = 1:length(getfunction)
 			paramkeys = getparamkeys(madsdata)
 			return $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
-		@doc "Get parameters in the Mads data dictionary that are NOT optimized or log-transformed (opt/log)" ->
+		@doc "Get the keys in the MADS data dictionary for parameters that are NOT $(funcname[index]) (`$(keywordname[index])`)" ->
 		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvalsNOT[i])]
@@ -198,13 +203,6 @@ for i = 1:length(getfunction)
 		end
 	end
 	eval(q)
-end
-
-"Get keys for optimizable parameters in the Mads data dictionary"
-function getoptparamkeys(madsdata::Associative)
-	paramtypes = getparamstype(madsdata)
-	paramkeys = getparamkeys(madsdata)
-	return paramkeys[paramtypes .!= nothing]
 end
 
 "Show optimizable parameters in the Mads data dictionary"
