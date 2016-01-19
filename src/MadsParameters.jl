@@ -223,10 +223,12 @@ function showallparameters(madsdata::Associative)
 	parkeys = Mads.getparamkeys(madsdata)
 	p = Array(ASCIIString, 0)
 	for parkey in parkeys
-		s = @sprintf "%-10s = %15g" parkey pardict[parkey]["init"]
+		s = @sprintf "%-30s : %-10s = %15g" pardict[parkey]["longname"] parkey pardict[parkey]["init"]
 		if pardict[parkey]["type"] != nothing
 			s *= " <- optimizable "
-			s *= @sprintf "log = %5s  Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
+			s *= @sprintf "log-transformed = %5s Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
+		else
+			s *= " <- fixed"
 		end
 		push!(p, s)
 	end
