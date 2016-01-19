@@ -18,8 +18,8 @@ The code allows for coupled model parameters and regularization terms that are i
 For additional information:
 
 *  web:   http://mads.lanl.gov -:- http://madsjulia.lanl.gov
-*  repo:  http://gitlab.com/mads/Mads.jl
-*  git:   git clone git@gitlab.com:mads/Mads.jl
+*  repo:  http://gitlab.com/mads/Mads.jl -:- http://gitlab.com/madsjulia/Mads.jl
+*  git:   git clone git@gitlab.com:mads/Mads.jl -:- git clone git@gitlab.com:madsjulia/Mads.jl
 *  email: mads@lanl.gov
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
@@ -57,7 +57,6 @@ MADS Licensing & Copyright
 --------------------------
 
 Execute `@doc Mads` to see the licensing & copyright information.
-
 """
 function help()
 	@doc Mads.help

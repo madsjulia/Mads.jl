@@ -65,8 +65,8 @@ Pkg.add("Gadfly");
 Pkg.add("JLD");
 Pkg.clone("BlackBoxOptim");
 
-MADS uses python YAML library.
-If you do not have it installed the best option is to use Julia's python
+MADS uses a Python YAML library.
+If you do not have it installed, the best option is to use Julia's python
 environment:
 
 ```
@@ -75,7 +75,7 @@ using Conda;
 Conda.add("yaml");
 ```
 
-To install YAML library globally (not recommended), you will need to run:
+To install the Python YAML library globally (not recommended), you will need to run:
 
 ```
 brew install libyaml
@@ -89,11 +89,11 @@ In Julia REPL, do the following commands:
 
 `using Mads` # if there are still missing packages, add them
 
-To explore a getting-started instructions, execute:
+To explore getting-started instructions, execute:
 
 `Mads.help()`
 
-There are various examples located in `Mads.jl/examples`.
+There are various examples located in the `Mads.jl/examples` directory of the Mads.jl repository.
 
 For example, execute
 
@@ -103,7 +103,7 @@ to perform various analyses related to contaminant transport, or execute
 
 `include("Mads.jl/examples/bigdt/bigdt.jl")`
 
-to perform BIGDT analysis
+to perform BIG-DT analysis.
 
 If you make changes in the MADS code, you will need to do
 
@@ -131,7 +131,7 @@ export https_proxy=http://proxyout.<your_site>:8080
 export no_proxy=.<your_site>
 ```
 
-For example, if you are doing this at LANL you will need to execute the 
+For example, if you are doing this at LANL, you will need to execute the 
 following lines in your bash command-line environment:
 
 ```
