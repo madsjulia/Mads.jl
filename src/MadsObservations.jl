@@ -10,7 +10,7 @@ function getwellkeys(madsdata::Associative)
 	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
 end
 
-"MADS observation variable names"
+# Make functions to get MADS observation variable names
 getobsnames = ["min", "max", "log", "weight", "target"]
 getobstypes = [Float64, Float64, Any, Float64, Float64]
 getobsdefault = [-Inf32, Inf32, nothing, 1, 0]

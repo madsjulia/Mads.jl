@@ -64,7 +64,7 @@ function getsourcekeys(madsdata::Associative)
 	return sourcekeys
 end
 
-"MADS parameter variable names"
+# Make functions to get MADS parameter variable names"
 getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
 getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
 getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
@@ -174,7 +174,7 @@ function setparamsdistuniform!(madsdata::Associative, min, max)
 	end
 end
 
-["Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)"]
+# Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
 funcname = ["optimized", "log-transformed"]

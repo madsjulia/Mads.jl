@@ -7,7 +7,7 @@ using ProgressMeter
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 "Independent sampling of MADS Model parameters"
-function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
+function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::AbstractString=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
 	else
@@ -20,8 +20,8 @@ function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
 	end
 end
 
-"Random numbers for a MADS Model parameters"
-function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
+"Random numbers for a MADS Model parameter defined by `parameterkey`"
+function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
 	if length(paramdist) == 0
 		paramdist = getparamdistributions(madsdata)
 	end
@@ -47,7 +47,7 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 end
 
 "Local sensitivity analysis"
-function localsa(madsdata; format="", filename="")
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="")
 	if filename ==""
 		rootname = Mads.getmadsrootname(madsdata)
 	else
@@ -122,7 +122,7 @@ function localsa(madsdata; format="", filename="")
 end
 
 "Saltelli (brute force)"
-function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
 	end
@@ -261,7 +261,7 @@ function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) d
 end
 
 "Saltelli "
-function saltelli(madsdata; N=100, seed=0)
+function saltelli(madsdata::Associative; N::Integer=100, seed::UInt32=0)
 	if seed != 0
 		srand(seed)
 	end
@@ -389,7 +389,7 @@ function saltelli(madsdata; N=100, seed=0)
 end
 
 "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range"
-function computeparametersensitities(madsdata, saresults)
+function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
 	mes = saresults["mes"]
@@ -427,11 +427,14 @@ function computeparametersensitities(madsdata, saresults)
 	@Compat.compat Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
 end
 
-"Parallelization"
-names = ["saltelli", "saltellibrute"]
-for mi = 1:length(names)
+# Parallelization of Saltelli functions
+saltelli_functions = ["saltelli", "saltellibrute"]
+index = 0
+for mi = 1:length(saltelli_functions)
+	index = mi
 	q = quote
-		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
+		@doc "Parallel version of $(saltelli_functions[index])" ->
+		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
 			if seed != 0
 				srand(seed)
 			end
@@ -439,7 +442,7 @@ for mi = 1:length(names)
 				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
+			results = pmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
@@ -464,14 +467,14 @@ for mi = 1:length(names)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(names[mi])*"_parallel")
+			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
 		end # end fuction
 	end # end quote
 	eval(q)
 end
 
 "Print the sensitivity analysis results"
-function printSAresults(madsdata, results)
+function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
@@ -547,7 +550,7 @@ function printSAresults(madsdata, results)
 end
 
 "Print the sensitivity analysis results (method 2)"
-function saltelliprintresults2(madsdata, results)
+function saltelliprintresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
@@ -581,8 +584,8 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-"Convert Void's to NaN's in a dictionary"
-function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
+"Convert Void's into NaN's in a dictionary"
+function nothing2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
 			for j in keys(dict[i])
@@ -601,7 +604,7 @@ function nothing2nan!(dict) # TODO generalize using while loop and recursive cal
 	end
 end
 
-"Delete rows with NaN"
+"Delete rows with NaN in a Dataframe `df`"
 function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
@@ -613,7 +616,7 @@ function deleteNaN!(df::DataFrame)
 	end
 end
 
-"Scale down values larger than max(Float32) so that Gadfly can plot the data"
+"Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data"
 function maxtorealmaxFloat32!(df::DataFrame)
 	limit = realmax(Float32) / 10
 	for i in 1:length(df)
@@ -629,7 +632,7 @@ end
 
 ## eFAST
 "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method"
-function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -637,7 +640,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	# AVi:       Sum of main effect variance indices (divided by # of resamples to get mean, Vi)
 	# ismads:    Boolean that tells us whether our system is analyzed in mads or as a standalone
 	# InputData: Different size depending on whether we are analyzing a mads system or using eFAST as a standalone.  If analyzing a mads problem,
-	# 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
+	# 			 InputData will have two columns, where the first column holds the saltelli_functions of parameters we are analyzing and the second holds
 	#			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
 	#			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
 	# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
