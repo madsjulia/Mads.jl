@@ -22,22 +22,20 @@ end
 
 "Random numbers for a MADS Model parameter defined by `parameterkey`"
 function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
-	if length(paramdist) == 0
-		paramdist = getparamdistributions(madsdata)
-	end
 	if haskey( madsdata["Parameters"], parameterkey )
-		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Void
-			if haskey(madsdata["Parameters"][parameterkey], "log")
-				if madsdata["Parameters"][parameterkey]["log"]
-					dist = paramdist[parameterkey]
-					if typeof(dist) == Uniform
-						a = log10(dist.a)
-						b = log10(dist.b)
-						return 10.^(a + (b - a) * Distributions.rand(numsamples))
-					elseif typeof(dist) == Normal
-						μ = log10(dist.μ)
-						return 10.^(μ + dist.σ * Distributions.randn(numsamples))
-					end
+		if length(paramdist) == 0
+			paramdist = getparamdistributions(madsdata)
+		end
+		if Mads.isopt(madsdata, parameterkey)
+			if Mads.islog(madsdata, parameterkey)
+				dist = paramdist[parameterkey]
+				if typeof(dist) == Distributions.Uniform
+					a = log10(dist.a)
+					b = log10(dist.b)
+					return 10.^(a + (b - a) * Distributions.rand(numsamples))
+				elseif typeof(dist) == Distributions.Normal
+					μ = log10(dist.μ)
+					return 10.^(μ + dist.σ * Distributions.randn(numsamples))
 				end
 			end
 			return Distributions.rand(paramdist[parameterkey], numsamples)

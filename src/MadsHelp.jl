@@ -22,36 +22,62 @@ For additional information:
 *  git:   git clone git@gitlab.com:mads/Mads.jl -:- git clone git@gitlab.com:madsjulia/Mads.jl
 *  email: mads@lanl.gov
 
-Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
-
 MADS Getting started
 --------------------
 
-All the MADS analyses are based on MADS data dictionary that defines the problem.
-MADS data dictionary is typically loaded from a YAML MADS input file.
+Install Julia and MADS using the installation instruction in the `Readme.md`.
+If you are not familiar with Julia a short on-line class is recommended.
+You can also explore the examples in the `Mads.jl/examples/learn_julia` directory of the Mads.jl repository.
+
+To start using Mads, initiate the Julia REPL and execute `using Mads` to load MADS.
+All the MADS analyses are based on a MADS data dictionary that defines the problem.
+The MADS data dictionary is typically loaded from a YAML MADS input file.
 The loading of a MADS file can be executed as follows:
 
 `madsdata = Mads.loadmadsfile("<input_file_name>.mads")`
 
-For example, you can load `Mads.jl/examples/contamination/w01short.mads` located in the Mads.jl repository:
+For example, you can execute:
 
-`madsdata = Mads.loadmadsfile("Mads.jl/examples/contamination/w01short.mads")`
+`madsdata = Mads.loadmadsfile("internal-linear.mads")`
+
+To run this command, Julia needs to be executed in the `Mads.jl/examples/getting_started` directory of the Mads.jl repository.
 
 Typically, MADS data dictionary includes several classes:
 
 - `Parameters` : lists of model parameters
 - `Observations` : lists of model observations
+- `Model` : defines a model to predict model observations using model parameters
+
+The file `internal-linear.mads` looks like this:
+
+```
+Parameters:
+- a : { init:  1, dist: "Uniform(-10, 10)" }
+- b : { init: -1, dist: "Uniform(-10, 10)" }
+Observations:
+- o1: { target: -3 }
+- o2: { target:  1 }
+- o3: { target:  5 }
+- o4: { target:  9 }
+Model: internal-linear.jl
+```
+
+In this case there are two parameters, `a` and `b`, defining a linear model, `f(t) = a * t + b`, described in `internal-linearmodel.jl`.
+This Julia file `internal-linearmodel.jl` is specified under `Model` in the MADS data dictionary.
 
 `Mads.showallparameters(madsdata)` will show all the parameters.
 
 `Mads.showobservations(madsdata)` will list all the observations.
 
-In addition, the MADS data dictionary provides information how to compute model predictions related to the listed observations based on model parameters. 
-
 MADS can perform various types of analyses:
 
+- `Mads.forward(madsdata)` will execute forward model simulation based on the initial parameter values.
 - `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS data dictionary.
-- `iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS data dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
+- `optparam, iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS data dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
+- `Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
+
+More complicated analyses will require additional information to be provided in the MADS data dictionary.
+Examples are given in the `Mads.jl/examples` subdirectories of the Mads.jl repository
 
 MADS Licensing & Copyright
 --------------------------

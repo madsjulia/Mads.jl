@@ -13,26 +13,33 @@ end
 # Make functions to get MADS observation variable names
 getobsnames = ["min", "max", "log", "weight", "target"]
 getobstypes = [Float64, Float64, Any, Float64, Float64]
-getobsdefault = [-Inf32, Inf32, nothing, 1, 0]
+getobsdefault = [-1e6, 1e6, nothing, 1, 0]
+getobslogdefault = [1e-6, 1e6, nothing, 1, 1]
 index = 0
 for i = 1:length(getobsnames)
 	obsname = getobsnames[i]
 	obstype = getobstypes[i]
 	obsdefault = getobsdefault[i]
+	obslogdefault = getobslogdefault[i]
 	index = i
 	q = quote
-		@doc "Get an array with `$(getobsnames[index])` values for all the MADS observations" ->
+		@doc "Get an array with `$(getobsnames[index])` values for observations defined by `obskeys`" ->
 		function $(symbol(string("getobs", obsname)))(madsdata, obskeys) # create a function to get each parameter name with 2 arguments
 			obsvalue = Array($(obstype), length(obskeys))
 			for i in 1:length(obskeys)
 				if haskey( madsdata["Observations"][obskeys[i]], $obsname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsname]
 				else
-					obsvalue[i] = $(obsdefault)
+					if haskey( madsdata["Observations"][obskeys[i]], "log") && madsdata["Observations"][obskeys[i]]["log"] == true
+						obsvalue[i] = $(obslogdefault)
+					else
+						obsvalue[i] = $(obsdefault)
+					end
 				end
 			end
 			return obsvalue # returns the parameter values
 		end
+		@doc "Get an array with `$(getobsnames[index])` values for all the MADS observations" ->
 		function $(symbol(string("getobs", obsname)))(madsdata) # create a function to get each parameter name with 1 argument
 			obskeys = getobskeys(madsdata) # get observation keys
 			return $(symbol(string("getobs", obsname)))(madsdata, obskeys) # call the function with 2 arguments
@@ -64,12 +71,16 @@ function showobservations(madsdata::Associative)
 	obskeys = Mads.getobskeys(madsdata)
 	p = Array(ASCIIString, 0)
 	for obskey in obskeys
-		if obsdict[obskey]["weight"] > eps(Float16)
-			s = @sprintf "%-10s target = %15g weight = %15g" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
-			push!(p, s)
+		if haskey( obsdict[obskey], "weight" )
+			if obsdict[obskey]["weight"] > eps(Float16)
+				s = @sprintf "%-10s target = %15g weight = %15g\n" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
+			end
+		else
+			s = @sprintf "%-10s target = %15g\n" obskey obsdict[obskey]["target"]
 		end
+		push!(p, s)
 	end
-	display(p)
+	print(p...)
 end
 
 """

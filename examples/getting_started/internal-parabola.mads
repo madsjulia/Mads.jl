@@ -1,0 +1,14 @@
+Parameters:
+- a : { init:  4, min: -10, max: 10 }
+- b : { init: -3, min: -10, max: 10 }
+Observations:
+- o1: { target:  2 }
+- o2: { target:  5 }
+- o3: { target: 10 }
+- o4: { target: 17 }
+- o5: { target: 26 }
+- o6: { target: 37 }
+- o7: { target: 50 }
+- o8: { target: 65 }
+- o9: { target: 82 }
+Model: internal-parabola.jl

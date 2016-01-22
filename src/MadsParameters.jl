@@ -1,3 +1,5 @@
+using Distributions
+
 """
 Get keys of all parameters in the MADS dictionary
 
@@ -65,34 +67,179 @@ function getsourcekeys(madsdata::Associative)
 end
 
 # Make functions to get MADS parameter variable names"
-getparamsnames = ["init_min", "init_max", "min", "max", "init", "type", "log", "step", "longname", "plotname"]
-getparamstypes = [Float64, Float64, Float64, Float64, Float64, Any, Any, Float64, AbstractString, AbstractString]
-getparamsdefault = [-Inf32, Inf32, -Inf32, Inf32, 0, "opt", "null", sqrt(eps(Float32)), "", ""]
+getparamsnames = ["init", "type", "log", "step", "longname", "plotname"]
+getparamstypes = [Float64, Any, Any, Float64, AbstractString, AbstractString]
+getparamsdefault = [0, "opt", false, sqrt(eps(Float32)), "", ""]
+getparamslogdefault = [1, "opt", true, sqrt(eps(Float32)), "", ""]
 index = 0
 for i = 1:length(getparamsnames)
 	paramname = getparamsnames[i]
 	paramtype = getparamstypes[i]
 	paramdefault = getparamsdefault[i]
+	paramlogdefault = getparamslogdefault[i]
 	index = i
 	q = quote
-		@doc "Get an array with `$(getparamsnames[index])` values for all the MADS model parameters" ->
+		@doc "Get an array with `$(getparamsnames[index])` values for parameters defined by `paramkeys`" ->
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
 				if haskey( madsdata["Parameters"][paramkeys[i]], $paramname)
 					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
 				else
-					paramvalue[i] = $(paramdefault)
+					if Mads.islog(madsdata, paramkeys[i])
+						paramvalue[i] = $(paramlogdefault)
+					else
+						paramvalue[i] = $(paramdefault)
+					end
 				end
 			end
 			return paramvalue # returns the parameter values
 		end
+		@doc "Get an array with `$(getparamsnames[index])` values for all the MADS model parameters" ->
 		function $(symbol(string("getparams", paramname)))(madsdata) # create a function to get each parameter name with 1 argument
 			paramkeys = getparamkeys(madsdata) # get parameter keys
 			return $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # call the function with 2 arguments
 		end
 	end
 	eval(q)
+end
+
+"Get an array with `min` values for parameters defined by `paramkeys`"
+function getparamsmin(madsdata, paramkeys)
+	paramvalue = Array(Float64, length(paramkeys))
+	for i in 1:length(paramkeys)
+		if haskey( madsdata["Parameters"][paramkeys[i]], "min")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["min"]
+		else
+			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
+				distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				if typeof(distribution) == Distributions.Uniform
+					paramvalue[i] = distribution.a
+					continue
+				end
+			end
+			if Mads.islog(madsdata, paramkeys[i])
+				paramvalue[i] = 1e-6
+			else
+				paramvalue[i] = -1e6
+			end
+		end
+	end
+	return paramvalue # returns the parameter values
+end
+"Get an array with `min` values for all the MADS model parameters"
+function getparamsmin(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return getparamsmin(madsdata, paramkeys)
+end
+
+"Get an array with `max` values for parameters defined by `paramkeys`"
+function getparamsmax(madsdata, paramkeys)
+	paramvalue = Array(Float64, length(paramkeys))
+	for i in 1:length(paramkeys)
+		if haskey( madsdata["Parameters"][paramkeys[i]], "max")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["max"]
+		else
+			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
+				distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				if typeof(distribution) == Distributions.Uniform
+					paramvalue[i] = distribution.b
+					continue
+				end
+			end
+			if Mads.islog(madsdata, paramkeys[i])
+				paramvalue[i] = 1e+6
+			else
+				paramvalue[i] = 1e6
+			end
+		end
+	end
+	return paramvalue # returns the parameter values
+end
+"Get an array with `min` values for all the MADS model parameters"
+function getparamsmax(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return getparamsmax(madsdata, paramkeys)
+end
+
+"Get an array with `init_min` values for parameters defined by `paramkeys`"
+function getparamsinit_min(madsdata, paramkeys)
+	paramvalue = Array(Float64, length(paramkeys))
+	for i in 1:length(paramkeys)
+		if haskey( madsdata["Parameters"][paramkeys[i]], "init_min")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["init_min"]
+			continue
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
+			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+			if typeof(distribution) == Distributions.Uniform
+				paramvalue[i] = distribution.a
+				continue
+			end
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "min")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["min"]
+			continue
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
+			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+			if typeof(distribution) == Distributions.Uniform
+				paramvalue[i] = distribution.a
+				continue
+			end
+		end
+		if Mads.islog(madsdata, paramkeys[i])
+			paramvalue[i] = 1e-6
+		else
+			paramvalue[i] = -1e6
+		end
+	end
+	return paramvalue # returns the parameter values
+end
+"Get an array with `init_min` values for all the MADS model parameters"
+function getparamsinit_min(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return getparamsinit_min(madsdata, paramkeys)
+end
+
+"Get an array with `init_max` values for parameters defined by `paramkeys`"
+function getparamsinit_max(madsdata, paramkeys)
+	paramvalue = Array(Float64, length(paramkeys))
+	for i in 1:length(paramkeys)
+		if haskey( madsdata["Parameters"][paramkeys[i]], "init_max")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["init_max"]
+			continue
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
+			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+			if typeof(distribution) == Distributions.Uniform
+				paramvalue[i] = distribution.b
+				continue
+			end
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "max")
+			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["max"]
+			continue
+		end
+		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
+			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+			if typeof(distribution) == Distributions.Uniform
+				paramvalue[i] = distribution.b
+				continue
+			end
+		end
+		if Mads.islog(madsdata, paramkeys[i])
+			paramvalue[i] = 1e+6
+		else
+			paramvalue[i] = 1e6
+		end
+	end
+	return paramvalue # returns the parameter values
+end
+"Get an array with `init_max` values for all the MADS model parameters"
+function getparamsinit_max(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	return getparamsinit_max(madsdata, paramkeys)
 end
 
 """
@@ -109,6 +256,25 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
+	end
+end
+
+"Is parameter with key `parameterkey` optimizable?"
+function isopt(madsdata::Associative, parameterkey::AbstractString)
+	if !haskey(madsdata["Parameters"][parameterkey], "type") || 
+		haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt"
+		return true
+	else
+		return false
+	end
+end
+
+"Is parameter with key `parameterkey` log-transformed?"
+function islog(madsdata::Associative, parameterkey::AbstractString)
+	if haskey(madsdata["Parameters"][parameterkey], "log") && madsdata["Parameters"][parameterkey]["log"] == true
+		return true
+	else
+		return false
 	end
 end
 
@@ -129,11 +295,11 @@ function setallparamsoff!(madsdata::Associative)
 end
 
 "Set a specific parameter with a key `parameterkey` ON"
-function setparamon!(madsdata::Associative, parameterkey)
+function setparamon!(madsdata::Associative, parameterkey::AbstractString)
 		madsdata["Parameters"][parameterkey]["type"] = "opt";
 end
 
-"Set a specific parameter with a key `parameterkey`  OFF"
+"Set a specific parameter with a key `parameterkey` OFF"
 function setparamoff!(madsdata::Associative, parameterkey)
 		madsdata["Parameters"][parameterkey]["type"] = nothing
 end
@@ -211,10 +377,28 @@ function showparameters(madsdata::Associative)
 	parkeys = Mads.getoptparamkeys(madsdata)
 	p = Array(ASCIIString, 0)
 	for parkey in parkeys
-		s = @sprintf "%-10s init = %15g log = %5s  Distribution = %s" parkey pardict[parkey]["init"] pardict[parkey]["log"] pardict[parkey]["dist"]
+		if haskey( pardict[parkey], "longname" )
+			s = @sprintf "%-30s : " pardict[parkey]["longname"]
+		else
+			s = ""
+		end
+		s *= @sprintf "%-10s = %15g " parkey pardict[parkey]["init"]
+		if haskey( pardict[parkey], "log" ) && pardict[parkey]["log"] == true
+			s *= @sprintf "log-transformed "
+		end
+		if haskey( pardict[parkey], "min" )
+			s *= @sprintf "min = %s " pardict[parkey]["min"]
+		end
+		if haskey( pardict[parkey], "max" )
+			s *= @sprintf "max = %s " pardict[parkey]["max"]
+		end
+		if haskey( pardict[parkey], "dist" )
+			s *= @sprintf "distribution = %s " pardict[parkey]["dist"]
+		end
+		s *= "\n"
 		push!(p, s)
 	end
-	display(p)
+	print(p...)
 end
 
 "Show all parameters in the Mads data dictionary"
@@ -223,22 +407,47 @@ function showallparameters(madsdata::Associative)
 	parkeys = Mads.getparamkeys(madsdata)
 	p = Array(ASCIIString, 0)
 	for parkey in parkeys
-		s = @sprintf "%-30s : %-10s = %15g" pardict[parkey]["longname"] parkey pardict[parkey]["init"]
-		if pardict[parkey]["type"] != nothing
-			s *= " <- optimizable "
-			s *= @sprintf "log-transformed = %5s Distribution = %s" pardict[parkey]["log"] pardict[parkey]["dist"]
+		if haskey( pardict[parkey], "longname" )
+			s = @sprintf "%-30s : " pardict[parkey]["longname"]
 		else
-			s *= " <- fixed"
+			s = ""
 		end
+		s *= @sprintf "%-10s = %15g " parkey pardict[parkey]["init"]
+		if haskey( pardict[parkey], "type" ) 
+			if pardict[parkey]["type"] != nothing
+				s *= "<- optimizable "
+			else
+				s *= "<- fixed"
+			end
+		else
+			s *= "<- optimizable "
+		end
+		if haskey( pardict[parkey], "log" ) && pardict[parkey]["log"] == true
+			s *= @sprintf "log-transformed "
+		end
+		if haskey( pardict[parkey], "min" )
+			s *= @sprintf "min = %s " pardict[parkey]["min"]
+		end
+		if haskey( pardict[parkey], "max" )
+			s *= @sprintf "max = %s " pardict[parkey]["max"]
+		end
+		if haskey( pardict[parkey], "dist" )
+			s *= @sprintf "distribution = %s " pardict[parkey]["dist"]
+		end
+		s *= "\n"
 		push!(p, s)
 	end
-	display(p)
+	print(p...)
 end
 
 """
-Get distributions of all parameters in the Mads data dictionary
+Get probabilistic distributions of all parameters in the Mads data dictionary
 
 `Mads.getparamdistributions(madsdata; init_dist=false)`
+
+Note:
+
+Probabilistic distribution of parameters can be defined only if "dist" or "min"/"max" are specified in the Mads data dictionary `madsdata`.
 
 Arguments:
 
@@ -266,7 +475,11 @@ function getparamdistributions(madsdata::Associative; init_dist=false)
 				maxkey = "max"
 			end
 		end
-		distributions[paramkeys[i]] = Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
+		if haskey(madsdata["Parameters"][paramkeys[i]], minkey ) && haskey(madsdata["Parameters"][paramkeys[i]], maxkey )
+			distributions[paramkeys[i]] = Distributions.Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
+		else
+			Mads.err("""Probabilistic distribution of parameter $(paramkeys[i]) is not defined; "dist" or "min"/"max" are missing!""")
+		end
 	end
 	return distributions
 end

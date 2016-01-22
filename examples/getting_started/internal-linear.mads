@@ -1,0 +1,9 @@
+Parameters:
+- a : { init:  1, dist: "Uniform(-10, 10)" }
+- b : { init: -1, dist: "Uniform(-10, 10)" }
+Observations:
+- o1: { target: -3 }
+- o2: { target:  1 }
+- o3: { target:  5 }
+- o4: { target:  9 }
+Model: internal-linear.jl

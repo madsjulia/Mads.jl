@@ -123,20 +123,22 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 		error("MADS input file problem")
 	end
-	if haskey(madsdata, "Restart") && madsdata["Restart"] == "memory"
-		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
-		return madscommandfunctionwithreuse
-	elseif !haskey(madsdata, "Restart") || madsdata["Restart"] != false
-		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-		if haskey(madsdata, "RestartDir")
-			rootdir = madsdata["RestartDir"]
-		elseif contains(madsdata["Filename"], "/")
-			rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
-		else
-			rootdir = string(rootname, "_restart")
+	if haskey(madsdata, "Restart")
+		if madsdata["Restart"] == "memory"
+			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
+			return madscommandfunctionwithreuse
+		elseif madsdata["Restart"] != false
+			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
+			if haskey(madsdata, "RestartDir")
+				rootdir = madsdata["RestartDir"]
+			elseif contains(madsdata["Filename"], "/")
+				rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
+			else
+				rootdir = string(rootname, "_restart")
+			end
+			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
+			return madscommandfunctionwithreuse
 		end
-		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
-		return madscommandfunctionwithreuse
 	else
 		return madscommandfunction
 	end

@@ -72,23 +72,25 @@ function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MA
 	if haskey(madsdata, "Parameters")
 		parameters = madsdata["Parameters"]
 		for key in keys(parameters)
+			if !haskey(parameters[key], "init")
+				Mads.err("""Parameter $key does not have initial value; add "init" value!""")
+			end
+			for v in ["init", "init_max", "init_min", "max", "min", "step"]
+				if haskey(parameters[key], v)
+					parameters[key][v] = float(parameters[key][v])
+				end
+			end
 			if haskey(parameters[key], "log")
 				flag = parameters[key]["log"]
 				if flag == "yes" || flag == true
 					parameters[key]["log"] = true
 					for v in ["init", "init_max", "init_min", "max", "min", "step"]
 						if haskey(parameters[key], v)
-							parameters[key][v] = float(parameters[key][v])
 							if parameters[key][v] < 0
-								Mads.err("""The field $v for Parameter $key cannot be log-transformed; it is negative!""")
+								Mads.err("""The value $v for Parameter $key cannot be log-transformed; it is negative!""")
 							end
 						end
 					end
-				else
-					parameters[key]["log"] = false
-				end
-				if haskey(parameters[key], "min") && haskey(parameters[key], "max") && !haskey(parameters[key], "dist")
-					parameters[key]["dist"] = "Uniform($(parameters[key]["min"]),$(parameters[key]["max"]))"
 				end
 			end
 		end
