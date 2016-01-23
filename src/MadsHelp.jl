@@ -13,7 +13,6 @@ MADS is an open-source code designed as an integrated high-performance computati
 
 MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input.
 The code provides a series of alternative algorithms to perform each type of model analyses.
-The code allows for coupled model parameters and regularization terms that are internally computed based on user-defined mathematical expressions.
 
 For additional information:
 
