@@ -259,7 +259,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Sa
 end
 
 "Saltelli "
-function saltelli(madsdata::Associative; N::Integer=100, seed::UInt32=0)
+function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	if seed != 0
 		srand(seed)
 	end
