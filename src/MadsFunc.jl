@@ -2,7 +2,7 @@ if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
 
-"Make MADS command function"
+"Make MADS function to execute the model defined in the MADS data dictionary `madsdata`"
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
@@ -144,13 +144,12 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	end
 end
 
-"Make MADS command gradient function"
+"Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS data dictionary `madsdata`"
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
 
-"Make MADS command gradient function"
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
@@ -160,13 +159,13 @@ function makemadscommandgradient(madsdata::Associative, f::Function)
 	return madscommandgradient
 end
 
-"Make MADS command function & gradient function"
+"Make MADS forward & gradient functions for the model defined in the MADS data dictionary `madsdata`"
+
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
 end
 
-"Make MADS command function and gradient function"
 function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
@@ -226,6 +225,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 	return madscommandfunctionandgradient
 end
 
+"Make a function to compute the prior log-likelihood of the model parameters listed in the MADS data dictionary `madsdata`"
 function makelogprior(madsdata::Associative)
 	distributions = getparamdistributions(madsdata::Associative)
 	function logprior(params::Associative)
@@ -237,6 +237,10 @@ function makelogprior(madsdata::Associative)
 	end
 end
 
+"""
+Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
+Model parameters and observations are defined in the MADS data dictionary `madsdata`.
+"""
 function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.)
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
@@ -258,13 +262,16 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.
 	end
 end
 
-"Make MADS loglikelihood function"
+"""
+Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
+The function can be provided as an external function in the MADS data dictionary under `LogLikelihood` or computed internally.
+"""
 function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
-		Mads.madsinfo("Internal log likelihood")
+		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
-		Mads.madsinfo("External log likelihood")
+		Mads.madsinfo("Log-likelihood function computed internally ...")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
