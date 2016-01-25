@@ -191,6 +191,11 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		for i = 1:length(fevals)
+			if typeof(fevals[i]) == RemoteException
+				throw(fevals[i])
+			end
+		end
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
