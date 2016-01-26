@@ -1,11 +1,17 @@
 Problem: { }
 Parameters:
-- ESC1c : { longname: "cost coal 1", init: 1.86, type: opt, log: no, dist: "Uniform(2.7, 2.9)" }
+- ESC1c : { longname: "cost coal 1", init: 2.86, type: opt, log: no, dist: "Uniform(2.7, 2.9)" }
 - ESC2c : { longname: "cost coal 2", init: 3.07, type: opt, log: no, dist: "Uniform(3.0, 3.1)" }
 - ESC3c : { longname: "cost coal 3", init: 3.22, type: opt, log: no, dist: "Uniform(3.2, 3.3)" }
 - ESC1g : { longname: "cost gas 1",  init: 4.73, type: opt, log: no, dist: "Uniform(4.7, 4.8)" }
 - ESC2g : { longname: "cost gas 2",  init: 4.98, type: opt, log: no, dist: "Uniform(4.9, 5.0)" }
 - ESC3g : { longname: "cost gas 3",  init: 5.26, type: opt, log: no, dist: "Uniform(5.2, 5.3)" }
+- PC1c : { longname: "cost coal 1", init: 0.16, type: null, log: no, dist: "Uniform(0.1, 0.2)" }
+- PC2c : { longname: "cost coal 2", init: 0.18, type: null, log: no, dist: "Uniform(0.15, 0.25)" }
+- PC3c : { longname: "cost coal 3", init: 0.22, type: null, log: no, dist: "Uniform(0.17, 0.27)" }
+- PC1g : { longname: "cost gas 1",  init: 0.52, type: null, log: no, dist: "Uniform(0.45, 0.55)" }
+- PC2g : { longname: "cost gas 2",  init: 0.55, type: null, log: no, dist: "Uniform(0.5, 0.6)" }
+- PC3g : { longname: "cost gas 3",  init: 0.58, type: null, log: no, dist: "Uniform(0.55, 0.65)" }
 Observations:
 - of: { longname: "Objective function", log: false, max: 1e6, min: 0, target: 0, weight: 1}
 Model: wefo-sobol.jl

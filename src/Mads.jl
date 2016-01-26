@@ -11,7 +11,7 @@ import Lora
 import Distributions
 import Logging
 import JSON
-import NLopt
+# import NLopt
 import MPTools
 import HDF5 # HDF5 installation is problematic on some machines
 import Conda

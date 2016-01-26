@@ -1,0 +1,94 @@
+Problem: { }
+Parameters:
+#- ESC1c : { longname: "cost coal 1", init: 2.86, type: opt, log: no, dist: "Uniform(2.3, 3.2)" }
+#- ESC2c : { longname: "cost coal 2", init: 3.07, type: opt, log: no, dist: "Uniform(2.5, 3.5)" }
+#- ESC3c : { longname: "cost coal 3", init: 3.22, type: opt, log: no, dist: "Uniform(2.6, 3.6)" }
+#- ESC1g : { longname: "cost gas 1",  init: 4.73, type: opt, log: no, dist: "Uniform(4.1, 5.1)" }
+#- ESC2g : { longname: "cost gas 2",  init: 4.98, type: opt, log: no, dist: "Uniform(4.2, 5.5)" }
+#- ESC3g : { longname: "cost gas 3",  init: 5.26, type: opt, log: no, dist: "Uniform(4.5, 5.8)" }
+
+#- PC1c : { longname: "electricity generation cost coal 1", init: 0.16, type: opt, log: no, dist: "Uniform(0.1, 0.3)" }
+#- PC2c : { longname: "electricity generation cost coal 2", init: 0.18, type: opt, log: no, dist: "Uniform(0.1, 0.3)" }
+#- PC3c : { longname: "electricity generation cost coal 3", init: 0.22, type: opt, log: no, dist: "Uniform(0.2, 0.3)" }
+#- PC1g : { longname: "electricity generation cost gas 1",  init: 0.52, type: opt, log: no, dist: "Uniform(0.4, 0.7)" }
+#- PC2g : { longname: "electricity generation cost gas 2",  init: 0.55, type: opt, log: no, dist: "Uniform(0.4, 0.7)" }
+#- PC3g : { longname: "electricity generation cost gas 3",  init: 0.58, type: opt, log: no, dist: "Uniform(0.4, 0.7)" }
+
+#- CGWf1 : { longname: "GW supply cost to food", init: 1.96, type: opt, log: no, dist: "Uniform(1.6, 2.6)" }
+#- CGWf2 : { longname: "GW supply cost to food", init: 2.42, type: opt, log: no, dist: "Uniform(1.9, 2.9)" }
+#- CGWf3 : { longname: "GW supply cost to food", init: 2.83, type: opt, log: no, dist: "Uniform(2.5, 3.5)" }
+
+#- CSWf1 : { longname: "SW supply cost to food", init: 2.23, type: opt, log: no, dist: "Uniform(1.6, 2.8)" }
+#- CSWf2 : { longname: "SW supply cost to food", init: 2.56, type: opt, log: no, dist: "Uniform(2.1, 3.1)" }
+#- CSWf3 : { longname: "SW supply cost to food", init: 3.38, type: opt, log: no, dist: "Uniform(2.9, 3.9)" }
+
+#- CGWe1c : { longname: "GW supply cost to power plant - coal", init: 2.07, type: opt, log: no, dist: "Uniform(1.6, 2.6)" }
+#- CGWe2c : { longname: "GW supply cost to power plant - coal", init: 2.49, type: opt, log: no, dist: "Uniform(1.9, 2.9)" }
+#- CGWe3c : { longname: "GW supply cost to power plant - coal", init: 2.98, type: opt, log: no, dist: "Uniform(2.2, 3.5)" }
+#- CGWe1g : { longname: "GW supply cost to power plant - gas", init: 1.75, type: opt, log: no, dist: "Uniform(1.2, 2.5)" }
+#- CGWe2g : { longname: "GW supply cost to power plant - gas", init: 2.19, type: opt, log: no, dist: "Uniform(1.6, 2.8)" }
+#- CGWe3g : { longname: "GW supply cost to power plant - gas", init: 2.62, type: opt, log: no, dist: "Uniform(1.8, 3.0)" }
+
+#- CSWe1c : { longname: "GW supply cost to power plant - coal", init: 1.82, type: opt, log: no, dist: "Uniform(1.2, 2.8)" }
+#- CSWe2c : { longname: "GW supply cost to power plant - coal", init: 2.19, type: opt, log: no, dist: "Uniform(1.5, 3.0)" }
+#- CSWe3c : { longname: "GW supply cost to power plant - coal", init: 2.57, type: opt, log: no, dist: "Uniform(1.7, 3.2)" }
+#- CSWe1g : { longname: "GW supply cost to power plant - gas", init: 2.18, type: opt, log: no, dist: "Uniform(1.6, 2.8)" }
+#- CSWe2g : { longname: "GW supply cost to power plant - gas", init: 2.67, type: opt, log: no, dist: "Uniform(2.0, 3.3)" }
+#- CSWe3g : { longname: "GW supply cost to power plant - gas", init: 3.15, type: opt, log: no, dist: "Uniform(2.3, 3.6)" }
+
+#- CRWe1c : { longname: "RW supply cost to power plant - coal", init: 4.15, type: opt, log: no, dist: "Uniform(3.6, 4.9)" }
+#- CRWe2c : { longname: "RW supply cost to power plant - coal", init: 4.37, type: opt, log: no, dist: "Uniform(3.8, 5.2)" }
+#- CRWe3c : { longname: "RW supply cost to power plant - coal", init: 4.52, type: opt, log: no, dist: "Uniform(4.0, 5.5)" }
+#- CRWe1g : { longname: "RW supply cost to power plant - gas", init: 4.32, type: opt, log: no, dist: "Uniform(3.8, 4.9)" }
+#- CRWe2g : { longname: "RW supply cost to power plant - gas", init: 4.48, type: opt, log: no, dist: "Uniform(3.9, 5.2)" }
+#- CRWe3g : { longname: "RW supply cost to power plant - gas", init: 4.66, type: opt, log: no, dist: "Uniform(4.0, 5.2)" }
+
+#- CFO1 : { longname: "cost for food production", init: 149.5, type: opt, log: no, dist: "Uniform(135, 165)" }
+#- CFO2 : { longname: "cost for food production", init: 165.5, type: opt, log: no, dist: "Uniform(150, 180)" }
+#- CFO3 : { longname: "cost for food production", init: 180, type: opt, log: no, dist: "Uniform(165, 195)" }
+#- CEA1 : { longname: "cost for co2 abatement from electricity", init: 12600, type: opt, log: no, dist: "Uniform(11200, 13900)" }
+#- CEA2 : { longname: "cost for co2 abatement from electricity", init: 14500, type: opt, log: no, dist: "Uniform(13100, 15900)" }
+#- CEA3 : { longname: "cost for co2 abatement from electricity", init: 16200, type: opt, log: no, dist: "Uniform(15000, 17800)" }
+#- CFA1 : { longname: "cost for co2 abatement from food", init: 10.8, type: opt, log: no, dist: "Uniform(9.0, 13.0)" }
+#- CFA2 : { longname: "cost for co2 abatement from food", init: 11.9, type: opt, log: no, dist: "Uniform(9.5, 14.5)" }
+#- CFA3 : { longname: "cost for co2 abatement from food", init: 13.1, type: opt, log: no, dist: "Uniform(10.0, 16.0)" }
+
+#- CC1c : { longname: "unit CO2 emission/unit electricity - coal", init: 261.03, type: opt, log: no, dist: "Uniform(235.0, 280.0)" }
+#- CC2c : { longname: "unit CO2 emission/unit electricity - coal", init: 254.89, type: opt, log: no, dist: "Uniform(240.0, 275.0)" }
+#- CC3c : { longname: "unit CO2 emission/unit electricity - coal", init: 247.08, type: opt, log: no, dist: "Uniform(230.0, 265.0)" }
+#- CC1g : { longname: "unit CO2 emission/unit electricity - gas", init: 152.58, type: opt, log: no, dist: "Uniform(130.0, 170.0)" }
+#- CC2g : { longname: "unit CO2 emission/unit electricity - gas", init: 149.98, type: opt, log: no, dist: "Uniform(130.0, 170.0)" }
+#- CC3g : { longname: "unit CO2 emission/unit electricity - gas", init: 146.19, type: opt, log: no, dist: "Uniform(130.0, 170.0)" }
+
+#- AVCG1c : { longname: "available coal", init: 285, type: opt, log: no, dist: "Uniform(280, 290)" }
+#- AVCG2c : { longname: "available coal", init: 265, type: opt, log: no, dist: "Uniform(260, 270)" }
+#- AVCG3c : { longname: "available coal", init: 240, type: opt, log: no, dist: "Uniform(235, 245)" }
+#- AVCG1g : { longname: "available gas", init: 129, type: opt, log: no, dist: "Uniform(124, 134)" }
+#- AVCG2g : { longname: "available gas", init: 117, type: opt, log: no, dist: "Uniform(112, 122)" }
+#- AVCG3g : { longname: "available gas", init: 105, type: opt, log: no, dist: "Uniform(100, 110)" }
+
+- Dt1e : { longname: "demand electricity", init: 105, type: opt, log: no, dist: "Uniform(95, 110)" }
+- Dt2e : { longname: "demand electricity", init: 115, type: opt, log: no, dist: "Uniform(100, 120)" }
+- Dt3e : { longname: "demand electricity", init: 126, type: opt, log: no, dist: "Uniform(111, 130)" }
+- Dt1f : { longname: "demand food", init: 67000, type: opt, log: no, dist: "Uniform(66000, 72000)" }
+- Dt2f : { longname: "demand food", init: 71000, type: opt, log: no, dist: "Uniform(70000, 76000)" }
+- Dt3f : { longname: "demand food", init: 75000, type: opt, log: no, dist: "Uniform(74000, 78000)" }
+
+#- TMCC : { longname: "max allowable CO2 emissions", init: 15.2, type: opt, log: no, dist: "Uniform(12.8, 16.8)" }
+#- a1 : { longname: "unit water demand - coal", init: 91740000, type: opt, log: no, dist: "Uniform(91200000, 92200000)" }
+#- a2 : { longname: "unit water demand - gas", init: 122320000, type: opt, log: no, dist: "Uniform(122000000, 122940000)" }
+
+#- Water1g : { longname: "max available groundwater", init: 50, type: opt, log: no, dist: "Uniform(44, 54)" }
+#- Water2g : { longname: "max available groundwater", init: 48, type: opt, log: no, dist: "Uniform(42, 52)" }
+#- Water3g : { longname: "max available groundwater", init: 46, type: opt, log: no, dist: "Uniform(40, 50)" }
+#- Water1s : { longname: "max available surface water", init: 36, type: opt, log: no, dist: "Uniform(30, 40)" }
+#- Water2s : { longname: "max available surface water", init: 34, type: opt, log: no, dist: "Uniform(28, 38)" }
+#- Water3s : { longname: "max available surface water", init: 31, type: opt, log: no, dist: "Uniform(25, 35)" }
+#- Water1r : { longname: "max available recycled water", init: 30, type: opt, log: no, dist: "Uniform(24, 34)" }
+#- Water2r : { longname: "max available recycled water", init: 27, type: opt, log: no, dist: "Uniform(21, 31)" }
+#- Water3r : { longname: "max available recycled water", init: 24, type: opt, log: no, dist: "Uniform(19, 28)" }
+
+Observations:
+- of: { longname: "Objective function", log: false, max: 200e9, min: 0, target: 0, weight: 1}
+Model: wefo-sobol-allparameters2.jl
+Restart: false
