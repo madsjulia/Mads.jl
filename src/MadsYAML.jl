@@ -1,5 +1,5 @@
 if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
-	@doc "Load YAML file" ->
+	"Load YAML file"
 	function loadyamlfile(filename::AbstractString; julia=false) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
@@ -13,14 +13,14 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 		return yamldata # this is not OrderedDict()
 	end
 
-	@doc "Dump YAML file" ->
+	"Dump YAML file"
 	function dumpyamlfile(filename::AbstractString, yamldata) # dump YAML file
 		f = open(filename, "w")
 		write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
 		close(f)
 	end
 elseif isdefined(:YAML) # using YAML in Julia
-	@doc "Load YAML file" ->
+	"Load YAML file"
 	function loadyamlfile(filename::AbstractString; julia=true) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
@@ -30,7 +30,7 @@ elseif isdefined(:YAML) # using YAML in Julia
 		return yamldata # this is not OrderedDict()
 	end
 
-	@doc "Dump YAML file in JSON format" ->
+	"Dump YAML file in JSON format"
 	function dumpyamlfile(filename::AbstractString, yamldata) # dump YAML file
 		f = open(filename, "w")
 		JSON.print(f, yamldata) # dump as a JSON file just in case
@@ -41,8 +41,8 @@ else
 	throw("Missing modules!")
 end
 
-@doc "Load YAML MADS file" ->
-function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS input file in YAML format
+"Load YAML MADS file"
+function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MADS input file in YAML format
 	madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
@@ -72,23 +72,25 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 	if haskey(madsdata, "Parameters")
 		parameters = madsdata["Parameters"]
 		for key in keys(parameters)
+			if !haskey(parameters[key], "init")
+				Mads.err("""Parameter $key does not have initial value; add "init" value!""")
+			end
+			for v in ["init", "init_max", "init_min", "max", "min", "step"]
+				if haskey(parameters[key], v)
+					parameters[key][v] = float(parameters[key][v])
+				end
+			end
 			if haskey(parameters[key], "log")
 				flag = parameters[key]["log"]
 				if flag == "yes" || flag == true
 					parameters[key]["log"] = true
 					for v in ["init", "init_max", "init_min", "max", "min", "step"]
 						if haskey(parameters[key], v)
-							parameters[key][v] = float(parameters[key][v])
 							if parameters[key][v] < 0
-								Mads.err("""The field $v for Parameter $key cannot be log-transformed; it is negative!""")
+								Mads.err("""The value $v for Parameter $key cannot be log-transformed; it is negative!""")
 							end
 						end
 					end
-				else
-					parameters[key]["log"] = false
-				end
-				if haskey(parameters[key], "min") && haskey(parameters[key], "max") && !haskey(parameters[key], "dist")
-					parameters[key]["dist"] = "Uniform($(parameters[key]["min"]),$(parameters[key]["max"]))"
 				end
 			end
 		end
@@ -143,7 +145,7 @@ function loadyamlmadsfile(filename::AbstractString; julia=false) # load MADS inp
 	return madsdata
 end
 
-@doc "Dump YAML MADS file" ->
+"Dump YAML MADS file"
 function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
@@ -196,12 +198,12 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input 
 	dumpyamlfile(filename, yamldata)
 end
 
-@doc "Read predictions from YAML MADS file" ->
+"Read predictions from YAML MADS file"
 function readyamlpredictions(filename::AbstractString) # read YAML predictions
 	return loadyamlfile(filename)
 end
 
-@doc "Dump well concentrations" ->
+"Dump well concentrations"
 function dumpwellconcentrations(filename::AbstractString, madsdata)
 	outfile = open(filename, "w")
 	write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")

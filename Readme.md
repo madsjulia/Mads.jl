@@ -1,30 +1,46 @@
 Installation
 ============
 
-Local installation
+Local MADS installation
 -------------------
 
-### Create a .juliarc file
+### Clone some packages in a local directory
 
-Add the following line in the `.juliarc.jl` file in your home directory
-
-`push!(LOAD_PATH, ENV["HOME"]*"/codes")`
-
-### Clone some packages in the codes directory
+Below the local directory is called `codes`
 
 ```
 mkdir codes
 cd codes
 git clone git@gitlab.com:mads/Mads.jl.git
-git clone git@gitlab.com:omalled/Anasol.jl.git
-git clone git@gitlab.com:omalled/R3Function.jl.git
-git clone git@gitlab.com:omalled/MPToools.jl.git
-git clone git@gitlab.com:omalled/BIGUQ.jl.git
+git clone git@gitlab.com:mads/Anasol.jl.git
+git clone git@gitlab.com:mads/R3Function.jl.git
+git clone git@gitlab.com:mads/MPTools.jl.git
+git clone git@gitlab.com:mads/BIGUQ.jl.git
 ```
 
-### Add more packages
+### Create a .juliarc.jl file
 
-Start julia and add the following packages:
+Add the following line in the `.juliarc.jl` file in your home directory
+
+`push!(LOAD_PATH, ENV["HOME"]*"/codes")`
+
+If the file does not exist create one.
+
+Global MADS installation
+------------------
+
+```
+Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
+Pkg.clone("git@gitlab.com:mads/Anasol.jl.git")
+Pkg.clone("git@gitlab.com:mads/R3Function.jl.git")
+Pkg.clone("git@gitlab.com:mads/MPTools.jl.git")
+Pkg.clone("git@gitlab.com:mads/BIGUQ.jl.git")
+```
+
+Installation of MADS packages
+-----------------------------
+
+Start Julia and add the following packages:
 
 Pkg.add("DataFrames");
 Pkg.add("Logging");
@@ -37,38 +53,65 @@ Pkg.add("NLopt");
 Pkg.add("ForwardDiff");
 Pkg.add("ODE");
 Pkg.add("ProgressMeter");
-Pkg.add("LightXML");
 Pkg.add("Docile");
 Pkg.add("Lexicon");
+Pkg.add("Conda");
 Pkg.add("PyCall");
 Pkg.add("PyPlot");
-Pkg.add("Conda");
 Pkg.add("YAML");
 Pkg.add("JSON");
+Pkg.add("LightXML");
 Pkg.add("Gadfly");
 Pkg.add("JLD");
 Pkg.clone("BlackBoxOptim");
 
-### Run examples
-
-In julia REPL, do the following commands:
-
-`reload("Mads.jl")` # if there are still missing packages, add them
-
-`reload("Mads.jl/examples/bigdt/bigdt.jl")` # to peform bigdt analysis
-
-Global installation
-------------------
+MADS uses a Python YAML library.
+If you do not have it installed, the best option is to use Julia's python
+environment:
 
 ```
-Pkg.clone("git@gitlab.com:omalled/Anasol.jl.git")
-Pkg.clone("git@gitlab.com:omalled/R3Function.jl.git")
-Pkg.clone("git@gitlab.com:omalled/MPToools.jl.git")
-Pkg.clone("git@gitlab.com:omalled/BIGUQ.jl.git")
-Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
+ENV["PYTHON"]=""; # forces Julia to ignore system python
+using Conda;
+Conda.add("yaml");
 ```
 
-Installation behind a firewall
+To install the Python YAML library globally (not recommended), you will need to run:
+
+```
+brew install libyaml
+sudo pip install yaml
+```
+
+Run MADS examples
+------------
+
+In Julia REPL, do the following commands:
+
+`using Mads` # if there are still missing packages, add them
+
+To explore getting-started instructions, execute:
+
+`Mads.help()`
+
+There are various examples located in the `Mads.jl/examples` directory of the Mads.jl repository.
+
+For example, execute
+
+`include("Mads.jl/examples/contamination/analysis.jl")`
+
+to perform various analyses related to contaminant transport, or execute
+
+`include("Mads.jl/examples/bigdt/bigdt.jl")`
+
+to perform BIG-DT analysis.
+
+If you make changes in the MADS code, you will need to do
+
+`reload("Mads.jl")` 
+
+to update the MADS code in Julia.
+
+Installation of MADS behind a firewall
 ------------------------------
 
 Add in .gitconfig:
@@ -86,4 +129,15 @@ export rsync_proxy=http://proxyout.<your_site>:8080
 export http_proxy=http://proxyout.<your_site>:8080
 export https_proxy=http://proxyout.<your_site>:8080
 export no_proxy=.<your_site>
+```
+
+For example, if you are doing this at LANL, you will need to execute the 
+following lines in your bash command-line environment:
+
+```
+export ftp_proxy=http://proxyout.lanl.gov:8080
+export rsync_proxy=http://proxyout.lanl.gov:8080
+export http_proxy=http://proxyout.lanl.gov:8080
+export https_proxy=http://proxyout.lanl.gov:8080
+export no_proxy=.lanl.gov
 ```

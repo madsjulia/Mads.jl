@@ -20,12 +20,12 @@ if madsdirname != ""
 end
 md = Dict()
 try
-	md = Mads.loadyamlmadsfile(madsfilenamelong)
+	md = Mads.loadmadsfile(madsfilenamelong)
 catch
 	Mads.madswarn("""Mads input file: $(madsfilenamelong) is missing! Try in the local directory ...""")
 	try
 		madsfilenamelong = madsfilename
-		md = Mads.loadyamlmadsfile(madsfilenamelong)
+		md = Mads.loadmadsfile(madsfilenamelong)
 	catch
 		Mads.madserr("""Mads input file: $(madsfilename) is missing; quit!""")
 		error("$(madsfilename) is missing")

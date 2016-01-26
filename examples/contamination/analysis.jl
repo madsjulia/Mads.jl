@@ -1,6 +1,9 @@
 import Mads
 
-md = Mads.loadyamlmadsfile("w01.mads") # load Mads input file into Julia Dictionary
+currentdir = pwd()
+madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
+cd(madsdirname)
+md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("""Mads root name: $(rootname)""")
 display(md) # show the content of the Mads input file
@@ -76,3 +79,5 @@ Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads inp
 Mads.allwellsoff!(md_new) # turn off all wells
 Mads.wellon!(md_new, "w13a") # use well w13a
 Mads.calibraterandom(md_new, 10) # calibrate 10 times with random initial guesses
+
+cd(currentdir)

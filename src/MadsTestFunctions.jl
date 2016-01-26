@@ -1,9 +1,9 @@
-@doc "Rosenbrock test function (more difficult to solve)" ->
+"Rosenbrock test function (more difficult to solve)"
 function rosenbrock2_lm(x)
 	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
 end
 
-@doc "Parameter gradients of the Rosenbrock test function" ->
+"Parameter gradients of the Rosenbrock test function"
 function rosenbrock2_gradient_lm(x)
 	j = Array(Float64,2,2)
 	j[1, 1] = -20.0 * x[1]
@@ -13,23 +13,23 @@ function rosenbrock2_gradient_lm(x)
 	return j
 end
 
-@doc "Rosenbrock test function" ->
+"Rosenbrock test function"
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
 end
 
-@doc "Rosenbrock test function for LM optimization (returns the 2 components separetely)" ->
+"Rosenbrock test function for LM optimization (returns the 2 components separetely)"
 function rosenbrock_lm(x::Vector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
 end
 
-@doc "Parameter gradients of the Rosenbrock test function" ->
+"Parameter gradients of the Rosenbrock test function"
 function rosenbrock_gradient!(x::Vector, storage::Vector)
 	storage[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
 	storage[2] = 200.0 * (x[2] - x[1]^2)
 end
 
-@doc "Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)" ->
+"Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)"
 function rosenbrock_gradient_lm(x::Vector; dx=false)
 	storage = Array(Float64,2,2)
 	storage[1,1] = -2.0 * (1.0 - x[1])
@@ -39,7 +39,7 @@ function rosenbrock_gradient_lm(x::Vector; dx=false)
 	return storage
 end
 
-@doc "Parameter Hessian of the Rosenbrock test function" ->
+"Parameter Hessian of the Rosenbrock test function"
 function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
 	storage[1, 2] = -400.0 * x[1]
@@ -72,12 +72,6 @@ function makerosenbrock_gradient(N)
 	return rosenbrock_gradient_lm
 end
 
-
-
-########################################
-## Function: Powell Function          ##
-########################################
-
 function makepowell(N)                                                                   
     function powell(x::Vector)                                       
         result = Array(eltype(x),N)
@@ -92,7 +86,6 @@ function makepowell(N)
     return powell
 end
     
-
 function makepowell_gradient(N)                      
     function powell_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
@@ -115,12 +108,6 @@ function makepowell_gradient(N)
     return powell_gradient             
 end
 
-
-
-###############################################
-#############  Sphere Function  ###############
-###############################################
-
 function makesphere(N)
     function sphere(x::Vector)
         result = Array(eltype(x), N)
@@ -135,7 +122,6 @@ function makesphere(N)
     
 end
 
-
 function makesphere_gradient(N)
     function sphere_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
@@ -147,11 +133,6 @@ function makesphere_gradient(N)
 
     return sphere_gradient
 end
-
-
-###############################################
-##########  Dixon-Price Function  #############
-###############################################
 
 function makedixonprice(N)
     function dixonprice(x::Vector)
@@ -166,7 +147,6 @@ function makedixonprice(N)
 
     return dixonprice
 end
-
 
 function makedixonprice_gradient(N)
 
@@ -186,11 +166,6 @@ function makedixonprice_gradient(N)
     return dixonprice_gradient
     
 end
-
-
-###############################################
-##########  Sum-squares Function  #############
-###############################################
 
 function makesumsquares(N)
     function sumsquares(x::Vector)
@@ -222,12 +197,6 @@ function makesumsquares_gradient(N)
     return sumsquares_gradient
 end
 
-
-###############################################
-##  Rotated Hyper-Ellipsoid Function  #########
-###############################################
-
-
 function makerotatedhyperellipsoid(N)
 
     function rotatedhyperellipsoid(x::Vector)
@@ -249,7 +218,6 @@ function makerotatedhyperellipsoid(N)
     return rotatedhyperellipsoid
         
 end
-
 
 function makerotatedhyperellipsoid_gradient(N)
     function rotatedhyperellipsoid_gradient(x::Vector)

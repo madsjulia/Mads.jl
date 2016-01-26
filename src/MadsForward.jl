@@ -1,19 +1,55 @@
-@doc "Do a forward run using provided values for the model parameters " ->
-function forward(madsdata::Associative, paramvalues)
+"""
+Perform a forward run using the initial or provided values for the model parameters
+
+- `forward(madsdata)`
+- `forward(madsdata, paramvalues)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `paramvalues` : dictionary of model parameter values
+
+Returns:
+
+- `obsvalues` : dictionary of model predictions
+
+"""
+
+function forward(madsdata::Associative)
+	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	@show paramvalues
+	@show madsdata
+	Mads.forward(madsdata, paramvalues)
+end
+
+function forward(madsdata::Associative, paramvalues::Associative)
 	f = Mads.makemadscommandfunction(madsdata)
 	return f(paramvalues)
 end
 
-@doc "Do a forward run over a 3D grid using the initial or provided values for the model parameters " ->
-function forwardgrid(madsdata::Associative; paramvalues=Void)
-	if paramvalues == Void
-		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	end
+"""
+Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
+
+- `forwardgrid(madsdata)`  
+- `forwardgrid(madsdata, paramvalues))`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `paramvalues` : dictionary of model parameter values
+
+Returns:
+
+- `array3d` : 3D array with model predictions along a 3D grid
+
+"""
+
+function forwardgrid(madsdata::Associative)
+	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forwardgrid(madsdata, paramvalues)
 end
 
-@doc "Do a forward run over a 3D grid using provided values for the model parameters " ->
-function forwardgrid(madsdatain::Associative, paramvalues)
+function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	madsdata = copy(madsdatain)
 	f = Mads.makemadscommandfunction(madsdata)
 	nx = madsdata["Grid"]["xcount"]

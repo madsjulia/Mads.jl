@@ -1,4 +1,28 @@
-@doc "Calibrate with random initial guesses" ->
+"""
+Calibrate with random initial guesses
+
+`Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `numberofsamples` : number of random initial samples
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `maxJacobians` : maximum number of Jacobian solves
+- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda_mu` : lambda multiplication factor [10]
+- `np_lambda` : number of parallel lambda solves
+- `show_trace` : shows solution trace [default=false]
+- `usenaive` : use naive Levenberg-Marquardt solver
+
+Returns:
+
+- `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
+
+"""
 function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
@@ -31,11 +55,35 @@ function calibraterandom(madsdata::Associative, numberofsamples; tolX=1e-3, tolG
 	if quietchange
 		Mads.quietoff()
 	end
-	Mads.setparamsinit!(madsdata, paramdict)
+	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	return bestresult
 end
 
-@doc "Calibrate " ->
+"""
+Calibrate
+
+`Mads.calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `maxJacobians` : maximum number of Jacobian solves
+- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda_mu` : lambda multiplication factor [10]
+- `np_lambda` : number of parallel lambda solves
+- `show_trace` : shows solution trace [default=false]
+- `usenaive` : use naive Levenberg-Marquardt solver
+
+Returns:
+
+- `minimumdict` : model parameter dictionary with the optimal values at the minimum
+- `results` : optimization algorithm results (e.g. results.minimum)
+
+"""
 function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
@@ -50,6 +98,9 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	sindx = 0.1
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
+		if typeof(sindx) == ASCIIString
+			sindx = float(sindx)
+		end
 	end
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
@@ -60,9 +111,9 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 		close(outfile)
 	end
 	if usenaive
-		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, o_lm, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, o_lm, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
 	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
@@ -73,17 +124,9 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	return minimumdict, results
 end
 
-@doc "Do a forward run using the initial or provided values for the model parameters " ->
-function forward(madsdata::Associative; paramvalues=Void)
-	if paramvalues == Void
-		paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	end
-	forward(madsdata, paramvalues)
-end
-
 # NLopt is too much of a pain to install at this point
-@doc "Do a calibration using NLopt " -> # TODO switch to a mathprogbase approach
-function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS)
+"Do a calibration using NLopt "
+function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
 	parammins = Array(Float64, length(paramkeys))

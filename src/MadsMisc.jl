@@ -1,5 +1,20 @@
-@doc "Make a version of f that accepts an array containing the opt parameters' values" ->
-function makearrayfunction(madsdata, f)
+"""
+Make a version of the function `f` that accepts an array containing the optimal parameters' values
+
+`Mads.makearrayfunction(madsdata, f)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `f` : ...
+
+Returns:
+
+- `arrayfunction` : function accepting an array containing the optimal parameters' values
+
+
+"""
+function makearrayfunction(madsdata::Associative, f::Function)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
@@ -8,8 +23,8 @@ function makearrayfunction(madsdata, f)
 	return arrayfunction
 end
 
-@doc "Make a conditional log likelihood function that accepts an array containing the opt parameters' values" ->
-function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
+"Make a conditional log likelihood function that accepts an array containing the opt parameters' values"
+function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -21,8 +36,8 @@ function makearrayconditionalloglikelihood(madsdata, conditionalloglikelihood)
 	return arrayconditionalloglikelihood
 end
 
-@doc "Make a log likelihood function that accepts an array containing the opt parameters' values" ->
-function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood array
+"Make a log likelihood function that accepts an array containing the opt parameters' values"
+function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
@@ -38,12 +53,12 @@ function makearrayloglikelihood(madsdata, loglikelihood) # make log likelihood a
 	return arrayloglikelihood
 end
 
-@doc "Set Dynamic Model for MADS model calls using internal Julia functions" ->
-function setdynamicmodel(madsdata, f::Function)
+"Set Dynamic Model for MADS model calls using internal Julia functions"
+function setdynamicmodel(madsdata::Associative, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
-@doc "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
+"Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
 	expression = MPTools.populateexpression(expression, parameters)
@@ -52,8 +67,8 @@ function evaluatemadsexpression(expressionstring, parameters)
 	return retval
 end
 
-@doc "Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values" ->
-function evaluatemadsexpressions(parameters, madsdata)
+"Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
+function evaluatemadsexpressions(madsdata::Associative, parameters)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()
 		for exprname in keys(madsdata["Expressions"])

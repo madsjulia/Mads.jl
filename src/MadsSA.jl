@@ -6,8 +6,8 @@ using ProgressMeter
 
 #TODO use this fuction in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
-@doc "Independent sampling of MADS Model parameters" ->
-function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
+"Independent sampling of MADS Model parameters"
+function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::AbstractString=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
 	else
@@ -20,24 +20,22 @@ function parametersample(madsdata, numsamples, parameterkey=""; init_dist=false)
 	end
 end
 
-@doc "Random numbers for a MADS Model parameters" ->
-function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
-	if length(paramdist) == 0
-		paramdist = getparamdistributions(madsdata)
-	end
+"Random numbers for a MADS Model parameter defined by `parameterkey`"
+function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
 	if haskey( madsdata["Parameters"], parameterkey )
-		if haskey(madsdata["Parameters"][parameterkey], "type") && typeof(madsdata["Parameters"][parameterkey]["type"]) != Void
-			if haskey(madsdata["Parameters"][parameterkey], "log")
-				if madsdata["Parameters"][parameterkey]["log"]
-					dist = paramdist[parameterkey]
-					if typeof(dist) == Uniform
-						a = log10(dist.a)
-						b = log10(dist.b)
-						return 10.^(a + (b - a) * Distributions.rand(numsamples))
-					elseif typeof(dist) == Normal
-						μ = log10(dist.μ)
-						return 10.^(μ + dist.σ * Distributions.randn(numsamples))
-					end
+		if length(paramdist) == 0
+			paramdist = getparamdistributions(madsdata)
+		end
+		if Mads.isopt(madsdata, parameterkey)
+			if Mads.islog(madsdata, parameterkey)
+				dist = paramdist[parameterkey]
+				if typeof(dist) == Distributions.Uniform
+					a = log10(dist.a)
+					b = log10(dist.b)
+					return 10.^(a + (b - a) * Distributions.rand(numsamples))
+				elseif typeof(dist) == Distributions.Normal
+					μ = log10(dist.μ)
+					return 10.^(μ + dist.σ * Distributions.randn(numsamples))
 				end
 			end
 			return Distributions.rand(paramdist[parameterkey], numsamples)
@@ -46,8 +44,8 @@ function paramrand(madsdata, parameterkey; numsamples=1, paramdist=Dict())
 	return nothing
 end
 
-@doc "Local sensitivity analysis" ->
-function localsa(madsdata; format="", filename="")
+"Local sensitivity analysis"
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="")
 	if filename ==""
 		rootname = Mads.getmadsrootname(madsdata)
 	else
@@ -69,7 +67,7 @@ function localsa(madsdata; format="", filename="")
 											Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 											Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 	filename = "$(rootname)-jacobian"
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
 	Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
 	JpJ = J' * J
@@ -107,7 +105,7 @@ function localsa(madsdata; format="", filename="")
 												Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenmatrix"
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
 	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
@@ -115,14 +113,14 @@ function localsa(madsdata; format="", filename="")
 												 Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 												 Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenvalues"
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
 	Mads.madsinfo("""Eigen values plot saved in $filename""")
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
-@doc "Saltelli (brute force)" ->
-function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+"Saltelli (brute force)"
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
 	end
@@ -260,8 +258,8 @@ function saltellibrute(madsdata; N=1000, seed=0) # TODO Saltelli (brute force) d
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
-@doc "Saltelli " ->
-function saltelli(madsdata; N=100, seed=0)
+"Saltelli "
+function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	if seed != 0
 		srand(seed)
 	end
@@ -388,8 +386,8 @@ function saltelli(madsdata; N=100, seed=0)
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
-@doc "Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range" ->
-function computeparametersensitities(madsdata, saresults)
+"Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range"
+function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
 	mes = saresults["mes"]
@@ -427,11 +425,14 @@ function computeparametersensitities(madsdata, saresults)
 	@Compat.compat Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
 end
 
-@doc "Parallelization" ->
-names = ["saltelli", "saltellibrute"]
-for mi = 1:length(names)
+# Parallelization of Saltelli functions
+saltelli_functions = ["saltelli", "saltellibrute"]
+index = 0
+for mi = 1:length(saltelli_functions)
+	index = mi
 	q = quote
-		function $(symbol(string(names[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
+		@doc "Parallel version of $(saltelli_functions[index])" ->
+		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
 			if seed != 0
 				srand(seed)
 			end
@@ -439,7 +440,7 @@ for mi = 1:length(names)
 				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = pmap(i->$(symbol(names[mi]))(madsdata; N=N), 1:numsaltellis)
+			results = pmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
@@ -464,14 +465,14 @@ for mi = 1:length(names)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(names[mi])*"_parallel")
+			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
 		end # end fuction
 	end # end quote
 	eval(q)
 end
 
-@doc "Print the sensitivity analysis results" ->
-function printSAresults(madsdata, results)
+"Print the sensitivity analysis results"
+function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
@@ -546,8 +547,8 @@ function printSAresults(madsdata, results)
 	madsoutput("\n")
 end
 
-@doc "Print the sensitivity analysis results (method 2)" ->
-function saltelliprintresults2(madsdata, results)
+"Print the sensitivity analysis results (method 2)"
+function saltelliprintresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
@@ -581,8 +582,8 @@ function saltelliprintresults2(madsdata, results)
 	end
 end
 
-@doc "Convert Void's to NaN's in a dictionary" ->
-function nothing2nan!(dict) # TODO generalize using while loop and recursive calls ....
+"Convert Void's into NaN's in a dictionary"
+function nothing2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
 			for j in keys(dict[i])
@@ -601,7 +602,7 @@ function nothing2nan!(dict) # TODO generalize using while loop and recursive cal
 	end
 end
 
-@doc "Delete rows with NaN" ->
+"Delete rows with NaN in a Dataframe `df`"
 function deleteNaN!(df::DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
@@ -613,7 +614,7 @@ function deleteNaN!(df::DataFrame)
 	end
 end
 
-@doc "Scale down values larger than max(Float32) so that Gadfly can plot the data" ->
+"Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data"
 function maxtorealmaxFloat32!(df::DataFrame)
 	limit = realmax(Float32) / 10
 	for i in 1:length(df)
@@ -628,8 +629,8 @@ function maxtorealmaxFloat32!(df::DataFrame)
 end
 
 ## eFAST
-@doc "Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method" ->
-function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+"Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method"
+function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -637,7 +638,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	# AVi:       Sum of main effect variance indices (divided by # of resamples to get mean, Vi)
 	# ismads:    Boolean that tells us whether our system is analyzed in mads or as a standalone
 	# InputData: Different size depending on whether we are analyzing a mads system or using eFAST as a standalone.  If analyzing a mads problem,
-	# 			 InputData will have two columns, where the first column holds the names of parameters we are analyzing and the second holds
+	# 			 InputData will have two columns, where the first column holds the saltelli_functions of parameters we are analyzing and the second holds
 	#			 the probability distributions of the parameters.  If using eFAST as a standalone, InputData will have 6 columns, holding, respectively,
 	#			 the name, distribution type, initial value, min/mean, max/std, and a boolean.  If distribution type is uniform columns 4 and 5 will hold
 	# 			 the min/max values, if the distribution type is normal or lognormal columns 4 and 5 will hold mean/std.  Boolean tells us whether the
@@ -1152,7 +1153,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 	#@everywhere using Distributions
 	#require("DataStructures")
 	########## Although it would be nice to have this inside the if statement of ismads == 1, for some reason julia won't compile
-	# Need to add this in if version is < 0.4 so we can use @doc macro
+	# Need to add this in if version is < 0.4 so we can use macro
 	#if VERSION < v"0.4.0-dev"
 	#@everywhere using Docile # default for v > 0.4
 	#end
@@ -1438,7 +1439,7 @@ function efast(md; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, 
 
 end
 
-@doc "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)" ->
+"Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"
 function plotSAresults_monty(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")

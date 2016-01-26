@@ -2,7 +2,7 @@ if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import R3Function
 end
 
-@doc "Make MADS command function" ->
+"Make MADS function to execute the model defined in the MADS data dictionary `madsdata`"
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
@@ -92,20 +92,23 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
 					Mads.madsinfo("""Observations: $(results)""")
-				elseif haskey(madsdata, "JSONPredictions") # JSON
+				end
+				if haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = loadjsonfile("$(newdirname)/$filename")
+						results = merge(results, loadjsonfile("$(newdirname)/$filename"))
 					end
-				elseif haskey(madsdata, "YAMLPredictions") # YAML
+				end
+				if haskey(madsdata, "YAMLPredictions") # YAML
 					for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
 						results = merge(results, loadyamlfile("$(newdirname)/$filename"))
 					end
-				elseif haskey(madsdata, "ASCIIPredictions") # ASCII
+				end
+				if haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(newdirname)/$(madsdata["ASCIIPredictions"])")
 					obskeys = getobskeys(madsdata)
 					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
-					results = DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions))
+					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
 			run(`rm -fR $newdirname`)
@@ -120,32 +123,33 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 		error("MADS input file problem")
 	end
-	if haskey(madsdata, "Restart") && madsdata["Restart"] == "memory"
-		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
-		return madscommandfunctionwithreuse
-	elseif !haskey(madsdata, "Restart") || madsdata["Restart"] != false
-		rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-		if haskey(madsdata, "RestartDir")
-			rootdir = madsdata["RestartDir"]
-		elseif contains(madsdata["Filename"], "/")
-			rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
-		else
-			rootdir = string(rootname, "_restart")
+	if haskey(madsdata, "Restart")
+		if madsdata["Restart"] == "memory"
+			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
+			return madscommandfunctionwithreuse
+		elseif madsdata["Restart"] != false
+			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
+			if haskey(madsdata, "RestartDir")
+				rootdir = madsdata["RestartDir"]
+			elseif contains(madsdata["Filename"], "/")
+				rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
+			else
+				rootdir = string(rootname, "_restart")
+			end
+			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
+			return madscommandfunctionwithreuse
 		end
-		madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
-		return madscommandfunctionwithreuse
 	else
 		return madscommandfunction
 	end
 end
 
-@doc "Make MADS command gradient function" ->
+"Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS data dictionary `madsdata`"
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
 
-@doc "Make MADS command gradient function" ->
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
@@ -155,13 +159,13 @@ function makemadscommandgradient(madsdata::Associative, f::Function)
 	return madscommandgradient
 end
 
-@doc "Make MADS command function & gradient function" ->
+"Make MADS forward & gradient functions for the model defined in the MADS data dictionary `madsdata`"
+
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
 end
 
-@doc "Make MADS command function and gradient function" ->
 function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
@@ -187,6 +191,11 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 			i += 1
 		end
 		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		for i = 1:length(fevals)
+			if typeof(fevals[i]) == RemoteException
+				throw(fevals[i])
+			end
+		end
 		fevalsdict = Dict()
 		for feval in fevals
 			fevalsdict[feval[1]] = feval[2]
@@ -221,6 +230,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 	return madscommandfunctionandgradient
 end
 
+"Make a function to compute the prior log-likelihood of the model parameters listed in the MADS data dictionary `madsdata`"
 function makelogprior(madsdata::Associative)
 	distributions = getparamdistributions(madsdata::Associative)
 	function logprior(params::Associative)
@@ -232,6 +242,10 @@ function makelogprior(madsdata::Associative)
 	end
 end
 
+"""
+Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
+Model parameters and observations are defined in the MADS data dictionary `madsdata`.
+"""
 function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.)
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
@@ -253,13 +267,16 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.
 	end
 end
 
-@doc "Make MADS loglikelihood function" ->
+"""
+Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
+The function can be provided as an external function in the MADS data dictionary under `LogLikelihood` or computed internally.
+"""
 function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
-		Mads.madsinfo("Internal log likelihood")
+		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
-		Mads.madsinfo("External log likelihood")
+		Mads.madsinfo("Log-likelihood function computed internally ...")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)

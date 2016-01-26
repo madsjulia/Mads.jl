@@ -3,7 +3,7 @@ import JLD
 using Base.Test
 
 codedir = dirname(Base.source_path())
-md = Mads.loadyamlmadsfile("$codedir/w01short.mads")
+md = Mads.loadmadsfile("$codedir/w01short.mads")
 computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(Mads.getparamkeys(md), Mads.getparamsinit(md))
 forward_preds = computeconcentrations(paramdict)

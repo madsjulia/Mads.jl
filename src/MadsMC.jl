@@ -1,13 +1,23 @@
 import BlackBoxOptim
 import Lora
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
-# @document
-#@docstrings
 
-@doc "Bayes Sampling " ->
-function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3), thinning=1)
+"""
+Bayes Sampling
+
+`Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `nsteps` :  
+- `burnin` :  
+- `thinning` :   
+
+Returns:
+
+- `mcmcchain` : 
+"""
+function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
 	#TODO make it sample only over the opt params
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -23,14 +33,47 @@ function bayessampling(madsdata; nsteps=round(Int, 1e2), burnin=round(Int, 1e3),
 	return mcmcchain
 end
 
-@doc "Brute force parallel Bayesian sampling " ->
-function bayessampling(madsdata, numsequences; nsteps=round(Int, 1e2), burnin=round(Int, 1e3))
-	mcmcchains = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin), 1:numsequences)
-	return mcmcchains
+"""
+Brute force parallel Bayesian sampling
+
+`Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `numsequences` :
+- `nsteps` : 
+- `burnin` : 
+- `thinning` : 
+
+Returns:
+
+- `mcmcchain` : 
+"""
+function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
+	mcmcchain = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+	return mcmcchain
 end
 
-@doc "Do a forward Monte Carlo analysis " ->
-function montecarlo(madsdata; N=round(Int, 1e2))
+"""
+Monte Carlo analysis
+
+`Mads.montecarlo(madsdata; N=100)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `N` : number of samples (default = 100)
+
+Returns:
+
+- `outputdicts` : parameter dictionary containing the data arrays
+
+Dumps:
+
+- YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
+"""
+function montecarlo(madsdata::Associative; N=100)
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -69,13 +112,16 @@ function montecarlo(madsdata; N=round(Int, 1e2))
 		outputdicts[i]["Parameters"] = paramdicts[i]
 		outputdicts[i]["Results"] = results[i]
 	end
-	outputfilename = string(madsdata["Filename"][1:end-5], ".mcresults.yaml")
+	#rootname = Mads.getmadsrootname(madsdata)
+	#outputfilename = rootname * ".mcresults.yaml"
 	dumpyamlfile(outputfilename, outputdicts)
 	return outputdicts
 end
 
-@doc "Convert parameter array to a parameter dictionary of arrays" ->
-function paramarray2dict(madsdata, array)
+"""
+Convert parameter array to a parameter dictionary of arrays
+"""
+function paramarray2dict(madsdata::Associative, array)
 	paramkeys = getparamkeys(madsdata)
 	dict = OrderedDict()
 	for i in 1:length(paramkeys)
@@ -84,8 +130,29 @@ function paramarray2dict(madsdata, array)
 	return dict
 end
 
-@doc "Generate spaghetti plots for each model parameter separtely " ->
-function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
+"""
+Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
+
+`Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `paramdictarray` : parameter dictionary containing the data arrays to be plotted
+- `keyword` : keyword to be added in the file name used to output the produced plots
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : `x` axis title
+- `ytitle` : `y` axis title
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Returns: `none`
+
+Dumps:
+
+- Image files (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
+
+"""
+function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true )
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -168,7 +235,7 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 		else
 			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		end
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = Mads.setimagefileformat!(filename, format)
 		try
 			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter.":$
@@ -177,8 +244,30 @@ function spaghettiplots(madsdata, paramdictarray::OrderedDict; format="", keywor
 	end
 end
 
-@doc "Generate Monte-Carlo spaghetti plots for all the selected model parameter " ->
-function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", filename="", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+"""
+Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
+
+`Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `paramdictarray` : dictionary containing the parameter data arrays to be plotted
+- `filename` : output file name used to output the produced plots
+- `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : `x` axis title
+- `ytitle` : `y` axis title
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Returns: `none`
+
+Dumps:
+
+- Image files (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+
+"""
+function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -223,7 +312,7 @@ function spaghettiplot(madsdata, paramdictarray::OrderedDict; keyword = "", file
 			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
-	filename, format = setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."

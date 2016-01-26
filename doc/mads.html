@@ -1,0 +1,2903 @@
+<!doctype html>
+
+<meta charset="utf-8">
+
+<title>Mads</title>
+
+<link rel="stylesheet" type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/codemirror.min.css">
+
+<link rel="stylesheet" type="text/css" href="static/custom.css">
+
+<h1 class='package-header'>Mads</h1>
+
+<h1 id='module-reference'>Reference</h1>
+<ul class='index'>
+<li >
+<strong>methods:</strong>
+</li>
+<li >
+<ul >
+<li >
+<a href='#method_allwellsoff_madsdata::associative_k__v__'>allwellsoff!(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_allwellson_madsdata::associative_k__v__'>allwellson!(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_asinetransform_params::array_t__1____lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__'>asinetransform(params::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</a></li>
+<li >
+<a href='#method_bayessampling_madsdata___numsequences_'>bayessampling(madsdata,  numsequences)</a></li>
+<li >
+<a href='#method_bayessampling_madsdata::associative_k__v__'>bayessampling(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_calibrate_madsdata::associative_k__v__'>calibrate(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_calibratenlopt_madsdata::associative_k__v__'>calibratenlopt(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_calibraterandom_madsdata::associative_k__v____numberofsamples_'>calibraterandom(madsdata::Associative{K, V},  numberofsamples)</a></li>
+<li >
+<a href='#method_cmadsins_obs_obsid::array_t__1____instructionfilename::abstractstring___inputfilename::abstractstring_'>cmadsins_obs(obsid::Array{T, 1},  instructionfilename::AbstractString,  inputfilename::AbstractString)</a></li>
+<li >
+<a href='#method_computemass_madsdata::associative_k__v__'>computemass(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_computemass_madsfiles_'>computemass(madsfiles)</a></li>
+<li >
+<a href='#method_computeparametersensitities_madsdata___saresults_'>computeparametersensitities(madsdata,  saresults)</a></li>
+<li >
+<a href='#method_contamination_wellx___welly___wellz___n___lambda___theta___vx___vy___vz___ax___ay___az___h___x___y___z___dx___dy___dz___f___t0___t1___t_'>contamination(wellx,  welly,  wellz,  n,  lambda,  theta,  vx,  vy,  vz,  ax,  ay,  az,  H,  x,  y,  z,  dx,  dy,  dz,  f,  t0,  t1,  t)</a></li>
+<li >
+<a href='#method_createmadsproblem_infilename::abstractstring___outfilename::abstractstring_'>createmadsproblem(infilename::AbstractString,  outfilename::AbstractString)</a></li>
+<li >
+<a href='#method_createobservations_madsdata::associative_k__v____time___observation_'>createobservations!(madsdata::Associative{K, V},  time,  observation)</a></li>
+<li >
+<a href='#method_deletenan_df::dataframes.dataframe_'>deleteNaN!(df::DataFrames.DataFrame)</a></li>
+<li >
+<a href='#method_dumpasciifile_filename::abstractstring___data_'>dumpasciifile(filename::AbstractString,  data)</a></li>
+<li >
+<a href='#method_dumpjsonfile_filename::abstractstring___data_'>dumpjsonfile(filename::AbstractString,  data)</a></li>
+<li >
+<a href='#method_dumpwellconcentrations_filename::abstractstring___madsdata_'>dumpwellconcentrations(filename::AbstractString,  madsdata)</a></li>
+<li >
+<a href='#method_dumpyamlfile_filename::abstractstring___yamldata_'>dumpyamlfile(filename::AbstractString,  yamldata)</a></li>
+<li >
+<a href='#method_dumpyamlmadsfile_madsdata___filename::abstractstring_'>dumpyamlmadsfile(madsdata,  filename::AbstractString)</a></li>
+<li >
+<a href='#method_efast_md::associative_k__v__'>efast(md::Associative{K, V})</a></li>
+<li >
+<a href='#method_evaluatemadsexpression_expressionstring___parameters_'>evaluatemadsexpression(expressionstring,  parameters)</a></li>
+<li >
+<a href='#method_evaluatemadsexpressions_madsdata::associative_k__v____parameters_'>evaluatemadsexpressions(madsdata::Associative{K, V},  parameters)</a></li>
+<li >
+<a href='#method_forward_madsdata::associative_k__v__'>forward(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_forwardgrid_madsdata::associative_k__v__'>forwardgrid(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getextension_filename_'>getextension(filename)</a></li>
+<li >
+<a href='#method_getmadsdir__'>getmadsdir()</a></li>
+<li >
+<a href='#method_getmadsinputfile__'>getmadsinputfile()</a></li>
+<li >
+<a href='#method_getmadsproblemdir_madsdata::associative_k__v__'>getmadsproblemdir(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getmadsrootname_madsdata::associative_k__v__'>getmadsrootname(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getobskeys_madsdata::associative_k__v__'>getobskeys(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getparamdict_madsdata::associative_k__v__'>getparamdict(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getparamdistributions_madsdata::associative_k__v__'>getparamdistributions(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getparamkeys_madsdata::associative_k__v__'>getparamkeys(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getrootname_filename::abstractstring_'>getrootname(filename::AbstractString)</a></li>
+<li >
+<a href='#method_getsourcekeys_madsdata::associative_k__v__'>getsourcekeys(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_getwellkeys_madsdata::associative_k__v__'>getwellkeys(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_haskeyword_madsdata::associative_k__v____keyword::abstractstring_'>haskeyword(madsdata::Associative{K, V},  keyword::AbstractString)</a></li>
+<li >
+<a href='#method_help__'>help()</a></li>
+<li >
+<a href='#method_loadasciifile_filename::abstractstring_'>loadasciifile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_loadjsonfile_filename::abstractstring_'>loadjsonfile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_loadmadsfile_filename::abstractstring_'>loadmadsfile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_loadyamlfile_filename::abstractstring_'>loadyamlfile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_loadyamlmadsfile_filename::abstractstring_'>loadyamlmadsfile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_localsa_madsdata_'>localsa(madsdata)</a></li>
+<li >
+<a href='#method_madscrit_message::abstractstring_'>madscrit(message::AbstractString)</a></li>
+<li >
+<a href='#method_madsdebug_message::abstractstring_'>madsdebug(message::AbstractString)</a></li>
+<li >
+<a href='#method_madserr_message::abstractstring_'>madserr(message::AbstractString)</a></li>
+<li >
+<a href='#method_madsinfo_message::abstractstring_'>madsinfo(message::AbstractString)</a></li>
+<li >
+<a href='#method_madsoutput_message::abstractstring_'>madsoutput(message::AbstractString)</a></li>
+<li >
+<a href='#method_madswarn_message::abstractstring_'>madswarn(message::AbstractString)</a></li>
+<li >
+<a href='#method_makearrayconditionalloglikelihood_madsdata::associative_k__v____conditionalloglikelihood_'>makearrayconditionalloglikelihood(madsdata::Associative{K, V},  conditionalloglikelihood)</a></li>
+<li >
+<a href='#method_makearrayfunction_madsdata::associative_k__v____f::function_'>makearrayfunction(madsdata::Associative{K, V},  f::Function)</a></li>
+<li >
+<a href='#method_makearrayloglikelihood_madsdata::associative_k__v____loglikelihood_'>makearrayloglikelihood(madsdata::Associative{K, V},  loglikelihood)</a></li>
+<li >
+<a href='#method_makecomputeconcentrations_madsdata::associative_k__v__'>makecomputeconcentrations(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_makemadscommandfunction_madsdata::associative_k__v__'>makemadscommandfunction(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_makemadscommandfunctionandgradient_madsdata::associative_k__v__'>makemadscommandfunctionandgradient(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_makemadscommandfunctionandgradient_madsdata::associative_k__v____f::function_'>makemadscommandfunctionandgradient(madsdata::Associative{K, V},  f::Function)</a></li>
+<li >
+<a href='#method_makemadscommandgradient_madsdata::associative_k__v__'>makemadscommandgradient(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_makemadscommandgradient_madsdata::associative_k__v____f::function_'>makemadscommandgradient(madsdata::Associative{K, V},  f::Function)</a></li>
+<li >
+<a href='#method_makemadsloglikelihood_madsdata::associative_k__v__'>makemadsloglikelihood(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_maxtorealmaxfloat32_df::dataframes.dataframe_'>maxtorealmaxFloat32!(df::DataFrames.DataFrame)</a></li>
+<li >
+<a href='#method_montecarlo_madsdata::associative_k__v__'>montecarlo(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_nothing2nan_dict::associative_k__v__'>nothing2nan!(dict::Associative{K, V})</a></li>
+<li >
+<a href='#method_paramarray2dict_madsdata::associative_k__v____array_'>paramarray2dict(madsdata::Associative{K, V},  array)</a></li>
+<li >
+<a href='#method_parametersample_madsdata___numsamples_'>parametersample(madsdata,  numsamples)</a></li>
+<li >
+<a href='#method_parametersample_madsdata___numsamples___parameterkey_'>parametersample(madsdata,  numsamples,  parameterkey)</a></li>
+<li >
+<a href='#method_paramrand_madsdata___parameterkey_'>paramrand(madsdata,  parameterkey)</a></li>
+<li >
+<a href='#method_plotsaresults_monty_wellname___madsdata___result_'>plotSAresults_monty(wellname,  madsdata,  result)</a></li>
+<li >
+<a href='#method_plotgrid_madsdata::associative_k__v__'>plotgrid(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_plotgrid_madsdata::associative_k__v____parameters::associative_k__v__'>plotgrid(madsdata::Associative{K, V},  parameters::Associative{K, V})</a></li>
+<li >
+<a href='#method_plotgrid_madsdata::associative_k__v____s::array_float64__n__'>plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})</a></li>
+<li >
+<a href='#method_plotmadsproblem_madsdata::associative_k__v__'>plotmadsproblem(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_plotmass_lambda___mass_injected___mass_reduced___filename::abstractstring_'>plotmass(lambda,  mass_injected,  mass_reduced,  filename::AbstractString)</a></li>
+<li >
+<a href='#method_plotobssaresults_madsdata___result_'>plotobsSAresults(madsdata,  result)</a></li>
+<li >
+<a href='#method_plotwellsaresults_madsdata___result_'>plotwellSAresults(madsdata,  result)</a></li>
+<li >
+<a href='#method_plotwellsaresults_madsdata___result___wellname_'>plotwellSAresults(madsdata,  result,  wellname)</a></li>
+<li >
+<a href='#method_printsaresults_madsdata___results_'>printSAresults(madsdata,  results)</a></li>
+<li >
+<a href='#method_quietoff__'>quietoff()</a></li>
+<li >
+<a href='#method_quieton__'>quieton()</a></li>
+<li >
+<a href='#method_readasciipredictions_filename::abstractstring_'>readasciipredictions(filename::AbstractString)</a></li>
+<li >
+<a href='#method_readjsonpredictions_filename::abstractstring_'>readjsonpredictions(filename::AbstractString)</a></li>
+<li >
+<a href='#method_readobservations_madsdata::associative_k__v__'>readobservations(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_readobservations_cmads_madsdata::associative_k__v__'>readobservations_cmads(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_readyamlpredictions_filename::abstractstring_'>readyamlpredictions(filename::AbstractString)</a></li>
+<li >
+<a href='#method_resetmodelruns__'>resetmodelruns()</a></li>
+<li >
+<a href='#method_rosenbrock_x::array_t__1__'>rosenbrock(x::Array{T, 1})</a></li>
+<li >
+<a href='#method_rosenbrock2_gradient_lm_x_'>rosenbrock2_gradient_lm(x)</a></li>
+<li >
+<a href='#method_rosenbrock2_lm_x_'>rosenbrock2_lm(x)</a></li>
+<li >
+<a href='#method_rosenbrock_gradient_x::array_t__1____storage::array_t__1__'>rosenbrock_gradient!(x::Array{T, 1},  storage::Array{T, 1})</a></li>
+<li >
+<a href='#method_rosenbrock_gradient_lm_x::array_t__1__'>rosenbrock_gradient_lm(x::Array{T, 1})</a></li>
+<li >
+<a href='#method_rosenbrock_hessian_x::array_t__1____storage::array_t__2__'>rosenbrock_hessian!(x::Array{T, 1},  storage::Array{T, 2})</a></li>
+<li >
+<a href='#method_rosenbrock_lm_x::array_t__1__'>rosenbrock_lm(x::Array{T, 1})</a></li>
+<li >
+<a href='#method_saltelli_madsdata_'>saltelli(madsdata)</a></li>
+<li >
+<a href='#method_saltellibrute_madsdata_'>saltellibrute(madsdata)</a></li>
+<li >
+<a href='#method_saltelliprintresults2_madsdata___results_'>saltelliprintresults2(madsdata,  results)</a></li>
+<li >
+<a href='#method_searchdir_key::regex_'>searchdir(key::Regex)</a></li>
+<li >
+<a href='#method_setallparamsoff_madsdata::associative_k__v__'>setallparamsoff!(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_setallparamson_madsdata::associative_k__v__'>setallparamson!(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_setdebuglevel_level::int64_'>setdebuglevel(level::Int64)</a></li>
+<li >
+<a href='#method_setdynamicmodel_madsdata::associative_k__v____f::function_'>setdynamicmodel(madsdata::Associative{K, V},  f::Function)</a></li>
+<li >
+<a href='#method_setimagefileformat_filename___format_'>setimagefileformat!(filename,  format)</a></li>
+<li >
+<a href='#method_setmadsinputfile_filename::abstractstring_'>setmadsinputfile(filename::AbstractString)</a></li>
+<li >
+<a href='#method_setnprocs_np_'>setnprocs(np)</a></li>
+<li >
+<a href='#method_setnprocs_np___nt_'>setnprocs(np,  nt)</a></li>
+<li >
+<a href='#method_setobservationtargets_madsdata::associative_k__v____predictions::associative_k__v__'>setobservationtargets!(madsdata::Associative{K, V},  predictions::Associative{K, V})</a></li>
+<li >
+<a href='#method_setparamoff_madsdata::associative_k__v____parameterkey_'>setparamoff!(madsdata::Associative{K, V},  parameterkey)</a></li>
+<li >
+<a href='#method_setparamon_madsdata::associative_k__v____parameterkey_'>setparamon!(madsdata::Associative{K, V},  parameterkey)</a></li>
+<li >
+<a href='#method_setparamsdistnormal_madsdata::associative_k__v____mean___stddev_'>setparamsdistnormal!(madsdata::Associative{K, V},  mean,  stddev)</a></li>
+<li >
+<a href='#method_setparamsdistuniform_madsdata::associative_k__v____min___max_'>setparamsdistuniform!(madsdata::Associative{K, V},  min,  max)</a></li>
+<li >
+<a href='#method_setparamsinit_madsdata::associative_k__v____paramdict::associative_k__v__'>setparamsinit!(madsdata::Associative{K, V},  paramdict::Associative{K, V})</a></li>
+<li >
+<a href='#method_setverbositylevel_level::int64_'>setverbositylevel(level::Int64)</a></li>
+<li >
+<a href='#method_showallparameters_madsdata::associative_k__v__'>showallparameters(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_showobservations_madsdata::associative_k__v__'>showobservations(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_showparameters_madsdata::associative_k__v__'>showparameters(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_sinetransform_sineparams::array_t__1____lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__'>sinetransform(sineparams::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</a></li>
+<li >
+<a href='#method_sinetransformfunction_f::function___lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__'>sinetransformfunction(f::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</a></li>
+<li >
+<a href='#method_sinetransformgradient_g::function___lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__'>sinetransformgradient(g::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</a></li>
+<li >
+<a href='#method_spaghettiplot_madsdata::associative_k__v____paramdictarray::datastructures.ordereddict_k__v__'>spaghettiplot(madsdata::Associative{K, V},  paramdictarray::DataStructures.OrderedDict{K, V})</a></li>
+<li >
+<a href='#method_spaghettiplots_madsdata::associative_k__v____paramdictarray::datastructures.ordereddict_k__v__'>spaghettiplots(madsdata::Associative{K, V},  paramdictarray::DataStructures.OrderedDict{K, V})</a></li>
+<li >
+<a href='#method_welloff_madsdata___wellname::abstractstring_'>welloff!(madsdata,  wellname::AbstractString)</a></li>
+<li >
+<a href='#method_wellon_madsdata::associative_k__v____wellname::abstractstring_'>wellon!(madsdata::Associative{K, V},  wellname::AbstractString)</a></li>
+<li >
+<a href='#method_wells2observations_madsdata::associative_k__v__'>wells2observations!(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_writeparameters_madsdata::associative_k__v__'>writeparameters(madsdata::Associative{K, V})</a></li>
+<li >
+<a href='#method_writeparameters_madsdata::associative_k__v____parameters_'>writeparameters(madsdata::Associative{K, V},  parameters)</a></li>
+<li >
+<a href='#method_writeparametersviatemplate_parameters___templatefilename___outputfilename_'>writeparametersviatemplate(parameters,  templatefilename,  outputfilename)</a></li>
+</ul>
+</li>
+<li >
+<strong>globals:</strong>
+</li>
+<li >
+<ul >
+<li >
+<a href='#global_getobsnames'>getobsnames</a></li>
+<li >
+<a href='#global_getparamsnames'>getparamsnames</a></li>
+</ul>
+</li>
+</ul>
+<div class='entries'>
+<div class='entry'>
+<div id='method_allwellsoff_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> allwellsoff!(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Turn off all the wells in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:140</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_allwellson_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> allwellson!(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Turn on all the wells in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:116</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_asinetransform_params::array_t__1____lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> asinetransform(params::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Arcsine transformation of model parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSine.jl'>/Users/monty/Julia/Mads.jl/src/MadsSine.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_bayessampling_madsdata___numsequences_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> bayessampling(madsdata,  numsequences)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Brute force parallel Bayesian sampling</p>
+<p><code>Mads.bayessampling&#40;madsdata, numsequences; nsteps&#61;100, burnin&#61;1000, thinning&#61;1&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>numsequences</code> :</li>
+<li><code>nsteps</code> : </li>
+<li><code>burnin</code> : </li>
+<li><code>thinning</code> : </li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mcmcchain</code> : </li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:53</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_bayessampling_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> bayessampling(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Bayes Sampling</p>
+<p><code>Mads.bayessampling&#40;madsdata; nsteps&#61;100, burnin&#61;1000, thinning&#61;1&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>nsteps</code> :  </li>
+<li><code>burnin</code> :  </li>
+<li><code>thinning</code> :   </li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mcmcchain</code> : </li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:20</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_calibrate_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> calibrate(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Calibrate</p>
+<p><code>Mads.calibrate&#40;madsdata; tolX&#61;1e-3, tolG&#61;1e-6, maxEval&#61;1000, maxIter&#61;100, maxJacobians&#61;100, lambda&#61;100.0, lambda_mu&#61;10.0, np_lambda&#61;10, show_trace&#61;false, usenaive&#61;false&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>tolX</code> : parameter space tolerance</li>
+<li><code>tolG</code> : parameter space update tolerance</li>
+<li><code>maxEval</code> : maximum number of model evaluations</li>
+<li><code>maxIter</code> : maximum number of optimization iterations</li>
+<li><code>maxJacobians</code> : maximum number of Jacobian solves</li>
+<li><code>lambda</code> : initial Levenberg-Marquardt lambda </li>
+<li><code>lambda_mu</code> : lambda multiplication factor &#91;10&#93;</li>
+<li><code>np_lambda</code> : number of parallel lambda solves</li>
+<li><code>show_trace</code> : shows solution trace &#91;default&#61;false&#93;</li>
+<li><code>usenaive</code> : use naive Levenberg-Marquardt solver</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>minimumdict</code> : model parameter dictionary with the optimal values at the minimum</li>
+<li><code>results</code> : optimization algorithm results &#40;e.g. results.minimum&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl'>/Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl:87</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_calibratenlopt_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> calibratenlopt(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Do a calibration using NLopt </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl'>/Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl:129</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_calibraterandom_madsdata::associative_k__v____numberofsamples_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> calibraterandom(madsdata::Associative{K, V},  numberofsamples)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Calibrate with random initial guesses</p>
+<p><code>Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6, maxEval&#61;1000, maxIter&#61;100, maxJacobians&#61;100, lambda&#61;100.0, lambda_mu&#61;10.0, np_lambda&#61;10, show_trace&#61;false, usenaive&#61;false&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>numberofsamples</code> : number of random initial samples</li>
+<li><code>tolX</code> : parameter space tolerance</li>
+<li><code>tolG</code> : parameter space update tolerance</li>
+<li><code>maxEval</code> : maximum number of model evaluations</li>
+<li><code>maxIter</code> : maximum number of optimization iterations</li>
+<li><code>maxJacobians</code> : maximum number of Jacobian solves</li>
+<li><code>lambda</code> : initial Levenberg-Marquardt lambda </li>
+<li><code>lambda_mu</code> : lambda multiplication factor &#91;10&#93;</li>
+<li><code>np_lambda</code> : number of parallel lambda solves</li>
+<li><code>show_trace</code> : shows solution trace &#91;default&#61;false&#93;</li>
+<li><code>usenaive</code> : use naive Levenberg-Marquardt solver</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>bestresult</code> : optimal results tuple: &#91;1&#93; model parameter dictionary with the optimal values at the minimum; &#91;2&#93; optimization algorithm results &#40;e.g. bestresult&#91;2&#93;.minimum&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl'>/Users/monty/Julia/Mads.jl/src/MadsCalibrate.jl:26</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_cmadsins_obs_obsid::array_t__1____instructionfilename::abstractstring___inputfilename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> cmadsins_obs(obsid::Array{T, 1},  instructionfilename::AbstractString,  inputfilename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Call C MADS ins_obs&#40;&#41; function from the MADS library</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:314</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_computemass_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> computemass(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Compute injected/reduced contaminant mass</p>
+<p><code>Mads.computemass&#40;madsdata; time &#61; 0&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>time</code> : computational time</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mass_injected</code> : total injected mass</li>
+<li><code>mass_reduced</code> : total reduced mass</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsAnasol.jl'>/Users/monty/Julia/Mads.jl/src/MadsAnasol.jl:189</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_computemass_madsfiles_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> computemass(madsfiles)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Compute injected/reduced contaminant mass for a given set of mads input files</p>
+<p><code>Mads.computemass&#40;madsfiles; time &#61; 0, path &#61; &quot;.&quot;&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsfiles</code> : matching pattern for Mads input files &#40;string or regular expression accepted&#41;</li>
+<li><code>time</code> : computational time</li>
+<li><code>path</code> : search directory for the mads input files </li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>lambda</code> : array with all the lambda values</li>
+<li><code>mass_injected</code> : array with associated total injected mass</li>
+<li><code>mass_reduced</code> : array with associated total reduced mass</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsAnasol.jl'>/Users/monty/Julia/Mads.jl/src/MadsAnasol.jl:249</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_computeparametersensitities_madsdata___saresults_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> computeparametersensitities(madsdata,  saresults)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:392</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_contamination_wellx___welly___wellz___n___lambda___theta___vx___vy___vz___ax___ay___az___h___x___y___z___dx___dy___dz___f___t0___t1___t_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> contamination(wellx,  welly,  wellz,  n,  lambda,  theta,  vx,  vy,  vz,  ax,  ay,  az,  H,  x,  y,  z,  dx,  dy,  dz,  f,  t0,  t1,  t)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Compute concentration for a point in space and time &#40;x,y,z,t&#41;</p>
+<p><code>Mads.contamination&#40;wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction&#61;&quot;long_bbb_ddd_iir_c&quot;&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>wellx</code></li>
+<li><code>welly</code></li>
+<li><code>wellz</code></li>
+<li><code>n</code></li>
+<li><code>lambda</code></li>
+<li><code>theta</code></li>
+<li><code>vx</code></li>
+<li><code>vy</code></li>
+<li><code>vz</code></li>
+<li><code>ax</code></li>
+<li><code>ay</code></li>
+<li><code>az</code></li>
+<li><code>H</code></li>
+<li><code>x</code></li>
+<li><code>y</code></li>
+<li><code>z</code></li>
+<li><code>dx</code></li>
+<li><code>dy</code></li>
+<li><code>dz</code></li>
+<li><code>f</code></li>
+<li><code>t0</code></li>
+<li><code>t1</code></li>
+<li><code>t</code></li>
+<li><code>anasolfunction</code> : &quot;long_bbb_ddd_iir_c&quot;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsAnasol.jl'>/Users/monty/Julia/Mads.jl/src/MadsAnasol.jl:148</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_createmadsproblem_infilename::abstractstring___outfilename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> createmadsproblem(infilename::AbstractString,  outfilename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Create a new Mads problem where the observation targets are computed based on the model predictions</p>
+<ul>
+<li><code>Mads.createmadsproblem&#40;infilename, outfilename&#41;</code></li>
+<li><code>Mads.createmadsproblem&#40;madsdata, outfilename&#41;</code></li>
+<li>&#96;Mads.createmadsproblem&#40;madsdata, predictions, outfilename&#41;</li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>infilename</code> : input Mads file</li>
+<li><code>outfilename</code> : output Mads file</li>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>predictions</code> : dictionary of model predictions</li>
+</ul>
+<p>Returns: <code>none</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsCreate.jl'>/Users/monty/Julia/Mads.jl/src/MadsCreate.jl:20</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_createobservations_madsdata::associative_k__v____time___observation_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> createobservations!(madsdata::Associative{K, V},  time,  observation)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Create observations in the MADS data dictionary based on <code>time</code> and <code>observation</code> arrays </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:78</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_deletenan_df::dataframes.dataframe_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> deleteNaN!(df::DataFrames.DataFrame)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Delete rows with NaN in a Dataframe <code>df</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:608</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_dumpasciifile_filename::abstractstring___data_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> dumpasciifile(filename::AbstractString,  data)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Dump ASCII file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsASCII.jl'>/Users/monty/Julia/Mads.jl/src/MadsASCII.jl:8</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_dumpjsonfile_filename::abstractstring___data_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> dumpjsonfile(filename::AbstractString,  data)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Dump JSON file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsJSON.jl'>/Users/monty/Julia/Mads.jl/src/MadsJSON.jl:12</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_dumpwellconcentrations_filename::abstractstring___madsdata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> dumpwellconcentrations(filename::AbstractString,  madsdata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Dump well concentrations</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:205</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_dumpyamlfile_filename::abstractstring___yamldata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> dumpyamlfile(filename::AbstractString,  yamldata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Dump YAML file in JSON format</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:34</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_dumpyamlmadsfile_madsdata___filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> dumpyamlmadsfile(madsdata,  filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Dump YAML MADS file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:147</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_efast_md::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> efast(md::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Saltelli&#39;s eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing &#40;eFAST&#41; method</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:635</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_evaluatemadsexpression_expressionstring___parameters_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> evaluatemadsexpression(expressionstring,  parameters)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Evaluate the expression in terms of the parameters, return a Dict&#40;&#41; containing the expression names as keys, and the values of the expression as values</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:62</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_evaluatemadsexpressions_madsdata::associative_k__v____parameters_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> evaluatemadsexpressions(madsdata::Associative{K, V},  parameters)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Evaluate the expressions in terms of the parameters, return a Dict&#40;&#41; containing the expression names as keys, and the values of the expression as values</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:71</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_forward_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> forward(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Perform a forward run using the initial or provided values for the model parameters</p>
+<ul>
+<li><code>forward&#40;madsdata&#41;</code></li>
+<li><code>forward&#40;madsdata, paramvalues&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>paramvalues</code> : dictionary of model parameter values</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>obsvalues</code> : dictionary of model predictions</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsForward.jl'>/Users/monty/Julia/Mads.jl/src/MadsForward.jl:18</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_forwardgrid_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> forwardgrid(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Perform a forward run over a 3D grid defined in <code>madsdata</code> using the initial or provided values for the model parameters</p>
+<ul>
+<li><code>forwardgrid&#40;madsdata&#41;</code>  </li>
+<li><code>forwardgrid&#40;madsdata, paramvalues&#41;&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>paramvalues</code> : dictionary of model parameter values</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>array3d</code> : 3D array with model predictions along a 3D grid</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsForward.jl'>/Users/monty/Julia/Mads.jl/src/MadsForward.jl:45</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getextension_filename_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getextension(filename)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get file name extension</p>
+<p>Example:</p>
+<pre><code>ext &#61; Mads.getextension&#40;&quot;a.mads&quot;&#41; # ext &#61; &quot;mads&quot; </code></pre>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:135</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getmadsdir__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getmadsdir()
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get the directory where currently Mads is running</p>
+<p><code>problemdir &#61; Mads.getmadsdir&#40;&#41;</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:90</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getmadsinputfile__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getmadsinputfile()
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get the default MADS input file set as a MADS global variable using <code>setmadsinputfile&#40;filename&#41;</code></p>
+<p><code>Mads.getmadsinputfile&#40;&#41;</code></p>
+<p>Arguments: <code>none</code></p>
+<p>Returns:</p>
+<ul>
+<li><code>filename</code> : input file name &#40;e.g. <code>input_file_name.mads</code>&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:54</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getmadsproblemdir_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getmadsproblemdir(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get the directory where the Mads data file is located</p>
+<p><code>Mads.getmadsproblemdir&#40;madsdata&#41;</code></p>
+<p>Example:</p>
+<pre><code>madsdata &#61; Mads.loadmadsproblemdir&#40;&quot;../../a.mads&quot;&#41;
+madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
+<p>where <code>madsproblemdir</code> &#61; <code>&quot;../../&quot;</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:81</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getmadsrootname_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getmadsrootname(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get the MADS problem root name</p>
+<p><code>madsrootname &#61; Mads.getmadsrootname&#40;madsdata&#41;</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:63</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getobskeys_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getobskeys(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get keys for all the observations in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getparamdict_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getparamdict(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get dictionary with all parameters and their respective initial values</p>
+<p><code>Mads.getparamdict&#40;madsdata&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>paramdict</code> : dictionary with all parameters and their respective initial values</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:33</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getparamdistributions_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getparamdistributions(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get distributions of all parameters in the Mads data dictionary</p>
+<p><code>Mads.getparamdistributions&#40;madsdata; init_dist&#61;false&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>init_dist</code> : if true, use the initialization distributions &#40;if defined&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:248</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getparamkeys_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getparamkeys(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get keys of all parameters in the MADS dictionary</p>
+<p><code>Mads.getparamkeys&#40;madsdata&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>paramkeys</code> : array with the keys of all parameters in the MADS dictionary</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:14</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getrootname_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getrootname(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get file name root</p>
+<p>Example:</p>
+<pre><code>r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;&#41; # r &#61; &quot;a&quot;
+r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#61; &quot;a.rnd&quot;
+</code></pre>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:112</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getsourcekeys_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getsourcekeys(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get keys of all source parameters in the MADS dictionary</p>
+<p><code>Mads.getsourcekeys&#40;madsdata&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>sourcekeys</code> : array with keys of all source parameters in the MADS dictionary</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:54</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_getwellkeys_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> getwellkeys(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get keys for all the wells in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:8</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_haskeyword_madsdata::associative_k__v____keyword::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> haskeyword(madsdata::Associative{K, V},  keyword::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Check for a <code>keyword</code> in a class within the Mads dictionary <code>madsdata</code></p>
+<ul>
+<li><code>Mads.haskeyword&#40;madsdata, keyword&#41;</code></li>
+<li><code>Mads.haskeyword&#40;madsdata, class, keyword&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>class</code> : dictionary class; if not provided searches for <code>keyword</code> in <code>Problem</code> class</li>
+<li><code>keyword</code> : dictionary key</li>
+</ul>
+<p>Returns: <code>true</code> or <code>false</code></p>
+<p>Examples:</p>
+<ul>
+<li><code>Mads.haskeyword&#40;madsdata, &quot;disp&quot;&#41;</code> ... searches in <code>Problem</code> class by default</li>
+<li><code>Mads.haskeyword&#40;madsdata, &quot;Wells&quot;, &quot;R-28&quot;&#41;</code> ... searches in <code>Wells</code> class for a keyword &quot;R-28&quot;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:54</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_help__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> help()
+</div>
+<div class='entry-body'>
+<div class="markdown"><h2>MADS &#40;Model Analysis &amp; Decision Support&#41;</h2>
+<p>MADS is an open-source code designed as an integrated high-performance computational framework performing a wide range of model-based analyses:</p>
+<ul>
+<li>Sensitivity Analysis</li>
+<li>Parameter Estimation</li>
+<li>Model Inversion and Calibration</li>
+<li>Uncertainty Quantification</li>
+<li>Model Selection and Averaging</li>
+<li>Decision Support</li>
+</ul>
+<p>MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input. The code provides a series of alternative algorithms to perform each type of model analyses. The code allows for coupled model parameters and regularization terms that are internally computed based on user-defined mathematical expressions.</p>
+<p>For additional information:</p>
+<ul>
+<li> web:   http://mads.lanl.gov -:- http://madsjulia.lanl.gov</li>
+<li> repo:  http://gitlab.com/mads/Mads.jl -:- http://gitlab.com/madsjulia/Mads.jl</li>
+<li> git:   git clone git&#64;gitlab.com:mads/Mads.jl -:- git clone git&#64;gitlab.com:madsjulia/Mads.jl</li>
+<li> email: mads&#64;lanl.gov</li>
+</ul>
+<p>Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html</p>
+<h2>MADS Getting started</h2>
+<p>All the MADS analyses are based on MADS data dictionary that defines the problem. MADS data dictionary is typically loaded from a YAML MADS input file. The loading of a MADS file can be executed as follows:</p>
+<p><code>madsdata &#61; Mads.loadmadsfile&#40;&quot;&lt;input_file_name&gt;.mads&quot;&#41;</code></p>
+<p>For example, you can load <code>Mads.jl/examples/contamination/w01short.mads</code> located in the Mads.jl repository:</p>
+<p><code>madsdata &#61; Mads.loadmadsfile&#40;&quot;Mads.jl/examples/contamination/w01short.mads&quot;&#41;</code></p>
+<p>Typically, MADS data dictionary includes several classes:</p>
+<ul>
+<li><code>Parameters</code> : lists of model parameters</li>
+<li><code>Observations</code> : lists of model observations</li>
+</ul>
+<p><code>Mads.showallparameters&#40;madsdata&#41;</code> will show all the parameters.</p>
+<p><code>Mads.showobservations&#40;madsdata&#41;</code> will list all the observations.</p>
+<p>In addition, the MADS data dictionary provides information how to compute model predictions related to the listed observations based on model parameters. </p>
+<p>MADS can perform various types of analyses:</p>
+<ul>
+<li><code>saresults &#61; Mads.efast&#40;madsdata&#41;</code> will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS data dictionary.</li>
+<li><code>iaresults &#61; Mads.calibrate&#40;madsdata&#41;</code> will perform calibration &#40;inverse analysis&#41; of the model parameters to reproduce the model observations as defined in the MADS data dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.</li>
+</ul>
+<h2>MADS Licensing &amp; Copyright</h2>
+<p>Execute <code>&#64;doc Mads</code> to see the licensing &amp; copyright information.</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelp.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelp.jl:61</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_loadasciifile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> loadasciifile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Load ASCII file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsASCII.jl'>/Users/monty/Julia/Mads.jl/src/MadsASCII.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_loadjsonfile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> loadjsonfile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Load JSON file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsJSON.jl'>/Users/monty/Julia/Mads.jl/src/MadsJSON.jl:6</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_loadmadsfile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> loadmadsfile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Load MADS input file defining a MADS class set</p>
+<ul>
+<li><code>Mads.loadmadsfile&#40;filename&#41;</code></li>
+<li><code>Mads.loadmadsfile&#40;filename; julia&#61;false&#41;</code></li>
+<li><code>Mads.loadmadsfile&#40;filename; julia&#61;true&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : input file name &#40;e.g. <code>input_file_name.mads</code>&#41;</li>
+<li><code>julia</code> : if <code>true</code>, force using <code>julia</code> parsing fuctions; if <code>false</code> &#40;default&#41;, use <code>python</code> parsing functions &#91;boolean&#93;</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>madsdata</code> : Loaded Mads data class</li>
+</ul>
+<p>Example: <code>md &#61; loadmadsfile&#40;&quot;input_file_name.mads&quot;&#41;</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:19</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_loadyamlfile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> loadyamlfile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Load YAML file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:24</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_loadyamlmadsfile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> loadyamlmadsfile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Load YAML MADS file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:45</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_localsa_madsdata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> localsa(madsdata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Local sensitivity analysis</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:50</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madscrit_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madscrit(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS critical error messages</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:31</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madsdebug_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madsdebug(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS debug messages</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:9</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madserr_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madserr(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS error messages</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:26</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madsinfo_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madsinfo(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS information/status messages</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:16</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madsoutput_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madsoutput(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS output</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_madswarn_message::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> madswarn(message::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS warning messages</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsLog.jl'>/Users/monty/Julia/Mads.jl/src/MadsLog.jl:21</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makearrayconditionalloglikelihood_madsdata::associative_k__v____conditionalloglikelihood_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makearrayconditionalloglikelihood(madsdata::Associative{K, V},  conditionalloglikelihood)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make a conditional log likelihood function that accepts an array containing the opt parameters&#39; values</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:27</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makearrayfunction_madsdata::associative_k__v____f::function_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makearrayfunction(madsdata::Associative{K, V},  f::Function)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make a version of the function <code>f</code> that accepts an array containing the optimal parameters&#39; values</p>
+<p><code>Mads.makearrayfunction&#40;madsdata, f&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>f</code> : ...</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>arrayfunction</code> : function accepting an array containing the optimal parameters&#39; values</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:17</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makearrayloglikelihood_madsdata::associative_k__v____loglikelihood_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makearrayloglikelihood(madsdata::Associative{K, V},  loglikelihood)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make a log likelihood function that accepts an array containing the opt parameters&#39; values</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:40</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makecomputeconcentrations_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makecomputeconcentrations(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Create a function to compute concentrations for all the observation points using Anasol</p>
+<p><code>Mads.makecomputeconcentrations&#40;madsdata&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>computeconcentrations</code> : function to compute concentrations; <code>computeconcentrations</code> returns a dictionary of observations and model predicted concentrations</li>
+</ul>
+<p>Examples:</p>
+<p><code>computeconcentrations&#40;&#41;</code></p>
+<p>or</p>
+<pre><code>computeconcentrations &#61; Mads.makecomputeconcentrations&#40;madsdata&#41;
+paramkeys &#61; Mads.getparamkeys&#40;madsdata&#41;
+paramdict &#61; OrderedDict&#40;zip&#40;paramkeys, map&#40;key-&gt;madsdata&#91;&quot;Parameters&quot;&#93;&#91;key&#93;&#91;&quot;init&quot;&#93;, paramkeys&#41;&#41;&#41;
+forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsAnasol.jl'>/Users/monty/Julia/Mads.jl/src/MadsAnasol.jl:30</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadscommandfunction_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadscommandfunction(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS command function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:6</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadscommandfunctionandgradient_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadscommandfunctionandgradient(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS command function &amp; gradient function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:162</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadscommandfunctionandgradient_madsdata::associative_k__v____f::function_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadscommandfunctionandgradient(madsdata::Associative{K, V},  f::Function)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS command function and gradient function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:168</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadscommandgradient_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadscommandgradient(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS command gradient function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:146</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadscommandgradient_madsdata::associative_k__v____f::function_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadscommandgradient(madsdata::Associative{K, V},  f::Function)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS command gradient function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:152</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_makemadsloglikelihood_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> makemadsloglikelihood(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS loglikelihood function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsFunc.jl'>/Users/monty/Julia/Mads.jl/src/MadsFunc.jl:260</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_maxtorealmaxfloat32_df::dataframes.dataframe_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> maxtorealmaxFloat32!(df::DataFrames.DataFrame)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Scale down values larger than max&#40;Float32&#41; in a Dataframe <code>df</code> so that Gadfly can plot the data</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:620</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_montecarlo_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> montecarlo(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Monte Carlo analysis</p>
+<p><code>Mads.montecarlo&#40;madsdata; N&#61;100&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>N</code> : number of samples &#40;default &#61; 100&#41;</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>outputdicts</code> : parameter dictionary containing the data arrays</li>
+</ul>
+<p>Dumps:</p>
+<ul>
+<li>YAML output file with the parameter dictionary containing the data arrays &#40;<code>&lt;mads_root_name&gt;.mcresults.yaml</code>&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:76</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_nothing2nan_dict::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> nothing2nan!(dict::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Convert Void&#39;s into NaN&#39;s in a dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:588</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_paramarray2dict_madsdata::associative_k__v____array_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> paramarray2dict(madsdata::Associative{K, V},  array)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Convert parameter array to a parameter dictionary of arrays</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:124</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_parametersample_madsdata___numsamples_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> parametersample(madsdata,  numsamples)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Independent sampling of MADS Model parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:10</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_parametersample_madsdata___numsamples___parameterkey_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> parametersample(madsdata,  numsamples,  parameterkey)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Independent sampling of MADS Model parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:10</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_paramrand_madsdata___parameterkey_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> paramrand(madsdata,  parameterkey)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Random numbers for a MADS Model parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:24</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotsaresults_monty_wellname___madsdata___result_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotSAresults_monty(wellname,  madsdata,  result)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot the sensitivity analysis results for each well &#40;Specific plot requested by Monty&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:1445</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotgrid_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotgrid(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot a 3D grid solution </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:151</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotgrid_madsdata::associative_k__v____parameters::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotgrid(madsdata::Associative{K, V},  parameters::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot a 3D grid solution </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:157</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotgrid_madsdata::associative_k__v____s::array_float64__n__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot a 3D grid solution based on s </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:105</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotmadsproblem_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotmadsproblem(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot MADS problem</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:43</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotmass_lambda___mass_injected___mass_reduced___filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotmass(lambda,  mass_injected,  mass_reduced,  filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot injected/reduced contaminant mass</p>
+<ul>
+<li><code>Mads.plotmass&#40;lambda, mass_injected, mass_reduced, filename&#61;&quot;file_name&quot;&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>lambda</code> : array with all the lambda values</li>
+<li><code>mass_injected</code> : array with associated total injected mass</li>
+<li><code>mass_reduced</code> : array with associated total reduced mass</li>
+<li><code>filename</code> : output filename for the generated plot</li>
+<li><code>format</code> : output plot format &#40;<code>png</code>, <code>pdf</code>, etc.&#41;</li>
+</ul>
+<p>Dumps: image file with name <code>filename</code> and in specified <code>format</code></p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsAnasol.jl'>/Users/monty/Julia/Mads.jl/src/MadsAnasol.jl:286</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotobssaresults_madsdata___result_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotobsSAresults(madsdata,  result)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot the sensitivity analysis results for the observations</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:386</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotwellsaresults_madsdata___result_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotwellSAresults(madsdata,  result)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot the sensitivity analysis results for all wells &#40;wells class expected&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:294</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_plotwellsaresults_madsdata___result___wellname_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> plotwellSAresults(madsdata,  result,  wellname)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Plot the sensitivity analysis results for each well &#40;wells class expected&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:307</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_printsaresults_madsdata___results_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> printSAresults(madsdata,  results)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Print the sensitivity analysis results</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:477</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_quietoff__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> quietoff()
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS not quiet</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:7</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_quieton__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> quieton()
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Make MADS quiet</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_readasciipredictions_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> readasciipredictions(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Read MADS predictions from an ASCII file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsASCII.jl'>/Users/monty/Julia/Mads.jl/src/MadsASCII.jl:13</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_readjsonpredictions_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> readjsonpredictions(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Read MADS predictions from a JSON file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsJSON.jl'>/Users/monty/Julia/Mads.jl/src/MadsJSON.jl:19</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_readobservations_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> readobservations(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Read observations</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:280</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_readobservations_cmads_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> readobservations_cmads(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Read observations using C Mads library</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:300</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_readyamlpredictions_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> readyamlpredictions(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Read predictions from YAML MADS file</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsYAML.jl'>/Users/monty/Julia/Mads.jl/src/MadsYAML.jl:200</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_resetmodelruns__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> resetmodelruns()
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Reset the model runs count to be equal to zero</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:30</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock_x::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock(x::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Rosenbrock test function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:17</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock2_gradient_lm_x_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock2_gradient_lm(x)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Parameter gradients of the Rosenbrock test function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:7</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock2_lm_x_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock2_lm(x)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Rosenbrock test function &#40;more difficult to solve&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock_gradient_x::array_t__1____storage::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock_gradient!(x::Array{T, 1},  storage::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Parameter gradients of the Rosenbrock test function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:27</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock_gradient_lm_x::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock_gradient_lm(x::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Parameter gradients of the Rosenbrock test function for LM optimization &#40;returns the gradients for the 2 components separetely&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:33</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock_hessian_x::array_t__1____storage::array_t__2__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock_hessian!(x::Array{T, 1},  storage::Array{T, 2})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Parameter Hessian of the Rosenbrock test function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:43</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_rosenbrock_lm_x::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> rosenbrock_lm(x::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Rosenbrock test function for LM optimization &#40;returns the 2 components separetely&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl'>/Users/monty/Julia/Mads.jl/src/MadsTestFunctions.jl:22</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_saltelli_madsdata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> saltelli(madsdata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Saltelli </p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:264</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_saltellibrute_madsdata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> saltellibrute(madsdata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Saltelli &#40;brute force&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:125</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_saltelliprintresults2_madsdata___results_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> saltelliprintresults2(madsdata,  results)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Print the sensitivity analysis results &#40;method 2&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSA.jl'>/Users/monty/Julia/Mads.jl/src/MadsSA.jl:553</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_searchdir_key::regex_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> searchdir(key::Regex)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Get files in the current directory or in a directory difined by <code>path</code> matching pattern <code>key</code> which cann be a string or regular expression</p>
+<ul>
+<li><code>Mads.searchdir&#40;key&#41;</code></li>
+<li><code>Mads.searchdir&#40;key; path &#61; &quot;.&quot;&#41;</code></li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>key</code> : matching pattern for Mads input files &#40;string or regular expression accepted&#41;</li>
+<li><code>path</code> : search directory for the mads input files</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>filename</code> : an array with file names matching the pattern in the specified directory</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:160</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setallparamsoff_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setallparamsoff!(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set all parameters OFF</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:124</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setallparamson_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setallparamson!(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set all parameters ON</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:116</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setdebuglevel_level::int64_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setdebuglevel(level::Int64)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set MADS debug level</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:20</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setdynamicmodel_madsdata::associative_k__v____f::function_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setdynamicmodel(madsdata::Associative{K, V},  f::Function)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set Dynamic Model for MADS model calls using internal Julia functions</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMisc.jl'>/Users/monty/Julia/Mads.jl/src/MadsMisc.jl:57</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setimagefileformat_filename___format_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setimagefileformat!(filename,  format)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set image file <code>format</code> based on the <code>filename</code> extension, or sets the <code>filename</code> extension based on the requested <code>format</code>. The default <code>format</code> is <code>SVG</code>. <code>PNG</code>, <code>PDF</code>, <code>ESP</code>, and <code>PS</code> are also supported.</p>
+<p><code>Mads.setimagefileformat&#33;&#40;filename, format&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : output file name used to dump plots</li>
+<li><code>format</code> : output plot format &#40;<code>png</code>, <code>pdf</code>, etc.&#41;</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>filename</code> : output file name used to dump plots</li>
+<li><code>format</code> : output plot format &#40;<code>png</code>, <code>pdf</code>, etc.&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsPlot.jl'>/Users/monty/Julia/Mads.jl/src/MadsPlot.jl:17</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setmadsinputfile_filename::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setmadsinputfile(filename::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set a default MADS input file</p>
+<p><code>Mads.setmadsinputfile&#40;filename&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : input file name &#40;e.g. <code>input_file_name.mads</code>&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:39</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setnprocs_np_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setnprocs(np)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set number of processors</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParallel.jl'>/Users/monty/Julia/Mads.jl/src/MadsParallel.jl:15</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setnprocs_np___nt_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setnprocs(np,  nt)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set number of processors / threads</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParallel.jl'>/Users/monty/Julia/Mads.jl/src/MadsParallel.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setobservationtargets_madsdata::associative_k__v____predictions::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setobservationtargets!(madsdata::Associative{K, V},  predictions::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set observations &#40;calibration targets&#41; in the MADS data dictionary based on <code>predictions</code> dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:100</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setparamoff_madsdata::associative_k__v____parameterkey_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setparamoff!(madsdata::Associative{K, V},  parameterkey)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set a specific parameter with a key <code>parameterkey</code>  OFF</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:137</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setparamon_madsdata::associative_k__v____parameterkey_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setparamon!(madsdata::Associative{K, V},  parameterkey)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set a specific parameter with a key <code>parameterkey</code> ON</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:132</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setparamsdistnormal_madsdata::associative_k__v____mean___stddev_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setparamsdistnormal!(madsdata::Associative{K, V},  mean,  stddev)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set normal parameter distributions for all the model parameters in the MADS data dictionary</p>
+<p><code>Mads.setparamsdistnormal&#33;&#40;madsdata, mean, stddev&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>mean</code> : array with the mean values</li>
+<li><code>stddev</code> : array with the standard deviation values</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:152</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setparamsdistuniform_madsdata::associative_k__v____min___max_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setparamsdistuniform!(madsdata::Associative{K, V},  min,  max)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set uniform parameter distributions for all the model parameters in the MADS data dictionary</p>
+<p><code>Mads.setparamsdistuniform&#33;&#40;madsdata, min, max&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>min</code> : array with the minimum values</li>
+<li><code>max</code> : array with the maximum values</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:170</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setparamsinit_madsdata::associative_k__v____paramdict::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setparamsinit!(madsdata::Associative{K, V},  paramdict::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set initial parameter guesses in the MADS dictionary</p>
+<p><code>Mads.setparamsinit&#33;&#40;madsdata, paramdict&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>paramdict</code> : dictionary with initial model parameter values</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:108</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setverbositylevel_level::int64_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setverbositylevel(level::Int64)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set MADS verbosity level</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsHelpers.jl'>/Users/monty/Julia/Mads.jl/src/MadsHelpers.jl:25</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_showallparameters_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> showallparameters(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Show all parameters in the Mads data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:221</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_showobservations_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> showobservations(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Show observations in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:62</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_showparameters_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> showparameters(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Show optimizable parameters in the Mads data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:209</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_sinetransform_sineparams::array_t__1____lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> sinetransform(sineparams::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Sine transformation of model parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSine.jl'>/Users/monty/Julia/Mads.jl/src/MadsSine.jl:10</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_sinetransformfunction_f::function___lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> sinetransformfunction(f::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Sine transformation of a function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSine.jl'>/Users/monty/Julia/Mads.jl/src/MadsSine.jl:17</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_sinetransformgradient_g::function___lowerbounds::array_t__1____upperbounds::array_t__1____indexlogtransformed::array_t__1__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> sinetransformgradient(g::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Sine transformation of a gradient function</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsSine.jl'>/Users/monty/Julia/Mads.jl/src/MadsSine.jl:25</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_spaghettiplot_madsdata::associative_k__v____paramdictarray::datastructures.ordereddict_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> spaghettiplot(madsdata::Associative{K, V},  paramdictarray::DataStructures.OrderedDict{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Generate a combined spaghetti plot for the <code>selected</code> &#40;<code>type &#33;&#61; null</code>&#41; model parameter</p>
+<p><code>Mads.spaghettiplot&#40;madsdata, paramdictarray; filename&#61;&quot;&quot;, keyword &#61; &quot;&quot;, format&#61;&quot;&quot;, xtitle&#61;&quot;X&quot;, ytitle&#61;&quot;Y&quot;, obs_plot_dots&#61;true&#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>paramdictarray</code> : dictionary containing the parameter data arrays to be plotted</li>
+<li><code>filename</code> : output file name used to output the produced plots</li>
+<li><code>keyword</code> : keyword to be added in the file name used to output the produced plots &#40;if <code>filename</code> is not defined&#41;</li>
+<li><code>format</code> : output plot format &#40;<code>png</code>, <code>pdf</code>, etc.&#41;</li>
+<li><code>xtitle</code> : <code>x</code> axis title</li>
+<li><code>ytitle</code> : <code>y</code> axis title</li>
+<li><code>obs_plot_dots</code> : plot observation as dots &#40;<code>true</code> &#91;default&#93; or <code>false</code>&#41;</li>
+</ul>
+<p>Returns: <code>none</code></p>
+<p>Dumps:</p>
+<ul>
+<li>Image files &#40;<code>&lt;mads_rootname&gt;-&lt;keyword&gt;-&lt;number_of_samples&gt;-spaghetti.&lt;default_image_extension&gt;</code>&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:270</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_spaghettiplots_madsdata::associative_k__v____paramdictarray::datastructures.ordereddict_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> spaghettiplots(madsdata::Associative{K, V},  paramdictarray::DataStructures.OrderedDict{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Generate separate spaghetti plots for each <code>selected</code> &#40;<code>type &#33;&#61; null</code>&#41; model parameter</p>
+<p><code>Mads.spaghettiplots&#40;madsdata, paramdictarray; format&#61;&quot;&quot;, keyword&#61;&quot;&quot;, xtitle&#61;&quot;X&quot;, ytitle&#61;&quot;Y&quot;, obs_plot_dots&#61;true &#41;</code></p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads data dictionary</li>
+<li><code>paramdictarray</code> : parameter dictionary containing the data arrays to be plotted</li>
+<li><code>keyword</code> : keyword to be added in the file name used to output the produced plots</li>
+<li><code>format</code> : output plot format &#40;<code>png</code>, <code>pdf</code>, etc.&#41;</li>
+<li><code>xtitle</code> : <code>x</code> axis title</li>
+<li><code>ytitle</code> : <code>y</code> axis title</li>
+<li><code>obs_plot_dots</code> : plot observation as dots &#40;<code>true</code> &#91;default&#93; or <code>false</code>&#41;</li>
+</ul>
+<p>Returns: <code>none</code></p>
+<p>Dumps:</p>
+<ul>
+<li>Image files &#40;<code>&lt;mads_rootname&gt;-&lt;keyword&gt;-&lt;param_key&gt;-&lt;number_of_samples&gt;-spaghetti.&lt;default_image_extension&gt;</code>&#41;</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsMC.jl'>/Users/monty/Julia/Mads.jl/src/MadsMC.jl:155</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_welloff_madsdata___wellname::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> welloff!(madsdata,  wellname::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Turn off a specific well in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:148</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_wellon_madsdata::associative_k__v____wellname::abstractstring_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> wellon!(madsdata::Associative{K, V},  wellname::AbstractString)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Turn on a specific well in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:124</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_wells2observations_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> wells2observations!(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Convert <code>Wells</code> class to <code>Observations</code> class in the MADS data dictionary</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:164</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_writeparameters_madsdata::associative_k__v__' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> writeparameters(madsdata::Associative{K, V})
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Write initial parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:191</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_writeparameters_madsdata::associative_k__v____parameters_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> writeparameters(madsdata::Associative{K, V},  parameters)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Write parameters</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:198</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_writeparametersviatemplate_parameters___templatefilename___outputfilename_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> writeparametersviatemplate(parameters,  templatefilename,  outputfilename)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Write parameters via MADS template</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsIO.jl'>/Users/monty/Julia/Mads.jl/src/MadsIO.jl:164</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='global_getobsnames' class='entry-name category-global'>
+<div class='category'>[global] &mdash; </div> getobsnames
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS observation variable names</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsObservations.jl'>/Users/monty/Julia/Mads.jl/src/MadsObservations.jl:14</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='global_getparamsnames' class='entry-name category-global'>
+<div class='category'>[global] &mdash; </div> getparamsnames
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>MADS parameter variable names</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='file:///Users/monty/Julia/Mads.jl/src/MadsParameters.jl'>/Users/monty/Julia/Mads.jl/src/MadsParameters.jl:68</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/codemirror.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.5.0/mode/julia/julia.min.js"></script>
+
+
+
+<script type="text/javascript" src="static/custom.js"></script>
+

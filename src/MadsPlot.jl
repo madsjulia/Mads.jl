@@ -1,5 +1,20 @@
-@doc "Set image file format" ->
-function setimagefileformat(filename, format)
+"""
+Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
+
+`Mads.setimagefileformat!(filename, format)`
+
+Arguments:
+
+- `filename` : output file name used to dump plots
+- `format` : output plot format (`png`, `pdf`, etc.)
+
+Returns:
+
+- `filename` : output file name used to dump plots
+- `format` : output plot format (`png`, `pdf`, etc.)
+
+"""
+function setimagefileformat!(filename, format)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
 	root = Mads.getrootname(filename)
@@ -24,7 +39,7 @@ function setimagefileformat(filename, format)
 	return filename, format
 end
 
-@doc "Plot MADS problem" ->
+"Plot MADS problem"
 function plotmadsproblem(madsdata::Associative; format="", filename="")
 	if haskey(madsdata, "Sources")
 		rectangles = Array(Float64, 0, 4)
@@ -81,12 +96,12 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
 	end
-	filename, format = setimagefileformat(filename, format)
+	filename, format = setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
 	p
 end
 
-@doc "Plot a 3D grid solution based on s " ->
+"Plot a 3D grid solution based on s "
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
 	@PyCall.pyimport matplotlib.ticker as mt
 	@PyCall.pyimport matplotlib.colors as mcc
@@ -132,13 +147,13 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
 end
 
-@doc "Plot a 3D grid solution " ->
+"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-@doc "Plot a 3D grid solution " ->
+"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
@@ -226,7 +241,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-			vsize = 4inch
+			vsize += 4inch
 		elseif npp == 1
 			pl = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
@@ -237,7 +252,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 	if filename == ""
 		filename = "$rootname-match"
 	end
-	filename, format = setimagefileformat(filename, format)
+	filename, format = setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
 	if typeof(pl) == Gadfly.Plot{}
 		pl
@@ -253,15 +268,21 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, Gadfly.Guide.xlabel(plotlabels[i])))
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, 
+					Gadfly.Guide.xlabel(plotlabels[i]),
+					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt) 
+					))
 			else
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j])))
+				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], 
+					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
+					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt)
+					))
 			end
 		end
 	end
 	hsize = (3 * size(samples, 2))inch
 	vsize = (3 * size(samples, 2))inch
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = Mads.setimagefileformat!(filename, format)
 	try
 		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
@@ -269,7 +290,7 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	end
 end
 
-@doc "Plot the sensitivity analysis results for all wells (wells class expected)" ->
+"Plot the sensitivity analysis results for all wells (wells class expected)"
 function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
@@ -282,7 +303,7 @@ function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "
 	end
 end
 
-@doc "Plot the sensitivity analysis results for each well (wells class expected)" ->
+"Plot the sensitivity analysis results for each well (wells class expected)"
 function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
@@ -361,7 +382,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
 end
 
-@doc "Plot the sensitivity analysis results for the observations" ->
+"Plot the sensitivity analysis results for the observations"
 function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")
@@ -489,26 +510,26 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		vsize += 4inch
 	end
 	######################################################
-	rootname = Mads.getmadsrootname(madsdata)
-	# p1 = Gadfly.vstack(pp[1:3]...)
-	# p2 = Gadfly.vstack(pp[4:6]...)
-	# p = Gadfly.hstack(p1,p2)
-	p = Gadfly.vstack(pp...)
 	if filename == ""
 		method = result["method"]
+		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$rootname-$method-$nsample"
 	end
 	if !separate_files
-		filename, format = Mads.setimagefileformat(filename, format)
+		# p1 = Gadfly.vstack(pp[1:3]...)
+		# p2 = Gadfly.vstack(pp[4:6]...)
+		# p = Gadfly.hstack(p1,p2)
+		filename, format = Mads.setimagefileformat!(filename, format)
+		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = Mads.setimagefileformat!(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = Mads.setimagefileformat!(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
 	end
 end

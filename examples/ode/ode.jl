@@ -6,7 +6,7 @@ using DataStructures
 
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
-md = Mads.loadyamlmadsfile("ode.mads")
+md = Mads.loadmadsfile("ode.mads")
 rootname = Mads.getmadsrootname(md)
 
 # get parameter keys

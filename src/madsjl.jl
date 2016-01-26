@@ -10,7 +10,7 @@ if length(ARGS) > 0
 		include(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
 	elseif length(ARGS) == 2
 		madsfile = ARGS[2]
-		md = Mads.loadyamlmadsfile(madsfile)
+		md = Mads.loadmadsfile(madsfile)
 		result = eval(parse("Mads.$(madscommand)(md)"))
 		println(result)
 	else

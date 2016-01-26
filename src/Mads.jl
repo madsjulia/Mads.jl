@@ -1,3 +1,32 @@
+"""
+MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
+
+http://mads.lanl.gov
+http://madsjulia.lanl.gov
+http://gitlab.com/mads/Mads.jl
+
+Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
+
+Copyright 2016.  Los Alamos National Security, LLC.  All rights reserved.
+
+This material was produced under U.S. Government contract DE-AC52-06NA25396 for
+Los Alamos National Laboratory, which is operated by Los Alamos National Security, LLC for
+the U.S. Department of Energy. The Government is granted for itself and others acting on its
+behalf a paid-up, nonexclusive, irrevocable worldwide license in this material to reproduce,
+prepare derivative works, and perform publicly and display publicly. Beginning five (5) years after
+--------------- November 17, 2015, ----------------------------------------------------------------
+subject to additional five-year worldwide renewals, the Government is granted for itself and
+others acting on its behalf a paid-up, nonexclusive, irrevocable worldwide license in this
+material to reproduce, prepare derivative works, distribute copies to the public, perform
+publicly and display publicly, and to permit others to do so.
+
+NEITHER THE UNITED STATES NOR THE UNITED STATES DEPARTMENT OF ENERGY, NOR LOS ALAMOS NATIONAL SECURITY, LLC,
+NOR ANY OF THEIR EMPLOYEES, MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR
+RESPONSIBILITY FOR THE ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY INFORMATION, APPARATUS, PRODUCT, OR
+PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.
+
+LA-CC-15-080; Copyright Number Assigned: C16008
+"""
 module Mads
 
 import DataStructures # import is needed for parallel calls
@@ -11,9 +40,13 @@ import Lora
 import Distributions
 import Logging
 import JSON
+<<<<<<< HEAD
 # import NLopt
+=======
+# import NLopt # creates problems on some machines
+>>>>>>> 71a5fe6fcec54ff5e880a7364ca3a2cd973acda8
 import MPTools
-import HDF5 # HDF5 installation is problematic on some machines
+import HDF5 # HDF5 installation might be problematic on some machines
 import Conda
 import PyCall
 import PyPlot
@@ -29,6 +62,8 @@ end
 if !in(dirname(Base.source_path()), LOAD_PATH)
 	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
 end
+include("MadsHelp.jl")
+include("MadsCreate.jl")
 include("MadsIO.jl")
 include("MadsYAML.jl")
 include("MadsASCII.jl")
@@ -61,42 +96,6 @@ madsinputfile = ""
 create_tests = false # dangerous if true
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
-#@document
-#@docstrings
-
-@doc "Save calibration results" ->
-function savecalibrationresults(madsdata::Associative, results)
-	#TODO map estimated parameters on a new madsdata structure
-	#TODO save madsdata in yaml file using dumpyamlmadsfile
-	#TODO save residuals, predictions, observations (yaml?)
-end
-
-@doc "Make a version of the mads file where the targets are given by the model predictions" ->
-function maketruth(infilename::AbstractString, outfilename::AbstractString)
-	md = loadyamlmadsfile(infilename)
-	f = makemadscommandfunction(md)
-	result = f(Dict(zip(getparamkeys(md), getparamsinit(md))))
-	outyaml = loadyamlfile(infilename)
-	if haskey(outyaml, "Observations")
-		for fullobs in outyaml["Observations"]
-			obskey = collect(keys(fullobs))[1]
-			obs = fullobs[obskey]
-			obs["target"] = result[obskey]
-		end
-	end
-	if haskey(outyaml, "Wells")
-		for fullwell in outyaml["Wells"]
-			wellname = collect(keys(fullwell))[1]
-			for fullobs in fullwell[wellname]["obs"]
-				obskey = collect(keys(fullobs))[1]
-				obs = fullobs[obskey]
-				obs["target"] = result[string(wellname, "_", obs["t"])]
-			end
-		end
-	end
-	dumpyamlfile(outfilename, outyaml)
-end
-
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
 type svrOutput
 	alpha::Array{Float64,1}
@@ -113,4 +112,4 @@ type svrFeature
 	feature::Array{Float64,1}
 end
 
-end # Module end
+end

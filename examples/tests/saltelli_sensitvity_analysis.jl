@@ -3,7 +3,7 @@ using Mads
 problemdir = Mads.getmadsdir()
 
 Mads.madsinfo("TEST Saltelli Monte-Carlo senstivity analysis: Sobol test:")
-mdsobol = Mads.loadyamlmadsfile(problemdir * "test-sobol.mads")
+mdsobol = Mads.loadmadsfile(problemdir * "test-sobol.mads")
 results = Mads.saltelli(mdsobol, N=5000, seed=2015)
 Mads.printSAresults(mdsobol, results)
 
@@ -12,7 +12,7 @@ results = Mads.efast(mdsobol, N=385, seed=2015) # in this case 385 model runs is
 Mads.printSAresults(mdsobol, results)
 
 Mads.madsinfo("TEST Saltelli Monte-Carlo senstivity analysis: Linear problem:")
-mdsaltelli = Mads.loadyamlmadsfile(problemdir * "test-saltelli.mads")
+mdsaltelli = Mads.loadmadsfile(problemdir * "test-saltelli.mads")
 results = Mads.saltelli(mdsaltelli, N=5000, seed=2015) # Fast
 Mads.printSAresults(mdsaltelli, results)
 
@@ -21,11 +21,11 @@ results = Mads.efast(mdsaltelli, N=385, seed=2015) # in this case 385 model runs
 Mads.printSAresults(mdsaltelli, results)
 
 # Mads.madsinfo("TEST Saltelli senstivity analysis (brute force): Sobol test:") # TODO Brute force needs to be fixed
-# mdsobol = Mads.loadyamlmadsfile(problemdir * "test-sobol.mads")
+# mdsobol = Mads.loadmadsfile(problemdir * "test-sobol.mads")
 #results = Mads.saltellibrute(mdsobol) # Slow
 #Mads.printSAresults(mdsobol,results)
 
 # Mads.madsinfo("TEST Saltelli senstivity analysis (brute force): Linear problem:")
-# mdsaltelli = Mads.loadyamlmadsfile(problemdir * "test-saltelli.mads")
+# mdsaltelli = Mads.loadmadsfile(problemdir * "test-saltelli.mads")
 #results = Mads.saltellibrute(mdsaltelli) # Slow
 #Mads.printSAresults(mdsaltelli,results)

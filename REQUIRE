@@ -1,4 +1,4 @@
-julia 0.3
+julia 0.4
 Anasol
 R3Function
 MPTools
@@ -16,7 +16,6 @@ ODE
 Sundials
 ProgressMeter
 LightXML
-Docile
 Conda
 PyCall
 PyPlot
