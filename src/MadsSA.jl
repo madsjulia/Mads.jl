@@ -119,7 +119,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
-"Saltelli (brute force)"
+"""Saltelli sensitivity analysis (brute force)"""
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
@@ -258,7 +258,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Sa
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
-"Saltelli "
+"""Saltelli sensitivity analysis"""
 function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	if seed != 0
 		srand(seed)

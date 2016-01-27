@@ -48,13 +48,24 @@ for i = 1:length(getobsnames)
 	eval(q)
 end
 
+"Set observation time based on the observation name in the MADS data dictionary"
+function setobstime!(madsdata::Associative)
+	obskeys = Mads.getobskeys(madsdata)
+	for i in 1:length(obskeys)
+		s = split(obskeys[i], '_')
+		madsdata["Observations"][obskeys[i]]["time"] = parse(Float64, s[2])
+	end
+end
+
+"Set observation weights in the MADS data dictionary"
 function setobsweights!(madsdata::Associative, value::Number)
-	obskeys = getobskeys(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		madsdata["Observations"][obskeys[i]]["weight"] = value
 	end
 end
 
+"Set well weights in the MADS data dictionary"
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)

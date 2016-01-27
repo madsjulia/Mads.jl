@@ -159,6 +159,8 @@ Returns:
 """
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
+filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
+filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
 
 "Write parameters via MADS template"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)

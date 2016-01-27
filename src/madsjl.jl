@@ -1,26 +1,30 @@
 #!/usr/bin/env julia -q --color
 import Mads
-if VERSION < v"0.4.0-dev"
-	using Dates
-end
 
 if length(ARGS) > 0
-	madscommand = ARGS[1] # TODO flip cmd and file? allow for more cmd's (keywords)?; It might be good to have command first. Some commands don't have a file (e.g., "help"), others may have two (e.g., "diff"). I suggest we have a command then the information needed to execute the command (files, keywords, etc) coming after the command.
-	if isfile(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
-		include(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
+	if length(ARGS) > 1
+		madsfile = ARGS[1]
+		if isfile(madsfile)
+			md = Mads.loadmadsfile(madsfile)
+		else
+			Mads.err("""Provided argument $madsfile is not an existing file!""")
+		end
 	elseif length(ARGS) == 2
+		madscommand = ARGS[2]
+		if isfile(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
+		include(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
 		madsfile = ARGS[2]
 		md = Mads.loadmadsfile(madsfile)
 		result = eval(parse("Mads.$(madscommand)(md)"))
 		println(result)
 	else
-		println("Usage: madsjl command filename.mads ...")
-		println("Example: madsjl forward test-internal-linearmodel.mads")
+		println("Usage: madsjl.jl filename.mads commands ...")
+		println("Example: madsjl.jl test-internal-linearmodel.mads forward efast")
 		error("Command line error!")
 	end
 else
-	println("Usage: madsjl command filename.mads ...")
-	println("Example: madsjl forward test-internal-linearmodel.mads")
+	println("Usage: madsjl.jl filename.mads commands ...")
+	println("Example: madsjl.jl test-internal-linearmodel.mads forward efast")
 	error("Command line error!")
 end
 

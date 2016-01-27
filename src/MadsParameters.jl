@@ -13,9 +13,9 @@ Returns:
 
 - `paramkeys` : array with the keys of all parameters in the MADS dictionary
 """
-function getparamkeys(madsdata::Associative)
+function getparamkeys(madsdata::Associative; filter="")
 	if haskey( madsdata, "Parameters" )
-		return collect(keys(madsdata["Parameters"]))
+		return collect(filterkeys(madsdata["Parameters"], filter))
 	end
 end
 
@@ -97,7 +97,7 @@ for i = 1:length(getparamsnames)
 		end
 		@doc "Get an array with `$(getparamsnames[index])` values for all the MADS model parameters" ->
 		function $(symbol(string("getparams", paramname)))(madsdata) # create a function to get each parameter name with 1 argument
-			paramkeys = getparamkeys(madsdata) # get parameter keys
+			paramkeys = Mads.getparamkeys(madsdata) # get parameter keys
 			return $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # call the function with 2 arguments
 		end
 	end
@@ -279,16 +279,16 @@ function islog(madsdata::Associative, parameterkey::AbstractString)
 end
 
 "Set all parameters ON"
-function setallparamson!(madsdata::Associative)
-	paramkeys = getparamkeys(madsdata)
+function setallparamson!(madsdata::Associative; filter="")
+	paramkeys = getparamkeys(madsdata; filter=filter)
 	for i in 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["type"] = "opt"
 	end
 end
 
 "Set all parameters OFF"
-function setallparamsoff!(madsdata::Associative)
-	paramkeys = getparamkeys(madsdata)
+function setallparamsoff!(madsdata::Associative; filter="")
+	paramkeys = getparamkeys(madsdata; filter=filter)
 	for i in 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["type"] = nothing
 	end
@@ -417,7 +417,7 @@ function showallparameters(madsdata::Associative)
 			if pardict[parkey]["type"] != nothing
 				s *= "<- optimizable "
 			else
-				s *= "<- fixed"
+				s *= "<- fixed "
 			end
 		else
 			s *= "<- optimizable "

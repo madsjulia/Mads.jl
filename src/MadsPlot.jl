@@ -383,7 +383,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 end
 
 "Plot the sensitivity analysis results for the observations"
-function plotobsSAresults(madsdata, result; filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+function plotobsSAresults(madsdata, result; filter="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -396,13 +396,13 @@ function plotobsSAresults(madsdata, result; filename="", format="", debug=false,
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	nT = length(obsdict)
+	nT = length(Mads.filterkeys(obsdict, filter))
 	d = Array(Float64, 2, nT)
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	var = Array(Float64, nP, nT)
 	i = 1
-	for obskey in keys(obsdict)
+	for obskey in Mads.filterkeys(obsdict, filter)
 		d[1,i] = obsdict[obskey]["time"]
 		d[2,i] = obsdict[obskey]["target"]
 		j = 1
