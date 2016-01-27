@@ -1,9 +1,9 @@
-julia 0.4
+julia 0.4-
 Anasol
 R3Function
 MPTools
 BIGUQ
-Lora
+Lora 0.4.4
 HDF5
 Optim
 NLopt

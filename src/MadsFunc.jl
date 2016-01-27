@@ -4,7 +4,7 @@ end
 
 "Make MADS function to execute the model defined in the MADS data dictionary `madsdata`"
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
-	madsproblemdir = getmadsproblemdir(madsdata)
+	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
 		juliamodel = evalfile(madsdata["Julia"])
@@ -21,7 +21,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")
-		function madscommandfunction(parameters::Dict) # MADS command function
+		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
 			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
@@ -138,6 +138,8 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
 			return madscommandfunctionwithreuse
+		else
+			return madscommandfunction
 		end
 	else
 		return madscommandfunction

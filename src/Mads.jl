@@ -40,11 +40,7 @@ import Lora
 import Distributions
 import Logging
 import JSON
-<<<<<<< HEAD
-# import NLopt
-=======
 # import NLopt # creates problems on some machines
->>>>>>> 71a5fe6fcec54ff5e880a7364ca3a2cd973acda8
 import MPTools
 import HDF5 # HDF5 installation might be problematic on some machines
 import Conda

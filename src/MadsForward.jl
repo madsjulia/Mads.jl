@@ -17,8 +17,6 @@ Returns:
 
 function forward(madsdata::Associative)
 	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	@show paramvalues
-	@show madsdata
 	Mads.forward(madsdata, paramvalues)
 end
 
