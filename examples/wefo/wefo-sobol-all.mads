@@ -1,4 +1,3 @@
-Problem: { }
 Parameters:
 - ESC1c : { longname: "cost coal 1", init: 2.86, type: opt, log: no, dist: "Uniform(2.3, 3.2)" }
 - ESC2c : { longname: "cost coal 2", init: 3.07, type: opt, log: no, dist: "Uniform(2.5, 3.5)" }
@@ -87,8 +86,6 @@ Parameters:
 - Water1r : { longname: "max available recycled water", init: 30, type: opt, log: no, dist: "Uniform(24, 34)" }
 - Water2r : { longname: "max available recycled water", init: 27, type: opt, log: no, dist: "Uniform(21, 31)" }
 - Water3r : { longname: "max available recycled water", init: 24, type: opt, log: no, dist: "Uniform(19, 28)" }
-
 Observations:
 - of: { longname: "Objective function", log: false, max: 200e9, min: 0, target: 0, weight: 1}
 Model: wefo-sobol-all.jl
-Restart: false
