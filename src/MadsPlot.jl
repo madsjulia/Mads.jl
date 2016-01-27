@@ -260,7 +260,8 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 end
 
 function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="")
-	plotlabels = getparamsplotname(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
+	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
@@ -383,7 +384,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 end
 
 "Plot the sensitivity analysis results for the observations"
-function plotobsSAresults(madsdata, result; filter="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		madserror("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -391,7 +392,7 @@ function plotobsSAresults(madsdata, result; filter="", filename="", format="", d
 	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
-	plotlabels = getparamsplotname(madsdata)
+	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
@@ -513,7 +514,11 @@ function plotobsSAresults(madsdata, result; filter="", filename="", format="", d
 	if filename == ""
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
-		filename = "$rootname-$method-$nsample"
+		if keyword != ""
+			filename = "$rootname-$method-$keyword-$nsample"
+		else
+			filename = "$rootname-$method-$nsample"
+		end
 	end
 	if !separate_files
 		# p1 = Gadfly.vstack(pp[1:3]...)

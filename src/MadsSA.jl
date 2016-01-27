@@ -51,9 +51,9 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	else
 		rootname = Mads.getrootname(filename)
 	end
-	paramkeys = getoptparamkeys(madsdata)
 	f_lm, g_lm = makelmfunctions(madsdata)
-	plotlabels = getparamsplotname(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
+	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
@@ -785,10 +785,10 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		## Redistributing constCell
 		ismads = constCell[1]
 		if ismads == 0
-			(ismads, P, nprime,ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed) = constCell
+			(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, issvr, seed) = constCell
 			issvr = 0; directOutput = 0
 		else
-			(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict,paramkeys,issvr,directOutput, f, seed) = constCell
+			(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed) = constCell
 		end
 
 		# If we want to use a seed for our random phis
@@ -899,14 +899,14 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				#end
 				#println("x_svr reshaped test")
 
-				# If # of processors is <= Nr*nprime+(Nr+1) compute model ouput serially
-				Mads.madsoutput("""Compute model ouput in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
+				# If # of processors is <= Nr*nprime+(Nr+1) compute model output in serial
+				Mads.madsoutput("""Compute model output in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
 				@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
-					Y[i,:] = collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :]))))))
+					Y[i, :] = collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :]))))))
 				end
 			else
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-				Mads.madsoutput("""Compute model ouput in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
+				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
 				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end #End if (processors)
@@ -914,7 +914,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			## CALCULATING MODEL OUTPUT (Standalone)
 			# If we are using this program as a standalone, we enter our model function here:
 		elseif ismads == 0
-			# If # of processors is <= Nr*nprime+(Nr+1) compute model ouput serially
+			# If # of processors is <= Nr*nprime+(Nr+1) compute model output serially
 			if P <= Nr*nprime+(Nr+1)
 				for i = 1:Ns
 					println("Calculating model output (not mads or svr) from .jl file in serial - Parameter k = $k ($(paramkeys[k])) ...")
@@ -1365,7 +1365,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
 		sendto(collect(2:nprime*Nr), constCell = constCell)
-		# If there are less workers than resamplings*parameters, we send to all workers available
+		# If there are less workers than resamplings * parameters, we send to all workers available
 	elseif P > 1
 		sendto(workers(), constCell = constCell)
 	end
@@ -1383,7 +1383,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 
 	## If we are reading output directly from file
 	if directOutput == 1
-		sendto(workers(), OutputData   = OutputData)
+		sendto(workers(), OutputData = OutputData)
 	end
 
 	### Calculating decomposed variances in parallel ###
@@ -1398,7 +1398,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		V        = resultvec[:,1] / Nr
 		Vi       = 2 * resultvec[:,2] / Nr
 		Vci      = 2 * resultvec[:,3] / Nr
-		# Main effect indices (i.e. decomposed varinace, before normalization)
+		# Main effect indices (i.e. decomposed variance, before normalization)
 		Var[:,k] = Vi
 		# Normalizing vs mean over loops
 		Si[:,k]  = Vi ./ V

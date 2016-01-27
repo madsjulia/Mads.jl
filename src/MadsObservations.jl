@@ -92,6 +92,7 @@ function showobservations(madsdata::Associative)
 		push!(p, s)
 	end
 	print(p...)
+	println("Number of observations is $(length(p))")
 end
 
 """

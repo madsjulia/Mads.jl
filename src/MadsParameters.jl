@@ -399,6 +399,7 @@ function showparameters(madsdata::Associative)
 		push!(p, s)
 	end
 	print(p...)
+	println("Number of parameters is $(length(p))")
 end
 
 "Show all parameters in the Mads data dictionary"
@@ -438,6 +439,7 @@ function showallparameters(madsdata::Associative)
 		push!(p, s)
 	end
 	print(p...)
+	println("Number of parameters is $(length(p))")
 end
 
 """
