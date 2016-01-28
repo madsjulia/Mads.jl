@@ -80,7 +80,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			if haskey(madsdata, "Julia")
 				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
-				results = juliamodel(madsdata) # this should be madsdata; not parameters
+				results = juliamodel(madsdata)
 				cd(madsproblemdir)
 			else
 				Mads.madsoutput("Execution of external command ...\n")
@@ -123,7 +123,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
 		error("MADS input file problem")
 	end
-	if haskey(madsdata, "Restart")
+	if isdefined(:R3Function) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
 			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
 			return madscommandfunctionwithreuse
@@ -162,7 +162,6 @@ function makemadscommandgradient(madsdata::Associative, f::Function)
 end
 
 "Make MADS forward & gradient functions for the model defined in the MADS data dictionary `madsdata`"
-
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
