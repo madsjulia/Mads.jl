@@ -1,47 +1,38 @@
-#!/usr/bin/env julia -q --color
+#!/usr/bin/env julia -q --color=yes
+
+if length(ARGS) < 2
+	println("Usage: madsjl.jl {mads_dictionary_file}.mads commands ...")
+	println("Example: madsjl.jl my_mads_yaml_file.mads forward efast")
+	warn("Command line error!")
+	quit()
+end
+
 import Mads
+import JLD
 
-if length(ARGS) > 0
-	if length(ARGS) > 1
-		madsfile = ARGS[1]
-		if isfile(madsfile)
-			md = Mads.loadmadsfile(madsfile)
-		else
-			Mads.err("""Provided argument $madsfile is not an existing file!""")
-		end
-	elseif length(ARGS) == 2
-		madscommand = ARGS[2]
-		if isfile(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
-		include(joinpath(Mads.madsdir, "cmdline", string(madscommand, ".jl")))
-		madsfile = ARGS[2]
-		md = Mads.loadmadsfile(madsfile)
-		result = eval(parse("Mads.$(madscommand)(md)"))
-		println(result)
-	else
-		println("Usage: madsjl.jl filename.mads commands ...")
-		println("Example: madsjl.jl test-internal-linearmodel.mads forward efast")
-		error("Command line error!")
-	end
+madsfile = ARGS[1]
+if isfile(madsfile)
+	info("Reading $madsfile ...")
+	md = Mads.loadmadsfile(madsfile)
+	dir = Mads.getmadsproblemdir(md)
+	root = Mads.getmadsrootname(md)
 else
-	println("Usage: madsjl.jl filename.mads commands ...")
-	println("Example: madsjl.jl test-internal-linearmodel.mads forward efast")
-	error("Command line error!")
+	println("Provided first argument $madsfile is not an existing file!")
+	warn("Command line error!")
+	quit()
+end
+for i = 2:length(ARGS)
+	madscommand = ARGS[i]
+	info("""Executing $madscommand ...""")
+	if isfile(joinpath(Mads.madsdir, "/Mads/scripts/", string(madscommand, ".jl")))
+		include(joinpath(Mads.madsdir, "/Mads/scripts/", string(madscommand, ".jl")))
+	end
+	result = eval(parse("Mads.$(madscommand)(md)"))
+	JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
+	display(result)
+	println("\ndone.\n")
 end
 
-#=
-if !isfile(madsfile)
-	Mads.madserr("""Mads input file: $(madsfile) is missing; quit!""")
-	error("$(madsfile) is missing")
-end
-
-Mads.madsinfo("""Mads input file: $(madsfile)""")
-
-madsdirname = string((dirname(Base.source_path())))
-Mads.madsinfo("""Mads working directory: $(madsdirname)""")
-Mads.setmadsinputfile(madsfile)
-=#
-
-# Should we put this at the top? I would like to keep the history even if there is an error.
-f = open("madsjl_cmdline_hist", "a+")
-write(f, join(["$(Dates.now()) :";"madsjl"; ARGS; "\n"], " "))
+f = open("madsjl.cmdline_hist", "a+")
+write(f, join(["$(Dates.now()) :"; "madsjl.jl"; ARGS; "\n"], " ") )
 close(f)
