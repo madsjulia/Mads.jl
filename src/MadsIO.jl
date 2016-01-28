@@ -215,7 +215,7 @@ function instline2regexs(instline::AbstractString)
 	while offset <= length(instline) && ismatch(regex, instline, offset)
 		m = match(regex, instline, offset)
 		if m == nothing
-			error("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
+			Mads.madserr("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
 		end
 		offset = m.offset + length(m.match)
 		if m.match[1] == '@'
@@ -229,7 +229,7 @@ function instline2regexs(instline::AbstractString)
 			push!(regexs, r"\h+")
 			push!(getparamhere, false)
 		else
-			error("Unknown instruction file instruction: $(m.match)")
+			Mads.madserr("Unknown instruction file instruction: $(m.match)")
 		end
 	end
 	return regexs, obsnames, getparamhere
@@ -272,7 +272,7 @@ function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractStr
 			end
 		end
 		if !gotmatch
-			error("Didn't get a match for instruction file ($instructionfilename) line:\n$instline")
+			Mads.madserr("Didn't get a match for instruction file ($instructionfilename) line:\n$instline")
 		end
 	end
 	return obsdict

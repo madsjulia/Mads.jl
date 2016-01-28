@@ -9,8 +9,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 	Mads.madsinfo("Decision parameters:")
 	for paramname in keys(choice["Parameters"])
 		if Mads.isopt(madsdata, paramname)
-			Mads.err("Decision parameter, $paramname, is also an adjustable (type = \"opt\") parameter.")
-			throw("MADS input error; MADS quits!")
+			Mads.madscrit("Decision parameter, $paramname, is also an adjustable (type = \"opt\") parameter.")
 		end
 		c = choice["Parameters"][paramname]
 		madsdata["Parameters"][paramname]["init"] = c

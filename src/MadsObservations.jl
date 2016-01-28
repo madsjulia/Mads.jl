@@ -153,7 +153,7 @@ function wellon!(madsdata::Associative, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.err("""Well name $wellname does not match existing well names!""")
+		Mads.madserr("""Well name $wellname does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end
@@ -177,7 +177,7 @@ function welloff!(madsdata, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.err("""Well name $wellname does not match existing well names!""")
+		Mads.madserr("""Well name $wellname does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end

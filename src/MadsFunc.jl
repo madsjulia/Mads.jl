@@ -81,6 +81,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
 				results = juliamodel(madsdata)
+				@show results
 				cd(madsproblemdir)
 			else
 				Mads.madsoutput("Execution of external command ...\n")
@@ -120,8 +121,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata)
 	else
-		Mads.err("Cannot create a madscommand function without a Model or a Command entry in the mads input file")
-		error("MADS input file problem")
+		Mads.madscrit("Cannot create a function to call model without a `Model` entry in the mads data dictionary!")
 	end
 	if isdefined(:R3Function) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"

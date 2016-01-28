@@ -249,7 +249,7 @@ Returns:
 function computemass(madsfiles; time = 0, path = ".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
-	Mads.info("""Number of files = $nf""")
+	Mads.madsinfo("""Number of files = $nf""")
 	lambda = Array(Float64, nf)
 	mass_injected = Array(Float64, nf)
 	mass_reduced = Array(Float64, nf)

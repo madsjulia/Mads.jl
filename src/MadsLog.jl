@@ -24,7 +24,7 @@ end
 
 "MADS error messages"
 function madserr(message::AbstractString)
-	Logging.err(message) # level 3
+	Logging.madserr(message) # level 3
 end
 
 "MADS critical error messages"

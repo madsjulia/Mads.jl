@@ -79,7 +79,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		try
 			covar = inv(JpJ)
 		catch "SingularException(4)"
-			Mads.err("""Singular covariance matrix! Local sensitivity analysis fails.""")
+			Mads.madserr("""Singular covariance matrix! Local sensitivity analysis fails.""")
 			return
 		end
 	end
@@ -1016,7 +1016,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 					lambda = varargin[1]
 					kernel_function(x,y) = exp(-lambda*norm(x.feature-y.feature,2)^2)
 				elseif kernel == "spline"
-					error("Spline kernel is not implemented!")
+					Mads.madserr("Spline kernel is not implemented!")
 					# kernel_function(a,b) = prod(arrayfun(@(x,y) 1 + x*y+x*y*min(x,y)-(x+y)/2*min(x,y)^2+1/3*min(x,y)^3,a.feature,b.feature))
 				elseif kernel == "periodic"
 					l = varargin[1]
@@ -1442,7 +1442,7 @@ end
 "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"
 function plotSAresults_monty(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
-		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
+		Mads.madserr("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]

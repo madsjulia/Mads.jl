@@ -386,7 +386,7 @@ end
 "Plot the sensitivity analysis results for the observations"
 function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
-		madserror("There is no 'Observations' class in the MADS input dataset")
+		Mads.madserror("There is no 'Observations' class in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]
