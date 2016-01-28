@@ -23,14 +23,22 @@ else
 end
 for i = 2:length(ARGS)
 	madscommand = ARGS[i]
-	info("""Executing $madscommand ...""")
-	if isfile(joinpath(Mads.madsdir, "/Mads/scripts/", string(madscommand, ".jl")))
-		include(joinpath(Mads.madsdir, "/Mads/scripts/", string(madscommand, ".jl")))
+	if isfile(joinpath(Mads.madsdir, "/../scripts/", string(madscommand, ".jl")))
+		s = joinpath(Mads.madsdir, "/../scripts/", string(madscommand, ".jl"))
+		info("Executing script $(s) ...")
+		include(s)
+	elseif isfile(string(madscommand, ".jl"))
+		s = string(madscommand, ".jl")
+		info("Executing script $(s) ...")
+		include(s)
+	else
+		info("Executing Mads command $madscommand (command or script) ...")
+		result = eval(parse("Mads.$(madscommand)(md)"))
+		JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
+		display(result)
+		println("")
 	end
-	result = eval(parse("Mads.$(madscommand)(md)"))
-	JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
-	display(result)
-	println("\ndone.\n")
+	info("done.")
 end
 
 f = open("madsjl.cmdline_hist", "a+")
