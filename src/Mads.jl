@@ -1,3 +1,5 @@
+# __precompile__()
+
 """
 MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
 
@@ -27,7 +29,6 @@ PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED
 
 LA-CC-15-080; Copyright Number Assigned: C16008
 """
-
 module Mads
 
 import DataStructures # import is needed for parallel calls
@@ -49,15 +50,6 @@ import PyPlot
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 import YAML # use YAML if PyYAML is not available
 
-if VERSION < v"0.4.0-rc"
-	using Docile # default for v > 0.4
-	using Lexicon
-	using Dates
-	typealias AbstractString String
-end
-if !in(dirname(Base.source_path()), LOAD_PATH)
-	push!(LOAD_PATH, dirname(Base.source_path())) # add MADS path if not already there
-end
 include("MadsHelp.jl")
 include("MadsCreate.jl")
 include("MadsIO.jl")
@@ -80,7 +72,8 @@ include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
-include("MadsLog.jl") # messages higher than specified level are printed
+include("MadsLog.jl") # messages higher than verbosity level are printed
+
 quiet = true
 verbositylevel = 1
 debuglevel = 1
