@@ -61,7 +61,7 @@ end
 "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
-	expression = MPTools.populateexpression(expression, parameters)
+	expression = MetaProgTools.populateexpression(expression, parameters)
 	retval::Float64
 	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
 	return retval

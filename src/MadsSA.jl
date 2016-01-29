@@ -1163,8 +1163,8 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	#@everywhere madspath  = "/n/srv/jlaughli/codes/Mads.jl/src/"
 
 	#import Mads
-	#if ~isdefined(:MPTools) | ~isdefined(:Anasol) | ~isdefined(:Mads)
-	#	include("/n/srv/jlaughli/codes/mptools.jl/src/MPTools.jl")
+	#if ~isdefined(:MetaProgTools) | ~isdefined(:Anasol) | ~isdefined(:Mads)
+	#	include("/n/srv/jlaughli/codes/mptools.jl/src/MetaProgTools.jl")
 	#	include(madspath*"MadsAnasol.jl")
 	#	include(madspath*"Mads.jl")
 	#end

@@ -42,7 +42,7 @@ import Lora
 import Distributions
 import JSON
 # import NLopt # creates problems on some machines
-import MPTools
+import MetaProgTools
 import HDF5 # HDF5 installation might be problematic on some machines
 import Conda
 import PyCall

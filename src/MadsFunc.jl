@@ -1,5 +1,5 @@
 if isdefined(:HDF5) # HDF5 installation is problematic on some machines
-	import R3Function
+	import ReusableFunctions
 end
 
 "Make MADS function to execute the model defined in the MADS data dictionary `madsdata`"
@@ -123,9 +123,9 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	else
 		Mads.madscrit("Cannot create a function to call model without a `Model` entry in the mads data dictionary!")
 	end
-	if isdefined(:R3Function) && haskey(madsdata, "Restart")
+	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
-			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction)
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
 			return madscommandfunctionwithreuse
 		elseif madsdata["Restart"] != false
 			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
@@ -136,7 +136,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			else
 				rootdir = string(rootname, "_restart")
 			end
-			madscommandfunctionwithreuse = R3Function.maker3function(madscommandfunction, rootdir)
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, rootdir)
 			return madscommandfunctionwithreuse
 		else
 			return madscommandfunction

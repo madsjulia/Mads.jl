@@ -13,8 +13,8 @@ mkdir codes
 cd codes
 git clone git@gitlab.com:mads/Mads.jl.git
 git clone git@gitlab.com:mads/Anasol.jl.git
-git clone git@gitlab.com:mads/R3Function.jl.git
-git clone git@gitlab.com:mads/MPTools.jl.git
+git clone git@gitlab.com:mads/ReusableFunctions.jl.git
+git clone git@gitlab.com:mads/MetaProgTools.jl.git
 git clone git@gitlab.com:mads/BIGUQ.jl.git
 ```
 
@@ -32,8 +32,8 @@ Global MADS installation
 ```
 Pkg.clone("git@gitlab.com:mads/Mads.jl.git")
 Pkg.clone("git@gitlab.com:mads/Anasol.jl.git")
-Pkg.clone("git@gitlab.com:mads/R3Function.jl.git")
-Pkg.clone("git@gitlab.com:mads/MPTools.jl.git")
+Pkg.clone("git@gitlab.com:mads/ReusableFunctions.jl.git")
+Pkg.clone("git@gitlab.com:mads/MetaProgTools.jl.git")
 Pkg.clone("git@gitlab.com:mads/BIGUQ.jl.git")
 ```
 
