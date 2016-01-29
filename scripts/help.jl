@@ -1,8 +1,10 @@
 import Mads
 
-filenames = readdir(joinpath(Mads.madsdir, "cmdline"))
-println("Usage: madsjl command filename.mads ...")
-println("Example: madsjl forward test-internal-linearmodel.mads")
+println("Usage: madsjl.jl {mads_dictionary_file}.mads commands ...")
+println("Examples: madsjl.jl my_mads_yaml_file.mads forward efast")
+println("          madsjl.jl diff my_mads_yaml_file1.mads my_mads_yaml_file2.mads")
+println("          madsjl.jl help")
+filenames = readdir(joinpath(Mads.madsdir, "../scripts"))
 println("Some available commands:")
 for filename in filenames
 	if filename[end-2:end] == ".jl"

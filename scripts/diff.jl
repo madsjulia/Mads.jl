@@ -1,7 +1,7 @@
 import YAML
 
 if length(ARGS) != 3
-	println("Usage: madsjl diff file1.mads file2.mads")
+	println("Usage: madsjl.jl diff file1.mads file2.mads")
 end
 
 function printdiff(prefix, thing1::Associative, thing2::Associative, depth)

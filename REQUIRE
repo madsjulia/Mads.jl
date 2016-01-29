@@ -8,7 +8,6 @@ HDF5
 Optim
 NLopt
 BlackBoxOptim
-Logging
 Distributions
 DataStructures
 ForwardDiff

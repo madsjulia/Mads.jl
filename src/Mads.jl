@@ -27,6 +27,7 @@ PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE WOULD NOT INFRINGE PRIVATELY OWNED
 
 LA-CC-15-080; Copyright Number Assigned: C16008
 """
+
 module Mads
 
 import DataStructures # import is needed for parallel calls
@@ -38,7 +39,6 @@ import Compat
 import Optim
 import Lora
 import Distributions
-import Logging
 import JSON
 # import NLopt # creates problems on some machines
 import MPTools
@@ -81,9 +81,6 @@ include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsLog.jl") # messages higher than specified level are printed
-# Logging.configure(level=OFF) # OFF
-# Logging.configure(level=CRITICAL) # ONLY CRITICAL
-Logging.configure(level=Logging.DEBUG)
 quiet = true
 verbositylevel = 1
 debuglevel = 1

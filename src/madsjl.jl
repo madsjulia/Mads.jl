@@ -2,13 +2,15 @@
 
 if length(ARGS) < 2
 	println("Usage: madsjl.jl {mads_dictionary_file}.mads commands ...")
-	println("Example: madsjl.jl my_mads_yaml_file.mads forward efast")
+	println("Examples: madsjl.jl my_mads_yaml_file.mads forward efast")
+	println("          madsjl.jl diff my_mads_yaml_file1.mads my_mads_yaml_file2.mads")
+	println("          madsjl.jl help")
 	warn("Command line error!")
 	quit()
 end
 
-import Mads
 import JLD
+import Mads
 
 madsfile = ARGS[1]
 if isfile(madsfile)
@@ -16,27 +18,36 @@ if isfile(madsfile)
 	md = Mads.loadmadsfile(madsfile)
 	dir = Mads.getmadsproblemdir(md)
 	root = Mads.getmadsrootname(md)
+	start = 2
 else
-	println("Provided first argument $madsfile is not an existing file!")
-	warn("Command line error!")
-	quit()
+	start = 1
 end
-for i = 2:length(ARGS)
+for i = start:length(ARGS)
 	madscommand = ARGS[i]
-	if isfile(joinpath(Mads.madsdir, "/../scripts/", string(madscommand, ".jl")))
-		s = joinpath(Mads.madsdir, "/../scripts/", string(madscommand, ".jl"))
+	if isfile(joinpath(Mads.madsdir, "../scripts/", string(madscommand, ".jl")))
+		s = joinpath(Mads.madsdir, "../scripts/", string(madscommand, ".jl"))
 		info("Executing script $(s) ...")
 		include(s)
+		if start == 1
+			info("done.")
+			quit()
+		end 
 	elseif isfile(string(madscommand, ".jl"))
 		s = string(madscommand, ".jl")
 		info("Executing script $(s) ...")
 		include(s)
+		if start == 1
+			info("done.")
+			quit()
+		end 
 	else
-		info("Executing Mads command $madscommand (command or script) ...")
-		result = eval(parse("Mads.$(madscommand)(md)"))
-		JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
-		display(result)
-		println("")
+		if start == 2
+			info("Executing Mads command $madscommand ...")
+			result = eval(parse("Mads.$(madscommand)(md)"))
+			JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
+			display(result)
+			println("")
+		end
 	end
 	info("done.")
 end
