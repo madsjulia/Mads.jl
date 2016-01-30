@@ -3,10 +3,44 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2016-01-29</lastmod>
+     <loc>http://madsjulia.lanl.gov/</loc>
+     <lastmod>2016-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
+    
+
+    
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/Mads/</loc>
+     <lastmod>2016-01-30</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/BIGUQ/</loc>
+     <lastmod>2016-01-30</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/Anasol/</loc>
+     <lastmod>2016-01-30</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/ReusableFunctions/</loc>
+     <lastmod>2016-01-30</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/MetaProgTools/</loc>
+     <lastmod>2016-01-30</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>
