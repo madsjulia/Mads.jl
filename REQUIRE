@@ -1,4 +1,4 @@
-julia 0.4-
+julia 0.4
 Anasol
 ReusableFunctions
 MetaProgTools
@@ -6,7 +6,6 @@ BIGUQ
 Lora 0.4.4
 HDF5
 Optim
-NLopt
 BlackBoxOptim
 Distributions
 DataStructures
@@ -23,3 +22,4 @@ JSON
 JLD
 Gadfly
 DataFrames
+Lexicon
