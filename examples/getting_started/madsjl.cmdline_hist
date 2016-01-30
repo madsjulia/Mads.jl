@@ -1,2 +1,4 @@
 2016-01-27T17:32:10 : madsjl.jl internal-linear.mads forward efast 
 2016-01-27T18:03:31 : madsjl.jl internal-linear.mads forward test-script efast 
+2016-01-30T08:27:08 : madsjl.jl internal-parabola.mads forward efast 
+2016-01-30T08:27:25 : madsjl.jl diff internal-linear.mads internal-parabola.mads 

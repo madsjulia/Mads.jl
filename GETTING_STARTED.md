@@ -89,6 +89,20 @@ MADS can perform various types of analyses:
 More complicated analyses will require additional information to be provided in the MADS data dictionary.
 Examples are given in the `examples` subdirectories of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples)).
 
+MADS Command-line execution
+---------------------------
+
+MADS can be executed at the command line using `madsjl.jl`. Link this file in a directory in your search `PATH`.
+
+For example, using `madsjl.jl` you can execute:
+
+```
+madsjl.jl diff internal-linear.mads internal-parabola.mads
+madsjl.jl internal-parabola.mads forward efast
+```
+
+in the `examples/getting_started` subdirectory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started)).
+
 MADS Documentation
 ------------------
 

@@ -1,13 +1,13 @@
 import Lexicon
 
-"Produces help information"
+"Produce help information"
 function help()
-	Markdown.parse_file("../GETTING_STARTED.md")
+	Markdown.parse_file(Pkg.dir("Mads") * "/GETTING_STARTED.md")
 end
 
-"Produces copyright information"
-function help()
-	Markdown.parse_file("../COPYING.md")
+"Produce copyright information"
+function copyright()
+	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING")
 end
 
 "Create help files for Mads functions"
@@ -22,6 +22,7 @@ function create_help_func()
 
 	# index = Lexicon.save(Mads.madsdir * "/../mkdocs/docs/mads.md", Mads)
 	# Lexicon.save(Mads.madsdir * "/../mkdocs/docs/index.md", Lexicon.Index([index]); md_subheader = :category)
+
 	d = pwd()
 	cd(Mads.madsdir * "/../mkdocs")
 	run(`mkdocs gh-deploy --clean`)
