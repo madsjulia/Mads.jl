@@ -51,6 +51,7 @@ import PyPlot
 import YAML # use YAML if PyYAML is not available
 
 include("MadsHelp.jl")
+include("MadsTest.jl")
 include("MadsCreate.jl")
 include("MadsIO.jl")
 include("MadsYAML.jl")

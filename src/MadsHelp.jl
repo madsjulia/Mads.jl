@@ -10,8 +10,8 @@ function copyright()
 	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING")
 end
 
-"Create help files for Mads functions"
-function create_help_func()
+"Create web documentation files for Mads functions"
+function create_documentation()
 	Lexicon.save(Mads.madsdir * "/../docs/mads.md", Mads; md_permalink = false)
 	Lexicon.save(Mads.madsdir * "/../docs/mads.html", Mads)
 	Lexicon.save(Mads.madsdir * "/../mkdocs/docs/Modules/Mads.md", Mads; mdstyle_objname="##", md_permalink = false, md_subheader=:category)

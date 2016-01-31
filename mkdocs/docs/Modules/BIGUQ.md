@@ -10,7 +10,7 @@
 Get MCMC chain
 
 *source:*
-[BIGUQ/src/BIGDT.jl:23](https://github.com/madsjulia/BIGUQ.jl/tree/46720791b251bf3d51030a45a1688d159c72cb82/src/BIGDT.jl#L23)
+[BIGUQ/src/BIGDT.jl:23](https://github.com/madsjulia/BIGUQ.jl/tree/4bf2ebb80665a4c472bd4f66a047740d17f5fa0f/src/BIGDT.jl#L23)
 
 ---
 
@@ -19,7 +19,7 @@ Get MCMC chain
 makes the bigdts for each possible decision assuming that no more observations will be made
 
 *source:*
-[BIGUQ/src/BIGOED.jl:23](https://github.com/madsjulia/BIGUQ.jl/tree/46720791b251bf3d51030a45a1688d159c72cb82/src/BIGOED.jl#L23)
+[BIGUQ/src/BIGOED.jl:24](https://github.com/madsjulia/BIGUQ.jl/tree/4bf2ebb80665a4c472bd4f66a047740d17f5fa0f/src/BIGOED.jl#L24)
 
 ---
 
@@ -28,5 +28,16 @@ makes the bigdts for each possible decision assuming that no more observations w
 make bigdts for each possible decision assuming that the proposedobs are observed
 
 *source:*
-[BIGUQ/src/BIGOED.jl:50](https://github.com/madsjulia/BIGUQ.jl/tree/46720791b251bf3d51030a45a1688d159c72cb82/src/BIGOED.jl#L50)
+[BIGUQ/src/BIGOED.jl:51](https://github.com/madsjulia/BIGUQ.jl/tree/4bf2ebb80665a4c472bd4f66a047740d17f5fa0f/src/BIGOED.jl#L51)
+
+## Types [Internal]
+
+---
+
+<a id="type__bigoed.1" class="lexicon_definition"></a>
+## BIGUQ.BigOED
+BigOED type
+
+*source:*
+[BIGUQ/src/BIGOED.jl:2](https://github.com/madsjulia/BIGUQ.jl/tree/4bf2ebb80665a4c472bd4f66a047740d17f5fa0f/src/BIGOED.jl#L2)
 
