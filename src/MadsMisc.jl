@@ -11,8 +11,6 @@ Arguments:
 Returns:
 
 - `arrayfunction` : function accepting an array containing the optimal parameters' values
-
-
 """
 function makearrayfunction(madsdata::Associative, f::Function)
 	optparamkeys = getoptparamkeys(madsdata)

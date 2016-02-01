@@ -143,7 +143,7 @@ Arguments:
 - `t0`
 - `t1`
 - `t`
-- `anasolfunction` : "long_bbb_ddd_iir_c"
+- `anasolfunction` : Anasol function to call (check out the Anasol module) [long_bbb_ddd_iir_c]
 """
 function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
 	anasolfunction = eval(parse("Anasol.$anasolfunction"))

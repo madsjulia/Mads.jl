@@ -4,9 +4,18 @@ using Gadfly
 using Distributions
 using ProgressMeter
 
-#TODO use this fuction in all the MADS sampling strategies (for example, SA below)
+#TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
-"Independent sampling of MADS Model parameters"
+"""
+Independent sampling of model parameters defined in the Mads data dictionary
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `numsamples` : number of samples
+- `parameterkey` : model parameter key
+- `init_dist` : if `true` use the distribution defined for initialization in the Mads data dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the Mads data dictionary (defined using `dist` parameter field)
+"""
 function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::AbstractString=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
@@ -20,7 +29,16 @@ function parametersample(madsdata::Associative, numsamples::Integer, parameterke
 	end
 end
 
-"Random numbers for a MADS Model parameter defined by `parameterkey`"
+"""
+Random numbers for a MADS model parameter defined by `parameterkey`
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `parameterkey` : model parameter key
+- `numsamples` : number of samples
+- `paramdist` : dictionary with parameter distributions
+"""
 function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
 	if haskey( madsdata["Parameters"], parameterkey )
 		if length(paramdist) == 0
@@ -44,7 +62,15 @@ function paramrand(madsdata::Associative, parameterkey::AbstractString; numsampl
 	return nothing
 end
 
-"Local sensitivity analysis"
+"""
+Local sensitivity analysis based on eigen analysis of covariance matrix
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="")
 	if filename ==""
 		rootname = Mads.getmadsrootname(madsdata)
@@ -100,18 +126,18 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
-												Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
-												Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-												Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
+				Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
+				Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+				Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenmatrix"
 	filename, format = Mads.setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
 	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
 	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
-												 Gadfly.Geom.bar,
-												 Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-												 Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
+				Gadfly.Geom.bar,
+				Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+				Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 	filename = "$(rootname)-eigenvalues"
 	filename, format = Mads.setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
@@ -119,7 +145,15 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
-"""Saltelli sensitivity analysis (brute force)"""
+"""
+Saltelli sensitivity analysis (brute force)
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `N` : number of samples
+- `seed` : initial random seed
+"""
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
@@ -258,7 +292,15 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Sa
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
-"""Saltelli sensitivity analysis"""
+"""
+Saltelli sensitivity analysis
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `N` : number of samples
+- `seed` : initial random seed
+"""
 function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	if seed != 0
 		srand(seed)
@@ -386,7 +428,14 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
-"Compute sensitities for each model parameter; averaging the sensitivity indices over the entire range"
+"""
+Compute sensitivities for each model parameter; averaging the sensitivity indices over the entire observation range
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `saresults` : sensitivity analysis results
+"""
 function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)
@@ -471,7 +520,7 @@ for mi = 1:length(saltelli_functions)
 	eval(q)
 end
 
-"Print the sensitivity analysis results"
+"Print sensitivity analysis results"
 function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -547,7 +596,7 @@ function printSAresults(madsdata::Associative, results::Associative)
 	madsoutput("\n")
 end
 
-"Print the sensitivity analysis results (method 2)"
+"Print sensitivity analysis results (method 2)"
 function saltelliprintresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -628,8 +677,17 @@ function maxtorealmaxFloat32!(df::DataFrame)
 	end
 end
 
-## eFAST
-"Saltelli's eFAST Algoirthm based on Saltelli extended Fourier Amplituded Sensitivty Testing (eFAST) method"
+"""
+Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Testing (eFAST) method
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `N` : number of samples
+- `M` : maximum number of harmonics
+- `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
+- `seed` : initial random seed
+"""
 function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1095,23 +1153,16 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			return f
 		end
 	end
-	################################### END - DEFINING MODULES ###################################
+	################################### END - DEFINING MODULES 
 
-	##
 	## Set GSA Parameters
-	##
-	#M        = 6          # Max # of Harmonics (usually set to 4 or 6)
+	# M        = 6          # Max # of Harmonics (usually set to 4 or 6)
 	# Lower values of M tend to underestimate main sensitivity indices.
-	Ns_total = N       # Total Number of samples over all search curves (minimum for eFAST method is 65)
+	Ns_total = N # Total Number of samples over all search curves (minimum for eFAST method is 65)
 	# Choosing a small Ns will increase speed but decrease accuracy
 	# Ns_total = 65 will only work if M=4 and gamma = 2 (Wi >= 8 is the actual constraint)
-	#gamma    = 4          # To adjust equation Wi = (Ns_total/Nr - 1)/(gamma*M)
-	# Saltelli 1999 suggests gamma = 2 or 4; higher gammas typically give more accurate results
-	# and are even *sometmies* faster.
-	##
-	##
-	##
-
+	# gamma    = 4          # To adjust equation Wi = (Ns_total/Nr - 1)/(gamma*M)
+	# Saltelli 1999 suggests gamma = 2 or 4; higher gammas typically give more accurate results and are even *sometmies* faster.
 
 	# Are we reading from a .mads file or are we running this as a standalone (input: .csv, output: .exe)?
 	# 1 for MADS, 0 for standalone. Basically determines IO of script.

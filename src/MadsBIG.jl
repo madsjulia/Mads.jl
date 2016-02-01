@@ -1,10 +1,34 @@
 import BIGUQ
 import ProgressMeter
 
+"""
+Setup BIG-DT problem
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `choice` : dictionary of BIG-DT choices (scenarios)
+
+Returns:
+
+- `bigdtproblem` : BIG-DT problem type
+"""
 function makebigdt(madsdata::Associative, choice::Associative)
 	return makebigdt!(deepcopy(madsdata), choice)
 end
 
+"""
+Setup BIG-DT problem
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `choice` : dictionary of BIG-DT choices (scenarios)
+
+Returns:
+
+- `bigdtproblem` : BIG-DT problem type
+"""
 function makebigdt!(madsdata::Associative, choice::Associative)
 	Mads.madsinfo("Decision parameters:")
 	for paramname in keys(choice["Parameters"])
@@ -79,6 +103,21 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 	return BIGUQ.BigDT(makeloglikelihood, logprior, nominalparams, likelihoodparamsmin, likelihoodparamsmax, performancegoalsatisfied, gethorizonoffailure)
 end
 
+"""
+Perform BIG-DT analysis
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `nummodelruns` : number of model runs
+- `numhorizons` : number of info-gap horizons of uncertainty
+- `maxHorizon` : maximum info-gap horizons of uncertainty
+- `numlikelihoods` : number of Bayesian likelihoods
+
+Returns:
+
+- `bigdtresults` : dictionary with BIG-DT results
+"""
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = parametersample(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -113,6 +152,16 @@ function makemakearrayconditionalloglikelihood(madsdata::Associative)
 	end
 end
 
+"""
+Plot BIG-DT robustness curves
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `bigdtresults` : BIG-DT results
+- `filename` : output file name used to dump plots
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename="", format="", maxprob=1.0, maxhoriz=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]
 	horizons = bigdtresults["horizons"]
@@ -134,5 +183,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 									Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
 									Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
 	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
-	p
+	if typeof(p) == Gadfly.Plot{}
+		p
+	end
 end

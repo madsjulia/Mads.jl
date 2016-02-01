@@ -1,3 +1,6 @@
+"""
+Make forward model functions needed for Levenberg-Marquardt optimization
+"""
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -20,6 +23,9 @@ function makelmfunctions(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	"""
+	Forward model function for Levenberg-Marquardt optimization
+	"""
 	function f_lm(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -40,6 +46,9 @@ function makelmfunctions(madsdata)
 		end
 		return residuals
 	end
+	"""
+	Gradient function for the forward model used for Levenberg-Marquardt optimization
+	"""
 	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0)) #TODO we need the center; this is not working
 		if sizeof(dx) == 0
 			dx = lineardx
@@ -68,12 +77,18 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm, o_lm
 end
 
+"""
+Naive Levenberg-Marquardt optimization: get the LM parameter space step
+"""
 function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
 	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
 	return deltax
 end
 
+"""
+Naive Levenberg-Marquardt optimization: perform LM iteration
+"""
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f0::Vector, lambdas::Vector)
 	J = g(x0) # get jacobian
 	Jp = J'
@@ -85,6 +100,24 @@ function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
+"""
+Naive Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `o` : objective function
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `lambda` : initial Levenberg-Marquardt lambda [100]
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `np_lambda` : number of parallel lambda solves
+"""
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Function=x->(x'*x)[1]; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
@@ -103,7 +136,31 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Func
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end
 
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, maxJacobians=100, alwaysDoJacobian=false, callback=best_x->nothing)
+"""
+Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `root` : Mads problem root name
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `maxJacobians` : maximum number of Jacobian solves
+- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
+- `lambda_scale` : lambda scaling factor 
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `lambda_nu` : lambda multiplication factor ν [10]
+- `np_lambda` : number of parallel lambda solves
+- `show_trace` : shows solution trace [default=false]
+- `alwaysDoJacobian`: computer Jacobian each iteration [false]
+- `callback` : call back function for debugging
+"""
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=best_x->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m

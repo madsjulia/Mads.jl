@@ -106,7 +106,6 @@ Example:
 ```
 r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
-
 ```
 """
 function getrootname(filename::AbstractString; first=true)
@@ -205,6 +204,7 @@ function writeparameters(madsdata::Associative, parameters)
 	end
 end
 
+"Convert an instruction line in the Mads instruction file into regular expressions"
 function instline2regexs(instline::AbstractString)
 	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
 	regex = r"@[^@]*@|w|![^!]*!"
@@ -235,11 +235,13 @@ function instline2regexs(instline::AbstractString)
 	return regexs, obsnames, getparamhere
 end
 
+"Match an instruction line in the Mads instruction file with model input file"
 function obslineismatch(obsline::AbstractString, regexs::Array{Regex, 1})
 	bigregex = Regex(string(map(x->x.pattern, regexs)...))
 	return ismatch(bigregex, obsline)
 end
 
+"Get observations for a set of regular expressions"
 function regexs2obs(obsline, regexs, obsnames, getparamhere)
 	offset = 1
 	obsnameindex = 1
@@ -255,6 +257,7 @@ function regexs2obs(obsline, regexs, obsnames, getparamhere)
 	return obsdict
 end
 
+"Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`"
 function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractString)
 	instfile = open(instructionfilename, "r")
 	obsfile = open(inputfilename, "r")
@@ -312,7 +315,7 @@ function readobservations_cmads(madsdata::Associative)
 	return observations
 end
 
-"Call C MADS ins_obs() function from the MADS library"
+"Call C MADS ins_obs() function from the MADS dynamic library"
 function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0

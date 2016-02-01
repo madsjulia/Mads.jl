@@ -5,14 +5,13 @@ Set image file `format` based on the `filename` extension, or sets the `filename
 
 Arguments:
 
-- `filename` : output file name used to dump plots
+- `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 
 Returns:
 
-- `filename` : output file name used to dump plots
+- `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
-
 """
 function setimagefileformat!(filename, format)
 	format = uppercase(format)
@@ -39,7 +38,15 @@ function setimagefileformat!(filename, format)
 	return filename, format
 end
 
-"Plot MADS problem"
+"""
+Plot contaminant sources and wells defined in Mads data dictionary
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function plotmadsproblem(madsdata::Associative; format="", filename="")
 	if haskey(madsdata, "Sources")
 		rectangles = Array(Float64, 0, 4)
@@ -85,23 +92,43 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
-									Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-									Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-																									 Compose.fill(parse(Colors.Colorant, "orange")),
-																									 Compose.fillopacity(0.2),
-																									 Compose.stroke(parse(Colors.Colorant, "orange")))),
-									Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-									Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+		Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
+		Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
+		Compose.fill(parse(Colors.Colorant, "orange")),
+		Compose.fillopacity(0.2),
+		Compose.stroke(parse(Colors.Colorant, "orange")))),
+		Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
+		Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
 	end
 	filename, format = setimagefileformat!(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
-	p
+	if typeof(p) == Gadfly.Plot{}
+		p
+	end
 end
 
-"Plot a 3D grid solution based on s "
+"""
+Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
+
+```
+plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
+plotgrid(madsdata; addtitle=true, title="", filename="", format="")
+plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
+```
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `parameters` : dictionary with model parameters
+- `s` : model predictions array
+- `addtitle` : add plot title [true]
+- `title` : plot title
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
 	@PyCall.pyimport matplotlib.ticker as mt
 	@PyCall.pyimport matplotlib.colors as mcc
@@ -147,19 +174,33 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
 end
 
-"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-"Plot a 3D grid solution "
 function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-function plotmatches(madsdata_in::Associative)
+
+"""
+Plot the matches between model predictions and observations
+
+```
+plotmatches(madsdata; filename="", format="")
+plotmatches(madsdata, result; filename="", format="")
+```
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `result` : dictionary with model predictions
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
+function plotmatches(madsdata_in::Associative; filename="", format="")
 	madsdata = deepcopy(madsdata_in)
 	if haskey(madsdata, "Wells")
 		setwellweights!(madsdata, 1)
@@ -167,7 +208,7 @@ function plotmatches(madsdata_in::Associative)
 		setobsweights!(madsdata, 1)
 	end
 	r = forward(madsdata)
-	plotmatches(madsdata_in, r)
+	plotmatches(madsdata_in, r, filename=filename, format=format)
 end
 
 function plotmatches(madsdata::Associative, result::Associative; filename="", format="")
@@ -259,6 +300,16 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 	end
 end
 
+"""
+Create histogram/scatter plots of model parameter samples
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `samples` : matrix with model parameters
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="")
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
@@ -291,21 +342,44 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	end
 end
 
-"Plot the sensitivity analysis results for all wells (wells class expected)"
-function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+"""
+Plot the sensitivity analysis results for all the wells in the Mads data dictionary (wells class expected)
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `result` : sensitivity analysis results
+- `xtitle` : x-axis title
+- `ytitle` : y-axis title
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
+function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]", filename = "", format="")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	for wellname in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellname]["on"]
-			plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle)
+			plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle, filename = filename, format = format)
 		end
 	end
 end
 
-"Plot the sensitivity analysis results for each well (wells class expected)"
-function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]")
+"""
+Plot the sensitivity analysis results for a given well in the Mads data dictionary (wells class expected)
+
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `result` : sensitivity analysis results
+- `wellname` : well name
+- `xtitle` : x-axis title
+- `ytitle` : y-axis title
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
+function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]", filename = "", format="")
 	if !haskey(madsdata, "Wells")
 		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
 		return
@@ -380,10 +454,24 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	p = Gadfly.vstack(pp...)
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
-	Gadfly.draw(Gadfly.SVG(string("$rootname-$wellname-$method-$nsample.svg"), 6inch, vsize), p)
+	if filename == ""
+		filename = "$rootname-$wellname-$method-$nsample"
+	end
+	filename, format = Mads.setimagefileformat!(filename, format)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), p)
 end
 
-"Plot the sensitivity analysis results for the observations"
+"""
+Plot the sensitivity analysis results for the observations
+Arguments:
+
+- `madsdata` : Mads data dictionary
+- `result` : sensitivity analysis results
+- `filter` : string or regex to plot only observations containing `filter`
+- `keyword` : to be added in the auto-generated filename
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+"""
 function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		Mads.madserror("There is no 'Observations' class in the MADS input dataset")
@@ -455,10 +543,10 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-											 Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-											 Gadfly.Guide.XLabel(xtitle),
-											 Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
+				Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+					Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
+					Gadfly.Guide.XLabel(xtitle),
+					Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
 		vsize += 4inch
 	end
@@ -480,10 +568,10 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-											 Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-											 Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-											 Gadfly.Guide.XLabel(xtitle),
-											 Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
+				Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+				Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
+				Gadfly.Guide.XLabel(xtitle),
+				Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
 		vsize += 4inch
 	end
@@ -505,8 +593,8 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-											 Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-											 Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
+			Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4inch
 	end

@@ -449,12 +449,12 @@ Get probabilistic distributions of all parameters in the Mads data dictionary
 
 Note:
 
-Probabilistic distribution of parameters can be defined only if "dist" or "min"/"max" are specified in the Mads data dictionary `madsdata`.
+Probabilistic distribution of parameters can be defined only if `dist` or `min`/`max` model parameter fields are specified in the Mads data dictionary `madsdata`.
 
 Arguments:
 
 - `madsdata` : Mads data dictionary
-- `init_dist` : if true, use the initialization distributions (if defined)
+- `init_dist` : if `true` use the distribution defined for initialization in the Mads data dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the Mads data dictionary (defined using `dist` parameter field)
 """
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
