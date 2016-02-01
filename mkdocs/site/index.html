@@ -201,14 +201,14 @@ The code provides a series of alternative algorithms to perform each type of mod
 If you are not familiar with Julia, checkout <a href="http://samuelcolvin.github.io/JuliaByExample/">Julia By Example</a>, <a href="https://learnxinyminutes.com/docs/julia/">learn X in Y minutes</a>, <a href="http://bogumilkaminski.pl/files/julia_express.pdf">Julia Express</a>).
 You can also explore the Julia examples in the <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>).</p>
 <p>To start using MADS, initiate the Julia REPL and execute <code>import Mads</code> to load MADS modules.</p>
-<p>All the MADS analyses are based on a MADS data dictionary that defines the problem.</p>
-<p>The MADS data dictionary is typically loaded from a YAML MADS input file.
+<p>All the MADS analyses are based on a MADS problem dictionary that defines the problem.</p>
+<p>The MADS problem dictionary is typically loaded from a YAML MADS input file.
 The loading of a MADS file can be executed as follows:</p>
 <p><code>madsdata = Mads.loadmadsfile("&lt;input_file_name&gt;.mads")</code></p>
 <p>For example, you can execute:</p>
 <p><code>madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")</code></p>
 <p>The file <code>internal-linear.mads</code> is located in <code>examples/getting_started</code> directory of the <code>Mads.jl</code> repository.</p>
-<p>Typically, the MADS data dictionary includes several classes:</p>
+<p>Typically, the MADS problem dictionary includes several classes:</p>
 <ul>
 <li><code>Parameters</code> : lists of model parameters</li>
 <li><code>Observations</code> : lists of model observations</li>
@@ -227,18 +227,18 @@ Model: internal-linear.jl
 </code></pre>
 
 <p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linearmodel.jl</code>.</p>
-<p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS data dictionary above.</p>
+<p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
 <p>Execute:</p>
 <p><code>Mads.showallparameters(madsdata)</code> to show all the parameters.</p>
 <p><code>Mads.showobservations(madsdata)</code> to list all the observations.</p>
 <p>MADS can perform various types of analyses:</p>
 <ul>
 <li><code>Mads.forward(madsdata)</code> will execute forward model simulation based on the initial parameter values.</li>
-<li><code>saresults = Mads.efast(madsdata)</code> will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS data dictionary.</li>
-<li><code>optparam, iaresults = Mads.calibrate(madsdata)</code> will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS data dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.</li>
+<li><code>saresults = Mads.efast(madsdata)</code> will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.</li>
+<li><code>optparam, iaresults = Mads.calibrate(madsdata)</code> will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.</li>
 <li><code>Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values</code>optparam` estimated by the inverse analyses above.</li>
 </ul>
-<p>More complicated analyses will require additional information to be provided in the MADS data dictionary.
+<p>More complicated analyses will require additional information to be provided in the MADS problem dictionary.
 Examples are given in the <code>examples</code> subdirectories of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>).</p>
 <h2 id="mads-command-line-execution">MADS Command-line execution</h2>
 <p>MADS can be executed at the command line using <code>madsjl.jl</code>. Link this file in a directory in your search <code>PATH</code>.</p>
@@ -299,5 +299,5 @@ madsjl.jl internal-parabola.mads forward efast
 
 <!--
 MkDocs version : 0.15.0
-Build Date UTC : 2016-02-01 20:12:54.993692
+Build Date UTC : 2016-02-01 20:16:17.785758
 -->

@@ -10,7 +10,7 @@ Arguments:
 
 - `infilename` : input Mads file
 - `outfilename` : output Mads file
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `predictions` : dictionary of model predictions
 
 Returns: `none`

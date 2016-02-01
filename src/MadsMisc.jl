@@ -5,7 +5,7 @@ Make a version of the function `f` that accepts an array containing the optimal 
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `f` : ...
 
 Returns:

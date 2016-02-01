@@ -6,7 +6,7 @@ Perform a forward run using the initial or provided values for the model paramet
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `paramvalues` : dictionary of model parameter values
 
 Returns:
@@ -31,7 +31,7 @@ Perform a forward run over a 3D grid defined in `madsdata` using the initial or 
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `paramvalues` : dictionary of model parameter values
 
 Returns:

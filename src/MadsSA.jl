@@ -7,14 +7,14 @@ using ProgressMeter
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 """
-Independent sampling of model parameters defined in the Mads data dictionary
+Independent sampling of model parameters defined in the MADS problem dictionary
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `numsamples` : number of samples
 - `parameterkey` : model parameter key
-- `init_dist` : if `true` use the distribution defined for initialization in the Mads data dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the Mads data dictionary (defined using `dist` parameter field)
+- `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 """
 function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::AbstractString=""; init_dist::Bool=false)
 	if parameterkey != ""
@@ -34,7 +34,7 @@ Random numbers for a MADS model parameter defined by `parameterkey`
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `parameterkey` : model parameter key
 - `numsamples` : number of samples
 - `paramdist` : dictionary with parameter distributions
@@ -67,7 +67,7 @@ Local sensitivity analysis based on eigen analysis of covariance matrix
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
@@ -150,7 +150,7 @@ Saltelli sensitivity analysis (brute force)
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `seed` : initial random seed
 """
@@ -297,7 +297,7 @@ Saltelli sensitivity analysis
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `seed` : initial random seed
 """
@@ -433,7 +433,7 @@ Compute sensitivities for each model parameter; averaging the sensitivity indice
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `saresults` : sensitivity analysis results
 """
 function computeparametersensitities(madsdata::Associative, saresults::Associative)
@@ -682,7 +682,7 @@ Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Tes
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `M` : maximum number of harmonics
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)

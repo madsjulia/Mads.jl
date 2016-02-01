@@ -173,7 +173,7 @@ Dump YAML Mads file
 
 Arguments:
 
-- `madsdata` : MADS data dictionary
+- `madsdata` : MADS problem dictionary
 - `filename` : file name
 """
 function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input file in YAML forma
@@ -233,7 +233,7 @@ function readyamlpredictions(filename::AbstractString) # read YAML predictions
 	return loadyamlfile(filename)
 end
 
-"Dump well data from MADS data dictionary into a ASCII file"
+"Dump well data from MADS problem dictionary into a ASCII file"
 function dumpwelldata(filename::AbstractString, madsdata)
 	outfile = open(filename, "w")
 	write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")

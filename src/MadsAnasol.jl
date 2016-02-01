@@ -8,7 +8,7 @@ Create a function to compute concentrations for all the observation points using
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 
 Returns:
 
@@ -109,7 +109,7 @@ function makecomputeconcentrations(madsdata::Associative)
 		global modelruns += 1
 		return c
 	end
-	@doc "Computes concentrations at all the observation points in the MADS data dictionary" computeconcentrations
+	@doc "Computes concentrations at all the observation points in the MADS problem dictionary" computeconcentrations
 	return computeconcentrations
 end
 
@@ -178,7 +178,7 @@ Compute injected/reduced contaminant mass
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `time` : computational time
 
 Returns:

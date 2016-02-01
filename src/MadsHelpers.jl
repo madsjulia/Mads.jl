@@ -41,7 +41,7 @@ Check for a `keyword` in a class within the Mads dictionary `madsdata`
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
 - `keyword` : dictionary key
 

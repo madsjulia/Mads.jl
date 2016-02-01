@@ -6,7 +6,7 @@ Setup BIG-DT problem
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `choice` : dictionary of BIG-DT choices (scenarios)
 
 Returns:
@@ -22,7 +22,7 @@ Setup BIG-DT problem
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `choice` : dictionary of BIG-DT choices (scenarios)
 
 Returns:
@@ -108,7 +108,7 @@ Perform BIG-DT analysis
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `nummodelruns` : number of model runs
 - `numhorizons` : number of info-gap horizons of uncertainty
 - `maxHorizon` : maximum info-gap horizons of uncertainty
@@ -157,7 +157,7 @@ Plot BIG-DT robustness curves
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `bigdtresults` : BIG-DT results
 - `filename` : output file name used to dump plots
 - `format` : output plot format (`png`, `pdf`, etc.)

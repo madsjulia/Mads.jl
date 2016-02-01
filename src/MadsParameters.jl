@@ -7,7 +7,7 @@ Get keys of all parameters in the MADS dictionary
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 
 Returns:
 
@@ -26,7 +26,7 @@ Get dictionary with all parameters and their respective initial values
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 
 Returns:
 
@@ -47,7 +47,7 @@ Get keys of all source parameters in the MADS dictionary
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 
 Returns:
 
@@ -249,7 +249,7 @@ Set initial parameter guesses in the MADS dictionary
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `paramdict` : dictionary with initial model parameter values
 """
 function setparamsinit!(madsdata::Associative, paramdict::Associative)
@@ -305,13 +305,13 @@ function setparamoff!(madsdata::Associative, parameterkey)
 end
 
 """
-Set normal parameter distributions for all the model parameters in the MADS data dictionary
+Set normal parameter distributions for all the model parameters in the MADS problem dictionary
 
 `Mads.setparamsdistnormal!(madsdata, mean, stddev)`
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `mean` : array with the mean values
 - `stddev` : array with the standard deviation values
 """
@@ -323,13 +323,13 @@ function setparamsdistnormal!(madsdata::Associative, mean, stddev)
 end
 
 """
-Set uniform parameter distributions for all the model parameters in the MADS data dictionary
+Set uniform parameter distributions for all the model parameters in the MADS problem dictionary
 
 `Mads.setparamsdistuniform!(madsdata, min, max)`
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `min` : array with the minimum values
 - `max` : array with the maximum values
 """
@@ -349,7 +349,7 @@ index = 0
 for i = 1:length(getfunction)
 	index = i
 	q = quote
-		@doc "Get the keys in the MADS data dictionary for parameters that are $(funcname[index]) (`$(keywordname[index])`)" ->
+		@doc "Get the keys in the MADS problem dictionary for parameters that are $(funcname[index]) (`$(keywordname[index])`)" ->
 		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvalsNOT[i])]
@@ -358,7 +358,7 @@ for i = 1:length(getfunction)
 			paramkeys = getparamkeys(madsdata)
 			return $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
-		@doc "Get the keys in the MADS data dictionary for parameters that are NOT $(funcname[index]) (`$(keywordname[index])`)" ->
+		@doc "Get the keys in the MADS problem dictionary for parameters that are NOT $(funcname[index]) (`$(keywordname[index])`)" ->
 		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvalsNOT[i])]
@@ -371,7 +371,7 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
-"Show optimizable parameters in the Mads data dictionary"
+"Show optimizable parameters in the MADS problem dictionary"
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
@@ -402,7 +402,7 @@ function showparameters(madsdata::Associative)
 	println("Number of parameters is $(length(p))")
 end
 
-"Show all parameters in the Mads data dictionary"
+"Show all parameters in the MADS problem dictionary"
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
@@ -443,18 +443,18 @@ function showallparameters(madsdata::Associative)
 end
 
 """
-Get probabilistic distributions of all parameters in the Mads data dictionary
+Get probabilistic distributions of all parameters in the MADS problem dictionary
 
 `Mads.getparamdistributions(madsdata; init_dist=false)`
 
 Note:
 
-Probabilistic distribution of parameters can be defined only if `dist` or `min`/`max` model parameter fields are specified in the Mads data dictionary `madsdata`.
+Probabilistic distribution of parameters can be defined only if `dist` or `min`/`max` model parameter fields are specified in the MADS problem dictionary `madsdata`.
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
-- `init_dist` : if `true` use the distribution defined for initialization in the Mads data dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the Mads data dictionary (defined using `dist` parameter field)
+- `madsdata` : MADS problem dictionary
+- `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 """
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)

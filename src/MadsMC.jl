@@ -8,7 +8,7 @@ Bayes Sampling
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `nsteps` :  
 - `burnin` :  
 - `thinning` :   
@@ -40,7 +40,7 @@ Brute force parallel Bayesian sampling
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `numsequences` :
 - `nsteps` : 
 - `burnin` : 
@@ -62,7 +62,7 @@ Monte Carlo analysis
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `N` : number of samples (default = 100)
 
 Returns:
@@ -137,7 +137,7 @@ Generate separate spaghetti plots for each `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `paramdictarray` : parameter dictionary containing the data arrays to be plotted
 - `keyword` : keyword to be added in the file name used to output the produced plots
 - `format` : output plot format (`png`, `pdf`, etc.)
@@ -251,7 +251,7 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `paramdictarray` : dictionary containing the parameter data arrays to be plotted
 - `filename` : output file name used to output the produced plots
 - `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)

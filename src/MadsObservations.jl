@@ -1,10 +1,10 @@
-"Get keys for all the observations in the MADS data dictionary"
+"Get keys for all the observations in the MADS problem dictionary"
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Observations"])]
 end
 
-"Get keys for all the wells in the MADS data dictionary"
+"Get keys for all the wells in the MADS problem dictionary"
 function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
 	#return [convert(AbstractString,k) for k in keys(madsdata["Wells"])]
@@ -48,7 +48,7 @@ for i = 1:length(getobsnames)
 	eval(q)
 end
 
-"Set observation time based on the observation name in the MADS data dictionary"
+"Set observation time based on the observation name in the MADS problem dictionary"
 function setobstime!(madsdata::Associative)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -57,7 +57,7 @@ function setobstime!(madsdata::Associative)
 	end
 end
 
-"Set observation weights in the MADS data dictionary"
+"Set observation weights in the MADS problem dictionary"
 function setobsweights!(madsdata::Associative, value::Number)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -65,7 +65,7 @@ function setobsweights!(madsdata::Associative, value::Number)
 	end
 end
 
-"Set well weights in the MADS data dictionary"
+"Set well weights in the MADS problem dictionary"
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
@@ -76,7 +76,7 @@ function setwellweights!(madsdata::Associative, value::Number)
 	setobsweights!(madsdata, value)
 end
 
-"Show observations in the MADS data dictionary"
+"Show observations in the MADS problem dictionary"
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = Mads.getobskeys(madsdata)
@@ -96,7 +96,7 @@ function showobservations(madsdata::Associative)
 end
 
 """
-Create observations in the MADS data dictionary based on `time` and `observation` arrays 
+Create observations in the MADS problem dictionary based on `time` and `observation` arrays 
 """
 function createobservations!(madsdata::Associative, time, observation; logtransform=false, weight_type="constant", weight=1)
 	@assert length(t) == length(c)
@@ -119,7 +119,7 @@ function createobservations!(madsdata::Associative, time, observation; logtransf
 	madsdata["Observations"] = observationsdict
 end
 
-"Set observations (calibration targets) in the MADS data dictionary based on `predictions` dictionary"
+"Set observations (calibration targets) in the MADS problem dictionary based on `predictions` dictionary"
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
 	if haskey(madsdata, "Wells")
@@ -135,7 +135,7 @@ function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	end
 end
 
-"Turn on all the wells in the MADS data dictionary"
+"Turn on all the wells in the MADS problem dictionary"
 function allwellson!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = true
@@ -143,7 +143,7 @@ function allwellson!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-"Turn on a specific well in the MADS data dictionary"
+"Turn on a specific well in the MADS problem dictionary"
 function wellon!(madsdata::Associative, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -159,7 +159,7 @@ function wellon!(madsdata::Associative, wellname::AbstractString)
 	end
 end
 
-"Turn off all the wells in the MADS data dictionary"
+"Turn off all the wells in the MADS problem dictionary"
 function allwellsoff!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = false
@@ -167,7 +167,7 @@ function allwellsoff!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-"Turn off a specific well in the MADS data dictionary"
+"Turn off a specific well in the MADS problem dictionary"
 function welloff!(madsdata, wellname::AbstractString)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -183,7 +183,7 @@ function welloff!(madsdata, wellname::AbstractString)
 	end
 end
 
-"Convert `Wells` class to `Observations` class in the MADS data dictionary"
+"Convert `Wells` class to `Observations` class in the MADS problem dictionary"
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
 	for wellkey in collect(keys(madsdata["Wells"]))

@@ -39,11 +39,11 @@ function setimagefileformat!(filename, format)
 end
 
 """
-Plot contaminant sources and wells defined in Mads data dictionary
+Plot contaminant sources and wells defined in MADS problem dictionary
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
@@ -121,7 +121,7 @@ plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `parameters` : dictionary with model parameters
 - `s` : model predictions array
 - `addtitle` : add plot title [true]
@@ -195,7 +195,7 @@ plotmatches(madsdata, result; filename="", format="")
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `result` : dictionary with model predictions
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
@@ -305,7 +305,7 @@ Create histogram/scatter plots of model parameter samples
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `samples` : matrix with model parameters
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
@@ -343,11 +343,11 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 end
 
 """
-Plot the sensitivity analysis results for all the wells in the Mads data dictionary (wells class expected)
+Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `result` : sensitivity analysis results
 - `xtitle` : x-axis title
 - `ytitle` : y-axis title
@@ -367,11 +367,11 @@ function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "
 end
 
 """
-Plot the sensitivity analysis results for a given well in the Mads data dictionary (wells class expected)
+Plot the sensitivity analysis results for a given well in the MADS problem dictionary (wells class expected)
 
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `result` : sensitivity analysis results
 - `wellname` : well name
 - `xtitle` : x-axis title
@@ -463,9 +463,10 @@ end
 
 """
 Plot the sensitivity analysis results for the observations
+
 Arguments:
 
-- `madsdata` : Mads data dictionary
+- `madsdata` : MADS problem dictionary
 - `result` : sensitivity analysis results
 - `filter` : string or regex to plot only observations containing `filter`
 - `keyword` : to be added in the auto-generated filename

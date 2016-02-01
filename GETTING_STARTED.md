@@ -36,9 +36,9 @@ You can also explore the Julia examples in the `examples/learn_julia` directory 
 
 To start using MADS, initiate the Julia REPL and execute `import Mads` to load MADS modules.
 
-All the MADS analyses are based on a MADS data dictionary that defines the problem.
+All the MADS analyses are based on a MADS problem dictionary that defines the problem.
 
-The MADS data dictionary is typically loaded from a YAML MADS input file.
+The MADS problem dictionary is typically loaded from a YAML MADS input file.
 The loading of a MADS file can be executed as follows:
 
 `madsdata = Mads.loadmadsfile("<input_file_name>.mads")`
@@ -49,7 +49,7 @@ For example, you can execute:
 
 The file `internal-linear.mads` is located in `examples/getting_started` directory of the `Mads.jl` repository.
 
-Typically, the MADS data dictionary includes several classes:
+Typically, the MADS problem dictionary includes several classes:
 
 - `Parameters` : lists of model parameters
 - `Observations` : lists of model observations
@@ -71,7 +71,7 @@ Model: internal-linear.jl
 
 In this case, there are two parameters, `a` and `b`, defining a linear model, `f(t) = a * t + b`, described in `internal-linearmodel.jl`.
 
-The Julia file `internal-linearmodel.jl` is specified under `Model` in the MADS data dictionary above.
+The Julia file `internal-linearmodel.jl` is specified under `Model` in the MADS problem dictionary above.
 
 Execute:
 
@@ -82,11 +82,11 @@ Execute:
 MADS can perform various types of analyses:
 
 - `Mads.forward(madsdata)` will execute forward model simulation based on the initial parameter values.
-- `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS data dictionary.
-- `optparam, iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS data dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
+- `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.
+- `optparam, iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
 - `Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
 
-More complicated analyses will require additional information to be provided in the MADS data dictionary.
+More complicated analyses will require additional information to be provided in the MADS problem dictionary.
 Examples are given in the `examples` subdirectories of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples)).
 
 MADS Command-line execution
