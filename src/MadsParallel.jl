@@ -1,4 +1,4 @@
-"Set number of processors / threads"
+"Set number of processors `np` and threads `nt`"
 function setnprocs(np, nt)
 	n = np - nprocs()
 	if n > 0
@@ -11,7 +11,7 @@ function setnprocs(np, nt)
 	madsoutput("Number of processors is $(nprocs()) $(workers())\n")
 end
 
-"Set number of processors"
+"Set number of processors `np`"
 function setnprocs(np)
 	setnprocs(np, np)
 end

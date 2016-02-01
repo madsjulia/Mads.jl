@@ -1,6 +1,14 @@
 if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
-	"Load YAML file"
-	function loadyamlfile(filename::AbstractString; julia=false) # load YAML file
+	"""
+	Load YAML file
+
+	Arguments:
+
+	- `filename` : file name
+	- `julia=false` : use Python YAML library (if available)
+	- `julia=true` : use Julia YAML library (if available)
+	"""
+	function loadyamlfile(filename::AbstractString; julia::Bool=false) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
 		if julia
@@ -13,7 +21,14 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 		return yamldata # this is not OrderedDict()
 	end
 
-	"Dump YAML file"
+	"""
+	Dump YAML file
+
+	Arguments:
+
+	- `filename` : file name
+	- `yamldata` : YAML data
+	"""
 	function dumpyamlfile(filename::AbstractString, yamldata) # dump YAML file
 		f = open(filename, "w")
 		write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
@@ -21,7 +36,7 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 	end
 elseif isdefined(:YAML) # using YAML in Julia
 	"Load YAML file"
-	function loadyamlfile(filename::AbstractString; julia=true) # load YAML file
+	function loadyamlfile(filename::AbstractString; julia::Bool=true) # load YAML file
 		yamldata = DataStructures.OrderedDict()
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
@@ -41,7 +56,15 @@ else
 	throw("Missing modules!")
 end
 
-"Load YAML MADS file"
+"""
+Load YAML Mads file
+
+Arguments:
+
+- `filename` : file name
+- `julia=false` : use Python YAML library (if available)
+- `julia=true` : use Julia YAML library (if available)
+"""
 function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MADS input file in YAML format
 	madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	if haskey(madsdata, "Parameters")
@@ -145,7 +168,14 @@ function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MA
 	return madsdata
 end
 
-"Dump YAML MADS file"
+"""
+Dump YAML Mads file
+
+Arguments:
+
+- `madsdata` : MADS data dictionary
+- `filename` : file name
+"""
 function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
@@ -198,13 +228,13 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString) # load MADS input 
 	dumpyamlfile(filename, yamldata)
 end
 
-"Read predictions from YAML MADS file"
+"Read MADS model predictions from a YAML file `filename`"
 function readyamlpredictions(filename::AbstractString) # read YAML predictions
 	return loadyamlfile(filename)
 end
 
-"Dump well concentrations"
-function dumpwellconcentrations(filename::AbstractString, madsdata)
+"Dump well data from MADS data dictionary into a ASCII file"
+function dumpwelldata(filename::AbstractString, madsdata)
 	outfile = open(filename, "w")
 	write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")
 	for n in keys(madsdata["Wells"])

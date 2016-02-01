@@ -14,7 +14,6 @@ Returns:
 - `obsvalues` : dictionary of model predictions
 
 """
-
 function forward(madsdata::Associative)
 	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	Mads.forward(madsdata, paramvalues)
@@ -41,7 +40,6 @@ Returns:
 - `array3d` : 3D array with model predictions along a 3D grid
 
 """
-
 function forwardgrid(madsdata::Associative)
 	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forwardgrid(madsdata, paramvalues)

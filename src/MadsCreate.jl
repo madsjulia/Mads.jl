@@ -16,7 +16,6 @@ Arguments:
 Returns: `none`
 
 """
-
 function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)

@@ -8,10 +8,12 @@ function quietoff()
 	global quiet = false;
 end
 
+"Turn on the generation of MADS tests (dangerous)"
 function create_tests_on()
 	global create_tests = true;
 end
 
+"Turn off the generation of MADS tests (default)"
 function create_tests_off()
 	global create_tests = false;
 end
@@ -50,7 +52,6 @@ Examples:
 - `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
 - `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
 """
-
 function haskeyword(madsdata::Associative, keyword::AbstractString)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end

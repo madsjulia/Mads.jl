@@ -103,8 +103,7 @@ function makepowell_gradient(N)
             result[4*i, 4*i]     = -2*sqrt(10)*(x[4*i-3] - x[4*i] )
         end
         return result
-    end
-        
+    end       
     return powell_gradient             
 end
 
@@ -114,12 +113,9 @@ function makesphere(N)
         for i = 1:N
             result[i] = x[i]
         end
-
         return result
     end
-
     return sphere
-    
 end
 
 function makesphere_gradient(N)
@@ -130,7 +126,6 @@ function makesphere_gradient(N)
         end
         return result
     end
-
     return sphere_gradient
 end
 
@@ -141,15 +136,12 @@ function makedixonprice(N)
         for i=2:N
             result[i] = sqrt(i)*(2*x[i]^2 - x[i-1])
         end
-
         return result
     end
-
     return dixonprice
 end
 
 function makedixonprice_gradient(N)
-
     function dixonprice_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
 
@@ -158,13 +150,10 @@ function makedixonprice_gradient(N)
         for i=2:N
             result[i-1, i] = -sqrt(2*i)
             result[i, i]   = 4*sqrt(2*i)*x[i]
-        end
-        
+        end       
         return result
     end
-
     return dixonprice_gradient
-    
 end
 
 function makesumsquares(N)
@@ -174,72 +163,53 @@ function makesumsquares(N)
         for i=1:N
             result[i] = sqrt(i)*x[i]
         end
-
         return result
     end
-
     return sumsquares
 end
 
 
 function makesumsquares_gradient(N)
-
     function sumsquares_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
-
         for i=1:N
             result[i, i] = sqrt(2*i)
         end
-
         return result
     end
-
     return sumsquares_gradient
 end
 
 function makerotatedhyperellipsoid(N)
-
     function rotatedhyperellipsoid(x::Vector)
-
         result = Array(eltype(x), N)
-
         result[1] = x[1]
         for i =2:N
             sum = 0
             for j = 1:i
-                sum = sum + x[j]^2
+                sum += x[j]^2
             end
             result[i] = sqrt(sum)
         end
-
         return result
     end
-
-    return rotatedhyperellipsoid
-        
+    return rotatedhyperellipsoid 
 end
 
 function makerotatedhyperellipsoid_gradient(N)
     function rotatedhyperellipsoid_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
-
         result[1, 1] = sqrt(2)
-
         for i = 2:N
             sum = 0
             for j = 1:i
-                sum = sum + x[j]^2
+                sum += x[j]^2
             end
-
             for j = 1:i
                 result[j, i] = sqrt(2)*x[j]*sum^(-0.5)
             end
-
         end
-
         return result
-
     end
-
     return rotatedhyperellipsoid_gradient
 end    
