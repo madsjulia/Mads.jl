@@ -1,11 +1,11 @@
 import Lexicon
 
-"Produce help information"
+"Produce MADS help information"
 function help()
 	Markdown.parse_file(Pkg.dir("Mads") * "/GETTING_STARTED.md")
 end
 
-"Produce copyright information"
+"Produce MADS copyright information"
 function copyright()
 	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING")
 end

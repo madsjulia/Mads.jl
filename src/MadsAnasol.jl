@@ -120,30 +120,34 @@ Compute concentration for a point in space and time (x,y,z,t)
 
 Arguments:
 
-- `wellx`
-- `welly`
-- `wellz`
-- `n`
-- `lambda`
-- `theta`
-- `vx`
-- `vy`
-- `vz`
-- `ax`
-- `ay`
-- `az`
-- `H`
-- `x`
-- `y`
-- `z`
-- `dx`
-- `dy`
-- `dz`
-- `f`
-- `t0`
-- `t1`
-- `t`
+- `wellx` - observation point (well) X coordinate
+- `welly` - observation point (well) Y coordinate
+- `wellz` - observation point (well) Z coordinate
+- `n` - porosity
+- `lambda` - first-order reaction rate
+- `theta` - groundwater flow direction
+- `vx` - advective transport velocity in X direction
+- `vy` - advective transport velocity in Y direction
+- `vz` - advective transport velocity in Z direction
+- `ax` - dispersivity in X direction (longitudinal)
+- `ay` - dispersivity in Y direction (transverse horizontal)
+- `az` - dispersivity in Y direction (transverse vertical)
+- `H` - Hurst coefficient for Fractional Brownian dispersion
+- `x` - X coordinate of contaminant source location 
+- `y` - Y coordinate of contaminant source location
+- `z` - Z coordinate of contaminant source location
+- `dx` - source size (extent) in X direction
+- `dy` - source size (extent) in Y direction
+- `dz` - source size (extent) in Z direction
+- `f` - source mass flux
+- `t0` - source starting time
+- `t1` - source termination time
+- `t` - time to compute concentration at the observation point
 - `anasolfunction` : Anasol function to call (check out the Anasol module) [long_bbb_ddd_iir_c]
+
+Returns:
+
+- predicted concentration at (wellx, welly, wellz, t)
 """
 function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
 	anasolfunction = eval(parse("Anasol.$anasolfunction"))
@@ -227,7 +231,6 @@ function computemass(madsdata::Associative; time = 0)
 	end
 	return mass_injected, mass_reduced
 end
-
 
 """
 Compute injected/reduced contaminant mass for a given set of mads input files

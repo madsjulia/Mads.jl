@@ -2,16 +2,46 @@ if isdefined(:HDF5) # HDF5 installation is problematic on some machines
 	import ReusableFunctions
 end
 
-"Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`"
+"""
+Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`
+
+The model fields that can be used to define the model are:
+
+- `Model` : execute a julia function defined in an input julia file that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+
+- `MADS model` : create a julia function based on an input julia file; the input file should have a function that accepts as an argument the MADS problem dictionary; this function should a create a julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+
+- `Internal model` : execute an internal julia function that accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+
+- `Command` : execute an external unix command or script that will execute an external model.
+
+- `Julia` : execute a julia script that will execute an external model.
+
+Both `Command` and `Julia` can use different approaches to pass model parameters to the external model and different approaches to get back the model outputs. The available options for writing model inputs and reading model outputs are listed below.
+
+Options for writing model inputs:
+
+- `Templates` : template files for writing model input files as defined at http://mads.lanl.gov
+- `ASCIIParameters` : model parameters written in a ASCII file
+- `YAMLParameters` : model parameters written in a YAML file
+- `JSONParameters` : model parameters written in a JSON file
+
+Options for reading model outputs:
+
+- `Instructions` : instruction files for reading model output files as defined at http://mads.lanl.gov
+- `ASCIIPredictions` : model predictions read from a ASCII file
+- `YAMLPredictions` : model predictions read from a YAML file
+- `JSONPredictions` : model predictions read from a JSON file
+"""
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
 		juliamodel = evalfile(madsdata["Julia"])
 	end
-	if haskey(madsdata, "Dynamic model")
-		Mads.madsoutput("Dynamic model evaluation ...\n")
-		madscommandfunction = madsdata["Dynamic model"]
+	if haskey(madsdata, "Internal model")
+		Mads.madsoutput("Internal evaluation of model function...\n")
+		madscommandfunction = madsdata["Internal model"]
 	elseif haskey(madsdata, "MADS model")
 		Mads.madsoutput("MADS model evaluation ...\n")
 		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
@@ -81,7 +111,6 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
 				results = juliamodel(madsdata)
-				@show results
 				cd(madsproblemdir)
 			else
 				Mads.madsoutput("Execution of external command ...\n")

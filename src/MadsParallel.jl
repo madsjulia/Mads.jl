@@ -1,5 +1,5 @@
-"Set number of processors `np` and threads `nt`"
-function setnprocs(np, nt)
+"Set the number of processors to `np` and the number of threads to `nt`"
+function setprocs(np, nt)
 	n = np - nprocs()
 	if n > 0
 		addprocs(n)
@@ -11,7 +11,22 @@ function setnprocs(np, nt)
 	madsoutput("Number of processors is $(nprocs()) $(workers())\n")
 end
 
-"Set number of processors `np`"
-function setnprocs(np)
+"Set the number of processors to `np`"
+function setprocs(np)
 	setnprocs(np, np)
+end
+
+"Set the available processors based on environmental variables"
+function setprocs()
+	if haskey(ENV, "SLURM_NODELIST")
+		s = ENV["SLURM_NODELIST"]
+		ss = split(s,"[")
+		d = split(split(ss[2],"]")[1],"-")
+		n = collect(parse(Int,d[1]):1:parse(Int,d[2]))
+		h = Array(ASCIIString, 0)
+		for i in n
+			push!(h, ss[1] * string(i))
+		end
+		addprocs(h)
+	end
 end

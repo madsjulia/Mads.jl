@@ -12,8 +12,6 @@ Arguments:
 - `outfilename` : output Mads file
 - `madsdata` : MADS problem dictionary
 - `predictions` : dictionary of model predictions
-
-Returns: `none`
 """
 function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
 	madsdata = Mads.loadmadsfile(infilename)
