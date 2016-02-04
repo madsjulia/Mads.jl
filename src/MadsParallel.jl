@@ -16,16 +16,20 @@ function setprocs(np)
 	setnprocs(np, np)
 end
 
+sprintf(args...) = eval(:@sprintf($(args...)))
+
 "Set the available processors based on environmental variables"
 function setprocs()
 	if haskey(ENV, "SLURM_NODELIST")
 		s = ENV["SLURM_NODELIST"]
 		ss = split(s,"[")
 		d = split(split(ss[2],"]")[1],"-")
+		l = length(d[1])
+		f = "%0" * string(l) * "d"
 		n = collect(parse(Int,d[1]):1:parse(Int,d[2]))
 		h = Array(ASCIIString, 0)
 		for i in n
-			push!(h, ss[1] * string(i))
+			push!(h, ss[1] * sprintf(f, i))
 		end
 		addprocs(h)
 	end

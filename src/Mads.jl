@@ -44,11 +44,12 @@ import JSON
 # import NLopt # creates problems on some machines
 import MetaProgTools
 import HDF5 # HDF5 installation might be problematic on some machines
-ENV["PYTHON"]="" # forces Julia to ignore system python
 import Conda
-Conda.add("yaml")
+# ENV["PYTHON"]="" # forces Julia to ignore system python
+# Conda.add("yaml") # loads Python YAML library
+# Conda.add("matplotlib") # loads Python matplotlib library
 import PyCall
-import PyPlot
+import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 import YAML # use YAML if PyYAML is not available
 

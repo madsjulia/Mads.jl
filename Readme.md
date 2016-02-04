@@ -52,9 +52,9 @@ If you do not have it installed, the best option is to use Julia's Python
 environment. In Julia REPL, execute the following:
 
 ```
-ENV["PYTHON"]=""; # forces Julia to ignore system python
-using Conda;
-Conda.add("yaml");
+ENV["PYTHON"]="" # forces Julia to ignore system python
+using Conda
+Conda.add("yaml")
 ```
 
 To install the Python YAML library globally (not recommended), you will need to run:
