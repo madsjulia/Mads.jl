@@ -13,27 +13,51 @@ end
 
 "Set the number of processors to `np`"
 function setprocs(np)
-	setnprocs(np, np)
+	setprocs(np, np)
 end
 
 sprintf(args...) = eval(:@sprintf($(args...)))
 
 "Set the available processors based on environmental variables"
-function setprocs()
+function setprocs(;ntasks_per_node=0)
+	# s = "hmem[05-07,09-17]"
+	# s = "hh[45]"
+	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
 	if haskey(ENV, "SLURM_NODELIST")
 		s = ENV["SLURM_NODELIST"]
-		c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
-		ss = split(s, "[")
-		d = split(split(ss[2], "]")[1], "-")
-		l = length(d[1])
-		f = "%0" * string(l) * "d"
-		n = collect(parse(Int, d[1]):1:parse(Int, d[2]))
-		h = Array(ASCIIString, 0)
-		for i in n
-			for j = 1:c
-				push!(h, ss[1] * sprintf(f, i))
+		if ntasks_per_node > 0
+			c = ntasks_per_node
+		else
+			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
+				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
+			else
+				c = 1
 			end
 		end
+		ss = split(s, "[")
+		name = ss[1]
+		h = Array(ASCIIString, 0)
+		if length(ss) == 1
+			for j = 1:c
+				push!(h, name)
+			end
+		else
+			cm = split( split(ss[2], "]")[1], ",")
+			for n = 1:length(cm)
+				d = split(cm[n], "-")
+				e = length(d) == 1 ? d[1] : d[2]
+				l = length(d[1])
+				f = "%0" * string(l) * "d"
+				for i in collect(parse(Int, d[1]):1:parse(Int, e))
+					nn = name * sprintf(f, i)
+					for j = 1:c
+						push!(h, nn)
+					end
+				end
+			end
+		end
+		# return(h)
 		addprocs(h)
+		madsoutput("Number of processors is $(nprocs()) $(workers())\n")
 	end
 end
