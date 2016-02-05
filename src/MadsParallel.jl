@@ -7,8 +7,8 @@ function setprocs(np, nt)
 		rmprocs(workers()[end+n+1:end])
 	end
 	blas_set_num_threads(nt)
-	sleep(1)
-	madsoutput("Number of processors is $(nprocs()) $(workers())\n")
+	sleep(0.01)
+	warn("Number of processors is $(nprocs()) $(workers())\n")
 end
 
 "Set the number of processors to `np`"
@@ -16,14 +16,24 @@ function setprocs(np)
 	setprocs(np, np)
 end
 
-sprintf(args...) = eval(:@sprintf($(args...)))
-
 "Set the available processors based on environmental variables"
-function setprocs(;ntasks_per_node=0)
+function setprocs(;ntasks_per_node=0, mads_servers=false)
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
-	if haskey(ENV, "SLURM_NODELIST")
+	if mads_servers
+		machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+		c = ntasks_per_node > 0 ? ntasks_per_node : 1
+		h = Array(ASCIIString, 0)
+		for n = 1:length(machinenames)
+			for j = 1:c
+				push!(h, machinenames[n])
+			end
+		end
+		addprocs(h)
+		sleep(0.01)
+		warn("Number of processors is $(nprocs()) $(workers())\n")
+	elseif haskey(ENV, "SLURM_NODELIST")
 		s = ENV["SLURM_NODELIST"]
 		if ntasks_per_node > 0
 			c = ntasks_per_node
@@ -58,6 +68,7 @@ function setprocs(;ntasks_per_node=0)
 		end
 		# return(h)
 		addprocs(h)
-		madsoutput("Number of processors is $(nprocs()) $(workers())\n")
+		sleep(0.01)
+		warn("Number of processors is $(nprocs()) $(workers())\n")
 	end
 end

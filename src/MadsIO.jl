@@ -1,5 +1,5 @@
 """
-Load MADS input file defining a MADS class set
+Load MADS input file defining a MADS problem dictionary
 
 - `Mads.loadmadsfile(filename)`
 - `Mads.loadmadsfile(filename; julia=false)`
@@ -8,16 +8,44 @@ Load MADS input file defining a MADS class set
 Arguments:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
-- `julia` : if `true`, force using `julia` parsing fuctions; if `false` (default), use `python` parsing functions [boolean]
+- `julia` : if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions [boolean]
 
 Returns:
 
-- `madsdata` : Loaded Mads data class
+- `madsdata` : Mads problem dictionary
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 """
 function loadmadsfile(filename::AbstractString; julia::Bool=false)
 	loadyamlmadsfile(filename; julia=julia)
+end
+
+"""
+Save MADS problem dictionary `madsdata` in MADS input file `filename`
+
+- `Mads.savemadsfile(madsdata)`
+- `Mads.savemadsfile(madsdata, "test.mads")`
+
+Arguments:
+
+- `madsdata` : Mads problem dictionary
+- `filename` : input file name (e.g. `input_file_name.mads`)
+"""
+function savemadsfile(madsdata, filename::AbstractString="")
+	if filename == ""
+		dir = Mads.getmadsproblemdir(madsdata)
+		root = Mads.getmadsrootname(madsdata)
+		if ismatch(r"v[0-9].", root)
+			s = split(root, "v")
+			v = parse(Int, s[2]) + 1
+			l = length(s[2])
+			f = "%0" * string(l) * "d"
+			filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
+		else
+			filename = "$(dir)/$(root)-rerun.mads"
+		end
+	end
+	dumpyamlmadsfile(madsdata, filename)
 end
 
 "Save calibration results"
@@ -158,8 +186,13 @@ Returns:
 """
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
+
+"""Filter dictionary keys based on a string or regular expression"""
 filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
+
+"Convert `@sprintf` macro into `sprintf` function"
+sprintf(args...) = eval(:@sprintf($(args...)))
 
 "Write parameters via MADS template"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)

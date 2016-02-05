@@ -913,7 +913,7 @@ Load a JSON file
 
 <a id="method__loadmadsfile.1" class="lexicon_definition"></a>
 #### loadmadsfile(filename::AbstractString)
-Load MADS input file defining a MADS class set
+Load MADS input file defining a MADS problem dictionary
 
 - `Mads.loadmadsfile(filename)`
 - `Mads.loadmadsfile(filename; julia=false)`
