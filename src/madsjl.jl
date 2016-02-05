@@ -19,6 +19,11 @@ if length(ARGS) < 2
 	quit()
 end
 
+if haskey(ENV, "SLURM_NODELIST")
+	include(joinpath(Pkg.dir("Mads"), "src/MadsParallel.jl"))
+	setprocs()
+end
+
 madscommand = ARGS[1]
 madsscript = joinpath(Pkg.dir("Mads"), "scripts", string(madscommand, ".jl"))
 if isfile(madsscript)
@@ -36,15 +41,15 @@ elseif isfile(string(madscommand, ".jl"))
 	quit()
 end
 
-import JLD
-import Mads
+@everywhere import JLD
+@everywhere import Mads
 
 madsfile = ARGS[1]
 if isfile(madsfile)
 	info("Reading $madsfile ...")
-	md = Mads.loadmadsfile(madsfile)
-	dir = Mads.getmadsproblemdir(md)
-	root = Mads.getmadsrootname(md)
+	@everywhere md = Mads.loadmadsfile(madsfile)
+	@everywhere dir = Mads.getmadsproblemdir(md)
+	@everywhere root = Mads.getmadsrootname(md)
 else
 	warn("Expecting Mads input file or Mads script as a first argument!")
 	madsjl_help()
