@@ -192,7 +192,7 @@ end
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	writeparameters(madsdata, Dict(paramkeys, paramsinit))
+	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)))
 end
 
 "Write parameters"
