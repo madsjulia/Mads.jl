@@ -59,7 +59,7 @@ println("Matrix vector multiplication ...")
 @time o_julia = fjmxv(M, x)
 @test_approx_eq maximum( o_c - o_julia ) 0
 
-Mads.setnprocs(4)
+Mads.setprocs(4)
 
 println("Matrix vector multiplication in parallel ...")
 println("C (bad) ...")

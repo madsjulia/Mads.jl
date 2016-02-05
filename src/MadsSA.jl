@@ -514,7 +514,7 @@ for mi = 1:length(saltelli_functions)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
+			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -804,7 +804,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 
 	function eFAST_distributeX(X, nprime, InputData, ismads)
 		if ismads == 0 ## If we are using this as a standalone (reading input from csv):
-			# Store X (which only contains transformations for parameters of interst)
+			# Store X (which only contains transformations for parameters of interest)
 			# in temporary array so we can create larger X including parameters we hold constant.
 			tempX = X
 			X = zeros(Ns,n)
@@ -1187,9 +1187,6 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	## Using Sobol function
 	#(ismads, directOutput, issvr, plotresults, truncateRanges) = (0,0,0,0,0)
 
-
-
-
 	# Number of processors (for parallel computing)
 	# Different values of P will determine how program is parallelized
 	# If P > 1 -> Program will parallelize resamplings & parameters
@@ -1197,6 +1194,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 	# the model output quicker.
 	P = nprocs()
+	madsoutput("""Number of processors is $P""")
 
 	## Packages
 	#using DataStructures

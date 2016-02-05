@@ -38,14 +38,14 @@ function runp!(Z, Y, Xt)
     Z
 end
 
-run1!(Z, Y, Xt)
-runp!(Z, Y, Xt)
-@time run1!(Z, Y, Xt)
-zc = copy(sdata(Z))
-fill!(Z, -1)
-@time runp!(Z, Y, Xt)
+run1!(Z, Y, Xt);
+runp!(Z, Y, Xt);
+@time run1!(Z, Y, Xt);
+zc = copy(sdata(Z));
+fill!(Z, -1);
+@time runp!(Z, Y, Xt);
 
-@show sdata(Z) == zc
+@show sdata(Z) == zc;
 
 blas_set_num_threads(8)
 
