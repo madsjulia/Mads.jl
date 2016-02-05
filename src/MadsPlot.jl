@@ -211,10 +211,28 @@ function plotmatches(madsdata_in::Associative; filename="", format="")
 	plotmatches(madsdata_in, r, filename=filename, format=format)
 end
 
-function plotmatches(madsdata::Associative, result::Associative; filename="", format="")
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time")
+	newobs = similar(madsdata["Observations"])
+	newresult = similar(result)
+	for k in keys(madsdata["Observations"])
+		if ismatch(rx, k)
+			newobs[k] = copy(madsdata["Observations"][k])
+			if !haskey(newobs[k], "time")
+				newobs[k]["time"] = key2time(k)
+			end
+			newresult[k] = result[k]
+		end
+	end
+	newmadsdata = copy(madsdata)
+	newmadsdata["Observations"] = newobs
+	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel)
+end
+
+function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time")
 	rootname = Mads.getmadsrootname(madsdata)
 	vsize = 0inch
-	pl = Gadfly.Plot{}
+	pl::Gadfly.Plot
+	didplot = false
 	if haskey(madsdata, "Wells")
 		pp = Array(Gadfly.Plot{}, 0)
 		p = Gadfly.Plot{}
@@ -256,45 +274,42 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		end
 		if length(pp) > 1
 			pl = Gadfly.vstack(pp...)
+			didplot = true
 		else
 			pl = p
+			didplot = true
 		end
 	elseif haskey(madsdata, "Observations")
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
-		c = Array(Float64, 0)
-		tc = Array(Float64, 0)
-		d = Array(Float64, 0)
-		td = Array(Float64, 0)
+		obs = Array(Float64, 0)
+		tobs = Any[]
+		ress = Array(Float64, 0)
+		tress = Any[]
 		for i in 1:nT
 			time = madsdata["Observations"][obskeys[i]]["time"]
 			if madsdata["Observations"][obskeys[i]]["weight"] > eps(Float64)
-				push!(tc, time)
-				push!(d, madsdata["Observations"][obskeys[i]]["target"])
+				push!(tobs, time)
+				push!(obs, madsdata["Observations"][obskeys[i]]["target"])
 			end
-			if result[obskey[i]] > eps(Float64)
-				push!(tc, time)
-				push!(c, result[obskeys[i]])
-			end
+			push!(tress, time)
+			push!(ress, result[obskeys[i]])
 		end
-		npp = length(c)
-		if npp > 1
-			pl = Gadfly.plot(Guide.title(wellname),
-						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-			vsize += 4inch
-		elseif npp == 1
-			pl = Gadfly.plot(Guide.title(wellname),
-						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
-						layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-			vsize = 4inch
-		end
+		pl = Gadfly.plot(Guide.title(title), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
+					layer(x=tress, y=ress, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+					layer(x=tobs, y=obs, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+		didplot = true
+		vsize += 4inch
+	end
+	if !didplot
+		error("Nothing to plot")
 	end
 	if filename == ""
 		filename = "$rootname-match"
 	end
 	filename, format = setimagefileformat!(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+	#Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+	Gadfly.draw(Gadfly.PDF(filename, 6inch, vsize), pl)
 	if typeof(pl) == Gadfly.Plot{}
 		pl
 	end
