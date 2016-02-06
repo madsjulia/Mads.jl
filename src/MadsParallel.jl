@@ -21,6 +21,7 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
+	h = Array(ASCIIString, 0)
 	if mads_servers
 		machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
@@ -30,9 +31,6 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 				push!(h, machinenames[n])
 			end
 		end
-		addprocs(h)
-		sleep(0.01)
-		warn("Number of processors is $(nprocs()) $(workers())\n")
 	elseif haskey(ENV, "SLURM_NODELIST")
 		s = ENV["SLURM_NODELIST"]
 		if ntasks_per_node > 0
@@ -46,7 +44,6 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 		end
 		ss = split(s, "[")
 		name = ss[1]
-		h = Array(ASCIIString, 0)
 		if length(ss) == 1
 			for j = 1:c
 				push!(h, name)
@@ -66,9 +63,12 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 				end
 			end
 		end
-		# return(h)
-		addprocs(h)
-		sleep(0.01)
-		warn("Number of processors is $(nprocs()) $(workers())\n")
 	end
+	# return(h)
+	addprocs(h)
+	sleep(0.01)
+	@everywhere workingdir = remotecall_fetch(1, ()->pwd())
+	@everywhere cd(workingdir)
+	sleep(0.01)
+	warn("Number of processors is $(nprocs()) $(workers())\n")
 end
