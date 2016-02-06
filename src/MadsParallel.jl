@@ -36,11 +36,7 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 		if ntasks_per_node > 0
 			c = ntasks_per_node
 		else
-			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
-				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
-			else
-				c = 1
-			end
+			c = haskey(ENV, "SLURM_NTASKS_PER_NODE") ? parse(Int, ENV["SLURM_NTASKS_PER_NODE"]) : 1
 		end
 		ss = split(s, "[")
 		name = ss[1]
