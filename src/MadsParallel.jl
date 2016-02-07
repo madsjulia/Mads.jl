@@ -16,6 +16,9 @@ function setprocs(np)
 	setprocs(np, np)
 end
 
+"Convert `@sprintf` macro into `sprintf` function"
+sprintf(args...) = eval(:@sprintf($(args...)))
+
 "Set the available processors based on environmental variables"
 function setprocs(;ntasks_per_node=0, mads_servers=false)
 	# s = "hmem[05-07,09-17]"

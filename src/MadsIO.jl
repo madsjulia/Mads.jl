@@ -191,9 +191,6 @@ searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(pa
 filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
 
-"Convert `@sprintf` macro into `sprintf` function"
-sprintf(args...) = eval(:@sprintf($(args...)))
-
 "Write parameters via MADS template"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
