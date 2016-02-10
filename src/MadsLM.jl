@@ -62,7 +62,7 @@ function makelmfunctions(madsdata)
 		if sizeof(center) == 0
 			push!(p, arrayparameters)
 		end
-		fevals = pmap(f_lm, p)
+		fevals = RobustPmap.rpmap(f_lm, p)
 		if sizeof(center) == 0
 			center = fevals[nP+1]
 		end
@@ -93,9 +93,9 @@ function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f
 	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
-	deltaxs = pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
-	fs = pmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
-	sses = pmap(o, fs) # get the sum of squared residuals for each forward run
+	deltaxs = RobustPmap.rpmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
+	fs = RobustPmap.rpmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
+	sses = RobustPmap.rpmap(o, fs) # get the sum of squared residuals for each forward run
 	bestindex = indmin(sses) # find the best forward run
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
@@ -302,11 +302,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			return predicted_residual, delta_x
 		end
 
-		phisanddelta_xs = pmap(getphianddelta_x, collect(1:np_lambda))
+		phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
 		phi = map(x->x[1], phisanddelta_xs)
 		delta_xs = map(x->x[2], phisanddelta_xs)
 
-		trial_fs = pmap(f, map(dx->x + dx, delta_xs))
+		trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
 		f_calls += np_lambda
 		objfuncevals = map(o, trial_fs)
 

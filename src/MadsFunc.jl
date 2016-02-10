@@ -220,7 +220,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 			xph[optparamkey][optparamkey] += dx[i] # TODO make sure that the order matches
 			i += 1
 		end
-		fevals = pmap(keyval->[keyval[1], f(keyval[2])], xph)
+		fevals = RobustPmap.rpmap(keyval->[keyval[1], f(keyval[2])], xph)
 		for i = 1:length(fevals)
 			if typeof(fevals[i]) == RemoteException
 				throw(fevals[i])

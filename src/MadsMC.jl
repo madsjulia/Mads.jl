@@ -51,7 +51,7 @@ Returns:
 - `mcmcchain` : 
 """
 function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
-	mcmcchain = pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+	mcmcchain = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	return mcmcchain
 end
 
@@ -105,7 +105,7 @@ function montecarlo(madsdata::Associative; N=100)
 		paramdicts[i] = Dict(zip(paramkeys, params))
 	end
 	f = makemadscommandfunction(madsdata)
-	results = pmap(f, paramdicts)
+	results = RobustPmap.rpmap(f, paramdicts)
 	outputdicts = Array(Dict, N)
 	for i = 1:N
 		outputdicts[i] = Dict()
