@@ -109,7 +109,6 @@ function makecomputeconcentrations(madsdata::Associative)
 		global modelruns += 1
 		return c
 	end
-	@doc "Computes concentrations at all the observation points in the MADS problem dictionary" computeconcentrations
 	return computeconcentrations
 end
 

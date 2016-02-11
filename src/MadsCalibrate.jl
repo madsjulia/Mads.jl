@@ -50,7 +50,6 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, to
 			bestphi = phi
 		end
 	end
-
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	return bestresult
 end
