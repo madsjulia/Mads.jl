@@ -169,7 +169,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 		rootname = Mads.getmadsrootname(madsdata)
 		filename =  rootname * "-robustness"
 	end
-	filename, format = setimagefileformat!(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
 	df = DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))

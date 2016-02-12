@@ -235,7 +235,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 		else
 			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		end
-		filename, format = Mads.setimagefileformat!(filename, format)
+		filename, format = Mads.setimagefileformat(filename, format)
 		try
 			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter.":$
@@ -312,7 +312,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filen
 			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
-	filename, format = Mads.setimagefileformat!(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
 	catch "At least one finite value must be provided to formatter."

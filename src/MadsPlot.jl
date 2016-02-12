@@ -1,7 +1,7 @@
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`Mads.setimagefileformat!(filename, format)`
+`Mads.setimagefileformat(filename, format)`
 
 Arguments:
 
@@ -13,7 +13,7 @@ Returns:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function setimagefileformat!(filename, format)
+function setimagefileformat(filename, format)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
 	root = Mads.getrootname(filename)
@@ -103,7 +103,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
 	end
-	filename, format = setimagefileformat!(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
@@ -272,7 +272,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				end
 				if separate_files
 					filename_w = "$rootname-match-$wellname"
-					filename_w, format = setimagefileformat!(filename_w, format)
+					filename_w, format = setimagefileformat(filename_w, format)
 					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, 6inch, 4inch), p)
 					didplot = true
 				end
@@ -314,7 +314,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		if filename == ""
 			filename = "$rootname-match"
 		end
-		filename, format = setimagefileformat!(filename, format)
+		filename, format = setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
 		if typeof(pl) == Gadfly.Plot{}
 			pl
@@ -356,7 +356,7 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	end
 	hsize = (3 * size(samples, 2))inch
 	vsize = (3 * size(samples, 2))inch
-	filename, format = Mads.setimagefileformat!(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	try
 		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
@@ -479,7 +479,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	if filename == ""
 		filename = "$rootname-$wellname-$method-$nsample"
 	end
-	filename, format = Mads.setimagefileformat!(filename, format)
+	filename, format = Mads.setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), p)
 end
 
@@ -635,17 +635,17 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		# p1 = Gadfly.vstack(pp[1:3]...)
 		# p2 = Gadfly.vstack(pp[4:6]...)
 		# p = Gadfly.hstack(p1,p2)
-		filename, format = Mads.setimagefileformat!(filename, format)
+		filename, format = Mads.setimagefileformat(filename, format)
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
-		filename, format = Mads.setimagefileformat!(filename, format)
+		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
-		filename, format = Mads.setimagefileformat!(filename, format)
+		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
 	end
 end
