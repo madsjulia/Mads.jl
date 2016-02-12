@@ -40,6 +40,7 @@ import Compat
 import Optim
 import Lora
 import Distributions
+import RobustPmap
 import JSON
 # import NLopt # creates problems on some machines
 import MetaProgTools

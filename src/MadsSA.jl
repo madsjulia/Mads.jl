@@ -489,7 +489,7 @@ for mi = 1:length(saltelli_functions)
 				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = pmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
+			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
@@ -966,7 +966,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
-				Y = hcat(pmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end #End if (processors)
 
 			## CALCULATING MODEL OUTPUT (Standalone)
