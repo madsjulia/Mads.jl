@@ -200,7 +200,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotmatches(madsdata_in::Associative; filename="", format="")
+function plotmatches(madsdata_in::Associative; filename="", format="", separate_files=false)
 	madsdata = deepcopy(madsdata_in)
 	if haskey(madsdata, "Wells")
 		setwellweights!(madsdata, 1)
@@ -208,10 +208,10 @@ function plotmatches(madsdata_in::Associative; filename="", format="")
 		setobsweights!(madsdata, 1)
 	end
 	r = forward(madsdata)
-	plotmatches(madsdata_in, r, filename=filename, format=format)
+	plotmatches(madsdata_in, r, filename=filename, format=format, separate_file=separate_files)
 end
 
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time")
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -225,13 +225,13 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	end
 	newmadsdata = copy(madsdata)
 	newmadsdata["Observations"] = newobs
-	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel)
+	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files)
 end
 
-function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time")
+function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	vsize = 0inch
-	pl::Gadfly.Plot
+	pl = Any{}
 	didplot = false
 	if haskey(madsdata, "Wells")
 		pp = Array(Gadfly.Plot{}, 0)
@@ -246,12 +246,12 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				td = Array(Float64, 0)
 				for i in 1:nT
 					time = o[i]["t"]
-					obskey = wellname * "_" * string(time)
 					if o[i]["weight"] > eps(Float64)
 						push!(td, time)
 						push!(d, o[i]["c"])
 					end
-					if result[obskey] > eps(Float64)
+					obskey = wellname * "_" * string(time)
+					if haskey(result, obskey)
 						push!(tc, time)
 						push!(c, result[obskey])
 					end
@@ -259,20 +259,26 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				npp = length(c)
 				if npp > 1
 					p = Gadfly.plot(Guide.title(wellname),
-							layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
+						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
 					vsize += 4inch
 					push!(pp, p)
 				else npp = 1
-						p = Gadfly.plot(Guide.title(wellname),
-							layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
+					p = Gadfly.plot(Guide.title(wellname),
+						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
 					vsize += 4inch
 					push!(pp, p)
 				end
+				if separate_files
+					filename_w = "$rootname-match-$wellname"
+					filename_w, format = setimagefileformat!(filename_w, format)
+					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, 6inch, 4inch), p)
+					didplot = true
+				end
 			end
 		end
-		if length(pp) > 1
+		if length(pp) > 1 && !separate_files
 			pl = Gadfly.vstack(pp...)
 			didplot = true
 		else
@@ -302,16 +308,17 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		vsize += 4inch
 	end
 	if !didplot
-		error("Nothing to plot")
+		error("Nothing to plot!")
 	end
-	if filename == ""
-		filename = "$rootname-match"
-	end
-	filename, format = setimagefileformat!(filename, format)
-	#Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
-	Gadfly.draw(Gadfly.PDF(filename, 6inch, vsize), pl)
-	if typeof(pl) == Gadfly.Plot{}
-		pl
+	if !separate_files
+		if filename == ""
+			filename = "$rootname-match"
+		end
+		filename, format = setimagefileformat!(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+		if typeof(pl) == Gadfly.Plot{}
+			pl
+		end
 	end
 end
 
