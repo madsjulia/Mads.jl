@@ -23,6 +23,7 @@ Options for writing model inputs:
 
 - `Templates` : template files for writing model input files as defined at http://mads.lanl.gov
 - `ASCIIParameters` : model parameters written in a ASCII file
+- `JLDParameters` : model parameters written in a ASCII file
 - `YAMLParameters` : model parameters written in a YAML file
 - `JSONParameters` : model parameters written in a JSON file
 
@@ -30,6 +31,7 @@ Options for reading model outputs:
 
 - `Instructions` : instruction files for reading model output files as defined at http://mads.lanl.gov
 - `ASCIIPredictions` : model predictions read from a ASCII file
+- `JLDPredictions` : model predictions read from a ASCII file
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 """
@@ -74,6 +76,17 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				cd(madsproblemdir)
 			end
 			#TODO move the writing into the "writeparameters" function
+			if haskey(madsdata, "JLDParameters") # JLD
+				for filename in vcat(madsdata["JLDParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+				JLD.save("$(newdirname)/$(madsdata["JLDParameters"])", parameters) # create parameter files
+			end
+			if haskey(madsdata, "JLDPredictions") # JLD
+				for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
+					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+				end
+			end
 			if haskey(madsdata, "JSONParameters") # JSON
 				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
@@ -122,6 +135,11 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
 					Mads.madsinfo("""Observations: $(results)""")
+				end
+				if haskey(madsdata, "JLDPredictions") # JLD
+					for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
+						results = merge(results, JLD.load("$(newdirname)/$filename"))
+					end
 				end
 				if haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing

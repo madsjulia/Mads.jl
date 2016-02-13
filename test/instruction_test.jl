@@ -3,10 +3,10 @@ using Base.Test
 
 Mads.quieton()
 
-problemdir = Mads.getmadsdir()
+problemdir = Mads.madsdir * "/../test/instruction_test_data/"
 
-instructionfilename = problemdir * "insttestdata/pm1.inst"
-inputfilename = problemdir * "insttestdata/pm1.obs"
+instructionfilename = problemdir * "pm1.inst"
+inputfilename = problemdir * "pm1.obs"
 
 obsdict = Mads.ins_obs(instructionfilename, inputfilename)
 obsnames = ["P40693_r1_pm01", "P40693_r11_pm01", "P40693_r13_pm01", "P40693_r15_pm01", "P40693_r28_pm01", "P40693_r33_1_pm01", "P40693_r33_2_pm01", "P40693_r35b_pm01", "P40693_r36_pm01", "P40693_r42_pm01", "P40693_r43_1_pm01", "P40693_r43_2_pm01", "P40693_r44_1_pm01", "P40693_r44_2_pm01", "P40693_r45_1_pm01", "P40693_r45_2_pm01", "P40693_r50_1_pm01", "P40693_r50_2_pm01", "P40693_r61_1_pm01", "P40693_r61_2_pm01", "P40693_r62_pm01", "P41760_r1_pm01", "P41760_r11_pm01", "P41760_r13_pm01", "P41760_r15_pm01", "P41760_r28_pm01", "P41760_r33_1_pm01", "P41760_r33_2_pm01", "P41760_r35b_pm01", "P41760_r36_pm01", "P41760_r42_pm01", "P41760_r43_1_pm01", "P41760_r43_2_pm01", "P41760_r44_1_pm01", "P41760_r44_2_pm01", "P41760_r45_1_pm01", "P41760_r45_2_pm01", "P41760_r50_1_pm01", "P41760_r50_2_pm01", "P41760_r61_1_pm01", "P41760_r61_2_pm01", "P41760_r62_pm01"]

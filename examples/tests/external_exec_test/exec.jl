@@ -1,8 +1,7 @@
-using Mads
+import Mads
 
-# external execution test using ASCII files
-println("TEST Saltelli senstivity analysis:")
+Mads.madsinfo("TEST Saltelli sensitivity analysis:")
 md = Mads.loadmadsfile("exec.mads")
-results = Mads.saltelli(md,N=int(1e4))
-results = Mads.saltelliparallel(md,N=int(1e4),2)
-Mads.saltelliprintresults(md,results)
+results = Mads.saltelli(md, N=100)
+results = Mads.saltelliparallel(md, N=50, 2)
+Mads.saltelliprintresults(md, results)

@@ -1,5 +1,14 @@
 import Mads
-md = Mads.loadmadsfile("test-external-yaml.mads")
-results = Mads.calibrate(md; usenaive=true)
-results = Mads.calibrate(md)
-@show results
+import Base.Test
+
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+	workdir = Mads.madsdir * "/../examples/tests/parallel_opt_test/"
+end
+
+md = Mads.loadmadsfile(workdir * "external-yaml.mads")
+yparam, yresults = Mads.calibrate(md)
+md = Mads.loadmadsfile(workdir * "external-jld.mads")
+jparam, jresults = Mads.calibrate(md)
+
+@test yparam == jparam

@@ -42,6 +42,7 @@ import Lora
 import Distributions
 import RobustPmap
 import JSON
+import JLD
 # import NLopt # creates problems on some machines
 import MetaProgTools
 import HDF5 # HDF5 installation might be problematic on some machines
