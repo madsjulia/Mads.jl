@@ -1,24 +1,20 @@
-using Mads
-using Optim
-using Logging
-
-Logging.configure(level=DEBUG)
+import Mads
+using Base.Test
 
 f = Mads.rosenbrock
 g! = Mads.rosenbrock_gradient!
 h! = Mads.rosenbrock_hessian!
 
-Mads.madsinfo("TEST Optimization of Rosenbrock function:")
+info("Optimization of Rosenbrock function ...")
 
-Mads.madsinfo("TEST Nelder-Mead optimization (default) of the Rosenbrock function:")
-results = optimize(f, [0.0, 0.0])
-println(results)
+info("Nelder-Mead optimization (default) of the Rosenbrock function ...")
+results = Optim.optimize(f, [0.0, 0.0])
 
-Mads.madsinfo("TEST Levenberg-Marquardt optimization in Optim module of the Rosenbrock function without sine transformation:")
+info("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function without sine transformation:")
 results = Optim.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
 Mads.madsoutput("""$results\n""")
 
-Mads.madsinfo("TEST Sine transformation of parameter space:")
+info("Sine transformation of parameter space ...")
 indexlogtransformed = []
 lowerbounds = [-2, -2]
 upperbounds = [2, 2]
@@ -36,11 +32,11 @@ Mads.madsoutput("TEST Parameter transformation in a function: $a = $Mads.rosenbr
 a = sin_rosenbrock_lm(Mads.asinetransform([1.0,1.0], lowerbounds, upperbounds))
 Mads.madsoutput("TEST Parameter transformation in a function: $a = $Mads.rosenbrock_lm([1.0,1.0])\n")
 
-Mads.madsinfo("TEST Levenberg-Marquardt optimization in Optim module of the Rosenbrock function with sine transformation:")
+info("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function with sine transformation:")
 results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds), show_trace=false)
 Mads.madsoutput("""$results\n""")
 Mads.madsoutput(" * Minimum back transformed: $Mads.sinetransform(results.minimum, lowerbounds, upperbounds)\n")
 
-Mads.madsinfo("TEST MADS Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
+info("MADS Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
 results = Mads.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], lambda_mu=2.0, np_lambda=10, show_trace=false)
 Mads.madsoutput("""$results\n""")
