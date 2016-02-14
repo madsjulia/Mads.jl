@@ -24,13 +24,13 @@ else
 end
 
 # internal execution test
-include("optimization_linear_problem.jl")
-include("optimization_linear_problem+template.jl")
-# include("tests/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
+include("optimization/optimization_linear_problem.jl")
+include("optimization/optimization_linear_problem+template.jl")
+# include("optimization/optimization_linear_problem_nlopt.jl") NLopt is currently disabled
 # senstivity
 #include("saltelli_sensitvity_analysis.jl")
 #include("saltelli_sensitvity_analysis_parallel.jl")
-include("bayesian_sampling.jl")
-include("montecarlo.jl")
-include("gsl_call.jl")
-include("anasol/test_anasol.jl")
+include("bayesian_sampling/bayesian_sampling.jl")
+include("montecarlo/montecarlo.jl")
+include("gsl_call/gsl_call.jl")
+include("anasol/anasol.jl")

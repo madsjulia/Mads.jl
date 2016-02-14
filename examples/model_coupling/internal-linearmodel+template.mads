@@ -1,5 +1,3 @@
-Problem: { }
-Solution: external
 Parameters:
 - a : { longname: "a", init:  1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
 - b : { longname: "b", init: -1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
@@ -11,4 +9,3 @@ Observations:
 Templates:
 - tmp1: { tpl: parameter.tpl, write: parameter.dat }
 Julia: test-internal-linearmodel+template.jl
-Restart: false
