@@ -1,15 +1,15 @@
-using Mads
-if VERSION < v"0.4.0-dev"
-	using Docile # default for v > 0.4
-end
+import Mads
+import Base.Test
 
-# Test callback funcitonality
+# Test callback functionality
+"GSL function wrap"
 function gsl_function_wrap(x::Cdouble, params::Ptr{Void})
 	f = unsafe_pointer_to_objref(params)::Function
 	convert(Cdouble, f(x))::Cdouble
 end
 const gsl_function_wrap_c = cfunction(gsl_function_wrap, Cdouble, (Cdouble, Ptr{Void}))
 
+"GSL function type"
 type GSL_Function
 	func::Ptr{Void}
 	params::Any
@@ -28,9 +28,13 @@ function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, 
 	return (result[1], abserr[1])
 end
 
-mdinternal = Mads.loadmadsfile("test-internal-linearmodel.mads")
-f = Mads.makemadscommandfunction(mdinternal)
-f2(x) = f(["a"=>0., "b"=>x])["o1"]
-println(gsl_integration_qag(f2, 0, 1))
-println(gsl_integration_qag(f2, 0, 2))
-println(gsl_integration_qag(f2, 0, 3))
+info("GSL integration of a linear model ...")
+md = Mads.loadmadsfile("internal-linearmodel.mads")
+f = Mads.makemadscommandfunction(md)
+f2(x) = f(Dict("a"=>0., "b"=>x))["o1"]
+area, err = gsl_integration_qag(f2, 0, 1)
+@test area == -0.5
+area, err = gsl_integration_qag(f2, 0, 2)
+@test area == -2
+area, err = gsl_integration_qag(f2, 0, 3)
+@test area == -4.5
