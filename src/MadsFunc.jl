@@ -128,7 +128,11 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			else
 				Mads.madsoutput("Execution of external command ...\n")
 				Mads.madsinfo("""Execute: $(madsdata["Command"])""")
-				run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
+				try
+					run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
+				catch
+					Mads.madscrit("""Command $(madsdata["Command"]) cannot be executed!""")
+				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
 					cd(newdirname)

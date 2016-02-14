@@ -4,11 +4,15 @@ import Lora
 """
 Bayes Sampling
 
-`Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)`
+```
+Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)
+Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)
+```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
+- `numsequences` : number of sequences executed in parallel
 - `nsteps` :  
 - `burnin` :  
 - `thinning` :   
@@ -33,23 +37,6 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 	return mcmcchain
 end
 
-"""
-Brute force parallel Bayesian sampling
-
-`Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)`
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `numsequences` :
-- `nsteps` : 
-- `burnin` : 
-- `thinning` : 
-
-Returns:
-
-- `mcmcchain` : 
-"""
 function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
 	mcmcchain = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	return mcmcchain
@@ -73,7 +60,7 @@ Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
 """
-function montecarlo(madsdata::Associative; N=100)
+function montecarlo(madsdata::Associative; N=100, filename="")
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -92,7 +79,7 @@ function montecarlo(madsdata::Associative; N=100)
 		klog = 1
 		knonlog = 1
 		for j = 1:length(params)
-			if paramtypes[j] != nohting
+			if paramtypes[j] != Void
 				if paramlogs[j] == true || paramlogs[j] == "yes"
 					params[j] = 10 ^ logoptparams[klog, i]
 					klog += 1
@@ -113,8 +100,10 @@ function montecarlo(madsdata::Associative; N=100)
 		outputdicts[i]["Results"] = results[i]
 	end
 	#rootname = Mads.getmadsrootname(madsdata)
-	#outputfilename = rootname * ".mcresults.yaml"
-	dumpyamlfile(outputfilename, outputdicts)
+	#filename = rootname * ".mcresults.yaml"
+	if filename != ""
+		dumpyamlfile(filename, outputdicts)
+	end
 	return outputdicts
 end
 
@@ -122,7 +111,7 @@ end
 Convert parameter array to a parameter dictionary of arrays
 """
 function paramarray2dict(madsdata::Associative, array)
-	paramkeys = getparamkeys(madsdata)
+	paramkeys = getoptparamkeys(madsdata)
 	dict = OrderedDict()
 	for i in 1:length(paramkeys)
 		dict[paramkeys[i]] = array[:,i]
@@ -144,8 +133,6 @@ Arguments:
 - `xtitle` : `x` axis title
 - `ytitle` : `y` axis title
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
-
-Returns: `none`
 
 Dumps:
 
@@ -192,10 +179,10 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 		end
 		if !haskey( madsdata, "Wells" )
 			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-								Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-								[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
-								Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-								for i in 1:numberofsamples]...)
+					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+					[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
+					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					for i in 1:numberofsamples]...)
 			vsize = 4inch
 		else
 			pp = Array(Gadfly.Plot{}, 0)
@@ -211,14 +198,22 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 					d = Array(Float64, nTw)
 					for i in 1:nTw
 						t[i] = o[i]["t"]
-						d[i] = o[i]["c"]
+						if haskey(o[i], "c")
+							d[i] = o[i]["c"]
+						elseif haskey(o[i], "target")
+							d[i] = o[i]["target"]
+						else
+							madswarn("Observation/calibration data is missing!")
+							t[i] = 0
+							d[i] = 0
+						end
 					end
 					endj += nTw
 					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-										Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-										[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
-										Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-										for i in 1:numberofsamples]...)
+							Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+							[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+							for i in 1:numberofsamples]...)
 					push!(pp, p)
 					vsize += 4inch
 					startj = endj + 1
@@ -238,7 +233,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; form
 		filename, format = Mads.setimagefileformat(filename, format)
 		try
 			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
-		catch "At least one finite value must be provided to formatter.":$
+		catch "At least one finite value must be provided to formatter."
 			Mads.madswarn("Gadfly fails!")
 		end
 	end
@@ -301,10 +296,10 @@ function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filen
 		end
 	end
 	p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-					for i in 1:numberofsamples]... )
+			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+			for i in 1:numberofsamples]... )
 	if filename == ""
 		if keyword == ""
 			filename = "$rootname-$numberofsamples-spaghetti"

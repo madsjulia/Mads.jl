@@ -3,7 +3,7 @@ using Base.Test
 
 Mads.quieton()
 
-problemdir = Mads.madsdir * "/../test/instruction_test_data/"
+problemdir = Mads.madsdir * "/../test/reading_instructions_data/"
 
 instructionfilename = problemdir * "pm1.inst"
 inputfilename = problemdir * "pm1.obs"

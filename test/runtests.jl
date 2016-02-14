@@ -1,7 +1,7 @@
-using Mads
+import Mads
 using Base.Test
 
-mads_tests = ["optim-lm.jl", "instruction_test.jl", "sa-efast.jl", "../examples/anasol/test_anasol.jl"]
+mads_tests = ["optimization-lm.jl", "reading_instructions.jl", "../examples/sensitivity/runtests.jl", "../examples/anasol/anasol.jl"]
 
 println("Running MADS tests:")
 

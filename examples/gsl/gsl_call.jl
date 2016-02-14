@@ -1,5 +1,5 @@
 import Mads
-import Base.Test
+using Base.Test
 
 # Test callback functionality
 "GSL function wrap"

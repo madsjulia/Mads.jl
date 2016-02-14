@@ -1,7 +1,8 @@
-using Mads
+import Mads
 
-Mads.madsinfo("TEST Monte Carlo on an external call problem:")
-md = Mads.loadmadsfile("test-external-ascii.mads")
-#Mads.setdynamicmodel(md, f)
+info("Monte Carlo analysis ...")
+md = Mads.loadmadsfile("internal-linearmodel.mads")
 results = Mads.montecarlo(md; N=10)
-Mads.madsoutput("$results\n")
+for i in 1:length(results)
+	display(results[i])
+end

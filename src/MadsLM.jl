@@ -231,7 +231,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			J = Array(Float64, 1, 1)
 			try
 				J = g(x, center=fcur)
-			catch#many functions don't accept a "center", if they don't try it without -- this is super hack-y
+			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
 				J = g(x)
 			end
 			if root != ""

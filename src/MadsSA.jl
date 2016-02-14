@@ -557,43 +557,43 @@ function printSAresults(madsdata::Associative, results::Associative)
 		madsoutput("\n")
 	end
 	=#
-	madsoutput("\nMain Effect Indices\n")
-	madsoutput("obs")
+	print("\nMain Effect Indices\n")
+	print("obs")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		print("\t$(paramkey)")
 	end
-	madsoutput("\tSum")
-	madsoutput("\n")
+	print("\tSum")
+	print("\n")
 	for obskey in obskeys
-		madsoutput(obskey)
+		print(obskey)
 		sum = 0
 		for paramkey in paramkeys
 			sum += mes[obskey][paramkey]
-			madsoutput("\t$(@sprintf("%f",mes[obskey][paramkey]))")
+			print("\t$(@sprintf("%f",mes[obskey][paramkey]))")
 		end
-		madsoutput("\t$(sum)")
-		madsoutput("\n")
+		print("\t$(sum)")
+		print("\n")
 	end
-	madsoutput("\nTotal Effect Indices\n")
-	madsoutput("obs")
+	print("\nTotal Effect Indices\n")
+	print("obs")
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		print("\t$(paramkey)")
 	end
-	madsoutput("\tSum")
-	madsoutput("\n")
+	print("\tSum")
+	print("\n")
 	for obskey in obskeys
-		madsoutput(obskey)
+		print(obskey)
 		sum = 0
 		for paramkey in paramkeys
 			sum += tes[obskey][paramkey]
-			madsoutput("\t$(@sprintf("%f",tes[obskey][paramkey]))")
+			print("\t$(@sprintf("%f",tes[obskey][paramkey]))")
 		end
-		madsoutput("\t$(sum)")
-		madsoutput("\n")
+		print("\t$(sum)")
+		print("\n")
 	end
-	madsoutput("\n")
+	print("\n")
 end
 
 "Print sensitivity analysis results (method 2)"
@@ -601,33 +601,33 @@ function saltelliprintresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]
-	madsoutput("Main Effect Indices")
-	madsoutput("\t")
+	print("Main Effect Indices")
+	print("\t")
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		print("\t$(paramkey)")
 	end
-	madsoutput("\n")
+	print("\n")
 	for obskey in obskeys
-		madsoutput(obskey)
+		print(obskey)
 		for paramkey in paramkeys
-			madsoutput("\t$(mes[obskey][paramkey])")
+			print("\t$(mes[obskey][paramkey])")
 		end
-		madsoutput("\n")
+		print("\n")
 	end
-	madsoutput("\nTotal Effect Indices")
-	madsoutput("\t")
+	print("\nTotal Effect Indices")
+	print("\t")
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		print("\t$(paramkey)")
 	end
-	madsoutput("\n")
+	print("\n")
 	for obskey in obskeys
-		madsoutput(obskey)
+		print(obskey)
 		for paramkey in paramkeys
-			madsoutput("\t$(tes[obskey][paramkey])")
+			print("\t$(tes[obskey][paramkey])")
 		end
-		madsoutput("\n")
+		print("\n")
 	end
 end
 
@@ -792,8 +792,8 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 						Ns += 1
 						Ns_total = Ns * Nr
 					end
-					Mads.madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!");
-					Mads.madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns");
+					Mads.print("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!");
+					Mads.print("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns");
 					return Nr, Wi, Ns, Ns_total
 				end
 			end
