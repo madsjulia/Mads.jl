@@ -1,4 +1,5 @@
 using DataStructures
+
 function madsmodelrun(parameters::Dict) # model run
 	f(t) = parameters["a"] * t * t - parameters["b"] # a * t^2 - b
 	times = 1:10

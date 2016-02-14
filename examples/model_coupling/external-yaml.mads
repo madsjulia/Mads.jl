@@ -6,7 +6,7 @@ Observations:
 - o2: { longname: "observation 2", log: false, max: 20, min: -20, target:  1, weight: 1}
 - o3: { longname: "observation 3", log: false, max: 20, min: -20, target:  5, weight: 1}
 - o4: { longname: "observation 4", log: false, max: 20, min: -20, target:  9, weight: 1}
-Command: "julia test-external-yaml-linearmodel.jl"
+Command: "julia external-yaml-linearmodel.jl"
 YAMLParameters: parameters.yaml
 YAMLPredictions:
 - predictions.yaml
