@@ -1,5 +1,5 @@
 import Mads
-import Lora
+# import Lora
 
 info("Bayesian sampling of contaminant transport problem ...")
 problemdir = string((dirname(Base.source_path()))) * "/"

@@ -3,7 +3,7 @@ import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
-	workdir = Mads.madsdir * "/../examples/tests/parallel_opt_test/"
+	workdir = Mads.madsdir * "/../examples/parallel_optimization/"
 end
 
 md = Mads.loadmadsfile(workdir * "external-yaml.mads")

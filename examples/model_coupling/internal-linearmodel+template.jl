@@ -1,4 +1,4 @@
-using DataStructures
+import DataStructures
 
 function madsmodelrun(parameters::Dict) # model run
 	# parameters are passed as an argument; however for testing they are read from an external file

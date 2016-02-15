@@ -27,3 +27,4 @@ use_restart_results = Mads.saltelli(md, N=50, seed=2016)
 @test create_restart_results == use_restart_results
 
 run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
+return

@@ -1,9 +1,7 @@
 import Mads
 using Base.Test
 
-Mads.quieton()
-
-problemdir = Mads.madsdir * "/../test/reading_instructions_data/"
+problemdir = string((dirname(Base.source_path()))) * "/"
 
 instructionfilename = problemdir * "pm1.inst"
 inputfilename = problemdir * "pm1.obs"
@@ -16,3 +14,4 @@ for obsname in obsnames
 	@test obsdict[obsname] == obsvalues[i]
 	i += 1
 end
+return

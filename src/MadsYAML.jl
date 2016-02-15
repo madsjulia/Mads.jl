@@ -17,7 +17,6 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		end
 		close(f)
-		yamldata["Filename"] = filename
 		return yamldata # this is not OrderedDict()
 	end
 
@@ -41,7 +40,6 @@ elseif isdefined(:YAML) # using YAML in Julia
 		f = open(filename)
 		yamldata = YAML.load(f) # works; however Julia YAML cannot write
 		close(f)
-		yamldata["Filename"] = filename
 		return yamldata # this is not OrderedDict()
 	end
 
