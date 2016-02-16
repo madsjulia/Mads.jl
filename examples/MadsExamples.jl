@@ -23,4 +23,4 @@ info("Call of a GSL function ...")
 include("gsl/runtests.jl")
 
 info("Analytical contaminant transport solver (anasol) ...")
-include("anasol/anasol.jl")
+include("anasol/runtests.jl")
