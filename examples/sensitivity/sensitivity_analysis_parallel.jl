@@ -1,12 +1,14 @@
 using Mads
 
+problemdir = Mads.getmadsdir()
+
 info("Parallel Saltelli sensitivity analysis: Sobol test ...")
-mdsobol = Mads.loadmadsfile("sobol.mads")
+mdsobol = Mads.loadmadsfile(problemdir * "sobol.mads")
 results = Mads.saltelliparallel(mdsobol, N=500, 2)
 Mads.printSAresults(mdsobol, results)
 
 info("Parallel Saltelli sensitivity analysis: Linear problem ...")
-mdsaltelli = Mads.loadmadsfile("saltelli.mads")
+mdsaltelli = Mads.loadmadsfile(problemdir * "saltelli.mads")
 results = Mads.saltelliparallel(mdsaltelli, N=500, 2)
 Mads.printSAresults(mdsaltelli, results)
 

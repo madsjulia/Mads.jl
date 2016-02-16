@@ -16,24 +16,24 @@ Mads.madsoutput("""$results\n""")
 
 info("Sine transformation of parameter space ...")
 indexlogtransformed = []
-lowerbounds = [-2, -2]
-upperbounds = [2, 2]
+lowerbounds = [-2.0, -2.0]
+upperbounds = [2.0, 2.0]
 sin_rosenbrock_lm = Mads.sinetransformfunction(Mads.rosenbrock_lm, lowerbounds, upperbounds, indexlogtransformed)
 sin_rosenbrock_gradient_lm = Mads.sinetransformgradient(Mads.rosenbrock_gradient_lm, lowerbounds, upperbounds, indexlogtransformed)
 Mads.madsoutput("TEST sine transformation:")
-a = Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds)
+a = Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds, indexlogtransformed)
 Mads.madsoutput("TEST Parameter transformation: $a -> $Mads.sinetransform(a, lowerbounds, upperbounds)\n")
-a = Mads.asinetransform([2.0,2.0], lowerbounds, upperbounds)
+a = Mads.asinetransform([2.0,2.0], lowerbounds, upperbounds, indexlogtransformed)
 Mads.madsoutput("TEST Parameter transformation: $a -> $Mads.sinetransform(a, lowerbounds, upperbounds)\n")
-a = Mads.asinetransform([-2.0,-2.0], lowerbounds, upperbounds)
+a = Mads.asinetransform([-2.0,-2.0], lowerbounds, upperbounds, indexlogtransformed)
 Mads.madsoutput("TEST Parameter transformation: $a -> $Mads.sinetransform(a, lowerbounds, upperbounds)\n")
-a = sin_rosenbrock_lm(Mads.asinetransform([2.0,2.0], lowerbounds, upperbounds))
+a = sin_rosenbrock_lm(Mads.asinetransform([2.0,2.0], lowerbounds, upperbounds, indexlogtransformed))
 Mads.madsoutput("TEST Parameter transformation in a function: $a = $Mads.rosenbrock_lm([2.0,2.0])\n")
-a = sin_rosenbrock_lm(Mads.asinetransform([1.0,1.0], lowerbounds, upperbounds))
+a = sin_rosenbrock_lm(Mads.asinetransform([1.0,1.0], lowerbounds, upperbounds, indexlogtransformed))
 Mads.madsoutput("TEST Parameter transformation in a function: $a = $Mads.rosenbrock_lm([1.0,1.0])\n")
 
 info("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function with sine transformation:")
-results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds), show_trace=false)
+results = Optim.levenberg_marquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds, indexlogtransformed), show_trace=false)
 Mads.madsoutput("""$results\n""")
 Mads.madsoutput(" * Minimum back transformed: $Mads.sinetransform(results.minimum, lowerbounds, upperbounds)\n")
 

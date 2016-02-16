@@ -1,8 +1,7 @@
 using Mads
 
-Mads.madsinfo("TEST Levenberg-Marquardt optimization of an internal call problem:")
+info("Levenberg-Marquardt optimization of an internal problem:")
 problemdir = string((dirname(Base.source_path())))*"/"
-Mads.madsinfo("""Problem directory: $(problemdir)""")
-mdinternal = Mads.loadmadsfile(problemdir*"test-internal-linearmodel.mads")
-results = Mads.calibrate(mdinternal)
-Mads.madsoutput("""$results\n""")
+
+md = Mads.loadmadsfile(problemdir*"internal-linearmodel.mads")
+results = Mads.calibrate(md, maxEval=2, maxIter=1, maxJacobians=1, np_lambda=2)
