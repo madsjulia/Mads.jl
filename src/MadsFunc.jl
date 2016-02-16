@@ -23,7 +23,7 @@ Options for writing model inputs:
 
 - `Templates` : template files for writing model input files as defined at http://mads.lanl.gov
 - `ASCIIParameters` : model parameters written in a ASCII file
-- `JLDParameters` : model parameters written in a ASCII file
+- `JLDParameters` : model parameters written in a JLD file
 - `YAMLParameters` : model parameters written in a YAML file
 - `JSONParameters` : model parameters written in a JSON file
 
@@ -31,7 +31,7 @@ Options for reading model outputs:
 
 - `Instructions` : instruction files for reading model output files as defined at http://mads.lanl.gov
 - `ASCIIPredictions` : model predictions read from a ASCII file
-- `JLDPredictions` : model predictions read from a ASCII file
+- `JLDPredictions` : model predictions read from a JLD file
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 """
@@ -110,10 +110,9 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				end
 			end
 			if haskey(madsdata, "ASCIIParameters") # ASCII
-				for filename in vcat(madsdata["ASCIIParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
-				end
-				dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create parameter files
+				run(`rm -f $(newdirname)/$(madsdata["ASCIIParameters"])`) # delete the parameter file links
+				#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
+				dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create an ASCII parameter file
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
 				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing

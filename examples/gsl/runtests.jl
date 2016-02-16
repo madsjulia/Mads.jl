@@ -1,6 +1,11 @@
 import Mads
 using Base.Test
 
+madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
+if madsdirname == ""
+	madsdirname = Mads.madsdir * "/../examples/gsl/"
+end
+
 # Test callback functionality
 "GSL function wrap"
 function gsl_function_wrap(x::Cdouble, params::Ptr{Void})
@@ -29,9 +34,9 @@ function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, 
 end
 
 info("GSL integration of a linear model ...")
-md = Mads.loadmadsfile("internal-linearmodel.mads")
-f = Mads.makemadscommandfunction(md)
-f2(x) = f(Dict("a"=>0., "b"=>x))["o1"]
+md = Mads.loadmadsfile(madsdirname * "internal-linearmodel.mads")
+flinearmodel = Mads.makemadscommandfunction(md)
+f2(x) = flinearmodel(Dict("a"=>0., "b"=>x))["o1"]
 area, err = gsl_integration_qag(f2, 0, 1)
 @test area == -0.5
 area, err = gsl_integration_qag(f2, 0, 2)

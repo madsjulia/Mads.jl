@@ -7,6 +7,5 @@ if workdir == ""
 end
 md = Mads.loadmadsfile(workdir * "internal-linearmodel.mads")
 results = Mads.montecarlo(md; N=10)
-for i in 1:length(results)
-	display(results[i])
-end
+
+return

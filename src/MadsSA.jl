@@ -59,7 +59,7 @@ function paramrand(madsdata::Associative, parameterkey::AbstractString; numsampl
 			return Distributions.rand(paramdist[parameterkey], numsamples)
 		end
 	end
-	return nothing
+	return Void
 end
 
 """
@@ -632,7 +632,7 @@ function saltelliprintresults2(madsdata::Associative, results::Associative)
 end
 
 "Convert Void's into NaN's in a dictionary"
-function nothing2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
+function void2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
 			for j in keys(dict[i])

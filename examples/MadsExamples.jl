@@ -20,7 +20,7 @@ info("Monte Carlo analysis ...")
 include("montecarlo/montecarlo.jl")
 
 info("Call of a GSL function ...")
-include("gsl_call/gsl_call.jl")
+include("gsl_call/runtests.jl")
 
 info("Analytical contaminant transport solver (anasol) ...")
 include("anasol/anasol.jl")

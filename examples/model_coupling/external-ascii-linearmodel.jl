@@ -1,6 +1,4 @@
-#using Mads
-
-#parameters = Mads.loadasciifile("parameters.dat") # ASCII text file created to write currend model parameters
+#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 paramfile = open("parameters.dat")
 parameters = map(float, readlines(paramfile))
 close(paramfile)
@@ -14,4 +12,3 @@ for prediction in predictions
 	write(predicfile, string(prediction, "\n"))
 end
 close(predicfile)
-#Mads.dumpasciifile("predictions.dat", predictions) # ASCII text file created to write currend model parameters
