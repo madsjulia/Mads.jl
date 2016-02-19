@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Velimir monty Vesselinov">
+  
+  <title>Installation - MADS</title>
+  
+
+  <link rel="shortcut icon" href="../mads-favicon.ico">
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Installation";
+    var mkdocs_page_input_path = "README.md";
+    var mkdocs_page_url = "/README/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MADS</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Installation</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#installation">Installation</a></li>
+                
+                    <li><a class="toctree-l4" href="#installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</a></li>
+                
+                    <li><a class="toctree-l4" href="#mads-yaml">MADS &amp; YAML</a></li>
+                
+                    <li><a class="toctree-l4" href="#run-mads-examples">Run MADS examples</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Modules</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/Mads/">Mads</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/BIGUQ/">BIGUQ</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/Anasol/">Anasol</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/ReusableFunctions/">ReusableFunctions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/MetaProgTools/">MetaProgTools</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MADS</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Installation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="installation">Installation</h1>
+<p>After starting Julia, execute:</p>
+<pre><code>Pkg.add(&quot;Mads&quot;)
+</code></pre>
+
+<h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
+<p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
+<pre><code>[url &quot;https://&quot;]
+        insteadOf = git://
+</code></pre>
+
+<p>or execute:</p>
+<pre><code>git config --global url.&quot;https://&quot;.insteadOf git://
+</code></pre>
+
+<p>Set proxies:</p>
+<pre><code>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
+export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
+export http_proxy=http://proxyout.&lt;your_site&gt;:8080
+export https_proxy=http://proxyout.&lt;your_site&gt;:8080
+export no_proxy=.&lt;your_site&gt;
+</code></pre>
+
+<p>For example, if you are doing this at LANL, you will need to execute the 
+following lines in your bash command-line environment:</p>
+<pre><code>export ftp_proxy=http://proxyout.lanl.gov:8080
+export rsync_proxy=http://proxyout.lanl.gov:8080
+export http_proxy=http://proxyout.lanl.gov:8080
+export https_proxy=http://proxyout.lanl.gov:8080
+export no_proxy=.lanl.gov
+</code></pre>
+
+<h2 id="mads-yaml">MADS &amp; YAML</h2>
+<p>MADS uses the Python YAML library.
+If you do not have it installed, the best option is to use Julia's Python
+environment. In Julia REPL, execute the following:</p>
+<pre><code>ENV[&quot;PYTHON&quot;]=&quot;&quot; # forces Julia to ignore system python
+using Conda
+Conda.add(&quot;yaml&quot;)
+</code></pre>
+
+<p>To install the Python YAML library globally (not recommended), you will need to run:</p>
+<pre><code>brew install libyaml
+sudo pip install yaml
+</code></pre>
+
+<h2 id="run-mads-examples">Run MADS examples</h2>
+<p>In Julia REPL, do the following commands:</p>
+<p><code>import Mads</code></p>
+<p>To explore getting-started instructions, execute:</p>
+<p><code>Mads.help()</code></p>
+<p>There are various examples located in the <code>examples</code> directory of the <code>Mads</code> repository.</p>
+<p>For example, execute</p>
+<p><code>include(Mads.madsdir * "/../examples/contamination/analysis.jl")</code></p>
+<p>to perform various analyses related to contaminant transport, or execute</p>
+<p><code>include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")</code></p>
+<p>to perform BIG-DT analysis.</p>
+<p>If you make changes in the MADS code, you will need to do</p>
+<p><code>reload("Mads.jl")</code> </p>
+<p>to update the MADS code in Julia.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Modules/Mads/" class="btn btn-neutral float-right" title="Mads">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Modules/Mads/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
