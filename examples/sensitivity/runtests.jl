@@ -4,12 +4,15 @@ using Base.Test
 using DataStructures
 
 problemdir = Mads.getmadsdir()
+if problemdir == ""
+	@everywhere problemdir = Mads.madsdir * "/../examples/sensitivity/"
+end
 
-mdsobol = Mads.loadmadsfile(problemdir * "sobol.mads")
-sa_results = Mads.efast(mdsobol, N=385, seed=2015)
+md = Mads.loadmadsfile(problemdir * "sobol.mads")
+sa_results = Mads.efast(md, N=385, seed=2015)
 
 if Mads.create_tests
-	println(" - Generating file examples/sensitivity/sobol-efast-results_correct.json ... ")
+	warn("* Generating test file examples/sensitivity/sobol-efast-results_correct.json ... ")
 	file = open(problemdir * "sobol-efast-results_correct.json", "w")
 	JSON.print(file, sa_results)
 	close(file)

@@ -21,6 +21,9 @@ sprintf(args...) = eval(:@sprintf($(args...)))
 
 "Set the available processors based on environmental variables"
 function setprocs(;ntasks_per_node=0, mads_servers=false)
+	if nprocs() > 0
+		rmprocs(workers())
+	end
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
@@ -69,5 +72,6 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 	@everywhere workingdir = remotecall_fetch(1, ()->pwd())
 	@everywhere cd(workingdir)
 	sleep(0.01)
-	warn("Number of processors is $(nprocs()) $(workers())\n")
+	info("Number of processors: $(nprocs())\n")
+	info("Workers: $(join(h, " "))")
 end

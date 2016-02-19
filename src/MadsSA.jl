@@ -1194,7 +1194,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 	# the model output quicker.
 	P = nprocs()
-	madsoutput("""Number of processors is $P""")
+	madsoutput("Number of processors is $P\n")
 
 	## Packages
 	#using DataStructures
