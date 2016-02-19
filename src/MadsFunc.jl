@@ -39,7 +39,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
-		juliamodel = evalfile(madsdata["Julia"])
+		juliamodel = evalfile(joinpath(madsproblemdir, madsdata["Julia"])
 	end
 	if haskey(madsdata, "Internal model")
 		Mads.madsoutput("Internal evaluation of model function...\n")
