@@ -39,28 +39,18 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
-		juliamodel = evalfile(joinpath(madsproblemdir, madsdata["Julia"]))
+		juliamodel = loadeverywhere(joinpath(madsproblemdir, madsdata["Julia"]))
 	end
 	if haskey(madsdata, "Internal model")
 		Mads.madsoutput("Internal evaluation of model function...\n")
 		madscommandfunction = madsdata["Internal model"]
 	elseif haskey(madsdata, "MADS model")
 		Mads.madsoutput("MADS model evaluation ...\n")
-		yetanothermakemadscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["MADS model"]))
+		yetanothermakemadscommandfunction = loadeverywhere(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		Mads.madsoutput("Internal model evaluation ...\n")
-		code = readall(joinpath(madsproblemdir, madsdata["Model"]))
-		functionname = strip(split(split(code, "function")[end],"(")[1]) # Last function should be the callable function
-		q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
-		eval(Main, q)
-		madscommandfunctionsymbol = q.args[2].args[end]
-		try
-			q = Expr(:., :Main, QuoteNode(madscommandfunctionsymbol))
-			madscommandfunction = eval(q)
-		catch
-			error("loading internal model defined in $(joinpath(madsproblemdir, madsdata["Model"]))")
-		end
+		madscommandfunction = loadeverywhere(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Associative) # MADS command function
@@ -203,6 +193,22 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		end
 	else
 		return madscommandfunction
+	end
+end
+
+"Load everywhere function from a file"
+function loadeverywhere(finename)
+	code = readall(finename)
+	functionname = strip(split(split(code, "function")[1],"(")[1]) # First function should be the callable function
+	q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
+	eval(Main, q)
+	functionsymbol = q.args[2].args[end]
+	try
+		q = Expr(:., :Main, QuoteNode(functionsymbol))
+		commandfunction = eval(q)
+		return commandfunction
+	catch
+		Mads.crit("loading model defined in $(finename)")
 	end
 end
 
