@@ -38,19 +38,22 @@ Options for reading model outputs:
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
-		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
-		juliamodel = importeverywhere(joinpath(madsproblemdir, madsdata["Julia"]))
+		filename = joinpath(madsproblemdir, madsdata["Julia"])
+		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs in file $(filename)n")
+		madsdatacommandfunction = importeverywhere(filename)
 	end
 	if haskey(madsdata, "Internal model")
-		Mads.madsoutput("Internal evaluation of model function...\n")
+		Mads.madsoutput("Internal evaluation of a model function $(madsdata["Internal model"]) ...\n")
 		madscommandfunction = madsdata["Internal model"]
 	elseif haskey(madsdata, "MADS model")
-		Mads.madsoutput("MADS model evaluation ...\n")
-		yetanothermakemadscommandfunction = importeverywhere(joinpath(madsproblemdir, madsdata["MADS model"]))
-		return yetanothermakemadscommandfunction(madsdata)
+		filename = joinpath(madsproblemdir, madsdata["MADS model"])
+		Mads.madsoutput("MADS model evaluation of file $(filename) ...\n")
+		madsdatacommandfunction = importeverywhere(joinpath(filename))
+		madscommandfunction = madsdatacommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
-		Mads.madsoutput("Internal model evaluation ...\n")
-		madscommandfunction = importeverywhere(joinpath(madsproblemdir, madsdata["Model"]))
+		filename = joinpath(madsproblemdir, madsdata["Model"])
+		Mads.madsoutput("Internal model evaluation of file $(filename) ...\n")
+		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Associative) # MADS command function
@@ -122,22 +125,21 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			if haskey(madsdata, "Julia")
 				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
-				results = juliamodel(madsdata)
+				results = madsdatacommandfunction(madsdata)
 				cd(madsproblemdir)
 			else
 				Mads.madsoutput("Execution of external command ...\n")
-				Mads.madsinfo("""Execute: $(madsdata["Command"])""")
+				Mads.madsinfo("Execute: $(madsdata["Command"])")
 				try
 					run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				catch
-					Mads.madscrit("""Command $(madsdata["Command"]) cannot be executed!""")
+					Mads.madscrit("Command $(madsdata["Command"]) cannot be executed!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
 					cd(newdirname)
 					results = readobservations(madsdata)
 					cd(madsproblemdir)
-					Mads.madsinfo("""Observations: $(results)""")
 				end
 				if haskey(madsdata, "JLDPredictions") # JLD
 					for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
