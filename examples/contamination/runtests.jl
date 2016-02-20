@@ -14,7 +14,7 @@ forward_predictions = Mads.forward(md) # execute forward model simulation based 
 
 Mads.plotmatches(md, forward_predictions) # plot initial matches
 
-inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=2, maxIter=1) # perform model calibration
+inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, maxIter=1) # perform model calibration
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 

@@ -40,7 +40,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	if haskey(madsdata, "Julia")
 		filename = joinpath(madsproblemdir, madsdata["Julia"])
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs in file $(filename)n")
-		madsdatacommandfunction = importeverywhere(filename)
+		juliafunction = importeverywhere(filename)
 	end
 	if haskey(madsdata, "Internal model")
 		Mads.madsoutput("Internal evaluation of a model function $(madsdata["Internal model"]) ...\n")
@@ -125,7 +125,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			if haskey(madsdata, "Julia")
 				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
 				cd(newdirname)
-				results = madsdatacommandfunction(madsdata)
+				results = juliafunction(madsdata)
 				cd(madsproblemdir)
 			else
 				Mads.madsoutput("Execution of external command ...\n")
@@ -207,10 +207,12 @@ function importeverywhere(finename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
 	eval(Main, q)
+	@show q
 	functionsymbol = q.args[2].args[end]
 	try
 		q = Expr(:., :Main, QuoteNode(functionsymbol))
 		commandfunction = eval(q)
+		@show commandfunction
 		return commandfunction
 	catch
 		madscrit("loading model defined in $(finename)")
