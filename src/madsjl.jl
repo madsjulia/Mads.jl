@@ -13,7 +13,7 @@ function madsjl_help()
 	println("          madsjl.jl help")
 end
 
-if length(ARGS) < 2
+if length(ARGS) < 1
 	warn("Command line error!")
 	madsjl_help()
 	quit()
