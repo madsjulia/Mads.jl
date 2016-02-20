@@ -59,7 +59,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
-			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(randstring(6))_$(myid())"
+			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(getpid())_$(randstring(6))_$(Mads.modelruns)"
 			Mads.madsinfo("""Temp directory: $(newdirname)""")
 			run(`mkdir $newdirname`)
 			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
