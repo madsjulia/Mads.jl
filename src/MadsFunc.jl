@@ -50,7 +50,20 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		Mads.madsoutput("Internal model evaluation ...\n")
-		madscommandfunction = evalfile(joinpath(madsproblemdir, madsdata["Model"]))
+		code = readall(joinpath(madsproblemdir, madsdata["Model"]))
+		q = parse(string("@everywhere begin\n", code, "\nend"))
+		eval(Main, q)
+		madscommandfunctionsymbol = q.args[2].args[end]
+		if typeof(madscommandfunctionsymbol) != Symbol
+			error("$(joinpath(madsproblemdir, madsdata["Model"])) must end with the name of the MADS model function")
+		else
+			try
+				q = Expr(:., :Main, QuoteNode(madscommandfunctionsymbol))
+				madscommandfunction = eval(q)
+			catch
+				error("error loading model from $(joinpath(madsproblemdir, madsdata["Model"]))")
+			end
+		end
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Associative) # MADS command function
