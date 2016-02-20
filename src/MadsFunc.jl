@@ -39,18 +39,18 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
-		juliamodel = loadeverywhere(joinpath(madsproblemdir, madsdata["Julia"]))
+		juliamodel = importeverywhere(joinpath(madsproblemdir, madsdata["Julia"]))
 	end
 	if haskey(madsdata, "Internal model")
 		Mads.madsoutput("Internal evaluation of model function...\n")
 		madscommandfunction = madsdata["Internal model"]
 	elseif haskey(madsdata, "MADS model")
 		Mads.madsoutput("MADS model evaluation ...\n")
-		yetanothermakemadscommandfunction = loadeverywhere(joinpath(madsproblemdir, madsdata["MADS model"]))
+		yetanothermakemadscommandfunction = importeverywhere(joinpath(madsproblemdir, madsdata["MADS model"]))
 		return yetanothermakemadscommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		Mads.madsoutput("Internal model evaluation ...\n")
-		madscommandfunction = loadeverywhere(joinpath(madsproblemdir, madsdata["Model"]))
+		madscommandfunction = importeverywhere(joinpath(madsproblemdir, madsdata["Model"]))
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")
 		function madscommandfunction(parameters::Associative) # MADS command function
@@ -196,10 +196,13 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	end
 end
 
-"Load everywhere function from a file"
-function loadeverywhere(finename)
+"""
+Import function everywhere from a file.
+The first function in the file is the one that will be called by Mads to perform the model simulations.
+"""
+function importeverywhere(finename)
 	code = readall(finename)
-	functionname = strip(split(split(code, "function")[1],"(")[1]) # First function should be the callable function
+	functionname = strip(split(split(code, "function")[2],"(")[1])
 	q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
 	eval(Main, q)
 	functionsymbol = q.args[2].args[end]
@@ -208,7 +211,7 @@ function loadeverywhere(finename)
 		commandfunction = eval(q)
 		return commandfunction
 	catch
-		Mads.crit("loading model defined in $(finename)")
+		madscrit("loading model defined in $(finename)")
 	end
 end
 
