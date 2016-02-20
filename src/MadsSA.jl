@@ -792,8 +792,8 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 						Ns += 1
 						Ns_total = Ns * Nr
 					end
-					Mads.print("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!");
-					Mads.print("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns");
+					Mads.madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!\n");
+					Mads.madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns\n");
 					return Nr, Wi, Ns, Ns_total
 				end
 			end
@@ -829,7 +829,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 					# dist contains all data about distribution so this will apply any necessary distributions to X
 					X[:,k] = quantile(dist[k],X[:,k])
 				else
-					println("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
+					madscrit("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
 					return
 				end # End if
 			end # End k=1:nprime (looping over parameters of interest)
@@ -907,7 +907,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		# IF WE ARE READING OUTPUT OF MODEL DIRECTLY!
 
 		if directOutput==1
-			println("Output taken directly from data file. Parameter k = $k ($(paramkeys[k])) ...")
+			info("Output taken directly from data file. Parameter k = $k ($(paramkeys[k])) ...")
 			Y = OutputData[:,:,k]
 			## CALCULATING MODEL OUTPUT (SVR)
 			# If we are using svrobj as our surrogate model function, calculate Y as such:
@@ -930,7 +930,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			end
 
 			# Compute model output
-			println("Computing surrogate model (SVR) for parameter k = $k ($(paramkeys[k])) ...")
+			info("Computing surrogate model (SVR) for parameter k = $k ($(paramkeys[k])) ...")
 			for i = 1 : ny
 				idx = find( x-> (x == i), X_svr[:,(nprime+1)])
 				predictedY[idx] = predictSVR(X_svr[idx,:], svrobj[i])
@@ -975,13 +975,13 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			# If # of processors is <= Nr*nprime+(Nr+1) compute model output serially
 			if P <= Nr*nprime+(Nr+1)
 				for i = 1:Ns
-					println("Calculating model output (not mads or svr) from .jl file in serial - Parameter k = $k ($(paramkeys[k])) ...")
+					info("Calculating model output (not mads or svr) from .jl file in serial - Parameter k = $k ($(paramkeys[k])) ...")
 					# Replace this with whatever model we are analyzing
 					Y[i,:] = defineModel_Sobol(X[i,:])
 				end
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 			else
-				println("Calculating model output (not mads or svr) from .jl file in parallel - Parameter k = $k ($(paramkeys[k])) ...")
+				info("Calculating model output (not mads or svr) from .jl file in parallel - Parameter k = $k ($(paramkeys[k])) ...")
 				Y = zeros(1,ny)
 				Y = @parallel (vcat) for j = 1:Ns
 					defineModel_Sobol(X[j,:])
@@ -1319,7 +1319,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			Ns += 1
 		end
 		Ns_total = @Compat.compat int(Ns*Nr)
-		println("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
+		info("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
 	end
 
 	## For debugging and/or graphs
@@ -1328,7 +1328,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 
 	## Error Check (Wi=8 is the minimum frequency required for eFAST. Ns_total must be at least 65 to satisfy this criterion)
 	if Wi<8
-		println("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
+		madscrit("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
 		return
 	end
 
@@ -1474,7 +1474,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	end
 
 	if issvr
-		println("returning results efast analysis of SVR model")
+		info("returning results efast analysis of SVR model")
 		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
 	else
 		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
