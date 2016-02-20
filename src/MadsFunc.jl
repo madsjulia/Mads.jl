@@ -39,7 +39,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia")
 		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs ...\n")
-		juliamodel = evalfile(joinpath(madsproblemdir, madsdata["Julia"])
+		juliamodel = evalfile(joinpath(madsproblemdir, madsdata["Julia"]))
 	end
 	if haskey(madsdata, "Internal model")
 		Mads.madsoutput("Internal evaluation of model function...\n")
@@ -51,18 +51,15 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 	elseif haskey(madsdata, "Model")
 		Mads.madsoutput("Internal model evaluation ...\n")
 		code = readall(joinpath(madsproblemdir, madsdata["Model"]))
-		q = parse(string("@everywhere begin\n", code, "\nend"))
+		functionname = strip(split(split(code, "function")[end],"(")[1]) # Last function should be the callable function
+		q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
 		eval(Main, q)
 		madscommandfunctionsymbol = q.args[2].args[end]
-		if typeof(madscommandfunctionsymbol) != Symbol
-			error("$(joinpath(madsproblemdir, madsdata["Model"])) must end with the name of the MADS model function")
-		else
-			try
-				q = Expr(:., :Main, QuoteNode(madscommandfunctionsymbol))
-				madscommandfunction = eval(q)
-			catch
-				error("error loading model from $(joinpath(madsproblemdir, madsdata["Model"]))")
-			end
+		try
+			q = Expr(:., :Main, QuoteNode(madscommandfunctionsymbol))
+			madscommandfunction = eval(q)
+		catch
+			error("loading internal model defined in $(joinpath(madsproblemdir, madsdata["Model"]))")
 		end
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
 		Mads.madsoutput("External model evaluation ...\n")

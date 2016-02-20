@@ -6,5 +6,3 @@ function madsmodelrun(parameters::Associative) # model run
 	predictions = DataStructures.OrderedDict{AbstractString, Float64}(zip(map(i -> string("o", i), times), map(f, times)))
 	return predictions
 end
-
-madsmodelrun
