@@ -1,7 +1,10 @@
 import DataStructures
 
-function madsmodelrun(parameters::Associative) # model run
-	# parameters are passed as an argument; however for testing they are read from an external file
+function madsmodelrun(madsdata::Associative) # mads data dictionary is as an argument if needed
+	# Replace with:
+	# - a system call executing an external model
+	# - a parser of the model outputs
+	# - return a dictionary with model predictions
 	param = readdlm("parameter.dat")
 	a = param[1]
 	b = param[2]

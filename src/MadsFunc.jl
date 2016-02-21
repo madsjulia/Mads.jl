@@ -7,17 +7,21 @@ Make MADS function to execute the model defined in the MADS problem dictionary `
 
 The model fields that can be used to define the model are:
 
-- `Model` : execute a julia function defined in an input julia file that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+- `Model` : execute a Julia function defined in an input Julia file that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations; MADS will execute the first function defined in the file;.
 
-- `MADS model` : create a julia function based on an input julia file; the input file should have a function that accepts as an argument the MADS problem dictionary; this function should a create a julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+- `MADS model` : create a Julia function based on an input Julia file; the input file should contain a function that accepts as an argument the MADS problem dictionary; MADS will execute the first function defined in the file; this function should a create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
 
-- `Internal model` : execute an internal julia function that accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+- `Julia model` : execute an internal Julia function that accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
 
-- `Command` : execute an external unix command or script that will execute an external model.
+- `Command` : execute an external UNIX command or script that will execute an external model.
 
-- `Julia` : execute a julia script that will execute an external model.
+- `Julia command` : execute a Julia script that will execute an external model; the input file should contain a function that accepts as an argument the MADS problem dictionary. The Julia script should (1) execute the model (making an a system call of an external model), (2) parse the model outputs, (3) return a dictionary with model predictions.
 
-Both `Command` and `Julia` can use different approaches to pass model parameters to the external model and different approaches to get back the model outputs. The available options for writing model inputs and reading model outputs are listed below.
+Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
+
+Only `Command` uses different approaches to get back the model outputs.
+
+The available options for writing model inputs and reading model outputs are as follows.
 
 Options for writing model inputs:
 
@@ -37,30 +41,32 @@ Options for reading model outputs:
 """
 function makemadscommandfunction(madsdata::Associative) # make MADS command function
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
-	if haskey(madsdata, "Julia")
-		filename = joinpath(madsproblemdir, madsdata["Julia"])
-		Mads.madsoutput("Execution using Julia model-evaluation script parsing model outputs in file $(filename)n")
-		juliafunction = importeverywhere(filename)
-	end
-	if haskey(madsdata, "Internal model")
-		Mads.madsoutput("Internal evaluation of a model function $(madsdata["Internal model"]) ...\n")
+	if haskey(madsdata, "Julia model")
+		Mads.madsoutput("""Internal model evaluation of Julia function $(madsdata["Julia model"]) ...\n""")
 		madscommandfunction = madsdata["Internal model"]
 	elseif haskey(madsdata, "MADS model")
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
-		Mads.madsoutput("MADS model evaluation of file $(filename) ...\n")
+		Mads.madsoutput("Internal MADS model evaluation a Julia script in file $(filename) ...\n")
 		madsdatacommandfunction = importeverywhere(joinpath(filename))
 		madscommandfunction = madsdatacommandfunction(madsdata)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
-		Mads.madsoutput("Internal model evaluation of file $(filename) ...\n")
+		Mads.madsoutput("Internal model evaluation a Julia script in file $(filename) ...\n")
 		madscommandfunction = importeverywhere(filename)
-	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia")
-		Mads.madsoutput("External model evaluation ...\n")
+	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
+		if haskey(madsdata, "Command")
+			Mads.madsoutput("""External model evaluation of command $(madsdata["Command"]) ...\n""")
+		end
+		if haskey(madsdata, "Julia command")
+			filename = joinpath(madsproblemdir, madsdata["Julia command"])
+			Mads.madsoutput("Model evaluation using a Julia script in file $(filename)\n")
+			madsdatacommandfunction = importeverywhere(filename)
+		end
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
-			newdirname = "../$(split(pwd(),"/")[end])_$(Libc.strftime("%Y%m%d%H%M",time()))_$(getpid())_$(randstring(6))_$(Mads.modelruns)"
-			Mads.madsinfo("""Temp directory: $(newdirname)""")
+			newdirname = "../$(split(pwd(),"/")[end])_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+			Mads.madsinfo("Temp directory: $(newdirname)")
 			run(`mkdir $newdirname`)
 			run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 			if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -122,14 +128,13 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
 				end
 			end
-			if haskey(madsdata, "Julia")
-				Mads.madsoutput("Execution of Julia model-evaluation script parsing model outputs ...\n")
+			if haskey(madsdata, "Julia command")
+				Mads.madsoutput("Executing Julia model-evaluation script parsing the model outputs ...\n")
 				cd(newdirname)
-				results = juliafunction(madsdata)
+				results = madsdatacommandfunction(madsdata)
 				cd(madsproblemdir)
 			else
-				Mads.madsoutput("Execution of external command ...\n")
-				Mads.madsinfo("Execute: $(madsdata["Command"])")
+				Mads.madsinfo("Executing $(madsdata["Command"]) ...")
 				try
 					run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				catch
@@ -173,7 +178,8 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata)
 	else
-		Mads.madscrit("Cannot create a function to call model without a `Model` entry in the MADS problem dictionary!")
+		Mads.madserr("Cannot create a function to call model without an entry in the MADS problem dictionary!")
+		Mads.madscrit("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
 	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
