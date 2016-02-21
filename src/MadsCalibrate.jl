@@ -42,7 +42,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, to
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, maxJacobians=100, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
 		phi = result[2].f_minimum
 		info("""Random initial guess #$i: OF = $phi""")
 		if phi < bestphi

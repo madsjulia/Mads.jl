@@ -169,7 +169,11 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
-			run(`rm -fR $newdirname`)
+			try
+				run(`rm -fR $newdirname`)
+			catch
+				madswarn("Temp directory $newdirname cannot be deleted!")
+			end
 			cd(currentdir) # restore to the original directory
 			global modelruns += 1
 			return results
