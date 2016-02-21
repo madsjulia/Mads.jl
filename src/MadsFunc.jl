@@ -203,16 +203,15 @@ Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 """
 function importeverywhere(finename)
+	#TODO DANGEROUS a function with the same name but with different method may exist in the memory
 	code = readall(finename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
 	eval(Main, q)
-	@show q
 	functionsymbol = q.args[2].args[end]
 	try
 		q = Expr(:., :Main, QuoteNode(functionsymbol))
 		commandfunction = eval(q)
-		@show commandfunction
 		return commandfunction
 	catch
 		madscrit("loading model defined in $(finename)")
@@ -250,7 +249,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)
 	end
-	function madscommandfunctionandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
+	function madscommandfunctionandgradient(parameters::Associative; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
