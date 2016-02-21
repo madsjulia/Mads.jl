@@ -9,9 +9,9 @@ end
 info("External optimization ...")
 
 md = Mads.loadmadsfile(workdir * "external-jld.mads")
-jparam, jresults = Mads.calibrate(md, maxIter=1, maxJacobians=1)
+jparam, jresults = Mads.calibrate(md, maxJacobians=1)
 md = Mads.loadmadsfile(workdir * "external-yaml.mads")
-yparam, yresults = Mads.calibrate(md, maxIter=1, maxJacobians=1)
+yparam, yresults = Mads.calibrate(md, maxJacobians=1)
 
 @test yparam == jparam
 

@@ -13,9 +13,9 @@ info("Restarting external calibration problem ...")
 md = Mads.loadmadsfile(problemdir * "external-jld.mads")
 md["Restart"] = true
 info("... create restart ...")
-create_restart_results = Mads.calibrate(md, maxIter=2, maxJacobians=2)
+create_restart_results = Mads.calibrate(md, maxJacobians=1)
 info("... use restart ...")
-use_restart_results = Mads.calibrate(md, maxIter=2, maxJacobians=2)
+use_restart_results = Mads.calibrate(md, maxJacobians=1)
 
 @test create_restart_results[1] == use_restart_results[1]
 
