@@ -223,8 +223,6 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	lambda_p = Array(Float64, np_lambda)
 	phi = Array(Float64, np_lambda)
 	first_lambda = true
-	maxJacobians = max(maxJacobians, maxIter, (maxEval - 1)/(nP+np_lambda))
-	maxEval = max(maxJacobians*(nP+np_lambda), maxIter*(nP+np_lambda), maxEval - 1) + 1
 	compute_jacobian = true
 	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
