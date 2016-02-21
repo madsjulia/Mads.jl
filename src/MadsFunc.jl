@@ -7,19 +7,19 @@ Make MADS function to execute the model defined in the MADS problem dictionary `
 
 The model fields that can be used to define the model are:
 
-- `Model` : execute a Julia function defined in an input Julia file that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations; MADS will execute the first function defined in the file;.
+- `Model` : execute a Julia function defined in an input Julia file that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations. MADS will execute the first function defined in the file.
 
-- `MADS model` : create a Julia function based on an input Julia file; the input file should contain a function that accepts as an argument the MADS problem dictionary; MADS will execute the first function defined in the file; this function should a create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
+- `MADS model` : create a Julia function based on an input Julia file; the input file should contain a function that accepts as an argument the MADS problem dictionary. MADS will execute the first function defined in the file; this function should a create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
 
 - `Julia model` : execute an internal Julia function that accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations
 
 - `Command` : execute an external UNIX command or script that will execute an external model.
 
-- `Julia command` : execute a Julia script that will execute an external model; the input file should contain a function that accepts as an argument the MADS problem dictionary. The Julia script should (1) execute the model (making an a system call of an external model), (2) parse the model outputs, (3) return a dictionary with model predictions.
+- `Julia command` : execute a Julia script that will execute an external model. The Julia script is defined in an input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary; MADS will execute the first function defined in the file. The Julia script should be capable to (1) execute the model (making a system call of an external model), (2) parse the model outputs, (3) return a dictionary with model predictions.
 
 Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
 
-Only `Command` uses different approaches to get back the model outputs.
+Only `Command` uses different approaches to get back the model outputs. The script defined under `Julia command` parses the model outputs using Julia.
 
 The available options for writing model inputs and reading model outputs are as follows.
 
