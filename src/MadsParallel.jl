@@ -72,6 +72,7 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 	@everywhere workingdir = remotecall_fetch(1, ()->pwd())
 	@everywhere cd(workingdir)
 	sleep(0.01)
-	info("Number of processors: $(nprocs())\n")
+	info("Number of processors: $(nprocs())")
 	info("Workers: $(join(h, " "))")
+	info("Working directory: $(workingdir)")
 end
