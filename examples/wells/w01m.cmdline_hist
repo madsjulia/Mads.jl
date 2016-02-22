@@ -1,0 +1,23 @@
+20150821-114121 : mads w01m lmiter=1 eval=3 fdebug=10
+20150821-121109 : mads w01m lmiter=1 eval=3 fdebug=10
+20150821-122325 : mads w01m lmiter=1 eval=3 fdebug=10
+20150821-123709 : mads w01m lsens
+20150823-092642 : mads w01m lmiter=1 eval=3
+20150823-094359 : mads w01m lmiter=1 eval=3
+20150823-094421 : mads w01m lmiter=1 eval=3
+20150823-094700 : mads w01m lmiter=1 eval=3
+20150823-100423 : mads w01m lmiter=1 eval=3
+20150905-165633 : mads w01m forward
+20150905-170428 : mads w01m lmiter=1
+20150905-170436 : mads w01m lmiter=1 nplambda=2
+20150905-170441 : mads w01m lmiter=1 nplambda=2 np=2
+20150905-170505 : mads w01m lmiter=1 nplambda=2 np=2 restart=0
+20150905-170547 : mads w01m lmiter=1 nplambda=2 np=2 restart=0 lmnlam=2
+20150905-170602 : mads w01m lmiter=1 nplambda=2 np=2 restart=0 lmnlam=2
+20150905-170610 : mads w01m lmiter=1 restart=0 lmnlam=2
+20150905-170630 : mads w01m lmiter=1 restart=0 lmnlam=2
+20150905-170946 : mads w01m lmiter=1 restart=0 lmnlam=2 nplambda=2 np=2
+20150906-084916 : mads w01m lmiter=1 restart=0 lmnlam=2 nplambda=2 np=2 fdebug=10
+20150906-084920 : mads w01m lmiter=1 restart=0 lmnlam=2 nplambda=2 np=2 fdebug=10
+20151004-163848 : mads w01m
+20151004-164602 : mads w01m f

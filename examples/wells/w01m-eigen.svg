@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="304.8mm" viewBox="0 0 152.4 304.8"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot yscalable" id="fig-c9454a4e7ef145919f787317750b18a2-element-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-2">
+    <text x="84.35" y="293.19" text-anchor="middle" dy="0.6em">Eigenvectors</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-c9454a4e7ef145919f787317750b18a2-element-3">
+    <text x="42.32" y="286.51" text-anchor="middle" dy="0.6em">1</text>
+    <text x="84.35" y="286.51" text-anchor="middle" dy="0.6em">2</text>
+    <text x="126.38" y="286.51" text-anchor="middle" dy="0.6em">3</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-4">
+    <text x="8.81" y="219.46" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.81, 221.46)">Eigenvalues</text>
+  </g>
+  <g clip-path="url(#fig-c9454a4e7ef145919f787317750b18a2-element-6)" id="fig-c9454a4e7ef145919f787317750b18a2-element-5">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="fig-c9454a4e7ef145919f787317750b18a2-element-7">
+      <rect x="21.3" y="157.4" width="126.09" height="128.11"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-c9454a4e7ef145919f787317750b18a2-element-8">
+      <path fill="none" d="M21.3,283.51 L 147.4 283.51"/>
+      <path fill="none" d="M21.3,242.14 L 147.4 242.14"/>
+      <path fill="none" d="M21.3,200.77 L 147.4 200.77"/>
+      <path fill="none" d="M21.3,159.4 L 147.4 159.4"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-c9454a4e7ef145919f787317750b18a2-element-9">
+      <path fill="none" d="M63.34,157.4 L 63.34 285.51"/>
+      <path fill="none" d="M105.37,157.4 L 105.37 285.51"/>
+    </g>
+    <g class="plotpanel" id="fig-c9454a4e7ef145919f787317750b18a2-element-10">
+      <g class="geometry" id="fig-c9454a4e7ef145919f787317750b18a2-element-11">
+        <g class="color_AlphaColorValue{RGB{Float32},Float32}(RGB{Float32}(0.0f0,0.74736935f0,1.0f0),1.0f0)" stroke="#FFFFFF" stroke-width="0.3" fill="#00BFFF" id="fig-c9454a4e7ef145919f787317750b18a2-element-12">
+          <circle cx="42.32" cy="247.81" r="3.53"/>
+          <circle cx="84.35" cy="234.74" r="3.53"/>
+          <circle cx="126.38" cy="174.3" r="3.53"/>
+        </g>
+      </g>
+    </g>
+  </g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-c9454a4e7ef145919f787317750b18a2-element-13">
+    <text x="20.31" y="283.51" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">0</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="20.31" y="242.14" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">5</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="20.31" y="200.77" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">10</tspan><tspan dy="0.498000em"></tspan></text>
+    <text x="20.31" y="159.4" text-anchor="end" dy="0.35em">10<tspan style="dominant-baseline:inherit" dy="-0.6em" font-size="83%">15</tspan><tspan dy="0.498000em"></tspan></text>
+  </g>
+</g>
+<g class="plotroot" id="fig-c9454a4e7ef145919f787317750b18a2-element-14">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-15">
+    <text x="77.34" y="140.79" text-anchor="middle" dy="0.6em">Eigenvectors</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-c9454a4e7ef145919f787317750b18a2-element-16">
+    <text x="37.3" y="134.11" text-anchor="middle" dy="0.6em">1</text>
+    <text x="77.34" y="134.11" text-anchor="middle" dy="0.6em">2</text>
+    <text x="117.37" y="134.11" text-anchor="middle" dy="0.6em">3</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-17">
+    <text x="8.81" y="67.06" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.81, 69.06)">Parameters</text>
+  </g>
+  <g class="guide colorkey" id="fig-c9454a4e7ef145919f787317750b18a2-element-18">
+    <g font-size="2.82" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#4C404B" id="fig-c9454a4e7ef145919f787317750b18a2-element-19">
+      <text x="141.7" y="88.35" dy="0.35em">-1.0</text>
+      <text x="141.7" y="80.56" dy="0.35em">-0.5</text>
+      <text x="141.7" y="64.98" dy="0.35em">0.5</text>
+      <text x="141.7" y="72.77" dy="0.35em">0.0</text>
+    </g>
+    <g shape-rendering="crispEdges" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-20">
+      <rect x="139.39" y="87.77" width="1.31" height="0.58" fill="#008000"/>
+      <rect x="139.39" y="87.19" width="1.31" height="0.58" fill="#208600"/>
+      <rect x="139.39" y="86.6" width="1.31" height="0.58" fill="#328D00"/>
+      <rect x="139.39" y="86.02" width="1.31" height="0.58" fill="#409300"/>
+      <rect x="139.39" y="85.43" width="1.31" height="0.58" fill="#4D9A00"/>
+      <rect x="139.39" y="84.85" width="1.31" height="0.58" fill="#5AA000"/>
+      <rect x="139.39" y="84.26" width="1.31" height="0.58" fill="#66A700"/>
+      <rect x="139.39" y="83.68" width="1.31" height="0.58" fill="#72AD00"/>
+      <rect x="139.39" y="83.1" width="1.31" height="0.58" fill="#7DB300"/>
+      <rect x="139.39" y="82.51" width="1.31" height="0.58" fill="#88BA00"/>
+      <rect x="139.39" y="81.93" width="1.31" height="0.58" fill="#94C000"/>
+      <rect x="139.39" y="81.34" width="1.31" height="0.58" fill="#9FC700"/>
+      <rect x="139.39" y="80.76" width="1.31" height="0.58" fill="#AACE00"/>
+      <rect x="139.39" y="80.17" width="1.31" height="0.58" fill="#B5D400"/>
+      <rect x="139.39" y="79.59" width="1.31" height="0.58" fill="#C1DB00"/>
+      <rect x="139.39" y="79.01" width="1.31" height="0.58" fill="#CCE100"/>
+      <rect x="139.39" y="78.42" width="1.31" height="0.58" fill="#D7E800"/>
+      <rect x="139.39" y="77.84" width="1.31" height="0.58" fill="#E2EE00"/>
+      <rect x="139.39" y="77.25" width="1.31" height="0.58" fill="#EEF500"/>
+      <rect x="139.39" y="76.67" width="1.31" height="0.58" fill="#F9FC00"/>
+      <rect x="139.39" y="76.08" width="1.31" height="0.58" fill="#FFFA00"/>
+      <rect x="139.39" y="75.5" width="1.31" height="0.58" fill="#FFF100"/>
+      <rect x="139.39" y="74.92" width="1.31" height="0.58" fill="#FFE800"/>
+      <rect x="139.39" y="74.33" width="1.31" height="0.58" fill="#FFDE00"/>
+      <rect x="139.39" y="73.75" width="1.31" height="0.58" fill="#FFD500"/>
+      <rect x="139.39" y="73.16" width="1.31" height="0.58" fill="#FFCB00"/>
+      <rect x="139.39" y="72.58" width="1.31" height="0.58" fill="#FFC200"/>
+      <rect x="139.39" y="71.99" width="1.31" height="0.58" fill="#FFB800"/>
+      <rect x="139.39" y="71.41" width="1.31" height="0.58" fill="#FFAE00"/>
+      <rect x="139.39" y="70.83" width="1.31" height="0.58" fill="#FFA400"/>
+      <rect x="139.39" y="70.24" width="1.31" height="0.58" fill="#FF9A00"/>
+      <rect x="139.39" y="69.66" width="1.31" height="0.58" fill="#FF8F00"/>
+      <rect x="139.39" y="69.07" width="1.31" height="0.58" fill="#FF8400"/>
+      <rect x="139.39" y="68.49" width="1.31" height="0.58" fill="#FF7900"/>
+      <rect x="139.39" y="67.9" width="1.31" height="0.58" fill="#FF6D00"/>
+      <rect x="139.39" y="67.32" width="1.31" height="0.58" fill="#FF6000"/>
+      <rect x="139.39" y="66.74" width="1.31" height="0.58" fill="#FF5200"/>
+      <rect x="139.39" y="66.15" width="1.31" height="0.58" fill="#FF4200"/>
+      <rect x="139.39" y="65.57" width="1.31" height="0.58" fill="#FF2D00"/>
+      <rect x="139.39" y="64.98" width="1.31" height="0.58" fill="#FF0000"/>
+      <g stroke="#FFFFFF" stroke-width="0.2" id="fig-c9454a4e7ef145919f787317750b18a2-element-21">
+        <path fill="none" d="M139.39,88.35 L 140.7 88.35"/>
+        <path fill="none" d="M139.39,80.56 L 140.7 80.56"/>
+        <path fill="none" d="M139.39,64.98 L 140.7 64.98"/>
+        <path fill="none" d="M139.39,72.77 L 140.7 72.77"/>
+      </g>
+    </g>
+    <g fill="#362A35" font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-22">
+      <text x="139.39" y="60.98">value</text>
+    </g>
+  </g>
+  <g clip-path="url(#fig-c9454a4e7ef145919f787317750b18a2-element-24)" id="fig-c9454a4e7ef145919f787317750b18a2-element-23">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="fig-c9454a4e7ef145919f787317750b18a2-element-25">
+      <rect x="17.29" y="5" width="120.1" height="128.11"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-c9454a4e7ef145919f787317750b18a2-element-26">
+      <path fill="none" d="M17.29,47.7 L 137.39 47.7"/>
+      <path fill="none" d="M17.29,90.41 L 137.39 90.41"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-c9454a4e7ef145919f787317750b18a2-element-27">
+      <path fill="none" d="M57.32,5 L 57.32 133.11"/>
+      <path fill="none" d="M97.35,5 L 97.35 133.11"/>
+    </g>
+    <g class="plotpanel" id="fig-c9454a4e7ef145919f787317750b18a2-element-28">
+      <g shape-rendering="crispEdges" class="geometry" stroke="#000000" stroke-opacity="0.000" id="fig-c9454a4e7ef145919f787317750b18a2-element-29">
+        <rect x="17.29" y="5" width="40.08" height="42.75" fill="#FFA400"/>
+        <rect x="17.29" y="47.7" width="40.08" height="42.75" fill="#088100"/>
+        <rect x="17.29" y="90.41" width="40.08" height="42.75" fill="#FFC100"/>
+        <rect x="57.32" y="5" width="40.08" height="42.75" fill="#088100"/>
+        <rect x="57.32" y="47.7" width="40.08" height="42.75" fill="#FFDF00"/>
+        <rect x="57.32" y="90.41" width="40.08" height="42.75" fill="#FFC300"/>
+        <rect x="97.35" y="5" width="40.08" height="42.75" fill="#FFC100"/>
+        <rect x="97.35" y="47.7" width="40.08" height="42.75" fill="#FFC200"/>
+        <rect x="97.35" y="90.41" width="40.08" height="42.75" fill="#008000"/>
+      </g>
+    </g>
+  </g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-c9454a4e7ef145919f787317750b18a2-element-30">
+    <text x="16.29" y="26.35" text-anchor="end" dy="0.35em">k</text>
+    <text x="16.29" y="69.06" text-anchor="end" dy="0.35em">S</text>
+    <text x="16.29" y="111.76" text-anchor="end" dy="0.35em">m</text>
+  </g>
+</g>
+<defs>
+<clipPath id="fig-c9454a4e7ef145919f787317750b18a2-element-6">
+  <path d="M21.3,157.4 L 147.4 157.4 147.4 285.51 21.3 285.51" />
+</clipPath
+><clipPath id="fig-c9454a4e7ef145919f787317750b18a2-element-24">
+  <path d="M17.29,5 L 137.39 5 137.39 133.11 17.29 133.11" />
+</clipPath
+></defs>
+</svg>

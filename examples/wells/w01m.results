@@ -1,0 +1,19 @@
+Model parameters:
+permeability -0.780065
+storativity -4.81743
+thickness 10.0079
+
+Model predictions:
+o1                  :           0 -            0 =            0 (           0) success 1 range            0 -         0.05
+o2                  :        5.98 -      6.70719 =     -0.72719 (    -0.72719) success 0 range         5.93 -         6.03
+o3                  :        8.02 -      7.64711 =      0.37289 (     0.37289) success 0 range         7.97 -         8.07
+o4                  :        8.67 -      8.19762 =      0.47238 (     0.47238) success 0 range         8.62 -         8.72
+o5                  :        8.97 -      8.58841 =      0.38159 (     0.38159) success 0 range         8.92 -         9.02
+o6                  :        9.14 -      8.89161 =      0.24839 (     0.24839) success 0 range         9.09 -         9.19
+o7                  :        9.25 -      9.13938 =      0.11062 (     0.11062) success 0 range          9.2 -          9.3
+o8                  :        9.31 -      9.34889 =     -0.03889 (    -0.03889) success 1 range         9.26 -         9.36
+o9                  :        9.38 -       9.5304 =      -0.1504 (     -0.1504) success 0 range         9.33 -         9.43
+o10                 :        9.41 -       9.6905 =      -0.2805 (     -0.2805) success 0 range         9.36 -         9.46
+o11                 :        9.45 -      9.83373 =     -0.38373 (    -0.38373) success 0 range          9.4 -          9.5
+Objective function: 1.3606 Success: 0 (0)
+Number of function evaluations = 76

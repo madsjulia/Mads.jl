@@ -1,0 +1,3 @@
+permeability               : 1 -0.996396 0.999836
+storativity                : -0.996396 1 -0.994712
+thickness                  : 0.999836 -0.994712 1
