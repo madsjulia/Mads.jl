@@ -38,8 +38,8 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 end
 
 function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
-	mcmcchain = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
-	return mcmcchain
+	mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+	return mcmcchains
 end
 
 """
