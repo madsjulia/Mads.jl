@@ -1,7 +1,7 @@
 Problem: { }
 Solution: internal
 Sources:
-- box: {
+- gauss: {
   x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, step: 25, min: 210, max: 1460 },
   y  : { longname: "Source y coordinate [L]", init: 1450, type: null, log: no, step: 25, min: 1230, max: 1930 },
   z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
