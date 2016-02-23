@@ -50,7 +50,7 @@ elseif isdefined(:YAML) # using YAML in Julia
 		close(f)
 	end
 else
-	Mads.madserr("MADS needs YAML (and optionally PyYAML)!")
+	Mads.madserror("MADS needs YAML (and optionally PyYAML)!")
 	throw("Missing modules!")
 end
 
@@ -94,7 +94,7 @@ function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MA
 		parameters = madsdata["Parameters"]
 		for key in keys(parameters)
 			if !haskey(parameters[key], "init")
-				Mads.madserr("""Parameter $key does not have initial value; add "init" value!""")
+				Mads.madserror("""Parameter $key does not have initial value; add "init" value!""")
 			end
 			for v in ["init", "init_max", "init_min", "max", "min", "step"]
 				if haskey(parameters[key], v)
@@ -108,7 +108,7 @@ function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MA
 					for v in ["init", "init_max", "init_min", "max", "min", "step"]
 						if haskey(parameters[key], v)
 							if parameters[key][v] < 0
-								Mads.madserr("""The value $v for Parameter $key cannot be log-transformed; it is negative!""")
+								Mads.madserror("""The value $v for Parameter $key cannot be log-transformed; it is negative!""")
 							end
 						end
 					end

@@ -138,7 +138,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				try
 					run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				catch
-					Mads.madscrit("Command $(madsdata["Command"]) cannot be executed!")
+					Mads.madscritical("Command $(madsdata["Command"]) cannot be executed!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -182,8 +182,8 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata)
 	else
-		Mads.madserr("Cannot create a function to call model without an entry in the MADS problem dictionary!")
-		Mads.madscrit("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
+		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
+		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
 	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
@@ -224,7 +224,7 @@ function importeverywhere(finename)
 		commandfunction = eval(q)
 		return commandfunction
 	catch
-		madscrit("loading model defined in $(finename)")
+		madscritical("loading model defined in $(finename)")
 	end
 end
 

@@ -254,7 +254,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		Mads.madswarn(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
+		Mads.madsinfo(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
@@ -269,7 +269,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		function getphianddelta_x(npl)
 			lambda = lambda_p[npl]
-			Mads.madswarn(@sprintf "#%02d lambda: %e" npl lambda);
+			Mads.madsinfo(@sprintf "#%02d lambda: %e" npl lambda);
 			u, s, v = svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
 			for i=1:length(s)

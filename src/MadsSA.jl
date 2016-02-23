@@ -105,7 +105,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		try
 			covar = inv(JpJ)
 		catch "SingularException(4)"
-			Mads.madserr("""Singular covariance matrix! Local sensitivity analysis fails.""")
+			Mads.madserror("""Singular covariance matrix! Local sensitivity analysis fails.""")
 			return
 		end
 	end
@@ -486,7 +486,7 @@ for mi = 1:length(saltelli_functions)
 				srand(seed)
 			end
 			if numsaltellis < 1
-				madserr("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
+				madserror("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
 			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
@@ -829,7 +829,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 					# dist contains all data about distribution so this will apply any necessary distributions to X
 					X[:,k] = quantile(dist[k],X[:,k])
 				else
-					madscrit("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
+					madscritical("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
 					return
 				end # End if
 			end # End k=1:nprime (looping over parameters of interest)
@@ -1074,7 +1074,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 					lambda = varargin[1]
 					kernel_function(x,y) = exp(-lambda*norm(x.feature-y.feature,2)^2)
 				elseif kernel == "spline"
-					Mads.madserr("Spline kernel is not implemented!")
+					Mads.madserror("Spline kernel is not implemented!")
 					# kernel_function(a,b) = prod(arrayfun(@(x,y) 1 + x*y+x*y*min(x,y)-(x+y)/2*min(x,y)^2+1/3*min(x,y)^3,a.feature,b.feature))
 				elseif kernel == "periodic"
 					l = varargin[1]
@@ -1328,7 +1328,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 
 	## Error Check (Wi=8 is the minimum frequency required for eFAST. Ns_total must be at least 65 to satisfy this criterion)
 	if Wi<8
-		madscrit("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
+		madscritical("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
 		return
 	end
 
@@ -1491,7 +1491,7 @@ end
 "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"
 function plotSAresults_monty(wellname, madsdata, result)
 	if !haskey(madsdata, "Wells")
-		Mads.madserr("There is no 'Wells' data in the MADS input dataset")
+		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]

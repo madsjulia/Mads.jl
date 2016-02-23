@@ -51,9 +51,13 @@ import Conda
 # Conda.add("yaml") # loads Python YAML library
 # Conda.add("matplotlib") # loads Python matplotlib library
 import PyCall
-import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 import YAML # use YAML if PyYAML is not available
+if ENV["HOSTNAME"] != "hb"
+	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
+else
+	warn("PyPlot is not available.")
+end
 
 include("MadsHelp.jl")
 include("MadsTest.jl")

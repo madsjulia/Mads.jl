@@ -480,7 +480,7 @@ function getparamdistributions(madsdata::Associative; init_dist=false)
 		if haskey(madsdata["Parameters"][paramkeys[i]], minkey ) && haskey(madsdata["Parameters"][paramkeys[i]], maxkey )
 			distributions[paramkeys[i]] = Distributions.Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
 		else
-			Mads.madserr("""Probabilistic distribution of parameter $(paramkeys[i]) is not defined; "dist" or "min"/"max" are missing!""")
+			Mads.madserror("""Probabilistic distribution of parameter $(paramkeys[i]) is not defined; "dist" or "min"/"max" are missing!""")
 		end
 	end
 	return distributions

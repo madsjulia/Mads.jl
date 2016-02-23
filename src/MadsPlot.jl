@@ -378,7 +378,7 @@ Arguments:
 """
 function plotwellSAresults(madsdata, result; xtitle = "Time [years]", ytitle = "Concentration [ppb]", filename = "", format="")
 	if !haskey(madsdata, "Wells")
-		Mads.madserror("There is no 'Wells' data in the MADS input dataset")
+		Mads.madserroror("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	for wellname in keys(madsdata["Wells"])
@@ -403,11 +403,11 @@ Arguments:
 """
 function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", ytitle = "Concentration [ppb]", filename = "", format="")
 	if !haskey(madsdata, "Wells")
-		Mads.madserror("There is no 'Wells' class in the MADS input dataset")
+		Mads.madserroror("There is no 'Wells' class in the MADS input dataset")
 		return
 	end
 	if !haskey(madsdata["Wells"], wellname)
-		Mads.madserror("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
+		Mads.madserroror("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
 		return
 	end
 	o = madsdata["Wells"][wellname]["obs"]
@@ -497,7 +497,7 @@ Arguments:
 """
 function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", format="", debug=false, separate_files=false, xtitle = "Time [years]", ytitle = "Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
-		Mads.madserror("There is no 'Observations' class in the MADS input dataset")
+		Mads.madserroror("There is no 'Observations' class in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]
