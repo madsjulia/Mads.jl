@@ -9,8 +9,6 @@ http://gitlab.com/mads/Mads.jl
 http://madsjulia.github.io/Mads.jl/
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
-
-Copyright 2016.  Los Alamos National Security, LLC.  All rights reserved.
 """
 module Mads
 
