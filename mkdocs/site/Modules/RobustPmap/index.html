@@ -8,7 +8,7 @@
   
   <meta name="author" content="Velimir monty Vesselinov">
   
-  <title>BIGUQ - MADS</title>
+  <title>RobustPmap - MADS</title>
   
 
   <link rel="shortcut icon" href="../../mads-favicon.ico">
@@ -24,9 +24,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "BIGUQ";
-    var mkdocs_page_input_path = "Modules/BIGUQ.md";
-    var mkdocs_page_url = "/Modules/BIGUQ/";
+    var mkdocs_page_name = "RobustPmap";
+    var mkdocs_page_input_path = "Modules/RobustPmap.md";
+    var mkdocs_page_url = "/Modules/RobustPmap/";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -103,27 +103,8 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">BIGUQ</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#biguq">BIGUQ</a></li>
-                
-                    <li><a class="toctree-l4" href="#methods-internal">Methods [Internal]</a></li>
-                
-                    <li><a class="toctree-l4" href="#getmcmcchainbigdtbiguqbigdt-likelihoodparams">getmcmcchain(bigdt::BIGUQ.BigDT,  likelihoodparams)</a></li>
-                
-                    <li><a class="toctree-l4" href="#makebigdtsbigoedbiguqbigoed">makebigdts(bigoed::BIGUQ.BigOED)</a></li>
-                
-                    <li><a class="toctree-l4" href="#makebigdtsbigoedbiguqbigoed-proposedindex-proposedobs">makebigdts(bigoed::BIGUQ.BigOED,  proposedindex,  proposedobs)</a></li>
-                
-                    <li><a class="toctree-l4" href="#types-internal">Types [Internal]</a></li>
-                
-                    <li><a class="toctree-l4" href="#biguqbigoed">BIGUQ.BigOED</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../BIGUQ/">BIGUQ</a>
         
     </li>
 
@@ -150,8 +131,21 @@
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../RobustPmap/">RobustPmap</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">RobustPmap</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#robustpmap">RobustPmap</a></li>
+                
+                    <li><a class="toctree-l4" href="#methods-internal">Methods [Internal]</a></li>
+                
+                    <li><a class="toctree-l4" href="#checkexceptionsx-t">checkexceptions(x,  t)</a></li>
+                
+                    <li><a class="toctree-l4" href="#rpmapf-args">rpmap(f,  args...)</a></li>
+                
+            
+            </ul>
         
     </li>
 
@@ -185,7 +179,7 @@
         
       
     
-    <li>BIGUQ</li>
+    <li>RobustPmap</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -199,33 +193,20 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="biguq">BIGUQ</h1>
+                <h1 id="robustpmap">RobustPmap</h1>
 <h2 id="methods-internal">Methods [Internal]</h2>
 <hr />
-<p><a id="method__getmcmcchain.1" class="lexicon_definition"></a></p>
-<h2 id="getmcmcchainbigdtbiguqbigdt-likelihoodparams">getmcmcchain(bigdt::BIGUQ.BigDT,  likelihoodparams)</h2>
-<p>Get MCMC chain</p>
+<p><a id="method__checkexceptions.1" class="lexicon_definition"></a></p>
+<h2 id="checkexceptionsx-t">checkexceptions(x,  t)</h2>
+<p>Check for type exceptions</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/BIGUQ.jl/tree/e604acdc1f5b912d83a4fa35bb0e8fcce9bfdead/src/BIGDT.jl#L23">BIGUQ/src/BIGDT.jl:23</a></p>
+<a href="https://github.com/madsjulia/RobustPmap.jl/tree/81157ce162d53b3f90a9c114d139efcba7a1014a/src/RobustPmap.jl#L36">RobustPmap/src/RobustPmap.jl:36</a></p>
 <hr />
-<p><a id="method__makebigdts.1" class="lexicon_definition"></a></p>
-<h2 id="makebigdtsbigoedbiguqbigoed">makebigdts(bigoed::BIGUQ.BigOED)</h2>
-<p>makes the bigdts for each possible decision assuming that no more observations will be made</p>
+<p><a id="method__rpmap.1" class="lexicon_definition"></a></p>
+<h2 id="rpmapf-args">rpmap(f,  args...)</h2>
+<p>Robust pmap call</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/BIGUQ.jl/tree/e604acdc1f5b912d83a4fa35bb0e8fcce9bfdead/src/BIGOED.jl#L24">BIGUQ/src/BIGOED.jl:24</a></p>
-<hr />
-<p><a id="method__makebigdts.2" class="lexicon_definition"></a></p>
-<h2 id="makebigdtsbigoedbiguqbigoed-proposedindex-proposedobs">makebigdts(bigoed::BIGUQ.BigOED,  proposedindex,  proposedobs)</h2>
-<p>make bigdts for each possible decision assuming that the proposedobs are observed</p>
-<p><em>source:</em>
-<a href="https://github.com/madsjulia/BIGUQ.jl/tree/e604acdc1f5b912d83a4fa35bb0e8fcce9bfdead/src/BIGOED.jl#L51">BIGUQ/src/BIGOED.jl:51</a></p>
-<h2 id="types-internal">Types [Internal]</h2>
-<hr />
-<p><a id="type__bigoed.1" class="lexicon_definition"></a></p>
-<h2 id="biguqbigoed">BIGUQ.BigOED</h2>
-<p>BigOED type</p>
-<p><em>source:</em>
-<a href="https://github.com/madsjulia/BIGUQ.jl/tree/e604acdc1f5b912d83a4fa35bb0e8fcce9bfdead/src/BIGOED.jl#L2">BIGUQ/src/BIGOED.jl:2</a></p>
+<a href="https://github.com/madsjulia/RobustPmap.jl/tree/81157ce162d53b3f90a9c114d139efcba7a1014a/src/RobustPmap.jl#L48">RobustPmap/src/RobustPmap.jl:48</a></p>
               
             </div>
           </div>
@@ -233,10 +214,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Anasol/" class="btn btn-neutral float-right" title="Anasol">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../Mads/" class="btn btn-neutral" title="Mads"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../MetaProgTools/" class="btn btn-neutral" title="MetaProgTools"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -264,10 +243,8 @@
           <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../Mads/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../MetaProgTools/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../Anasol/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

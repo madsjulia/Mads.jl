@@ -19,6 +19,7 @@ function create_documentation()
 	Lexicon.save(Mads.madsdir * "/../mkdocs/docs/Modules/Anasol.md", Anasol; mdstyle_objname="##", md_permalink = false, md_subheader=:category)
 	Lexicon.save(Mads.madsdir * "/../mkdocs/docs/Modules/ReusableFunctions.md", ReusableFunctions; mdstyle_objname="##", md_permalink = false, md_subheader=:category)
 	Lexicon.save(Mads.madsdir * "/../mkdocs/docs/Modules/MetaProgTools.md", MetaProgTools; mdstyle_objname="##", md_permalink = false, md_subheader=:category)
+	Lexicon.save(Mads.madsdir * "/../mkdocs/docs/Modules/RobustPmap.md", RobustPmap; mdstyle_objname="##", md_permalink = false, md_subheader=:category)
 
 	# index = Lexicon.save(Mads.madsdir * "/../mkdocs/docs/mads.md", Mads)
 	# Lexicon.save(Mads.madsdir * "/../mkdocs/docs/index.md", Lexicon.Index([index]); md_subheader = :category)

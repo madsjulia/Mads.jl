@@ -10,12 +10,16 @@ site_favicon: mads-favicon.ico
 pages:
 - Home: index.md
 - Installation: README.md
+- Getting started: GETTING_STARTED.md
+- Model coupling: MODEL_COUPLING.md
+- Testing & Verification: TEST.md
 - Modules:
     - Mads: Modules/Mads.md
     - BIGUQ: Modules/BIGUQ.md
     - Anasol: Modules/Anasol.md
     - ReusableFunctions: Modules/ReusableFunctions.md
     - MetaProgTools: Modules/MetaProgTools.md
+    - RobustPmap: Modules/RobustPmap.md
 
 markdown_extensions:
     - tables

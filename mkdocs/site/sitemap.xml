@@ -4,7 +4,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,31 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/README/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>http://madsjulia.lanl.gov/GETTING_STARTED/</loc>
+     <lastmod>2016-02-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>http://madsjulia.lanl.gov/MODEL_COUPLING/</loc>
+     <lastmod>2016-02-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>http://madsjulia.lanl.gov/TEST/</loc>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -21,31 +45,37 @@
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/Mads/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/BIGUQ/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/Anasol/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/ReusableFunctions/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/MetaProgTools/</loc>
-     <lastmod>2016-02-21</lastmod>
+     <lastmod>2016-02-24</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Modules/RobustPmap/</loc>
+     <lastmod>2016-02-24</lastmod>
      <changefreq>daily</changefreq>
     </url>
         

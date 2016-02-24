@@ -1,1 +1,1 @@
-../../GETTING_STARTED.md
+../../MADS.md
