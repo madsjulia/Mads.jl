@@ -34,7 +34,7 @@ import Conda
 import PyCall
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 import YAML # use YAML if PyYAML is not available
-if ENV["HOSTNAME"] != "hb"
+if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
 	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 else
 	warn("PyPlot is not available.")

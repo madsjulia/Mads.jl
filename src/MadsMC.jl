@@ -22,7 +22,7 @@ Returns:
 - `mcmcchain` : 
 """
 function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
-	#TODO make it sample only over the opt params
+	nsteps = 100
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -30,11 +30,16 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 	for i = 1:length(optparamkeys)
 		initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 	end
-	mcmcmodel = Lora.model(arrayloglikelihood, init=initvals)
-	sampler = Lora.RAM(1e-1, 0.3)
-	smc = Lora.SerialMC(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
-	mcmcchain = Lora.run(mcmcmodel, sampler, smc)
-	return mcmcchain
+	mcparams = Lora.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
+	model = Lora.likelihood_model(mcparams, false)
+	#sampler = Lora.RAM(1e-1, 0.3)#TODO switch back to RAM once it is included in a release of Lora
+	sampler = Lora.MH(fill(1e-1, length(initvals)))
+	mcrange = Lora.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
+	mcparams0 = Dict(:p=>initvals)
+	job = Lora.BasicMCJob(model, sampler, mcrange, mcparams0, tuner=Lora.VanillaMCTuner())
+	Lora.run(job)
+	chain = Lora.output(job)
+	return chain
 end
 
 function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
