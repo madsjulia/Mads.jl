@@ -203,7 +203,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			else
 				rootdir = string(rootname, "_restart")
 			end
-			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, rootdir)
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, rootdir, getparamkeys(madsdata), getobskeys(madsdata))
 			return madscommandfunctionwithreuse
 		else
 			return madscommandfunction
