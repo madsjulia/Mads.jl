@@ -673,17 +673,21 @@ Arguments:
 - `xtitle` : `x` axis title
 - `ytitle` : `y` axis title
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+- `seed` : initial random seed
 
 Dumps:
 
 - A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
-function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	paramvalues = parametersample(madsdata, number_of_samples)
-	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots)
+	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+	if seed != 0
+		srand(seed)
+	end
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -812,6 +816,7 @@ Arguments:
 - `xtitle` : `x` axis title
 - `ytitle` : `y` axis title
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+- `seed` : initial random seed
 
 Returns: `none`
 
@@ -819,12 +824,15 @@ Dumps:
 
 - Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
-function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	paramvalues = parametersample(madsdata, number_of_samples)
-	spaghettiplot(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots)
+	spaghettiplot(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+	if seed != 0
+		srand(seed)
+	end
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)

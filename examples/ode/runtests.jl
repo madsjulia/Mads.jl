@@ -6,7 +6,12 @@ using DataStructures
 
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
-md = Mads.loadmadsfile("ode.mads")
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+  workdir = Mads.madsdir * "/../examples/ode/"
+end
+
+md = Mads.loadmadsfile(workdir * "ode.mads")
 rootname = Mads.getmadsrootname(md)
 
 # get parameter keys
@@ -34,13 +39,13 @@ end
 # create a function for the ODE solver
 funcosc = makefunc(paramdict)
 Mads.madsinfo("Solve ODE ...")
-times = [0:.1:100]
+times = collect(0:.1:100)
 initialconditions = [1.,0.]
 t, y = ode23s(funcosc, initialconditions, times, points=:specified)
-ys = hcat(y...)' # vecorize the output and transpose it with '
+ys = hcat(y...)' # vectorizing the output and transposing it with '
 
-#writedlm("$rootname-solution.dat",ys[:,1])
-p = plot(layer(x=t,y=ys[:,1],Geom.line,Theme(default_color=color("orange"))),layer(x=t,y=ys[:,2],Geom.line))
+# draw initial solution
+p = plot(layer(x=t, y=ys[:,1], Geom.line,Theme(default_color=parse(Colors.Colorant, "orange"))), layer(x=t,y=ys[:,2],Geom.line))
 draw(SVG(string("$rootname-solution.svg"),6inch,4inch),p)
 
 # create an observation dictionary in the MADS dictionary
@@ -48,24 +53,23 @@ Mads.madsinfo("Create MADS Observations ...")
 Mads.createobservations!(md, t, ys[:,1])
 Mads.showobservations(md)
 
-# global SA
-srand(20151001)
-Mads.madsinfo("Global SA ...")
-saltelliresult = Mads.saltelli(md, N=10)
-f = open("$rootname-SA-results.json", "w")
-JSON.print(f, saltelliresult)
-close(f)
-# saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
+Mads.madsinfo("Global sensitivity analysis ...")
+saltelliresult = Mads.efast(md, seed=20151001)
 Mads.plotobsSAresults(md, saltelliresult; xtitle = "Time", ytitle = "State variable")
 
-# local SA
-Mads.madsinfo("Local SA ...")
-localsaresult = Mads.localsa(md)
+Mads.madsinfo("Spaghetti plots over the prior parameter ranges ...")
+Mads.spaghettiplot(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
+Mads.spaghettiplots(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
 
-# Spaghetti plots
-srand(20151001)
-Mads.madsinfo("Spaghetti plots over the prior ranges ...")
-numberofsamples = 10
-paramvalues=Mads.parametersample(md, numberofsamples)
-Mads.spaghettiplot(md, paramvalues; obs_plot_dots=false)
-Mads.spaghettiplots(md, paramvalues; obs_plot_dots=false)
+info("Bayesian sampling ...")
+mcmcchain = Mads.bayessampling(md)
+
+info("Bayesian scatter plots ...")
+Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.svg")
+
+# convert the parameters in the chain to a parameter dictionary of arrays
+mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') 
+
+info("Posterior (Bayesian) spaghetti plots ...")
+Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false)
+Mads.spaghettiplot(md, mcmcvalues, keyword="posterior", obs_plot_dots=false)

@@ -135,9 +135,9 @@ end
 Create observations in the MADS problem dictionary based on `time` and `observation` arrays 
 """
 function createobservations!(madsdata::Associative, time, observation; logtransform=false, weight_type="constant", weight=1)
-	@assert length(t) == length(c)
+	@assert length(time) == length(observation)
 	observationsdict = OrderedDict()
-	for i in 1:length(t)
+	for i in 1:length(time)
 		obskey = string("o", time[i])
 		data = OrderedDict()
 		data["target"] = observation[i]
