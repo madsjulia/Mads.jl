@@ -10,5 +10,5 @@
 Make reusable function
 
 *source:*
-[ReusableFunctions/src/ReusableFunctions.jl:37](https://github.com/madsjulia/ReusableFunctions.jl/tree/2902f134b572d700d137241971eb6fdb63415289/src/ReusableFunctions.jl#L37)
+[ReusableFunctions/src/ReusableFunctions.jl:43](https://github.com/madsjulia/ReusableFunctions.jl/tree/c4854cc0a056609cd314906d76fb45132dca16d3/src/ReusableFunctions.jl#L43)
 

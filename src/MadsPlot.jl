@@ -1,3 +1,6 @@
+using ProgressMeter
+using DataStructures
+
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
@@ -245,10 +248,12 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				d = Array(Float64, 0)
 				td = Array(Float64, 0)
 				for i in 1:nT
-					time = o[i]["t"]
-					if o[i]["weight"] > eps(Float64)
+					time = getobstime(o[i])
+					t = getobstarget(o[i])
+					w = getobsweight(o[i])
+					if w == NaN || w > eps(Float64)
 						push!(td, time)
-						push!(d, o[i]["c"])
+						push!(d, t)
 					end
 					obskey = wellname * "_" * string(time)
 					if haskey(result, obskey)
@@ -647,5 +652,236 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = Mads.setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
+	end
+end
+
+"""
+Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
+
+```
+Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `paramdictarray` : parameter dictionary containing the data arrays to be plotted
+- `number_of_samples` : number of samples
+- `keyword` : keyword to be added in the file name used to output the produced plots
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : `x` axis title
+- `ytitle` : `y` axis title
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Dumps:
+
+- A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
+"""
+function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+	paramvalues = parametersample(madsdata, number_of_samples)
+	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots)
+end
+
+function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+	rootname = getmadsrootname(madsdata)
+	func = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	paramoptkeys = getoptparamkeys(madsdata)
+	numberofsamples = length(paramdictarray[paramoptkeys[1]])
+	obskeys = Mads.getobskeys(madsdata)
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+	end
+	nT = length(obskeys)
+	if !haskey( madsdata, "Wells" )
+		t = Array(Float64, nT)
+		d = Array(Float64, nT)
+		for i in 1:nT
+			if haskey( madsdata["Observations"][obskeys[i]], "time")
+				t[i] = madsdata["Observations"][obskeys[i]]["time"]
+			else
+				madswarn("Observation time is missing for observation $(obskeys[i])!")
+				t[i] = 0
+			end
+			if haskey( madsdata["Observations"][obskeys[i]], "target")
+				d[i] = madsdata["Observations"][obskeys[i]]["target"]
+			else
+				d[i] = 0
+			end
+		end
+	end
+	vsize = 0inch
+	Mads.madsoutput("Spaghetti plots for each selected model parameter (type != null) ...\n")
+	for paramkey in paramoptkeys
+		Mads.madsoutput("Parameter: $paramkey ...\n")
+		Y = Array(Float64, nT, numberofsamples)
+		@showprogress 4 "Computing ..." for i in 1:numberofsamples
+			original = paramdict[paramkey]
+			paramdict[paramkey] = paramdictarray[paramkey][i]
+			result = func(paramdict)
+			for j in 1:nT
+				Y[j,i] = result[obskeys[j]]
+			end
+			paramdict[paramkey] = original
+		end
+		if !haskey( madsdata, "Wells" )
+			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+					[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
+					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					for i in 1:numberofsamples]...)
+			vsize = 4inch
+		else
+			pp = Array(Gadfly.Plot{}, 0)
+			p = Gadfly.Plot{}
+			vsize = 0inch
+			startj = 1
+			endj  = 0
+			for wellname in keys(madsdata["Wells"])
+				if madsdata["Wells"][wellname]["on"]
+					o = madsdata["Wells"][wellname]["obs"]
+					nTw = length(o)
+					t = Array(Float64, nTw)
+					d = Array(Float64, nTw)
+					for i in 1:nTw
+						t[i] = o[i]["t"]
+						if haskey(o[i], "c")
+							d[i] = o[i]["c"]
+						elseif haskey(o[i], "target")
+							d[i] = o[i]["target"]
+						else
+							madswarn("Observation/calibration data are missing for well $(wellname)!")
+							t[i] = 0
+							d[i] = 0
+						end
+					end
+					endj += nTw
+					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+							Guide.title(wellname),
+							Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+							[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+							for i in 1:numberofsamples]...)
+					push!(pp, p)
+					vsize += 4inch
+					startj = endj + 1
+				end
+			end
+			if length(pp) > 1
+				pl = Gadfly.vstack(pp...)
+			else
+				pl = p
+			end
+		end
+		if keyword == ""
+			filename = string("$rootname-$paramkey-$numberofsamples-spaghetti")
+		else
+			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
+		end
+		filename, format = Mads.setimagefileformat(filename, format)
+		try
+			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
+		catch "At least one finite value must be provided to formatter."
+			Mads.madswarn("Gadfly fails!")
+		end
+	end
+end
+
+"""
+Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
+
+```
+Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `paramdictarray` : dictionary containing the parameter data arrays to be plotted
+- `number_of_samples` : number of samples
+- `filename` : output file name used to output the produced plots
+- `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : `x` axis title
+- `ytitle` : `y` axis title
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+
+Returns: `none`
+
+Dumps:
+
+- Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+"""
+function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+	paramvalues = parametersample(madsdata, number_of_samples)
+	spaghettiplot(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots)
+end
+
+function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+	rootname = getmadsrootname(madsdata)
+	func = makemadscommandfunction(madsdata)
+	paramkeys = getparamkeys(madsdata)
+	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	paramoptkeys = getoptparamkeys(madsdata)
+	numberofsamples = length(paramdictarray[paramoptkeys[1]])
+	obskeys = Mads.getobskeys(madsdata)
+	nT = length(obskeys)
+	t = Array(Float64, nT )
+	d = Array(Float64, nT )
+	if obs_plot_dots
+		obs_plot1 = """Gadfly.Geom.point"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+	else
+		obs_plot1 = """Gadfly.Geom.line"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+	end
+	for i in 1:nT
+		if haskey( madsdata["Observations"][obskeys[i]], "time")
+			t[i] = madsdata["Observations"][obskeys[i]]["time"]
+		else
+			madswarn("Observation time is missing for observation $(obskeys[i])!")
+			t[i] = 0
+		end
+		if haskey( madsdata["Observations"][obskeys[i]], "target")
+			d[i] = madsdata["Observations"][obskeys[i]]["target"]
+		else
+			d[i] = 0
+		end
+	end
+	Y = Array(Float64,nT,numberofsamples)
+	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
+	@showprogress 4 "Computing ..." for i in 1:numberofsamples
+		for paramkey in paramoptkeys
+			paramdict[paramkey] = paramdictarray[paramkey][i]
+		end
+		result = func(paramdict)
+		for j in 1:nT
+			Y[j,i] = result[obskeys[j]]
+		end
+	end
+	p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+			for i in 1:numberofsamples]... )
+	if filename == ""
+		if keyword == ""
+			filename = "$rootname-$numberofsamples-spaghetti"
+		else
+			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
+		end
+	end
+	filename, format = Mads.setimagefileformat(filename, format)
+	try
+		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
+	catch "At least one finite value must be provided to formatter."
+		Mads.madswarn("Gadfly fails!")
 	end
 end

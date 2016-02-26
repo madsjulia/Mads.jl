@@ -10,6 +10,54 @@ function copyright()
 	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING")
 end
 
+"""
+List available functions in the MADS modules:
+
+Examples:
+
+```
+Mads.functions()
+Mads.functions(BIGUQ)
+Mads.functions("get")
+Mads.functions(Mads, "get")
+```
+
+Arguments:
+
+- `module` : MADS module
+- `string` : matching string
+"""
+function functions(string::AbstractString="")
+	functions(Mads, string)
+	functions(BIGUQ, string)
+	functions(Anasol, string)
+	functions(ReusableFunctions, string)
+	functions(MetaProgTools, string)
+	functions(RobustPmap, string)
+end
+
+function functions(m::Module, string::AbstractString="")
+	objects = m.__META__
+	modulename = "$(m)"
+	names = Any[]
+	k = keys(objects)
+	c = collect(k)
+	for i in 1:length(c)
+		functionname = "$(c[i])"
+		if functionname == modulename || contains(functionname, "ObjectIdDict")
+			continue
+		end
+		if string == "" || contains(functionname, string)
+			push!(names, functionname)
+		end
+	end
+	if length(names) > 0
+		info("$(m) functions:")
+		sort!(names)
+		display(names)
+	end
+end
+
 "Create web documentation files for Mads functions"
 function create_documentation()
 	Lexicon.save(Mads.madsdir * "/../docs/mads.md", Mads; md_permalink = false)

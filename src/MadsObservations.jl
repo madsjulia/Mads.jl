@@ -48,12 +48,48 @@ for i = 1:length(getobsnames)
 	eval(q)
 end
 
-"Set observation time based on the observation name in the MADS problem dictionary"
-function setobstime!(madsdata::Associative)
+"""
+Set observation time based on the observation name in the MADS problem dictionary
+
+Usage:
+
+```
+Mads.setobstime!(madsdata, split)
+Mads.setobstime!(madsdata, regex)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `split` : string to split
+- `regex` : regular expression to match
+
+Examples:
+```
+Mads.setobstime!(madsdata, "_t")
+Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
+```
+"""
+function setobstime!(madsdata::Associative, split::AbstractString="_")
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
-		s = split(obskeys[i], '_')
-		madsdata["Observations"][obskeys[i]]["time"] = parse(Float64, s[2])
+		s = split(obskeys[i], split)
+		if length(s) != 2
+			madserror("String $(split) cannot split $(obskeys[i])")
+		else
+			madsdata["Observations"][obskeys[i]]["time"] = parse(Float64, s[2])
+		end
+	end
+end
+function setobstime!(madsdata::Associative, rx::Regex=r"[A-x]*_([0-9,.]+)")
+	obskeys = Mads.getobskeys(madsdata)
+	for i in 1:length(obskeys)
+		m = match(rx, obskeys[i])
+		if length(m.captures) != 1
+			madserror("Regular expression $(rx) cannot match $(obskeys[i])")
+		else
+			madsdata["Observations"][obskeys[i]]["time"] = parse(Float64, m.captures[1])
+		end
 	end
 end
 
@@ -181,6 +217,45 @@ function welloff!(madsdata, wellname::AbstractString)
 	else
 		wells2observations!(madsdata)
 	end
+end
+
+"Get observation time"
+function getobstime(o::Dict)
+	if haskey(o, "t")
+		time = o["t"]
+	elseif haskey(o, "time")
+		time = o["time"]
+	else
+		time = NaN
+		madswarn("Time is missing for observation $(o)!")
+	end
+	return time
+end
+
+"Get observation weight"
+function getobsweight(o::Dict)
+	if haskey(o, "w")
+		time = o["w"]
+	elseif haskey(o, "weight")
+		time = o["weight"]
+	else
+		time = NaN
+		madswarn("Weight is missing for observation $(o)!")
+	end
+	return time
+end
+
+"Get observation target"
+function getobstarget(o::Dict)
+	if haskey(o, "c")
+		time = o["c"]
+	elseif haskey(o, "target")
+		time = o["target"]
+	else
+		time = NaN
+		madswarn("Target is missing for observation $(o)!")
+	end
+	return time
 end
 
 "Convert `Wells` class to `Observations` class in the MADS problem dictionary"

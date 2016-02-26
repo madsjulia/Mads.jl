@@ -1,22 +1,48 @@
 import Mads
 
-info("Bayesian sampling ...")
-problemdir = string((dirname(Base.source_path()))) * "/"
+problemdir = Mads.getmadsdir() # get the directory where the problem is executed
+if problemdir == ""
+	problemdir = Mads.madsdir * "/../examples/bayesian_sampling/"
+end
 
 md = Mads.loadmadsfile(problemdir * "internal-linearmodel.mads")
-mcmcchain = Mads.bayessampling(md)
-Mads.scatterplotsamples(md, mcmcchain.samples, problemdir * "mcmcchain1.svg")
-mcmcchain = Mads.bayessampling(md; nsteps=5, burnin=2)
-Mads.scatterplotsamples(md, mcmcchain.samples, problemdir * "mcmcchain2.svg")
-# mcmcchain = Mads.bayessampling(md, 4; nsteps=25, burnin=0)
-# Mads.scatterplotsamples(md, mcmcchain.samples, problemdir * "mcmcchain3.svg")
+rootname = Mads.getmadsrootname(md)
+
+info("Bayesian sampling ...")
+mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=10000, thinning=1)
+Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.svg")
+
+info("Parallel Bayesian sampling ...")
+mcmcchains = Mads.bayessampling(md, 2; nsteps=5000, burnin=5000, thinning=1)
+Mads.scatterplotsamples(md, vcat(map(chain->chain.value', mcmcchains)...), rootname * "-parallel-bayes.svg")
 
 md = Mads.loadmadsfile(problemdir * "w01.mads")
-chain = Mads.bayessampling(md; nsteps=10, burnin=10, thinning=10)
-# Lora.describe(chain)
 rootname = Mads.getmadsrootname(md)
-Mads.scatterplotsamples(md, chain.samples, rootname * "-bayes-results.svg")
-mcvalues = Mads.paramarray2dict(md, chain.samples) # convert the parameters in the chain samples to a parameter dictionary of arrays
-Mads.spaghettiplots(md, mcvalues)
+
+info("Calibrate a contaminant transport problem (anasol) ...")
+param, results = Mads.calibrate(md)
+f = Mads.forward(md, param)
+
+info("Plot matches for a contaminant transport problem (anasol) ...")
+Mads.plotmatches(md, f)
+
+Mads.setparamsinit!(md, param)
+
+info("Bayesian sampling of a contaminant transport problem (anasol) ...")
+mcmcchain = Mads.bayessampling(md; nsteps=1000, burnin=1000, thinning=1)
+
+info("Bayesian scatter plots ...")
+Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.svg")
+
+# convert the parameters in the chain to a parameter dictionary of arrays
+mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') 
+
+info("Posterior (Bayesian) spaghetti plots ...")
+Mads.spaghettiplots(md, mcmcvalues, keyword="posterior")
+Mads.spaghettiplot(md, mcmcvalues, keyword="posterior")
+
+info("Prior spaghetti plots ...")
+Mads.spaghettiplots(md, 100, keyword="prior")
+Mads.spaghettiplot(md, 100, keyword="prior")
 
 return
