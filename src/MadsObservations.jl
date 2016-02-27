@@ -49,7 +49,7 @@ for i = 1:length(getobsnames)
 			return obsvalue
 		end
 		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
-		function $(symbol(string("getobs", obsname)))(madsdata::Associative
+		function $(symbol(string("getobs", obsname)))(madsdata::Associative)
 			obskeys = getobskeys(madsdata)
 			return $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
