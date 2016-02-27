@@ -1,16 +1,16 @@
-"Get keys for all the observations in the MADS problem dictionary"
+"Get keys for all observations in the MADS problem dictionary"
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
 end
 
-"Get keys for all the targets (observations with weights greater than zero) in the MADS problem dictionary"
+"Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary"
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	k = getobskeys(madsdata)
 	return k[w.>0]
 end
 
-"Get keys for all the wells in the MADS problem dictionary"
+"Get keys for all wells in the MADS problem dictionary"
 function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
 end
@@ -30,7 +30,7 @@ for i = 1:length(getobsnames)
 	obslogdefault = getobslogdefault[i]
 	index = i
 	q = quote
-		@doc "Get an array with `$(getobsnames[index])` values for observations defined by `obskeys`" ->
+		@doc "Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`" ->
 		function $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys) 
 			obsvalue = Array($(obstype), length(obskeys))
 			for i in 1:length(obskeys)
@@ -48,8 +48,8 @@ for i = 1:length(getobsnames)
 			end
 			return obsvalue
 		end
-		@doc "Get an array with `$(getobsnames[index])` values for all the MADS observations" ->
-		function $(symbol(string("getobs", obsname)))(madsdata::Associative)
+		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
+		function $(symbol(string("getobs", obsname)))(madsdata::Associative
 			obskeys = getobskeys(madsdata)
 			return $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
