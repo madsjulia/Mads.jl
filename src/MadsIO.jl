@@ -170,7 +170,7 @@ function getextension(filename)
 end
 
 """
-Get files in the current directory or in a directory difined by `path` matching pattern `key` which cann be a string or regular expression
+Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
 - `Mads.searchdir(key)`
 - `Mads.searchdir(key; path = ".")`
@@ -187,7 +187,7 @@ Returns:
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
 
-"""Filter dictionary keys based on a string or regular expression"""
+"Filter dictionary keys based on a string or regular expression"
 filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
 

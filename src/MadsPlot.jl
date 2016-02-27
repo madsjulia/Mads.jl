@@ -169,12 +169,11 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	ploty = [y[1]; y[1]; y]
 	plotc = [minimum(levels); maximum(levels); map(x->min(maximum(levels), max(minimum(levels), x)), c)]
 	alpha = ones(length(plotx))
-	alpha[1] = alpha[2] = 0#make the two points corresponding to the minimum and maximum of the levels transparent
+	alpha[1] = alpha[2] = 0
 	PyPlot.scatter(plotx, ploty, marker="o", c=log10(plotc), s=70, cmap="jet")
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
-	#I think this fixes the aspect ratio. It works in another code, but isn't tested here
 end
 
 function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
@@ -186,7 +185,6 @@ function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true,
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
-
 
 """
 Plot the matches between model predictions and observations
@@ -248,9 +246,9 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				d = Array(Float64, 0)
 				td = Array(Float64, 0)
 				for i in 1:nT
-					time = getobstime(o[i])
-					t = getobstarget(o[i])
-					w = getobsweight(o[i])
+					time = gettime(o[i])
+					t = gettarget(o[i])
+					w = getweight(o[i])
 					if w == NaN || w > eps(Float64)
 						push!(td, time)
 						push!(d, t)
@@ -637,9 +635,6 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		end
 	end
 	if !separate_files
-		# p1 = Gadfly.vstack(pp[1:3]...)
-		# p2 = Gadfly.vstack(pp[4:6]...)
-		# p = Gadfly.hstack(p1,p2)
 		filename, format = Mads.setimagefileformat(filename, format)
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
