@@ -8,4 +8,4 @@ notifications:
   email: false
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("Mads"); Pkg.test("Mads")';
+  - julia -e 'Pkg.clone(pwd()); ENV["PYTHON"]=""; import Conda; Conda.add("yaml"); Pkg.build("Mads"); Pkg.test("Mads")';
