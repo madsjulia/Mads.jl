@@ -1,2 +1,9 @@
+info("Adding Python YAML ...")
+import PyCall
 import Conda
-Conda.add("yaml")
+try
+	@PyCall.pyimport yaml
+catch
+	ENV["PYTHON"]=""
+	Conda.add("yaml")
+end

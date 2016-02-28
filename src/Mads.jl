@@ -12,7 +12,9 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-import DataStructures # import is needed for parallel calls
+import MetaProgTools
+import RobustPmap
+import DataStructures
 import Distributions
 import Gadfly
 import Compose
@@ -21,24 +23,23 @@ import Compat
 import Optim
 import Lora
 import Distributions
-import RobustPmap
 import JSON
 import JLD
-# import NLopt # creates problems on some machines
-import MetaProgTools
+import YAML
 import HDF5 # HDF5 installation might be problematic on some machines
 import Conda
-# ENV["PYTHON"]="" # forces Julia to ignore system python
-# Conda.add("yaml") # loads Python YAML library
-# Conda.add("matplotlib") # loads Python matplotlib library
 import PyCall
-@PyCall.pyimport yaml # PyYAML installation is problematic on some machines
-import YAML # use YAML if PyYAML is not available
 if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
 	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 else
 	warn("PyPlot is not available.")
 end
+try
+	@PyCall.pyimport yaml
+catch
+	warn("Python YAML is not available.")
+end
+
 
 include("MadsHelp.jl")
 include("MadsTest.jl")
