@@ -34,6 +34,11 @@ if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
 else
 	warn("PyPlot is not available.")
 end
+try
+	@PyCall.pyimport yaml
+catch
+	ENV["PYTHON"]=""
+end
 @PyCall.pyimport yaml
 
 include("MadsHelp.jl")
