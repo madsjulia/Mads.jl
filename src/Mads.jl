@@ -27,17 +27,14 @@ import JSON
 import JLD
 import YAML
 import HDF5 # HDF5 installation might be problematic on some machines
+
+ENV["PYTHON"]=""
 import Conda
 import PyCall
 if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
 	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 else
 	warn("PyPlot is not available.")
-end
-try
-	@PyCall.pyimport yaml
-catch
-	ENV["PYTHON"]=""
 end
 @PyCall.pyimport yaml
 
