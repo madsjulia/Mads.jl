@@ -12,7 +12,6 @@ Distributions
 DataStructures
 ForwardDiff
 ODE
-Sundials
 ProgressMeter
 LightXML
 Conda
@@ -23,4 +22,5 @@ JSON
 JLD
 Gadfly
 DataFrames
+Docile
 Lexicon
