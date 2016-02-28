@@ -70,28 +70,8 @@ export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
 ```
 
-MADS & YAML
------------
-
-MADS uses the Python YAML library.
-If you do not have it installed, the best option is to use Julia's Python
-environment. In Julia REPL, execute the following:
-
-```
-ENV["PYTHON"]="" # forces Julia to ignore system python
-using Conda
-Conda.add("yaml")
-```
-
-To install the Python YAML library globally (not recommended), you will need to run:
-
-```
-brew install libyaml
-sudo pip install yaml
-```
-
-Run MADS examples
-------------
+MADS examples
+=============
 
 In Julia REPL, do the following commands:
 
@@ -112,9 +92,3 @@ to perform various analyses related to contaminant transport, or execute
 `include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")`
 
 to perform BIG-DT analysis.
-
-If you make changes in the MADS code, you will need to do
-
-`reload("Mads.jl")` 
-
-to update the MADS code in Julia.
