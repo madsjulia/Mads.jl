@@ -309,9 +309,12 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				push!(ress, result[obskeys[i]])
 			end
 		end
+		if length(tress) + length(tobs) == 0
+			error("No data to plot")
+		end
 		pl = Gadfly.plot(Guide.title(title), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
 					layer(x=tress, y=ress, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					layer(x=tobs, y=obs, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+					layer(x=tobs, y=obs, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt, highlight_width=0pt)))
 		didplot = true
 		vsize += 4inch
 	end
