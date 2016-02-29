@@ -212,7 +212,7 @@ function plotmatches(madsdata_in::Associative; filename="", format="", separate_
 	plotmatches(madsdata_in, r, filename=filename, format=format, separate_file=separate_files)
 end
 
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false)
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false, hsize=6inch)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -226,10 +226,10 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	end
 	newmadsdata = copy(madsdata)
 	newmadsdata["Observations"] = newobs
-	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files)
+	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false)
+function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false, hsize=6inch)
 	rootname = Mads.getmadsrootname(madsdata)
 	vsize = 0inch
 	pl = Any{}
@@ -276,7 +276,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				if separate_files
 					filename_w = "$rootname-match-$wellname"
 					filename_w, format = setimagefileformat(filename_w, format)
-					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, 6inch, 4inch), p)
+					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, hsize, 4inch), p)
 					didplot = true
 				end
 			end
@@ -297,12 +297,17 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		tress = Any[]
 		for i in 1:nT
 			time = madsdata["Observations"][obskeys[i]]["time"]
+			skipnext = false
 			if madsdata["Observations"][obskeys[i]]["weight"] > eps(Float64)
 				push!(tobs, time)
 				push!(obs, madsdata["Observations"][obskeys[i]]["target"])
+			else
+				skipnext = !isa(time, Real)#skip plotting the model prediciton is "time" is not a number and the weight is zero
 			end
-			push!(tress, time)
-			push!(ress, result[obskeys[i]])
+			if !skipnext
+				push!(tress, time)
+				push!(ress, result[obskeys[i]])
+			end
 		end
 		pl = Gadfly.plot(Guide.title(title), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
 					layer(x=tress, y=ress, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
@@ -318,7 +323,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 			filename = "$rootname-match"
 		end
 		filename, format = setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), pl)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, hsize, vsize), pl)
 		if typeof(pl) == Gadfly.Plot{}
 			pl
 		end
