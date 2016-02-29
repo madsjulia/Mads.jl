@@ -8,7 +8,7 @@
   
   <meta name="author" content="Velimir monty Vesselinov">
   
-  <title>Model coupling - MADS</title>
+  <title>Installation - MADS</title>
   
 
   <link rel="shortcut icon" href="../mads-favicon.ico">
@@ -24,9 +24,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Model coupling";
-    var mkdocs_page_input_path = "MODEL_COUPLING.md";
-    var mkdocs_page_url = "/MODEL_COUPLING/";
+    var mkdocs_page_name = "Installation";
+    var mkdocs_page_input_path = "INSTALLATION.md";
+    var mkdocs_page_url = "/INSTALLATION/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -63,8 +63,17 @@
 <li>
           
             <li>
-    <li class="toctree-l1 ">
-        <a class="" href="../INSTALLATION/">Installation</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Installation</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#installation">Installation</a></li>
+                
+                    <li><a class="toctree-l4" href="#installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</a></li>
+                
+            
+            </ul>
         
     </li>
 <li>
@@ -84,15 +93,8 @@
 <li>
           
             <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Model coupling</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#model-coupling">Model Coupling</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../MODEL_COUPLING/">Model coupling</a>
         
     </li>
 <li>
@@ -183,7 +185,7 @@
     
       
     
-    <li>Model coupling</li>
+    <li>Installation</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -197,48 +199,37 @@
           <div role="main">
             <div class="section">
               
-                <h2 id="model-coupling">Model Coupling</h2>
-<p>MADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary. The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS. The fields in the MADS problem dictionary that can be used to define the model coupling are:</p>
-<ul>
-<li>
-<p><code>Model</code> : Julia model defined in an external Julia file.</p>
-</li>
-<li>
-<p><code>MADS model</code> : Julia model defined in an external Julia file using information from the MADS problem dictionary.</p>
-</li>
-<li>
-<p><code>Julia model</code> : Julia model defined internally (already in the Julia workspace).</p>
-</li>
-<li>
-<p><code>Command</code> : external model executed by an UNIX command or script.</p>
-</li>
-<li>
-<p><code>Julia command</code> : external model executed by a Julia script. The Julia script is defined in an external Julia file.</p>
-</li>
-</ul>
-<p>Both <code>Command</code> and <code>Julia command</code> can use different approaches to pass model parameters to the external model. Only <code>Command</code> uses different approaches to get back the model outputs. The script defined under <code>Julia command</code> parses the model outputs using Julia. The available options for writing model inputs and reading model outputs are as follows.</p>
-<ul>
-<li>
-<p>Options for writing model inputs:</p>
-<ul>
-<li><code>Templates</code> : template files for writing model input files as defined at <a href="http://mads.lanl.gov">mads.lanl.gov</a></li>
-<li><code>ASCIIParameters</code> : model parameters written in a ASCII file</li>
-<li><code>JLDParameters</code> : model parameters written in a JLD file</li>
-<li><code>YAMLParameters</code> : model parameters written in a YAML file</li>
-<li><code>JSONParameters</code> : model parameters written in a JSON file</li>
-</ul>
-</li>
-<li>
-<p>Options for reading model outputs:</p>
-<ul>
-<li><code>Instructions</code> : instruction files for reading model output files as defined at mads.lanl.gov](http://mads.lanl.gov)</li>
-<li><code>ASCIIPredictions</code> : model predictions read from a ASCII file</li>
-<li><code>JLDPredictions</code> : model predictions read from a JLD file</li>
-<li><code>YAMLPredictions</code> : model predictions read from a YAML file</li>
-<li><code>JSONPredictions</code> : model predictions read from a JSON file</li>
-</ul>
-</li>
-</ul>
+                <h1 id="installation">Installation</h1>
+<p>After starting Julia, execute:</p>
+<pre><code>Pkg.add(&quot;Mads&quot;)
+</code></pre>
+
+<h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
+<p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
+<pre><code>[url &quot;https://&quot;]
+        insteadOf = git://
+</code></pre>
+
+<p>or execute:</p>
+<pre><code>git config --global url.&quot;https://&quot;.insteadOf git://
+</code></pre>
+
+<p>Set proxies:</p>
+<pre><code>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
+export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
+export http_proxy=http://proxyout.&lt;your_site&gt;:8080
+export https_proxy=http://proxyout.&lt;your_site&gt;:8080
+export no_proxy=.&lt;your_site&gt;
+</code></pre>
+
+<p>For example, if you are doing this at LANL, you will need to execute the 
+following lines in your bash command-line environment:</p>
+<pre><code>export ftp_proxy=http://proxyout.lanl.gov:8080
+export rsync_proxy=http://proxyout.lanl.gov:8080
+export http_proxy=http://proxyout.lanl.gov:8080
+export https_proxy=http://proxyout.lanl.gov:8080
+export no_proxy=.lanl.gov
+</code></pre>
               
             </div>
           </div>
@@ -246,10 +237,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../TEST/" class="btn btn-neutral float-right" title="Testing & Verification">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../GETTING_STARTED/" class="btn btn-neutral float-right" title="Getting started">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../EXAMPLES/" class="btn btn-neutral" title="Examples"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -277,10 +268,10 @@
           <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../EXAMPLES/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../TEST/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../GETTING_STARTED/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

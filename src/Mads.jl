@@ -28,7 +28,6 @@ import JLD
 import YAML
 import HDF5 # HDF5 installation might be problematic on some machines
 
-ENV["PYTHON"]=""
 import Conda
 import PyCall
 if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
@@ -36,7 +35,10 @@ if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
 else
 	warn("PyPlot is not available.")
 end
-@PyCall.pyimport yaml
+if Conda.exists("yaml")
+	ENV["PYTHON"]=""
+	@PyCall.pyimport yaml
+end
 
 include("MadsHelp.jl")
 include("MadsTest.jl")

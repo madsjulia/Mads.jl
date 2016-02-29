@@ -8,7 +8,7 @@
   
   <meta name="author" content="Velimir monty Vesselinov">
   
-  <title>Installation - MADS</title>
+  <title>Examples - MADS</title>
   
 
   <link rel="shortcut icon" href="../mads-favicon.ico">
@@ -24,9 +24,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Installation";
-    var mkdocs_page_input_path = "README.md";
-    var mkdocs_page_url = "/README/";
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "EXAMPLES.md";
+    var mkdocs_page_url = "/EXAMPLES/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -63,21 +63,8 @@
 <li>
           
             <li>
-    <li class="toctree-l1 current">
-        <a class="current" href="./">Installation</a>
-        
-            <ul>
-            
-                <li class="toctree-l3"><a href="#installation">Installation</a></li>
-                
-                    <li><a class="toctree-l4" href="#installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</a></li>
-                
-                    <li><a class="toctree-l4" href="#mads-yaml">MADS &amp; YAML</a></li>
-                
-                    <li><a class="toctree-l4" href="#run-mads-examples">Run MADS examples</a></li>
-                
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../INSTALLATION/">Installation</a>
         
     </li>
 <li>
@@ -85,6 +72,20 @@
             <li>
     <li class="toctree-l1 ">
         <a class="" href="../GETTING_STARTED/">Getting started</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Examples</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#mads-examples">MADS examples</a></li>
+                
+            
+            </ul>
         
     </li>
 <li>
@@ -182,7 +183,7 @@
     
       
     
-    <li>Installation</li>
+    <li>Examples</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -196,53 +197,7 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="installation">Installation</h1>
-<p>After starting Julia, execute:</p>
-<pre><code>Pkg.add(&quot;Mads&quot;)
-</code></pre>
-
-<h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
-<p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
-<pre><code>[url &quot;https://&quot;]
-        insteadOf = git://
-</code></pre>
-
-<p>or execute:</p>
-<pre><code>git config --global url.&quot;https://&quot;.insteadOf git://
-</code></pre>
-
-<p>Set proxies:</p>
-<pre><code>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
-export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
-export http_proxy=http://proxyout.&lt;your_site&gt;:8080
-export https_proxy=http://proxyout.&lt;your_site&gt;:8080
-export no_proxy=.&lt;your_site&gt;
-</code></pre>
-
-<p>For example, if you are doing this at LANL, you will need to execute the 
-following lines in your bash command-line environment:</p>
-<pre><code>export ftp_proxy=http://proxyout.lanl.gov:8080
-export rsync_proxy=http://proxyout.lanl.gov:8080
-export http_proxy=http://proxyout.lanl.gov:8080
-export https_proxy=http://proxyout.lanl.gov:8080
-export no_proxy=.lanl.gov
-</code></pre>
-
-<h2 id="mads-yaml">MADS &amp; YAML</h2>
-<p>MADS uses the Python YAML library.
-If you do not have it installed, the best option is to use Julia's Python
-environment. In Julia REPL, execute the following:</p>
-<pre><code>ENV[&quot;PYTHON&quot;]=&quot;&quot; # forces Julia to ignore system python
-using Conda
-Conda.add(&quot;yaml&quot;)
-</code></pre>
-
-<p>To install the Python YAML library globally (not recommended), you will need to run:</p>
-<pre><code>brew install libyaml
-sudo pip install yaml
-</code></pre>
-
-<h2 id="run-mads-examples">Run MADS examples</h2>
+                <h1 id="mads-examples">MADS examples</h1>
 <p>In Julia REPL, do the following commands:</p>
 <p><code>import Mads</code></p>
 <p>To explore getting-started instructions, execute:</p>
@@ -253,9 +208,6 @@ sudo pip install yaml
 <p>to perform various analyses related to contaminant transport, or execute</p>
 <p><code>include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")</code></p>
 <p>to perform BIG-DT analysis.</p>
-<p>If you make changes in the MADS code, you will need to do</p>
-<p><code>reload("Mads.jl")</code> </p>
-<p>to update the MADS code in Julia.</p>
               
             </div>
           </div>
@@ -263,10 +215,10 @@ sudo pip install yaml
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../GETTING_STARTED/" class="btn btn-neutral float-right" title="Getting started">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../MODEL_COUPLING/" class="btn btn-neutral float-right" title="Model coupling">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../GETTING_STARTED/" class="btn btn-neutral" title="Getting started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -294,10 +246,10 @@ sudo pip install yaml
           <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../GETTING_STARTED/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../GETTING_STARTED/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../MODEL_COUPLING/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

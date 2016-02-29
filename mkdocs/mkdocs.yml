@@ -9,8 +9,9 @@ site_favicon: mads-favicon.ico
 
 pages:
 - Home: index.md
-- Installation: README.md
+- Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
+- Examples: EXAMPLES.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md

@@ -3,9 +3,13 @@ os:
   - osx
   - linux
 julia:
+  - nightly
   - 0.4
+  - 0.5
 notifications:
   email: false
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); ENV["PYTHON"]=""; import Conda; Conda.add("yaml"); Pkg.build("Mads"); Pkg.test("Mads")';
+after_success:
+  - julia -e 'cd(Pkg.dir("Mads")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())';  

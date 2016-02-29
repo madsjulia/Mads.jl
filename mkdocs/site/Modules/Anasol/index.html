@@ -64,7 +64,7 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../../README/">Installation</a>
+        <a class="" href="../../INSTALLATION/">Installation</a>
         
     </li>
 <li>
@@ -72,6 +72,13 @@
             <li>
     <li class="toctree-l1 ">
         <a class="" href="../../GETTING_STARTED/">Getting started</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../EXAMPLES/">Examples</a>
         
     </li>
 <li>
@@ -124,13 +131,11 @@
             
                 <li class="toctree-l3"><a href="#anasol">Anasol</a></li>
                 
-                    <li><a class="toctree-l4" href="#methods-internal">Methods [Internal]</a></li>
+                    <li><a class="toctree-l4" href="#macros-internal">Macros [Internal]</a></li>
                 
-                    <li><a class="toctree-l4" href="#coreexpressiondispersionname-dispersiontimedependence-i-sourcename-boundaryname">coreexpression(dispersionname,  dispersiontimedependence,  i,  sourcename,  boundaryname)</a></li>
+                    <li><a class="toctree-l4" href="#codee">@code(e)</a></li>
                 
-                    <li><a class="toctree-l4" href="#tt1cx-t">tt1c(x,  t)</a></li>
-                
-                    <li><a class="toctree-l4" href="#tt1ix-t">tt1i(x,  t)</a></li>
+                    <li><a class="toctree-l4" href="#gen_codef">@gen_code(f)</a></li>
                 
             
             </ul>
@@ -203,44 +208,22 @@
             <div class="section">
               
                 <h1 id="anasol">Anasol</h1>
-<h2 id="methods-internal">Methods [Internal]</h2>
+<h2 id="macros-internal">Macros [Internal]</h2>
 <hr />
-<p><a id="method__coreexpression.1" class="lexicon_definition"></a></p>
-<h2 id="coreexpressiondispersionname-dispersiontimedependence-i-sourcename-boundaryname">coreexpression(dispersionname,  dispersiontimedependence,  i,  sourcename,  boundaryname)</h2>
-<p>Create core expressions</p>
+<p><a id="macro___code.1" class="lexicon_definition"></a></p>
+<h2 id="codee">@code(e)</h2>
+<p><code>code</code> the code macro is used to put a line of code (or a quote) onto the growing
+gen_code function.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Anasol.jl/tree/1b6f7d35086c62a2afc18cc838af34eb5cc2cd1f/src/Anasol.jl#L123">Anasol/src/Anasol.jl:123</a></p>
+<a href="https://github.com/madsjulia/Anasol.jl/tree/277129ed7a426d5a8027bca95b4bbdcb209759ee/src/gencode.jl#L32">Anasol/src/gencode.jl:32</a></p>
 <hr />
-<p><a id="method__tt1c.1" class="lexicon_definition"></a></p>
-<h2 id="tt1cx-t">tt1c(x,  t)</h2>
-<p>1D analytical solution of contaminant flow with constant-concentration input
-The source is released at x = 0 and t = 0.</p>
-<p>Arguments:</p>
-<pre><code>- `x`  : spatial locations
-- `t`  : times
-- `c0` : initial (background) concentration
-- `ci` : input concentration
-- `aL` : longitudinal dispersion
-- `u`  : transport velocity
-</code></pre>
+<p><a id="macro___gen_code.1" class="lexicon_definition"></a></p>
+<h2 id="gen_codef">@gen_code(f)</h2>
+<p><code>gen_code</code> rejigs the standard julia <code>@generate</code> macro so that it creates a <code>code</code>
+expression variable that can be extended using the <code>@code</code> macro.  At the end of
+the function it automatically outputs the result.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Anasol.jl/tree/1b6f7d35086c62a2afc18cc838af34eb5cc2cd1f/src/Anasol.jl#L60">Anasol/src/Anasol.jl:60</a></p>
-<hr />
-<p><a id="method__tt1i.1" class="lexicon_definition"></a></p>
-<h2 id="tt1ix-t">tt1i(x,  t)</h2>
-<p>1D analytical solution of contaminant flow with instantaneous mass input
-The source is released at x = 0 and t = 0.</p>
-<p>Arguments:</p>
-<pre><code>- `x`  : spatial locations
-- `t`  : times
-- `c0` : initial (background) concentration
-- `m`  : instantaneous mass input
-- `aL` : longitudinal dispersion
-- `u`  : transport velocity
-- `ϕ`  : total (water-filled) porosity
-</code></pre>
-<p><em>source:</em>
-<a href="https://github.com/madsjulia/Anasol.jl/tree/1b6f7d35086c62a2afc18cc838af34eb5cc2cd1f/src/Anasol.jl#L102">Anasol/src/Anasol.jl:102</a></p>
+<a href="https://github.com/madsjulia/Anasol.jl/tree/277129ed7a426d5a8027bca95b4bbdcb209759ee/src/gencode.jl#L6">Anasol/src/gencode.jl:6</a></p>
               
             </div>
           </div>
