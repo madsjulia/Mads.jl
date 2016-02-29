@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Velimir monty Vesselinov">
+  
+  <title>Getting started - MADS</title>
+  
+
+  <link rel="shortcut icon" href="../mads-favicon.ico">
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../static/custom.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Getting started";
+    var mkdocs_page_input_path = "GETTING_STARTED.md";
+    var mkdocs_page_url = "/GETTING_STARTED/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+  <script src="../static/custom.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> MADS</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../INSTALLATION/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Getting started</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#mads-getting-started">MADS Getting Started</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#mads-command-line-execution">MADS Command-line execution</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#mads-documentation">MADS Documentation</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#mads-licensing-copyright">MADS Licensing &amp; Copyright</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../EXAMPLES/">Examples</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../MODEL_COUPLING/">Model coupling</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../TEST/">Testing & Verification</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../FUNCTIONS/">Functions</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Modules</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/Mads/">Mads</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/BIGUQ/">BIGUQ</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/Anasol/">Anasol</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/ReusableFunctions/">ReusableFunctions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/MetaProgTools/">MetaProgTools</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Modules/RobustPmap/">RobustPmap</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">MADS</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Getting started</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="mads-getting-started">MADS Getting Started</h2>
+<p>Install <a href="http://julialang.org">Julia</a> and <a href="http://github.com/madsjulia/Mads.jl">MADS</a> (<code>Pkg.add("Mads")</code>) using the installation instruction in the <code>README.md</code> (<a href="https://github.com/madsjulia/Mads.jl">see also</a>).
+If you are not familiar with Julia, checkout <a href="http://samuelcolvin.github.io/JuliaByExample/">Julia By Example</a>, <a href="https://learnxinyminutes.com/docs/julia/">learn X in Y minutes</a>, <a href="http://bogumilkaminski.pl/files/julia_express.pdf">Julia Express</a>).
+You can also explore the Julia examples in the <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia">github</a>).</p>
+<p>To start using MADS, initiate the Julia REPL and execute <code>import Mads</code> to load MADS modules.</p>
+<p>All the MADS analyses are based on a MADS problem dictionary that defines the problem.</p>
+<p>The MADS problem dictionary is typically loaded from a YAML MADS input file.
+The loading of a MADS file can be executed as follows:</p>
+<p><code>madsdata = Mads.loadmadsfile("&lt;input_file_name&gt;.mads")</code></p>
+<p>For example, you can execute:</p>
+<p><code>madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")</code></p>
+<p>The file <code>internal-linear.mads</code> is located in <code>examples/getting_started</code> directory of the <code>Mads.jl</code> repository.</p>
+<p>Typically, the MADS problem dictionary includes several classes:</p>
+<ul>
+<li><code>Parameters</code> : lists of model parameters</li>
+<li><code>Observations</code> : lists of model observations</li>
+<li><code>Model</code> : defines a model to predict the model observations using the model parameters</li>
+</ul>
+<p>The file <code>internal-linear.mads</code> looks like this:</p>
+<pre><code>Parameters:
+- a : { init:  1, dist: &quot;Uniform(-10, 10)&quot; }
+- b : { init: -1, dist: &quot;Uniform(-10, 10)&quot; }
+Observations:
+- o1: { target: -3 }
+- o2: { target:  1 }
+- o3: { target:  5 }
+- o4: { target:  9 }
+Model: internal-linear.jl
+</code></pre>
+
+<p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linearmodel.jl</code>.</p>
+<p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
+<p>Execute:</p>
+<p><code>Mads.showallparameters(madsdata)</code> to show all the parameters.</p>
+<p><code>Mads.showobservations(madsdata)</code> to list all the observations.</p>
+<p>MADS can perform various types of analyses:</p>
+<ul>
+<li><code>Mads.forward(madsdata)</code> will execute forward model simulation based on the initial parameter values.</li>
+<li><code>saresults = Mads.efast(madsdata)</code> will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.</li>
+<li><code>optparam, iaresults = Mads.calibrate(madsdata)</code> will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.</li>
+<li><code>Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values</code>optparam` estimated by the inverse analyses above.</li>
+</ul>
+<p>More complicated analyses will require additional information to be provided in the MADS problem dictionary.
+Examples are given in the <code>examples</code> subdirectories of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>).</p>
+<h2 id="mads-command-line-execution">MADS Command-line execution</h2>
+<p>MADS can be executed at the command line using <code>madsjl.jl</code>. Link this file in a directory in your search <code>PATH</code>.</p>
+<p>For example, using <code>madsjl.jl</code> you can execute:</p>
+<pre><code>madsjl.jl diff internal-linear.mads internal-parabola.mads
+madsjl.jl internal-parabola.mads forward efast
+</code></pre>
+
+<p>in the <code>examples/getting_started</code> subdirectory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started">github</a>).</p>
+<h2 id="mads-documentation">MADS Documentation</h2>
+<p>All the available MADS modules and functions are described at <a href="http://madsjulia.github.io/Mads.jl">madsjulia.github.io</a></p>
+<h2 id="mads-licensing-copyright">MADS Licensing &amp; Copyright</h2>
+<p>Check the files <code>COPYING</code> and <code>LICENSE</code> to see the licensing &amp; copyright information.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../EXAMPLES/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../INSTALLATION/" class="btn btn-neutral" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../INSTALLATION/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../EXAMPLES/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

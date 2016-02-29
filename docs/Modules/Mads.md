@@ -1,11 +1,12 @@
 # Mads
 
-## Internal
+
+## Methods [Internal]
 
 ---
 
 <a id="method__allwellsoff.1" class="lexicon_definition"></a>
-#### allwellsoff!(madsdata::Associative{K, V})
+## allwellsoff!(madsdata::Associative{K, V})
 Turn off all the wells in the MADS problem dictionary
 
 *source:*
@@ -14,7 +15,7 @@ Turn off all the wells in the MADS problem dictionary
 ---
 
 <a id="method__allwellson.1" class="lexicon_definition"></a>
-#### allwellson!(madsdata::Associative{K, V})
+## allwellson!(madsdata::Associative{K, V})
 Turn on all the wells in the MADS problem dictionary
 
 *source:*
@@ -23,7 +24,7 @@ Turn on all the wells in the MADS problem dictionary
 ---
 
 <a id="method__asinetransform.1" class="lexicon_definition"></a>
-#### asinetransform(params::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+## asinetransform(params::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
 Arcsine transformation of model parameters
 
 *source:*
@@ -32,7 +33,7 @@ Arcsine transformation of model parameters
 ---
 
 <a id="method__bayessampling.1" class="lexicon_definition"></a>
-#### bayessampling(madsdata::Associative{K, V})
+## bayessampling(madsdata::Associative{K, V})
 Bayes Sampling
 
 ```
@@ -59,7 +60,7 @@ Returns:
 ---
 
 <a id="method__calibrate.1" class="lexicon_definition"></a>
-#### calibrate(madsdata::Associative{K, V})
+## calibrate(madsdata::Associative{K, V})
 Calibrate
 
 `Mads.calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
@@ -91,7 +92,7 @@ Returns:
 ---
 
 <a id="method__calibratenlopt.1" class="lexicon_definition"></a>
-#### calibratenlopt(madsdata::Associative{K, V})
+## calibratenlopt(madsdata::Associative{K, V})
 Do a calibration using NLopt 
 
 *source:*
@@ -100,7 +101,7 @@ Do a calibration using NLopt
 ---
 
 <a id="method__calibraterandom.1" class="lexicon_definition"></a>
-#### calibraterandom(madsdata::Associative{K, V})
+## calibraterandom(madsdata::Associative{K, V})
 Calibrate with random initial guesses
 
 ```
@@ -136,7 +137,7 @@ Returns:
 ---
 
 <a id="method__calibraterandom.2" class="lexicon_definition"></a>
-#### calibraterandom(madsdata::Associative{K, V},  numberofsamples)
+## calibraterandom(madsdata::Associative{K, V},  numberofsamples)
 Calibrate with random initial guesses
 
 ```
@@ -172,7 +173,7 @@ Returns:
 ---
 
 <a id="method__cmadsins_obs.1" class="lexicon_definition"></a>
-#### cmadsins_obs(obsid::Array{T, 1},  instructionfilename::AbstractString,  inputfilename::AbstractString)
+## cmadsins_obs(obsid::Array{T, 1},  instructionfilename::AbstractString,  inputfilename::AbstractString)
 Call C MADS ins_obs() function from the MADS dynamic library
 
 *source:*
@@ -181,7 +182,7 @@ Call C MADS ins_obs() function from the MADS dynamic library
 ---
 
 <a id="method__computemass.1" class="lexicon_definition"></a>
-#### computemass(madsdata::Associative{K, V})
+## computemass(madsdata::Associative{K, V})
 Compute injected/reduced contaminant mass
 
 `Mads.computemass(madsdata; time = 0)`
@@ -203,7 +204,7 @@ Returns:
 ---
 
 <a id="method__computemass.2" class="lexicon_definition"></a>
-#### computemass(madsfiles)
+## computemass(madsfiles)
 Compute injected/reduced contaminant mass for a given set of mads input files
 
 `Mads.computemass(madsfiles; time = 0, path = ".")`
@@ -227,7 +228,7 @@ Returns:
 ---
 
 <a id="method__computeparametersensitities.1" class="lexicon_definition"></a>
-#### computeparametersensitities(madsdata::Associative{K, V},  saresults::Associative{K, V})
+## computeparametersensitities(madsdata::Associative{K, V},  saresults::Associative{K, V})
 Compute sensitivities for each model parameter; averaging the sensitivity indices over the entire observation range
 
 Arguments:
@@ -242,7 +243,7 @@ Arguments:
 ---
 
 <a id="method__contamination.1" class="lexicon_definition"></a>
-#### contamination(wellx,  welly,  wellz,  n,  lambda,  theta,  vx,  vy,  vz,  ax,  ay,  az,  H,  x,  y,  z,  dx,  dy,  dz,  f,  t0,  t1,  t)
+## contamination(wellx,  welly,  wellz,  n,  lambda,  theta,  vx,  vy,  vz,  ax,  ay,  az,  H,  x,  y,  z,  dx,  dy,  dz,  f,  t0,  t1,  t)
 Compute concentration for a point in space and time (x,y,z,t)
 
 `Mads.contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")`
@@ -285,7 +286,7 @@ Returns:
 ---
 
 <a id="method__copyright.1" class="lexicon_definition"></a>
-#### copyright()
+## copyright()
 Produce MADS copyright information
 
 *source:*
@@ -294,7 +295,7 @@ Produce MADS copyright information
 ---
 
 <a id="method__create_documentation.1" class="lexicon_definition"></a>
-#### create_documentation()
+## create_documentation()
 Create web documentation files for Mads functions
 
 *source:*
@@ -303,7 +304,7 @@ Create web documentation files for Mads functions
 ---
 
 <a id="method__create_tests_off.1" class="lexicon_definition"></a>
-#### create_tests_off()
+## create_tests_off()
 Turn off the generation of MADS tests (default)
 
 *source:*
@@ -312,7 +313,7 @@ Turn off the generation of MADS tests (default)
 ---
 
 <a id="method__create_tests_on.1" class="lexicon_definition"></a>
-#### create_tests_on()
+## create_tests_on()
 Turn on the generation of MADS tests (dangerous)
 
 *source:*
@@ -321,7 +322,7 @@ Turn on the generation of MADS tests (dangerous)
 ---
 
 <a id="method__createmadsproblem.1" class="lexicon_definition"></a>
-#### createmadsproblem(infilename::AbstractString,  outfilename::AbstractString)
+## createmadsproblem(infilename::AbstractString,  outfilename::AbstractString)
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
 - `Mads.createmadsproblem(infilename, outfilename)`
@@ -342,7 +343,7 @@ Arguments:
 ---
 
 <a id="method__createobservations.1" class="lexicon_definition"></a>
-#### createobservations!(madsdata::Associative{K, V},  time,  observation)
+## createobservations!(madsdata::Associative{K, V},  time,  observation)
 Create observations in the MADS problem dictionary based on `time` and `observation` arrays 
 
 
@@ -352,7 +353,7 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 ---
 
 <a id="method__deletenan.1" class="lexicon_definition"></a>
-#### deleteNaN!(df::DataFrames.DataFrame)
+## deleteNaN!(df::DataFrames.DataFrame)
 Delete rows with NaN in a Dataframe `df`
 
 *source:*
@@ -361,7 +362,7 @@ Delete rows with NaN in a Dataframe `df`
 ---
 
 <a id="method__dobigdt.1" class="lexicon_definition"></a>
-#### dobigdt(madsdata::Associative{K, V},  nummodelruns::Int64)
+## dobigdt(madsdata::Associative{K, V},  nummodelruns::Int64)
 Perform BIG-DT analysis
 
 Arguments:
@@ -383,7 +384,7 @@ Returns:
 ---
 
 <a id="method__dumpasciifile.1" class="lexicon_definition"></a>
-#### dumpasciifile(filename::AbstractString,  data)
+## dumpasciifile(filename::AbstractString,  data)
 Dump ASCII file
 
 *source:*
@@ -392,7 +393,7 @@ Dump ASCII file
 ---
 
 <a id="method__dumpjsonfile.1" class="lexicon_definition"></a>
-#### dumpjsonfile(filename::AbstractString,  data)
+## dumpjsonfile(filename::AbstractString,  data)
 Dump a JSON file
 
 *source:*
@@ -401,7 +402,7 @@ Dump a JSON file
 ---
 
 <a id="method__dumpwelldata.1" class="lexicon_definition"></a>
-#### dumpwelldata(filename::AbstractString,  madsdata)
+## dumpwelldata(filename::AbstractString,  madsdata)
 Dump well data from MADS problem dictionary into a ASCII file
 
 *source:*
@@ -410,7 +411,7 @@ Dump well data from MADS problem dictionary into a ASCII file
 ---
 
 <a id="method__dumpyamlfile.1" class="lexicon_definition"></a>
-#### dumpyamlfile(filename::AbstractString,  yamldata)
+## dumpyamlfile(filename::AbstractString,  yamldata)
 Dump YAML file in JSON format
 
 *source:*
@@ -419,7 +420,7 @@ Dump YAML file in JSON format
 ---
 
 <a id="method__dumpyamlmadsfile.1" class="lexicon_definition"></a>
-#### dumpyamlmadsfile(madsdata,  filename::AbstractString)
+## dumpyamlmadsfile(madsdata,  filename::AbstractString)
 Dump YAML Mads file
 
 Arguments:
@@ -434,7 +435,7 @@ Arguments:
 ---
 
 <a id="method__efast.1" class="lexicon_definition"></a>
-#### efast(md::Associative{K, V})
+## efast(md::Associative{K, V})
 Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Testing (eFAST) method
 
 Arguments:
@@ -452,7 +453,7 @@ Arguments:
 ---
 
 <a id="method__evaluatemadsexpression.1" class="lexicon_definition"></a>
-#### evaluatemadsexpression(expressionstring,  parameters)
+## evaluatemadsexpression(expressionstring,  parameters)
 Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
 *source:*
@@ -461,7 +462,7 @@ Evaluate the expression in terms of the parameters, return a Dict() containing t
 ---
 
 <a id="method__evaluatemadsexpressions.1" class="lexicon_definition"></a>
-#### evaluatemadsexpressions(madsdata::Associative{K, V},  parameters)
+## evaluatemadsexpressions(madsdata::Associative{K, V},  parameters)
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
 *source:*
@@ -470,7 +471,7 @@ Evaluate the expressions in terms of the parameters, return a Dict() containing 
 ---
 
 <a id="method__filterkeys.1" class="lexicon_definition"></a>
-#### filterkeys(dict::Associative{K, V},  key::Regex)
+## filterkeys(dict::Associative{K, V},  key::Regex)
 Filter dictionary keys based on a string or regular expression
 
 *source:*
@@ -479,7 +480,7 @@ Filter dictionary keys based on a string or regular expression
 ---
 
 <a id="method__forward.1" class="lexicon_definition"></a>
-#### forward(madsdata::Associative{K, V})
+## forward(madsdata::Associative{K, V})
 Perform a forward run using the initial or provided values for the model parameters
 
 - `forward(madsdata)`
@@ -501,7 +502,7 @@ Returns:
 ---
 
 <a id="method__forwardgrid.1" class="lexicon_definition"></a>
-#### forwardgrid(madsdata::Associative{K, V})
+## forwardgrid(madsdata::Associative{K, V})
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
 - `forwardgrid(madsdata)`  
@@ -523,7 +524,7 @@ Returns:
 ---
 
 <a id="method__functions.1" class="lexicon_definition"></a>
-#### functions()
+## functions()
 List available functions in the MADS modules:
 
 Examples:
@@ -547,7 +548,7 @@ Arguments:
 ---
 
 <a id="method__functions.2" class="lexicon_definition"></a>
-#### functions(string::AbstractString)
+## functions(string::AbstractString)
 List available functions in the MADS modules:
 
 Examples:
@@ -571,7 +572,7 @@ Arguments:
 ---
 
 <a id="method__getextension.1" class="lexicon_definition"></a>
-#### getextension(filename)
+## getextension(filename)
 Get file name extension
 
 Example:
@@ -587,7 +588,7 @@ ext = Mads.getextension("a.mads") # ext = "mads"
 ---
 
 <a id="method__getmadsdir.1" class="lexicon_definition"></a>
-#### getmadsdir()
+## getmadsdir()
 Get the directory where currently Mads is running
 
 `problemdir = Mads.getmadsdir()`
@@ -599,7 +600,7 @@ Get the directory where currently Mads is running
 ---
 
 <a id="method__getmadsinputfile.1" class="lexicon_definition"></a>
-#### getmadsinputfile()
+## getmadsinputfile()
 Get the default MADS input file set as a MADS global variable using `setmadsinputfile(filename)`
 
 `Mads.getmadsinputfile()`
@@ -617,7 +618,7 @@ Returns:
 ---
 
 <a id="method__getmadsproblemdir.1" class="lexicon_definition"></a>
-#### getmadsproblemdir(madsdata::Associative{K, V})
+## getmadsproblemdir(madsdata::Associative{K, V})
 Get the directory where the Mads data file is located
 
 `Mads.getmadsproblemdir(madsdata)`
@@ -638,7 +639,7 @@ where `madsproblemdir` = `"../../"`
 ---
 
 <a id="method__getmadsrootname.1" class="lexicon_definition"></a>
-#### getmadsrootname(madsdata::Associative{K, V})
+## getmadsrootname(madsdata::Associative{K, V})
 Get the MADS problem root name
 
 `madsrootname = Mads.getmadsrootname(madsdata)`
@@ -650,7 +651,7 @@ Get the MADS problem root name
 ---
 
 <a id="method__getobskeys.1" class="lexicon_definition"></a>
-#### getobskeys(madsdata::Associative{K, V})
+## getobskeys(madsdata::Associative{K, V})
 Get keys for all observations in the MADS problem dictionary
 
 *source:*
@@ -659,7 +660,7 @@ Get keys for all observations in the MADS problem dictionary
 ---
 
 <a id="method__getparamdict.1" class="lexicon_definition"></a>
-#### getparamdict(madsdata::Associative{K, V})
+## getparamdict(madsdata::Associative{K, V})
 Get dictionary with all parameters and their respective initial values
 
 `Mads.getparamdict(madsdata)`
@@ -679,7 +680,7 @@ Returns:
 ---
 
 <a id="method__getparamdistributions.1" class="lexicon_definition"></a>
-#### getparamdistributions(madsdata::Associative{K, V})
+## getparamdistributions(madsdata::Associative{K, V})
 Get probabilistic distributions of all parameters in the MADS problem dictionary
 
 `Mads.getparamdistributions(madsdata; init_dist=false)`
@@ -700,7 +701,7 @@ Arguments:
 ---
 
 <a id="method__getparamkeys.1" class="lexicon_definition"></a>
-#### getparamkeys(madsdata::Associative{K, V})
+## getparamkeys(madsdata::Associative{K, V})
 Get keys of all parameters in the MADS dictionary
 
 `Mads.getparamkeys(madsdata)`
@@ -720,7 +721,7 @@ Returns:
 ---
 
 <a id="method__getparamsinit_max.1" class="lexicon_definition"></a>
-#### getparamsinit_max(madsdata)
+## getparamsinit_max(madsdata)
 Get an array with `init_max` values for all the MADS model parameters
 
 *source:*
@@ -729,7 +730,7 @@ Get an array with `init_max` values for all the MADS model parameters
 ---
 
 <a id="method__getparamsinit_max.2" class="lexicon_definition"></a>
-#### getparamsinit_max(madsdata,  paramkeys)
+## getparamsinit_max(madsdata,  paramkeys)
 Get an array with `init_max` values for parameters defined by `paramkeys`
 
 *source:*
@@ -738,7 +739,7 @@ Get an array with `init_max` values for parameters defined by `paramkeys`
 ---
 
 <a id="method__getparamsinit_min.1" class="lexicon_definition"></a>
-#### getparamsinit_min(madsdata)
+## getparamsinit_min(madsdata)
 Get an array with `init_min` values for all the MADS model parameters
 
 *source:*
@@ -747,7 +748,7 @@ Get an array with `init_min` values for all the MADS model parameters
 ---
 
 <a id="method__getparamsinit_min.2" class="lexicon_definition"></a>
-#### getparamsinit_min(madsdata,  paramkeys)
+## getparamsinit_min(madsdata,  paramkeys)
 Get an array with `init_min` values for parameters defined by `paramkeys`
 
 *source:*
@@ -756,7 +757,7 @@ Get an array with `init_min` values for parameters defined by `paramkeys`
 ---
 
 <a id="method__getparamsmax.1" class="lexicon_definition"></a>
-#### getparamsmax(madsdata)
+## getparamsmax(madsdata)
 Get an array with `min` values for all the MADS model parameters
 
 *source:*
@@ -765,7 +766,7 @@ Get an array with `min` values for all the MADS model parameters
 ---
 
 <a id="method__getparamsmax.2" class="lexicon_definition"></a>
-#### getparamsmax(madsdata,  paramkeys)
+## getparamsmax(madsdata,  paramkeys)
 Get an array with `max` values for parameters defined by `paramkeys`
 
 *source:*
@@ -774,7 +775,7 @@ Get an array with `max` values for parameters defined by `paramkeys`
 ---
 
 <a id="method__getparamsmin.1" class="lexicon_definition"></a>
-#### getparamsmin(madsdata)
+## getparamsmin(madsdata)
 Get an array with `min` values for all the MADS model parameters
 
 *source:*
@@ -783,7 +784,7 @@ Get an array with `min` values for all the MADS model parameters
 ---
 
 <a id="method__getparamsmin.2" class="lexicon_definition"></a>
-#### getparamsmin(madsdata,  paramkeys)
+## getparamsmin(madsdata,  paramkeys)
 Get an array with `min` values for parameters defined by `paramkeys`
 
 *source:*
@@ -792,7 +793,7 @@ Get an array with `min` values for parameters defined by `paramkeys`
 ---
 
 <a id="method__getrootname.1" class="lexicon_definition"></a>
-#### getrootname(filename::AbstractString)
+## getrootname(filename::AbstractString)
 Get file name root
 
 Example:
@@ -809,7 +810,7 @@ r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ---
 
 <a id="method__getsourcekeys.1" class="lexicon_definition"></a>
-#### getsourcekeys(madsdata::Associative{K, V})
+## getsourcekeys(madsdata::Associative{K, V})
 Get keys of all source parameters in the MADS dictionary
 
 `Mads.getsourcekeys(madsdata)`
@@ -829,7 +830,7 @@ Returns:
 ---
 
 <a id="method__gettarget.1" class="lexicon_definition"></a>
-#### gettarget(o::Associative{K, V})
+## gettarget(o::Associative{K, V})
 Get observation target
 
 *source:*
@@ -838,7 +839,7 @@ Get observation target
 ---
 
 <a id="method__gettargetkeys.1" class="lexicon_definition"></a>
-#### gettargetkeys(madsdata::Associative{K, V})
+## gettargetkeys(madsdata::Associative{K, V})
 Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary
 
 *source:*
@@ -847,7 +848,7 @@ Get keys for all targets (observations with weights greater than zero) in the MA
 ---
 
 <a id="method__gettime.1" class="lexicon_definition"></a>
-#### gettime(o::Associative{K, V})
+## gettime(o::Associative{K, V})
 Get observation time
 
 *source:*
@@ -856,7 +857,7 @@ Get observation time
 ---
 
 <a id="method__getweight.1" class="lexicon_definition"></a>
-#### getweight(o::Associative{K, V})
+## getweight(o::Associative{K, V})
 Get observation weight
 
 *source:*
@@ -865,7 +866,7 @@ Get observation weight
 ---
 
 <a id="method__getwellkeys.1" class="lexicon_definition"></a>
-#### getwellkeys(madsdata::Associative{K, V})
+## getwellkeys(madsdata::Associative{K, V})
 Get keys for all wells in the MADS problem dictionary
 
 *source:*
@@ -874,7 +875,7 @@ Get keys for all wells in the MADS problem dictionary
 ---
 
 <a id="method__haskeyword.1" class="lexicon_definition"></a>
-#### haskeyword(madsdata::Associative{K, V},  keyword::AbstractString)
+## haskeyword(madsdata::Associative{K, V},  keyword::AbstractString)
 Check for a `keyword` in a class within the Mads dictionary `madsdata`
 
 - `Mads.haskeyword(madsdata, keyword)`
@@ -900,7 +901,7 @@ Examples:
 ---
 
 <a id="method__help.1" class="lexicon_definition"></a>
-#### help()
+## help()
 Produce MADS help information
 
 *source:*
@@ -909,7 +910,7 @@ Produce MADS help information
 ---
 
 <a id="method__importeverywhere.1" class="lexicon_definition"></a>
-#### importeverywhere(finename)
+## importeverywhere(finename)
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 
@@ -920,7 +921,7 @@ The first function in the file is the one that will be called by Mads to perform
 ---
 
 <a id="method__ins_obs.1" class="lexicon_definition"></a>
-#### ins_obs(instructionfilename::AbstractString,  inputfilename::AbstractString)
+## ins_obs(instructionfilename::AbstractString,  inputfilename::AbstractString)
 Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
 
 *source:*
@@ -929,7 +930,7 @@ Apply Mads instruction file `instructionfilename` to read model input file `inpu
 ---
 
 <a id="method__instline2regexs.1" class="lexicon_definition"></a>
-#### instline2regexs(instline::AbstractString)
+## instline2regexs(instline::AbstractString)
 Convert an instruction line in the Mads instruction file into regular expressions
 
 *source:*
@@ -938,7 +939,7 @@ Convert an instruction line in the Mads instruction file into regular expression
 ---
 
 <a id="method__islog.1" class="lexicon_definition"></a>
-#### islog(madsdata::Associative{K, V},  parameterkey::AbstractString)
+## islog(madsdata::Associative{K, V},  parameterkey::AbstractString)
 Is parameter with key `parameterkey` log-transformed?
 
 *source:*
@@ -947,7 +948,7 @@ Is parameter with key `parameterkey` log-transformed?
 ---
 
 <a id="method__isopt.1" class="lexicon_definition"></a>
-#### isopt(madsdata::Associative{K, V},  parameterkey::AbstractString)
+## isopt(madsdata::Associative{K, V},  parameterkey::AbstractString)
 Is parameter with key `parameterkey` optimizable?
 
 *source:*
@@ -956,7 +957,7 @@ Is parameter with key `parameterkey` optimizable?
 ---
 
 <a id="method__levenberg_marquardt.1" class="lexicon_definition"></a>
-#### levenberg_marquardt(f::Function,  g::Function,  x0)
+## levenberg_marquardt(f::Function,  g::Function,  x0)
 Levenberg-Marquardt optimization
 
 Arguments:
@@ -987,7 +988,7 @@ Arguments:
 ---
 
 <a id="method__levenberg_marquardt.2" class="lexicon_definition"></a>
-#### levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)
+## levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)
 Levenberg-Marquardt optimization
 
 Arguments:
@@ -1018,7 +1019,7 @@ Arguments:
 ---
 
 <a id="method__loadasciifile.1" class="lexicon_definition"></a>
-#### loadasciifile(filename::AbstractString)
+## loadasciifile(filename::AbstractString)
 Load ASCII file
 
 *source:*
@@ -1027,7 +1028,7 @@ Load ASCII file
 ---
 
 <a id="method__loadjsonfile.1" class="lexicon_definition"></a>
-#### loadjsonfile(filename::AbstractString)
+## loadjsonfile(filename::AbstractString)
 Load a JSON file
 
 *source:*
@@ -1036,7 +1037,7 @@ Load a JSON file
 ---
 
 <a id="method__loadmadsfile.1" class="lexicon_definition"></a>
-#### loadmadsfile(filename::AbstractString)
+## loadmadsfile(filename::AbstractString)
 Load MADS input file defining a MADS problem dictionary
 
 - `Mads.loadmadsfile(filename)`
@@ -1061,7 +1062,7 @@ Example: `md = loadmadsfile("input_file_name.mads")`
 ---
 
 <a id="method__loadyamlfile.1" class="lexicon_definition"></a>
-#### loadyamlfile(filename::AbstractString)
+## loadyamlfile(filename::AbstractString)
 Load YAML file
 
 *source:*
@@ -1070,7 +1071,7 @@ Load YAML file
 ---
 
 <a id="method__loadyamlmadsfile.1" class="lexicon_definition"></a>
-#### loadyamlmadsfile(filename::AbstractString)
+## loadyamlmadsfile(filename::AbstractString)
 Load YAML Mads file
 
 Arguments:
@@ -1086,7 +1087,7 @@ Arguments:
 ---
 
 <a id="method__localsa.1" class="lexicon_definition"></a>
-#### localsa(madsdata::Associative{K, V})
+## localsa(madsdata::Associative{K, V})
 Local sensitivity analysis based on eigen analysis of covariance matrix
 
 Arguments:
@@ -1102,7 +1103,7 @@ Arguments:
 ---
 
 <a id="method__madscritical.1" class="lexicon_definition"></a>
-#### madscritical(message::AbstractString)
+## madscritical(message::AbstractString)
 MADS critical error messages
 
 *source:*
@@ -1111,7 +1112,7 @@ MADS critical error messages
 ---
 
 <a id="method__madsdebug.1" class="lexicon_definition"></a>
-#### madsdebug(message::AbstractString)
+## madsdebug(message::AbstractString)
 MADS debug messages
 
 *source:*
@@ -1120,7 +1121,7 @@ MADS debug messages
 ---
 
 <a id="method__madserror.1" class="lexicon_definition"></a>
-#### madserror(message::AbstractString)
+## madserror(message::AbstractString)
 MADS error messages
 
 *source:*
@@ -1129,7 +1130,7 @@ MADS error messages
 ---
 
 <a id="method__madsinfo.1" class="lexicon_definition"></a>
-#### madsinfo(message::AbstractString)
+## madsinfo(message::AbstractString)
 MADS information/status messages
 
 *source:*
@@ -1138,7 +1139,7 @@ MADS information/status messages
 ---
 
 <a id="method__madsoutput.1" class="lexicon_definition"></a>
-#### madsoutput(message::AbstractString)
+## madsoutput(message::AbstractString)
 MADS output
 
 *source:*
@@ -1147,7 +1148,7 @@ MADS output
 ---
 
 <a id="method__madswarn.1" class="lexicon_definition"></a>
-#### madswarn(message::AbstractString)
+## madswarn(message::AbstractString)
 MADS warning messages
 
 *source:*
@@ -1156,7 +1157,7 @@ MADS warning messages
 ---
 
 <a id="method__makearrayconditionalloglikelihood.1" class="lexicon_definition"></a>
-#### makearrayconditionalloglikelihood(madsdata::Associative{K, V},  conditionalloglikelihood)
+## makearrayconditionalloglikelihood(madsdata::Associative{K, V},  conditionalloglikelihood)
 Make a conditional log likelihood function that accepts an array containing the opt parameters' values
 
 *source:*
@@ -1165,7 +1166,7 @@ Make a conditional log likelihood function that accepts an array containing the 
 ---
 
 <a id="method__makearrayfunction.1" class="lexicon_definition"></a>
-#### makearrayfunction(madsdata::Associative{K, V},  f::Function)
+## makearrayfunction(madsdata::Associative{K, V},  f::Function)
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
 `Mads.makearrayfunction(madsdata, f)`
@@ -1186,7 +1187,7 @@ Returns:
 ---
 
 <a id="method__makearrayloglikelihood.1" class="lexicon_definition"></a>
-#### makearrayloglikelihood(madsdata::Associative{K, V},  loglikelihood)
+## makearrayloglikelihood(madsdata::Associative{K, V},  loglikelihood)
 Make a log likelihood function that accepts an array containing the opt parameters' values
 
 *source:*
@@ -1195,7 +1196,7 @@ Make a log likelihood function that accepts an array containing the opt paramete
 ---
 
 <a id="method__makebigdt.1" class="lexicon_definition"></a>
-#### makebigdt!(madsdata::Associative{K, V},  choice::Associative{K, V})
+## makebigdt!(madsdata::Associative{K, V},  choice::Associative{K, V})
 Setup BIG-DT problem
 
 Arguments:
@@ -1214,7 +1215,7 @@ Returns:
 ---
 
 <a id="method__makebigdt.2" class="lexicon_definition"></a>
-#### makebigdt(madsdata::Associative{K, V},  choice::Associative{K, V})
+## makebigdt(madsdata::Associative{K, V},  choice::Associative{K, V})
 Setup BIG-DT problem
 
 Arguments:
@@ -1233,7 +1234,7 @@ Returns:
 ---
 
 <a id="method__makecomputeconcentrations.1" class="lexicon_definition"></a>
-#### makecomputeconcentrations(madsdata::Associative{K, V})
+## makecomputeconcentrations(madsdata::Associative{K, V})
 Create a function to compute concentrations for all the observation points using Anasol
 
 `Mads.makecomputeconcentrations(madsdata)`
@@ -1266,7 +1267,7 @@ forward_preds = computeconcentrations(paramdict)
 ---
 
 <a id="method__makelmfunctions.1" class="lexicon_definition"></a>
-#### makelmfunctions(madsdata)
+## makelmfunctions(madsdata)
 Make forward model functions needed for Levenberg-Marquardt optimization
 
 
@@ -1276,7 +1277,7 @@ Make forward model functions needed for Levenberg-Marquardt optimization
 ---
 
 <a id="method__makelogprior.1" class="lexicon_definition"></a>
-#### makelogprior(madsdata::Associative{K, V})
+## makelogprior(madsdata::Associative{K, V})
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
 *source:*
@@ -1285,7 +1286,7 @@ Make a function to compute the prior log-likelihood of the model parameters list
 ---
 
 <a id="method__makemadscommandfunction.1" class="lexicon_definition"></a>
-#### makemadscommandfunction(madsdata::Associative{K, V})
+## makemadscommandfunction(madsdata::Associative{K, V})
 Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`
 
 Usage:
@@ -1334,7 +1335,7 @@ Options for reading model outputs:
 ---
 
 <a id="method__makemadscommandfunctionandgradient.1" class="lexicon_definition"></a>
-#### makemadscommandfunctionandgradient(madsdata::Associative{K, V})
+## makemadscommandfunctionandgradient(madsdata::Associative{K, V})
 Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
 
 *source:*
@@ -1343,7 +1344,7 @@ Make MADS forward & gradient functions for the model defined in the MADS problem
 ---
 
 <a id="method__makemadscommandgradient.1" class="lexicon_definition"></a>
-#### makemadscommandgradient(madsdata::Associative{K, V})
+## makemadscommandgradient(madsdata::Associative{K, V})
 Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
 *source:*
@@ -1352,7 +1353,7 @@ Make MADS gradient function to compute the parameter-space gradient for the mode
 ---
 
 <a id="method__makemadsconditionalloglikelihood.1" class="lexicon_definition"></a>
-#### makemadsconditionalloglikelihood(madsdata::Associative{K, V})
+## makemadsconditionalloglikelihood(madsdata::Associative{K, V})
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 
@@ -1363,7 +1364,7 @@ Model parameters and observations are defined in the MADS problem dictionary `ma
 ---
 
 <a id="method__makemadsloglikelihood.1" class="lexicon_definition"></a>
-#### makemadsloglikelihood(madsdata::Associative{K, V})
+## makemadsloglikelihood(madsdata::Associative{K, V})
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 
@@ -1374,7 +1375,7 @@ The function can be provided as an external function in the MADS problem diction
 ---
 
 <a id="method__maxtorealmaxfloat32.1" class="lexicon_definition"></a>
-#### maxtorealmaxFloat32!(df::DataFrames.DataFrame)
+## maxtorealmaxFloat32!(df::DataFrames.DataFrame)
 Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
 
 *source:*
@@ -1383,7 +1384,7 @@ Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly ca
 ---
 
 <a id="method__montecarlo.1" class="lexicon_definition"></a>
-#### montecarlo(madsdata::Associative{K, V})
+## montecarlo(madsdata::Associative{K, V})
 Monte Carlo analysis
 
 `Mads.montecarlo(madsdata; N=100)`
@@ -1408,7 +1409,7 @@ Dumps:
 ---
 
 <a id="method__naive_get_deltax.1" class="lexicon_definition"></a>
-#### naive_get_deltax(JpJ::Array{T, 2},  Jp::Array{T, 2},  f0::Array{T, 1},  lambda::Real)
+## naive_get_deltax(JpJ::Array{T, 2},  Jp::Array{T, 2},  f0::Array{T, 1},  lambda::Real)
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 
@@ -1418,7 +1419,7 @@ Naive Levenberg-Marquardt optimization: get the LM parameter space step
 ---
 
 <a id="method__naive_levenberg_marquardt.1" class="lexicon_definition"></a>
-#### naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})
+## naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})
 Naive Levenberg-Marquardt optimization
 
 Arguments:
@@ -1443,7 +1444,7 @@ Arguments:
 ---
 
 <a id="method__naive_levenberg_marquardt.2" class="lexicon_definition"></a>
-#### naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
+## naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
 Naive Levenberg-Marquardt optimization
 
 Arguments:
@@ -1468,7 +1469,7 @@ Arguments:
 ---
 
 <a id="method__naive_lm_iteration.1" class="lexicon_definition"></a>
-#### naive_lm_iteration(f::Function,  g::Function,  o::Function,  x0::Array{T, 1},  f0::Array{T, 1},  lambdas::Array{T, 1})
+## naive_lm_iteration(f::Function,  g::Function,  o::Function,  x0::Array{T, 1},  f0::Array{T, 1},  lambdas::Array{T, 1})
 Naive Levenberg-Marquardt optimization: perform LM iteration
 
 
@@ -1478,7 +1479,7 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 ---
 
 <a id="method__obslineismatch.1" class="lexicon_definition"></a>
-#### obslineismatch(obsline::AbstractString,  regexs::Array{Regex, 1})
+## obslineismatch(obsline::AbstractString,  regexs::Array{Regex, 1})
 Match an instruction line in the Mads instruction file with model input file
 
 *source:*
@@ -1487,7 +1488,7 @@ Match an instruction line in the Mads instruction file with model input file
 ---
 
 <a id="method__paramarray2dict.1" class="lexicon_definition"></a>
-#### paramarray2dict(madsdata::Associative{K, V},  array)
+## paramarray2dict(madsdata::Associative{K, V},  array)
 Convert parameter array to a parameter dictionary of arrays
 
 
@@ -1497,7 +1498,7 @@ Convert parameter array to a parameter dictionary of arrays
 ---
 
 <a id="method__parametersample.1" class="lexicon_definition"></a>
-#### parametersample(madsdata::Associative{K, V},  numsamples::Integer)
+## parametersample(madsdata::Associative{K, V},  numsamples::Integer)
 Independent sampling of model parameters defined in the MADS problem dictionary
 
 Arguments:
@@ -1514,7 +1515,7 @@ Arguments:
 ---
 
 <a id="method__parametersample.2" class="lexicon_definition"></a>
-#### parametersample(madsdata::Associative{K, V},  numsamples::Integer,  parameterkey::AbstractString)
+## parametersample(madsdata::Associative{K, V},  numsamples::Integer,  parameterkey::AbstractString)
 Independent sampling of model parameters defined in the MADS problem dictionary
 
 Arguments:
@@ -1531,7 +1532,7 @@ Arguments:
 ---
 
 <a id="method__paramrand.1" class="lexicon_definition"></a>
-#### paramrand(madsdata::Associative{K, V},  parameterkey::AbstractString)
+## paramrand(madsdata::Associative{K, V},  parameterkey::AbstractString)
 Random numbers for a MADS model parameter defined by `parameterkey`
 
 Arguments:
@@ -1548,7 +1549,7 @@ Arguments:
 ---
 
 <a id="method__plotsaresults_monty.1" class="lexicon_definition"></a>
-#### plotSAresults_monty(wellname,  madsdata,  result)
+## plotSAresults_monty(wellname,  madsdata,  result)
 Plot the sensitivity analysis results for each well (Specific plot requested by Monty)
 
 *source:*
@@ -1557,7 +1558,7 @@ Plot the sensitivity analysis results for each well (Specific plot requested by 
 ---
 
 <a id="method__plotgrid.1" class="lexicon_definition"></a>
-#### plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})
+## plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})
 Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
 
 ```
@@ -1583,7 +1584,7 @@ Arguments:
 ---
 
 <a id="method__plotmadsproblem.1" class="lexicon_definition"></a>
-#### plotmadsproblem(madsdata::Associative{K, V})
+## plotmadsproblem(madsdata::Associative{K, V})
 Plot contaminant sources and wells defined in MADS problem dictionary
 
 Arguments:
@@ -1599,7 +1600,7 @@ Arguments:
 ---
 
 <a id="method__plotmass.1" class="lexicon_definition"></a>
-#### plotmass(lambda,  mass_injected,  mass_reduced,  filename::AbstractString)
+## plotmass(lambda,  mass_injected,  mass_reduced,  filename::AbstractString)
 Plot injected/reduced contaminant mass
 
 - `Mads.plotmass(lambda, mass_injected, mass_reduced, filename="file_name")`
@@ -1621,7 +1622,7 @@ Dumps: image file with name `filename` and in specified `format`
 ---
 
 <a id="method__plotmatches.1" class="lexicon_definition"></a>
-#### plotmatches(madsdata_in::Associative{K, V})
+## plotmatches(madsdata_in::Associative{K, V})
 Plot the matches between model predictions and observations
 
 ```
@@ -1643,7 +1644,7 @@ Arguments:
 ---
 
 <a id="method__plotobssaresults.1" class="lexicon_definition"></a>
-#### plotobsSAresults(madsdata,  result)
+## plotobsSAresults(madsdata,  result)
 Plot the sensitivity analysis results for the observations
 
 Arguments:
@@ -1662,7 +1663,7 @@ Arguments:
 ---
 
 <a id="method__plotrobustnesscurves.1" class="lexicon_definition"></a>
-#### plotrobustnesscurves(madsdata::Associative{K, V},  bigdtresults::Dict{K, V})
+## plotrobustnesscurves(madsdata::Associative{K, V},  bigdtresults::Dict{K, V})
 Plot BIG-DT robustness curves
 
 Arguments:
@@ -1679,7 +1680,7 @@ Arguments:
 ---
 
 <a id="method__plotwellsaresults.1" class="lexicon_definition"></a>
-#### plotwellSAresults(madsdata,  result)
+## plotwellSAresults(madsdata,  result)
 Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
 
 Arguments:
@@ -1698,7 +1699,7 @@ Arguments:
 ---
 
 <a id="method__plotwellsaresults.2" class="lexicon_definition"></a>
-#### plotwellSAresults(madsdata,  result,  wellname)
+## plotwellSAresults(madsdata,  result,  wellname)
 Plot the sensitivity analysis results for a given well in the MADS problem dictionary (wells class expected)
 
 Arguments:
@@ -1718,7 +1719,7 @@ Arguments:
 ---
 
 <a id="method__printsaresults.1" class="lexicon_definition"></a>
-#### printSAresults(madsdata::Associative{K, V},  results::Associative{K, V})
+## printSAresults(madsdata::Associative{K, V},  results::Associative{K, V})
 Print sensitivity analysis results
 
 *source:*
@@ -1727,7 +1728,7 @@ Print sensitivity analysis results
 ---
 
 <a id="method__quietoff.1" class="lexicon_definition"></a>
-#### quietoff()
+## quietoff()
 Make MADS not quiet
 
 *source:*
@@ -1736,7 +1737,7 @@ Make MADS not quiet
 ---
 
 <a id="method__quieton.1" class="lexicon_definition"></a>
-#### quieton()
+## quieton()
 Make MADS quiet
 
 *source:*
@@ -1745,7 +1746,7 @@ Make MADS quiet
 ---
 
 <a id="method__readasciipredictions.1" class="lexicon_definition"></a>
-#### readasciipredictions(filename::AbstractString)
+## readasciipredictions(filename::AbstractString)
 Read MADS predictions from an ASCII file
 
 *source:*
@@ -1754,7 +1755,7 @@ Read MADS predictions from an ASCII file
 ---
 
 <a id="method__readjsonpredictions.1" class="lexicon_definition"></a>
-#### readjsonpredictions(filename::AbstractString)
+## readjsonpredictions(filename::AbstractString)
 Read MADS model predictions from a JSON file
 
 *source:*
@@ -1763,7 +1764,7 @@ Read MADS model predictions from a JSON file
 ---
 
 <a id="method__readobservations.1" class="lexicon_definition"></a>
-#### readobservations(madsdata::Associative{K, V})
+## readobservations(madsdata::Associative{K, V})
 Read observations
 
 *source:*
@@ -1772,7 +1773,7 @@ Read observations
 ---
 
 <a id="method__readobservations_cmads.1" class="lexicon_definition"></a>
-#### readobservations_cmads(madsdata::Associative{K, V})
+## readobservations_cmads(madsdata::Associative{K, V})
 Read observations using C Mads library
 
 *source:*
@@ -1781,7 +1782,7 @@ Read observations using C Mads library
 ---
 
 <a id="method__readyamlpredictions.1" class="lexicon_definition"></a>
-#### readyamlpredictions(filename::AbstractString)
+## readyamlpredictions(filename::AbstractString)
 Read MADS model predictions from a YAML file `filename`
 
 *source:*
@@ -1790,7 +1791,7 @@ Read MADS model predictions from a YAML file `filename`
 ---
 
 <a id="method__regexs2obs.1" class="lexicon_definition"></a>
-#### regexs2obs(obsline,  regexs,  obsnames,  getparamhere)
+## regexs2obs(obsline,  regexs,  obsnames,  getparamhere)
 Get observations for a set of regular expressions
 
 *source:*
@@ -1799,7 +1800,7 @@ Get observations for a set of regular expressions
 ---
 
 <a id="method__resetmodelruns.1" class="lexicon_definition"></a>
-#### resetmodelruns()
+## resetmodelruns()
 Reset the model runs count to be equal to zero
 
 *source:*
@@ -1808,7 +1809,7 @@ Reset the model runs count to be equal to zero
 ---
 
 <a id="method__rosenbrock.1" class="lexicon_definition"></a>
-#### rosenbrock(x::Array{T, 1})
+## rosenbrock(x::Array{T, 1})
 Rosenbrock test function
 
 *source:*
@@ -1817,7 +1818,7 @@ Rosenbrock test function
 ---
 
 <a id="method__rosenbrock2_gradient_lm.1" class="lexicon_definition"></a>
-#### rosenbrock2_gradient_lm(x)
+## rosenbrock2_gradient_lm(x)
 Parameter gradients of the Rosenbrock test function
 
 *source:*
@@ -1826,7 +1827,7 @@ Parameter gradients of the Rosenbrock test function
 ---
 
 <a id="method__rosenbrock2_lm.1" class="lexicon_definition"></a>
-#### rosenbrock2_lm(x)
+## rosenbrock2_lm(x)
 Rosenbrock test function (more difficult to solve)
 
 *source:*
@@ -1835,7 +1836,7 @@ Rosenbrock test function (more difficult to solve)
 ---
 
 <a id="method__rosenbrock_gradient.1" class="lexicon_definition"></a>
-#### rosenbrock_gradient!(x::Array{T, 1},  storage::Array{T, 1})
+## rosenbrock_gradient!(x::Array{T, 1},  storage::Array{T, 1})
 Parameter gradients of the Rosenbrock test function
 
 *source:*
@@ -1844,7 +1845,7 @@ Parameter gradients of the Rosenbrock test function
 ---
 
 <a id="method__rosenbrock_gradient_lm.1" class="lexicon_definition"></a>
-#### rosenbrock_gradient_lm(x::Array{T, 1})
+## rosenbrock_gradient_lm(x::Array{T, 1})
 Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)
 
 *source:*
@@ -1853,7 +1854,7 @@ Parameter gradients of the Rosenbrock test function for LM optimization (returns
 ---
 
 <a id="method__rosenbrock_hessian.1" class="lexicon_definition"></a>
-#### rosenbrock_hessian!(x::Array{T, 1},  storage::Array{T, 2})
+## rosenbrock_hessian!(x::Array{T, 1},  storage::Array{T, 2})
 Parameter Hessian of the Rosenbrock test function
 
 *source:*
@@ -1862,7 +1863,7 @@ Parameter Hessian of the Rosenbrock test function
 ---
 
 <a id="method__rosenbrock_lm.1" class="lexicon_definition"></a>
-#### rosenbrock_lm(x::Array{T, 1})
+## rosenbrock_lm(x::Array{T, 1})
 Rosenbrock test function for LM optimization (returns the 2 components separetely)
 
 *source:*
@@ -1871,7 +1872,7 @@ Rosenbrock test function for LM optimization (returns the 2 components separetel
 ---
 
 <a id="method__saltelli.1" class="lexicon_definition"></a>
-#### saltelli(madsdata::Associative{K, V})
+## saltelli(madsdata::Associative{K, V})
 Saltelli sensitivity analysis
 
 Arguments:
@@ -1887,7 +1888,7 @@ Arguments:
 ---
 
 <a id="method__saltellibrute.1" class="lexicon_definition"></a>
-#### saltellibrute(madsdata::Associative{K, V})
+## saltellibrute(madsdata::Associative{K, V})
 Saltelli sensitivity analysis (brute force)
 
 Arguments:
@@ -1903,7 +1904,7 @@ Arguments:
 ---
 
 <a id="method__saltelliprintresults2.1" class="lexicon_definition"></a>
-#### saltelliprintresults2(madsdata::Associative{K, V},  results::Associative{K, V})
+## saltelliprintresults2(madsdata::Associative{K, V},  results::Associative{K, V})
 Print sensitivity analysis results (method 2)
 
 *source:*
@@ -1912,7 +1913,7 @@ Print sensitivity analysis results (method 2)
 ---
 
 <a id="method__savemadsfile.1" class="lexicon_definition"></a>
-#### savemadsfile(madsdata)
+## savemadsfile(madsdata)
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 - `Mads.savemadsfile(madsdata)`
@@ -1930,7 +1931,7 @@ Arguments:
 ---
 
 <a id="method__savemadsfile.2" class="lexicon_definition"></a>
-#### savemadsfile(madsdata,  filename::AbstractString)
+## savemadsfile(madsdata,  filename::AbstractString)
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 - `Mads.savemadsfile(madsdata)`
@@ -1948,7 +1949,7 @@ Arguments:
 ---
 
 <a id="method__scatterplotsamples.1" class="lexicon_definition"></a>
-#### scatterplotsamples(madsdata,  samples::Array{T, 2},  filename::AbstractString)
+## scatterplotsamples(madsdata,  samples::Array{T, 2},  filename::AbstractString)
 Create histogram/scatter plots of model parameter samples
 
 Arguments:
@@ -1965,7 +1966,7 @@ Arguments:
 ---
 
 <a id="method__searchdir.1" class="lexicon_definition"></a>
-#### searchdir(key::Regex)
+## searchdir(key::Regex)
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
 - `Mads.searchdir(key)`
@@ -1987,7 +1988,7 @@ Returns:
 ---
 
 <a id="method__setallparamsoff.1" class="lexicon_definition"></a>
-#### setallparamsoff!(madsdata::Associative{K, V})
+## setallparamsoff!(madsdata::Associative{K, V})
 Set all parameters OFF
 
 *source:*
@@ -1996,7 +1997,7 @@ Set all parameters OFF
 ---
 
 <a id="method__setallparamson.1" class="lexicon_definition"></a>
-#### setallparamson!(madsdata::Associative{K, V})
+## setallparamson!(madsdata::Associative{K, V})
 Set all parameters ON
 
 *source:*
@@ -2005,7 +2006,7 @@ Set all parameters ON
 ---
 
 <a id="method__setdebuglevel.1" class="lexicon_definition"></a>
-#### setdebuglevel(level::Int64)
+## setdebuglevel(level::Int64)
 Set MADS debug level
 
 *source:*
@@ -2014,7 +2015,7 @@ Set MADS debug level
 ---
 
 <a id="method__setdynamicmodel.1" class="lexicon_definition"></a>
-#### setdynamicmodel(madsdata::Associative{K, V},  f::Function)
+## setdynamicmodel(madsdata::Associative{K, V},  f::Function)
 Set Dynamic Model for MADS model calls using internal Julia functions
 
 *source:*
@@ -2023,7 +2024,7 @@ Set Dynamic Model for MADS model calls using internal Julia functions
 ---
 
 <a id="method__setimagefileformat.1" class="lexicon_definition"></a>
-#### setimagefileformat(filename,  format)
+## setimagefileformat(filename,  format)
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
 `Mads.setimagefileformat(filename, format)`
@@ -2045,7 +2046,7 @@ Returns:
 ---
 
 <a id="method__setmadsinputfile.1" class="lexicon_definition"></a>
-#### setmadsinputfile(filename::AbstractString)
+## setmadsinputfile(filename::AbstractString)
 Set a default MADS input file
 
 `Mads.setmadsinputfile(filename)`
@@ -2061,7 +2062,7 @@ Arguments:
 ---
 
 <a id="method__setobservationtargets.1" class="lexicon_definition"></a>
-#### setobservationtargets!(madsdata::Associative{K, V},  predictions::Associative{K, V})
+## setobservationtargets!(madsdata::Associative{K, V},  predictions::Associative{K, V})
 Set observations (calibration targets) in the MADS problem dictionary based on `predictions` dictionary
 
 *source:*
@@ -2070,7 +2071,7 @@ Set observations (calibration targets) in the MADS problem dictionary based on `
 ---
 
 <a id="method__setobstime.1" class="lexicon_definition"></a>
-#### setobstime!(madsdata::Associative{K, V},  separator::AbstractString)
+## setobstime!(madsdata::Associative{K, V},  separator::AbstractString)
 Set observation time based on the observation name in the MADS problem dictionary
 
 Usage:
@@ -2099,7 +2100,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ---
 
 <a id="method__setobsweights.1" class="lexicon_definition"></a>
-#### setobsweights!(madsdata::Associative{K, V},  value::Number)
+## setobsweights!(madsdata::Associative{K, V},  value::Number)
 Set observation weights in the MADS problem dictionary
 
 *source:*
@@ -2108,7 +2109,7 @@ Set observation weights in the MADS problem dictionary
 ---
 
 <a id="method__setparamoff.1" class="lexicon_definition"></a>
-#### setparamoff!(madsdata::Associative{K, V},  parameterkey)
+## setparamoff!(madsdata::Associative{K, V},  parameterkey)
 Set a specific parameter with a key `parameterkey` OFF
 
 *source:*
@@ -2117,7 +2118,7 @@ Set a specific parameter with a key `parameterkey` OFF
 ---
 
 <a id="method__setparamon.1" class="lexicon_definition"></a>
-#### setparamon!(madsdata::Associative{K, V},  parameterkey::AbstractString)
+## setparamon!(madsdata::Associative{K, V},  parameterkey::AbstractString)
 Set a specific parameter with a key `parameterkey` ON
 
 *source:*
@@ -2126,7 +2127,7 @@ Set a specific parameter with a key `parameterkey` ON
 ---
 
 <a id="method__setparamsdistnormal.1" class="lexicon_definition"></a>
-#### setparamsdistnormal!(madsdata::Associative{K, V},  mean,  stddev)
+## setparamsdistnormal!(madsdata::Associative{K, V},  mean,  stddev)
 Set normal parameter distributions for all the model parameters in the MADS problem dictionary
 
 `Mads.setparamsdistnormal!(madsdata, mean, stddev)`
@@ -2144,7 +2145,7 @@ Arguments:
 ---
 
 <a id="method__setparamsdistuniform.1" class="lexicon_definition"></a>
-#### setparamsdistuniform!(madsdata::Associative{K, V},  min,  max)
+## setparamsdistuniform!(madsdata::Associative{K, V},  min,  max)
 Set uniform parameter distributions for all the model parameters in the MADS problem dictionary
 
 `Mads.setparamsdistuniform!(madsdata, min, max)`
@@ -2162,7 +2163,7 @@ Arguments:
 ---
 
 <a id="method__setparamsinit.1" class="lexicon_definition"></a>
-#### setparamsinit!(madsdata::Associative{K, V},  paramdict::Associative{K, V})
+## setparamsinit!(madsdata::Associative{K, V},  paramdict::Associative{K, V})
 Set initial parameter guesses in the MADS dictionary
 
 `Mads.setparamsinit!(madsdata, paramdict)`
@@ -2179,7 +2180,7 @@ Arguments:
 ---
 
 <a id="method__setprocs.1" class="lexicon_definition"></a>
-#### setprocs()
+## setprocs()
 Set the available processors based on environmental variables
 
 *source:*
@@ -2188,7 +2189,7 @@ Set the available processors based on environmental variables
 ---
 
 <a id="method__setprocs.2" class="lexicon_definition"></a>
-#### setprocs(np)
+## setprocs(np)
 Set the number of processors to `np`
 
 *source:*
@@ -2197,7 +2198,7 @@ Set the number of processors to `np`
 ---
 
 <a id="method__setprocs.3" class="lexicon_definition"></a>
-#### setprocs(np,  nt)
+## setprocs(np,  nt)
 Set the number of processors to `np` and the number of threads to `nt`
 
 *source:*
@@ -2206,7 +2207,7 @@ Set the number of processors to `np` and the number of threads to `nt`
 ---
 
 <a id="method__setverbositylevel.1" class="lexicon_definition"></a>
-#### setverbositylevel(level::Int64)
+## setverbositylevel(level::Int64)
 Set MADS verbosity level
 
 *source:*
@@ -2215,7 +2216,7 @@ Set MADS verbosity level
 ---
 
 <a id="method__setwellweights.1" class="lexicon_definition"></a>
-#### setwellweights!(madsdata::Associative{K, V},  value::Number)
+## setwellweights!(madsdata::Associative{K, V},  value::Number)
 Set well weights in the MADS problem dictionary
 
 *source:*
@@ -2224,7 +2225,7 @@ Set well weights in the MADS problem dictionary
 ---
 
 <a id="method__showallparameters.1" class="lexicon_definition"></a>
-#### showallparameters(madsdata::Associative{K, V})
+## showallparameters(madsdata::Associative{K, V})
 Show all parameters in the MADS problem dictionary
 
 *source:*
@@ -2233,7 +2234,7 @@ Show all parameters in the MADS problem dictionary
 ---
 
 <a id="method__showobservations.1" class="lexicon_definition"></a>
-#### showobservations(madsdata::Associative{K, V})
+## showobservations(madsdata::Associative{K, V})
 Show observations in the MADS problem dictionary
 
 *source:*
@@ -2242,7 +2243,7 @@ Show observations in the MADS problem dictionary
 ---
 
 <a id="method__showparameters.1" class="lexicon_definition"></a>
-#### showparameters(madsdata::Associative{K, V})
+## showparameters(madsdata::Associative{K, V})
 Show optimizable parameters in the MADS problem dictionary
 
 *source:*
@@ -2251,7 +2252,7 @@ Show optimizable parameters in the MADS problem dictionary
 ---
 
 <a id="method__sinetransform.1" class="lexicon_definition"></a>
-#### sinetransform(sineparams::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+## sinetransform(sineparams::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
 Sine transformation of model parameters
 
 *source:*
@@ -2260,7 +2261,7 @@ Sine transformation of model parameters
 ---
 
 <a id="method__sinetransformfunction.1" class="lexicon_definition"></a>
-#### sinetransformfunction(f::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+## sinetransformfunction(f::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
 Sine transformation of a function
 
 *source:*
@@ -2269,7 +2270,7 @@ Sine transformation of a function
 ---
 
 <a id="method__sinetransformgradient.1" class="lexicon_definition"></a>
-#### sinetransformgradient(g::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
+## sinetransformgradient(g::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})
 Sine transformation of a gradient function
 
 *source:*
@@ -2278,7 +2279,7 @@ Sine transformation of a gradient function
 ---
 
 <a id="method__spaghettiplot.1" class="lexicon_definition"></a>
-#### spaghettiplot(madsdata::Associative{K, V},  number_of_samples::Int64)
+## spaghettiplot(madsdata::Associative{K, V},  number_of_samples::Int64)
 Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
 
 ```
@@ -2312,7 +2313,7 @@ Dumps:
 ---
 
 <a id="method__spaghettiplots.1" class="lexicon_definition"></a>
-#### spaghettiplots(madsdata::Associative{K, V},  number_of_samples::Int64)
+## spaghettiplots(madsdata::Associative{K, V},  number_of_samples::Int64)
 Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
 
 ```
@@ -2343,7 +2344,7 @@ Dumps:
 ---
 
 <a id="method__sprintf.1" class="lexicon_definition"></a>
-#### sprintf(args...)
+## sprintf(args...)
 Convert `@sprintf` macro into `sprintf` function
 
 *source:*
@@ -2352,7 +2353,7 @@ Convert `@sprintf` macro into `sprintf` function
 ---
 
 <a id="method__test.1" class="lexicon_definition"></a>
-#### test()
+## test()
 Execute Mads tests (the tests will be in parallel if processors are defined)
 
 *source:*
@@ -2361,7 +2362,7 @@ Execute Mads tests (the tests will be in parallel if processors are defined)
 ---
 
 <a id="method__test.2" class="lexicon_definition"></a>
-#### test(test)
+## test(test)
 Execute Mads tests (the tests will be in parallel if processors are defined)
 
 *source:*
@@ -2370,7 +2371,7 @@ Execute Mads tests (the tests will be in parallel if processors are defined)
 ---
 
 <a id="method__testj.1" class="lexicon_definition"></a>
-#### testj()
+## testj()
 Execute Mads tests (the default tests are in serial)
 
 *source:*
@@ -2379,7 +2380,7 @@ Execute Mads tests (the default tests are in serial)
 ---
 
 <a id="method__void2nan.1" class="lexicon_definition"></a>
-#### void2nan!(dict::Associative{K, V})
+## void2nan!(dict::Associative{K, V})
 Convert Void's into NaN's in a dictionary
 
 *source:*
@@ -2388,7 +2389,7 @@ Convert Void's into NaN's in a dictionary
 ---
 
 <a id="method__welloff.1" class="lexicon_definition"></a>
-#### welloff!(madsdata,  wellname::AbstractString)
+## welloff!(madsdata,  wellname::AbstractString)
 Turn off a specific well in the MADS problem dictionary
 
 *source:*
@@ -2397,7 +2398,7 @@ Turn off a specific well in the MADS problem dictionary
 ---
 
 <a id="method__wellon.1" class="lexicon_definition"></a>
-#### wellon!(madsdata::Associative{K, V},  wellname::AbstractString)
+## wellon!(madsdata::Associative{K, V},  wellname::AbstractString)
 Turn on a specific well in the MADS problem dictionary
 
 *source:*
@@ -2406,7 +2407,7 @@ Turn on a specific well in the MADS problem dictionary
 ---
 
 <a id="method__wells2observations.1" class="lexicon_definition"></a>
-#### wells2observations!(madsdata::Associative{K, V})
+## wells2observations!(madsdata::Associative{K, V})
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 *source:*
@@ -2415,7 +2416,7 @@ Convert `Wells` class to `Observations` class in the MADS problem dictionary
 ---
 
 <a id="method__writeparameters.1" class="lexicon_definition"></a>
-#### writeparameters(madsdata::Associative{K, V})
+## writeparameters(madsdata::Associative{K, V})
 Write initial parameters
 
 *source:*
@@ -2424,7 +2425,7 @@ Write initial parameters
 ---
 
 <a id="method__writeparameters.2" class="lexicon_definition"></a>
-#### writeparameters(madsdata::Associative{K, V},  parameters)
+## writeparameters(madsdata::Associative{K, V},  parameters)
 Write parameters
 
 *source:*
@@ -2433,7 +2434,7 @@ Write parameters
 ---
 
 <a id="method__writeparametersviatemplate.1" class="lexicon_definition"></a>
-#### writeparametersviatemplate(parameters,  templatefilename,  outputfilename)
+## writeparametersviatemplate(parameters,  templatefilename,  outputfilename)
 Write parameters via MADS template
 
 *source:*
