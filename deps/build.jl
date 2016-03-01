@@ -21,7 +21,15 @@ if haskey(ENV, "http_proxy")
 end
 push!(args, "install")
 push!(args, "--user")
-push!(args, "--no-cache")
 append!(args, PACKAGES)
 
 pip.main(args)
+
+try
+	@pyimport yaml
+	info("Python YAML is available ...")
+catch
+	warn("Installation of pyyaml failed! Using Conda instead ...")
+	import Conda
+	Conda.add("yaml")
+end
