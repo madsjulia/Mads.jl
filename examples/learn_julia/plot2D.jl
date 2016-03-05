@@ -20,6 +20,7 @@ PyPlot.figure()
 PyPlot.plot(x, y)
 PyPlot.gcf()
 PyPlot.clf()
+PyPlot.close()
 
 PyPlot.figure()
 x = linspace(0, 25, 100)
@@ -31,3 +32,4 @@ PyPlot.legend(["sin", "cos", "sqrt", "func_plot"], loc="lower left")
 PyPlot.gcf()
 
 PyPlot.clf()
+PyPlot.close()
