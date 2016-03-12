@@ -7,10 +7,10 @@ examples = readdir(Pkg.dir("Mads") * "/examples/")
 
 println("Running MADS tests:")
 
-for test in examples
-    file = Pkg.dir("Mads") * "/examples/" * test * "/runtests.jl"
+for madstest in examples
+    file = Pkg.dir("Mads") * "/examples/" * madstest * "/runtests.jl"
     if isfile(file)
-    	println(" * $(test) ...")
+    	println(" * $(madstest) ...")
     	include(file)
     end
 end
