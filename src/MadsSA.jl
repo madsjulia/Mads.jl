@@ -1413,9 +1413,10 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
-		sendto(collect(2:nprime*Nr), constCell = constCell)
+		# sendto(collect(2:nprime*Nr), constCell = constCell)
+		sendto(workers(), constCell = constCell)
+	elseif P > 1 
 		# If there are less workers than resamplings * parameters, we send to all workers available
-	elseif P > 1
 		sendto(workers(), constCell = constCell)
 	end
 
