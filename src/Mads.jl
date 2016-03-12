@@ -30,14 +30,14 @@ import HDF5 # HDF5 installation might be problematic on some machines
 
 import Conda
 import PyCall
-if !haskey(ENV, "HOSTNAME") || ENV["HOSTNAME"] != "hb"
+if !haskey(ENV, "HOSTNAME") || !(ENV["HOSTNAME"] >= "hb")
 	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 else
 	warn("PyPlot is not available.")
 end
 if Conda.exists("yaml")
-	ENV["PYTHON"]=""
-	@PyCall.pyimport yaml
+	@everywhere ENV["PYTHON"] = ""
+	@everywhere @PyCall.pyimport yaml
 end
 
 include("MadsHelp.jl")

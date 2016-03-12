@@ -1,3 +1,8 @@
+"Get the number of processors"
+function getprocs()
+	warn("Number of processors is $(nprocs()) $(workers())\n")
+end
+
 "Set the number of processors to `np` and the number of threads to `nt`"
 function setprocs(np, nt)
 	n = np - nprocs()

@@ -277,10 +277,15 @@ function regexs2obs(obsline, regexs, obsnames, getparamhere)
 	obsnameindex = 1
 	obsdict = Dict{AbstractString, Float64}()
 	for i = 1:length(regexs)
+		@show regexs[i]
 		m = match(regexs[i], obsline, offset)
-		if getparamhere[i]
-			obsdict[obsnames[obsnameindex]] = parse(Float64, m.match)
-			obsnameindex += 1
+		if m == nothing
+			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
+		else
+			if getparamhere[i]
+				obsdict[obsnames[obsnameindex]] = parse(Float64, m.match)
+				obsnameindex += 1
+			end
 		end
 		offset = m.offset + length(m.match)
 	end
