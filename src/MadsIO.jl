@@ -277,7 +277,6 @@ function regexs2obs(obsline, regexs, obsnames, getparamhere)
 	obsnameindex = 1
 	obsdict = Dict{AbstractString, Float64}()
 	for i = 1:length(regexs)
-		@show regexs[i]
 		m = match(regexs[i], obsline, offset)
 		if m == nothing
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
