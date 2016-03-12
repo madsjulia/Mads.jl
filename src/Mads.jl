@@ -40,6 +40,14 @@ if Conda.exists("yaml")
 end
 @everywhere @PyCall.pyimport yaml
 
+quiet = true
+verbositylevel = 1
+debuglevel = 1
+modelruns = 0
+madsinputfile = ""
+create_tests = false # dangerous if true
+const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
+
 include("MadsLog.jl") # messages higher than verbosity level are printed
 include("MadsHelp.jl")
 include("MadsTest.jl")
@@ -64,14 +72,6 @@ include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
-
-quiet = true
-verbositylevel = 1
-debuglevel = 1
-modelruns = 0
-madsinputfile = ""
-create_tests = false # dangerous if true
-const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
 type svrOutput
