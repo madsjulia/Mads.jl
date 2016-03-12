@@ -30,16 +30,17 @@ import HDF5 # HDF5 installation might be problematic on some machines
 
 import Conda
 import PyCall
-if !haskey(ENV, "HOSTNAME") || !(ENV["HOSTNAME"] >= "hb")
+if !haskey(ENV, "HOSTNAME") || !ismatch(r"hb[0-9]*", ENV["HOSTNAME"])
 	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
 else
 	warn("PyPlot is not available.")
 end
 if Conda.exists("yaml")
 	@everywhere ENV["PYTHON"] = ""
-	@everywhere @PyCall.pyimport yaml
 end
+@everywhere @PyCall.pyimport yaml
 
+include("MadsLog.jl") # messages higher than verbosity level are printed
 include("MadsHelp.jl")
 include("MadsTest.jl")
 include("MadsCreate.jl")
@@ -63,7 +64,6 @@ include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
-include("MadsLog.jl") # messages higher than verbosity level are printed
 
 quiet = true
 verbositylevel = 1

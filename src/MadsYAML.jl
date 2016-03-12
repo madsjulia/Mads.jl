@@ -34,6 +34,7 @@ if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 		close(f)
 	end
 elseif isdefined(:YAML) # using YAML in Julia
+	Mads.madswarn("Julia YAML module is used")
 	"Load YAML file"
 	function loadyamlfile(filename::AbstractString; julia::Bool=true) # load YAML file
 		yamldata = DataStructures.OrderedDict()
