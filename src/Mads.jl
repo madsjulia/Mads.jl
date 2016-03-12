@@ -38,7 +38,7 @@ end
 if Conda.exists("yaml")
 	@everywhere ENV["PYTHON"] = ""
 end
-@everywhere @PyCall.pyimport yaml
+@PyCall.pyimport yaml
 
 quiet = true
 verbositylevel = 1

@@ -26,8 +26,8 @@ sprintf(args...) = eval(:@sprintf($(args...)))
 
 "Set the available processors based on environmental variables"
 function setprocs(;ntasks_per_node=0, mads_servers=false)
-	if nprocs() > 0
-		rmprocs(workers())
+	if nprocs() > 1
+		rmprocs(workers()[2:end])
 	end
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
