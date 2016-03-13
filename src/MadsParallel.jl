@@ -3,7 +3,19 @@ function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
 end
 
-"Set the number of processors to `np` and the number of threads to `nt`"
+"""
+Set the number of processors to `np` and the number of threads to `nt`
+
+Usage:
+```
+Mads.setprocs(4, 8)
+```
+
+Arguments:
+
+- `np` : number of processors
+- `nt` : number of threads
+"""
 function setprocs(np::Int, nt::Int)
 	np = np <= 0 ? 1 : np
 	nt = nt <= 0 ? 1 : nt
@@ -20,7 +32,19 @@ function setprocs(np::Int, nt::Int)
 	getprocs()
 end
 
-"Set the number of processors to `np`"
+"""
+Set the number of processors to `np`
+
+Usage:
+
+```
+Mads.setprocs(4)
+```
+
+Arguments:
+
+- `np` : number of processors
+"""
 function setprocs(np::Int)
 	setprocs(np, np)
 end
@@ -32,6 +56,7 @@ sprintf(args...) = eval(:@sprintf($(args...)))
 Set the available processors based on environmental variables. Supports SLURM only at the moment.
 
 Usage:
+
 ```
 Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
@@ -39,6 +64,7 @@ Mads.setprocs(ntasks_per_node=2, mads_servers=true)
 ```
 
 Optional arguments:
+
 - `ntasks_per_node` : number of parallel tasks per node
 - `mads_servers` : if true use MADS servers (LANL only)
 """
