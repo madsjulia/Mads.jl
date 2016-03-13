@@ -36,7 +36,7 @@ else
 	warn("PyPlot is not available.")
 end
 if Conda.exists("yaml")
-	@everywhere ENV["PYTHON"] = ""
+	ENV["PYTHON"] = ""
 end
 @PyCall.pyimport yaml
 
