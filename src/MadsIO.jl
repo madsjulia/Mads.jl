@@ -249,7 +249,11 @@ function instline2regexs(instline::AbstractString)
 		end
 		offset = m.offset + length(m.match)
 		if m.match[1] == '@'
-			push!(regexs, Regex(string("\\h*", m.match[2:end - 1], "[^\\s]*")))
+			if isspace(m.match[end - 1])
+				push!(regexs, Regex(string("\\h*", m.match[2:end - 1])))
+			else
+				push!(regexs, Regex(string("\\h*", m.match[2:end - 1], "[^\\s]*")))
+			end
 			push!(getparamhere, false)
 		elseif m.match[1] == '!'
 			push!(regexs, floatregex)

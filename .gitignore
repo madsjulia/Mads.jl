@@ -12,7 +12,6 @@ syntax: glob
 *.json
 *.yaml
 output.dat
-*iterationresults
 # MADS files
 obj
 bin
@@ -25,8 +24,10 @@ wells
 *.so
 *.so.1
 *.results
+*iterationresults
 *.intermediate_residuals
 *.intermediate_results
+*lmjacobian.dat
 *intermediate.mads
 *-rerun.mads
 *-error.mads
