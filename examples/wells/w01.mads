@@ -1,5 +1,3 @@
-Problem: { }
-Solution: external
 Parameters:
 - k: { longname: "permeability", init: 1, type: opt, log: no, step: 0.1, min: -5, max: 5, init_min: -1, init_max: 1 }
 - S: { longname: "storativity", init: 1, type: opt, log: no, step: 0.1, min: -5, max: 5, init_min: -1, init_max: 1 }
@@ -15,7 +13,7 @@ Observations:
 - o9:  { target: 9.38, weight: 1, log: no, min: 9.33, max: 9.43 }
 - o10: { target: 9.41, weight: 1, log: no, min: 9.36, max: 9.46 }
 - o11: { target: 9.45, weight: 1, log: no, min: 9.40, max: 9.50 }
-Command: "wells w01 &> /dev/null"
+Command: "wells w01; cat w01.s_point"
 Templates:
 - tmp1: { tpl: w01.tpl, write: w01.wells }
 Instructions:
