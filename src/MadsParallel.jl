@@ -1,35 +1,52 @@
 "Get the number of processors"
 function getprocs()
-	warn("Number of processors is $(nprocs()) $(workers())\n")
+	info("Number of processors: $(nprocs()) $(workers())\n")
 end
 
 "Set the number of processors to `np` and the number of threads to `nt`"
-function setprocs(np, nt)
+function setprocs(np::Int, nt::Int)
+	np = np <= 0 ? 1 : np
+	nt = nt <= 0 ? 1 : nt
+	@show np
 	n = np - nprocs()
+	@show n
 	if n > 0
 		addprocs(n)
 	elseif n < 0
 		rmprocs(workers()[end+n+1:end])
 	end
 	blas_set_num_threads(nt)
-	sleep(0.01)
-	warn("Number of processors is $(nprocs()) $(workers())\n")
+	sleep(0.1)
+	getprocs()
 end
 
 "Set the number of processors to `np`"
-function setprocs(np)
+function setprocs(np::Int)
 	setprocs(np, np)
 end
 
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
 
-"Set the available processors based on environmental variables"
-function setprocs(;ntasks_per_node=0, mads_servers=false)
+"""
+Set the available processors based on environmental variables. Supports SLURM only at the moment.
+
+Usage:
+```
+Mads.setprocs()
+Mads.setprocs(ntasks_per_node=4)
+Mads.setprocs(ntasks_per_node=2, mads_servers=true)
+```
+
+Optional arguments:
+- `ntasks_per_node` : number of parallel tasks per node
+- `mads_servers` : if true use MADS servers (LANL only)
+"""
+function setprocs(; ntasks_per_node=0, mads_servers=false)
 	if nprocs() > 1
 		rmprocs(workers())
 	end
-	sleep(0.01)
+	sleep(0.1)
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
@@ -73,13 +90,17 @@ function setprocs(;ntasks_per_node=0, mads_servers=false)
 		end
 	end
 	# return(h)
-	addprocs(h)
-	sleep(0.01)
-	@everywhere global_workingdir = remotecall_fetch(1, ()->pwd())
-	@everywhere cd(global_workingdir)
-	local_workingdir = pwd()
-	sleep(0.01)
-	info("Number of processors: $(nprocs())")
-	info("Workers: $(join(h, " "))")
-	info("Working directory: $(local_workingdir)")
+	if length(h) > 0
+		addprocs(h)
+		sleep(0.1)
+		@everywhere global_workingdir = remotecall_fetch(1, ()->pwd())
+		@everywhere cd(global_workingdir)
+		local_workingdir = pwd()
+		sleep(0.1)
+		info("Number of processors: $(nprocs())")
+		info("Workers: $(join(h, " "))")
+		info("Working directory: $(local_workingdir)")
+	else
+		warn("No processors found to add!")
+	end
 end

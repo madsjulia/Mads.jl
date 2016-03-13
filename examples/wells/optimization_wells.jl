@@ -1,12 +1,25 @@
 import Mads
 
-info("Levenberg-Marquardt optimization of an external call problem using the code WELLS ...")
+problemdir = Mads.getmadsdir()
+if problemdir == ""
+	problemdir = Mads.madsdir * "/../examples/wells/"
+end
 cdir = pwd()
-problemdir = string((dirname(Base.source_path()))) * "/"
-cd(problemdir)
+@everywhere cd(problemdir)
+
+info("Levenberg-Marquardt optimization of an external call problem using the code WELLS ...")
+
 md = Mads.loadmadsfile("w01.mads")
 params, results = Mads.calibrate(md)
 display(params)
-cd(cdir)
+
+md = Mads.loadmadsfile("w01-restart.mads")
+params, results = Mads.calibrate(md)
+display(params)
+params, results = Mads.calibrate(md)
+display(params)
+
+
+@everywhere cd(cdir)
 
 return
