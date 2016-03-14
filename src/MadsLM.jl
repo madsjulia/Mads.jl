@@ -249,8 +249,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
-		if norm(JpJ) == 0.0
-			Mads.madserror("Jacobian norm is too low! Parameters do not change observations.")
+		if norm(JpJ) < eps(Float64)
+			Mads.madswarn("Jacobian norm is too low! Parameters do not change observations.")
 		end
 		if first_lambda
 			lambda = min(1e4, max(lambda, diag(JpJ)...)) * lambda_scale;

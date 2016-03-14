@@ -19,7 +19,7 @@ end
 
 "MADS warning messages"
 function madswarn(message::AbstractString)
-	!quiet && warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+	warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
 end
 
 "MADS error messages"
