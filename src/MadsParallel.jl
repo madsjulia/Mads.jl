@@ -69,10 +69,6 @@ Optional arguments:
 - `mads_servers` : if true use MADS servers (LANL only)
 """
 function setprocs(; ntasks_per_node=0, mads_servers=false)
-	if nprocs() > 1
-		rmprocs(workers())
-	end
-	sleep(0.1)
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
@@ -117,6 +113,10 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 	end
 	# return(h)
 	if length(h) > 0
+		if nprocs() > 1
+			rmprocs(workers())
+		end
+		sleep(0.1)
 		addprocs(h)
 		sleep(0.1)
 		@everywhere global_workingdir = remotecall_fetch(1, ()->pwd())
