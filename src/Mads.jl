@@ -35,7 +35,9 @@ if !haskey(ENV, "HOSTNAME") || !ismatch(r"hb[0-9]*", ENV["HOSTNAME"])
 else
 	warn("PyPlot is not available.")
 end
-if Conda.exists("yaml")
+try
+	@PyCall.pyimport yaml
+catch
 	ENV["PYTHON"] = ""
 end
 @PyCall.pyimport yaml
