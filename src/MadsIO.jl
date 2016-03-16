@@ -320,6 +320,8 @@ function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractStr
 			Mads.madserror("Did not get a match for instruction file ($instructionfilename) line:\n$instline")
 		end
 	end
+	close(instfile)
+	close(obsfile)
 	return obsdict
 end
 

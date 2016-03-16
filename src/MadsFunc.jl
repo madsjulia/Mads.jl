@@ -71,21 +71,21 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			currentdir = pwd()
 			cd(madsproblemdir)
 			newdirname = "../$(split(pwd(),"/")[end])_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
-			Mads.madsinfo("Temp directory: $(newdirname)")
+			Mads.madsinfo("Temporary directory: $(newdirname)")
 			attempt = 0
 			trying = true
 			while trying
 				try
 					attempt += 1
 					if !isdir(newdirname)
-						run(`mkdir $newdirname`)
+						mkdir(newdirname)
 					end
 					run(`bash -c "ln -sf $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 					trying = false
 				catch
 					sleep(attempt * 0.5)
 					if attempt > 3
-						madscritical("Temp directory $newdirname cannot be created!")
+						madscritical("Temporary directory $newdirname cannot be created!")
 						trying = false
 					end
 				end
@@ -190,23 +190,22 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
+			cd(currentdir) # restore to the original directory
 			attempt = 0
 			trying = true
 			while trying
 				try
 					attempt += 1
-					run(`rm -fR $newdirname`)
+					rm(newdirname, recursive=true)
 					trying = false
 				catch
+					trying = false
 					sleep(attempt * 0.5)
 					if attempt > 3
-						madswarn("Temp directory $newdirname cannot be deleted!")
-						trying = false
-						run(`bash -c 'bash -c "sleep 15; rm -fR $newdirname" &'`)
+						madswarn("Temporary directory $newdirname cannot be deleted!")
 					end
 				end
 			end
-			cd(currentdir) # restore to the original directory
 			global modelruns += 1
 			return results
 		end
