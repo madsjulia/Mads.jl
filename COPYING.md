@@ -1,9 +1,5 @@
 MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
-
-http://mads.lanl.gov
-http://madsjulia.lanl.gov
-http://gitlab.com/mads/Mads.jl
-http://madsjulia.github.io/Mads.jl/
+---------------
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 
