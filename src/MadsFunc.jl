@@ -92,14 +92,18 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
-					filename = instruction["read"]
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					filename = newdirname * "/" * instruction["read"]
+					if isfile(filename)
+						rm(filename) # delete the parameter file links
+					end
 				end
 			end
 			if haskey(madsdata, "Templates") # Templates/Instructions
 				for template in madsdata["Templates"]
-					filename = template["write"]
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					filename = newdirname * "/" * template["write"]
+					if isfile(filename)
+						rm(filename) # delete the parameter file links
+					end
 				end
 				cd(newdirname)
 				writeparameters(madsdata, parameters)
@@ -108,45 +112,69 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			#TODO move the writing into the "writeparameters" function
 			if haskey(madsdata, "JLDParameters") # JLD
 				for filename in vcat(madsdata["JLDParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 				JLD.save("$(newdirname)/$(madsdata["JLDParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JLDPredictions") # JLD
 				for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 			end
 			if haskey(madsdata, "JSONParameters") # JSON
 				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 				dumpjsonfile("$(newdirname)/$(madsdata["JSONParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JSONPredictions") # JSON
 				for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 			end
 			if haskey(madsdata, "YAMLParameters") # YAML
 				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 				dumpyamlfile("$(newdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 			end
 			if haskey(madsdata, "ASCIIParameters") # ASCII
-				run(`rm -f $(newdirname)/$(madsdata["ASCIIParameters"])`) # delete the parameter file links
+				f = newdirname * "/" * madsdata["ASCIIParameters"]
+				if isfile(f)
+					rm(f) # delete the parameter file links
+				end
 				#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 				dumpasciifile("$(newdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create an ASCII parameter file
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
 				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					run(`rm -f $(newdirname)/$filename`) # delete the parameter file links
+					f = newdirname * "/" * filename
+					if isfile(f)
+						rm(f) # delete the parameter file links
+					end
 				end
 			end
 			if haskey(madsdata, "Julia command")
@@ -159,7 +187,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 				try
 					run(`bash -c "cd $newdirname; $(madsdata["Command"])"`)
 				catch
-					Mads.madscritical("Command $(madsdata["Command"]) cannot be executed!")
+					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -190,7 +218,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
-			cd(currentdir) # restore to the original directory
+			cd(madsproblemdir) # restore to the original directory
 			attempt = 0
 			trying = true
 			while trying
@@ -199,10 +227,10 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					rm(newdirname, recursive=true)
 					trying = false
 				catch
-					trying = false
 					sleep(attempt * 0.5)
 					if attempt > 3
 						madswarn("Temporary directory $newdirname cannot be deleted!")
+						trying = false
 					end
 				end
 			end
