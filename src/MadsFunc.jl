@@ -77,8 +77,10 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			while trying
 				try
 					attempt += 1
-					run(`mkdir $newdirname`)
-					run(`bash -c "ln -s $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
+					if !isdir(newdirname)
+						run(`mkdir $newdirname`)
+					end
+					run(`bash -c "ln -sf $(madsproblemdir)/* $newdirname"`) # link all the files in the mads problem directory
 					trying = false
 				catch
 					sleep(attempt * 0.5)
@@ -200,6 +202,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 					if attempt > 3
 						madswarn("Temp directory $newdirname cannot be deleted!")
 						trying = false
+						run(`bash -c 'bash -c "sleep 15; rm -fR $newdirname" &'`)
 					end
 				end
 			end
