@@ -28,6 +28,24 @@ import JLD
 import YAML
 import HDF5 # HDF5 installation might be problematic on some machines
 
+macro tryimport(s)
+	importq = string(:(import $s))
+	warnstring = string(s, " not available")
+	q = quote
+		try 
+			eval(parse($importq))
+		catch
+			warn($warnstring)
+		end
+	end
+	return :($(esc(q)))
+end
+
+@tryimport Gadfly
+@tryimport PyPlot
+@tryimport PyCall
+
+#=
 if !haskey(ENV, "MADS_NO_PLOT")
 	import Gadfly
 	if !haskey(ENV, "MADS_NO_PYTHON")
@@ -36,9 +54,11 @@ if !haskey(ENV, "MADS_NO_PLOT")
 else
 	warn("Mads plotting is disabled")
 end
+=#
 
-if !haskey(ENV, "MADS_NO_PYTHON")
-	import PyCall
+#if !haskey(ENV, "MADS_NO_PYTHON")
+@tryimport PyCall
+if isdefined(:PyCall)
 	try
 		eval(:(@PyCall.pyimport yaml))
 	catch
@@ -49,6 +69,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 	end
 	eval(:(@PyCall.pyimport yaml))
 end
+#end
 
 quiet = true
 verbositylevel = 1
