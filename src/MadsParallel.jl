@@ -19,16 +19,14 @@ Arguments:
 function setprocs(np::Int, nt::Int)
 	np = np <= 0 ? 1 : np
 	nt = nt <= 0 ? 1 : nt
-	@show np
 	n = np - nprocs()
-	@show n
 	if n > 0
 		addprocs(n)
 	elseif n < 0
 		rmprocs(workers()[end+n+1:end])
 	end
 	blas_set_num_threads(nt)
-	sleep(0.1)
+	sleep(10)
 	getprocs()
 end
 
@@ -119,19 +117,8 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 		sleep(0.1)
 		addprocs(h)
 		sleep(0.1)
-		if haskey(ENV, "MADS_NO_PYTHON")
-			@everywhere ENV["MADS_NO_PYTHON"] = ""
-		end
-		if haskey(ENV, "MADS_NO_PLOT")
-			@everywhere ENV["MADS_NO_PLOT"] = ""
-		end
-		@everywhere global_workingdir = remotecall_fetch(1, ()->pwd())
-		@everywhere cd(global_workingdir)
-		local_workingdir = pwd()
-		sleep(0.1)
 		info("Number of processors: $(nprocs())")
 		info("Workers: $(join(h, " "))")
-		info("Working directory: $(local_workingdir)")
 	else
 		warn("No processors found to add!")
 	end
