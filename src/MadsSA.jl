@@ -1,7 +1,3 @@
-using DataStructures
-using DataFrames
-using Gadfly
-using Distributions
 using ProgressMeter
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
@@ -88,14 +84,16 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	J = g_lm(initparams)
 	writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
-				Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
-				Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-				Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
-	filename = "$(rootname)-jacobian"
-	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
-	Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
+	if isdefined(:Gadfly)
+		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
+					Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
+					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
+		filename = "$(rootname)-jacobian"
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
+		Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
+	end
 	JpJ = J' * J
 	covar = Array(Float64, 0)
 	try
@@ -125,23 +123,25 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	sortedeigenm = real(eigenm[:,index])
 	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
-				Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
-				Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-				Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
-	# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-	filename = "$(rootname)-eigenmatrix"
-	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
-	Mads.madsinfo("""Eigen matrix plot saved in $filename""")
-	eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
-				Gadfly.Geom.bar,
-				Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
-				Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
-	filename = "$(rootname)-eigenvalues"
-	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
-	Mads.madsinfo("""Eigen values plot saved in $filename""")
+	if isdefined(:Gadfly)
+		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
+					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
+					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+					Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
+		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+		filename = "$(rootname)-eigenmatrix"
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
+		Mads.madsinfo("""Eigen matrix plot saved in $filename""")
+		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
+					Gadfly.Geom.bar,
+					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
+		filename = "$(rootname)-eigenvalues"
+		filename, format = Mads.setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
+		Mads.madsinfo("""Eigen values plot saved in $filename""")
+	end
 	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
@@ -652,10 +652,10 @@ function void2nan!(dict::Associative) # TODO generalize using while loop and rec
 end
 
 "Delete rows with NaN in a Dataframe `df`"
-function deleteNaN!(df::DataFrame)
+function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
-			deleterows!(df, find(isnan(df[i][:])))
+			DataFrames.deleterows!(df, find(isnan(df[i][:])))
 			if size(df)[1] == 0
 				return
 			end
@@ -664,7 +664,7 @@ function deleteNaN!(df::DataFrame)
 end
 
 "Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data"
-function maxtorealmaxFloat32!(df::DataFrame)
+function maxtorealmaxFloat32!(df::DataFrames.DataFrame)
 	limit = realmax(Float32) / 10
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
@@ -1541,7 +1541,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	# Rounding maxconcentration to 3 sig figs
 	maxconcentration = signif(maxconcentration,3)
 	# Data frame for concentration
-	dfc = DataFrame(x=[1:50], y = Y[:], parameter="c")
+	dfc = DataFrames.DataFrame(x=[1:50], y = Y[:], parameter="c")
 	# Changing paramkeys so they don't include "source1_"
 	for k = 1:nP
 		if length(paramkeys[k]) > 6
@@ -1554,7 +1554,7 @@ function plotSAresults_monty(wellname, madsdata, result)
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		#deleteNaN!(df[j])
 		j += 1
 	end

@@ -10,10 +10,13 @@ info("External optimization ...")
 
 md = Mads.loadmadsfile(workdir * "external-jld.mads")
 jparam, jresults = Mads.calibrate(md, maxJacobians=1)
-md = Mads.loadmadsfile(workdir * "external-yaml.mads")
-yparam, yresults = Mads.calibrate(md, maxJacobians=1)
 
-@test yparam == jparam
+if !haskey(ENV, "MADS_NO_PYTHON")
+	md = Mads.loadmadsfile(workdir * "external-yaml.mads")
+	yparam, yresults = Mads.calibrate(md, maxJacobians=1)
+
+	@test yparam == jparam
+end
 
 include(workdir * "optimization-lm.jl")
 include(workdir * "optimization_rosenbrock.jl")

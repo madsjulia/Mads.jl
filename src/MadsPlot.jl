@@ -1,5 +1,5 @@
 using ProgressMeter
-using DataStructures
+using Gadfly
 
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
@@ -65,7 +65,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 			end
 		end
 	end
-	dfw = DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
+	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if madsdata["Wells"][wellkey]["on"]
 			match = false
@@ -133,8 +133,10 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
-	@PyCall.pyimport matplotlib.ticker as mt
-	@PyCall.pyimport matplotlib.colors as mcc
+	if isdefined(:PyCall)
+		eval(:(@PyCall.pyimport matplotlib.ticker as mt))
+		eval(:(@PyCall.pyimport matplotlib.colors as mcc))
+	end
 	probname = Mads.getmadsrootname(madsdata; first=false)
 	xmin = madsdata["Grid"]["xmin"]
 	ymin = madsdata["Grid"]["ymin"]
@@ -353,12 +355,12 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], Gadfly.Geom.histogram, 
+				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram, 
 					Gadfly.Guide.xlabel(plotlabels[i]),
 					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt) 
 					))
 			else
-				cs[i, j] = Gadfly.render(plot(x=samples[:, i], y=samples[:, j], 
+				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j], 
 					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
 					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt)
 					))
@@ -442,7 +444,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 			j += 1
 		end
 	end
-	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
+	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
 	pp = Array(Any, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
 	push!(pp, pc)
@@ -450,7 +452,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -462,7 +464,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -474,7 +476,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -547,7 +549,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		tes = tes / maxtes # normalize 0 to 1
 	end
 	###################################################### DATA
-	dfc = DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
+	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
 	push!(pp, pd)
@@ -561,7 +563,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 	###################################################### TES
 	df = Array(Any, nP)
 	for j in 1:length(plotlabels)
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
 	end
 	vdf = vcat(df...)
@@ -586,7 +588,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 	end
 	###################################################### MES
 	for j in 1:length(plotlabels)
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$(plotlabels[j])")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
 	end
 	vdf = vcat(df...)
@@ -611,7 +613,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 	end
 	###################################################### VAR
 	for j in 1:length(plotlabels)
-		df[j] = DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$(plotlabels[j])")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
 	end
 	vdf = vcat(df...)
@@ -687,14 +689,14 @@ function spaghettiplots(madsdata::Associative, number_of_samples::Int; format=""
 	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplots(madsdata::Associative, paramdictarray::OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	if seed != 0
 		srand(seed)
 	end
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	paramdict = DataStructures.OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
@@ -832,14 +834,14 @@ function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="
 	spaghettiplot(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, paramdictarray::OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	if seed != 0
 		srand(seed)
 	end
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	paramdict = OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	paramdict = DataStructures.OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)

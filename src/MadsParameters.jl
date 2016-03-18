@@ -1,4 +1,5 @@
 using Distributions
+using DataStructures
 
 """
 Get keys of all parameters in the MADS dictionary

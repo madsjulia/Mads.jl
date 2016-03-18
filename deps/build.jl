@@ -1,35 +1,37 @@
-info("Checking for Python YAML ...")
-using PyCall
+if !haskey(ENV, "MADS_NO_PYTHON")
+	info("Checking for Python YAML ...")
+	using PyCall
 
-const PACKAGES = ["pyyaml"]
+	const PACKAGES = ["pyyaml"]
 
-try
+	try
+		@pyimport pip
+	catch
+		info("Installing pip ...")
+		get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
+		download("https://bootstrap.pypa.io/get-pip.py", get_pip)
+		run(`$(PyCall.python) $get_pip --user`)
+		rm("$get_pip")
+	end
+
 	@pyimport pip
-catch
-	info("Installing pip ...")
-	get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
-	download("https://bootstrap.pypa.io/get-pip.py", get_pip)
-	run(`$(PyCall.python) $get_pip --user`)
-	rm("$get_pip")
-end
+	args = UTF8String[]
+	if haskey(ENV, "http_proxy")
+		push!(args, "--proxy")
+		push!(args, ENV["http_proxy"])
+	end
+	push!(args, "install")
+	push!(args, "--user")
+	append!(args, PACKAGES)
 
-@pyimport pip
-args = UTF8String[]
-if haskey(ENV, "http_proxy")
-	push!(args, "--proxy")
-	push!(args, ENV["http_proxy"])
-end
-push!(args, "install")
-push!(args, "--user")
-append!(args, PACKAGES)
+	pip.main(args)
 
-pip.main(args)
-
-try
-	@pyimport yaml
-	info("Python YAML is available ...")
-catch
-	warn("Installation of pyyaml failed! Using Conda instead ...")
-	import Conda
-	Conda.add("yaml")
+	try
+		@pyimport yaml
+		info("Python YAML is available ...")
+	catch
+		warn("Installation of pyyaml failed! Using Conda instead ...")
+		import Conda
+		Conda.add("yaml")
+	end
 end

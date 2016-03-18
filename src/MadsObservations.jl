@@ -39,7 +39,7 @@ for i = 1:length(getobsnames)
 				elseif haskey( madsdata["Observations"][obskeys[i]], $obsaltname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsaltname]
 				else
-					if haskey( madsdata["Observations"][obskeys[i]], "log") && madsdata["Observations"][obskeys[i]]["log"] == true
+					if haskey(madsdata["Observations"][obskeys[i]], "log") && madsdata["Observations"][obskeys[i]]["log"] == true
 						obsvalue[i] = $(obslogdefault)
 					else
 						obsvalue[i] = $(obsdefault)

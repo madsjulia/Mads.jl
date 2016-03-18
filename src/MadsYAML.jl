@@ -113,6 +113,8 @@ function loadyamlmadsfile(filename::AbstractString; julia::Bool=false) # load MA
 							end
 						end
 					end
+				else
+					parameters[key]["log"] = false
 				end
 			end
 		end

@@ -15,8 +15,8 @@ module Mads
 import MetaProgTools
 import RobustPmap
 import DataStructures
+import DataFrames
 import Distributions
-import Gadfly
 import Compose
 import Colors
 import Compat
@@ -28,19 +28,27 @@ import JLD
 import YAML
 import HDF5 # HDF5 installation might be problematic on some machines
 
-import Conda
-import PyCall
-if !haskey(ENV, "HOSTNAME") || !ismatch(r"hb[0-9]*", ENV["HOSTNAME"])
-	import PyPlot # PyPlot installation may be problematic on some machines; remove if fails
+if !haskey(ENV, "MADS_NO_PLOT")
+	import Gadfly
+	if !haskey(ENV, "MADS_NO_PYTHON")
+		import PyPlot
+	end
 else
-	warn("PyPlot is not available.")
+	warn("Mads plotting is disabled")
 end
-try
-	@PyCall.pyimport yaml
-catch
-	ENV["PYTHON"] = ""
+
+if !haskey(ENV, "MADS_NO_PYTHON")
+	import PyCall
+	try
+		eval(:(@PyCall.pyimport yaml))
+	catch
+		ENV["PYTHON"] = ""
+	end
+	if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
+		import Conda
+	end
+	eval(:(@PyCall.pyimport yaml))
 end
-@PyCall.pyimport yaml
 
 quiet = true
 verbositylevel = 1
@@ -62,7 +70,6 @@ include("MadsSine.jl")
 include("MadsMisc.jl")
 include("MadsHelpers.jl")
 include("MadsParallel.jl")
-include("MadsPlot.jl")
 include("MadsForward.jl")
 include("MadsCalibrate.jl")
 include("MadsFunc.jl")
@@ -74,6 +81,9 @@ include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
+if !haskey(ENV, "MADS_NO_PLOT")
+	include("MadsPlot.jl")
+end
 
 ## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
 type svrOutput
