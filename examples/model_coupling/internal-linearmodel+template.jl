@@ -5,7 +5,9 @@ function madsmodelrun(madsdata::Associative) # mads data dictionary is as an arg
 	# - a system call executing an external model
 	# - a parser of the model outputs
 	# - return a dictionary with model predictions
-	param = readdlm("parameter.dat")
+	i = open("parameter.dat", "r")
+	param = readdlm(i)
+	close(i)
 	a = param[1]
 	b = param[2]
 	f(t) = a * t - b # a * t - b
