@@ -123,3 +123,12 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 		warn("No processors found to add!")
 	end
 end
+
+function noplot()
+	if myid() == 1
+		for i in workers()
+			@spawnat i ENV["MADS_NO_PYTHON"]=""
+			@spawnat i ENV["MADS_NO_PLOT"]=""
+		end
+	end
+end

@@ -1,4 +1,3 @@
-# import Mads
 import DataStructures
 import PyCall
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
