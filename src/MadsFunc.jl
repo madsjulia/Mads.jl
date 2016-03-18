@@ -250,7 +250,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			return madscommandfunctionwithreuse
 		elseif madsdata["Restart"] != false
 			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-			if haskey(madsdata, "RestartDir")
+			if haskey(madsdata, "RestartDir") && isdir(madsdata["RestartDir"])
 				rootdir = madsdata["RestartDir"]
 			elseif contains(madsdata["Filename"], "/")
 				rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
