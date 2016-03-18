@@ -119,6 +119,12 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 		sleep(0.1)
 		addprocs(h)
 		sleep(0.1)
+		if haskey(ENV, "MADS_NO_PYTHON")
+			@everywhere ENV["MADS_NO_PYTHON"] = ""
+		end
+		if haskey(ENV, "MADS_NO_PLOT")
+			@everywhere ENV["MADS_NO_PLOT"] = ""
+		end
 		@everywhere global_workingdir = remotecall_fetch(1, ()->pwd())
 		@everywhere cd(global_workingdir)
 		local_workingdir = pwd()
