@@ -328,18 +328,30 @@ end
 "Read observations"
 function readobservations(madsdata::Associative)
 	obsids = getobskeys(madsdata)
+	obsweight = getobsweight(madsdata)
 	observations = Dict()
 	obscount = Dict(zip(obsids, zeros(Int, length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])
 		for k in keys(obs)
 			obscount[k] += 1
-			observations[k] = obs[k]
+			if obscount[k] > 1
+				observations[k] += obs[k]
+			else
+				observations[k] = obs[k]
+			end
 		end
 	end
 	for k in keys(obscount)
-		if obscount[k] != 1
-			warn("got observation, $k, $(obscount[k]) times")
+		if obscount[k] == 0
+			if obsweight[k] > 0 
+				madswarn("Observation $k is missing!") # this should be an error
+			else
+				madswarn("Observation $k is missing!")
+			end
+		elseif obscount[k] > 1
+			observations[k] /= obscount[k]
+			madswarn("Observation $k detected $(obscount[k]) times; an average is computed") # this should be an info
 		end
 	end
 	return observations
