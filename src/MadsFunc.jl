@@ -71,7 +71,6 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			currentdir = pwd()
 			cd(madsproblemdir)
 			tempdirname = "../$(split(pwd(),"/")[end])_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
-			Mads.madsinfo("Temporary directory: $(tempdirname)")
 			attempt = 0
 			trying = true
 			while trying
@@ -81,6 +80,8 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 						mkdir(tempdirname)
 					end
 					run(`bash -c "ln -sf $(madsproblemdir)/* $tempdirname"`) # link all the files in the mads problem directory
+					cd(tempdirname)
+					Mads.madsinfo("Temporary directory: $(tempdirname)")
 					trying = false
 				catch
 					sleep(attempt * 0.5)
@@ -92,7 +93,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
-					filename = tempdirname * "/" * instruction["read"]
+					filename = instruction["read"]
 					if isfile(filename)
 						rm(filename) # delete the parameter file links
 					end
@@ -100,28 +101,26 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "Templates") # Templates/Instructions
 				for template in madsdata["Templates"]
-					filename = tempdirname * "/" * template["write"]
+					filename = template["write"]
 					if isfile(filename)
 						rm(filename) # delete the parameter file links
 					end
 				end
-				cd(tempdirname)
 				writeparameters(madsdata, parameters)
-				cd(madsproblemdir)
 			end
 			#TODO move the writing into the "writeparameters" function
 			if haskey(madsdata, "JLDParameters") # JLD
 				for filename in vcat(madsdata["JLDParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
 				end
-				JLD.save("$(tempdirname)/$(madsdata["JLDParameters"])", parameters) # create parameter files
+				JLD.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JLDPredictions") # JLD
 				for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
@@ -129,16 +128,16 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "JSONParameters") # JSON
 				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
 				end
-				dumpjsonfile("$(tempdirname)/$(madsdata["JSONParameters"])", parameters) # create parameter files
+				dumpjsonfile("$(madsdata["JSONParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JSONPredictions") # JSON
 				for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
@@ -146,7 +145,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "YAMLParameters") # YAML
 				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
@@ -155,14 +154,14 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
 				end
 			end
 			if haskey(madsdata, "ASCIIParameters") # ASCII
-				f = tempdirname * "/" * madsdata["ASCIIParameters"]
+				f = madsdata["ASCIIParameters"]
 				if isfile(f)
 					rm(f) # delete the parameter file links
 				end
@@ -171,7 +170,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
 				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = tempdirname * "/" * filename
+					f = filename
 					if isfile(f)
 						rm(f) # delete the parameter file links
 					end
@@ -179,46 +178,43 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsoutput("Executing Julia model-evaluation script parsing the model outputs ...\n")
-				cd(tempdirname)
 				results = madsdatacommandfunction(madsdata)
-				cd(madsproblemdir)
 			else
 				Mads.madsinfo("Executing $(madsdata["Command"]) ...")
 				try
-					run(`bash -c "cd $tempdirname; $(madsdata["Command"])"`)
+					run(`bash -c "$(madsdata["Command"])"`)
 				catch
+					cd(madsproblemdir)
 					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
-					cd(tempdirname)
 					results = readobservations(madsdata)
-					cd(madsproblemdir)
 				end
 				if haskey(madsdata, "JLDPredictions") # JLD
 					for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, JLD.load("$(tempdirname)/$filename"))
+						results = merge(results, JLD.load(filename))
 					end
 				end
 				if haskey(madsdata, "JSONPredictions") # JSON
 					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, loadjsonfile("$(tempdirname)/$filename"))
+						results = merge(results, loadjsonfile(filename))
 					end
 				end
 				if haskey(madsdata, "YAMLPredictions") # YAML
 					for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, loadyamlfile("$(tempdirname)/$filename"))
+						results = merge(results, loadyamlfile(filename))
 					end
 				end
 				if haskey(madsdata, "ASCIIPredictions") # ASCII
-					predictions = loadasciifile("$(tempdirname)/$(madsdata["ASCIIPredictions"])")
+					predictions = loadasciifile("$(madsdata["ASCIIPredictions"])")
 					obskeys = getobskeys(madsdata)
 					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
 					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
 				end
 			end
-			cd(madsproblemdir) # restore to the original directory
+			cd(madsproblemdir)
 			attempt = 0
 			trying = true
 			while trying
