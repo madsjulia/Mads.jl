@@ -246,14 +246,26 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 			return madscommandfunctionwithreuse
 		elseif madsdata["Restart"] != false
 			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-			if haskey(madsdata, "RestartDir") && isdir(madsdata["RestartDir"])
-				rootdir = madsdata["RestartDir"]
-			elseif contains(madsdata["Filename"], "/")
-				rootdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
-			else
-				rootdir = string(rootname, "_restart")
+			restartdir = ""
+			if haskey(madsdata, "RestartDir")
+				restartdir = madsdata["RestartDir"]
+				if !isdir(restartdir)
+					try
+						mkdir(restartdir)
+					catch
+						restartdir = ""
+						madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created")
+					end
+				end
 			end
-			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, rootdir, getparamkeys(madsdata), getobskeys(madsdata))
+			if restartdir == ""
+				if contains(madsdata["Filename"], "/")
+					restartdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
+				else
+					restartdir = string(rootname, "_restart")
+				end
+			end
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, getparamkeys(madsdata), getobskeys(madsdata))
 			return madscommandfunctionwithreuse
 		else
 			return madscommandfunction

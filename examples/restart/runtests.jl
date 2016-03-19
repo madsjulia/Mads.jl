@@ -12,6 +12,7 @@ run(`rm -fR $(problemdir)/external-jld_restart`)
 info("Restarting external calibration problem ...")
 md = Mads.loadmadsfile(problemdir * "external-jld.mads")
 md["Restart"] = true
+md["RestartDir"] = "$(problemdir)/external-jld.restart_test"
 info("... create restart ...")
 create_restart_results = Mads.calibrate(md, maxJacobians=1)
 info("... use restart ...")
@@ -19,7 +20,7 @@ use_restart_results = Mads.calibrate(md, maxJacobians=1)
 
 @test create_restart_results[1] == use_restart_results[1]
 
-run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
+run(`rm -fR $(problemdir)/external-jld.restart_test`)
 
 info("Restarting internal calibration problem ...")
 md = Mads.loadmadsfile(problemdir * "internal-linearmodel.mads")
@@ -36,7 +37,7 @@ use_restart_results = Mads.calibrate(md)
 
 run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
 
-info("Restarting sensitivity analysis problem ...")
+info("Restarting internal sensitivity analysis problem ...")
 md = Mads.loadmadsfile(problemdir * "internal-linearmodel.mads")
 info("... no restart ...")
 no_restart_results = Mads.saltelli(md, N=50, seed=2016)
