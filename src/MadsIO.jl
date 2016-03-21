@@ -191,7 +191,7 @@ searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(pa
 filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
 
-"Write parameters via MADS template"
+"Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"

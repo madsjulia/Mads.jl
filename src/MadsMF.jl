@@ -1,18 +1,5 @@
-using Mads
-using NMF
-using NMFk
-
-srand(2015)
-nS = 100
-nk = 3
-a = rand(nS)
-b = rand(nS)
-c = rand(nS)
-X = [a a*10 b b*5 a+b*2 c c+b]
-
-W, H, p, s = NMFk.execute(X, 30, nk)
-
-function NMFlm(X, nk; mads=false)
+"Matrix factorization via Levenberg Marquardt"
+function MFlm(X, nk; mads=true)
 	nS = size(X)[1]
 	nP = size(X)[2]
 	W_size = nS * nk
@@ -35,19 +22,19 @@ function NMFlm(X, nk; mads=false)
 	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
 
-	function nmf_reshape(x::Vector)
+	function mf_reshape(x::Vector)
 		W = reshape(x[1:W_size], nS, nk)
 		H = reshape(x[W_size+1:end], nk, nP)
 		return W, H
 	end
 
-	function nmf_lm(x::Vector)
-		W, H = nmf_reshape(x)
+	function mf_lm(x::Vector)
+		W, H = mf_reshape(x)
 		E = X - W * H
 		return vec(E)
 	end
 
-	function nmf_g_lm(x::Vector)
+	function mf_g_lm(x::Vector)
 		W = reshape(x[1:W_size], nS, nk)
 		H = reshape(x[W_size+1:end], nk, nP)
 		Wb = zeros(nS, nk)
@@ -72,18 +59,15 @@ function NMFlm(X, nk; mads=false)
 		return J
 	end
 
-	nmf_lm_sin = Mads.sinetransformfunction(nmf_lm, lowerbounds, upperbounds, indexlogtransformed)
-	nmf_g_lm_sin = Mads.sinetransformfunction(nmf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
+	mf_lm_sin = Mads.sinetransformfunction(mf_lm, lowerbounds, upperbounds, indexlogtransformed)
+	mf_g_lm_sin = Mads.sinetransformfunction(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	if mads
-		r = Mads.levenberg_marquardt(nmf_lm_sin, nmf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=10000, maxIter=10000, tolX=1e-6, tolG=1e-12)
+		r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=10000, maxIter=10000, tolX=1e-6, tolG=1e-12)
 	else
-		r = Optim.levenberg_marquardt(nmf_lm_sin, nmf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=10000)
+		r = Optim.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=10000)
 	end
 	# println("OF = $(r.f_minimum)")
 	x_final = Mads.sinetransform(r.minimum, lowerbounds, upperbounds, indexlogtransformed)
-	W, H = nmf_reshape(x_final)
+	W, H = mf_reshape(x_final)
 	return W, H, r.f_minimum
 end
-
-Wlm, Hlm, plm = NMFlm(X, nk)
-[Wlm * Hlm X]
