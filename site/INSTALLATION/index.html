@@ -72,6 +72,10 @@
             
                 <li class="toctree-l3"><a href="#installation">Installation</a></li>
                 
+                    <li><a class="toctree-l4" href="#installation-of-mads-without-python">Installation of MADS without PYTHON</a></li>
+                
+                    <li><a class="toctree-l4" href="#installation-of-mads-without-plotting-modules">Installation of MADS without plotting modules</a></li>
+                
                     <li><a class="toctree-l4" href="#installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</a></li>
                 
             
@@ -211,6 +215,16 @@
                 <h1 id="installation">Installation</h1>
 <p>After starting Julia, execute:</p>
 <pre><code>Pkg.add(&quot;Mads&quot;)
+</code></pre>
+
+<h2 id="installation-of-mads-without-python">Installation of MADS without PYTHON</h2>
+<p>MADS uses PyYAML and matplotlib. To avoid using these libraries set the following environmental variable:</p>
+<pre><code>export MADS_NO_PYTHON=&quot;&quot;
+</code></pre>
+
+<h2 id="installation-of-mads-without-plotting-modules">Installation of MADS without plotting modules</h2>
+<p>MADS uses Gadfly and matplotlib for plotting. To avoid using these libraries set the following environmental variable:</p>
+<pre><code>export MADS_NO_PLOT=&quot;&quot;
 </code></pre>
 
 <h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>

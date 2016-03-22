@@ -10,7 +10,7 @@
 Check for type exceptions
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:36](https://github.com/madsjulia/RobustPmap.jl/tree/81ec4bc760786dbfe6fff518d43a11bf5743e7c9/src/RobustPmap.jl#L36)
+[RobustPmap/src/RobustPmap.jl:36](https://github.com/madsjulia/RobustPmap.jl/tree/3751f3f2335217f8ba83893523a388d4477840e1/src/RobustPmap.jl#L36)
 
 ---
 
@@ -19,5 +19,5 @@ Check for type exceptions
 Robust pmap call
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:48](https://github.com/madsjulia/RobustPmap.jl/tree/81ec4bc760786dbfe6fff518d43a11bf5743e7c9/src/RobustPmap.jl#L48)
+[RobustPmap/src/RobustPmap.jl:48](https://github.com/madsjulia/RobustPmap.jl/tree/3751f3f2335217f8ba83893523a388d4477840e1/src/RobustPmap.jl#L48)
 
