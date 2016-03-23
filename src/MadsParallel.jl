@@ -133,6 +133,7 @@ function noplot()
 	end
 end
 
+"Set the working directory"
 function setdir(dir::ASCIIString)
 	if isdir(dir)
 		cd(dir)
