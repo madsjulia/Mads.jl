@@ -13,8 +13,6 @@ Mads.quietoff()
 
 info("Set the correct working directory on all the processors ...")
 @everywhere Mads.setdir()
-# @everywhere workingdir = remotecall_fetch(1, ()->pwd())
-# @everywhere cd(workingdir)
 @everywhere @show pwd()
 
 Mads.madsinfo("Load Mads problem ...")
