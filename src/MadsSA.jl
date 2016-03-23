@@ -489,7 +489,7 @@ for mi = 1:length(saltelli_functions)
 				madserror("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N), 1:numsaltellis)
+			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
