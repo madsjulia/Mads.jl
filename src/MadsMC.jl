@@ -31,8 +31,11 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 	end
 	mcparams = Lora.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
 	model = Lora.likelihood_model(mcparams, false)
-	sampler = Lora.RAM(fill(1e-1, length(initvals)), 0.3) # TODO switch back to RAM once it is included in a release of Lora
-	# sampler = Lora.MH(fill(1e-1, length(initvals)))
+	if Base.isbindingresolved(Lora, :RAM)
+		sampler = Lora.RAM(fill(1e-1, length(initvals)), 0.3)
+	else
+		sampler = Lora.MH(fill(1e-1, length(initvals)))
+	end
 	mcrange = Lora.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
 	mcparams0 = Dict(:p=>initvals)
 	job = Lora.BasicMCJob(model, sampler, mcrange, mcparams0, tuner=Lora.VanillaMCTuner())

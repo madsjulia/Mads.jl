@@ -121,7 +121,7 @@ function getmadsdir()
 		problemdir = ""
 	else
 		problemdir = string((dirname(source_path))) * "/"
-		Mads.madsinfo("Problem directory: $(problemdir)")
+		madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir
 end

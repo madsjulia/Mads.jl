@@ -132,3 +132,16 @@ function noplot()
 		end
 	end
 end
+
+function setdir(dir::ASCIIString)
+	if isdir(dir)
+		cd(dir)
+	end
+end
+
+function setdir()
+	dir = remotecall_fetch(1, ()->pwd())
+	cd(dir)
+end
+
+
