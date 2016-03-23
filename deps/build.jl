@@ -1,11 +1,13 @@
-if !haskey(ENV, "MADS_NO_PYTHON")
-	info("Checking for Python YAML ...")
-	using PyCall
+if haskey(ENV, "MADS_NO_PYTHON")
+	info("No Python will be used ...")
+else
+	import PyCall
 
+	info("Checking for Python YAML ...")
 	const PACKAGES = ["pyyaml"]
 
 	try
-		@pyimport pip
+		eval(:(@PyCall.pyimport pip))
 	catch
 		info("Installing pip ...")
 		get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
@@ -14,7 +16,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 		rm("$get_pip")
 	end
 
-	@pyimport pip
+	eval(:(@PyCall.pyimport pip))
 	args = UTF8String[]
 	if haskey(ENV, "http_proxy")
 		push!(args, "--proxy")
@@ -27,7 +29,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 	pip.main(args)
 
 	try
-		@pyimport yaml
+		eval(:(@PyCall.pyimport yaml))
 		info("Python YAML is available ...")
 	catch
 		warn("Installation of pyyaml failed! Using Conda instead ...")
