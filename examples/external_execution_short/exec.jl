@@ -4,6 +4,7 @@ include(joinpath(Pkg.dir("Mads"), "src/MadsParallel.jl"))
 info("Set SLURM processors ...")
 setprocs()
 # setprocs(ntasks_per_node=2)
+
 info("Number of processors = $(length(workers()))")
 
 info("Import mads ...")
