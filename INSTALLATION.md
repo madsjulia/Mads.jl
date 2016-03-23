@@ -4,7 +4,7 @@ Installation
 After starting Julia, execute:
 
 
-```
+```julia
 Pkg.add("Mads")
 ```
 
