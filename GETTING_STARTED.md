@@ -77,7 +77,7 @@ in the `examples/getting_started` subdirectory of the `Mads.jl` repository ([git
 MADS Documentation
 ------------------
 
-All the available MADS modules and functions are described at [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+All the available MADS modules and functions are described at [github](http://madsjulia.github.io/Mads.jl) and [readthedocs](`http://madsjl.readthedocs.org/en/latest/`)
 
 MADS Licensing & Copyright
 --------------------------

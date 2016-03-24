@@ -50,6 +50,29 @@ function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000
 	return mcmcchains
 end
 
+function savemcmcresults(chain, filename::AbstractString)
+	f = open(filename, "w")
+	print(f, "Min: ")
+	JSON.print(f, minimum(chain.value,2)[:])
+	println(f, "")
+	print(f, "Max: ")
+	JSON.print(f, maximum(chain.value,2)[:])
+	println(f, "")
+	print(f, "Mean: ")
+	JSON.print(f, mean(chain.value,2)[:])
+	println(f, "")
+	print(f, "Variance: ")
+	JSON.print(f, var(chain.value,2)[:])
+	println(f, "")
+	print(f, "MCse: ")
+	JSON.print(f, Lora.mcse(chain))
+	println(f, "")
+	print(f, "MCvar: ")
+	JSON.print(f, Lora.mcvar(chain))
+	println(f, "")
+	close(f)
+end
+
 """
 Monte Carlo analysis
 
