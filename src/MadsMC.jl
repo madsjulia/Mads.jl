@@ -39,7 +39,8 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 	end
 	mcrange = Lora.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
 	mcparams0 = Dict(:p=>initvals)
-	job = Lora.BasicMCJob(model, sampler, mcrange, mcparams0, tuner=Lora.VanillaMCTuner())
+	outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
+	job = Lora.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Lora.VanillaMCTuner())
 	Lora.run(job)
 	chain = Lora.output(job)
 	return chain
