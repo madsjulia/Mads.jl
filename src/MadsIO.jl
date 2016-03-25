@@ -342,9 +342,11 @@ function readobservations(madsdata::Associative)
 			end
 		end
 	end
+	c = 0
 	for k in keys(obscount)
+		c += 1
 		if obscount[k] == 0
-			if obsweight[k] > 0 
+			if obsweight[c] > 0 
 				madswarn("Observation $k is missing!") # this should be an error
 			else
 				madswarn("Observation $k is missing!")
