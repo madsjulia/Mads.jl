@@ -345,7 +345,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="")
+function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="", dot_size=0.9mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -362,7 +362,7 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 			else
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j], 
 					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
-					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt)
+					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt, default_point_size=dot_size)
 					))
 			end
 		end
