@@ -14,19 +14,32 @@ Installation of MADS without PYTHON
 
 MADS uses PyYAML and matplotlib. To avoid using these libraries set the following environmental variable:
 
-
+(bash)
 ```
 export MADS_NO_PYTHON=""
 ```
 
+or
+
+(tcsh)
+```
+setenv MADS_NO_PYTHON ""
+```
 
 Installation of MADS without plotting modules
 ------------------------------
 
 MADS uses Gadfly and matplotlib for plotting. To avoid using these libraries set the following environmental variable:
 
+(bash)
 ```
 export MADS_NO_PLOT=""
+```
+or
+
+(tcsh)
+```
+setenv MADS_NO_PLOT ""
 ```
 
 Installation of MADS behind a firewall
