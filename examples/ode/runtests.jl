@@ -51,7 +51,8 @@ Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"),6inch,4inch),p)
 # create an observation dictionary in the MADS dictionary
 Mads.madsinfo("Create MADS Observations ...")
 Mads.createobservations!(md, t, ys[:,1])
-Mads.showobservations(md)
+Mads.madsinfo("Show MADS Observations ...")
+# Mads.showobservations(md)
 
 Mads.madsinfo("Global sensitivity analysis ...")
 saltelliresult = Mads.efast(md, seed=20151001)
@@ -65,10 +66,21 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.spaghettiplots(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
 end
 
-info("Bayesian sampling ...")
+Mads.madsinfo("Local sensitivity analysis ...")
+localsaresult = Mads.localsa(md, format="png")
+stddev = localsaresult["stddev"]
+
+Mads.madsinfo("Posterior ranges at the initial (prior) optimal estimate ...")
+f = open("$rootname-localsa-paramranges.dat", "w")
+for i in 1:length(paramkeys)
+	println(f, md["Parameters"][paramkeys[i]]["init"]-3*stddev[i]," < ",md["Parameters"][paramkeys[i]]["longname"], " < ", md["Parameters"][paramkeys[i]]["init"]+3*stddev[i])
+end
+close(f)
+
+Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md)
 
-info("Bayesian scatter plots ...")
+Mads.madsinfo("Bayesian scatter plots ...")
 if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.svg")
 end

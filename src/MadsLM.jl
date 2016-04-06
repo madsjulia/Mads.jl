@@ -1,4 +1,23 @@
 """
+Compute the sum of squared residuals for observations that match a regular expression
+"""
+function partialof(madsdata, resultdict, regex)
+	obskeys = getobskeys(madsdata)
+	results = Array(Float64, 0)
+	weights = Array(Float64, 0)
+	targets = Array(Float64, 0)
+	for obskey in obskeys
+		if ismatch(regex, obskey)
+			push!(results, resultdict[obskey]) # preserve the expected order
+			push!(weights, madsdata["Observations"][obskey]["weight"])
+			push!(targets, madsdata["Observations"][obskey]["target"])
+		end
+	end
+	residuals = (results .- targets) .* weights
+	return sum(residuals .^ 2)
+end
+
+"""
 Make forward model functions needed for Levenberg-Marquardt optimization
 """
 function makelmfunctions(madsdata)
