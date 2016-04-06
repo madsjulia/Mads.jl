@@ -429,7 +429,7 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor=1., df=false)
 		Mads.madsinfo("Log-likelihood function computed internally ...")
 		if df
 			ndf = length(getobskeys(madsdata)) - length(getoptparamkeys(madsdata))
-			madsoutput("Number of degrees of freedom is $ndf")
+			Mads.madsinfo("Number of degrees of freedom is $ndf")
 		else
 			ndf = 1
 		end
