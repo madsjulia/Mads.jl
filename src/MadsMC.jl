@@ -22,7 +22,7 @@ Returns:
 - `mcmcchain` : 
 """
 function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
-	madsloglikelihood = makemadsloglikelihood(madsdata)
+	madsloglikelihood = makemadsloglikelihood(madsdata, df=true)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	optparamkeys = getoptparamkeys(madsdata)
 	initvals = Array(Float64, length(optparamkeys))

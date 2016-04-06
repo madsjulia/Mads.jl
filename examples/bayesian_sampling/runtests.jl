@@ -14,9 +14,10 @@ Mads.savemcmcresults(mcmcchain, rootname * "-test-mcmcchain1.json")
 if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-mcmcchain1.svg")
 end
-mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=0)
+mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1)
+values = vcat(map(chain->chain.value', mcmcchains)...)
 if !haskey(ENV, "MADS_NO_PLOT")
-	Mads.scatterplotsamples(md, vcat(map(chain->chain.value', mcmcchains)...), workdir * rootname * "-test-mcmcchain3.svg")
+	Mads.scatterplotsamples(md, values, rootname * "-test-mcmcchain3.svg")
 end
 
 md = Mads.loadmadsfile(workdir * "w01.mads")
