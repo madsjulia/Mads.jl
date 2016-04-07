@@ -148,7 +148,7 @@ end
 function makemakearrayconditionalloglikelihood(madsdata::Associative)
 	function makeloglikelihood(likelihoodparams::Vector)
 		log10weightfactor = likelihoodparams[1]
-		return makearrayconditionalloglikelihood(madsdata, makemadsconditionalloglikelihood(madsdata; weightfactor=10 ^ log10weightfactor, ndf=1))
+		return makearrayconditionalloglikelihood(madsdata, makemadsconditionalloglikelihood(madsdata; weightfactor=10 ^ log10weightfactor))
 	end
 end
 

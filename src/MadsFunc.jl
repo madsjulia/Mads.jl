@@ -396,7 +396,7 @@ end
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 """
-function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1., ndf=1)
+function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.)
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
@@ -410,7 +410,7 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.
 					weight = observations[obsname]["weight"]
 				end
 				weight *= weightfactor
-				loglhood -= weight * weight * diff * diff / ndf
+				loglhood -= weight * weight * diff * diff
 			end
 		end
 		return loglhood
@@ -421,20 +421,14 @@ end
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 """
-function makemadsloglikelihood(madsdata::Associative; weightfactor=1., df=false)
+function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
 	if haskey(madsdata, "LogLikelihood")
 		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
 	else
 		Mads.madsinfo("Log-likelihood function computed internally ...")
-		if df
-			ndf = length(getobskeys(madsdata)) - length(getoptparamkeys(madsdata))
-			Mads.madsinfo("Number of degrees of freedom is $ndf")
-		else
-			ndf = 1
-		end
 		logprior = makelogprior(madsdata)
-		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor, ndf=ndf)
+		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
 			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
