@@ -13,7 +13,7 @@ pages:
 - Getting started: GETTING_STARTED.md
 - Examples: 
     - General: EXAMPLES.md
-    - BIG-DT: Examples/source_termination.md
+    - Decision Analysis: Example/source_termination.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md

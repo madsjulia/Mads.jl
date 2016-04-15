@@ -1,4 +1,3 @@
-# Decision Analysis Example Problem
 ## Contaminant Source Termination
 
 ### Model setup:
@@ -9,17 +8,17 @@
 
 * 3 monitoring wells
 
-We know some of the properties of the source (location, size, strength, release start time, etc.).
+We know some of the properties of the source (location, shape, strength, release start time, etc.).
 We know concentrations observed at the 3 monitoring wells (10 annual measurements per well from 2006-2015).
-We do NOT know
+We do NOT know:
 
 *	groundwater flow velocity
 
 *	longitudinal dispersion of the plume
 
 Inverse modeling can be used to estimate these parameters.
-However, there are uncertainties with the estimates that inverse modeling does not consider.
-Because of these uncertainties, we perform a decision analysis rather than a simple inverse analysis.
+However, there are uncertainties with the inverse model estimates.
+Because of these uncertainties, we perform a decision analysis.
 
 ### Uncertainties:
 
@@ -68,8 +67,7 @@ The set of variances is
 
 $$ \\{ σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 \\} $$
 
-where $$$σ^2_0$$$ is the nominal variance (500; the nominal standard deviation $$$σ_0$$$ is ~22) and
-$$$h$$$ is the horizon of uncertainty.
+where $$$σ^2_0$$$ is the nominal variance (500; the nominal standard deviation $$$σ_0$$$ is ~22) and $$$h$$$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ### Robustness:
@@ -111,9 +109,10 @@ Their decision can also rely on
 ### Model:
 
 Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
+The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $$$x$$$ and $$$y$$$ axes; the contaminant is released in 1985.
 
 ### Model runs:
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
-The analysis took about 5 minutes in a serial mode using the Julia verion of Mads.
+The analysis took about 5 minutes in a serial mode using the Julia version of Mads.
 The runs are independent and can be computed efficiently in parallel.
