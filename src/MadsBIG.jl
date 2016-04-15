@@ -1,5 +1,6 @@
 import BIGUQ
 import ProgressMeter
+import DataFrames
 
 """
 Setup BIG-DT problem

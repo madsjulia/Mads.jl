@@ -11,7 +11,9 @@ pages:
 - Home: index.md
 - Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
-- Examples: EXAMPLES.md
+- Examples: 
+    - General: EXAMPLES.md
+    - BIG-DT: Examples/source_termination.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md

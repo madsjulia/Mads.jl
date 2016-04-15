@@ -25,11 +25,11 @@ Because of these uncertainties, we perform a decision analysis rather than a sim
 
 #### Probabilistic uncertainties:
 
-*	prior probabilities about unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)
+*	prior probability distributions of unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)
 
-*	measurement errors of the observed concentrations
+*	measurement errors of the observed concentrations (assumed to be normally distributed with zero mean and predefined standard deviation; the standard deviation is equal to the reciprocal of observation weights)
 
-*	posterior probabilities about unknown model parameters (informed through Bayes theorem accounting for the impact of observed concentrations to constrain the prior model-parameter probabilities)
+*	posterior probabilities distributions of unknown model parameters (informed through Bayes' theorem accounting for the impact of observed concentrations to constrain the prior belief about the model parameter uncertainties represented is prior probability distributions)
 
 #### Non-probabilistic uncertainties:
 
@@ -61,6 +61,7 @@ Bayesian Information Gap Decision Theory (BIG-DT)
 Horizon (level) of uncertainty is a non-negative index that defines
 (1) a set of possible concentrations at w2 (including possibilities not predicted by the model) and
 (2) a set of likelihood functions for the discrepancy (residual) between the model prediction and the observation.
+
 The likelihood functions differ in the variance.
 The set of possible concentrations at w2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
 The set of variances is
@@ -89,7 +90,7 @@ Figures representing robustness of model predictions:
 
 ### Discussion of the results:
 
-We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500ppb.
+We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500 ppb.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
 The zero-horizon of uncertainty estimate also corresponds to the result obtained using a Bayesian decision analysis that does not account for non-probabilistic (information gap) uncertainties.
 
@@ -109,10 +110,10 @@ Their decision can also rely on
 
 ### Model:
 
-Analytical solution (coded in Mads.jl).
+Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
 
 ### Model runs:
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
-The analysis took about 5 minutes in a serial mode using Mads.jl.
+The analysis took about 5 minutes in a serial mode using the Julia verion of Mads.
 The runs are independent and can be computed efficiently in parallel.
