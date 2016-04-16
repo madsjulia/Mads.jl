@@ -21,6 +21,8 @@ YAML
 JSON
 JLD
 Gadfly
+Cairo
+Fontconfig
 DataFrames
 Docile
 Lexicon
