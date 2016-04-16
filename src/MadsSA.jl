@@ -1,5 +1,4 @@
 using ProgressMeter
-using Gadfly
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
@@ -1559,25 +1558,27 @@ function plotSAresults_monty(wellname, madsdata, result)
 		#deleteNaN!(df[j])
 		j += 1
 	end
-	vdf = vcat(df...)
-	# Setting default colors for parameters
-	a = Gadfly.Scale.color_discrete_hue()
-	# index 6 is grey
-	if nP >= 6
-		pcolors = a.f(nP+1)
-		pcolors = vcat(pcolors[6], pcolors[1:5], pcolors[7:nP+1])
-	else
-		pcolors = a.f(nP+6)
-		pcolors = vcat(pcolors[6], pcolors[1:nP])
+	if isdefined(:Gadfly)
+		vdf = vcat(df...)
+		# Setting default colors for parameters	
+		a = Gadfly.Scale.color_discrete_hue()
+		# index 6 is grey
+		if nP >= 6
+			pcolors = a.f(nP+1)
+			pcolors = vcat(pcolors[6], pcolors[1:5], pcolors[7:nP+1])
+		else
+			pcolors = a.f(nP+6)
+			pcolors = vcat(pcolors[6], pcolors[1:nP])
+		end
+		# Combining dataframes
+		bigdf = vcat(dfc,vdf)
+		# Plotting
+		ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect/Normalized Concentration"),
+											 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
+											 Gadfly.Scale.color_discrete_manual(pcolors...))
+		# Creating .svg file for plot (in current directory)
+		rootname = Mads.getmadsrootname(madsdata)
+		method = result["method"]
+		Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes)
 	end
-	# Combining dataframes
-	bigdf = vcat(dfc,vdf)
-	# Plotting
-	ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect/Normalized Concentration"),
-										 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
-										 Gadfly.Scale.color_discrete_manual(pcolors...))
-	# Creating .svg file for plot (in current directory)
-	rootname = Mads.getmadsrootname(madsdata)
-	method = result["method"]
-	Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes)
 end

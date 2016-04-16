@@ -26,5 +26,7 @@ Mads.madsinfo("Saltelli sensitivity analysis ...")
 saltelli_results = Mads.saltelliparallel(md, length(workers()), N=50, seed=2016)
 JLD.save("saltelli_results.jld", "saltelli_results", saltelli_results)
 
-Mads.madsinfo("Local sensitivity analysis ...")
-Mads.localsa(md)
+if !haskey(ENV, "MADS_NO_PLOT")
+	Mads.madsinfo("Local sensitivity analysis ...")
+	Mads.localsa(md)
+end

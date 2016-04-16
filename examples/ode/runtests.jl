@@ -58,17 +58,15 @@ Mads.madsinfo("Global sensitivity analysis ...")
 saltelliresult = Mads.efast(md, seed=20151001)
 if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.plotobsSAresults(md, saltelliresult; xtitle = "Time", ytitle = "State variable")
-end
 
-Mads.madsinfo("Spaghetti plots over the prior parameter ranges ...")
-if !haskey(ENV, "MADS_NO_PLOT")
+	Mads.madsinfo("Spaghetti plots over the prior parameter ranges ...")
 	Mads.spaghettiplot(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
 	Mads.spaghettiplots(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
-end
 
-Mads.madsinfo("Local sensitivity analysis ...")
-localsaresult = Mads.localsa(md, format="png")
-stddev = localsaresult["stddev"]
+	Mads.madsinfo("Local sensitivity analysis ...")
+	localsaresult = Mads.localsa(md, format="png")
+	stddev = localsaresult["stddev"]
+end
 
 Mads.madsinfo("Posterior ranges at the initial (prior) optimal estimate ...")
 f = open("$rootname-localsa-paramranges.dat", "w")
