@@ -18,8 +18,8 @@ if Mads.create_tests
 	close(file)
 else
 	sa_results_correct = JSON.parsefile(problemdir * "sobol-efast-results_correct.json"; dicttype=DataStructures.OrderedDict, use_mmap=true)
-	@test !in( collect(values(sa_results_correct["mes"]["of"])) - collect(values(sa_results["mes"]["of"])) .< 1e-6, false )
-	@test !in( collect(values(sa_results_correct["tes"]["of"])) - collect(values(sa_results["tes"]["of"])) .< 1e-6, false )
+	@test !in( Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false )
+	@test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
 end
 
 return

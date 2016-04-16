@@ -1,4 +1,5 @@
 using ProgressMeter
+using Gadfly
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
