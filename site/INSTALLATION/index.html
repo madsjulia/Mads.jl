@@ -34,7 +34,7 @@
   <script src="../js/modernizr-2.8.3.min.js"></script>
   <script type="text/javascript" src="../js/highlight.pack.js"></script>
   <script src="../js/theme.js"></script> 
-  <script src="../static/custom.js"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 
   
 </head>
@@ -229,57 +229,65 @@
               
                 <h1 id="installation">Installation</h1>
 <p>After starting Julia, execute:</p>
-<pre><code class="julia">Pkg.add(&quot;Mads&quot;)
-</code></pre>
+<div class="codehilite"><pre><span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;Mads&quot;</span><span class="p">)</span>
+</pre></div>
+
 
 <h2 id="installation-of-mads-without-python">Installation of MADS without PYTHON</h2>
 <p>MADS uses PyYAML and matplotlib. To avoid using these libraries set the following environmental variable:</p>
 <p>(bash)</p>
-<pre><code>export MADS_NO_PYTHON=&quot;&quot;
-</code></pre>
+<div class="codehilite"><pre>export MADS_NO_PYTHON=&quot;&quot;
+</pre></div>
+
 
 <p>or</p>
 <p>(tcsh)</p>
-<pre><code>setenv MADS_NO_PYTHON &quot;&quot;
-</code></pre>
+<div class="codehilite"><pre>setenv MADS_NO_PYTHON &quot;&quot;
+</pre></div>
+
 
 <h2 id="installation-of-mads-without-plotting-modules">Installation of MADS without plotting modules</h2>
 <p>MADS uses Gadfly and matplotlib for plotting. To avoid using these libraries set the following environmental variable:</p>
 <p>(bash)</p>
-<pre><code>export MADS_NO_PLOT=&quot;&quot;
-</code></pre>
+<div class="codehilite"><pre>export MADS_NO_PLOT=&quot;&quot;
+</pre></div>
+
 
 <p>or</p>
 <p>(tcsh)</p>
-<pre><code>setenv MADS_NO_PLOT &quot;&quot;
-</code></pre>
+<div class="codehilite"><pre>setenv MADS_NO_PLOT &quot;&quot;
+</pre></div>
+
 
 <h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
 <p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
-<pre><code>[url &quot;https://&quot;]
-        insteadOf = git://
-</code></pre>
+<div class="codehilite"><pre><span class="k">[url &quot;https://&quot;]</span>
+        <span class="na">insteadOf</span> <span class="o">=</span> <span class="s">git://</span>
+</pre></div>
+
 
 <p>or execute:</p>
-<pre><code>git config --global url.&quot;https://&quot;.insteadOf git://
-</code></pre>
+<div class="codehilite"><pre>git config --global url.&quot;https://&quot;.insteadOf git://
+</pre></div>
+
 
 <p>Set proxies:</p>
-<pre><code>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
+<div class="codehilite"><pre>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
 export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
 export http_proxy=http://proxyout.&lt;your_site&gt;:8080
 export https_proxy=http://proxyout.&lt;your_site&gt;:8080
 export no_proxy=.&lt;your_site&gt;
-</code></pre>
+</pre></div>
+
 
 <p>For example, if you are doing this at LANL, you will need to execute the 
 following lines in your bash command-line environment:</p>
-<pre><code>export ftp_proxy=http://proxyout.lanl.gov:8080
+<div class="codehilite"><pre>export ftp_proxy=http://proxyout.lanl.gov:8080
 export rsync_proxy=http://proxyout.lanl.gov:8080
 export http_proxy=http://proxyout.lanl.gov:8080
 export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
-</code></pre>
+</pre></div>
               
             </div>
           </div>

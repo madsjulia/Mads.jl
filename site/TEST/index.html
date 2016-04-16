@@ -34,7 +34,7 @@
   <script src="../js/modernizr-2.8.3.min.js"></script>
   <script type="text/javascript" src="../js/highlight.pack.js"></script>
   <script src="../js/theme.js"></script> 
-  <script src="../static/custom.js"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 
   
 </head>
@@ -224,18 +224,19 @@
                 <h2 id="testing-verification">Testing &amp; Verification</h2>
 <p>MADS includes a series of test and verification problems. These are also provided as examples how to run the code and perform various types of data and model analyses. All the MADS examples can be found in the MADS repository: <a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>.</p>
 <p>All the test and verification problems can be executed using:</p>
-<pre><code>import Mads
-Mads.test()
-</code></pre>
+<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">Mads</span>
+<span class="n">Mads</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+</pre></div>
+
 
 <p>or</p>
-<pre><code>Pkg.test(&quot;Mads&quot;)
+<div class="codehilite"><pre>Pkg.test(&quot;Mads&quot;)
 Pkg.test(&quot;Anasol&quot;)
 Pkg.test(&quot;BIGUQ&quot;)
 Pkg.test(&quot;ReusableFunctions&quot;)
 Pkg.test(&quot;MetaProgTools&quot;)
 Pkg.test(&quot;RobustPmap&quot;)
-</code></pre>
+</pre></div>
               
             </div>
           </div>

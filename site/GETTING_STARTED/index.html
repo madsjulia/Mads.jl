@@ -34,7 +34,7 @@
   <script src="../js/modernizr-2.8.3.min.js"></script>
   <script type="text/javascript" src="../js/highlight.pack.js"></script>
   <script src="../js/theme.js"></script> 
-  <script src="../static/custom.js"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
 
   
 </head>
@@ -249,7 +249,7 @@ The loading of a MADS file can be executed as follows:</p>
 <li><code>Model</code> : defines a model to predict the model observations using the model parameters</li>
 </ul>
 <p>The file <code>internal-linear.mads</code> looks like this:</p>
-<pre><code>Parameters:
+<div class="codehilite"><pre>Parameters:
 - a : { init:  1, dist: &quot;Uniform(-10, 10)&quot; }
 - b : { init: -1, dist: &quot;Uniform(-10, 10)&quot; }
 Observations:
@@ -258,7 +258,8 @@ Observations:
 - o3: { target:  5 }
 - o4: { target:  9 }
 Model: internal-linear.jl
-</code></pre>
+</pre></div>
+
 
 <p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linearmodel.jl</code>.</p>
 <p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
@@ -277,9 +278,10 @@ Examples are given in the <code>examples</code> subdirectories of the <code>Mads
 <h2 id="mads-command-line-execution">MADS Command-line execution</h2>
 <p>MADS can be executed at the command line using <code>madsjl.jl</code>. Link this file in a directory in your search <code>PATH</code>.</p>
 <p>For example, using <code>madsjl.jl</code> you can execute:</p>
-<pre><code>madsjl.jl diff internal-linear.mads internal-parabola.mads
+<div class="codehilite"><pre>madsjl.jl diff internal-linear.mads internal-parabola.mads
 madsjl.jl internal-parabola.mads forward efast
-</code></pre>
+</pre></div>
+
 
 <p>in the <code>examples/getting_started</code> subdirectory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started">github</a>).</p>
 <h2 id="mads-documentation">MADS Documentation</h2>
