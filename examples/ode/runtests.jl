@@ -64,7 +64,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.spaghettiplots(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001)
 
 	Mads.madsinfo("Local sensitivity analysis ...")
-	localsaresult = Mads.localsa(md, format="png")
+	localsaresult = Mads.localsa(md, format="svg")
 	stddev = localsaresult["stddev"]
 	Mads.madsinfo("Posterior ranges at the initial (prior) optimal estimate ...")
 	f = open("$rootname-localsa-paramranges.dat", "w")
