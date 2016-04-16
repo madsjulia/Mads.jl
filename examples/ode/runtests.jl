@@ -66,14 +66,13 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.madsinfo("Local sensitivity analysis ...")
 	localsaresult = Mads.localsa(md, format="png")
 	stddev = localsaresult["stddev"]
+	Mads.madsinfo("Posterior ranges at the initial (prior) optimal estimate ...")
+	f = open("$rootname-localsa-paramranges.dat", "w")
+	for i in 1:length(paramkeys)
+		println(f, md["Parameters"][paramkeys[i]]["init"]-3*stddev[i]," < ",md["Parameters"][paramkeys[i]]["longname"], " < ", md["Parameters"][paramkeys[i]]["init"]+3*stddev[i])
+	end
+	close(f)
 end
-
-Mads.madsinfo("Posterior ranges at the initial (prior) optimal estimate ...")
-f = open("$rootname-localsa-paramranges.dat", "w")
-for i in 1:length(paramkeys)
-	println(f, md["Parameters"][paramkeys[i]]["init"]-3*stddev[i]," < ",md["Parameters"][paramkeys[i]]["longname"], " < ", md["Parameters"][paramkeys[i]]["init"]+3*stddev[i])
-end
-close(f)
 
 Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md)
