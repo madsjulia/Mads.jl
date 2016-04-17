@@ -799,7 +799,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			end
 		end
 		# If script reaches this section of code, adjustments must be made to Ns boundaries
-		err("ERROR! Change bounds in eFAST_optimalSearch or choose different Ns/M")
+		madserror("ERROR! Change bounds in eFAST_optimalSearch or choose different Ns/M")
 	end
 
 	function eFAST_distributeX(X, nprime, InputData, ismads)
