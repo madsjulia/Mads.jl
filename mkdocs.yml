@@ -27,6 +27,7 @@ pages:
 - License: COPYING.md
 
 markdown_extensions:
+  - extra
   - tables
   - toc
   - fenced_code
