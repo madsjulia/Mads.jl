@@ -12,31 +12,31 @@ pages:
 - Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
 - Examples: 
-	- General: EXAMPLES.md
-	- Decision Analysis: Example/source_termination.md
+  - General: EXAMPLES.md
+  - Decision Analysis: Example/source_termination.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md
 - Modules:
-	- Mads: Modules/Mads.md
-	- BIGUQ: Modules/BIGUQ.md
-	- Anasol: Modules/Anasol.md
-	- ReusableFunctions: Modules/ReusableFunctions.md
-	- MetaProgTools: Modules/MetaProgTools.md
-	- RobustPmap: Modules/RobustPmap.md
+  - Mads: Modules/Mads.md
+  - BIGUQ: Modules/BIGUQ.md
+  - Anasol: Modules/Anasol.md
+  - ReusableFunctions: Modules/ReusableFunctions.md
+  - MetaProgTools: Modules/MetaProgTools.md
+  - RobustPmap: Modules/RobustPmap.md
 - License: COPYING.md
 
 python:
-	version: 2 # for unicode
-	setup_py_install: true
+  version: 2 # for unicode
+  setup_py_install: true
 
 markdown_extensions:
-	- tables
-	- toc
-	- fenced_code
-	- mdx_math:
-		enable_dollar_delimiter: True #for use of inline $..$
-	- codehilite
-	- footnotes
+  - tables
+  - toc
+  - fenced_code
+  - mdx_math:
+    enable_dollar_delimiter: True #for use of inline $..$
+  - codehilite
+  - footnotes
 
 extra_javascript: ['https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML']
