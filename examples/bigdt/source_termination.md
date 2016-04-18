@@ -1,6 +1,6 @@
 ## Contaminant Source Termination
 
-### Model setup:
+### Model setup
 
 ![](source_termination-problemsetup.png)
 
@@ -20,9 +20,9 @@ Inverse modeling can be used to estimate these parameters.
 However, there are uncertainties with the inverse model estimates.
 Because of these uncertainties, we perform a decision analysis.
 
-### Uncertainties:
+### Uncertainties
 
-#### Probabilistic uncertainties:
+#### Probabilistic uncertainties
 
 *	prior probability distributions of unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)
 
@@ -30,7 +30,7 @@ Because of these uncertainties, we perform a decision analysis.
 
 *	posterior probabilities distributions of unknown model parameters (informed through Bayes' theorem accounting for the impact of observed concentrations to constrain the prior belief about the model parameter uncertainties represented is prior probability distributions)
 
-#### Non-probabilistic uncertainties:
+#### Non-probabilistic uncertainties
 
 *	conceptual uncertainties in the applied model
 
@@ -40,22 +40,22 @@ Because of these uncertainties, we perform a decision analysis.
 
 Future concentrations at monitoring well w2 (from 2016 till 2025) are less than MCL of 2500 ppb
 
-### Scenarios:
+### Scenarios
 
 * Terminate the source in 2015 (now)
 * Terminate the source in 2020 (in 5 years)
 * Terminate the source in 2025 (in 10 years)
 * Terminate the source in 2030 (in 15 years)
 
-### Task:
+### Task
 
 Evaluate the robustness of future concentrations at w2 being below 2500 ppb with respect to the uncertainties in the model and the statistical methods.
 
-### Method:
+### Method
 
 Bayesian Information Gap Decision Theory (BIG-DT)
 
-### Horizon (level) of uncertainty:
+### Horizon (level) of uncertainty
 
 Horizon (level) of uncertainty is a non-negative index that defines
 (1) a set of possible concentrations at w2 (including possibilities not predicted by the model) and
@@ -70,11 +70,11 @@ $$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$
 where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22) and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
-### Robustness:
+### Robustness
 
 The horizon (level) of uncertainty at which the maximum acceptable probability of failure is reached
 
-### Results:
+### Results
 
 Figures representing robustness of model predictions:
 
@@ -86,7 +86,7 @@ Figures representing robustness of model predictions:
 
 ![](source_termination-robustness-zoom-1000.png)
 
-### Discussion of the results:
+### Discussion of the results
 
 We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500 ppb.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
@@ -106,12 +106,12 @@ Their decision can also rely on
 (1) risk assessment (e.g., differences in the exposure times depending on when the source is terminated) and
 (2) financial constraints (e.g., costs associated with the source termination over different time frames).
 
-### Model:
+### Model
 
 Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
 The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.
 
-### Model runs:
+### Model runs
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using the Julia version of Mads.

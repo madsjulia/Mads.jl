@@ -98,14 +98,21 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../EXAMPLES/">General</a>
+        <a class="" href="../EXAMPLES/">MADS examples</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../Example/source_termination/">Decision Analysis</a>
+        <a class="" href="../Example/bigdt/source_termination/source_termination/">Decision Analysis</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Example/bayesian_sampling/bayesian_sampling/">Bayesian sampling</a>
         
     </li>
 
@@ -229,65 +236,57 @@
               
                 <h1 id="installation">Installation</h1>
 <p>After starting Julia, execute:</p>
-<div class="codehilite"><pre><span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;Mads&quot;</span><span class="p">)</span>
-</pre></div>
-
+<pre><code class="julia">Pkg.add(&quot;Mads&quot;)
+</code></pre>
 
 <h2 id="installation-of-mads-without-python">Installation of MADS without PYTHON</h2>
 <p>MADS uses PyYAML and matplotlib. To avoid using these libraries set the following environmental variable:</p>
 <p>(bash)</p>
-<div class="codehilite"><pre>export MADS_NO_PYTHON=&quot;&quot;
-</pre></div>
-
+<pre><code>export MADS_NO_PYTHON=&quot;&quot;
+</code></pre>
 
 <p>or</p>
 <p>(tcsh)</p>
-<div class="codehilite"><pre>setenv MADS_NO_PYTHON &quot;&quot;
-</pre></div>
-
+<pre><code>setenv MADS_NO_PYTHON &quot;&quot;
+</code></pre>
 
 <h2 id="installation-of-mads-without-plotting-modules">Installation of MADS without plotting modules</h2>
 <p>MADS uses Gadfly and matplotlib for plotting. To avoid using these libraries set the following environmental variable:</p>
 <p>(bash)</p>
-<div class="codehilite"><pre>export MADS_NO_PLOT=&quot;&quot;
-</pre></div>
-
+<pre><code>export MADS_NO_PLOT=&quot;&quot;
+</code></pre>
 
 <p>or</p>
 <p>(tcsh)</p>
-<div class="codehilite"><pre>setenv MADS_NO_PLOT &quot;&quot;
-</pre></div>
-
+<pre><code>setenv MADS_NO_PLOT &quot;&quot;
+</code></pre>
 
 <h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
 <p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
-<div class="codehilite"><pre><span class="k">[url &quot;https://&quot;]</span>
-        <span class="na">insteadOf</span> <span class="o">=</span> <span class="s">git://</span>
-</pre></div>
-
+<pre><code>[url &quot;https://&quot;]
+        insteadOf = git://
+</code></pre>
 
 <p>or execute:</p>
-<div class="codehilite"><pre>git config --global url.&quot;https://&quot;.insteadOf git://
-</pre></div>
-
+<pre><code>git config --global url.&quot;https://&quot;.insteadOf git://
+</code></pre>
 
 <p>Set proxies:</p>
-<div class="codehilite"><pre>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
+<pre><code>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
 export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
 export http_proxy=http://proxyout.&lt;your_site&gt;:8080
 export https_proxy=http://proxyout.&lt;your_site&gt;:8080
 export no_proxy=.&lt;your_site&gt;
-</pre></div>
-
+</code></pre>
 
 <p>For example, if you are doing this at LANL, you will need to execute the 
 following lines in your bash command-line environment:</p>
-<div class="codehilite"><pre>export ftp_proxy=http://proxyout.lanl.gov:8080
+<pre><code>export ftp_proxy=http://proxyout.lanl.gov:8080
 export rsync_proxy=http://proxyout.lanl.gov:8080
 export http_proxy=http://proxyout.lanl.gov:8080
 export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
-</pre></div>
+</code></pre>
               
             </div>
           </div>

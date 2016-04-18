@@ -85,14 +85,21 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../EXAMPLES/">General</a>
+        <a class="" href="../../EXAMPLES/">MADS examples</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../../Example/source_termination/">Decision Analysis</a>
+        <a class="" href="../../Example/bigdt/source_termination/source_termination/">Decision Analysis</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Example/bayesian_sampling/bayesian_sampling/">Bayesian sampling</a>
         
     </li>
 
@@ -613,10 +620,9 @@
 <p><a id="method__bayessampling.1" class="lexicon_definition"></a></p>
 <h2 id="bayessamplingmadsdataassociativek-v">bayessampling(madsdata::Associative{K, V})</h2>
 <p>Bayes Sampling</p>
-<div class="codehilite"><pre>Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)
+<pre><code>Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)
 Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -668,10 +674,9 @@ Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)
 <p><a id="method__calibraterandom.1" class="lexicon_definition"></a></p>
 <h2 id="calibraterandommadsdataassociativek-v">calibraterandom(madsdata::Associative{K, V})</h2>
 <p>Calibrate with random initial guesses</p>
-<div class="codehilite"><pre>Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+<pre><code>Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -699,10 +704,9 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <p><a id="method__calibraterandom.2" class="lexicon_definition"></a></p>
 <h2 id="calibraterandommadsdataassociativek-v-numberofsamples">calibraterandom(madsdata::Associative{K, V},  numberofsamples)</h2>
 <p>Calibrate with random initial guesses</p>
-<div class="codehilite"><pre>Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+<pre><code>Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -999,12 +1003,11 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <h2 id="functions">functions()</h2>
 <p>List available functions in the MADS modules:</p>
 <p>Examples:</p>
-<div class="codehilite"><pre><span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">()</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="nx">BIGUQ</span><span class="p">)</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">)</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="nx">Mads</span><span class="p">,</span> <span class="s2">&quot;get&quot;</span><span class="p">)</span>
-</pre></div>
-
+<pre><code>Mads.functions()
+Mads.functions(BIGUQ)
+Mads.functions(&quot;get&quot;)
+Mads.functions(Mads, &quot;get&quot;)
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -1018,12 +1021,11 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <h2 id="functionsstringabstractstring">functions(string::AbstractString)</h2>
 <p>List available functions in the MADS modules:</p>
 <p>Examples:</p>
-<div class="codehilite"><pre><span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">()</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="nx">BIGUQ</span><span class="p">)</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="s2">&quot;get&quot;</span><span class="p">)</span>
-<span class="nx">Mads</span><span class="p">.</span><span class="nx">functions</span><span class="p">(</span><span class="nx">Mads</span><span class="p">,</span> <span class="s2">&quot;get&quot;</span><span class="p">)</span>
-</pre></div>
-
+<pre><code>Mads.functions()
+Mads.functions(BIGUQ)
+Mads.functions(&quot;get&quot;)
+Mads.functions(Mads, &quot;get&quot;)
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -1037,9 +1039,8 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <h2 id="getextensionfilename">getextension(filename)</h2>
 <p>Get file name extension</p>
 <p>Example:</p>
-<div class="codehilite"><pre>ext = Mads.getextension(&quot;a.mads&quot;) # ext = &quot;mads&quot; 
-</pre></div>
-
+<pre><code>ext = Mads.getextension(&quot;a.mads&quot;) # ext = &quot;mads&quot; 
+</code></pre>
 
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/8f7570d847b23cafbce36e73ed2ac10ada9fa742/src/MadsIO.jl#L162">Mads/src/MadsIO.jl:162</a></p>
@@ -1068,10 +1069,9 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <p>Get the directory where the Mads data file is located</p>
 <p><code>Mads.getmadsproblemdir(madsdata)</code></p>
 <p>Example:</p>
-<div class="codehilite"><pre>madsdata = Mads.loadmadsproblemdir(&quot;../../a.mads&quot;)
+<pre><code>madsdata = Mads.loadmadsproblemdir(&quot;../../a.mads&quot;)
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
-</pre></div>
-
+</code></pre>
 
 <p>where <code>madsproblemdir</code> = <code>"../../"</code></p>
 <p><em>source:</em>
@@ -1192,10 +1192,9 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 <h2 id="getrootnamefilenameabstractstring">getrootname(filename::AbstractString)</h2>
 <p>Get file name root</p>
 <p>Example:</p>
-<div class="codehilite"><pre>r = Mads.getrootname(&quot;a.rnd.dat&quot;) # r = &quot;a&quot;
+<pre><code>r = Mads.getrootname(&quot;a.rnd.dat&quot;) # r = &quot;a&quot;
 r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
-</pre></div>
-
+</code></pre>
 
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/8f7570d847b23cafbce36e73ed2ac10ada9fa742/src/MadsIO.jl#L139">Mads/src/MadsIO.jl:139</a></p>
@@ -1530,12 +1529,11 @@ The first function in the file is the one that will be called by Mads to perform
 <p>Examples:</p>
 <p><code>computeconcentrations()</code></p>
 <p>or</p>
-<div class="codehilite"><pre>computeconcentrations = Mads.makecomputeconcentrations(madsdata)
+<pre><code>computeconcentrations = Mads.makecomputeconcentrations(madsdata)
 paramkeys = Mads.getparamkeys(madsdata)
 paramdict = OrderedDict(zip(paramkeys, map(key-&gt;madsdata[&quot;Parameters&quot;][key][&quot;init&quot;], paramkeys)))
 forward_preds = computeconcentrations(paramdict)
-</pre></div>
-
+</code></pre>
 
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/8f7570d847b23cafbce36e73ed2ac10ada9fa742/src/MadsAnasol.jl#L30">Mads/src/MadsAnasol.jl:30</a></p>
@@ -1556,9 +1554,8 @@ forward_preds = computeconcentrations(paramdict)
 <h2 id="makemadscommandfunctionmadsdataassociativek-v">makemadscommandfunction(madsdata::Associative{K, V})</h2>
 <p>Make MADS function to execute the model defined in the MADS problem dictionary <code>madsdata</code></p>
 <p>Usage:</p>
-<div class="codehilite"><pre><span class="nx">Mads</span><span class="p">.</span><span class="nx">makemadscommandfunction</span><span class="p">(</span><span class="nx">madsdata</span><span class="p">)</span>
-</pre></div>
-
+<pre><code>Mads.makemadscommandfunction(madsdata)
+</code></pre>
 
 <p>MADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary. The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS. The fields in the MADS problem dictionary that can be used to define the model coupling are:</p>
 <ul>
@@ -1772,11 +1769,10 @@ The function can be provided as an external function in the MADS problem diction
 <p><a id="method__plotgrid.1" class="lexicon_definition"></a></p>
 <h2 id="plotgridmadsdataassociativek-v-sarrayfloat64-n">plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})</h2>
 <p>Plot a 3D grid solution based on model predictions in array <code>s</code>, initial parameters, or user provided parameter values</p>
-<div class="codehilite"><pre>plotgrid(madsdata, s; addtitle=true, title=&quot;&quot;, filename=&quot;&quot;, format=&quot;&quot;)
+<pre><code>plotgrid(madsdata, s; addtitle=true, title=&quot;&quot;, filename=&quot;&quot;, format=&quot;&quot;)
 plotgrid(madsdata; addtitle=true, title=&quot;&quot;, filename=&quot;&quot;, format=&quot;&quot;)
 plotgrid(madsdata, parameters; addtitle=true, title=&quot;&quot;, filename=&quot;&quot;, format=&quot;&quot;)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -1824,10 +1820,9 @@ plotgrid(madsdata, parameters; addtitle=true, title=&quot;&quot;, filename=&quot
 <p><a id="method__plotmatches.1" class="lexicon_definition"></a></p>
 <h2 id="plotmatchesmadsdata_inassociativek-v">plotmatches(madsdata_in::Associative{K, V})</h2>
 <p>Plot the matches between model predictions and observations</p>
-<div class="codehilite"><pre>plotmatches(madsdata; filename=&quot;&quot;, format=&quot;&quot;)
+<pre><code>plotmatches(madsdata; filename=&quot;&quot;, format=&quot;&quot;)
 plotmatches(madsdata, result; filename=&quot;&quot;, format=&quot;&quot;)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -2160,10 +2155,9 @@ plotmatches(madsdata, result; filename=&quot;&quot;, format=&quot;&quot;)
 <h2 id="setobstimemadsdataassociativek-v-separatorabstractstring">setobstime!(madsdata::Associative{K, V},  separator::AbstractString)</h2>
 <p>Set observation time based on the observation name in the MADS problem dictionary</p>
 <p>Usage:</p>
-<div class="codehilite"><pre>Mads.setobstime!(madsdata, separator)
+<pre><code>Mads.setobstime!(madsdata, separator)
 Mads.setobstime!(madsdata, regex)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -2172,10 +2166,9 @@ Mads.setobstime!(madsdata, regex)
 <li><code>regex</code> : regular expression to match</li>
 </ul>
 <p>Examples:</p>
-<div class="codehilite"><pre>Mads.setobstime!(madsdata, &quot;_t&quot;)
+<pre><code>Mads.setobstime!(madsdata, &quot;_t&quot;)
 Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
-</pre></div>
-
+</code></pre>
 
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/8f7570d847b23cafbce36e73ed2ac10ada9fa742/src/MadsObservations.jl#L121">Mads/src/MadsObservations.jl:121</a></p>
@@ -2240,11 +2233,10 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 <h2 id="setprocs">setprocs()</h2>
 <p>Set the available processors based on environmental variables. Supports SLURM only at the moment.</p>
 <p>Usage:</p>
-<div class="codehilite"><pre>Mads.setprocs()
+<pre><code>Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=2, mads_servers=true)
-</pre></div>
-
+</code></pre>
 
 <p>Optional arguments:</p>
 <ul>
@@ -2258,9 +2250,8 @@ Mads.setprocs(ntasks_per_node=2, mads_servers=true)
 <h2 id="setprocsnpint64">setprocs(np::Int64)</h2>
 <p>Set the number of processors to <code>np</code></p>
 <p>Usage:</p>
-<div class="codehilite"><pre>Mads.setprocs(4)
-</pre></div>
-
+<pre><code>Mads.setprocs(4)
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -2273,9 +2264,8 @@ Mads.setprocs(ntasks_per_node=2, mads_servers=true)
 <h2 id="setprocsnpint64-ntint64">setprocs(np::Int64,  nt::Int64)</h2>
 <p>Set the number of processors to <code>np</code> and the number of threads to <code>nt</code></p>
 <p>Usage:</p>
-<div class="codehilite"><pre>Mads.setprocs(4, 8)
-</pre></div>
-
+<pre><code>Mads.setprocs(4, 8)
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -2336,10 +2326,9 @@ Mads.setprocs(ntasks_per_node=2, mads_servers=true)
 <p><a id="method__spaghettiplot.1" class="lexicon_definition"></a></p>
 <h2 id="spaghettiplotmadsdataassociativek-v-number_of_samplesint64">spaghettiplot(madsdata::Associative{K, V},  number_of_samples::Int64)</h2>
 <p>Generate a combined spaghetti plot for the <code>selected</code> (<code>type != null</code>) model parameter</p>
-<div class="codehilite"><pre>Mads.spaghettiplot(madsdata, paramdictarray; filename=&quot;&quot;, keyword = &quot;&quot;, format=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
+<pre><code>Mads.spaghettiplot(madsdata, paramdictarray; filename=&quot;&quot;, keyword = &quot;&quot;, format=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
 Mads.spaghettiplot(madsdata, number_of_samples; filename=&quot;&quot;, keyword = &quot;&quot;, format=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>
@@ -2365,10 +2354,9 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename=&quot;&quot;, keyword =
 <p><a id="method__spaghettiplots.1" class="lexicon_definition"></a></p>
 <h2 id="spaghettiplotsmadsdataassociativek-v-number_of_samplesint64">spaghettiplots(madsdata::Associative{K, V},  number_of_samples::Int64)</h2>
 <p>Generate separate spaghetti plots for each <code>selected</code> (<code>type != null</code>) model parameter</p>
-<div class="codehilite"><pre>Mads.spaghettiplots(madsdata, paramdictarray; format=&quot;&quot;, keyword=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
+<pre><code>Mads.spaghettiplots(madsdata, paramdictarray; format=&quot;&quot;, keyword=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
 Mads.spaghettiplots(madsdata, number_of_samples; format=&quot;&quot;, keyword=&quot;&quot;, xtitle=&quot;X&quot;, ytitle=&quot;Y&quot;, obs_plot_dots=true)
-</pre></div>
-
+</code></pre>
 
 <p>Arguments:</p>
 <ul>

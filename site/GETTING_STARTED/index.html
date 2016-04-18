@@ -101,14 +101,21 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../EXAMPLES/">General</a>
+        <a class="" href="../EXAMPLES/">MADS examples</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../Example/source_termination/">Decision Analysis</a>
+        <a class="" href="../Example/bigdt/source_termination/source_termination/">Decision Analysis</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Example/bayesian_sampling/bayesian_sampling/">Bayesian sampling</a>
         
     </li>
 
@@ -249,7 +256,7 @@ The loading of a MADS file can be executed as follows:</p>
 <li><code>Model</code> : defines a model to predict the model observations using the model parameters</li>
 </ul>
 <p>The file <code>internal-linear.mads</code> looks like this:</p>
-<div class="codehilite"><pre>Parameters:
+<pre><code>Parameters:
 - a : { init:  1, dist: &quot;Uniform(-10, 10)&quot; }
 - b : { init: -1, dist: &quot;Uniform(-10, 10)&quot; }
 Observations:
@@ -258,8 +265,7 @@ Observations:
 - o3: { target:  5 }
 - o4: { target:  9 }
 Model: internal-linear.jl
-</pre></div>
-
+</code></pre>
 
 <p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linearmodel.jl</code>.</p>
 <p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
@@ -278,10 +284,9 @@ Examples are given in the <code>examples</code> subdirectories of the <code>Mads
 <h2 id="mads-command-line-execution">MADS Command-line execution</h2>
 <p>MADS can be executed at the command line using <code>madsjl.jl</code>. Link this file in a directory in your search <code>PATH</code>.</p>
 <p>For example, using <code>madsjl.jl</code> you can execute:</p>
-<div class="codehilite"><pre>madsjl.jl diff internal-linear.mads internal-parabola.mads
+<pre><code>madsjl.jl diff internal-linear.mads internal-parabola.mads
 madsjl.jl internal-parabola.mads forward efast
-</pre></div>
-
+</code></pre>
 
 <p>in the <code>examples/getting_started</code> subdirectory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started">github</a>).</p>
 <h2 id="mads-documentation">MADS Documentation</h2>
@@ -295,7 +300,7 @@ madsjl.jl internal-parabola.mads forward efast
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../EXAMPLES/" class="btn btn-neutral float-right" title="General">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../EXAMPLES/" class="btn btn-neutral float-right" title="MADS examples">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../INSTALLATION/" class="btn btn-neutral" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>

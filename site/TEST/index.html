@@ -85,14 +85,21 @@
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../EXAMPLES/">General</a>
+        <a class="" href="../EXAMPLES/">MADS examples</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="../Example/source_termination/">Decision Analysis</a>
+        <a class="" href="../Example/bigdt/source_termination/source_termination/">Decision Analysis</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../Example/bayesian_sampling/bayesian_sampling/">Bayesian sampling</a>
         
     </li>
 
@@ -224,19 +231,18 @@
                 <h2 id="testing-verification">Testing &amp; Verification</h2>
 <p>MADS includes a series of test and verification problems. These are also provided as examples how to run the code and perform various types of data and model analyses. All the MADS examples can be found in the MADS repository: <a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>.</p>
 <p>All the test and verification problems can be executed using:</p>
-<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">Mads</span>
-<span class="n">Mads</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
-</pre></div>
-
+<pre><code>import Mads
+Mads.test()
+</code></pre>
 
 <p>or</p>
-<div class="codehilite"><pre>Pkg.test(&quot;Mads&quot;)
+<pre><code>Pkg.test(&quot;Mads&quot;)
 Pkg.test(&quot;Anasol&quot;)
 Pkg.test(&quot;BIGUQ&quot;)
 Pkg.test(&quot;ReusableFunctions&quot;)
 Pkg.test(&quot;MetaProgTools&quot;)
 Pkg.test(&quot;RobustPmap&quot;)
-</pre></div>
+</code></pre>
               
             </div>
           </div>

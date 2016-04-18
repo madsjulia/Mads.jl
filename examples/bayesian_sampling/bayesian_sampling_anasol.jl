@@ -1,6 +1,9 @@
 import Mads
 
-problemdir = string((dirname(Base.source_path()))) * "/"
+problemdir = Mads.getmadsdir() # get the directory where the problem is executed
+if problemdir == ""
+	problemdir = Mads.madsdir * "/../examples/bayesian_sampling/"
+end
 
 md = Mads.loadmadsfile(problemdir * "w01.mads")
 

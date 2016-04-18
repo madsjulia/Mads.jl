@@ -12,8 +12,9 @@ pages:
 - Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
 - Examples: 
-  - General: EXAMPLES.md
-  - Decision Analysis: Example/source_termination.md
+  - MADS examples: EXAMPLES.md
+  - Decision Analysis: Example/bigdt/source_termination/source_termination.md
+  - Bayesian sampling: Example/bayesian_sampling/bayesian_sampling.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md
@@ -33,7 +34,6 @@ markdown_extensions:
   - fenced_code
   - mdx_math:
       enable_dollar_delimiter: True #for use of inline $..$
-  - codehilite
   - footnotes
 
 extra_javascript: ['https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML']
