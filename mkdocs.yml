@@ -26,16 +26,13 @@ pages:
   - RobustPmap: Modules/RobustPmap.md
 - License: COPYING.md
 
-python:
-  version: 2 # for unicode
-  setup_py_install: true
-
 markdown_extensions:
   - tables
   - toc
   - fenced_code
-  - mdx_math:
-    enable_dollar_delimiter: True #for use of inline $..$
+  - mdx_math
+  - math:
+      enable_dollar_delimiter: True #for use of inline $..$
   - codehilite
   - footnotes
 
