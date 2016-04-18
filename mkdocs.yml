@@ -30,7 +30,6 @@ markdown_extensions:
   - tables
   - toc
   - fenced_code
-  - mdx_math
   - math:
       enable_dollar_delimiter: True #for use of inline $..$
   - codehilite
