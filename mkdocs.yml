@@ -12,9 +12,9 @@ pages:
 - Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
 - Examples: 
-  - MADS examples: EXAMPLES.md
-  - Decision Analysis: Example/bigdt/source_termination/source_termination.md
-  - Bayesian sampling: Example/bayesian_sampling/bayesian_sampling.md
+  - Setup: EXAMPLES_SETUP.md
+  - Decision Analysis: Examples/bigdt/source_termination/source_termination.md
+  - Bayesian sampling: Examples/bayesian_sampling/bayesian_sampling.md
 - Model coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md

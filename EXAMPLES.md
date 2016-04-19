@@ -1,4 +1,4 @@
-### MADS examples
+Execution of MADS examples
 -------------
 
 In Julia REPL, do the following commands:
@@ -19,4 +19,4 @@ to perform various analyses related to contaminant transport, or execute
 
 `include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")`
 
-to perform BIG-DT analysis.
+to perform BIG-DT decision analysis.

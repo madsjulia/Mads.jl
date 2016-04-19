@@ -211,7 +211,7 @@ function plotmatches(madsdata_in::Associative; filename="", format="", separate_
 		setobsweights!(madsdata, 1)
 	end
 	r = forward(madsdata)
-	plotmatches(madsdata_in, r, filename=filename, format=format, separate_file=separate_files)
+	plotmatches(madsdata_in, r, filename=filename, format=format, separate_files=separate_files)
 end
 
 function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false, hsize=6inch)
