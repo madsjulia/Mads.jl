@@ -11,7 +11,7 @@ pages:
 - Home: index.md
 - Installation: INSTALLATION.md
 - Getting started: GETTING_STARTED.md
-- Examples: 
+- Examples:
   - Setup: EXAMPLES_SETUP.md
   - Decision Analysis: Examples/bigdt/source_termination/source_termination.md
   - Bayesian sampling: Examples/bayesian_sampling/bayesian_sampling.md

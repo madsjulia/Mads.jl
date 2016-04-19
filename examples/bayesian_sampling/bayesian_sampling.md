@@ -11,13 +11,13 @@
 
 ### Prior spaghetti plots
 
-#### Source size along $x$ axis
+**Source size along $x$ axis**
 
-#### Source size along $y$ axis
+**Source size along $y$ axis**
 
 ### Posterior spaghetti plots
 
-#### Source size along $x$ axis
+**Source size along $x$ axis**
 
-#### Source size along $y$ axis
+**Source size along $y$ axis**
 
