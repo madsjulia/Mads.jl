@@ -1,11 +1,14 @@
 import Mads
 
 currentdir = pwd()
+
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 if madsdirname == ""
 	madsdirname = Mads.madsdir * "/../examples/contamination/"
 end
+
 cd(madsdirname)
+
 md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("Mads root name: $(rootname)")
@@ -20,14 +23,14 @@ Mads.plotmadsproblem(md) # display the well locations and the initial source loc
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
 Mads.plotmatches(md, forward_predictions) # plot initial matches
-run(`open w01-match.svg`)
+run(`open w01-match.svg`) # works only on mac os x
 
 inverse_parameters, inverse_results = Mads.calibrate(md) # perform model calibration
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
 Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
-run(`open w01-match.svg`)
+run(`open w01-match.svg`) # works only on mac os x
 
 # use only two wells
 Mads.allwellsoff!(md) # turn off all wells
@@ -39,21 +42,21 @@ Mads.plotmadsproblem(md) # display the well locations and the initial source loc
 forward_predictions = Mads.forward(md) # execute a forward model simulation based on the initial parameter guesses
 
 Mads.plotmatches(md, forward_predictions, filename=rootname * "-w13a_w20a-init-match.svg") # plot initial matches
-run(`open w01-w13a_w20a-init-match.svg`)
+run(`open w01-w13a_w20a-init-match.svg`) # works only on mac os x
 
 inverse_parameters, inverse_results = Mads.calibrate(md) # perform model calibration
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute a forward model simulation based on the calibrated values
 
 Mads.plotmatches(md, inverse_predictions, filename=rootname * "-w13a_w20a-calib-match.svg") # plot calibrated matches
-run(`open w01-w13a_w20a-calib-match.svg`)
+run(`open w01-w13a_w20a-calib-match.svg`) # works only on mac os x
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues=Mads.parametersample(md, 10)
 Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
-run(`open w01-w13a_w20a-vx-10-spaghetti.svg`)
-run(`open w01-w13a_w20a-source1_t0-10-spaghetti.svg`)
-run(`open w01-w13a_w20a-source1_t1-10-spaghetti.svg`)
+run(`open w01-w13a_w20a-vx-10-spaghetti.svg`) # works only on mac os x
+run(`open w01-w13a_w20a-source1_t0-10-spaghetti.svg`) # works only on mac os x
+run(`open w01-w13a_w20a-source1_t1-10-spaghetti.svg`) # works only on mac os x
 
 # Create a new problem (example)
 md_new = deepcopy(md)
@@ -75,7 +78,7 @@ md_new["Sources"][1]["gauss"]["dz"]["init"] = 0 # set a point source
 new_forward_predictions = Mads.forward(md_new) # execute a forward model simulation
 Mads.setobservationtargets!(md_new, new_forward_predictions) # set calibration targets to match the forward model predictions
 Mads.plotmatches(md_new, new_forward_predictions, filename=rootname * "-new-problem.svg")
-run(`open w01-new-problem.svg`)
+run(`open w01-new-problem.svg`) # works only on mac os x
 Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads input file
 
 # Calibrate with random initial guesses

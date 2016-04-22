@@ -5,8 +5,8 @@ import Lora
 Bayes Sampling
 
 ```
-Mads.bayessampling(madsdata; nsteps=100, burnin=1000, thinning=1)
-Mads.bayessampling(madsdata, numsequences; nsteps=100, burnin=1000, thinning=1)
+Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1)
+Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1)
 ```
 
 Arguments:
@@ -21,7 +21,7 @@ Returns:
 
 - `mcmcchain` : 
 """
-function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
+function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -46,7 +46,7 @@ function bayessampling(madsdata::Associative; nsteps::Int=100, burnin::Int=1000,
 	return chain
 end
 
-function bayessampling(madsdata, numsequences; nsteps::Int=100, burnin::Int=1000, thinning::Int=1)
+function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1)
 	mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	return mcmcchains
 end

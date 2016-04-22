@@ -1,4 +1,3 @@
-
 ## Bayesian Sampling
 
 ### Model setup
@@ -20,4 +19,3 @@
 **Source size along $x$ axis**
 
 **Source size along $y$ axis**
-

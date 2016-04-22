@@ -1,11 +1,7 @@
 import Mads
-import Gadfly
 using JSON
 using DataStructures
 using ProgressMeter
-
-# Example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")
-Mads.madswarn("""Mads execution example: reload("Mads.jl"); Mads.setmadsinputfile("w01short.mads"); reload("w01.jl")""")
 
 # load MADS problem
 madsdirname = Mads.getmadsdir()
@@ -45,15 +41,20 @@ paramkeys = Mads.getparamkeys(md)
 optparamkeys = Mads.getoptparamkeys(md)
 
 # get all the parameter initial values
-paramdict = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict_init = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # create a function to compute concentrations
 computeconcentrations = Mads.makecomputeconcentrations(md)
 
 # compute concentrataions based on the initial values
-forward_preds = computeconcentrations(paramdict)
+forward_preds = computeconcentrations(paramdict_init)
 
-Mads.madsinfo("Manual SA ...")
+# the same result can be achieved using Mads.forward(md); the above is only for demonstration purposes
+
+forward_preds2 = Mads.forward(md)
+@assert forward_preds == forward_preds2
+
+Mads.madsinfo("Manual sensitivity analysis ...")
 numberofsamples = 10
 paramvalues=Mads.parametersample(md, numberofsamples)
 Mads.allwellsoff!(md)
@@ -70,49 +71,49 @@ saltelliresultb = Mads.saltellibrute(md,N=500)
 Mads.plotwellSAresults(md,saltelliresultb,"w1a")
 
 # save saltelli results
-# f = open("$rootname-SA-results.json", "w")
-# JSON.print(f, saltelliresult)
-# close(f)
+f = open("$rootname-SA-results.json", "w")
+JSON.print(f, saltelliresult)
+close(f)
 
 # load saltielli results
-# saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
+saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
 
 # print saltieli results
-# Mads.saltelliprintresults(md, result)
+Mads.saltelliprintresults(md, result)
 
 # plot global SA results for a given observation point
-# Mads.plotwellSAresults(md,result,"w1a")
+Mads.plotwellSAresults(md,result,"w1a")
 
 # parameter space exploration
-# Mads.madsinfo("Parameter space exploration ...")
-# numberofsamples = 100
-# paramvalues=Mads.parametersample(md, numberofsamples)
-# Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
-# k = 0
-# for paramkey in keys(paramvalues)
-#   for i in 1:numberofsamples
-#     original = paramdict[paramkey]
-#     paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
-# 		forward_preds = computeconcentrations(paramdict)
-#     paramdict[paramkey] = original
-# 		j = 1
-# 		for obskey in keys(forward_preds)
-# 			Y[j,i + k] = forward_preds[obskey]
-# 			j += 1
-# 		end
-#   end
-# 	k += numberofsamples
-# end
+Mads.madsinfo("Parameter space exploration ...")
+numberofsamples = 100
+paramvalues=Mads.parametersample(md, numberofsamples)
+Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
+k = 0
+for paramkey in keys(paramvalues)
+  for i in 1:numberofsamples
+    original = paramdict[paramkey]
+    paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
+		forward_preds = computeconcentrations(paramdict)
+    paramdict[paramkey] = original
+		j = 1
+		for obskey in keys(forward_preds)
+			Y[j,i + k] = forward_preds[obskey]
+			j += 1
+		end
+  end
+	k += numberofsamples
+end
 # save model inputs (not recommended)
-# writedlm("$rootname-input.dat", paramvalues)
+writedlm("$rootname-input.dat", paramvalues)
 
 # save model inputs
-# f = open("$rootname-input.json", "w")
-# JSON.print(f, paramvalues)
-# close(f)
+f = open("$rootname-input.json", "w")
+JSON.print(f, paramvalues)
+close(f)
 
 # load saltielli results
-# paramvalues = JSON.parsefile("$rootname-input.json"; ordered=true, use_mmap=true)
+paramvalues = JSON.parsefile("$rootname-input.json"; ordered=true, use_mmap=true)
 
 # save model outputs
-# writedlm("$rootname-output.dat", Y)
+writedlm("$rootname-output.dat", Y)
