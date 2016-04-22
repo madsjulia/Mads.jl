@@ -1,18 +1,19 @@
-## Contaminant transport in an aquifer
+## Analysis of contaminant transport in an aquifer
 
 ### Model setup
 
 ![](w01-problemsetup.svg)
 
 There are 20 monitoring wells.
-Each well has 2 measurement ports: shallow (3 m below the water table labelled `a`) and deep (33 m below the water table labelled `b`).
+Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
 Contaminant concentrations are observed for 50 years at each well.
+The contaminant transport is solved using the `Anasol` package in Mads.
 
 ### Unknown model parameters
 
-* Start Time of contaminant releast `$t_0$`
-* Ent Time of contaminant releast `$t_1$`
-* Advctive pore velocity `$v$`
+* Start Time of contaminant release `$t_0$`
+* End Time of contaminant release `$t_1$`
+* Advective pore velocity `$v$`
 
 ### Example model solution
 
@@ -38,22 +39,27 @@ Analysis of the data from only 2 monitoring locations: w13a and w20a.
 
 ![](ode-eigenvalues.svg)
 
-### Gloabal sensitivity analysis
+### Global sensitivity analysis
 
 ![](ode-SA-results.svg)
 
 Prior parameter uncertainties:
 
 ```
-k = LogUniform(0.01, 0.1)
-omega = Uniform(0.1, 0.3)
+$t_0$ = Uniform(0, 10)
+$t_1$ = Uniform(5, 40)
+$v$ = LogUniform(0.1, 200)
 ```
+
+![](w01-w13a_w20a-source1_t0-10-spaghetti.svg)
+![](w01-w13a_w20a-source2_t1-10-spaghetti.svg)
+![](w01-w13a_w20a-vx-10-spaghetti.svg)
 
 ### Bayesian sensitivity analysis
 
 #### Observations
 
-Synthetic observations are applied to contrain the ODE parameters
+Synthetic observations are applied to constrain the ODE parameters
 
 ![](ode-observations.svg)
 

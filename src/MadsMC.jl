@@ -2,26 +2,30 @@ import BlackBoxOptim
 import Lora
 
 """
-Bayes Sampling
+Bayesian Sampling
 
 ```
-Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1)
-Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1)
+Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
+Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
 ```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `numsequences` : number of sequences executed in parallel
-- `nsteps` :  
-- `burnin` :  
-- `thinning` :   
+- `nsteps` : number of final realizations in the chain
+- `burnin` :  number of initial realizations before the MCMC are recorded
+- `thinning` : removal of any `thinning` realization
+- `seed` : initial random number seed
 
 Returns:
 
 - `mcmcchain` : 
 """
-function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1)
+function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
+	if seed != 0
+		srand(seed)
+	end
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -46,7 +50,10 @@ function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100,
 	return chain
 end
 
-function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1)
+function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
+	if seed != 0
+		srand(seed)
+	end
 	mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	return mcmcchains
 end

@@ -75,7 +75,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 end
 
 Mads.madsinfo("Bayesian sampling ...")
-mcmcchain = Mads.bayessampling(md, seed=20151001, )
+mcmcchain = Mads.bayessampling(md, seed=20151001)
 
 Mads.madsinfo("Bayesian scatter plots ...")
 if !haskey(ENV, "MADS_NO_PLOT")

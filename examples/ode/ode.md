@@ -1,13 +1,13 @@
-## Analysis of an Oardinary Differentioal Equation (DOE)
+## Analysis of an Ordinary Differential Equation (DOE)
 
 ### ODE
 
-x''[t] == -\omega^2 * x[t] - k * x'[t]
+$$x''(t) == -\omega^2 * x(t) - k * x'(t)$$
 
 ### Unknown ODE parameters
 
 * k
-* onega
+* $\omega$
 
 ### An Example ODE solution
 
@@ -15,7 +15,7 @@ x''[t] == -\omega^2 * x[t] - k * x'[t]
 
 ```
 k = 0.1
-omega = 0.2
+$\omega$ = 0.2
 ```
 
 ### Local sensitivity analysis
@@ -24,7 +24,7 @@ omega = 0.2
 
 ![](ode-eigenvalues.svg)
 
-### Gloabal sensitivity analysis
+### Global sensitivity analysis
 
 ![](ode-SA-results.svg)
 
@@ -32,14 +32,14 @@ Prior parameter uncertainties:
 
 ```
 k = LogUniform(0.01, 0.1)
-omega = Uniform(0.1, 0.3)
+$\omega$ = Uniform(0.1, 0.3)
 ```
 
 ### Bayesian sensitivity analysis
 
 #### Observations
 
-Synthetic observations are applied to contrain the ODE parameters
+Synthetic observations are applied to constrain the ODE parameters
 
 ![](ode-observations.svg)
 
