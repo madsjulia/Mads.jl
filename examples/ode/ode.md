@@ -9,9 +9,11 @@ $$x''(t) == -\omega^2 * x(t) - k * x'(t)$$
 * k
 * $\omega$
 
-### An Example ODE solution
+### An example ODE solution
 
-![](ode-solution.svg)
+![](ode-matchsvg)
+
+For model parameters:
 
 ```
 k = 0.1
@@ -28,7 +30,7 @@ $\omega$ = 0.2
 
 ![](ode-SA-results.svg)
 
-Prior parameter uncertainties:
+For, prior parameter uncertainties:
 
 ```
 k = LogUniform(0.01, 0.1)
@@ -41,7 +43,7 @@ $\omega$ = Uniform(0.1, 0.3)
 
 Synthetic observations are applied to constrain the ODE parameters
 
-![](ode-observations.svg)
+![](ode-match.svg)
 
 Observation errors are equal for all the sample locations with standard deviation equal to 1 (`observation weight` =  1 / `observation standard deviation` = 1 / 1 = 1)
 
@@ -51,14 +53,18 @@ Observation errors are equal for all the sample locations with standard deviatio
 
 ![](ode-prior-omega-100-spaghetti.svg)
 
+The observation data are plotted as a solid black line.
+
 #### Histograms/scatter plots of Bayesian MCMC results
 
 ![](ode-bayes.svg)
 
 #### Posterior parameter uncertainties
 
-Note: parameter uncertainties are constrained by observation data
+Note: parameter uncertainties are constrained by the observation data
 
-![](ode-posterior-k-100-spaghetti.svg)
+![](ode-posterior-k-1000-spaghetti.svg)
 
-![](ode-posterior-omega-100-spaghetti.svg)
+![](ode-posterior-omega-1000-spaghetti.svg)
+
+The observation data are plotted as a solid black line.
