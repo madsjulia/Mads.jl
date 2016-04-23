@@ -25,7 +25,7 @@ pages:
   - ReusableFunctions: Modules/ReusableFunctions.md
   - MetaProgTools: Modules/MetaProgTools.md
   - RobustPmap: Modules/RobustPmap.md
-- Acknowledgment: ACKNOWLEDGMENT.md
+- Acknowledgments: ACKNOWLEDGMENTS.md
 - License: COPYING.md
 
 markdown_extensions:
