@@ -52,9 +52,10 @@ end
 
 function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
 	if seed != 0
-		srand(seed)
+		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
+	else
+		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	end
-	mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 	return mcmcchains
 end
 

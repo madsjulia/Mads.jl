@@ -21,7 +21,7 @@ Mads.setparamsinit!(md, opt_param)
 Mads.plotmatches(md)
 
 Mads.madsinfo("Bayesian sampling of contaminant transport problem ...")
-mcmcchains = Mads.bayessampling(md)
+mcmcchains = Mads.bayessampling(md, seed=2016)
 
 Mads.madsinfo("Bayesian scatter plots ...")
 Mads.scatterplotsamples(md, mcmcchains.value', rootname * "-bayes-results.svg")
