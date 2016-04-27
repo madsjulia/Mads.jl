@@ -841,13 +841,13 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict( zip(paramkeys, getparamsinit(madsdata)) )
+	paramdict = DataStructures.OrderedDict(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
-	t = Array(Float64, nT )
-	d = Array(Float64, nT )
+	t = Array(Float64, nT)
+	d = Array(Float64, nT)
 	if obs_plot_dots
 		obs_plot1 = """Gadfly.Geom.point"""
 		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
@@ -879,11 +879,55 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 			Y[j,i] = result[obskeys[j]]
 		end
 	end
-	p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-			for i in 1:numberofsamples]... )
+	if !haskey( madsdata, "Wells" )
+		p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+				Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+				for i in 1:numberofsamples]... )
+		vsize = 4inch
+	else
+		pp = Array(Gadfly.Plot{}, 0)
+		p = Gadfly.Plot{}
+		vsize = 0inch
+		startj = 1
+		endj  = 0
+		for wellname in keys(madsdata["Wells"])
+			if madsdata["Wells"][wellname]["on"]
+				o = madsdata["Wells"][wellname]["obs"]
+				nTw = length(o)
+				t = Array(Float64, nTw)
+				d = Array(Float64, nTw)
+				for i in 1:nTw
+					t[i] = o[i]["t"]
+					if haskey(o[i], "c")
+						d[i] = o[i]["c"]
+					elseif haskey(o[i], "target")
+						d[i] = o[i]["target"]
+					else
+						madswarn("Observation/calibration data are missing for well $(wellname)!")
+						t[i] = 0
+						d[i] = 0
+					end
+				end
+				endj += nTw
+				p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+						Guide.title(wellname),
+						Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+						[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+						for i in 1:numberofsamples]...)
+				push!(pp, p)
+				vsize += 4inch
+				startj = endj + 1
+			end
+		end
+		if length(pp) > 1
+			pl = Gadfly.vstack(pp...)
+		else
+			pl = p
+		end
+	end
 	if filename == ""
 		if keyword == ""
 			filename = "$rootname-$numberofsamples-spaghetti"
@@ -893,7 +937,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 	end
 	filename, format = Mads.setimagefileformat(filename, format)
 	try
-		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch,4inch), p)
+		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end

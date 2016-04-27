@@ -1,5 +1,7 @@
 ## Bayesian Sampling
 
+All the figures below are generated using `examples/bayesian_sampling/bayesian_sampling.jl`.
+
 ### Model setup
 
 ![](w01-problemsetup.svg)
@@ -11,6 +13,15 @@
 ### Prior spaghetti plots
 
 Spaghetti plots of 100 model runs representing the prior model prediction uncertainties at the 3 monitoring wells.
+
+#### Joint spaghetti plots
+
+All model parameters are changed simultaneously within their prior uncertainty ranges.
+
+![](w01-prior-100-spaghetti.png)
+
+#### Individual spaghetti plots
+
 A single model parameter is changed at a time.
 
 **Source $x$ location**
@@ -37,6 +48,10 @@ A single model parameter is changed at a time.
 
 ![](w01-prior-source1_t1-100-spaghetti.png)
 
+### Model calibration match
+
+![](w01-match.svg)
+
 ### Bayesian sampling results
 
 ![](w01-bayes.png)
@@ -44,6 +59,16 @@ A single model parameter is changed at a time.
 ### Posterior spaghetti plots
 
 Spaghetti plots of 1000 model predictions representing the posterior model uncertainties at the 3 monitoring wells.
+
+
+#### Joint spaghetti plots
+
+All model parameters are changed simultaneously within their prior uncertainty ranges.
+
+![](w01-posterior-1000-spaghetti.png)
+
+#### Individual spaghetti plots
+
 A single model parameter is changed at a time.
 
 Note that only the posterior uncertainties in the source release time ($t_0$)  and the source termination time ($t_1$) are producing large impact in the model predictions.
