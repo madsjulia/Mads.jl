@@ -14,8 +14,8 @@ pages:
 - Examples:
   - Setup: EXAMPLES_SETUP.md
   - Decision Analysis: Examples/bigdt/source_termination/source_termination.md
-  - Bayesian sampling: Examples/bayesian_sampling/bayesian_sampling.md
-- Model coupling: MODEL_COUPLING.md
+  - Bayesian Sampling: Examples/bayesian_sampling/bayesian_sampling.md
+- Model Coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md
 - Modules:

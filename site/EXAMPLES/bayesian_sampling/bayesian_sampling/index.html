@@ -8,7 +8,7 @@
   
   <meta name="author" content="Velimir monty Vesselinov">
   
-  <title>Bayesian sampling - MADS</title>
+  <title>Bayesian Sampling - MADS</title>
   
 
   <link rel="shortcut icon" href="../../../mads-favicon.ico">
@@ -25,7 +25,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Bayesian sampling";
+    var mkdocs_page_name = "Bayesian Sampling";
     var mkdocs_page_input_path = "Examples/bayesian_sampling/bayesian_sampling.md";
     var mkdocs_page_url = "/Examples/bayesian_sampling/bayesian_sampling/";
   </script>
@@ -99,7 +99,7 @@
         
             
     <li class="toctree-l1 current">
-        <a class="current" href="./">Bayesian sampling</a>
+        <a class="current" href="./">Bayesian Sampling</a>
         
             <ul>
             
@@ -108,6 +108,8 @@
                     <li><a class="toctree-l4" href="#model-setup">Model setup</a></li>
                 
                     <li><a class="toctree-l4" href="#prior-spaghetti-plots">Prior spaghetti plots</a></li>
+                
+                    <li><a class="toctree-l4" href="#bayesian-sampling-results">Bayesian sampling results</a></li>
                 
                     <li><a class="toctree-l4" href="#posterior-spaghetti-plots">Posterior spaghetti plots</a></li>
                 
@@ -122,7 +124,7 @@
           
             <li>
     <li class="toctree-l1 ">
-        <a class="" href="../../../MODEL_COUPLING/">Model coupling</a>
+        <a class="" href="../../../MODEL_COUPLING/">Model Coupling</a>
         
     </li>
 <li>
@@ -231,7 +233,7 @@
         
       
     
-    <li>Bayesian sampling</li>
+    <li>Bayesian Sampling</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -257,11 +259,38 @@
 </li>
 </ul>
 <h3 id="prior-spaghetti-plots">Prior spaghetti plots</h3>
+<p>Spaghetti plots of 100 model runs representing the prior model prediction uncertainties at the 3 monitoring wells.
+A single model parameter is changed at a time.</p>
+<p><strong>Source <script type="math/tex">x</script> location</strong></p>
+<p><img alt="" src="../w01-prior-source1_x-100-spaghetti.png" /></p>
+<p><strong>Source <script type="math/tex">y</script> location</strong></p>
+<p><img alt="" src="../w01-prior-source1_y-100-spaghetti.png" /></p>
 <p><strong>Source size along <script type="math/tex">x</script> axis</strong></p>
+<p><img alt="" src="../w01-prior-source1_dx-100-spaghetti.png" /></p>
 <p><strong>Source size along <script type="math/tex">y</script> axis</strong></p>
+<p><img alt="" src="../w01-prior-source1_dx-100-spaghetti.png" /></p>
+<p><strong>Source release time <script type="math/tex">t_0</script></strong></p>
+<p><img alt="" src="../w01-prior-source1_t0-100-spaghetti.png" /></p>
+<p><strong>Source termination time <script type="math/tex">t_1</script></strong></p>
+<p><img alt="" src="../w01-prior-source1_t1-100-spaghetti.png" /></p>
+<h3 id="bayesian-sampling-results">Bayesian sampling results</h3>
+<p><img alt="" src="../w01-bayes.png" /></p>
 <h3 id="posterior-spaghetti-plots">Posterior spaghetti plots</h3>
-<p><strong>Source size along <script type="math/tex">x</script> axis</strong></p>
-<p><strong>Source size along <script type="math/tex">y</script> axis</strong></p>
+<p>Spaghetti plots of 1000 model predictions representing the posterior model uncertainties at the 3 monitoring wells.
+A single model parameter is changed at a time.</p>
+<p>Note that only the posterior uncertainties in the source release time (<script type="math/tex">t_0</script>)  and the source termination time (<script type="math/tex">t_1</script>) are producing large impact in the model predictions.</p>
+<p><strong>Source <script type="math/tex">x</script> location (all the 1000 model predictions are overlapping)</strong></p>
+<p><img alt="" src="../w01-posterior-source1_x-1000-spaghetti.png" /></p>
+<p><strong>Source <script type="math/tex">y</script> location (all the 1000 model predictions are overlapping</strong></p>
+<p><img alt="" src="../w01-posterior-source1_y-1000-spaghetti.png" /></p>
+<p><strong>Source size along <script type="math/tex">x</script> axis (all the 1000 model predictions are overlapping</strong></p>
+<p><img alt="" src="../w01-posterior-source1_dx-1000-spaghetti.png" /></p>
+<p><strong>Source size along <script type="math/tex">y</script> axis (all the 1000 model predictions are overlapping</strong></p>
+<p><img alt="" src="../w01-posterior-source1_dx-1000-spaghetti.png" /></p>
+<p><strong>Source release time <script type="math/tex">t_0</script></strong></p>
+<p><img alt="" src="../w01-posterior-source1_t0-1000-spaghetti.png" /></p>
+<p><strong>Source termination time <script type="math/tex">t_1</script></strong></p>
+<p><img alt="" src="../w01-posterior-source1_t1-1000-spaghetti.png" /></p>
               
             </div>
           </div>
@@ -269,7 +298,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../../../MODEL_COUPLING/" class="btn btn-neutral float-right" title="Model coupling">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../../MODEL_COUPLING/" class="btn btn-neutral float-right" title="Model Coupling">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../../bigdt/source_termination/source_termination/" class="btn btn-neutral" title="Decision Analysis"><span class="icon icon-circle-arrow-left"></span> Previous</a>
