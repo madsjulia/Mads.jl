@@ -207,7 +207,9 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	outfile = open(outputfilename, "w")
 	for line in lines
 		splitline = split(line, separator) # two separators are needed for each parameter
-		@assert rem(length(splitline), 2) == 1 # length(splitlines) should always be an odd number -- if it isn't the assumptions in the code below fail
+		if rem(length(splitline), 2) != 1
+			error("The number of separators (\"$separator\") is not even in template file $templatefilename on line:\n$line")
+		end
 		for i = 1:div(length(splitline)-1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
 			Mads.madsinfo("Replacing " * strip(splitline[2 * i]) * " -> " * string(parameters[strip(splitline[2 * i])]))
