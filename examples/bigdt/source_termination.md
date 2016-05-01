@@ -1,6 +1,6 @@
 ## Contaminant Source Termination
 
-ll the figures below are generated using `examples/bigdt/source_termination.jl`.
+All the figures below are generated using `examples/bigdt/source_termination.jl`.
 
 ### Model setup
 

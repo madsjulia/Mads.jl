@@ -120,13 +120,13 @@
                 
                     <li><a class="toctree-l4" href="#example-model-solution">Example model solution</a></li>
                 
-                    <li><a class="toctree-l4" href="#calibration-match-between-observations-and-model-predictions">Calibration match between observations and model predictions</a></li>
+                    <li><a class="toctree-l4" href="#model-calibration">Model calibration</a></li>
                 
-                    <li><a class="toctree-l4" href="#local-sensitivity-analysis">Local sensitivity analysis</a></li>
-                
-                    <li><a class="toctree-l4" href="#global-sensitivity-analysis">Global sensitivity analysis</a></li>
+                    <li><a class="toctree-l4" href="#prior-parameter-uncertainties">Prior parameter uncertainties</a></li>
                 
                     <li><a class="toctree-l4" href="#bayesian-sensitivity-analysis">Bayesian sensitivity analysis</a></li>
+                
+                    <li><a class="toctree-l4" href="#posterior-parameter-uncertainties">Posterior parameter uncertainties</a></li>
                 
             
             </ul>
@@ -270,6 +270,7 @@
             <div class="section">
               
                 <h2 id="analysis-of-contaminant-transport-in-an-aquifer">Analysis of contaminant transport in an aquifer</h2>
+<p>All the figures below are generated using <code>examples/contamination/contamination.jl</code>.</p>
 <h3 id="model-setup">Model setup</h3>
 <p><img alt="" src="../w01-all_wells-problemsetup.svg" /></p>
 <p>There are 20 monitoring wells.
@@ -302,14 +303,11 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 <script type="math/tex">v = 40</script>
 </li>
 </ul>
-<h3 id="calibration-match-between-observations-and-model-predictions">Calibration match between observations and model predictions</h3>
+<h3 id="model-calibration">Model calibration</h3>
+<p>A calibration match between observations and model predictions obtained by model inversion:</p>
 <p><img alt="" src="../w01-w13a_w20a-calib-match.svg" /></p>
-<h3 id="local-sensitivity-analysis">Local sensitivity analysis</h3>
-<p><img alt="" src="../ode-eigenmatrix.svg" /></p>
-<p><img alt="" src="../ode-eigenvalues.svg" /></p>
-<h3 id="global-sensitivity-analysis">Global sensitivity analysis</h3>
-<p><img alt="" src="../ode-SA-results.svg" /></p>
-<p>Probabilistic distribution of the prior parameter uncertainties are:</p>
+<h3 id="prior-parameter-uncertainties">Prior parameter uncertainties</h3>
+<p>Probabilistic distributions of the prior parameter uncertainties are:</p>
 <ul>
 <li>
 <script type="math/tex">t_0</script> = Uniform(0, 10)</li>
@@ -318,19 +316,17 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 <li>
 <script type="math/tex">v</script> = LogUniform(0.1, 200)</li>
 </ul>
-<p><img alt="" src="../w01-w13a_w20a-source1_t0-10-spaghetti.svg" />
-<img alt="" src="../w01-w13a_w20a-source2_t1-10-spaghetti.svg" />
-<img alt="" src="../w01-w13a_w20a-vx-10-spaghetti.svg" /></p>
+<p>Spaghetti plots representing the prior uncertainties:</p>
+<p><img alt="" src="../w01-w13a_w20a-prior-100-spaghetti.svg" /></p>
+<p>The observation data are plotted as red dots.</p>
 <h3 id="bayesian-sensitivity-analysis">Bayesian sensitivity analysis</h3>
-<h4 id="prior-parameter-uncertainties">Prior parameter uncertainties</h4>
-<p><img alt="" src="../ode-prior-k-100-spaghetti.svg" /></p>
-<p><img alt="" src="../ode-prior-omega-100-spaghetti.svg" /></p>
-<h4 id="histogramsscatter-plots-of-bayesian-mcmc-results">Histograms/scatter plots of Bayesian MCMC results</h4>
-<p><img alt="" src="../ode-bayes.svg" /></p>
-<h4 id="posterior-parameter-uncertainties">Posterior parameter uncertainties</h4>
-<p>Note: parameter uncertainties are constrained by observation data</p>
-<p><img alt="" src="../ode-posterior-k-100-spaghetti.svg" /></p>
-<p><img alt="" src="../ode-posterior-omega-100-spaghetti.svg" /></p>
+<p>Histograms and scatter plots of Bayesian MCMC results:</p>
+<p><img alt="" src="../w01-bayes.png" /></p>
+<h3 id="posterior-parameter-uncertainties">Posterior parameter uncertainties</h3>
+<p>Spaghetti plots representing the posterior uncertainties:</p>
+<p><img alt="" src="../w01-w13a_w20a-posterior-1000-spaghetti.png" /></p>
+<p>Note that the parameter uncertainties are constrained by the observation data.
+The observation data are plotted as red dots.</p>
               
             </div>
           </div>

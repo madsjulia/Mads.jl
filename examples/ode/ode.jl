@@ -87,6 +87,6 @@ Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
 # convert the parameters in the chain to a parameter dictionary of arrays
 mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') 
 
-info("Posterior (Bayesian) spaghetti plots ...")
+Mads.madsinfo("Posterior (Bayesian) spaghetti plots ...")
 Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")
 Mads.spaghettiplot(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")

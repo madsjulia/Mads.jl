@@ -222,7 +222,7 @@ function createobservations!(madsdata::Associative, time, observation; logtransf
 	madsdata["Observations"] = observationsdict
 end
 
-"Set observations (calibration targets) in the MADS problem dictionary based on `predictions` dictionary"
+"Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary"
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
 	if haskey(madsdata, "Wells")

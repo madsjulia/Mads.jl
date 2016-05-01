@@ -1,5 +1,7 @@
 ## Analysis of contaminant transport in an aquifer
 
+All the figures below are generated using `examples/contamination/contamination.jl`.
+
 ### Model setup
 
 ![](w01-all_wells-problemsetup.svg)
@@ -31,47 +33,37 @@ Model parameter values:
 * $t_1 = 15$
 * $v = 40$
 
-### Calibration match between observations and model predictions
+### Model calibration
+
+A calibration match between observations and model predictions obtained by model inversion:
 
 ![](w01-w13a_w20a-calib-match.svg)
 
-### Local sensitivity analysis
+### Prior parameter uncertainties
 
-![](ode-eigenmatrix.svg)
-
-![](ode-eigenvalues.svg)
-
-### Global sensitivity analysis
-
-![](ode-SA-results.svg)
-
-Probabilistic distribution of the prior parameter uncertainties are:
+Probabilistic distributions of the prior parameter uncertainties are:
 
 * $t_0$ = Uniform(0, 10)
 * $t_1$ = Uniform(5, 40)
 * $v$ = LogUniform(0.1, 200)
 
-![](w01-w13a_w20a-source1_t0-10-spaghetti.svg)
-![](w01-w13a_w20a-source2_t1-10-spaghetti.svg)
-![](w01-w13a_w20a-vx-10-spaghetti.svg)
+Spaghetti plots representing the prior uncertainties:
+
+![](w01-w13a_w20a-prior-100-spaghetti.svg)
+
+The observation data are plotted as red dots.
 
 ### Bayesian sensitivity analysis
 
+Histograms and scatter plots of Bayesian MCMC results:
 
-#### Prior parameter uncertainties
+![](w01-bayes.png)
 
-![](ode-prior-k-100-spaghetti.svg)
+### Posterior parameter uncertainties
 
-![](ode-prior-omega-100-spaghetti.svg)
+Spaghetti plots representing the posterior uncertainties:
 
-#### Histograms/scatter plots of Bayesian MCMC results
+![](w01-w13a_w20a-posterior-1000-spaghetti.png)
 
-![](ode-bayes.svg)
-
-#### Posterior parameter uncertainties
-
-Note: parameter uncertainties are constrained by observation data
-
-![](ode-posterior-k-100-spaghetti.svg)
-
-![](ode-posterior-omega-100-spaghetti.svg)
+Note that the parameter uncertainties are constrained by the observation data.
+The observation data are plotted as red dots.

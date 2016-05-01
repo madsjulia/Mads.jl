@@ -1,5 +1,7 @@
 ## Analysis of an Ordinary Differential Equation (ODE)
 
+All the figures below are generated using `examples/ode/ode.jl`.
+
 ### ODE
 
 $$x''(t) = -\omega^2 * x(t) - k * x'(t)$$
