@@ -1,41 +1,37 @@
-## Analysis of an Ordinary Differential Equation (DOE)
+## Analysis of an Ordinary Differential Equation (ODE)
 
 ### ODE
 
-$$x''(t) == -\omega^2 * x(t) - k * x'(t)$$
+$$x''(t) = -\omega^2 * x(t) - k * x'(t)$$
 
-### Unknown ODE parameters
+#### Unknown ODE parameters
 
 * k
 * $\omega$
 
-### An example ODE solution
+#### Example ODE solution
 
-![](ode-matchsvg)
+![](ode-solution.svg)
 
 For model parameters:
 
-```
-k = 0.1
-$\omega$ = 0.2
-```
+* k = 0.1
+* $\omega$ = 0.2
 
 ### Local sensitivity analysis
 
-![](ode-eigenmatrix.svg)
+![](ode-eigenmatrix.png)
 
-![](ode-eigenvalues.svg)
+![](ode-eigenvalues.png)
 
-### Global sensitivity analysis
+### Global sensitivity analysis (using eFAST)
 
-![](ode-SA-results.svg)
+![](ode-efast-385.svg)
 
-For, prior parameter uncertainties:
+Probabilistic distributions of the prior parameter uncertainties are:
 
-```
-k = LogUniform(0.01, 0.1)
-$\omega$ = Uniform(0.1, 0.3)
-```
+* k = LogUniform(0.01, 0.1)
+* $\omega$ = Uniform(0.1, 0.3)
 
 ### Bayesian sensitivity analysis
 
@@ -43,28 +39,44 @@ $\omega$ = Uniform(0.1, 0.3)
 
 Synthetic observations are applied to constrain the ODE parameters
 
-![](ode-match.svg)
+![](ode-match.png)
 
 Observation errors are equal for all the sample locations with standard deviation equal to 1 (`observation weight` =  1 / `observation standard deviation` = 1 / 1 = 1)
 
 #### Prior parameter uncertainties
 
-![](ode-prior-k-100-spaghetti.svg)
+##### *k* only
 
-![](ode-prior-omega-100-spaghetti.svg)
+![](ode-prior-k-100-spaghetti.png)
+
+##### *$\omega$* only
+
+![](ode-prior-omega-100-spaghetti.png)
+
+##### *Both* parameters
+
+![](ode-prior-100-spaghetti.png)
 
 The observation data are plotted as a solid black line.
 
 #### Histograms/scatter plots of Bayesian MCMC results
 
-![](ode-bayes.svg)
+![](ode-bayes.png)
 
 #### Posterior parameter uncertainties
 
-Note: parameter uncertainties are constrained by the observation data
+Note that now the parameter uncertainties are constrained by the observation data
 
-![](ode-posterior-k-1000-spaghetti.svg)
+##### *k* only
 
-![](ode-posterior-omega-1000-spaghetti.svg)
+![](ode-posterior-k-1000-spaghetti.png)
+
+##### *$\omega$* only
+
+![](ode-posterior-omega-1000-spaghetti.png)
+
+##### *Both* parameters
+
+![](ode-posterior-1000-spaghetti.png)
 
 The observation data are plotted as a solid black line.

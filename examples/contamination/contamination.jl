@@ -18,7 +18,7 @@ Mads.showparameters(md) # show all the adjustable model parameters
 Mads.showobservations(md) # show all the observations
 
 # use all wells
-Mads.plotmadsproblem(md) # display the well locations and the initial source location
+Mads.plotmadsproblem(md, keyword="all_wells") # display the well locations and the initial source location
 
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
@@ -37,7 +37,7 @@ Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
 
-Mads.plotmadsproblem(md) # display the well locations and the initial source location
+Mads.plotmadsproblem(md, keyword="w13a_w20a") # display the well locations and the initial source location
 
 forward_predictions = Mads.forward(md) # execute a forward model simulation based on the initial parameter guesses
 

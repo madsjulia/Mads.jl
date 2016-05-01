@@ -2,7 +2,7 @@
 
 ### Model setup
 
-![](w01-problemsetup.svg)
+![](w01-all_wells-problemsetup.svg)
 
 There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
@@ -11,27 +11,29 @@ The contaminant transport is solved using the `Anasol` package in Mads.
 
 ### Unknown model parameters
 
-* Start Time of contaminant release `$t_0$`
-* End Time of contaminant release `$t_1$`
-* Advective pore velocity `$v$`
+* Start time of contaminant release $t_0$
+* End time of contaminant release $t_1$
+* Advective pore velocity $v$
+
+### Reduced model setup 
+
+Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
+
+![](w01-w13a_w20a-problemsetup.svg)
 
 ### Example model solution
 
-![](w01-solution.svg)
+![](w01-w13a_w20a-init-match.svg)
 
-```
-$t_0 = 4$
-$t_1 = 15$
-$v = 40$
-```
+Model parameter values:
 
-### Reduced analysis 
-
-Analysis of the data from only 2 monitoring locations: w13a and w20a.
+* $t_0 = 4$ 
+* $t_1 = 15$
+* $v = 40$
 
 ### Calibration match between observations and model predictions
 
-![](w01-match.svg)
+![](w01-w13a_w20a-calib-match.svg)
 
 ### Local sensitivity analysis
 
@@ -43,13 +45,11 @@ Analysis of the data from only 2 monitoring locations: w13a and w20a.
 
 ![](ode-SA-results.svg)
 
-Prior parameter uncertainties:
+Probabilistic distribution of the prior parameter uncertainties are:
 
-```
-$t_0$ = Uniform(0, 10)
-$t_1$ = Uniform(5, 40)
-$v$ = LogUniform(0.1, 200)
-```
+* $t_0$ = Uniform(0, 10)
+* $t_1$ = Uniform(5, 40)
+* $v$ = LogUniform(0.1, 200)
 
 ![](w01-w13a_w20a-source1_t0-10-spaghetti.svg)
 ![](w01-w13a_w20a-source2_t1-10-spaghetti.svg)
@@ -57,13 +57,6 @@ $v$ = LogUniform(0.1, 200)
 
 ### Bayesian sensitivity analysis
 
-#### Observations
-
-Synthetic observations are applied to constrain the ODE parameters
-
-![](ode-observations.svg)
-
-Observation errors are equal for all the sample locations with standard deviation equal to 1 (`observation weight` =  1 / `observation standard deviation` = 1 / 1 = 1)
 
 #### Prior parameter uncertainties
 

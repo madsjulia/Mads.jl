@@ -4,7 +4,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/INSTALLATION/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/GETTING_STARTED/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -29,19 +29,31 @@
         
     <url>
      <loc>http://madsjulia.lanl.gov/EXAMPLES_SETUP/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Examples/bigdt/source_termination/source_termination/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Examples/bayesian_sampling/bayesian_sampling/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Examples/contamination/contamination/</loc>
+     <lastmod>2016-05-01</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>http://madsjulia.lanl.gov/Examples/ode/ode/</loc>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -50,7 +62,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/MODEL_COUPLING/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -58,7 +70,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/TEST/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -66,7 +78,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/FUNCTIONS/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -75,37 +87,37 @@
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/Mads/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/BIGUQ/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/Anasol/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/ReusableFunctions/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/MetaProgTools/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.lanl.gov/Modules/RobustPmap/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -114,7 +126,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/ACKNOWLEDGMENTS/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -122,7 +134,7 @@
     
     <url>
      <loc>http://madsjulia.lanl.gov/COPYING/</loc>
-     <lastmod>2016-04-27</lastmod>
+     <lastmod>2016-05-01</lastmod>
      <changefreq>daily</changefreq>
     </url>
     

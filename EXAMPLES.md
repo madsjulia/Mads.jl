@@ -13,10 +13,10 @@ There are various examples located in the `examples` directory of the `Mads` rep
 
 For example, execute
 
-`include(Mads.madsdir * "/../examples/contamination/analysis.jl")`
+`include(Mads.madsdir * "/../examples/contamination/contamination.jl")`
 
 to perform various analyses related to contaminant transport, or execute
 
-`include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")`
+`include(Mads.madsdir * "/../examples/bigdt/source_termination.jl")`
 
 to perform BIG-DT decision analysis.
