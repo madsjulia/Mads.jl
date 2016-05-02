@@ -41,6 +41,8 @@ macro tryimport(s)
 	return :($(esc(q)))
 end
 
+@tryimport LMLin
+
 if !haskey(ENV, "MADS_NO_PLOT")
 	@tryimport Gadfly
 	if !haskey(ENV, "MADS_NO_PYTHON")

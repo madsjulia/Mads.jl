@@ -1,5 +1,5 @@
 import Mads
-import Base.Test
+using Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
