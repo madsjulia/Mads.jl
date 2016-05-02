@@ -198,12 +198,14 @@ Plot the matches between model predictions and observations
 ```
 plotmatches(madsdata; filename="", format="")
 plotmatches(madsdata, result; filename="", format="")
+plotmatches(madsdata, result, r"NO3"; filename="", format="")
 ```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `result` : dictionary with model predictions
+- `rx` : regular expression to filter the outputs
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
@@ -255,7 +257,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 					time = gettime(o[i])
 					t = gettarget(o[i])
 					w = getweight(o[i])
-					if w == NaN || w > eps(Float64)
+					if w == NaN || w > 0
 						push!(td, time)
 						push!(d, t)
 					end
@@ -304,7 +306,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		for i in 1:nT
 			time = madsdata["Observations"][obskeys[i]]["time"]
 			skipnext = false
-			if madsdata["Observations"][obskeys[i]]["weight"] > eps(Float64)
+			if madsdata["Observations"][obskeys[i]]["weight"] > 0
 				push!(tobs, time)
 				push!(obs, madsdata["Observations"][obskeys[i]]["target"])
 			else
