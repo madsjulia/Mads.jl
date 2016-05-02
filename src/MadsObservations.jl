@@ -161,7 +161,7 @@ end
 function invobsweights!(madsdata::Associative, value::Number)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
-		if madsdata["Observations"][obskeys[i]]["target"] > 0
+		if madsdata["Observations"][obskeys[i]]["weight"] > 0 && madsdata["Observations"][obskeys[i]]["target"] > 0
 			madsdata["Observations"][obskeys[i]]["weight"] = ( 1. / madsdata["Observations"][obskeys[i]]["target"] ) * value
 		end
 	end
@@ -194,7 +194,7 @@ function invwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			if madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] > 0
+			if madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] > 0 && madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"]> 0
 				madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] = ( 1. / madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] ) * value
 			end
 		end
