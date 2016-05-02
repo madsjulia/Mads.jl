@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="304.8mm" viewBox="0 0 152.4 304.8"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot xscalable yscalable" id="img-38566a04-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-2">
+    <text x="82.79" y="293.19" text-anchor="middle" dy="0.6em">X</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-3">
+    <text x="20.18" y="286.51" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="82.79" y="286.51" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="286.51" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-38566a04-4)">
+  <g id="img-38566a04-5">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-38566a04-6">
+      <rect x="18.18" y="215.81" width="129.22" height="69.7"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-7">
+      <path fill="none" d="M18.18,283.51 L 147.4 283.51"/>
+      <path fill="none" d="M18.18,267.09 L 147.4 267.09"/>
+      <path fill="none" d="M18.18,250.66 L 147.4 250.66"/>
+      <path fill="none" d="M18.18,234.24 L 147.4 234.24"/>
+      <path fill="none" d="M18.18,217.81 L 147.4 217.81"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-8">
+      <path fill="none" d="M20.18,215.81 L 20.18 285.51"/>
+      <path fill="none" d="M82.79,215.81 L 82.79 285.51"/>
+      <path fill="none" d="M145.4,215.81 L 145.4 285.51"/>
+    </g>
+    <g class="plotpanel" id="img-38566a04-9">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-10">
+        <path fill="none" d="M32.7,268.29 L 45.23 263.04 57.75 257.56 70.27 252.15 82.79 247.06 95.31 242.47 107.83 238.51 120.36 235.27 132.88 232.77 145.4 231"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-11">
+        <path fill="none" d="M32.7,267.77 L 45.23 262.73 57.75 257.52 70.27 252.41 82.79 247.59 95.31 243.25 107.83 239.5 120.36 236.4 132.88 233.99 145.4 232.26"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-12">
+        <path fill="none" d="M32.7,269.61 L 45.23 263.89 57.75 257.8 70.27 251.72 82.79 245.97 95.31 240.81 107.83 236.39 120.36 232.82 132.88 230.12 145.4 228.28"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-13">
+        <path fill="none" d="M32.7,267.36 L 45.23 262.5 57.75 257.53 70.27 252.66 82.79 248.08 95.31 243.95 107.83 240.36 120.36 237.39 132.88 235.05 145.4 233.36"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-14">
+        <path fill="none" d="M32.7,268.81 L 45.23 263.36 57.75 257.63 70.27 251.95 82.79 246.59 95.31 241.76 107.83 237.62 120.36 234.24 132.88 231.66 145.4 229.86"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-15">
+        <path fill="none" d="M32.7,268.64 L 45.23 263.25 57.75 257.61 70.27 252.01 82.79 246.74 95.31 241.99 107.83 237.9 120.36 234.57 132.88 232.01 145.4 230.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-16">
+        <path fill="none" d="M32.7,267.41 L 45.23 262.53 57.75 257.53 70.27 252.63 82.79 248.03 95.31 243.87 107.83 240.27 120.36 237.28 132.88 234.94 145.4 233.24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-17">
+        <path fill="none" d="M32.7,268.47 L 45.23 263.14 57.75 257.58 70.27 252.08 82.79 246.89 95.31 242.22 107.83 238.2 120.36 234.91 132.88 232.38 145.4 230.61"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-18">
+        <path fill="none" d="M32.7,268.11 L 45.23 262.92 57.75 257.54 70.27 252.24 82.79 247.24 95.31 242.73 107.83 238.85 120.36 235.65 132.88 233.18 145.4 231.43"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-19">
+        <path fill="none" d="M32.7,267.07 L 45.23 262.35 57.75 257.56 70.27 252.88 82.79 248.49 95.31 244.52 107.83 241.07 120.36 238.19 132.88 235.91 145.4 234.25"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-20">
+        <path fill="none" d="M32.7,268.57 L 45.23 263.21 57.75 257.6 70.27 252.04 82.79 246.8 95.31 242.08 107.83 238.02 120.36 234.7 132.88 232.16 145.4 230.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-21">
+        <path fill="none" d="M32.7,267.27 L 45.23 262.45 57.75 257.54 70.27 252.73 82.79 248.21 95.31 244.13 107.83 240.59 120.36 237.64 132.88 235.33 145.4 233.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-22">
+        <path fill="none" d="M32.7,268.85 L 45.23 263.39 57.75 257.64 70.27 251.94 82.79 246.56 95.31 241.72 107.83 237.56 120.36 234.17 132.88 231.59 145.4 229.79"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-23">
+        <path fill="none" d="M32.7,267.24 L 45.23 262.44 57.75 257.54 70.27 252.75 82.79 248.25 95.31 244.18 107.83 240.65 120.36 237.71 132.88 235.4 145.4 233.72"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-24">
+        <path fill="none" d="M32.7,267.13 L 45.23 262.38 57.75 257.55 70.27 252.83 82.79 248.4 95.31 244.4 107.83 240.91 120.36 238.01 132.88 235.73 145.4 234.05"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-25">
+        <path fill="none" d="M32.7,268.8 L 45.23 263.36 57.75 257.63 70.27 251.96 82.79 246.6 95.31 241.78 107.83 237.64 120.36 234.26 132.88 231.68 145.4 229.89"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-26">
+        <path fill="none" d="M32.7,267.88 L 45.23 262.79 57.75 257.53 70.27 252.35 82.79 247.47 95.31 243.08 107.83 239.28 120.36 236.15 132.88 233.72 145.4 231.99"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-27">
+        <path fill="none" d="M32.7,268.17 L 45.23 262.96 57.75 257.55 70.27 252.21 82.79 247.18 95.31 242.65 107.83 238.74 120.36 235.53 132.88 233.06 145.4 231.3"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-28">
+        <path fill="none" d="M32.7,269.61 L 45.23 263.89 57.75 257.8 70.27 251.72 82.79 245.97 95.31 240.81 107.83 236.39 120.36 232.82 132.88 230.12 145.4 228.27"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-29">
+        <path fill="none" d="M32.7,268.02 L 45.23 262.87 57.75 257.54 70.27 252.28 82.79 247.32 95.31 242.86 107.83 239.01 120.36 235.84 132.88 233.38 145.4 231.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-30">
+        <path fill="none" d="M32.7,269.61 L 45.23 263.89 57.75 257.8 70.27 251.72 82.79 245.97 95.31 240.8 107.83 236.39 120.36 232.81 132.88 230.11 145.4 228.27"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-31">
+        <path fill="none" d="M32.7,268.39 L 45.23 263.1 57.75 257.57 70.27 252.11 82.79 246.96 95.31 242.33 107.83 238.33 120.36 235.06 132.88 232.55 145.4 230.78"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-32">
+        <path fill="none" d="M32.7,269.04 L 45.23 263.51 57.75 257.68 70.27 251.88 82.79 246.4 95.31 241.48 107.83 237.25 120.36 233.82 132.88 231.2 145.4 229.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-33">
+        <path fill="none" d="M32.7,269.62 L 45.23 263.9 57.75 257.81 70.27 251.72 82.79 245.96 95.31 240.79 107.83 236.37 120.36 232.8 132.88 230.09 145.4 228.25"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-34">
+        <path fill="none" d="M32.7,269.62 L 45.23 263.9 57.75 257.81 70.27 251.72 82.79 245.96 95.31 240.79 107.83 236.37 120.36 232.79 132.88 230.09 145.4 228.24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-35">
+        <path fill="none" d="M32.7,269.62 L 45.23 263.9 57.75 257.8 70.27 251.72 82.79 245.96 95.31 240.79 107.83 236.37 120.36 232.8 132.88 230.1 145.4 228.25"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-36">
+        <path fill="none" d="M32.7,269.48 L 45.23 263.81 57.75 257.77 70.27 251.75 82.79 246.06 95.31 240.95 107.83 236.57 120.36 233.03 132.88 230.35 145.4 228.51"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-37">
+        <path fill="none" d="M32.7,269.12 L 45.23 263.56 57.75 257.69 70.27 251.85 82.79 246.34 95.31 241.38 107.83 237.13 120.36 233.67 132.88 231.05 145.4 229.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-38">
+        <path fill="none" d="M32.7,268.01 L 45.23 262.86 57.75 257.53 70.27 252.28 82.79 247.34 95.31 242.88 107.83 239.04 120.36 235.87 132.88 233.42 145.4 231.68"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-39">
+        <path fill="none" d="M32.7,268.06 L 45.23 262.9 57.75 257.54 70.27 252.26 82.79 247.29 95.31 242.8 107.83 238.93 120.36 235.75 132.88 233.29 145.4 231.55"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-40">
+        <path fill="none" d="M32.7,269.16 L 45.23 263.59 57.75 257.7 70.27 251.84 82.79 246.31 95.31 241.33 107.83 237.06 120.36 233.6 132.88 230.96 145.4 229.15"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-41">
+        <path fill="none" d="M32.7,268.71 L 45.23 263.3 57.75 257.62 70.27 251.99 82.79 246.68 95.31 241.9 107.83 237.79 120.36 234.44 132.88 231.88 145.4 230.08"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-42">
+        <path fill="none" d="M32.7,267.23 L 45.23 262.44 57.75 257.54 70.27 252.76 82.79 248.26 95.31 244.2 107.83 240.67 120.36 237.74 132.88 235.43 145.4 233.75"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-43">
+        <path fill="none" d="M32.7,269.39 L 45.23 263.74 57.75 257.75 70.27 251.78 82.79 246.13 95.31 241.06 107.83 236.71 120.36 233.19 132.88 230.52 145.4 228.69"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-44">
+        <path fill="none" d="M32.7,269.21 L 45.23 263.63 57.75 257.71 70.27 251.82 82.79 246.26 95.31 241.26 107.83 236.98 120.36 233.5 132.88 230.86 145.4 229.04"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-45">
+        <path fill="none" d="M32.7,269.18 L 45.23 263.6 57.75 257.71 70.27 251.83 82.79 246.29 95.31 241.3 107.83 237.03 120.36 233.56 132.88 230.92 145.4 229.1"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-46">
+        <path fill="none" d="M32.7,269.62 L 45.23 263.9 57.75 257.81 70.27 251.72 82.79 245.96 95.31 240.79 107.83 236.37 120.36 232.79 132.88 230.09 145.4 228.24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-47">
+        <path fill="none" d="M32.7,269.12 L 45.23 263.57 57.75 257.69 70.27 251.85 82.79 246.34 95.31 241.37 107.83 237.12 120.36 233.67 132.88 231.04 145.4 229.22"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-48">
+        <path fill="none" d="M32.7,269.61 L 45.23 263.9 57.75 257.8 70.27 251.72 82.79 245.97 95.31 240.8 107.83 236.38 120.36 232.81 132.88 230.11 145.4 228.26"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-49">
+        <path fill="none" d="M32.7,267.68 L 45.23 262.68 57.75 257.52 70.27 252.46 82.79 247.7 95.31 243.4 107.83 239.68 120.36 236.61 132.88 234.22 145.4 232.5"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-50">
+        <path fill="none" d="M32.7,269.63 L 45.23 263.9 57.75 257.81 70.27 251.72 82.79 245.96 95.31 240.78 107.83 236.36 120.36 232.79 132.88 230.08 145.4 228.24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-51">
+        <path fill="none" d="M32.7,269.05 L 45.23 263.52 57.75 257.68 70.27 251.87 82.79 246.4 95.31 241.47 107.83 237.24 120.36 233.81 132.88 231.19 145.4 229.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-52">
+        <path fill="none" d="M32.7,269.43 L 45.23 263.77 57.75 257.76 70.27 251.76 82.79 246.1 95.31 241.01 107.83 236.65 120.36 233.12 132.88 230.45 145.4 228.61"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-53">
+        <path fill="none" d="M32.7,268.92 L 45.23 263.43 57.75 257.65 70.27 251.92 82.79 246.5 95.31 241.63 107.83 237.45 120.36 234.04 132.88 231.44 145.4 229.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-54">
+        <path fill="none" d="M32.7,267.52 L 45.23 262.59 57.75 257.52 70.27 252.56 82.79 247.89 95.31 243.68 107.83 240.03 120.36 237 132.88 234.64 145.4 232.93"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-55">
+        <path fill="none" d="M32.7,268.49 L 45.23 263.16 57.75 257.59 70.27 252.07 82.79 246.87 95.31 242.18 107.83 238.15 120.36 234.86 132.88 232.33 145.4 230.55"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-56">
+        <path fill="none" d="M32.7,268.92 L 45.23 263.43 57.75 257.65 70.27 251.91 82.79 246.5 95.31 241.63 107.83 237.44 120.36 234.04 132.88 231.44 145.4 229.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-57">
+        <path fill="none" d="M32.7,268.62 L 45.23 263.24 57.75 257.6 70.27 252.02 82.79 246.76 95.31 242.02 107.83 237.95 120.36 234.62 132.88 232.07 145.4 230.28"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-58">
+        <path fill="none" d="M32.7,268.2 L 45.23 262.98 57.75 257.55 70.27 252.2 82.79 247.15 95.31 242.61 107.83 238.69 120.36 235.47 132.88 232.99 145.4 231.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-59">
+        <path fill="none" d="M32.7,269.6 L 45.23 263.88 57.75 257.8 70.27 251.72 82.79 245.98 95.31 240.82 107.83 236.4 120.36 232.83 132.88 230.13 145.4 228.29"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-60">
+        <path fill="none" d="M32.7,268.65 L 45.23 263.26 57.75 257.61 70.27 252.01 82.79 246.73 95.31 241.98 107.83 237.89 120.36 234.56 132.88 232 145.4 230.21"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-61">
+        <path fill="none" d="M32.7,268.67 L 45.23 263.27 57.75 257.61 70.27 252 82.79 246.71 95.31 241.95 107.83 237.85 120.36 234.51 132.88 231.95 145.4 230.16"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-62">
+        <path fill="none" d="M32.7,269.36 L 45.23 263.72 57.75 257.74 70.27 251.78 82.79 246.16 95.31 241.09 107.83 236.76 120.36 233.25 132.88 230.59 145.4 228.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-63">
+        <path fill="none" d="M32.7,267.09 L 45.23 262.37 57.75 257.56 70.27 252.86 82.79 248.46 95.31 244.47 107.83 241.01 120.36 238.12 132.88 235.84 145.4 234.17"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-64">
+        <path fill="none" d="M32.7,269.6 L 45.23 263.89 57.75 257.8 70.27 251.72 82.79 245.98 95.31 240.81 107.83 236.4 120.36 232.83 132.88 230.13 145.4 228.29"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-65">
+        <path fill="none" d="M32.7,268.64 L 45.23 263.25 57.75 257.61 70.27 252.01 82.79 246.73 95.31 241.98 107.83 237.9 120.36 234.57 132.88 232.01 145.4 230.22"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-66">
+        <path fill="none" d="M32.7,269.54 L 45.23 263.85 57.75 257.79 70.27 251.74 82.79 246.02 95.31 240.88 107.83 236.49 120.36 232.93 132.88 230.24 145.4 228.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-67">
+        <path fill="none" d="M32.7,267.21 L 45.23 262.43 57.75 257.54 70.27 252.77 82.79 248.28 95.31 244.23 107.83 240.71 120.36 237.78 132.88 235.48 145.4 233.8"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-68">
+        <path fill="none" d="M32.7,267.98 L 45.23 262.85 57.75 257.53 70.27 252.3 82.79 247.37 95.31 242.93 107.83 239.09 120.36 235.94 132.88 233.49 145.4 231.75"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-69">
+        <path fill="none" d="M32.7,268.99 L 45.23 263.48 57.75 257.67 70.27 251.89 82.79 246.44 95.31 241.54 107.83 237.33 120.36 233.91 132.88 231.3 145.4 229.49"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-70">
+        <path fill="none" d="M32.7,269.63 L 45.23 263.91 57.75 257.81 70.27 251.71 82.79 245.96 95.31 240.78 107.83 236.36 120.36 232.78 132.88 230.08 145.4 228.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-71">
+        <path fill="none" d="M32.7,267.54 L 45.23 262.6 57.75 257.52 70.27 252.54 82.79 247.86 95.31 243.64 107.83 239.97 120.36 236.94 132.88 234.58 145.4 232.87"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-72">
+        <path fill="none" d="M32.7,269.47 L 45.23 263.8 57.75 257.77 70.27 251.75 82.79 246.07 95.31 240.96 107.83 236.59 120.36 233.04 132.88 230.36 145.4 228.53"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-73">
+        <path fill="none" d="M32.7,269.39 L 45.23 263.75 57.75 257.75 70.27 251.77 82.79 246.13 95.31 241.05 107.83 236.71 120.36 233.19 132.88 230.52 145.4 228.69"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-74">
+        <path fill="none" d="M32.7,268.86 L 45.23 263.39 57.75 257.64 70.27 251.93 82.79 246.55 95.31 241.7 107.83 237.54 120.36 234.15 132.88 231.56 145.4 229.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-75">
+        <path fill="none" d="M32.7,267.72 L 45.23 262.7 57.75 257.52 70.27 252.44 82.79 247.65 95.31 243.34 107.83 239.6 120.36 236.52 132.88 234.12 145.4 232.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-76">
+        <path fill="none" d="M32.7,268.91 L 45.23 263.43 57.75 257.65 70.27 251.92 82.79 246.51 95.31 241.64 107.83 237.46 120.36 234.06 132.88 231.46 145.4 229.66"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-77">
+        <path fill="none" d="M32.7,267.33 L 45.23 262.49 57.75 257.53 70.27 252.68 82.79 248.13 95.31 244.01 107.83 240.43 120.36 237.47 132.88 235.14 145.4 233.45"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-78">
+        <path fill="none" d="M32.7,267.89 L 45.23 262.8 57.75 257.53 70.27 252.34 82.79 247.47 95.31 243.07 107.83 239.26 120.36 236.13 132.88 233.7 145.4 231.97"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-79">
+        <path fill="none" d="M32.7,269.61 L 45.23 263.89 57.75 257.8 70.27 251.72 82.79 245.97 95.31 240.8 107.83 236.39 120.36 232.82 132.88 230.12 145.4 228.27"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-80">
+        <path fill="none" d="M32.7,269.25 L 45.23 263.65 57.75 257.72 70.27 251.81 82.79 246.24 95.31 241.22 107.83 236.93 120.36 233.44 132.88 230.79 145.4 228.97"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-81">
+        <path fill="none" d="M32.7,269.4 L 45.23 263.75 57.75 257.75 70.27 251.77 82.79 246.12 95.31 241.04 107.83 236.7 120.36 233.17 132.88 230.51 145.4 228.67"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-82">
+        <path fill="none" d="M32.7,267.73 L 45.23 262.7 57.75 257.52 70.27 252.43 82.79 247.64 95.31 243.32 107.83 239.58 120.36 236.5 132.88 234.1 145.4 232.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-83">
+        <path fill="none" d="M32.7,267.48 L 45.23 262.57 57.75 257.52 70.27 252.58 82.79 247.94 95.31 243.74 107.83 240.11 120.36 237.09 132.88 234.74 145.4 233.03"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-84">
+        <path fill="none" d="M32.7,268.57 L 45.23 263.21 57.75 257.6 70.27 252.04 82.79 246.8 95.31 242.08 107.83 238.02 120.36 234.7 132.88 232.16 145.4 230.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-85">
+        <path fill="none" d="M32.7,267.75 L 45.23 262.72 57.75 257.52 70.27 252.42 82.79 247.62 95.31 243.28 107.83 239.54 120.36 236.44 132.88 234.04 145.4 232.31"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-86">
+        <path fill="none" d="M32.7,268.58 L 45.23 263.22 57.75 257.6 70.27 252.03 82.79 246.79 95.31 242.06 107.83 238 120.36 234.68 132.88 232.14 145.4 230.36"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-87">
+        <path fill="none" d="M32.7,268.39 L 45.23 263.1 57.75 257.57 70.27 252.11 82.79 246.96 95.31 242.33 107.83 238.33 120.36 235.06 132.88 232.55 145.4 230.78"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-88">
+        <path fill="none" d="M32.7,269.37 L 45.23 263.73 57.75 257.75 70.27 251.78 82.79 246.15 95.31 241.08 107.83 236.75 120.36 233.23 132.88 230.57 145.4 228.73"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-89">
+        <path fill="none" d="M32.7,269.22 L 45.23 263.63 57.75 257.71 70.27 251.82 82.79 246.26 95.31 241.25 107.83 236.97 120.36 233.49 132.88 230.84 145.4 229.02"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-90">
+        <path fill="none" d="M32.7,267.29 L 45.23 262.46 57.75 257.53 70.27 252.72 82.79 248.19 95.31 244.1 107.83 240.54 120.36 237.59 132.88 235.27 145.4 233.59"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-91">
+        <path fill="none" d="M32.7,267.74 L 45.23 262.71 57.75 257.52 70.27 252.43 82.79 247.63 95.31 243.3 107.83 239.56 120.36 236.47 132.88 234.07 145.4 232.35"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-92">
+        <path fill="none" d="M32.7,269.31 L 45.23 263.69 57.75 257.73 70.27 251.8 82.79 246.19 95.31 241.15 107.83 236.83 120.36 233.33 132.88 230.67 145.4 228.85"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-93">
+        <path fill="none" d="M32.7,267.82 L 45.23 262.76 57.75 257.52 70.27 252.38 82.79 247.54 95.31 243.17 107.83 239.39 120.36 236.28 132.88 233.86 145.4 232.13"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-94">
+        <path fill="none" d="M32.7,269.06 L 45.23 263.53 57.75 257.68 70.27 251.87 82.79 246.38 95.31 241.45 107.83 237.21 120.36 233.77 132.88 231.15 145.4 229.34"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-95">
+        <path fill="none" d="M32.7,269.51 L 45.23 263.83 57.75 257.78 70.27 251.74 82.79 246.04 95.31 240.91 107.83 236.53 120.36 232.98 132.88 230.3 145.4 228.46"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-96">
+        <path fill="none" d="M32.7,268.42 L 45.23 263.11 57.75 257.58 70.27 252.1 82.79 246.94 95.31 242.29 107.83 238.28 120.36 235.01 132.88 232.49 145.4 230.71"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-97">
+        <path fill="none" d="M32.7,268.26 L 45.23 263.01 57.75 257.56 70.27 252.17 82.79 247.09 95.31 242.52 107.83 238.57 120.36 235.34 132.88 232.85 145.4 231.09"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-98">
+        <path fill="none" d="M32.7,269.63 L 45.23 263.91 57.75 257.81 70.27 251.71 82.79 245.95 95.31 240.78 107.83 236.35 120.36 232.77 132.88 230.07 145.4 228.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-99">
+        <path fill="none" d="M32.7,269.38 L 45.23 263.74 57.75 257.75 70.27 251.78 82.79 246.14 95.31 241.07 107.83 236.73 120.36 233.21 132.88 230.54 145.4 228.71"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-100">
+        <path fill="none" d="M32.7,268.61 L 45.23 263.24 57.75 257.6 70.27 252.02 82.79 246.76 95.31 242.02 107.83 237.95 120.36 234.62 132.88 232.07 145.4 230.29"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-101">
+        <path fill="none" d="M32.7,268.44 L 45.23 263.12 57.75 257.58 70.27 252.09 82.79 246.92 95.31 242.27 107.83 238.26 120.36 234.98 132.88 232.45 145.4 230.68"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-102">
+        <path fill="none" d="M32.7,267.61 L 45.23 262.64 57.75 257.52 70.27 252.5 82.79 247.78 95.31 243.52 107.83 239.83 120.36 236.78 132.88 234.4 145.4 232.69"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-103">
+        <path fill="none" d="M32.7,267.21 L 45.23 262.43 57.75 257.54 70.27 252.77 82.79 248.29 95.31 244.24 107.83 240.72 120.36 237.79 132.88 235.48 145.4 233.8"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-104">
+        <path fill="none" d="M32.7,267.11 L 45.23 262.37 57.75 257.55 70.27 252.85 82.79 248.43 95.31 244.44 107.83 240.97 120.36 238.07 132.88 235.79 145.4 234.12"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-105">
+        <path fill="none" d="M32.7,267.11 L 45.23 262.37 57.75 257.55 70.27 252.85 82.79 248.44 95.31 244.44 107.83 240.97 120.36 238.08 132.88 235.8 145.4 234.13"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-106">
+        <path fill="none" d="M32.7,269.17 L 45.23 263.6 57.75 257.7 70.27 251.84 82.79 246.3 95.31 241.32 107.83 237.05 120.36 233.58 132.88 230.95 145.4 229.13"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-107">
+        <path fill="none" d="M32.7,269.63 L 45.23 263.91 57.75 257.81 70.27 251.71 82.79 245.95 95.31 240.78 107.83 236.36 120.36 232.78 132.88 230.08 145.4 228.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-108">
+        <path fill="none" d="M32.7,269.58 L 45.23 263.87 57.75 257.79 70.27 251.73 82.79 245.99 95.31 240.84 107.83 236.44 120.36 232.87 132.88 230.18 145.4 228.33"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-109">
+        <path fill="none" d="M32.7,268.1 L 45.23 262.92 57.75 257.54 70.27 252.24 82.79 247.25 95.31 242.75 107.83 238.87 120.36 235.68 132.88 233.22 145.4 231.47"/>
+      </g>
+      <g class="geometry" id="img-38566a04-110">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke="#FFFFFF" stroke-width="0.3" fill="#FF0000" id="img-38566a04-111">
+          <use xlink:href="#img-38566a04-112" x="32.7" y="267.31"/>
+          <use xlink:href="#img-38566a04-112" x="45.23" y="263.96"/>
+          <use xlink:href="#img-38566a04-112" x="57.75" y="260.27"/>
+          <use xlink:href="#img-38566a04-112" x="70.27" y="256.26"/>
+          <use xlink:href="#img-38566a04-112" x="82.79" y="251.96"/>
+          <use xlink:href="#img-38566a04-112" x="95.31" y="247.43"/>
+          <use xlink:href="#img-38566a04-112" x="107.83" y="242.71"/>
+          <use xlink:href="#img-38566a04-112" x="120.36" y="237.88"/>
+          <use xlink:href="#img-38566a04-112" x="132.88" y="233"/>
+          <use xlink:href="#img-38566a04-112" x="145.4" y="228.15"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-113">
+    <text x="17.18" y="283.51" text-anchor="end" dy="0.35em">0</text>
+    <text x="17.18" y="267.09" text-anchor="end" dy="0.35em">100</text>
+    <text x="17.18" y="250.66" text-anchor="end" dy="0.35em">200</text>
+    <text x="17.18" y="234.24" text-anchor="end" dy="0.35em">300</text>
+    <text x="17.18" y="217.81" text-anchor="end" dy="0.35em">400</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-114">
+    <text x="9.16" y="250.66" text-anchor="end" dy="0.35em">Y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-115">
+    <text x="82.79" y="213.81" text-anchor="middle">w3</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-38566a04-116">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-117">
+    <text x="83.63" y="191.59" text-anchor="middle" dy="0.6em">X</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-118">
+    <text x="21.86" y="184.91" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="83.63" y="184.91" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="184.91" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-38566a04-119)">
+  <g id="img-38566a04-120">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-38566a04-121">
+      <rect x="19.86" y="114.21" width="127.54" height="69.7"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-122">
+      <path fill="none" d="M19.86,181.91 L 147.4 181.91"/>
+      <path fill="none" d="M19.86,165.49 L 147.4 165.49"/>
+      <path fill="none" d="M19.86,149.06 L 147.4 149.06"/>
+      <path fill="none" d="M19.86,132.64 L 147.4 132.64"/>
+      <path fill="none" d="M19.86,116.21 L 147.4 116.21"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-123">
+      <path fill="none" d="M21.86,114.21 L 21.86 183.91"/>
+      <path fill="none" d="M83.63,114.21 L 83.63 183.91"/>
+      <path fill="none" d="M145.4,114.21 L 145.4 183.91"/>
+    </g>
+    <g class="plotpanel" id="img-38566a04-124">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-125">
+        <path fill="none" d="M34.21,171.48 L 46.57 166.35 58.92 160.4 71.27 153.91 83.63 147.2 95.98 140.56 108.34 134.28 120.69 128.57 133.05 123.57 145.4 119.41"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-126">
+        <path fill="none" d="M34.21,169.51 L 46.57 164.14 58.92 158.12 71.27 151.74 83.63 145.28 95.98 139 108.34 133.13 120.69 127.84 133.05 123.27 145.4 119.49"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-127">
+        <path fill="none" d="M34.21,175.33 L 46.57 170.87 58.92 165.21 71.27 158.63 83.63 151.47 95.98 144.13 108.34 136.98 120.69 130.33 133.05 124.41 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-128">
+        <path fill="none" d="M34.21,167.67 L 46.57 162.14 58.92 156.11 71.27 149.85 83.63 143.63 95.98 137.67 108.34 132.17 120.69 127.26 133.05 123.05 145.4 119.6"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-129">
+        <path fill="none" d="M34.21,173.17 L 46.57 168.3 58.92 162.45 71.27 155.89 83.63 148.98 95.98 142.04 108.34 135.39 120.69 129.27 133.05 123.9 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-130">
+        <path fill="none" d="M34.21,172.64 L 46.57 167.68 58.92 161.79 71.27 155.25 83.63 148.4 95.98 141.56 108.34 135.02 120.69 129.04 133.05 123.79 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-131">
+        <path fill="none" d="M34.21,167.88 L 46.57 162.36 58.92 156.33 71.27 150.06 83.63 143.81 95.98 137.82 108.34 132.27 120.69 127.32 133.05 123.07 145.4 119.59"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-132">
+        <path fill="none" d="M34.21,172.08 L 46.57 167.04 58.92 161.11 71.27 154.6 83.63 147.81 95.98 141.07 108.34 134.66 120.69 128.81 133.05 123.68 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-133">
+        <path fill="none" d="M34.21,170.82 L 46.57 165.61 58.92 159.63 71.27 153.17 83.63 146.54 95.98 140.02 108.34 133.88 120.69 128.31 133.05 123.46 145.4 119.43"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-134">
+        <path fill="none" d="M34.21,166.12 L 46.57 160.48 58.92 154.47 71.27 148.34 83.63 142.33 95.98 136.64 108.34 131.43 120.69 126.83 133.05 122.91 145.4 119.72"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-135">
+        <path fill="none" d="M34.21,172.42 L 46.57 167.43 58.92 161.53 71.27 155 83.63 148.17 95.98 141.37 108.34 134.88 120.69 128.95 133.05 123.74 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-136">
+        <path fill="none" d="M34.21,167.19 L 46.57 161.62 58.92 155.59 71.27 149.37 83.63 143.22 95.98 137.34 108.34 131.93 120.69 127.12 133.05 123 145.4 119.63"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-137">
+        <path fill="none" d="M34.21,173.28 L 46.57 168.42 58.92 162.57 71.27 156.02 83.63 149.09 95.98 142.13 108.34 135.46 120.69 129.32 133.05 123.92 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-138">
+        <path fill="none" d="M34.21,167.05 L 46.57 161.48 58.92 155.45 71.27 149.24 83.63 143.1 95.98 137.25 108.34 131.87 120.69 127.08 133.05 122.99 145.4 119.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-139">
+        <path fill="none" d="M34.21,166.46 L 46.57 160.85 58.92 154.83 71.27 148.67 83.63 142.61 95.98 136.86 108.34 131.59 120.69 126.92 133.05 122.94 145.4 119.69"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-140">
+        <path fill="none" d="M34.21,173.13 L 46.57 168.25 58.92 162.39 71.27 155.84 83.63 148.93 95.98 142 108.34 135.36 120.69 129.26 133.05 123.89 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-141">
+        <path fill="none" d="M34.21,169.95 L 46.57 164.63 58.92 158.62 71.27 152.21 83.63 145.69 95.98 139.34 108.34 133.38 120.69 128 133.05 123.33 145.4 119.47"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-142">
+        <path fill="none" d="M34.21,171.03 L 46.57 165.84 58.92 159.87 71.27 153.4 83.63 146.74 95.98 140.19 108.34 134.01 120.69 128.39 133.05 123.5 145.4 119.42"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-143">
+        <path fill="none" d="M34.21,175.33 L 46.57 170.87 58.92 165.22 71.27 158.63 83.63 151.48 95.98 144.14 108.34 136.99 120.69 130.33 133.05 124.41 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-144">
+        <path fill="none" d="M34.21,170.5 L 46.57 165.25 58.92 159.26 71.27 152.81 83.63 146.22 95.98 139.77 108.34 133.69 120.69 128.19 133.05 123.41 145.4 119.44"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-145">
+        <path fill="none" d="M34.21,175.34 L 46.57 170.88 58.92 165.23 71.27 158.64 83.63 151.49 95.98 144.15 108.34 136.99 120.69 130.33 133.05 124.41 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-146">
+        <path fill="none" d="M34.21,171.83 L 46.57 166.74 58.92 160.81 71.27 154.3 83.63 147.55 95.98 140.85 108.34 134.5 120.69 128.7 133.05 123.63 145.4 119.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-147">
+        <path fill="none" d="M34.21,173.83 L 46.57 169.08 58.92 163.27 71.27 156.7 83.63 149.71 95.98 142.65 108.34 135.85 120.69 129.58 133.05 124.04 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-148">
+        <path fill="none" d="M34.21,175.36 L 46.57 170.91 58.92 165.26 71.27 158.68 83.63 151.52 95.98 144.17 108.34 137.01 120.69 130.35 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-149">
+        <path fill="none" d="M34.21,175.37 L 46.57 170.92 58.92 165.27 71.27 158.69 83.63 151.53 95.98 144.18 108.34 137.02 120.69 130.35 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-150">
+        <path fill="none" d="M34.21,175.36 L 46.57 170.91 58.92 165.25 71.27 158.67 83.63 151.51 95.98 144.17 108.34 137.01 120.69 130.34 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-151">
+        <path fill="none" d="M34.21,175.02 L 46.57 170.5 58.92 164.81 71.27 158.23 83.63 151.1 95.98 143.82 108.34 136.74 120.69 130.17 133.05 124.33 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-152">
+        <path fill="none" d="M34.21,174.05 L 46.57 169.34 58.92 163.55 71.27 156.98 83.63 149.96 95.98 142.86 108.34 136.01 120.69 129.68 133.05 124.09 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-153">
+        <path fill="none" d="M34.21,170.44 L 46.57 165.18 58.92 159.18 71.27 152.75 83.63 146.16 95.98 139.72 108.34 133.66 120.69 128.17 133.05 123.41 145.4 119.45"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-154">
+        <path fill="none" d="M34.21,170.65 L 46.57 165.41 58.92 159.42 71.27 152.97 83.63 146.37 95.98 139.88 108.34 133.78 120.69 128.25 133.05 123.44 145.4 119.44"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-155">
+        <path fill="none" d="M34.21,174.17 L 46.57 169.47 58.92 163.7 71.27 157.13 83.63 150.1 95.98 142.97 108.34 136.09 120.69 129.74 133.05 124.12 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-156">
+        <path fill="none" d="M34.21,172.85 L 46.57 167.92 58.92 162.04 71.27 155.5 83.63 148.62 95.98 141.74 108.34 135.16 120.69 129.13 133.05 123.83 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-157">
+        <path fill="none" d="M34.21,167 L 46.57 161.42 58.92 155.39 71.27 149.19 83.63 143.06 95.98 137.22 108.34 131.84 120.69 127.07 133.05 122.99 145.4 119.65"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-158">
+        <path fill="none" d="M34.21,174.78 L 46.57 170.21 58.92 164.49 71.27 157.91 83.63 150.81 95.98 143.58 108.34 136.55 120.69 130.04 133.05 124.27 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-159">
+        <path fill="none" d="M34.21,174.32 L 46.57 169.65 58.92 163.89 71.27 157.31 83.63 150.27 95.98 143.12 108.34 136.2 120.69 129.81 133.05 124.15 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-160">
+        <path fill="none" d="M34.21,174.23 L 46.57 169.54 58.92 163.77 71.27 157.2 83.63 150.16 95.98 143.03 108.34 136.14 120.69 129.77 133.05 124.13 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-161">
+        <path fill="none" d="M34.21,175.37 L 46.57 170.92 58.92 165.27 71.27 158.69 83.63 151.53 95.98 144.18 108.34 137.02 120.69 130.35 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-162">
+        <path fill="none" d="M34.21,174.07 L 46.57 169.35 58.92 163.57 71.27 156.99 83.63 149.98 95.98 142.87 108.34 136.02 120.69 129.69 133.05 124.09 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-163">
+        <path fill="none" d="M34.21,175.35 L 46.57 170.89 58.92 165.24 71.27 158.66 83.63 151.5 95.98 144.16 108.34 137 120.69 130.34 133.05 124.41 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-164">
+        <path fill="none" d="M34.21,169.12 L 46.57 163.71 58.92 157.69 71.27 151.33 83.63 144.92 95.98 138.71 108.34 132.92 120.69 127.71 133.05 123.22 145.4 119.51"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-165">
+        <path fill="none" d="M34.21,175.38 L 46.57 170.93 58.92 165.28 71.27 158.69 83.63 151.53 95.98 144.19 108.34 137.02 120.69 130.35 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-166">
+        <path fill="none" d="M34.21,173.85 L 46.57 169.1 58.92 163.29 71.27 156.73 83.63 149.73 95.98 142.67 108.34 135.86 120.69 129.59 133.05 124.04 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-167">
+        <path fill="none" d="M34.21,174.89 L 46.57 170.33 58.92 164.63 71.27 158.05 83.63 150.94 95.98 143.68 108.34 136.63 120.69 130.1 133.05 124.29 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-168">
+        <path fill="none" d="M34.21,173.48 L 46.57 168.66 58.92 162.83 71.27 156.27 83.63 149.32 95.98 142.32 108.34 135.6 120.69 129.41 133.05 123.96 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-169">
+        <path fill="none" d="M34.21,168.39 L 46.57 162.92 58.92 156.89 71.27 150.58 83.63 144.26 95.98 138.18 108.34 132.53 120.69 127.48 133.05 123.13 145.4 119.55"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-170">
+        <path fill="none" d="M34.21,172.17 L 46.57 167.14 58.92 161.22 71.27 154.7 83.63 147.9 95.98 141.14 108.34 134.71 120.69 128.84 133.05 123.7 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-171">
+        <path fill="none" d="M34.21,173.49 L 46.57 168.67 58.92 162.84 71.27 156.28 83.63 149.32 95.98 142.33 108.34 135.6 120.69 129.42 133.05 123.96 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-172">
+        <path fill="none" d="M34.21,172.56 L 46.57 167.59 58.92 161.69 71.27 155.16 83.63 148.31 95.98 141.49 108.34 134.97 120.69 129.01 133.05 123.77 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-173">
+        <path fill="none" d="M34.21,171.14 L 46.57 165.96 58.92 159.99 71.27 153.52 83.63 146.85 95.98 140.28 108.34 134.07 120.69 128.43 133.05 123.52 145.4 119.42"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-174">
+        <path fill="none" d="M34.21,175.31 L 46.57 170.85 58.92 165.19 71.27 158.6 83.63 151.45 95.98 144.12 108.34 136.97 120.69 130.32 133.05 124.4 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-175">
+        <path fill="none" d="M34.21,172.66 L 46.57 167.71 58.92 161.82 71.27 155.28 83.63 148.42 95.98 141.58 108.34 135.04 120.69 129.05 133.05 123.79 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-176">
+        <path fill="none" d="M34.21,172.74 L 46.57 167.79 58.92 161.91 71.27 155.37 83.63 148.5 95.98 141.64 108.34 135.09 120.69 129.08 133.05 123.81 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-177">
+        <path fill="none" d="M34.21,174.7 L 46.57 170.1 58.92 164.38 71.27 157.8 83.63 150.71 95.98 143.49 108.34 136.49 120.69 130 133.05 124.24 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-178">
+        <path fill="none" d="M34.21,166.25 L 46.57 160.62 58.92 154.61 71.27 148.47 83.63 142.44 95.98 136.73 108.34 131.49 120.69 126.86 133.05 122.92 145.4 119.71"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-179">
+        <path fill="none" d="M34.21,175.31 L 46.57 170.85 58.92 165.2 71.27 158.61 83.63 151.46 95.98 144.12 108.34 136.97 120.69 130.32 133.05 124.4 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-180">
+        <path fill="none" d="M34.21,172.65 L 46.57 167.69 58.92 161.8 71.27 155.26 83.63 148.41 95.98 141.56 108.34 135.03 120.69 129.04 133.05 123.79 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-181">
+        <path fill="none" d="M34.21,175.17 L 46.57 170.67 58.92 165 71.27 158.42 83.63 151.28 95.98 143.97 108.34 136.86 120.69 130.24 133.05 124.36 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-182">
+        <path fill="none" d="M34.21,166.92 L 46.57 161.33 58.92 155.3 71.27 149.11 83.63 142.99 95.98 137.16 108.34 131.8 120.69 127.05 133.05 122.98 145.4 119.65"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-183">
+        <path fill="none" d="M34.21,170.33 L 46.57 165.05 58.92 159.05 71.27 152.62 83.63 146.05 95.98 139.63 108.34 133.59 120.69 128.13 133.05 123.39 145.4 119.45"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-184">
+        <path fill="none" d="M34.21,173.69 L 46.57 168.91 58.92 163.09 71.27 156.53 83.63 149.55 95.98 142.52 108.34 135.75 120.69 129.51 133.05 124.01 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-185">
+        <path fill="none" d="M34.21,175.38 L 46.57 170.94 58.92 165.29 71.27 158.7 83.63 151.54 95.98 144.19 108.34 137.03 120.69 130.36 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-186">
+        <path fill="none" d="M34.21,168.51 L 46.57 163.04 58.92 157.01 71.27 150.7 83.63 144.36 95.98 138.26 108.34 132.59 120.69 127.52 133.05 123.15 145.4 119.55"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-187">
+        <path fill="none" d="M34.21,175 L 46.57 170.47 58.92 164.78 71.27 158.19 83.63 151.07 95.98 143.8 108.34 136.72 120.69 130.15 133.05 124.32 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-188">
+        <path fill="none" d="M34.21,174.79 L 46.57 170.21 58.92 164.5 71.27 157.92 83.63 150.82 95.98 143.58 108.34 136.56 120.69 130.04 133.05 124.27 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-189">
+        <path fill="none" d="M34.21,173.31 L 46.57 168.46 58.92 162.61 71.27 156.06 83.63 149.12 95.98 142.16 108.34 135.48 120.69 129.33 133.05 123.92 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-190">
+        <path fill="none" d="M34.21,169.29 L 46.57 163.9 58.92 157.88 71.27 151.51 83.63 145.07 95.98 138.83 108.34 133.01 120.69 127.77 133.05 123.24 145.4 119.5"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-191">
+        <path fill="none" d="M34.21,173.46 L 46.57 168.64 58.92 162.8 71.27 156.24 83.63 149.29 95.98 142.3 108.34 135.58 120.69 129.4 133.05 123.96 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-192">
+        <path fill="none" d="M34.21,167.52 L 46.57 161.97 58.92 155.94 71.27 149.7 83.63 143.5 95.98 137.57 108.34 132.09 120.69 127.22 133.05 123.04 145.4 119.61"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-193">
+        <path fill="none" d="M34.21,169.98 L 46.57 164.67 58.92 158.66 71.27 152.25 83.63 145.73 95.98 139.36 108.34 133.39 120.69 128.01 133.05 123.34 145.4 119.47"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-194">
+        <path fill="none" d="M34.21,175.33 L 46.57 170.87 58.92 165.22 71.27 158.64 83.63 151.48 95.98 144.14 108.34 136.99 120.69 130.33 133.05 124.41 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-195">
+        <path fill="none" d="M34.21,174.41 L 46.57 169.76 58.92 164.01 71.27 157.43 83.63 150.38 95.98 143.21 108.34 136.27 120.69 129.86 133.05 124.17 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-196">
+        <path fill="none" d="M34.21,174.81 L 46.57 170.24 58.92 164.53 71.27 157.94 83.63 150.84 95.98 143.6 108.34 136.57 120.69 130.05 133.05 124.27 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-197">
+        <path fill="none" d="M34.21,169.32 L 46.57 163.94 58.92 157.92 71.27 151.55 83.63 145.11 95.98 138.86 108.34 133.03 120.69 127.78 133.05 123.25 145.4 119.5"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-198">
+        <path fill="none" d="M34.21,168.23 L 46.57 162.74 58.92 156.71 71.27 150.41 83.63 144.11 95.98 138.06 108.34 132.45 120.69 127.43 133.05 123.11 145.4 119.56"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-199">
+        <path fill="none" d="M34.21,172.42 L 46.57 167.43 58.92 161.52 71.27 154.99 83.63 148.17 95.98 141.37 108.34 134.88 120.69 128.95 133.05 123.74 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-200">
+        <path fill="none" d="M34.21,169.42 L 46.57 164.05 58.92 158.03 71.27 151.65 83.63 145.2 95.98 138.93 108.34 133.08 120.69 127.82 133.05 123.26 145.4 119.5"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-201">
+        <path fill="none" d="M34.21,172.46 L 46.57 167.47 58.92 161.56 71.27 155.03 83.63 148.2 95.98 141.39 108.34 134.9 120.69 128.96 133.05 123.75 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-202">
+        <path fill="none" d="M34.21,171.83 L 46.57 166.74 58.92 160.8 71.27 154.3 83.63 147.54 95.98 140.85 108.34 134.5 120.69 128.7 133.05 123.63 145.4 119.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-203">
+        <path fill="none" d="M34.21,174.73 L 46.57 170.14 58.92 164.42 71.27 157.84 83.63 150.75 95.98 143.52 108.34 136.51 120.69 130.01 133.05 124.25 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-204">
+        <path fill="none" d="M34.21,174.34 L 46.57 169.68 58.92 163.92 71.27 157.34 83.63 150.29 95.98 143.14 108.34 136.22 120.69 129.82 133.05 124.16 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-205">
+        <path fill="none" d="M34.21,167.28 L 46.57 161.72 58.92 155.69 71.27 149.46 83.63 143.3 95.98 137.41 108.34 131.98 120.69 127.15 133.05 123.01 145.4 119.63"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-206">
+        <path fill="none" d="M34.21,169.37 L 46.57 163.99 58.92 157.97 71.27 151.59 83.63 145.15 95.98 138.89 108.34 133.05 120.69 127.8 133.05 123.25 145.4 119.5"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-207">
+        <path fill="none" d="M34.21,174.57 L 46.57 169.96 58.92 164.22 71.27 157.64 83.63 150.57 95.98 143.37 108.34 136.4 120.69 129.94 133.05 124.21 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-208">
+        <path fill="none" d="M34.21,169.72 L 46.57 164.37 58.92 158.36 71.27 151.96 83.63 145.47 95.98 139.16 108.34 133.24 120.69 127.92 133.05 123.3 145.4 119.48"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-209">
+        <path fill="none" d="M34.21,173.9 L 46.57 169.16 58.92 163.36 71.27 156.79 83.63 149.79 95.98 142.72 108.34 135.9 120.69 129.61 133.05 124.05 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-210">
+        <path fill="none" d="M34.21,175.09 L 46.57 170.58 58.92 164.9 71.27 158.32 83.63 151.19 95.98 143.89 108.34 136.8 120.69 130.2 133.05 124.34 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-211">
+        <path fill="none" d="M34.21,171.92 L 46.57 166.85 58.92 160.92 71.27 154.41 83.63 147.64 95.98 140.93 108.34 134.56 120.69 128.74 133.05 123.65 145.4 119.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-212">
+        <path fill="none" d="M34.21,171.36 L 46.57 166.21 58.92 160.25 71.27 153.77 83.63 147.07 95.98 140.46 108.34 134.2 120.69 128.52 133.05 123.55 145.4 119.41"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-213">
+        <path fill="none" d="M34.21,175.39 L 46.57 170.95 58.92 165.3 71.27 158.72 83.63 151.55 95.98 144.2 108.34 137.04 120.69 130.36 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-214">
+        <path fill="none" d="M34.21,174.76 L 46.57 170.18 58.92 164.46 71.27 157.88 83.63 150.78 95.98 143.55 108.34 136.54 120.69 130.03 133.05 124.26 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-215">
+        <path fill="none" d="M34.21,172.56 L 46.57 167.58 58.92 161.68 71.27 155.15 83.63 148.31 95.98 141.48 108.34 134.97 120.69 129 133.05 123.77 145.4 119.38"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-216">
+        <path fill="none" d="M34.21,171.97 L 46.57 166.91 58.92 160.98 71.27 154.47 83.63 147.7 95.98 140.98 108.34 134.59 120.69 128.76 133.05 123.66 145.4 119.4"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-217">
+        <path fill="none" d="M34.21,168.81 L 46.57 163.37 58.92 157.34 71.27 151 83.63 144.63 95.98 138.48 108.34 132.75 120.69 127.61 133.05 123.18 145.4 119.53"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-218">
+        <path fill="none" d="M34.21,166.9 L 46.57 161.31 58.92 155.29 71.27 149.09 83.63 142.98 95.98 137.15 108.34 131.8 120.69 127.04 133.05 122.98 145.4 119.66"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-219">
+        <path fill="none" d="M34.21,166.34 L 46.57 160.72 58.92 154.7 71.27 148.55 83.63 142.51 95.98 136.78 108.34 131.54 120.69 126.89 133.05 122.93 145.4 119.7"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-220">
+        <path fill="none" d="M34.21,166.33 L 46.57 160.71 58.92 154.69 71.27 148.54 83.63 142.5 95.98 136.78 108.34 131.53 120.69 126.89 133.05 122.93 145.4 119.7"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-221">
+        <path fill="none" d="M34.21,174.19 L 46.57 169.5 58.92 163.73 71.27 157.15 83.63 150.12 95.98 143 108.34 136.11 120.69 129.75 133.05 124.12 145.4 119.37"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-222">
+        <path fill="none" d="M34.21,175.39 L 46.57 170.94 58.92 165.29 71.27 158.71 83.63 151.55 95.98 144.2 108.34 137.03 120.69 130.36 133.05 124.42 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-223">
+        <path fill="none" d="M34.21,175.25 L 46.57 170.78 58.92 165.11 71.27 158.53 83.63 151.38 95.98 144.06 108.34 136.92 120.69 130.29 133.05 124.39 145.4 119.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-224">
+        <path fill="none" d="M34.21,170.77 L 46.57 165.55 58.92 159.57 71.27 153.11 83.63 146.49 95.98 139.98 108.34 133.85 120.69 128.29 133.05 123.46 145.4 119.43"/>
+      </g>
+      <g class="geometry" id="img-38566a04-225">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke="#FFFFFF" stroke-width="0.3" fill="#FF0000" id="img-38566a04-226">
+          <use xlink:href="#img-38566a04-227" x="34.21" y="161.82"/>
+          <use xlink:href="#img-38566a04-227" x="46.57" y="157.91"/>
+          <use xlink:href="#img-38566a04-227" x="58.92" y="153.64"/>
+          <use xlink:href="#img-38566a04-227" x="71.27" y="149.04"/>
+          <use xlink:href="#img-38566a04-227" x="83.63" y="144.15"/>
+          <use xlink:href="#img-38566a04-227" x="95.98" y="139.04"/>
+          <use xlink:href="#img-38566a04-227" x="108.34" y="133.76"/>
+          <use xlink:href="#img-38566a04-227" x="120.69" y="128.39"/>
+          <use xlink:href="#img-38566a04-227" x="133.05" y="123"/>
+          <use xlink:href="#img-38566a04-227" x="145.4" y="117.67"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-228">
+    <text x="18.86" y="181.91" text-anchor="end" dy="0.35em">0</text>
+    <text x="18.86" y="165.49" text-anchor="end" dy="0.35em">500</text>
+    <text x="18.86" y="149.06" text-anchor="end" dy="0.35em">1000</text>
+    <text x="18.86" y="132.64" text-anchor="end" dy="0.35em">1500</text>
+    <text x="18.86" y="116.21" text-anchor="end" dy="0.35em">2000</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-229">
+    <text x="9.16" y="149.06" text-anchor="end" dy="0.35em">Y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-230">
+    <text x="83.63" y="112.21" text-anchor="middle">w2</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-38566a04-231">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-232">
+    <text x="81.95" y="89.99" text-anchor="middle" dy="0.6em">X</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-233">
+    <text x="18.51" y="83.31" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="81.95" y="83.31" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="83.31" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-38566a04-234)">
+  <g id="img-38566a04-235">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-38566a04-236">
+      <rect x="16.51" y="12.61" width="130.89" height="69.7"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-237">
+      <path fill="none" d="M16.51,80.31 L 147.4 80.31"/>
+      <path fill="none" d="M16.51,63.89 L 147.4 63.89"/>
+      <path fill="none" d="M16.51,47.46 L 147.4 47.46"/>
+      <path fill="none" d="M16.51,31.04 L 147.4 31.04"/>
+      <path fill="none" d="M16.51,14.61 L 147.4 14.61"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-38566a04-238">
+      <path fill="none" d="M18.51,12.61 L 18.51 82.31"/>
+      <path fill="none" d="M81.95,12.61 L 81.95 82.31"/>
+      <path fill="none" d="M145.4,12.61 L 145.4 82.31"/>
+    </g>
+    <g class="plotpanel" id="img-38566a04-239">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-240">
+        <path fill="none" d="M31.2,78.22 L 43.89 76.2 56.58 73.12 69.27 68.86 81.95 63.4 94.64 56.83 107.33 49.32 120.02 41.11 132.71 32.49 145.4 23.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-241">
+        <path fill="none" d="M31.2,78.15 L 43.89 76.13 56.58 73.11 69.27 68.96 81.95 63.65 94.64 57.28 107.33 50 120.02 42.03 132.71 33.64 145.4 25.11"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-242">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.88 107.33 47.86 120.02 39.12 132.71 30 145.4 20.82"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-243">
+        <path fill="none" d="M31.2,78.09 L 43.89 76.09 56.58 73.11 69.27 69.05 81.95 63.88 94.64 57.68 107.33 50.59 120.02 42.84 132.71 34.65 145.4 26.29"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-244">
+        <path fill="none" d="M31.2,78.29 L 43.89 76.26 56.58 73.14 69.27 68.79 81.95 63.19 94.64 56.43 107.33 48.7 120.02 40.28 132.71 31.45 145.4 22.52"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-245">
+        <path fill="none" d="M31.2,78.27 L 43.89 76.24 56.58 73.13 69.27 68.81 81.95 63.25 94.64 56.56 107.33 48.9 120.02 40.55 132.71 31.78 145.4 22.92"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-246">
+        <path fill="none" d="M31.2,78.1 L 43.89 76.09 56.58 73.11 69.27 69.04 81.95 63.85 94.64 57.63 107.33 50.53 120.02 42.75 132.71 34.54 145.4 26.16"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-247">
+        <path fill="none" d="M31.2,78.24 L 43.89 76.22 56.58 73.13 69.27 68.84 81.95 63.33 94.64 56.69 107.33 49.1 120.02 40.82 132.71 32.13 145.4 23.33"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-248">
+        <path fill="none" d="M31.2,78.19 L 43.89 76.17 56.58 73.11 69.27 68.89 81.95 63.49 94.64 56.98 107.33 49.55 120.02 41.43 132.71 32.89 145.4 24.22"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-249">
+        <path fill="none" d="M31.2,78.05 L 43.89 76.06 56.58 73.12 69.27 69.13 81.95 64.07 94.64 58.01 107.33 51.08 120.02 43.48 132.71 35.46 145.4 27.25"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-250">
+        <path fill="none" d="M31.2,78.26 L 43.89 76.23 56.58 73.13 69.27 68.82 81.95 63.28 94.64 56.61 107.33 48.98 120.02 40.65 132.71 31.92 145.4 23.08"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-251">
+        <path fill="none" d="M31.2,78.08 L 43.89 76.08 56.58 73.11 69.27 69.07 81.95 63.94 94.64 57.78 107.33 50.75 120.02 43.04 132.71 34.9 145.4 26.59"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-252">
+        <path fill="none" d="M31.2,78.29 L 43.89 76.27 56.58 73.14 69.27 68.78 81.95 63.17 94.64 56.4 107.33 48.66 120.02 40.22 132.71 31.38 145.4 22.44"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-253">
+        <path fill="none" d="M31.2,78.07 L 43.89 76.08 56.58 73.11 69.27 69.08 81.95 63.96 94.64 57.81 107.33 50.79 120.02 43.1 132.71 34.97 145.4 26.68"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-254">
+        <path fill="none" d="M31.2,78.06 L 43.89 76.06 56.58 73.12 69.27 69.11 81.95 64.03 94.64 57.93 107.33 50.97 120.02 43.34 132.71 35.28 145.4 27.04"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-255">
+        <path fill="none" d="M31.2,78.29 L 43.89 76.26 56.58 73.14 69.27 68.79 81.95 63.19 94.64 56.44 107.33 48.72 120.02 40.3 132.71 31.47 145.4 22.55"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-256">
+        <path fill="none" d="M31.2,78.16 L 43.89 76.15 56.58 73.11 69.27 68.93 81.95 63.6 94.64 57.18 107.33 49.85 120.02 41.83 132.71 33.39 145.4 24.81"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-257">
+        <path fill="none" d="M31.2,78.2 L 43.89 76.18 56.58 73.12 69.27 68.88 81.95 63.46 94.64 56.93 107.33 49.48 120.02 41.33 132.71 32.76 145.4 24.07"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-258">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.88 107.33 47.86 120.02 39.12 132.71 30 145.4 20.81"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-259">
+        <path fill="none" d="M31.2,78.18 L 43.89 76.16 56.58 73.11 69.27 68.91 81.95 63.53 94.64 57.05 107.33 49.66 120.02 41.58 132.71 33.07 145.4 24.44"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-260">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.88 107.33 47.85 120.02 39.12 132.71 29.99 145.4 20.81"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-261">
+        <path fill="none" d="M31.2,78.23 L 43.89 76.21 56.58 73.12 69.27 68.85 81.95 63.36 94.64 56.75 107.33 49.2 120.02 40.95 132.71 32.29 145.4 23.51"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-262">
+        <path fill="none" d="M31.2,78.32 L 43.89 76.29 56.58 73.15 69.27 68.76 81.95 63.1 94.64 56.26 107.33 48.45 120.02 39.93 132.71 31.02 145.4 22.02"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-263">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.87 107.33 47.84 120.02 39.1 132.71 29.97 145.4 20.79"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-264">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.87 107.33 47.84 120.02 39.1 132.71 29.97 145.4 20.78"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-265">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.87 107.33 47.85 120.02 39.11 132.71 29.98 145.4 20.79"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-266">
+        <path fill="none" d="M31.2,78.38 L 43.89 76.35 56.58 73.18 69.27 68.72 81.95 62.94 94.64 55.96 107.33 47.98 120.02 39.29 132.71 30.21 145.4 21.07"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-267">
+        <path fill="none" d="M31.2,78.33 L 43.89 76.3 56.58 73.16 69.27 68.75 81.95 63.07 94.64 56.21 107.33 48.37 120.02 39.82 132.71 30.87 145.4 21.84"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-268">
+        <path fill="none" d="M31.2,78.18 L 43.89 76.16 56.58 73.11 69.27 68.91 81.95 63.54 94.64 57.07 107.33 49.68 120.02 41.6 132.71 33.11 145.4 24.48"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-269">
+        <path fill="none" d="M31.2,78.19 L 43.89 76.17 56.58 73.11 69.27 68.9 81.95 63.51 94.64 57.02 107.33 49.61 120.02 41.51 132.71 32.99 145.4 24.34"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-270">
+        <path fill="none" d="M31.2,78.34 L 43.89 76.31 56.58 73.16 69.27 68.75 81.95 63.06 94.64 56.18 107.33 48.32 120.02 39.76 132.71 30.79 145.4 21.75"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-271">
+        <path fill="none" d="M31.2,78.27 L 43.89 76.25 56.58 73.14 69.27 68.8 81.95 63.23 94.64 56.51 107.33 48.82 120.02 40.44 132.71 31.65 145.4 22.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-272">
+        <path fill="none" d="M31.2,78.07 L 43.89 76.07 56.58 73.11 69.27 69.08 81.95 63.96 94.64 57.82 107.33 50.81 120.02 43.12 132.71 35 145.4 26.71"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-273">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.34 56.58 73.17 69.27 68.72 81.95 62.97 94.64 56.02 107.33 48.08 120.02 39.43 132.71 30.38 145.4 21.26"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-274">
+        <path fill="none" d="M31.2,78.34 L 43.89 76.31 56.58 73.16 69.27 68.74 81.95 63.04 94.64 56.14 107.33 48.26 120.02 39.68 132.71 30.7 145.4 21.64"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-275">
+        <path fill="none" d="M31.2,78.34 L 43.89 76.31 56.58 73.16 69.27 68.75 81.95 63.05 94.64 56.16 107.33 48.3 120.02 39.73 132.71 30.76 145.4 21.71"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-276">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.87 107.33 47.84 120.02 39.1 132.71 29.97 145.4 20.78"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-277">
+        <path fill="none" d="M31.2,78.33 L 43.89 76.3 56.58 73.16 69.27 68.75 81.95 63.07 94.64 56.2 107.33 48.36 120.02 39.81 132.71 30.86 145.4 21.84"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-278">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.88 107.33 47.85 120.02 39.11 132.71 29.99 145.4 20.8"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-279">
+        <path fill="none" d="M31.2,78.13 L 43.89 76.12 56.58 73.11 69.27 68.97 81.95 63.7 94.64 57.36 107.33 50.12 120.02 42.2 132.71 33.86 145.4 25.36"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-280">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.87 107.33 47.84 120.02 39.1 132.71 29.96 145.4 20.78"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-281">
+        <path fill="none" d="M31.2,78.32 L 43.89 76.29 56.58 73.15 69.27 68.76 81.95 63.1 94.64 56.26 107.33 48.44 120.02 39.92 132.71 31.01 145.4 22"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-282">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.34 56.58 73.17 69.27 68.72 81.95 62.96 94.64 56 107.33 48.04 120.02 39.37 132.71 30.31 145.4 21.18"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-283">
+        <path fill="none" d="M31.2,78.3 L 43.89 76.27 56.58 73.15 69.27 68.78 81.95 63.15 94.64 56.35 107.33 48.58 120.02 40.12 132.71 31.25 145.4 22.28"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-284">
+        <path fill="none" d="M31.2,78.11 L 43.89 76.1 56.58 73.11 69.27 69.01 81.95 63.79 94.64 57.52 107.33 50.36 120.02 42.52 132.71 34.26 145.4 25.83"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-285">
+        <path fill="none" d="M31.2,78.25 L 43.89 76.22 56.58 73.13 69.27 68.83 81.95 63.32 94.64 56.67 107.33 49.07 120.02 40.78 132.71 32.08 145.4 23.26"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-286">
+        <path fill="none" d="M31.2,78.3 L 43.89 76.27 56.58 73.15 69.27 68.78 81.95 63.14 94.64 56.35 107.33 48.58 120.02 40.11 132.71 31.24 145.4 22.28"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-287">
+        <path fill="none" d="M31.2,78.26 L 43.89 76.24 56.58 73.13 69.27 68.81 81.95 63.27 94.64 56.57 107.33 48.93 120.02 40.59 132.71 31.84 145.4 22.98"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-288">
+        <path fill="none" d="M31.2,78.2 L 43.89 76.18 56.58 73.12 69.27 68.88 81.95 63.45 94.64 56.91 107.33 49.44 120.02 41.28 132.71 32.7 145.4 24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-289">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.71 81.95 62.9 94.64 55.89 107.33 47.87 120.02 39.13 132.71 30.01 145.4 20.83"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-290">
+        <path fill="none" d="M31.2,78.27 L 43.89 76.24 56.58 73.13 69.27 68.81 81.95 63.25 94.64 56.55 107.33 48.89 120.02 40.53 132.71 31.77 145.4 22.9"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-291">
+        <path fill="none" d="M31.2,78.27 L 43.89 76.24 56.58 73.13 69.27 68.81 81.95 63.24 94.64 56.53 107.33 48.86 120.02 40.5 132.71 31.72 145.4 22.85"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-292">
+        <path fill="none" d="M31.2,78.36 L 43.89 76.33 56.58 73.17 69.27 68.73 81.95 62.99 94.64 56.04 107.33 48.11 120.02 39.47 132.71 30.44 145.4 21.33"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-293">
+        <path fill="none" d="M31.2,78.05 L 43.89 76.06 56.58 73.12 69.27 69.12 81.95 64.05 94.64 57.98 107.33 51.04 120.02 43.43 132.71 35.39 145.4 27.17"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-294">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.71 81.95 62.9 94.64 55.88 107.33 47.86 120.02 39.13 132.71 30.01 145.4 20.83"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-295">
+        <path fill="none" d="M31.2,78.27 L 43.89 76.24 56.58 73.13 69.27 68.81 81.95 63.25 94.64 56.55 107.33 48.9 120.02 40.54 132.71 31.78 145.4 22.91"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-296">
+        <path fill="none" d="M31.2,78.39 L 43.89 76.36 56.58 73.18 69.27 68.71 81.95 62.92 94.64 55.92 107.33 47.92 120.02 39.21 132.71 30.11 145.4 20.95"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-297">
+        <path fill="none" d="M31.2,78.07 L 43.89 76.07 56.58 73.11 69.27 69.09 81.95 63.97 94.64 57.84 107.33 50.83 120.02 43.15 132.71 35.05 145.4 26.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-298">
+        <path fill="none" d="M31.2,78.17 L 43.89 76.16 56.58 73.11 69.27 68.92 81.95 63.55 94.64 57.1 107.33 49.72 120.02 41.66 132.71 33.18 145.4 24.56"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-299">
+        <path fill="none" d="M31.2,78.31 L 43.89 76.28 56.58 73.15 69.27 68.77 81.95 63.12 94.64 56.3 107.33 48.51 120.02 40.01 132.71 31.11 145.4 22.13"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-300">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.87 107.33 47.84 120.02 39.09 132.71 29.96 145.4 20.77"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-301">
+        <path fill="none" d="M31.2,78.11 L 43.89 76.11 56.58 73.11 69.27 69.01 81.95 63.78 94.64 57.5 107.33 50.33 120.02 42.47 132.71 34.2 145.4 25.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-302">
+        <path fill="none" d="M31.2,78.38 L 43.89 76.35 56.58 73.18 69.27 68.72 81.95 62.94 94.64 55.97 107.33 47.99 120.02 39.31 132.71 30.23 145.4 21.09"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-303">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.34 56.58 73.17 69.27 68.72 81.95 62.97 94.64 56.02 107.33 48.08 120.02 39.42 132.71 30.38 145.4 21.26"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-304">
+        <path fill="none" d="M31.2,78.3 L 43.89 76.27 56.58 73.14 69.27 68.78 81.95 63.17 94.64 56.39 107.33 48.65 120.02 40.21 132.71 31.36 145.4 22.42"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-305">
+        <path fill="none" d="M31.2,78.14 L 43.89 76.13 56.58 73.11 69.27 68.97 81.95 63.68 94.64 57.33 107.33 50.07 120.02 42.13 132.71 33.77 145.4 25.25"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-306">
+        <path fill="none" d="M31.2,78.3 L 43.89 76.27 56.58 73.14 69.27 68.78 81.95 63.15 94.64 56.36 107.33 48.59 120.02 40.13 132.71 31.26 145.4 22.3"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-307">
+        <path fill="none" d="M31.2,78.08 L 43.89 76.08 56.58 73.11 69.27 69.06 81.95 63.9 94.64 57.71 107.33 50.64 120.02 42.9 132.71 34.73 145.4 26.39"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-308">
+        <path fill="none" d="M31.2,78.16 L 43.89 76.15 56.58 73.11 69.27 68.93 81.95 63.59 94.64 57.17 107.33 49.84 120.02 41.81 132.71 33.37 145.4 24.79"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-309">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.9 94.64 55.88 107.33 47.86 120.02 39.12 132.71 30 145.4 20.81"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-310">
+        <path fill="none" d="M31.2,78.35 L 43.89 76.32 56.58 73.16 69.27 68.74 81.95 63.02 94.64 56.12 107.33 48.23 120.02 39.63 132.71 30.63 145.4 21.56"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-311">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.34 56.58 73.17 69.27 68.72 81.95 62.97 94.64 56.02 107.33 48.07 120.02 39.41 132.71 30.36 145.4 21.24"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-312">
+        <path fill="none" d="M31.2,78.14 L 43.89 76.13 56.58 73.11 69.27 68.96 81.95 63.68 94.64 57.32 107.33 50.06 120.02 42.11 132.71 33.75 145.4 25.23"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-313">
+        <path fill="none" d="M31.2,78.11 L 43.89 76.1 56.58 73.11 69.27 69.02 81.95 63.81 94.64 57.56 107.33 50.42 120.02 42.6 132.71 34.35 145.4 25.94"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-314">
+        <path fill="none" d="M31.2,78.26 L 43.89 76.23 56.58 73.13 69.27 68.82 81.95 63.28 94.64 56.61 107.33 48.98 120.02 40.65 132.71 31.92 145.4 23.08"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-315">
+        <path fill="none" d="M31.2,78.14 L 43.89 76.13 56.58 73.11 69.27 68.96 81.95 63.66 94.64 57.3 107.33 50.02 120.02 42.07 132.71 33.69 145.4 25.16"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-316">
+        <path fill="none" d="M31.2,78.26 L 43.89 76.23 56.58 73.13 69.27 68.82 81.95 63.28 94.64 56.6 107.33 48.97 120.02 40.64 132.71 31.9 145.4 23.06"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-317">
+        <path fill="none" d="M31.2,78.23 L 43.89 76.21 56.58 73.12 69.27 68.85 81.95 63.36 94.64 56.75 107.33 49.2 120.02 40.95 132.71 32.29 145.4 23.51"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-318">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.33 56.58 73.17 69.27 68.73 81.95 62.98 94.64 56.04 107.33 48.1 120.02 39.46 132.71 30.42 145.4 21.31"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-319">
+        <path fill="none" d="M31.2,78.35 L 43.89 76.31 56.58 73.16 69.27 68.74 81.95 63.03 94.64 56.14 107.33 48.26 120.02 39.67 132.71 30.68 145.4 21.62"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-320">
+        <path fill="none" d="M31.2,78.08 L 43.89 76.08 56.58 73.11 69.27 69.07 81.95 63.93 94.64 57.76 107.33 50.72 120.02 43 132.71 34.86 145.4 26.54"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-321">
+        <path fill="none" d="M31.2,78.14 L 43.89 76.13 56.58 73.11 69.27 68.96 81.95 63.67 94.64 57.31 107.33 50.04 120.02 42.09 132.71 33.72 145.4 25.2"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-322">
+        <path fill="none" d="M31.2,78.36 L 43.89 76.33 56.58 73.17 69.27 68.73 81.95 63 94.64 56.08 107.33 48.16 120.02 39.54 132.71 30.52 145.4 21.43"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-323">
+        <path fill="none" d="M31.2,78.15 L 43.89 76.14 56.58 73.11 69.27 68.95 81.95 63.63 94.64 57.23 107.33 49.93 120.02 41.94 132.71 33.52 145.4 24.97"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-324">
+        <path fill="none" d="M31.2,78.32 L 43.89 76.29 56.58 73.15 69.27 68.76 81.95 63.09 94.64 56.25 107.33 48.43 120.02 39.9 132.71 30.97 145.4 21.96"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-325">
+        <path fill="none" d="M31.2,78.39 L 43.89 76.35 56.58 73.18 69.27 68.71 81.95 62.93 94.64 55.94 107.33 47.95 120.02 39.25 132.71 30.16 145.4 21.01"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-326">
+        <path fill="none" d="M31.2,78.23 L 43.89 76.21 56.58 73.12 69.27 68.84 81.95 63.35 94.64 56.73 107.33 49.16 120.02 40.9 132.71 32.23 145.4 23.44"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-327">
+        <path fill="none" d="M31.2,78.21 L 43.89 76.19 56.58 73.12 69.27 68.87 81.95 63.42 94.64 56.86 107.33 49.36 120.02 41.17 132.71 32.57 145.4 23.84"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-328">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.86 107.33 47.83 120.02 39.09 132.71 29.95 145.4 20.76"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-329">
+        <path fill="none" d="M31.2,78.37 L 43.89 76.34 56.58 73.17 69.27 68.73 81.95 62.98 94.64 56.03 107.33 48.09 120.02 39.44 132.71 30.4 145.4 21.28"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-330">
+        <path fill="none" d="M31.2,78.26 L 43.89 76.24 56.58 73.13 69.27 68.82 81.95 63.27 94.64 56.58 107.33 48.93 120.02 40.59 132.71 31.84 145.4 22.98"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-331">
+        <path fill="none" d="M31.2,78.24 L 43.89 76.21 56.58 73.12 69.27 68.84 81.95 63.34 94.64 56.71 107.33 49.14 120.02 40.88 132.71 32.2 145.4 23.41"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-332">
+        <path fill="none" d="M31.2,78.12 L 43.89 76.11 56.58 73.11 69.27 68.99 81.95 63.74 94.64 57.43 107.33 50.23 120.02 42.34 132.71 34.03 145.4 25.57"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-333">
+        <path fill="none" d="M31.2,78.07 L 43.89 76.07 56.58 73.11 69.27 69.09 81.95 63.97 94.64 57.84 107.33 50.84 120.02 43.16 132.71 35.05 145.4 26.77"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF0000" id="img-38566a04-334">
+        <path fill="none" d="M31.2,78.05 L 43.89 76.06 56.58 73.12 69.27 69.12 81.95 64.04 94.64 57.96 107.33 51.01 120.02 43.39 132.71 35.34 145.4 27.11"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FFFF00" id="img-38566a04-335">
+        <path fill="none" d="M31.2,78.05 L 43.89 76.06 56.58 73.12 69.27 69.12 81.95 64.04 94.64 57.96 107.33 51.01 120.02 43.4 132.71 35.35 145.4 27.12"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#FF00FF" id="img-38566a04-336">
+        <path fill="none" d="M31.2,78.34 L 43.89 76.31 56.58 73.16 69.27 68.75 81.95 63.05 94.64 56.17 107.33 48.31 120.02 39.74 132.71 30.78 145.4 21.74"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00FFFF" id="img-38566a04-337">
+        <path fill="none" d="M31.2,78.4 L 43.89 76.37 56.58 73.19 69.27 68.7 81.95 62.89 94.64 55.86 107.33 47.83 120.02 39.09 132.71 29.96 145.4 20.77"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#008000" id="img-38566a04-338">
+        <path fill="none" d="M31.2,78.39 L 43.89 76.36 56.58 73.18 69.27 68.71 81.95 62.91 94.64 55.9 107.33 47.89 120.02 39.17 132.71 30.05 145.4 20.88"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-38566a04-339">
+        <path fill="none" d="M31.2,78.19 L 43.89 76.17 56.58 73.11 69.27 68.9 81.95 63.49 94.64 56.99 107.33 49.57 120.02 41.45 132.71 32.92 145.4 24.25"/>
+      </g>
+      <g class="geometry" id="img-38566a04-340">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke="#FFFFFF" stroke-width="0.3" fill="#FF0000" id="img-38566a04-341">
+          <use xlink:href="#img-38566a04-342" x="31.2" y="73.64"/>
+          <use xlink:href="#img-38566a04-342" x="43.89" y="71.39"/>
+          <use xlink:href="#img-38566a04-342" x="56.58" y="68.63"/>
+          <use xlink:href="#img-38566a04-342" x="69.27" y="65.3"/>
+          <use xlink:href="#img-38566a04-342" x="81.95" y="61.34"/>
+          <use xlink:href="#img-38566a04-342" x="94.64" y="56.73"/>
+          <use xlink:href="#img-38566a04-342" x="107.33" y="51.44"/>
+          <use xlink:href="#img-38566a04-342" x="120.02" y="45.45"/>
+          <use xlink:href="#img-38566a04-342" x="132.71" y="38.77"/>
+          <use xlink:href="#img-38566a04-342" x="145.4" y="31.42"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-38566a04-343">
+    <text x="15.51" y="80.31" text-anchor="end" dy="0.35em">0</text>
+    <text x="15.51" y="63.89" text-anchor="end" dy="0.35em">5</text>
+    <text x="15.51" y="47.46" text-anchor="end" dy="0.35em">10</text>
+    <text x="15.51" y="31.04" text-anchor="end" dy="0.35em">15</text>
+    <text x="15.51" y="14.61" text-anchor="end" dy="0.35em">20</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-344">
+    <text x="9.16" y="47.46" text-anchor="end" dy="0.35em">Y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-38566a04-345">
+    <text x="81.95" y="10.61" text-anchor="middle">w1</text>
+  </g>
+</g>
+<defs>
+  <clipPath id="img-38566a04-234">
+  <path d="M16.51,12.61 L 147.4 12.61 147.4 82.31 16.51 82.31" />
+</clipPath>
+  <clipPath id="img-38566a04-4">
+  <path d="M18.18,215.81 L 147.4 215.81 147.4 285.51 18.18 285.51" />
+</clipPath>
+  <clipPath id="img-38566a04-119">
+  <path d="M19.86,114.21 L 147.4 114.21 147.4 183.91 19.86 183.91" />
+</clipPath>
+  <g id="img-38566a04-112">
+    <circle cx="0" cy="0" r="1.06"/>
+  </g>
+  <g id="img-38566a04-227">
+    <circle cx="0" cy="0" r="1.06"/>
+  </g>
+  <g id="img-38566a04-342">
+    <circle cx="0" cy="0" r="1.06"/>
+  </g>
+</defs>
+</svg>

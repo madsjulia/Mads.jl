@@ -1,8 +1,10 @@
 ## Analysis of contaminant transport in an aquifer
 
+All the figures below are generated using `examples/contamination/contamination.jl`.
+
 ### Model setup
 
-![](w01-problemsetup.svg)
+![](w01-all_wells-problemsetup.svg)
 
 There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
@@ -11,74 +13,57 @@ The contaminant transport is solved using the `Anasol` package in Mads.
 
 ### Unknown model parameters
 
-* Start Time of contaminant release `$t_0$`
-* End Time of contaminant release `$t_1$`
-* Advective pore velocity `$v$`
+* Start time of contaminant release $t_0$
+* End time of contaminant release $t_1$
+* Advective pore velocity $v$
+
+### Reduced model setup 
+
+Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
+
+![](w01-w13a_w20a-problemsetup.svg)
 
 ### Example model solution
 
-![](w01-solution.svg)
+![](w01-w13a_w20a-init-match.svg)
 
-```
-$t_0 = 4$
-$t_1 = 15$
-$v = 40$
-```
+Model parameter values:
 
-### Reduced analysis 
+* $t_0 = 4$ 
+* $t_1 = 15$
+* $v = 40$
 
-Analysis of the data from only 2 monitoring locations: w13a and w20a.
+### Model calibration
 
-### Calibration match between observations and model predictions
+A calibration match between observations and model predictions obtained by model inversion:
 
-![](w01-match.svg)
+![](w01-w13a_w20a-calib-match.svg)
 
-### Local sensitivity analysis
+### Prior parameter uncertainties
 
-![](ode-eigenmatrix.svg)
+Probabilistic distributions of the prior parameter uncertainties are:
 
-![](ode-eigenvalues.svg)
+* $t_0$ = Uniform(0, 10)
+* $t_1$ = Uniform(5, 40)
+* $v$ = LogUniform(0.1, 200)
 
-### Global sensitivity analysis
+Spaghetti plots representing the prior uncertainties:
 
-![](ode-SA-results.svg)
+![](w01-w13a_w20a-prior-100-spaghetti.svg)
 
-Prior parameter uncertainties:
-
-```
-$t_0$ = Uniform(0, 10)
-$t_1$ = Uniform(5, 40)
-$v$ = LogUniform(0.1, 200)
-```
-
-![](w01-w13a_w20a-source1_t0-10-spaghetti.svg)
-![](w01-w13a_w20a-source2_t1-10-spaghetti.svg)
-![](w01-w13a_w20a-vx-10-spaghetti.svg)
+The observation data are plotted as red dots.
 
 ### Bayesian sensitivity analysis
 
-#### Observations
+Histograms and scatter plots of Bayesian MCMC results:
 
-Synthetic observations are applied to constrain the ODE parameters
+![](w01-bayes.png)
 
-![](ode-observations.svg)
+### Posterior parameter uncertainties
 
-Observation errors are equal for all the sample locations with standard deviation equal to 1 (`observation weight` =  1 / `observation standard deviation` = 1 / 1 = 1)
+Spaghetti plots representing the posterior uncertainties:
 
-#### Prior parameter uncertainties
+![](w01-w13a_w20a-posterior-1000-spaghetti.png)
 
-![](ode-prior-k-100-spaghetti.svg)
-
-![](ode-prior-omega-100-spaghetti.svg)
-
-#### Histograms/scatter plots of Bayesian MCMC results
-
-![](ode-bayes.svg)
-
-#### Posterior parameter uncertainties
-
-Note: parameter uncertainties are constrained by observation data
-
-![](ode-posterior-k-100-spaghetti.svg)
-
-![](ode-posterior-omega-100-spaghetti.svg)
+Note that the parameter uncertainties are constrained by the observation data.
+The observation data are plotted as red dots.

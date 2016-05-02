@@ -17,15 +17,13 @@ Parameters:
 - beta: {init: 0.0, log: false, longname: 'Levy beta [-]', max: 1.0, min: -1.0, step: 0.1, type: null}
 - nlc0: {init: 0.0, log: false, longname: 'NLC 0 [T]', max: 1.0, min: -1.0, step: 0.1, type: null}
 - nlc1: {init: 1.0, log: false, longname: 'NLC 1 [T]', max: 10.0, min: 0.1, step: 1.0, type: null}
-Problem: {}
-Solution: internal
 Sources:
 - gauss:
     dx: {init: 0, log: false, longname: 'Source x dimension [L]', max: 500.0, min: 1.0, step: 1.0, type: null}
     dy: {init: 0, log: false, longname: 'Source y dimension [L]', max: 500.0, min: 1.0, step: 1.0, type: null}
     dz: {init: 0, log: false, longname: 'Source z dimension [L]', max: 10.0, min: 1.0, step: 1.0, type: null}
-    f: {init: 50.0, log: true, longname: 'Contaminant flux [M/T]', max: 100.0, min: 0.01, step: 1.0e+25, type: null}
-    t0: {init: 4, log: false, longname: 'Start Time [T]', max: 5.0, min: 0.0, step: 1.0, type: opt}
+    f: {init: 50.0, log: true, longname: 'Contaminant flux [M/T]', max: 100.0, min: 0.01, step: 1.0, type: null}
+    t0: {init: 4, log: false, longname: 'Start Time [T]', max: 10.0, min: 0.0, step: 1.0, type: opt}
     t1: {init: 5, log: false, longname: 'End Time [T]', max: 40.0, min: 5.0, step: 1.0, type: opt}
     x: {init: 1000.0, log: false, longname: 'Source x coordinate [L]', max: 1460.0, min: 210.0, step: 25.0, type: null}
     y: {init: 1450.0, log: false, longname: 'Source y coordinate [L]', max: 1930.0, min: 1230.0, step: 25.0, type: null}

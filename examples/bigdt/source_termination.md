@@ -1,6 +1,6 @@
 ## Contaminant Source Termination
 
-ll the figures below are generated using `examples/bigdt/source_termination.jl`.
+All the figures below are generated using `examples/bigdt/source_termination.jl`.
 
 ### Model setup
 
@@ -94,7 +94,7 @@ Figures representing robustness of model predictions:
 
 ![](source_termination-robustness-zoom-1000.png)
 
-### Discussion of the results
+### Discussion
 
 We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500 ppb.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
@@ -118,8 +118,6 @@ Their decision can also rely on
 
 Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
 The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.
-
-### Model runs
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using the Julia version of Mads.

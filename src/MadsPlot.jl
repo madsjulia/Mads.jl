@@ -49,8 +49,9 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+- `keyword` : to be added in the filename
 """
-function plotmadsproblem(madsdata::Associative; format="", filename="")
+function plotmadsproblem(madsdata::Associative; format="", filename="", keyword="")
 	if haskey(madsdata, "Sources")
 		rectangles = Array(Float64, 0, 4)
 		for i = 1:length(madsdata["Sources"])
@@ -105,6 +106,9 @@ function plotmadsproblem(madsdata::Associative; format="", filename="")
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
+	end
+	if keyword != ""
+		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setimagefileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
@@ -446,7 +450,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
 	pp = Array(Any, 0)
-	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
+	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle))
 	push!(pp, pc)
 	vsize = 4inch
 	df = Array(Any, nP)
@@ -880,7 +884,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 		end
 	end
 	if !haskey( madsdata, "Wells" )
-		p = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+		pl = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 				Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))

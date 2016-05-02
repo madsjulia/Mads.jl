@@ -15,10 +15,9 @@ Mads.madsinfo("Mads root name: $(rootname)")
 display(md) # show the content of the Mads input file
 Mads.showallparameters(md) # show all the model parameters
 Mads.showparameters(md) # show all the adjustable model parameters
-Mads.showobservations(md) # show all the observations
 
 # use all wells
-Mads.plotmadsproblem(md) # display the well locations and the initial source location
+Mads.plotmadsproblem(md, keyword="all_wells") # display the well locations and the initial source location
 
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
@@ -36,8 +35,9 @@ run(`open w01-match.svg`) # works only on mac os x
 Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
+Mads.showobservations(md) # show all the observations
 
-Mads.plotmadsproblem(md) # display the well locations and the initial source location
+Mads.plotmadsproblem(md, keyword="w13a_w20a") # display the well locations and the initial source location
 
 forward_predictions = Mads.forward(md) # execute a forward model simulation based on the initial parameter guesses
 
@@ -52,11 +52,23 @@ Mads.plotmatches(md, inverse_predictions, filename=rootname * "-w13a_w20a-calib-
 run(`open w01-w13a_w20a-calib-match.svg`) # works only on mac os x
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
-paramvalues=Mads.parametersample(md, 10)
-Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
-run(`open w01-w13a_w20a-vx-10-spaghetti.svg`) # works only on mac os x
-run(`open w01-w13a_w20a-source1_t0-10-spaghetti.svg`) # works only on mac os x
-run(`open w01-w13a_w20a-source1_t1-10-spaghetti.svg`) # works only on mac os x
+Mads.madsinfo("Prior spaghetti plot ...")
+paramvalues=Mads.parametersample(md, 100)
+Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior")
+run(`open w01-w13a_w20a-prior-100-spaghetti.svg`) # works only on mac os x
+
+Mads.madsinfo("Bayesian sampling ...")
+mcmcchain = Mads.bayessampling(md, seed=20151001)
+
+Mads.madsinfo("Bayesian scatter plots ...")
+Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
+
+# convert the parameters in the chain to a parameter dictionary of arrays
+mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') 
+
+Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
+Mads.spaghettiplot(md, mcmcvalues, keyword="w13a_w20a-posterior", format="PNG")
+run(`open w01-w13a_w20a-posterior-1000-spaghetti.svg`) # works only on mac os x
 
 # Create a new problem (example)
 md_new = deepcopy(md)
@@ -84,6 +96,6 @@ Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads inp
 # Calibrate with random initial guesses
 Mads.allwellsoff!(md_new) # turn off all wells
 Mads.wellon!(md_new, "w13a") # use well w13a
-Mads.calibraterandom(md_new, 10) # calibrate 10 times with random initial guesses
+Mads.calibraterandom(md_new, 10, seed=20151001) # calibrate 10 times with random initial guesses
 
 cd(currentdir)
