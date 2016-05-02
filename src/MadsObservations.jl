@@ -161,7 +161,9 @@ end
 function invobsweights!(madsdata::Associative, value::Number)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
-		madsdata["Observations"][obskeys[i]]["weight"] = ( 1. / madsdata["Observations"][obskeys[i]]["target"] ) * value
+		if madsdata["Observations"][obskeys[i]]["target"] > 0
+			madsdata["Observations"][obskeys[i]]["weight"] = ( 1. / madsdata["Observations"][obskeys[i]]["target"] ) * value
+		end
 	end
 end
 
@@ -192,8 +194,9 @@ function invwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] = ( 1. / madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] ) * value
-			madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] *= value
+			if madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] > 0
+				madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] = ( 1. / madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] ) * value
+			end
 		end
 	end
 	invobsweights!(madsdata, value)
@@ -206,13 +209,14 @@ function showobservations(madsdata::Associative)
 	p = Array(ASCIIString, 0)
 	for obskey in obskeys
 		if haskey( obsdict[obskey], "weight" )
-			if obsdict[obskey]["weight"] > eps(Float16)
+			if obsdict[obskey]["weight"] > 0
 				s = @sprintf "%-10s target = %15g weight = %15g\n" obskey obsdict[obskey]["target"] obsdict[obskey]["weight"]
+				push!(p, s)
 			end
 		else
 			s = @sprintf "%-10s target = %15g\n" obskey obsdict[obskey]["target"]
+			push!(p, s)
 		end
-		push!(p, s)
 	end
 	print(p...)
 	println("Number of observations is $(length(p))")
