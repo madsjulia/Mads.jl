@@ -157,6 +157,14 @@ function modobsweights!(madsdata::Associative, value::Number)
 	end
 end
 
+"Inversely proportional observation weights in the MADS problem dictionary"
+function invobsweights!(madsdata::Associative, value::Number)
+	obskeys = Mads.getobskeys(madsdata)
+	for i in 1:length(obskeys)
+		madsdata["Observations"][obskeys[i]]["weight"] = ( 1. / madsdata["Observations"][obskeys[i]]["target"] ) * value
+	end
+end
+
 "Set well weights in the MADS problem dictionary"
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
@@ -177,6 +185,18 @@ function modwellweights!(madsdata::Associative, value::Number)
 		end
 	end
 	modobsweights!(madsdata, value)
+end
+
+"Inversely proportional observation weights in the MADS problem dictionary"
+function invwellweights!(madsdata::Associative, value::Number)
+	wellkeys = getwellkeys(madsdata)
+	for i in 1:length(wellkeys)
+		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+			madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] = ( 1. / madsdata["Wells"][wellkeys[i]]["obs"][k]["target"] ) * value
+			madsdata["Wells"][wellkeys[i]]["obs"][k]["weight"] *= value
+		end
+	end
+	invobsweights!(madsdata, value)
 end
 
 "Show observations in the MADS problem dictionary"
