@@ -80,12 +80,25 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 				push!(h, machinenames[n])
 			end
 		end
-	elseif haskey(ENV, "SLURM_NODELIST")
-		s = ENV["SLURM_NODELIST"]
+	elseif haskey(ENV, "SLURM_JOB_NODELIST") || haskey(ENV, "SLURM_NODELIST")
+		if haskey(ENV, "SLURM_JOB_NODELIST")
+			s = ENV["SLURM_JOB_NODELIST"]
+		else
+			s = ENV["SLURM_NODELIST"]
+		end
 		if ntasks_per_node > 0
 			c = ntasks_per_node
 		else
 			c = haskey(ENV, "SLURM_NTASKS_PER_NODE") ? parse(Int, ENV["SLURM_NTASKS_PER_NODE"]) : 1
+			#=
+			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
+				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
+			else if haskey(ENV, "SLURM_TASKS_PER_NODE")
+				c = parse(Int, ENV["SLURM_TASKS_PER_NODE"])
+			else
+				c = 1
+			end
+			=#
 		end
 		ss = split(s, "[")
 		name = ss[1]
@@ -108,6 +121,8 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 				end
 			end
 		end
+	else
+		warn("Unknown parallel environment!")
 	end
 	# return(h)
 	if length(h) > 0
