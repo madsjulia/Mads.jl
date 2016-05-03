@@ -70,6 +70,7 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
+	# scontrol show hostname $SLURM_JOB_NODELIST | paste -d, -s
 	h = Array(ASCIIString, 0)
 	if mads_servers
 		machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
@@ -89,16 +90,13 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 		if ntasks_per_node > 0
 			c = ntasks_per_node
 		else
-			c = haskey(ENV, "SLURM_NTASKS_PER_NODE") ? parse(Int, ENV["SLURM_NTASKS_PER_NODE"]) : 1
-			#=
 			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
 				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
 			else if haskey(ENV, "SLURM_TASKS_PER_NODE")
-				c = parse(Int, ENV["SLURM_TASKS_PER_NODE"])
+				c = parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
 			else
 				c = 1
 			end
-			=#
 		end
 		ss = split(s, "[")
 		name = ss[1]
