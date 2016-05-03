@@ -92,7 +92,7 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 		else
 			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
 				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
-			else if haskey(ENV, "SLURM_TASKS_PER_NODE")
+			elseif haskey(ENV, "SLURM_TASKS_PER_NODE")
 				c = parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
 			else
 				c = 1
