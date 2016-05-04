@@ -68,7 +68,7 @@ mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
 Mads.spaghettiplot(md, mcmcvalues, keyword="w13a_w20a-posterior", format="PNG")
-run(`open w01-w13a_w20a-posterior-1000-spaghetti.svg`) # works only on mac os x
+run(`open w01-w13a_w20a-posterior-1000-spaghetti.png`) # works only on mac os x
 
 # Create a new problem (example)
 md_new = deepcopy(md)

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="101.6mm" viewBox="0 0 152.4 101.6"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot xscalable yscalable" id="img-73f7a19f-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-73f7a19f-2">
+    <text x="74.22" y="89.99" text-anchor="middle" dy="0.6em">x [m]</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-73f7a19f-3">
+    <text x="17.28" y="83.32" text-anchor="middle" dy="0.6em">0</text>
+    <text x="40.06" y="83.32" text-anchor="middle" dy="0.6em">500</text>
+    <text x="62.83" y="83.32" text-anchor="middle" dy="0.6em">1000</text>
+    <text x="85.6" y="83.32" text-anchor="middle" dy="0.6em">1500</text>
+    <text x="108.37" y="83.32" text-anchor="middle" dy="0.6em">2000</text>
+    <text x="131.15" y="83.32" text-anchor="middle" dy="0.6em">2500</text>
+  </g>
+  <g class="guide colorkey" id="img-73f7a19f-4">
+    <g class="color_Wells" id="img-73f7a19f-5">
+      <g fill="#4C404B" font-size="2.82" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-73f7a19f-6">
+        <text x="136.96" y="45.47" dy="0.35em">Wells</text>
+      </g>
+      <g fill="#00BFFF" stroke="#000000" stroke-opacity="0.000" id="img-73f7a19f-7">
+        <rect x="134.15" y="44.56" width="1.81" height="1.81"/>
+      </g>
+    </g>
+    <g fill="#362A35" font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-73f7a19f-8">
+      <text x="134.15" y="41.65">category</text>
+    </g>
+  </g>
+<g clip-path="url(#img-73f7a19f-9)">
+  <g id="img-73f7a19f-10">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-73f7a19f-11">
+      <rect x="15.28" y="5" width="117.86" height="77.32"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-73f7a19f-12">
+      <path fill="none" d="M17.28,5 L 17.28 82.32"/>
+      <path fill="none" d="M40.06,5 L 40.06 82.32"/>
+      <path fill="none" d="M62.83,5 L 62.83 82.32"/>
+      <path fill="none" d="M85.6,5 L 85.6 82.32"/>
+      <path fill="none" d="M108.37,5 L 108.37 82.32"/>
+      <path fill="none" d="M131.15,5 L 131.15 82.32"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-73f7a19f-13">
+      <path fill="none" d="M15.28,80.32 L 133.15 80.32"/>
+      <path fill="none" d="M15.28,65.65 L 133.15 65.65"/>
+      <path fill="none" d="M15.28,50.99 L 133.15 50.99"/>
+      <path fill="none" d="M15.28,36.33 L 133.15 36.33"/>
+      <path fill="none" d="M15.28,21.66 L 133.15 21.66"/>
+      <path fill="none" d="M15.28,7 L 133.15 7"/>
+    </g>
+    <g class="plotpanel" id="img-73f7a19f-14">
+      <g class="geometry" stroke="#000000" stroke-opacity="0.000" fill="#4C404B" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" id="img-73f7a19f-15">
+        <text x="95.2" y="39.98" text-anchor="middle" dy="0.35em" visibility="visible">w13a</text>
+        <text x="118.2" y="41.74" text-anchor="middle" dy="0.35em" visibility="visible">w20a</text>
+      </g>
+      <g class="geometry" id="img-73f7a19f-16">
+        <g stroke-width="0.3" id="img-73f7a19f-17">
+          <use xlink:href="#img-73f7a19f-18" x="90.52" y="37.65" stroke="#FFFFFF" class="color_Wells" fill="#00BFFF"/>
+          <use xlink:href="#img-73f7a19f-18" x="113.52" y="39.41" stroke="#FFFFFF" class="color_Wells" fill="#00BFFF"/>
+        </g>
+      </g>
+    </g>
+    <g class="geometry" id="img-73f7a19f-19">
+      <g stroke="#FFA500" opacity="0.2" fill="#FFA500" id="img-73f7a19f-20">
+        <rect x="57.14" y="25.33" width="11.39" height="36.66"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-73f7a19f-21">
+    <text x="14.28" y="168.29" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="1.0">600</text>
+    <text x="14.28" y="153.63" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="1.0">700</text>
+    <text x="14.28" y="138.97" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="1.0">800</text>
+    <text x="14.28" y="124.3" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="1.0">900</text>
+    <text x="14.28" y="109.64" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="1.0">1000</text>
+    <text x="14.28" y="94.98" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="1.0">1100</text>
+    <text x="14.28" y="80.32" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="visible" gadfly:scale="1.0">1200</text>
+    <text x="14.28" y="65.65" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="visible" gadfly:scale="1.0">1300</text>
+    <text x="14.28" y="50.99" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="visible" gadfly:scale="1.0">1400</text>
+    <text x="14.28" y="36.33" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="visible" gadfly:scale="1.0">1500</text>
+    <text x="14.28" y="21.66" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="visible" gadfly:scale="1.0">1600</text>
+    <text x="14.28" y="7" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="visible" gadfly:scale="1.0">1700</text>
+    <text x="14.28" y="-7.66" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="1.0">1800</text>
+    <text x="14.28" y="-22.33" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="1.0">1900</text>
+    <text x="14.28" y="-36.99" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="1.0">2000</text>
+    <text x="14.28" y="-51.65" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="1.0">2100</text>
+    <text x="14.28" y="-66.31" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="1.0">2200</text>
+    <text x="14.28" y="-80.98" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="1.0">2300</text>
+    <text x="14.28" y="256.27" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">0</text>
+    <text x="14.28" y="248.94" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">50</text>
+    <text x="14.28" y="241.61" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">100</text>
+    <text x="14.28" y="234.28" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">150</text>
+    <text x="14.28" y="226.94" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">200</text>
+    <text x="14.28" y="219.61" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">250</text>
+    <text x="14.28" y="212.28" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">300</text>
+    <text x="14.28" y="204.95" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">350</text>
+    <text x="14.28" y="197.62" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">400</text>
+    <text x="14.28" y="190.29" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">450</text>
+    <text x="14.28" y="182.96" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">500</text>
+    <text x="14.28" y="175.62" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">550</text>
+    <text x="14.28" y="168.29" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">600</text>
+    <text x="14.28" y="160.96" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">650</text>
+    <text x="14.28" y="153.63" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">700</text>
+    <text x="14.28" y="146.3" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">750</text>
+    <text x="14.28" y="138.97" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">800</text>
+    <text x="14.28" y="131.64" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">850</text>
+    <text x="14.28" y="124.3" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">900</text>
+    <text x="14.28" y="116.97" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">950</text>
+    <text x="14.28" y="109.64" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">1000</text>
+    <text x="14.28" y="102.31" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">1050</text>
+    <text x="14.28" y="94.98" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">1100</text>
+    <text x="14.28" y="87.65" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">1150</text>
+    <text x="14.28" y="80.32" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">1200</text>
+    <text x="14.28" y="72.98" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">1250</text>
+    <text x="14.28" y="65.65" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">1300</text>
+    <text x="14.28" y="58.32" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">1350</text>
+    <text x="14.28" y="50.99" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">1400</text>
+    <text x="14.28" y="43.66" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">1450</text>
+    <text x="14.28" y="36.33" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">1500</text>
+    <text x="14.28" y="28.99" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">1550</text>
+    <text x="14.28" y="21.66" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">1600</text>
+    <text x="14.28" y="14.33" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">1650</text>
+    <text x="14.28" y="7" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">1700</text>
+    <text x="14.28" y="-0.33" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">1750</text>
+    <text x="14.28" y="-7.66" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">1800</text>
+    <text x="14.28" y="-14.99" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">1850</text>
+    <text x="14.28" y="-22.33" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">1900</text>
+    <text x="14.28" y="-29.66" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="10.0">1950</text>
+    <text x="14.28" y="-36.99" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="10.0">2000</text>
+    <text x="14.28" y="-44.32" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="10.0">2050</text>
+    <text x="14.28" y="-51.65" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="10.0">2100</text>
+    <text x="14.28" y="-58.98" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="10.0">2150</text>
+    <text x="14.28" y="-66.31" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="10.0">2200</text>
+    <text x="14.28" y="182.96" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="0.5">500</text>
+    <text x="14.28" y="109.64" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="0.5">1000</text>
+    <text x="14.28" y="36.33" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="0.5">1500</text>
+    <text x="14.28" y="-36.99" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="0.5">2000</text>
+    <text x="14.28" y="-110.3" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="0.5">2500</text>
+    <text x="14.28" y="256.27" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">0</text>
+    <text x="14.28" y="248.94" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">50</text>
+    <text x="14.28" y="241.61" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">100</text>
+    <text x="14.28" y="234.28" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">150</text>
+    <text x="14.28" y="226.94" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">200</text>
+    <text x="14.28" y="219.61" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">250</text>
+    <text x="14.28" y="212.28" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">300</text>
+    <text x="14.28" y="204.95" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">350</text>
+    <text x="14.28" y="197.62" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">400</text>
+    <text x="14.28" y="190.29" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">450</text>
+    <text x="14.28" y="182.96" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">500</text>
+    <text x="14.28" y="175.62" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">550</text>
+    <text x="14.28" y="168.29" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">600</text>
+    <text x="14.28" y="160.96" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">650</text>
+    <text x="14.28" y="153.63" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">700</text>
+    <text x="14.28" y="146.3" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">750</text>
+    <text x="14.28" y="138.97" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">800</text>
+    <text x="14.28" y="131.64" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">850</text>
+    <text x="14.28" y="124.3" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">900</text>
+    <text x="14.28" y="116.97" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">950</text>
+    <text x="14.28" y="109.64" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">1000</text>
+    <text x="14.28" y="102.31" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">1050</text>
+    <text x="14.28" y="94.98" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">1100</text>
+    <text x="14.28" y="87.65" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">1150</text>
+    <text x="14.28" y="80.32" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">1200</text>
+    <text x="14.28" y="72.98" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">1250</text>
+    <text x="14.28" y="65.65" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">1300</text>
+    <text x="14.28" y="58.32" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">1350</text>
+    <text x="14.28" y="50.99" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">1400</text>
+    <text x="14.28" y="43.66" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">1450</text>
+    <text x="14.28" y="36.33" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">1500</text>
+    <text x="14.28" y="28.99" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">1550</text>
+    <text x="14.28" y="21.66" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">1600</text>
+    <text x="14.28" y="14.33" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">1650</text>
+    <text x="14.28" y="7" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">1700</text>
+    <text x="14.28" y="-0.33" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">1750</text>
+    <text x="14.28" y="-7.66" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">1800</text>
+    <text x="14.28" y="-14.99" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">1850</text>
+    <text x="14.28" y="-22.33" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">1900</text>
+    <text x="14.28" y="-29.66" text-anchor="middle" transform="rotate(-90, 14.28, 7)" visibility="hidden" gadfly:scale="5.0">1950</text>
+    <text x="14.28" y="-36.99" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)" visibility="hidden" gadfly:scale="5.0">2000</text>
+    <text x="14.28" y="-44.32" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)" visibility="hidden" gadfly:scale="5.0">2050</text>
+    <text x="14.28" y="-51.65" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)" visibility="hidden" gadfly:scale="5.0">2100</text>
+    <text x="14.28" y="-58.98" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)" visibility="hidden" gadfly:scale="5.0">2150</text>
+    <text x="14.28" y="-66.31" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)" visibility="hidden" gadfly:scale="5.0">2200</text>
+  </g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-73f7a19f-22">
+    <text x="14.28" y="80.32" text-anchor="middle" transform="rotate(-90, 14.28, 80.32)">1200</text>
+    <text x="14.28" y="65.65" text-anchor="middle" transform="rotate(-90, 14.28, 65.65)">1300</text>
+    <text x="14.28" y="50.99" text-anchor="middle" transform="rotate(-90, 14.28, 50.99)">1400</text>
+    <text x="14.28" y="36.33" text-anchor="middle" transform="rotate(-90, 14.28, 36.33)">1500</text>
+    <text x="14.28" y="21.66" text-anchor="middle" transform="rotate(-90, 14.28, 21.66)">1600</text>
+    <text x="14.28" y="7" text-anchor="middle" transform="rotate(-90, 14.28, 7)">1700</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-73f7a19f-23">
+    <text x="8.81" y="41.66" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.81, 43.66)">y [m]</text>
+  </g>
+</g>
+<defs>
+  <clipPath id="img-73f7a19f-9">
+  <path d="M15.28,5 L 133.15 5 133.15 82.32 15.28 82.32" />
+</clipPath>
+  <g id="img-73f7a19f-18">
+    <circle cx="0" cy="0" r="0.9"/>
+  </g>
+</defs>
+</svg>
