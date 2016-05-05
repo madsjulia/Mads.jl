@@ -179,7 +179,7 @@ Arguments:
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
 - `callback` : call back function for debugging
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=best_x->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=(best_x, of, lambda)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -223,7 +223,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
-	callback(x)
+	callback(x, o(fcur), NaN)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
@@ -374,7 +374,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			push!(tr, os)
 			println(os)
 		end
-		callback(best_x)
+		callback(best_x, best_residual, lambda)
 
 		# check convergence criteria:
 		if norm(J' * fcur, Inf) < tolG # Small gradient: norm(J^T * fcur, Inf) < tolG

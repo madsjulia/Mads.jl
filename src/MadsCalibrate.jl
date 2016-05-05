@@ -99,16 +99,17 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	end
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-	function calibratecallback(x_best)
+	function calibratecallback(x_best, of, lambda)
 		outfile = open("$rootname.iterationresults", "a+")
-		write(outfile, string("OF: ", o_lm(f_lm_sin(x_best)), "\n"))
+		write(outfile, string("OF: ", of, "\n"))
+		write(outfile, string("lambda: ", lambda, "\n"))
 		write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
 		close(outfile)
 	end
 	if usenaive == true
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	elseif usenaive == :lmlin
-		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, lambda)->calibratecallback(best_x))
+		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->calibratecallback(best_x, of, lambda))
 	else
 		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
