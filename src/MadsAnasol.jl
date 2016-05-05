@@ -27,7 +27,7 @@ paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["ini
 forward_preds = computeconcentrations(paramdict)
 ```
 """
-function makecomputeconcentrations(madsdata::Associative)
+function makecomputeconcentrations(madsdata::Associative; calczeroweightobs=false, calcpredictions=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
 	if haskeyword(madsdata, "background")
@@ -75,7 +75,7 @@ function makecomputeconcentrations(madsdata::Associative)
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
 					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					#if madsdata["Wells"][wellkey]["obs"][o]["weight"] > eps(Float64)
+					if calczeroweightobs || madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0 || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 						conc = background
 						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
 							if haskey( madsdata["Sources"][i], "box" )
@@ -100,9 +100,9 @@ function makecomputeconcentrations(madsdata::Associative)
 							end
 						end
 						c[string(wellkey, "_", t)] = conc
-					#else
-					#	c[string(wellkey, "_", t)] = 0
-					#end
+					else
+						c[string(wellkey, "_", t)] = 0
+					end
 				end
 			end
 		end

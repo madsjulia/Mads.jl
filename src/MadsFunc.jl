@@ -44,7 +44,7 @@ Options for reading model outputs:
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 """
-function makemadscommandfunction(madsdata::Associative) # make MADS command function
+function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false, calcpredictions=true) # make MADS command function
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsoutput("""Internal model evaluation of Julia function $(madsdata["Julia model"]) ...\n""")
@@ -235,7 +235,7 @@ function makemadscommandfunction(madsdata::Associative) # make MADS command func
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
 		Mads.madsoutput("MADS interal Anasol model evaluation for contaminant transport ...\n")
-		return makecomputeconcentrations(madsdata)
+		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
 		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
