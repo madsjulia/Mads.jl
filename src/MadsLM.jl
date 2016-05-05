@@ -223,6 +223,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
+	callback(x)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
