@@ -2,7 +2,7 @@ import Mads
 using Base.Test
 
 callbacksucceeded = false
-@everywhere function callback(x_best)
+@everywhere function callback(x_best, of, lambda)
 	global callbacksucceeded
 	callbacksucceeded = true
 	println("The callback function was called: $x_best")

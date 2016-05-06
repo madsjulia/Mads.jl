@@ -243,17 +243,17 @@
   </g>
 </g>
 <defs>
+  <clipPath id="img-062b9977-44">
+  <path d="M9.51,5 L 71.2 5 71.2 54.99 9.51 54.99" />
+</clipPath>
   <clipPath id="img-062b9977-4">
   <path d="M85.71,81.2 L 147.4 81.2 147.4 130.81 85.71 130.81" />
-</clipPath>
-  <clipPath id="img-062b9977-16">
-  <path d="M21.23,81.2 L 71.2 81.2 71.2 130.81 21.23 130.81" />
 </clipPath>
   <clipPath id="img-062b9977-30">
   <path d="M99.48,5 L 147.4 5 147.4 54.99 99.48 54.99" />
 </clipPath>
-  <clipPath id="img-062b9977-44">
-  <path d="M9.51,5 L 71.2 5 71.2 54.99 9.51 54.99" />
+  <clipPath id="img-062b9977-16">
+  <path d="M21.23,81.2 L 71.2 81.2 71.2 130.81 21.23 130.81" />
 </clipPath>
   <g id="img-062b9977-24">
     <circle cx="0" cy="0" r="0.9"/>
