@@ -1,17 +1,27 @@
 "Matrix factorization via Levenberg Marquardt"
-function MFlm(X, nk; mads=true)
+function MFlm(X, nk; mads=true, log_W=false, log_H=false)
 	nS = size(X)[1]
 	nP = size(X)[2]
 	W_size = nS * nk
-	W_logtransformed = trues(nS * nk)
-	W_lowerbounds = ones(nS * nk) * 1e-15
-	W_upperbounds = ones(nS * nk) * 10
-	W_init = ones(nS * nk) * 0.5
+	if log_W
+		W_logtransformed = trues(W_size)
+		W_lowerbounds = ones(W_size) * 1e-15
+	else
+		W_logtransformed = falses(W_size)
+		W_lowerbounds = zeros(W_size)
+	end
+	W_upperbounds = ones(W_size)
+	W_init = ones(W_size) * 0.5
 	H_size = nP * nk
-	H_logtransformed = trues(nP * nk)
-	H_lowerbounds = ones(nP * nk) * 1e-15
-	H_upperbounds = ones(nP * nk) * 10
-	H_init = ones(nP * nk)
+	if log_H
+		H_logtransformed = trues(H_size)
+		H_lowerbounds = ones(H_size) * 1e-15
+	else
+		H_logtransformed = falses(H_size)
+		H_lowerbounds = zeros(H_size)
+	end
+	H_upperbounds = ones(H_size) * maximum(X) * 100
+	H_init = ones(H_size) * 0.5
 	nParam = W_size + H_size
 	nObs = nP * nS
 	x = [W_init; H_init]
@@ -62,10 +72,11 @@ function MFlm(X, nk; mads=true)
 	mf_lm_sin = Mads.sinetransformfunction(mf_lm, lowerbounds, upperbounds, indexlogtransformed)
 	mf_g_lm_sin = Mads.sinetransformfunction(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	if mads
-		r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=10000, maxIter=10000, tolX=1e-6, tolG=1e-12)
+		r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=10000, maxIter=10000, maxJacobians=10000, tolX=1e-12, tolG=1e-15)
 	else
 		r = Optim.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=10000)
 	end
+	display(r)
 	# println("OF = $(r.f_minimum)")
 	x_final = Mads.sinetransform(r.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	W, H = mf_reshape(x_final)
