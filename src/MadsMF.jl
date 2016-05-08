@@ -1,5 +1,26 @@
-"Matrix factorization via Levenberg Marquardt"
-function MFlm(X, nk; mads=true, log_W=false, log_H=false)
+import NMF
+
+"Non-negative Matrix Factorization using NMF"
+function NMFm(X, nk; retries=100, tol=1.0e-9, maxiter=100000)
+	nP = size(X)[1] # number of observation points
+	nC = size(X)[2] # number of observed components/transients
+	Wbest = Array(Float64, nP, nk)
+	Hbest = Array(Float64, nk, nC)
+	phi_best = Inf
+	for i = 1:retries
+		nmf_result = NMF.nnmf(X, nk; alg=:multmse, maxiter=maxiter, tol=tol)
+		phi = nmf_result.objvalue
+		if phi_best > phi
+			phi_best = phi
+			Wbest = nmf_result.W
+			Hbest = nmf_result.H
+		end
+	end
+	return Wbest, Hbest, phi_best
+end
+
+"Matrix Factorization via Levenberg Marquardt"
+function MFlm(X, nk; mads=true, log_W=false, log_H=false, retries=1)
 	nS = size(X)[1]
 	nP = size(X)[2]
 	W_size = nS * nk
