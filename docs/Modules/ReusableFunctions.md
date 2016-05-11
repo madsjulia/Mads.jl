@@ -6,9 +6,9 @@
 ---
 
 <a id="method__maker3function.1" class="lexicon_definition"></a>
-## maker3function(f::Function,  dirname::ASCIIString)
+## maker3function(f,  dirname)
 Make reusable function
 
 *source:*
-[ReusableFunctions/src/ReusableFunctions.jl:43](https://github.com/madsjulia/ReusableFunctions.jl/tree/0ae5dfc83f0b1554123f206751e0232630009511/src/ReusableFunctions.jl#L43)
+[ReusableFunctions/src/ReusableFunctions.jl:43](https://github.com/madsjulia/ReusableFunctions.jl/tree/eb26c3d7744c54d53d3af36e7d294e7bec1ff9d4/src/ReusableFunctions.jl#L43)
 
