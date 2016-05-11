@@ -7,13 +7,13 @@ In the case of geochemical concentrations, these may represent a mixture of diff
 
 The separation of the different signals observed in the data is important for conceptualization of the site conditions.
 
-Below a seris of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.
+Below a series of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.
 
 More complicated Blind Source Separation (BSS) analyses can be found in:
 
 Alexandrov, Boian S., and Velimir V. Vesselinov. "Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization." Water Resources Research 50.9 (2014): 7332-7347.
 
-All the figures below are generated using `examples/blind_source_separation/blind_source_separation.jl`.
+All the figures below are generated using `examples/blind_source_separation/blind_source_separation.jl`. BSS can be performed using different methods. The examples below use the [Ipopt](https://projects.coin-or.org/Ipopt) implementation in the [JuMP](https://github.com/JuliaOpt/JuMP.jl) Julia module.
 
 ### Sources generated using sine functions and random noise
 
