@@ -2,14 +2,14 @@
 
 Frequently there are several different physical phenomena or mechanisms (sources) than may can cause transients in the observed data.
 
-For example, in the case water-level (hydraulic pressure) data, these might me barometric pressure fluctuations, tidal effects, pumping effects, etc.
+For example, in the case of water-level (hydraulic pressure) data, these might me barometric pressure fluctuations, tidal effects, pumping effects, etc.
 In the case of geochemical concentrations, these may represent a mixture of different groundwater sources with different initial geochemical compositions.
 
 The separation of the different signals observed in the data is important for conceptualization of the site conditions.
 
-Below we present synthetic examples how transient data can be used to identify (separate/unmix) the original signals.
+Below a seris of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.
 
-More complicated BSS analyses can be found in:
+More complicated Blind Source Separation (BSS) analyses can be found in:
 
 Alexandrov, Boian S., and Velimir V. Vesselinov. "Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization." Water Resources Research 50.9 (2014): 7332-7347.
 
