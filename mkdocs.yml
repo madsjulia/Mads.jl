@@ -1,5 +1,5 @@
 site_name: MADS
-site_url: http://madsjulia.lanl.gov
+site_url: http://mads.readthedocs.io
 theme: readthedocs
 
 repo_url: https://github.com/madsjulia/Mads.jl
