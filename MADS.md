@@ -17,10 +17,11 @@ For additional information:
 
 * web:
     - [mads.lanl.gov](http://mads.lanl.gov)
-    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov) 
+    - [madsc.lanl.gov](http://madsc.lanl.gov) (C version of MADS)
 * documentation:
+    - [readthedocs](`http://mads.readthedocs.org/en/latest/`)
     - [github](`http://madsjulia.github.io/Mads.jl`)
-    - [readthedocs](`http://madsjl.readthedocs.org/en/latest/`)
+    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov) 
 * repos:
     - [github](http://github.com/madsjulia/Mads.jl)
     - [gitlab](http://gitlab.com/mads/Mads.jl)

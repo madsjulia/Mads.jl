@@ -12,9 +12,6 @@ Distributions
 DataStructures
 ForwardDiff
 ODE
-NMF
-JuMP
-Ipopt
 ProgressMeter
 LightXML
 Conda
