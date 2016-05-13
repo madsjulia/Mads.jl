@@ -45,8 +45,8 @@ t, y = ode23s(funcosc, initialconditions, times, points=:specified)
 ys = hcat(y...)' # vectorizing the output and transposing it with '
 
 # draw initial solution
-p = Gadfly.plot(layer(x=t, y=ys[:,1], Geom.line, Theme(default_color=parse(Colors.Colorant, "orange"))), layer(x=t, y=ys[:,2], Geom.line))
-Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"),6inch,4inch),p)
+#p = Gadfly.plot(layer(x=t, y=ys[:,1], Geom.line, Theme(default_color=parse(Colors.Colorant, "orange"))), layer(x=t, y=ys[:,2], Geom.line))
+#Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"),6inch,4inch),p)
 
 # create an observation dictionary in the MADS dictionary
 Mads.madsinfo("Create MADS Observations ...")
@@ -57,6 +57,7 @@ Mads.madsinfo("Show MADS Observations ...")
 Mads.madsinfo("Global sensitivity analysis ...")
 saltelliresult = Mads.efast(md, seed=20151001)
 if !haskey(ENV, "MADS_NO_PLOT")
+	#=
 	Mads.plotobsSAresults(md, saltelliresult; xtitle = "Time", ytitle = "State variable")
 
 	Mads.madsinfo("Spaghetti plots over the prior parameter ranges ...")
@@ -72,8 +73,11 @@ if !haskey(ENV, "MADS_NO_PLOT")
 		println(f, md["Parameters"][paramkeys[i]]["init"]-3*stddev[i]," < ",md["Parameters"][paramkeys[i]]["longname"], " < ", md["Parameters"][paramkeys[i]]["init"]+3*stddev[i])
 	end
 	close(f)
+	=#
 end
 
+#=
+#skip the bayesian analysis -- too slow and we test it elsewhere
 Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md, seed=20151001)
 
@@ -90,3 +94,4 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false)
 	Mads.spaghettiplot(md, mcmcvalues, keyword="posterior", obs_plot_dots=false)
 end
+=#

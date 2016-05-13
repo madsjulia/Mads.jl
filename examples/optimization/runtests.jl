@@ -6,6 +6,8 @@ if workdir == ""
 	workdir = Mads.madsdir * "/../examples/optimization/"
 end
 
+#=
+#Don't test external optimization -- too slow
 info("External optimization ...")
 
 md = Mads.loadmadsfile(workdir * "external-jld.mads")
@@ -17,6 +19,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 
 	@test yparam == jparam
 end
+=#
 
 include(workdir * "optimization-lm.jl")
 include(workdir * "optimization_rosenbrock.jl")
