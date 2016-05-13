@@ -1,0 +1,33 @@
+sftp vvv@publish.lanl.gov << EOF
+cd /www/dev-green/docs/projects/madsjulia
+mdkir ACKNOWLEDGMENTS
+mkdir COPYING
+mkdir EXAMPLES_SETUP
+mkdir FUNCTIONS
+mkdir GETTING_STARTED
+mkdir INSTALLATION
+mkdir MODEL_COUPLING
+mkdir Examples
+mkdir Examples/bayesian_sampling
+mkdir Examples/bigdt
+mkdir Examples/blind_source_separation
+mkdir Examples/contamination
+mkdir Examples/ode
+mkdir Modules
+mkdir Modules/Anasol
+mkdir Modules/BIGUQ
+mkdir Modules/Mads
+mkdir Modules/MetaProgTools
+mkdir Modules/ReusableFunctions
+mkdir Modules/RobustPmap
+mkdir TEST
+mkdir css
+mkdir fonts
+mkdir img
+mkdir js
+mkdir mkdcocs
+mkdir static
+put -rp ./*
+bye
+EOF
+echo Done.
