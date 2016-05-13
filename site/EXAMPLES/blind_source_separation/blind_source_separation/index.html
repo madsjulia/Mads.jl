@@ -268,13 +268,13 @@
               
                 <h2 id="blind-source-separation">Blind Source Separation</h2>
 <p>Frequently there are several different physical phenomena or mechanisms (sources) than may can cause transients in the observed data.</p>
-<p>For example, in the case water-level (hydraulic pressure) data, these might me barometric pressure fluctuations, tidal effects, pumping effects, etc.
+<p>For example, in the case of water-level (hydraulic pressure) data, these might me barometric pressure fluctuations, tidal effects, pumping effects, etc.
 In the case of geochemical concentrations, these may represent a mixture of different groundwater sources with different initial geochemical compositions.</p>
 <p>The separation of the different signals observed in the data is important for conceptualization of the site conditions.</p>
-<p>Below we present synthetic examples how transient data can be used to identify (separate/unmix) the original signals.</p>
-<p>More complicated BSS analyses can be found in:</p>
+<p>Below a series of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.</p>
+<p>More complicated Blind Source Separation (BSS) analyses can be found in:</p>
 <p>Alexandrov, Boian S., and Velimir V. Vesselinov. "Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization." Water Resources Research 50.9 (2014): 7332-7347.</p>
-<p>All the figures below are generated using <code>examples/blind_source_separation/blind_source_separation.jl</code>.</p>
+<p>All the figures below are generated using <code>examples/blind_source_separation/blind_source_separation.jl</code>. BSS can be performed using different methods. The examples below use the <a href="https://projects.coin-or.org/Ipopt">Ipopt</a> implementation in the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> Julia module.</p>
 <h3 id="sources-generated-using-sine-functions-and-random-noise">Sources generated using sine functions and random noise</h3>
 <h4 id="original-sources-assumed-unknown">Original sources (assumed unknown)</h4>
 <p><img alt="" src="../sig_original_sources.svg" /></p>
