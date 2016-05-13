@@ -12,7 +12,7 @@ gen_code function.
 
 
 *source:*
-[Anasol/src/gencode.jl:32](https://github.com/madsjulia/Anasol.jl/tree/40bc2baf8d94f488db5374d7e84e829e0fe92859/src/gencode.jl#L32)
+[Anasol/src/gencode.jl:32](https://github.com/madsjulia/Anasol.jl/tree/277129ed7a426d5a8027bca95b4bbdcb209759ee/src/gencode.jl#L32)
 
 ---
 
@@ -24,5 +24,5 @@ the function it automatically outputs the result.
 
 
 *source:*
-[Anasol/src/gencode.jl:6](https://github.com/madsjulia/Anasol.jl/tree/40bc2baf8d94f488db5374d7e84e829e0fe92859/src/gencode.jl#L6)
+[Anasol/src/gencode.jl:6](https://github.com/madsjulia/Anasol.jl/tree/277129ed7a426d5a8027bca95b4bbdcb209759ee/src/gencode.jl#L6)
 

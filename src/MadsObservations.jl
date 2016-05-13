@@ -205,7 +205,7 @@ end
 "Show observations in the MADS problem dictionary"
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = Mads.getobskeys(madsdata2)
 	p = Array(ASCIIString, 0)
 	for obskey in obskeys
 		if haskey( obsdict[obskey], "weight" )

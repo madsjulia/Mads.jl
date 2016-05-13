@@ -948,3 +948,47 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 		Mads.madswarn("Gadfly fails!")
 	end
 end
+
+"""
+Create plots of data series
+
+Arguments:
+
+- `X` : matrix with the series data
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : x-axis title
+- `ytitle` : y-axis title
+- `title` : plot title
+- `name` : series name
+- `combined` : `true` by default
+"""
+function plotseries(X::Matrix, filename::AbstractString; format="", xtitle = "X", ytitle = "Y", title="Sources", name="Source", combined::Bool=true)
+	nT = size(X)[1]
+	nS = size(X)[2]
+	if combined
+		hsize = 6Gadfly.inch
+		vsize = 4Gadfly.inch
+		pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i], 
+			Gadfly.Geom.line,
+			color = ["$name $i" for j in 1:nT])
+			for i in 1:nS]...,
+			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+			Gadfly.Guide.colorkey(title))
+	else
+		hsize = 6Gadfly.inch
+		vsize = 2Gadfly.inch * nS
+		pp = Array(Gadfly.Plot{}, nS)
+		for i in 1:nS
+			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
+		end
+		pS = Gadfly.vstack(pp...)
+	end
+	filename, format = Mads.setimagefileformat(filename, format)
+	try
+		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, hsize, vsize), pS)
+	catch "At least one finite value must be provided to formatter."
+		Mads.madswarn("Gadfly fails!")
+	end
+end
+

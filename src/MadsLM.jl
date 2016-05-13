@@ -223,10 +223,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
-	callback(x, o(fcur), NaN)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
+	callback(x, residual, NaN)
 	Mads.madsoutput("""Initial OF: $residual\n"""; level = 1);
 
 	# Maintain a trace of the system.

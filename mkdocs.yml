@@ -1,5 +1,5 @@
 site_name: MADS
-site_url: http://madsjulia.lanl.gov
+site_url: http://mads.readthedocs.io
 theme: readthedocs
 
 repo_url: https://github.com/madsjulia/Mads.jl
@@ -15,6 +15,7 @@ pages:
   - Setup: EXAMPLES_SETUP.md
   - Decision Analysis: Examples/bigdt/source_termination/source_termination.md
   - Bayesian Sampling: Examples/bayesian_sampling/bayesian_sampling.md
+  - Blind Source Separation: Examples/blind_source_separation/blind_source_separation.md
   - Contaminant Transport: Examples/contamination/contamination.md
   - ODE Analysis: Examples/ode/ode.md
 - Model Coupling: MODEL_COUPLING.md

@@ -45,7 +45,7 @@ t, y = ode23s(funcosc, initialconditions, times, points=:specified)
 ys = hcat(y...)' # vectorizing the output and transposing it with '
 
 # draw initial solution
-p = Gadfly.plot(layer(x=t, y=ys[:,1], Geom.line,Theme(default_color=parse(Colors.Colorant, "orange"))), layer(x=t,y=ys[:,2],Geom.line))
+p = Gadfly.plot(layer(x=t, y=ys[:,1], Geom.line, Theme(default_color=parse(Colors.Colorant, "orange"))), layer(x=t, y=ys[:,2], Geom.line))
 Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"),6inch,4inch),p)
 
 # create an observation dictionary in the MADS dictionary

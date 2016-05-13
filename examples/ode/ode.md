@@ -67,7 +67,7 @@ The observation data are plotted as a solid black line.
 
 #### Posterior parameter uncertainties
 
-Note that now the parameter uncertainties are constrained by the observation data
+Note that now the parameter uncertainties are constrained by the observation data.
 
 ##### *k* only
 

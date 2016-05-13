@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="101.6mm" viewBox="0 0 152.4 101.6"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot xscalable yscalable" id="img-afb9654b-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-afb9654b-2">
+    <text x="68.92" y="89.99" text-anchor="middle" dy="0.6em">X</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-afb9654b-3">
+    <text x="20.86" y="83.32" text-anchor="middle" dy="0.6em">0</text>
+    <text x="68.92" y="83.32" text-anchor="middle" dy="0.6em">50</text>
+    <text x="116.99" y="83.32" text-anchor="middle" dy="0.6em">100</text>
+  </g>
+  <g class="guide colorkey" id="img-afb9654b-4">
+    <g fill="#4C404B" font-size="2.82" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-afb9654b-5">
+      <text x="122.81" y="43.66" dy="0.35em" id="img-afb9654b-6" class="color_Source_1">Source 1</text>
+      <text x="122.81" y="47.28" dy="0.35em" id="img-afb9654b-7" class="color_Source_2">Source 2</text>
+    </g>
+    <g stroke="#000000" stroke-opacity="0.000" id="img-afb9654b-8">
+      <rect x="119.99" y="42.75" width="1.81" height="1.81" id="img-afb9654b-9" fill="#00BFFF" class="color_Source_1"/>
+      <rect x="119.99" y="46.38" width="1.81" height="1.81" id="img-afb9654b-10" fill="#D4CA3A" class="color_Source_2"/>
+    </g>
+    <g fill="#362A35" font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-afb9654b-11">
+      <text x="119.99" y="39.84" id="img-afb9654b-12">Unmixed sources</text>
+    </g>
+  </g>
+<g clip-path="url(#img-afb9654b-13)">
+  <g id="img-afb9654b-14">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-afb9654b-15">
+      <rect x="18.86" y="5" width="100.14" height="77.32" id="img-afb9654b-16"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-afb9654b-17">
+      <path fill="none" d="M18.86,80.31 L 118.99 80.31" id="img-afb9654b-18"/>
+      <path fill="none" d="M18.86,65.65 L 118.99 65.65" id="img-afb9654b-19"/>
+      <path fill="none" d="M18.86,50.99 L 118.99 50.99" id="img-afb9654b-20"/>
+      <path fill="none" d="M18.86,36.33 L 118.99 36.33" id="img-afb9654b-21"/>
+      <path fill="none" d="M18.86,21.66 L 118.99 21.66" id="img-afb9654b-22"/>
+      <path fill="none" d="M18.86,7 L 118.99 7" id="img-afb9654b-23"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-afb9654b-24">
+      <path fill="none" d="M20.86,5 L 20.86 82.32" id="img-afb9654b-25"/>
+      <path fill="none" d="M68.92,5 L 68.92 82.32" id="img-afb9654b-26"/>
+      <path fill="none" d="M116.99,5 L 116.99 82.32" id="img-afb9654b-27"/>
+    </g>
+    <g class="plotpanel" id="img-afb9654b-28">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry color_Source_2" stroke-dasharray="none" stroke="#D4CA3A" id="img-afb9654b-29">
+        <path fill="none" d="M21.82,41.48 L 22.78 39.24 23.74 37.08 24.7 35.05 25.66 33.18 26.62 31.49 27.59 30.02 28.55 28.78 29.51 27.73 30.47 26.8 31.43 25.9 32.39 24.9 33.35 23.73 34.32 22.4 35.28 21.06 36.24 19.78 37.2 18.6 38.16 17.52 39.12 16.4 40.08 15.13 41.05 13.72 42.01 12.28 42.97 10.91 43.93 9.72 44.89 8.78 45.85 8.13 46.81 7.78 47.77 7.74 48.74 7.97 49.7 8.41 50.66 8.97 51.62 9.53 52.58 9.98 53.54 10.22 54.5 10.36 55.47 10.58 56.43 11.02 57.39 11.65 58.35 12.4 59.31 13.07 60.27 13.53 61.23 13.83 62.2 14.1 63.16 14.46 64.12 14.99 65.08 15.77 66.04 16.82 67 18.15 67.96 19.74 68.92 21.56 69.89 23.55 70.85 25.63 71.81 27.7 72.77 29.68 73.73 31.53 74.69 33.29 75.65 35.04 76.62 36.75 77.58 38.38 78.54 39.94 79.5 41.39 80.46 42.7 81.42 43.96 82.38 45.28 83.34 46.75 84.31 48.43 85.27 50.31 86.23 52.3 87.19 54.27 88.15 56.14 89.11 57.92 90.07 59.64 91.04 61.36 92 63.05 92.96 64.72 93.92 66.33 94.88 67.9 95.84 69.39 96.8 70.66 97.77 71.68 98.73 72.64 99.69 73.69 100.65 74.94 101.61 76.56 102.57 78.53 103.53 80.19 104.49 78.88 105.46 70.07 106.42 57.52 107.38 57.43 108.34 68.85 109.3 77.34 110.26 80.08 111.22 80.23 112.19 79.79 113.15 79.42 114.11 79.24 115.07 79.23 116.03 79.19 116.99 78.81" id="img-afb9654b-30"/>
+      </g>
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry color_Source_1" stroke-dasharray="none" stroke="#00BFFF" id="img-afb9654b-31">
+        <path fill="none" d="M21.82,34.64 L 22.78 26.58 23.74 19.97 24.7 15.38 25.66 13.15 26.62 13.45 27.59 16.22 28.55 21.18 29.51 27.86 30.47 35.71 31.43 44.12 32.39 52.5 33.35 60.3 34.32 66.78 35.28 70.86 36.24 71.52 37.2 68.46 38.16 62.3 39.12 54.28 40.08 45.38 41.05 36.25 42.01 27.48 42.97 19.68 43.93 13.42 44.89 9.21 45.85 7.39 46.81 8.09 47.77 11.26 48.74 16.62 49.7 23.72 50.66 32.03 51.62 40.94 52.58 49.92 53.54 58.41 54.5 65.6 55.47 70.14 56.43 70.8 57.39 67.45 58.35 61.11 59.31 53.16 60.27 44.53 61.23 35.79 62.2 27.47 63.16 20.15 64.12 14.41 65.08 10.73 66.04 9.44 67 10.68 67.96 14.37 68.92 20.21 69.89 27.75 70.85 36.39 71.81 45.5 72.77 54.43 73.73 62.52 74.69 68.91 75.65 72.64 76.62 73.16 77.58 70.54 78.54 65.32 79.5 58.36 80.46 50.42 81.42 42.13 82.38 34.09 83.34 26.94 84.31 21.31 85.27 17.71 86.23 16.53 87.19 17.94 88.15 21.86 89.11 27.97 90.07 35.72 91.04 44.44 92 53.43 92.96 61.94 93.92 69.28 94.88 74.66 95.84 77.47 96.8 77.77 97.77 75.65 98.73 71 99.69 64.35 100.65 56.43 101.61 47.92 102.57 39.56 103.53 32.33 104.49 27.48 105.46 26.18 106.42 27.53 107.38 28.93 108.34 30.53 109.3 34.48 110.26 41.08 111.22 49.22 112.19 57.75 113.15 65.79 114.11 72.6 115.07 77.4 116.03 79.48 116.99 79.34" id="img-afb9654b-32"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-afb9654b-33">
+    <text x="17.86" y="80.31" text-anchor="end" dy="0.35em" id="img-afb9654b-34">0.00</text>
+    <text x="17.86" y="65.65" text-anchor="end" dy="0.35em" id="img-afb9654b-35">0.05</text>
+    <text x="17.86" y="50.99" text-anchor="end" dy="0.35em" id="img-afb9654b-36">0.10</text>
+    <text x="17.86" y="36.33" text-anchor="end" dy="0.35em" id="img-afb9654b-37">0.15</text>
+    <text x="17.86" y="21.66" text-anchor="end" dy="0.35em" id="img-afb9654b-38">0.20</text>
+    <text x="17.86" y="7" text-anchor="end" dy="0.35em" id="img-afb9654b-39">0.25</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-afb9654b-40">
+    <text x="9.16" y="43.66" text-anchor="end" dy="0.35em" id="img-afb9654b-41">Y</text>
+  </g>
+</g>
+<defs>
+  <clipPath id="img-afb9654b-13">
+  <path d="M18.86,5 L 118.99 5 118.99 82.32 18.86 82.32" />
+</clipPath>
+</defs>
+</svg>
