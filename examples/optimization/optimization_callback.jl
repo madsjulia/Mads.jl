@@ -2,10 +2,10 @@ import Mads
 using Base.Test
 
 callbacksucceeded = false
-@everywhere function callback(x_best)
+@everywhere function callback(x_best, of, lambda)
 	global callbacksucceeded
 	callbacksucceeded = true
-	println("The callback function was called: $x_best")
+	println("The callback function was called: $x_best, $of, $lambda")
 end
 
 info("Levenberg-Marquardt optimization of the Rosenbrock function with callback")
