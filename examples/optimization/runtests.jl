@@ -6,20 +6,18 @@ if workdir == ""
 	workdir = Mads.madsdir * "/../examples/optimization/"
 end
 
-#=
-#Don't test external optimization -- too slow
-info("External optimization ...")
+if Mads.long_tests
+	Mads.madsinfo("External optimization ...")
 
-md = Mads.loadmadsfile(workdir * "external-jld.mads")
-jparam, jresults = Mads.calibrate(md, maxJacobians=1)
+	md = Mads.loadmadsfile(workdir * "external-jld.mads")
+	jparam, jresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 
-if !haskey(ENV, "MADS_NO_PYTHON")
-	md = Mads.loadmadsfile(workdir * "external-yaml.mads")
-	yparam, yresults = Mads.calibrate(md, maxJacobians=1)
-
-	@test yparam == jparam
+	if !haskey(ENV, "MADS_NO_PYTHON")
+		md = Mads.loadmadsfile(workdir * "external-yaml.mads")
+		yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
+		@test yparam == jparam
+	end
 end
-=#
 
 include(workdir * "optimization-lm.jl")
 include(workdir * "optimization_rosenbrock.jl")

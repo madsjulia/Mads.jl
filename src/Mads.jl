@@ -82,6 +82,7 @@ debuglevel = 1
 modelruns = 0
 madsinputfile = ""
 create_tests = false # dangerous if true
+long_tests = false # execute long tests
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 include("MadsLog.jl") # messages higher than verbosity level are printed

@@ -1,6 +1,6 @@
 using Mads
 
-info("Levenberg-Marquardt optimization of an internal problem:")
+Mads.madsinfo("Levenberg-Marquardt optimization of an internal problem:")
 problemdir = string((dirname(Base.source_path())))*"/"
 
 md = Mads.loadmadsfile(problemdir*"internal-linearmodel.mads")

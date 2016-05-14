@@ -1,7 +1,7 @@
 import Mads
 
 # external execution test using ASCII files
-info("Levenberg-Marquardt optimization of an external problem using ASCII files ...")
+Mads.madsinfo("Levenberg-Marquardt optimization of an external problem using ASCII files ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
 	workdir = Mads.madsdir * "/../examples/optimization/"

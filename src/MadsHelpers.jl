@@ -18,6 +18,16 @@ function create_tests_off()
 	global create_tests = false;
 end
 
+"Turn on execution of long MADS tests (dangerous)"
+function long_tests_on()
+	global long_tests = true;
+end
+
+"Turn off execution of long MADS tests (default)"
+function long_tests_off()
+	global long_tests = false;
+end
+
 "Set MADS debug level"
 function setdebuglevel(level::Int)
 	global debuglevel = level

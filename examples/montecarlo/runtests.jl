@@ -1,6 +1,6 @@
 import Mads
 
-info("Monte Carlo analysis ...")
+Mads.madsinfo("Monte Carlo analysis ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
 	workdir = Mads.madsdir * "/../examples/montecarlo/"

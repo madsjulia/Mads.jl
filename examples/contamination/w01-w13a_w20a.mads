@@ -1,0 +1,2272 @@
+Grid: {time: 50, xcount: 33, xmax: 2300, xmin: 700, ycount: 19, ymax: 1900, ymin: 1000, zcount: 1, zmax: 50, zmin: 0}
+Parameters:
+- n: {init: 0.1, log: false, longname: 'Porosity [L3/L3]', max: 1.0, min: 0.0, step: 0.1, type: null}
+- rf: {init: 1.0, log: true, longname: 'Retardation Factor [-]', max: 10.0, min: 1.0, step: 1.0, type: null}
+- lambda: {init: 0.0, log: true, longname: 'Half-life decay [1/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
+- theta: {init: 0.0, log: false, longname: 'Flow Angle [degrees]', max: 30.0, min: -30.0, step: 5.0, type: null}
+- vx: {init: 40.0, log: true, longname: 'Pore x velocity [L/T]', max: 200.0, min: 0.01, step: 10.0, type: opt}
+- vy: {init: 0.0, log: false, longname: 'Pore y velocity [L/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
+- vz: {init: 0.0, log: false, longname: 'Pore z velocity [L/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
+- ax: {init: 70.0, log: true, longname: 'Dispersivity x [L]', max: 140.0, min: 10.0, step: 10.0, type: null}
+- ay: {init: 15.0, log: true, longname: 'Dispersivity y [L]', max: 30.0, min: 1.0, step: 10.0, type: null}
+- az: {init: 0.3, log: true, longname: 'Dispersivity z [L]', max: 1.0, min: 0.1, step: 1.25893, type: null}
+- ts_dsp: {init: 1.0, log: false, longname: 'Time Scale Dispersivity [-]', max: 10.0, min: 0.1, step: 0.1, type: null}
+- ts_adv: {init: 1.0, log: false, longname: 'Time Scale Advection [-]', max: 10.0, min: 0.1, step: 0.1, type: null}
+- ts_rct: {init: 1.0, log: false, longname: 'Time Scale Reaction [-]', max: 10.0, min: 0.1, step: 0.1, type: null}
+- alpha: {init: 2.0, log: false, longname: 'Levy alpha [-]', max: 2.0, min: 1.1, step: 0.1, type: null}
+- beta: {init: 0.0, log: false, longname: 'Levy beta [-]', max: 1.0, min: -1.0, step: 0.1, type: null}
+- nlc0: {init: 0.0, log: false, longname: 'NLC 0 [T]', max: 1.0, min: -1.0, step: 0.1, type: null}
+- nlc1: {init: 1.0, log: false, longname: 'NLC 1 [T]', max: 10.0, min: 0.1, step: 1.0, type: null}
+Sources:
+- box:
+    dx: {init: 250.0, log: false, longname: 'Source x dimension [L]', max: 500.0, min: 1.0, step: 1.0, type: null}
+    dy: {init: 250.0, log: false, longname: 'Source y dimension [L]', max: 500.0, min: 1.0, step: 1.0, type: null}
+    dz: {init: 1.0, log: false, longname: 'Source z dimension [L]', max: 10.0, min: 1.0, step: 1.0, type: null}
+    f: {init: 50.0, log: true, longname: 'Contaminant flux [M/T]', max: 100.0, min: 0.01, step: 1.0, type: null}
+    t0: {init: 4.0, log: false, longname: 'Start Time [T]', max: 10.0, min: 0.0, step: 1.0, type: opt}
+    t1: {init: 15.0, log: false, longname: 'End Time [T]', max: 40.0, min: 5.0, step: 1.0, type: opt}
+    x: {init: 1000.0, log: false, longname: 'Source x coordinate [L]', max: 1460.0, min: 210.0, step: 25.0, type: null}
+    y: {init: 1450.0, log: false, longname: 'Source y coordinate [L]', max: 1930.0, min: 1230.0, step: 25.0, type: null}
+    z: {init: 0.0, log: false, longname: 'Source z coordinate [L]', max: 100.0, min: 0.0, step: 1.0, type: null}
+Time: {end: 50, start: 1, step: 1}
+Wells:
+- w1a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.69798, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 29.9077, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 79.257, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 129.014, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 172.17, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 207.793, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 236.712, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 260.093, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 279.016, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 294.383, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 305.215, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 287.267, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 246.359, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 203.574, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 166.2, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 135.389, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 110.489, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 90.4743, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 74.3791, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 61.3953, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 50.8778, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 42.3194, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 35.3236, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 29.58, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 24.845, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 20.9262, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 17.6711, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 14.9581, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 12.69, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 10.7881, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 9.18902, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 7.84114, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 6.70231, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 5.73799, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 4.91974, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 4.2241, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 3.63162, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 3.12614, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 2.6942, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 2.32453, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 2.00772, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 1.73582, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 1.50218, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 1.30118, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 1.12804, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 823
+    y: 1499
+    z0: 3
+    z1: 3
+- w1b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.52128e-14, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.48488e-06, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.000587946, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.0116229, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.0688368, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.222566, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.508637, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.935368, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.48795, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2.13864, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 2.85565, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 3.60882, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 4.37183, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 5.11451, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 5.78603, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 6.3256, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 6.6907, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 6.86931, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 6.87481, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 6.73512, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 6.48338, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 6.15189, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 5.76897, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 5.35781, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 4.93647, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 4.51839, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 4.11314, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 3.72716, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 3.3645, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 3.02736, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 2.71662, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 2.43217, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 2.17326, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 1.93869, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 1.727, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 1.53656, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 1.36573, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 1.21282, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 1.07622, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 0.954404, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 0.845916, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 0.749414, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 0.663664, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 0.587534, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 0.519996, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 823
+    y: 1499
+    z0: 33
+    z1: 33
+- w2a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 0.670317, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 21.0752, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 67.763, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 121.433, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 171.556, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 214.925, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 251.297, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 281.412, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 306.234, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 326.682, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 342.88, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 336.423, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 301.301, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 257.25, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 215.15, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 178.494, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 147.752, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 122.372, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 101.543, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 84.4703, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 70.4608, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 58.9392, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 49.4369, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 41.5761, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 35.0531, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 29.6238, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 25.0914, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 21.2971, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 18.1124, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 15.4324, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 13.172, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 11.2611, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 9.64236, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 8.26831, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 7.09982, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 6.10439, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 5.25498, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 4.52902, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 3.90767, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 3.3751, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 2.91802, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 2.52523, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 2.18729, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 1.8962, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 1.64521, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 880
+    y: 1360
+    z0: 3
+    z1: 3
+- w2b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.16116e-14, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.21594e-06, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.000583257, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.0126895, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.0795901, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.267329, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.627706, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 1.17786, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.90309, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2.76926, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 3.73473, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 4.75858, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 5.80437, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 6.83214, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 7.77659, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 8.55596, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 9.10803, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 9.4095, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 9.47219, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 9.32979, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 9.02522, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 8.60191, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 8.09898, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 7.54918, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 6.9785, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 6.40665, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 5.84799, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 5.31246, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 4.80653, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 4.334, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 3.89669, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 3.49493, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 3.12808, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 2.79477, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 2.49318, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 2.22124, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 1.97676, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 1.75751, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 1.56129, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 1.38601, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 1.22966, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 1.09039, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 0.966475, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 0.856319, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 0.758479, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 880
+    y: 1360
+    z0: 33
+    z1: 33
+- w3a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 8027.22, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 10580.8, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 11704.7, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 12330.2, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 12721.7, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 12984.8, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 13170.1, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 13305.1, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 13406.1, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 13483.2, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 5515.74, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 3009.12, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1922.53, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 1326.88, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 959.52, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 716.156, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 546.966, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 425.167, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 335.134, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 267.186, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 215.038, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 174.459, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 142.512, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 117.113, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 96.7453, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 80.2915, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 66.9121, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 55.9696, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 46.9739, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 39.5442, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 33.3823, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 28.2523, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 23.9668, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 20.3753, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 17.3566, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 14.8127, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 12.6636, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 10.8438, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 9.29954, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 7.98653, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 6.86806, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 5.91366, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 5.09791, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 4.39962, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 3.80101, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 975
+    y: 1450
+    z0: 3
+    z1: 3
+- w3b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.27434e-11, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 6.18926e-05, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.0106689, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.13923, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.643108, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1.76294, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 3.58317, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 6.03851, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 8.98087, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 12.2391, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 15.6548, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 19.0977, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 22.4587, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 25.5611, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 28.1025, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 29.8162, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 30.6059, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 30.5352, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 29.7576, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 28.4543, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 26.7965, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 24.9287, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 22.9646, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 20.9882, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 19.059, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 17.2168, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 15.4861, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 13.8804, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 12.4052, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 11.0601, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 9.84124, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 8.74221, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 7.75525, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 6.87184, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 6.08328, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 5.38098, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 4.75666, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 4.20253, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 3.71133, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 3.27639, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 2.89161, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 2.55145, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 2.25093, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 1.98555, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 1.75132, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 975
+    y: 1450
+    z0: 33
+    z1: 33
+- w4a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 0.00131196, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.0512, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 9.94634, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 30.5047, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 59.3212, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 91.7016, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 124.263, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 155.064, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 183.172, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 208.265, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 230.353, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 248.577, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 256.401, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 250.291, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 233.932, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 212.277, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 188.944, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 166.081, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 144.801, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 125.584, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 108.551, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 93.634, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 80.67, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 69.4597, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 59.7973, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 51.4855, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 44.3439, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 38.2113, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 32.9459, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 28.4243, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 24.5402, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 21.2021, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 18.3313, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 15.8608, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 13.7333, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 11.8997, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 10.3183, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 8.95321, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 7.77403, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 6.75462, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 5.87268, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 5.10909, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 4.4475, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 3.87387, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 3.37616, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1004
+    y: 1601
+    z0: 3
+    z1: 3
+- w4b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 3.76826e-17, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 9.95676e-08, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.000140058, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.00521556, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.0451328, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.187749, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.513278, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 1.07883, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.90262, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2.96764, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 4.23369, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 5.64978, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 7.16321, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 8.72091, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 10.2518, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 11.6551, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 12.8254, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 13.6875, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 14.2112, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 14.4063, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 14.3097, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 13.9719, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 13.4473, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 12.7873, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 12.0373, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 11.2354, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 10.4119, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 9.59031, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 8.78793, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 8.01721, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 7.28646, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 6.60081, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 5.96292, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 5.37362, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 4.83237, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 4.33769, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 3.88744, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 3.47908, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 3.10983, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 2.77681, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 2.47714, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 2.20799, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 1.96668, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 1.75063, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 1.55745, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1004
+    y: 1601
+    z0: 33
+    z1: 33
+- w5a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 244.376, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1281.67, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 2265.36, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3015.28, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 3572.17, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 3988.77, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 4304.79, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 4547.92, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 4737.38, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 4886.71, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 4761.19, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 3819.32, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 2912.81, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 2225.76, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1720.36, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1346.15, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 1065.2, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 851.218, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 686.055, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 557.067, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 455.284, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 374.236, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 309.183, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 256.597, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 213.821, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 178.831, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 150.063, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 126.305, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 106.603, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 90.2019, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 76.5031, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 65.025, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 55.3798, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 47.2532, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 40.389, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 34.578, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 29.648, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 25.4572, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 21.888, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 18.843, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 16.2409, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 14.0139, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 12.1052, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 10.467, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 9.05923, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1106
+    y: 1401
+    z0: 3
+    z1: 3
+- w5b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.23093e-12, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 3.97177e-05, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.0105554, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.17099, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.898895, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 2.68513, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 5.80077, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 10.2298, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 15.7559, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 22.0744, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 28.8725, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 35.8735, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 42.844, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 49.4772, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 55.238, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 59.5595, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 62.1271, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 62.9377, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 62.2065, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 60.2494, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 57.3987, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 53.9558, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 50.171, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 46.2406, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 42.3106, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 38.4849, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 34.8336, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 31.4006, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 28.2102, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 25.2722, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 22.5866, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 20.1462, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 17.9393, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 15.9517, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 14.1673, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 12.5699, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 11.1432, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 9.87137, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 8.73946, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 7.73346, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 6.8404, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 6.04839, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 5.34656, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 4.72509, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 4.17509, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1106
+    y: 1401
+    z0: 33
+    z1: 33
+- w6a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.22081e-08, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 0.00616537, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.409489, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3.31946, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 11.5327, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 26.1717, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 46.5215, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 70.9659, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 97.759, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 125.405, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 152.774, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 179.078, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 203.434, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 223.459, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 236.239, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 240.642, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 237.443, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 228.362, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 215.27, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 199.802, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 183.229, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 166.467, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 150.139, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 134.638, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 120.193, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 106.914, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 94.8314, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 83.924, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 74.1373, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 65.3979, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 57.6231, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 50.7271, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 44.6251, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 39.2359, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 34.4834, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 30.2975, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 26.6142, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 23.3754, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 20.5293, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 18.0293, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 15.834, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 13.9068, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 12.2152, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 10.7306, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 9.42758, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1190
+    y: 1260
+    z0: 3
+    z1: 3
+- w6b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 9.44208e-22, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 8.60156e-10, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 8.48211e-06, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.000835757, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.0129557, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0794229, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.286157, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.739117, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.52875, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2.70637, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 4.27872, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 6.21504, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 8.45924, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 10.9413, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 13.5781, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 16.2575, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 18.8318, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 21.1428, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 23.0578, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 24.4928, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 25.4169, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 25.8444, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 25.8211, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 25.4109, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 24.6854, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 23.7157, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 22.5677, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 21.2996, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 19.9607, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 18.5915, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 17.2241, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 15.8832, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 14.5873, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 13.3496, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 12.1786, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 11.0797, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 10.0553, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 9.10595, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 8.23038, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 7.42628, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 6.69052, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 6.01945, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 5.40909, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 4.8553, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 4.35394, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1190
+    y: 1260
+    z0: 33
+    z1: 33
+- w7a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 8.73429e-10, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 0.00122765, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.13999, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.48629, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 6.068, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 15.3258, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 29.3904, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 47.434, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 68.2377, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 90.581, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 113.43, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 135.992, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 157.572, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 176.734, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 191.239, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 199.545, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 201.503, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 197.973, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 190.244, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 179.627, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 167.257, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 154.031, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 140.613, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 127.469, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 114.906, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 103.112, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 92.1902, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 82.1793, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 73.0775, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 64.8547, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 57.4636, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 50.8472, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 44.9439, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 39.6908, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 35.0266, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 30.8927, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 27.2341, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 24.0001, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 21.1442, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 18.6243, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 16.4021, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 14.4437, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 12.7183, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 11.1988, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 9.86088, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1208
+    y: 1651
+    z0: 3
+    z1: 3
+- w7b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 3.96196e-23, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.82622e-10, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 3.09149e-06, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.000399047, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.00727265, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0496534, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.193163, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.528359, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.14242, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2.0951, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 3.40868, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 5.07002, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 7.03923, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 9.25958, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 11.6615, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 14.1522, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 16.6069, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 18.8832, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 20.8502, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 22.4133, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 23.5233, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 24.1736, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 24.391, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 24.2235, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 23.7308, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 22.9763, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 22.0212, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 20.9216, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 19.7265, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 18.4775, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 17.2084, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 15.9462, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 14.7116, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 13.5203, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 12.3831, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 11.3074, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 10.2976, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 9.35578, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 8.48211, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 7.67553, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 6.93394, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 6.25453, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 5.63404, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 5.06892, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 4.55548, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1208
+    y: 1651
+    z0: 33
+    z1: 33
+- w8a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 0.942133, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 76.1656, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 335.542, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 703.278, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 1090.41, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1452.03, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1771.84, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 2047.13, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 2280.88, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 2477.99, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 2642.77, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 2706.74, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 2564.3, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 2294.92, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1990.63, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1698.88, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 1438.13, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 1212.83, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 1021.48, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 860.387, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 725.325, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 612.266, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 517.633, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 438.357, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 371.858, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 315.985, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 268.956, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 229.298, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 195.794, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 167.435, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 143.39, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 122.966, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 105.588, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 90.7798, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 78.1405, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 67.3371, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 58.0897, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 50.1638, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 43.3618, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 37.5172, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 32.4894, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 28.1594, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 24.4265, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 21.205, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 18.4221, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1225
+    y: 1511
+    z0: 3
+    z1: 3
+- w8b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.98223e-14, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 5.31434e-06, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.00348711, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.0887191, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.611121, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 2.18451, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 5.36152, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 10.3981, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 17.2336, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 25.5882, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 35.0771, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 45.2972, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 55.8758, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 66.4248, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 76.3447, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 84.8406, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 91.2339, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 95.1881, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 96.7194, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 96.0904, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 93.6894, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 89.9374, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 85.2312, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 79.9148, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 74.2699, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 68.5166, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 62.8201, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 57.2995, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 52.0359, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 47.0812, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 42.4644, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 38.1977, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 34.2809, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 30.7052, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 27.456, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 24.5149, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 21.8614, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 19.474, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 17.3311, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 15.4115, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 13.695, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 12.1623, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 10.7955, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 9.578, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 8.49456, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1225
+    y: 1511
+    z0: 33
+    z1: 33
+- w9a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 0.0112319, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 8.07452, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 73.6887, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 221.965, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 427.039, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 655.481, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 883.812, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 1098.84, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1294.4, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 1468.51, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 1621.45, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 1746.59, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1796.34, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 1747.65, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1628.33, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1473.66, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 1308.74, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 1148.22, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 999.511, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 865.692, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 747.414, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 644.055, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 554.394, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 476.982, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 410.346, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 353.09, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 303.944, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 261.778, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 225.603, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 194.56, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 167.91, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 145.018, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 125.342, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 108.417, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 93.8485, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 81.2974, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 70.4761, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 61.1386, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 53.075, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 46.1061, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 40.0786, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 34.8612, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 30.3419, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 26.4243, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 23.0259, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1272
+    y: 1369
+    z0: 3
+    z1: 3
+- w9b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 3.18941e-16, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 7.56247e-07, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.00102608, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.0375271, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.321253, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1.32683, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 3.60887, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 7.55641, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 13.2873, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 20.6767, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 29.4421, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 39.2286, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 49.6721, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 60.4059, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 70.9361, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 80.5624, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 88.5591, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 94.4148, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 97.9304, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 99.1828, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 98.433, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 96.0337, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 92.3609, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 87.77, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 82.5731, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 77.0299, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 71.3483, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 65.6878, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 60.1666, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 54.8684, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 49.8493, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 45.1435, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 40.7683, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 36.7287, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 33.0204, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 29.6328, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 26.5507, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 23.7564, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 21.2307, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 18.9535, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 16.9049, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 15.0655, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 13.4168, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 11.941, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 10.6218, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1272
+    y: 1369
+    z0: 33
+    z1: 33
+- w10a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 3.29721e-06, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 0.157856, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 5.83679, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 35.3227, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 103.049, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 208.291, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 341.099, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 489.616, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 643.701, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 795.928, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 941.41, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 1077.09, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1196.16, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 1279.84, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1313.86, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1299.47, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 1247.37, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 1170.27, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 1079.2, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 982.428, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 885.677, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 792.595, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 705.333, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 624.997, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 551.997, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 486.3, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 427.598, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 375.43, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 329.263, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 288.535, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 252.693, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 221.21, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 193.596, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 169.401, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 148.219, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 129.687, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 113.478, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 99.307, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 86.9184, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 76.0891, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 66.6228, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 58.3474, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 51.1122, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 44.7856, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 39.2524, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1377
+    y: 1534
+    z0: 3
+    z1: 3
+- w10b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.28687e-19, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.02348e-08, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.000111107, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.00817048, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.106288, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.579842, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.92261, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 4.66712, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 9.20063, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 15.678, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 24.03, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 34.0224, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 45.3251, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 57.565, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 70.3022, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 82.9273, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 94.6703, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 104.774, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 112.677, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 118.097, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 121.013, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 121.606, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 120.177, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 117.082, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 112.69, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 107.343, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 101.348, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 94.9635, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 88.4019, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 81.8312, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 75.3802, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 69.1442, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 63.1903, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 57.563, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 52.2887, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 47.3798, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 42.8378, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 38.6563, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 34.8233, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 31.3228, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 28.1361, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 25.2433, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 22.6238, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 20.2567, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 18.1218, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1377
+    y: 1534
+    z0: 33
+    z1: 33
+- w11a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.94195e-29, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.64208e-13, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 6.41437e-08, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3.13374e-05, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.00126838, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.014729, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.0836669, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.303737, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.817806, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 1.78598, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 3.34935, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 5.60345, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 8.5871, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 12.2843, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 16.6331, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 21.5304, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 26.8227, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 32.2974, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 37.6963, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 42.7523, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 47.2289, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 50.9487, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 53.8052, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 55.7605, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 56.8339, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 57.0877, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 56.6121, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 55.5123, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 53.8986, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 51.8791, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 49.5542, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 47.0143, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 44.3382, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 41.5927, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 38.833, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 36.1036, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 33.4397, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 30.8676, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 28.4069, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 26.0709, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 23.8679, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 21.8024, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 19.8753, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 18.0854, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 16.4292, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1445
+    y: 1150
+    z0: 3
+    z1: 3
+- w11b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.29407e-42, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 5.75946e-20, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 2.07516e-12, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.23426e-08, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 2.23614e-06, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 7.04617e-05, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.000815768, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.00504658, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.0205471, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.062404, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.153125, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.320182, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.591983, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.993713, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1.54413, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 2.2537, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 3.12374, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 4.14541, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 5.29834, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 6.54993, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 7.85698, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 9.16969, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 10.437, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 11.6119, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 12.6551, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 13.5376, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 14.2413, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 14.7585, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 15.0902, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 15.2448, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 15.236, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 15.0808, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 14.7985, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 14.4088, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 13.9314, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 13.3851, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 12.7869, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 12.1526, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 11.4958, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 10.8283, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 10.1602, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 9.49966, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 8.85348, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 8.22694, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 7.62408, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1445
+    y: 1150
+    z0: 33
+    z1: 33
+- w12a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.00081e-27, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.48409e-12, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 3.42055e-07, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.000125866, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.00429828, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0445741, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.233577, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.798303, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 2.05118, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 4.31564, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 7.8515, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 12.8095, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 19.2199, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 27.0057, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 36.0051, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 45.9766, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 56.5737, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 67.332, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 77.7134, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 87.1908, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 95.3278, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 101.826, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 106.537, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 109.447, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 110.644, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 110.294, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 108.602, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 105.791, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 102.088, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 97.7033, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 92.8299, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 87.6363, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 82.2662, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 76.8386, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 71.45, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 66.176, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 61.0744, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 56.1876, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 51.5449, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 47.1649, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 43.0578, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 39.2266, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 35.669, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 32.3788, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 29.3467, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1514
+    y: 1714
+    z0: 3
+    z1: 3
+- w12b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 6.57819e-41, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 5.34148e-19, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.09157e-11, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 4.88982e-08, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 7.4739e-06, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.000210287, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.00224558, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.013076, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.0507957, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.148596, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.35364, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.720914, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1.30468, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 2.15046, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 3.28946, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 4.73582, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 6.48548, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 8.51431, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 10.7754, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 13.1985, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 15.6947, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 18.1651, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 20.5123, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 22.6495, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 24.5079, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 26.0397, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 27.2187, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 28.0377, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 28.5062, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 28.6456, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 28.4864, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 28.0645, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 27.418, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 26.5858, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 25.6051, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 24.5108, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 23.3347, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 22.1049, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 20.8458, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 19.5782, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 18.3195, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 17.0838, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 15.8822, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 14.7235, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 13.614, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1514
+    y: 1714
+    z0: 33
+    z1: 33
+- w13a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.75877e-16, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.27102e-06, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 0.00466548, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.209927, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 2.03463, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 9.12646, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 26.3249, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 57.5895, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 104.755, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 167.453, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 243.691, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 330.577, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 424.915, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 523.438, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 622.009, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 714.721, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 794.955, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 857.421, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 899.345, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 920.488, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 922.499, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 908.138, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 880.622, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 843.161, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 798.699, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 749.771, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 698.468, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 646.451, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 594.99, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 545.025, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 497.216, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 452.002, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 409.646, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 370.275, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 333.917, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 300.523, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 269.992, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 242.188, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 216.954, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 194.117, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 173.501, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 154.932, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 138.237, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 123.252, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 109.821, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1608
+    y: 1491
+    z0: 3
+    z1: 3
+- w13b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.55678e-29, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 4.19582e-13, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.27932e-07, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 7.00402e-05, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.00303521, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0368858, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.21643, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.804997, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 2.20858, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 4.89607, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 9.29458, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 15.7078, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 24.2771, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 34.9817, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 47.6613, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 62.0319, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 77.6623, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 93.9464, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 110.136, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 125.441, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 139.144, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 150.69, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 159.727, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 166.107, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 169.856, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 171.133, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 170.188, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 167.321, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 162.856, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 157.112, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 150.39, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 142.966, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 135.078, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 126.933, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 118.704, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 110.529, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 102.52, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 94.7624, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 87.3189, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 80.2344, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 73.538, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 67.246, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 61.3647, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 55.8921, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 50.8203, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1608
+    y: 1491
+    z0: 33
+    z1: 33
+- w14a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 8.12139e-26, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 3.83294e-11, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 3.0351e-06, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 0.000847012, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.0245063, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.22758, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.10233, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 3.55218, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 8.7202, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 17.6926, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 31.2508, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 49.7521, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 73.131, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 100.975, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 132.612, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 167.1, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 203.119, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 238.957, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 272.728, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 302.695, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 327.528, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 346.423, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 359.099, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 365.709, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 366.724, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 362.815, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 354.753, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 343.333, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 329.318, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 313.409, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 296.224, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 278.293, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 260.056, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 241.869, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 224.015, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 206.708, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 190.107, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 174.321, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 159.422, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 145.449, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 132.417, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 120.32, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 109.137, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 98.8379, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 89.3825, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1658
+    y: 1284
+    z0: 3
+    z1: 3
+- w14b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 5.26104e-39, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 8.12346e-18, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 9.54651e-11, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3.24317e-07, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 4.19939e-05, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.00105795, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.010441, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.057313, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.212669, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.599801, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 1.38551, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 2.75538, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 4.88367, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 7.90774, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 11.9122, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 16.9229, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 22.9044, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 29.7538, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 37.2919, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 45.2645, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 53.3623, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 61.255, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 68.6281, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 75.2137, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 80.8099, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 85.2876, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 88.5881, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 90.714, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 91.7171, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 91.6851, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 90.7296, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 88.9753, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 86.551, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 83.5839, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 80.1939, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 76.4913, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 72.5748, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 68.5306, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 64.4325, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 60.3422, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 56.3105, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 52.3778, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 48.5757, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 44.9278, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 41.4511, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1658
+    y: 1284
+    z0: 33
+    z1: 33
+- w15a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.8092e-56, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.75955e-26, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.77212e-16, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.76147e-11, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 1.72799e-08, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1.67791e-06, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 4.33727e-05, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.000489745, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.00318175, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.0140337, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.0466956, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.125759, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.287833, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.579737, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 1.05422, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1.76439, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 2.75807, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 4.07299, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 5.73255, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 7.74195, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 10.0846, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 12.7201, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 15.5855, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 18.5992, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 21.6678, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 24.6941, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 27.5848, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 30.2568, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 32.6419, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 34.6888, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 36.3637, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 37.65, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 38.546, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 39.0626, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 39.2208, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 39.049, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 38.5807, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 37.8522, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 36.9009, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 35.764, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 34.4771, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 33.074, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 31.5852, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 30.0387, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 28.4591, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1750
+    y: 1094
+    z0: 3
+    z1: 3
+- w15b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.39068e-69, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 4.42242e-33, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 6.61019e-21, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 8.00242e-15, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 3.51657e-11, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 9.27563e-09, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 4.89345e-07, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 9.43098e-06, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 9.28239e-05, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.000570564, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.00248971, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.00840115, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.0232601, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.055128, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 0.11538, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 0.218285, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 0.380033, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 0.61739, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 0.94622, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 1.37999, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 1.92825, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 2.59527, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 3.37877, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 4.26938, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 5.25065, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 6.30006, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 7.39058, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 8.49266, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 9.57632, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 10.6131, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 11.5774, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 12.448, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 13.2082, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 13.8466, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 14.3562, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 14.7348, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 14.9841, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 15.1088, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 15.1164, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 15.0163, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 14.8191, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 14.5362, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 14.1795, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 13.7603, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 13.2902, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1750
+    y: 1094
+    z0: 33
+    z1: 33
+- w16a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 7.15853e-35, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.43407e-15, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 3.9603e-09, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 6.52312e-06, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.00054718, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0103234, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.0828914, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.389891, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.28334, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 3.28944, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 7.02864, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 13.1023, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 21.9917, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 33.994, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 49.2018, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 67.5071, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 88.5998, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 111.937, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 136.723, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 161.958, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 186.545, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 209.431, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 229.718, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 246.745, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 260.105, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 269.636, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 275.388, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 277.572, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 276.513, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 272.607, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 266.281, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 257.97, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 248.091, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 237.031, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 225.138, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 212.719, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 200.035, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 187.306, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 174.712, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 162.398, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 150.474, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 139.027, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 128.114, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 117.777, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 108.039, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1761
+    y: 1636
+    z0: 3
+    z1: 3
+- w16b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 5.0071e-48, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 3.28072e-22, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.34458e-13, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 2.69667e-09, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 1.01281e-06, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 5.18709e-05, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.000849308, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.00681152, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.0339265, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.121028, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.338645, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.789702, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1.60068, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 2.90626, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 4.83215, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 7.48043, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 10.919, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 15.1742, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 20.223, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 25.9863, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 32.3254, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 39.0488, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 45.9283, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 52.7205, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 59.1896, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 65.1267, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 70.3628, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 74.7758, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 78.2911, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 80.8789, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 82.5481, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 83.3384, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 83.3134, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 82.5526, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 81.1453, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 79.185, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 76.7651, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 73.9756, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 70.9009, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 67.6182, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 64.1964, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 60.6962, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 57.1699, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 53.6617, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 50.2082, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1761
+    y: 1636
+    z0: 33
+    z1: 33
+- w17a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.72331e-35, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.20483e-15, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 4.33283e-09, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 8.14382e-06, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 0.000739404, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 0.0147052, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.122601, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.593137, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.99545, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 5.20462, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 11.2799, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 21.2766, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 36.0677, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 56.2255, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 81.9731, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 113.186, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 149.387, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 189.701, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 232.812, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 277.029, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 320.466, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 361.269, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 397.828, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 428.913, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 453.732, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 471.921, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 483.491, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 488.748, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 488.213, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 482.546, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 472.476, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 458.755, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 442.112, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 423.233, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 402.741, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 381.185, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 359.041, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 336.712, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 314.529, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 292.761, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 271.62, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 251.264, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 231.812, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 213.345, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 195.91, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1850
+    y: 1368
+    z0: 3
+    z1: 3
+- w17b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.91331e-48, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.7685e-22, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.47758e-13, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3.38163e-09, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 1.37473e-06, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 7.42208e-05, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.00126189, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.01041, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.0529979, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.192398, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.546085, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 1.28864, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 2.63827, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 4.83122, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 8.09214, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 12.6077, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 18.5071, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 25.8485, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 34.6048, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 44.6512, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 55.7582, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 67.6013, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 79.7867, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 91.8883, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 103.487, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 114.207, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 123.738, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 131.851, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 138.398, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 143.313, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 146.599, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 148.316, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 148.567, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 147.488, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 145.231, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 141.959, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 137.839, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 133.029, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 127.68, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 121.931, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 115.908, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 109.72, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 103.464, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 97.221, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 91.0585, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1850
+    y: 1368
+    z0: 33
+    z1: 33
+- w18a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 2.42317e-57, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.29947e-26, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 2.31211e-16, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 3.05458e-11, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 3.55414e-08, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 3.86682e-06, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.000108407, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.00130086, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.00886033, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.0405835, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.139265, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.384801, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.899979, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 1.84651, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 3.4118, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 5.79011, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 9.16233, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 13.6777, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 19.4381, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 26.4829, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 34.7756, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 44.1945, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 54.5338, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 65.5155, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 76.8112, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 88.0702, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 98.947, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 109.126, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 118.34, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 126.379, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 133.098, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 138.413, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 142.297, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 144.772, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 145.9, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 145.773, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 144.505, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 142.224, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 139.065, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 135.163, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 130.652, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 125.655, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 120.292, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 114.667, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 108.877, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1950
+    y: 1205
+    z0: 3
+    z1: 3
+- w18b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 1.87069e-70, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 3.28018e-33, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 8.66169e-21, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.39372e-14, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 7.26438e-11, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 2.14697e-08, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.22848e-06, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 2.5162e-05, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.000259653, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.0016575, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.00745958, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.0258264, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.073074, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.176435, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 0.375239, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 0.719915, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 1.26889, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 2.08399, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 3.22515, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 4.74491, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 6.68287, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 9.06032, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 11.8756, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 15.101, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 18.683, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 22.5441, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 26.5889, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 30.7103, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 34.7977, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 38.7437, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 42.4503, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 45.8335, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 48.826, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 51.3788, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 53.4606, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 55.0572, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 56.1693, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 56.8105, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 57.0048, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 56.7841, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 56.1862, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 55.252, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 54.0247, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 52.5473, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 50.8623, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 1950
+    y: 1205
+    z0: 33
+    z1: 33
+- w19a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 9.81895e-78, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 8.97468e-37, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 4.10889e-23, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 2.75266e-16, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 3.3759e-12, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1.76478e-09, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.51729e-07, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 4.21695e-06, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 5.51647e-05, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.000425652, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.00223663, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.00880904, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.0277917, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.0736521, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 0.169778, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 0.349439, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 0.655172, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 1.1366, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 1.847, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 2.8392, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 4.16091, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 5.85, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 7.92967, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 10.4044, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 13.2573, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 16.4491, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 19.9201, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 23.5936, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 27.3811, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 31.188, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 34.9201, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 38.488, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 41.8121, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 44.825, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 47.4739, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 49.7208, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 51.5424, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 52.9291, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 53.8833, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 54.4181, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 54.5546, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 54.321, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 53.7495, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 52.876, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 51.7374, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 2013
+    y: 1794
+    z0: 3
+    z1: 3
+- w19b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 7.92699e-91, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.36882e-43, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 1.60955e-27, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.31341e-19, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 7.217e-15, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 1.02512e-11, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.79941e-09, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 8.53956e-08, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 1.69325e-06, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 1.8218e-05, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.000125619, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.000620325, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.00236921, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.00739426, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 0.0196346, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 0.0457239, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 0.0955715, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 0.182564, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 0.323292, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 0.536809, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 0.843487, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 1.26358, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 1.81553, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 2.51421, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 3.36916, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 4.38315, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 5.55117, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 6.86018, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 8.28957, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 9.81222, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 11.3962, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 13.0065, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 14.6072, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 16.1634, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 17.6424, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 19.0155, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 20.2585, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 21.3524, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 22.2833, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 23.0429, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 23.6274, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 24.0376, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 24.2779, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 24.356, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 24.2821, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 2013
+    y: 1794
+    z0: 33
+    z1: 33
+- w20a:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 5.78784e-60, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 1.10909e-27, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 6.49962e-17, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 1.55827e-11, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 2.59224e-08, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 3.57893e-06, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 0.000118935, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 0.00162116, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.0121911, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.0604357, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.221228, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.645007, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 1.57853, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 3.36667, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 6.43234, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 11.2394, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 18.2471, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 27.865, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 40.412, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 56.0774, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 74.8848, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 96.6635, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 121.037, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 147.437, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 175.143, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 203.34, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 231.184, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 257.862, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 282.648, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 304.933, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 324.254, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 340.292, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 352.874, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 361.957, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 367.608, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 369.987, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 369.322, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 365.89, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 360, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 351.976, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 342.143, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 330.822, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 318.314, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 304.903, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 290.845, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 2113
+    y: 1479
+    z0: 3
+    z1: 3
+- w20b:
+    obs:
+    - 1: {c: 0, log: false, max: 1e+06, min: 0, t: 1, weight: 1}
+    - 2: {c: 0, log: false, max: 1e+06, min: 0, t: 2, weight: 1}
+    - 3: {c: 0, log: false, max: 1e+06, min: 0, t: 3, weight: 1}
+    - 4: {c: 0, log: false, max: 1e+06, min: 0, t: 4, weight: 1}
+    - 5: {c: 0, log: false, max: 1e+06, min: 0, t: 5, weight: 1}
+    - 6: {c: 4.50619e-73, log: false, max: 1e+06, min: 0, t: 6, weight: 1}
+    - 7: {c: 2.82335e-34, log: false, max: 1e+06, min: 0, t: 7, weight: 1}
+    - 8: {c: 2.45555e-21, log: false, max: 1e+06, min: 0, t: 8, weight: 1}
+    - 9: {c: 7.17035e-15, log: false, max: 1e+06, min: 0, t: 9, weight: 1}
+    - 10: {c: 5.34355e-11, log: false, max: 1e+06, min: 0, t: 10, weight: 1}
+    - 11: {c: 2.00418e-08, log: false, max: 1e+06, min: 0, t: 11, weight: 1}
+    - 12: {c: 1.35944e-06, log: false, max: 1e+06, min: 0, t: 12, weight: 1}
+    - 13: {c: 3.16314e-05, log: false, max: 1e+06, min: 0, t: 13, weight: 1}
+    - 14: {c: 0.000360414, log: false, max: 1e+06, min: 0, t: 14, weight: 1}
+    - 15: {c: 0.00249034, log: false, max: 1e+06, min: 0, t: 15, weight: 1}
+    - 16: {c: 0.011957, log: false, max: 1e+06, min: 0, t: 16, weight: 1}
+    - 17: {c: 0.0436875, log: false, max: 1e+06, min: 0, t: 17, weight: 1}
+    - 18: {c: 0.129362, log: false, max: 1e+06, min: 0, t: 18, weight: 1}
+    - 19: {c: 0.324728, log: false, max: 1e+06, min: 0, t: 19, weight: 1}
+    - 20: {c: 0.714245, log: false, max: 1e+06, min: 0, t: 20, weight: 1}
+    - 21: {c: 1.41111, log: false, max: 1e+06, min: 0, t: 21, weight: 1}
+    - 22: {c: 2.55217, log: false, max: 1e+06, min: 0, t: 22, weight: 1}
+    - 23: {c: 4.28852, log: false, max: 1e+06, min: 0, t: 23, weight: 1}
+    - 24: {c: 6.77353, log: false, max: 1e+06, min: 0, t: 24, weight: 1}
+    - 25: {c: 10.1496, log: false, max: 1e+06, min: 0, t: 25, weight: 1}
+    - 26: {c: 14.5344, log: false, max: 1e+06, min: 0, t: 26, weight: 1}
+    - 27: {c: 20.0071, log: false, max: 1e+06, min: 0, t: 27, weight: 1}
+    - 28: {c: 26.5957, log: false, max: 1e+06, min: 0, t: 28, weight: 1}
+    - 29: {c: 34.2673, log: false, max: 1e+06, min: 0, t: 29, weight: 1}
+    - 30: {c: 42.9242, log: false, max: 1e+06, min: 0, t: 30, weight: 1}
+    - 31: {c: 52.4065, log: false, max: 1e+06, min: 0, t: 31, weight: 1}
+    - 32: {c: 62.5015, log: false, max: 1e+06, min: 0, t: 32, weight: 1}
+    - 33: {c: 72.9587, log: false, max: 1e+06, min: 0, t: 33, weight: 1}
+    - 34: {c: 83.507, log: false, max: 1e+06, min: 0, t: 34, weight: 1}
+    - 35: {c: 93.8728, log: false, max: 1e+06, min: 0, t: 35, weight: 1}
+    - 36: {c: 103.796, log: false, max: 1e+06, min: 0, t: 36, weight: 1}
+    - 37: {c: 113.045, log: false, max: 1e+06, min: 0, t: 37, weight: 1}
+    - 38: {c: 121.423, log: false, max: 1e+06, min: 0, t: 38, weight: 1}
+    - 39: {c: 128.776, log: false, max: 1e+06, min: 0, t: 39, weight: 1}
+    - 40: {c: 134.995, log: false, max: 1e+06, min: 0, t: 40, weight: 1}
+    - 41: {c: 140.012, log: false, max: 1e+06, min: 0, t: 41, weight: 1}
+    - 42: {c: 143.802, log: false, max: 1e+06, min: 0, t: 42, weight: 1}
+    - 43: {c: 146.375, log: false, max: 1e+06, min: 0, t: 43, weight: 1}
+    - 44: {c: 147.769, log: false, max: 1e+06, min: 0, t: 44, weight: 1}
+    - 45: {c: 148.049, log: false, max: 1e+06, min: 0, t: 45, weight: 1}
+    - 46: {c: 147.296, log: false, max: 1e+06, min: 0, t: 46, weight: 1}
+    - 47: {c: 145.607, log: false, max: 1e+06, min: 0, t: 47, weight: 1}
+    - 48: {c: 143.084, log: false, max: 1e+06, min: 0, t: 48, weight: 1}
+    - 49: {c: 139.834, log: false, max: 1e+06, min: 0, t: 49, weight: 1}
+    - 50: {c: 135.965, log: false, max: 1e+06, min: 0, t: 50, weight: 1}
+    x: 2113
+    y: 1479
+    z0: 33
+    z1: 33
