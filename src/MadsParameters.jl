@@ -58,10 +58,12 @@ function getsourcekeys(madsdata::Associative)
 	sourcekeys = Array(ASCIIString, 0)
 	if haskey( madsdata, "Sources" )
 		for i = 1:length(madsdata["Sources"])
-			k = collect(ASCIIString, keys(madsdata["Sources"][i]["box"]))
-			b = fill("Source1_", length(k))
-			s = b .* k
-			sourcekeys = [sourcekeys; s]
+			for k = keys(madsdata["Sources"][1])
+				sk = collect(ASCIIString, keys(madsdata["Sources"][i][k]))
+				b = fill("Source1_", length(sk))
+				s = b .* sk
+				sourcekeys = [sourcekeys; s]
+			end
 		end
 	end
 	return sourcekeys
@@ -84,7 +86,7 @@ for i = 1:length(getparamsnames)
 		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
-				if haskey( madsdata["Parameters"][paramkeys[i]], $paramname)
+				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
 					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
 				else
 					if Mads.islog(madsdata, paramkeys[i])

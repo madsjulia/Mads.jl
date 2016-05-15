@@ -7,7 +7,7 @@ end
 
 "Produce MADS copyright information"
 function copyright()
-	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING")
+	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING.md")
 end
 
 """

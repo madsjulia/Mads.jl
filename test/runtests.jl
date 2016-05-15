@@ -1,6 +1,8 @@
 import Mads
 using Base.Test
 
+include("miscellaneous.jl")
+
 examples = readdir(Pkg.dir("Mads") * "/examples/")
 
 println("Running MADS tests:")
@@ -8,7 +10,7 @@ println("Running MADS tests:")
 for madstest in examples
     file = Pkg.dir("Mads") * "/examples/" * madstest * "/runtests.jl"
     if isfile(file)
-    	println(" * $(madstest) ...")
+    	println("* $(madstest) ...")
     	include(file)
     end
 end

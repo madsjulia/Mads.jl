@@ -11,16 +11,17 @@ end
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
 function test(testmod="")
 	if testmod == ""
+		println("* Mads modules ...")
 		include(Pkg.dir("Mads") * "/test/runtests.jl")
-		println(" * Anasol testing ...")
+		println("* Anasol testing ...")
 		include(Pkg.dir("Anasol") * "/test/runtests.jl")
-		println(" * BIGUQ testing ...")
+		println("* BIGUQ testing ...")
 		include(Pkg.dir("BIGUQ") * "/test/runtests.jl")
-		println(" * ReusableFunctions testing ...")
+		println("* ReusableFunctions testing ...")
 		include(Pkg.dir("ReusableFunctions") * "/test/runtests.jl")
-		println(" * MetaProgTools testing ...")
+		println("* MetaProgTools testing ...")
 		include(Pkg.dir("MetaProgTools") * "/test/runtests.jl")
-		println(" * RobustPmap testing ...")
+		println("* RobustPmap testing ...")
 		include(Pkg.dir("RobustPmap") * "/test/runtests.jl")
 	else
 		file = Pkg.dir("Mads") * "/examples/$(testmod)/runtests.jl"
