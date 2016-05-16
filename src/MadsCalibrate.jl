@@ -27,7 +27,7 @@ Returns:
 - `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
 
 """
-function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0)
+function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true)
 	if seed != 0
 		srand(seed)
 	end
@@ -44,7 +44,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, to
 		Mads.setparamsinit!(madsdata, paramsoptdict)
 		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
 		phi = result[2].f_minimum
-		info("""Random initial guess #$i: OF = $phi""")
+		!quiet && info("""Random initial guess #$i: OF = $phi""")
 		if phi < bestphi
 			bestresult = result
 			bestphi = phi
