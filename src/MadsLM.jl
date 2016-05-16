@@ -149,8 +149,6 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Func
 		if maxEval < nEval
 			break
 		end
-		@show currentx
-		@show currentsse
 	end
 	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
 end

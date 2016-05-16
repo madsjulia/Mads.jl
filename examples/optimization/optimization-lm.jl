@@ -4,6 +4,9 @@ using Base.Test
 @everywhere fopt(x) = [x[1], 2.0 - x[2]]
 @everywhere gopt(x) = [1.0 0.0; 0.0 -1.0]
 
+results = Mads.naive_levenberg_marquardt(fopt, gopt, [100.0, 100.0])
+@test norm(results.minimum - [0.0, 2.0]) < 0.01
+
 results = Mads.levenberg_marquardt(fopt, gopt, [100.0, 100.0])
 @test norm(results.minimum - [0.0, 2.0]) < 0.01
 

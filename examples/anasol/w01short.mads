@@ -82,7 +82,7 @@ Wells:
  49: { t: 49, c: 1.30118, weight: 1, log: no, min: 0, max: 1e+06 },
  50: { t: 50, c: 1.12804, weight: 1, log: no, min: 0, max: 1e+06 } ] }
 Grid: { time: 50,
-xcount: 33, ycount: 19, zcount: 1,
+xcount: 2, ycount: 2, zcount: 1,
 xmin: 700, ymin: 1000, zmin: 0,
 xmax: 2300, ymax: 1900, zmax: 50 }
-Time: { start: 1, end: 50, step: 1 }
+Time: { start: 50, end: 51, step: 1 }

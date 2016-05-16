@@ -20,6 +20,8 @@ end
 
 inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
 
+inverse_parameters, inverse_results = Mads.calibraterandom(md, 1, maxEval=1, np_lambda=1, maxJacobians=1) 
+
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
 if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests

@@ -1,5 +1,5 @@
-Mads.quieton()
 Mads.quietoff()
+Mads.quieton()
 Mads.create_tests_on()
 Mads.create_tests_off()
 Mads.long_tests_on()
