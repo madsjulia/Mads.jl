@@ -172,10 +172,10 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 	end
 	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
-	df = DataFrame(horizon=[], maxfailureprob=[], Choices=[])
+	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))
 	for i = 1:size(maxfailureprobs, 2)
-		df = vcat(df, DataFrame(horizon=horizons, maxfailureprob=maxfailureprobs[:, i], Choices=madsdata["Choices"][i]["name"]))
+		df = vcat(df, DataFrames.DataFrame(horizon=horizons, maxfailureprob=maxfailureprobs[:, i], Choices=madsdata["Choices"][i]["name"]))
 		#layers[i] = Gadfly.layer(x=horizons, y=maxfailureprobs[:, i], Geom.line)
 	end
 	#p = Gadfly.plot(layers..., Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"))

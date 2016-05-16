@@ -75,7 +75,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs=fals
 				end
 				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
 					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					if calczeroweightobs || madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0 || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
+					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 						conc = background
 						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
 							if haskey( madsdata["Sources"][i], "box" )
