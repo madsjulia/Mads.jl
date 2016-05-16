@@ -16,8 +16,125 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 """
-function loadmadsfile(filename::AbstractString; julia::Bool=false)
-	loadyamlmadsfile(filename; julia=julia)
+function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml")
+	if format == "yaml"
+		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
+	elseif format == "json"
+		madsdata = loadjsonfile(filename)
+	end
+	madsdata = parsemadsdata(madsdata)
+	madsdata["Filename"] = filename
+	return madsdata
+end
+ 
+"""
+Parse loaded Mads problem dictionary
+
+Arguments:
+
+- `madsdata` : Mads problem dictionary
+"""
+function parsemadsdata(madsdata)
+	if haskey(madsdata, "Parameters")
+		parameters = DataStructures.OrderedDict()
+		for dict in madsdata["Parameters"]
+			for key in keys(dict)
+				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
+					parameters[key] = dict[key]
+				else
+					if !haskey(madsdata, "Expressions")
+						madsdata["Expressions"] = DataStructures.OrderedDict()
+					end
+					madsdata["Expressions"][key] = dict[key]
+				end
+			end
+		end
+		madsdata["Parameters"] = parameters
+	end
+	if haskey(madsdata, "Sources")
+		for i = 1:length(madsdata["Sources"])
+			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
+			sourceparams = keys(madsdata["Sources"][i][sourcetype])
+			for sourceparam in sourceparams
+				madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+			end
+		end
+	end
+	if haskey(madsdata, "Parameters")
+		parameters = madsdata["Parameters"]
+		for key in keys(parameters)
+			if !haskey(parameters[key], "init")
+				Mads.madserror("""Parameter $key does not have initial value; add "init" value!""")
+			end
+			for v in ["init", "init_max", "init_min", "max", "min", "step"]
+				if haskey(parameters[key], v)
+					parameters[key][v] = float(parameters[key][v])
+				end
+			end
+			if haskey(parameters[key], "log")
+				flag = parameters[key]["log"]
+				if flag == "yes" || flag == true
+					parameters[key]["log"] = true
+					for v in ["init", "init_max", "init_min", "max", "min", "step"]
+						if haskey(parameters[key], v)
+							if parameters[key][v] < 0
+								Mads.madserror("""The value $v for Parameter $key cannot be log-transformed; it is negative!""")
+							end
+						end
+					end
+				else
+					parameters[key]["log"] = false
+				end
+			end
+		end
+	end
+	if haskey(madsdata, "Wells")
+		wells = DataStructures.OrderedDict()
+		for dict in madsdata["Wells"]
+			for key in keys(dict)
+				wells[key] = dict[key]
+				wells[key]["on"] = true
+				for i = 1:length(wells[key]["obs"])
+					for keys in keys(wells[key]["obs"][i])
+						wells[key]["obs"][i] = wells[key]["obs"][i][keys]
+					end
+				end
+			end
+		end
+		madsdata["Wells"] = wells
+		Mads.wells2observations!(madsdata)
+	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
+		observations = DataStructures.OrderedDict()
+		for dict in madsdata["Observations"]
+			for key in keys(dict)
+				observations[key] = dict[key]
+			end
+		end
+		madsdata["Observations"] = observations
+	end
+	if haskey(madsdata, "Templates")
+		templates = Array(Dict, length(madsdata["Templates"]))
+		i = 1
+		for dict in madsdata["Templates"]
+			for key in keys(dict) # this should only iterate once
+				templates[i] = dict[key]
+			end
+			i += 1
+		end
+		madsdata["Templates"] = templates
+	end
+	if haskey(madsdata, "Instructions")
+		instructions = Array(Dict, length(madsdata["Instructions"]))
+		i = 1
+		for dict in madsdata["Instructions"]
+			for key in keys(dict) # this should only iterate once
+				instructions[i] = dict[key]
+			end
+			i += 1
+		end
+		madsdata["Instructions"] = instructions
+	end
+	return madsdata
 end
 
 """
@@ -30,8 +147,9 @@ Arguments:
 
 - `madsdata` : Mads problem dictionary
 - `filename` : input file name (e.g. `input_file_name.mads`)
+- `julia` : if `true` use Julia JSON module to save
 """
-function savemadsfile(madsdata, filename::AbstractString="")
+function savemadsfile(madsdata, filename::AbstractString=""; julia::Bool=false)
 	if filename == ""
 		dir = Mads.getmadsproblemdir(madsdata)
 		root = Mads.getmadsrootname(madsdata)
@@ -45,7 +163,7 @@ function savemadsfile(madsdata, filename::AbstractString="")
 			filename = "$(dir)/$(root)-rerun.mads"
 		end
 	end
-	dumpyamlmadsfile(madsdata, filename)
+	dumpyamlmadsfile(madsdata, filename, julia=julia)
 end
 
 "Save calibration results"

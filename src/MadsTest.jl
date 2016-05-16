@@ -1,18 +1,18 @@
 "Execute Mads tests (the default tests are in serial)"
-function testj()
-	Pkg.test("Mads")
-	Pkg.test("Anasol")
-	Pkg.test("BIGUQ")
-	Pkg.test("ReusableFunctions")
-	Pkg.test("MetaProgTools")
-	Pkg.test("RobustPmap")
+function testj(coverage=false)
+	Pkg.test("Mads"; coverage=coverage)
+	Pkg.test("Anasol"; coverage=coverage)
+	Pkg.test("BIGUQ"; coverage=coverage)
+	Pkg.test("ReusableFunctions"; coverage=coverage)
+	Pkg.test("MetaProgTools"; coverage=coverage)
+	Pkg.test("RobustPmap"; coverage=coverage)
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
 function test(testmod="")
 	if testmod == ""
-		println("* Mads modules ...")
 		include(Pkg.dir("Mads") * "/test/runtests.jl")
+		println("* Mads modules ...")
 		println("* Anasol testing ...")
 		include(Pkg.dir("Anasol") * "/test/runtests.jl")
 		println("* BIGUQ testing ...")

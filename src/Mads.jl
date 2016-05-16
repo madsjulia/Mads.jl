@@ -85,6 +85,10 @@ create_tests = false # dangerous if true
 long_tests = false # execute long tests
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
+if haskey(ENV, "MADS_LONG_TESTS")
+	long_tests = true
+end
+
 include("MadsLog.jl") # messages higher than verbosity level are printed
 include("MadsHelp.jl")
 include("MadsTest.jl")
