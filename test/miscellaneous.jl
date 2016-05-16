@@ -2,8 +2,13 @@ Mads.quietoff()
 Mads.quieton()
 Mads.create_tests_on()
 Mads.create_tests_off()
-Mads.long_tests_on()
-Mads.long_tests_off()
+if Mads.long_tests
+	Mads.long_tests_off()
+	Mads.long_tests_on()
+else
+	Mads.long_tests_on()
+	Mads.long_tests_off()
+end
 Mads.setdebuglevel(1)
 Mads.setverbositylevel(1)
 Mads.resetmodelruns()
