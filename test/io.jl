@@ -10,7 +10,7 @@ arr1 = Mads.loadjsonfile("a.json")
 # @assert arr==arr1
 run(`bash -c "rm -f a.json"`)
 
-Mads.dumpyamlfile("a.ymal", arr)
-arr1 = Mads.loadyamlfile("a.ymal")
-@assert arr==arr1
-run(`bash -c "rm -f a.ymal"`)
+Mads.dumpyamlfile("a.yaml", arr)
+arr1 = Mads.loadyamlfile("a.yaml")
+# @assert arr==arr1
+run(`bash -c "rm -f a.yaml"`)
