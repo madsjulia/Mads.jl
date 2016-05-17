@@ -1,7 +1,7 @@
 import Mads
 
 problemdir = Mads.getmadsdir()
-if isdefined(:YAML)
+if isdefined(:yaml)
 	md = Mads.loadmadsfile(problemdir * "source_termination.mads")
 else
 	md = Mads.loadmadsfile(problemdir * "source_termination_json.mads", format="json")
