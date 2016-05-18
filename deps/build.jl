@@ -30,9 +30,9 @@ else
 
 	try
 		eval(:(@PyCall.pyimport yaml))
-		info("Python YAML is available ...")
+		info("Python YAML (pyyaml) is installed!")
 	catch
-		warn("Installation of pyyaml failed! Using Conda instead ...")
+		warn("Python YAML (pyyaml) installation has failed! Using Conda instead ...")
 		import Conda
 		Conda.add("yaml")
 	end
