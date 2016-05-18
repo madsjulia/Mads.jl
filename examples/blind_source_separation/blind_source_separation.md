@@ -19,40 +19,40 @@ All the figures below are generated using `examples/blind_source_separation/blin
 
 #### Original sources (assumed unknown)
 
-![](sig_original_sources.svg)
+![](blind_source_separation/sig_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](sig_mixed_signals.svg)
+![](blind_source_separation/sig_mixed_signals.svg)
 
 #### Reconstructed (unmixed) original sources based on the observed data
 
-![](sig_unmixed_sources_nlopt.svg)
+![](blind_source_separation/sig_unmixed_sources_nlopt.svg)
 
 ### Sources generated using sine functions
 
 #### Original sources (assumed unknown)
 
-![](sin_original_sources.svg)
+![](blind_source_separation/sin_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](sin_mixed_signals.svg)
+![](blind_source_separation/sin_mixed_signals.svg)
 
 #### Reconstructed (unmixed) sources based on the observed data
 
-![](sin_unmixed_sources_nlopt.svg)
+![](blind_source_separation/sin_unmixed_sources_nlopt.svg)
 
 ### Sources generated using random noise
 
 #### Original sources (assumed unknown)
 
-![](rand_original_sources.svg)
+![](blind_source_separation/rand_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](rand_mixed_signals.svg)
+![](blind_source_separation/rand_mixed_signals.svg)
 
 #### Reconstructed (unmixed) original sources based on the observed data
 
-![](rand_unmixed_sources_nlopt.svg)
+![](blind_source_separation/rand_unmixed_sources_nlopt.svg)

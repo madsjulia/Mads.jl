@@ -1,1 +1,0 @@
-../../../examples/bayesian_sampling/bayesian_sampling.md

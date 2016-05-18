@@ -4,7 +4,7 @@ All the figures below are generated using `examples/bayesian_sampling/bayesian_s
 
 ### Model setup
 
-![](w01-problemsetup.svg)
+![](bayesian_sampling/w01-problemsetup.svg)
 
 * Contaminant source (orange rectangle)
 
@@ -18,7 +18,7 @@ Spaghetti plots of 100 model runs representing the prior model prediction uncert
 
 All model parameters are changed simultaneously within their prior uncertainty ranges.
 
-![](w01-prior-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-100-spaghetti.png)
 
 #### Individual spaghetti plots
 
@@ -26,35 +26,35 @@ A single model parameter is changed at a time.
 
 **Source $x$ location**
 
-![](w01-prior-source1_x-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_x-100-spaghetti.png)
 
 **Source $y$ location**
 
-![](w01-prior-source1_y-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_y-100-spaghetti.png)
 
 **Source size along $x$ axis**
 
-![](w01-prior-source1_dx-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_dx-100-spaghetti.png)
 
 **Source size along $y$ axis**
 
-![](w01-prior-source1_dx-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_dx-100-spaghetti.png)
 
 **Source release time $t_0$**
 
-![](w01-prior-source1_t0-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_t0-100-spaghetti.png)
 
 **Source termination time $t_1$**
 
-![](w01-prior-source1_t1-100-spaghetti.png)
+![](bayesian_sampling/w01-prior-source1_t1-100-spaghetti.png)
 
 ### Model calibration match
 
-![](w01-match.svg)
+![](bayesian_sampling/w01-match.svg)
 
 ### Bayesian sampling results
 
-![](w01-bayes.png)
+![](bayesian_sampling/w01-bayes.png)
 
 ### Posterior spaghetti plots
 
@@ -65,7 +65,7 @@ Spaghetti plots of 1000 model predictions representing the posterior model uncer
 
 All model parameters are changed simultaneously within their prior uncertainty ranges.
 
-![](w01-posterior-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-1000-spaghetti.png)
 
 #### Individual spaghetti plots
 
@@ -75,24 +75,24 @@ Note that only the posterior uncertainties in the source release time ($t_0$)  a
 
 **Source $x$ location (all the 1000 model predictions are overlapping)**
 
-![](w01-posterior-source1_x-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_x-1000-spaghetti.png)
 
 **Source $y$ location (all the 1000 model predictions are overlapping**
 
-![](w01-posterior-source1_y-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_y-1000-spaghetti.png)
 
 **Source size along $x$ axis (all the 1000 model predictions are overlapping**
 
-![](w01-posterior-source1_dx-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_dx-1000-spaghetti.png)
 
 **Source size along $y$ axis (all the 1000 model predictions are overlapping**
 
-![](w01-posterior-source1_dx-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_dx-1000-spaghetti.png)
 
 **Source release time $t_0$**
 
-![](w01-posterior-source1_t0-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_t0-1000-spaghetti.png)
 
 **Source termination time $t_1$**
 
-![](w01-posterior-source1_t1-1000-spaghetti.png)
+![](bayesian_sampling/w01-posterior-source1_t1-1000-spaghetti.png)
