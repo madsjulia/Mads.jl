@@ -4,7 +4,7 @@ All the figures below are generated using `examples/contamination/contamination.
 
 ### Model setup
 
-![](contamination/w01-all_wells-problemsetup.svg)
+![](w01-all_wells-problemsetup.svg)
 
 There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
@@ -21,11 +21,11 @@ The contaminant transport is solved using the `Anasol` package in Mads.
 
 Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
 
-![](contamination/w01-w13a_w20a-problemsetup.svg)
+![](w01-w13a_w20a-problemsetup.svg)
 
 ### Example model solution
 
-![](contamination/w01-w13a_w20a-init-match.svg)
+![](w01-w13a_w20a-init-match.svg)
 
 Model parameter values:
 
@@ -37,7 +37,7 @@ Model parameter values:
 
 A calibration match between observations and model predictions obtained by model inversion:
 
-![](contamination/w01-w13a_w20a-calib-match.svg)
+![](w01-w13a_w20a-calib-match.svg)
 
 ### Prior parameter uncertainties
 
@@ -49,7 +49,7 @@ Probabilistic distributions of the prior parameter uncertainties are:
 
 Spaghetti plots representing the prior uncertainties:
 
-![](contamination/w01-w13a_w20a-prior-100-spaghetti.svg)
+![](w01-w13a_w20a-prior-100-spaghetti.svg)
 
 The observation data are plotted as red dots.
 
@@ -57,13 +57,13 @@ The observation data are plotted as red dots.
 
 Histograms and scatter plots of Bayesian MCMC results:
 
-![](contamination/w01-bayes.png)
+![](w01-bayes.png)
 
 ### Posterior parameter uncertainties
 
 Spaghetti plots representing the posterior uncertainties:
 
-![](contamination/w01-w13a_w20a-posterior-1000-spaghetti.png)
+![](w01-w13a_w20a-posterior-1000-spaghetti.png)
 
 Note that the parameter uncertainties are constrained by the observation data.
 The observation data are plotted as red dots.

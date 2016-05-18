@@ -13,7 +13,7 @@ $$x''(t) = -\omega^2 * x(t) - k * x'(t)$$
 
 #### Example ODE solution
 
-![](ode/ode-solution.svg)
+![](ode-solution.svg)
 
 For model parameters:
 
@@ -22,13 +22,13 @@ For model parameters:
 
 ### Local sensitivity analysis
 
-![](ode/ode-eigenmatrix.png)
+![](ode-eigenmatrix.png)
 
-![](ode/ode-eigenvalues.png)
+![](ode-eigenvalues.png)
 
 ### Global sensitivity analysis (using eFAST)
 
-![](ode/ode-efast-385.svg)
+![](ode-efast-385.svg)
 
 Probabilistic distributions of the prior parameter uncertainties are:
 
@@ -41,7 +41,7 @@ Probabilistic distributions of the prior parameter uncertainties are:
 
 Synthetic observations are applied to constrain the ODE parameters
 
-![](ode/ode-match.png)
+![](ode-match.png)
 
 Observation errors are equal for all the sample locations with standard deviation equal to 1 (`observation weight` =  1 / `observation standard deviation` = 1 / 1 = 1)
 
@@ -49,21 +49,21 @@ Observation errors are equal for all the sample locations with standard deviatio
 
 ##### *k* only
 
-![](ode/ode-prior-k-100-spaghetti.png)
+![](ode-prior-k-100-spaghetti.png)
 
 ##### *$\omega$* only
 
-![](ode/ode-prior-omega-100-spaghetti.png)
+![](ode-prior-omega-100-spaghetti.png)
 
 ##### *Both* parameters
 
-![](ode/ode-prior-100-spaghetti.png)
+![](ode-prior-100-spaghetti.png)
 
 The observation data are plotted as a solid black line.
 
 #### Histograms/scatter plots of Bayesian MCMC results
 
-![](ode/ode-bayes.png)
+![](ode-bayes.png)
 
 #### Posterior parameter uncertainties
 
@@ -71,14 +71,14 @@ Note that now the parameter uncertainties are constrained by the observation dat
 
 ##### *k* only
 
-![](ode/ode-posterior-k-1000-spaghetti.png)
+![](ode-posterior-k-1000-spaghetti.png)
 
 ##### *$\omega$* only
 
-![](ode/ode-posterior-omega-1000-spaghetti.png)
+![](ode-posterior-omega-1000-spaghetti.png)
 
 ##### *Both* parameters
 
-![](ode/ode-posterior-1000-spaghetti.png)
+![](ode-posterior-1000-spaghetti.png)
 
 The observation data are plotted as a solid black line.

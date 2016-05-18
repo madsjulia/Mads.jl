@@ -3,10 +3,10 @@ using Base.Test
 
 println("Running MADS tests:")
 
-println("* miscellaneous ...")
-include("miscellaneous.jl")
-println("* io ...")
-include("io.jl")
+# println("* miscellaneous ...")
+# include("miscellaneous.jl")
+# println("* io ...")
+# include("io.jl")
 
 examples = readdir(Pkg.dir("Mads") * "/examples/")
 

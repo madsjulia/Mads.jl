@@ -26,7 +26,7 @@
   <script>
     // Current page data
     var mkdocs_page_name = "Contaminant Transport";
-    var mkdocs_page_input_path = "Examples/contamination.md";
+    var mkdocs_page_input_path = "Examples/contamination/index.md";
     var mkdocs_page_url = "/Examples/contamination/";
   </script>
   
@@ -279,7 +279,7 @@
                 <h2 id="analysis-of-contaminant-transport-in-an-aquifer">Analysis of contaminant transport in an aquifer</h2>
 <p>All the figures below are generated using <code>examples/contamination/contamination.jl</code>.</p>
 <h3 id="model-setup">Model setup</h3>
-<p><img alt="" src="../contamination/w01-all_wells-problemsetup.svg" /></p>
+<p><img alt="" src="./w01-all_wells-problemsetup.svg" /></p>
 <p>There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled <code>a</code>) and deep (33 m below the water table labeled <code>b</code>).
 Contaminant concentrations are observed for 50 years at each well.
@@ -295,9 +295,9 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 </ul>
 <h3 id="reduced-model-setup">Reduced model setup</h3>
 <p>Analysis of the data from only 2 monitoring locations: <code>w13a</code> and <code>w20a</code>.</p>
-<p><img alt="" src="../contamination/w01-w13a_w20a-problemsetup.svg" /></p>
+<p><img alt="" src="./w01-w13a_w20a-problemsetup.svg" /></p>
 <h3 id="example-model-solution">Example model solution</h3>
-<p><img alt="" src="../contamination/w01-w13a_w20a-init-match.svg" /></p>
+<p><img alt="" src="./w01-w13a_w20a-init-match.svg" /></p>
 <p>Model parameter values:</p>
 <ul>
 <li>
@@ -312,7 +312,7 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 </ul>
 <h3 id="model-calibration">Model calibration</h3>
 <p>A calibration match between observations and model predictions obtained by model inversion:</p>
-<p><img alt="" src="../contamination/w01-w13a_w20a-calib-match.svg" /></p>
+<p><img alt="" src="./w01-w13a_w20a-calib-match.svg" /></p>
 <h3 id="prior-parameter-uncertainties">Prior parameter uncertainties</h3>
 <p>Probabilistic distributions of the prior parameter uncertainties are:</p>
 <ul>
@@ -324,14 +324,14 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 <script type="math/tex">v</script> = LogUniform(0.1, 200)</li>
 </ul>
 <p>Spaghetti plots representing the prior uncertainties:</p>
-<p><img alt="" src="../contamination/w01-w13a_w20a-prior-100-spaghetti.svg" /></p>
+<p><img alt="" src="./w01-w13a_w20a-prior-100-spaghetti.svg" /></p>
 <p>The observation data are plotted as red dots.</p>
 <h3 id="bayesian-sensitivity-analysis">Bayesian sensitivity analysis</h3>
 <p>Histograms and scatter plots of Bayesian MCMC results:</p>
-<p><img alt="" src="../contamination/w01-bayes.png" /></p>
+<p><img alt="" src="./w01-bayes.png" /></p>
 <h3 id="posterior-parameter-uncertainties">Posterior parameter uncertainties</h3>
 <p>Spaghetti plots representing the posterior uncertainties:</p>
-<p><img alt="" src="../contamination/w01-w13a_w20a-posterior-1000-spaghetti.png" /></p>
+<p><img alt="" src="./w01-w13a_w20a-posterior-1000-spaghetti.png" /></p>
 <p>Note that the parameter uncertainties are constrained by the observation data.
 The observation data are plotted as red dots.</p>
               

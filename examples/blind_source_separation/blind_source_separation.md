@@ -13,46 +13,46 @@ More complicated Blind Source Separation (BSS) analyses can be found in:
 
 Alexandrov, Boian S., and Velimir V. Vesselinov. "Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization." Water Resources Research 50.9 (2014): 7332-7347.
 
-All the figures below are generated using `examples/blind_source_separation/blind_source_separation.jl`. BSS can be performed using different methods. The examples below use the [Ipopt](https://projects.coin-or.org/Ipopt) implementation in the [JuMP](https://github.com/JuliaOpt/JuMP.jl) Julia module.
+All the figures below are generated using `examples/blind_source_separation.jl`. BSS can be performed using different methods. The examples below use the [Ipopt](https://projects.coin-or.org/Ipopt) implementation in the [JuMP](https://github.com/JuliaOpt/JuMP.jl) Julia module.
 
 ### Sources generated using sine functions and random noise
 
 #### Original sources (assumed unknown)
 
-![](blind_source_separation/sig_original_sources.svg)
+![](sig_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](blind_source_separation/sig_mixed_signals.svg)
+![](sig_mixed_signals.svg)
 
 #### Reconstructed (unmixed) original sources based on the observed data
 
-![](blind_source_separation/sig_unmixed_sources_nlopt.svg)
+![](sig_unmixed_sources_nlopt.svg)
 
 ### Sources generated using sine functions
 
 #### Original sources (assumed unknown)
 
-![](blind_source_separation/sin_original_sources.svg)
+![](sin_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](blind_source_separation/sin_mixed_signals.svg)
+![](sin_mixed_signals.svg)
 
 #### Reconstructed (unmixed) sources based on the observed data
 
-![](blind_source_separation/sin_unmixed_sources_nlopt.svg)
+![](sin_unmixed_sources_nlopt.svg)
 
 ### Sources generated using random noise
 
 #### Original sources (assumed unknown)
 
-![](blind_source_separation/rand_original_sources.svg)
+![](rand_original_sources.svg)
 
 #### Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)
 
-![](blind_source_separation/rand_mixed_signals.svg)
+![](rand_mixed_signals.svg)
 
 #### Reconstructed (unmixed) original sources based on the observed data
 
-![](blind_source_separation/rand_unmixed_sources_nlopt.svg)
+![](rand_unmixed_sources_nlopt.svg)

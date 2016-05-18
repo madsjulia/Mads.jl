@@ -26,7 +26,7 @@
   <script>
     // Current page data
     var mkdocs_page_name = "Blind Source Separation";
-    var mkdocs_page_input_path = "Examples/blind_source_separation.md";
+    var mkdocs_page_input_path = "Examples/blind_source_separation/index.md";
     var mkdocs_page_url = "/Examples/blind_source_separation/";
   </script>
   
@@ -274,28 +274,28 @@ In the case of geochemical concentrations, these may represent a mixture of diff
 <p>Below a series of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.</p>
 <p>More complicated Blind Source Separation (BSS) analyses can be found in:</p>
 <p>Alexandrov, Boian S., and Velimir V. Vesselinov. "Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization." Water Resources Research 50.9 (2014): 7332-7347.</p>
-<p>All the figures below are generated using <code>examples/blind_source_separation/blind_source_separation.jl</code>. BSS can be performed using different methods. The examples below use the <a href="https://projects.coin-or.org/Ipopt">Ipopt</a> implementation in the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> Julia module.</p>
+<p>All the figures below are generated using <code>examples/blind_source_separation.jl</code>. BSS can be performed using different methods. The examples below use the <a href="https://projects.coin-or.org/Ipopt">Ipopt</a> implementation in the <a href="https://github.com/JuliaOpt/JuMP.jl">JuMP</a> Julia module.</p>
 <h3 id="sources-generated-using-sine-functions-and-random-noise">Sources generated using sine functions and random noise</h3>
 <h4 id="original-sources-assumed-unknown">Original sources (assumed unknown)</h4>
-<p><img alt="" src="../blind_source_separation/sig_original_sources.svg" /></p>
+<p><img alt="" src="./sig_original_sources.svg" /></p>
 <h4 id="mixed-sources-observed-at-4-different-monitoring-locations-representing-4-different-signals-or-observation-streams">Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)</h4>
-<p><img alt="" src="../blind_source_separation/sig_mixed_signals.svg" /></p>
+<p><img alt="" src="./sig_mixed_signals.svg" /></p>
 <h4 id="reconstructed-unmixed-original-sources-based-on-the-observed-data">Reconstructed (unmixed) original sources based on the observed data</h4>
-<p><img alt="" src="../blind_source_separation/sig_unmixed_sources_nlopt.svg" /></p>
+<p><img alt="" src="./sig_unmixed_sources_nlopt.svg" /></p>
 <h3 id="sources-generated-using-sine-functions">Sources generated using sine functions</h3>
 <h4 id="original-sources-assumed-unknown_1">Original sources (assumed unknown)</h4>
-<p><img alt="" src="../blind_source_separation/sin_original_sources.svg" /></p>
+<p><img alt="" src="./sin_original_sources.svg" /></p>
 <h4 id="mixed-sources-observed-at-4-different-monitoring-locations-representing-4-different-signals-or-observation-streams_1">Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)</h4>
-<p><img alt="" src="../blind_source_separation/sin_mixed_signals.svg" /></p>
+<p><img alt="" src="./sin_mixed_signals.svg" /></p>
 <h4 id="reconstructed-unmixed-sources-based-on-the-observed-data">Reconstructed (unmixed) sources based on the observed data</h4>
-<p><img alt="" src="../blind_source_separation/sin_unmixed_sources_nlopt.svg" /></p>
+<p><img alt="" src="./sin_unmixed_sources_nlopt.svg" /></p>
 <h3 id="sources-generated-using-random-noise">Sources generated using random noise</h3>
 <h4 id="original-sources-assumed-unknown_2">Original sources (assumed unknown)</h4>
-<p><img alt="" src="../blind_source_separation/rand_original_sources.svg" /></p>
+<p><img alt="" src="./rand_original_sources.svg" /></p>
 <h4 id="mixed-sources-observed-at-4-different-monitoring-locations-representing-4-different-signals-or-observation-streams_2">Mixed sources observed at 4 different monitoring locations (representing 4 different signals or observation streams)</h4>
-<p><img alt="" src="../blind_source_separation/rand_mixed_signals.svg" /></p>
+<p><img alt="" src="./rand_mixed_signals.svg" /></p>
 <h4 id="reconstructed-unmixed-original-sources-based-on-the-observed-data_1">Reconstructed (unmixed) original sources based on the observed data</h4>
-<p><img alt="" src="../blind_source_separation/rand_unmixed_sources_nlopt.svg" /></p>
+<p><img alt="" src="./rand_unmixed_sources_nlopt.svg" /></p>
               
             </div>
           </div>

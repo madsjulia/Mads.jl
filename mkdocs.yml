@@ -13,11 +13,11 @@ pages:
 - Getting started: GETTING_STARTED.md
 - Examples:
   - Setup: EXAMPLES_SETUP.md
-  - Decision Analysis: Examples/bigdt/source_termination.md
-  - Bayesian Sampling: Examples/bayesian_sampling.md
-  - Blind Source Separation: Examples/blind_source_separation.md
-  - Contaminant Transport: Examples/contamination.md
-  - ODE Analysis: Examples/ode.md
+  - Decision Analysis: Examples/bigdt/source_termination/index.md
+  - Bayesian Sampling: Examples/bayesian_sampling/index.md
+  - Blind Source Separation: Examples/blind_source_separation/index.md
+  - Contaminant Transport: Examples/contamination/index.md
+  - ODE Analysis: Examples/ode/index.md
 - Model Coupling: MODEL_COUPLING.md
 - Testing & Verification: TEST.md
 - Functions: FUNCTIONS.md

@@ -26,7 +26,7 @@
   <script>
     // Current page data
     var mkdocs_page_name = "ODE Analysis";
-    var mkdocs_page_input_path = "Examples/ode.md";
+    var mkdocs_page_input_path = "Examples/ode/index.md";
     var mkdocs_page_url = "/Examples/ode/";
   </script>
   
@@ -282,7 +282,7 @@
 </li>
 </ul>
 <h4 id="example-ode-solution">Example ODE solution</h4>
-<p><img alt="" src="../ode/ode-solution.svg" /></p>
+<p><img alt="" src="./ode-solution.svg" /></p>
 <p>For model parameters:</p>
 <ul>
 <li>k = 0.1</li>
@@ -290,10 +290,10 @@
 <script type="math/tex">\omega</script> = 0.2</li>
 </ul>
 <h3 id="local-sensitivity-analysis">Local sensitivity analysis</h3>
-<p><img alt="" src="../ode/ode-eigenmatrix.png" /></p>
-<p><img alt="" src="../ode/ode-eigenvalues.png" /></p>
+<p><img alt="" src="./ode-eigenmatrix.png" /></p>
+<p><img alt="" src="./ode-eigenvalues.png" /></p>
 <h3 id="global-sensitivity-analysis-using-efast">Global sensitivity analysis (using eFAST)</h3>
-<p><img alt="" src="../ode/ode-efast-385.svg" /></p>
+<p><img alt="" src="./ode-efast-385.svg" /></p>
 <p>Probabilistic distributions of the prior parameter uncertainties are:</p>
 <ul>
 <li>k = LogUniform(0.01, 0.1)</li>
@@ -303,26 +303,26 @@
 <h3 id="bayesian-sensitivity-analysis">Bayesian sensitivity analysis</h3>
 <h4 id="observations">Observations</h4>
 <p>Synthetic observations are applied to constrain the ODE parameters</p>
-<p><img alt="" src="../ode/ode-match.png" /></p>
+<p><img alt="" src="./ode-match.png" /></p>
 <p>Observation errors are equal for all the sample locations with standard deviation equal to 1 (<code>observation weight</code> =  1 / <code>observation standard deviation</code> = 1 / 1 = 1)</p>
 <h4 id="prior-parameter-uncertainties">Prior parameter uncertainties</h4>
 <h5 id="k-only"><em>k</em> only</h5>
-<p><img alt="" src="../ode/ode-prior-k-100-spaghetti.png" /></p>
+<p><img alt="" src="./ode-prior-k-100-spaghetti.png" /></p>
 <h5 id="omega-only"><em><script type="math/tex">\omega</script></em> only</h5>
-<p><img alt="" src="../ode/ode-prior-omega-100-spaghetti.png" /></p>
+<p><img alt="" src="./ode-prior-omega-100-spaghetti.png" /></p>
 <h5 id="both-parameters"><em>Both</em> parameters</h5>
-<p><img alt="" src="../ode/ode-prior-100-spaghetti.png" /></p>
+<p><img alt="" src="./ode-prior-100-spaghetti.png" /></p>
 <p>The observation data are plotted as a solid black line.</p>
 <h4 id="histogramsscatter-plots-of-bayesian-mcmc-results">Histograms/scatter plots of Bayesian MCMC results</h4>
-<p><img alt="" src="../ode/ode-bayes.png" /></p>
+<p><img alt="" src="./ode-bayes.png" /></p>
 <h4 id="posterior-parameter-uncertainties">Posterior parameter uncertainties</h4>
 <p>Note that now the parameter uncertainties are constrained by the observation data.</p>
 <h5 id="k-only_1"><em>k</em> only</h5>
-<p><img alt="" src="../ode/ode-posterior-k-1000-spaghetti.png" /></p>
+<p><img alt="" src="./ode-posterior-k-1000-spaghetti.png" /></p>
 <h5 id="omega-only_1"><em><script type="math/tex">\omega</script></em> only</h5>
-<p><img alt="" src="../ode/ode-posterior-omega-1000-spaghetti.png" /></p>
+<p><img alt="" src="./ode-posterior-omega-1000-spaghetti.png" /></p>
 <h5 id="both-parameters_1"><em>Both</em> parameters</h5>
-<p><img alt="" src="../ode/ode-posterior-1000-spaghetti.png" /></p>
+<p><img alt="" src="./ode-posterior-1000-spaghetti.png" /></p>
 <p>The observation data are plotted as a solid black line.</p>
               
             </div>
