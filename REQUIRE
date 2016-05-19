@@ -4,7 +4,7 @@ ReusableFunctions
 MetaProgTools
 BIGUQ
 RobustPmap
-Lora 0.5
+Lora
 HDF5
 Optim
 BlackBoxOptim
@@ -15,7 +15,7 @@ ODE
 ProgressMeter
 LightXML
 Conda
-PyCall
+PyCall 1.4.0
 PyPlot
 YAML
 JSON

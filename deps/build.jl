@@ -29,6 +29,7 @@ else
 	pip.main(args)
 
 	try
+		sleep(2)
 		eval(:(@PyCall.pyimport yaml))
 		info("Python YAML (pyyaml) is installed!")
 	catch
