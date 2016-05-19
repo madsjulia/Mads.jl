@@ -8,4 +8,6 @@ else
 end
 nsample = 10
 bigdtresults = Mads.dobigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
-Mads.plotrobustnesscurves(md, bigdtresults; filename=problemdir * "source_termination-robustness-$nsample")
+if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
+	Mads.plotrobustnesscurves(md, bigdtresults; filename=problemdir * "source_termination-robustness-$nsample")
+end
