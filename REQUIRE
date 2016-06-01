@@ -15,7 +15,7 @@ ODE
 ProgressMeter
 LightXML
 Conda
-PyCall 1.4.0-
+PyCall
 PyPlot
 YAML
 JSON
