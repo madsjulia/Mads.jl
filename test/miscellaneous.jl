@@ -1,7 +1,17 @@
-Mads.quietoff()
-Mads.quieton()
-Mads.create_tests_on()
-Mads.create_tests_off()
+if Mads.quiet
+	Mads.quietoff()
+	Mads.quieton()
+else
+	Mads.quieton()
+	Mads.quietoff()
+end
+if Mads.create_tests
+	Mads.create_tests_off()
+	Mads.create_tests_on()
+else
+	Mads.create_tests_on()
+	Mads.create_tests_off()
+end
 if Mads.long_tests
 	Mads.long_tests_off()
 	Mads.long_tests_on()

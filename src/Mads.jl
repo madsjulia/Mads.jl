@@ -89,6 +89,14 @@ if haskey(ENV, "MADS_LONG_TESTS")
 	long_tests = true
 end
 
+if haskey(ENV, "MADS_QUIET")
+	quiet = true
+end
+
+if haskey(ENV, "MADS_NOT_QUIET")
+	quiet = false
+end
+
 include("MadsLog.jl") # messages higher than verbosity level are printed
 include("MadsHelp.jl")
 include("MadsTest.jl")

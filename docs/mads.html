@@ -167,8 +167,6 @@
 <li >
 <a href='#method_loadyamlfile_filename::abstractstring_'>loadyamlfile(filename::AbstractString)</a></li>
 <li >
-<a href='#method_loadyamlmadsfile_filename::abstractstring_'>loadyamlmadsfile(filename::AbstractString)</a></li>
-<li >
 <a href='#method_localsa_madsdata::associative_k__v__'>localsa(madsdata::Associative{K, V})</a></li>
 <li >
 <a href='#method_long_tests_off__'>long_tests_off()</a></li>
@@ -238,6 +236,8 @@
 <a href='#method_parametersample_madsdata::associative_k__v____numsamples::integer___parameterkey::abstractstring_'>parametersample(madsdata::Associative{K, V},  numsamples::Integer,  parameterkey::AbstractString)</a></li>
 <li >
 <a href='#method_paramrand_madsdata::associative_k__v____parameterkey::abstractstring_'>paramrand(madsdata::Associative{K, V},  parameterkey::AbstractString)</a></li>
+<li >
+<a href='#method_parsemadsdata_madsdata_'>parsemadsdata(madsdata)</a></li>
 <li >
 <a href='#method_partialof_madsdata___resultdict___regex_'>partialof(madsdata,  resultdict,  regex)</a></li>
 <li >
@@ -345,7 +345,13 @@
 <li >
 <a href='#method_setprocs_np::int64___nt::int64_'>setprocs(np::Int64,  nt::Int64)</a></li>
 <li >
+<a href='#method_settarget_o::associative_k__v____target_'>settarget(o::Associative{K, V},  target)</a></li>
+<li >
+<a href='#method_settime_o::associative_k__v____time_'>settime(o::Associative{K, V},  time)</a></li>
+<li >
 <a href='#method_setverbositylevel_level::int64_'>setverbositylevel(level::Int64)</a></li>
+<li >
+<a href='#method_setweight_o::associative_k__v____weight_'>setweight(o::Associative{K, V},  weight)</a></li>
 <li >
 <a href='#method_setwellweights_madsdata::associative_k__v____value::number_'>setwellweights!(madsdata::Associative{K, V},  value::Number)</a></li>
 <li >
@@ -372,6 +378,8 @@
 <a href='#method_test_testmod_'>test(testmod)</a></li>
 <li >
 <a href='#method_testj__'>testj()</a></li>
+<li >
+<a href='#method_testj_coverage_'>testj(coverage)</a></li>
 <li >
 <a href='#method_void2nan_dict::associative_k__v__'>void2nan!(dict::Associative{K, V})</a></li>
 <li >
@@ -401,7 +409,7 @@
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L290'>Mads/src/MadsObservations.jl:290</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L326'>Mads/src/MadsObservations.jl:326</a></td>
 </tr>
 </table>
 </div>
@@ -418,7 +426,7 @@
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L266'>Mads/src/MadsObservations.jl:266</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L302'>Mads/src/MadsObservations.jl:302</a></td>
 </tr>
 </table>
 </div>
@@ -435,7 +443,7 @@
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSine.jl#L2'>Mads/src/MadsSine.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L2'>Mads/src/MadsSine.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -467,7 +475,7 @@ Mads.bayessampling&#40;madsdata, numsequences; nsteps&#61;1000, burnin&#61;100, 
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMC.jl#L25'>Mads/src/MadsMC.jl:25</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L25'>Mads/src/MadsMC.jl:25</a></td>
 </tr>
 </table>
 </div>
@@ -504,7 +512,7 @@ Mads.bayessampling&#40;madsdata, numsequences; nsteps&#61;1000, burnin&#61;100, 
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsCalibrate.jl#L82'>Mads/src/MadsCalibrate.jl:82</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L82'>Mads/src/MadsCalibrate.jl:82</a></td>
 </tr>
 </table>
 </div>
@@ -521,7 +529,7 @@ Mads.bayessampling&#40;madsdata, numsequences; nsteps&#61;1000, burnin&#61;100, 
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsCalibrate.jl#L127'>Mads/src/MadsCalibrate.jl:127</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L127'>Mads/src/MadsCalibrate.jl:127</a></td>
 </tr>
 </table>
 </div>
@@ -560,7 +568,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsCalibrate.jl#L30'>Mads/src/MadsCalibrate.jl:30</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L30'>Mads/src/MadsCalibrate.jl:30</a></td>
 </tr>
 </table>
 </div>
@@ -599,7 +607,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsCalibrate.jl#L30'>Mads/src/MadsCalibrate.jl:30</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L30'>Mads/src/MadsCalibrate.jl:30</a></td>
 </tr>
 </table>
 </div>
@@ -616,7 +624,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L379'>Mads/src/MadsIO.jl:379</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L497'>Mads/src/MadsIO.jl:497</a></td>
 </tr>
 </table>
 </div>
@@ -644,7 +652,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsAnasol.jl#L192'>Mads/src/MadsAnasol.jl:192</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L192'>Mads/src/MadsAnasol.jl:192</a></td>
 </tr>
 </table>
 </div>
@@ -674,7 +682,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsAnasol.jl#L251'>Mads/src/MadsAnasol.jl:251</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L251'>Mads/src/MadsAnasol.jl:251</a></td>
 </tr>
 </table>
 </div>
@@ -696,7 +704,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L439'>Mads/src/MadsSA.jl:439</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L439'>Mads/src/MadsSA.jl:439</a></td>
 </tr>
 </table>
 </div>
@@ -745,7 +753,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsAnasol.jl#L151'>Mads/src/MadsAnasol.jl:151</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L151'>Mads/src/MadsAnasol.jl:151</a></td>
 </tr>
 </table>
 </div>
@@ -762,7 +770,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelp.jl#L9'>Mads/src/MadsHelp.jl:9</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L9'>Mads/src/MadsHelp.jl:9</a></td>
 </tr>
 </table>
 </div>
@@ -779,7 +787,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelp.jl#L62'>Mads/src/MadsHelp.jl:62</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L62'>Mads/src/MadsHelp.jl:62</a></td>
 </tr>
 </table>
 </div>
@@ -796,7 +804,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L17'>Mads/src/MadsHelpers.jl:17</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L17'>Mads/src/MadsHelpers.jl:17</a></td>
 </tr>
 </table>
 </div>
@@ -813,7 +821,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L12'>Mads/src/MadsHelpers.jl:12</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L12'>Mads/src/MadsHelpers.jl:12</a></td>
 </tr>
 </table>
 </div>
@@ -842,7 +850,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsCreate.jl#L16'>Mads/src/MadsCreate.jl:16</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCreate.jl#L16'>Mads/src/MadsCreate.jl:16</a></td>
 </tr>
 </table>
 </div>
@@ -859,7 +867,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L228'>Mads/src/MadsObservations.jl:228</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L264'>Mads/src/MadsObservations.jl:264</a></td>
 </tr>
 </table>
 </div>
@@ -876,7 +884,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L655'>Mads/src/MadsSA.jl:655</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L655'>Mads/src/MadsSA.jl:655</a></td>
 </tr>
 </table>
 </div>
@@ -905,7 +913,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsBIG.jl#L122'>Mads/src/MadsBIG.jl:122</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L122'>Mads/src/MadsBIG.jl:122</a></td>
 </tr>
 </table>
 </div>
@@ -922,7 +930,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsASCII.jl#L8'>Mads/src/MadsASCII.jl:8</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L8'>Mads/src/MadsASCII.jl:8</a></td>
 </tr>
 </table>
 </div>
@@ -939,7 +947,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsJSON.jl#L14'>Mads/src/MadsJSON.jl:14</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L14'>Mads/src/MadsJSON.jl:14</a></td>
 </tr>
 </table>
 </div>
@@ -956,7 +964,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L238'>Mads/src/MadsYAML.jl:238</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L127'>Mads/src/MadsYAML.jl:127</a></td>
 </tr>
 </table>
 </div>
@@ -973,7 +981,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L48'>Mads/src/MadsYAML.jl:48</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L52'>Mads/src/MadsYAML.jl:52</a></td>
 </tr>
 </table>
 </div>
@@ -995,7 +1003,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L180'>Mads/src/MadsYAML.jl:180</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L69'>Mads/src/MadsYAML.jl:69</a></td>
 </tr>
 </table>
 </div>
@@ -1020,7 +1028,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L691'>Mads/src/MadsSA.jl:691</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L691'>Mads/src/MadsSA.jl:691</a></td>
 </tr>
 </table>
 </div>
@@ -1037,7 +1045,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L60'>Mads/src/MadsMisc.jl:60</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L60'>Mads/src/MadsMisc.jl:60</a></td>
 </tr>
 </table>
 </div>
@@ -1054,7 +1062,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L69'>Mads/src/MadsMisc.jl:69</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L69'>Mads/src/MadsMisc.jl:69</a></td>
 </tr>
 </table>
 </div>
@@ -1071,7 +1079,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L191'>Mads/src/MadsIO.jl:191</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L309'>Mads/src/MadsIO.jl:309</a></td>
 </tr>
 </table>
 </div>
@@ -1101,7 +1109,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsForward.jl#L16'>Mads/src/MadsForward.jl:16</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsForward.jl#L16'>Mads/src/MadsForward.jl:16</a></td>
 </tr>
 </table>
 </div>
@@ -1131,7 +1139,7 @@ Mads.calibraterandom&#40;madsdata, numberofsamples; tolX&#61;1e-3, tolG&#61;1e-6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsForward.jl#L41'>Mads/src/MadsForward.jl:41</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsForward.jl#L41'>Mads/src/MadsForward.jl:41</a></td>
 </tr>
 </table>
 </div>
@@ -1158,7 +1166,7 @@ Mads.functions&#40;Mads, &quot;get&quot;&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelp.jl#L30'>Mads/src/MadsHelp.jl:30</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L30'>Mads/src/MadsHelp.jl:30</a></td>
 </tr>
 </table>
 </div>
@@ -1185,7 +1193,7 @@ Mads.functions&#40;Mads, &quot;get&quot;&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelp.jl#L30'>Mads/src/MadsHelp.jl:30</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L30'>Mads/src/MadsHelp.jl:30</a></td>
 </tr>
 </table>
 </div>
@@ -1204,7 +1212,7 @@ Mads.functions&#40;Mads, &quot;get&quot;&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L162'>Mads/src/MadsIO.jl:162</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L280'>Mads/src/MadsIO.jl:280</a></td>
 </tr>
 </table>
 </div>
@@ -1222,7 +1230,7 @@ Mads.functions&#40;Mads, &quot;get&quot;&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L118'>Mads/src/MadsIO.jl:118</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L236'>Mads/src/MadsIO.jl:236</a></td>
 </tr>
 </table>
 </div>
@@ -1245,7 +1253,7 @@ Mads.functions&#40;Mads, &quot;get&quot;&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L82'>Mads/src/MadsIO.jl:82</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L200'>Mads/src/MadsIO.jl:200</a></td>
 </tr>
 </table>
 </div>
@@ -1267,7 +1275,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L109'>Mads/src/MadsIO.jl:109</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L227'>Mads/src/MadsIO.jl:227</a></td>
 </tr>
 </table>
 </div>
@@ -1285,7 +1293,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L91'>Mads/src/MadsIO.jl:91</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L209'>Mads/src/MadsIO.jl:209</a></td>
 </tr>
 </table>
 </div>
@@ -1302,7 +1310,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L2'>Mads/src/MadsObservations.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L2'>Mads/src/MadsObservations.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -1328,7 +1336,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L36'>Mads/src/MadsParameters.jl:36</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L36'>Mads/src/MadsParameters.jl:36</a></td>
 </tr>
 </table>
 </div>
@@ -1353,7 +1361,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L460'>Mads/src/MadsParameters.jl:460</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L462'>Mads/src/MadsParameters.jl:462</a></td>
 </tr>
 </table>
 </div>
@@ -1379,7 +1387,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L17'>Mads/src/MadsParameters.jl:17</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L17'>Mads/src/MadsParameters.jl:17</a></td>
 </tr>
 </table>
 </div>
@@ -1396,7 +1404,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L241'>Mads/src/MadsParameters.jl:241</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L243'>Mads/src/MadsParameters.jl:243</a></td>
 </tr>
 </table>
 </div>
@@ -1413,7 +1421,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L207'>Mads/src/MadsParameters.jl:207</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L209'>Mads/src/MadsParameters.jl:209</a></td>
 </tr>
 </table>
 </div>
@@ -1430,7 +1438,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L201'>Mads/src/MadsParameters.jl:201</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L203'>Mads/src/MadsParameters.jl:203</a></td>
 </tr>
 </table>
 </div>
@@ -1447,7 +1455,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L167'>Mads/src/MadsParameters.jl:167</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L169'>Mads/src/MadsParameters.jl:169</a></td>
 </tr>
 </table>
 </div>
@@ -1464,7 +1472,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L161'>Mads/src/MadsParameters.jl:161</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L163'>Mads/src/MadsParameters.jl:163</a></td>
 </tr>
 </table>
 </div>
@@ -1481,7 +1489,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L138'>Mads/src/MadsParameters.jl:138</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L140'>Mads/src/MadsParameters.jl:140</a></td>
 </tr>
 </table>
 </div>
@@ -1498,7 +1506,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L132'>Mads/src/MadsParameters.jl:132</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L134'>Mads/src/MadsParameters.jl:134</a></td>
 </tr>
 </table>
 </div>
@@ -1515,7 +1523,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L109'>Mads/src/MadsParameters.jl:109</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L111'>Mads/src/MadsParameters.jl:111</a></td>
 </tr>
 </table>
 </div>
@@ -1532,7 +1540,7 @@ madsproblemdir &#61; Mads.getmadsproblemdir&#40;madsdata&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L2'>Mads/src/MadsParallel.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L2'>Mads/src/MadsParallel.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -1552,7 +1560,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L139'>Mads/src/MadsIO.jl:139</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L257'>Mads/src/MadsIO.jl:257</a></td>
 </tr>
 </table>
 </div>
@@ -1578,7 +1586,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L57'>Mads/src/MadsParameters.jl:57</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L57'>Mads/src/MadsParameters.jl:57</a></td>
 </tr>
 </table>
 </div>
@@ -1595,7 +1603,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L87'>Mads/src/MadsObservations.jl:87</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L109'>Mads/src/MadsObservations.jl:109</a></td>
 </tr>
 </table>
 </div>
@@ -1612,7 +1620,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L7'>Mads/src/MadsObservations.jl:7</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L7'>Mads/src/MadsObservations.jl:7</a></td>
 </tr>
 </table>
 </div>
@@ -1629,7 +1637,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L61'>Mads/src/MadsObservations.jl:61</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L61'>Mads/src/MadsObservations.jl:61</a></td>
 </tr>
 </table>
 </div>
@@ -1646,7 +1654,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L74'>Mads/src/MadsObservations.jl:74</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L85'>Mads/src/MadsObservations.jl:85</a></td>
 </tr>
 </table>
 </div>
@@ -1663,7 +1671,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L14'>Mads/src/MadsObservations.jl:14</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L14'>Mads/src/MadsObservations.jl:14</a></td>
 </tr>
 </table>
 </div>
@@ -1696,7 +1704,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L65'>Mads/src/MadsHelpers.jl:65</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L65'>Mads/src/MadsHelpers.jl:65</a></td>
 </tr>
 </table>
 </div>
@@ -1713,7 +1721,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelp.jl#L4'>Mads/src/MadsHelp.jl:4</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L4'>Mads/src/MadsHelp.jl:4</a></td>
 </tr>
 </table>
 </div>
@@ -1730,7 +1738,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L282'>Mads/src/MadsFunc.jl:282</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L282'>Mads/src/MadsFunc.jl:282</a></td>
 </tr>
 </table>
 </div>
@@ -1747,7 +1755,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L305'>Mads/src/MadsIO.jl:305</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L423'>Mads/src/MadsIO.jl:423</a></td>
 </tr>
 </table>
 </div>
@@ -1764,7 +1772,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L240'>Mads/src/MadsIO.jl:240</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L358'>Mads/src/MadsIO.jl:358</a></td>
 </tr>
 </table>
 </div>
@@ -1781,7 +1789,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L161'>Mads/src/MadsObservations.jl:161</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L194'>Mads/src/MadsObservations.jl:194</a></td>
 </tr>
 </table>
 </div>
@@ -1798,7 +1806,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L193'>Mads/src/MadsObservations.jl:193</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L227'>Mads/src/MadsObservations.jl:227</a></td>
 </tr>
 </table>
 </div>
@@ -1815,7 +1823,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L274'>Mads/src/MadsParameters.jl:274</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L276'>Mads/src/MadsParameters.jl:276</a></td>
 </tr>
 </table>
 </div>
@@ -1832,7 +1840,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L264'>Mads/src/MadsParameters.jl:264</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L266'>Mads/src/MadsParameters.jl:266</a></td>
 </tr>
 </table>
 </div>
@@ -1870,7 +1878,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L182'>Mads/src/MadsLM.jl:182</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L180'>Mads/src/MadsLM.jl:180</a></td>
 </tr>
 </table>
 </div>
@@ -1908,7 +1916,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L182'>Mads/src/MadsLM.jl:182</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L180'>Mads/src/MadsLM.jl:180</a></td>
 </tr>
 </table>
 </div>
@@ -1925,7 +1933,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsASCII.jl#L2'>Mads/src/MadsASCII.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L2'>Mads/src/MadsASCII.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -1942,7 +1950,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsJSON.jl#L2'>Mads/src/MadsJSON.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L2'>Mads/src/MadsJSON.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -1974,7 +1982,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L19'>Mads/src/MadsIO.jl:19</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L19'>Mads/src/MadsIO.jl:19</a></td>
 </tr>
 </table>
 </div>
@@ -1991,30 +1999,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L39'>Mads/src/MadsYAML.jl:39</a></td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class='entry'>
-<div id='method_loadyamlmadsfile_filename::abstractstring_' class='entry-name category-method'>
-<div class='category'>[method] &mdash; </div> loadyamlmadsfile(filename::AbstractString)
-</div>
-<div class='entry-body'>
-<div class="markdown"><p>Load YAML Mads file</p>
-<p>Arguments:</p>
-<ul>
-<li><code>filename</code> : file name</li>
-<li><code>julia&#61;false</code> : use Python YAML library &#40;if available&#41;</li>
-<li><code>julia&#61;true</code> : use Julia YAML library &#40;if available&#41;</li>
-</ul>
-</div><div class='entry-meta'>
-<strong>Details:</strong>
-<table class='meta-table'>
-<tr >
-<td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L67'>Mads/src/MadsYAML.jl:67</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L43'>Mads/src/MadsYAML.jl:43</a></td>
 </tr>
 </table>
 </div>
@@ -2037,7 +2022,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L70'>Mads/src/MadsSA.jl:70</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L70'>Mads/src/MadsSA.jl:70</a></td>
 </tr>
 </table>
 </div>
@@ -2054,7 +2039,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L27'>Mads/src/MadsHelpers.jl:27</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L27'>Mads/src/MadsHelpers.jl:27</a></td>
 </tr>
 </table>
 </div>
@@ -2071,7 +2056,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L22'>Mads/src/MadsHelpers.jl:22</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L22'>Mads/src/MadsHelpers.jl:22</a></td>
 </tr>
 </table>
 </div>
@@ -2088,7 +2073,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L31'>Mads/src/MadsLog.jl:31</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L31'>Mads/src/MadsLog.jl:31</a></td>
 </tr>
 </table>
 </div>
@@ -2105,7 +2090,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L9'>Mads/src/MadsLog.jl:9</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L9'>Mads/src/MadsLog.jl:9</a></td>
 </tr>
 </table>
 </div>
@@ -2122,7 +2107,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L26'>Mads/src/MadsLog.jl:26</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L26'>Mads/src/MadsLog.jl:26</a></td>
 </tr>
 </table>
 </div>
@@ -2139,7 +2124,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L16'>Mads/src/MadsLog.jl:16</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L16'>Mads/src/MadsLog.jl:16</a></td>
 </tr>
 </table>
 </div>
@@ -2156,7 +2141,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L2'>Mads/src/MadsLog.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L2'>Mads/src/MadsLog.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -2173,7 +2158,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLog.jl#L21'>Mads/src/MadsLog.jl:21</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L21'>Mads/src/MadsLog.jl:21</a></td>
 </tr>
 </table>
 </div>
@@ -2190,7 +2175,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L25'>Mads/src/MadsMisc.jl:25</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L25'>Mads/src/MadsMisc.jl:25</a></td>
 </tr>
 </table>
 </div>
@@ -2217,7 +2202,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L15'>Mads/src/MadsMisc.jl:15</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L15'>Mads/src/MadsMisc.jl:15</a></td>
 </tr>
 </table>
 </div>
@@ -2234,7 +2219,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L38'>Mads/src/MadsMisc.jl:38</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L38'>Mads/src/MadsMisc.jl:38</a></td>
 </tr>
 </table>
 </div>
@@ -2260,7 +2245,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsBIG.jl#L33'>Mads/src/MadsBIG.jl:33</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L33'>Mads/src/MadsBIG.jl:33</a></td>
 </tr>
 </table>
 </div>
@@ -2286,7 +2271,7 @@ r &#61; Mads.getrootname&#40;&quot;a.rnd.dat&quot;, first&#61;false&#41; # r &#6
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsBIG.jl#L17'>Mads/src/MadsBIG.jl:17</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L17'>Mads/src/MadsBIG.jl:17</a></td>
 </tr>
 </table>
 </div>
@@ -2319,7 +2304,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsAnasol.jl#L30'>Mads/src/MadsAnasol.jl:30</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L30'>Mads/src/MadsAnasol.jl:30</a></td>
 </tr>
 </table>
 </div>
@@ -2336,7 +2321,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L23'>Mads/src/MadsLM.jl:23</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L23'>Mads/src/MadsLM.jl:23</a></td>
 </tr>
 </table>
 </div>
@@ -2353,7 +2338,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L379'>Mads/src/MadsFunc.jl:379</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L379'>Mads/src/MadsFunc.jl:379</a></td>
 </tr>
 </table>
 </div>
@@ -2407,7 +2392,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L47'>Mads/src/MadsFunc.jl:47</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L47'>Mads/src/MadsFunc.jl:47</a></td>
 </tr>
 </table>
 </div>
@@ -2424,7 +2409,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L314'>Mads/src/MadsFunc.jl:314</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L314'>Mads/src/MadsFunc.jl:314</a></td>
 </tr>
 </table>
 </div>
@@ -2441,7 +2426,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L299'>Mads/src/MadsFunc.jl:299</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L299'>Mads/src/MadsFunc.jl:299</a></td>
 </tr>
 </table>
 </div>
@@ -2458,7 +2443,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L394'>Mads/src/MadsFunc.jl:394</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L394'>Mads/src/MadsFunc.jl:394</a></td>
 </tr>
 </table>
 </div>
@@ -2475,7 +2460,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsFunc.jl#L419'>Mads/src/MadsFunc.jl:419</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L419'>Mads/src/MadsFunc.jl:419</a></td>
 </tr>
 </table>
 </div>
@@ -2492,7 +2477,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L667'>Mads/src/MadsSA.jl:667</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L667'>Mads/src/MadsSA.jl:667</a></td>
 </tr>
 </table>
 </div>
@@ -2509,7 +2494,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L153'>Mads/src/MadsObservations.jl:153</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L186'>Mads/src/MadsObservations.jl:186</a></td>
 </tr>
 </table>
 </div>
@@ -2526,7 +2511,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L182'>Mads/src/MadsObservations.jl:182</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L216'>Mads/src/MadsObservations.jl:216</a></td>
 </tr>
 </table>
 </div>
@@ -2557,7 +2542,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMC.jl#L103'>Mads/src/MadsMC.jl:103</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L103'>Mads/src/MadsMC.jl:103</a></td>
 </tr>
 </table>
 </div>
@@ -2574,7 +2559,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L102'>Mads/src/MadsLM.jl:102</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L102'>Mads/src/MadsLM.jl:102</a></td>
 </tr>
 </table>
 </div>
@@ -2606,7 +2591,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L140'>Mads/src/MadsLM.jl:140</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L140'>Mads/src/MadsLM.jl:140</a></td>
 </tr>
 </table>
 </div>
@@ -2638,7 +2623,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L140'>Mads/src/MadsLM.jl:140</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L140'>Mads/src/MadsLM.jl:140</a></td>
 </tr>
 </table>
 </div>
@@ -2655,7 +2640,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L111'>Mads/src/MadsLM.jl:111</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L111'>Mads/src/MadsLM.jl:111</a></td>
 </tr>
 </table>
 </div>
@@ -2672,7 +2657,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L279'>Mads/src/MadsIO.jl:279</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L397'>Mads/src/MadsIO.jl:397</a></td>
 </tr>
 </table>
 </div>
@@ -2689,7 +2674,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMC.jl#L153'>Mads/src/MadsMC.jl:153</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L153'>Mads/src/MadsMC.jl:153</a></td>
 </tr>
 </table>
 </div>
@@ -2713,7 +2698,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L15'>Mads/src/MadsSA.jl:15</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L15'>Mads/src/MadsSA.jl:15</a></td>
 </tr>
 </table>
 </div>
@@ -2737,7 +2722,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L15'>Mads/src/MadsSA.jl:15</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L15'>Mads/src/MadsSA.jl:15</a></td>
 </tr>
 </table>
 </div>
@@ -2761,7 +2746,28 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L38'>Mads/src/MadsSA.jl:38</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L38'>Mads/src/MadsSA.jl:38</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_parsemadsdata_madsdata_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> parsemadsdata(madsdata)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Parse loaded Mads problem dictionary</p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : Mads problem dictionary</li>
+</ul>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L37'>Mads/src/MadsIO.jl:37</a></td>
 </tr>
 </table>
 </div>
@@ -2778,7 +2784,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsLM.jl#L4'>Mads/src/MadsLM.jl:4</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L4'>Mads/src/MadsLM.jl:4</a></td>
 </tr>
 </table>
 </div>
@@ -2795,7 +2801,7 @@ forward_preds &#61; computeconcentrations&#40;paramdict&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L1493'>Mads/src/MadsSA.jl:1493</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L1493'>Mads/src/MadsSA.jl:1493</a></td>
 </tr>
 </table>
 </div>
@@ -2825,7 +2831,7 @@ plotgrid&#40;madsdata, parameters; addtitle&#61;true, title&#61;&quot;&quot;, fi
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L139'>Mads/src/MadsPlot.jl:139</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L139'>Mads/src/MadsPlot.jl:139</a></td>
 </tr>
 </table>
 </div>
@@ -2849,7 +2855,7 @@ plotgrid&#40;madsdata, parameters; addtitle&#61;true, title&#61;&quot;&quot;, fi
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L54'>Mads/src/MadsPlot.jl:54</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L54'>Mads/src/MadsPlot.jl:54</a></td>
 </tr>
 </table>
 </div>
@@ -2878,7 +2884,7 @@ plotgrid&#40;madsdata, parameters; addtitle&#61;true, title&#61;&quot;&quot;, fi
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsAnasol.jl#L288'>Mads/src/MadsAnasol.jl:288</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L288'>Mads/src/MadsAnasol.jl:288</a></td>
 </tr>
 </table>
 </div>
@@ -2906,7 +2912,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L212'>Mads/src/MadsPlot.jl:212</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L212'>Mads/src/MadsPlot.jl:212</a></td>
 </tr>
 </table>
 </div>
@@ -2932,7 +2938,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L517'>Mads/src/MadsPlot.jl:517</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L517'>Mads/src/MadsPlot.jl:517</a></td>
 </tr>
 </table>
 </div>
@@ -2956,7 +2962,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsBIG.jl#L166'>Mads/src/MadsBIG.jl:166</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L166'>Mads/src/MadsBIG.jl:166</a></td>
 </tr>
 </table>
 </div>
@@ -2984,7 +2990,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L966'>Mads/src/MadsPlot.jl:966</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L966'>Mads/src/MadsPlot.jl:966</a></td>
 </tr>
 </table>
 </div>
@@ -3010,7 +3016,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L398'>Mads/src/MadsPlot.jl:398</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L398'>Mads/src/MadsPlot.jl:398</a></td>
 </tr>
 </table>
 </div>
@@ -3037,7 +3043,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L423'>Mads/src/MadsPlot.jl:423</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L423'>Mads/src/MadsPlot.jl:423</a></td>
 </tr>
 </table>
 </div>
@@ -3054,7 +3060,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L524'>Mads/src/MadsSA.jl:524</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L524'>Mads/src/MadsSA.jl:524</a></td>
 </tr>
 </table>
 </div>
@@ -3071,7 +3077,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L7'>Mads/src/MadsHelpers.jl:7</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L7'>Mads/src/MadsHelpers.jl:7</a></td>
 </tr>
 </table>
 </div>
@@ -3088,7 +3094,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L2'>Mads/src/MadsHelpers.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L2'>Mads/src/MadsHelpers.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -3105,7 +3111,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsASCII.jl#L13'>Mads/src/MadsASCII.jl:13</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L13'>Mads/src/MadsASCII.jl:13</a></td>
 </tr>
 </table>
 </div>
@@ -3122,7 +3128,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsJSON.jl#L21'>Mads/src/MadsJSON.jl:21</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L21'>Mads/src/MadsJSON.jl:21</a></td>
 </tr>
 </table>
 </div>
@@ -3139,7 +3145,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L331'>Mads/src/MadsIO.jl:331</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L449'>Mads/src/MadsIO.jl:449</a></td>
 </tr>
 </table>
 </div>
@@ -3156,7 +3162,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L365'>Mads/src/MadsIO.jl:365</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L483'>Mads/src/MadsIO.jl:483</a></td>
 </tr>
 </table>
 </div>
@@ -3173,7 +3179,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsYAML.jl#L233'>Mads/src/MadsYAML.jl:233</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L122'>Mads/src/MadsYAML.jl:122</a></td>
 </tr>
 </table>
 </div>
@@ -3190,7 +3196,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L285'>Mads/src/MadsIO.jl:285</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L403'>Mads/src/MadsIO.jl:403</a></td>
 </tr>
 </table>
 </div>
@@ -3207,7 +3213,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L42'>Mads/src/MadsHelpers.jl:42</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L42'>Mads/src/MadsHelpers.jl:42</a></td>
 </tr>
 </table>
 </div>
@@ -3224,7 +3230,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L17'>Mads/src/MadsTestFunctions.jl:17</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L17'>Mads/src/MadsTestFunctions.jl:17</a></td>
 </tr>
 </table>
 </div>
@@ -3241,7 +3247,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L7'>Mads/src/MadsTestFunctions.jl:7</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L7'>Mads/src/MadsTestFunctions.jl:7</a></td>
 </tr>
 </table>
 </div>
@@ -3258,7 +3264,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L2'>Mads/src/MadsTestFunctions.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L2'>Mads/src/MadsTestFunctions.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -3275,7 +3281,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L27'>Mads/src/MadsTestFunctions.jl:27</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L27'>Mads/src/MadsTestFunctions.jl:27</a></td>
 </tr>
 </table>
 </div>
@@ -3292,7 +3298,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L33'>Mads/src/MadsTestFunctions.jl:33</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L33'>Mads/src/MadsTestFunctions.jl:33</a></td>
 </tr>
 </table>
 </div>
@@ -3309,7 +3315,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L43'>Mads/src/MadsTestFunctions.jl:43</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L43'>Mads/src/MadsTestFunctions.jl:43</a></td>
 </tr>
 </table>
 </div>
@@ -3326,7 +3332,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTestFunctions.jl#L22'>Mads/src/MadsTestFunctions.jl:22</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L22'>Mads/src/MadsTestFunctions.jl:22</a></td>
 </tr>
 </table>
 </div>
@@ -3349,7 +3355,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L304'>Mads/src/MadsSA.jl:304</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L304'>Mads/src/MadsSA.jl:304</a></td>
 </tr>
 </table>
 </div>
@@ -3372,7 +3378,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L157'>Mads/src/MadsSA.jl:157</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L157'>Mads/src/MadsSA.jl:157</a></td>
 </tr>
 </table>
 </div>
@@ -3389,7 +3395,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L600'>Mads/src/MadsSA.jl:600</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L600'>Mads/src/MadsSA.jl:600</a></td>
 </tr>
 </table>
 </div>
@@ -3409,13 +3415,14 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <ul>
 <li><code>madsdata</code> : Mads problem dictionary</li>
 <li><code>filename</code> : input file name &#40;e.g. <code>input_file_name.mads</code>&#41;</li>
+<li><code>julia</code> : if <code>true</code> use Julia JSON module to save</li>
 </ul>
 </div><div class='entry-meta'>
 <strong>Details:</strong>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L34'>Mads/src/MadsIO.jl:34</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L152'>Mads/src/MadsIO.jl:152</a></td>
 </tr>
 </table>
 </div>
@@ -3435,13 +3442,14 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <ul>
 <li><code>madsdata</code> : Mads problem dictionary</li>
 <li><code>filename</code> : input file name &#40;e.g. <code>input_file_name.mads</code>&#41;</li>
+<li><code>julia</code> : if <code>true</code> use Julia JSON module to save</li>
 </ul>
 </div><div class='entry-meta'>
 <strong>Details:</strong>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L34'>Mads/src/MadsIO.jl:34</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L152'>Mads/src/MadsIO.jl:152</a></td>
 </tr>
 </table>
 </div>
@@ -3465,7 +3473,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L354'>Mads/src/MadsPlot.jl:354</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L354'>Mads/src/MadsPlot.jl:354</a></td>
 </tr>
 </table>
 </div>
@@ -3495,7 +3503,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L187'>Mads/src/MadsIO.jl:187</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L305'>Mads/src/MadsIO.jl:305</a></td>
 </tr>
 </table>
 </div>
@@ -3512,7 +3520,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L291'>Mads/src/MadsParameters.jl:291</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L293'>Mads/src/MadsParameters.jl:293</a></td>
 </tr>
 </table>
 </div>
@@ -3529,7 +3537,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L283'>Mads/src/MadsParameters.jl:283</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L285'>Mads/src/MadsParameters.jl:285</a></td>
 </tr>
 </table>
 </div>
@@ -3546,7 +3554,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L32'>Mads/src/MadsHelpers.jl:32</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L32'>Mads/src/MadsHelpers.jl:32</a></td>
 </tr>
 </table>
 </div>
@@ -3563,7 +3571,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L150'>Mads/src/MadsParallel.jl:150</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L150'>Mads/src/MadsParallel.jl:150</a></td>
 </tr>
 </table>
 </div>
@@ -3580,7 +3588,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsMisc.jl#L55'>Mads/src/MadsMisc.jl:55</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L55'>Mads/src/MadsMisc.jl:55</a></td>
 </tr>
 </table>
 </div>
@@ -3608,7 +3616,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L19'>Mads/src/MadsPlot.jl:19</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L19'>Mads/src/MadsPlot.jl:19</a></td>
 </tr>
 </table>
 </div>
@@ -3630,7 +3638,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L67'>Mads/src/MadsIO.jl:67</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L185'>Mads/src/MadsIO.jl:185</a></td>
 </tr>
 </table>
 </div>
@@ -3647,7 +3655,7 @@ plotmatches&#40;madsdata, result, r&quot;NO3&quot;; filename&#61;&quot;&quot;, f
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L250'>Mads/src/MadsObservations.jl:250</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L286'>Mads/src/MadsObservations.jl:286</a></td>
 </tr>
 </table>
 </div>
@@ -3676,7 +3684,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L121'>Mads/src/MadsObservations.jl:121</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L154'>Mads/src/MadsObservations.jl:154</a></td>
 </tr>
 </table>
 </div>
@@ -3693,7 +3701,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L145'>Mads/src/MadsObservations.jl:145</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L178'>Mads/src/MadsObservations.jl:178</a></td>
 </tr>
 </table>
 </div>
@@ -3710,7 +3718,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L304'>Mads/src/MadsParameters.jl:304</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L306'>Mads/src/MadsParameters.jl:306</a></td>
 </tr>
 </table>
 </div>
@@ -3727,7 +3735,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L299'>Mads/src/MadsParameters.jl:299</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L301'>Mads/src/MadsParameters.jl:301</a></td>
 </tr>
 </table>
 </div>
@@ -3751,7 +3759,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L319'>Mads/src/MadsParameters.jl:319</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L321'>Mads/src/MadsParameters.jl:321</a></td>
 </tr>
 </table>
 </div>
@@ -3775,7 +3783,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L337'>Mads/src/MadsParameters.jl:337</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L339'>Mads/src/MadsParameters.jl:339</a></td>
 </tr>
 </table>
 </div>
@@ -3798,7 +3806,7 @@ Mads.setobstime&#33;&#40;madsdata, r&quot;&#91;A-x&#93;*_t&#40;&#91;0-9,.&#93;&#
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L256'>Mads/src/MadsParameters.jl:256</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L258'>Mads/src/MadsParameters.jl:258</a></td>
 </tr>
 </table>
 </div>
@@ -3824,7 +3832,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L69'>Mads/src/MadsParallel.jl:69</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L69'>Mads/src/MadsParallel.jl:69</a></td>
 </tr>
 </table>
 </div>
@@ -3847,7 +3855,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L46'>Mads/src/MadsParallel.jl:46</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L46'>Mads/src/MadsParallel.jl:46</a></td>
 </tr>
 </table>
 </div>
@@ -3871,7 +3879,41 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L19'>Mads/src/MadsParallel.jl:19</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L19'>Mads/src/MadsParallel.jl:19</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_settarget_o::associative_k__v____target_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> settarget(o::Associative{K, V},  target)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set observation target</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L122'>Mads/src/MadsObservations.jl:122</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_settime_o::associative_k__v____time_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> settime(o::Associative{K, V},  time)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set observation time</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L74'>Mads/src/MadsObservations.jl:74</a></td>
 </tr>
 </table>
 </div>
@@ -3888,7 +3930,24 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsHelpers.jl#L37'>Mads/src/MadsHelpers.jl:37</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L37'>Mads/src/MadsHelpers.jl:37</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_setweight_o::associative_k__v____weight_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> setweight(o::Associative{K, V},  weight)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Set observation weight</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L98'>Mads/src/MadsObservations.jl:98</a></td>
 </tr>
 </table>
 </div>
@@ -3905,7 +3964,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L171'>Mads/src/MadsObservations.jl:171</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L205'>Mads/src/MadsObservations.jl:205</a></td>
 </tr>
 </table>
 </div>
@@ -3922,7 +3981,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L407'>Mads/src/MadsParameters.jl:407</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L409'>Mads/src/MadsParameters.jl:409</a></td>
 </tr>
 </table>
 </div>
@@ -3939,7 +3998,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L206'>Mads/src/MadsObservations.jl:206</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L241'>Mads/src/MadsObservations.jl:241</a></td>
 </tr>
 </table>
 </div>
@@ -3956,7 +4015,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParameters.jl#L376'>Mads/src/MadsParameters.jl:376</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L378'>Mads/src/MadsParameters.jl:378</a></td>
 </tr>
 </table>
 </div>
@@ -3973,7 +4032,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSine.jl#L10'>Mads/src/MadsSine.jl:10</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L10'>Mads/src/MadsSine.jl:10</a></td>
 </tr>
 </table>
 </div>
@@ -3990,7 +4049,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSine.jl#L17'>Mads/src/MadsSine.jl:17</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L17'>Mads/src/MadsSine.jl:17</a></td>
 </tr>
 </table>
 </div>
@@ -4007,7 +4066,7 @@ Mads.setprocs&#40;ntasks_per_node&#61;2, mads_servers&#61;true&#41;</code></pre>
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSine.jl#L25'>Mads/src/MadsSine.jl:25</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L25'>Mads/src/MadsSine.jl:25</a></td>
 </tr>
 </table>
 </div>
@@ -4044,7 +4103,7 @@ Mads.spaghettiplot&#40;madsdata, number_of_samples; filename&#61;&quot;&quot;, k
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L838'>Mads/src/MadsPlot.jl:838</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L838'>Mads/src/MadsPlot.jl:838</a></td>
 </tr>
 </table>
 </div>
@@ -4079,7 +4138,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsPlot.jl#L693'>Mads/src/MadsPlot.jl:693</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L693'>Mads/src/MadsPlot.jl:693</a></td>
 </tr>
 </table>
 </div>
@@ -4096,7 +4155,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsParallel.jl#L51'>Mads/src/MadsParallel.jl:51</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L51'>Mads/src/MadsParallel.jl:51</a></td>
 </tr>
 </table>
 </div>
@@ -4113,7 +4172,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTest.jl#L12'>Mads/src/MadsTest.jl:12</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L12'>Mads/src/MadsTest.jl:12</a></td>
 </tr>
 </table>
 </div>
@@ -4130,7 +4189,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTest.jl#L12'>Mads/src/MadsTest.jl:12</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L12'>Mads/src/MadsTest.jl:12</a></td>
 </tr>
 </table>
 </div>
@@ -4147,7 +4206,24 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsTest.jl#L2'>Mads/src/MadsTest.jl:2</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L2'>Mads/src/MadsTest.jl:2</a></td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class='entry'>
+<div id='method_testj_coverage_' class='entry-name category-method'>
+<div class='category'>[method] &mdash; </div> testj(coverage)
+</div>
+<div class='entry-body'>
+<div class="markdown"><p>Execute Mads tests &#40;the default tests are in serial&#41;</p>
+</div><div class='entry-meta'>
+<strong>Details:</strong>
+<table class='meta-table'>
+<tr >
+<td><strong>source:</strong></td><td >
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L2'>Mads/src/MadsTest.jl:2</a></td>
 </tr>
 </table>
 </div>
@@ -4164,7 +4240,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsSA.jl#L635'>Mads/src/MadsSA.jl:635</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L635'>Mads/src/MadsSA.jl:635</a></td>
 </tr>
 </table>
 </div>
@@ -4181,7 +4257,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L298'>Mads/src/MadsObservations.jl:298</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L334'>Mads/src/MadsObservations.jl:334</a></td>
 </tr>
 </table>
 </div>
@@ -4198,7 +4274,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L274'>Mads/src/MadsObservations.jl:274</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L310'>Mads/src/MadsObservations.jl:310</a></td>
 </tr>
 </table>
 </div>
@@ -4215,7 +4291,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsObservations.jl#L314'>Mads/src/MadsObservations.jl:314</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L350'>Mads/src/MadsObservations.jl:350</a></td>
 </tr>
 </table>
 </div>
@@ -4232,7 +4308,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L224'>Mads/src/MadsIO.jl:224</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L342'>Mads/src/MadsIO.jl:342</a></td>
 </tr>
 </table>
 </div>
@@ -4249,7 +4325,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L231'>Mads/src/MadsIO.jl:231</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L349'>Mads/src/MadsIO.jl:349</a></td>
 </tr>
 </table>
 </div>
@@ -4266,7 +4342,7 @@ Mads.spaghettiplots&#40;madsdata, number_of_samples; format&#61;&quot;&quot;, ke
 <table class='meta-table'>
 <tr >
 <td><strong>source:</strong></td><td >
-<a href='https://github.com/madsjulia/Mads.jl/tree/224655a85934331d198d25321603d1d6d0c8b13e/src/MadsIO.jl#L195'>Mads/src/MadsIO.jl:195</a></td>
+<a href='https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L313'>Mads/src/MadsIO.jl:313</a></td>
 </tr>
 </table>
 </div>

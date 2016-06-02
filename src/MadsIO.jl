@@ -142,14 +142,18 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 - `Mads.savemadsfile(madsdata)`
 - `Mads.savemadsfile(madsdata, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
 
 Arguments:
 
 - `madsdata` : Mads problem dictionary
+- `parameters` : Dictinary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
+- `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 """
-function savemadsfile(madsdata, filename::AbstractString=""; julia::Bool=false)
+function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false)
 	if filename == ""
 		dir = Mads.getmadsproblemdir(madsdata)
 		root = Mads.getmadsrootname(madsdata)
@@ -164,6 +168,40 @@ function savemadsfile(madsdata, filename::AbstractString=""; julia::Bool=false)
 		end
 	end
 	dumpyamlmadsfile(madsdata, filename, julia=julia)
+end
+
+function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
+	if filename == ""
+		dir = Mads.getmadsproblemdir(madsdata2)
+		root = Mads.getmadsrootname(madsdata2)
+		if ismatch(r"v[0-9].", root)
+			s = split(root, "v")
+			v = parse(Int, s[2]) + 1
+			l = length(s[2])
+			f = "%0" * string(l) * "d"
+			filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
+		else
+			filename = "$(dir)/$(root)-rerun.mads"
+		end
+	end
+	if explicit
+		madsdata2 = loadyamlfile(madsdata["Filename"])
+		for i = 1:length(madsdata2["Parameters"])
+			pdict = madsdata2["Parameters"][i]
+			paramname = collect(keys(pdict))[1]
+			realparam = pdict[paramname]
+			if haskey(realparam, "type") && realparam["type"] == "opt"
+				oldinit = realparam["init"]
+				realparam["init"] = parameters[paramname]
+				newinit = realparam["init"]
+			end
+		end
+		dumpyamlfile(filename, madsdata2, julia=julia)
+	else
+		madsdata2 = deepcopy(madsdata)
+		setparamsinit!(madsdata2, parameters)
+		dumpyamlmadsfile(madsdata2, filename, julia=julia)
+	end
 end
 
 "Save calibration results"
