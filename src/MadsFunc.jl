@@ -240,31 +240,16 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
+	return makemadsreusablefunction(madsdata, madscommandfunction)
+end
+
+function makemadsreusablefunction(madsdata, madscommandfunction, suffix="")
 	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
 			return madscommandfunctionwithreuse
 		elseif madsdata["Restart"] != false
-			rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
-			restartdir = ""
-			if haskey(madsdata, "RestartDir")
-				restartdir = madsdata["RestartDir"]
-				if !isdir(restartdir)
-					try
-						mkdir(restartdir)
-					catch
-						restartdir = ""
-						madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created")
-					end
-				end
-			end
-			if restartdir == ""
-				if contains(madsdata["Filename"], "/")
-					restartdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
-				else
-					restartdir = string(rootname, "_restart")
-				end
-			end
+			restartdir = getrestartdir(madsdata, suffix)
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, getparamkeys(madsdata), getobskeys(madsdata))
 			return madscommandfunctionwithreuse
 		else
@@ -273,6 +258,33 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 	else
 		return madscommandfunction
 	end
+end
+
+"""
+Get the directory where restarts will be stored.
+"""
+function getrestartdir(madsdata, suffix="")
+	rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
+	restartdir = ""
+	if haskey(madsdata, "RestartDir")
+		restartdir = madsdata["RestartDir"]
+		if !isdir(restartdir)
+			try
+				mkdir(restartdir)
+			catch
+				restartdir = ""
+				madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created")
+			end
+		end
+	end
+	if restartdir == ""
+		if contains(madsdata["Filename"], "/")
+			restartdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
+		else
+			restartdir = string(rootname, "_restart")
+		end
+	end
+	return joinpath(restartdir, suffix)
 end
 
 """
@@ -372,7 +384,7 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 		end
 		return fevalsdict["noparametersvaried"], gradient
 	end
-	return madscommandfunctionandgradient
+	return makemadsreusablefunction(madsdata, madscommandfunctionandgradient, "jacobian")
 end
 
 "Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`"

@@ -250,9 +250,6 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
 				J = g(x)
 			end
-			if root != ""
-				writedlm("$(root)-lmjacobian.dat", J)
-			end
 			g_calls += 1
 			Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
 			compute_jacobian = false
