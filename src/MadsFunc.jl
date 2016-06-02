@@ -243,14 +243,18 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 	return makemadsreusablefunction(madsdata, madscommandfunction)
 end
 
-function makemadsreusablefunction(madsdata, madscommandfunction, suffix="")
+function makemadsreusablefunction(madsdata, madscommandfunction, suffix=""; usedict=true)
 	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
 		if madsdata["Restart"] == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
 			return madscommandfunctionwithreuse
 		elseif madsdata["Restart"] != false
 			restartdir = getrestartdir(madsdata, suffix)
-			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, getparamkeys(madsdata), getobskeys(madsdata))
+			if usedict
+				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, getparamkeys(madsdata), getobskeys(madsdata))
+			else
+				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir)
+			end
 			return madscommandfunctionwithreuse
 		else
 			return madscommandfunction

@@ -65,10 +65,10 @@ function makelmfunctions(madsdata)
 		end
 		return residuals
 	end
-	"""
-	Gradient function for the forward model used for Levenberg-Marquardt optimization
-	"""
-	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0)) #TODO we need the center; this is not working
+	function inner_g_lm(arrayparameters_dx_center_tuple)
+		arrayparameters = arrayparameters_dx_center_tuple[1]
+		dx = arrayparameters_dx_center_tuple[2]
+		center = arrayparameters_dx_center_tuple[3]
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
@@ -92,6 +92,13 @@ function makelmfunctions(madsdata)
 			end
 		end
 		return jacobian
+	end
+	reusable_inner_g_lm = makemadsreusablefunction(madsdata, inner_g_lm, "g_lm"; usedict=false)
+	"""
+	Gradient function for the forward model used for Levenberg-Marquardt optimization
+	"""
+	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0)) #TODO we need the center; this is not working
+		return reusable_inner_g_lm((arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
 end
