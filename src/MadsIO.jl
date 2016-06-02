@@ -143,6 +143,7 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 - `Mads.savemadsfile(madsdata)`
 - `Mads.savemadsfile(madsdata, "test.mads")`
 - `Mads.savemadsfile(madsdata, parameters, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
 
 Arguments:
 
@@ -150,7 +151,7 @@ Arguments:
 - `parameters` : Dictinary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
-- `explicit` : if `true` use ignore MADS YAML file modifications
+- `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 """
 function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false)
 	if filename == ""
