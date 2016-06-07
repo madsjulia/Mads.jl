@@ -1,4 +1,5 @@
 using Mads
+using Base.Test
 
 problemdir = Mads.getmadsdir()
 
@@ -12,6 +13,10 @@ mdsaltelli = Mads.loadmadsfile(problemdir * "saltelli.mads")
 results = Mads.saltelliparallel(mdsaltelli, N=500, 2)
 Mads.printSAresults(mdsaltelli, results)
 
+rm("saltellirestart", recursive=true)
+results1 = Mads.saltelliparallel(mdsaltelli, 2; N=500, restartdir="saltellirestart")
+results2 = Mads.saltelliparallel(mdsaltelli, 2; N=500, restartdir="saltellirestart")
+@test results1 == results2
 # Mads.madsinfo("Parallel Saltelli sensitivity analysis (brute force): Sobol test:") # TODO Brute force needs to be fixed
 # mdsobol = Mads.loadmadsfile("sobol.mads")
 # results = Mads.saltellibruteparallel(mdsobol, 2) # Slow

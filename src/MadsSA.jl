@@ -154,7 +154,7 @@ Arguments:
 - `N` : number of samples
 - `seed` : initial random seed
 """
-function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdir=false) # TODO Saltelli (brute force) does not seem to work; not sure
 	if seed != 0
 		srand(seed)
 	end
@@ -292,6 +292,29 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0) # TODO Sa
 	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
+function loadsaltellirestart!(evalmat, matname, restartdir)
+	if restartdir == false
+		return false
+	end
+	filename = joinpath(restartdir, string(matname, "_", myid(), ".jld"))
+	if !isfile(filename)
+		return false
+	end
+	mat = JLD.load(filename, "mat")
+	copy!(evalmat, mat)
+	return true
+end
+
+function savesaltellirestart(evalmat, matname, restartdir)
+	if restartdir != false
+		if !isdir(restartdir)
+			mkdir(restartdir)
+		end
+		JLD.save(joinpath(restartdir, string(matname, "_", myid(), ".jld")), "mat", evalmat)
+	end
+	return nothing
+end
+
 """
 Saltelli sensitivity analysis
 
@@ -301,7 +324,7 @@ Arguments:
 - `N` : number of samples
 - `seed` : initial random seed
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed=0)
+function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=false)
 	if seed != 0
 		srand(seed)
 	end
@@ -338,19 +361,25 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	yA = Array(Float64, N, length(obskeys))
-	for i = 1:N
-		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
-		for j = 1:length(obskeys)
-			yA[i, j] = feval[obskeys[j]]
+	if !loadsaltellirestart!(yA, "yA", restartdir)
+		for i = 1:N
+			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
+			for j = 1:length(obskeys)
+				yA[i, j] = feval[obskeys[j]]
+			end
 		end
+		savesaltellirestart(yA, "yA", restartdir)
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
 	yB = Array(Float64, N, length(obskeys))
-	for i = 1:N
-		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
-		for j = 1:length(obskeys)
-			yB[i, j] = feval[obskeys[j]]
+	if !loadsaltellirestart!(yB, "yB", restartdir)
+		for i = 1:N
+			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
+			for j = 1:length(obskeys)
+				yB[i, j] = feval[obskeys[j]]
+			end
 		end
+		savesaltellirestart(yB, "yB", restartdir)
 	end
 	for i = 1:nP
 		for j = 1:N
@@ -364,11 +393,14 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0)
 		end
 		Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
 		yC = Array(Float64, N, length(obskeys))
-		for j = 1:N
-			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
-			for k = 1:length(obskeys)
-				yC[j, k] = feval[obskeys[k]]
+		if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
+			for j = 1:N
+				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
+				for k = 1:length(obskeys)
+					yC[j, k] = feval[obskeys[k]]
+				end
 			end
+			savesaltellirestart(yC, "yC$(i)", restartdir)
 		end
 		maxnnans = 0
 		for j = 1:nO
@@ -481,7 +513,7 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0)
+		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
 			if seed != 0
 				srand(seed)
 			end
@@ -489,7 +521,7 @@ for mi = 1:length(saltelli_functions)
 				madserror("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i), 1:numsaltellis)
+			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
