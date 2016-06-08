@@ -157,7 +157,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Func
 			break
 		end
 	end
-	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(), nEval, maxIter)
+	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(Optim.LevenbergMarquardt()), nEval, maxIter)
 end
 
 """
@@ -176,7 +176,7 @@ Arguments:
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
 - `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
-- `lambda_scale` : lambda scaling factor 
+- `lambda_scale` : lambda scaling factor
 - `lambda_mu` : lambda multiplication factor μ [10]
 - `lambda_nu` : lambda multiplication factor ν [10]
 - `np_lambda` : number of parallel lambda solves
@@ -235,7 +235,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	Mads.madsoutput("""Initial OF: $residual\n"""; level = 1);
 
 	# Maintain a trace of the system.
-	tr = Optim.OptimizationTrace()
+	tr = Optim.OptimizationTrace(Optim.LevenbergMarquardt())
 	if !Mads.quiet && show_trace
 		d = @Compat.compat Dict("lambda" => lambda)
 		os = Optim.OptimizationState(iterCt, o(fcur), NaN, d)
