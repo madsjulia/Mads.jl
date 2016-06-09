@@ -1,5 +1,5 @@
-using Distributions
-using DataStructures
+import Distributions
+import DataStructures
 
 """
 Get keys of all parameters in the MADS dictionary
@@ -36,7 +36,7 @@ Returns:
 function getparamdict(madsdata::Associative)
 	if haskey( madsdata, "Parameters" )
 		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+		paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		return paramdict
 	end
 end
@@ -339,7 +339,7 @@ Arguments:
 function setparamsdistuniform!(madsdata::Associative, min, max)
 	paramkeys = getparamkeys(madsdata)
 	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
+		madsdata["Parameters"][paramkeys[i]]["dist"] = "Distributions.Uniform($(min[i]),$(max[i]))"
 	end
 end
 
@@ -461,7 +461,7 @@ Arguments:
 """
 function getparamdistributions(madsdata::Associative; init_dist=false)
 	paramkeys = getoptparamkeys(madsdata)
-	distributions = OrderedDict()
+	distributions = DataStructures.OrderedDict()
 	for i in 1:length(paramkeys)
 		if init_dist
 			if haskey(madsdata["Parameters"][paramkeys[i]], "init_dist")
@@ -473,7 +473,7 @@ function getparamdistributions(madsdata::Associative; init_dist=false)
 			end
 		else
 			if haskey(madsdata["Parameters"][paramkeys[i]], "dist")
-				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				distributions[paramkeys[i]] = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
 				continue
 			else
 				minkey = "min"

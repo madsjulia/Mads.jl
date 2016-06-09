@@ -12,6 +12,8 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
+madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "MetaProgTools", "RobustPmap"]
+
 import MetaProgTools
 import RobustPmap
 import DataStructures
@@ -98,6 +100,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 end
 
 include("MadsLog.jl") # messages higher than verbosity level are printed
+include("MadsPublish.jl")
 include("MadsHelp.jl")
 include("MadsTest.jl")
 include("MadsCreate.jl")

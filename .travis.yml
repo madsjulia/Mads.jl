@@ -8,7 +8,7 @@ notifications:
   email: false
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.pin("PyCall", v"1.4.0")'
+  - julia -e 'Pkg.clone(pwd()); Pkg.checkout("Optim")'
   - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); Pkg.test("Mads"; coverage=true)'
   - julia -e 'Pkg.build("Mads"); Pkg.test("Mads"; coverage=true)'
 after_success:

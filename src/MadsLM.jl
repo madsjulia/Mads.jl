@@ -1,3 +1,5 @@
+import Optim
+
 """
 Compute the sum of squared residuals for observations that match a regular expression
 """

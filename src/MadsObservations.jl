@@ -263,10 +263,10 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 """
 function createobservations!(madsdata::Associative, time, observation; logtransform=false, weight_type="constant", weight=1)
 	@assert length(time) == length(observation)
-	observationsdict = OrderedDict()
+	observationsdict = DataStructures.OrderedDict()
 	for i in 1:length(time)
 		obskey = string("o", time[i])
-		data = OrderedDict()
+		data = DataStructures.OrderedDict()
 		data["target"] = observation[i]
 		if weight_type == "constant"
 			data["weight"] = weight

@@ -843,7 +843,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			for k = 1:n
 				# If the value we assigned to parameter k is a distribution, apply said distribution to its search curve
 				# Otherwise, set it as a constant (for parameters we are not analyzing)
-				if issubtype(typeof(InputData[k,2]), Distribution)
+				if issubtype(typeof(InputData[k,2]), Distributions.Distribution)
 					X[:,k] = quantile(InputData[k,2],tempX[:,k])
 				else
 					X[:,k] = InputData[k,2]
@@ -857,7 +857,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				# If parameter is one we are analyzing then we will assign numbers according to its probability dist
 				# Otherwise, we will simply set it at a constant (i.e. its initial value)
 				# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
-				if issubtype(typeof(InputData[k,2]), Distribution)
+				if issubtype(typeof(InputData[k,2]), Distributions.Distribution)
 					# dist contains all data about distribution so this will apply any necessary distributions to X
 					X[:,k] = quantile(dist[k],X[:,k])
 				else
@@ -992,13 +992,13 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				# If # of processors is <= Nr*nprime+(Nr+1) compute model output in serial
 				Mads.madsoutput("""Compute model output in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
 				@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
-					Y[i, :] = collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :]))))))
+					Y[i, :] = collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :]))))))
 				end
 			else
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
-				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict,OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end #End if (processors)
 
 			## CALCULATING MODEL OUTPUT (Standalone)

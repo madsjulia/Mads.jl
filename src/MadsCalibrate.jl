@@ -32,7 +32,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, to
 		srand(seed)
 	end
 	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	bestresult = Array(Any,2)
@@ -115,7 +115,7 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	end
 	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
-	minimumdict = OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	minimumdict = DataStructures.OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimum[i]
 	end
