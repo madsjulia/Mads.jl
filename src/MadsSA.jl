@@ -323,8 +323,10 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `seed` : initial random seed
+- `restartdir` : directory where files will be stored containing model results for fast simulation restarts
+- `parallel` : set to true if the model runs should be performed in parallel
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=false)
+function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=false, parallel=false, checkpointfrequency=div(N, 10))
 	if seed != 0
 		srand(seed)
 	end
@@ -360,26 +362,63 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 		B = [B s2]
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
+	function farray(Ai)
+		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, Ai))))
+		result = Array(Float64, length(obskeys))
+		for i = 1:length(obskeys)
+			result[i] = feval[obskeys[i]]
+		end
+		return result
+	end
 	yA = Array(Float64, N, length(obskeys))
-	if !loadsaltellirestart!(yA, "yA", restartdir)
+	if parallel
+		if !isdir(restartdir)
+			mkdir(restartdir)
+		end
+		Avecs = Array(Array{Float64, 1}, size(A, 1))
 		for i = 1:N
-			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
+			Avecs[i] = vec(A[i, :])
+		end
+		pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
+		for i = 1:N
 			for j = 1:length(obskeys)
-				yA[i, j] = feval[obskeys[j]]
+				yA[i, j] = pmapresult[i][j]
 			end
 		end
-		savesaltellirestart(yA, "yA", restartdir)
+	else
+		if !loadsaltellirestart!(yA, "yA", restartdir)
+			for i = 1:N
+				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
+				for j = 1:length(obskeys)
+					yA[i, j] = feval[obskeys[j]]
+				end
+			end
+			savesaltellirestart(yA, "yA", restartdir)
+		end
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
 	yB = Array(Float64, N, length(obskeys))
-	if !loadsaltellirestart!(yB, "yB", restartdir)
+	if parallel
+		Bvecs = Array(Array{Float64, 1}, size(B, 1))
 		for i = 1:N
-			feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
+			Bvecs[i] = vec(B[i, :])
+		end
+		pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
+		for i = 1:N
 			for j = 1:length(obskeys)
-				yB[i, j] = feval[obskeys[j]]
+				yB[i, j] = pmapresult[i][j]
 			end
 		end
-		savesaltellirestart(yB, "yB", restartdir)
+	else
+		if !loadsaltellirestart!(yB, "yB", restartdir)
+			for i = 1:N
+				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
+				for j = 1:length(obskeys)
+					yB[i, j] = feval[obskeys[j]]
+				end
+			end
+			savesaltellirestart(yB, "yB", restartdir)
+		end
 	end
 	for i = 1:nP
 		for j = 1:N
@@ -393,14 +432,27 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 		end
 		Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
 		yC = Array(Float64, N, length(obskeys))
-		if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
+		if parallel
+			Cvecs = Array(Array{Float64, 1}, size(C, 1))
 			for j = 1:N
-				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
+				Cvecs[j] = vec(C[j, :])
+			end
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
+			for j = 1:N
 				for k = 1:length(obskeys)
-					yC[j, k] = feval[obskeys[k]]
+					yC[j, k] = pmapresult[j][k]
 				end
 			end
-			savesaltellirestart(yC, "yC$(i)", restartdir)
+		else
+			if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
+				for j = 1:N
+					feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
+					for k = 1:length(obskeys)
+						yC[j, k] = feval[obskeys[k]]
+					end
+				end
+				savesaltellirestart(yC, "yC$(i)", restartdir)
+			end
 		end
 		maxnnans = 0
 		for j = 1:nO
