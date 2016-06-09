@@ -207,7 +207,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_means = Array(OrderedDict, numoneparamsamples)
+		cond_means = Array(DataStructures.OrderedDict, numoneparamsamples)
 		@showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
 			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
@@ -246,8 +246,8 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_vars = Array(OrderedDict, nummanyparamsamples)
-		cond_means = Array(OrderedDict, nummanyparamsamples)
+		cond_vars = Array(DataStructures.OrderedDict, nummanyparamsamples)
+		cond_means = Array(DataStructures.OrderedDict, nummanyparamsamples)
 		@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = DataStructures.OrderedDict()
 			cond_means[j] = DataStructures.OrderedDict()
@@ -344,13 +344,13 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 	A = Array(Float64, (N, 0))
 	B = Array(Float64, (N, 0))
 	C = Array(Float64, (N, nP))
-	variance = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}() # variance
-	mes = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}() # main effect (first order) sensitivities
-	tes = OrderedDict{AbstractString, OrderedDict{AbstractString, Float64}}()	# total effect sensitivities
+	variance = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}() # variance
+	mes = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}() # main effect (first order) sensitivities
+	tes = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}()	# total effect sensitivities
 	for i = 1:nO
-		variance[obskeys[i]] = OrderedDict{AbstractString, Float64}()
-		mes[obskeys[i]] = OrderedDict{AbstractString, Float64}()
-		tes[obskeys[i]] = OrderedDict{AbstractString, Float64}()
+		variance[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
+		mes[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
+		tes[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
 	end
 	for key in paramoptkeys
 		delete!(paramalldict,key)
@@ -526,9 +526,9 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 	mes = saresults["mes"]
 	tes = saresults["tes"]
 	var = saresults["var"]
-	pvar = OrderedDict{AbstractString, Float64}() # parameter variance
-	pmes = OrderedDict{AbstractString, Float64}() # parameter main effect (first order) sensitivities
-	ptes = OrderedDict{AbstractString, Float64}()	# parameter total effect sensitivities
+	pvar = DataStructures.OrderedDict{AbstractString, Float64}() # parameter variance
+	pmes = DataStructures.OrderedDict{AbstractString, Float64}() # parameter main effect (first order) sensitivities
+	ptes = DataStructures.OrderedDict{AbstractString, Float64}()	# parameter total effect sensitivities
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)
@@ -718,12 +718,12 @@ end
 "Convert Void's into NaN's in a dictionary"
 function void2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
-		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedDict
+		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: DataStructures.OrderedDict
 			for j in keys(dict[i])
 				if typeof(dict[i][j]) == Void
 					dict[i][j] = NaN
 				end
-				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedDict
+				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: DataStructures.OrderedDict
 					for k = keys(dict[i][j])
 						if typeof(dict[i][j][k]) == Void
 							dict[i][j][k] = NaN
