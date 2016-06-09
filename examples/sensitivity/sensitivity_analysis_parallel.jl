@@ -16,8 +16,8 @@ Mads.printSAresults(mdsaltelli, results)
 if isdir("saltellirestart")
 	rm("saltellirestart", recursive=true)
 end
-results1 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart")
-results2 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart")
+results1 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart", seed=2016)
+results2 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart", seed=2016)
 @test results1 == results2
 rm("saltellirestart", recursive=true)
 
