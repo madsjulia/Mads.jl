@@ -772,7 +772,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0)
+function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints")
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -1050,7 +1050,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
-				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast"), 1:size(X, 1))...)'
 			end #End if (processors)
 
 			## CALCULATING MODEL OUTPUT (Standalone)
