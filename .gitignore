@@ -1,6 +1,7 @@
 syntax: glob
 .DS_Store
 .project
+*.cov
 *_restart
 *.s_point
 *.wells
