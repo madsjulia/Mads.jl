@@ -772,7 +772,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints")
+function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints", restart=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -811,6 +811,11 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	# Y:         2-d array of model output (Ns x Nr) (Or higher dimension if we are running mads or user defines dynamic system)
 	#
 	##
+	if restart
+		if !isdir(restartdir)
+			mkdir(restartdir)
+		end
+	end
 
 	if seed != 0
 		srand(seed)
@@ -1026,6 +1031,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			## CALCULATING MODEL OUTPUT (Mads)
 			# If we are analyzing a mads problem, we calculate our model output as such:
 		elseif ismads == 1
+			#= This seems like weird test to decide if things should be done in parallel or serial...I suggest we drop it and always pmap
 			if P <= Nr*nprime+(Nr+1)
 				### Adding transformations of X and Y from svrobj into here to accurately compare runtimes of mads and svr
 				#X_svr = Array(Float64,(Ns*ny,nprime+1))
@@ -1047,11 +1053,16 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 					Y[i, :] = collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :]))))))
 				end
 			else
+				=#
 				# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
-				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast"), 1:size(X, 1))...)'
-			end #End if (processors)
+				if restart
+					Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$k"), 1:size(X, 1))...)'
+				else
+					Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+				end
+			#end #End if (processors)
 
 			## CALCULATING MODEL OUTPUT (Standalone)
 			# If we are using this program as a standalone, we enter our model function here:

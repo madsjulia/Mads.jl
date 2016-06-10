@@ -152,7 +152,7 @@ Convert parameter array to a parameter dictionary of arrays
 """
 function paramarray2dict(madsdata::Associative, array)
 	paramkeys = getoptparamkeys(madsdata)
-	dict = OrderedDict()
+	dict = DataStructures.OrderedDict()
 	for i in 1:length(paramkeys)
 		dict[paramkeys[i]] = array[:,i]
 	end
