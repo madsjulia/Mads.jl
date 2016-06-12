@@ -36,6 +36,7 @@ Mads.copyright()
 # Mads.functions("test")
 # Mads.functions(Mads, "test")
 # Mads.create_documentation()
+close(outWrite);
 close(outRead);
 redirect_stdout(originalSTDOUT);
 Mads.quieton()

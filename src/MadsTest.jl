@@ -1,8 +1,18 @@
-"Execute Mads tests (the default tests are in serial)"
+"Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)"
 function testj(coverage=false)
 	for i in madsmodules
 		Pkg.test(i; coverage=coverage)
 	end
+end
+
+"Remove Mads coverage files"
+function cleancoverage()
+	orig_dir = pwd()
+	for i in madsmodules
+		cd(joinpath(Pkg.dir(i), "src"))
+		run(`bash -c "rm -f *.cov"`)
+	end
+	cd(orig_dir)
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"

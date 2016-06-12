@@ -61,6 +61,7 @@ Mads.showparameters(md)
 Mads.showallparameters(md)
 Mads.showallparameters(md)
 Mads.showobservations(md)
+close(outWrite);
 close(outRead);
 redirect_stdout(originalSTDOUT);
 
