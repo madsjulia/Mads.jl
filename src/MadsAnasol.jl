@@ -1,5 +1,6 @@
 import Anasol
 import ProgressMeter
+import Gadfly
 
 """
 Create a function to compute concentrations for all the observation points using Anasol
@@ -255,7 +256,7 @@ function computemass(madsfiles; time = 0, path = ".")
 	lambda = Array(Float64, nf)
 	mass_injected = Array(Float64, nf)
 	mass_reduced = Array(Float64, nf)
-	@showprogress 1 "Computing reducted mass ..." for i = 1:nf
+	@ProgressMeter.showprogress 1 "Computing reducted mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(path * "/" * mf[i])
 		l = md["Parameters"]["lambda"]["init"]
 		if l < eps(Float64)
@@ -292,8 +293,8 @@ function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString;
 	display(p2)
 	p3 = Gadfly.plot(x=mass_injected, y=mass_reduced./mass_injected, Guide.xlabel("Mass Injected [kg]"), Guide.ylabel("Fraction of the Reduced Mass [-]"), Geom.point, Scale.x_log10, Scale.y_log10)
 	display(p3)
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	p = Gadfly.vstack(p1, p2, p3)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 8inch), p)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 8Gadfly.inch), p)
 	return
 end

@@ -1,6 +1,7 @@
 import BIGUQ
 import ProgressMeter
 import DataFrames
+import Gadfly
 
 """
 Setup BIG-DT problem
@@ -133,7 +134,7 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 	local horizons::Array{Float64, 1}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
-	@showprogress 1 "Computing ... " for i = 1:length(madsdata["Choices"])
+	@ProgressMeter.showprogress 1 "Computing ... " for i = 1:length(madsdata["Choices"])
 		Mads.madsinfo("Choice #$i: $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
 		if length(likelihoodparams) == 0
@@ -143,7 +144,7 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 		end
 		maxfailureprobs[:, i], horizons, badlikelihoodparams = BIGUQ.getrobustnesscurve(bigdt, maxHorizon, numlikelihoods; getfailureprobfnct=getfailureprobs, numhorizons=numhorizons, likelihoodparams=likelihoodparams)
 	end
-	return @Compat.compat Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
+	return Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
 end
 
 function makemakearrayconditionalloglikelihood(madsdata::Associative)
@@ -170,7 +171,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 		rootname = Mads.getmadsrootname(madsdata)
 		filename =  rootname * "-robustness"
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	layers = Array(Any, size(maxfailureprobs, 2))
 	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))
@@ -183,7 +184,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 									Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"),
 									Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
 									Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
-	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
+	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.Gadfly.inch, 3Gadfly.Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
 	end

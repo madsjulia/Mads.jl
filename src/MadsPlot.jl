@@ -1,10 +1,10 @@
-using ProgressMeter
-using Gadfly
+import ProgressMeter
+import Gadfly
 
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`Mads.setimagefileformat(filename, format)`
+`setimagefileformat(filename, format)`
 
 Arguments:
 
@@ -111,7 +111,7 @@ function plotmadsproblem(madsdata::Associative; format="", filename="", keyword=
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), p)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
 	end
@@ -220,7 +220,7 @@ function plotmatches(madsdata_in::Associative; filename="", format="", separate_
 	plotmatches(madsdata_in, r, filename=filename, format=format, separate_files=separate_files)
 end
 
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false, hsize=6inch)
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename="", format="", key2time=k->0., title=rx.pattern, ylabel="y", xlabel="time", separate_files=false, hsize=6Gadfly.inch)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -237,9 +237,9 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false, hsize=6inch)
+function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false, hsize=6Gadfly.inch)
 	rootname = Mads.getmadsrootname(madsdata)
-	vsize = 0inch
+	vsize = 0Gadfly.inch
 	pl = Any{}
 	didplot = false
 	if haskey(madsdata, "Wells")
@@ -272,19 +272,19 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 					p = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-					vsize += 4inch
+					vsize += 4Gadfly.inch
 					push!(pp, p)
 				else npp = 1
 					p = Gadfly.plot(Guide.title(wellname),
 						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
 					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
-					vsize += 4inch
+					vsize += 4Gadfly.inch
 					push!(pp, p)
 				end
 				if separate_files
 					filename_w = "$rootname-match-$wellname"
 					filename_w, format = setimagefileformat(filename_w, format)
-					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, hsize, 4inch), p)
+					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, hsize, 4Gadfly.inch), p)
 					didplot = true
 				end
 			end
@@ -324,7 +324,7 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 					layer(x=tress, y=ress, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
 					layer(x=tobs, y=obs, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt, highlight_width=0pt)))
 		didplot = true
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	if !didplot
 		error("Nothing to plot!")
@@ -373,9 +373,9 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 			end
 		end
 	end
-	hsize = (3 * size(samples, 2))inch
-	vsize = (3 * size(samples, 2))inch
-	filename, format = Mads.setimagefileformat(filename, format)
+	hsize = (3 * size(samples, 2))Gadfly.inch
+	vsize = (3 * size(samples, 2))Gadfly.inch
+	filename, format = setimagefileformat(filename, format)
 	try
 		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
@@ -454,7 +454,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	pp = Array(Any, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle))
 	push!(pp, pc)
-	vsize = 4inch
+	vsize = 4Gadfly.inch
 	df = Array(Any, nP)
 	j = 1
 	for paramkey in paramkeys
@@ -466,7 +466,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	if length(vdf[1]) > 0
 		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
 		push!(pp, ptes)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	j = 1
 	for paramkey in paramkeys
@@ -478,7 +478,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	if length(vdf[1]) > 0
 		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
 		push!(pp, pmes)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	j = 1
 	for paramkey in paramkeys
@@ -490,7 +490,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	if length(vdf[1]) > 0
 		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
 		push!(pp, pvar)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	p = Gadfly.vstack(pp...)
 	rootname = getmadsrootname(madsdata)
@@ -498,8 +498,8 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	if filename == ""
 		filename = "$rootname-$wellname-$method-$nsample"
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize), p)
+	filename, format = setimagefileformat(filename, format)
+	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize), p)
 end
 
 """
@@ -564,8 +564,8 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
 		# writetable("dfc.dat", dfc)
 	end
-	# vsize = 4inch
-	vsize = 0inch
+	# vsize = 4Gadfly.inch
+	vsize = 0Gadfly.inch
 	###################################################### TES
 	df = Array(Any, nP)
 	for j in 1:length(plotlabels)
@@ -590,7 +590,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 					Gadfly.Guide.XLabel(xtitle),
 					Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
 		push!(pp, ptes)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	###################################################### MES
 	for j in 1:length(plotlabels)
@@ -615,7 +615,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 				Gadfly.Guide.XLabel(xtitle),
 				Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pmes)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	###################################################### VAR
 	for j in 1:length(plotlabels)
@@ -638,7 +638,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
-		vsize += 4inch
+		vsize += 4Gadfly.inch
 	end
 	######################################################
 	if filename == ""
@@ -651,18 +651,18 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		end
 	end
 	if !separate_files
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = setimagefileformat(filename, format)
 		p = Gadfly.vstack(pp...)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, vsize ), p)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
-		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), ptes)
+		filename, format = setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
-		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 4inch), pmes)
+		filename, format = setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), pmes)
 	end
 end
 
@@ -731,12 +731,12 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			end
 		end
 	end
-	vsize = 0inch
+	vsize = 0Gadfly.inch
 	Mads.madsoutput("Spaghetti plots for each selected model parameter (type != null) ...\n")
 	for paramkey in paramoptkeys
 		Mads.madsoutput("Parameter: $paramkey ...\n")
 		Y = Array(Float64, nT, numberofsamples)
-		@showprogress 4 "Computing ..." for i in 1:numberofsamples
+		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
 			result = func(paramdict)
@@ -751,11 +751,11 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 					[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]...)
-			vsize = 4inch
+			vsize = 4Gadfly.inch
 		else
 			pp = Array(Gadfly.Plot{}, 0)
 			p = Gadfly.Plot{}
-			vsize = 0inch
+			vsize = 0Gadfly.inch
 			startj = 1
 			endj  = 0
 			for wellname in keys(madsdata["Wells"])
@@ -784,7 +784,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 							for i in 1:numberofsamples]...)
 					push!(pp, p)
-					vsize += 4inch
+					vsize += 4Gadfly.inch
 					startj = endj + 1
 				end
 			end
@@ -799,9 +799,9 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		else
 			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		end
-		filename, format = Mads.setimagefileformat(filename, format)
+		filename, format = setimagefileformat(filename, format)
 		try
-			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
+			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter."
 			Mads.madswarn("Gadfly fails!")
 		end
@@ -876,7 +876,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 	end
 	Y = Array(Float64,nT,numberofsamples)
 	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
-	@showprogress 4 "Computing ..." for i in 1:numberofsamples
+	@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 		for paramkey in paramoptkeys
 			paramdict[paramkey] = paramdictarray[paramkey][i]
 		end
@@ -891,11 +891,11 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 				for i in 1:numberofsamples]... )
-		vsize = 4inch
+		vsize = 4Gadfly.inch
 	else
 		pp = Array(Gadfly.Plot{}, 0)
 		p = Gadfly.Plot{}
-		vsize = 0inch
+		vsize = 0Gadfly.inch
 		startj = 1
 		endj  = 0
 		for wellname in keys(madsdata["Wells"])
@@ -924,7 +924,7 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 						for i in 1:numberofsamples]...)
 				push!(pp, p)
-				vsize += 4inch
+				vsize += 4Gadfly.inch
 				startj = endj + 1
 			end
 		end
@@ -941,9 +941,9 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
 		end
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	try
-		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6inch, vsize), pl)
+		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
@@ -967,8 +967,8 @@ function plotseries(X::Matrix, filename::AbstractString; format="", xtitle = "X"
 	nT = size(X)[1]
 	nS = size(X)[2]
 	if combined
-		hsize = 6Gadfly.inch
-		vsize = 4Gadfly.inch
+		hsize = 6Gadfly.Gadfly.inch
+		vsize = 4Gadfly.Gadfly.inch
 		pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i], 
 			Gadfly.Geom.line,
 			color = ["$name $i" for j in 1:nT])
@@ -976,15 +976,15 @@ function plotseries(X::Matrix, filename::AbstractString; format="", xtitle = "X"
 			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
 			Gadfly.Guide.colorkey(title))
 	else
-		hsize = 6Gadfly.inch
-		vsize = 2Gadfly.inch * nS
+		hsize = 6Gadfly.Gadfly.inch
+		vsize = 2Gadfly.Gadfly.inch * nS
 		pp = Array(Gadfly.Plot{}, nS)
 		for i in 1:nS
 			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
 		end
 		pS = Gadfly.vstack(pp...)
 	end
-	filename, format = Mads.setimagefileformat(filename, format)
+	filename, format = setimagefileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, hsize, vsize), pS)
 	catch "At least one finite value must be provided to formatter."

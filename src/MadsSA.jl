@@ -1,4 +1,6 @@
-using ProgressMeter
+import ProgressMeter
+import Distributions
+import Gadfly
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
@@ -90,8 +92,8 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 		filename = "$(rootname)-jacobian"
-		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6inch, 12inch), jacmat)
+		filename, format = setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 12Gadfly.inch), jacmat)
 		Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
 	end
 	JpJ = J' * J
@@ -130,19 +132,19 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 					Gadfly.Scale.ContinuousColorScale(Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenmatrix"
-		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,6inch), eigenmat)
+		filename, format = setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6Gadfly.inch,6Gadfly.inch), eigenmat)
 		Mads.madsinfo("""Eigen matrix plot saved in $filename""")
 		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 					Gadfly.Geom.bar,
 					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenvalues"
-		filename, format = Mads.setimagefileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6inch,4inch), eigenval)
+		filename, format = setimagefileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("""Eigen values plot saved in $filename""")
 	end
-	@Compat.compat Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
+	Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end
 
 """
@@ -208,7 +210,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
 		cond_means = Array(DataStructures.OrderedDict, numoneparamsamples)
-		@showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
+		@ProgressMeter.showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
 			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
 				cond_means[j][obskeys[k]] = 0.
@@ -248,7 +250,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 		madsinfo("""Parameter : $(paramkeys[i])""")
 		cond_vars = Array(DataStructures.OrderedDict, nummanyparamsamples)
 		cond_means = Array(DataStructures.OrderedDict, nummanyparamsamples)
-		@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
+		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = DataStructures.OrderedDict()
 			cond_means[j] = DataStructures.OrderedDict()
 			for m = 1:length(obskeys)
@@ -289,7 +291,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 			var[obskeys[j]][paramkeys[i]] = runningsum / nummanyparamsamples
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
+	Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
 function loadsaltellirestart!(evalmat, matname, restartdir)
@@ -509,7 +511,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 			Mads.madswarn("""There are $(maxnnans) NaN's""")
 		end
 	end
-	@Compat.compat Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
+	Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
 end
 
 """
@@ -555,7 +557,7 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 		pmes[paramkeys[i]] = pm / length(obskeys)
 		ptes[paramkeys[i]] = pt / length(obskeys)
 	end
-	@Compat.compat Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
+	Dict("var" => pvar, "mes" => pmes, "tes" => ptes)
 end
 
 # Parallelization of Saltelli functions
@@ -598,7 +600,7 @@ for mi = 1:length(saltelli_functions)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			@Compat.compat Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
+			Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
 		end # end fuction
 	end # end quote
 	eval(q)
@@ -858,8 +860,8 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
 			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
-				Wi = @Compat.compat Int(Wi)
-				Ns = @Compat.compat Int(Ns_total / Nr)
+				Wi = Int(Wi)
+				Ns = Int(Ns_total / Nr)
 				if iseven(Ns)
 					Ns += 1
 					Ns_total = Ns * Nr
@@ -943,7 +945,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		srand(seed+kL)
 
 		# Determining which parameter we are on
-		k = @Compat.compat Int(ceil(kL/Nr))
+		k = Int(ceil(kL/Nr))
 
 		# Initializing
 		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
@@ -1122,7 +1124,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			AVci = zeros(ny,1)
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Looping over each point in time
-			@showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
+			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
 				Y[:,i] = (Y[:,i] - mean(Y[:,i]))'
 				## Calculating Fourier coefficients associated with MAIN INDICES
@@ -1357,7 +1359,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	if truncateRanges ==1
 		##### Truncated ranges Boian asked for (ranges were too large for SVR)
 		############## FORCED INPUT ##############
-		@Compat.compat percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
+		percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
 		#Increasing ranges
 		if increaserange == 1
 			#percentDict = ["vx"=>.40, "ax"=>.95, "ts_dsp"=>.60, "source1_f"=>.20, "source1_t0"=>.40, "source1_x"=>.10, "source1_t1"=>.20]
@@ -1406,14 +1408,14 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		# Note: Ns must be odd, eFAST_optimalSearch.jl will adjust for this if necessary but if you use a forced input
 		# make sure to keep this in mind.
 		# Ns =
-		Wi = @Compat.compat int(100)
-		Nr = @Compat.compat int(ceil(Ns_total/(gamma*M*Wi+1)))
+		Wi = int(100)
+		Nr = int(ceil(Ns_total/(gamma*M*Wi+1)))
 
-		Ns       = @Compat.compat int((gamma*M*Wi+1))
+		Ns       = int((gamma*M*Wi+1))
 		if mod(Ns,2) != 1
 			Ns += 1
 		end
-		Ns_total = @Compat.compat int(Ns*Nr)
+		Ns_total = int(Ns*Nr)
 		info("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
 	end
 
@@ -1451,7 +1453,7 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 		for k = 1:nprime
 			OutputData[:,:,k] = reshape(tempOutputData[:,:,k], (ny,Ns))'
 		end
-		ny = @Compat.compat int(length(OutputData[1,:,1]))
+		ny = int(length(OutputData[1,:,1]))
 		# Converting data into similar format (PROB NEED TO ADD IN PHASE SHIFT HERE, change OutputData to a 3d array)
 	end
 
@@ -1571,9 +1573,9 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 
 	if issvr
 		info("returning results efast analysis of SVR model")
-		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
+		return Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast(SVR)", "seed" => seed)
 	else
-		return @Compat.compat Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
+		return Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
 	end
 
 	# Plot results as .svg file
@@ -1669,11 +1671,11 @@ function plotSAresults_monty(wellname, madsdata, result)
 		bigdf = vcat(dfc,vdf)
 		# Plotting
 		ptes = Gadfly.plot(bigdf, x="x", y="y", Geom.line, color = "parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect/Normalized Concentration"),
-											 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03inch),
+											 Guide.title("$(wellname) - Max Concentration: $(maxconcentration)"), Theme(key_position = :bottom, line_width=.03Gadfly.inch),
 											 Gadfly.Scale.color_discrete_manual(pcolors...))
 		# Creating .svg file for plot (in current directory)
 		rootname = Mads.getmadsrootname(madsdata)
 		method = result["method"]
-		Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9inch, 6inch), ptes)
+		Gadfly.draw(SVG(string("$rootname-$wellname-$method-$(nsample)_montyplot.svg"), 9Gadfly.inch, 6Gadfly.inch), ptes)
 	end
 end

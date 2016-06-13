@@ -10,8 +10,8 @@ Mads.madsinfo("Optimization of Rosenbrock function ...")
 Mads.madsinfo("Nelder-Mead optimization (default) of the Rosenbrock function ...")
 results = Optim.optimize(fr, [0.0, 0.0])
 
-Mads.madsinfo("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function without sine transformation:")
-results = Optim.LevenbergMarquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
+# Mads.madsinfo("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function without sine transformation:")
+# results = Optim.LevenbergMarquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)
 
 Mads.madsinfo("Sine transformation of parameter space ...")
 indexlogtransformed = []
@@ -31,9 +31,9 @@ Mads.madsinfo("Parameter transformation in a function: $a = $Mads.rosenbrock_lm(
 a = sin_rosenbrock_lm(Mads.asinetransform([1.0,1.0], lowerbounds, upperbounds, indexlogtransformed))
 Mads.madsinfo("Parameter transformation in a function: $a = $Mads.rosenbrock_lm([1.0,1.0])\n")
 
-Mads.madsinfo("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function with sine transformation:")
-results = Optim.LevenbergMarquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds, indexlogtransformed), show_trace=false)
-Mads.madsinfo("Minimum back transformed: $Mads.sinetransform(results.minimum, lowerbounds, upperbounds)\n")
+# Mads.madsinfo("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function with sine transformation:")
+# results = Optim.LevenbergMarquardt(sin_rosenbrock_lm, sin_rosenbrock_gradient_lm, Mads.asinetransform([0.0, 0.0], lowerbounds, upperbounds, indexlogtransformed), show_trace=false)
+# Mads.madsinfo("Minimum back transformed: $Mads.sinetransform(results.minimum, lowerbounds, upperbounds)\n")
 
 Mads.madsinfo("MADS Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
 results = Mads.LevenbergMarquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], lambda_mu=2.0, np_lambda=10, show_trace=false)

@@ -239,7 +239,7 @@ function LevenbergMarquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[
 	# Maintain a trace of the system.
 	tr = Optim.OptimizationTrace(Optim.LevenbergMarquardt())
 	if !Mads.quiet && show_trace
-		d = @Compat.compat Dict("lambda" => lambda)
+		d = Dict("lambda" => lambda)
 		os = Optim.OptimizationState(iterCt, o(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
@@ -373,7 +373,7 @@ function LevenbergMarquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[
 
 		if show_trace
 			gradnorm = norm(J'*fcur, Inf)
-			d = @Compat.compat Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
+			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
 			os = Optim.OptimizationState(iterCt, o(fcur), gradnorm, d)
 			push!(tr, os)
 			println(os)

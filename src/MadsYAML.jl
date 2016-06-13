@@ -87,7 +87,7 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString; julia::Bool=false)
 		for well in keys(yamldata["Wells"])
 			delete!(yamldata["Wells"][well], "on" )
 			for i = 1:length(yamldata["Wells"][well]["obs"])
-				dict = @Compat.compat Dict(i=>yamldata["Wells"][well]["obs"][i])
+				dict = Dict(i=>yamldata["Wells"][well]["obs"][i])
 				yamldata["Wells"][well]["obs"][i] = dict
 			end
 		end
@@ -97,7 +97,7 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString; julia::Bool=false)
 			a = Array(Any, 0)
 			for key in keys(yamldata[obsorparam])
 				if !ismatch(r"source[1-9]*_", key)
-					push!( a, @Compat.compat Dict(key=>yamldata[obsorparam][key]))
+					push!( a, Dict(key=>yamldata[obsorparam][key]))
 				end
 			end
 			yamldata[obsorparam] = a
@@ -109,7 +109,7 @@ function dumpyamlmadsfile(madsdata, filename::AbstractString; julia::Bool=false)
 			i = 1
 			keys = map(string, 1:length(yamldata[tplorins]))
 			for key in keys
-				a[i] = @Compat.compat Dict(key=>yamldata[tplorins][i])
+				a[i] = Dict(key=>yamldata[tplorins][i])
 				i += 1
 			end
 			yamldata[tplorins] = a

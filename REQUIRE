@@ -4,23 +4,23 @@ ReusableFunctions
 MetaProgTools
 BIGUQ
 RobustPmap
-Lora
-HDF5
-Optim 0.5
-BlackBoxOptim
-Distributions
-DataStructures
-ForwardDiff
-ODE
-ProgressMeter
-LightXML
 Conda
 PyCall 1.6.2
 PyPlot
+Gadfly
+HDF5
 YAML
 JSON
 JLD
-Gadfly
+LightXML
+ProgressMeter
+Distributions
+DataStructures
 DataFrames
+ForwardDiff
+ODE
+Lora
+Optim
+BlackBoxOptim
 Docile
 Lexicon
