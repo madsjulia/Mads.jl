@@ -1,3 +1,6 @@
+import JSON
+import YAML
+
 if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
 	"""
 	Load YAML file

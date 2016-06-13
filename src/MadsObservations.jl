@@ -1,3 +1,5 @@
+import DataStructures
+
 "Get keys for all observations in the MADS problem dictionary"
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))

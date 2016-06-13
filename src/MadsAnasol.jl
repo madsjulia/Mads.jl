@@ -1,4 +1,5 @@
 import Anasol
+import DataStructures
 import ProgressMeter
 import Gadfly
 

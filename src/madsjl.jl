@@ -1,4 +1,5 @@
 #!/usr/bin/env julia -q --color=yes
+import JLD
 
 function write_cmdline_hist()
 	f = open("madsjl.cmdline_hist", "a+")

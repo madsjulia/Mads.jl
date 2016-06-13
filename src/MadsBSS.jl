@@ -1,6 +1,7 @@
 import NMF
 import JuMP
 import Ipopt
+import Optim
 
 "Non-negative Matrix Factorization using NMF"
 function NMFm(X, nk; retries=1, tol=1.0e-9, maxiter=10000)

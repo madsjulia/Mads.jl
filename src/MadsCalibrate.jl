@@ -1,3 +1,6 @@
+import DataStructures
+import Optim
+
 """
 Calibrate with random initial guesses
 

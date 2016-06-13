@@ -1,3 +1,5 @@
+import DataStructures
+
 """
 Load MADS input file defining a MADS problem dictionary
 

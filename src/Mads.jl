@@ -14,22 +14,6 @@ module Mads
 
 madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "MetaProgTools", "RobustPmap"]
 
-import MetaProgTools
-import RobustPmap
-import DataStructures
-import DataFrames
-import Distributions
-import Compose
-import Colors
-import Compat
-import Optim
-import Lora
-import Distributions
-import JSON
-import JLD
-import YAML
-import HDF5
-
 macro tryimport(s)
 	importq = string(:(import $s))
 	warnstring = string(s, " not available")

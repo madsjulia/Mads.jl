@@ -1,6 +1,12 @@
+import MetaProgTools
 import ProgressMeter
 import Distributions
+import DataStructures
+import DataFrames
 import Gadfly
+import Colors
+import JSON
+import JLD
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy

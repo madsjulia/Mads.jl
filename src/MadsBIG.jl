@@ -2,6 +2,7 @@ import BIGUQ
 import ProgressMeter
 import DataFrames
 import Gadfly
+import Optim
 
 """
 Setup BIG-DT problem

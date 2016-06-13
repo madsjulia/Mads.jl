@@ -1,3 +1,6 @@
+import JSON
+import DataStructures
+
 "Load a JSON file"
 function loadjsonfile(filename::AbstractString) # load JSON text file
 	sz = filesize(filename)
