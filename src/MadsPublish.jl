@@ -54,7 +54,7 @@ function tag(testmod::AbstractString)
 		Pkg.tag(testmod)
 		info("$testmod is now tagged!")
 	else
-		error("$testmod cannot be tagged!")
+		warn("$testmod cannot be tagged!")
 	end
 end
 
