@@ -9,5 +9,5 @@ callbacksucceeded = false
 end
 
 Mads.madsinfo("Levenberg-Marquardt optimization of the Rosenbrock function with callback")
-results = Mads.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0]; show_trace=false, callback=callback)
+results = Mads.LevenbergMarquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0]; show_trace=false, callback=callback)
 @test callbacksucceeded

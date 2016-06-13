@@ -154,9 +154,9 @@ function MFlm(X, nk; mads=true, log_W=false, log_H=false, retries=1, tol=1.0e-9,
 			x = [W_init; H_init]
 		end
 		if mads
-			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=maxiter, maxIter=maxiter, maxJacobians=maxiter, tolX=tol, tolG=1e-16)
+			r = Mads.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=maxiter, maxIter=maxiter, maxJacobians=maxiter, tolX=tol, tolG=1e-16)
 		else
-			r = Optim.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxiter)
+			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxiter)
 		end
 		phi = r.f_minimum
 		#display(r)
