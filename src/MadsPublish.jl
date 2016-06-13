@@ -44,21 +44,15 @@ end
 "Tag the Mads modules"
 function tag()
 	for i in madsmodules
-		tag_flag = Mads.status(i)
-		if tag_flag
-			info("$i is now tagged!")
-			Pkg.tag(i)
-		else
-			error("$i cannot be tagged!")
-		end
+		Mads.tag(i)
 	end
 end
 
 function tag(testmod::AbstractString)
 	tag_flag = Mads.status(testmod)
 	if tag_flag
-		info("$testmod is now tagged!")
 		Pkg.tag(testmod)
+		info("$testmod is now tagged!")
 	else
 		error("$testmod cannot be tagged!")
 	end

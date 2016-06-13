@@ -5,12 +5,74 @@
 
 ---
 
+<a id="method__levenbergmarquardt.1" class="lexicon_definition"></a>
+## LevenbergMarquardt(f::Function,  g::Function,  x0)
+Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `root` : Mads problem root name
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `maxJacobians` : maximum number of Jacobian solves
+- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
+- `lambda_scale` : lambda scaling factor
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `lambda_nu` : lambda multiplication factor ν [10]
+- `np_lambda` : number of parallel lambda solves
+- `show_trace` : shows solution trace [default=false]
+- `alwaysDoJacobian`: computer Jacobian each iteration [false]
+- `callback` : call back function for debugging
+
+
+*source:*
+[Mads/src/MadsLM.jl:189](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L189)
+
+---
+
+<a id="method__levenbergmarquardt.2" class="lexicon_definition"></a>
+## LevenbergMarquardt(f::Function,  g::Function,  x0,  o::Function)
+Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `root` : Mads problem root name
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `maxJacobians` : maximum number of Jacobian solves
+- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
+- `lambda_scale` : lambda scaling factor
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `lambda_nu` : lambda multiplication factor ν [10]
+- `np_lambda` : number of parallel lambda solves
+- `show_trace` : shows solution trace [default=false]
+- `alwaysDoJacobian`: computer Jacobian each iteration [false]
+- `callback` : call back function for debugging
+
+
+*source:*
+[Mads/src/MadsLM.jl:189](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L189)
+
+---
+
 <a id="method__allwellsoff.1" class="lexicon_definition"></a>
 ## allwellsoff!(madsdata::Associative{K, V})
 Turn off all the wells in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:326](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L326)
+[Mads/src/MadsObservations.jl:326](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L326)
 
 ---
 
@@ -19,7 +81,7 @@ Turn off all the wells in the MADS problem dictionary
 Turn on all the wells in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:302](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L302)
+[Mads/src/MadsObservations.jl:302](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L302)
 
 ---
 
@@ -28,7 +90,7 @@ Turn on all the wells in the MADS problem dictionary
 Arcsine transformation of model parameters
 
 *source:*
-[Mads/src/MadsSine.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L2)
+[Mads/src/MadsSine.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSine.jl#L2)
 
 ---
 
@@ -56,7 +118,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsMC.jl:25](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L25)
+[Mads/src/MadsMC.jl:25](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMC.jl#L25)
 
 ---
 
@@ -88,7 +150,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsCalibrate.jl:82](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L82)
+[Mads/src/MadsCalibrate.jl:82](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsCalibrate.jl#L82)
 
 ---
 
@@ -97,7 +159,7 @@ Returns:
 Do a calibration using NLopt 
 
 *source:*
-[Mads/src/MadsCalibrate.jl:127](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L127)
+[Mads/src/MadsCalibrate.jl:127](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsCalibrate.jl#L127)
 
 ---
 
@@ -133,7 +195,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsCalibrate.jl:30](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L30)
+[Mads/src/MadsCalibrate.jl:30](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsCalibrate.jl#L30)
 
 ---
 
@@ -169,7 +231,25 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsCalibrate.jl:30](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCalibrate.jl#L30)
+[Mads/src/MadsCalibrate.jl:30](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsCalibrate.jl#L30)
+
+---
+
+<a id="method__checkout.1" class="lexicon_definition"></a>
+## checkout()
+Checkout the latest version of the Mads modules
+
+*source:*
+[Mads/src/MadsPublish.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPublish.jl#L2)
+
+---
+
+<a id="method__cleancoverage.1" class="lexicon_definition"></a>
+## cleancoverage()
+Remove Mads coverage files
+
+*source:*
+[Mads/src/MadsTest.jl:9](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTest.jl#L9)
 
 ---
 
@@ -178,7 +258,7 @@ Returns:
 Call C MADS ins_obs() function from the MADS dynamic library
 
 *source:*
-[Mads/src/MadsIO.jl:497](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L497)
+[Mads/src/MadsIO.jl:535](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L535)
 
 ---
 
@@ -200,7 +280,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsAnasol.jl:192](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L192)
+[Mads/src/MadsAnasol.jl:193](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsAnasol.jl#L193)
 
 ---
 
@@ -224,7 +304,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsAnasol.jl:251](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L251)
+[Mads/src/MadsAnasol.jl:252](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsAnasol.jl#L252)
 
 ---
 
@@ -239,7 +319,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:439](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L439)
+[Mads/src/MadsSA.jl:525](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L525)
 
 ---
 
@@ -282,7 +362,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsAnasol.jl:151](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L151)
+[Mads/src/MadsAnasol.jl:152](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsAnasol.jl#L152)
 
 ---
 
@@ -291,7 +371,7 @@ Returns:
 Produce MADS copyright information
 
 *source:*
-[Mads/src/MadsHelp.jl:9](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L9)
+[Mads/src/MadsHelp.jl:9](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelp.jl#L9)
 
 ---
 
@@ -300,7 +380,7 @@ Produce MADS copyright information
 Create web documentation files for Mads functions
 
 *source:*
-[Mads/src/MadsHelp.jl:62](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L62)
+[Mads/src/MadsHelp.jl:62](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelp.jl#L62)
 
 ---
 
@@ -309,7 +389,7 @@ Create web documentation files for Mads functions
 Turn off the generation of MADS tests (default)
 
 *source:*
-[Mads/src/MadsHelpers.jl:17](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L17)
+[Mads/src/MadsHelpers.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L17)
 
 ---
 
@@ -318,7 +398,7 @@ Turn off the generation of MADS tests (default)
 Turn on the generation of MADS tests (dangerous)
 
 *source:*
-[Mads/src/MadsHelpers.jl:12](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L12)
+[Mads/src/MadsHelpers.jl:12](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L12)
 
 ---
 
@@ -339,7 +419,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsCreate.jl:16](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsCreate.jl#L16)
+[Mads/src/MadsCreate.jl:16](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsCreate.jl#L16)
 
 ---
 
@@ -349,7 +429,7 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 
 
 *source:*
-[Mads/src/MadsObservations.jl:264](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L264)
+[Mads/src/MadsObservations.jl:264](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L264)
 
 ---
 
@@ -358,7 +438,7 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 Delete rows with NaN in a Dataframe `df`
 
 *source:*
-[Mads/src/MadsSA.jl:655](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L655)
+[Mads/src/MadsSA.jl:741](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L741)
 
 ---
 
@@ -380,7 +460,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsBIG.jl:122](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L122)
+[Mads/src/MadsBIG.jl:123](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsBIG.jl#L123)
 
 ---
 
@@ -389,7 +469,7 @@ Returns:
 Dump ASCII file
 
 *source:*
-[Mads/src/MadsASCII.jl:8](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L8)
+[Mads/src/MadsASCII.jl:8](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsASCII.jl#L8)
 
 ---
 
@@ -398,7 +478,7 @@ Dump ASCII file
 Dump a JSON file
 
 *source:*
-[Mads/src/MadsJSON.jl:14](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L14)
+[Mads/src/MadsJSON.jl:14](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsJSON.jl#L14)
 
 ---
 
@@ -407,7 +487,7 @@ Dump a JSON file
 Dump well data from MADS problem dictionary into a ASCII file
 
 *source:*
-[Mads/src/MadsYAML.jl:127](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L127)
+[Mads/src/MadsYAML.jl:127](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsYAML.jl#L127)
 
 ---
 
@@ -416,7 +496,7 @@ Dump well data from MADS problem dictionary into a ASCII file
 Dump YAML file in JSON format
 
 *source:*
-[Mads/src/MadsYAML.jl:52](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L52)
+[Mads/src/MadsYAML.jl:52](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsYAML.jl#L52)
 
 ---
 
@@ -431,7 +511,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsYAML.jl:69](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L69)
+[Mads/src/MadsYAML.jl:69](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsYAML.jl#L69)
 
 ---
 
@@ -449,7 +529,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:691](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L691)
+[Mads/src/MadsSA.jl:777](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L777)
 
 ---
 
@@ -458,7 +538,7 @@ Arguments:
 Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
 *source:*
-[Mads/src/MadsMisc.jl:60](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L60)
+[Mads/src/MadsMisc.jl:60](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L60)
 
 ---
 
@@ -467,7 +547,7 @@ Evaluate the expression in terms of the parameters, return a Dict() containing t
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
 *source:*
-[Mads/src/MadsMisc.jl:69](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L69)
+[Mads/src/MadsMisc.jl:69](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L69)
 
 ---
 
@@ -476,7 +556,7 @@ Evaluate the expressions in terms of the parameters, return a Dict() containing 
 Filter dictionary keys based on a string or regular expression
 
 *source:*
-[Mads/src/MadsIO.jl:309](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L309)
+[Mads/src/MadsIO.jl:347](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L347)
 
 ---
 
@@ -498,7 +578,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsForward.jl:16](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsForward.jl#L16)
+[Mads/src/MadsForward.jl:16](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsForward.jl#L16)
 
 ---
 
@@ -520,7 +600,16 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsForward.jl:41](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsForward.jl#L41)
+[Mads/src/MadsForward.jl:41](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsForward.jl#L41)
+
+---
+
+<a id="method__free.1" class="lexicon_definition"></a>
+## free()
+Use the latest tagged versions of the Mads modules
+
+*source:*
+[Mads/src/MadsPublish.jl:68](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPublish.jl#L68)
 
 ---
 
@@ -544,7 +633,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsHelp.jl:30](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L30)
+[Mads/src/MadsHelp.jl:30](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelp.jl#L30)
 
 ---
 
@@ -568,7 +657,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsHelp.jl:30](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L30)
+[Mads/src/MadsHelp.jl:30](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelp.jl#L30)
 
 ---
 
@@ -584,7 +673,7 @@ ext = Mads.getextension("a.mads") # ext = "mads"
 
 
 *source:*
-[Mads/src/MadsIO.jl:280](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L280)
+[Mads/src/MadsIO.jl:318](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L318)
 
 ---
 
@@ -596,7 +685,7 @@ Get the directory where currently Mads is running
 
 
 *source:*
-[Mads/src/MadsIO.jl:236](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L236)
+[Mads/src/MadsIO.jl:274](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L274)
 
 ---
 
@@ -614,7 +703,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsIO.jl:200](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L200)
+[Mads/src/MadsIO.jl:238](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L238)
 
 ---
 
@@ -635,7 +724,7 @@ where `madsproblemdir` = `"../../"`
 
 
 *source:*
-[Mads/src/MadsIO.jl:227](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L227)
+[Mads/src/MadsIO.jl:265](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L265)
 
 ---
 
@@ -647,7 +736,7 @@ Get the MADS problem root name
 
 
 *source:*
-[Mads/src/MadsIO.jl:209](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L209)
+[Mads/src/MadsIO.jl:247](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L247)
 
 ---
 
@@ -656,7 +745,7 @@ Get the MADS problem root name
 Get keys for all observations in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L2)
+[Mads/src/MadsObservations.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L2)
 
 ---
 
@@ -676,7 +765,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:36](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L36)
+[Mads/src/MadsParameters.jl:36](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L36)
 
 ---
 
@@ -697,7 +786,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:462](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L462)
+[Mads/src/MadsParameters.jl:462](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L462)
 
 ---
 
@@ -717,7 +806,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:17](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L17)
+[Mads/src/MadsParameters.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L17)
 
 ---
 
@@ -726,7 +815,7 @@ Returns:
 Get an array with `init_max` values for all the MADS model parameters
 
 *source:*
-[Mads/src/MadsParameters.jl:243](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L243)
+[Mads/src/MadsParameters.jl:243](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L243)
 
 ---
 
@@ -735,7 +824,7 @@ Get an array with `init_max` values for all the MADS model parameters
 Get an array with `init_max` values for parameters defined by `paramkeys`
 
 *source:*
-[Mads/src/MadsParameters.jl:209](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L209)
+[Mads/src/MadsParameters.jl:209](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L209)
 
 ---
 
@@ -744,7 +833,7 @@ Get an array with `init_max` values for parameters defined by `paramkeys`
 Get an array with `init_min` values for all the MADS model parameters
 
 *source:*
-[Mads/src/MadsParameters.jl:203](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L203)
+[Mads/src/MadsParameters.jl:203](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L203)
 
 ---
 
@@ -753,7 +842,7 @@ Get an array with `init_min` values for all the MADS model parameters
 Get an array with `init_min` values for parameters defined by `paramkeys`
 
 *source:*
-[Mads/src/MadsParameters.jl:169](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L169)
+[Mads/src/MadsParameters.jl:169](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L169)
 
 ---
 
@@ -762,7 +851,7 @@ Get an array with `init_min` values for parameters defined by `paramkeys`
 Get an array with `min` values for all the MADS model parameters
 
 *source:*
-[Mads/src/MadsParameters.jl:163](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L163)
+[Mads/src/MadsParameters.jl:163](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L163)
 
 ---
 
@@ -771,7 +860,7 @@ Get an array with `min` values for all the MADS model parameters
 Get an array with `max` values for parameters defined by `paramkeys`
 
 *source:*
-[Mads/src/MadsParameters.jl:140](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L140)
+[Mads/src/MadsParameters.jl:140](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L140)
 
 ---
 
@@ -780,7 +869,7 @@ Get an array with `max` values for parameters defined by `paramkeys`
 Get an array with `min` values for all the MADS model parameters
 
 *source:*
-[Mads/src/MadsParameters.jl:134](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L134)
+[Mads/src/MadsParameters.jl:134](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L134)
 
 ---
 
@@ -789,7 +878,7 @@ Get an array with `min` values for all the MADS model parameters
 Get an array with `min` values for parameters defined by `paramkeys`
 
 *source:*
-[Mads/src/MadsParameters.jl:111](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L111)
+[Mads/src/MadsParameters.jl:111](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L111)
 
 ---
 
@@ -798,7 +887,27 @@ Get an array with `min` values for parameters defined by `paramkeys`
 Get the number of processors
 
 *source:*
-[Mads/src/MadsParallel.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L2)
+[Mads/src/MadsParallel.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L2)
+
+---
+
+<a id="method__getrestartdir.1" class="lexicon_definition"></a>
+## getrestartdir(madsdata)
+Get the directory where restarts will be stored.
+
+
+*source:*
+[Mads/src/MadsFunc.jl:270](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L270)
+
+---
+
+<a id="method__getrestartdir.2" class="lexicon_definition"></a>
+## getrestartdir(madsdata,  suffix)
+Get the directory where restarts will be stored.
+
+
+*source:*
+[Mads/src/MadsFunc.jl:270](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L270)
 
 ---
 
@@ -815,7 +924,7 @@ r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 
 
 *source:*
-[Mads/src/MadsIO.jl:257](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L257)
+[Mads/src/MadsIO.jl:295](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L295)
 
 ---
 
@@ -835,7 +944,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:57](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L57)
+[Mads/src/MadsParameters.jl:57](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L57)
 
 ---
 
@@ -844,7 +953,7 @@ Returns:
 Get observation target
 
 *source:*
-[Mads/src/MadsObservations.jl:109](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L109)
+[Mads/src/MadsObservations.jl:109](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L109)
 
 ---
 
@@ -853,7 +962,7 @@ Get observation target
 Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:7](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L7)
+[Mads/src/MadsObservations.jl:7](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L7)
 
 ---
 
@@ -862,7 +971,7 @@ Get keys for all targets (observations with weights greater than zero) in the MA
 Get observation time
 
 *source:*
-[Mads/src/MadsObservations.jl:61](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L61)
+[Mads/src/MadsObservations.jl:61](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L61)
 
 ---
 
@@ -871,7 +980,7 @@ Get observation time
 Get observation weight
 
 *source:*
-[Mads/src/MadsObservations.jl:85](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L85)
+[Mads/src/MadsObservations.jl:85](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L85)
 
 ---
 
@@ -880,7 +989,7 @@ Get observation weight
 Get keys for all wells in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:14](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L14)
+[Mads/src/MadsObservations.jl:14](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L14)
 
 ---
 
@@ -906,7 +1015,7 @@ Examples:
 
 
 *source:*
-[Mads/src/MadsHelpers.jl:65](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L65)
+[Mads/src/MadsHelpers.jl:65](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L65)
 
 ---
 
@@ -915,7 +1024,7 @@ Examples:
 Produce MADS help information
 
 *source:*
-[Mads/src/MadsHelp.jl:4](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelp.jl#L4)
+[Mads/src/MadsHelp.jl:4](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelp.jl#L4)
 
 ---
 
@@ -926,7 +1035,7 @@ The first function in the file is the one that will be called by Mads to perform
 
 
 *source:*
-[Mads/src/MadsFunc.jl:282](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L282)
+[Mads/src/MadsFunc.jl:298](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L298)
 
 ---
 
@@ -935,7 +1044,7 @@ The first function in the file is the one that will be called by Mads to perform
 Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
 
 *source:*
-[Mads/src/MadsIO.jl:423](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L423)
+[Mads/src/MadsIO.jl:461](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L461)
 
 ---
 
@@ -944,7 +1053,7 @@ Apply Mads instruction file `instructionfilename` to read model input file `inpu
 Convert an instruction line in the Mads instruction file into regular expressions
 
 *source:*
-[Mads/src/MadsIO.jl:358](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L358)
+[Mads/src/MadsIO.jl:396](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L396)
 
 ---
 
@@ -953,7 +1062,7 @@ Convert an instruction line in the Mads instruction file into regular expression
 Inversely proportional observation weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:194](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L194)
+[Mads/src/MadsObservations.jl:194](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L194)
 
 ---
 
@@ -962,7 +1071,7 @@ Inversely proportional observation weights in the MADS problem dictionary
 Inversely proportional observation weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:227](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L227)
+[Mads/src/MadsObservations.jl:227](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L227)
 
 ---
 
@@ -971,7 +1080,7 @@ Inversely proportional observation weights in the MADS problem dictionary
 Is parameter with key `parameterkey` log-transformed?
 
 *source:*
-[Mads/src/MadsParameters.jl:276](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L276)
+[Mads/src/MadsParameters.jl:276](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L276)
 
 ---
 
@@ -980,69 +1089,7 @@ Is parameter with key `parameterkey` log-transformed?
 Is parameter with key `parameterkey` optimizable?
 
 *source:*
-[Mads/src/MadsParameters.jl:266](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L266)
-
----
-
-<a id="method__levenberg_marquardt.1" class="lexicon_definition"></a>
-## levenberg_marquardt(f::Function,  g::Function,  x0)
-Levenberg-Marquardt optimization
-
-Arguments:
-
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `root` : Mads problem root name
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
-- `lambda_scale` : lambda scaling factor 
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `lambda_nu` : lambda multiplication factor ν [10]
-- `np_lambda` : number of parallel lambda solves
-- `show_trace` : shows solution trace [default=false]
-- `alwaysDoJacobian`: computer Jacobian each iteration [false]
-- `callback` : call back function for debugging
-
-
-*source:*
-[Mads/src/MadsLM.jl:180](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L180)
-
----
-
-<a id="method__levenberg_marquardt.2" class="lexicon_definition"></a>
-## levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)
-Levenberg-Marquardt optimization
-
-Arguments:
-
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `root` : Mads problem root name
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
-- `lambda_scale` : lambda scaling factor 
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `lambda_nu` : lambda multiplication factor ν [10]
-- `np_lambda` : number of parallel lambda solves
-- `show_trace` : shows solution trace [default=false]
-- `alwaysDoJacobian`: computer Jacobian each iteration [false]
-- `callback` : call back function for debugging
-
-
-*source:*
-[Mads/src/MadsLM.jl:180](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L180)
+[Mads/src/MadsParameters.jl:266](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L266)
 
 ---
 
@@ -1051,7 +1098,7 @@ Arguments:
 Load ASCII file
 
 *source:*
-[Mads/src/MadsASCII.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L2)
+[Mads/src/MadsASCII.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsASCII.jl#L2)
 
 ---
 
@@ -1060,7 +1107,7 @@ Load ASCII file
 Load a JSON file
 
 *source:*
-[Mads/src/MadsJSON.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L2)
+[Mads/src/MadsJSON.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsJSON.jl#L2)
 
 ---
 
@@ -1085,7 +1132,7 @@ Example: `md = loadmadsfile("input_file_name.mads")`
 
 
 *source:*
-[Mads/src/MadsIO.jl:19](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L19)
+[Mads/src/MadsIO.jl:19](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L19)
 
 ---
 
@@ -1094,7 +1141,7 @@ Example: `md = loadmadsfile("input_file_name.mads")`
 Load YAML file
 
 *source:*
-[Mads/src/MadsYAML.jl:43](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L43)
+[Mads/src/MadsYAML.jl:43](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsYAML.jl#L43)
 
 ---
 
@@ -1110,7 +1157,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:70](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L70)
+[Mads/src/MadsSA.jl:72](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L72)
 
 ---
 
@@ -1119,7 +1166,7 @@ Arguments:
 Turn off execution of long MADS tests (default)
 
 *source:*
-[Mads/src/MadsHelpers.jl:27](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L27)
+[Mads/src/MadsHelpers.jl:27](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L27)
 
 ---
 
@@ -1128,7 +1175,7 @@ Turn off execution of long MADS tests (default)
 Turn on execution of long MADS tests (dangerous)
 
 *source:*
-[Mads/src/MadsHelpers.jl:22](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L22)
+[Mads/src/MadsHelpers.jl:22](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L22)
 
 ---
 
@@ -1137,7 +1184,7 @@ Turn on execution of long MADS tests (dangerous)
 MADS critical error messages
 
 *source:*
-[Mads/src/MadsLog.jl:31](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L31)
+[Mads/src/MadsLog.jl:31](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L31)
 
 ---
 
@@ -1146,7 +1193,7 @@ MADS critical error messages
 MADS debug messages
 
 *source:*
-[Mads/src/MadsLog.jl:9](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L9)
+[Mads/src/MadsLog.jl:9](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L9)
 
 ---
 
@@ -1155,7 +1202,7 @@ MADS debug messages
 MADS error messages
 
 *source:*
-[Mads/src/MadsLog.jl:26](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L26)
+[Mads/src/MadsLog.jl:26](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L26)
 
 ---
 
@@ -1164,7 +1211,7 @@ MADS error messages
 MADS information/status messages
 
 *source:*
-[Mads/src/MadsLog.jl:16](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L16)
+[Mads/src/MadsLog.jl:16](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L16)
 
 ---
 
@@ -1173,7 +1220,7 @@ MADS information/status messages
 MADS output
 
 *source:*
-[Mads/src/MadsLog.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L2)
+[Mads/src/MadsLog.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L2)
 
 ---
 
@@ -1182,7 +1229,7 @@ MADS output
 MADS warning messages
 
 *source:*
-[Mads/src/MadsLog.jl:21](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLog.jl#L21)
+[Mads/src/MadsLog.jl:21](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLog.jl#L21)
 
 ---
 
@@ -1191,7 +1238,7 @@ MADS warning messages
 Make a conditional log likelihood function that accepts an array containing the opt parameters' values
 
 *source:*
-[Mads/src/MadsMisc.jl:25](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L25)
+[Mads/src/MadsMisc.jl:25](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L25)
 
 ---
 
@@ -1212,7 +1259,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsMisc.jl:15](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L15)
+[Mads/src/MadsMisc.jl:15](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L15)
 
 ---
 
@@ -1221,7 +1268,7 @@ Returns:
 Make a log likelihood function that accepts an array containing the opt parameters' values
 
 *source:*
-[Mads/src/MadsMisc.jl:38](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L38)
+[Mads/src/MadsMisc.jl:38](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L38)
 
 ---
 
@@ -1240,7 +1287,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsBIG.jl:33](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L33)
+[Mads/src/MadsBIG.jl:34](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsBIG.jl#L34)
 
 ---
 
@@ -1259,7 +1306,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsBIG.jl:17](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L17)
+[Mads/src/MadsBIG.jl:18](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsBIG.jl#L18)
 
 ---
 
@@ -1292,7 +1339,7 @@ forward_preds = computeconcentrations(paramdict)
 
 
 *source:*
-[Mads/src/MadsAnasol.jl:30](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L30)
+[Mads/src/MadsAnasol.jl:31](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsAnasol.jl#L31)
 
 ---
 
@@ -1302,7 +1349,7 @@ Make forward model functions needed for Levenberg-Marquardt optimization
 
 
 *source:*
-[Mads/src/MadsLM.jl:23](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L23)
+[Mads/src/MadsLM.jl:25](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L25)
 
 ---
 
@@ -1311,7 +1358,7 @@ Make forward model functions needed for Levenberg-Marquardt optimization
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
 *source:*
-[Mads/src/MadsFunc.jl:379](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L379)
+[Mads/src/MadsFunc.jl:395](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L395)
 
 ---
 
@@ -1360,7 +1407,7 @@ Options for reading model outputs:
 
 
 *source:*
-[Mads/src/MadsFunc.jl:47](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L47)
+[Mads/src/MadsFunc.jl:47](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L47)
 
 ---
 
@@ -1369,7 +1416,7 @@ Options for reading model outputs:
 Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
 
 *source:*
-[Mads/src/MadsFunc.jl:314](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L314)
+[Mads/src/MadsFunc.jl:330](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L330)
 
 ---
 
@@ -1378,7 +1425,7 @@ Make MADS forward & gradient functions for the model defined in the MADS problem
 Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
 *source:*
-[Mads/src/MadsFunc.jl:299](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L299)
+[Mads/src/MadsFunc.jl:315](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L315)
 
 ---
 
@@ -1389,7 +1436,7 @@ Model parameters and observations are defined in the MADS problem dictionary `ma
 
 
 *source:*
-[Mads/src/MadsFunc.jl:394](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L394)
+[Mads/src/MadsFunc.jl:410](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L410)
 
 ---
 
@@ -1400,7 +1447,7 @@ The function can be provided as an external function in the MADS problem diction
 
 
 *source:*
-[Mads/src/MadsFunc.jl:419](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsFunc.jl#L419)
+[Mads/src/MadsFunc.jl:435](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsFunc.jl#L435)
 
 ---
 
@@ -1409,7 +1456,7 @@ The function can be provided as an external function in the MADS problem diction
 Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
 
 *source:*
-[Mads/src/MadsSA.jl:667](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L667)
+[Mads/src/MadsSA.jl:753](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L753)
 
 ---
 
@@ -1418,7 +1465,7 @@ Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly ca
 Modify (multiply) observation weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:186](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L186)
+[Mads/src/MadsObservations.jl:186](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L186)
 
 ---
 
@@ -1427,7 +1474,7 @@ Modify (multiply) observation weights in the MADS problem dictionary
 Modify (multiply) well weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:216](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L216)
+[Mads/src/MadsObservations.jl:216](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L216)
 
 ---
 
@@ -1452,7 +1499,57 @@ Dumps:
 
 
 *source:*
-[Mads/src/MadsMC.jl:103](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L103)
+[Mads/src/MadsMC.jl:103](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMC.jl#L103)
+
+---
+
+<a id="method__naive_levenbergmarquardt.1" class="lexicon_definition"></a>
+## naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1})
+Naive Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `o` : objective function
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `lambda` : initial Levenberg-Marquardt lambda [100]
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `np_lambda` : number of parallel lambda solves
+
+
+*source:*
+[Mads/src/MadsLM.jl:149](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L149)
+
+---
+
+<a id="method__naive_levenbergmarquardt.2" class="lexicon_definition"></a>
+## naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
+Naive Levenberg-Marquardt optimization
+
+Arguments:
+
+- `f` : forward model function
+- `g` : gradient function for the forward model
+- `x0` : initial parameter guess
+- `o` : objective function
+- `tolX` : parameter space tolerance
+- `tolG` : parameter space update tolerance
+- `tolOF` : objective function update tolerance
+- `maxEval` : maximum number of model evaluations
+- `maxIter` : maximum number of optimization iterations
+- `lambda` : initial Levenberg-Marquardt lambda [100]
+- `lambda_mu` : lambda multiplication factor μ [10]
+- `np_lambda` : number of parallel lambda solves
+
+
+*source:*
+[Mads/src/MadsLM.jl:149](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L149)
 
 ---
 
@@ -1462,57 +1559,7 @@ Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 
 *source:*
-[Mads/src/MadsLM.jl:102](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L102)
-
----
-
-<a id="method__naive_levenberg_marquardt.1" class="lexicon_definition"></a>
-## naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})
-Naive Levenberg-Marquardt optimization
-
-Arguments:
-
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `o` : objective function
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `lambda` : initial Levenberg-Marquardt lambda [100]
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `np_lambda` : number of parallel lambda solves
-
-
-*source:*
-[Mads/src/MadsLM.jl:140](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L140)
-
----
-
-<a id="method__naive_levenberg_marquardt.2" class="lexicon_definition"></a>
-## naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
-Naive Levenberg-Marquardt optimization
-
-Arguments:
-
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `o` : objective function
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `lambda` : initial Levenberg-Marquardt lambda [100]
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `np_lambda` : number of parallel lambda solves
-
-
-*source:*
-[Mads/src/MadsLM.jl:140](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L140)
+[Mads/src/MadsLM.jl:111](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L111)
 
 ---
 
@@ -1522,7 +1569,7 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 
 
 *source:*
-[Mads/src/MadsLM.jl:111](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L111)
+[Mads/src/MadsLM.jl:120](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L120)
 
 ---
 
@@ -1531,7 +1578,7 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 Match an instruction line in the Mads instruction file with model input file
 
 *source:*
-[Mads/src/MadsIO.jl:397](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L397)
+[Mads/src/MadsIO.jl:435](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L435)
 
 ---
 
@@ -1541,7 +1588,7 @@ Convert parameter array to a parameter dictionary of arrays
 
 
 *source:*
-[Mads/src/MadsMC.jl:153](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMC.jl#L153)
+[Mads/src/MadsMC.jl:153](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMC.jl#L153)
 
 ---
 
@@ -1558,7 +1605,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:15](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L15)
+[Mads/src/MadsSA.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L17)
 
 ---
 
@@ -1575,7 +1622,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:15](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L15)
+[Mads/src/MadsSA.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L17)
 
 ---
 
@@ -1592,7 +1639,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:38](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L38)
+[Mads/src/MadsSA.jl:40](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L40)
 
 ---
 
@@ -1606,7 +1653,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsIO.jl:37](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L37)
+[Mads/src/MadsIO.jl:37](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L37)
 
 ---
 
@@ -1616,7 +1663,7 @@ Compute the sum of squared residuals for observations that match a regular expre
 
 
 *source:*
-[Mads/src/MadsLM.jl:4](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsLM.jl#L4)
+[Mads/src/MadsLM.jl:6](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L6)
 
 ---
 
@@ -1625,7 +1672,7 @@ Compute the sum of squared residuals for observations that match a regular expre
 Plot the sensitivity analysis results for each well (Specific plot requested by Monty)
 
 *source:*
-[Mads/src/MadsSA.jl:1493](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L1493)
+[Mads/src/MadsSA.jl:1590](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L1590)
 
 ---
 
@@ -1651,7 +1698,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:139](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L139)
+[Mads/src/MadsPlot.jl:139](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L139)
 
 ---
 
@@ -1668,7 +1715,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:54](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L54)
+[Mads/src/MadsPlot.jl:54](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L54)
 
 ---
 
@@ -1690,7 +1737,7 @@ Dumps: image file with name `filename` and in specified `format`
 
 
 *source:*
-[Mads/src/MadsAnasol.jl:288](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsAnasol.jl#L288)
+[Mads/src/MadsAnasol.jl:289](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsAnasol.jl#L289)
 
 ---
 
@@ -1714,7 +1761,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:212](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L212)
+[Mads/src/MadsPlot.jl:212](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L212)
 
 ---
 
@@ -1733,7 +1780,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:517](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L517)
+[Mads/src/MadsPlot.jl:517](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L517)
 
 ---
 
@@ -1750,7 +1797,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsBIG.jl:166](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsBIG.jl#L166)
+[Mads/src/MadsBIG.jl:167](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsBIG.jl#L167)
 
 ---
 
@@ -1771,7 +1818,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:966](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L966)
+[Mads/src/MadsPlot.jl:966](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L966)
 
 ---
 
@@ -1790,7 +1837,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:398](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L398)
+[Mads/src/MadsPlot.jl:398](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L398)
 
 ---
 
@@ -1810,7 +1857,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:423](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L423)
+[Mads/src/MadsPlot.jl:423](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L423)
 
 ---
 
@@ -1819,7 +1866,7 @@ Arguments:
 Print sensitivity analysis results
 
 *source:*
-[Mads/src/MadsSA.jl:524](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L524)
+[Mads/src/MadsSA.jl:610](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L610)
 
 ---
 
@@ -1828,7 +1875,7 @@ Print sensitivity analysis results
 Make MADS not quiet
 
 *source:*
-[Mads/src/MadsHelpers.jl:7](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L7)
+[Mads/src/MadsHelpers.jl:7](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L7)
 
 ---
 
@@ -1837,7 +1884,7 @@ Make MADS not quiet
 Make MADS quiet
 
 *source:*
-[Mads/src/MadsHelpers.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L2)
+[Mads/src/MadsHelpers.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L2)
 
 ---
 
@@ -1846,7 +1893,7 @@ Make MADS quiet
 Read MADS predictions from an ASCII file
 
 *source:*
-[Mads/src/MadsASCII.jl:13](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsASCII.jl#L13)
+[Mads/src/MadsASCII.jl:13](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsASCII.jl#L13)
 
 ---
 
@@ -1855,7 +1902,7 @@ Read MADS predictions from an ASCII file
 Read MADS model predictions from a JSON file
 
 *source:*
-[Mads/src/MadsJSON.jl:21](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsJSON.jl#L21)
+[Mads/src/MadsJSON.jl:21](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsJSON.jl#L21)
 
 ---
 
@@ -1864,7 +1911,7 @@ Read MADS model predictions from a JSON file
 Read observations
 
 *source:*
-[Mads/src/MadsIO.jl:449](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L449)
+[Mads/src/MadsIO.jl:487](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L487)
 
 ---
 
@@ -1873,7 +1920,7 @@ Read observations
 Read observations using C Mads library
 
 *source:*
-[Mads/src/MadsIO.jl:483](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L483)
+[Mads/src/MadsIO.jl:521](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L521)
 
 ---
 
@@ -1882,7 +1929,7 @@ Read observations using C Mads library
 Read MADS model predictions from a YAML file `filename`
 
 *source:*
-[Mads/src/MadsYAML.jl:122](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsYAML.jl#L122)
+[Mads/src/MadsYAML.jl:122](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsYAML.jl#L122)
 
 ---
 
@@ -1891,7 +1938,7 @@ Read MADS model predictions from a YAML file `filename`
 Get observations for a set of regular expressions
 
 *source:*
-[Mads/src/MadsIO.jl:403](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L403)
+[Mads/src/MadsIO.jl:441](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L441)
 
 ---
 
@@ -1900,7 +1947,7 @@ Get observations for a set of regular expressions
 Reset the model runs count to be equal to zero
 
 *source:*
-[Mads/src/MadsHelpers.jl:42](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L42)
+[Mads/src/MadsHelpers.jl:42](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L42)
 
 ---
 
@@ -1909,7 +1956,7 @@ Reset the model runs count to be equal to zero
 Rosenbrock test function
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:17](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L17)
+[Mads/src/MadsTestFunctions.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L17)
 
 ---
 
@@ -1918,7 +1965,7 @@ Rosenbrock test function
 Parameter gradients of the Rosenbrock test function
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:7](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L7)
+[Mads/src/MadsTestFunctions.jl:7](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L7)
 
 ---
 
@@ -1927,7 +1974,7 @@ Parameter gradients of the Rosenbrock test function
 Rosenbrock test function (more difficult to solve)
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L2)
+[Mads/src/MadsTestFunctions.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L2)
 
 ---
 
@@ -1936,7 +1983,7 @@ Rosenbrock test function (more difficult to solve)
 Parameter gradients of the Rosenbrock test function
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:27](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L27)
+[Mads/src/MadsTestFunctions.jl:27](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L27)
 
 ---
 
@@ -1945,7 +1992,7 @@ Parameter gradients of the Rosenbrock test function
 Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:33](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L33)
+[Mads/src/MadsTestFunctions.jl:33](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L33)
 
 ---
 
@@ -1954,7 +2001,7 @@ Parameter gradients of the Rosenbrock test function for LM optimization (returns
 Parameter Hessian of the Rosenbrock test function
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:43](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L43)
+[Mads/src/MadsTestFunctions.jl:43](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L43)
 
 ---
 
@@ -1963,7 +2010,7 @@ Parameter Hessian of the Rosenbrock test function
 Rosenbrock test function for LM optimization (returns the 2 components separetely)
 
 *source:*
-[Mads/src/MadsTestFunctions.jl:22](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTestFunctions.jl#L22)
+[Mads/src/MadsTestFunctions.jl:22](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTestFunctions.jl#L22)
 
 ---
 
@@ -1976,10 +2023,12 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `seed` : initial random seed
+- `restartdir` : directory where files will be stored containing model results for fast simulation restarts
+- `parallel` : set to true if the model runs should be performed in parallel
 
 
 *source:*
-[Mads/src/MadsSA.jl:304](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L304)
+[Mads/src/MadsSA.jl:331](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L331)
 
 ---
 
@@ -1995,7 +2044,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsSA.jl:157](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L157)
+[Mads/src/MadsSA.jl:159](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L159)
 
 ---
 
@@ -2004,45 +2053,53 @@ Arguments:
 Print sensitivity analysis results (method 2)
 
 *source:*
-[Mads/src/MadsSA.jl:600](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L600)
+[Mads/src/MadsSA.jl:686](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L686)
 
 ---
 
 <a id="method__savemadsfile.1" class="lexicon_definition"></a>
-## savemadsfile(madsdata)
+## savemadsfile(madsdata::Associative{K, V})
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 - `Mads.savemadsfile(madsdata)`
 - `Mads.savemadsfile(madsdata, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
 
 Arguments:
 
 - `madsdata` : Mads problem dictionary
+- `parameters` : Dictinary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
+- `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 
 
 *source:*
-[Mads/src/MadsIO.jl:152](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L152)
+[Mads/src/MadsIO.jl:156](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L156)
 
 ---
 
 <a id="method__savemadsfile.2" class="lexicon_definition"></a>
-## savemadsfile(madsdata,  filename::AbstractString)
+## savemadsfile(madsdata::Associative{K, V},  filename::AbstractString)
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 - `Mads.savemadsfile(madsdata)`
 - `Mads.savemadsfile(madsdata, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
 
 Arguments:
 
 - `madsdata` : Mads problem dictionary
+- `parameters` : Dictinary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
+- `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 
 
 *source:*
-[Mads/src/MadsIO.jl:152](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L152)
+[Mads/src/MadsIO.jl:156](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L156)
 
 ---
 
@@ -2059,7 +2116,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:354](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L354)
+[Mads/src/MadsPlot.jl:354](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L354)
 
 ---
 
@@ -2081,7 +2138,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsIO.jl:305](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L305)
+[Mads/src/MadsIO.jl:343](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L343)
 
 ---
 
@@ -2090,7 +2147,7 @@ Returns:
 Set all parameters OFF
 
 *source:*
-[Mads/src/MadsParameters.jl:293](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L293)
+[Mads/src/MadsParameters.jl:293](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L293)
 
 ---
 
@@ -2099,7 +2156,7 @@ Set all parameters OFF
 Set all parameters ON
 
 *source:*
-[Mads/src/MadsParameters.jl:285](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L285)
+[Mads/src/MadsParameters.jl:285](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L285)
 
 ---
 
@@ -2108,7 +2165,7 @@ Set all parameters ON
 Set MADS debug level
 
 *source:*
-[Mads/src/MadsHelpers.jl:32](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L32)
+[Mads/src/MadsHelpers.jl:32](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L32)
 
 ---
 
@@ -2117,7 +2174,7 @@ Set MADS debug level
 Set the working directory
 
 *source:*
-[Mads/src/MadsParallel.jl:150](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L150)
+[Mads/src/MadsParallel.jl:150](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L150)
 
 ---
 
@@ -2126,7 +2183,7 @@ Set the working directory
 Set Dynamic Model for MADS model calls using internal Julia functions
 
 *source:*
-[Mads/src/MadsMisc.jl:55](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsMisc.jl#L55)
+[Mads/src/MadsMisc.jl:55](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMisc.jl#L55)
 
 ---
 
@@ -2134,7 +2191,7 @@ Set Dynamic Model for MADS model calls using internal Julia functions
 ## setimagefileformat(filename,  format)
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`Mads.setimagefileformat(filename, format)`
+`setimagefileformat(filename, format)`
 
 Arguments:
 
@@ -2148,7 +2205,7 @@ Returns:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:19](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L19)
+[Mads/src/MadsPlot.jl:19](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L19)
 
 ---
 
@@ -2164,7 +2221,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsIO.jl:185](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L185)
+[Mads/src/MadsIO.jl:223](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L223)
 
 ---
 
@@ -2173,7 +2230,7 @@ Arguments:
 Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:286](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L286)
+[Mads/src/MadsObservations.jl:286](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L286)
 
 ---
 
@@ -2202,7 +2259,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 
 
 *source:*
-[Mads/src/MadsObservations.jl:154](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L154)
+[Mads/src/MadsObservations.jl:154](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L154)
 
 ---
 
@@ -2211,7 +2268,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 Set observation weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:178](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L178)
+[Mads/src/MadsObservations.jl:178](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L178)
 
 ---
 
@@ -2220,7 +2277,7 @@ Set observation weights in the MADS problem dictionary
 Set a specific parameter with a key `parameterkey` OFF
 
 *source:*
-[Mads/src/MadsParameters.jl:306](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L306)
+[Mads/src/MadsParameters.jl:306](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L306)
 
 ---
 
@@ -2229,7 +2286,7 @@ Set a specific parameter with a key `parameterkey` OFF
 Set a specific parameter with a key `parameterkey` ON
 
 *source:*
-[Mads/src/MadsParameters.jl:301](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L301)
+[Mads/src/MadsParameters.jl:301](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L301)
 
 ---
 
@@ -2247,7 +2304,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:321](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L321)
+[Mads/src/MadsParameters.jl:321](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L321)
 
 ---
 
@@ -2265,7 +2322,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:339](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L339)
+[Mads/src/MadsParameters.jl:339](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L339)
 
 ---
 
@@ -2282,7 +2339,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParameters.jl:258](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L258)
+[Mads/src/MadsParameters.jl:258](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L258)
 
 ---
 
@@ -2305,7 +2362,7 @@ Optional arguments:
 
 
 *source:*
-[Mads/src/MadsParallel.jl:69](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L69)
+[Mads/src/MadsParallel.jl:69](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L69)
 
 ---
 
@@ -2325,7 +2382,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParallel.jl:46](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L46)
+[Mads/src/MadsParallel.jl:46](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L46)
 
 ---
 
@@ -2345,7 +2402,7 @@ Arguments:
 
 
 *source:*
-[Mads/src/MadsParallel.jl:19](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L19)
+[Mads/src/MadsParallel.jl:19](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L19)
 
 ---
 
@@ -2354,7 +2411,7 @@ Arguments:
 Set observation target
 
 *source:*
-[Mads/src/MadsObservations.jl:122](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L122)
+[Mads/src/MadsObservations.jl:122](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L122)
 
 ---
 
@@ -2363,7 +2420,7 @@ Set observation target
 Set observation time
 
 *source:*
-[Mads/src/MadsObservations.jl:74](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L74)
+[Mads/src/MadsObservations.jl:74](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L74)
 
 ---
 
@@ -2372,7 +2429,7 @@ Set observation time
 Set MADS verbosity level
 
 *source:*
-[Mads/src/MadsHelpers.jl:37](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsHelpers.jl#L37)
+[Mads/src/MadsHelpers.jl:37](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsHelpers.jl#L37)
 
 ---
 
@@ -2381,7 +2438,7 @@ Set MADS verbosity level
 Set observation weight
 
 *source:*
-[Mads/src/MadsObservations.jl:98](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L98)
+[Mads/src/MadsObservations.jl:98](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L98)
 
 ---
 
@@ -2390,7 +2447,7 @@ Set observation weight
 Set well weights in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:205](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L205)
+[Mads/src/MadsObservations.jl:205](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L205)
 
 ---
 
@@ -2399,7 +2456,7 @@ Set well weights in the MADS problem dictionary
 Show all parameters in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsParameters.jl:409](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L409)
+[Mads/src/MadsParameters.jl:409](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L409)
 
 ---
 
@@ -2408,7 +2465,7 @@ Show all parameters in the MADS problem dictionary
 Show observations in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:241](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L241)
+[Mads/src/MadsObservations.jl:241](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L241)
 
 ---
 
@@ -2417,7 +2474,7 @@ Show observations in the MADS problem dictionary
 Show optimizable parameters in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsParameters.jl:378](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParameters.jl#L378)
+[Mads/src/MadsParameters.jl:378](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParameters.jl#L378)
 
 ---
 
@@ -2426,7 +2483,7 @@ Show optimizable parameters in the MADS problem dictionary
 Sine transformation of model parameters
 
 *source:*
-[Mads/src/MadsSine.jl:10](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L10)
+[Mads/src/MadsSine.jl:10](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSine.jl#L10)
 
 ---
 
@@ -2435,7 +2492,7 @@ Sine transformation of model parameters
 Sine transformation of a function
 
 *source:*
-[Mads/src/MadsSine.jl:17](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L17)
+[Mads/src/MadsSine.jl:17](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSine.jl#L17)
 
 ---
 
@@ -2444,7 +2501,7 @@ Sine transformation of a function
 Sine transformation of a gradient function
 
 *source:*
-[Mads/src/MadsSine.jl:25](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSine.jl#L25)
+[Mads/src/MadsSine.jl:25](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSine.jl#L25)
 
 ---
 
@@ -2478,7 +2535,7 @@ Dumps:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:838](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L838)
+[Mads/src/MadsPlot.jl:838](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L838)
 
 ---
 
@@ -2509,7 +2566,7 @@ Dumps:
 
 
 *source:*
-[Mads/src/MadsPlot.jl:693](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsPlot.jl#L693)
+[Mads/src/MadsPlot.jl:693](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPlot.jl#L693)
 
 ---
 
@@ -2518,7 +2575,25 @@ Dumps:
 Convert `@sprintf` macro into `sprintf` function
 
 *source:*
-[Mads/src/MadsParallel.jl:51](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsParallel.jl#L51)
+[Mads/src/MadsParallel.jl:51](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsParallel.jl#L51)
+
+---
+
+<a id="method__status.1" class="lexicon_definition"></a>
+## status()
+Status of the Mads modules
+
+*source:*
+[Mads/src/MadsPublish.jl:9](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPublish.jl#L9)
+
+---
+
+<a id="method__tag.1" class="lexicon_definition"></a>
+## tag()
+Tag the Mads modules
+
+*source:*
+[Mads/src/MadsPublish.jl:45](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsPublish.jl#L45)
 
 ---
 
@@ -2527,7 +2602,7 @@ Convert `@sprintf` macro into `sprintf` function
 Execute Mads tests (the tests will be in parallel if processors are defined)
 
 *source:*
-[Mads/src/MadsTest.jl:12](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L12)
+[Mads/src/MadsTest.jl:19](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTest.jl#L19)
 
 ---
 
@@ -2536,25 +2611,25 @@ Execute Mads tests (the tests will be in parallel if processors are defined)
 Execute Mads tests (the tests will be in parallel if processors are defined)
 
 *source:*
-[Mads/src/MadsTest.jl:12](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L12)
+[Mads/src/MadsTest.jl:19](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTest.jl#L19)
 
 ---
 
 <a id="method__testj.1" class="lexicon_definition"></a>
 ## testj()
-Execute Mads tests (the default tests are in serial)
+Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
 
 *source:*
-[Mads/src/MadsTest.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L2)
+[Mads/src/MadsTest.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTest.jl#L2)
 
 ---
 
 <a id="method__testj.2" class="lexicon_definition"></a>
 ## testj(coverage)
-Execute Mads tests (the default tests are in serial)
+Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
 
 *source:*
-[Mads/src/MadsTest.jl:2](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsTest.jl#L2)
+[Mads/src/MadsTest.jl:2](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsTest.jl#L2)
 
 ---
 
@@ -2563,7 +2638,7 @@ Execute Mads tests (the default tests are in serial)
 Convert Void's into NaN's in a dictionary
 
 *source:*
-[Mads/src/MadsSA.jl:635](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsSA.jl#L635)
+[Mads/src/MadsSA.jl:721](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsSA.jl#L721)
 
 ---
 
@@ -2572,7 +2647,7 @@ Convert Void's into NaN's in a dictionary
 Turn off a specific well in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:334](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L334)
+[Mads/src/MadsObservations.jl:334](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L334)
 
 ---
 
@@ -2581,7 +2656,7 @@ Turn off a specific well in the MADS problem dictionary
 Turn on a specific well in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:310](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L310)
+[Mads/src/MadsObservations.jl:310](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L310)
 
 ---
 
@@ -2590,7 +2665,7 @@ Turn on a specific well in the MADS problem dictionary
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 *source:*
-[Mads/src/MadsObservations.jl:350](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsObservations.jl#L350)
+[Mads/src/MadsObservations.jl:350](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsObservations.jl#L350)
 
 ---
 
@@ -2599,7 +2674,7 @@ Convert `Wells` class to `Observations` class in the MADS problem dictionary
 Write initial parameters
 
 *source:*
-[Mads/src/MadsIO.jl:342](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L342)
+[Mads/src/MadsIO.jl:380](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L380)
 
 ---
 
@@ -2608,7 +2683,7 @@ Write initial parameters
 Write parameters
 
 *source:*
-[Mads/src/MadsIO.jl:349](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L349)
+[Mads/src/MadsIO.jl:387](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L387)
 
 ---
 
@@ -2617,5 +2692,5 @@ Write parameters
 Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
 
 *source:*
-[Mads/src/MadsIO.jl:313](https://github.com/madsjulia/Mads.jl/tree/2f496a7d5dcec4dd757bfec81b7e4c7457f4d3f9/src/MadsIO.jl#L313)
+[Mads/src/MadsIO.jl:351](https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsIO.jl#L351)
 

@@ -10,7 +10,16 @@
 Check for type exceptions
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:36](https://github.com/madsjulia/RobustPmap.jl/tree/68e0549696c5058156ccb0a8e5e28579f3a31afd/src/RobustPmap.jl#L36)
+[RobustPmap/src/RobustPmap.jl:38](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L38)
+
+---
+
+<a id="method__crpmap.1" class="lexicon_definition"></a>
+## crpmap(f,  checkpointfrequency,  filerootname,  args...)
+Robust pmap call with checkpoints
+
+*source:*
+[RobustPmap/src/RobustPmap.jl:57](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L57)
 
 ---
 
@@ -19,5 +28,5 @@ Check for type exceptions
 Robust pmap call
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:48](https://github.com/madsjulia/RobustPmap.jl/tree/68e0549696c5058156ccb0a8e5e28579f3a31afd/src/RobustPmap.jl#L48)
+[RobustPmap/src/RobustPmap.jl:50](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L50)
 
