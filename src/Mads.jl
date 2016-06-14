@@ -30,12 +30,16 @@ end
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	@tryimport Gadfly
-	if !isdefined(:Gadfly) && !isdefined(:Compose)
-		warn("Plotting modules are not available; Mads plotting is disabled")
+	if !isdefined(:Gadfly)
+		warn("Gadfly is not available; Mads plotting is disabled")
 		ENV["MADS_NO_PLOT"] = ""
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON")
 		@tryimport PyPlot
+		if !isdefined(:PyPlot)
+			warn("PyPlot is not available; Mads plotting is disabled")
+			ENV["MADS_NO_PLOT"] = ""
+		end
 	end
 else
 	warn("Mads plotting is disabled")
