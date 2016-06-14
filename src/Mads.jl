@@ -4,9 +4,8 @@
 MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
 
 http://mads.lanl.gov
-http://madsjulia.lanl.gov
-http://gitlab.com/mads/Mads.jl
-http://madsjulia.github.io/Mads.jl/
+http://github.com/madsjulia
+http://mads.readthedocs.org
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
@@ -31,6 +30,10 @@ end
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	@tryimport Gadfly
+	if !isdefined(:Gadfly) && !isdefined(:Compose)
+		warn("Plotting modules are not available; Mads plotting is disabled")
+		ENV["MADS_NO_PLOT"] = ""
+	end
 	if !haskey(ENV, "MADS_NO_PYTHON")
 		@tryimport PyPlot
 	end
@@ -83,7 +86,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
-include("MadsLog.jl") # messages higher than verbosity level are printed
+include("MadsLog.jl")
 include("MadsPublish.jl")
 include("MadsHelp.jl")
 include("MadsTest.jl")
@@ -96,6 +99,8 @@ include("MadsSine.jl")
 include("MadsMisc.jl")
 include("MadsHelpers.jl")
 include("MadsParallel.jl")
+include("MadsParameters.jl")
+include("MadsObservations.jl")
 include("MadsForward.jl")
 include("MadsCalibrate.jl")
 include("MadsFunc.jl")
@@ -103,12 +108,13 @@ include("MadsLM.jl")
 include("MadsSA.jl")
 include("MadsMC.jl")
 # include("MadsBSS.jl")
-include("MadsParameters.jl")
-include("MadsObservations.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 if !haskey(ENV, "MADS_NO_PLOT")
+	include("MadsAnasolPlot.jl")
+	include("MadsBIGPlot.jl")
+	include("MadsSAPlot.jl")
 	include("MadsPlot.jl")
 end
 

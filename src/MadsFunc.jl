@@ -1,8 +1,5 @@
 import RobustPmap
-@tryimport HDF5
-if isdefined(:HDF5) # HDF5 installation is problematic on some machines
-	import ReusableFunctions
-end
+import ReusableFunctions
 import DataStructures
 import Distributions
 import JLD
