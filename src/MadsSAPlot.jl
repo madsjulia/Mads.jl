@@ -28,7 +28,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if isdefined(:Gadfly)
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
-					Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
+					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 		filename = "$(rootname)-jacobian"
