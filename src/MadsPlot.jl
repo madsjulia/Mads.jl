@@ -1,3 +1,5 @@
+import Colors
+import Compose
 import ProgressMeter
 import DataFrames
 import DataStructures
@@ -97,14 +99,14 @@ function plotmadsproblem(madsdata::Associative; format="", filename="", keyword=
 	xmax = xmax + dx / 6
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
-	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Geom.point, Geom.label,
-		Guide.XLabel("x [m]"), Guide.YLabel("y [m]"), Guide.yticks(orientation=:vertical),
-		Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
+	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Gadfly.Geom.point, Gadfly.Geom.label,
+		Gadfly.Guide.XLabel("x [m]"), Gadfly.Guide.YLabel("y [m]"), Gadfly.Guide.yticks(orientation=:vertical),
+		Gadfly.Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
 		Compose.fill(parse(Colors.Colorant, "orange")),
 		Compose.fillopacity(0.2),
 		Compose.stroke(parse(Colors.Colorant, "orange")))),
-		Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-		Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
+		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
@@ -272,14 +274,14 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				npp = length(c)
 				if npp > 1
 					p = Gadfly.plot(Guide.title(wellname),
-						layer(x=tc, y=c, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+						Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
+					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch
 					push!(pp, p)
 				else npp = 1
 					p = Gadfly.plot(Guide.title(wellname),
-						layer(x=tc, y=c, Geom.point, Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4pt)),
-					    layer(x=td, y=d, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+						Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4Gadfly.pt)),
+					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch
 					push!(pp, p)
 				end
@@ -322,9 +324,9 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 		if length(tress) + length(tobs) == 0
 			error("No data to plot")
 		end
-		pl = Gadfly.plot(Guide.title(title), Guide.xlabel(xlabel), Guide.ylabel(ylabel),
-					layer(x=tress, y=ress, Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3pt)),
-					layer(x=tobs, y=obs, Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt, highlight_width=0pt)))
+		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.xlabel(xlabel), Gadfly.Guide.ylabel(ylabel),
+					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
+					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
 		didplot = true
 		vsize += 4Gadfly.inch
 	end
@@ -353,7 +355,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="", dot_size=0.9mm)
+function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString; format="", dot_size=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -365,12 +367,12 @@ function scatterplotsamples(madsdata, samples::Matrix, filename::AbstractString;
 			if i == j
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram, 
 					Gadfly.Guide.xlabel(plotlabels[i]),
-					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt) 
+					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt) 
 					))
 			else
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j], 
 					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
-					Gadfly.Theme(major_label_font_size=24pt, minor_label_font_size=12pt, default_point_size=dot_size)
+					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, default_point_size=dot_size)
 					))
 			end
 		end
@@ -454,7 +456,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
 	pp = Array(Any, 0)
-	pc = Gadfly.plot(dfc, x="x", y="y", Geom.point, Guide.XLabel(xtitle), Guide.YLabel(ytitle))
+	pc = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.point, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle))
 	push!(pp, pc)
 	vsize = 4Gadfly.inch
 	df = Array(Any, nP)
@@ -466,7 +468,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		ptes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Total Effect"), Theme(key_position = :top) )
+		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position = :top) )
 		push!(pp, ptes)
 		vsize += 4Gadfly.inch
 	end
@@ -478,7 +480,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Main Effect"), Theme(key_position = :none) )
+		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position = :none) )
 		push!(pp, pmes)
 		vsize += 4Gadfly.inch
 	end
@@ -490,7 +492,7 @@ function plotwellSAresults(madsdata, result, wellname; xtitle = "Time [years]", 
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		pvar = Gadfly.plot(vdf, x="x", y="y", Geom.line, color="parameter", Guide.XLabel(xtitle), Guide.YLabel("Output Variance"), Theme(key_position = :none) )
+		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position = :none) )
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
 	end
@@ -559,7 +561,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 	###################################################### DATA
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
 	pp = Array(Any, 0)
-	pd = Gadfly.plot(dfc, x="x", y="y", Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle) )
+	pd = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle) )
 	push!(pp, pd)
 	if debug
 		# println(dfc)
@@ -587,7 +589,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+				Gadfly.Theme(line_width=1.5Gadfly.pt, default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 					Gadfly.Guide.XLabel(xtitle),
 					Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
@@ -612,7 +614,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=1.5pt, default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+				Gadfly.Theme(line_width=1.5Gadfly.pt, default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 				Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 				Gadfly.Guide.XLabel(xtitle),
 				Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
@@ -637,7 +639,7 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-			Gadfly.Theme(default_point_size=20pt, major_label_font_size=14pt, minor_label_font_size=12pt, key_title_font_size=16pt, key_label_font_size=12pt),
+			Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
@@ -710,10 +712,10 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	obskeys = Mads.getobskeys(madsdata)
 	if obs_plot_dots
 		obs_plot1 = """Gadfly.Geom.point"""
-		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3Gadfly.pt)"""
 	else
 		obs_plot1 = """Gadfly.Geom.line"""
-		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1Gadfly.mm)"""
 	end
 	nT = length(obskeys)
 	if !haskey( madsdata, "Wells" )
@@ -748,9 +750,9 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			paramdict[paramkey] = original
 		end
 		if !haskey( madsdata, "Wells" )
-			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-					Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-					[Gadfly.layer(x=t, y=Y[:,i], Geom.line,
+			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),#why are we eval(parse(string))'ing this?
+					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 					for i in 1:numberofsamples]...)
 			vsize = 4Gadfly.inch
@@ -780,9 +782,9 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 					end
 					endj += nTw
 					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-							Guide.title(wellname),
-							Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-							[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+							Gadfly.Guide.title(wellname),
+							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 							for i in 1:numberofsamples]...)
 					push!(pp, p)
@@ -858,10 +860,10 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 	d = Array(Float64, nT)
 	if obs_plot_dots
 		obs_plot1 = """Gadfly.Geom.point"""
-		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3pt)"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3Gadfly.pt)"""
 	else
 		obs_plot1 = """Gadfly.Geom.line"""
-		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1mm)"""
+		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1Gadfly.mm)"""
 	end
 	for i in 1:nT
 		if haskey( madsdata["Observations"][obskeys[i]], "time")
@@ -888,8 +890,8 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 		end
 	end
 	if !haskey( madsdata, "Wells" )
-		pl = Gadfly.plot(layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-				Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+		pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 				for i in 1:numberofsamples]... )
@@ -920,9 +922,9 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 				end
 				endj += nTw
 				p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-						Guide.title(wellname),
-						Guide.XLabel(xtitle), Guide.YLabel(ytitle),
-						[Gadfly.layer(x=t, y=Y[startj:endj,i], Geom.line,
+						Gadfly.Guide.title(wellname),
+						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
 						for i in 1:numberofsamples]...)
 				push!(pp, p)
@@ -975,14 +977,14 @@ function plotseries(X::Matrix, filename::AbstractString; format="", xtitle = "X"
 			Gadfly.Geom.line,
 			color = ["$name $i" for j in 1:nT])
 			for i in 1:nS]...,
-			Guide.XLabel(xtitle), Guide.YLabel(ytitle),
+			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 			Gadfly.Guide.colorkey(title))
 	else
 		hsize = 6Gadfly.Gadfly.inch
 		vsize = 2Gadfly.Gadfly.inch * nS
 		pp = Array(Gadfly.Plot{}, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Guide.XLabel(xtitle), Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
+			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
 		end
 		pS = Gadfly.vstack(pp...)
 	end
