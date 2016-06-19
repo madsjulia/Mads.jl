@@ -147,7 +147,7 @@ Arguments:
 - `lambda_mu` : lambda multiplication factor μ [10]
 - `np_lambda` : number of parallel lambda solves
 """
-function naive_LevenbergMarquardt(f::Function, g::Function, x0::Vector, o::Function=x->(x'*x)[1]; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Function=x->(x'*x)[1]; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
@@ -187,7 +187,7 @@ Arguments:
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
 - `callback` : call back function for debugging
 """
-function LevenbergMarquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=(best_x, of, lambda)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=(best_x, of, lambda)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m

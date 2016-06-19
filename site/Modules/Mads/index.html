@@ -164,9 +164,9 @@
                 
                     <li><a class="toctree-l4" href="#methods-internal">Methods [Internal]</a></li>
                 
-                    <li><a class="toctree-l4" href="#levenbergmarquardtffunction-gfunction-x0">LevenbergMarquardt(f::Function,  g::Function,  x0)</a></li>
+                    <li><a class="toctree-l4" href="#levenberg_marquardtffunction-gfunction-x0">levenberg_marquardt(f::Function,  g::Function,  x0)</a></li>
                 
-                    <li><a class="toctree-l4" href="#levenbergmarquardtffunction-gfunction-x0-ofunction">LevenbergMarquardt(f::Function,  g::Function,  x0,  o::Function)</a></li>
+                    <li><a class="toctree-l4" href="#levenberg_marquardtffunction-gfunction-x0-ofunction">levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)</a></li>
                 
                     <li><a class="toctree-l4" href="#allwellsoffmadsdataassociativek-v">allwellsoff!(madsdata::Associative{K, V})</a></li>
                 
@@ -374,9 +374,9 @@
                 
                     <li><a class="toctree-l4" href="#montecarlomadsdataassociativek-v">montecarlo(madsdata::Associative{K, V})</a></li>
                 
-                    <li><a class="toctree-l4" href="#naive_levenbergmarquardtffunction-gfunction-x0arrayt-1">naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1})</a></li>
+                    <li><a class="toctree-l4" href="#naive_levenberg_marquardtffunction-gfunction-x0arrayt-1">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})</a></li>
                 
-                    <li><a class="toctree-l4" href="#naive_levenbergmarquardtffunction-gfunction-x0arrayt-1-ofunction">naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)</a></li>
+                    <li><a class="toctree-l4" href="#naive_levenberg_marquardtffunction-gfunction-x0arrayt-1-ofunction">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)</a></li>
                 
                     <li><a class="toctree-l4" href="#naive_get_deltaxjpjarrayt-2-jparrayt-2-f0arrayt-1-lambdareal">naive_get_deltax(JpJ::Array{T, 2},  Jp::Array{T, 2},  f0::Array{T, 1},  lambda::Real)</a></li>
                 
@@ -655,8 +655,8 @@
                 <h1 id="mads">Mads</h1>
 <h2 id="methods-internal">Methods [Internal]</h2>
 <hr />
-<p><a id="method__levenbergmarquardt.1" class="lexicon_definition"></a></p>
-<h2 id="levenbergmarquardtffunction-gfunction-x0">LevenbergMarquardt(f::Function,  g::Function,  x0)</h2>
+<p><a id="method__levenberg_marquardt.1" class="lexicon_definition"></a></p>
+<h2 id="levenberg_marquardtffunction-gfunction-x0">levenberg_marquardt(f::Function,  g::Function,  x0)</h2>
 <p>Levenberg-Marquardt optimization</p>
 <p>Arguments:</p>
 <ul>
@@ -682,8 +682,8 @@
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L189">Mads/src/MadsLM.jl:189</a></p>
 <hr />
-<p><a id="method__levenbergmarquardt.2" class="lexicon_definition"></a></p>
-<h2 id="levenbergmarquardtffunction-gfunction-x0-ofunction">LevenbergMarquardt(f::Function,  g::Function,  x0,  o::Function)</h2>
+<p><a id="method__levenberg_marquardt.2" class="lexicon_definition"></a></p>
+<h2 id="levenberg_marquardtffunction-gfunction-x0-ofunction">levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)</h2>
 <p>Levenberg-Marquardt optimization</p>
 <p>Arguments:</p>
 <ul>
@@ -1760,8 +1760,8 @@ The function can be provided as an external function in the MADS problem diction
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsMC.jl#L103">Mads/src/MadsMC.jl:103</a></p>
 <hr />
-<p><a id="method__naive_levenbergmarquardt.1" class="lexicon_definition"></a></p>
-<h2 id="naive_levenbergmarquardtffunction-gfunction-x0arrayt-1">naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1})</h2>
+<p><a id="method__naive_levenberg_marquardt.1" class="lexicon_definition"></a></p>
+<h2 id="naive_levenberg_marquardtffunction-gfunction-x0arrayt-1">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})</h2>
 <p>Naive Levenberg-Marquardt optimization</p>
 <p>Arguments:</p>
 <ul>
@@ -1781,8 +1781,8 @@ The function can be provided as an external function in the MADS problem diction
 <p><em>source:</em>
 <a href="https://github.com/madsjulia/Mads.jl/tree/768814756d0b4c66eabdb3e92cd8e9a1e138f46b/src/MadsLM.jl#L149">Mads/src/MadsLM.jl:149</a></p>
 <hr />
-<p><a id="method__naive_levenbergmarquardt.2" class="lexicon_definition"></a></p>
-<h2 id="naive_levenbergmarquardtffunction-gfunction-x0arrayt-1-ofunction">naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)</h2>
+<p><a id="method__naive_levenberg_marquardt.2" class="lexicon_definition"></a></p>
+<h2 id="naive_levenberg_marquardtffunction-gfunction-x0arrayt-1-ofunction">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)</h2>
 <p>Naive Levenberg-Marquardt optimization</p>
 <p>Arguments:</p>
 <ul>

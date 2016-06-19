@@ -4,8 +4,8 @@
 
 ---
 
-<a id="method__levenbergmarquardt.1" class="lexicon_definition"></a>
-#### LevenbergMarquardt(f::Function,  g::Function,  x0)
+<a id="method__levenberg_marquardt.1" class="lexicon_definition"></a>
+#### levenberg_marquardt(f::Function,  g::Function,  x0)
 Levenberg-Marquardt optimization
 
 Arguments:
@@ -35,8 +35,8 @@ Arguments:
 
 ---
 
-<a id="method__levenbergmarquardt.2" class="lexicon_definition"></a>
-#### LevenbergMarquardt(f::Function,  g::Function,  x0,  o::Function)
+<a id="method__levenberg_marquardt.2" class="lexicon_definition"></a>
+#### levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)
 Levenberg-Marquardt optimization
 
 Arguments:
@@ -1502,8 +1502,8 @@ Dumps:
 
 ---
 
-<a id="method__naive_levenbergmarquardt.1" class="lexicon_definition"></a>
-#### naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1})
+<a id="method__naive_levenberg_marquardt.1" class="lexicon_definition"></a>
+#### naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})
 Naive Levenberg-Marquardt optimization
 
 Arguments:
@@ -1527,8 +1527,8 @@ Arguments:
 
 ---
 
-<a id="method__naive_levenbergmarquardt.2" class="lexicon_definition"></a>
-#### naive_LevenbergMarquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
+<a id="method__naive_levenberg_marquardt.2" class="lexicon_definition"></a>
+#### naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)
 Naive Levenberg-Marquardt optimization
 
 Arguments:
