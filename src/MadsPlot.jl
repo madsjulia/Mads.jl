@@ -273,13 +273,13 @@ function plotmatches(madsdata::Associative, result::Associative; filename="", fo
 				end
 				npp = length(c)
 				if npp > 1
-					p = Gadfly.plot(Guide.title(wellname),
+					p = Gadfly.plot(Gadfly.Guide.title(wellname),
 						Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
 					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch
 					push!(pp, p)
 				else npp = 1
-					p = Gadfly.plot(Guide.title(wellname),
+					p = Gadfly.plot(Gadfly.Guide.title(wellname),
 						Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4Gadfly.pt)),
 					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch

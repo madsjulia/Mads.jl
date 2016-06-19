@@ -23,14 +23,14 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 	maxhoriz = min(maxhoriz, max(horizons...))
 	for i = 1:size(maxfailureprobs, 2)
 		df = vcat(df, DataFrames.DataFrame(horizon=horizons, maxfailureprob=maxfailureprobs[:, i], Choices=madsdata["Choices"][i]["name"]))
-		#layers[i] = Gadfly.layer(x=horizons, y=maxfailureprobs[:, i], Geom.line)
+		#layers[i] = Gadfly.layer(x=horizons, y=maxfailureprobs[:, i], Gadfly.Geom.line)
 	end
-	#p = Gadfly.plot(layers..., Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"))
-	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choices", Geom.line,
-									Guide.xlabel("Horizon of uncertainty"), Guide.ylabel("Maximum probability of failure"),
+	#p = Gadfly.plot(layers..., Gadfly.Guide.xlabel("Horizon of uncertainty"), Gadfly.Guide.ylabel("Maximum probability of failure"))
+	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choices", Gadfly.Geom.line,
+									Gadfly.Guide.xlabel("Horizon of uncertainty"), Gadfly.Guide.ylabel("Maximum probability of failure"),
 									Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
-									Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
-	Gadfly.draw(eval(Gadfly.symbol(format))(filename, 4Gadfly.Gadfly.inch, 3Gadfly.Gadfly.inch), p)
+									Gadfly.Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
+	Gadfly.draw(Gadfly.eval(Gadfly.symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
 	end
