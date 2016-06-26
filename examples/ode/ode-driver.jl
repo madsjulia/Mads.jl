@@ -1,5 +1,5 @@
-using ODE
-using DataStructures
+import ODE
+import DataStructures
 
 function madsmodelrun(parameters::Associative)
 	omega = parameters["omega"]
@@ -18,8 +18,8 @@ function madsmodelrun(parameters::Associative)
 	funcosc = makefunc(parameters)
 	times = collect(0:.1:100)
 	initialconditions = [1.,0.]
-	t, y = ode23s(funcosc, initialconditions, times, points=:specified)
+	t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
 	ys = hcat(y...).' # vecorize the output and transpose with '
-	predictions = OrderedDict{AbstractString, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
+	predictions = DataStructures.OrderedDict{AbstractString, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
 	return predictions
 end

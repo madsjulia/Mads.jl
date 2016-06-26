@@ -1,4 +1,18 @@
+import Distributions
 import DataStructures
+
+"Is the dictionary containing all the observations"
+function isobs(madsdata::Associative, dict::Associative)
+	flag = true
+	obs = getobskeys(madsdata)
+	for i in obs
+		if !haskey(dict, i)
+			flag = false
+			break
+		end
+	end
+	return flag
+end
 
 "Get keys for all observations in the MADS problem dictionary"
 function getobskeys(madsdata::Associative)
@@ -18,11 +32,11 @@ function getwellkeys(madsdata::Associative)
 end
 
 # Make functions to get MADS observation variable names
-getobsnames = ["min", "max", "log", "weight", "target", "time"]
-getobsaltnames = ["min", "max", "log", "w", "c", "t"]
-getobstypes = [Float64, Float64, Any, Float64, Float64, Float64]
-getobsdefault = [-1e6, 1e6, nothing, 1, 0, NaN]
-getobslogdefault = [1e-6, 1e6, nothing, 1, 1, NaN]
+getobsnames = ["min", "max", "log", "weight", "target", "time", "dist"]
+getobsaltnames = ["min", "max", "log", "w", "c", "t", "dist"]
+getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, Distributions.Distribution]
+getobsdefault = [-1e6, 1e6, nothing, 1, 0, NaN, "Uniform(-1e6, 1e6)"]
+getobslogdefault = [1e-6, 1e6, nothing, 1, 1, NaN, "Uniform(1e-6, 1e6)"]
 index = 0
 for i = 1:length(getobsnames)
 	obsname = getobsnames[i]
@@ -36,15 +50,25 @@ for i = 1:length(getobsnames)
 		function $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys) 
 			obsvalue = Array($(obstype), length(obskeys))
 			for i in 1:length(obskeys)
-				if haskey( madsdata["Observations"][obskeys[i]], $obsname)
+				if haskey(madsdata["Observations"][obskeys[i]], $obsname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsname]
-				elseif haskey( madsdata["Observations"][obskeys[i]], $obsaltname)
+				elseif haskey(madsdata["Observations"][obskeys[i]], $obsaltname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsaltname]
 				else
 					if haskey(madsdata["Observations"][obskeys[i]], "log") && madsdata["Observations"][obskeys[i]]["log"] == true
 						obsvalue[i] = $(obslogdefault)
 					else
 						obsvalue[i] = $(obsdefault)
+					end
+					if ($obsname == "min" || $obsname == "max") && haskey(madsdata["Observations"][obskeys[i]], "dist")
+						distribution = Distributions.eval(parse(madsdata["Observations"][obskeys[i]]["dist"]))
+						if typeof(distribution) == Distributions.Uniform
+							if $obsname == "min"
+								obsvalue[i] = distribution.a
+							elseif $obsname == "max"
+								obsvalue[i] = distribution.b
+							end
+						end
 					end
 				end
 			end

@@ -201,6 +201,7 @@ Plot the matches between model predictions and observations
 
 ```
 plotmatches(madsdata; filename="", format="")
+plotmatches(madsdata, param; filename="", format="")
 plotmatches(madsdata, result; filename="", format="")
 plotmatches(madsdata, result, r"NO3"; filename="", format="")
 ```
@@ -208,19 +209,14 @@ plotmatches(madsdata, result, r"NO3"; filename="", format="")
 Arguments:
 
 - `madsdata` : MADS problem dictionary
+- `param` : dictionary with model parameters
 - `result` : dictionary with model predictions
 - `rx` : regular expression to filter the outputs
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
 function plotmatches(madsdata_in::Associative; filename="", format="", separate_files=false)
-	madsdata = deepcopy(madsdata_in)
-	if haskey(madsdata, "Wells")
-		setwellweights!(madsdata, 1)
-	elseif haskey(madsdata, "Observations")
-		setobsweights!(madsdata, 1)
-	end
-	r = forward(madsdata)
+	r = forward(madsdata; all=true)
 	plotmatches(madsdata_in, r, filename=filename, format=format, separate_files=separate_files)
 end
 
@@ -241,8 +237,20 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, result::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false, hsize=6Gadfly.inch)
-	rootname = Mads.getmadsrootname(madsdata)
+function plotmatches(madsdata::Associative, dict_in::Associative; filename="", format="", title="", ylabel="y", xlabel="time", separate_files=false, hsize=6Gadfly.inch)
+	obs_flag = isobs(madsdata, dict_in)
+	if obs_flag
+		result = dict_in
+	else
+		par_flag = isparam(madsdata, dict_in)
+		if par_flag
+			result = forward(madsdata, dict_in; all=true)
+		else
+			madswarn("Provided dictionary does not define either parameters or observations")
+			return	
+		end
+	end
+	rootname = getmadsrootname(madsdata)
 	vsize = 0Gadfly.inch
 	pl = Any{}
 	didplot = false

@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 info("Optimization ...")
 

@@ -1,6 +1,19 @@
 import Distributions
 import DataStructures
 
+"Is the dictionary containing all the parameters"
+function isparam(madsdata::Associative, dict::Associative)
+	flag = true
+	par = getparamkeys(madsdata)
+	for i in par
+		if !haskey(dict, i)
+			flag = false
+			break
+		end
+	end
+	return flag
+end
+
 """
 Get keys of all parameters in the MADS dictionary
 
@@ -115,7 +128,7 @@ function getparamsmin(madsdata, paramkeys)
 			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["min"]
 		else
 			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
-				distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
 				if typeof(distribution) == Distributions.Uniform
 					paramvalue[i] = distribution.a
 					continue
@@ -144,7 +157,7 @@ function getparamsmax(madsdata, paramkeys)
 			paramvalue[i] = madsdata["Parameters"][paramkeys[i]]["max"]
 		else
 			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
-				distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+				distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
 				if typeof(distribution) == Distributions.Uniform
 					paramvalue[i] = distribution.b
 					continue
@@ -174,7 +187,7 @@ function getparamsinit_min(madsdata, paramkeys)
 			continue
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
-			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
 			if typeof(distribution) == Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
@@ -185,7 +198,7 @@ function getparamsinit_min(madsdata, paramkeys)
 			continue
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
-			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
 			if typeof(distribution) == Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
@@ -214,7 +227,7 @@ function getparamsinit_max(madsdata, paramkeys)
 			continue
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
-			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
 			if typeof(distribution) == Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
@@ -225,7 +238,7 @@ function getparamsinit_max(madsdata, paramkeys)
 			continue
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
-			distribution = eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
+			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
 			if typeof(distribution) == Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
@@ -465,7 +478,7 @@ function getparamdistributions(madsdata::Associative; init_dist=false)
 	for i in 1:length(paramkeys)
 		if init_dist
 			if haskey(madsdata["Parameters"][paramkeys[i]], "init_dist")
-				distributions[paramkeys[i]] = eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
+				distributions[paramkeys[i]] = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
 				continue
 			else
 				minkey = haskey(madsdata["Parameters"][paramkeys[i]], "init_min") ? "init_dist" : "min"
