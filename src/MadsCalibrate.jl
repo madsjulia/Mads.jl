@@ -30,14 +30,16 @@ Returns:
 - `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
 
 """
-function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true)
-	if seed != 0
-		srand(seed)
-	end
+function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, all=false)
+	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
+	if all
+		allresults = Any[]
+	end
+	bestparameters = Any[]
 	bestresult = Array(Any,2)
 	bestphi = Inf
 	for i in 1:numberofsamples
@@ -45,16 +47,29 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-3, to
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		result = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
-		phi = result[2].f_minimum
-		!quiet && info("""Random initial guess #$i: OF = $phi""")
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		phi = results.f_minimum
+		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
 		if phi < bestphi
-			bestresult = result
+			bestparameters = parameters
+			bestresult = results
 			bestphi = phi
+		end
+		if all
+			if sizeof(allresults) == 0
+				allresults = [phi converged parameters]
+			else
+				allresults = [allresults; phi converged parameters]
+			end
 		end
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
-	return bestresult
+	if all
+		return allresults
+	else
+		return bestparameters, bestresult
+	end
 end
 
 """

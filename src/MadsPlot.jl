@@ -708,9 +708,7 @@ function spaghettiplots(madsdata::Associative, number_of_samples::Int; format=""
 end
 
 function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
-	if seed != 0
-		srand(seed)
-	end
+	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -853,9 +851,7 @@ function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="
 end
 
 function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
-	if seed != 0
-		srand(seed)
-	end
+	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)

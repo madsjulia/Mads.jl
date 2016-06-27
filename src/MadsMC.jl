@@ -25,9 +25,7 @@ Returns:
 - `mcmcchain` : 
 """
 function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
-	if seed != 0
-		srand(seed)
-	end
+	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	optparamkeys = getoptparamkeys(madsdata)

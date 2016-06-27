@@ -6,6 +6,16 @@ import DataFrames
 import JSON
 import JLD
 
+"Set current seed"
+function setseed(seed::Number)
+	if seed != 0
+		srand(seed)
+	else
+		s = Int(Base.Random.GLOBAL_RNG.seed[1])
+		madsinfo("Current seed: $s")
+	end
+end
+
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 """
@@ -74,9 +84,7 @@ Arguments:
 - `seed` : initial random seed
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdir=false) # TODO Saltelli (brute force) does not seem to work; not sure
-	if seed != 0
-		srand(seed)
-	end
+	Mads.setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
 	nummanyparamsamples = numsamples
@@ -246,9 +254,7 @@ Arguments:
 - `parallel` : set to true if the model runs should be performed in parallel
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=false, parallel=false, checkpointfrequency=div(N, 10))
-	if seed != 0
-		srand(seed)
-	end
+	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
 	paramalldict = Dict(zip(paramallkeys, Mads.getparamsinit(madsdata)))
@@ -485,9 +491,7 @@ for mi = 1:length(saltelli_functions)
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
 		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
-			if seed != 0
-				srand(seed)
-			end
+			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
 				return
@@ -735,10 +739,8 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 			mkdir(restartdir)
 		end
 	end
-
-	if seed != 0
-		srand(seed)
-	end
+	
+	Mads.setseed(seed)
 
 	## Setting pathfiles
 	efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"

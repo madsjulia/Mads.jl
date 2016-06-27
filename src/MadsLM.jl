@@ -348,7 +348,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		if objfuncevals[npl_best] < best_residual
 			best_residual = trial_residual
 			best_x = x + delta_x
-			best_f = fcur
+			best_f = trial_f
 		end
 
 		# step quality = residual change / predicted residual change
@@ -381,12 +381,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		callback(best_x, best_residual, lambda)
 
 		# check convergence criteria:
-		if norm(delta_x) < tolX * ( tolX + norm(x) )
-			Mads.madsinfo("Small parameter step size: $(norm(delta_x)) < $tolX (tolX)")
+		nx = norm(delta_x)
+		if nx < tolX * ( tolX + norm(x) )
+			Mads.madsinfo("Small parameter step size: $nx < $tolX (tolX)")
 			x_converged = true
 		end
-		if norm(J' * fcur, Inf) < tolG
-			Mads.madsinfo("Small gradient: $(norm(J' * fcur, Inf)) < $tolG (norm(J^T * fcur) < tolG)")
+		ng = norm(J' * fcur, Inf) 
+		if ng < tolG
+			Mads.madsinfo("Small gradient: $ng < $tolG (norm(J^T * fcur) < tolG)")
 			g_converged = true
 		end
 		if best_residual < tolOF
@@ -395,5 +397,5 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 		converged = g_converged | x_converged | of_converged
 	end
-	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, o(best_f), g_calls, converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, tr, f_calls, g_calls)
+	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, tr, f_calls, g_calls)
 end
