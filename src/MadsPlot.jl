@@ -813,7 +813,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		end
 		filename, format = setimagefileformat(filename, format)
 		try
-			Gadfly.draw( Gadfly.eval((symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
+			Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter."
 			Mads.madswarn("Gadfly fails!")
 		end
