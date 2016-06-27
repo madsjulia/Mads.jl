@@ -219,7 +219,6 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	x_converged = false
 	g_converged = false
 	of_converged = false
-	iterCt = 0
 	x = x0
 	best_x = x0
 	nP = length(x)
@@ -241,7 +240,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	tr = Optim.OptimizationTrace(Optim.LevenbergMarquardt())
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
-		os = Optim.OptimizationState(iterCt, o(fcur), NaN, d)
+		os = Optim.OptimizationState(g_calls, o(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
 	end
@@ -252,7 +251,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	phi = Array(Float64, np_lambda)
 	first_lambda = true
 	compute_jacobian = true
-	while ( ~converged && g_calls < maxJacobians && f_calls < maxEval)
+	while (~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
 			J = Array(Float64, 1, 1)
 			try
@@ -282,7 +281,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		Mads.madsinfo(@sprintf "Iteration %02d: Starting lambda: %e" iterCt lambda_current)
+		Mads.madsinfo(@sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
@@ -382,16 +381,19 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		callback(best_x, best_residual, lambda)
 
 		# check convergence criteria:
-		if norm(J' * fcur, Inf) < tolG # Small gradient: norm(J^T * fcur, Inf) < tolG
-			g_converged = true
-		end
-		if norm(delta_x) < tolX * ( tolX + norm(x) ) # Small step size: norm(delta_x) < tolX
+		if norm(delta_x) < tolX * ( tolX + norm(x) )
+			Mads.madsinfo("Small parameter step size: $(norm(delta_x)) < $tolX (tolX)")
 			x_converged = true
 		end
-		if best_residual < tolOF # Small objective fuction < tolOF
+		if norm(J' * fcur, Inf) < tolG
+			Mads.madsinfo("Small gradient: $(norm(J' * fcur, Inf)) < $tolG (norm(J^T * fcur) < tolG)")
+			g_converged = true
+		end
+		if best_residual < tolOF
+			Mads.madsinfo("Small objective function: $best_residual < $tolOF (tolOF)")
 			of_converged = true
 		end
 		converged = g_converged | x_converged | of_converged
 	end
-	Optim.MultivariateOptimizationResults("Levenberg-Marquardt", x0, best_x, o(best_f), iterCt, !converged, x_converged, 0.0, false, 0.0, g_converged, tolG, tr, f_calls, g_calls)
+	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, o(best_f), g_calls, converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, tr, f_calls, g_calls)
 end
