@@ -1,8 +1,10 @@
 "Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)"
 function testj(coverage=false)
+	orig_dir = pwd()
 	for i in madsmodules
 		Pkg.test(i; coverage=coverage)
 	end
+	cd(orig_dir)
 end
 
 "Remove Mads coverage files"
@@ -17,6 +19,7 @@ end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
 function test(testmod="")
+	orig_dir = pwd()
 	if testmod == ""
 		include(Pkg.dir("Mads") * "/test/runtests.jl")
 		println("* Mads modules ...")
@@ -39,4 +42,5 @@ function test(testmod="")
 			warn("Test $file is missing!")
 		end
 	end
+	cd(orig_dir)
 end
