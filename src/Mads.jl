@@ -90,6 +90,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
+include("MadsTypes.jl")
 include("MadsLog.jl")
 include("MadsPublish.jl")
 include("MadsHelp.jl")
@@ -120,22 +121,6 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	include("MadsBIGPlot.jl")
 	include("MadsSAPlot.jl")
 	include("MadsPlot.jl")
-end
-
-## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
-type svrOutput
-	alpha::Array{Float64,1}
-	b::Float64
-	kernel::Function
-	kernelType::ASCIIString
-	train_data::Array{Float64, 2}
-	varargin::Array
-
-	svrOutput(alpha::Array{Float64,1}, b::Float64, kernel::Function, kernelType::ASCIIString, train_data::Array{Float64, 2}, varargin::Array) = new(alpha, b, kernel, kernelType, train_data, varargin); # constructor for the type
-end
-
-type svrFeature
-	feature::Array{Float64,1}
 end
 
 end
