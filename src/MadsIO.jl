@@ -370,7 +370,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		end
 		for i = 1:div(length(splitline)-1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-			Mads.madsinfo("Replacing " * strip(splitline[2 * i]) * " -> " * string(parameters[strip(splitline[2 * i])]))
+			Mads.madsinfo("Replacing " * strip(splitline[2 * i]) * " -> " * string(parameters[strip(splitline[2 * i])]), 1)
 			write(outfile, string(parameters[strip(splitline[2 * i])])) # splitline[2 * i] in this case is parameter ID
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator

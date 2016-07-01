@@ -226,7 +226,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
-		Mads.madsoutput("""Parallel lambda search; number of parallel lambdas = $np_lambda\n"""; level = 1);
+		Mads.madsoutput("Parallel lambda search; number of parallel lambdas = $np_lambda\n");
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
@@ -234,7 +234,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	best_f = fcur
 	best_residual = residual = o(fcur)
 	callback(x, residual, NaN)
-	Mads.madsoutput("""Initial OF: $residual\n"""; level = 1);
+	Mads.madsoutput("Initial OF: $residual\n");
 
 	# Maintain a trace of the system.
 	tr = Optim.OptimizationTrace(Optim.LevenbergMarquardt())
@@ -260,10 +260,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				J = g(x)
 			end
 			g_calls += 1
-			Mads.madsoutput("Jacobian #$g_calls\n"; level = 1);
+			Mads.madsoutput("Jacobian #$g_calls\n");
 			compute_jacobian = false
 		end
-		Mads.madsoutput("""Current Best OF: $best_residual\n"""; level = 1);
+		Mads.madsoutput("Current Best OF: $best_residual\n");
 		# Solve for:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
@@ -315,14 +315,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_residual = o(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			Mads.madsoutput(@sprintf "#%02d OF (est): %f" npl predicted_residual; level = 4);
+			Mads.madsoutput("$(@sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
 			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
-				Mads.madsoutput(" -> not good"; level = 2);
+				Mads.madsoutput(" -> not good", 1);
 				if np_lambda == 1
-					Mads.madsoutput("""Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)"""; level = 3);
+					Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)", 2);
 				end
 			else
-				Mads.madsoutput(" -> ok"; level = 2);
+				Mads.madsoutput(" -> ok", 1);
 			end
 			return predicted_residual, delta_x
 		end
@@ -337,8 +337,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		npl_best = indmin(objfuncevals)
 		npl_worst = indmax(objfuncevals)
-		Mads.madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]; level = 1 );
-		Mads.madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]; level = 1 );
+		Mads.madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]);
+		Mads.madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])
