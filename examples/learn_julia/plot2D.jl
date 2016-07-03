@@ -1,18 +1,18 @@
-using Gadfly
+import Gadfly
 
 srand(100)
 x = 1:10
 y = rand(10)
 
 Gadfly.plot(x=x, y=y)
-Gadfly.plot(x=x, y=y, Geom.point, Geom.line)
+Gadfly.plot(x=x, y=y, Gadfly.Geom.point, Gadfly.Geom.line)
 Gadfly.plot(x=x, y=2.^y,
-     Scale.y_sqrt, Geom.point, Geom.smooth,
-     Guide.xlabel("Time"), Guide.ylabel("Response"), Guide.title("Training"))
+     Gadfly.Scale.y_sqrt, Gadfly.Geom.point, Gadfly.Geom.smooth,
+     Gadfly.Guide.xlabel("Time"), Gadfly.Guide.ylabel("Response"), Gadfly.Guide.title("Training"))
 func_plot(x) = sin(x) + sqrt(x)
 Gadfly.plot([sin, cos, sqrt, func_plot], 0, 25)
 
-using PyPlot
+import PyPlot
 
 PyPlot.svg(true)
 PyPlot.clf()

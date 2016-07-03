@@ -33,9 +33,12 @@ function makelmfunctions(madsdata)
 	else # L2 norm of x
 		o_lm(x) = (x'*x)[1]
 	end
-	obskeys = getobskeys(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
+	index = find(isnan(targets))
+	weights[index] = 0
+	targets[index] = 0
 	if ssdr
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)

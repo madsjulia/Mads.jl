@@ -1,5 +1,5 @@
-using Distributions
-using Gadfly
+import Distributions
+import Gadfly
 
 # create random vector with normal distribution
 dist = Distributions.Uniform(1,2)

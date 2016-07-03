@@ -33,6 +33,52 @@ function forward(madsdata::Associative, paramvalues::Associative; all=false)
 	return f(paramvalues)
 end
 
+function forward(madsdata::Associative, paramvalues::Array; all=false)
+	madsdata_c = deepcopy(madsdata)
+	if all
+		if haskey(madsdata_c, "Wells")
+			setwellweights!(madsdata_c, 1)
+		elseif haskey(madsdata_c, "Observations")
+			setobsweights!(madsdata_c, 1)
+		end
+	end
+	f = makemadscommandfunction(madsdata_c)
+	pk = Mads.getoptparamkeys(madsdata_c)
+	np = length(pk)
+	s = size(paramvalues)
+	if length(s) > 2
+		madswarn("Incorrect array size: size(paramvalues) = $(size(paramvalues))")
+		return
+	elseif length(s) == 2	
+		mx = max(s...)
+		mn = min(s...)
+	else
+		mx = s[1]
+		mn = 1
+	end
+	if mn != np && mx != np
+		madswarn("Incorrect array size: size(paramvalues) = $(size(paramvalues))")
+		return
+	end
+	nr = (mn == np) ? mx : mn
+	r = []
+	for i = 1:nr
+		if length(s) == 2
+			if s[2] == np
+				pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[i,j], 1:np)))
+			else
+				pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[j,i], 1:np)))
+			end
+		else
+			pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[j], 1:np)))
+		end
+		@show pd
+		o = f(pd)
+		push!(r, o)
+	end
+	return r
+end
+
 """
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 

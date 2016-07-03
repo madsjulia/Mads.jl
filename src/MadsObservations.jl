@@ -22,8 +22,9 @@ end
 "Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary"
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
-	k = getobskeys(madsdata)
-	return k[w.>0]
+	t = getobstarget(madsdata)
+	k = getobskeys(madsdata )
+	return k[w.>0 | isnan(t)]
 end
 
 "Get keys for all wells in the MADS problem dictionary"
@@ -35,8 +36,8 @@ end
 getobsnames = ["min", "max", "log", "weight", "target", "time", "dist"]
 getobsaltnames = ["min", "max", "log", "w", "c", "t", "dist"]
 getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, Distributions.Distribution]
-getobsdefault = [-1e6, 1e6, nothing, 1, 0, NaN, "Uniform(-1e6, 1e6)"]
-getobslogdefault = [1e-6, 1e6, nothing, 1, 1, NaN, "Uniform(1e-6, 1e6)"]
+getobsdefault = [-1e6, 1e6, nothing, 1, NaN, NaN, "Uniform(-1e6, 1e6)"]
+getobslogdefault = [1e-6, 1e6, nothing, 1, NaN, NaN, "Uniform(1e-6, 1e6)"]
 index = 0
 for i = 1:length(getobsnames)
 	obsname = getobsnames[i]
@@ -97,7 +98,7 @@ function gettime(o::Associative)
 end
 
 "Set observation time"
-function settime(o::Associative, time)
+function settime!(o::Associative, time)
 	if haskey(o, "time")
 		o["time"] = time
 	elseif haskey(o, "t")
@@ -121,7 +122,7 @@ function getweight(o::Associative)
 end
 
 "Set observation weight"
-function setweight(o::Associative, weight)
+function setweight!(o::Associative, weight)
 	if haskey(o, "weight")
 		o["weight"] = weight
 	elseif haskey(o, "w")
@@ -145,7 +146,7 @@ function gettarget(o::Associative)
 end
 
 "Set observation target"
-function settarget(o::Associative, target)
+function settarget!(o::Associative, target)
 	if haskey(o, "target")
 		o["target"] = target
 	elseif haskey(o, "c")
@@ -184,7 +185,7 @@ function setobstime!(madsdata::Associative, separator::AbstractString="_")
 		if length(s) != 2
 			madserror("String `$(split)` cannot split $(obskeys[i])")
 		else
-			settime(madsdata["Observations"][obskeys[i]], parse(Float64, s[2]))
+			settime!(madsdata["Observations"][obskeys[i]], parse(Float64, s[2]))
 		end
 	end
 end
@@ -195,7 +196,7 @@ function setobstime!(madsdata::Associative, rx::Regex=r"[A-x]*_([0-9,.]+)")
 		if typeof(m) == Void || length(m.captures) != 1
 			madserror("Regular expression `$(rx)` cannot match $(obskeys[i])")
 		else
-			settime(madsdata["Observations"][obskeys[i]], parse(Float64, m.captures[1]))
+			settime!(madsdata["Observations"][obskeys[i]], parse(Float64, m.captures[1]))
 		end
 	end
 end
@@ -204,7 +205,7 @@ end
 function setobsweights!(madsdata::Associative, value::Number)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
-		setweight(madsdata["Observations"][obskeys[i]], value)
+		setweight!(madsdata["Observations"][obskeys[i]], value)
 	end
 end
 
@@ -212,7 +213,7 @@ end
 function modobsweights!(madsdata::Associative, value::Number)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
-		setweight(madsdata["Observations"][obskeys[i]], getweight(madsdata["Observations"][obskeys[i]]) * value)
+		setweight!(madsdata["Observations"][obskeys[i]], getweight(madsdata["Observations"][obskeys[i]]) * value)
 	end
 end
 
@@ -222,7 +223,7 @@ function invobsweights!(madsdata::Associative, value::Number)
 	for i in 1:length(obskeys)
 		t = gettarget(madsdata["Observations"][obskeys[i]])
 		if getweight(madsdata["Observations"][obskeys[i]]) > 0 && t > 0
-			setweight(madsdata["Observations"][obskeys[i]], (1. / t) * value)
+			setweight!(madsdata["Observations"][obskeys[i]], (1. / t) * value)
 		end
 	end
 end
@@ -232,7 +233,7 @@ function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			setweight(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
+			setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
 		end
 	end
 	setobsweights!(madsdata, value)
@@ -243,7 +244,7 @@ function modwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			setweight(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
+			setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
 		end
 	end
 	modobsweights!(madsdata, value)
@@ -256,7 +257,7 @@ function invwellweights!(madsdata::Associative, value::Number)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 			t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
 			if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0 
-				setweight(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * value)
+				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * value)
 			end
 		end
 	end
