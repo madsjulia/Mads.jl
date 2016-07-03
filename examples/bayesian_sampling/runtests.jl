@@ -13,7 +13,6 @@ mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
 
 mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
-values = vcat(map(chain->chain.value', mcmcchains)...)
 
 md = Mads.loadmadsfile(workdir * "w01.mads")
 rootname = Mads.getmadsrootname(md)

@@ -1,3 +1,4 @@
+import Mads
 import Gadfly
 md = Mads.loadmadsfile("internal-polynomial.mads")
 info("Bayesian analysis with different observation weights (standard deviation errors)")
@@ -13,6 +14,7 @@ for w = (1000000, 1000, 1)
 	p = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
 	Gadfly.draw(Gadfly.PNG("bayes_init_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), p)
 end
+pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 p, r = Mads.calibrate(md)
 Mads.setparamsinit!(md, p)
 rm("internal-polynomial.iterationresults")
@@ -28,3 +30,4 @@ for w = (1000000, 1000, 1)
 	p = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
 	Gadfly.draw(Gadfly.PNG("bayes_opt_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), p)
 end
+Mads.setparamsinit!(md, pinit)

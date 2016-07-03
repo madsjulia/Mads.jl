@@ -9,13 +9,15 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="")
-	if filename ==""
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true)
+	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
+		ext = ""
 	else
 		rootname = Mads.getrootname(filename)
+		ext = "." * Mads.getextension(filename)
 	end
-	f_lm, g_lm = makelmfunctions(madsdata)
+	g = makelocalsafunction(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -23,18 +25,18 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	end
 	nP = length(paramkeys)
 	initparams = getparamsinit(madsdata, paramkeys)
-	J = g_lm(initparams)
-	writedlm("$(rootname)-jacobian.dat", J)
+	J = g(initparams)
+	datafiles && writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if isdefined(:Gadfly)
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
-		filename = "$(rootname)-jacobian"
+		filename = "$(rootname)-jacobian" * ext
 		filename, format = setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 12Gadfly.inch), jacmat)
-		Mads.madsinfo("""Jacobian matrix plot saved in $filename""")
+		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	JpJ = J' * J
 	covar = Array(Float64, 0)
@@ -45,44 +47,46 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		try
 			covar = inv(JpJ)
 		catch "SingularException(4)"
-			Mads.madserror("""Singular covariance matrix! Local sensitivity analysis fails.""")
+			Mads.madserror("Singular covariance matrix! Local sensitivity analysis fails.")
 			return
 		end
 	end
-	writedlm("$(rootname)-covariance.dat", covar)
 	stddev = sqrt(abs(diag(covar)))
-	f = open("$(rootname)-stddev.dat", "w")
-	for i in 1:nP
-		write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
+	if datafiles
+		writedlm("$(rootname)-covariance.dat", covar)
+		f = open("$(rootname)-stddev.dat", "w")
+		for i in 1:nP
+			write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
+		end
+		close(f)
 	end
-	close(f)
 	correl = covar ./ diag(covar)
-	writedlm("$(rootname)-correlation.dat", correl)
+	datafiles && writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
 	eigenv = abs(eigenv)
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])
-	writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
-	writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
+	datafiles && writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
+	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	if isdefined(:Gadfly)
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 					Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
 		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-		filename = "$(rootname)-eigenmatrix"
+		filename = "$(rootname)-eigenmatrix" * ext
 		filename, format = setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6Gadfly.inch,6Gadfly.inch), eigenmat)
-		Mads.madsinfo("""Eigen matrix plot saved in $filename""")
+		Mads.madsinfo("Eigen matrix plot saved in $filename")
 		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 					Gadfly.Geom.bar,
 					Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
-		filename = "$(rootname)-eigenvalues"
+		filename = "$(rootname)-eigenvalues" * ext
 		filename, format = setimagefileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
-		Mads.madsinfo("""Eigen values plot saved in $filename""")
+		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
 	Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
 end

@@ -1,3 +1,4 @@
+import Mads
 import Gadfly
 md = Mads.loadmadsfile("internal-polynomial.mads")
 info("Information Gap analysis")

@@ -539,15 +539,20 @@ function plotobsSAresults(madsdata, result; filter="", keyword="", filename="", 
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	nT = length(Mads.filterkeys(obsdict, filter))
+	obskeys = Mads.filterkeys(obsdict, filter)
+	nT = length(obskeys)
 	d = Array(Float64, 2, nT)
 	mes = Array(Float64, nP, nT)
 	tes = Array(Float64, nP, nT)
 	var = Array(Float64, nP, nT)
 	i = 1
-	for obskey in Mads.filterkeys(obsdict, filter)
+	for obskey in obskeys
 		d[1,i] = obsdict[obskey]["time"]
-		d[2,i] = obsdict[obskey]["target"]
+		if haskey(obsdict[obskey], "target")
+			d[2,i] = obsdict[obskey]["target"]
+		else
+			d[2,i] = NaN
+		end
 		j = 1
 		for paramkey in paramkeys
 			mes[j,i] = result["mes"][obskey][paramkey]

@@ -21,7 +21,7 @@ function partialof(madsdata, resultdict, regex)
 end
 
 """
-Make forward model functions needed for Levenberg-Marquardt optimization
+Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 """
 function makelmfunctions(madsdata)
 	f = makemadscommandfunction(madsdata)
@@ -107,6 +107,68 @@ function makelmfunctions(madsdata)
 		return reusable_inner_g_lm((arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
+end
+
+"""
+Make gradient function needed for local sensitivity analysis
+"""
+function makelocalsafunction(madsdata)
+	f = makemadscommandfunction(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
+	weights = Mads.getobsweight(madsdata)
+	nO = length(obskeys)
+	optparamkeys = Mads.getoptparamkeys(madsdata)
+	lineardx = getparamsstep(madsdata, optparamkeys)
+	nP = length(optparamkeys)
+	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	function func(arrayparameters::Vector)
+		parameters = copy(initparams)
+		for i = 1:length(arrayparameters)
+			parameters[optparamkeys[i]] = arrayparameters[i]
+		end
+		resultdict = f(parameters)
+		results = Array(Float64, 0)
+		for obskey in obskeys
+			push!(results, resultdict[obskey]) # preserve the expected order
+		end
+		return results .* weights
+	end
+	function inner_grad(arrayparameters_dx_center_tuple)
+		arrayparameters = arrayparameters_dx_center_tuple[1]
+		dx = arrayparameters_dx_center_tuple[2]
+		center = arrayparameters_dx_center_tuple[3]
+		if sizeof(dx) == 0
+			dx = lineardx
+		end
+		p = Vector{Float64}[]
+		for i in 1:nP
+			a = copy(arrayparameters)
+			a[i] += dx[i]
+			push!(p, a)
+		end
+		if sizeof(center) == 0
+			push!(p, arrayparameters)
+		end
+		fevals = RobustPmap.rpmap(func, p)
+		if sizeof(center) == 0
+			center = fevals[nP+1]
+		end
+		jacobian = Array(Float64, (nO, nP))
+		for j in 1:nO
+			for i in 1:nP
+				jacobian[j, i] = ( fevals[i][j] - center[j] ) / dx[i]
+			end
+		end
+		return jacobian
+	end
+	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "grad"; usedict=false)
+	"""
+	Gradient function for the forward model used for Levenberg-Marquardt optimization
+	"""
+	function grad(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0))
+		return reusable_inner_grad((arrayparameters, dx, center))
+	end
+	return grad
 end
 
 """

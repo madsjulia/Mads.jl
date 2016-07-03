@@ -1,3 +1,4 @@
+import Mads
 import Gadfly
 md = Mads.loadmadsfile("internal-polynomial.mads")
 n = 100
@@ -23,6 +24,7 @@ info("Statistics of the model parameter estimates:")
 for i = 1:np
 	@printf "%s\t%f\t%f\t%f\t%f\n" pnames[i] pmean[i] pmin[i] pmax[i] pstd[i]
 end
+info("Identify 3 different global optima with different model parameter estimates:")
 println("$(collect(size(find((abs(p[:,1]) .< 0.1) .== true)))) calibrations have a ~= 0")
 println("$(collect(size(find((abs(p[:,2]-1) .< 0.1) .== true)))) calibrations have b ~= 1")
 println("$(collect(size(find((abs(p[:,3]) .< 0.1) .== true)))) calibrations have c ~= 0")
