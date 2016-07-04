@@ -828,13 +828,15 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 
 ```
 Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, obsmdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 ```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `paramdictarray` : dictionary containing the parameter data arrays to be plotted
+- `paramdictarray` : parameter dictionary array containing the data arrays to be plotted
+- `obsdictarray` : observation dictionary array containing the data arrays to be plotted
 - `number_of_samples` : number of samples
 - `filename` : output file name used to output the produced plots
 - `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
@@ -852,21 +854,67 @@ Dumps:
 """
 function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	paramvalues = parametersample(madsdata, number_of_samples)
-	spaghettiplot(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
+	spaghettiplot(madsdata::Associative, paramvalues; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+function spaghettiplot(madsdata::Associative, dictarray::Associative; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
 	Mads.setseed(seed)
-	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
-	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
-	t = Array(Float64, nT)
-	d = Array(Float64, nT)
+	flag_params = true
+	Y = []
+	for paramkey in paramoptkeys
+		if !haskey(dictarray, paramkey)
+			flag_params = false
+		end
+	end
+	if flag_params
+		numberofsamples = length(dictarray[paramoptkeys[1]])
+		Y = Array(Float64, nT, numberofsamples)
+		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
+			for paramkey in paramoptkeys
+				paramdict[paramkey] = dictarray[paramkey][i]
+			end
+			result = func(paramdict)
+			for j in 1:nT
+				Y[j,i] = result[obskeys[j]]
+			end
+		end
+	else
+		numberofsamples = length(dictarray)
+		Y = hcat(map(i->collect(values(o[i])), 1:numberofsamples)...)'
+		if size(Y)[2] != nT
+			madswarn("Number of observations does not match!")
+			return
+		end
+	end
+	spaghettiplot(madsdata::Associative, Y; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
+end
+
+function spaghettiplot(madsdata::Associative, array::Array; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
+	rootname = getmadsrootname(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
+	nT = length(obskeys)
+	s = size(array)
+	if length(s) > 2
+		madswarn("Incorrect array size: size(Y) = $(size(Y))")
+		return
+	end
+	if s[1] == nT
+		Y = array
+		numberofsamples = s[2]
+	elseif s[2] == nT
+		Y = array'
+		numberofsamples = s[1]
+	else
+		madswarn("Incorrect array size: size(Y) = $(size(Y))")
+		return
+	end
 	if obs_plot_dots
 		obs_plot1 = """Gadfly.Geom.point"""
 		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=3Gadfly.pt)"""
@@ -874,31 +922,9 @@ function spaghettiplot(madsdata::Associative, paramdictarray::DataStructures.Ord
 		obs_plot1 = """Gadfly.Geom.line"""
 		obs_plot2 = """Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=1Gadfly.mm)"""
 	end
-	for i in 1:nT
-		if haskey( madsdata["Observations"][obskeys[i]], "time")
-			t[i] = madsdata["Observations"][obskeys[i]]["time"]
-		else
-			madswarn("Observation time is missing for observation $(obskeys[i])!")
-			t[i] = 0
-		end
-		if haskey( madsdata["Observations"][obskeys[i]], "target")
-			d[i] = madsdata["Observations"][obskeys[i]]["target"]
-		else
-			d[i] = 0
-		end
-	end
-	Y = Array(Float64,nT,numberofsamples)
-	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
-	@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
-		for paramkey in paramoptkeys
-			paramdict[paramkey] = paramdictarray[paramkey][i]
-		end
-		result = func(paramdict)
-		for j in 1:nT
-			Y[j,i] = result[obskeys[j]]
-		end
-	end
 	if !haskey( madsdata, "Wells" )
+		t = getobstime(madsdata)
+		d = getobstarget(madsdata)
 		pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,

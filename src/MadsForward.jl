@@ -1,13 +1,17 @@
+import ProgressMeter
+
 """
 Perform a forward run using the initial or provided values for the model parameters
 
 - `forward(madsdata)`
-- `forward(madsdata, paramvalues)`
+- `forward(madsdata, paramdict)`
+- `forward(madsdata, paramarray)`
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `paramvalues` : dictionary of model parameter values
+- `paramdict` : dictionary of model parameter values
+- `paramarray` : array of model parameter values
 
 Returns:
 
@@ -18,7 +22,7 @@ function forward(madsdata::Associative; all=false)
 	forward(madsdata, paramvalues; all=all)
 end
 
-function forward(madsdata::Associative, paramvalues::Associative; all=false)
+function forward(madsdata::Associative, paramdict::Associative; all=false)
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
@@ -30,10 +34,10 @@ function forward(madsdata::Associative, paramvalues::Associative; all=false)
 	else
 		f = makemadscommandfunction(madsdata)
 	end
-	return f(paramvalues)
+	return f(paramdict)
 end
 
-function forward(madsdata::Associative, paramvalues::Array; all=false)
+function forward(madsdata::Associative, paramarray::Array; all=false)
 	madsdata_c = deepcopy(madsdata)
 	if all
 		if haskey(madsdata_c, "Wells")
@@ -45,7 +49,7 @@ function forward(madsdata::Associative, paramvalues::Array; all=false)
 	f = makemadscommandfunction(madsdata_c)
 	pk = Mads.getoptparamkeys(madsdata_c)
 	np = length(pk)
-	s = size(paramvalues)
+	s = size(paramarray)
 	if length(s) > 2
 		madswarn("Incorrect array size: size(paramvalues) = $(size(paramvalues))")
 		return
@@ -62,17 +66,16 @@ function forward(madsdata::Associative, paramvalues::Array; all=false)
 	end
 	nr = (mn == np) ? mx : mn
 	r = []
-	for i = 1:nr
+	@ProgressMeter.showprogress 4 "Computing ..." for i = 1:nr
 		if length(s) == 2
 			if s[2] == np
-				pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[i,j], 1:np)))
+				pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[i,j], 1:np)))
 			else
-				pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[j,i], 1:np)))
+				pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[j,i], 1:np)))
 			end
 		else
-			pd = DataStructures.OrderedDict(zip(pk, map(j->paramvalues[j], 1:np)))
+			pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[j], 1:np)))
 		end
-		@show pd
 		o = f(pd)
 		push!(r, o)
 	end
