@@ -1,5 +1,5 @@
-using PyPlot
-using QuantEcon
+import PyPlot
+import QuantEcon
 
 PyPlot.svg(true)
 
@@ -15,14 +15,14 @@ for i in 1:n
         zcos[j, i] = fcos(x[i], y[j])
     end
 end
-# zcos computed using broadcastbroadcast
+# zcos computed using broadcast
 zcos = broadcast(fcos, x', y)
 
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig[:gca](projection="3d")
 ax[:set_zlim](-0.5, 1.0)
 xgrid, ygrid = QuantEcon.meshgrid(x, y)
-ax[:plot_surface](xgrid, ygrid, zcos, rstride=2, cstride=2, cmap=ColorMap("jet"), alpha=0.7, linewidth=0.25)
+ax[:plot_surface](xgrid, ygrid, zcos, rstride=2, cstride=2, cmap=PyPlot.ColorMap("jet"), alpha=0.7, linewidth=0.25)
 PyPlot.gcf()
 
 PyPlot.clf()
@@ -59,5 +59,3 @@ ygrid, zgrid = QuantEcon.meshgrid(y, z)
 cax=ax[:contourf](slice(X,1,:,:), ygrid, zgrid, 100, vmin=0, vmax=1, zdir="x", offset=1)
 PyPlot.colorbar(cax)
 PyPlot.draw()
-
-
