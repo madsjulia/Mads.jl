@@ -1,7 +1,7 @@
-using GeoStats
-using Gadfly
-using PyPlot
-using QuantEcon
+import GeoStats
+import Gadfly
+import PyPlot
+import QuantEcon
 
 PyPlot.svg(true)
 
@@ -25,16 +25,15 @@ for i in 1:n
 	end
 end
 
-Gadfly.plot(layer(z=k, x=x, y=y, Geom.contour(levels=linspace(minimum(k),maximum(k),51))),layer(x=X[1,:], y=X[2,:], Geom.point, Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4pt)))
+Gadfly.plot(Gadfly.layer(z=k, x=x, y=y, Gadfly.Geom.contour(levels=linspace(minimum(k),maximum(k),51))),Gadfly.layer(x=X[1,:], y=X[2,:], Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), Gadfly.default_point_size=4pt)))
 
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig[:gca](projection="3d")
 ax[:set_zlim](minimum(k), maximum(k))
 xgrid, ygrid = QuantEcon.meshgrid(x, y)
-ax[:plot_surface](xgrid, ygrid, k, rstride=2, cstride=2, cmap=ColorMap("jet"), alpha=0.7, linewidth=0.25)
+ax[:plot_surface](xgrid, ygrid, k, rstride=2, cstride=2, cmap=PyPlot.ColorMap("jet"), alpha=0.7, linewidth=0.25)
 PyPlot.gcf()
 
 PyPlot.clf()
 PyPlot.surf(k)
 PyPlot.gcf()
-

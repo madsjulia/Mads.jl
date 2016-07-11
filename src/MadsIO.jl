@@ -174,8 +174,8 @@ end
 
 function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
-		dir = Mads.getmadsproblemdir(madsdata2)
-		root = Mads.getmadsrootname(madsdata2)
+		dir = Mads.getmadsproblemdir(madsdata)
+		root = Mads.getmadsrootname(madsdata)
 		if ismatch(r"v[0-9].", root)
 			s = split(root, "v")
 			v = parse(Int, s[2]) + 1
