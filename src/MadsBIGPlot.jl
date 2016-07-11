@@ -1,5 +1,3 @@
-import Gadfly
-
 """
 Plot BIG-DT robustness curves
 
