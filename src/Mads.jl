@@ -29,19 +29,23 @@ end
 @tryimport LMLin
 
 if !haskey(ENV, "MADS_NO_PLOT")
-	@tryimport Gadfly
-	if !isdefined(:Gadfly)
-		warn("Gadfly is not available; Mads plotting is disabled")
-		ENV["MADS_NO_PLOT"] = ""
+	if !haskey(ENV, "MADS_NO_GADFLY")
+		@tryimport Gadfly
+		if !isdefined(:Gadfly)
+			warn("Gadfly is not available")
+			ENV["MADS_NO_GADFLY"] = ""
+		end
 	end
-	if !haskey(ENV, "MADS_NO_PYTHON")
+	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 		@tryimport PyPlot
 		if !isdefined(:PyPlot)
-			warn("PyPlot is not available; Mads plotting is disabled")
-			ENV["MADS_NO_PLOT"] = ""
+			warn("PyPlot is not available")
+			ENV["MADS_NO_PYPLOT"] = ""
 		end
 	end
 else
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
 	warn("Mads plotting is disabled")
 end
 
@@ -117,11 +121,14 @@ include("MadsMC.jl")
 include("MadsBIG.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
-if !haskey(ENV, "MADS_NO_PLOT")
+if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")
 	include("MadsBIGPlot.jl")
 	include("MadsSAPlot.jl")
 	include("MadsPlot.jl")
+end
+if !haskey(ENV, "MADS_NO_PYPLOT")
+	include("MadsPlotPy.jl")
 end
 
 end
