@@ -1,4 +1,5 @@
 import ProgressMeter
+import JLD
 
 """
 Perform a forward run using the initial or provided values for the model parameters
@@ -17,12 +18,12 @@ Returns:
 
 - `obsvalues` : dictionary of model predictions
 """
-function forward(madsdata::Associative; all=false)
-	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	forward(madsdata, paramvalues; all=all)
+function forward(madsdata::Associative; all=false, dump=false)
+	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	forward(madsdata, paramdict; all=all, dump=dump)
 end
 
-function forward(madsdata::Associative, paramdict::Associative; all=false)
+function forward(madsdata::Associative, paramdict::Associative; all=false, dump=false)
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
@@ -37,7 +38,11 @@ function forward(madsdata::Associative, paramdict::Associative; all=false)
 	return f(paramdict)
 end
 
-function forward(madsdata::Associative, paramarray::Array; all=false)
+function forward(madsdata::Associative, paramarray::Array; all=false, dump=false)
+	if dump
+		rootname = getmadsrootname(madsdata)
+	end
+	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	madsdata_c = deepcopy(madsdata)
 	if all
 		if haskey(madsdata_c, "Wells")
@@ -69,14 +74,18 @@ function forward(madsdata::Associative, paramarray::Array; all=false)
 	@ProgressMeter.showprogress 4 "Computing ..." for i = 1:nr
 		if length(s) == 2
 			if s[2] == np
-				pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[i,j], 1:np)))
+				pd = Dict(zip(pk, map(j->paramarray[i,j], 1:np)))
 			else
-				pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[j,i], 1:np)))
+				pd = Dict(zip(pk, map(j->paramarray[j,i], 1:np)))
 			end
 		else
-			pd = DataStructures.OrderedDict(zip(pk, map(j->paramarray[j], 1:np)))
+			pd = Dict(zip(pk, map(j->paramarray[j], 1:np)))
 		end
-		o = f(pd)
+		merge!(paramdict, pd)
+		o = f(paramdict)
+		if dump
+			JLD.save(rootname * "_forwardrun_$(i).jld", o)
+		end
 		push!(r, o)
 	end
 	return r
