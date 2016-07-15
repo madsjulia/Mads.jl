@@ -15,7 +15,7 @@ madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "MetaProgTools", 
 
 macro tryimport(s)
 	importq = string(:(import $s))
-	warnstring = string(s, " not available")
+	warnstring = string(s, " is not available")
 	q = quote
 		try 
 			eval(parse($importq))
@@ -32,14 +32,12 @@ if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		@tryimport Gadfly
 		if !isdefined(:Gadfly)
-			warn("Gadfly is not available")
 			ENV["MADS_NO_GADFLY"] = ""
 		end
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 		@tryimport PyPlot
 		if !isdefined(:PyPlot)
-			warn("PyPlot is not available")
 			ENV["MADS_NO_PYPLOT"] = ""
 		end
 	end
