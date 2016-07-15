@@ -242,7 +242,12 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
-	return makemadsreusablefunction(madsdata, madscommandfunction)
+	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
+		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
+		parameterswithexpressions = merge(paramsnoexpressions, expressions)
+		return madscommandfunction(parameterswithexpressions)
+	end
+	return makemadsreusablefunction(madsdata, madscommandfunctionwithexpressions)
 end
 
 function makemadsreusablefunction(madsdata, madscommandfunction, suffix=""; usedict=true)
