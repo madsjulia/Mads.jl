@@ -20,7 +20,7 @@ pmax = map(i->max(p[:,i]...), 1:np)
 pmean = map(i->mean(p[:,i]), 1:np)
 pstd = map(i->std(p[:,i]), 1:np)
 info("Statistics of the model parameter estimates:")
-@printf "Name\tMean\tMin\tMad\tStdDev"
+@printf "Name\tMean\tMin\tMad\tStdDev\n"
 for i = 1:np
 	@printf "%s\t%f\t%f\t%f\t%f\n" pnames[i] pmean[i] pmin[i] pmax[i] pstd[i]
 end
@@ -31,10 +31,10 @@ println("$(collect(size(find((abs(p[:,3]) .< 0.1) .== true)))) calibrations have
 println("$(collect(size(find((abs(p[:,4]) .< 0.1) .== true)))) calibrations have n ~= 0")
 println("$(collect(size(find((abs(p[:,4]-1) .< 0.1) .== true)))) calibrations have n ~= 1")
 info("Scatter plot of parameter estimates")
-Gadfly.plot(x=p[:,1], y=p[:,4], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("n"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `n` (f(t)=a*t^n+b*t+c)"))
+display(Gadfly.plot(x=p[:,1], y=p[:,4], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("n"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `n` (f(t)=a*t^n+b*t+c)")))
 ind_n0 = abs(p[:,4]) .< 0.1
-Gadfly.plot(x=p[ind_n0,1], y=p[ind_n0,3], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("c"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `c` when n = 0 (f(t)=a*t^n+b*t+c)"))
+display(Gadfly.plot(x=p[ind_n0,1], y=p[ind_n0,3], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("c"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `c` when n = 0 (f(t)=a*t^n+b*t+c)")))
 ind_n1 = abs(p[:,4]-1) .< 0.1
-Gadfly.plot(x=p[ind_n1,1], y=p[ind_n1,2], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("b"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `b` when n = 1 (f(t)=a*t^n+b*t+c)"))
+display(Gadfly.plot(x=p[ind_n1,1], y=p[ind_n1,2], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("b"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `b` when n = 1 (f(t)=a*t^n+b*t+c)")))
 ind_n01 = !(ind_n0 | ind_n1)
-Gadfly.plot(x=p[ind_n01,1], y=p[ind_n01,4], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("n"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `n` when n != 0 && n != 1 (f(t)=a*t^n+b*t+c)"))
+display(Gadfly.plot(x=p[ind_n01,1], y=p[ind_n01,4], Gadfly.Geom.point, Gadfly.Guide.xlabel("a"), Gadfly.Guide.ylabel("n"), Gadfly.Guide.title("Scatter plot of parameter estimates `a` and `n` when n != 0 && n != 1 (f(t)=a*t^n+b*t+c)")))

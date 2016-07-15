@@ -21,5 +21,5 @@ for i = 1:3
 end
 Mads.setparamsinit!(md, pinit)
 info("Global sensitivity analysis")
-efastresult = Mads.efast(md, N=1000)
+efastresult = Mads.efast(md, N=1000, seed=2016)
 Mads.plotobsSAresults(md, efastresult, filename="sensitivity_global.png", xtitle = "x", ytitle = "y")

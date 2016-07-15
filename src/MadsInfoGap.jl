@@ -90,7 +90,6 @@ function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=10
 		println("Min h = $h OF = $(phi_best) par = $par_best")
 	end
 end
-=#
 
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
