@@ -3,6 +3,7 @@ import Compose
 import ProgressMeter
 import DataFrames
 import DataStructures
+import Gadfly
 
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.

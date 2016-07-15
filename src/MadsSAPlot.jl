@@ -1,3 +1,5 @@
+import Gadfly
+
 """
 Local sensitivity analysis based on eigen analysis of covariance matrix
 

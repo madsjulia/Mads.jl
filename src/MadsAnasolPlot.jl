@@ -1,3 +1,5 @@
+import Gadfly
+
 """
 Plot injected/reduced contaminant mass
 
