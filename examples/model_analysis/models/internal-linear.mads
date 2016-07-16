@@ -1,0 +1,10 @@
+Parameters:
+- a : { init: 1, type: opt, dist: "Uniform(-10, 10)" }
+- b : { init: 0, type: opt, dist: "Uniform(-5, 5)" }
+Observations:
+- o1: { target: 1, time: 1, weight: 1, dist: "Uniform(0, 2)" }
+- o2: { target: 2, time: 2, weight: 1, dist: "Uniform(1, 3)" }
+- o3: { target: 3, time: 3, weight: 1, dist: "Uniform(2, 4)" }
+- o4: { target: 4, time: 4, weight: 1, dist: "Uniform(3, 5)" }
+- o5: { time: 5 }
+MADS model: internal-linear.jl

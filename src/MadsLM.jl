@@ -163,7 +163,7 @@ function makelocalsafunction(madsdata)
 	end
 	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "grad"; usedict=false)
 	"""
-	Gradient function for the forward model used for Levenberg-Marquardt optimization
+	Gradient function for the forward model used for local sensitivity analysis
 	"""
 	function grad(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0))
 		return reusable_inner_grad((arrayparameters, dx, center))

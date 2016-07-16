@@ -9,7 +9,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true)
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true)
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -28,7 +28,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	J = g(initparams)
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	if isdefined(:Gadfly)
+	if imagefiles && isdefined(:Gadfly)
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -69,7 +69,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	sortedeigenm = real(eigenm[:,index])
 	datafiles && writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
 	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	if isdefined(:Gadfly)
+	if imagefiles && isdefined(:Gadfly)
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 					Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -88,7 +88,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv, "stddev"=>stddev)
+	Dict("covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"

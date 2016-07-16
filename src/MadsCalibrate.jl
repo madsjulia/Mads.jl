@@ -22,6 +22,7 @@ Arguments:
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
+- `save_results` : save intermediate results [default=true]
 - `usenaive` : use naive Levenberg-Marquardt solver
 - `seed` : initial random seed
 
@@ -30,7 +31,7 @@ Returns:
 - `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
 
 """
-function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, all=false)
+function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, all=false, save_results=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
@@ -47,7 +48,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.f_minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -89,6 +90,7 @@ Arguments:
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
+- `save_results` : save intermediate results [default=true]
 - `usenaive` : use naive Levenberg-Marquardt solver
 
 Returns:
@@ -97,7 +99,7 @@ Returns:
 - `results` : optimization algorithm results (e.g. results.minimum)
 
 """
-function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, save_results=true)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -117,12 +119,16 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	end
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-	function calibratecallback(x_best, of, lambda)
-		outfile = open("$rootname.iterationresults", "a+")
-		write(outfile, string("OF: ", of, "\n"))
-		write(outfile, string("lambda: ", lambda, "\n"))
-		write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
-		close(outfile)
+	if save_results
+		function calibratecallback(x_best, of, lambda)
+			outfile = open("$rootname.iterationresults", "a+")
+			write(outfile, string("OF: ", of, "\n"))
+			write(outfile, string("lambda: ", lambda, "\n"))
+			write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
+			close(outfile)
+		end
+	else
+		calibratecallback(x_best, of, lambda) = nothing
 	end
 	if usenaive == true
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)

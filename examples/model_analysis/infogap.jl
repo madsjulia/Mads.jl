@@ -1,5 +1,9 @@
 import Mads
 import Gadfly
-md = Mads.loadmadsfile("internal-polynomial.mads")
+include(Pkg.dir("Mads") * "/src/MadsInfoGap.jl")
+
+md = Mads.loadmadsfile("models/internal-polynomial.mads")
+
 info("Information Gap analysis")
-Mads.infogap(md, retries=10)
+
+infogap_jump(md, retries=2, seed=2016)

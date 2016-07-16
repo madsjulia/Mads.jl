@@ -187,7 +187,7 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 					run(`bash -c "$(madsdata["Command"])"`)
 				catch
 					cd(madsproblemdir)
-					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed!")
+					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions

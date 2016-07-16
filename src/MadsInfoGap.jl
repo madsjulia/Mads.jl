@@ -5,7 +5,8 @@ import Ipopt
 # JuMP has issues with @JuMP.variable()
 
 "Information Gap Decision Analysis using JuMP"
-function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=100000, verbosity=0)
+function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=100, verbosity=0, seed=0)
+	Mads.setseed(seed)
 	f = Mads.makemadscommandfunction(madsdata)
 	pk = Mads.getoptparamkeys(madsdata)
 	pmin = Mads.getparamsmin(madsdata, pk)
@@ -25,15 +26,17 @@ function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=10
 	end
 	par_best = []
 	obs_best = []
-	for h = (0.1, 1, 2, 5, 10)
+	for h = (0.1)
 		phi_best = 0
 		for r = 1:retries
 			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
 			if r > 1 || random
-				@JuMP.variable(m, p[i=1:np], start=rand() * (pmax[i] - pmin[i]) + pmin[i])
-			else
-				@JuMP.variable(m, p[i=1:np], start=pinit[i])
+				for i = 1:np
+					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+				end
 			end
+			@show pinit
+			@JuMP.variable(m, p[i=1:np], start=pinit[i])
 			@JuMP.variable(m, o[1:no])
 			@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^p[4]) + p[2] * ti[1] + p[3])
 			@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
@@ -49,7 +52,7 @@ function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=10
 			@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.solve(m)
 			phi = JuMP.getobjectivevalue(m)	
-			# println("OF = $(phi)")
+			println("OF = $(phi)")
 			if phi_best < phi
 				phi_best = phi
 				par_best = JuMP.getvalue(p)
@@ -57,14 +60,17 @@ function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=10
 			end
 		end
 		println("Max h = $h OF = $(phi_best) par = $par_best")
+		pinit = Mads.getparamsinit(madsdata, pk)
 		phi_best = Inf
 		for r = 1:retries
 			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
 			if r > 1 || random
-				@JuMP.variable(m, p[i=1:np], start=rand() * (pmax[i] - pmin[i]) + pmin[i])
-			else
-				@JuMP.variable(m, p[i=1:np], start=pinit[i])
+				for i = 1:np
+					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+				end
 			end
+			@show pinit
+			@JuMP.variable(m, p[i=1:np], start=pinit[i])
 			@JuMP.variable(m, o[1:no])
 			@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^p[4]) + p[2] * ti[1] + p[3])
 			@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
@@ -80,7 +86,7 @@ function infogap_jump(madsdata::Associative; retries=1, random=false, maxiter=10
 			@JuMP.NLobjective(m, Min, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.solve(m)
 			phi = JuMP.getobjectivevalue(m)	
-			# println("OF = $(phi)")
+			println("OF = $(phi)")
 			if phi_best > phi
 				phi_best = phi
 				par_best = JuMP.getvalue(p)
@@ -95,7 +101,8 @@ type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
 
 "Information Gap Decision Analysis using MathProgBase"
-function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100000, verbosity=0, solver=MathProgBase.defaultNLPsolver)
+function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100, verbosity=0, solver=MathProgBase.defaultNLPsolver, seed=0)
+	Mads.setseed(seed)
 	f = Mads.makemadscommandfunction(madsdata)
 	pk = Mads.getoptparamkeys(madsdata)
 	pmin = Mads.getparamsmin(madsdata, pk)
@@ -110,11 +117,11 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 	ti = Mads.getobstime(madsdata)
 	no = length(ok)
 	function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
-	    for feat in requested_features
-	        if !(feat in [:Grad, :Jac, :Hess])
-	            error("Unsupported feature $feat")
-	        end
-	    end
+		for feat in requested_features
+			if !(feat in [:Grad, :Jac, :Hess])
+				error("Unsupported feature $feat")
+			end
+		end
 	end
 	MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
 	MathProgBase.eval_f(d::MadsModel, p) = p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3]
@@ -124,10 +131,10 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 		end
 	end
 	function MathProgBase.eval_grad_f(d::MadsModel, grad_f, p)
-	    grad_f[1] = ti[5]^p[4]
-	    grad_f[2] = ti[5]
-	    grad_f[3] = 1
-	    grad_f[4] = p[1] * (ti[5]^p[4]) * log(p[4])
+		grad_f[1] = ti[5]^p[4]
+		grad_f[2] = ti[5]
+		grad_f[3] = 1
+		grad_f[4] = p[1] * (ti[5]^p[4]) * log(ti[5])
 	end
 	MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
 	MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
@@ -140,32 +147,33 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 		end
 	end
 	par_best = []
-	obs_best = []
 	for h = (0.1)
 		phi_best = -Inf
 		for r = 1:retries
 			m = MathProgBase.NonlinearModel(solver)
 			for i = 1:no
-				omin[i] = t[i] - h
-				omax[i] = t[i] + h
+				omin[i] = t[i]
+				omax[i] = t[i]
 			end
+			@show omin
+			@show omax
 			MathProgBase.loadproblem!(m, 4, 4, pmin, pmax, omin, omax, :Min, MadsModel())
 			if r > 1 || random
 				for i = 1:np
 					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
 				end
-				MathProgBase.setwarmstart!(m, pinit)
-			else
-				MathProgBase.setwarmstart!(m, pinit)
 			end
+			# MathProgBase.setwarmstart!(m, pinit)
+			@show pinit
 			MathProgBase.optimize!(m)
-    		stat = MathProgBase.status(m)
- 			phi = MathProgBase.getobjval(m)
-			# println("OF = $(phi)")
+			stat = MathProgBase.status(m)
+			phi = MathProgBase.getobjval(m)
+			println("OF = $(phi)")
 			if phi_best < phi
 				phi_best = phi
 				par_best = MathProgBase.getsolution(m)
 			end
+			@show MathProgBase.getsolution(m)
 		end
 		println("Max h = $h OF = $(phi_best) par = $par_best")
 	end
