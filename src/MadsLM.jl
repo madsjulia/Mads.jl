@@ -1,10 +1,53 @@
 import RobustPmap
 import Optim
 
-"""
-Compute the sum of squared residuals for observations that match a regular expression
-"""
-function partialof(madsdata, resultdict, regex)
+"Compute residuals"
+function residuals(madsdata::Associative, results::Vector)
+	ssdr = Mads.haskeyword(madsdata, "ssdr")
+	obskeys = Mads.getobskeys(madsdata)
+	weights = Mads.getobsweight(madsdata)
+	targets = Mads.getobstarget(madsdata)
+	isn = isnan(targets)
+	index = find(isn)
+	weights[index] = 0
+	targets[index] = 0
+	residuals = (results .- targets) .* weights
+	if ssdr
+		mins = Mads.getobsmin(madsdata)
+		maxs = Mads.getobsmax(madsdata)
+		mins[index] = -Inf
+		maxs[index] = Inf
+		rmax = (results .- maxs) .* weights
+		rmin = (results .- mins) .* weights
+		rmax[rmax .< 0] = 0
+		rmin[rmin .> 0] = 0
+		residuals .+= (rmax .+ rmin)
+	end
+	return residuals[!isn]
+end
+function residuals(madsdata::Associative, resultdict::Associative)
+	residuals(madsdata, collect(values(resultdict)))
+end
+function residuals(madsdata::Associative)
+	resultdict = Mads.forward(madsdata)
+	residuals(madsdata, collect(values(resultdict)))
+end
+
+"Compute objective function"
+function of(madsdata::Associative, results::Vector)
+	r = residuals(madsdata, results)
+	sum(r .^ 2)
+end
+function of(madsdata::Associative, resultdict::Associative)
+	of(madsdata, collect(values(resultdict)))
+end
+function of(madsdata::Associative)
+	resultdict = Mads.forward(madsdata)
+	of(madsdata, collect(values(resultdict)))
+end
+
+"Compute the sum of squared residuals for observations that match a regular expression"
+function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	obskeys = getobskeys(madsdata)
 	results = Array(Float64, 0)
 	weights = Array(Float64, 0)
@@ -20,10 +63,8 @@ function partialof(madsdata, resultdict, regex)
 	return sum(residuals .^ 2)
 end
 
-"""
-Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
-"""
-function makelmfunctions(madsdata)
+"Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization"
+function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	if Mads.haskeyword(madsdata, "sar")
@@ -42,6 +83,8 @@ function makelmfunctions(madsdata)
 	if ssdr
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)
+		mins[index] = -Inf
+		maxs[index] = Inf
 	end
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -109,10 +152,8 @@ function makelmfunctions(madsdata)
 	return f_lm, g_lm, o_lm
 end
 
-"""
-Make gradient function needed for local sensitivity analysis
-"""
-function makelocalsafunction(madsdata)
+"Make gradient function needed for local sensitivity analysis"
+function makelocalsafunction(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
@@ -171,18 +212,14 @@ function makelocalsafunction(madsdata)
 	return grad
 end
 
-"""
-Naive Levenberg-Marquardt optimization: get the LM parameter space step
-"""
+"Naive Levenberg-Marquardt optimization: get the LM parameter space step"
 function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
 	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
 	return deltax
 end
 
-"""
-Naive Levenberg-Marquardt optimization: perform LM iteration
-"""
+"Naive Levenberg-Marquardt optimization: perform LM iteration"
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f0::Vector, lambdas::Vector)
 	J = g(x0) # get jacobian
 	Jp = J'

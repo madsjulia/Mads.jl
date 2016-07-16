@@ -9,7 +9,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true)
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, center=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -25,7 +25,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	end
 	nP = length(paramkeys)
 	initparams = getparamsinit(madsdata, paramkeys)
-	J = g(initparams)
+	J = g(initparams, center=center)
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly)

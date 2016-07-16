@@ -6,11 +6,13 @@ if !isdir("uncertainty_results")
 end
 
 p, c = Mads.calibrate(md, save_results=false)
-l = Mads.localsa(md, datafiles=false, imagefiles=false)
+f = Mads.forward(md, p)
+of = Mads.of(md, f)
+l = Mads.localsa(md, datafiles=false, imagefiles=false, center=collect(values(f)))
 np = length(Mads.getoptparamkeys(md))
 no = length(Mads.gettargetkeys(md))
-dof = no - np
-stddev_scale = c.f_minimum / dof
+dof = (no > np) ? no - np : 1
+stddev_scale = of / dof
 Mads.setparamsdistnormal!(md, collect(values(p)), l["stddev"] * stddev_scale)
 r = Mads.parametersample(md, 100)
 r = hcat(map(i->collect(values(r))[i], 1:length(p))...)'

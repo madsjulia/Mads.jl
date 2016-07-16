@@ -36,7 +36,7 @@ Arguments:
 
 - `madsdata` : Mads problem dictionary
 """
-function parsemadsdata(madsdata)
+function parsemadsdata(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
 		for dict in madsdata["Parameters"]
