@@ -102,6 +102,7 @@ end
 
 "Information Gap Decision Analysis using MathProgBase"
 function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100, verbosity=0, solver=MathProgBase.defaultNLPsolver, seed=0)
+	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
 	Mads.setseed(seed)
 	f = Mads.makemadscommandfunction(madsdata)
 	pk = Mads.getoptparamkeys(madsdata)
@@ -125,19 +126,19 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 	end
 	MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
 	MathProgBase.eval_f(d::MadsModel, p) = p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3]
-	function MathProgBase.eval_g(d::MadsModel, o, p)
-		for i = 1:no
-			o[i] = p[1] * (ti[i]^p[4]) + p[2] * ti[i] + p[3]
-		end
-	end
 	function MathProgBase.eval_grad_f(d::MadsModel, grad_f, p)
 		grad_f[1] = ti[5]^p[4]
 		grad_f[2] = ti[5]
 		grad_f[3] = 1
 		grad_f[4] = p[1] * (ti[5]^p[4]) * log(ti[5])
 	end
+	function MathProgBase.eval_g(d::MadsModel, o, p)
+		for i = 1:no
+			o[i] = p[1] * (ti[i]^p[4]) + p[2] * ti[i] + p[3]
+		end
+	end
 	MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-	MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
+	# MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
 	function MathProgBase.eval_jac_g(d::MadsModel, J, p)
 		for i = 1:no
 			J[i + 0] = ti[i]^p[4]
@@ -147,24 +148,22 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 		end
 	end
 	par_best = []
+	g = [1.0,1.0,1.0,1.0]
 	for h = (0.1)
 		phi_best = -Inf
 		for r = 1:retries
 			m = MathProgBase.NonlinearModel(solver)
 			for i = 1:no
-				omin[i] = t[i]
-				omax[i] = t[i]
+				omin[i] = t[i] - h * 1000
+				omax[i] = t[i] + h * 1000
 			end
-			@show omin
-			@show omax
-			MathProgBase.loadproblem!(m, 4, 4, pmin, pmax, omin, omax, :Min, MadsModel())
+			MathProgBase.loadproblem!(m, 4, 4, pmin, pmax, omin, omax, :Max, MadsModel())
 			if r > 1 || random
 				for i = 1:np
 					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
 				end
 			end
 			# MathProgBase.setwarmstart!(m, pinit)
-			@show pinit
 			MathProgBase.optimize!(m)
 			stat = MathProgBase.status(m)
 			phi = MathProgBase.getobjval(m)
@@ -175,6 +174,17 @@ function infogap_mpb(madsdata::Associative; retries=1, random=false, maxiter=100
 			end
 			@show MathProgBase.getsolution(m)
 		end
+		of = MathProgBase.eval_f(MadsModel(), par_best)
+		@show of
+		MathProgBase.eval_g(MadsModel(), g, par_best)
+		@show g
+		@show pinit
+		@show omin
+		@show omax
+		@show pmin
+		@show pmax
+		f = Mads.forward(madsdata, par_best)
+		@show f
 		println("Max h = $h OF = $(phi_best) par = $par_best")
 	end
 end
