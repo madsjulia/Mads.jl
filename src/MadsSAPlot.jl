@@ -6,10 +6,13 @@ Local sensitivity analysis based on eigen analysis of covariance matrix
 Arguments:
 
 - `madsdata` : MADS problem dictionary
+- `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+- `param` : parameter set
+- `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, center=Array(Float64,0))
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, param=Array(Float64,0), obs=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -24,8 +27,10 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	initparams = getparamsinit(madsdata, paramkeys)
-	J = g(initparams, center=center)
+	if sizeof(param) == 0
+		param = getparamsinit(madsdata, paramkeys)
+	end
+	J = g(param, center=obs)
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly)
@@ -56,7 +61,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
 		for i in 1:nP
-			write(f, "$(paramkeys[i]) $(initparams[i]) $(stddev[i])\n")
+			write(f, "$(paramkeys[i]) $(param[i]) $(stddev[i])\n")
 		end
 		close(f)
 	end

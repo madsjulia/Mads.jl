@@ -5,10 +5,11 @@ if !isdir("uncertainty_results")
 	mkdir("uncertainty_results")
 end
 
+info("Local uncertainty analysis")
 p, c = Mads.calibrate(md, save_results=false)
 f = Mads.forward(md, p)
 of = Mads.of(md, f)
-l = Mads.localsa(md, datafiles=false, imagefiles=false, center=collect(values(f)))
+l = Mads.localsa(md, datafiles=false, imagefiles=false, param=collect(values(p)), obs=collect(values(f)))
 np = length(Mads.getoptparamkeys(md))
 no = length(Mads.gettargetkeys(md))
 dof = (no > np) ? no - np : 1
