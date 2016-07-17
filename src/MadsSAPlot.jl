@@ -47,7 +47,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	covar = Array(Float64, 0)
 	try
 		u, s, v = svd(JpJ)
-		covar = ( v * inv(diagm(s)) * u' )
+		covar = v * inv(diagm(s)) * u'
 	catch "LAPACKException(12)"
 		try
 			covar = inv(JpJ)
@@ -93,7 +93,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 "Plot the sensitivity analysis results for each well (Specific plot requested by Monty)"
