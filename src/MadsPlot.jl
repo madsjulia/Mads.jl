@@ -830,14 +830,22 @@ function spaghettiplot(madsdata::Associative, array::Array; filename="", keyword
 		madswarn("Incorrect array size: size(Y) = $(size(Y))")
 		return
 	end
+	Y = []
 	if s[1] == nT
 		Y = array
 		numberofsamples = s[2]
-	elseif s[2] == nT
+	elseif length(s) == 2 && s[2] == nT
 		Y = array'
 		numberofsamples = s[1]
+	elseif length(s) == 1
+		numberofsamples = s[1]
+		Y = hcat(map(i->collect(values(array[i])), 1:numberofsamples)...)
+		if size(Y)[1] != nT
+			madswarn("Incorrect array size: size(array) = $(s) => size(Y) = $(size(Y))")
+			return
+		end
 	else
-		madswarn("Incorrect array size: size(Y) = $(size(Y))")
+		madswarn("Incorrect array size: size(array) = $(s)")
 		return
 	end
 	if obs_plot_dots

@@ -137,7 +137,7 @@ function makelmfunctions(madsdata::Associative)
 		jacobian = Array(Float64, (nO, nP))
 		for j in 1:nO
 			for i in 1:nP
-				jacobian[j, i] = ( fevals[i][j] - center[j] ) / dx[i]
+				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
 			end
 		end
 		return jacobian
@@ -197,7 +197,7 @@ function makelocalsafunction(madsdata::Associative)
 		jacobian = Array(Float64, (nO, nP))
 		for j in 1:nO
 			for i in 1:nP
-				jacobian[j, i] = ( fevals[i][j] - center[j] ) / dx[i]
+				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
 			end
 		end
 		return jacobian

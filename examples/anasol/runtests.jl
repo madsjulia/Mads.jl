@@ -20,6 +20,8 @@ if Mads.create_tests
 end
 
 Mads.forwardgrid(md)
+Mads.of(md)
+Mads.residuals(md)
 pd = Mads.getparamdict(md)
 sk = Mads.getsourcekeys(md)
 m = Mads.getparamsmin(md)
