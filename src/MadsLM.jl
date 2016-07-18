@@ -177,7 +177,7 @@ function makelocalsafunction(madsdata::Associative)
 	function inner_grad(arrayparameters_dx_center_tuple)
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
-		center = arrayparameters_dx_center_tuple[3]
+		center = arrayparameters_dx_center_tuple[3] .* weights
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
