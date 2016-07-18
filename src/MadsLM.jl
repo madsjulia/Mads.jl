@@ -153,7 +153,7 @@ function makelmfunctions(madsdata::Associative)
 end
 
 "Make gradient function needed for local sensitivity analysis"
-function makelocalsafunction(madsdata::Associative)
+function makelocalsafunction(madsdata::Associative; multiplycenterbyweights=true)
 	f = makemadscommandfunction(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
@@ -177,7 +177,10 @@ function makelocalsafunction(madsdata::Associative)
 	function inner_grad(arrayparameters_dx_center_tuple)
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
-		center = arrayparameters_dx_center_tuple[3] .* weights
+		center = arrayparameters_dx_center_tuple[3]
+		if sizeof(center) > 0 && multiplycenterbyweights
+			center = center .* weights
+		end
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
