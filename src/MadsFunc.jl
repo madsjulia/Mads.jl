@@ -50,7 +50,7 @@ function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false,
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsoutput("""Internal model evaluation of Julia function $(madsdata["Julia model"]) ...\n""")
-		madscommandfunction = madsdata["Internal model"]
+		madscommandfunction = madsdata["Julia model"]
 	elseif haskey(madsdata, "MADS model")
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsoutput("Internal MADS model evaluation a Julia script in file $(filename) ...\n")
