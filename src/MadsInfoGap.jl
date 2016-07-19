@@ -228,7 +228,7 @@ function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol
 		end
 	end
 end
-MathProgBase.features_available(d::MadsModel) = [:Grad]
+MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
 function MathProgBase.eval_f(d::MadsModel, p)
 	of = p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3]
 	return of
