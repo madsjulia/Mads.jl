@@ -18,12 +18,12 @@ Returns:
 
 - `obsvalues` : dictionary of model predictions
 """
-function forward(madsdata::Associative; all=false, dump=false)
+function forward(madsdata::Associative; all=false)
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	forward(madsdata, paramdict; all=all, dump=dump)
+	forward(madsdata, paramdict; all=all)
 end
 
-function forward(madsdata::Associative, paramdict::Associative; all=false, dump=false)
+function forward(madsdata::Associative, paramdict::Associative; all=false)
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
