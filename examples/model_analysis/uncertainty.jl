@@ -53,6 +53,7 @@ display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacob
 
 info("Variance of posterior predictions using importance sampling")
 display(var(goodoprime, 2)')
+# JLD.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
 
 info("Spaghetti plot of posterior predictions")
 Mads.spaghettiplot(md, o, filename="uncertainty_results/spaghetti-$(problem).png")

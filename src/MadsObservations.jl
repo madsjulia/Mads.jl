@@ -309,6 +309,11 @@ function createobservations!(madsdata::Associative, time, observation; logtransf
 	madsdata["Observations"] = observationsdict
 end
 
+"Set observations in the MADS problem dictionary based on a `observations` dictionary"
+function setobservations!(madsdata::Associative, observations::Associative)
+	madsdata["Observations"] = observations
+end
+
 "Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary"
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
