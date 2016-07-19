@@ -16,32 +16,6 @@ function setseed(seed::Number)
 	end
 end
 
-function samplingold(p0, J, factor, numsamples; seed=0)
-	u, d, v = svd(J' * J)
-	maxd = maximum(d)
-	numgooddirections = sum(d .> factor * maxd)
-	gooddirections = Array(Float64, size(J, 2), numgooddirections)
-	k = 1
-	for i = 1:length(d)
-		if d[i] > factor * maxd
-			gooddirections[:, k] = v[:, i]
-			k += 1
-		end
-	end
-	newJ = J * gooddirections
-	# dp(newp) = gooddirections * newp
-	u, d, v = svd(newJ' * newJ)
-	covmat = v * diagm(1 ./ d) * u'
-	d = Distributions.MvNormal(zeros(numgooddirections), covmat)
-	setseed(seed)
-	gooddsamples = Distributions.rand(d, numsamples)
-	samples = gooddirections * gooddsamples
-	for i = 1:size(samples, 2)
-		samples[:, i] += p0
-	end
-	return samples
-end
-
 function sampling(pinit, J, numsamples; seed=0, scale=1)
 	u, d, v = svd(J' * J)
 	done = false
@@ -52,7 +26,6 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	local dist
 	numdirections = length(d)
 	numgooddirections = numdirections
-	first = false
 	while !done
 		try
 			covmat = (v * diagm(1 ./ d) * u') .* scale
@@ -60,11 +33,7 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
 		catch
-			if first == true
-				first = false
-			else
-				numgooddirections -= 1
-			end
+			numgooddirections -= 1
 			if numgooddirections <= 0
 				done = true
 				madserror("Reduction in sampling directions failed!")
