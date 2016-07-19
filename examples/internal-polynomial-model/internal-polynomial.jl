@@ -1,7 +1,7 @@
 import Mads
 import DataStructures
 
-function mamkemadsmodelrun(madsdata::Associative)
+function makemadsmodelrun(madsdata::Associative)
 	times = Mads.getobstime(madsdata)
 	names = Mads.getobskeys(madsdata)
 	function madsmodelrun(parameters::Associative) # model run
