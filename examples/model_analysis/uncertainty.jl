@@ -1,7 +1,7 @@
 import Mads
-md = Mads.loadmadsfile("models/internal-linear.mads")
+#md = Mads.loadmadsfile("models/internal-linear.mads")
 #md = Mads.loadmadsfile("models/internal-polynomial3.mads")
-#md = Mads.loadmadsfile("models/internal-polynomial.mads")
+md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
 problem = split(Mads.getmadsrootname(md),"-")[2]
 
@@ -50,13 +50,16 @@ println("AIC  (Akaike   Information Criterion)              : $(aic)")
 println("AICc (Akaike   Information Criterion + correction) : $(aicc)")
 println("BIC  (Bayesian Information Criterion)              : $(bic)")
 println("KIC  (Kashyap  Information Criterion)              : $(kic)")
-var_scale = no / sum(w) + gf
+#var_scale = no / sum(w) + gf
+var_scale = .5
+#=
 covar = l["covar"] .* var_scale
 display(l["jacobian"])
 display(l["stddev"]) 
 @show log(det(covar))
 @show var_scale
-samples = Mads.sampling(pv, l["jacobian"], 100, seed=2016, scale=var_scale)
+=#
+samples, llhoods = Mads.sampling(pv, l["jacobian"], 1000, seed=2016, scale=var_scale)
 #Mads.setparamsdistnormal!(md, collect(values(p)), l["stddev"] * stddev_scale)
 #r = Mads.parametersample(md, 100)
 #r = hcat(map(i->collect(values(r))[i], 1:length(p))...)'
@@ -64,15 +67,39 @@ o = Mads.forward(md, samples)
 n = length(o)
 o = hcat(map(i->collect(values(o[i])), 1:n)...)'
 
+#use the importance sampling to the 95% of the solutions, keeping the most likely solutions
+newllhoods = Mads.reweightsamples(md, o, llhoods)
+sortedllhoods = sort(newllhoods, rev=true)
+sortedprobs = sort(exp(newllhoods), rev=true) / sum(exp(newllhoods))
+cumprob = 0.
+i = 1
+while cumprob < .95
+	cumprob += sortedprobs[i]
+	i += 1
+end
+thresholdllhood = sortedllhoods[i - 1]
+goodoprime = Array(Float64, size(o, 2), 0)
+for i = 1:length(newllhoods)
+	if newllhoods[i] > thresholdllhood
+		goodoprime = hcat(goodoprime, vec(o[i, :]))
+	end
+end
+
+
 sp2 = var(o, 1)
 @show sp2
 
 info("Spaghetti plot of posterior predictions")
 Mads.spaghettiplot(md, o, filename="uncertainty_results/spaghetti-$(problem).png")
+info("Spaghetti plot of posterior predictions with importance sampling")
+Mads.spaghettiplot(md, goodoprime', filename="uncertainty_results/spaghetti-importance-$(problem).png")
 
 info("Histogram of `o5` predictions")
 fig = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
 Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem).png", 6Gadfly.inch, 4Gadfly.inch), fig)
+info("Histogram of `o5` predictions")
+fig = Gadfly.plot(x=goodoprime'[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
+Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-importance-$(problem).png", 6Gadfly.inch, 4Gadfly.inch), fig)
 
 info("Spaghetti plot of posterior predictions using Bayesian analysis")
 Mads.setparamsinit!(md, p)

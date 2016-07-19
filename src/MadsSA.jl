@@ -49,7 +49,7 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	dd = d
 	vo = v
 	gooddirections = []
-	dist = Any{}
+	local dist
 	numdirections = length(d)
 	numgooddirections = numdirections
 	first = false
@@ -77,6 +77,7 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	madswarn("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
 	setseed(seed)
 	gooddsamples = Distributions.rand(dist, numsamples)
+	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i]''), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
 	else
@@ -86,7 +87,31 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	for i = 1:size(samples, 2)
 		samples[:, i] += pinit
 	end
-	return samples
+	return samples, llhoods
+end
+
+"""
+Reweight samples using importance sampling -- returns an array loglikelihoods after reweighting
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `predictions` : the model predictions for each of the samples
+- `oldllhoods` : the log likelihoods of the parameters in the old distribution
+"""
+function reweightsamples(madsdata, predictions, oldllhoods)
+	obskeys = getobskeys(madsdata)
+	weights = getobsweight(madsdata)
+	targets = getobstarget(madsdata)
+	newllhoods = -oldllhoods
+	j = 1
+	for okey in obskeys
+		if haskey(madsdata["Observations"][okey], "weight")
+			newllhoods -= .5 * weights[j] ^ 2 * (predictions[:, j] - targets[j]) .^ 2
+		end
+		j += 1
+	end
+	return newllhoods
 end
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
