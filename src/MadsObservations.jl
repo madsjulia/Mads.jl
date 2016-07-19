@@ -285,9 +285,7 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-"""
-Create observations in the MADS problem dictionary based on `time` and `observation` arrays 
-"""
+"Create observations in the MADS problem dictionary based on `time` and `observation` arrays"
 function createobservations!(madsdata::Associative, time, observation; logtransform=false, weight_type="constant", weight=1)
 	@assert length(time) == length(observation)
 	observationsdict = DataStructures.OrderedDict()
@@ -296,22 +294,39 @@ function createobservations!(madsdata::Associative, time, observation; logtransf
 		data = DataStructures.OrderedDict()
 		data["target"] = observation[i]
 		if weight_type == "constant"
-			data["weight"] = weight
+			if weight != 1
+				data["weight"] = weight
+			end
 		else
 			data["weight"] = 1 / observation[i]
 		end
 		data["time"] = time[i]
-		data["log"] = logtransform
-		data["min"] = 0
-		data["max"] = 1
+		if logtransform == true
+			data["log"] = logtransform
+		end
 		observationsdict[obskey] = data
 	end
 	madsdata["Observations"] = observationsdict
 end
 
-"Set observations in the MADS problem dictionary based on a `observations` dictionary"
-function setobservations!(madsdata::Associative, observations::Associative)
-	madsdata["Observations"] = observations
+function createobservations!(madsdata::Associative, observations::Associative; logtransform=false, weight_type="constant", weight=1)
+	observationsdict = DataStructures.OrderedDict()
+	for k in keys(observations)
+		data = DataStructures.OrderedDict()
+		data["target"] = observations[k]
+		if weight_type == "constant"
+			if weight != 1
+				data["weight"] = weight
+			end
+		else
+			data["weight"] = 1 / observation[i]
+		end
+		if logtransform == true
+			data["log"] = logtransform
+		end
+		observationsdict[k] = data
+	end
+	madsdata["Observations"] = observationsdict
 end
 
 "Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary"
