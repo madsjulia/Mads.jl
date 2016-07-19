@@ -16,6 +16,7 @@ info("Local uncertainty analysis")
 info("Model calibration")
 p, c = Mads.calibrate(md, save_results=false)
 pv = collect(values(p))
+f = Mads.forward(md, p)
 var_scale = .5
 
 info("Local sensitivity analysis")
@@ -47,6 +48,9 @@ for i = 1:length(newllhoods)
 	end
 end
 
+info("Variance of posterior predictions (wrong)")
+display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacobian"]')')
+
 info("Variance of posterior predictions using importance sampling")
 display(var(goodoprime, 2)')
 
@@ -54,7 +58,7 @@ info("Spaghetti plot of posterior predictions")
 Mads.spaghettiplot(md, o, filename="uncertainty_results/spaghetti-$(problem).png")
 
 info("Spaghetti plot of posterior predictions using importance sampling")
-Mads.spaghettiplot(md, goodoprime', filename="uncertainty_results/spaghetti-importance-$(problem).png")
+Mads.spaghettiplot(md, goodoprime', filename="uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
 
 info("Histogram of `o5` predictions")
 fig = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
@@ -62,7 +66,7 @@ Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem).png", 6Gadfly.i
 
 info("Histogram of `o5` predictions using importance sampling")
 fig = Gadfly.plot(x=goodoprime'[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-importance-$(problem).png", 6Gadfly.inch, 4Gadfly.inch), fig)
+Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-importance-sampling.png", 6Gadfly.inch, 4Gadfly.inch), fig)
 
 info("Spaghetti plot of posterior predictions using Bayesian analysis")
 Mads.setparamsinit!(md, p)

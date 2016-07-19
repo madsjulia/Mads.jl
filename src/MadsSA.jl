@@ -29,7 +29,6 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	while !done
 		try
 			covmat = (v * diagm(1 ./ d) * u') .* scale
-			display(covmat)
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
 		catch
@@ -52,7 +51,6 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 	else
 		samples = gooddsamples
 	end
-	display(var(samples, 2))
 	for i = 1:size(samples, 2)
 		samples[:, i] += pinit
 	end
