@@ -169,7 +169,7 @@ function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia:
 			filename = "$(dir)/$(root)-rerun.mads"
 		end
 	end
-	dumpyamlmadsfile(madsdata, filename, julia=julia, explicit=explicit)
+	dumpyamlmadsfile(madsdata, filename, julia=julia)
 end
 
 function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
