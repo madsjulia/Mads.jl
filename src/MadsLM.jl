@@ -364,6 +364,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
 				J = g(x)
 			end
+			if any(isnan, J)
+				Mads.madswarn("Provided Jacobian matrix contains NaN's")
+				display(J)
+				Mads.madscritical("Mads quits!")
+			end
 			g_calls += 1
 			Mads.madsoutput("Jacobian #$g_calls\n");
 			compute_jacobian = false
@@ -401,40 +406,56 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		function getphianddelta_x(npl)
 			lambda = lambda_p[npl]
-			Mads.madsinfo(@sprintf "#%02d lambda: %e" npl lambda);
-			u, s, v = svd(JpJ + lambda * DtDidentity)
-			is = similar(s)
-			for i=1:length(s)
-				if abs(s[i]) > eps(Float64)
-					is[i] = 1 / s[i]
-				else
-					if sign(s[i]) == 0
-						is[i] = 1 / eps(Float64)
+			predicted_residual = []
+			delta_x = []
+			try
+				Mads.madsinfo(@sprintf "#%02d lambda: %e" npl lambda);
+				u, s, v = svd(JpJ + lambda * DtDidentity)
+				is = similar(s)
+				for i=1:length(s)
+					if abs(s[i]) > eps(Float64)
+						is[i] = 1 / s[i]
 					else
-						is[i] = sign(s[i]) / eps(Float64)
+						if sign(s[i]) == 0
+							is[i] = 1 / eps(Float64)
+						else
+							is[i] = sign(s[i]) / eps(Float64)
+						end
 					end
 				end
-			end
-			# s = map(i->max(eps(Float32), i), s)
-			delta_x = (v * spdiagm(is) * u') * -J' * fcur
-			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
-			predicted_residual = o(J * delta_x + fcur)
-			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			Mads.madsoutput("$(@sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
-			if predicted_residual > residual + 2max( eps(predicted_residual), eps(residual) )
-				Mads.madsoutput(" -> not good", 1);
-				if np_lambda == 1
-					Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)", 2);
+				# s = map(i->max(eps(Float32), i), s)
+				delta_x = (v * spdiagm(is) * u') * -J' * fcur
+				# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
+				predicted_residual = o(J * delta_x + fcur)
+				# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
+				Mads.madsoutput("$(@sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
+				if predicted_residual > residual + 2max(eps(predicted_residual), eps(residual))
+					Mads.madsoutput(" -> not good", 1);
+					if npl == 1
+						Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)", 2);
+					end
+				else
+					Mads.madsoutput(" -> ok", 1);
 				end
-			else
-				Mads.madsoutput(" -> ok", 1);
+			catch
+				Mads.madswarn(@sprintf "#%02d lambda: %e cannot be computed" npl lambda);
 			end
 			return predicted_residual, delta_x
 		end
 
 		phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
-		phi = map(x->x[1], phisanddelta_xs)
-		delta_xs = map(x->x[2], phisanddelta_xs)
+		phi = []
+		delta_xs = []
+		for i=1:length(phisanddelta_xs)
+			if length(phisanddelta_xs[i][2]) > 0
+				push!(phi, phisanddelta_xs[i][1])
+				push!(delta_xs, phisanddelta_xs[i][2])
+			end
+		end
+		if length(delta_xs) == 0
+			Mads.madswarn("Levenberg-Marquardt lambdas cannot be computed")
+			Mads.madscritical("Mads quits!")
+		end
 
 		trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
 		f_calls += np_lambda

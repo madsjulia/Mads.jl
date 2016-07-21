@@ -34,6 +34,11 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		param = getoptparams(madsdata, par, paramkeys)
 	end
 	J = g(param, center=obs)
+	if any(isnan, J)
+		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
+		display(J)
+		Mads.madscritical("Mads quits!")
+	end
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly)
