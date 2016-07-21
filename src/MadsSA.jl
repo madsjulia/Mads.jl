@@ -16,7 +16,7 @@ function setseed(seed::Number)
 	end
 end
 
-function sampling(pinit, J, numsamples; seed=0, scale=1)
+function sampling(param, J, numsamples; seed=0, scale=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -52,7 +52,7 @@ function sampling(pinit, J, numsamples; seed=0, scale=1)
 		samples = gooddsamples
 	end
 	for i = 1:size(samples, 2)
-		samples[:, i] += pinit
+		samples[:, i] += param
 	end
 	return samples, llhoods
 end

@@ -275,6 +275,32 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	end
 end
 
+"Get optimizable parameters", 
+function getoptparams(madsdata::Associative, parameterarray::Array, optparameterkey::Array=[])
+	if length(optparameterkey) == 0
+		optparameterkey = getoptparamkeys(madsdata)
+	end
+	parameterkey = getparamkeys(madsdata)
+	nP = length(parameterkey)
+	nPo = length(optparameterkey)
+	if nP > nPo
+		parameterarraynew = Array(Float64, nPo)
+		j = 1
+		for i in 1:nP
+			if optparameterkey[j] == parameterkey[i]
+				parameterarraynew[j] = parameterarray[i]
+				j += 1
+				if j > nPo
+					break
+				end
+			end
+		end
+		return parameterarraynew
+	else
+		return parameterarray
+	end
+end
+
 "Is parameter with key `parameterkey` optimizable?"
 function isopt(madsdata::Associative, parameterkey::AbstractString)
 	if !haskey(madsdata["Parameters"][parameterkey], "type") || 

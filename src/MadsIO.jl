@@ -155,7 +155,7 @@ Arguments:
 - `julia` : if `true` use Julia JSON module to save
 - `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 """
-function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false)
+function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
 		dir = Mads.getmadsproblemdir(madsdata)
 		root = Mads.getmadsrootname(madsdata)
@@ -169,7 +169,7 @@ function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia:
 			filename = "$(dir)/$(root)-rerun.mads"
 		end
 	end
-	dumpyamlmadsfile(madsdata, filename, julia=julia)
+	dumpyamlmadsfile(madsdata, filename, julia=julia, explicit=explicit)
 end
 
 function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)

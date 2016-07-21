@@ -1,7 +1,7 @@
 import Mads
 #md = Mads.loadmadsfile("models/internal-linear.mads")
-#md = Mads.loadmadsfile("models/internal-polynomial3.mads")
-md = Mads.loadmadsfile("models/internal-polynomial.mads")
+md = Mads.loadmadsfile("models/internal-polynomial3.mads")
+#md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
 problem = split(Mads.getmadsrootname(md),"-")[2]
 
@@ -15,12 +15,12 @@ info("Local uncertainty analysis")
 
 info("Model calibration")
 p, c = Mads.calibrate(md, save_results=false)
-pv = collect(values(p))
+pv = Mads.getoptparams(md, collect(values(p)))
 f = Mads.forward(md, p)
 var_scale = .5
 
 info("Local sensitivity analysis")
-lsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, param=pv, obs=collect(values(f)))
+lsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=pv, obs=collect(values(f)))
 
 info("Model parameter samping")
 samples, llhoods = Mads.sampling(pv, lsa_results["jacobian"], 1000, seed=2016, scale=var_scale)

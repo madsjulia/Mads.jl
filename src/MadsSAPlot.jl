@@ -9,10 +9,10 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
-- `param` : parameter set
+- `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, param=Array(Float64,0), obs=Array(Float64,0))
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, par=Array(Float64,0), obs=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -27,8 +27,11 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	if sizeof(param) == 0
+	nPi = sizeof(par)
+	if nPi == 0
 		param = getparamsinit(madsdata, paramkeys)
+	elseif nPi != nP
+		param = getoptparams(madsdata, par, paramkeys)
 	end
 	J = g(param, center=obs)
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)
