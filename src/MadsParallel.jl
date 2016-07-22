@@ -66,16 +66,17 @@ Optional arguments:
 - `ntasks_per_node` : number of parallel tasks per node
 - `mads_servers` : if true use MADS servers (LANL only)
 """
-function setprocs(; ntasks_per_node=0, mads_servers=false)
+function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, dir::ASCIIString="")
 	# s = "hmem[05-07,09-17]"
 	# s = "hh[45]"
 	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
 	# scontrol show hostname $SLURM_JOB_NODELIST | paste -d, -s
 	h = Array(ASCIIString, 0)
 	if mads_servers
-		machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+		if length(machinenames) == 0
+			machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
-		h = Array(ASCIIString, 0)
 		for n = 1:length(machinenames)
 			for j = 1:c
 				push!(h, machinenames[n])
@@ -122,16 +123,30 @@ function setprocs(; ntasks_per_node=0, mads_servers=false)
 	else
 		warn("Unknown parallel environment!")
 	end
-	# return(h)
 	if length(h) > 0
 		if nprocs() > 1
 			rmprocs(workers())
 		end
 		sleep(0.1)
-		addprocs(h)
+		if test
+			for i = 1:length(h)
+				info("Connecting to $(h[i])")
+				#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
+				try
+					#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
+					addprocs([h[i]])
+				catch
+					warn("Connection to $(h[i]) failed!")
+				end
+			end
+		else
+			addprocs(h)
+		end
 		sleep(0.1)
 		info("Number of processors: $(nprocs())")
-		info("Workers: $(join(h, " "))")
+		if nprocs() > 1
+			info("Workers: $(join(h, " "))")
+		end
 	else
 		warn("No processors found to add!")
 	end
