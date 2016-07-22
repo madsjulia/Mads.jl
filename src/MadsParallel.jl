@@ -130,22 +130,25 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		sleep(0.1)
 		if test
 			for i = 1:length(h)
-				info("Connecting to $(h[i])")
+				info("\nConnecting to $(h[i])")
 				#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 				try
 					#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 					addprocs([h[i]])
 				catch
-					warn("Connection to $(h[i]) failed!")
+					warn("\nConnection to $(h[i]) failed!")
 				end
 			end
 		else
 			addprocs(h)
 		end
 		sleep(0.1)
-		info("Number of processors: $(nprocs())")
 		if nprocs() > 1
+			info("\nNumber of processors: $(nprocs())")
 			info("Workers: $(join(h, " "))")
+		else
+			warn("\nNo workers found to add!")
+			info("Number of processors: $(nprocs())")
 		end
 	else
 		warn("No processors found to add!")
@@ -155,8 +158,9 @@ end
 function noplot()
 	if myid() == 1
 		for i in workers()
-			@spawnat i ENV["MADS_NO_PYTHON"]=""
 			@spawnat i ENV["MADS_NO_PLOT"]=""
+			@spawnat i ENV["MADS_NO_PYPLOT"]=""
+			@spawnat i ENV["MADS_NO_GADFLY"]=""
 		end
 	end
 end
@@ -172,5 +176,3 @@ function setdir()
 	dir = remotecall_fetch(1, ()->pwd())
 	cd(dir)
 end
-
-
