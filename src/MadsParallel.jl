@@ -130,13 +130,13 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		sleep(0.1)
 		if test
 			for i = 1:length(h)
-				info("\nConnecting to $(h[i])")
+				info("Connecting to $(h[i])")
 				#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 				try
 					#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 					addprocs([h[i]])
 				catch
-					warn("\nConnection to $(h[i]) failed!")
+					warn("Connection to $(h[i]) failed!")
 				end
 			end
 		else
@@ -144,10 +144,10 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		end
 		sleep(0.1)
 		if nprocs() > 1
-			info("\nNumber of processors: $(nprocs())")
+			info("Number of processors: $(nprocs())")
 			info("Workers: $(join(h, " "))")
 		else
-			warn("\nNo workers found to add!")
+			warn("No workers found to add!")
 			info("Number of processors: $(nprocs())")
 		end
 	else
