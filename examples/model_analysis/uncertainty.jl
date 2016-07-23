@@ -15,6 +15,7 @@ info("Local uncertainty analysis")
 
 info("Model calibration")
 p, c = Mads.calibrate(md, save_results=false)
+selected_index = Mads.indexkeys(md["Observations"], r"o[1-3]")
 pv = Mads.getoptparams(md, collect(values(p)))
 f = Mads.forward(md, p)
 var_scale = .5
@@ -26,9 +27,10 @@ info("Model parameter samping")
 samples, llhoods = Mads.sampling(pv, lsa_results["jacobian"], 1000, seed=2016, scale=var_scale)
 
 info("Model forward runs")
-o = Mads.forward(md, samples)
-n = length(o)
-o = hcat(map(i->collect(values(o[i])), 1:n)...)'
+pred = Mads.forward(md, samples)
+n = length(pred)
+o = hcat(map(i->collect(values(pred[i])), 1:n)...)'
+o_s = hcat(map(i->collect(values(pred[i]))[selected_index], 1:n)...)'
 
 info("Use importance sampling to the 95% of the solutions, keeping the most likely solutions")
 newllhoods = Mads.reweightsamples(md, o, llhoods)
@@ -53,9 +55,11 @@ display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacob
 
 info("Variance of posterior predictions using all samples")
 display(var(o, 1))
+display(var(o_s, 1))
 
 info("Variance of posterior predictions using importance sampling")
 display(var(goodoprime, 2)')
+display(var(goodoprime[selected_index,:], 2)')
 # JLD.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
 
 info("Spaghetti plot of posterior predictions")
