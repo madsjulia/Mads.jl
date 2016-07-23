@@ -51,6 +51,9 @@ end
 info("Variance of posterior predictions (wrong)")
 display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacobian"]')')
 
+info("Variance of posterior predictions using all samples")
+display(var(o, 1))
+
 info("Variance of posterior predictions using importance sampling")
 display(var(goodoprime, 2)')
 # JLD.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
@@ -82,4 +85,3 @@ Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-bayes.png", 6Ga
 
 info("Variance of posterior predictions using Bayesian analysis")
 display(var(pred, 1))
-

@@ -140,7 +140,17 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 				end
 			end
 		else
+			originalSTDOUT = STDOUT;
+			originalSTDERR = STDERR;
+			(outRead, outWrite) = redirect_stdout();
+			(errRead, errWrite) = redirect_stderr();
 			addprocs(h)
+			close(outWrite);
+			close(outRead);
+			close(errWrite);
+			close(errRead);
+			redirect_stdout(originalSTDOUT);
+			redirect_stderr(originalSTDERR);
 		end
 		sleep(0.1)
 		if nprocs() > 1
