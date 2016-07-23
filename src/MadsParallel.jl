@@ -66,13 +66,9 @@ Optional arguments:
 - `ntasks_per_node` : number of parallel tasks per node
 - `mads_servers` : if true use MADS servers (LANL only)
 """
-function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, dir::ASCIIString="")
-	# s = "hmem[05-07,09-17]"
-	# s = "hh[45]"
-	# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
-	# scontrol show hostname $SLURM_JOB_NODELIST | paste -d, -s
+function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, hide_output::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
 	h = Array(ASCIIString, 0)
-	if mads_servers
+	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
 			machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 		end
@@ -83,6 +79,10 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 			end
 		end
 	elseif haskey(ENV, "SLURM_JOB_NODELIST") || haskey(ENV, "SLURM_NODELIST")
+		# s = "hmem[05-07,09-17]"
+		# s = "hh[45]"
+		# scontrol show hostname hmem[05-07,09-17] | paste -d, -s
+		# scontrol show hostname $SLURM_JOB_NODELIST | paste -d, -s
 		if haskey(ENV, "SLURM_JOB_NODELIST")
 			s = ENV["SLURM_JOB_NODELIST"]
 		else
@@ -131,7 +131,6 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		if test
 			for i = 1:length(h)
 				info("Connecting to $(h[i])")
-				#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 				try
 					#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
 					addprocs([h[i]])
@@ -140,17 +139,21 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 				end
 			end
 		else
-			originalSTDOUT = STDOUT;
-			originalSTDERR = STDERR;
-			(outRead, outWrite) = redirect_stdout();
-			(errRead, errWrite) = redirect_stderr();
+			if hide_output
+				originalSTDOUT = STDOUT;
+				originalSTDERR = STDERR;
+				(outRead, outWrite) = redirect_stdout();
+				(errRead, errWrite) = redirect_stderr();
+			end
 			addprocs(h)
-			close(outWrite);
-			close(outRead);
-			close(errWrite);
-			close(errRead);
-			redirect_stdout(originalSTDOUT);
-			redirect_stderr(originalSTDERR);
+			if hide_output
+				close(outWrite);
+				close(outRead);
+				close(errWrite);
+				close(errRead);
+				redirect_stdout(originalSTDOUT);
+				redirect_stderr(originalSTDERR);
+			end
 		end
 		sleep(0.1)
 		if nprocs() > 1
