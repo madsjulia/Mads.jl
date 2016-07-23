@@ -95,7 +95,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					end
 					run(`bash -c "ln -sf $(madsproblemdir)/* $tempdirname"`) # link all the files in the mads problem directory
 					cd(tempdirname)
-					Mads.madsinfo("Temporary directory: $(tempdirname)")
+					Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch
 					sleep(attempt * 0.5)
@@ -194,7 +194,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				Mads.madsoutput("Executing Julia model-evaluation script parsing the model outputs ...\n")
 				results = madsdatacommandfunction(madsdata)
 			else
-				Mads.madsinfo("Executing $(madsdata["Command"]) ...")
+				Mads.madsinfo("Executing $(madsdata["Command"]) in directory $(tempdirname) ...")
 				try
 					run(`bash -c "$(madsdata["Command"])"`)
 				catch
@@ -240,6 +240,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						rm(tempdirname, recursive=true)
 					end
 					trying = false
+					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
 				catch
 					sleep(attempt * 0.5)
 					if attempt > 3
@@ -252,7 +253,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
-		Mads.madsoutput("MADS internal Anasol model evaluation for contaminant transport ...\n")
+		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
 		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")

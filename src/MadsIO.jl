@@ -512,10 +512,10 @@ function readobservations(madsdata::Associative)
 		c += 1
 		if obscount[k] == 0
 			missing += 1
-			madsinfo("Observation $k is missing!")
+			madsinfo("Observation $k is missing!", 1)
 		elseif obscount[k] > 1
 			observations[k] /= obscount[k]
-			madsinfo("Observation $k detected $(obscount[k]) times; an average is computed") # this should be an info
+			madsinfo("Observation $k detected $(obscount[k]) times; an average is computed")
 		end
 	end
 	if missing > 0
