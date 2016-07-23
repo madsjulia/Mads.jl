@@ -351,7 +351,7 @@ filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : 
 
 "Find indexes for dictionary keys based on a string or regular expression"
 indexkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : find(x->ismatch(key, x), collect(keys(dict)))
-indexrkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : find(x->contains(x, key), collect(keys(dict)))
+indexkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : find(x->contains(x, key), collect(keys(dict)))
 
 "Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
