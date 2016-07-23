@@ -46,7 +46,14 @@ Options for reading model outputs:
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 """
-function makemadscommandfunction(madsdata::Associative; calczeroweightobs=false, calcpredictions=true) # make MADS command function
+function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs=false, calcpredictions=true) # make MADS command function
+	#remove the obs from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
+	madsdata = Dict()
+	for k in keys(madsdatawithobs)
+		if k != "Observations"
+			madsdata[k] = madsdatawithobs[k]
+		end
+	end
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsoutput("""Internal model evaluation of Julia function $(madsdata["Julia model"]) ...\n""")
