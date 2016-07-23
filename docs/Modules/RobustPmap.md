@@ -10,7 +10,7 @@
 Check for type exceptions
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:38](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L38)
+[RobustPmap/src/RobustPmap.jl:38](https://github.com/madsjulia/RobustPmap.jl/tree/6160b56094771a420b9a2af57f234ea18a1d062e/src/RobustPmap.jl#L38)
 
 ---
 
@@ -19,7 +19,7 @@ Check for type exceptions
 Robust pmap call with checkpoints
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:57](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L57)
+[RobustPmap/src/RobustPmap.jl:57](https://github.com/madsjulia/RobustPmap.jl/tree/6160b56094771a420b9a2af57f234ea18a1d062e/src/RobustPmap.jl#L57)
 
 ---
 
@@ -28,5 +28,5 @@ Robust pmap call with checkpoints
 Robust pmap call
 
 *source:*
-[RobustPmap/src/RobustPmap.jl:50](https://github.com/madsjulia/RobustPmap.jl/tree/7692c05f665bb7ea09d7d5ddec04e6341974a1ab/src/RobustPmap.jl#L50)
+[RobustPmap/src/RobustPmap.jl:50](https://github.com/madsjulia/RobustPmap.jl/tree/6160b56094771a420b9a2af57f234ea18a1d062e/src/RobustPmap.jl#L50)
 
