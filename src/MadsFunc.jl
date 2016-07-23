@@ -47,12 +47,17 @@ Options for reading model outputs:
 - `JSONPredictions` : model predictions read from a JSON file
 """
 function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs=false, calcpredictions=true) # make MADS command function
-	#remove the obs from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
+	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
+	obskeys = getobskeys(madsdatawithobs)#keep just the keys of the obs
 	madsdata = Dict()
-	for k in keys(madsdatawithobs)
-		if k != "Observations"
-			madsdata[k] = madsdatawithobs[k]
+	if !haskey(madsdatawithobs, "Sources")
+		for k in keys(madsdatawithobs)
+			if k != "Observations"
+				madsdata[k] = madsdatawithobs[k]
+			end
 		end
+	else
+		madsdata = madsdatawithobs
 	end
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
@@ -258,18 +263,21 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
 		return madscommandfunction(parameterswithexpressions)
 	end
-	return makemadsreusablefunction(madsdata, madscommandfunctionwithexpressions)
+	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata, madscommandfunction, suffix=""; usedict=true)
-	if isdefined(:ReusableFunctions) && haskey(madsdata, "Restart")
-		if madsdata["Restart"] == "memory"
+function makemadsreusablefunction(madsdata::Associative, madscommandfunction, suffix=""; usedict=true)
+	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
+end
+
+function makemadsreusablefunction(paramkeys, obskeys, madsdatarestart, madscommandfunction, restartdir; usedict=true)
+	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
+		if madsdatarestart == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
 			return madscommandfunctionwithreuse
-		elseif madsdata["Restart"] != false
-			restartdir = getrestartdir(madsdata, suffix)
+		elseif madsdatarestart != false
 			if usedict
-				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, getparamkeys(madsdata), getobskeys(madsdata))
+				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, paramkeys, obskeys)
 			else
 				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir)
 			end
