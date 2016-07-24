@@ -14,7 +14,7 @@ function checkout(git::Bool=true)
 end
 
 "Status of the Mads modules"
-function status(;git::Bool=true)
+function status(; git::Bool=true)
 	for i in madsmodules
 		Mads.status(i, git=git)
 	end
