@@ -38,7 +38,7 @@ function forward(madsdata::Associative, paramdict::Associative; all=false)
 	return f(paramdict)
 end
 
-function forward(madsdata::Associative, paramarray::Array; all=false, checkpointfrequency=false, checkpointfilename=string(madsdata["Filename"], "_forward"))
+function forward(madsdata::Associative, paramarray::Array; all=false, checkpointfrequency=false, checkpointfilename="checkpoint_forward")
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	madsdata_c = deepcopy(madsdata)
 	if all
@@ -48,7 +48,7 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 			setobsweights!(madsdata_c, 1)
 		end
 	end
-	f = makemadscommandfunction(madsdata_c)
+	f = makedoublearrayfunction(madsdata_c)
 	pk = Mads.getoptparamkeys(madsdata_c)
 	np = length(pk)
 	s = size(paramarray)
@@ -69,24 +69,25 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 	nr = (mn == np) ? mx : mn
 	r = []
 	if checkpointfrequency != false && length(s) == 2
+		if !isdir(getrestartdir(madsdata))
+			mkdir(getrestartdir(madsdata))
+		end
 		if s[2] == np
-			r = RobustPmap.crpmap(i->f(merge(paramdict, Dict(zip(pk, map(j->paramarray[i, j], 1:np))))), checkpointfrequency, string(madsdata["Filename"], "_forward"), 1:nr)
+			r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
 		else
-			r = RobustPmap.crpmap(i->f(merge(paramdict, Dict(zip(pk, map(j->paramarray[j, i], 1:np))))), checkpointfrequency, string(madsdata["Filename"], "_forward"), 1:nr)
+			r = RobustPmap.crpmap(i->f(paramarray[:, i]), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
 		end
 	elseif length(s) == 2
 		if s[2] == np
-			r = RobustPmap.rpmap(i->f(merge(paramdict, Dict(zip(pk, map(j->paramarray[i, j], 1:np))))), 1:nr)
+			r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
 		else
-			r = RobustPmap.rpmap(i->f(merge(paramdict, Dict(zip(pk, map(j->paramarray[j, i], 1:np))))), 1:nr)
+			r = RobustPmap.rpmap(i->f(paramarray[:, i]), 1:nr)
 		end
 	else
-		pd = Dict(zip(pk, map(j->paramarray[j], 1:np)))
-		merge!(paramdict, pd)
-		o = f(paramdict)
+		o = f(paramarray)
 		push!(r, o)
 	end
-	return r
+	return map(relem->DataStructures.OrderedDict(zip(getobskeys(madsdata), relem)), r)
 end
 
 """
