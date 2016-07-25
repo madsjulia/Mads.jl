@@ -67,7 +67,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsoutput("Internal MADS model evaluation a Julia script in file $(filename) ...\n")
 		madsdatacommandfunction = importeverywhere(joinpath(filename))
-		madscommandfunction = madsdatacommandfunction(madsdata)
+		madscommandfunction = madsdatacommandfunction(madsdatawithobs)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsoutput("Internal model evaluation a Julia script in file $(filename) ...\n")
