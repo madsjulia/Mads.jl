@@ -2,6 +2,7 @@
 function madsoutput(message::AbstractString, level=0)
 	if !quiet && level < verbositylevel
 		print(message)
+		flush(STDOUT)
 	end
 end
 
@@ -9,6 +10,7 @@ end
 function madsdebug(message::AbstractString, level=0)
 	if !quiet && level < debuglevel
 		println("DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
+		flush(STDOUT)
 	end
 end
 
@@ -16,17 +18,22 @@ end
 function madsinfo(message::AbstractString, level=0)
 	if !quiet && level < verbositylevel
 		info(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+		flush(STDOUT)
 	end
 end
 
 "MADS warning messages"
 function madswarn(message::AbstractString)
 	warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+	flush(STDOUT)
+	flush(STDERR)
 end
 
 "MADS error messages"
 function madserror(message::AbstractString)
 	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
+	flush(STDOUT)
+	flush(STDERR)
 end
 
 "MADS critical error messages"

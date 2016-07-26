@@ -10,13 +10,14 @@ import JLD
 function setseed(seed::Number)
 	if seed != 0
 		srand(seed)
+		madsinfo("New seed: $seed")
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		madsinfo("Current seed: $s")
 	end
 end
 
-function sampling(param, J, numsamples; seed=0, scale=1)
+function sampling(param::Vector, J::Array, numsamples::Int; seed::Number=0, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -66,7 +67,7 @@ Arguments:
 - `predictions` : the model predictions for each of the samples
 - `oldllhoods` : the log likelihoods of the parameters in the old distribution
 """
-function reweightsamples(madsdata, predictions, oldllhoods)
+function reweightsamples(madsdata::Associative, predictions::Vector, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
 	weights = getobsweight(madsdata)
 	targets = getobstarget(madsdata)
@@ -558,7 +559,7 @@ for mi = 1:length(saltelli_functions)
 		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
 			Mads.setseed(seed)
 			if numsaltellis < 1
-				madserror("Number of parallel sesistivity runs must be > 0 ($numsaltellis < 1)")
+				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
 			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
@@ -587,7 +588,7 @@ for mi = 1:length(saltelli_functions)
 				end
 			end
 			Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
-		end # end fuction
+		end # end function
 	end # end quote
 	eval(q)
 end
