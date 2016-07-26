@@ -1,5 +1,4 @@
-# @everywhere import Mads
-reload("Mads")
+import Mads
 
 currentdir = pwd()
 
@@ -13,7 +12,6 @@ cd(madsdirname)
 md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("Mads root name: $(rootname)")
-#=
 display(md) # show the content of the Mads input file
 Mads.showallparameters(md) # show all the model parameters
 Mads.showparameters(md) # show all the adjustable model parameters
@@ -52,15 +50,12 @@ inverse_predictions = Mads.forward(md, inverse_parameters) # execute a forward m
 
 Mads.plotmatches(md, inverse_predictions, filename=rootname * "-w13a_w20a-calib-match.svg") # plot calibrated matches
 run(`open w01-w13a_w20a-calib-match.svg`) # works only on mac os x
-=#
+
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 Mads.madsinfo("Prior spaghetti plot ...")
 paramvalues=Mads.parametersample(md, 100)
-Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior.png")
-# run(`open w01-w13a_w20a-prior-100-spaghetti.svg`) # works only on mac os x
-
-efastresult = Mads.efast(md, N=100, seed=2016)
-Mads.plotobsSAresults(md, efastresult, filename="w13a_w20a-global.png", xtitle = "x", ytitle = "y")
+Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior")
+run(`open w01-w13a_w20a-prior-100-spaghetti.svg`) # works only on mac os x
 
 Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md, seed=20151001)
@@ -73,8 +68,8 @@ mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
 Mads.spaghettiplot(md, mcmcvalues, keyword="w13a_w20a-posterior", format="PNG")
-# run(`open w01-w13a_w20a-posterior-1000-spaghetti.png`) # works only on mac os x
-#=
+run(`open w01-w13a_w20a-posterior-1000-spaghetti.png`) # works only on mac os x
+
 # Create a new problem (example)
 md_new = deepcopy(md)
 Mads.allwellson!(md_new) # turn on all wells
@@ -102,5 +97,5 @@ Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads inp
 Mads.allwellsoff!(md_new) # turn off all wells
 Mads.wellon!(md_new, "w13a") # use well w13a
 Mads.calibraterandom(md_new, 10, seed=20151001) # calibrate 10 times with random initial guesses
-=#
+
 cd(currentdir)
