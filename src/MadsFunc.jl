@@ -67,7 +67,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsoutput("Internal MADS model evaluation a Julia script in file $(filename) ...\n")
 		madsdatacommandfunction = importeverywhere(joinpath(filename))
-		madscommandfunction = madsdatacommandfunction(madsdata)
+		madscommandfunction = madsdatacommandfunction(madsdatawithobs)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsoutput("Internal model evaluation a Julia script in file $(filename) ...\n")
@@ -203,7 +203,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
-					results = readobservations(madsdata)
+					results = readobservations(madsdata, obskeys)
 				end
 				if haskey(madsdata, "JLDPredictions") # JLD
 					for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
@@ -222,7 +222,6 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 				if haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(madsdata["ASCIIPredictions"])")
-					obskeys = getobskeys(madsdata)
 					obsid=[convert(AbstractString,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
 					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))

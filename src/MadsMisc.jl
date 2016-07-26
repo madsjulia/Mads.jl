@@ -14,13 +14,43 @@ Returns:
 
 - `arrayfunction` : function accepting an array containing the optimal parameters' values
 """
-function makearrayfunction(madsdata::Associative, f::Function)
+function makearrayfunction(madsdata::Associative, f=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
 		return f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
 	end
 	return arrayfunction
+end
+
+"""
+Make a version of the function `f` that accepts an array containing the optimal parameters' values, and returns an array of observations
+
+`Mads.makedoublearrayfunction(madsdata, f)`
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `f` : ...
+
+Returns:
+
+- `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
+"""
+function makedoublearrayfunction(madsdata::Associative, f=makemadscommandfunction(madsdata))
+	arrayfunction = makearrayfunction(madsdata, f)
+	obskeys = getobskeys(madsdata)
+	function doublearrayfunction(arrayparameters::Vector)
+		dictresult = arrayfunction(arrayparameters)
+		arrayresult = Array(Float64, length(obskeys))
+		i = 1
+		for k in obskeys
+			arrayresult[i] = dictresult[k]
+			i += 1
+		end
+		return arrayresult
+	end
+	return doublearrayfunction
 end
 
 "Make a conditional log likelihood function that accepts an array containing the opt parameters' values"

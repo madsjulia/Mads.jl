@@ -490,9 +490,7 @@ function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractStr
 end
 
 "Read observations"
-function readobservations(madsdata::Associative)
-	obsids = getobskeys(madsdata)
-	obsweight = getobsweight(madsdata)
+function readobservations(madsdata::Associative, obsids=getobskeys(madsdata))
 	observations = Dict()
 	obscount = Dict(zip(obsids, zeros(Int, length(obsids))))
 	for instruction in madsdata["Instructions"]

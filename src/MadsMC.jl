@@ -119,7 +119,7 @@ function montecarlo(madsdata::Associative; N=100, filename="")
 		klog = 1
 		knonlog = 1
 		for j = 1:length(params)
-			if paramtypes[j] != Void
+			if paramtypes[j] == "opt"
 				if paramlogs[j] == true || paramlogs[j] == "yes"
 					params[j] = 10 ^ logoptparams[klog, i]
 					klog += 1
