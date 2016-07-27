@@ -89,7 +89,7 @@ Monte Carlo analysis
 
 Arguments:
 
-- `madsdata` : MADS problem dictionary
+- `madsdata` : MADS problem dictionary sampling uniformly between mins/maxs
 - `N` : number of samples (default = 100)
 
 Returns:
