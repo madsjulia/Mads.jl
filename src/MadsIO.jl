@@ -406,7 +406,7 @@ function instline2regexs(instline::AbstractString)
 	regexs = Regex[]
 	obsnames = AbstractString[]
 	getparamhere = Bool[]
-	while offset <= length(instline) && ismatch(regex, instline, offset)
+	while offset <= length(instline) && ismatch(regex, instline, offset - 1)#this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
 		if m == nothing
 			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
