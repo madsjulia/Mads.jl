@@ -61,24 +61,24 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	end
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
-		Mads.madsoutput("""Internal model evaluation of Julia function $(madsdata["Julia model"]) ...\n""")
+		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]
 	elseif haskey(madsdata, "MADS model")
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
-		Mads.madsoutput("Internal MADS model evaluation a Julia script in file $(filename) ...\n")
+		Mads.madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
 		madsdatacommandfunction = importeverywhere(joinpath(filename))
 		madscommandfunction = madsdatacommandfunction(madsdatawithobs)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
-		Mads.madsoutput("Internal model evaluation a Julia script in file $(filename) ...\n")
+		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
 		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
-			Mads.madsoutput("""External model evaluation of command $(madsdata["Command"]) ...\n""")
+			Mads.madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
 		end
 		if haskey(madsdata, "Julia command")
 			filename = joinpath(madsproblemdir, madsdata["Julia command"])
-			Mads.madsoutput("Model evaluation using a Julia script in file $(filename)\n")
+			Mads.madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
 			madsdatacommandfunction = importeverywhere(filename)
 		end
 		function madscommandfunction(parameters::Associative) # MADS command function
@@ -191,10 +191,10 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 			end
 			if haskey(madsdata, "Julia command")
-				Mads.madsoutput("Executing Julia model-evaluation script parsing the model outputs ...\n")
+				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) ...")
 				results = madsdatacommandfunction(madsdata)
 			else
-				Mads.madsinfo("Executing $(madsdata["Command"]) in directory $(tempdirname) ...")
+				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
 				try
 					run(`bash -c "$(madsdata["Command"])"`)
 				catch

@@ -67,7 +67,7 @@ Arguments:
 - `predictions` : the model predictions for each of the samples
 - `oldllhoods` : the log likelihoods of the parameters in the old distribution
 """
-function reweightsamples(madsdata::Associative, predictions::Vector, oldllhoods::Vector)
+function reweightsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
 	weights = getobsweight(madsdata)
 	targets = getobstarget(madsdata)
