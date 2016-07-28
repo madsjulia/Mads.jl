@@ -19,7 +19,7 @@ function parser_amanzi(filename::AbstractString="observations.out")
 	flag[cr_index] = 'c'
 	obs_name = Array(AbstractString, no)
 	for i = 1:no
-		obs_name[i] = w[i] * "$(flag[i])" * "_" * "$(time[i])"
+		obs_name[i] = w[i] * "$(flag[i])" * "_" * "$(@sprintf("%.1f", time[i]))"
 	end
 	dict = DataStructures.OrderedDict(zip(obs_name, obs))
 	return dict
