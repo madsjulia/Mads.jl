@@ -46,7 +46,7 @@ Options for reading model outputs:
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 """
-function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs=false, calcpredictions=true) # make MADS command function
+function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
 	obskeys = getobskeys(madsdatawithobs)#keep just the keys of the obs
 	madsdata = Dict()
@@ -266,11 +266,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata::Associative, madscommandfunction, suffix=""; usedict=true)
+function makemadsreusablefunction(madsdata::Associative, madscommandfunction, suffix=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
 
-function makemadsreusablefunction(paramkeys, obskeys, madsdatarestart, madscommandfunction, restartdir; usedict=true)
+function makemadsreusablefunction(paramkeys, obskeys, madsdatarestart, madscommandfunction, restartdir; usedict::Bool=true)
 	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
 		if madsdatarestart == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
@@ -293,7 +293,7 @@ end
 """
 Get the directory where restarts will be stored.
 """
-function getrestartdir(madsdata, suffix="")
+function getrestartdir(madsdata::Associative, suffix="")
 	rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
@@ -433,7 +433,7 @@ end
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 """
-function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor=1.)
+function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Real=1.)
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
@@ -458,7 +458,7 @@ end
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 """
-function makemadsloglikelihood(madsdata::Associative; weightfactor=1.)
+function makemadsloglikelihood(madsdata::Associative; weightfactor::Real=1.)
 	if haskey(madsdata, "LogLikelihood")
 		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations

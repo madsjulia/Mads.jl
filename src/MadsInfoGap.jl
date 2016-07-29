@@ -3,7 +3,7 @@ import MathProgBase
 import Ipopt
 
 "Information Gap Decision Analysis using JuMP"
-function infogap_jump(madsdata::Associative=Dict(); retries=1, random=false, maxiter=3000, verbosity=0, seed=0)
+function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, seed=0)
 	#madsdata = Mads.loadmadsfile("models/internal-polynomial.mads")
 	#Mads.setseed(seed)
 	if seed != 0
@@ -110,7 +110,7 @@ function infogap_jump(madsdata::Associative=Dict(); retries=1, random=false, max
 	end
 end
 
-function infogap_jumplin(madsdata::Associative=Dict(); retries=1, random=false, maxiter=3000, verbosity=0, seed=0)
+function infogap_jumplin(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, seed=0)
 	# madsdata = Mads.loadmadsfile("models/internal-linear.mads")
 	if seed != 0
 		srand(seed)

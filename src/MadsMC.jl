@@ -59,7 +59,8 @@ function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100
 	return mcmcchains
 end
 
-function savemcmcresults(chain, filename::AbstractString)
+"Save MCMC chain in a file"
+function savemcmcresults(chain::Array, filename::AbstractString)
 	f = open(filename, "w")
 	print(f, "Min: ")
 	JSON.print(f, minimum(chain, 1)[:])
@@ -100,7 +101,7 @@ Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
 """
-function montecarlo(madsdata::Associative; N=100, filename="")
+function montecarlo(madsdata::Associative; N::Int=100, filename::AbstractString="")
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -150,7 +151,7 @@ end
 """
 Convert parameter array to a parameter dictionary of arrays
 """
-function paramarray2dict(madsdata::Associative, array)
+function paramarray2dict(madsdata::Associative, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
 	dict = DataStructures.OrderedDict()
 	for i in 1:length(paramkeys)

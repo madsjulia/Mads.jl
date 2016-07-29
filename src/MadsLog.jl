@@ -1,5 +1,5 @@
 "MADS output (controlled by quiet` and `verbositylevel`)"
-function madsoutput(message::AbstractString, level=0)
+function madsoutput(message::AbstractString, level::Int=0)
 	if !quiet && level < verbositylevel
 		print(message)
 		flush(STDOUT)
@@ -7,7 +7,7 @@ function madsoutput(message::AbstractString, level=0)
 end
 
 "MADS debug messages (controlled by `quiet` and `debuglevel`)"
-function madsdebug(message::AbstractString, level=0)
+function madsdebug(message::AbstractString, level::Int=0)
 	if !quiet && level < debuglevel
 		println("DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
 		flush(STDOUT)
@@ -15,7 +15,7 @@ function madsdebug(message::AbstractString, level=0)
 end
 
 "MADS information/status messages (controlled by quiet` and `verbositylevel`)"
-function madsinfo(message::AbstractString, level=0)
+function madsinfo(message::AbstractString, level::Int=0)
 	if !quiet && level < verbositylevel
 		info(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
 		flush(STDOUT)

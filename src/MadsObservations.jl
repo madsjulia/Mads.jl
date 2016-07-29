@@ -1,10 +1,14 @@
 import Distributions
 import DataStructures
 
-"Is the dictionary containing all the observations"
+"Is a dictionary containing all the observations"
 function isobs(madsdata::Associative, dict::Associative)
 	flag = true
-	obs = getobskeys(madsdata)
+	if haskey(madsdata, "Observations") || haskey(madsdata, "Wells")
+		obs = getobskeys(madsdata)
+	else
+		obs = madsdata
+	end
 	for i in obs
 		if !haskey(dict, i)
 			flag = false

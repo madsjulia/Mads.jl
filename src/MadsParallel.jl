@@ -168,6 +168,7 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 	end
 end
 
+"MADS plotting is disabled"
 function noplot()
 	if myid() == 1
 		for i in workers()
