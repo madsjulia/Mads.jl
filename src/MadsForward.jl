@@ -87,7 +87,7 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 		o = f(paramarray)
 		push!(r, o)
 	end
-	return map(relem->DataStructures.OrderedDict(zip(getobskeys(madsdata), relem)), r)
+	return hcat(r[:]...)'
 end
 
 """

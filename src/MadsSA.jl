@@ -3,6 +3,7 @@ import ProgressMeter
 import Distributions
 import DataStructures
 import DataFrames
+import StatsBase
 import JSON
 import JLD
 
@@ -59,15 +60,19 @@ function sampling(param::Vector, J::Array, numsamples::Int; seed::Number=0, scal
 end
 
 """
-Reweight samples using importance sampling -- returns an array loglikelihoods after reweighting
+Reweigh samples using importance sampling -- returns a vector of log-likelihoods after reweighing
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `predictions` : the model predictions for each of the samples
 - `oldllhoods` : the log likelihoods of the parameters in the old distribution
+
+Returns:
+
+- `newllhoods` : vector of log-likelihoods after reweighing
 """
-function reweightsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
+function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
 	weights = getobsweight(madsdata)
 	targets = getobstarget(madsdata)
@@ -79,7 +84,56 @@ function reweightsamples(madsdata::Associative, predictions::Array, oldllhoods::
 		end
 		j += 1
 	end
-	return newllhoods - maximum(newllhoods)#normalize likelihoods so the most likely thing has likelihood 1
+	return newllhoods - maximum(newllhoods) # normalize likelihoods so the most likely thing has likelihood 1
+end
+
+"""
+Get important samples
+
+Arguments:
+
+- `samples` : array of samples
+- `llhoods` : vector of log-likelihoods
+
+Returns:
+
+- `imp_samples` : array of important samples
+"""
+function getimportantsamples(samples::Array, llhoods::Vector)
+	sortedlhoods = sort(exp(llhoods), rev=true)
+	sortedprobs = sortedlhoods / sum(sortedlhoods)
+	cumprob = 0.
+	i = 1
+	while cumprob < .95
+		cumprob += sortedprobs[i]
+		i += 1
+	end
+	thresholdllhood = log(sortedlhoods[i - 1])
+	imp_samples = Array(Float64, size(samples, 2), 0)
+	for i = 1:length(llhoods)
+		if llhoods[i] > thresholdllhood
+			imp_samples = hcat(imp_samples, vec(samples[i, :]))
+		end
+	end
+	return imp_samples
+end
+
+"""
+Get weighted mean and variance samples
+
+Arguments:
+
+- `samples` : array of samples
+- `llhoods` : vector of log-likelihoods
+
+Returns:
+
+- `mean` : vector of sample means
+- `var` : vector of sample variance
+"""
+function weightedstats(samples::Array, llhoods::Vector)
+	wv = StatsBase.WeightVec(sqrt(exp(llhoods)))
+	return mean(samples, wv, 1), var(samples, wv, 1)
 end
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)

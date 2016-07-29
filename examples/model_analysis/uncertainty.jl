@@ -27,28 +27,12 @@ info("Model parameter samping")
 samples, llhoods = Mads.sampling(pv, lsa_results["jacobian"], 1000, seed=2016, scale=var_scale)
 
 info("Model forward runs")
-pred = Mads.forward(md, samples)
-n = length(pred)
-o = hcat(map(i->collect(values(pred[i])), 1:n)...)'
-# o_s = hcat(map(i->collect(values(pred[i]))[selected_index], 1:n)...)'
+o = Mads.forward(md, samples)
 
 info("Use importance sampling to the 95% of the solutions, keeping the most likely solutions")
-newllhoods = Mads.reweightsamples(md, o, llhoods)
-sortedllhoods = sort(newllhoods, rev=true)
-sortedprobs = sort(exp(newllhoods), rev=true) / sum(exp(newllhoods))
-cumprob = 0.
-i = 1
-while cumprob < .95
-	cumprob += sortedprobs[i]
-	i += 1
-end
-thresholdllhood = sortedllhoods[i - 1]
-goodoprime = Array(Float64, size(o, 2), 0)
-for i = 1:length(newllhoods)
-	if newllhoods[i] > thresholdllhood
-		goodoprime = hcat(goodoprime, vec(o[i, :]))
-	end
-end
+newllhoods = Mads.reweighsamples(md, o, llhoods)
+goodoprime = Mads.getimportantsamples(o, newllhoods)
+s_mean, s_var = Mads.weightedstats(o, newllhoods)
 
 info("Variance of posterior predictions (wrong)")
 display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacobian"]')')
@@ -59,6 +43,10 @@ display(var(o, 1))
 
 info("Variance of posterior predictions using importance sampling")
 display(var(goodoprime, 2)')
+
+info("Variance of weighted posterior predictions using importance sampling")
+display(s_var)
+
 # display(var(goodoprime[selected_index,:], 2)')
 # JLD.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
 
@@ -79,13 +67,12 @@ Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-importance-samp
 info("Spaghetti plot of posterior predictions using Bayesian analysis")
 Mads.setparamsinit!(md, p)
 mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
-pred = Mads.forward(md, mcmcchain.value)
-pred = hcat(map(i->collect(values(pred[i])), 1:length(pred))...)'
-Mads.spaghettiplot(md, pred, filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
+ob = Mads.forward(md, mcmcchain.value)
+Mads.spaghettiplot(md, ob, filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
 
 info("Histogram of `o5` predictions using Bayesian analysis")
-fig = Gadfly.plot(x=pred[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
+fig = Gadfly.plot(x=ob[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
 Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-bayes.png", 6Gadfly.inch, 4Gadfly.inch), fig)
 
 info("Variance of posterior predictions using Bayesian analysis")
-display(var(pred, 1))
+display(var(ob, 1))
