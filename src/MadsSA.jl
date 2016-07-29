@@ -79,7 +79,7 @@ function reweightsamples(madsdata::Associative, predictions::Array, oldllhoods::
 		end
 		j += 1
 	end
-	return newllhoods
+	return newllhoods - maximum(newllhoods)#normalize likelihoods so the most likely thing has likelihood 1
 end
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
