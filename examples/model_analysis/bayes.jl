@@ -13,7 +13,6 @@ for w = (1000000, 1000, 1)
 	mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
 	Mads.scatterplotsamples(md, mcmcchain.value', "bayes_results/bayes_init_w$w.png")
 	o = Mads.forward(md, mcmcchain.value)
-	o = hcat(map(i->collect(values(o[i])), 1:length(o))...)'
 	Mads.spaghettiplot(md, o, filename="bayes_results/bayes_init_w$(w)_spaghetti.png")
 	@printf "Init: Observation Weight %d StdDev %f ->`o5` prediction: min = %f max = %f\n" w 1/w min(o[:,5]...) max(o[:,5]...)
 	f = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
@@ -47,7 +46,6 @@ for i = 1:3
 		mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
 		Mads.scatterplotsamples(md, mcmcchain.value', "bayes_results/bayes_opt_$(optnames[i])_w$w.png")
 		o = Mads.forward(md, mcmcchain.value)
-		o = hcat(map(i->collect(values(o[i])), 1:length(o))...)'
 		Mads.spaghettiplot(md, o, filename="bayes_results/bayes_opt_$(optnames[i])_w$(w)_spaghetti.png")
 		@printf "O%-3s: Observation Weight %d StdDev %f -> `o5` prediction: min = %f max = %f\n" optnames[i] w 1/w min(o[:,5]...) max(o[:,5]...)
 		f = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
