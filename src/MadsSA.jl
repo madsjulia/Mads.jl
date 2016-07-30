@@ -129,10 +129,10 @@ Arguments:
 Returns:
 
 - `mean` : vector of sample means
-- `var` : vector of sample variance
+- `var` : vector of sample variances
 """
 function weightedstats(samples::Array, llhoods::Vector)
-	wv = StatsBase.WeightVec(sqrt(exp(llhoods)))
+	wv = StatsBase.WeightVec(exp(llhoods))
 	return mean(samples, wv, 1), var(samples, wv, 1)
 end
 

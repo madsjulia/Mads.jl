@@ -15,9 +15,10 @@ ProgressMeter
 Distributions
 DataStructures
 DataFrames
+StatsBase
 ODE
-Lora
-Optim
+Lora 0.5
+Optim 0.5
 BlackBoxOptim
 Docile
 Lexicon

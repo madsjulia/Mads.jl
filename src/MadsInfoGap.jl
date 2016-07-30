@@ -110,109 +110,100 @@ function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool
 	end
 end
 
-function infogap_jumplin(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, seed=0)
-	# madsdata = Mads.loadmadsfile("models/internal-linear.mads")
+function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, quiet::Bool=false, model::Int=1, seed=0)
 	if seed != 0
 		srand(seed)
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		info("Current seed: $s")
+		!quiet && info("Current seed: $s")
 	end
-	# Mads.setseed(seed)
-	# f = Mads.makemadscommandfunction(madsdata)
-	# pk = Mads.getoptparamkeys(madsdata)
-	# pmin = Mads.getparamsmin(madsdata, pk)
-	# pmax = Mads.getparamsmax(madsdata, pk)
-	# pinit = Mads.getparamsinit(madsdata, pk)
-	# np = length(pk)
-	# ok = Mads.gettargetkeys(madsdata)
-	# omin = Mads.getobsmin(madsdata, ok)
-	# omax = Mads.getobsmax(madsdata, ok)
-	# w = Mads.getobsweight(madsdata, ok)
-	# t = Mads.getobstarget(madsdata, ok)
-	# ti = Mads.getobstime(madsdata)
-	# no = length(ok)
 	no = 4
-	np = 2
 	t = [1.,2.,3.,4.,0]
 	ti = [1,2,3,4,5]
 	omin = [1.,2.,3.,4.]
 	omax = [1.,2.,3.,4.]
-	pinit = [0.,1.,0.,1.]
-	pmin = [-10,-5]
-	pmax = [10,5]
-	par_best = []
-	obs_best = []
-	for h = (0.1, 0.2, 0.5)
-		phi_best = 0
-		for r = 1:retries
-			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
-			if r > 1 || random
-				for i = 1:np
-					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
-				end
-			end
-			@JuMP.variable(m, p[i=1:np], start=pinit[i])
-			@JuMP.variable(m, o[1:no])
-			@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
-			@JuMP.NLconstraint(m, o[2] == p[1] * ti[2] + p[2])
-			@JuMP.NLconstraint(m, o[3] == p[1] * ti[3] + p[2])
-			@JuMP.NLconstraint(m, o[4] == p[1] * ti[4] + p[2])
-			@JuMP.constraint(m, p[i=1:np] .>= pmin[i=1:np])
-			@JuMP.constraint(m, p[i=1:np] .<= pmax[i=1:np])
-			#@JuMP.constraint(m, o[i=1:no] .>= omin[i=1:no])
-			#@JuMP.constraint(m, o[i=1:no] .<= omax[i=1:no])
-			@JuMP.constraint(m, o[i=1:no] .>= t[i=1:no]-h)
-			@JuMP.constraint(m, o[i=1:no] .<= t[i=1:no]+h)
-			#@JuMP.NLobjective(m, Min, sum{w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2, i=1:no})
-			@JuMP.NLobjective(m, Max, p[1] * ti[5] + p[2])
-			JuMP.solve(m)
-			phi = JuMP.getobjectivevalue(m)	
-			# println("OF = $(phi)")
-			if phi_best < phi
-				phi_best = phi
-				par_best = JuMP.getvalue(p)
-				obs_best = JuMP.getvalue(o)
-			end
-		end
-		println("Max h = $h OF = $(phi_best) par = $par_best")
-		#=
-		pinit = Mads.getparamsinit(madsdata, pk)
-		phi_best = Inf
-		for r = 1:retries
-			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
-			if r > 1 || random
-				for i = 1:np
-					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
-				end
-			end
-			# @show pinit
-			@JuMP.variable(m, p[i=1:np], start=pinit[i])
-			@JuMP.variable(m, o[1:no])
-			@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
-			@JuMP.NLconstraint(m, o[2] == p[1] * ti[2] + p[2])
-			@JuMP.NLconstraint(m, o[3] == p[1] * ti[3] + p[2])
-			@JuMP.NLconstraint(m, o[4] == p[1] * ti[4] + p[2])
-			@JuMP.constraint(m, p[i=1:np] .>= pmin[i=1:np])
-			@JuMP.constraint(m, p[i=1:np] .<= pmax[i=1:np])
-			#@JuMP.constraint(m, o[i=1:no] .>= omin[i=1:no])
-			#@JuMP.constraint(m, o[i=1:no] .<= omax[i=1:no])
-			@JuMP.constraint(m, o[i=1:no] .>= t[i=1:no]-h)
-			@JuMP.constraint(m, o[i=1:no] .<= t[i=1:no]+h)
-			#@JuMP.NLobjective(m, Min, sum{w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2, i=1:no})
-			@JuMP.NLobjective(m, Min, p[1] * ti[5] + p[2])
-			JuMP.solve(m)
-			phi = JuMP.getobjectivevalue(m)	
-			println("OF = $(phi)")
-			if phi_best > phi
-				phi_best = phi
-				par_best = JuMP.getvalue(p)
-				obs_best = JuMP.getvalue(o)
-			end
-		end
-		println("Min h = $h OF = $(phi_best) par = $par_best")
-		=#
+	if model == 1
+		np = 2
+		pinit = [1.,1.]
+		pmin = [-10,-5]
+		pmax = [10,5]
+	elseif model == 2
+		np = 3
+		pinit = [1.,1.,1.]
+		pmin = [-10,-10,-5]
+		pmax = [10,10,5]
+	elseif model == 3
+		np = 4
+		pinit = [1.,1.,1.,1.]
+		pmin = [-10,-10,-5,-3]
+		pmax = [10,10,5,3]
 	end
+	par_best = Array(Float64, 0)
+	obs_best = Array(Float64, 0)
+	hmin = Array(Float64, 0)
+	hmax = Array(Float64, 0)
+	for h in horizons
+		for mm = ("Min", "Max")
+			phi_best = (mm == "Min") ? 0 : Inf
+			for r = 1:retries
+				m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
+				if r > 1 || random
+					for i = 1:np
+						p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+					end
+				else
+					p = pinit
+				end
+				@JuMP.variable(m, p[i = 1:np], start = p[i])
+				@JuMP.variable(m, o[1:no])
+				@JuMP.constraint(m, p[i = 1:np] .>= pmin[i = 1:np])
+				@JuMP.constraint(m, p[i = 1:np] .<= pmax[i = 1:np])
+				@JuMP.constraint(m, o[i = 1:no] .>= t[i = 1:no] - h)
+				@JuMP.constraint(m, o[i = 1:no] .<= t[i = 1:no] + h)
+				if model == 1
+					@JuMP.NLobjective(m, symbol(mm), p[1] * ti[5] + p[2])
+					@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
+					@JuMP.NLconstraint(m, o[2] == p[1] * ti[2] + p[2])
+					@JuMP.NLconstraint(m, o[3] == p[1] * ti[3] + p[2])
+					@JuMP.NLconstraint(m, o[4] == p[1] * ti[4] + p[2])
+				elseif model == 2
+					@JuMP.NLobjective(m, symbol(mm), p[1] * (ti[5]^(1.1)) + p[2] * ti[5] + p[3])
+					@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^(1.1)) + p[2] * ti[1] + p[3])
+					@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^(1.1)) + p[2] * ti[2] + p[3])
+					@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^(1.1)) + p[2] * ti[3] + p[3])
+					@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^(1.1)) + p[2] * ti[4] + p[3])
+				elseif model == 3
+					@JuMP.NLobjective(m, symbol(mm), p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
+					@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^p[4]) + p[2] * ti[1] + p[3])
+					@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
+					@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^p[4]) + p[2] * ti[3] + p[3])
+					@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^p[4]) + p[2] * ti[4] + p[3])
+				end
+				JuMP.solve(m)
+				phi = JuMP.getobjectivevalue(m)
+				if mm == "Min"
+					if phi_best < phi
+						phi_best = phi
+						par_best = JuMP.getvalue(p)
+						obs_best = JuMP.getvalue(o)
+					end
+				else
+					if phi_best > phi
+						phi_best = phi
+						par_best = JuMP.getvalue(p)
+						obs_best = JuMP.getvalue(o)
+					end
+				end
+			end
+			!quiet && println("$(mm) h = $h OF = $(phi_best) par = $par_best")
+			if mm == "Min"
+				push!(hmin, phi_best)
+			else
+				push!(hmax, phi_best)
+			end
+		end
+	end
+	return hmin, hmax
 end
 
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
