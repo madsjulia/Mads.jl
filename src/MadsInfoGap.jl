@@ -138,23 +138,27 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
 	end
+	pi = similar(pinit)
 	par_best = Array(Float64, 0)
 	obs_best = Array(Float64, 0)
 	hmin = Array(Float64, 0)
 	hmax = Array(Float64, 0)
 	for h in horizons
 		for mm = ("Min", "Max")
-			phi_best = (mm == "Min") ? 0 : Inf
+			phi_best = (mm == "Max") ? 0 : Inf
 			for r = 1:retries
 				m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
-				if r > 1 || random
+				if r == 1 && !random
 					for i = 1:np
-						p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+						pi[i] = pinit[i]
 					end
 				else
-					p = pinit
+					for i = 1:np
+						pi[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+					end
 				end
-				@JuMP.variable(m, p[i = 1:np], start = p[i])
+				# @show pi
+				@JuMP.variable(m, p[i = 1:np], start = pi[i])
 				@JuMP.variable(m, o[1:no])
 				@JuMP.constraint(m, p[i = 1:np] .>= pmin[i = 1:np])
 				@JuMP.constraint(m, p[i = 1:np] .<= pmax[i = 1:np])
@@ -181,7 +185,8 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 				end
 				JuMP.solve(m)
 				phi = JuMP.getobjectivevalue(m)
-				if mm == "Min"
+				# !quiet && println("OF = $(phi)")
+				if mm == "Max"
 					if phi_best < phi
 						phi_best = phi
 						par_best = JuMP.getvalue(p)

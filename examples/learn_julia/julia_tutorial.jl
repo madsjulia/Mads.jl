@@ -82,8 +82,8 @@ PyPlot.loglog(S2,linewidth=3,"go--")
 PyPlot.close("all")
 
 PyPlot.figure()
-PyPlot.plot(S2, label = "sv's of A",color="green", linestyle="dashed", marker="o",markersize=12)
-PyPlot.plot(S, label = "sv's of B",color="magenta", linestyle="dashed", marker="o",markersize=12)
+PyPlot.plot(S2, label = "sv's of A",color="green", linestyle="dashed", marker="o", markersize=12)
+PyPlot.plot(S, label = "sv's of B",color="magenta", linestyle="dashed", marker="o", markersize=12)
 PyPlot.legend()
 
 PyPlot.figure()
