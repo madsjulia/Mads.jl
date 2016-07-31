@@ -1,5 +1,5 @@
 "Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)"
-function testj(coverage=false)
+function testj(coverage::Bool=false)
 	orig_dir = pwd()
 	for i in madsmodules
 		Pkg.test(i; coverage=coverage)
