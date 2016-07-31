@@ -1,5 +1,6 @@
 import Mads
 #md = Mads.loadmadsfile("models/internal-linear.mads")
+#md = Mads.loadmadsfile("models/internal-exp-polynomial.mads")
 md = Mads.loadmadsfile("models/internal-polynomial3.mads")
 #md = Mads.loadmadsfile("models/internal-polynomial.mads")
 

@@ -9,4 +9,4 @@ Observations:
 - o3: { target: 3, time: 3, weight: 1, dist: "Uniform(2, 4)" }
 - o4: { target: 4, time: 4, weight: 1, dist: "Uniform(3, 5)" }
 - o5: { time: 5 }
-MADS model: internal-polynomial.jl
+MADS model: internal-exp-polynomial.jl
