@@ -1,6 +1,7 @@
 import JuMP
 import MathProgBase
 import Ipopt
+import Gadfly
 
 "Information Gap Decision Analysis using JuMP"
 function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, seed=0)
@@ -110,7 +111,7 @@ function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool
 	end
 end
 
-function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, quiet::Bool=false, model::Int=1, seed=0)
+function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, quiet::Bool=false, plot::Bool=false, model::Int=1, seed=0)
 	if seed != 0
 		srand(seed)
 	else
@@ -118,26 +119,46 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 		!quiet && info("Current seed: $s")
 	end
 	no = 4
-	t = [1.,2.,3.,4.,0]
-	ti = [1,2,3,4,5]
-	omin = [1.,2.,3.,4.]
-	omax = [1.,2.,3.,4.]
+	time = [1.,2.,3.,4.]
+	ti = [1.,2.,3.,4.,5.]
+	obs = [1.,2.,3.,4.]
+	models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = exp(t * n) + b * t + c"]
 	if model == 1
 		np = 2
 		pinit = [1.,1.]
 		pmin = [-10,-5]
 		pmax = [10,5]
+		function fo(t::Number, p::Vector)
+			return p[1] * t + p[2]
+		end
 	elseif model == 2
 		np = 3
 		pinit = [1.,1.,1.]
 		pmin = [-10,-10,-5]
 		pmax = [10,10,5]
+		function fo(t::Number, p::Vector)
+			return p[1] * (t ^ 1.1) + p[2] * t + p[3]
+		end
 	elseif model == 3
 		np = 4
 		pinit = [1.,1.,1.,1.]
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
+		function fo(t::Number, p::Vector)
+			return p[1] * (t ^ p[4]) + p[2] * t + p[3]
+		end
+	elseif model == 4
+		np = 4
+		pinit = [1.,1.,1.,1.]
+		pmin = [-10,-10,-5,-3]
+		pmax = [10,10,5,3]
+		function fo(t::Number, p::Vector)
+			return p[1] * exp(t * p[4]) + p[2] * t + p[3]
+		end
 	end
+	plotrange = 1:0.1:5
+	ymin = Array(Float64, length(plotrange))
+	ymax = Array(Float64, length(plotrange))
 	pi = similar(pinit)
 	par_best = Array(Float64, 0)
 	obs_best = Array(Float64, 0)
@@ -162,8 +183,8 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 				@JuMP.variable(m, o[1:no])
 				@JuMP.constraint(m, p[i = 1:np] .>= pmin[i = 1:np])
 				@JuMP.constraint(m, p[i = 1:np] .<= pmax[i = 1:np])
-				@JuMP.constraint(m, o[i = 1:no] .>= t[i = 1:no] - h)
-				@JuMP.constraint(m, o[i = 1:no] .<= t[i = 1:no] + h)
+				@JuMP.constraint(m, o[i = 1:no] .>= time[i = 1:no] - h)
+				@JuMP.constraint(m, o[i = 1:no] .<= time[i = 1:no] + h)
 				if model == 1
 					@JuMP.NLobjective(m, symbol(mm), p[1] * ti[5] + p[2])
 					@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
@@ -182,6 +203,12 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 					@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
 					@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^p[4]) + p[2] * ti[3] + p[3])
 					@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^p[4]) + p[2] * ti[4] + p[3])
+				elseif model == 4
+					@JuMP.NLobjective(m, symbol(mm), p[1] * exp(ti[5] * p[4]) + p[2] * ti[5] + p[3])
+					@JuMP.NLconstraint(m, o[1] == p[1] * exp(ti[1] * p[4]) + p[2] * ti[1] + p[3])
+					@JuMP.NLconstraint(m, o[2] == p[1] * exp(ti[2] * p[4]) + p[2] * ti[2] + p[3])
+					@JuMP.NLconstraint(m, o[3] == p[1] * exp(ti[3] * p[4]) + p[2] * ti[3] + p[3])
+					@JuMP.NLconstraint(m, o[4] == p[1] * exp(ti[4] * p[4]) + p[2] * ti[4] + p[3])
 				end
 				JuMP.solve(m)
 				phi = JuMP.getobjectivevalue(m)
@@ -203,9 +230,18 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 			!quiet && println("$(mm) h = $h OF = $(phi_best) par = $par_best")
 			if mm == "Min"
 				push!(hmin, phi_best)
+				ymin = map(t->fo(t, par_best), plotrange)
 			else
 				push!(hmax, phi_best)
+				ymax = map(t->fo(t, par_best), plotrange)
 			end
+		end
+		if plot
+			ldat = Gadfly.layer(x=time, y=obs, ymin=obs-h, ymax=obs+h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
+			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue")))
+			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red")))
+			f = Gadfly.plot(ldat, lmin, lmax, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: h=$(h) Model: $(models[model])"))
+			Gadfly.draw(Gadfly.PNG(Pkg.dir("Mads") * "/examples/model_analysis/infogap_results/model_$(model)_h_$(h).png", 6Gadfly.inch, 4Gadfly.inch), f)
 		end
 	end
 	return hmin, hmax
