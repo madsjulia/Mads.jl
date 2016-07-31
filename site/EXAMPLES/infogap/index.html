@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Velimir monty Vesselinov">
+  
+  <title>Information Gap Analysis - MADS</title>
+  
+
+  <link rel="shortcut icon" href="../../mads-favicon.ico">
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  <link href="../../static/custom.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Information Gap Analysis";
+    var mkdocs_page_input_path = "Examples/infogap/index.md";
+    var mkdocs_page_url = "/Examples/infogap/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> MADS</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../INSTALLATION/">Installation</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../GETTING_STARTED/">Getting started</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Examples</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../EXAMPLES_SETUP/">Setup</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../bigdt/source_termination/">Decision Analysis</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Information Gap Analysis</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#information-gap-analysis">Information Gap Analysis</a></li>
+                
+                    <li><a class="toctree-l4" href="#setup">Setup</a></li>
+                
+                    <li><a class="toctree-l4" href="#information-gap-analysis-for-model-yt-a-t-c">Information gap analysis for model y(t) = a * t + c</a></li>
+                
+                    <li><a class="toctree-l4" href="#information-gap-analysis-for-model-yt-a-t11-b-t-c">Information gap analysis for model y(t) = a * t^(1.1) + b * t + c</a></li>
+                
+                    <li><a class="toctree-l4" href="#information-gap-analysis-for-model-yt-a-tn-b-t-c">Information gap analysis for model y(t) = a * t^n + b * t + c</a></li>
+                
+                    <li><a class="toctree-l4" href="#information-gap-analysis-for-model-yt-a-expt-n-b-t-c">Information gap analysis for model y(t) = a * exp(t * n) + b * t + c</a></li>
+                
+                    <li><a class="toctree-l4" href="#opportuneness-and-robustness-of-the-4-models">Opportuneness and Robustness of the 4 models</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../bayesian_sampling/">Bayesian Sampling</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../blind_source_separation/">Blind Source Separation</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../contamination/">Contaminant Transport</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../ode/">ODE Analysis</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../MODEL_COUPLING/">Model Coupling</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../TEST/">Testing & Verification</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../FUNCTIONS/">Functions</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Modules</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/Mads/">Mads</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/BIGUQ/">BIGUQ</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/Anasol/">Anasol</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/ReusableFunctions/">ReusableFunctions</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/MetaProgTools/">MetaProgTools</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../Modules/RobustPmap/">RobustPmap</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../ACKNOWLEDGMENTS/">Acknowledgments</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../../COPYING/">License</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">MADS</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Examples &raquo;</li>
+        
+      
+    
+    <li>Information Gap Analysis</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="information-gap-analysis">Information Gap Analysis</h2>
+<p>All the figures below are generated using <code>examples/model_analysis/infogap.jl</code>.</p>
+<h3 id="setup">Setup</h3>
+<p><img alt="" src="./model_setup.png" /></p>
+<ul>
+<li>
+<p>There are 4 uncertain observations at times t = [1,2,3,4]</p>
+</li>
+<li>
+<p>There are 4 possible models that can be applied to match the data</p>
+<ol>
+<li>
+<p><code>y(t) = a * t + c</code></p>
+</li>
+<li>
+<p><code>y(t) = a * t^(1.1) + b * t + c</code></p>
+</li>
+<li>
+<p><code>y(t) = a * t^n + b * t + c</code></p>
+</li>
+<li>
+<p><code>y(t) = a * exp(t * n) + b * t + c</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p>There are 4 unknown model parameters with uniform prior probability functions:</p>
+<ol>
+<li>
+<p><code>a = Uniform(-10, 10)</code></p>
+</li>
+<li>
+<p><code>b = Uniform(-10, 10)</code></p>
+</li>
+<li>
+<p><code>c = Uniform(-5, 5)</code></p>
+</li>
+<li>
+<p><code>n = Uniform(-3, 3)</code></p>
+</li>
+</ol>
+</li>
+<li>
+<p>The model prediction for t = 5 is unknown and information gap prediction uncertainty needs to be evaluated</p>
+</li>
+<li>
+<p>The horizon of information gap uncertainty <code>h</code> is applied to define the acceptable deviations in the 4 uncertain observations.</p>
+</li>
+</ul>
+<h3 id="information-gap-analysis-for-model-yt-a-t-c">Information gap analysis for model <code>y(t) = a * t + c</code></h3>
+<p><img alt="" src="./model_1_h_0.001.png" /></p>
+<p><img alt="" src="./model_1_h_0.01.png" /></p>
+<p><img alt="" src="./model_1_h_0.02.png" /></p>
+<p><img alt="" src="./model_1_h_0.05.png" /></p>
+<p><img alt="" src="./model_1_h_0.1.png" /></p>
+<p><img alt="" src="./model_1_h_0.2.png" /></p>
+<p><img alt="" src="./model_1_h_0.5.png" /></p>
+<p><img alt="" src="./model_1_h_1.0.png" /></p>
+<h3 id="information-gap-analysis-for-model-yt-a-t11-b-t-c">Information gap analysis for model <code>y(t) = a * t^(1.1) + b * t + c</code></h3>
+<p><img alt="" src="./model_2_h_0.001.png" /></p>
+<p><img alt="" src="./model_2_h_0.01.png" /></p>
+<p><img alt="" src="./model_2_h_0.02.png" /></p>
+<p><img alt="" src="./model_2_h_0.05.png" /></p>
+<p><img alt="" src="./model_2_h_0.1.png" /></p>
+<p><img alt="" src="./model_2_h_0.2.png" /></p>
+<p><img alt="" src="./model_2_h_0.5.png" /></p>
+<p><img alt="" src="./model_2_h_1.0.png" /></p>
+<h3 id="information-gap-analysis-for-model-yt-a-tn-b-t-c">Information gap analysis for model <code>y(t) = a * t^n + b * t + c</code></h3>
+<p><img alt="" src="./model_3_h_0.001.png" /></p>
+<p><img alt="" src="./model_3_h_0.01.png" /></p>
+<p><img alt="" src="./model_3_h_0.02.png" /></p>
+<p><img alt="" src="./model_3_h_0.05.png" /></p>
+<p><img alt="" src="./model_3_h_0.1.png" /></p>
+<p><img alt="" src="./model_3_h_0.2.png" /></p>
+<p><img alt="" src="./model_3_h_0.5.png" /></p>
+<p><img alt="" src="./model_3_h_1.0.png" /></p>
+<h3 id="information-gap-analysis-for-model-yt-a-expt-n-b-t-c">Information gap analysis for model <code>y(t) = a * exp(t * n) + b * t + c</code></h3>
+<p><img alt="" src="./model_4_h_0.001.png" /></p>
+<p><img alt="" src="./model_4_h_0.01.png" /></p>
+<p><img alt="" src="./model_4_h_0.02.png" /></p>
+<p><img alt="" src="./model_4_h_0.05.png" /></p>
+<p><img alt="" src="./model_4_h_0.1.png" /></p>
+<p><img alt="" src="./model_4_h_0.2.png" /></p>
+<p><img alt="" src="./model_4_h_0.5.png" /></p>
+<p><img alt="" src="./model_4_h_1.0.png" /></p>
+<h3 id="opportuneness-and-robustness-of-the-4-models">Opportuneness and Robustness of the 4 models</h3>
+<p><img alt="" src="./opportuneness_vs_robustness.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../bayesian_sampling/" class="btn btn-neutral float-right" title="Bayesian Sampling">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../bigdt/source_termination/" class="btn btn-neutral" title="Decision Analysis"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/madsjulia/Mads.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../bigdt/source_termination/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../bayesian_sampling/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>

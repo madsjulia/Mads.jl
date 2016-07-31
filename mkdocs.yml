@@ -14,6 +14,7 @@ pages:
 - Examples:
   - Setup: EXAMPLES_SETUP.md
   - Decision Analysis: Examples/bigdt/source_termination/index.md
+  - Information Gap Analysis: Examples/infogap/index.md
   - Bayesian Sampling: Examples/bayesian_sampling/index.md
   - Blind Source Separation: Examples/blind_source_separation/index.md
   - Contaminant Transport: Examples/contamination/index.md
