@@ -152,7 +152,7 @@
         }, 
         {
             "location": "/Examples/infogap/", 
-            "text": "Information Gap Analysis\n\n\nAll the figures below are generated using \nexamples/model_analysis/infogap.jl\n.\n\n\nSetup\n\n\n\n\n\n\n\n\nThere are 4 uncertain observations at times t = [1,2,3,4]\n\n\n\n\n\n\nThere are 4 possible models that can be applied to match the data\n\n\n\n\n\n\ny(t) = a * t + c\n\n\n\n\n\n\ny(t) = a * t^(1.1) + b * t + c\n\n\n\n\n\n\ny(t) = a * t^n + b * t + c\n\n\n\n\n\n\ny(t) = a * exp(t * n) + b * t + c\n\n\n\n\n\n\n\n\n\n\nThere are 4 unknown model parameters with uniform prior probability functions:\n\n\n\n\n\n\na = Uniform(-10, 10)\n\n\n\n\n\n\nb = Uniform(-10, 10)\n\n\n\n\n\n\nc = Uniform(-5, 5)\n\n\n\n\n\n\nn = Uniform(-3, 3)\n\n\n\n\n\n\n\n\n\n\nThe model prediction for t = 5 is unknown and information gap prediction uncertainty needs to be evaluated\n\n\n\n\n\n\nThe horizon of information gap uncertainty \nh\n is applied to define the acceptable deviations in the 4 uncertain observations.\n\n\n\n\n\n\nInformation gap analysis for model \ny(t) = a * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInformation gap analysis for model \ny(t) = a * t^(1.1) + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInformation gap analysis for model \ny(t) = a * t^n + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInformation gap analysis for model \ny(t) = a * exp(t * n) + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOpportuneness and Robustness of the 4 models", 
+            "text": "Information Gap Analysis\n\n\nAll the figures below are generated using \nexamples/model_analysis/infogap.jl\n.\n\n\nSetup\n\n\n\n\n\n\n\n\nThere are 4 uncertain observations at times t = [1,2,3,4]\n\n\n\n\n\n\nThere are 4 possible models that can be applied to match the data\n\n\n\n\n\n\ny(t) = a * t + c\n\n\n\n\n\n\ny(t) = a * t^(1.1) + b * t + c\n\n\n\n\n\n\ny(t) = a * t^n + b * t + c\n\n\n\n\n\n\ny(t) = a * exp(t * n) + b * t + c\n\n\n\n\n\n\n\n\n\n\nThere are 4 unknown model parameters with uniform prior probability functions:\n\n\n\n\n\n\na = Uniform(-10, 10)\n\n\n\n\n\n\nb = Uniform(-10, 10)\n\n\n\n\n\n\nc = Uniform(-5, 5)\n\n\n\n\n\n\nn = Uniform(-3, 3)\n\n\n\n\n\n\n\n\n\n\nThe model prediction for t = 5 is unknown and information gap prediction uncertainty needs to be evaluated\n\n\n\n\n\n\nThe horizon of information gap uncertainty \nh\n is applied to define the acceptable deviations in the 4 uncertain observations.\n\n\n\n\n\n\nInfogap in model \ny(t) = a * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInfogap in model \ny(t) = a * t^(1.1) + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInfogap in model \ny(t) = a * t^n + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nInfogap in model \ny(t) = a * exp(t * n) + b * t + c\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOpportuneness and Robustness of the 4 models", 
             "title": "Information Gap Analysis"
         }, 
         {
@@ -166,24 +166,24 @@
             "title": "Setup"
         }, 
         {
-            "location": "/Examples/infogap/#information-gap-analysis-for-model-yt-a-t-c", 
+            "location": "/Examples/infogap/#infogap-in-model-yt-a-t-c", 
             "text": "", 
-            "title": "Information gap analysis for model y(t) = a * t + c"
+            "title": "Infogap in model y(t) = a * t + c"
         }, 
         {
-            "location": "/Examples/infogap/#information-gap-analysis-for-model-yt-a-t11-b-t-c", 
+            "location": "/Examples/infogap/#infogap-in-model-yt-a-t11-b-t-c", 
             "text": "", 
-            "title": "Information gap analysis for model y(t) = a * t^(1.1) + b * t + c"
+            "title": "Infogap in model y(t) = a * t^(1.1) + b * t + c"
         }, 
         {
-            "location": "/Examples/infogap/#information-gap-analysis-for-model-yt-a-tn-b-t-c", 
+            "location": "/Examples/infogap/#infogap-in-model-yt-a-tn-b-t-c", 
             "text": "", 
-            "title": "Information gap analysis for model y(t) = a * t^n + b * t + c"
+            "title": "Infogap in model y(t) = a * t^n + b * t + c"
         }, 
         {
-            "location": "/Examples/infogap/#information-gap-analysis-for-model-yt-a-expt-n-b-t-c", 
+            "location": "/Examples/infogap/#infogap-in-model-yt-a-expt-n-b-t-c", 
             "text": "", 
-            "title": "Information gap analysis for model y(t) = a * exp(t * n) + b * t + c"
+            "title": "Infogap in model y(t) = a * exp(t * n) + b * t + c"
         }, 
         {
             "location": "/Examples/infogap/#opportuneness-and-robustness-of-the-4-models", 
