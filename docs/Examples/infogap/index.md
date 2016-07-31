@@ -32,7 +32,7 @@ All the figures below are generated using `examples/model_analysis/infogap.jl`.
 
 * The horizon of information gap uncertainty `h` is applied to define the acceptable deviations in the 4 uncertain observations.
 
-### Information gap analysis for model `y(t) = a * t + c`
+### Infogap in model `y(t) = a * t + c`
 
 ![](model_1_h_0.001.png)
 
@@ -50,7 +50,7 @@ All the figures below are generated using `examples/model_analysis/infogap.jl`.
 
 ![](model_1_h_1.0.png)
 
-### Information gap analysis for model `y(t) = a * t^(1.1) + b * t + c`
+### Infogap in model `y(t) = a * t^(1.1) + b * t + c`
 
 ![](model_2_h_0.001.png)
 
@@ -68,7 +68,7 @@ All the figures below are generated using `examples/model_analysis/infogap.jl`.
 
 ![](model_2_h_1.0.png)
 
-### Information gap analysis for model `y(t) = a * t^n + b * t + c`
+### Infogap in model `y(t) = a * t^n + b * t + c`
 
 ![](model_3_h_0.001.png)
 
@@ -86,7 +86,7 @@ All the figures below are generated using `examples/model_analysis/infogap.jl`.
 
 ![](model_3_h_1.0.png)
 
-### Information gap analysis for model `y(t) = a * exp(t * n) + b * t + c`
+### Infogap in model `y(t) = a * exp(t * n) + b * t + c`
 
 ![](model_4_h_0.001.png)
 
