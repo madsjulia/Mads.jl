@@ -21,18 +21,18 @@ end
 function test(testmod="")
 	orig_dir = pwd()
 	if testmod == ""
-		include(Pkg.dir("Mads") * "/test/runtests.jl")
+		include(Pkg.dir("Mads") * "/tests/runtests.jl")
 		println("* Mads modules ...")
 		for i in madsmodules[2:end]
 			println("* $i testing ...")
-			include(Pkg.dir(i) * "/test/runtests.jl")
+			include(Pkg.dir(i) * "/tests/runtests.jl")
 		end
 	else
 		file = Pkg.dir("Mads") * "/examples/$(testmod)/runtests.jl"
 		if isfile(file)
 			include(file)
 		elseif isdefined(symbol(testmod))
-			file = Pkg.dir(testmod) * "/test/runtests.jl"
+			file = Pkg.dir(testmod) * "/tests/runtests.jl"
 			if isfile(file)
 				include(file)
 			else
