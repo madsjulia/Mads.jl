@@ -322,19 +322,15 @@ Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 """
 function importeverywhere(finename)
-	#TODO DANGEROUS a function with the same name but with different method may exist in the memory
 	code = readall(finename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
-	q = parse(string("@everywhere begin\n", code, "\n$functionname\nend"))
+	fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
+	q = parse(fullcode)
 	eval(Main, q)
-	functionsymbol = q.args[2].args[end]
-	try
-		q = Expr(:., :Main, QuoteNode(functionsymbol))
-		commandfunction = eval(q)
-		return commandfunction
-	catch
-		madscritical("loading model defined in $(finename)")
-	end
+	functionsymbol = Symbol(functionname)
+	q = Expr(:., :Main, QuoteNode(functionsymbol))
+	commandfunction = eval(q)
+	return commandfunction
 end
 
 "Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`"

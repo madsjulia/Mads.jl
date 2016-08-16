@@ -1,6 +1,6 @@
 import DataStructures
 
-function mamkemadsmodelrun(madsdata::Associative)
+function mamkemadsmodelrun_internal_linearmodel(madsdata::Associative)
 	function madsmodelrun(parameters::Associative) # model run
 		f(t) = parameters["a"] * t - parameters["b"] # a * t - b
 		times = 1:4

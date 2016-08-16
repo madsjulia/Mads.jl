@@ -1,6 +1,6 @@
 import DataStructures
 
-function madsmodelrun(madsdata::Associative) # mads data dictionary is as an argument if needed
+function madsmodelrun_internal_linearmodel_template(madsdata::Associative) # mads data dictionary is as an argument if needed
 	# Replace with:
 	# - a system call executing an external model
 	# - a parser of the model outputs
