@@ -265,7 +265,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Func
 			break
 		end
 	end
-	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace(Optim.LevenbergMarquardt()), nEval, maxIter)
+	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}(), nEval, maxIter)
 end
 
 """
@@ -342,7 +342,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	Mads.madsoutput("Initial OF: $residual\n");
 
 	# Maintain a trace of the system.
-	tr = Optim.OptimizationTrace(Optim.LevenbergMarquardt())
+	tr = Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}()
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
 		os = Optim.OptimizationState(g_calls, o(fcur), NaN, d)
