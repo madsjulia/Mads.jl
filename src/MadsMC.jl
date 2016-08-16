@@ -36,7 +36,7 @@ function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100,
 	mcparams = Lora.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
 	model = Lora.likelihood_model(mcparams, false)
 	if Base.isbindingresolved(Lora, :RAM)
-		sampler = Lora.RAM(fill(1e-1, length(initvals)), 0.3)
+		sampler = Lora.RAM(fill(1e-1, length(initvals)))
 	else
 		madswarn("Robust Adaptive Metropolis (RAM) method is not available")
 		sampler = Lora.MH(fill(1e-1, length(initvals)))

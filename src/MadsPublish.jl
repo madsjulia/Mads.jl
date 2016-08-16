@@ -60,7 +60,7 @@ end
 "Tag the Mads modules with a default argument `:patch`"
 function tag(sym::Symbol=:patch)
 	for i in madsmodules
-		Mads.tag(i; sym=sym)
+		Mads.tag(i, sym)
 	end
 end
 
