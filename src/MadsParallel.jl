@@ -8,6 +8,7 @@ Set the number of processors to `np` and the number of threads to `nt`
 
 Usage:
 ```
+Mads.setprocs(4)
 Mads.setprocs(4, 8)
 ```
 
@@ -30,19 +31,6 @@ function setprocs(np::Int, nt::Int)
 	getprocs()
 end
 
-"""
-Set the number of processors to `np`
-
-Usage:
-
-```
-Mads.setprocs(4)
-```
-
-Arguments:
-
-- `np` : number of processors
-"""
 function setprocs(np::Int)
 	setprocs(np, np)
 end
@@ -58,15 +46,22 @@ Usage:
 ```
 Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
-Mads.setprocs(ntasks_per_node=2, mads_servers=true)
+Mads.setprocs(ntasks_per_node=32, mads_servers=true)
+Mads.setprocs(ntasks_per_node=64, machinenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
 ```
 
 Optional arguments:
 
 - `ntasks_per_node` : number of parallel tasks per node
-- `mads_servers` : if true use MADS servers (LANL only)
+- `machinenames` : array with machines names to invoked
+- `dir` : common directory shared by all the jobs
+- `exename` : location of the julia executable (the same version of julia is needed on all the workers)
+- `mads_servers` : if `true` use MADS servers (LANL only)
+- `quiet` : suppress output [default `true`]
+- `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, hide_output::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString=pwd(), exename::ASCIIString="")
 	h = Array(ASCIIString, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
@@ -128,25 +123,31 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 			rmprocs(workers())
 		end
 		sleep(0.1)
+		arguments = Dict()
+		if exename != ""
+			arguments[:exename] = exename
+		end
+		if dir != ""
+			arguments[:dir] = dir
+		end
 		if test
 			for i = 1:length(h)
 				info("Connecting to $(h[i])")
 				try
-					#addprocs([h[i]], tunnel=true, exename="/home/vvv/script/julia", dir="/home/vvv/remote")
-					addprocs([h[i]])
+					addprocs([h[i]], arguments...)
 				catch
 					warn("Connection to $(h[i]) failed!")
 				end
 			end
 		else
-			if hide_output
+			if quiet
 				originalSTDOUT = STDOUT;
 				originalSTDERR = STDERR;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
 			end
-			addprocs(h)
-			if hide_output
+			addprocs(h, arguments...)
+			if quiet
 				close(outWrite);
 				close(outRead);
 				close(errWrite);
@@ -168,7 +169,7 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 	end
 end
 
-"MADS plotting is disabled"
+"Disable MADS plotting"
 function noplot()
 	if myid() == 1
 		for i in workers()
@@ -179,7 +180,14 @@ function noplot()
 	end
 end
 
-"Set the working directory"
+"""
+Set the working directory (for parallel environments)
+
+```
+@everywhere Mads.setdir()
+@everywhere Mads.setdir("/home/monty")
+```
+"""
 function setdir(dir::ASCIIString)
 	if isdir(dir)
 		cd(dir)

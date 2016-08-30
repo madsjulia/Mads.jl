@@ -240,7 +240,12 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename="", f
 		tobs = Any[]
 		ress = Array(Float64, 0)
 		tress = Any[]
+		time_missing = false
 		for i in 1:nT
+			if !haskey(madsdata["Observations"][obskeys[i]], "time")
+				time_missing = true
+				continue
+			end
 			time = madsdata["Observations"][obskeys[i]]["time"]
 			skipnext = false
 			if madsdata["Observations"][obskeys[i]]["weight"] > 0
@@ -254,8 +259,11 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename="", f
 				push!(ress, result[obskeys[i]])
 			end
 		end
+		if time_missing
+			madswarn("Some of the observations do not have `time` field specified!")
+		end
 		if length(tress) + length(tobs) == 0
-			error("No data to plot")
+			madserror("No data to plot")
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.xlabel(xlabel), Gadfly.Guide.ylabel(ylabel),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
