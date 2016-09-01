@@ -53,8 +53,7 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 	np = length(pk)
 	s = size(paramarray)
 	if length(s) > 2
-		madswarn("Incorrect array size: size(paramarray) = $(size(paramarray))")
-		return
+		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
 	elseif length(s) == 2	
 		mx = max(s...)
 		mn = min(s...)
@@ -63,8 +62,7 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 		mn = 1
 	end
 	if mn != np && mx != np
-		madswarn("Incorrect array size: size(paramarray) = $(size(paramarray))")
-		return
+		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
 	end
 	nr = (mn == np) ? mx : mn
 	r = []
