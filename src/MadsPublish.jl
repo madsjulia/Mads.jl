@@ -14,18 +14,24 @@ function checkout(git::Bool=true)
 end
 
 "Status of the Mads modules"
-function status(; git::Bool=true)
+function status(; git::Bool=true, gitmore::Bool=false)
 	for i in madsmodules
-		Mads.status(i, git=git)
+		Mads.status(i, git=git, gitmore=gitmore)
 	end
 end
 
-function status(madsmodule::AbstractString; git::Bool=true)
+function status(madsmodule::AbstractString; git::Bool=true, gitmore::Bool=false)
 	if git
 		cwd = pwd()
 		info("Git status $(madsmodule) ...")
 		cd(Pkg.dir(madsmodule))
 		run(`git status -s`)
+		if gitmore
+			info("Git ID HEAD  $(madsmodule) ...")
+			run(`git rev-parse --verify HEAD`)
+			info("Git ID master $(madsmodule) ...")
+			run(`git rev-parse --verify master`)
+		end
 		cd(cwd)
 	else
 		originalSTDOUT = STDOUT;
