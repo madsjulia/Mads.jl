@@ -61,7 +61,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString=pwd(), exename::ASCIIString="")
+function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
 	h = Array(ASCIIString, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
@@ -134,7 +134,7 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 			for i = 1:length(h)
 				info("Connecting to $(h[i])")
 				try
-					addprocs([h[i]], arguments...)
+					addprocs([h[i]]; arguments...)
 				catch
 					warn("Connection to $(h[i]) failed!")
 				end
@@ -146,7 +146,7 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
 			end
-			addprocs(h, arguments...)
+			addprocs(h; arguments...)
 			if quiet
 				close(outWrite);
 				close(outRead);
