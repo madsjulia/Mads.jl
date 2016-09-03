@@ -342,7 +342,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	Mads.madsoutput("Initial OF: $residual\n");
 
 	# Maintain a trace of the system.
-	local tr
+	tr = Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}()
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
 		os = Optim.OptimizationState(g_calls, o(fcur), NaN, d)
