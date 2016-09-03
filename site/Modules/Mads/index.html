@@ -545,8 +545,6 @@
                 
                     <li><a class="toctree-l4" href="#setprocs">setprocs()</a></li>
                 
-                    <li><a class="toctree-l4" href="#setprocsnpint64">setprocs(np::Int64)</a></li>
-                
                     <li><a class="toctree-l4" href="#setprocsnpint64-ntint64">setprocs(np::Int64,  nt::Int64)</a></li>
                 
                     <li><a class="toctree-l4" href="#setseedseednumber">setseed(seed::Number)</a></li>
@@ -583,13 +581,15 @@
                 
                     <li><a class="toctree-l4" href="#tag">tag()</a></li>
                 
+                    <li><a class="toctree-l4" href="#tagsymsymbol">tag(sym::Symbol)</a></li>
+                
                     <li><a class="toctree-l4" href="#test">test()</a></li>
                 
                     <li><a class="toctree-l4" href="#testtestmod">test(testmod)</a></li>
                 
                     <li><a class="toctree-l4" href="#testj">testj()</a></li>
                 
-                    <li><a class="toctree-l4" href="#testjcoverage">testj(coverage)</a></li>
+                    <li><a class="toctree-l4" href="#testjcoveragebool">testj(coverage::Bool)</a></li>
                 
                     <li><a class="toctree-l4" href="#void2nandictassociativek-v">void2nan!(dict::Associative{K, V})</a></li>
                 
@@ -712,19 +712,19 @@
 <h2 id="allwellsoffmadsdataassociativek-v">allwellsoff!(madsdata::Associative{K, V})</h2>
 <p>Turn off all the wells in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L377">Mads/src/MadsObservations.jl:377</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L377">Mads/src/MadsObservations.jl:377</a></p>
 <hr />
 <p><a id="method__allwellson.1" class="lexicon_definition"></a></p>
 <h2 id="allwellsonmadsdataassociativek-v">allwellson!(madsdata::Associative{K, V})</h2>
 <p>Turn on all the wells in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L353">Mads/src/MadsObservations.jl:353</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L353">Mads/src/MadsObservations.jl:353</a></p>
 <hr />
 <p><a id="method__asinetransform.1" class="lexicon_definition"></a></p>
 <h2 id="asinetransformparamsarrayt-1-lowerboundsarrayt-1-upperboundsarrayt-1-indexlogtransformedarrayt-1">asinetransform(params::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</h2>
 <p>Arcsine transformation of model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSine.jl#L2">Mads/src/MadsSine.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSine.jl#L2">Mads/src/MadsSine.jl:2</a></p>
 <hr />
 <p><a id="method__bayessampling.1" class="lexicon_definition"></a></p>
 <h2 id="bayessamplingmadsdataassociativek-v">bayessampling(madsdata::Associative{K, V})</h2>
@@ -747,7 +747,7 @@ Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, 
 <li><code>mcmcchain</code> : </li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMC.jl#L27">Mads/src/MadsMC.jl:27</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMC.jl#L27">Mads/src/MadsMC.jl:27</a></p>
 <hr />
 <p><a id="method__calibrate.1" class="lexicon_definition"></a></p>
 <h2 id="calibratemadsdataassociativek-v">calibrate(madsdata::Associative{K, V})</h2>
@@ -774,13 +774,13 @@ Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, 
 <li><code>results</code> : optimization algorithm results (e.g. results.minimum)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsCalibrate.jl#L102">Mads/src/MadsCalibrate.jl:102</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCalibrate.jl#L102">Mads/src/MadsCalibrate.jl:102</a></p>
 <hr />
 <p><a id="method__calibratenlopt.1" class="lexicon_definition"></a></p>
 <h2 id="calibratenloptmadsdataassociativek-v">calibratenlopt(madsdata::Associative{K, V})</h2>
 <p>Do a calibration using NLopt </p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsCalibrate.jl#L151">Mads/src/MadsCalibrate.jl:151</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCalibrate.jl#L151">Mads/src/MadsCalibrate.jl:151</a></p>
 <hr />
 <p><a id="method__calibraterandom.1" class="lexicon_definition"></a></p>
 <h2 id="calibraterandommadsdataassociativek-v">calibraterandom(madsdata::Associative{K, V})</h2>
@@ -811,7 +811,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>bestresult</code> : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsCalibrate.jl#L34">Mads/src/MadsCalibrate.jl:34</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCalibrate.jl#L34">Mads/src/MadsCalibrate.jl:34</a></p>
 <hr />
 <p><a id="method__calibraterandom.2" class="lexicon_definition"></a></p>
 <h2 id="calibraterandommadsdataassociativek-v-numberofsamples">calibraterandom(madsdata::Associative{K, V},  numberofsamples)</h2>
@@ -842,31 +842,31 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>bestresult</code> : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsCalibrate.jl#L34">Mads/src/MadsCalibrate.jl:34</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCalibrate.jl#L34">Mads/src/MadsCalibrate.jl:34</a></p>
 <hr />
 <p><a id="method__checkout.1" class="lexicon_definition"></a></p>
 <h2 id="checkout">checkout()</h2>
 <p>Checkout the latest version of the Mads modules</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPublish.jl#L2">Mads/src/MadsPublish.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L2">Mads/src/MadsPublish.jl:2</a></p>
 <hr />
 <p><a id="method__checkout.2" class="lexicon_definition"></a></p>
 <h2 id="checkoutgitbool">checkout(git::Bool)</h2>
 <p>Checkout the latest version of the Mads modules</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPublish.jl#L2">Mads/src/MadsPublish.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L2">Mads/src/MadsPublish.jl:2</a></p>
 <hr />
 <p><a id="method__cleancoverage.1" class="lexicon_definition"></a></p>
 <h2 id="cleancoverage">cleancoverage()</h2>
 <p>Remove Mads coverage files</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTest.jl#L11">Mads/src/MadsTest.jl:11</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTest.jl#L11">Mads/src/MadsTest.jl:11</a></p>
 <hr />
 <p><a id="method__cmadsins_obs.1" class="lexicon_definition"></a></p>
 <h2 id="cmadsins_obsobsidarrayt-1-instructionfilenameabstractstring-inputfilenameabstractstring">cmadsins_obs(obsid::Array{T, 1},  instructionfilename::AbstractString,  inputfilename::AbstractString)</h2>
 <p>Call C MADS ins_obs() function from the MADS dynamic library</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L540">Mads/src/MadsIO.jl:540</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L540">Mads/src/MadsIO.jl:540</a></p>
 <hr />
 <p><a id="method__computemass.1" class="lexicon_definition"></a></p>
 <h2 id="computemassmadsdataassociativek-v">computemass(madsdata::Associative{K, V})</h2>
@@ -883,7 +883,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>mass_reduced</code> : total reduced mass</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsAnasol.jl#L193">Mads/src/MadsAnasol.jl:193</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsAnasol.jl#L193">Mads/src/MadsAnasol.jl:193</a></p>
 <hr />
 <p><a id="method__computemass.2" class="lexicon_definition"></a></p>
 <h2 id="computemassmadsfiles">computemass(madsfiles)</h2>
@@ -902,7 +902,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>mass_reduced</code> : array with associated total reduced mass</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsAnasol.jl#L252">Mads/src/MadsAnasol.jl:252</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsAnasol.jl#L252">Mads/src/MadsAnasol.jl:252</a></p>
 <hr />
 <p><a id="method__computeparametersensitities.1" class="lexicon_definition"></a></p>
 <h2 id="computeparametersensititiesmadsdataassociativek-v-saresultsassociativek-v">computeparametersensitities(madsdata::Associative{K, V},  saresults::Associative{K, V})</h2>
@@ -913,7 +913,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>saresults</code> : sensitivity analysis results</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L568">Mads/src/MadsSA.jl:568</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L568">Mads/src/MadsSA.jl:568</a></p>
 <hr />
 <p><a id="method__contamination.1" class="lexicon_definition"></a></p>
 <h2 id="contaminationwellx-welly-wellz-n-lambda-theta-vx-vy-vz-ax-ay-az-h-x-y-z-dx-dy-dz-f-t0-t1-t">contamination(wellx,  welly,  wellz,  n,  lambda,  theta,  vx,  vy,  vz,  ax,  ay,  az,  H,  x,  y,  z,  dx,  dy,  dz,  f,  t0,  t1,  t)</h2>
@@ -951,31 +951,31 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li>predicted concentration at (wellx, welly, wellz, t)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsAnasol.jl#L152">Mads/src/MadsAnasol.jl:152</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsAnasol.jl#L152">Mads/src/MadsAnasol.jl:152</a></p>
 <hr />
 <p><a id="method__copyright.1" class="lexicon_definition"></a></p>
 <h2 id="copyright">copyright()</h2>
 <p>Produce MADS copyright information</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelp.jl#L9">Mads/src/MadsHelp.jl:9</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelp.jl#L9">Mads/src/MadsHelp.jl:9</a></p>
 <hr />
 <p><a id="method__create_documentation.1" class="lexicon_definition"></a></p>
 <h2 id="create_documentation">create_documentation()</h2>
 <p>Create web documentation files for Mads functions</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelp.jl#L62">Mads/src/MadsHelp.jl:62</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelp.jl#L62">Mads/src/MadsHelp.jl:62</a></p>
 <hr />
 <p><a id="method__create_tests_off.1" class="lexicon_definition"></a></p>
 <h2 id="create_tests_off">create_tests_off()</h2>
 <p>Turn off the generation of MADS tests (default)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L17">Mads/src/MadsHelpers.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L17">Mads/src/MadsHelpers.jl:17</a></p>
 <hr />
 <p><a id="method__create_tests_on.1" class="lexicon_definition"></a></p>
 <h2 id="create_tests_on">create_tests_on()</h2>
 <p>Turn on the generation of MADS tests (dangerous)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L12">Mads/src/MadsHelpers.jl:12</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L12">Mads/src/MadsHelpers.jl:12</a></p>
 <hr />
 <p><a id="method__createmadsproblem.1" class="lexicon_definition"></a></p>
 <h2 id="createmadsprobleminfilenameabstractstring-outfilenameabstractstring">createmadsproblem(infilename::AbstractString,  outfilename::AbstractString)</h2>
@@ -993,19 +993,19 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>predictions</code> : dictionary of model predictions</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsCreate.jl#L16">Mads/src/MadsCreate.jl:16</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCreate.jl#L16">Mads/src/MadsCreate.jl:16</a></p>
 <hr />
 <p><a id="method__createobservations.1" class="lexicon_definition"></a></p>
 <h2 id="createobservationsmadsdataassociativek-v-time-observation">createobservations!(madsdata::Associative{K, V},  time,  observation)</h2>
 <p>Create observations in the MADS problem dictionary based on <code>time</code> and <code>observation</code> arrays</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L293">Mads/src/MadsObservations.jl:293</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L293">Mads/src/MadsObservations.jl:293</a></p>
 <hr />
 <p><a id="method__deletenan.1" class="lexicon_definition"></a></p>
 <h2 id="deletenandfdataframesdataframe">deleteNaN!(df::DataFrames.DataFrame)</h2>
 <p>Delete rows with NaN in a Dataframe <code>df</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L782">Mads/src/MadsSA.jl:782</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L782">Mads/src/MadsSA.jl:782</a></p>
 <hr />
 <p><a id="method__dobigdt.1" class="lexicon_definition"></a></p>
 <h2 id="dobigdtmadsdataassociativek-v-nummodelrunsint64">dobigdt(madsdata::Associative{K, V},  nummodelruns::Int64)</h2>
@@ -1023,31 +1023,31 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>bigdtresults</code> : dictionary with BIG-DT results</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsBIG.jl#L123">Mads/src/MadsBIG.jl:123</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsBIG.jl#L123">Mads/src/MadsBIG.jl:123</a></p>
 <hr />
 <p><a id="method__dumpasciifile.1" class="lexicon_definition"></a></p>
 <h2 id="dumpasciifilefilenameabstractstring-data">dumpasciifile(filename::AbstractString,  data)</h2>
 <p>Dump ASCII file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsASCII.jl#L8">Mads/src/MadsASCII.jl:8</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsASCII.jl#L8">Mads/src/MadsASCII.jl:8</a></p>
 <hr />
 <p><a id="method__dumpjsonfile.1" class="lexicon_definition"></a></p>
 <h2 id="dumpjsonfilefilenameabstractstring-data">dumpjsonfile(filename::AbstractString,  data)</h2>
 <p>Dump a JSON file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsJSON.jl#L17">Mads/src/MadsJSON.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsJSON.jl#L17">Mads/src/MadsJSON.jl:17</a></p>
 <hr />
 <p><a id="method__dumpwelldata.1" class="lexicon_definition"></a></p>
 <h2 id="dumpwelldatafilenameabstractstring-madsdata">dumpwelldata(filename::AbstractString,  madsdata)</h2>
 <p>Dump well data from MADS problem dictionary into a ASCII file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsYAML.jl#L130">Mads/src/MadsYAML.jl:130</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsYAML.jl#L130">Mads/src/MadsYAML.jl:130</a></p>
 <hr />
 <p><a id="method__dumpyamlfile.1" class="lexicon_definition"></a></p>
 <h2 id="dumpyamlfilefilenameabstractstring-yamldata">dumpyamlfile(filename::AbstractString,  yamldata)</h2>
 <p>Dump YAML file in JSON format</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsYAML.jl#L55">Mads/src/MadsYAML.jl:55</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsYAML.jl#L55">Mads/src/MadsYAML.jl:55</a></p>
 <hr />
 <p><a id="method__dumpyamlmadsfile.1" class="lexicon_definition"></a></p>
 <h2 id="dumpyamlmadsfilemadsdata-filenameabstractstring">dumpyamlmadsfile(madsdata,  filename::AbstractString)</h2>
@@ -1058,7 +1058,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>filename</code> : file name</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsYAML.jl#L72">Mads/src/MadsYAML.jl:72</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsYAML.jl#L72">Mads/src/MadsYAML.jl:72</a></p>
 <hr />
 <p><a id="method__efast.1" class="lexicon_definition"></a></p>
 <h2 id="efastmdassociativek-v">efast(md::Associative{K, V})</h2>
@@ -1072,25 +1072,25 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>seed</code> : initial random seed</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L818">Mads/src/MadsSA.jl:818</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L818">Mads/src/MadsSA.jl:818</a></p>
 <hr />
 <p><a id="method__evaluatemadsexpression.1" class="lexicon_definition"></a></p>
 <h2 id="evaluatemadsexpressionexpressionstring-parameters">evaluatemadsexpression(expressionstring,  parameters)</h2>
 <p>Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L92">Mads/src/MadsMisc.jl:92</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L92">Mads/src/MadsMisc.jl:92</a></p>
 <hr />
 <p><a id="method__evaluatemadsexpressions.1" class="lexicon_definition"></a></p>
 <h2 id="evaluatemadsexpressionsmadsdataassociativek-v-parameters">evaluatemadsexpressions(madsdata::Associative{K, V},  parameters)</h2>
 <p>Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L101">Mads/src/MadsMisc.jl:101</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L101">Mads/src/MadsMisc.jl:101</a></p>
 <hr />
 <p><a id="method__filterkeys.1" class="lexicon_definition"></a></p>
 <h2 id="filterkeysdictassociativek-v-keyregex">filterkeys(dict::Associative{K, V},  key::Regex)</h2>
 <p>Filter dictionary keys based on a string or regular expression</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L349">Mads/src/MadsIO.jl:349</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L349">Mads/src/MadsIO.jl:349</a></p>
 <hr />
 <p><a id="method__forward.1" class="lexicon_definition"></a></p>
 <h2 id="forwardmadsdataassociativek-v">forward(madsdata::Associative{K, V})</h2>
@@ -1111,7 +1111,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>obsvalues</code> : dictionary of model predictions</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsForward.jl#L21">Mads/src/MadsForward.jl:21</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsForward.jl#L21">Mads/src/MadsForward.jl:21</a></p>
 <hr />
 <p><a id="method__forwardgrid.1" class="lexicon_definition"></a></p>
 <h2 id="forwardgridmadsdataassociativek-v">forwardgrid(madsdata::Associative{K, V})</h2>
@@ -1130,13 +1130,13 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>array3d</code> : 3D array with model predictions along a 3D grid</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsForward.jl#L108">Mads/src/MadsForward.jl:108</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsForward.jl#L106">Mads/src/MadsForward.jl:106</a></p>
 <hr />
 <p><a id="method__free.1" class="lexicon_definition"></a></p>
 <h2 id="free">free()</h2>
 <p>Use the latest tagged versions of the Mads modules</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPublish.jl#L78">Mads/src/MadsPublish.jl:78</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L84">Mads/src/MadsPublish.jl:84</a></p>
 <hr />
 <p><a id="method__functions.1" class="lexicon_definition"></a></p>
 <h2 id="functions">functions()</h2>
@@ -1154,7 +1154,7 @@ Mads.functions(Mads, &quot;get&quot;)
 <li><code>string</code> : matching string</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelp.jl#L30">Mads/src/MadsHelp.jl:30</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelp.jl#L30">Mads/src/MadsHelp.jl:30</a></p>
 <hr />
 <p><a id="method__functions.2" class="lexicon_definition"></a></p>
 <h2 id="functionsstringabstractstring">functions(string::AbstractString)</h2>
@@ -1172,7 +1172,7 @@ Mads.functions(Mads, &quot;get&quot;)
 <li><code>string</code> : matching string</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelp.jl#L30">Mads/src/MadsHelp.jl:30</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelp.jl#L30">Mads/src/MadsHelp.jl:30</a></p>
 <hr />
 <p><a id="method__getextension.1" class="lexicon_definition"></a></p>
 <h2 id="getextensionfilename">getextension(filename)</h2>
@@ -1182,7 +1182,7 @@ Mads.functions(Mads, &quot;get&quot;)
 </code></pre>
 
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L320">Mads/src/MadsIO.jl:320</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L320">Mads/src/MadsIO.jl:320</a></p>
 <hr />
 <p><a id="method__getimportantsamples.1" class="lexicon_definition"></a></p>
 <h2 id="getimportantsamplessamplesarrayt-n-llhoodsarrayt-1">getimportantsamples(samples::Array{T, N},  llhoods::Array{T, 1})</h2>
@@ -1197,14 +1197,14 @@ Mads.functions(Mads, &quot;get&quot;)
 <li><code>imp_samples</code> : array of important samples</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L102">Mads/src/MadsSA.jl:102</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L102">Mads/src/MadsSA.jl:102</a></p>
 <hr />
 <p><a id="method__getmadsdir.1" class="lexicon_definition"></a></p>
 <h2 id="getmadsdir">getmadsdir()</h2>
 <p>Get the directory where currently Mads is running</p>
 <p><code>problemdir = Mads.getmadsdir()</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L276">Mads/src/MadsIO.jl:276</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L276">Mads/src/MadsIO.jl:276</a></p>
 <hr />
 <p><a id="method__getmadsinputfile.1" class="lexicon_definition"></a></p>
 <h2 id="getmadsinputfile">getmadsinputfile()</h2>
@@ -1216,7 +1216,7 @@ Mads.functions(Mads, &quot;get&quot;)
 <li><code>filename</code> : input file name (e.g. <code>input_file_name.mads</code>)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L240">Mads/src/MadsIO.jl:240</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L240">Mads/src/MadsIO.jl:240</a></p>
 <hr />
 <p><a id="method__getmadsproblemdir.1" class="lexicon_definition"></a></p>
 <h2 id="getmadsproblemdirmadsdataassociativek-v">getmadsproblemdir(madsdata::Associative{K, V})</h2>
@@ -1229,20 +1229,20 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 
 <p>where <code>madsproblemdir</code> = <code>"../../"</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L267">Mads/src/MadsIO.jl:267</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L267">Mads/src/MadsIO.jl:267</a></p>
 <hr />
 <p><a id="method__getmadsrootname.1" class="lexicon_definition"></a></p>
 <h2 id="getmadsrootnamemadsdataassociativek-v">getmadsrootname(madsdata::Associative{K, V})</h2>
 <p>Get the MADS problem root name</p>
 <p><code>madsrootname = Mads.getmadsrootname(madsdata)</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L249">Mads/src/MadsIO.jl:249</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L249">Mads/src/MadsIO.jl:249</a></p>
 <hr />
 <p><a id="method__getobskeys.1" class="lexicon_definition"></a></p>
 <h2 id="getobskeysmadsdataassociativek-v">getobskeys(madsdata::Associative{K, V})</h2>
 <p>Get keys for all observations in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L22">Mads/src/MadsObservations.jl:22</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L22">Mads/src/MadsObservations.jl:22</a></p>
 <hr />
 <p><a id="method__getparamdict.1" class="lexicon_definition"></a></p>
 <h2 id="getparamdictmadsdataassociativek-v">getparamdict(madsdata::Associative{K, V})</h2>
@@ -1257,7 +1257,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 <li><code>paramdict</code> : dictionary with all parameters and their respective initial values</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L49">Mads/src/MadsParameters.jl:49</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L49">Mads/src/MadsParameters.jl:49</a></p>
 <hr />
 <p><a id="method__getparamdistributions.1" class="lexicon_definition"></a></p>
 <h2 id="getparamdistributionsmadsdataassociativek-v">getparamdistributions(madsdata::Associative{K, V})</h2>
@@ -1271,7 +1271,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 <li><code>init_dist</code> : if <code>true</code> use the distribution defined for initialization in the MADS problem dictionary (defined using <code>init_dist</code> parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using <code>dist</code> parameter field)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L501">Mads/src/MadsParameters.jl:501</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L501">Mads/src/MadsParameters.jl:501</a></p>
 <hr />
 <p><a id="method__getparamkeys.1" class="lexicon_definition"></a></p>
 <h2 id="getparamkeysmadsdataassociativek-v">getparamkeys(madsdata::Associative{K, V})</h2>
@@ -1286,73 +1286,73 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 <li><code>paramkeys</code> : array with the keys of all parameters in the MADS dictionary</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L30">Mads/src/MadsParameters.jl:30</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L30">Mads/src/MadsParameters.jl:30</a></p>
 <hr />
 <p><a id="method__getparamsinit_max.1" class="lexicon_definition"></a></p>
 <h2 id="getparamsinit_maxmadsdata">getparamsinit_max(madsdata)</h2>
 <p>Get an array with <code>init_max</code> values for all the MADS model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L256">Mads/src/MadsParameters.jl:256</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L256">Mads/src/MadsParameters.jl:256</a></p>
 <hr />
 <p><a id="method__getparamsinit_max.2" class="lexicon_definition"></a></p>
 <h2 id="getparamsinit_maxmadsdata-paramkeys">getparamsinit_max(madsdata,  paramkeys)</h2>
 <p>Get an array with <code>init_max</code> values for parameters defined by <code>paramkeys</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L222">Mads/src/MadsParameters.jl:222</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L222">Mads/src/MadsParameters.jl:222</a></p>
 <hr />
 <p><a id="method__getparamsinit_min.1" class="lexicon_definition"></a></p>
 <h2 id="getparamsinit_minmadsdata">getparamsinit_min(madsdata)</h2>
 <p>Get an array with <code>init_min</code> values for all the MADS model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L216">Mads/src/MadsParameters.jl:216</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L216">Mads/src/MadsParameters.jl:216</a></p>
 <hr />
 <p><a id="method__getparamsinit_min.2" class="lexicon_definition"></a></p>
 <h2 id="getparamsinit_minmadsdata-paramkeys">getparamsinit_min(madsdata,  paramkeys)</h2>
 <p>Get an array with <code>init_min</code> values for parameters defined by <code>paramkeys</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L182">Mads/src/MadsParameters.jl:182</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L182">Mads/src/MadsParameters.jl:182</a></p>
 <hr />
 <p><a id="method__getparamsmax.1" class="lexicon_definition"></a></p>
 <h2 id="getparamsmaxmadsdata">getparamsmax(madsdata)</h2>
 <p>Get an array with <code>min</code> values for all the MADS model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L176">Mads/src/MadsParameters.jl:176</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L176">Mads/src/MadsParameters.jl:176</a></p>
 <hr />
 <p><a id="method__getparamsmax.2" class="lexicon_definition"></a></p>
 <h2 id="getparamsmaxmadsdata-paramkeys">getparamsmax(madsdata,  paramkeys)</h2>
 <p>Get an array with <code>max</code> values for parameters defined by <code>paramkeys</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L153">Mads/src/MadsParameters.jl:153</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L153">Mads/src/MadsParameters.jl:153</a></p>
 <hr />
 <p><a id="method__getparamsmin.1" class="lexicon_definition"></a></p>
 <h2 id="getparamsminmadsdata">getparamsmin(madsdata)</h2>
 <p>Get an array with <code>min</code> values for all the MADS model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L147">Mads/src/MadsParameters.jl:147</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L147">Mads/src/MadsParameters.jl:147</a></p>
 <hr />
 <p><a id="method__getparamsmin.2" class="lexicon_definition"></a></p>
 <h2 id="getparamsminmadsdata-paramkeys">getparamsmin(madsdata,  paramkeys)</h2>
 <p>Get an array with <code>min</code> values for parameters defined by <code>paramkeys</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L124">Mads/src/MadsParameters.jl:124</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L124">Mads/src/MadsParameters.jl:124</a></p>
 <hr />
 <p><a id="method__getprocs.1" class="lexicon_definition"></a></p>
 <h2 id="getprocs">getprocs()</h2>
 <p>Get the number of processors</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L2">Mads/src/MadsParallel.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L2">Mads/src/MadsParallel.jl:2</a></p>
 <hr />
 <p><a id="method__getrestartdir.1" class="lexicon_definition"></a></p>
 <h2 id="getrestartdirmadsdataassociativek-v">getrestartdir(madsdata::Associative{K, V})</h2>
 <p>Get the directory where restarts will be stored.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L296">Mads/src/MadsFunc.jl:296</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L296">Mads/src/MadsFunc.jl:296</a></p>
 <hr />
 <p><a id="method__getrestartdir.2" class="lexicon_definition"></a></p>
 <h2 id="getrestartdirmadsdataassociativek-v-suffix">getrestartdir(madsdata::Associative{K, V},  suffix)</h2>
 <p>Get the directory where restarts will be stored.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L296">Mads/src/MadsFunc.jl:296</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L296">Mads/src/MadsFunc.jl:296</a></p>
 <hr />
 <p><a id="method__getrootname.1" class="lexicon_definition"></a></p>
 <h2 id="getrootnamefilenameabstractstring">getrootname(filename::AbstractString)</h2>
@@ -1363,7 +1363,7 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 </code></pre>
 
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L297">Mads/src/MadsIO.jl:297</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L297">Mads/src/MadsIO.jl:297</a></p>
 <hr />
 <p><a id="method__getsourcekeys.1" class="lexicon_definition"></a></p>
 <h2 id="getsourcekeysmadsdataassociativek-v">getsourcekeys(madsdata::Associative{K, V})</h2>
@@ -1378,37 +1378,37 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <li><code>sourcekeys</code> : array with keys of all source parameters in the MADS dictionary</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L70">Mads/src/MadsParameters.jl:70</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L70">Mads/src/MadsParameters.jl:70</a></p>
 <hr />
 <p><a id="method__gettarget.1" class="lexicon_definition"></a></p>
 <h2 id="gettargetoassociativek-v">gettarget(o::Associative{K, V})</h2>
 <p>Get observation target</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L140">Mads/src/MadsObservations.jl:140</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L140">Mads/src/MadsObservations.jl:140</a></p>
 <hr />
 <p><a id="method__gettargetkeys.1" class="lexicon_definition"></a></p>
 <h2 id="gettargetkeysmadsdataassociativek-v">gettargetkeys(madsdata::Associative{K, V})</h2>
 <p>Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L27">Mads/src/MadsObservations.jl:27</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L27">Mads/src/MadsObservations.jl:27</a></p>
 <hr />
 <p><a id="method__gettime.1" class="lexicon_definition"></a></p>
 <h2 id="gettimeoassociativek-v">gettime(o::Associative{K, V})</h2>
 <p>Get observation time</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L92">Mads/src/MadsObservations.jl:92</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L92">Mads/src/MadsObservations.jl:92</a></p>
 <hr />
 <p><a id="method__getweight.1" class="lexicon_definition"></a></p>
 <h2 id="getweightoassociativek-v">getweight(o::Associative{K, V})</h2>
 <p>Get observation weight</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L116">Mads/src/MadsObservations.jl:116</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L116">Mads/src/MadsObservations.jl:116</a></p>
 <hr />
 <p><a id="method__getwellkeys.1" class="lexicon_definition"></a></p>
 <h2 id="getwellkeysmadsdataassociativek-v">getwellkeys(madsdata::Associative{K, V})</h2>
 <p>Get keys for all wells in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L35">Mads/src/MadsObservations.jl:35</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L35">Mads/src/MadsObservations.jl:35</a></p>
 <hr />
 <p><a id="method__haskeyword.1" class="lexicon_definition"></a></p>
 <h2 id="haskeywordmadsdataassociativek-v-keywordabstractstring">haskeyword(madsdata::Associative{K, V},  keyword::AbstractString)</h2>
@@ -1430,74 +1430,74 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <li><code>Mads.haskeyword(madsdata, "Wells", "R-28")</code> ... searches in <code>Wells</code> class for a keyword "R-28"</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L65">Mads/src/MadsHelpers.jl:65</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L65">Mads/src/MadsHelpers.jl:65</a></p>
 <hr />
 <p><a id="method__help.1" class="lexicon_definition"></a></p>
 <h2 id="help">help()</h2>
 <p>Produce MADS help information</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelp.jl#L4">Mads/src/MadsHelp.jl:4</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelp.jl#L4">Mads/src/MadsHelp.jl:4</a></p>
 <hr />
 <p><a id="method__importeverywhere.1" class="lexicon_definition"></a></p>
 <h2 id="importeverywherefinename">importeverywhere(finename)</h2>
 <p>Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L324">Mads/src/MadsFunc.jl:324</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L324">Mads/src/MadsFunc.jl:324</a></p>
 <hr />
 <p><a id="method__indexkeys.1" class="lexicon_definition"></a></p>
 <h2 id="indexkeysdictassociativek-v-keyregex">indexkeys(dict::Associative{K, V},  key::Regex)</h2>
 <p>Find indexes for dictionary keys based on a string or regular expression</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L353">Mads/src/MadsIO.jl:353</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L353">Mads/src/MadsIO.jl:353</a></p>
 <hr />
 <p><a id="method__ins_obs.1" class="lexicon_definition"></a></p>
 <h2 id="ins_obsinstructionfilenameabstractstring-inputfilenameabstractstring">ins_obs(instructionfilename::AbstractString,  inputfilename::AbstractString)</h2>
 <p>Apply Mads instruction file <code>instructionfilename</code> to read model input file <code>inputfilename</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L467">Mads/src/MadsIO.jl:467</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L467">Mads/src/MadsIO.jl:467</a></p>
 <hr />
 <p><a id="method__instline2regexs.1" class="lexicon_definition"></a></p>
 <h2 id="instline2regexsinstlineabstractstring">instline2regexs(instline::AbstractString)</h2>
 <p>Convert an instruction line in the Mads instruction file into regular expressions</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L402">Mads/src/MadsIO.jl:402</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L402">Mads/src/MadsIO.jl:402</a></p>
 <hr />
 <p><a id="method__invobsweights.1" class="lexicon_definition"></a></p>
 <h2 id="invobsweightsmadsdataassociativek-v-valuenumber">invobsweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Inversely proportional observation weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L225">Mads/src/MadsObservations.jl:225</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L225">Mads/src/MadsObservations.jl:225</a></p>
 <hr />
 <p><a id="method__invwellweights.1" class="lexicon_definition"></a></p>
 <h2 id="invwellweightsmadsdataassociativek-v-valuenumber">invwellweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Inversely proportional observation weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L258">Mads/src/MadsObservations.jl:258</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L258">Mads/src/MadsObservations.jl:258</a></p>
 <hr />
 <p><a id="method__islog.1" class="lexicon_definition"></a></p>
 <h2 id="islogmadsdataassociativek-v-parameterkeyabstractstring">islog(madsdata::Associative{K, V},  parameterkey::AbstractString)</h2>
 <p>Is parameter with key <code>parameterkey</code> log-transformed?</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L315">Mads/src/MadsParameters.jl:315</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L315">Mads/src/MadsParameters.jl:315</a></p>
 <hr />
 <p><a id="method__isobs.1" class="lexicon_definition"></a></p>
 <h2 id="isobsmadsdataassociativek-v-dictassociativek-v">isobs(madsdata::Associative{K, V},  dict::Associative{K, V})</h2>
 <p>Is a dictionary containing all the observations</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L5">Mads/src/MadsObservations.jl:5</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L5">Mads/src/MadsObservations.jl:5</a></p>
 <hr />
 <p><a id="method__isopt.1" class="lexicon_definition"></a></p>
 <h2 id="isoptmadsdataassociativek-v-parameterkeyabstractstring">isopt(madsdata::Associative{K, V},  parameterkey::AbstractString)</h2>
 <p>Is parameter with key <code>parameterkey</code> optimizable?</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L305">Mads/src/MadsParameters.jl:305</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L305">Mads/src/MadsParameters.jl:305</a></p>
 <hr />
 <p><a id="method__isparam.1" class="lexicon_definition"></a></p>
 <h2 id="isparammadsdataassociativek-v-dictassociativek-v">isparam(madsdata::Associative{K, V},  dict::Associative{K, V})</h2>
 <p>Is the dictionary containing all the parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L5">Mads/src/MadsParameters.jl:5</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L5">Mads/src/MadsParameters.jl:5</a></p>
 <hr />
 <p><a id="method__levenberg_marquardt.1" class="lexicon_definition"></a></p>
 <h2 id="levenberg_marquardtffunction-gfunction-x0">levenberg_marquardt(f::Function,  g::Function,  x0)</h2>
@@ -1524,7 +1524,7 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>callback</code> : call back function for debugging</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L295">Mads/src/MadsLM.jl:295</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L295">Mads/src/MadsLM.jl:295</a></p>
 <hr />
 <p><a id="method__levenberg_marquardt.2" class="lexicon_definition"></a></p>
 <h2 id="levenberg_marquardtffunction-gfunction-x0-ofunction">levenberg_marquardt(f::Function,  g::Function,  x0,  o::Function)</h2>
@@ -1551,19 +1551,19 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>callback</code> : call back function for debugging</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L295">Mads/src/MadsLM.jl:295</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L295">Mads/src/MadsLM.jl:295</a></p>
 <hr />
 <p><a id="method__loadasciifile.1" class="lexicon_definition"></a></p>
 <h2 id="loadasciifilefilenameabstractstring">loadasciifile(filename::AbstractString)</h2>
 <p>Load ASCII file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsASCII.jl#L2">Mads/src/MadsASCII.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsASCII.jl#L2">Mads/src/MadsASCII.jl:2</a></p>
 <hr />
 <p><a id="method__loadjsonfile.1" class="lexicon_definition"></a></p>
 <h2 id="loadjsonfilefilenameabstractstring">loadjsonfile(filename::AbstractString)</h2>
 <p>Load a JSON file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsJSON.jl#L5">Mads/src/MadsJSON.jl:5</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsJSON.jl#L5">Mads/src/MadsJSON.jl:5</a></p>
 <hr />
 <p><a id="method__loadmadsfile.1" class="lexicon_definition"></a></p>
 <h2 id="loadmadsfilefilenameabstractstring">loadmadsfile(filename::AbstractString)</h2>
@@ -1584,13 +1584,13 @@ The first function in the file is the one that will be called by Mads to perform
 </ul>
 <p>Example: <code>md = loadmadsfile("input_file_name.mads")</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L21">Mads/src/MadsIO.jl:21</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L21">Mads/src/MadsIO.jl:21</a></p>
 <hr />
 <p><a id="method__loadyamlfile.1" class="lexicon_definition"></a></p>
 <h2 id="loadyamlfilefilenameabstractstring">loadyamlfile(filename::AbstractString)</h2>
 <p>Load YAML file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsYAML.jl#L46">Mads/src/MadsYAML.jl:46</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsYAML.jl#L46">Mads/src/MadsYAML.jl:46</a></p>
 <hr />
 <p><a id="method__localsa.1" class="lexicon_definition"></a></p>
 <h2 id="localsamadsdataassociativek-v">localsa(madsdata::Associative{K, V})</h2>
@@ -1605,85 +1605,85 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>obs</code> : observations for the parameter set</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSAPlot.jl#L15">Mads/src/MadsSAPlot.jl:15</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSAPlot.jl#L15">Mads/src/MadsSAPlot.jl:15</a></p>
 <hr />
 <p><a id="method__long_tests_off.1" class="lexicon_definition"></a></p>
 <h2 id="long_tests_off">long_tests_off()</h2>
 <p>Turn off execution of long MADS tests (default)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L27">Mads/src/MadsHelpers.jl:27</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L27">Mads/src/MadsHelpers.jl:27</a></p>
 <hr />
 <p><a id="method__long_tests_on.1" class="lexicon_definition"></a></p>
 <h2 id="long_tests_on">long_tests_on()</h2>
 <p>Turn on execution of long MADS tests (dangerous)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L22">Mads/src/MadsHelpers.jl:22</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L22">Mads/src/MadsHelpers.jl:22</a></p>
 <hr />
 <p><a id="method__madscritical.1" class="lexicon_definition"></a></p>
 <h2 id="madscriticalmessageabstractstring">madscritical(message::AbstractString)</h2>
 <p>MADS critical error messages</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L40">Mads/src/MadsLog.jl:40</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L40">Mads/src/MadsLog.jl:40</a></p>
 <hr />
 <p><a id="method__madsdebug.1" class="lexicon_definition"></a></p>
 <h2 id="madsdebugmessageabstractstring">madsdebug(message::AbstractString)</h2>
 <p>MADS debug messages (controlled by <code>quiet</code> and <code>debuglevel</code>)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L10">Mads/src/MadsLog.jl:10</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L10">Mads/src/MadsLog.jl:10</a></p>
 <hr />
 <p><a id="method__madsdebug.2" class="lexicon_definition"></a></p>
 <h2 id="madsdebugmessageabstractstring-levelint64">madsdebug(message::AbstractString,  level::Int64)</h2>
 <p>MADS debug messages (controlled by <code>quiet</code> and <code>debuglevel</code>)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L10">Mads/src/MadsLog.jl:10</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L10">Mads/src/MadsLog.jl:10</a></p>
 <hr />
 <p><a id="method__madserror.1" class="lexicon_definition"></a></p>
 <h2 id="madserrormessageabstractstring">madserror(message::AbstractString)</h2>
 <p>MADS error messages</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L33">Mads/src/MadsLog.jl:33</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L33">Mads/src/MadsLog.jl:33</a></p>
 <hr />
 <p><a id="method__madsinfo.1" class="lexicon_definition"></a></p>
 <h2 id="madsinfomessageabstractstring">madsinfo(message::AbstractString)</h2>
 <p>MADS information/status messages (controlled by quiet<code>and</code>verbositylevel`)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L18">Mads/src/MadsLog.jl:18</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L18">Mads/src/MadsLog.jl:18</a></p>
 <hr />
 <p><a id="method__madsinfo.2" class="lexicon_definition"></a></p>
 <h2 id="madsinfomessageabstractstring-levelint64">madsinfo(message::AbstractString,  level::Int64)</h2>
 <p>MADS information/status messages (controlled by quiet<code>and</code>verbositylevel`)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L18">Mads/src/MadsLog.jl:18</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L18">Mads/src/MadsLog.jl:18</a></p>
 <hr />
 <p><a id="method__madsoutput.1" class="lexicon_definition"></a></p>
 <h2 id="madsoutputmessageabstractstring">madsoutput(message::AbstractString)</h2>
 <p>MADS output (controlled by quiet<code>and</code>verbositylevel`)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L2">Mads/src/MadsLog.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L2">Mads/src/MadsLog.jl:2</a></p>
 <hr />
 <p><a id="method__madsoutput.2" class="lexicon_definition"></a></p>
 <h2 id="madsoutputmessageabstractstring-levelint64">madsoutput(message::AbstractString,  level::Int64)</h2>
 <p>MADS output (controlled by quiet<code>and</code>verbositylevel`)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L2">Mads/src/MadsLog.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L2">Mads/src/MadsLog.jl:2</a></p>
 <hr />
 <p><a id="method__madswarn.1" class="lexicon_definition"></a></p>
 <h2 id="madswarnmessageabstractstring">madswarn(message::AbstractString)</h2>
 <p>MADS warning messages</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLog.jl#L26">Mads/src/MadsLog.jl:26</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLog.jl#L26">Mads/src/MadsLog.jl:26</a></p>
 <hr />
 <p><a id="method__makearrayconditionalloglikelihood.1" class="lexicon_definition"></a></p>
 <h2 id="makearrayconditionalloglikelihoodmadsdataassociativek-v-conditionalloglikelihood">makearrayconditionalloglikelihood(madsdata::Associative{K, V},  conditionalloglikelihood)</h2>
 <p>Make a conditional log likelihood function that accepts an array containing the opt parameters' values</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L57">Mads/src/MadsMisc.jl:57</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L57">Mads/src/MadsMisc.jl:57</a></p>
 <hr />
 <p><a id="method__makearrayfunction.1" class="lexicon_definition"></a></p>
 <h2 id="makearrayfunctionmadsdataassociativek-v">makearrayfunction(madsdata::Associative{K, V})</h2>
 <p>Model section information criteria</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsModelSelection.jl#L2">Mads/src/MadsModelSelection.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsModelSelection.jl#L2">Mads/src/MadsModelSelection.jl:2</a></p>
 <hr />
 <p><a id="method__makearrayfunction.2" class="lexicon_definition"></a></p>
 <h2 id="makearrayfunctionmadsdataassociativek-v-f">makearrayfunction(madsdata::Associative{K, V},  f)</h2>
@@ -1699,19 +1699,19 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>arrayfunction</code> : function accepting an array containing the optimal parameters' values</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L17">Mads/src/MadsMisc.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L17">Mads/src/MadsMisc.jl:17</a></p>
 <hr />
 <p><a id="method__makearrayfunction.3" class="lexicon_definition"></a></p>
 <h2 id="makearrayfunctionmadsdataassociativek-v-pararrayt-n">makearrayfunction(madsdata::Associative{K, V},  par::Array{T, N})</h2>
 <p>Model section information criteria</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsModelSelection.jl#L2">Mads/src/MadsModelSelection.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsModelSelection.jl#L2">Mads/src/MadsModelSelection.jl:2</a></p>
 <hr />
 <p><a id="method__makearrayloglikelihood.1" class="lexicon_definition"></a></p>
 <h2 id="makearrayloglikelihoodmadsdataassociativek-v-loglikelihood">makearrayloglikelihood(madsdata::Associative{K, V},  loglikelihood)</h2>
 <p>Make a log likelihood function that accepts an array containing the opt parameters' values</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L70">Mads/src/MadsMisc.jl:70</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L70">Mads/src/MadsMisc.jl:70</a></p>
 <hr />
 <p><a id="method__makebigdt.1" class="lexicon_definition"></a></p>
 <h2 id="makebigdtmadsdataassociativek-v-choiceassociativek-v">makebigdt!(madsdata::Associative{K, V},  choice::Associative{K, V})</h2>
@@ -1726,7 +1726,7 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>bigdtproblem</code> : BIG-DT problem type</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsBIG.jl#L34">Mads/src/MadsBIG.jl:34</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsBIG.jl#L34">Mads/src/MadsBIG.jl:34</a></p>
 <hr />
 <p><a id="method__makebigdt.2" class="lexicon_definition"></a></p>
 <h2 id="makebigdtmadsdataassociativek-v-choiceassociativek-v_1">makebigdt(madsdata::Associative{K, V},  choice::Associative{K, V})</h2>
@@ -1741,7 +1741,7 @@ The first function in the file is the one that will be called by Mads to perform
 <li><code>bigdtproblem</code> : BIG-DT problem type</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsBIG.jl#L18">Mads/src/MadsBIG.jl:18</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsBIG.jl#L18">Mads/src/MadsBIG.jl:18</a></p>
 <hr />
 <p><a id="method__makecomputeconcentrations.1" class="lexicon_definition"></a></p>
 <h2 id="makecomputeconcentrationsmadsdataassociativek-v">makecomputeconcentrations(madsdata::Associative{K, V})</h2>
@@ -1765,7 +1765,7 @@ forward_preds = computeconcentrations(paramdict)
 </code></pre>
 
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsAnasol.jl#L31">Mads/src/MadsAnasol.jl:31</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsAnasol.jl#L31">Mads/src/MadsAnasol.jl:31</a></p>
 <hr />
 <p><a id="method__makedoublearrayfunction.1" class="lexicon_definition"></a></p>
 <h2 id="makedoublearrayfunctionmadsdataassociativek-v">makedoublearrayfunction(madsdata::Associative{K, V})</h2>
@@ -1781,7 +1781,7 @@ forward_preds = computeconcentrations(paramdict)
 <li><code>doublearrayfunction</code> : function accepting an array containing the optimal parameters' values, and returning an array of observations</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L40">Mads/src/MadsMisc.jl:40</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L40">Mads/src/MadsMisc.jl:40</a></p>
 <hr />
 <p><a id="method__makedoublearrayfunction.2" class="lexicon_definition"></a></p>
 <h2 id="makedoublearrayfunctionmadsdataassociativek-v-f">makedoublearrayfunction(madsdata::Associative{K, V},  f)</h2>
@@ -1797,25 +1797,25 @@ forward_preds = computeconcentrations(paramdict)
 <li><code>doublearrayfunction</code> : function accepting an array containing the optimal parameters' values, and returning an array of observations</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L40">Mads/src/MadsMisc.jl:40</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L40">Mads/src/MadsMisc.jl:40</a></p>
 <hr />
 <p><a id="method__makelmfunctions.1" class="lexicon_definition"></a></p>
 <h2 id="makelmfunctionsmadsdataassociativek-v">makelmfunctions(madsdata::Associative{K, V})</h2>
 <p>Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L67">Mads/src/MadsLM.jl:67</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L67">Mads/src/MadsLM.jl:67</a></p>
 <hr />
 <p><a id="method__makelocalsafunction.1" class="lexicon_definition"></a></p>
 <h2 id="makelocalsafunctionmadsdataassociativek-v">makelocalsafunction(madsdata::Associative{K, V})</h2>
 <p>Make gradient function needed for local sensitivity analysis</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L156">Mads/src/MadsLM.jl:156</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L156">Mads/src/MadsLM.jl:156</a></p>
 <hr />
 <p><a id="method__makelogprior.1" class="lexicon_definition"></a></p>
 <h2 id="makelogpriormadsdataassociativek-v">makelogprior(madsdata::Associative{K, V})</h2>
 <p>Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary <code>madsdata</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L421">Mads/src/MadsFunc.jl:421</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L417">Mads/src/MadsFunc.jl:417</a></p>
 <hr />
 <p><a id="method__makemadscommandfunction.1" class="lexicon_definition"></a></p>
 <h2 id="makemadscommandfunctionmadsdatawithobsassociativek-v">makemadscommandfunction(madsdatawithobs::Associative{K, V})</h2>
@@ -1862,51 +1862,51 @@ forward_preds = computeconcentrations(paramdict)
 <li><code>JSONPredictions</code> : model predictions read from a JSON file</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L49">Mads/src/MadsFunc.jl:49</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L49">Mads/src/MadsFunc.jl:49</a></p>
 <hr />
 <p><a id="method__makemadscommandfunctionandgradient.1" class="lexicon_definition"></a></p>
 <h2 id="makemadscommandfunctionandgradientmadsdataassociativek-v">makemadscommandfunctionandgradient(madsdata::Associative{K, V})</h2>
 <p>Make MADS forward &amp; gradient functions for the model defined in the MADS problem dictionary <code>madsdata</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L356">Mads/src/MadsFunc.jl:356</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L352">Mads/src/MadsFunc.jl:352</a></p>
 <hr />
 <p><a id="method__makemadscommandgradient.1" class="lexicon_definition"></a></p>
 <h2 id="makemadscommandgradientmadsdataassociativek-v">makemadscommandgradient(madsdata::Associative{K, V})</h2>
 <p>Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary <code>madsdata</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L341">Mads/src/MadsFunc.jl:341</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L337">Mads/src/MadsFunc.jl:337</a></p>
 <hr />
 <p><a id="method__makemadsconditionalloglikelihood.1" class="lexicon_definition"></a></p>
 <h2 id="makemadsconditionalloglikelihoodmadsdataassociativek-v">makemadsconditionalloglikelihood(madsdata::Associative{K, V})</h2>
 <p>Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary <code>madsdata</code>.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L436">Mads/src/MadsFunc.jl:436</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L432">Mads/src/MadsFunc.jl:432</a></p>
 <hr />
 <p><a id="method__makemadsloglikelihood.1" class="lexicon_definition"></a></p>
 <h2 id="makemadsloglikelihoodmadsdataassociativek-v">makemadsloglikelihood(madsdata::Associative{K, V})</h2>
 <p>Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under <code>LogLikelihood</code> or computed internally.</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsFunc.jl#L461">Mads/src/MadsFunc.jl:461</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsFunc.jl#L457">Mads/src/MadsFunc.jl:457</a></p>
 <hr />
 <p><a id="method__maxtorealmaxfloat32.1" class="lexicon_definition"></a></p>
 <h2 id="maxtorealmaxfloat32dfdataframesdataframe">maxtorealmaxFloat32!(df::DataFrames.DataFrame)</h2>
 <p>Scale down values larger than max(Float32) in a Dataframe <code>df</code> so that Gadfly can plot the data</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L794">Mads/src/MadsSA.jl:794</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L794">Mads/src/MadsSA.jl:794</a></p>
 <hr />
 <p><a id="method__modobsweights.1" class="lexicon_definition"></a></p>
 <h2 id="modobsweightsmadsdataassociativek-v-valuenumber">modobsweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Modify (multiply) observation weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L217">Mads/src/MadsObservations.jl:217</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L217">Mads/src/MadsObservations.jl:217</a></p>
 <hr />
 <p><a id="method__modwellweights.1" class="lexicon_definition"></a></p>
 <h2 id="modwellweightsmadsdataassociativek-v-valuenumber">modwellweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Modify (multiply) well weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L247">Mads/src/MadsObservations.jl:247</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L247">Mads/src/MadsObservations.jl:247</a></p>
 <hr />
 <p><a id="method__montecarlo.1" class="lexicon_definition"></a></p>
 <h2 id="montecarlomadsdataassociativek-v">montecarlo(madsdata::Associative{K, V})</h2>
@@ -1926,13 +1926,13 @@ The function can be provided as an external function in the MADS problem diction
 <li>YAML output file with the parameter dictionary containing the data arrays (<code>&lt;mads_root_name&gt;.mcresults.yaml</code>)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMC.jl#L104">Mads/src/MadsMC.jl:104</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMC.jl#L104">Mads/src/MadsMC.jl:104</a></p>
 <hr />
 <p><a id="method__naive_get_deltax.1" class="lexicon_definition"></a></p>
 <h2 id="naive_get_deltaxjpjarrayt-2-jparrayt-2-f0arrayt-1-lambdareal">naive_get_deltax(JpJ::Array{T, 2},  Jp::Array{T, 2},  f0::Array{T, 1},  lambda::Real)</h2>
 <p>Naive Levenberg-Marquardt optimization: get the LM parameter space step</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L219">Mads/src/MadsLM.jl:219</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L219">Mads/src/MadsLM.jl:219</a></p>
 <hr />
 <p><a id="method__naive_levenberg_marquardt.1" class="lexicon_definition"></a></p>
 <h2 id="naive_levenberg_marquardtffunction-gfunction-x0arrayt-1">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1})</h2>
@@ -1953,7 +1953,7 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>np_lambda</code> : number of parallel lambda solves</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L255">Mads/src/MadsLM.jl:255</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L255">Mads/src/MadsLM.jl:255</a></p>
 <hr />
 <p><a id="method__naive_levenberg_marquardt.2" class="lexicon_definition"></a></p>
 <h2 id="naive_levenberg_marquardtffunction-gfunction-x0arrayt-1-ofunction">naive_levenberg_marquardt(f::Function,  g::Function,  x0::Array{T, 1},  o::Function)</h2>
@@ -1974,37 +1974,37 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>np_lambda</code> : number of parallel lambda solves</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L255">Mads/src/MadsLM.jl:255</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L255">Mads/src/MadsLM.jl:255</a></p>
 <hr />
 <p><a id="method__naive_lm_iteration.1" class="lexicon_definition"></a></p>
 <h2 id="naive_lm_iterationffunction-gfunction-ofunction-x0arrayt-1-f0arrayt-1-lambdasarrayt-1">naive_lm_iteration(f::Function,  g::Function,  o::Function,  x0::Array{T, 1},  f0::Array{T, 1},  lambdas::Array{T, 1})</h2>
 <p>Naive Levenberg-Marquardt optimization: perform LM iteration</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L226">Mads/src/MadsLM.jl:226</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L226">Mads/src/MadsLM.jl:226</a></p>
 <hr />
 <p><a id="method__noplot.1" class="lexicon_definition"></a></p>
 <h2 id="noplot">noplot()</h2>
-<p>MADS plotting is disabled</p>
+<p>Disable MADS plotting</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L172">Mads/src/MadsParallel.jl:172</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L173">Mads/src/MadsParallel.jl:173</a></p>
 <hr />
 <p><a id="method__obslineismatch.1" class="lexicon_definition"></a></p>
 <h2 id="obslineismatchobslineabstractstring-regexsarrayregex-1">obslineismatch(obsline::AbstractString,  regexs::Array{Regex, 1})</h2>
 <p>Match an instruction line in the Mads instruction file with model input file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L441">Mads/src/MadsIO.jl:441</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L441">Mads/src/MadsIO.jl:441</a></p>
 <hr />
 <p><a id="method__of.1" class="lexicon_definition"></a></p>
 <h2 id="ofmadsdataassociativek-v-resultsarrayt-1">of(madsdata::Associative{K, V},  results::Array{T, 1})</h2>
 <p>Compute objective function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L37">Mads/src/MadsLM.jl:37</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L37">Mads/src/MadsLM.jl:37</a></p>
 <hr />
 <p><a id="method__paramarray2dict.1" class="lexicon_definition"></a></p>
 <h2 id="paramarray2dictmadsdataassociativek-v-arrayarrayt-n">paramarray2dict(madsdata::Associative{K, V},  array::Array{T, N})</h2>
 <p>Convert parameter array to a parameter dictionary of arrays</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMC.jl#L154">Mads/src/MadsMC.jl:154</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMC.jl#L154">Mads/src/MadsMC.jl:154</a></p>
 <hr />
 <p><a id="method__parametersample.1" class="lexicon_definition"></a></p>
 <h2 id="parametersamplemadsdataassociativek-v-numsamplesinteger">parametersample(madsdata::Associative{K, V},  numsamples::Integer)</h2>
@@ -2017,7 +2017,7 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>init_dist</code> : if <code>true</code> use the distribution defined for initialization in the MADS problem dictionary (defined using <code>init_dist</code> parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using <code>dist</code> parameter field)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L151">Mads/src/MadsSA.jl:151</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L151">Mads/src/MadsSA.jl:151</a></p>
 <hr />
 <p><a id="method__parametersample.2" class="lexicon_definition"></a></p>
 <h2 id="parametersamplemadsdataassociativek-v-numsamplesinteger-parameterkeyabstractstring">parametersample(madsdata::Associative{K, V},  numsamples::Integer,  parameterkey::AbstractString)</h2>
@@ -2030,7 +2030,7 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>init_dist</code> : if <code>true</code> use the distribution defined for initialization in the MADS problem dictionary (defined using <code>init_dist</code> parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using <code>dist</code> parameter field)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L151">Mads/src/MadsSA.jl:151</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L151">Mads/src/MadsSA.jl:151</a></p>
 <hr />
 <p><a id="method__paramrand.1" class="lexicon_definition"></a></p>
 <h2 id="paramrandmadsdataassociativek-v-parameterkeyabstractstring">paramrand(madsdata::Associative{K, V},  parameterkey::AbstractString)</h2>
@@ -2043,7 +2043,7 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>paramdist</code> : dictionary with parameter distributions</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L174">Mads/src/MadsSA.jl:174</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L174">Mads/src/MadsSA.jl:174</a></p>
 <hr />
 <p><a id="method__parsemadsdata.1" class="lexicon_definition"></a></p>
 <h2 id="parsemadsdatamadsdataassociativek-v">parsemadsdata(madsdata::Associative{K, V})</h2>
@@ -2053,7 +2053,7 @@ The function can be provided as an external function in the MADS problem diction
 <li><code>madsdata</code> : Mads problem dictionary</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L39">Mads/src/MadsIO.jl:39</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L39">Mads/src/MadsIO.jl:39</a></p>
 <hr />
 <p><a id="method__parser_amanzi.1" class="lexicon_definition"></a></p>
 <h2 id="parser_amanzi">parser_amanzi()</h2>
@@ -2071,7 +2071,7 @@ Mads.parser_amanzi(&quot;observations.out&quot;)
 <li><code>dict</code> : a dictionary with model observations following MADS requirements</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParsers.jl#L19">Mads/src/MadsParsers.jl:19</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParsers.jl#L19">Mads/src/MadsParsers.jl:19</a></p>
 <hr />
 <p><a id="method__parser_amanzi.2" class="lexicon_definition"></a></p>
 <h2 id="parser_amanzifilenameabstractstring">parser_amanzi(filename::AbstractString)</h2>
@@ -2089,19 +2089,19 @@ Mads.parser_amanzi(&quot;observations.out&quot;)
 <li><code>dict</code> : a dictionary with model observations following MADS requirements</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParsers.jl#L19">Mads/src/MadsParsers.jl:19</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParsers.jl#L19">Mads/src/MadsParsers.jl:19</a></p>
 <hr />
 <p><a id="method__partialof.1" class="lexicon_definition"></a></p>
 <h2 id="partialofmadsdataassociativek-v-resultdictassociativek-v-regexregex">partialof(madsdata::Associative{K, V},  resultdict::Associative{K, V},  regex::Regex)</h2>
 <p>Compute the sum of squared residuals for observations that match a regular expression</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L50">Mads/src/MadsLM.jl:50</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L50">Mads/src/MadsLM.jl:50</a></p>
 <hr />
 <p><a id="method__plotsaresults_monty.1" class="lexicon_definition"></a></p>
 <h2 id="plotsaresults_montywellname-madsdata-result">plotSAresults_monty(wellname,  madsdata,  result)</h2>
 <p>Plot the sensitivity analysis results for each well (Specific plot requested by Monty)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSAPlot.jl#L108">Mads/src/MadsSAPlot.jl:108</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSAPlot.jl#L108">Mads/src/MadsSAPlot.jl:108</a></p>
 <hr />
 <p><a id="method__plotgrid.1" class="lexicon_definition"></a></p>
 <h2 id="plotgridmadsdataassociativek-v-sarrayfloat64-n">plotgrid(madsdata::Associative{K, V},  s::Array{Float64, N})</h2>
@@ -2122,7 +2122,7 @@ plotgrid(madsdata, parameters; addtitle=true, title=&quot;&quot;, filename=&quot
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlotPy.jl#L22">Mads/src/MadsPlotPy.jl:22</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlotPy.jl#L22">Mads/src/MadsPlotPy.jl:22</a></p>
 <hr />
 <p><a id="method__plotmadsproblem.1" class="lexicon_definition"></a></p>
 <h2 id="plotmadsproblemmadsdataassociativek-v">plotmadsproblem(madsdata::Associative{K, V})</h2>
@@ -2135,7 +2135,7 @@ plotgrid(madsdata, parameters; addtitle=true, title=&quot;&quot;, filename=&quot
 <li><code>keyword</code> : to be added in the filename</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L58">Mads/src/MadsPlot.jl:58</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L58">Mads/src/MadsPlot.jl:58</a></p>
 <hr />
 <p><a id="method__plotmass.1" class="lexicon_definition"></a></p>
 <h2 id="plotmasslambda-mass_injected-mass_reduced-filenameabstractstring">plotmass(lambda,  mass_injected,  mass_reduced,  filename::AbstractString)</h2>
@@ -2153,7 +2153,7 @@ plotgrid(madsdata, parameters; addtitle=true, title=&quot;&quot;, filename=&quot
 </ul>
 <p>Dumps: image file with name <code>filename</code> and in specified <code>format</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsAnasolPlot.jl#L18">Mads/src/MadsAnasolPlot.jl:18</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsAnasolPlot.jl#L18">Mads/src/MadsAnasolPlot.jl:18</a></p>
 <hr />
 <p><a id="method__plotmatches.1" class="lexicon_definition"></a></p>
 <h2 id="plotmatchesmadsdata_inassociativek-v">plotmatches(madsdata_in::Associative{K, V})</h2>
@@ -2174,7 +2174,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L143">Mads/src/MadsPlot.jl:143</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L143">Mads/src/MadsPlot.jl:143</a></p>
 <hr />
 <p><a id="method__plotobssaresults.1" class="lexicon_definition"></a></p>
 <h2 id="plotobssaresultsmadsdata-result">plotobsSAresults(madsdata,  result)</h2>
@@ -2189,7 +2189,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L454">Mads/src/MadsPlot.jl:454</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L462">Mads/src/MadsPlot.jl:462</a></p>
 <hr />
 <p><a id="method__plotrobustnesscurves.1" class="lexicon_definition"></a></p>
 <h2 id="plotrobustnesscurvesmadsdataassociativek-v-bigdtresultsdictk-v">plotrobustnesscurves(madsdata::Associative{K, V},  bigdtresults::Dict{K, V})</h2>
@@ -2202,7 +2202,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsBIGPlot.jl#L13">Mads/src/MadsBIGPlot.jl:13</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsBIGPlot.jl#L13">Mads/src/MadsBIGPlot.jl:13</a></p>
 <hr />
 <p><a id="method__plotseries.1" class="lexicon_definition"></a></p>
 <h2 id="plotseriesxarrayt-2-filenameabstractstring">plotseries(X::Array{T, 2},  filename::AbstractString)</h2>
@@ -2219,7 +2219,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>combined</code> : <code>true</code> by default</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L938">Mads/src/MadsPlot.jl:938</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L946">Mads/src/MadsPlot.jl:946</a></p>
 <hr />
 <p><a id="method__plotwellsaresults.1" class="lexicon_definition"></a></p>
 <h2 id="plotwellsaresultsmadsdata-result">plotwellSAresults(madsdata,  result)</h2>
@@ -2234,7 +2234,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L335">Mads/src/MadsPlot.jl:335</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L343">Mads/src/MadsPlot.jl:343</a></p>
 <hr />
 <p><a id="method__plotwellsaresults.2" class="lexicon_definition"></a></p>
 <h2 id="plotwellsaresultsmadsdata-result-wellname">plotwellSAresults(madsdata,  result,  wellname)</h2>
@@ -2250,79 +2250,79 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L360">Mads/src/MadsPlot.jl:360</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L368">Mads/src/MadsPlot.jl:368</a></p>
 <hr />
 <p><a id="method__printsaresults.1" class="lexicon_definition"></a></p>
 <h2 id="printsaresultsmadsdataassociativek-v-resultsassociativek-v">printSAresults(madsdata::Associative{K, V},  results::Associative{K, V})</h2>
 <p>Print sensitivity analysis results</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L651">Mads/src/MadsSA.jl:651</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L651">Mads/src/MadsSA.jl:651</a></p>
 <hr />
 <p><a id="method__quietoff.1" class="lexicon_definition"></a></p>
 <h2 id="quietoff">quietoff()</h2>
 <p>Make MADS not quiet</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L7">Mads/src/MadsHelpers.jl:7</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L7">Mads/src/MadsHelpers.jl:7</a></p>
 <hr />
 <p><a id="method__quieton.1" class="lexicon_definition"></a></p>
 <h2 id="quieton">quieton()</h2>
 <p>Make MADS quiet</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L2">Mads/src/MadsHelpers.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L2">Mads/src/MadsHelpers.jl:2</a></p>
 <hr />
 <p><a id="method__readasciipredictions.1" class="lexicon_definition"></a></p>
 <h2 id="readasciipredictionsfilenameabstractstring">readasciipredictions(filename::AbstractString)</h2>
 <p>Read MADS predictions from an ASCII file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsASCII.jl#L13">Mads/src/MadsASCII.jl:13</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsASCII.jl#L13">Mads/src/MadsASCII.jl:13</a></p>
 <hr />
 <p><a id="method__readjsonpredictions.1" class="lexicon_definition"></a></p>
 <h2 id="readjsonpredictionsfilenameabstractstring">readjsonpredictions(filename::AbstractString)</h2>
 <p>Read MADS model predictions from a JSON file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsJSON.jl#L24">Mads/src/MadsJSON.jl:24</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsJSON.jl#L24">Mads/src/MadsJSON.jl:24</a></p>
 <hr />
 <p><a id="method__readobservations.1" class="lexicon_definition"></a></p>
 <h2 id="readobservationsmadsdataassociativek-v">readobservations(madsdata::Associative{K, V})</h2>
 <p>Read observations</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L493">Mads/src/MadsIO.jl:493</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L493">Mads/src/MadsIO.jl:493</a></p>
 <hr />
 <p><a id="method__readobservations.2" class="lexicon_definition"></a></p>
 <h2 id="readobservationsmadsdataassociativek-v-obsids">readobservations(madsdata::Associative{K, V},  obsids)</h2>
 <p>Read observations</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L493">Mads/src/MadsIO.jl:493</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L493">Mads/src/MadsIO.jl:493</a></p>
 <hr />
 <p><a id="method__readobservations_cmads.1" class="lexicon_definition"></a></p>
 <h2 id="readobservations_cmadsmadsdataassociativek-v">readobservations_cmads(madsdata::Associative{K, V})</h2>
 <p>Read observations using C Mads library</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L526">Mads/src/MadsIO.jl:526</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L526">Mads/src/MadsIO.jl:526</a></p>
 <hr />
 <p><a id="method__readyamlpredictions.1" class="lexicon_definition"></a></p>
 <h2 id="readyamlpredictionsfilenameabstractstring">readyamlpredictions(filename::AbstractString)</h2>
 <p>Read MADS model predictions from a YAML file <code>filename</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsYAML.jl#L125">Mads/src/MadsYAML.jl:125</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsYAML.jl#L125">Mads/src/MadsYAML.jl:125</a></p>
 <hr />
 <p><a id="method__regexs2obs.1" class="lexicon_definition"></a></p>
 <h2 id="regexs2obsobsline-regexs-obsnames-getparamhere">regexs2obs(obsline,  regexs,  obsnames,  getparamhere)</h2>
 <p>Get observations for a set of regular expressions</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L447">Mads/src/MadsIO.jl:447</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L447">Mads/src/MadsIO.jl:447</a></p>
 <hr />
 <p><a id="method__resetmodelruns.1" class="lexicon_definition"></a></p>
 <h2 id="resetmodelruns">resetmodelruns()</h2>
 <p>Reset the model runs count to be equal to zero</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L42">Mads/src/MadsHelpers.jl:42</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L42">Mads/src/MadsHelpers.jl:42</a></p>
 <hr />
 <p><a id="method__residuals.1" class="lexicon_definition"></a></p>
 <h2 id="residualsmadsdataassociativek-v-resultsarrayt-1">residuals(madsdata::Associative{K, V},  results::Array{T, 1})</h2>
 <p>Compute residuals</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsLM.jl#L5">Mads/src/MadsLM.jl:5</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsLM.jl#L5">Mads/src/MadsLM.jl:5</a></p>
 <hr />
 <p><a id="method__reweighsamples.1" class="lexicon_definition"></a></p>
 <h2 id="reweighsamplesmadsdataassociativek-v-predictionsarrayt-n-oldllhoodsarrayt-1">reweighsamples(madsdata::Associative{K, V},  predictions::Array{T, N},  oldllhoods::Array{T, 1})</h2>
@@ -2338,49 +2338,49 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>newllhoods</code> : vector of log-likelihoods after reweighing</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L75">Mads/src/MadsSA.jl:75</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L75">Mads/src/MadsSA.jl:75</a></p>
 <hr />
 <p><a id="method__rosenbrock.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrockxarrayt-1">rosenbrock(x::Array{T, 1})</h2>
 <p>Rosenbrock test function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L17">Mads/src/MadsTestFunctions.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L17">Mads/src/MadsTestFunctions.jl:17</a></p>
 <hr />
 <p><a id="method__rosenbrock2_gradient_lm.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock2_gradient_lmx">rosenbrock2_gradient_lm(x)</h2>
 <p>Parameter gradients of the Rosenbrock test function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L7">Mads/src/MadsTestFunctions.jl:7</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L7">Mads/src/MadsTestFunctions.jl:7</a></p>
 <hr />
 <p><a id="method__rosenbrock2_lm.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock2_lmx">rosenbrock2_lm(x)</h2>
 <p>Rosenbrock test function (more difficult to solve)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L2">Mads/src/MadsTestFunctions.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L2">Mads/src/MadsTestFunctions.jl:2</a></p>
 <hr />
 <p><a id="method__rosenbrock_gradient.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock_gradientxarrayt-1-storagearrayt-1">rosenbrock_gradient!(x::Array{T, 1},  storage::Array{T, 1})</h2>
 <p>Parameter gradients of the Rosenbrock test function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L27">Mads/src/MadsTestFunctions.jl:27</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L27">Mads/src/MadsTestFunctions.jl:27</a></p>
 <hr />
 <p><a id="method__rosenbrock_gradient_lm.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock_gradient_lmxarrayt-1">rosenbrock_gradient_lm(x::Array{T, 1})</h2>
 <p>Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L33">Mads/src/MadsTestFunctions.jl:33</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L33">Mads/src/MadsTestFunctions.jl:33</a></p>
 <hr />
 <p><a id="method__rosenbrock_hessian.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock_hessianxarrayt-1-storagearrayt-2">rosenbrock_hessian!(x::Array{T, 1},  storage::Array{T, 2})</h2>
 <p>Parameter Hessian of the Rosenbrock test function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L43">Mads/src/MadsTestFunctions.jl:43</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L43">Mads/src/MadsTestFunctions.jl:43</a></p>
 <hr />
 <p><a id="method__rosenbrock_lm.1" class="lexicon_definition"></a></p>
 <h2 id="rosenbrock_lmxarrayt-1">rosenbrock_lm(x::Array{T, 1})</h2>
 <p>Rosenbrock test function for LM optimization (returns the 2 components separetely)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTestFunctions.jl#L22">Mads/src/MadsTestFunctions.jl:22</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTestFunctions.jl#L22">Mads/src/MadsTestFunctions.jl:22</a></p>
 <hr />
 <p><a id="method__saltelli.1" class="lexicon_definition"></a></p>
 <h2 id="saltellimadsdataassociativek-v">saltelli(madsdata::Associative{K, V})</h2>
@@ -2394,7 +2394,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>parallel</code> : set to true if the model runs should be performed in parallel</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L376">Mads/src/MadsSA.jl:376</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L376">Mads/src/MadsSA.jl:376</a></p>
 <hr />
 <p><a id="method__saltellibrute.1" class="lexicon_definition"></a></p>
 <h2 id="saltellibrutemadsdataassociativek-v">saltellibrute(madsdata::Associative{K, V})</h2>
@@ -2406,13 +2406,13 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>seed</code> : initial random seed</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L206">Mads/src/MadsSA.jl:206</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L206">Mads/src/MadsSA.jl:206</a></p>
 <hr />
 <p><a id="method__saltelliprintresults2.1" class="lexicon_definition"></a></p>
 <h2 id="saltelliprintresults2madsdataassociativek-v-resultsassociativek-v">saltelliprintresults2(madsdata::Associative{K, V},  results::Associative{K, V})</h2>
 <p>Print sensitivity analysis results (method 2)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L727">Mads/src/MadsSA.jl:727</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L727">Mads/src/MadsSA.jl:727</a></p>
 <hr />
 <p><a id="method__savemadsfile.1" class="lexicon_definition"></a></p>
 <h2 id="savemadsfilemadsdataassociativek-v">savemadsfile(madsdata::Associative{K, V})</h2>
@@ -2432,7 +2432,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>explicit</code> : if <code>true</code> ignores MADS YAML file modifications and rereads the original input file</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L158">Mads/src/MadsIO.jl:158</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L158">Mads/src/MadsIO.jl:158</a></p>
 <hr />
 <p><a id="method__savemadsfile.2" class="lexicon_definition"></a></p>
 <h2 id="savemadsfilemadsdataassociativek-v-filenameabstractstring">savemadsfile(madsdata::Associative{K, V},  filename::AbstractString)</h2>
@@ -2452,13 +2452,13 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>explicit</code> : if <code>true</code> ignores MADS YAML file modifications and rereads the original input file</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L158">Mads/src/MadsIO.jl:158</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L158">Mads/src/MadsIO.jl:158</a></p>
 <hr />
 <p><a id="method__savemcmcresults.1" class="lexicon_definition"></a></p>
 <h2 id="savemcmcresultschainarrayt-n-filenameabstractstring">savemcmcresults(chain::Array{T, N},  filename::AbstractString)</h2>
 <p>Save MCMC chain in a file</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMC.jl#L63">Mads/src/MadsMC.jl:63</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMC.jl#L63">Mads/src/MadsMC.jl:63</a></p>
 <hr />
 <p><a id="method__scatterplotsamples.1" class="lexicon_definition"></a></p>
 <h2 id="scatterplotsamplesmadsdata-samplesarrayt-2-filenameabstractstring">scatterplotsamples(madsdata,  samples::Array{T, 2},  filename::AbstractString)</h2>
@@ -2471,7 +2471,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L291">Mads/src/MadsPlot.jl:291</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L299">Mads/src/MadsPlot.jl:299</a></p>
 <hr />
 <p><a id="method__searchdir.1" class="lexicon_definition"></a></p>
 <h2 id="searchdirkeyregex">searchdir(key::Regex)</h2>
@@ -2490,37 +2490,41 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>filename</code> : an array with file names matching the pattern in the specified directory</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L345">Mads/src/MadsIO.jl:345</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L345">Mads/src/MadsIO.jl:345</a></p>
 <hr />
 <p><a id="method__setallparamsoff.1" class="lexicon_definition"></a></p>
 <h2 id="setallparamsoffmadsdataassociativek-v">setallparamsoff!(madsdata::Associative{K, V})</h2>
 <p>Set all parameters OFF</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L332">Mads/src/MadsParameters.jl:332</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L332">Mads/src/MadsParameters.jl:332</a></p>
 <hr />
 <p><a id="method__setallparamson.1" class="lexicon_definition"></a></p>
 <h2 id="setallparamsonmadsdataassociativek-v">setallparamson!(madsdata::Associative{K, V})</h2>
 <p>Set all parameters ON</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L324">Mads/src/MadsParameters.jl:324</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L324">Mads/src/MadsParameters.jl:324</a></p>
 <hr />
 <p><a id="method__setdebuglevel.1" class="lexicon_definition"></a></p>
 <h2 id="setdebuglevellevelint64">setdebuglevel(level::Int64)</h2>
 <p>Set MADS debug level</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L32">Mads/src/MadsHelpers.jl:32</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L32">Mads/src/MadsHelpers.jl:32</a></p>
 <hr />
 <p><a id="method__setdir.1" class="lexicon_definition"></a></p>
 <h2 id="setdirdirasciistring">setdir(dir::ASCIIString)</h2>
-<p>Set the working directory</p>
+<p>Set the working directory (for parallel environments)</p>
+<pre><code>@everywhere Mads.setdir()
+@everywhere Mads.setdir(&quot;/home/monty&quot;)
+</code></pre>
+
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L183">Mads/src/MadsParallel.jl:183</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L191">Mads/src/MadsParallel.jl:191</a></p>
 <hr />
 <p><a id="method__setdynamicmodel.1" class="lexicon_definition"></a></p>
 <h2 id="setdynamicmodelmadsdataassociativek-v-ffunction">setdynamicmodel(madsdata::Associative{K, V},  f::Function)</h2>
 <p>Set Dynamic Model for MADS model calls using internal Julia functions</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsMisc.jl#L87">Mads/src/MadsMisc.jl:87</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsMisc.jl#L87">Mads/src/MadsMisc.jl:87</a></p>
 <hr />
 <p><a id="method__setimagefileformat.1" class="lexicon_definition"></a></p>
 <h2 id="setimagefileformatfilename-format">setimagefileformat(filename,  format)</h2>
@@ -2537,7 +2541,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L23">Mads/src/MadsPlot.jl:23</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L23">Mads/src/MadsPlot.jl:23</a></p>
 <hr />
 <p><a id="method__setmadsinputfile.1" class="lexicon_definition"></a></p>
 <h2 id="setmadsinputfilefilenameabstractstring">setmadsinputfile(filename::AbstractString)</h2>
@@ -2548,13 +2552,13 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>filename</code> : input file name (e.g. <code>input_file_name.mads</code>)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L225">Mads/src/MadsIO.jl:225</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L225">Mads/src/MadsIO.jl:225</a></p>
 <hr />
 <p><a id="method__setobservationtargets.1" class="lexicon_definition"></a></p>
 <h2 id="setobservationtargetsmadsdataassociativek-v-predictionsassociativek-v">setobservationtargets!(madsdata::Associative{K, V},  predictions::Associative{K, V})</h2>
 <p>Set observations (calibration targets) in the MADS problem dictionary based on a <code>predictions</code> dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L337">Mads/src/MadsObservations.jl:337</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L337">Mads/src/MadsObservations.jl:337</a></p>
 <hr />
 <p><a id="method__setobstime.1" class="lexicon_definition"></a></p>
 <h2 id="setobstimemadsdataassociativek-v-separatorabstractstring">setobstime!(madsdata::Associative{K, V},  separator::AbstractString)</h2>
@@ -2576,25 +2580,25 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 </code></pre>
 
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L185">Mads/src/MadsObservations.jl:185</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L185">Mads/src/MadsObservations.jl:185</a></p>
 <hr />
 <p><a id="method__setobsweights.1" class="lexicon_definition"></a></p>
 <h2 id="setobsweightsmadsdataassociativek-v-valuenumber">setobsweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Set observation weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L209">Mads/src/MadsObservations.jl:209</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L209">Mads/src/MadsObservations.jl:209</a></p>
 <hr />
 <p><a id="method__setparamoff.1" class="lexicon_definition"></a></p>
 <h2 id="setparamoffmadsdataassociativek-v-parameterkey">setparamoff!(madsdata::Associative{K, V},  parameterkey)</h2>
 <p>Set a specific parameter with a key <code>parameterkey</code> OFF</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L345">Mads/src/MadsParameters.jl:345</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L345">Mads/src/MadsParameters.jl:345</a></p>
 <hr />
 <p><a id="method__setparamon.1" class="lexicon_definition"></a></p>
 <h2 id="setparamonmadsdataassociativek-v-parameterkeyabstractstring">setparamon!(madsdata::Associative{K, V},  parameterkey::AbstractString)</h2>
 <p>Set a specific parameter with a key <code>parameterkey</code> ON</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L340">Mads/src/MadsParameters.jl:340</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L340">Mads/src/MadsParameters.jl:340</a></p>
 <hr />
 <p><a id="method__setparamsdistnormal.1" class="lexicon_definition"></a></p>
 <h2 id="setparamsdistnormalmadsdataassociativek-v-mean-stddev">setparamsdistnormal!(madsdata::Associative{K, V},  mean,  stddev)</h2>
@@ -2607,7 +2611,7 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 <li><code>stddev</code> : array with the standard deviation values</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L360">Mads/src/MadsParameters.jl:360</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L360">Mads/src/MadsParameters.jl:360</a></p>
 <hr />
 <p><a id="method__setparamsdistuniform.1" class="lexicon_definition"></a></p>
 <h2 id="setparamsdistuniformmadsdataassociativek-v-min-max">setparamsdistuniform!(madsdata::Associative{K, V},  min,  max)</h2>
@@ -2620,7 +2624,7 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 <li><code>max</code> : array with the maximum values</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L378">Mads/src/MadsParameters.jl:378</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L378">Mads/src/MadsParameters.jl:378</a></p>
 <hr />
 <p><a id="method__setparamsinit.1" class="lexicon_definition"></a></p>
 <h2 id="setparamsinitmadsdataassociativek-v-paramdictassociativek-v">setparamsinit!(madsdata::Associative{K, V},  paramdict::Associative{K, V})</h2>
@@ -2632,7 +2636,7 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 <li><code>paramdict</code> : dictionary with initial model parameter values</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L271">Mads/src/MadsParameters.jl:271</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L271">Mads/src/MadsParameters.jl:271</a></p>
 <hr />
 <p><a id="method__setprocs.1" class="lexicon_definition"></a></p>
 <h2 id="setprocs">setprocs()</h2>
@@ -2640,36 +2644,30 @@ Mads.setobstime!(madsdata, r&quot;[A-x]*_t([0-9,.]+)&quot;)
 <p>Usage:</p>
 <pre><code>Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
-Mads.setprocs(ntasks_per_node=2, mads_servers=true)
+Mads.setprocs(ntasks_per_node=32, mads_servers=true)
+Mads.setprocs(ntasks_per_node=64, machinenames=[&quot;madsmax&quot;, &quot;madszem&quot;])
+Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename=&quot;/home/monty/bin/julia&quot;, dir=&quot;/home/monty&quot;)
 </code></pre>
 
 <p>Optional arguments:</p>
 <ul>
 <li><code>ntasks_per_node</code> : number of parallel tasks per node</li>
-<li><code>mads_servers</code> : if true use MADS servers (LANL only)</li>
+<li><code>machinenames</code> : array with machines names to invoked</li>
+<li><code>dir</code> : common directory shared by all the jobs</li>
+<li><code>exename</code> : location of the julia executable (the same version of julia is needed on all the workers)</li>
+<li><code>mads_servers</code> : if <code>true</code> use MADS servers (LANL only)</li>
+<li><code>quiet</code> : suppress output [default <code>true</code>]</li>
+<li><code>test</code> : test the servers and connect to each one ones at a time [default <code>false</code>]</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L69">Mads/src/MadsParallel.jl:69</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L64">Mads/src/MadsParallel.jl:64</a></p>
 <hr />
 <p><a id="method__setprocs.2" class="lexicon_definition"></a></p>
-<h2 id="setprocsnpint64">setprocs(np::Int64)</h2>
-<p>Set the number of processors to <code>np</code></p>
-<p>Usage:</p>
-<pre><code>Mads.setprocs(4)
-</code></pre>
-
-<p>Arguments:</p>
-<ul>
-<li><code>np</code> : number of processors</li>
-</ul>
-<p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L46">Mads/src/MadsParallel.jl:46</a></p>
-<hr />
-<p><a id="method__setprocs.3" class="lexicon_definition"></a></p>
 <h2 id="setprocsnpint64-ntint64">setprocs(np::Int64,  nt::Int64)</h2>
 <p>Set the number of processors to <code>np</code> and the number of threads to <code>nt</code></p>
 <p>Usage:</p>
-<pre><code>Mads.setprocs(4, 8)
+<pre><code>Mads.setprocs(4)
+Mads.setprocs(4, 8)
 </code></pre>
 
 <p>Arguments:</p>
@@ -2678,79 +2676,79 @@ Mads.setprocs(ntasks_per_node=2, mads_servers=true)
 <li><code>nt</code> : number of threads</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L19">Mads/src/MadsParallel.jl:19</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L20">Mads/src/MadsParallel.jl:20</a></p>
 <hr />
 <p><a id="method__setseed.1" class="lexicon_definition"></a></p>
 <h2 id="setseedseednumber">setseed(seed::Number)</h2>
 <p>Set current seed</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L11">Mads/src/MadsSA.jl:11</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L11">Mads/src/MadsSA.jl:11</a></p>
 <hr />
 <p><a id="method__settarget.1" class="lexicon_definition"></a></p>
 <h2 id="settargetoassociativek-v-target">settarget!(o::Associative{K, V},  target)</h2>
 <p>Set observation target</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L153">Mads/src/MadsObservations.jl:153</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L153">Mads/src/MadsObservations.jl:153</a></p>
 <hr />
 <p><a id="method__settime.1" class="lexicon_definition"></a></p>
 <h2 id="settimeoassociativek-v-time">settime!(o::Associative{K, V},  time)</h2>
 <p>Set observation time</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L105">Mads/src/MadsObservations.jl:105</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L105">Mads/src/MadsObservations.jl:105</a></p>
 <hr />
 <p><a id="method__setverbositylevel.1" class="lexicon_definition"></a></p>
 <h2 id="setverbositylevellevelint64">setverbositylevel(level::Int64)</h2>
 <p>Set MADS verbosity level</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsHelpers.jl#L37">Mads/src/MadsHelpers.jl:37</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsHelpers.jl#L37">Mads/src/MadsHelpers.jl:37</a></p>
 <hr />
 <p><a id="method__setweight.1" class="lexicon_definition"></a></p>
 <h2 id="setweightoassociativek-v-weight">setweight!(o::Associative{K, V},  weight)</h2>
 <p>Set observation weight</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L129">Mads/src/MadsObservations.jl:129</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L129">Mads/src/MadsObservations.jl:129</a></p>
 <hr />
 <p><a id="method__setwellweights.1" class="lexicon_definition"></a></p>
 <h2 id="setwellweightsmadsdataassociativek-v-valuenumber">setwellweights!(madsdata::Associative{K, V},  value::Number)</h2>
 <p>Set well weights in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L236">Mads/src/MadsObservations.jl:236</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L236">Mads/src/MadsObservations.jl:236</a></p>
 <hr />
 <p><a id="method__showallparameters.1" class="lexicon_definition"></a></p>
 <h2 id="showallparametersmadsdataassociativek-v">showallparameters(madsdata::Associative{K, V})</h2>
 <p>Show all parameters in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L448">Mads/src/MadsParameters.jl:448</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L448">Mads/src/MadsParameters.jl:448</a></p>
 <hr />
 <p><a id="method__showobservations.1" class="lexicon_definition"></a></p>
 <h2 id="showobservationsmadsdataassociativek-v">showobservations(madsdata::Associative{K, V})</h2>
 <p>Show observations in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L272">Mads/src/MadsObservations.jl:272</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L272">Mads/src/MadsObservations.jl:272</a></p>
 <hr />
 <p><a id="method__showparameters.1" class="lexicon_definition"></a></p>
 <h2 id="showparametersmadsdataassociativek-v">showparameters(madsdata::Associative{K, V})</h2>
 <p>Show optimizable parameters in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParameters.jl#L417">Mads/src/MadsParameters.jl:417</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParameters.jl#L417">Mads/src/MadsParameters.jl:417</a></p>
 <hr />
 <p><a id="method__sinetransform.1" class="lexicon_definition"></a></p>
 <h2 id="sinetransformsineparamsarrayt-1-lowerboundsarrayt-1-upperboundsarrayt-1-indexlogtransformedarrayt-1">sinetransform(sineparams::Array{T, 1},  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</h2>
 <p>Sine transformation of model parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSine.jl#L10">Mads/src/MadsSine.jl:10</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSine.jl#L10">Mads/src/MadsSine.jl:10</a></p>
 <hr />
 <p><a id="method__sinetransformfunction.1" class="lexicon_definition"></a></p>
 <h2 id="sinetransformfunctionffunction-lowerboundsarrayt-1-upperboundsarrayt-1-indexlogtransformedarrayt-1">sinetransformfunction(f::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</h2>
 <p>Sine transformation of a function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSine.jl#L17">Mads/src/MadsSine.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSine.jl#L17">Mads/src/MadsSine.jl:17</a></p>
 <hr />
 <p><a id="method__sinetransformgradient.1" class="lexicon_definition"></a></p>
 <h2 id="sinetransformgradientgfunction-lowerboundsarrayt-1-upperboundsarrayt-1-indexlogtransformedarrayt-1">sinetransformgradient(g::Function,  lowerbounds::Array{T, 1},  upperbounds::Array{T, 1},  indexlogtransformed::Array{T, 1})</h2>
 <p>Sine transformation of a gradient function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSine.jl#L25">Mads/src/MadsSine.jl:25</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSine.jl#L25">Mads/src/MadsSine.jl:25</a></p>
 <hr />
 <p><a id="method__spaghettiplot.1" class="lexicon_definition"></a></p>
 <h2 id="spaghettiplotmadsdataassociativek-v-number_of_samplesint64">spaghettiplot(madsdata::Associative{K, V},  number_of_samples::Int64)</h2>
@@ -2780,7 +2778,7 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename=&quot;&quot;, keyword =
 <li>Image file with a spaghetti plot (<code>&lt;mads_rootname&gt;-&lt;keyword&gt;-&lt;number_of_samples&gt;-spaghetti.&lt;default_image_extension&gt;</code>)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L780">Mads/src/MadsPlot.jl:780</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L788">Mads/src/MadsPlot.jl:788</a></p>
 <hr />
 <p><a id="method__spaghettiplots.1" class="lexicon_definition"></a></p>
 <h2 id="spaghettiplotsmadsdataassociativek-v-number_of_samplesint64">spaghettiplots(madsdata::Associative{K, V},  number_of_samples::Int64)</h2>
@@ -2806,55 +2804,61 @@ Mads.spaghettiplots(madsdata, number_of_samples; format=&quot;&quot;, keyword=&q
 <li>A series of image files with spaghetti plots for each <code>selected</code> (<code>type != null</code>) model parameter (<code>&lt;mads_rootname&gt;-&lt;keyword&gt;-&lt;param_key&gt;-&lt;number_of_samples&gt;-spaghetti.&lt;default_image_extension&gt;</code>)</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPlot.jl#L635">Mads/src/MadsPlot.jl:635</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPlot.jl#L643">Mads/src/MadsPlot.jl:643</a></p>
 <hr />
 <p><a id="method__sprintf.1" class="lexicon_definition"></a></p>
 <h2 id="sprintfargs">sprintf(args...)</h2>
 <p>Convert <code>@sprintf</code> macro into <code>sprintf</code> function</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsParallel.jl#L51">Mads/src/MadsParallel.jl:51</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsParallel.jl#L39">Mads/src/MadsParallel.jl:39</a></p>
 <hr />
 <p><a id="method__status.1" class="lexicon_definition"></a></p>
 <h2 id="status">status()</h2>
 <p>Status of the Mads modules</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPublish.jl#L17">Mads/src/MadsPublish.jl:17</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L17">Mads/src/MadsPublish.jl:17</a></p>
 <hr />
 <p><a id="method__tag.1" class="lexicon_definition"></a></p>
 <h2 id="tag">tag()</h2>
-<p>Tag the Mads modules</p>
+<p>Tag the Mads modules with a default argument <code>:patch</code></p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsPublish.jl#L61">Mads/src/MadsPublish.jl:61</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L67">Mads/src/MadsPublish.jl:67</a></p>
+<hr />
+<p><a id="method__tag.2" class="lexicon_definition"></a></p>
+<h2 id="tagsymsymbol">tag(sym::Symbol)</h2>
+<p>Tag the Mads modules with a default argument <code>:patch</code></p>
+<p><em>source:</em>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsPublish.jl#L67">Mads/src/MadsPublish.jl:67</a></p>
 <hr />
 <p><a id="method__test.1" class="lexicon_definition"></a></p>
 <h2 id="test">test()</h2>
 <p>Execute Mads tests (the tests will be in parallel if processors are defined)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTest.jl#L21">Mads/src/MadsTest.jl:21</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTest.jl#L21">Mads/src/MadsTest.jl:21</a></p>
 <hr />
 <p><a id="method__test.2" class="lexicon_definition"></a></p>
 <h2 id="testtestmod">test(testmod)</h2>
 <p>Execute Mads tests (the tests will be in parallel if processors are defined)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTest.jl#L21">Mads/src/MadsTest.jl:21</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTest.jl#L21">Mads/src/MadsTest.jl:21</a></p>
 <hr />
 <p><a id="method__testj.1" class="lexicon_definition"></a></p>
 <h2 id="testj">testj()</h2>
 <p>Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTest.jl#L2">Mads/src/MadsTest.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTest.jl#L2">Mads/src/MadsTest.jl:2</a></p>
 <hr />
 <p><a id="method__testj.2" class="lexicon_definition"></a></p>
-<h2 id="testjcoverage">testj(coverage)</h2>
+<h2 id="testjcoveragebool">testj(coverage::Bool)</h2>
 <p>Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsTest.jl#L2">Mads/src/MadsTest.jl:2</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsTest.jl#L2">Mads/src/MadsTest.jl:2</a></p>
 <hr />
 <p><a id="method__void2nan.1" class="lexicon_definition"></a></p>
 <h2 id="void2nandictassociativek-v">void2nan!(dict::Associative{K, V})</h2>
 <p>Convert Void's into NaN's in a dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L762">Mads/src/MadsSA.jl:762</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L762">Mads/src/MadsSA.jl:762</a></p>
 <hr />
 <p><a id="method__weightedstats.1" class="lexicon_definition"></a></p>
 <h2 id="weightedstatssamplesarrayt-n-llhoodsarrayt-1">weightedstats(samples::Array{T, N},  llhoods::Array{T, 1})</h2>
@@ -2870,43 +2874,43 @@ Mads.spaghettiplots(madsdata, number_of_samples; format=&quot;&quot;, keyword=&q
 <li><code>var</code> : vector of sample variances</li>
 </ul>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsSA.jl#L134">Mads/src/MadsSA.jl:134</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsSA.jl#L134">Mads/src/MadsSA.jl:134</a></p>
 <hr />
 <p><a id="method__welloff.1" class="lexicon_definition"></a></p>
 <h2 id="welloffmadsdata-wellnameabstractstring">welloff!(madsdata,  wellname::AbstractString)</h2>
 <p>Turn off a specific well in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L385">Mads/src/MadsObservations.jl:385</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L385">Mads/src/MadsObservations.jl:385</a></p>
 <hr />
 <p><a id="method__wellon.1" class="lexicon_definition"></a></p>
 <h2 id="wellonmadsdataassociativek-v-wellnameabstractstring">wellon!(madsdata::Associative{K, V},  wellname::AbstractString)</h2>
 <p>Turn on a specific well in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L361">Mads/src/MadsObservations.jl:361</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L361">Mads/src/MadsObservations.jl:361</a></p>
 <hr />
 <p><a id="method__wells2observations.1" class="lexicon_definition"></a></p>
 <h2 id="wells2observationsmadsdataassociativek-v">wells2observations!(madsdata::Associative{K, V})</h2>
 <p>Convert <code>Wells</code> class to <code>Observations</code> class in the MADS problem dictionary</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsObservations.jl#L401">Mads/src/MadsObservations.jl:401</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsObservations.jl#L401">Mads/src/MadsObservations.jl:401</a></p>
 <hr />
 <p><a id="method__writeparameters.1" class="lexicon_definition"></a></p>
 <h2 id="writeparametersmadsdataassociativek-v">writeparameters(madsdata::Associative{K, V})</h2>
 <p>Write initial parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L386">Mads/src/MadsIO.jl:386</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L386">Mads/src/MadsIO.jl:386</a></p>
 <hr />
 <p><a id="method__writeparameters.2" class="lexicon_definition"></a></p>
 <h2 id="writeparametersmadsdataassociativek-v-parameters">writeparameters(madsdata::Associative{K, V},  parameters)</h2>
 <p>Write parameters</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L393">Mads/src/MadsIO.jl:393</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L393">Mads/src/MadsIO.jl:393</a></p>
 <hr />
 <p><a id="method__writeparametersviatemplate.1" class="lexicon_definition"></a></p>
 <h2 id="writeparametersviatemplateparameters-templatefilename-outputfilename">writeparametersviatemplate(parameters,  templatefilename,  outputfilename)</h2>
 <p>Write <code>parameters</code> via MADS template (<code>templatefilename</code>) to an output file (<code>outputfilename</code>)</p>
 <p><em>source:</em>
-<a href="https://github.com/madsjulia/Mads.jl/tree/4d48cec32022ea237adb5d2ec8fe7b306f860c23/src/MadsIO.jl#L357">Mads/src/MadsIO.jl:357</a></p>
+<a href="https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsIO.jl#L357">Mads/src/MadsIO.jl:357</a></p>
               
             </div>
           </div>
