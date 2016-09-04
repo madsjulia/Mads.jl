@@ -65,6 +65,7 @@ function create_documentation()
 	d = pwd()
 	cd(Pkg.dir("Mads"))
 	# run(`git pull gh gh-pages`)
+	run(`mkdocs build --clean`)
 	run(`mkdocs gh-deploy --clean`)
 	cd(d)
 	return
