@@ -1,11 +1,14 @@
 site_name: MADS
 site_url: http://mads.readthedocs.io
-theme: readthedocs
+theme: material
 
 repo_url: https://github.com/madsjulia/Mads.jl
 site_description: "Model Analysis and Decision Support"
 site_author: "Velimir monty Vesselinov"
 site_favicon: mads-favicon.ico
+
+extra_css:
+- assets/Documenter.css
 
 pages:
 - Home: index.md
@@ -40,5 +43,13 @@ markdown_extensions:
   - mdx_math:
       enable_dollar_delimiter: True #for use of inline $..$
   - footnotes
+  - admonition
+  - codehilite
 
-extra_javascript: ['https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML']
+extra_javascript: 
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  - assets/mathjaxhelper.js
+
+extra:
+  author:
+    github: montyvesselinov

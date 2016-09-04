@@ -1332,37 +1332,6 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 	P = nprocs()
 	madsoutput("Number of processors is $P\n")
 
-	## Packages
-	#using DataStructures
-	# Provides distributions for parameters
-	#@everywhere using Distributions
-	#require("DataStructures")
-	########## Although it would be nice to have this inside the if statement of ismads == 1, for some reason julia won't compile
-	# Need to add this in if version is < 0.4 so we can use macro
-	#if VERSION < v"0.4.0-dev"
-	#@everywhere using Docile # default for v > 0.4
-	#end
-
-	## Setting pathfiles
-	#@everywhere efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
-	#@everywhere madspath  = "/n/srv/jlaughli/codes/Mads.jl/src/"
-
-	#import Mads
-	#if ~isdefined(:MetaProgTools) | ~isdefined(:Anasol) | ~isdefined(:Mads)
-	#	include("/n/srv/jlaughli/codes/mptools.jl/src/MetaProgTools.jl")
-	#	include(madspath*"MadsAnasol.jl")
-	#	include(madspath*"Mads.jl")
-	#end
-	#using Mads
-	#@everywhere using ProgressMeter
-	## Necessary modules (no matter if we are reading from mads or using as a standalone)
-	#@everywhere include(efastpath*"eFAST_distributeX.jl")
-	#include(efastpath*"eFAST_getCompFreq.jl")
-	#include(efastpath*"eFAST_optimalSearch.jl")
-	#@everywhere include(efastpath*"eFAST_Parallel_kL.jl")
-	#@everywhere include(madspath*"MadsLog.jl")
-
-
 	paramallkeys  = getparamkeys(md)
 	# Values of this dictionary are intial values
 	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
