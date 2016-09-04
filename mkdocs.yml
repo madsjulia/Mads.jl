@@ -39,15 +39,17 @@ markdown_extensions:
   - extra
   - tables
   - toc
-  - fenced_code
-  - mdx_math:
-      enable_dollar_delimiter: True #for use of inline $..$
   - footnotes
   - admonition
   - codehilite
+  - fenced_code
+  - mdx_math:
+      enable_dollar_delimiter: True #for use of inline $..$
 
-extra_javascript: 
-  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+extra_javascript:
+  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+#  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
   - assets/mathjaxhelper.js
 
 extra:
