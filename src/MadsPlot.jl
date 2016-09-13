@@ -141,7 +141,7 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
 function plotmatches(madsdata_in::Associative; filename="", format="", separate_files=false)
-	r = forward(madsdata; all=true)
+	r = forward(madsdata_in; all=true)
 	plotmatches(madsdata_in, r, filename=filename, format=format, separate_files=separate_files)
 end
 
