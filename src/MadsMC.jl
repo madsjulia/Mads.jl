@@ -1,6 +1,6 @@
 import RobustPmap
 import BlackBoxOptim
-import Lora
+import Klara
 import JSON
 
 """
@@ -33,20 +33,20 @@ function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100,
 	for i = 1:length(optparamkeys)
 		initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 	end
-	mcparams = Lora.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
-	model = Lora.likelihood_model(mcparams, false)
-	if Base.isbindingresolved(Lora, :RAM)
-		sampler = Lora.RAM(fill(1e-1, length(initvals)))
+	mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
+	model = Klara.likelihood_model(mcparams, false)
+	if Base.isbindingresolved(Klara, :RAM)
+		sampler = Klara.RAM(fill(1e-1, length(initvals)))
 	else
 		madswarn("Robust Adaptive Metropolis (RAM) method is not available")
-		sampler = Lora.MH(fill(1e-1, length(initvals)))
+		sampler = Klara.MH(fill(1e-1, length(initvals)))
 	end
-	mcrange = Lora.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
+	mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
 	mcparams0 = Dict(:p=>initvals)
 	outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
-	job = Lora.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Lora.VanillaMCTuner())
-	Lora.run(job)
-	chain = Lora.output(job)
+	job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
+	Klara.run(job)
+	chain = Klara.output(job)
 	return chain
 end
 
@@ -75,10 +75,10 @@ function savemcmcresults(chain::Array, filename::AbstractString)
 	JSON.print(f, var(chain, 1)[:])
 	println(f, "")
 	print(f, "MCse: ")
-	JSON.print(f, Lora.mcse(chain))
+	JSON.print(f, Klara.mcse(chain))
 	println(f, "")
 	print(f, "MCvar: ")
-	JSON.print(f, Lora.mcvar(chain))
+	JSON.print(f, Klara.mcvar(chain))
 	println(f, "")
 	close(f)
 end

@@ -3,6 +3,5 @@
 
 # Anasol.jl
 
-
 Documentation for Anasol.jl module (all functions):
 
