@@ -28,7 +28,7 @@ paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["ini
 forward_preds = computeconcentrations(paramdict)
 ```
 """
-function makecomputeconcentrations(madsdata::Associative; calczeroweightobs=false, calcpredictions=true)
+function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = 0
 	if haskeyword(madsdata, "background")
@@ -39,7 +39,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs=fals
 		paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		computeconcentrations(paramdict)
 	end
-	function computeconcentrations(parameters)
+	function computeconcentrations(parameters::Associative)
 		porosity = parameters["n"]
 		lambda = parameters["lambda"]
 		theta = parameters["theta"]
@@ -190,7 +190,7 @@ Returns:
 - `mass_injected` : total injected mass
 - `mass_reduced` : total reduced mass
 """
-function computemass(madsdata::Associative; time = 0)
+function computemass(madsdata::Associative; time=0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
 		if grid_time > 0
@@ -249,7 +249,7 @@ Returns:
 - `mass_injected` : array with associated total injected mass
 - `mass_reduced` : array with associated total reduced mass
 """
-function computemass(madsfiles; time = 0, path = ".")
+function computemass(madsfiles; time=0, path = ".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
 	Mads.madsinfo("""Number of files = $nf""")

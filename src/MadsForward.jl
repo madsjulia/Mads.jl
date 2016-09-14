@@ -18,12 +18,12 @@ Returns:
 
 - `obsvalues` : dictionary of model predictions
 """
-function forward(madsdata::Associative; all=false)
+function forward(madsdata::Associative; all::Bool=false)
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forward(madsdata, paramdict; all=all)
 end
 
-function forward(madsdata::Associative, paramdict::Associative; all=false)
+function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
@@ -35,10 +35,23 @@ function forward(madsdata::Associative, paramdict::Associative; all=false)
 	else
 		f = makemadscommandfunction(madsdata)
 	end
-	return f(paramdict)
+	kk = collect(keys(paramdict))
+	l = length(paramdict[kk[1]])
+	for k = kk[2:end]
+		l2 = length(paramdict[k])
+		@assert l == l2
+	end
+	paraminitdict = DataStructures.OrderedDict(zip(kk, getparamsinit(madsdata)))
+	if l == 1
+		p = merge(paraminitdict, paraminitdict)
+		return f(p)
+	else
+		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
+	end
 end
 
-function forward(madsdata::Associative, paramarray::Array; all=false, checkpointfrequency=false, checkpointfilename="checkpoint_forward")
+function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	madsdata_c = deepcopy(madsdata)
 	if all
@@ -66,20 +79,22 @@ function forward(madsdata::Associative, paramarray::Array; all=false, checkpoint
 	end
 	nr = (mn == np) ? mx : mn
 	r = []
-	if checkpointfrequency != false && length(s) == 2
-		if !isdir(getrestartdir(madsdata))
-			mkdir(getrestartdir(madsdata))
-		end
-		if s[2] == np
-			r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
+	if length(s) == 2
+		if checkpointfrequency != 0
+			if !isdir(getrestartdir(madsdata))
+				mkdir(getrestartdir(madsdata))
+			end
+			if s[2] == np
+				r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
+			else
+				r = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
+			end
 		else
-			r = RobustPmap.crpmap(i->f(paramarray[:, i]), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
-		end
-	elseif length(s) == 2
-		if s[2] == np
-			r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
-		else
-			r = RobustPmap.rpmap(i->f(paramarray[:, i]), 1:nr)
+			if s[2] == np
+				r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
+			else
+				r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
+			end
 		end
 	else
 		o = f(paramarray)
