@@ -72,6 +72,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 end
 
 quiet = true
+graphbackend = "SVG"
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0

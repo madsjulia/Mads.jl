@@ -2025,14 +2025,14 @@ Set the working directory (for parallel environments)
 
 Set Dynamic Model for MADS model calls using internal Julia functions
 
-<a id='Mads.setimagefileformat-Tuple{Any,Any}' href='#Mads.setimagefileformat-Tuple{Any,Any}'>#</a>
-**`Mads.setimagefileformat`** &mdash; *Method*.
+<a id='Mads.setplotfileformat-Tuple{Any,Any}' href='#Mads.setplotfileformat-Tuple{Any,Any}'>#</a>
+**`Mads.setplotfileformat`** &mdash; *Method*.
 
 
 
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`setimagefileformat(filename, format)`
+`setplotfileformat(filename, format)`
 
 Arguments:
 

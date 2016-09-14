@@ -2459,11 +2459,11 @@ Set Dynamic Model for MADS model calls using internal Julia functions
 
 ---
 
-<a id="method__setimagefileformat.1" class="lexicon_definition"></a>
-#### setimagefileformat(filename,  format)
+<a id="method__setplotfileformat.1" class="lexicon_definition"></a>
+#### setplotfileformat(filename,  format)
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`setimagefileformat(filename, format)`
+`setplotfileformat(filename, format)`
 
 Arguments:
 

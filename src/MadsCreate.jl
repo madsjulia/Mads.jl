@@ -2,9 +2,10 @@
 """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-- `Mads.createmadsproblem(infilename, outfilename)`
-- `Mads.createmadsproblem(madsdata, outfilename)`
-- `Mads.createmadsproblem(madsdata, predictions, outfilename)
+- `Mads.createmadsproblem(infilename::AbstractString, outfilename::AbstractString)`
+- `Mads.createmadsproblem(madsdata::Associative, outfilename::AbstractString)`
+- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
+- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)`
 
 Arguments:
 
@@ -60,4 +61,21 @@ function createmadsproblem(madsdata::Associative, predictions::Associative, outf
 		end
 	end
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
+end
+
+function createmadsproblem(madsdata::Associative, predictions::Associative)
+	newmadsdata = deepcopy(madsdata)
+	observationsdict = newmadsdata["Observations"]
+	if haskey(newmadsdata, "Wells")
+		wellsdict = newmadsdata["Wells"]
+	end
+	for k in keys(predictions)
+		observationsdict[k]["target"] = predictions[k]
+		if haskey( observationsdict[k], "well" )
+			well = observationsdict[k]["well"]
+			i = observationsdict[k]["index"]
+			wellsdict[well]["obs"][i]["c"] = predictions[k]
+		end
+	end
+	return newmadsdata
 end
