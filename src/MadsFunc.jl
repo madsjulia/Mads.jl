@@ -324,7 +324,11 @@ The first function in the file is the one that will be called by Mads to perform
 function importeverywhere(finename)
 	code = readall(finename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
-	fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
+	if quiet
+		fullcode = "@everywhere begin if !isdefined(:$functionname) $code\n$functionname\nend\nend"
+	else
+		fullcode = "@everywhere begin if isdefined(:$functionname) !quiet && warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
+	end
 	q = parse(fullcode)
 	eval(Main, q)
 	functionsymbol = Symbol(functionname)
