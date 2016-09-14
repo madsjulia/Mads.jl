@@ -41,9 +41,9 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		l2 = length(paramdict[k])
 		@assert l == l2
 	end
-	paraminitdict = DataStructures.OrderedDict(zip(kk, getparamsinit(madsdata)))
+	paraminitdict = DataStructures.OrderedDict(zip(keys(paramdict), getparamsinit(madsdata)))
 	if l == 1
-		p = merge(paraminitdict, paraminitdict)
+		p = merge(paraminitdict, paramdict)
 		return f(p)
 	else
 		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)

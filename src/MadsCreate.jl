@@ -47,19 +47,7 @@ function createmadsproblem(madsdata::Associative, outfilename::AbstractString)
 end
 
 function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)
-	newmadsdata = deepcopy(madsdata)
-	observationsdict = newmadsdata["Observations"]
-	if haskey(newmadsdata, "Wells")
-		wellsdict = newmadsdata["Wells"]
-	end
-	for k in keys(predictions)
-		observationsdict[k]["target"] = predictions[k]
-		if haskey( observationsdict[k], "well" )
-			well = observationsdict[k]["well"]
-			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i]["c"] = predictions[k]
-		end
-	end
+	newmadsdata = createmadsproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end
 

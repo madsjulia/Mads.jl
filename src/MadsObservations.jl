@@ -424,3 +424,30 @@ function wells2observations!(madsdata::Associative)
 	end
 	madsdata["Observations"] = observations
 end
+
+"Ger `Wells` class spatial and temporal data"
+function getwellsdata(madsdata::Associative; time=false)
+	if time
+		a = Array(Float64, 4, 0)
+	else
+		a = Array(Float64, 3, 0)
+	end
+	for wellkey in collect(keys(madsdata["Wells"]))
+		if madsdata["Wells"][wellkey]["on"]
+			x = madsdata["Wells"][wellkey]["x"]
+			y = madsdata["Wells"][wellkey]["y"]
+			z = (madsdata["Wells"][wellkey]["z0"] + madsdata["Wells"][wellkey]["z1"])/2
+			if !time 
+				a = [a [x, y, z]]
+			else
+				o = madsdata["Wells"][wellkey]["obs"]
+				nT = length(o)
+				for i in 1:nT
+					t = gettime(o[i])
+					a = [a [x, y, z, t]]
+				end
+			end
+		end
+	end
+	return a
+end
