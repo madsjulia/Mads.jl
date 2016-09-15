@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 Mads.madsinfo("NLopt optimization of an internal call problem:")
 mdinternal = Mads.loadmadsfile("test-internal-linearmodel.mads")

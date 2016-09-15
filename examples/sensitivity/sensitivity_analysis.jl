@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 problemdir = Mads.getmadsdir()
 

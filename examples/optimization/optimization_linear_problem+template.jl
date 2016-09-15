@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 Mads.madsinfo("Levenberg-Marquardt optimization of an internal call problem using templates and Julia script to parse the model outputs:")
 problemdir = string((dirname(Base.source_path()))) * "/"

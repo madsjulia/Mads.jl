@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 @everywhere fr = Mads.rosenbrock
 @everywhere g! = Mads.rosenbrock_gradient!

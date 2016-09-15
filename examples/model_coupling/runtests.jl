@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
@@ -16,8 +16,8 @@ Mads.madsinfo("Internal coupling using `MADS model` ...")
 md = Mads.loadmadsfile(workdir * "internal-linearmodel-mads.mads")
 mfor = Mads.forward(md)
 
-@test ifor == tfor
-@test ifor == mfor
+@Base.Test.test ifor == tfor
+@Base.Test.test ifor == mfor
 
 Mads.madsinfo("External coupling using `Command` and JLD ...")
 md = Mads.loadmadsfile(workdir * "external-jld.mads")
@@ -32,7 +32,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 	md = Mads.loadmadsfile(workdir * "external-yaml.mads")
 	# yparam, yresults = Mads.calibrate(md)
 	yfor = Mads.forward(md)
-	@test yfor == jfor
+	@Base.Test.test yfor == jfor
 end
 # TODO ASCII does NOT work; `parameters` are not required to be Ordered Dictionary
 # info("External coupling using ASCII ...")
@@ -40,5 +40,5 @@ end
 # aparam, aresults = Mads.calibrate(md)
 # afor = Mads.forward(md)
 
-@test jfor == sfor
-@test jfor == ifor
+@Base.Test.test jfor == sfor
+@Base.Test.test jfor == ifor

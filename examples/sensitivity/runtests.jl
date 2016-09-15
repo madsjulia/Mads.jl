@@ -1,7 +1,7 @@
 import Mads
-using JSON
-using Base.Test
-using DataStructures
+import JSON
+import Base.Test
+import DataStructures
 
 problemdir = Mads.getmadsdir()
 if problemdir == ""
@@ -18,8 +18,8 @@ if Mads.create_tests
 	close(file)
 else
 	sa_results_correct = JSON.parsefile(problemdir * "sobol-efast-results_correct.json"; dicttype=DataStructures.OrderedDict, use_mmap=true)
-	@test !in( Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false )
-	@test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
+	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false )
+	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
 end
 
 return

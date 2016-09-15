@@ -1,7 +1,7 @@
 import Mads
-using JSON
-using DataStructures
-using ProgressMeter
+import JSON
+import DataStructures
+import ProgressMeter
 
 # load MADS problem
 madsdirname = Mads.getmadsdir()
@@ -41,7 +41,7 @@ paramkeys = Mads.getparamkeys(md)
 optparamkeys = Mads.getoptparamkeys(md)
 
 # get all the parameter initial values
-paramdict_init = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict_init = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # create a function to compute concentrations
 computeconcentrations = Mads.makecomputeconcentrations(md)

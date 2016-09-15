@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 println("Running MADS tests:")
 

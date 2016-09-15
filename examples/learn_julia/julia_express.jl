@@ -505,10 +505,10 @@ plot(points, pdf(Normal(), points), "r") # add normal density plot
 
 # Assertions:
 @assert 1 == 2 "ERROR" # 2 macro arguments; error raised
-using Base.Test # load Base.Test module
-@test 1 == 2 # similar to assert; error
-@test_approx_eq 1 1.1 # error
-@test_approx_eq_eps 1 1.1 0.2 # no error
+import Base.Test # load Base.Test module
+@Base.Test.test 1 == 2 # similar to assert; error
+@Base.Test.test_approx_eq 1 1.1 # error
+@Base.Test.test_approx_eq_eps 1 1.1 0.2 # no error
 
 # Function vectorization:
 t(x::Float64, y::Float64 = 1.0) = x * y

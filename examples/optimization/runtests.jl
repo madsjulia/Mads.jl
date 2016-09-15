@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
@@ -15,7 +15,7 @@ if Mads.long_tests
 	if !haskey(ENV, "MADS_NO_PYTHON")
 		md = Mads.loadmadsfile(workdir * "external-yaml.mads")
 		yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
-		@test yparam == jparam
+		@Base.Test.test yparam == jparam
 	end
 end
 

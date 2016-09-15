@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 @everywhere fcsqrt(d) = ccall( (:my_c_sqrt, "libmy.dylib"), Float64, (Float64,), d )
 @everywhere fcfunc_ex1(n, d) = ccall( (:my_c_func_ex1, "libmy.dylib"), Float64, (Int64, Float64), n, d )
@@ -30,13 +30,13 @@ end
 println("sqrt ...")
 @time fcsqrt(2)
 @time sqrt(2)
-@test_approx_eq fcsqrt(2) sqrt(2)
+@Base.Test.test_approx_eq fcsqrt(2) sqrt(2)
 
 # function example #1
 println("func #1 ...")
 @time fcfunc_ex1( 100, 6.4 )
 @time fjfunc_ex1( 100, 6.4 )
-@test_approx_eq fcfunc_ex1( 100, 6.4 ) fjfunc_ex1( 100, 6.4 )
+@Base.Test.test_approx_eq fcfunc_ex1( 100, 6.4 ) fjfunc_ex1( 100, 6.4 )
 
 nP = 100
 nO = 1000000
@@ -48,7 +48,7 @@ o_j = Array(Float64, nO)
 println("func #2 ...")
 @time fcfunc_ex2(nP, x, nO, o_c)
 @time fjfunc_ex2(x, o_j)
-@test_approx_eq maximum(abs(o_c - o_j)) 0
+@Base.Test.test_approx_eq maximum(abs(o_c - o_j)) 0
 
 M = ones(nO, nP)
 M[:,end] = 100000
@@ -57,7 +57,7 @@ println("Matrix vector multiplication ...")
 @time fcmxv_bad(nP, x, M, nO, o_c);
 @time fcmxv(nP, x, M, nO, o_c)
 @time o_julia = fjmxv(M, x)
-@test_approx_eq maximum( o_c - o_julia ) 0
+@Base.Test.test_approx_eq maximum( o_c - o_julia ) 0
 
 Mads.setprocs(4)
 

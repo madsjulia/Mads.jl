@@ -1,4 +1,4 @@
-using Base.Test
+import Base.Test
 import Mads
 md = Mads.loadmadsfile("ode.mads")
 t, y = ode23s(funcosc, initialconditions, times, points=:specified)
@@ -10,4 +10,4 @@ end
 result1 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 result2 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 rm("odecheckpoints"; recursive=true)
-@test isequal(result1, result2)
+@Base.Test.test isequal(result1, result2)

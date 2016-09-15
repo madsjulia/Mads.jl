@@ -74,7 +74,7 @@ W,S,V = svd(B)
 (),S2 = svd(A)
 
 ## PyPlotting
-using PyPlot
+import PyPlot
 
 PyPlot.plot(S2)
 PyPlot.figure()
@@ -82,8 +82,8 @@ PyPlot.loglog(S2,linewidth=3,"go--")
 PyPlot.close("all")
 
 PyPlot.figure()
-PyPlot.plot(S2, label = "sv's of A",color="green", linestyle="dashed", marker="o", markersize=12)
-PyPlot.plot(S, label = "sv's of B",color="magenta", linestyle="dashed", marker="o", markersize=12)
+PyPlot.plot(S2, label = "sv's of A", color="green", linestyle="dashed", marker="o", markersize=12)
+PyPlot.plot(S, label = "sv's of B", color="magenta", linestyle="dashed", marker="o", markersize=12)
 PyPlot.legend()
 
 PyPlot.figure()
@@ -93,7 +93,7 @@ PyPlot.plot(y, cos(x))
 PyPlot.legend(["sin","cos"],loc="lower left")
 
 a = 42
-PyPlot.title("Title, a = $(a)"), xlabel("the x-axis label"), ylabel ("the y-axislabel")
+PyPlot.title("Title, a = $(a)"), xlabel("the x-axis label"), ylabel("the y-axislabel")
 
 PyPlot.title("A title with latex, \$\\alpha + \\beta\$, a = $(a)")
 
@@ -102,7 +102,7 @@ PyPlot.savefig(mypath * "/deleteme.pdf")
 PyPlot.savefig("deletemetoo.eps")
 
 ## saving data
-using JLD
+import JLD
 mypath = pwd()
 JLD.save(mypath * "/deletedata.jld","randA",A,"randB",B)
 A = JLD.load(mypath * "deletedata.jld","randA")

@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 Mads.madsinfo("Restarting ...")
 problemdir = string((dirname(Base.source_path()))) * "/"
@@ -19,7 +19,7 @@ if Mads.long_tests
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 
-	@test create_restart_results[1] == use_restart_results[1]
+	@Base.Test.test create_restart_results[1] == use_restart_results[1]
 
 	run(`rm -fR $(problemdir)/external-jld.restart_test`)
 end
@@ -34,8 +34,8 @@ create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians
 Mads.madsinfo("... use restart ...")
 use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
 
-@test no_restart_results[1] == create_restart_results[1]
-@test create_restart_results[1] == use_restart_results[1]
+@Base.Test.test no_restart_results[1] == create_restart_results[1]
+@Base.Test.test create_restart_results[1] == use_restart_results[1]
 
 run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
 
@@ -50,8 +50,8 @@ if Mads.long_tests
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.saltelli(md, N=5, seed=2016)
 
-	@test no_restart_results == create_restart_results
-	@test create_restart_results == use_restart_results
+	@Base.Test.test no_restart_results == create_restart_results
+	@Base.Test.test create_restart_results == use_restart_results
 
 	run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
 end

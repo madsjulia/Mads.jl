@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 Mads.madsinfo("Levenberg-Marquardt optimization of an internal problem:")
 problemdir = string((dirname(Base.source_path())))*"/"

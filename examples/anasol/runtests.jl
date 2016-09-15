@@ -1,6 +1,6 @@
 import Mads
 import JLD
-using Base.Test
+import Base.Test
 
 workdir = Mads.madsdir * "/../examples/anasol"
 md = Mads.loadmadsfile("$workdir/w01short.mads")
@@ -12,7 +12,7 @@ ssr = 0.
 for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
 	ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
 end
-@test_approx_eq_eps ssr 0. 1e-8
+@Base.Test.test_approx_eq_eps ssr 0. 1e-8
 
 if Mads.create_tests
 	good_forward_preds = computeconcentrations(paramdict)

@@ -1,5 +1,5 @@
-using Mads
-using Base.Test
+import Mads
+import Base.Test
 
 problemdir = Mads.getmadsdir()
 
@@ -18,7 +18,7 @@ if isdir("saltellirestart")
 end
 results1 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart", seed=2016)
 results2 = Mads.saltelliparallel(mdsaltelli, 2; seed=2016, N=500, restartdir="saltellirestart", seed=2016)
-@test results1 == results2
+@Base.Test.test results1 == results2
 rm("saltellirestart", recursive=true)
 
 if isdir("saltellicheckpoint")
@@ -26,7 +26,7 @@ if isdir("saltellicheckpoint")
 end
 results1 = Mads.saltelli(mdsaltelli; N=5000, restartdir="saltellicheckpoint", checkpointfrequency=1000, parallel=true, seed=2016)
 results2 = Mads.saltelli(mdsaltelli; N=5000, restartdir="saltellicheckpoint", checkpointfrequency=1000, parallel=true, seed=2016)
-@test results1 == results2
+@Base.Test.test results1 == results2
 rm("saltellicheckpoint", recursive=true)
 # Mads.madsinfo("Parallel Saltelli sensitivity analysis (brute force): Sobol test:") # TODO Brute force needs to be fixed
 # mdsobol = Mads.loadmadsfile("sobol.mads")

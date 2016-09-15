@@ -2,12 +2,11 @@
 # Test problem for eFAST algorithm embedded in Mads
 
 # Loading packages (some must be loaded on every processor)
-@everywhere using Distributions
-@everywhere using Docile
-@everywhere using ProgressMeter
-#using DataStructures
-using Mads
-using JSON
+import Distributions
+import Docile
+import ProgressMeter
+import Mads
+import JSON
 
 ## Necessary modules (no matter if we are reading from mads or using as a standalone)
 @everywhere include("/home/jlaughli/Julia Code/eFAST_distributeX.jl");
@@ -40,9 +39,9 @@ rootname = Mads.getmadsrootname(md)
 Mads.madsinfo("""Mads root name: $(rootname)""")
 
 # Save eFAST results as JSON file
- f = open("$rootname-eFAST-results-N=$N.json", "w")
- JSON.print(f, resultsefast)
- close(f)
+f = open("$rootname-eFAST-results-N=$N.json", "w")
+JSON.print(f, resultsefast)
+close(f)
 
 # Load eFAST results
 # resultsefast = JSON.parsefile("$rootname-eFAST-results-N=$N.json"; ordered=true, use_mmap=true)

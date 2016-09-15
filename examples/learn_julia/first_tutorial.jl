@@ -52,6 +52,5 @@ foo_grid(n) = broadcast(foo, linspace(-0.5, 1, n)', linspace(-1, 0.5, n))
 
 foo_grid(500)
 
-using Images
-convert(Image, scale(foo_grid(500), 1/80))
-
+import Images
+Images.convert(Image, Images.scale(foo_grid(500), 1/80))

@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 if madsdirname == ""
@@ -38,8 +38,8 @@ md = Mads.loadmadsfile(madsdirname * "internal-linearmodel.mads")
 flinearmodel = Mads.makemadscommandfunction(md)
 f2(x) = flinearmodel(Dict("a"=>0., "b"=>x))["o1"]
 area, err = gsl_integration_qag(f2, 0, 1)
-@test area == -0.5
+@Base.Test.test area == -0.5
 area, err = gsl_integration_qag(f2, 0, 2)
-@test area == -2
+@Base.Test.test area == -2
 area, err = gsl_integration_qag(f2, 0, 3)
-@test area == -4.5
+@Base.Test.test area == -4.5

@@ -1,8 +1,6 @@
-using Mads
-using ODE
-using JSON
-using Gadfly
-using DataStructures
+import Mads
+import ODE
+import DataStructures
 
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
@@ -19,10 +17,10 @@ paramkeys = Mads.getparamkeys(md)
 # Mads.showparameters(md)
 
 # create parameter dictionary
-paramdict = OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # function to create a function for the ODE solver
-function makefunc(parameterdict::OrderedDict)
+function makefunc(parameterdict::DataStructures.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
@@ -41,7 +39,7 @@ funcosc = makefunc(paramdict)
 Mads.madsinfo("Solve ODE ...")
 times = collect(0:.1:100)
 initialconditions = [1.,0.]
-t, y = ode23s(funcosc, initialconditions, times, points=:specified)
+t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
 ys = hcat(y...)' # vectorizing the output and transposing it with '
 
 # create an observation dictionary in the MADS dictionary

@@ -1,4 +1,4 @@
-using Mads
+import Mads
 
 Mads.madsinfo("Levenberg-Marquardt optimization of an external problem using YAML files ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed

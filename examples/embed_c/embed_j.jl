@@ -1,5 +1,5 @@
 import Mads
-using Base.Test
+import Base.Test
 
 @everywhere fjmxv(M, x) = M .* x
 
