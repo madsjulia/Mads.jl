@@ -610,13 +610,13 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
+		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = RobustPmap.rpmap(i->$(symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
+			results = RobustPmap.rpmap(i->$(Symbol(saltelli_functions[mi]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]

@@ -31,7 +31,7 @@ function test(testmod="")
 		file = Pkg.dir("Mads") * "/examples/$(testmod)/runtests.jl"
 		if isfile(file)
 			include(file)
-		elseif isdefined(symbol(testmod))
+		elseif isdefined(Symbol(testmod))
 			file = Pkg.dir(testmod) * "/test/runtests.jl"
 			if isfile(file)
 				include(file)

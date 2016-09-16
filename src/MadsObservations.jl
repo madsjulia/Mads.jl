@@ -52,7 +52,7 @@ for i = 1:length(getobsnames)
 	index = i
 	q = quote
 		@doc "Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`" ->
-		function $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys) 
+		function $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys) 
 			obsvalue = Array($(obstype), length(obskeys))
 			for i in 1:length(obskeys)
 				if haskey(madsdata["Observations"][obskeys[i]], $obsname)
@@ -80,9 +80,9 @@ for i = 1:length(getobsnames)
 			return obsvalue
 		end
 		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
-		function $(symbol(string("getobs", obsname)))(madsdata::Associative)
+		function $(Symbol(string("getobs", obsname)))(madsdata::Associative)
 			obskeys = getobskeys(madsdata)
-			return $(symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
+			return $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
 	end
 	eval(q)

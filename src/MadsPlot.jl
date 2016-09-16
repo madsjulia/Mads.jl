@@ -131,7 +131,7 @@ function plotmadsproblem(madsdata::Associative; format::AbstractString="", filen
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setplotfileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
+	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
 	end
@@ -237,7 +237,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Abst
 				if separate_files
 					filename_w = "$rootname-match-$wellname"
 					filename_w, format = setplotfileformat(filename_w, format)
-					Gadfly.draw(Gadfly.eval(symbol(format))(filename_w, hsize, 4Gadfly.inch), p)
+					Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, 4Gadfly.inch), p)
 					didplot = true
 				end
 			end
@@ -295,7 +295,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Abst
 			filename = "$rootname-match"
 		end
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, hsize, vsize), pl)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
 		if typeof(pl) == Gadfly.Plot{}
 			pl
 		end
@@ -338,7 +338,7 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::Ab
 	vsize = (3 * size(samples, 2))Gadfly.inch
 	filename, format = setplotfileformat(filename, format)
 	try
-		Gadfly.draw( Gadfly.eval((symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
+		Gadfly.draw( Gadfly.eval((Symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
@@ -460,7 +460,7 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Abst
 		filename = "$rootname-$wellname-$method-$nsample"
 	end
 	filename, format = setplotfileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize), p)
+	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
 end
 
 """
@@ -619,16 +619,16 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 	if !separate_files
 		filename, format = setplotfileformat(filename, format)
 		p = Gadfly.vstack(pp...)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize ), p)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize ), p)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), ptes)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), ptes)
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), pmes)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), pmes)
 	end
 end
 
@@ -765,7 +765,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		end
 		filename, format = setplotfileformat(filename, format)
 		try
-			Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, vsize), pl)
+			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter."
 			Mads.madswarn("Gadfly fails!")
 		end
@@ -939,7 +939,7 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::AbstractSt
 	end
 	filename, format = setplotfileformat(filename, format)
 	try
-		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
+		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
@@ -982,7 +982,7 @@ function plotseries(X::Matrix, filename::AbstractString; format::AbstractString=
 	end
 	filename, format = setplotfileformat(filename, format)
 	try
-		Gadfly.draw(Gadfly.eval((symbol(format)))(filename, hsize, vsize), pS)
+		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pS)
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end

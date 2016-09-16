@@ -48,7 +48,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 		filename = "$(rootname)-jacobian" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 12Gadfly.inch), jacmat)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 12Gadfly.inch), jacmat)
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	JpJ = J' * J
@@ -90,7 +90,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenmatrix" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename,6Gadfly.inch,6Gadfly.inch), eigenmat)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename,6Gadfly.inch,6Gadfly.inch), eigenmat)
 		Mads.madsinfo("Eigen matrix plot saved in $filename")
 		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 					Gadfly.Geom.bar,
@@ -98,7 +98,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenvalues" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
 	Dict("jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)

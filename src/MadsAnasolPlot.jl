@@ -24,6 +24,6 @@ function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString;
 	display(p3)
 	filename, format = setplotfileformat(filename, format)
 	p = Gadfly.vstack(p1, p2, p3)
-	Gadfly.draw(Gadfly.eval(symbol(format))(filename, 6Gadfly.inch, 8Gadfly.inch), p)
+	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 8Gadfly.inch), p)
 	return
 end

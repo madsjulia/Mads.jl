@@ -96,7 +96,7 @@ for i = 1:length(getparamsnames)
 	index = i
 	q = quote
 		@doc "Get an array with `$(getparamsnames[index])` values for parameters defined by `paramkeys`" ->
-		function $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
+		function $(Symbol(string("getparams", paramname)))(madsdata, paramkeys) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array($(paramtype), length(paramkeys))
 			for i in 1:length(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
@@ -112,9 +112,9 @@ for i = 1:length(getparamsnames)
 			return paramvalue # returns the parameter values
 		end
 		@doc "Get an array with `$(getparamsnames[index])` values for all the MADS model parameters" ->
-		function $(symbol(string("getparams", paramname)))(madsdata) # create a function to get each parameter name with 1 argument
+		function $(Symbol(string("getparams", paramname)))(madsdata) # create a function to get each parameter name with 1 argument
 			paramkeys = Mads.getparamkeys(madsdata) # get parameter keys
-			return $(symbol(string("getparams", paramname)))(madsdata, paramkeys) # call the function with 2 arguments
+			return $(Symbol(string("getparams", paramname)))(madsdata, paramkeys) # call the function with 2 arguments
 		end
 	end
 	eval(q)
@@ -392,22 +392,22 @@ for i = 1:length(getfunction)
 	index = i
 	q = quote
 		@doc "Get the keys in the MADS problem dictionary for parameters that are $(funcname[index]) (`$(keywordname[index])`)" ->
-		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
+		function $(Symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvalsNOT[i])]
 		end
-		function $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata)
+		function $(Symbol(string("get", keywordname[i], "paramkeys")))(madsdata)
 			paramkeys = getparamkeys(madsdata)
-			return $(symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
+			return $(Symbol(string("get", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
 		@doc "Get the keys in the MADS problem dictionary for parameters that are NOT $(funcname[index]) (`$(keywordname[index])`)" ->
-		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
+		function $(Symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[i])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvalsNOT[i])]
 		end
-		function $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata)
+		function $(Symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata)
 			paramkeys = getparamkeys(madsdata)
-			return $(symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys)
+			return $(Symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
 	end
 	eval(q)
