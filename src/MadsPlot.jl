@@ -10,8 +10,8 @@ import Images
 Display image file
 """
 function display(filename::AbstractString)
-	trytoopen = false
 	if isdefined(:TerminalExtensions)
+		trytoopen = false
 		ext = lowercase(Mads.getextension(filename))
 		if ext == "svg"
 			root = Mads.getrootname(filename)
@@ -27,6 +27,8 @@ function display(filename::AbstractString)
 			img = Images.load(filename)
 			Base.display(img)
 		end
+	else
+		trytoopen = true
 	end
 	if trytoopen
 		try
