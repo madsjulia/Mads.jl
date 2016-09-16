@@ -4,6 +4,34 @@ import ProgressMeter
 import DataFrames
 import DataStructures
 import Gadfly
+import Images
+
+"""
+Display image file
+"""
+function display(filename::AbstractString)
+	if isdefined(:TerminalExtensions)
+		ext = lowercase(Mads.getextension(filename))
+		if ext == "svg"
+			root = Mads.getrootname(filename)
+			filename2 = root * ".png"
+			run(`convert -density 90 $filename $filename2`)
+			Base.display(Images.load(filename2))
+		else
+			Base.display(Images.load(filename))
+		end
+	else
+		try
+			run(`open $filename`)
+		catch
+			try
+				run(`xdg-open $filename`)
+			catch
+				warn("Do not know how to open $filename")
+			end
+		end
+	end
+end
 
 """
 Set the default plot format (`SVG` is the default format)
