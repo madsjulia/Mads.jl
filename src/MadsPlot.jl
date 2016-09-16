@@ -10,19 +10,25 @@ import Images
 Display image file
 """
 function display(filename::AbstractString)
+	trytoopen = false
 	if isdefined(:TerminalExtensions)
 		ext = lowercase(Mads.getextension(filename))
 		if ext == "svg"
 			root = Mads.getrootname(filename)
 			filename2 = root * ".png"
-			run(`convert -density 90 -background none $filename $filename2`)
-			img = Images.load(filename2)
-			Base.display(img)
+			try
+				run(`convert -density 90 -background none $filename $filename2`)
+				img = Images.load(filename2)
+				Base.display(img)
+			catch
+				trytoopen = true
+			end
 		else
 			img = Images.load(filename)
 			Base.display(img)
 		end
-	else
+	end
+	if trytoopen
 		try
 			run(`open $filename`)
 		catch
