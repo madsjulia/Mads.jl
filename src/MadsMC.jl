@@ -35,10 +35,9 @@ function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100,
 	end
 	mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
 	model = Klara.likelihood_model(mcparams, false)
-	if Base.isbindingresolved(Klara, :RAM)
+	if VERSION < v"0.5.0-dev"
 		sampler = Klara.RAM(fill(1e-1, length(initvals)))
 	else
-		madswarn("Robust Adaptive Metropolis (RAM) method is not available")
 		sampler = Klara.MH(fill(1e-1, length(initvals)))
 	end
 	mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
