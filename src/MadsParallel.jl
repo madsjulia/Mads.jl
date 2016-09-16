@@ -160,6 +160,9 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		if nprocs() > 1
 			info("Number of processors: $(nprocs())")
 			info("Workers: $(join(h, " "))")
+			if dir == "" && (length(machinenames) > 0 || mads_servers)
+				@everywhere setdir()
+			end
 		else
 			warn("No workers found to add!")
 			info("Number of processors: $(nprocs())")
@@ -196,5 +199,5 @@ end
 
 function setdir()
 	dir = remotecall_fetch(1, ()->pwd())
-	cd(dir)
+	setdir(dir)
 end
