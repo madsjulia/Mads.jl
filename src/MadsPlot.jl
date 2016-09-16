@@ -15,10 +15,12 @@ function display(filename::AbstractString)
 		if ext == "svg"
 			root = Mads.getrootname(filename)
 			filename2 = root * ".png"
-			run(`convert -density 90 $filename $filename2`)
-			Base.display(Images.load(filename2))
+			run(`convert -density 90 -background none $filename $filename2`)
+			img = Images.load(filename2)
+			Base.display(img)
 		else
-			Base.display(Images.load(filename))
+			img = Images.load(filename)
+			Base.display(img)
 		end
 	else
 		try
