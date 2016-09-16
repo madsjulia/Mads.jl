@@ -4,8 +4,8 @@ import DataStructures
 Parse Amanzi output provided in an external file (`filename`)
 
 ```
-Mads.parser_amanzi()
-Mads.parser_amanzi("observations.out")
+Mads.amanzi_output_parser()
+Mads.amanzi_output_parser("observations.out")
 ```
 
 Arguments:
@@ -16,7 +16,7 @@ Returns:
 
 - `dict` : a dictionary with model observations following MADS requirements
 """
-function parser_amanzi(filename::AbstractString="observations.out")
+function amanzi_output_parser(filename::AbstractString="observations.out")
 	d = readdlm(filename, ',', skipstart=2)
 	no = size(d)[1]
 	madsinfo("Number of observations $(no)")
