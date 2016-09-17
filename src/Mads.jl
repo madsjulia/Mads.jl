@@ -79,6 +79,7 @@ modelruns = 0
 madsinputfile = ""
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
+madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
 
 if haskey(ENV, "MADS_LONG_TESTS")

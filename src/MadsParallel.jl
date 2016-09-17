@@ -65,7 +65,7 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 	h = Array(ASCIIString, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
-			machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+			machinenames = madsservers
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
 		for n = 1:length(machinenames)
@@ -200,4 +200,34 @@ end
 function setdir()
 	dir = remotecall_fetch(1, ()->pwd())
 	setdir(dir)
+end
+
+function runremote(machinenames::Array=[], cmd::ASCIIString="")
+	output = Array{ASCIIString, 0}
+	if length(machinenames) == 0
+		machinenames = madsservers
+	end
+	for i in machinenames
+		try
+			o = readall(`ssh -t $i $cmd`)
+			push!(output, o)
+			println("$i: $o")
+		catch
+			push!(output, "")
+			warn("$i is not accessible")
+		end
+	end
+	return output
+end
+
+function madscores(machinenames::Array=[])
+	runremote(machinenames, "grep -c ^processor /proc/cpuinfo")
+end
+
+function madsup(machinenames::Array=[])
+	runremote(machinenames, "uptime 2>/dev/null")
+end
+
+function madsload(machinenames::Array=[])
+	runremote(machinenames, "top -n 1 2>/dev/null | grep Tasks")
 end
