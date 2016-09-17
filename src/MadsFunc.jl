@@ -74,6 +74,24 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
+			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
+			if m != nothing
+				npt = parse(Int, m.captures[1])
+			else
+				npt = 1
+			end
+			if npt < nprocs_per_task
+				if m != nothing
+					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task "))
+					warn("Mads Command has been updated to account for number of processors per task ($nprocs_per_task)")
+				else
+					m = match(r"julia", madsdata["Command"])
+					if m != nothing
+						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task "))
+						warn("Mads Command has been updated to account for number of processors per task ($nprocs_per_task)")
+					end
+				end
+			end
 			Mads.madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
 		end
 		if haskey(madsdata, "Julia command")

@@ -35,6 +35,11 @@ function setprocs(np::Int)
 	setprocs(np, np)
 end
 
+"Set number of processors needed for each parallel task at each node"
+function set_nprocs_per_task(local_nprocs_per_task::Int=1)
+	global nprocs_per_task = local_nprocs_per_task
+end 
+
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
 
@@ -53,7 +58,8 @@ Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/ju
 
 Optional arguments:
 
-- `ntasks_per_node` : number of parallel tasks per node
+- `ntasks_per_node` : number of parallel tasks per 
+- `nprocs_per_task` : number of processors needed for each parallel task at each node
 - `machinenames` : array with machines names to invoked
 - `dir` : common directory shared by all the jobs
 - `exename` : location of the julia executable (the same version of julia is needed on all the workers)
@@ -61,7 +67,8 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+	set_nprocs_per_task(nprocs_per_task)
 	h = Array(ASCIIString, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
