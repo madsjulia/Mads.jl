@@ -80,15 +80,15 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			else
 				npt = 1
 			end
-			if npt < nprocs_per_task
+			if nprocs_per_task > 1 && npt != nprocs_per_task
 				if m != nothing
 					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task "))
-					warn("Mads Command has been updated to account for number of processors per task ($nprocs_per_task)")
+					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m != nothing
 						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task "))
-						warn("Mads Command has been updated to account for number of processors per task ($nprocs_per_task)")
+						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
 					end
 				end
 			end
