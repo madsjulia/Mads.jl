@@ -214,7 +214,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					results = madsdatacommandfunction(madsdata)
 				catch
 					cd(madsproblemdir)
-					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname)!")
+					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 				end
 			else
 				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
