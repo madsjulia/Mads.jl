@@ -1,3 +1,5 @@
+madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+
 "Get the number of processors"
 function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
@@ -167,9 +169,6 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames
 		if nprocs() > 1
 			info("Number of processors: $(nprocs())")
 			info("Workers: $(join(h, " "))")
-			if dir == "" && (length(machinenames) > 0 || mads_servers)
-				@everywhere setdir()
-			end
 		else
 			warn("No workers found to add!")
 			info("Number of processors: $(nprocs())")
@@ -210,14 +209,14 @@ function setdir()
 end
 
 function runremote(machinenames::Array=[], cmd::ASCIIString="")
-	output = Array{ASCIIString, 0}
+	output = Array(ASCIIString, 0)
 	if length(machinenames) == 0
 		machinenames = madsservers
 	end
 	for i in machinenames
 		try
 			o = readall(`ssh -t $i $cmd`)
-			push!(output, o)
+			push!(output, strip(o))
 			println("$i: $o")
 		catch
 			push!(output, "")
@@ -236,5 +235,5 @@ function madsup(machinenames::Array=[])
 end
 
 function madsload(machinenames::Array=[])
-	runremote(machinenames, "top -n 1 2>/dev/null | grep Tasks")
+	runremote(machinenames, "top -n 1 2>/dev/null")
 end
