@@ -209,15 +209,20 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 			end
 			if haskey(madsdata, "Julia command")
-				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) ...")
-				results = madsdatacommandfunction(madsdata)
+				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
+				try
+					results = madsdatacommandfunction(madsdata)
+				catch
+					cd(madsproblemdir)
+					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname)!")
+				end
 			else
 				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
 				try
 					run(`bash -c "$(madsdata["Command"])"`)
 				catch
 					cd(madsproblemdir)
-					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed!")
+					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
