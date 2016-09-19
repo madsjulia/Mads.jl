@@ -294,7 +294,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Abst
 			end
 			time = madsdata["Observations"][obskeys[i]]["time"]
 			skipnext = false
-			if madsdata["Observations"][obskeys[i]]["weight"] > 0
+			if !haskey(madsdata["Observations"][obskeys[i]], "weight") || madsdata["Observations"][obskeys[i]]["weight"] > 0
 				push!(tobs, time)
 				push!(obs, madsdata["Observations"][obskeys[i]]["target"])
 			else
