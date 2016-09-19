@@ -24,14 +24,14 @@ Mads.plotmadsproblem(md, keyword="all_wells") # display the well locations and t
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
 Mads.plotmatches(md, forward_predictions) # plot initial matches
-Mads.display(" w01-match.svg`) # works only on mac os x
+Mads.display("w01-match.svg")
 
 inverse_parameters, inverse_results = Mads.calibrate(md) # perform model calibration
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
 Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
-Mads.display(" w01-match.svg`) # works only on mac os x
+Mads.display("w01-match.svg")
 
 # use only two wells
 Mads.allwellsoff!(md) # turn off all wells
@@ -44,20 +44,20 @@ Mads.plotmadsproblem(md, keyword="w13a_w20a") # display the well locations and t
 forward_predictions = Mads.forward(md) # execute a forward model simulation based on the initial parameter guesses
 
 Mads.plotmatches(md, forward_predictions, filename=rootname * "-w13a_w20a-init-match.svg") # plot initial matches
-Mads.display(" w01-w13a_w20a-init-match.svg`) # works only on mac os x
+Mads.display("w01-w13a_w20a-init-match.svg")
 
 inverse_parameters, inverse_results = Mads.calibrate(md) # perform model calibration
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute a forward model simulation based on the calibrated values
 
 Mads.plotmatches(md, inverse_predictions, filename=rootname * "-w13a_w20a-calib-match.svg") # plot calibrated matches
-Mads.display(" w01-w13a_w20a-calib-match.svg`) # works only on mac os x
+Mads.display("w01-w13a_w20a-calib-match.svg")
 =#
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 Mads.madsinfo("Prior spaghetti plot ...")
 paramvalues=Mads.parametersample(md, 100)
 Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior.png")
-# Mads.display(" w01-w13a_w20a-prior-100-spaghetti.svg`) # works only on mac os x
+Mads.display("w01-w13a_w20a-prior-100-spaghetti.svg")
 
 efastresult = Mads.efast(md, N=100, seed=2016)
 Mads.plotobsSAresults(md, efastresult, filename="w13a_w20a-global.png", xtitle = "x", ytitle = "y")
@@ -73,7 +73,7 @@ mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
 Mads.spaghettiplot(md, mcmcvalues, keyword="w13a_w20a-posterior", format="PNG")
-# Mads.display(" w01-w13a_w20a-posterior-1000-spaghetti.png`) # works only on mac os x
+Mads.display("w01-w13a_w20a-posterior-1000-spaghetti.png")
 #=
 # Create a new problem (example)
 md_new = deepcopy(md)
@@ -95,7 +95,7 @@ md_new["Sources"][1]["gauss"]["dz"]["init"] = 0 # set a point source
 new_forward_predictions = Mads.forward(md_new) # execute a forward model simulation
 Mads.setobservationtargets!(md_new, new_forward_predictions) # set calibration targets to match the forward model predictions
 Mads.plotmatches(md_new, new_forward_predictions, filename=rootname * "-new-problem.svg")
-Mads.display(" w01-new-problem.svg`) # works only on mac os x
+Mads.display("w01-new-problem.svg")
 Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads input file
 
 # Calibrate with random initial guesses

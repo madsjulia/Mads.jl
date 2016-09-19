@@ -1,5 +1,5 @@
 "Model section information criteria"
-function makearrayfunction(madsdata::Associative, par::Array=[])
+function modelinformationcriteria(madsdata::Associative, par::Array=[])
 	f = Mads.forward(madsdata, par)
 	of = Mads.of(madsdata, f)
 	np = length(Mads.getoptparamkeys(madsdata))

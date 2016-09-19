@@ -35,6 +35,11 @@ function setprocs(np::Int)
 	setprocs(np, np)
 end
 
+"Set number of processors needed for each parallel task at each node"
+function set_nprocs_per_task(local_nprocs_per_task::Int=1)
+	global nprocs_per_task = local_nprocs_per_task
+end 
+
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
 
@@ -53,7 +58,8 @@ Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/ju
 
 Optional arguments:
 
-- `ntasks_per_node` : number of parallel tasks per node
+- `ntasks_per_node` : number of parallel tasks per 
+- `nprocs_per_task` : number of processors needed for each parallel task at each node
 - `machinenames` : array with machines names to invoked
 - `dir` : common directory shared by all the jobs
 - `exename` : location of the julia executable (the same version of julia is needed on all the workers)
@@ -61,11 +67,12 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+	set_nprocs_per_task(nprocs_per_task)
 	h = Array(ASCIIString, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
-			machinenames = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+			machinenames = madsservers
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
 		for n = 1:length(machinenames)
@@ -160,6 +167,9 @@ function setprocs(; ntasks_per_node::Int=0, machinenames::Array=[], mads_servers
 		if nprocs() > 1
 			info("Number of processors: $(nprocs())")
 			info("Workers: $(join(h, " "))")
+			if dir == "" && (length(machinenames) > 0 || mads_servers)
+				@everywhere setdir()
+			end
 		else
 			warn("No workers found to add!")
 			info("Number of processors: $(nprocs())")
@@ -196,5 +206,35 @@ end
 
 function setdir()
 	dir = remotecall_fetch(1, ()->pwd())
-	cd(dir)
+	setdir(dir)
+end
+
+function runremote(machinenames::Array=[], cmd::ASCIIString="")
+	output = Array{ASCIIString, 0}
+	if length(machinenames) == 0
+		machinenames = madsservers
+	end
+	for i in machinenames
+		try
+			o = readall(`ssh -t $i $cmd`)
+			push!(output, o)
+			println("$i: $o")
+		catch
+			push!(output, "")
+			warn("$i is not accessible")
+		end
+	end
+	return output
+end
+
+function madscores(machinenames::Array=[])
+	runremote(machinenames, "grep -c ^processor /proc/cpuinfo")
+end
+
+function madsup(machinenames::Array=[])
+	runremote(machinenames, "uptime 2>/dev/null")
+end
+
+function madsload(machinenames::Array=[])
+	runremote(machinenames, "top -n 1 2>/dev/null | grep Tasks")
 end

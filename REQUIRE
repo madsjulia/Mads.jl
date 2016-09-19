@@ -8,6 +8,7 @@ Conda
 PyCall 1.6.2
 PyPlot
 Gadfly
+Images
 YAML
 JSON
 JLD
