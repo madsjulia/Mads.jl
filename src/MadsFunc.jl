@@ -210,11 +210,21 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
-				try
-					results = madsdatacommandfunction(madsdata)
-				catch
-					cd(madsproblemdir)
-					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+				attempt = 0
+				trying = true
+				while trying
+					try
+						attempt += 1
+						results = madsdatacommandfunction(madsdata)
+						trying = false
+					catch
+						sleep(attempt * 2)
+						if attempt > 3
+							cd(madsproblemdir)
+							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+							trying = false
+						end
+					end
 				end
 			else
 				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
