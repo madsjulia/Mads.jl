@@ -66,7 +66,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	elseif haskey(madsdata, "MADS model")
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
-		madsdatacommandfunction = importeverywhere(joinpath(filename))
+		madsdatacommandfunction = importeverywhere(filename)
 		madscommandfunction = madsdatacommandfunction(madsdatawithobs)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
@@ -210,21 +210,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
-				attempt = 0
-				trying = true
-				while trying
-					try
-						attempt += 1
-						results = madsdatacommandfunction(madsdata)
-						trying = false
-					catch
-						sleep(attempt * 2)
-						if attempt > 3
-							cd(madsproblemdir)
-							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
-							trying = false
-						end
-					end
+				try
+					results = madsdatacommandfunction(madsdata)
+				catch
+					cd(madsproblemdir)
+					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 				end
 			else
 				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
