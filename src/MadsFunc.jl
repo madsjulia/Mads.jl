@@ -350,7 +350,7 @@ function importeverywhere(filename)
 	if quiet
 		fullcode = "@everywhere begin if !isdefined(:$functionname) $code\n$functionname\nend\nend"
 	else
-		fullcode = "@everywhere begin if isdefined(:$functionname) !quiet && warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
+		fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
 	end
 	q = parse(fullcode)
 	eval(Main, q)
