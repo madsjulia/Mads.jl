@@ -1208,18 +1208,18 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, 
 				end
 				if kernel == "gaussian"
 					lambda = varargin[1]
-					kernel_function(x,y) = exp(-lambda*norm(x.feature-y.feature,2)^2)
+					kernel_function = (x,y)->exp(-lambda*norm(x.feature-y.feature,2)^2)
 				elseif kernel == "spline"
 					Mads.madserror("Spline kernel is not implemented!")
 					# kernel_function(a,b) = prod(arrayfun(@(x,y) 1 + x*y+x*y*min(x,y)-(x+y)/2*min(x,y)^2+1/3*min(x,y)^3,a.feature,b.feature))
 				elseif kernel == "periodic"
 					l = varargin[1]
 					p = varargin[2]
-					kernel_function(x,y) = exp(-2*sin(pi*norm(x.feature-y.feature,2)/p)^2/l^2)
+					kernel_function = (x,y)->exp(-2*sin(pi*norm(x.feature-y.feature,2)/p)^2/l^2)
 				elseif kernel == "tangent"
 					a = varargin[1]
 					c = varargin[2]
-					kernel_function(x,y) = prod(tanh(a*x.feature'*y.feature+c))
+					kernel_function = (x,y)->prod(tanh(a*x.feature'*y.feature+c))
 				else
 					throw("Error!")
 				end

@@ -193,7 +193,7 @@ function setobstime!(madsdata::Associative, separator::AbstractString="_")
 		end
 	end
 end
-function setobstime!(madsdata::Associative, rx::Regex=r"[A-x]*_([0-9,.]+)")
+function setobstime!(madsdata::Associative, rx::Regex)
 	obskeys = Mads.getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		m = match(rx, obskeys[i])
@@ -272,7 +272,7 @@ end
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = Mads.getobskeys(madsdata)
-	p = Array(ASCIIString, 0)
+	p = Array(String, 0)
 	for obskey in obskeys
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])

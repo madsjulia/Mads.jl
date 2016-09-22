@@ -113,14 +113,14 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	sindx = 0.1
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
-		if typeof(sindx) == ASCIIString
+		if typeof(sindx) == String
 			sindx = float(sindx)
 		end
 	end
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	if save_results
-		function calibratecallback(x_best, of, lambda)
+		calibratecallback = (x_best, of, lambda)->begin
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
@@ -128,7 +128,7 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 			close(outfile)
 		end
 	else
-		calibratecallback(x_best, of, lambda) = nothing
+		calibratecallback = (x_best, of, lambda)->nothing
 	end
 	if usenaive == true
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
