@@ -67,13 +67,8 @@ end
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
-	if Mads.haskeyword(madsdata, "sar")
-		function o_lm(x::Vector)
-			sum(abs(x))
-		end
-	else # L2 norm of x
-		o_lm(x) = (x'*x)[1]
-	end
+	sar = Mads.haskeyword(madsdata, "sar")
+	o_lm(x::Vector) = sar ? sum(abs(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
