@@ -127,7 +127,7 @@ end
 function evaluatemadsexpression(expressionstring, parameters)
 	expression = parse(expressionstring)
 	expression = MetaProgTools.populateexpression(expression, parameters)
-	retval::Float64
+	local retval::Float64
 	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
 	return retval
 end

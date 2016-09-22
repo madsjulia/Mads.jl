@@ -69,9 +69,9 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir::ASCIIString="", exename::ASCIIString="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
-	h = Array(ASCIIString, 0)
+	h = Array(String, 0)
 	if length(machinenames) > 0 || mads_servers
 		if length(machinenames) == 0
 			machinenames = madsservers
@@ -197,7 +197,7 @@ Set the working directory (for parallel environments)
 @everywhere Mads.setdir("/home/monty")
 ```
 """
-function setdir(dir::ASCIIString)
+function setdir(dir)
 	if isdir(dir)
 		cd(dir)
 	end
@@ -208,8 +208,8 @@ function setdir()
 	setdir(dir)
 end
 
-function runremote(machinenames::Array=[], cmd::ASCIIString="")
-	output = Array(ASCIIString, 0)
+function runremote(machinenames::Array=[], cmd="")
+	output = Array(String, 0)
 	if length(machinenames) == 0
 		machinenames = madsservers
 	end

@@ -344,8 +344,8 @@ end
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 """
-function importeverywhere(finename)
-	code = readall(finename)
+function importeverywhere(filename)
+	code = readstring(filename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	if quiet
 		fullcode = "@everywhere begin if !isdefined(:$functionname) $code\n$functionname\nend\nend"

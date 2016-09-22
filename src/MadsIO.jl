@@ -343,15 +343,15 @@ Returns:
 - `filename` : an array with file names matching the pattern in the specified directory
 """
 searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
-searchdir(key::ASCIIString; path = ".") = filter(x->contains(x, key), readdir(path))
+searchdir(key::String; path = ".") = filter(x->contains(x, key), readdir(path))
 
 "Filter dictionary keys based on a string or regular expression"
-filterkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
-filterkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
+filterkeys(dict::Associative, key::Regex) = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
+filterkeys(dict::Associative, key::String = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
 
 "Find indexes for dictionary keys based on a string or regular expression"
-indexkeys(dict::Associative, key::Regex = "") = key == "" ? keys(dict) : find(x->ismatch(key, x), collect(keys(dict)))
-indexkeys(dict::Associative, key::ASCIIString = "") = key == "" ? keys(dict) : find(x->contains(x, key), collect(keys(dict)))
+indexkeys(dict::Associative, key::Regex) = key == "" ? keys(dict) : find(x->ismatch(key, x), collect(keys(dict)))
+indexkeys(dict::Associative, key::String = "") = key == "" ? keys(dict) : find(x->contains(x, key), collect(keys(dict)))
 
 "Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)
