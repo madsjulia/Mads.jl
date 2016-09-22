@@ -8,6 +8,7 @@ function runcmd(cmd::Cmd, quiet=false)
 	cmdout = Pipe()
 	cmderr = Pipe()
 	cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
+	wait(cmdproc)
 	close(cmdin)
 	close(cmdout.in)
 	close(cmderr.in)
@@ -15,10 +16,13 @@ function runcmd(cmd::Cmd, quiet=false)
 		erroutput = readlines(cmderr)
 		if length(erroutput) > 0
 			for i in erroutput
-				warn("$i")
+				warn("$(strip(i))")
 			end
-			error("Execution of command $cmd produced an error!")
+			
 		end
+	end
+	if cmdproc.exitcode != 0
+		error("Execution of command $cmd produced an error!")
 	end
 	return cmdout, cmderr
 end
