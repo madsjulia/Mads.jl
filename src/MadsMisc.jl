@@ -1,5 +1,25 @@
 import MetaProgTools
 
+function runcmd(cmd::Cmd, quiet=false)
+	cmdin = Pipe()
+	cmdout = Pipe()
+	cmderr = Pipe()
+	cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
+	close(cmdin)
+	close(cmdout.in)
+	close(cmderr.in)
+	if !quiet
+		erroutput = readlines(cmderr)
+		if length(erroutput) > 0
+			warn("Execution of command $cmd produced an error:")
+			for i in erroutput
+				warn("$i")
+			end
+		end
+	end
+	return cmdout, cmderr
+end
+
 """
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
