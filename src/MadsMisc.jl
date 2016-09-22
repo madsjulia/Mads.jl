@@ -12,7 +12,7 @@ function runcmd(cmd::Cmd, quiet=false)
 	close(cmdin)
 	close(cmdout.in)
 	close(cmderr.in)
-	if !quiet
+	if !quiet || cmdproc.exitcode != 0
 		erroutput = readlines(cmderr)
 		if length(erroutput) > 0
 			for i in erroutput
@@ -22,6 +22,14 @@ function runcmd(cmd::Cmd, quiet=false)
 		end
 	end
 	if cmdproc.exitcode != 0
+		output = readlines(cmdout)
+		if length(output) > 0
+			for i in output
+				if ismatch(r"error"i, i)
+					warn("$(strip(i))")
+				end
+			end
+		end
 		error("Execution of command $cmd produced an error!")
 	end
 	return cmdout, cmderr

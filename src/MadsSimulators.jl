@@ -1,7 +1,7 @@
 """
 Execute amanzi
 """
-function amanzi(filename::AbstractString, nproc::Int=nprocs_per_task, quiet::Bool=true, observation_filename::AbstractString="observations.out", setup::AbstractString="source-amanzi-setup", amanzi_exe::AbstractString="")
+function amanzi(filename::AbstractString, nproc::Int=nprocs_per_task, quiet::Bool=true, observation_filename::AbstractString="observations.out", setup::AbstractString="source-amanzi-setup"; amanzi_exe::AbstractString="")
 	if quiet
 		quiet_string = "&> /dev/null"
 	else
