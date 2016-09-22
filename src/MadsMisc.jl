@@ -1,5 +1,8 @@
 import MetaProgTools
 
+"""
+Run external command and pipe stdout and stderr
+"""
 function runcmd(cmd::Cmd, quiet=false)
 	cmdin = Pipe()
 	cmdout = Pipe()
@@ -11,10 +14,10 @@ function runcmd(cmd::Cmd, quiet=false)
 	if !quiet
 		erroutput = readlines(cmderr)
 		if length(erroutput) > 0
-			warn("Execution of command $cmd produced an error:")
 			for i in erroutput
 				warn("$i")
 			end
+			error("Execution of command $cmd produced an error!")
 		end
 	end
 	return cmdout, cmderr
