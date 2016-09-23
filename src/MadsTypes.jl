@@ -1,4 +1,7 @@
-## Types necessary for SVR; needs to be defined here because types don't seem to work when not defined at top level
+import Compat
+import Compat.String
+
+## Types necessary for SVR
 type svrOutput
 	alpha::Array{Float64,1}
 	b::Float64
