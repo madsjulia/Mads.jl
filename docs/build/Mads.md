@@ -20,6 +20,33 @@ Turn off all the wells in the MADS problem dictionary
 
 Turn on all the wells in the MADS problem dictionary
 
+<a id='Mads.amanzi' href='#Mads.amanzi'>#</a>
+**`Mads.amanzi`** &mdash; *Function*.
+
+
+
+Execute amanzi
+
+<a id='Mads.amanzi_output_parser' href='#Mads.amanzi_output_parser'>#</a>
+**`Mads.amanzi_output_parser`** &mdash; *Function*.
+
+
+
+Parse Amanzi output provided in an external file (`filename`)
+
+```
+Mads.amanzi_output_parser()
+Mads.amanzi_output_parser("observations.out")
+```
+
+Arguments:
+
+  * `filename` : external file name (optional)
+
+Returns:
+
+  * `dict` : a dictionary with model observations following MADS requirements
+
 <a id='Mads.asinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}' href='#Mads.asinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.asinetransform`** &mdash; *Method*.
 
@@ -269,9 +296,10 @@ Turn on the generation of MADS tests (dangerous)
 
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-  * `Mads.createmadsproblem(infilename, outfilename)`
-  * `Mads.createmadsproblem(madsdata, outfilename)`
-  * `Mads.createmadsproblem(madsdata, predictions, outfilename)
+  * `Mads.createmadsproblem(infilename::AbstractString, outfilename::AbstractString)`
+  * `Mads.createmadsproblem(madsdata::Associative, outfilename::AbstractString)`
+  * `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
+  * `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)`
 
 Arguments:
 
@@ -293,6 +321,13 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 
 
 Delete rows with NaN in a Dataframe `df`
+
+<a id='Mads.display-Tuple{AbstractString}' href='#Mads.display-Tuple{AbstractString}'>#</a>
+**`Mads.display`** &mdash; *Method*.
+
+
+
+Display image file
 
 <a id='Mads.dobigdt-Tuple{Associative{K,V},Int64}' href='#Mads.dobigdt-Tuple{Associative{K,V},Int64}'>#</a>
 **`Mads.dobigdt`** &mdash; *Method*.
@@ -375,8 +410,8 @@ Evaluate the expression in terms of the parameters, return a Dict() containing t
 
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-<a id='Mads.filterkeys' href='#Mads.filterkeys'>#</a>
-**`Mads.filterkeys`** &mdash; *Function*.
+<a id='Mads.filterkeys-Tuple{Associative{K,V},Regex}' href='#Mads.filterkeys-Tuple{Associative{K,V},Regex}'>#</a>
+**`Mads.filterkeys`** &mdash; *Method*.
 
 
 
@@ -935,6 +970,13 @@ Get observation weight
 
 Get keys for all wells in the MADS problem dictionary
 
+<a id='Mads.getwellsdata-Tuple{Associative{K,V}}' href='#Mads.getwellsdata-Tuple{Associative{K,V}}'>#</a>
+**`Mads.getwellsdata`** &mdash; *Method*.
+
+
+
+Ger `Wells` class spatial and temporal data
+
 <a id='Mads.haskeyword-Tuple{Associative{K,V},AbstractString}' href='#Mads.haskeyword-Tuple{Associative{K,V},AbstractString}'>#</a>
 **`Mads.haskeyword`** &mdash; *Method*.
 
@@ -972,8 +1014,8 @@ Produce MADS help information
 
 Import function everywhere from a file. The first function in the file is the one that will be called by Mads to perform the model simulations.
 
-<a id='Mads.indexkeys' href='#Mads.indexkeys'>#</a>
-**`Mads.indexkeys`** &mdash; *Function*.
+<a id='Mads.indexkeys-Tuple{Associative{K,V},Regex}' href='#Mads.indexkeys-Tuple{Associative{K,V},Regex}'>#</a>
+**`Mads.indexkeys`** &mdash; *Method*.
 
 
 
@@ -1183,13 +1225,6 @@ Make a conditional log likelihood function that accepts an array containing the 
 
 
 
-Model section information criteria
-
-<a id='Mads.makearrayfunction' href='#Mads.makearrayfunction'>#</a>
-**`Mads.makearrayfunction`** &mdash; *Function*.
-
-
-
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
 `Mads.makearrayfunction(madsdata, f)`
@@ -1393,6 +1428,13 @@ Make a function to compute the log-likelihood for a given set of model parameter
 
 Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
 
+<a id='Mads.modelinformationcriteria' href='#Mads.modelinformationcriteria'>#</a>
+**`Mads.modelinformationcriteria`** &mdash; *Function*.
+
+
+
+Model section information criteria
+
 <a id='Mads.modobsweights!-Tuple{Associative{K,V},Number}' href='#Mads.modobsweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.modobsweights!`** &mdash; *Method*.
 
@@ -1532,39 +1574,12 @@ Arguments:
 
   * `madsdata` : Mads problem dictionary
 
-<a id='Mads.parser_amanzi' href='#Mads.parser_amanzi'>#</a>
-**`Mads.parser_amanzi`** &mdash; *Function*.
-
-
-
-Parse Amanzi output provided in an external file (`filename`)
-
-```
-Mads.parser_amanzi()
-Mads.parser_amanzi("observations.out")
-```
-
-Arguments:
-
-  * `filename` : external file name (optional)
-
-Returns:
-
-  * `dict` : a dictionary with model observations following MADS requirements
-
 <a id='Mads.partialof-Tuple{Associative{K,V},Associative{K,V},Regex}' href='#Mads.partialof-Tuple{Associative{K,V},Associative{K,V},Regex}'>#</a>
 **`Mads.partialof`** &mdash; *Method*.
 
 
 
 Compute the sum of squared residuals for observations that match a regular expression
-
-<a id='Mads.plotSAresults_monty-Tuple{Any,Any,Any}' href='#Mads.plotSAresults_monty-Tuple{Any,Any,Any}'>#</a>
-**`Mads.plotSAresults_monty`** &mdash; *Method*.
-
-
-
-Plot the sensitivity analysis results for each well (Specific plot requested by Monty)
 
 <a id='Mads.plotgrid-Tuple{Associative{K,V},Array{Float64,N}}' href='#Mads.plotgrid-Tuple{Associative{K,V},Array{Float64,N}}'>#</a>
 **`Mads.plotgrid`** &mdash; *Method*.
@@ -1645,7 +1660,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotobsSAresults-Tuple{Any,Any}' href='#Mads.plotobsSAresults-Tuple{Any,Any}'>#</a>
+<a id='Mads.plotobsSAresults-Tuple{Associative{K,V},Any}' href='#Mads.plotobsSAresults-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.plotobsSAresults`** &mdash; *Method*.
 
 
@@ -1693,7 +1708,7 @@ Arguments:
   * `name` : series name
   * `combined` : `true` by default
 
-<a id='Mads.plotwellSAresults-Tuple{Any,Any,Any}' href='#Mads.plotwellSAresults-Tuple{Any,Any,Any}'>#</a>
+<a id='Mads.plotwellSAresults-Tuple{Associative{K,V},Any,Any}' href='#Mads.plotwellSAresults-Tuple{Associative{K,V},Any,Any}'>#</a>
 **`Mads.plotwellSAresults`** &mdash; *Method*.
 
 
@@ -1710,7 +1725,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotwellSAresults-Tuple{Any,Any}' href='#Mads.plotwellSAresults-Tuple{Any,Any}'>#</a>
+<a id='Mads.plotwellSAresults-Tuple{Associative{K,V},Any}' href='#Mads.plotwellSAresults-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.plotwellSAresults`** &mdash; *Method*.
 
 
@@ -1869,6 +1884,13 @@ Parameter Hessian of the Rosenbrock test function
 
 Rosenbrock test function for LM optimization (returns the 2 components separetely)
 
+<a id='Mads.runcmd' href='#Mads.runcmd'>#</a>
+**`Mads.runcmd`** &mdash; *Function*.
+
+
+
+Run external command and pipe stdout and stderr
+
 <a id='Mads.saltelli-Tuple{Associative{K,V}}' href='#Mads.saltelli-Tuple{Associative{K,V}}'>#</a>
 **`Mads.saltelli`** &mdash; *Method*.
 
@@ -1952,7 +1974,7 @@ Arguments:
 
 Save MCMC chain in a file
 
-<a id='Mads.scatterplotsamples-Tuple{Any,Array{T,2},AbstractString}' href='#Mads.scatterplotsamples-Tuple{Any,Array{T,2},AbstractString}'>#</a>
+<a id='Mads.scatterplotsamples-Tuple{Associative{K,V},Array{T,2},AbstractString}' href='#Mads.scatterplotsamples-Tuple{Associative{K,V},Array{T,2},AbstractString}'>#</a>
 **`Mads.scatterplotsamples`** &mdash; *Method*.
 
 
@@ -1985,6 +2007,13 @@ Returns:
 
   * `filename` : an array with file names matching the pattern in the specified directory
 
+<a id='Mads.set_nprocs_per_task' href='#Mads.set_nprocs_per_task'>#</a>
+**`Mads.set_nprocs_per_task`** &mdash; *Function*.
+
+
+
+Set number of processors needed for each parallel task at each node
+
 <a id='Mads.setallparamsoff!-Tuple{Associative{K,V}}' href='#Mads.setallparamsoff!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.setallparamsoff!`** &mdash; *Method*.
 
@@ -2006,7 +2035,14 @@ Set all parameters ON
 
 Set MADS debug level
 
-<a id='Mads.setdir-Tuple{ASCIIString}' href='#Mads.setdir-Tuple{ASCIIString}'>#</a>
+<a id='Mads.setdefaultplotformat-Tuple{AbstractString}' href='#Mads.setdefaultplotformat-Tuple{AbstractString}'>#</a>
+**`Mads.setdefaultplotformat`** &mdash; *Method*.
+
+
+
+Set the default plot format (`SVG` is the default format)
+
+<a id='Mads.setdir-Tuple{Any}' href='#Mads.setdir-Tuple{Any}'>#</a>
 **`Mads.setdir`** &mdash; *Method*.
 
 
@@ -2024,25 +2060,6 @@ Set the working directory (for parallel environments)
 
 
 Set Dynamic Model for MADS model calls using internal Julia functions
-
-<a id='Mads.setplotfileformat-Tuple{Any,Any}' href='#Mads.setplotfileformat-Tuple{Any,Any}'>#</a>
-**`Mads.setplotfileformat`** &mdash; *Method*.
-
-
-
-Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
-
-`setplotfileformat(filename, format)`
-
-Arguments:
-
-  * `filename` : output file name
-  * `format` : output plot format (`png`, `pdf`, etc.)
-
-Returns:
-
-  * `filename` : output file name
-  * `format` : output plot format (`png`, `pdf`, etc.)
 
 <a id='Mads.setmadsinputfile-Tuple{AbstractString}' href='#Mads.setmadsinputfile-Tuple{AbstractString}'>#</a>
 **`Mads.setmadsinputfile`** &mdash; *Method*.
@@ -2156,6 +2173,25 @@ Arguments:
   * `madsdata` : MADS problem dictionary
   * `paramdict` : dictionary with initial model parameter values
 
+<a id='Mads.setplotfileformat-Tuple{AbstractString,AbstractString}' href='#Mads.setplotfileformat-Tuple{AbstractString,AbstractString}'>#</a>
+**`Mads.setplotfileformat`** &mdash; *Method*.
+
+
+
+Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
+
+`Mads.setplotfileformat(filename::AbstractString, format::AbstractString)`
+
+Arguments:
+
+  * `filename` : output file name
+  * `format` : output plot format (`png`, `pdf`, etc.)
+
+Returns:
+
+  * `filename` : output file name
+  * `format` : output plot format (`png`, `pdf`, etc.)
+
 <a id='Mads.setprocs-Tuple{Int64,Int64}' href='#Mads.setprocs-Tuple{Int64,Int64}'>#</a>
 **`Mads.setprocs`** &mdash; *Method*.
 
@@ -2194,7 +2230,8 @@ Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/ju
 
 Optional arguments:
 
-  * `ntasks_per_node` : number of parallel tasks per node
+  * `ntasks_per_node` : number of parallel tasks per 
+  * `nprocs_per_task` : number of processors needed for each parallel task at each node
   * `machinenames` : array with machines names to invoked
   * `dir` : common directory shared by all the jobs
   * `exename` : location of the julia executable (the same version of julia is needed on all the workers)

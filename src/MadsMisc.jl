@@ -17,14 +17,15 @@ function runcmd(cmd::Cmd, quiet=false)
 		if length(erroutput) > 0
 			for i in erroutput
 				warn("$(strip(i))")
-			end
-			
+			end	
 		end
 	end
 	if cmdproc.exitcode != 0
 		output = readlines(cmdout)
-		if length(output) > 0
-			for i in output
+		l = length(output)
+		if l > 0
+			s = (l < 100) ? 1 : 100
+			for i in output[s:end]
 				if ismatch(r"error"i, i)
 					warn("$(strip(i))")
 				end

@@ -1,10 +1,3 @@
-if Mads.quiet
-	Mads.quietoff()
-	Mads.quieton()
-else
-	Mads.quieton()
-	Mads.quietoff()
-end
 if Mads.create_tests
 	Mads.create_tests_off()
 	Mads.create_tests_on()
@@ -24,7 +17,9 @@ Mads.setverbositylevel(1)
 Mads.resetmodelruns()
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
+quiet_status = Mads.quiet
 Mads.quietoff()
+Mads.runcmd(`ls`)
 Mads.madsoutput("a")
 Mads.madsdebug("a")
 # Mads.madsinfo("a")
@@ -40,3 +35,8 @@ close(outWrite);
 close(outRead);
 redirect_stdout(originalSTDOUT);
 Mads.quieton()
+if quiet_status
+	Mads.quieton()
+else
+	Mads.quietoff()
+end
