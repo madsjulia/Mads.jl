@@ -18,7 +18,7 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 """
-function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml")
+function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml", check_missing_targets::Bool=true)
 	if format == "yaml"
 		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	elseif format == "json"
@@ -26,9 +26,26 @@ function loadmadsfile(filename::AbstractString; julia::Bool=false, format::Abstr
 	end
 	madsdata = parsemadsdata(madsdata)
 	madsdata["Filename"] = filename
+	if haskey(madsdata, "Observations")
+		t = getobstarget(madsdata)
+		isn = isnan(t)
+		if any(isn)
+			if check_missing_targets
+				k = getobskeys(madsdata)
+				warn("Observation with missing targets:")
+				for i in 1:length(k)
+					if isnan(t[i])
+						println(k[i])
+					end
+				end
+			else
+				warn("There are $(length(isn[isn.==true])) observations with missing targets!")
+			end
+		end
+	end
 	return madsdata
 end
- 
+
 """
 Parse loaded Mads problem dictionary
 

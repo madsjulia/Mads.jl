@@ -27,7 +27,7 @@ end
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
-	k = getobskeys(madsdata )
+	k = getobskeys(madsdata)
 	return k[w.>0 | isnan(t)]
 end
 
@@ -144,7 +144,7 @@ function gettarget(o::Associative)
 		target = o["c"]
 	else
 		target = NaN
-		madswarn("Target is missing for observation $(o)!")
+		!quiet && madswarn("Target is missing for observation $(o)!")
 	end
 	return target
 end
@@ -183,7 +183,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
 """
 function setobstime!(madsdata::Associative, separator::AbstractString="_")
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		s = split(obskeys[i], separator)
 		if length(s) != 2
@@ -194,7 +194,7 @@ function setobstime!(madsdata::Associative, separator::AbstractString="_")
 	end
 end
 function setobstime!(madsdata::Associative, rx::Regex)
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		m = match(rx, obskeys[i])
 		if typeof(m) == Void || length(m.captures) != 1
@@ -207,7 +207,7 @@ end
 
 "Set observation weights in the MADS problem dictionary"
 function setobsweights!(madsdata::Associative, value::Number)
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], value)
 	end
@@ -215,7 +215,7 @@ end
 
 "Modify (multiply) observation weights in the MADS problem dictionary"
 function modobsweights!(madsdata::Associative, value::Number)
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], getweight(madsdata["Observations"][obskeys[i]]) * value)
 	end
@@ -223,7 +223,7 @@ end
 
 "Inversely proportional observation weights in the MADS problem dictionary"
 function invobsweights!(madsdata::Associative, value::Number)
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		t = gettarget(madsdata["Observations"][obskeys[i]])
 		if getweight(madsdata["Observations"][obskeys[i]]) > 0 && t > 0
@@ -271,7 +271,7 @@ end
 "Show observations in the MADS problem dictionary"
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
-	obskeys = Mads.getobskeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	p = Array(String, 0)
 	for obskey in obskeys
 		w = getweight(obsdict[obskey])

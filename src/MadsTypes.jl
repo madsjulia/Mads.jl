@@ -1,5 +1,6 @@
 import Compat
 import Compat.String
+import Compat.ASCIIString
 
 ## Types necessary for SVR
 type svrOutput
