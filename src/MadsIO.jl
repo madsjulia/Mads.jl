@@ -18,7 +18,7 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 """
-function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml", check_missing_targets::Bool=true)
+function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml")
 	if format == "yaml"
 		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	elseif format == "json"
@@ -30,17 +30,7 @@ function loadmadsfile(filename::AbstractString; julia::Bool=false, format::Abstr
 		t = getobstarget(madsdata)
 		isn = isnan(t)
 		if any(isn)
-			if check_missing_targets
-				k = getobskeys(madsdata)
-				warn("Observation with missing targets:")
-				for i in 1:length(k)
-					if isnan(t[i])
-						println(k[i])
-					end
-				end
-			else
-				warn("There are $(length(isn[isn.==true])) observations with missing targets!")
-			end
+			warn("There are $(length(isn[isn.==true])) observations with missing targets!")
 		end
 	end
 	return madsdata
