@@ -464,7 +464,7 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::R
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
-		for obsname in keys(predictions)
+		for obsname in keys(observations)
 			pred = predictions[obsname]
 			if haskey(observations[obsname], "target")
 				obs = observations[obsname]["target"]
