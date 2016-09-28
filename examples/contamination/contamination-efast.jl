@@ -59,7 +59,7 @@ paramvalues=Mads.parametersample(md, 100)
 Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior.png")
 Mads.display("w01-w13a_w20a-prior-100-spaghetti.svg")
 
-efastresult = Mads.efast(md, N=100, seed=2016)
+efastresult = Mads.efast(md, N=1000, seed=2016)
 Mads.plotobsSAresults(md, efastresult, filename="w13a_w20a-global.png", xtitle = "x", ytitle = "y")
 
 Mads.madsinfo("Bayesian sampling ...")
