@@ -9,7 +9,7 @@ end
 "MADS debug messages (controlled by `quiet` and `debuglevel`)"
 function madsdebug(message::AbstractString, level::Int=0)
 	if !quiet && level < debuglevel
-		println("DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
+		print_with_color(:green,  "DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n")
 		flush(STDOUT)
 	end
 end
@@ -17,14 +17,14 @@ end
 "MADS information/status messages (controlled by quiet` and `verbositylevel`)"
 function madsinfo(message::AbstractString, level::Int=0)
 	if !quiet && level < verbositylevel
-		info(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+		print_with_color(:blue, "INFO: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n");
 		flush(STDOUT)
 	end
 end
 
 "MADS warning messages"
 function madswarn(message::AbstractString)
-	warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+	print_with_color(:red, "WARNING: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message  * "\n");
 	flush(STDOUT)
 	flush(STDERR)
 end
