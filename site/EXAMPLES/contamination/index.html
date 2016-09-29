@@ -466,17 +466,33 @@ The contaminant transport is solved using the <code>Anasol</code> package in Mad
 <li>
 <script type="math/tex">v</script> = LogUniform(0.1, 200)</li>
 </ul>
-<p>Spaghetti plots representing the prior uncertainties:</p>
+<p>Spaghetti plots representing the prior uncertainties (note that the uncertainties are not constrained by the observed data):</p>
 <p><img alt="" src="./w01-w13a_w20a-prior-100-spaghetti.svg" /></p>
 <p>The observation data are plotted as red dots.</p>
-<h3 id="bayesian-sensitivity-analysis">Bayesian sensitivity analysis</h3>
-<p>Histograms and scatter plots of Bayesian MCMC results:</p>
+<h3 id="bayesian-global-sensitivity-analysis">Bayesian global sensitivity analysis</h3>
+<p>Histograms and scatter plots of the Bayesian MCMC results:</p>
 <p><img alt="" src="./w01-bayes.png" /></p>
 <h3 id="posterior-parameter-uncertainties">Posterior parameter uncertainties</h3>
 <p>Spaghetti plots representing the posterior uncertainties:</p>
 <p><img alt="" src="./w01-w13a_w20a-posterior-1000-spaghetti.png" /></p>
 <p>Note that the parameter uncertainties are constrained by the observation data.
 The observation data are plotted as red dots.</p>
+<h3 id="efast-global-sensitivity-analysis">eFAST global sensitivity analysis</h3>
+<p>eFAST has proven to be one of the most reliable methods among the existing variance-based techniques for quantification of parameter sensitivity (Saltelli, 2004; Saltelli &amp; Bolado, 1998; Saltelli et al., 2000; Saltelli et al., 1999). </p>
+<p>Total and main sensitivity indices for monitoring wells w13a and w20a:</p>
+<p><img alt="" src="./w13a-efast-main_effect.svg" />
+<img alt="" src="./w13a-efast-total_effect.svg" />
+<img alt="" src="./w20a-efast-main_effect.svg" />
+<img alt="" src="./w20a-efast-total_effect.svg" /></p>
+<p>The differences between main and total effect estimates suggest correlations among the parameters.</p>
+<h3 id="saltellis-global-sensitivity-analysis">Saltelli's global sensitivity analysis</h3>
+<p>Classical Saltelli's (Sobol's) global sensitivity analysis</p>
+<p>Total and main sensitivity indices for monitoring wells w13a and w20a:</p>
+<p><img alt="" src="./w13a-saltelli-main_effect.svg" />
+<img alt="" src="./w13a-saltelli-total_effect.svg" />
+<img alt="" src="./w20a-saltelli-main_effect.svg" />
+<img alt="" src="./w20a-saltelli-total_effect.svg" /></p>
+<p>There are differences between eFAST &amp; Saltelli estimates. The eFAST results should be considered more reliable.</p>
           <aside class="copyright" role="note">
             
             Documentation built with

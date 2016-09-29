@@ -47,15 +47,15 @@ Probabilistic distributions of the prior parameter uncertainties are:
 * $t_1$ = Uniform(5, 40)
 * $v$ = LogUniform(0.1, 200)
 
-Spaghetti plots representing the prior uncertainties:
+Spaghetti plots representing the prior uncertainties (note that the uncertainties are not constrained by the observed data):
 
 ![](w01-w13a_w20a-prior-100-spaghetti.svg)
 
 The observation data are plotted as red dots.
 
-### Bayesian sensitivity analysis
+### Bayesian global sensitivity analysis
 
-Histograms and scatter plots of Bayesian MCMC results:
+Histograms and scatter plots of the Bayesian MCMC results:
 
 ![](w01-bayes.png)
 
@@ -67,3 +67,29 @@ Spaghetti plots representing the posterior uncertainties:
 
 Note that the parameter uncertainties are constrained by the observation data.
 The observation data are plotted as red dots.
+
+### eFAST global sensitivity analysis
+
+eFAST has proven to be one of the most reliable methods among the existing variance-based techniques for quantification of parameter sensitivity (Saltelli, 2004; Saltelli & Bolado, 1998; Saltelli et al., 2000; Saltelli et al., 1999). 
+
+Total and main sensitivity indices for monitoring wells w13a and w20a:
+
+![](w13a-efast-main_effect.svg)
+![](w13a-efast-total_effect.svg)
+![](w20a-efast-main_effect.svg)
+![](w20a-efast-total_effect.svg)
+
+The differences between main and total effect estimates suggest correlations among the parameters.
+
+### Saltelli's global sensitivity analysis
+
+Classical Saltelli's (Sobol's) global sensitivity analysis
+
+Total and main sensitivity indices for monitoring wells w13a and w20a:
+
+![](w13a-saltelli-main_effect.svg)
+![](w13a-saltelli-total_effect.svg)
+![](w20a-saltelli-main_effect.svg)
+![](w20a-saltelli-total_effect.svg)
+
+There are differences between eFAST & Saltelli estimates. The eFAST results should be considered more reliable.

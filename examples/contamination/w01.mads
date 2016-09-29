@@ -7,14 +7,14 @@ Sources:
   dy : { longname: "Source y dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
   dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
   f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1, min: 0.01, max: 100 },
-  t0 : { longname: "Start Time [T]", init: 4, type: opt, log: no, step: 1, min: 0, max: 10 },
-  t1 : { longname: "End Time [T]", init: 15, type: opt, log: no, step: 1, min: 5, max: 40 } }
+  t0 : { longname: "Start Time [T]", init: 4, plotname: "t<sub>0</sub>", type: opt, log: no, step: 1, min: 0, max: 10 },
+  t1 : { longname: "End Time [T]", init: 15, plotname: "t<sub>1</sub>", type: opt, log: no, step: 1, min: 5, max: 40 } }
 Parameters:
 - n       : { longname: "Porosity [L3/L3]", init: 0.1, type: null, log: no, step: 0.1, min: 0, max: 1 }
 - rf      : { longname: "Retardation Factor [-]", init: 1, type: null, log: yes, step: 1, min: 1, max: 10 }
 - lambda  : { longname: "Half-life decay [1/T]", init: 0, type: null, log: yes, step: 1, min: 0, max: 1 }
 - theta   : { longname: "Flow Angle [degrees]", init: 0, type: null, log: no, step: 5, min: -30, max: 30 }
-- vx      : { longname: "Pore x velocity [L/T]", init: 40, type: opt, log: yes, step: 10, min: 0.01, max: 200 }
+- vx      : { longname: "Pore x velocity [L/T]", plotname: "v", init: 40, type: opt, log: yes, step: 10, min: 0.01, max: 200 }
 - vy      : { longname: "Pore y velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
 - vz      : { longname: "Pore z velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
 - ax      : { longname: "Dispersivity x [L]", init: 70, type: null, log: yes, step: 10, min: 10, max: 140 }

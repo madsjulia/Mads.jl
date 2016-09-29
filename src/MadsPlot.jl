@@ -194,12 +194,12 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotmatches(madsdata_in::Associative; filename::AbstractString="", format::AbstractString="", separate_files::Bool=false)
+function plotmatches(madsdata_in::Associative; filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
 	r = forward(madsdata_in; all=true)
-	plotmatches(madsdata_in, r, filename=filename, format=format, separate_files=separate_files)
+	plotmatches(madsdata_in, r, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::AbstractString="", format::AbstractString="", key2time=k->0., title=rx.pattern, ylabel::AbstractString="y", xlabel::AbstractString="time", separate_files::Bool=false, hsize=6Gadfly.inch)
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::AbstractString="", format::AbstractString="", key2time=k->0., title=rx.pattern, xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -213,10 +213,10 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	end
 	newmadsdata = copy(madsdata)
 	newmadsdata["Observations"] = newobs
-	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, ylabel=ylabel, xlabel=xlabel, separate_files=separate_files, hsize=hsize)
+	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, dict_in::Associative; filename::AbstractString="", format::AbstractString="", title::AbstractString="", ylabel::AbstractString="y", xlabel::AbstractString="time", separate_files::Bool=false, hsize=6Gadfly.inch)
+function plotmatches(madsdata::Associative, dict_in::Associative; filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -260,13 +260,13 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Abst
 				end
 				npp = length(c)
 				if npp > 1
-					p = Gadfly.plot(Gadfly.Guide.title(wellname),
+					p = Gadfly.plot(Gadfly.Guide.title(wellname), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
 					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch
 					push!(pp, p)
 				else npp = 1
-					p = Gadfly.plot(Gadfly.Guide.title(wellname),
+					p = Gadfly.plot(Gadfly.Guide.title(wellname), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), default_point_size=4Gadfly.pt)),
 					    Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt)))
 					vsize += 4Gadfly.inch
@@ -319,7 +319,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Abst
 		if length(tress) + length(tobs) == 0
 			madserror("No data to plot")
 		end
-		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.xlabel(xlabel), Gadfly.Guide.ylabel(ylabel),
+		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
 					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
 		didplot = true
@@ -361,12 +361,12 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::Ab
 		for j in 1:size(samples, 2)
 			if i == j
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram, 
-					Gadfly.Guide.xlabel(plotlabels[i]),
+					Gadfly.Guide.XLabel(plotlabels[i]),
 					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt) 
 					))
 			else
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j], 
-					Gadfly.Guide.xlabel(plotlabels[i]), Gadfly.Guide.ylabel(plotlabels[j]),
+					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
 					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, default_point_size=dot_size)
 					))
 			end

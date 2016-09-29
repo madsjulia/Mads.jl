@@ -420,7 +420,16 @@
 <p>Turn on all the wells in the MADS problem dictionary</p>
 <p><a id='Mads.amanzi' href='#Mads.amanzi'>#</a>
 <strong><code>Mads.amanzi</code></strong> &mdash; <em>Function</em>.</p>
-<p>Execute amanzi</p>
+<p>Execute amanzi external groundwater flow and transport simulator </p>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : amanzi input file name</li>
+<li><code>nproc</code> : number of processor to be used by amanzi</li>
+<li><code>quiet</code> : : suppress output [default <code>true</code>]</li>
+<li><code>observation_filename</code> : amanzi observation filename [default "observations.out"]</li>
+<li><code>setup</code> : bash script to setup amanzi environmental variables</li>
+<li><code>amanzi_exe</code> : full path to the location of the amanzi executable</li>
+</ul>
 <p><a id='Mads.amanzi_output_parser' href='#Mads.amanzi_output_parser'>#</a>
 <strong><code>Mads.amanzi_output_parser</code></strong> &mdash; <em>Function</em>.</p>
 <p>Parse Amanzi output provided in an external file (<code>filename</code>)</p>
@@ -678,6 +687,29 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>M</code> : maximum number of harmonics</li>
 <li><code>gamma</code> : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)</li>
 <li><code>seed</code> : initial random seed</li>
+</ul>
+<p><a id='Mads.emcee-Tuple{Associative{K,V}}' href='#Mads.emcee-Tuple{Associative{K,V}}'>#</a>
+<strong><code>Mads.emcee</code></strong> &mdash; <em>Method</em>.</p>
+<p>Bayesian sampling with emcee</p>
+<div class="codehilite"><pre>Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+</pre></div>
+
+
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : MADS problem dictionary</li>
+<li><code>p0</code> : initial parameters (matrix of size (length(optparams), numwalkers))</li>
+<li><code>numwalkers</code> : number of walkers executed in parallel</li>
+<li><code>nsteps</code> : number of final realizations in the chain</li>
+<li><code>burnin</code> :  number of initial realizations before the MCMC are recorded</li>
+<li><code>thinning</code> : removal of any <code>thinning</code> realization</li>
+<li><code>seed</code> : initial random number seed</li>
+<li><code>sigma</code> : a standard deviation parameter used to initialize the walkers</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mcmcchain</code> : </li>
 </ul>
 <p><a id='Mads.evaluatemadsexpression-Tuple{Any,Any}' href='#Mads.evaluatemadsexpression-Tuple{Any,Any}'>#</a>
 <strong><code>Mads.evaluatemadsexpression</code></strong> &mdash; <em>Method</em>.</p>

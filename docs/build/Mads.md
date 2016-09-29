@@ -25,7 +25,16 @@ Turn on all the wells in the MADS problem dictionary
 
 
 
-Execute amanzi
+Execute amanzi external groundwater flow and transport simulator 
+
+Arguments:
+
+  * `filename` : amanzi input file name
+  * `nproc` : number of processor to be used by amanzi
+  * `quiet` : : suppress output [default `true`]
+  * `observation_filename` : amanzi observation filename [default "observations.out"]
+  * `setup` : bash script to setup amanzi environmental variables
+  * `amanzi_exe` : full path to the location of the amanzi executable
 
 <a id='Mads.amanzi_output_parser' href='#Mads.amanzi_output_parser'>#</a>
 **`Mads.amanzi_output_parser`** &mdash; *Function*.
@@ -395,6 +404,33 @@ Arguments:
   * `M` : maximum number of harmonics
   * `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
   * `seed` : initial random seed
+
+<a id='Mads.emcee-Tuple{Associative{K,V}}' href='#Mads.emcee-Tuple{Associative{K,V}}'>#</a>
+**`Mads.emcee`** &mdash; *Method*.
+
+
+
+Bayesian sampling with emcee
+
+```
+Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+```
+
+Arguments:
+
+  * `madsdata` : MADS problem dictionary
+  * `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
+  * `numwalkers` : number of walkers executed in parallel
+  * `nsteps` : number of final realizations in the chain
+  * `burnin` :  number of initial realizations before the MCMC are recorded
+  * `thinning` : removal of any `thinning` realization
+  * `seed` : initial random number seed
+  * `sigma` : a standard deviation parameter used to initialize the walkers
+
+Returns:
+
+  * `mcmcchain` : 
 
 <a id='Mads.evaluatemadsexpression-Tuple{Any,Any}' href='#Mads.evaluatemadsexpression-Tuple{Any,Any}'>#</a>
 **`Mads.evaluatemadsexpression`** &mdash; *Method*.
