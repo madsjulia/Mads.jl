@@ -72,7 +72,7 @@ The observation data are plotted as red dots.
 
 eFAST has proven to be one of the most reliable methods among the existing variance-based techniques for quantification of parameter sensitivity (Saltelli, 2004; Saltelli & Bolado, 1998; Saltelli et al., 2000; Saltelli et al., 1999). 
 
-Total and main sensitivity indices for monitoring wells w13a and w20a:
+Total and main sensitivity indices over time for monitoring wells w13a and w20a:
 
 ![](w13a-efast-main_effect.svg)
 ![](w13a-efast-total_effect.svg)
@@ -83,9 +83,9 @@ The differences between main and total effect estimates suggest correlations amo
 
 ### Saltelli's global sensitivity analysis
 
-Classical Saltelli's (Sobol's) global sensitivity analysis
+Classical Saltelli's (Sobol's) global sensitivity analysis.
 
-Total and main sensitivity indices for monitoring wells w13a and w20a:
+Total and main sensitivity indices over time for monitoring wells w13a and w20a:
 
 ![](w13a-saltelli-main_effect.svg)
 ![](w13a-saltelli-total_effect.svg)

@@ -54,7 +54,7 @@ function functions(m::Module, string::AbstractString="")
 	if length(names) > 0
 		info("$(m) functions:")
 		sort!(names)
-		display(names)
+		Base.display(names)
 	end
 end
 
