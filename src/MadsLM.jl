@@ -361,7 +361,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			end
 			if any(isnan, J)
 				Mads.madswarn("Provided Jacobian matrix contains NaN's")
-				display(J)
+				Base.display(J)
 				Mads.madscritical("Mads quits!")
 			end
 			g_calls += 1

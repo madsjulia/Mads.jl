@@ -285,7 +285,7 @@ function showobservations(madsdata::Associative)
 		end
 	end
 	print(p...)
-	# display(p)
+	# Base.display(p)
 	println("Number of observations is $(length(p))")
 end
 

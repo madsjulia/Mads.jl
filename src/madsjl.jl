@@ -69,7 +69,7 @@ for i = 2:length(ARGS)
 		info("Executing Mads command $madscommand (Mads.$madscommand) ...")
 		result = eval(parse("Mads.$(madscommand)(md)"))
 		JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
-		display(result)
+		Base.display(result)
 		println("")
 		info("Results are saved in $(dir)/$(root)-$(madscommand)-results.jld!")
 	end

@@ -36,7 +36,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 	J = g(param, center=obs)
 	if any(isnan, J)
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
-		display(J)
+		Base.display(J)
 		Mads.madscritical("Mads quits!")
 	end
 	datafiles && writedlm("$(rootname)-jacobian.dat", J)

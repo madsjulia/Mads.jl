@@ -160,7 +160,7 @@ function MFlm(X, nk; mads=true, log_W=false, log_H=false, retries=1, tol=1.0e-9,
 			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxiter)
 		end
 		phi = r.f_minimum
-		#display(r)
+		# Base.display(r)
 		println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
