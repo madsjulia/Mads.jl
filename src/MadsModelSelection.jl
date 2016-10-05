@@ -10,7 +10,7 @@ function modelinformationcriteria(madsdata::Associative, par::Array=[])
 	ln_det_w = log(det_w)
 	gf = of / dof
 	println("Posterior measurement variance                         : $(gf)")
-	ln_det_v = ln_det_w + no * log(sqrt(gf))
+	ln_det_v = ln_det_w + no * log(gf) / 2
 	l = Mads.localsa(md, datafiles=false, imagefiles=false, param=pv, obs=collect(values(f)))
 	aopt = sum(diag(l["covar"]))
 	copt = abs(l["eigenvalues"][end])/abs(l["eigenvalues"][1])
@@ -25,7 +25,7 @@ function modelinformationcriteria(madsdata::Associative, par::Array=[])
 	println("Determinant of observation weight matrix               : ln(det W) = $(ln_det_w)")
 	println("Determinant of covariance matrix of measurement errors : ln(det V) = $(ln_det_v)")
 
-	sml = dof + ln_det_v + no * 1.837877
+	sml = dof + ln_det_v + no * 1.837877 # ln(2*pi)
 	aic = sml + 2 * np
 	bic = sml + np * log(no)
 	aicc = sml + 2 * np * log(log(no))

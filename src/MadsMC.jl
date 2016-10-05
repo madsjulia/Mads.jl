@@ -5,7 +5,8 @@ import JSON
 @tryimport Emcee
 
 """
-Bayesian sampling with emcee
+Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+
 ```
 Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
 Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
@@ -15,7 +16,7 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
-- `numwalkers` : number of walkers executed in parallel
+- `numwalkers` : number of walkers executed in parallel (required >1)
 - `nsteps` : number of final realizations in the chain
 - `burnin` :  number of initial realizations before the MCMC are recorded
 - `thinning` : removal of any `thinning` realization
@@ -27,17 +28,23 @@ Returns:
 - `mcmcchain` : 
 """
 function emcee(madsdata::Associative; numwalkers=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0, sigma=0.01)
+	if numwalkers <= 1
+		numwalkers = 2
+	end
 	Mads.setseed(seed)
 	optparamkeys = getoptparamkeys(madsdata)
 	p0 = Array(Float64, length(optparamkeys), numwalkers)
+	pinit = getparamsinit(madsdata, optparamkeys)
+	pmin = getparamsmin(madsdata, optparamkeys)
+	pmax = getparamsmin(madsdata, optparamkeys)
 	for i = 1:length(optparamkeys)
-		mu = (madsdata["Parameters"][optparamkeys[i]]["init"] - madsdata["Parameters"][optparamkeys[i]]["min"]) / (madsdata["Parameters"][optparamkeys[i]]["max"] - madsdata["Parameters"][optparamkeys[i]]["min"])
-		mu = min(1-1e-3, max(mu, 1e-3))
-		alpha = ((1 - mu) / sigma ^ 2 - 1 / mu)
+		mu = (pinit[i] - pmin[i]) / (pmax[i] - pmin[i])
+		mu = min(1 - 1e-3, max(mu, 1e-3))
+		alpha = ((1 - mu) / sigma^2 - 1 / mu)
 		beta = alpha * (1 / mu - 1)
 		d = Distributions.Beta(alpha, mu)
 		for j = 1:numwalkers
-			p0[i, j] = madsdata["Parameters"][optparamkeys[i]]["min"] + rand(d) * (madsdata["Parameters"][optparamkeys[i]]["max"] - madsdata["Parameters"][optparamkeys[i]]["min"])
+			p0[i, j] = pmin[i] + rand(d) * (pmax[i] - pmin[i])
 		end
 	end
 	return emcee(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed)

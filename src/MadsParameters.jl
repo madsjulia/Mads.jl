@@ -129,7 +129,7 @@ function getparamsmin(madsdata, paramkeys)
 		else
 			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
 				distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
-				if typeof(distribution) == Distributions.Uniform
+				if typeof(distribution) <: Distributions.Uniform
 					paramvalue[i] = distribution.a
 					continue
 				end
@@ -158,7 +158,7 @@ function getparamsmax(madsdata, paramkeys)
 		else
 			if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
 				distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
-				if typeof(distribution) == Distributions.Uniform
+				if typeof(distribution) <: Distributions.Uniform
 					paramvalue[i] = distribution.b
 					continue
 				end
@@ -188,7 +188,7 @@ function getparamsinit_min(madsdata, paramkeys)
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
 			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
-			if typeof(distribution) == Distributions.Uniform
+			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
 			end
@@ -199,7 +199,7 @@ function getparamsinit_min(madsdata, paramkeys)
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
 			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
-			if typeof(distribution) == Distributions.Uniform
+			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
 			end
@@ -228,7 +228,7 @@ function getparamsinit_max(madsdata, paramkeys)
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "init_dist")
 			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["init_dist"]))
-			if typeof(distribution) == Distributions.Uniform
+			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
 			end
@@ -239,7 +239,7 @@ function getparamsinit_max(madsdata, paramkeys)
 		end
 		if haskey( madsdata["Parameters"][paramkeys[i]], "dist")
 			distribution = Distributions.eval(parse(madsdata["Parameters"][paramkeys[i]]["dist"]))
-			if typeof(distribution) == Distributions.Uniform
+			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
 			end
