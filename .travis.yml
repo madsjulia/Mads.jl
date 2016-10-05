@@ -10,8 +10,8 @@ notifications:
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd());'
-#  - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); reload("Mads"); Mads.checkout(false); Pkg.test("Mads"; coverage=true)'
-#  - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); reload("Mads"); Mads.checkout(false); Pkg.test("Mads"; coverage=true)'
-  - julia -e 'Pkg.build("Mads"); reload("Mads"); Mads.checkout(false); Pkg.test("Mads"; coverage=true)'
+#  - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); Pkg.test("Mads"; coverage=true)'
+#  - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); Pkg.test("Mads"; coverage=true)'
+  - julia -e 'Pkg.build("Mads"); Pkg.test("Mads"; coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("Mads")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
