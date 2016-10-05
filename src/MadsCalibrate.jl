@@ -151,9 +151,9 @@ end
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
-	paraminits = getparamsinit(madsdata, optparamkeys)
-	parammins = getparamsmin(madsdata, optparamkeys)
-	parammaxs = getparamsmin(madsdata, optparamkeys)
+	paraminits = getparamsinit(madsdata, paramkeys)
+	parammins = getparamsmin(madsdata, paramkeys)
+	parammaxs = getparamsmin(madsdata, paramkeys)
 	obs = Array(Float64, length(obskeys))
 	weights = ones(Float64, length(obskeys))
 	for i = 1:length(obskeys)

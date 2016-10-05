@@ -16,7 +16,7 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
-- `numwalkers` : number of walkers executed in parallel (required >1)
+- `numwalkers` : number of walkers (if in parallel this can be the number of available processors)
 - `nsteps` : number of final realizations in the chain
 - `burnin` :  number of initial realizations before the MCMC are recorded
 - `thinning` : removal of any `thinning` realization
@@ -25,9 +25,10 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` : 
+- `mcmcchain` : MCMC chain
+- `llhoodvals` : log likelihoods of the final samples in the chain
 """
-function emcee(madsdata::Associative; numwalkers=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0, sigma=0.01)
+function emcee(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, sigma::Number=0.01, seed=0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -50,12 +51,13 @@ function emcee(madsdata::Associative; numwalkers=10, nsteps::Int=100, burnin::In
 	return emcee(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed)
 end
 
-function emcee(madsdata::Associative, p0; numwalkers=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0)
+function emcee(madsdata::Associative, p0::Array; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0)
+	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	burninchain, _ = Emcee.sample(arrayloglikelihood, numwalkers, p0, burnin, 1)
-	chain, llhoods = Emcee.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], nsteps, thinning)
+	burninchain, _ = Emcee.sample(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
+	chain, llhoods = Emcee.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
 	return Emcee.flatten(chain, llhoods)
 end
 
