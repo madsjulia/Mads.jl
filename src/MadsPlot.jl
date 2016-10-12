@@ -360,12 +360,12 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::Ab
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
-				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram, 
+				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
 					Gadfly.Guide.XLabel(plotlabels[i]),
 					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt) 
 					))
 			else
-				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j], 
+				cs[j, i] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j],
 					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
 					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, default_point_size=dot_size)
 					))

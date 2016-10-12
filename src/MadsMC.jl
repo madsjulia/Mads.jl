@@ -37,7 +37,7 @@ function emcee(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burni
 	p0 = Array(Float64, length(optparamkeys), numwalkers)
 	pinit = getparamsinit(madsdata, optparamkeys)
 	pmin = getparamsmin(madsdata, optparamkeys)
-	pmax = getparamsmin(madsdata, optparamkeys)
+	pmax = getparamsmax(madsdata, optparamkeys)
 	for i = 1:length(optparamkeys)
 		mu = (pinit[i] - pmin[i]) / (pmax[i] - pmin[i])
 		mu = min(1 - 1e-3, max(mu, 1e-3))
