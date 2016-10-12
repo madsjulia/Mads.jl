@@ -44,7 +44,7 @@ markdown_extensions:
   - codehilite
   - fenced_code
   - mdx_math:
-      enable_dollar_delimiter: True #for use of inline $..$
+    - enable_dollar_delimiter: True #for use of inline $..$
 
 
 extra_javascript:
