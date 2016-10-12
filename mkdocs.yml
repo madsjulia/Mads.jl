@@ -36,6 +36,8 @@ pages:
 - License: COPYING.md
 
 markdown_extensions:
+  - mdx_math:
+    enable_dollar_delimiter: True #for use of inline $..$
   - extra
   - tables
   - toc
@@ -43,14 +45,11 @@ markdown_extensions:
   - admonition
   - codehilite
   - fenced_code
-  - mdx_math:
-    - enable_dollar_delimiter: True #for use of inline $..$
-
 
 extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
 #  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-  - assets/mathjaxhelper.js
+#  - assets/mathjaxhelper.js
 
 extra:
   author:
