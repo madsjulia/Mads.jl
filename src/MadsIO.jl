@@ -30,7 +30,12 @@ function loadmadsfile(filename::AbstractString; julia::Bool=false, format::Abstr
 		t = getobstarget(madsdata)
 		isn = isnan(t)
 		if any(isn)
-			warn("There are $(length(isn[isn.==true])) observations with missing targets!")
+			l = length(isn[isn.==true])
+			if l == 1
+				warn("There is 1 observation with a missing target!")
+			else
+				warn("There are $(l) observations with missing targets!")
+			end
 		end
 	end
 	return madsdata
