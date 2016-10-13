@@ -43,8 +43,8 @@ markdown_extensions:
   - admonition
   - codehilite
   - fenced_code
-  - mdx_math:
-      enable_dollar_delimiter: True #for use of inline $..$
+#  - mdx_math:
+#      enable_dollar_delimiter: True #for use of inline $..$
 
 
 extra_javascript:
@@ -55,3 +55,4 @@ extra_javascript:
 extra:
   author:
     github: montyvesselinov
+
