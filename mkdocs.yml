@@ -7,6 +7,8 @@ site_description: "Model Analysis and Decision Support"
 site_author: "Velimir monty Vesselinov"
 site_favicon: mads-favicon.ico
 
+google_analytics: ['UA-25717430-1', 'mads.lanl.gov']
+
 extra_css:
 - assets/Documenter.css
 
@@ -45,7 +47,6 @@ markdown_extensions:
   - fenced_code
 #  - mdx_math:
 #      enable_dollar_delimiter: True #for use of inline $..$
-
 
 extra_javascript:
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
