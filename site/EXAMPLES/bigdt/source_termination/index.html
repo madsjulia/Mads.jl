@@ -493,10 +493,8 @@ Because of these uncertainties, we perform a decision analysis.</p>
 <p>The likelihood functions differ in the variance.
 The set of possible concentrations at w2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
 The set of variances is</p>
-<p>
-<script type="math/tex; mode=display"> { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } </script>
-</p>
-<p>where <script type="math/tex">σ^2_0</script> is the nominal variance (500; the nominal standard deviation <script type="math/tex">σ_0</script> is ~22) and <script type="math/tex">h</script> is the horizon of uncertainty.
+<p>$$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$</p>
+<p>where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22) and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.</p>
 <h3 id="robustness">Robustness</h3>
 <p>The horizon (level) of uncertainty at which the maximum acceptable probability of failure is reached</p>
@@ -523,7 +521,7 @@ Their decision can also rely on
 (2) financial constraints (e.g., costs associated with the source termination over different time frames).</p>
 <h3 id="model">Model</h3>
 <p>Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
-The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the <script type="math/tex">x</script> and <script type="math/tex">y</script> axes; the contaminant is released in 1985.</p>
+The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.</p>
 <p>The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using the Julia version of Mads.
 The runs are independent and can be computed efficiently in parallel.</p>
@@ -602,8 +600,38 @@ The runs are independent and can be computed efficiently in parallel.</p>
     
       <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
     
-      <script src="../../../assets/mathjaxhelper.js"></script>
     
+      <script>
+        (function(i,s,o,g,r,a,m){
+          i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||
+          []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+          m.parentNode.insertBefore(a,m)
+        })(window, document,
+          'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        /* General initialization */
+        ga('create', 'UA-25717430-1', 'mads.lanl.gov');
+        ga('set', 'anonymizeIp', true);
+        ga('send', 'pageview');
+        /* Track outbound links */
+        var buttons = document.querySelectorAll('a');
+        Array.prototype.map.call(buttons, function(item) {
+          if (item.host != document.location.host) {
+            item.addEventListener('click', function() {
+              var action = item.getAttribute('data-action') || 'follow';
+              ga('send', 'event', 'outbound', action, item.href);
+            });
+          }
+        });
+        /* Register handler to log search on blur */
+        var query = document.querySelector('.query');
+        query.addEventListener('blur', function() {
+          if (this.value) {
+            var path = document.location.pathname;
+            ga('send', 'pageview', path + '?q=' + this.value);
+          }
+        });
+      </script>
     
   </body>
 </html>

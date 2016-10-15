@@ -317,7 +317,6 @@ end
 Get the directory where restarts will be stored.
 """
 function getrestartdir(madsdata::Associative, suffix="")
-	rootname = join(split(split(madsdata["Filename"], "/")[end], ".")[1:end-1], ".")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
@@ -326,15 +325,20 @@ function getrestartdir(madsdata::Associative, suffix="")
 				mkdir(restartdir)
 			catch
 				restartdir = ""
-				madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created")
+				madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
 	end
 	if restartdir == ""
-		if contains(madsdata["Filename"], "/")
-			restartdir = string(join(split(madsdata["Filename"], "/")[1:end-1], "/"), "/", rootname, "_restart")
-		else
-			restartdir = string(rootname, "_restart")
+		root = getmadsrootname(madsdata, version=true)
+		restartdir = root * "_restart"
+		if !isdir(restartdir)
+			try
+				mkdir(restartdir)
+			catch
+				restartdir = ""
+				madscritical("Directory ($restartdir) cannot be created!")
+			end
 		end
 	end
 	return joinpath(restartdir, suffix)

@@ -405,12 +405,36 @@ Arguments:
   * `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
   * `seed` : initial random seed
 
+<a id='Mads.emcee' href='#Mads.emcee'>#</a>
+**`Mads.emcee`** &mdash; *Function*.
+
+
+
+Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+
+```
+Emcee.sample(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
+```
+
+Arguments:
+
+  * `llhood` : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())
+  * `numwalkers` : number of walkers
+  * `x0` : normalized initial parameters (matrix of size (length(params), numwalkers))
+  * `thinning` : removal of any `thinning` realization
+  * `a` : 
+
+Returns:
+
+  * `mcmcchain` : final MCMC chain
+  * `llhoodvals` : log likelihoods of the final samples in the chain
+
 <a id='Mads.emcee-Tuple{Associative{K,V}}' href='#Mads.emcee-Tuple{Associative{K,V}}'>#</a>
 **`Mads.emcee`** &mdash; *Method*.
 
 
 
-Bayesian sampling with emcee
+Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
 ```
 Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
@@ -421,7 +445,7 @@ Arguments:
 
   * `madsdata` : MADS problem dictionary
   * `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
-  * `numwalkers` : number of walkers executed in parallel
+  * `numwalkers` : number of walkers (if in parallel this can be the number of available processors)
   * `nsteps` : number of final realizations in the chain
   * `burnin` :  number of initial realizations before the MCMC are recorded
   * `thinning` : removal of any `thinning` realization
@@ -430,7 +454,8 @@ Arguments:
 
 Returns:
 
-  * `mcmcchain` : 
+  * `mcmcchain` : MCMC chain
+  * `llhoodvals` : log likelihoods of the final samples in the chain
 
 <a id='Mads.evaluatemadsexpression-Tuple{Any,Any}' href='#Mads.evaluatemadsexpression-Tuple{Any,Any}'>#</a>
 **`Mads.evaluatemadsexpression`** &mdash; *Method*.
@@ -452,6 +477,13 @@ Evaluate the expressions in terms of the parameters, return a Dict() containing 
 
 
 Filter dictionary keys based on a string or regular expression
+
+<a id='Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}' href='#Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}'>#</a>
+**`Mads.flattenmcmcarray`** &mdash; *Method*.
+
+
+
+Flatten the MCMC arrays
 
 <a id='Mads.forward-Tuple{Associative{K,V}}' href='#Mads.forward-Tuple{Associative{K,V}}'>#</a>
 **`Mads.forward`** &mdash; *Method*.
@@ -2109,6 +2141,13 @@ Set a default MADS input file
 Arguments:
 
   * `filename` : input file name (e.g. `input_file_name.mads`)
+
+<a id='Mads.setnewmadsfilename-Tuple{Associative{K,V}}' href='#Mads.setnewmadsfilename-Tuple{Associative{K,V}}'>#</a>
+**`Mads.setnewmadsfilename`** &mdash; *Method*.
+
+
+
+Set new mads file name
 
 <a id='Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.setobservationtargets!`** &mdash; *Method*.

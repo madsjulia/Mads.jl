@@ -169,34 +169,14 @@ Arguments:
 """
 function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
-		dir = Mads.getmadsproblemdir(madsdata)
-		root = Mads.getmadsrootname(madsdata)
-		if ismatch(r"v[0-9].", root)
-			s = split(root, "v")
-			v = parse(Int, s[2]) + 1
-			l = length(s[2])
-			f = "%0" * string(l) * "d"
-			filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
-		else
-			filename = "$(dir)/$(root)-rerun.mads"
-		end
+		filename = setnewmadsfilename(madsdata)
 	end
 	dumpyamlmadsfile(madsdata, filename, julia=julia)
 end
 
 function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
-		dir = Mads.getmadsproblemdir(madsdata)
-		root = Mads.getmadsrootname(madsdata)
-		if ismatch(r"v[0-9].", root)
-			s = split(root, "v")
-			v = parse(Int, s[2]) + 1
-			l = length(s[2])
-			f = "%0" * string(l) * "d"
-			filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
-		else
-			filename = "$(dir)/$(root)-rerun.mads"
-		end
+		filename = setnewmadsfilename(madsdata)
 	end
 	if explicit
 		madsdata2 = loadyamlfile(madsdata["Filename"])
@@ -258,8 +238,8 @@ Get the MADS problem root name
 
 `madsrootname = Mads.getmadsrootname(madsdata)`
 """
-function getmadsrootname(madsdata::Associative; first=true)
-	return getrootname(madsdata["Filename"]; first=first)
+function getmadsrootname(madsdata::Associative; first=true, version=false)
+	return getrootname(madsdata["Filename"]; first=first, version=version)
 end
 
 """
@@ -277,7 +257,12 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::Associative)
-	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
+	if contains(madsdata["Filename"], "/")
+		d = join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
+	else
+		d = "./"
+	end
+	return d
 end
 
 """
@@ -306,13 +291,17 @@ r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 """
-function getrootname(filename::AbstractString; first=true)
+function getrootname(filename::AbstractString; first=true, version=false)
 	d = split(filename, "/")
 	s = split(d[end], ".")
 	if !first && length(s) > 1
 		r = join(s[1:end-1], ".")
 	else
 		r = s[1]
+	end
+	if version && ismatch(r"-v[0-9].$", r)
+		rm = match(r"-v[0-9].$", r)
+		r = r[1:rm.offset-1]
 	end
 	if length(d) > 1
 		r = join(d[1:end-1], "/") * "/" * r
@@ -337,6 +326,27 @@ function getextension(filename)
 	else
 		return ""
 	end
+end
+
+"""
+Set new mads file name
+"""
+function setnewmadsfilename(madsdata::Associative)
+	dir = getmadsproblemdir(madsdata)
+	root = getmadsrootname(madsdata)
+	newfilename
+	if ismatch(r"-v[0-9].$", root)
+		rm = match(r"-v([0-9]).$", root)
+		l = rm.captures[1] 
+		s = split(rm.match, "v")
+		v = parse(Int, s[2]) + 1
+		l = length(s[2])
+		f = "%0" * string(l) * "d"
+		filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
+	else
+		filename = "$(dir)/$(root)-rerun.mads"
+	end
+	return filename
 end
 
 """

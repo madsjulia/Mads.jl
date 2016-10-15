@@ -688,9 +688,29 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>gamma</code> : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)</li>
 <li><code>seed</code> : initial random seed</li>
 </ul>
+<p><a id='Mads.emcee' href='#Mads.emcee'>#</a>
+<strong><code>Mads.emcee</code></strong> &mdash; <em>Function</em>.</p>
+<p>Bayesian sampling with emcee: Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler</p>
+<div class="codehilite"><pre>Emcee.sample(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
+</pre></div>
+
+
+<p>Arguments:</p>
+<ul>
+<li><code>llhood</code> : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())</li>
+<li><code>numwalkers</code> : number of walkers</li>
+<li><code>x0</code> : normalized initial parameters (matrix of size (length(params), numwalkers))</li>
+<li><code>thinning</code> : removal of any <code>thinning</code> realization</li>
+<li><code>a</code> : </li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mcmcchain</code> : final MCMC chain</li>
+<li><code>llhoodvals</code> : log likelihoods of the final samples in the chain</li>
+</ul>
 <p><a id='Mads.emcee-Tuple{Associative{K,V}}' href='#Mads.emcee-Tuple{Associative{K,V}}'>#</a>
 <strong><code>Mads.emcee</code></strong> &mdash; <em>Method</em>.</p>
-<p>Bayesian sampling with emcee</p>
+<p>Bayesian sampling with emcee: Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler</p>
 <div class="codehilite"><pre>Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
 Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 </pre></div>
@@ -700,7 +720,7 @@ Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=
 <ul>
 <li><code>madsdata</code> : MADS problem dictionary</li>
 <li><code>p0</code> : initial parameters (matrix of size (length(optparams), numwalkers))</li>
-<li><code>numwalkers</code> : number of walkers executed in parallel</li>
+<li><code>numwalkers</code> : number of walkers (if in parallel this can be the number of available processors)</li>
 <li><code>nsteps</code> : number of final realizations in the chain</li>
 <li><code>burnin</code> :  number of initial realizations before the MCMC are recorded</li>
 <li><code>thinning</code> : removal of any <code>thinning</code> realization</li>
@@ -709,7 +729,8 @@ Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=
 </ul>
 <p>Returns:</p>
 <ul>
-<li><code>mcmcchain</code> : </li>
+<li><code>mcmcchain</code> : MCMC chain</li>
+<li><code>llhoodvals</code> : log likelihoods of the final samples in the chain</li>
 </ul>
 <p><a id='Mads.evaluatemadsexpression-Tuple{Any,Any}' href='#Mads.evaluatemadsexpression-Tuple{Any,Any}'>#</a>
 <strong><code>Mads.evaluatemadsexpression</code></strong> &mdash; <em>Method</em>.</p>
@@ -720,6 +741,9 @@ Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=
 <p><a id='Mads.filterkeys-Tuple{Associative{K,V},Regex}' href='#Mads.filterkeys-Tuple{Associative{K,V},Regex}'>#</a>
 <strong><code>Mads.filterkeys</code></strong> &mdash; <em>Method</em>.</p>
 <p>Filter dictionary keys based on a string or regular expression</p>
+<p><a id='Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}' href='#Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}'>#</a>
+<strong><code>Mads.flattenmcmcarray</code></strong> &mdash; <em>Method</em>.</p>
+<p>Flatten the MCMC arrays</p>
 <p><a id='Mads.forward-Tuple{Associative{K,V}}' href='#Mads.forward-Tuple{Associative{K,V}}'>#</a>
 <strong><code>Mads.forward</code></strong> &mdash; <em>Method</em>.</p>
 <p>Perform a forward run using the initial or provided values for the model parameters</p>
@@ -1699,6 +1723,9 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <ul>
 <li><code>filename</code> : input file name (e.g. <code>input_file_name.mads</code>)</li>
 </ul>
+<p><a id='Mads.setnewmadsfilename-Tuple{Associative{K,V}}' href='#Mads.setnewmadsfilename-Tuple{Associative{K,V}}'>#</a>
+<strong><code>Mads.setnewmadsfilename</code></strong> &mdash; <em>Method</em>.</p>
+<p>Set new mads file name</p>
 <p><a id='Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 <strong><code>Mads.setobservationtargets!</code></strong> &mdash; <em>Method</em>.</p>
 <p>Set observations (calibration targets) in the MADS problem dictionary based on a <code>predictions</code> dictionary</p>
@@ -2024,8 +2051,38 @@ Mads.spaghettiplots(madsdata, number_of_samples; format=&quot;&quot;, keyword=&q
     
       <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
     
-      <script src="../../assets/mathjaxhelper.js"></script>
     
+      <script>
+        (function(i,s,o,g,r,a,m){
+          i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||
+          []).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;
+          m.parentNode.insertBefore(a,m)
+        })(window, document,
+          'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        /* General initialization */
+        ga('create', 'UA-25717430-1', 'mads.lanl.gov');
+        ga('set', 'anonymizeIp', true);
+        ga('send', 'pageview');
+        /* Track outbound links */
+        var buttons = document.querySelectorAll('a');
+        Array.prototype.map.call(buttons, function(item) {
+          if (item.host != document.location.host) {
+            item.addEventListener('click', function() {
+              var action = item.getAttribute('data-action') || 'follow';
+              ga('send', 'event', 'outbound', action, item.href);
+            });
+          }
+        });
+        /* Register handler to log search on blur */
+        var query = document.querySelector('.query');
+        query.addEventListener('blur', function() {
+          if (this.value) {
+            var path = document.location.pathname;
+            ga('send', 'pageview', path + '?q=' + this.value);
+          }
+        });
+      </script>
     
   </body>
 </html>
