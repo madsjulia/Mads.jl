@@ -257,12 +257,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::Associative)
-	if contains(madsdata["Filename"], "/")
-		d = join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
-	else
-		d = "./"
-	end
-	return d
+	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
 end
 
 """
