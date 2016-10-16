@@ -81,13 +81,11 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	r = []
 	if length(s) == 2
 		if checkpointfrequency != 0
-			if !isdir(getrestartdir(madsdata))
-				mkdir(getrestartdir(madsdata))
-			end
+			restartdir = getrestartdir(madsdata)
 			if s[2] == np
-				r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
+				r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			else
-				r = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(getrestartdir(madsdata), checkpointfilename), 1:nr)
+				r = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			end
 		else
 			if s[2] == np

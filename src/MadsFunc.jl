@@ -289,11 +289,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata::Associative, madscommandfunction, suffix=""; usedict::Bool=true)
+function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::AbstractString=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
 
-function makemadsreusablefunction(paramkeys, obskeys, madsdatarestart, madscommandfunction, restartdir; usedict::Bool=true)
+function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart, madscommandfunction::Function, restartdir::AbstractString; usedict::Bool=true)
 	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
 		if madsdatarestart == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
@@ -316,7 +316,7 @@ end
 """
 Get the directory where restarts will be stored.
 """
-function getrestartdir(madsdata::Associative, suffix="")
+function getrestartdir(madsdata::Associative, suffix::AbstractString="")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
@@ -348,7 +348,7 @@ end
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 """
-function importeverywhere(filename)
+function importeverywhere(filename::AbstractString)
 	if VERSION < v"0.5"
 		code = readall(filename)
 	else

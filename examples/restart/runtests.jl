@@ -25,7 +25,7 @@ if Mads.long_tests
 end
 
 Mads.madsinfo("Restarting internal calibration problem ...")
-md = Mads.loadmadsfile(problemdir * "internal-linearmodel.mads")
+md = Mads.loadmadsfile(problemdir * "w01-v01.mads")
 Mads.madsinfo("... no restart ...")
 no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
 md["Restart"] = true
@@ -33,11 +33,14 @@ Mads.madsinfo("... create restart ...")
 create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
 Mads.madsinfo("... use restart ...")
 use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
+Mads.savemadsfile(md)
 
 @Base.Test.test no_restart_results[1] == create_restart_results[1]
 @Base.Test.test create_restart_results[1] == use_restart_results[1]
 
-run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
+rm("$(problemdir)/w01_restart", recursive=true) 
+rm("$(problemdir)/w01-v01.iterationresults")
+rm("$(problemdir)/w01-v02.mads")
 
 if Mads.long_tests
 	Mads.madsinfo("Restarting internal sensitivity analysis problem ...")
