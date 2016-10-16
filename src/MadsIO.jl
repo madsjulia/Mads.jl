@@ -342,7 +342,7 @@ function setnewmadsfilename(madsdata::Associative)
 		v = parse(Int, s[2]) + 1
 		l = length(s[2])
 		f = "%0" * string(l) * "d"
-		filename = "$(dir)/$(root)-v$(sprintf(f, v)).mads"
+		filename = "$(dir)/$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
 	else
 		filename = "$(dir)/$(root)-rerun.mads"
 	end
