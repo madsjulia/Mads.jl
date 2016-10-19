@@ -17,8 +17,16 @@ function cleancoverage()
 	cd(orig_dir)
 end
 
+"Reload Mads modules"
+function reload()
+	for i in madsmodules
+		println("* $i reloading ...")
+		Base.reload(i)
+	end
+end
+
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
-function test(testmod="")
+function test(testmod::String="")
 	orig_dir = pwd()
 	if testmod == ""
 		include(Pkg.dir("Mads") * "/test/runtests.jl")
