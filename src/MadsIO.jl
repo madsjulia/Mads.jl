@@ -329,7 +329,6 @@ Set new mads file name
 function setnewmadsfilename(madsdata::Associative)
 	dir = getmadsproblemdir(madsdata)
 	root = getmadsrootname(madsdata)
-	newfilename
 	if ismatch(r"-v[0-9].$", root)
 		rm = match(r"-v([0-9]).$", root)
 		l = rm.captures[1] 
