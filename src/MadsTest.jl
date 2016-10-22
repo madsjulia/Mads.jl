@@ -19,7 +19,7 @@ end
 
 "Reload Mads modules"
 function reload()
-	for i in madsmodules
+	for i in madsmodules[end:-1:1]
 		println("* $i reloading ...")
 		Base.reload(i)
 	end

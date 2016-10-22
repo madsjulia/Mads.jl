@@ -11,7 +11,7 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "MetaProgTools", "RobustPmap"]
+madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
 
 macro tryimport(s)
 	importq = string(:(import $s))
