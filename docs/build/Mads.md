@@ -1075,7 +1075,7 @@ Examples:
 
 Produce MADS help information
 
-<a id='Mads.importeverywhere-Tuple{Any}' href='#Mads.importeverywhere-Tuple{Any}'>#</a>
+<a id='Mads.importeverywhere-Tuple{AbstractString}' href='#Mads.importeverywhere-Tuple{AbstractString}'>#</a>
 **`Mads.importeverywhere`** &mdash; *Method*.
 
 
@@ -1871,6 +1871,13 @@ Read MADS model predictions from a YAML file `filename`
 
 
 Get observations for a set of regular expressions
+
+<a id='Mads.reload-Tuple{}' href='#Mads.reload-Tuple{}'>#</a>
+**`Mads.reload`** &mdash; *Method*.
+
+
+
+Reload Mads modules
 
 <a id='Mads.resetmodelruns-Tuple{}' href='#Mads.resetmodelruns-Tuple{}'>#</a>
 **`Mads.resetmodelruns`** &mdash; *Method*.

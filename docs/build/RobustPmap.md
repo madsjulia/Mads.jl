@@ -6,21 +6,21 @@
 
 Documentation for RobustPmap.jl module (all functions):
 
-<a id='RobustPmap.checkexceptions-Tuple{Any,Any}' href='#RobustPmap.checkexceptions-Tuple{Any,Any}'>#</a>
-**`RobustPmap.checkexceptions`** &mdash; *Method*.
+<a id='RobustPmap.checkexceptions' href='#RobustPmap.checkexceptions'>#</a>
+**`RobustPmap.checkexceptions`** &mdash; *Function*.
 
 
 
 Check for type exceptions
 
-<a id='RobustPmap.crpmap-Tuple{Any,Any,Any,Vararg{Any}}' href='#RobustPmap.crpmap-Tuple{Any,Any,Any,Vararg{Any}}'>#</a>
+<a id='RobustPmap.crpmap-Tuple{Function,Number,ByteString,Vararg{Any}}' href='#RobustPmap.crpmap-Tuple{Function,Number,ByteString,Vararg{Any}}'>#</a>
 **`RobustPmap.crpmap`** &mdash; *Method*.
 
 
 
 Robust pmap call with checkpoints
 
-<a id='RobustPmap.rpmap-Tuple{Any,Vararg{Any}}' href='#RobustPmap.rpmap-Tuple{Any,Vararg{Any}}'>#</a>
+<a id='RobustPmap.rpmap-Tuple{Function,Vararg{Any}}' href='#RobustPmap.rpmap-Tuple{Function,Vararg{Any}}'>#</a>
 **`RobustPmap.rpmap`** &mdash; *Method*.
 
 
