@@ -24,7 +24,7 @@ function loadmadsfile(filename::AbstractString; julia::Bool=false, format::Abstr
 	elseif format == "json"
 		madsdata = loadjsonfile(filename)
 	end
-	madsdata = parsemadsdata(madsdata)
+	parsemadsdata!(madsdata)
 	madsdata["Filename"] = filename
 	if haskey(madsdata, "Observations")
 		t = getobstarget(madsdata)
@@ -48,7 +48,7 @@ Arguments:
 
 - `madsdata` : Mads problem dictionary
 """
-function parsemadsdata(madsdata::Associative)
+function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
 		parameters = DataStructures.OrderedDict()
 		for dict in madsdata["Parameters"]
@@ -65,15 +65,7 @@ function parsemadsdata(madsdata::Associative)
 		end
 		madsdata["Parameters"] = parameters
 	end
-	if haskey(madsdata, "Sources")
-		for i = 1:length(madsdata["Sources"])
-			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			sourceparams = keys(madsdata["Sources"][i][sourcetype])
-			for sourceparam in sourceparams
-				madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
-			end
-		end
-	end
+	addsourceparameters!(madsdata)
 	if haskey(madsdata, "Parameters")
 		parameters = madsdata["Parameters"]
 		for key in keys(parameters)
@@ -148,7 +140,6 @@ function parsemadsdata(madsdata::Associative)
 		end
 		madsdata["Instructions"] = instructions
 	end
-	return madsdata
 end
 
 """

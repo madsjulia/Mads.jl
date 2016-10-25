@@ -69,7 +69,7 @@ Returns:
 """
 function getsourcekeys(madsdata::Associative)
 	sourcekeys = Array(String, 0)
-	if haskey( madsdata, "Sources" )
+	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			for k = keys(madsdata["Sources"][1])
 				sk = collect(String, keys(madsdata["Sources"][i][k]))
