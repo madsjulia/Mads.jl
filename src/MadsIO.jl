@@ -370,12 +370,16 @@ searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::String; path = ".") = filter(x->contains(x, key), readdir(path))
 
 "Filter dictionary keys based on a string or regular expression"
-filterkeys(dict::Associative, key::Regex) = key == "" ? keys(dict) : filter(x->ismatch(key, x), collect(keys(dict)))
-filterkeys(dict::Associative, key::String = "") = key == "" ? keys(dict) : filter(x->contains(x, key), collect(keys(dict)))
+filterkeys(dict::Associative, key::Regex = r"") = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
+filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
 
 "Find indexes for dictionary keys based on a string or regular expression"
-indexkeys(dict::Associative, key::Regex) = key == "" ? keys(dict) : find(x->ismatch(key, x), collect(keys(dict)))
-indexkeys(dict::Associative, key::String = "") = key == "" ? keys(dict) : find(x->contains(x, key), collect(keys(dict)))
+indexkeys(dict::Associative, key::Regex = r"") = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
+indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
+
+"Get dictionary values for keys based on a string or regular expression"
+getdictvalues(dict::Associative, key::Regex = r"") = map(y->(y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
 "Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
 function writeparametersviatemplate(parameters, templatefilename, outputfilename)

@@ -738,8 +738,8 @@ Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=
 <p><a id='Mads.evaluatemadsexpressions-Tuple{Associative{K,V},Any}' href='#Mads.evaluatemadsexpressions-Tuple{Associative{K,V},Any}'>#</a>
 <strong><code>Mads.evaluatemadsexpressions</code></strong> &mdash; <em>Method</em>.</p>
 <p>Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values</p>
-<p><a id='Mads.filterkeys-Tuple{Associative{K,V},Regex}' href='#Mads.filterkeys-Tuple{Associative{K,V},Regex}'>#</a>
-<strong><code>Mads.filterkeys</code></strong> &mdash; <em>Method</em>.</p>
+<p><a id='Mads.filterkeys' href='#Mads.filterkeys'>#</a>
+<strong><code>Mads.filterkeys</code></strong> &mdash; <em>Function</em>.</p>
 <p>Filter dictionary keys based on a string or regular expression</p>
 <p><a id='Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}' href='#Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}'>#</a>
 <strong><code>Mads.flattenmcmcarray</code></strong> &mdash; <em>Method</em>.</p>
@@ -797,6 +797,9 @@ Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=
 <li><code>module</code> : MADS module</li>
 <li><code>string</code> : matching string</li>
 </ul>
+<p><a id='Mads.getdictvalues' href='#Mads.getdictvalues'>#</a>
+<strong><code>Mads.getdictvalues</code></strong> &mdash; <em>Function</em>.</p>
+<p>Get dictionary values for keys based on a string or regular expression</p>
 <p><a id='Mads.getextension-Tuple{Any}' href='#Mads.getextension-Tuple{Any}'>#</a>
 <strong><code>Mads.getextension</code></strong> &mdash; <em>Method</em>.</p>
 <p>Get file name extension</p>
@@ -1067,8 +1070,8 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <p><a id='Mads.importeverywhere-Tuple{AbstractString}' href='#Mads.importeverywhere-Tuple{AbstractString}'>#</a>
 <strong><code>Mads.importeverywhere</code></strong> &mdash; <em>Method</em>.</p>
 <p>Import function everywhere from a file. The first function in the file is the one that will be called by Mads to perform the model simulations.</p>
-<p><a id='Mads.indexkeys-Tuple{Associative{K,V},Regex}' href='#Mads.indexkeys-Tuple{Associative{K,V},Regex}'>#</a>
-<strong><code>Mads.indexkeys</code></strong> &mdash; <em>Method</em>.</p>
+<p><a id='Mads.indexkeys' href='#Mads.indexkeys'>#</a>
+<strong><code>Mads.indexkeys</code></strong> &mdash; <em>Function</em>.</p>
 <p>Find indexes for dictionary keys based on a string or regular expression</p>
 <p><a id='Mads.ins_obs-Tuple{AbstractString,AbstractString}' href='#Mads.ins_obs-Tuple{AbstractString,AbstractString}'>#</a>
 <strong><code>Mads.ins_obs</code></strong> &mdash; <em>Method</em>.</p>

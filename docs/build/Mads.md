@@ -471,8 +471,8 @@ Evaluate the expression in terms of the parameters, return a Dict() containing t
 
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-<a id='Mads.filterkeys-Tuple{Associative{K,V},Regex}' href='#Mads.filterkeys-Tuple{Associative{K,V},Regex}'>#</a>
-**`Mads.filterkeys`** &mdash; *Method*.
+<a id='Mads.filterkeys' href='#Mads.filterkeys'>#</a>
+**`Mads.filterkeys`** &mdash; *Function*.
 
 
 
@@ -552,6 +552,13 @@ Arguments:
 
   * `module` : MADS module
   * `string` : matching string
+
+<a id='Mads.getdictvalues' href='#Mads.getdictvalues'>#</a>
+**`Mads.getdictvalues`** &mdash; *Function*.
+
+
+
+Get dictionary values for keys based on a string or regular expression
 
 <a id='Mads.getextension-Tuple{Any}' href='#Mads.getextension-Tuple{Any}'>#</a>
 **`Mads.getextension`** &mdash; *Method*.
@@ -1082,8 +1089,8 @@ Produce MADS help information
 
 Import function everywhere from a file. The first function in the file is the one that will be called by Mads to perform the model simulations.
 
-<a id='Mads.indexkeys-Tuple{Associative{K,V},Regex}' href='#Mads.indexkeys-Tuple{Associative{K,V},Regex}'>#</a>
-**`Mads.indexkeys`** &mdash; *Method*.
+<a id='Mads.indexkeys' href='#Mads.indexkeys'>#</a>
+**`Mads.indexkeys`** &mdash; *Function*.
 
 
 

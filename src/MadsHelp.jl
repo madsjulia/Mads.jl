@@ -37,24 +37,21 @@ function functions(string::AbstractString="")
 end
 
 function functions(m::Module, string::AbstractString="")
-	objects = m.__META__
-	modulename = "$(m)"
-	names = Any[]
-	k = keys(objects)
-	c = collect(k)
-	for i in 1:length(c)
-		functionname = "$(c[i])"
-		if functionname == modulename || contains(functionname, "ObjectIdDict")
+	f = names(m, true)
+	fuctions = Any[]
+	for i in 1:length(f)
+		functionname = "$(f[i])"
+		if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "_")
 			continue
 		end
 		if string == "" || contains(functionname, string)
-			push!(names, functionname)
+			push!(fuctions, functionname)
 		end
 	end
-	if length(names) > 0
+	if length(fuctions) > 0
 		info("$(m) functions:")
-		sort!(names)
-		Base.display(names)
+		sort!(fuctions)
+		Base.display(fuctions)
 	end
 end
 
