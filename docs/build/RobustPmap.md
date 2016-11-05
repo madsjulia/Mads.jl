@@ -13,14 +13,14 @@ Documentation for RobustPmap.jl module (all functions):
 
 Check for type exceptions
 
-<a id='RobustPmap.crpmap-Tuple{Function,Number,ByteString,Vararg{Any}}' href='#RobustPmap.crpmap-Tuple{Function,Number,ByteString,Vararg{Any}}'>#</a>
+<a id='RobustPmap.crpmap-Tuple{Function,Number,String,Vararg{Any,N}}' href='#RobustPmap.crpmap-Tuple{Function,Number,String,Vararg{Any,N}}'>#</a>
 **`RobustPmap.crpmap`** &mdash; *Method*.
 
 
 
 Robust pmap call with checkpoints
 
-<a id='RobustPmap.rpmap-Tuple{Function,Vararg{Any}}' href='#RobustPmap.rpmap-Tuple{Function,Vararg{Any}}'>#</a>
+<a id='RobustPmap.rpmap-Tuple{Function,Vararg{Any,N}}' href='#RobustPmap.rpmap-Tuple{Function,Vararg{Any,N}}'>#</a>
 **`RobustPmap.rpmap`** &mdash; *Method*.
 
 
