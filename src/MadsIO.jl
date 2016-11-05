@@ -94,6 +94,7 @@ function parsemadsdata!(madsdata::Associative)
 			end
 		end
 	end
+	checkparameterranges(madsdata)
 	if haskey(madsdata, "Wells")
 		wells = DataStructures.OrderedDict()
 		for dict in madsdata["Wells"]

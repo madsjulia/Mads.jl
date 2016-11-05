@@ -520,10 +520,75 @@ function getparamdistributions(madsdata::Associative; init_dist=false)
 			end
 		end
 		if haskey(madsdata["Parameters"][paramkeys[i]], minkey ) && haskey(madsdata["Parameters"][paramkeys[i]], maxkey )
-			distributions[paramkeys[i]] = Distributions.Uniform(madsdata["Parameters"][paramkeys[i]][minkey], madsdata["Parameters"][paramkeys[i]][maxkey])
+			min = madsdata["Parameters"][paramkeys[i]][minkey]
+			max = madsdata["Parameters"][paramkeys[i]][maxkey]
+			if(min > max)
+				madserror("Min/max for parameter `$(paramkeys[i])` are messed up (min = $min; max = $max)!")
+			end
+			distributions[paramkeys[i]] = Distributions.Uniform(min, max)
 		else
-			Mads.madserror("""Probabilistic distribution of parameter $(paramkeys[i]) is not defined; "dist" or "min"/"max" are missing!""")
+			madserror("""Probabilistic distribution of parameter `$(paramkeys[i])` is not defined; "dist" or "min"/"max" are missing!""")
 		end
 	end
 	return distributions
+end
+
+"Check parameter ranges for model parameters"
+function checkparameterranges(madsdata)
+	paramkeys = Mads.getparamkeys(madsdata)
+	optparamkeys = Mads.getoptparamkeys(madsdata)
+	init = Mads.getparamsinit(madsdata)
+	min = Mads.getparamsmin(madsdata)
+	max = Mads.getparamsmax(madsdata)
+	init_min = Mads.getparamsinit_min(madsdata)
+	init_max = Mads.getparamsinit_max(madsdata)
+	flag_error = false
+	d = init - min .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` initial value is less than the minimum (init = $(init[i]); min = $(min[i]))!")
+			if findfirst(optparamkeys, paramkeys[i]) > 0
+				flag_error = true
+			end
+		end
+	end
+	d = max - init .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` initial value is greater than the maximum (init = $(init[i]); max = $(max[i]))!")
+			if findfirst(optparamkeys, paramkeys[i]) > 0
+				flag_error = true
+			end
+		end
+	end
+	d = max - min .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` maximum is less than the minimum (max = $(max[i]); min = $(min[i]))!")
+			if findfirst(optparamkeys, paramkeys[i]) > 0
+				flag_error = true
+			end
+		end
+	end
+	d = init_max - init_min .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` initialization maximum is less than the initialization minimum (init_max = $(init_max[i]); init_min = $(init_min[i]))!")
+		end
+	end
+	d = init_min - min .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` initialization minimum is less than the minimum (init_min = $(init_min[i]); min = $(min[i]))!")
+		end
+	end
+	d = max - init_max .< 0
+	if any(d)
+		for i in find(d)
+			madswarn("Parameter `$(paramkeys[i])` initialization maximum is greater than the maximum (init_max = $(init_max[i]); max = $(min[i]))!")
+		end
+	end
+	if flag_error
+		madserror("Parameter ranges are incorrect!")
+	end
 end
