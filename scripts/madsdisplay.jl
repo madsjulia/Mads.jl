@@ -27,9 +27,9 @@ end
 function madsdisplay(filename::AbstractString)
 	if isdefined(:TerminalExtensions)
 		trytoopen = false
-		ext = lowercase(getextension(filename))
+		ext = lowercase(madsgetextension(filename))
 		if ext == "svg"
-			root = getrootname(filename)
+			root = madsgetrootname(filename)
 			filename2 = root * ".png"
 			try
 				run(`convert -density 90 -background none $filename $filename2`)
