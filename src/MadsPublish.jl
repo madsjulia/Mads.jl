@@ -1,3 +1,7 @@
+if VERSION >= v"0.5"
+	import PkgDev
+end
+
 "Checkout the latest version of the Mads modules"
 function checkout(git::Bool=true)
 	for i in madsmodules
@@ -73,7 +77,11 @@ end
 function tag(madsmodule::AbstractString, sym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
-		Pkg.tag(madsmodule, sym)
+		if VERSION < v"0.5"
+			Pkg.tag(madsmodule, sym)
+		else
+			PkgDev.tag(madsmodule, sym)
+		end
 		info("$madsmodule is now tagged!")
 	else
 		warn("$madsmodule cannot be tagged!")
