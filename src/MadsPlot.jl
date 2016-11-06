@@ -1025,4 +1025,3 @@ function plotseries(X::Matrix, filename::AbstractString; format::AbstractString=
 		Mads.madswarn("Gadfly fails!")
 	end
 end
-

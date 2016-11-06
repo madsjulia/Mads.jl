@@ -5,15 +5,19 @@ end
 "Checkout the latest version of the Mads modules"
 function checkout(git::Bool=true)
 	for i in madsmodules
-		cwd = pwd()
 		if git
 			info("Checking out $(i) ...")
+			cwd = pwd()
 			cd(Pkg.dir(i))
 			run(`git pull`)
+			cd(cwd)
 		else
-			Pkg.checkout(i)
+			try
+				Pkg.checkout(i)
+			catch
+				warn("$i cannot be checked out; most probably it is dirty!")
+			end
 		end
-		cd(cwd)
 	end
 end
 
@@ -31,7 +35,7 @@ function status(madsmodule::AbstractString; git::Bool=true, gitmore::Bool=false)
 		cd(Pkg.dir(madsmodule))
 		run(`git status -s`)
 		if gitmore
-			info("Git ID HEAD  $(madsmodule) ...")
+			info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)
 			info("Git ID master $(madsmodule) ...")
 			run(`git rev-parse --verify master`)
