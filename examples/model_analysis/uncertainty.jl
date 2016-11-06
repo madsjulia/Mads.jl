@@ -24,7 +24,7 @@ var_scale = .5
 info("Local sensitivity analysis")
 lsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=pv, obs=collect(values(f)))
 
-info("Model parameter samping")
+info("Model parameter sampling")
 samples, llhoods = Mads.sampling(pv, lsa_results["jacobian"], 1000, seed=2016, scale=var_scale)
 
 info("Model forward runs")

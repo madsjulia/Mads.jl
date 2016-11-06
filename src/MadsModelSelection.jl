@@ -1,6 +1,12 @@
 "Model section information criteria"
 function modelinformationcriteria(madsdata::Associative, par::Array=[])
-	f = Mads.forward(madsdata, par)
+	if length(par) > 0
+		f = Mads.forward(madsdata, par)
+		l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, param=par, obs=collect(values(f)))
+	else
+		f = Mads.forward(madsdata)
+		l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, obs=collect(values(f)))
+	end
 	of = Mads.of(madsdata, f)
 	np = length(Mads.getoptparamkeys(madsdata))
 	no = length(Mads.gettargetkeys(madsdata))
@@ -11,7 +17,6 @@ function modelinformationcriteria(madsdata::Associative, par::Array=[])
 	gf = of / dof
 	println("Posterior measurement variance                         : $(gf)")
 	ln_det_v = ln_det_w + no * log(gf) / 2
-	l = Mads.localsa(md, datafiles=false, imagefiles=false, param=pv, obs=collect(values(f)))
 	aopt = sum(diag(l["covar"]))
 	copt = abs(l["eigenvalues"][end])/abs(l["eigenvalues"][1])
 	eopt = abs(l["eigenvalues"][end])

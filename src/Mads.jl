@@ -72,6 +72,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 end
 
 quiet = true
+graphoutput = true
 graphbackend = "SVG"
 verbositylevel = 1
 debuglevel = 1
@@ -112,10 +113,10 @@ include("MadsParallel.jl")
 include("MadsParameters.jl")
 include("MadsObservations.jl")
 include("MadsForward.jl")
-include("MadsCalibrate.jl")
 include("MadsFunc.jl")
+include("MadsCalibrate.jl")
 include("MadsLM.jl")
-include("MadsSA.jl")
+include("MadsSenstivityAnalysis.jl")
 include("MadsMC.jl")
 include("MadsEmcee.jl")
 include("MadsKriging.jl")
@@ -130,7 +131,6 @@ include("MadsParsers.jl")
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")
 	include("MadsBIGPlot.jl")
-	include("MadsSAPlot.jl")
 	include("MadsPlot.jl")
 end
 if !haskey(ENV, "MADS_NO_PYPLOT")
