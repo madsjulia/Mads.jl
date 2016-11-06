@@ -51,7 +51,7 @@ function status(madsmodule::AbstractString; git::Bool=true, gitmore::Bool=false)
 		catch
 			redirect_stdout(originalSTDOUT);
 		end
-		a = ascii(o)
+		a = ascii(String(o))
 		print(a)
 		if ismatch(r"(dirty)", a)
 			warn("$madsmodule latest changes are not committed!")
