@@ -2,14 +2,13 @@ import RobustPmap
 import BlackBoxOptim
 import Klara
 import JSON
-@tryimport Emcee
 
 """
-Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
 ```
-Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
-Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 ```
 
 Arguments:
@@ -28,7 +27,7 @@ Returns:
 - `mcmcchain` : MCMC chain
 - `llhoodvals` : log likelihoods of the final samples in the chain
 """
-function emcee(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, sigma::Number=0.01, seed=0)
+function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, sigma::Number=0.01, seed=0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -48,17 +47,17 @@ function emcee(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burni
 			p0[i, j] = pmin[i] + rand(d) * (pmax[i] - pmin[i])
 		end
 	end
-	return emcee(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed)
+	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed)
 end
 
-function emcee(madsdata::Associative, p0::Array; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0)
+function emceesampling(madsdata::Associative, p0::Array; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	burninchain, _ = Emcee.sample(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
-	chain, llhoods = Emcee.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
-	return Emcee.flatten(chain, llhoods)
+	burninchain, _ = Mads.emcee(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
+	chain, llhoods = Mads.emcee(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
+	return Mads.flattenmcmcarray(chain, llhoods)
 end
 
 """

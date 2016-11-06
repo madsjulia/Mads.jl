@@ -14,6 +14,7 @@ Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
 rm(rootname * "-test-mcmcchain1.json")
 Mads.forward(md, mcmcchain.value)
 
+mcmcchains = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=1, seed=2016)
 mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 
 md = Mads.loadmadsfile(workdir * "w01.mads")

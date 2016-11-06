@@ -4,7 +4,7 @@ import DataFrames
 import Optim
 
 """
-Setup BIG-DT problem
+Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
 Arguments:
 
@@ -20,7 +20,7 @@ function makebigdt(madsdata::Associative, choice::Associative)
 end
 
 """
-Setup BIG-DT problem
+Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
 Arguments:
 
@@ -106,7 +106,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 end
 
 """
-Perform BIG-DT analysis
+Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
 Arguments:
 

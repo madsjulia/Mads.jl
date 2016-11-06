@@ -1,5 +1,5 @@
 if VERSION >= v"0.5"
-	import PkgDev
+	@tryimport PkgDev
 end
 
 "Checkout the latest version of the Mads modules"
@@ -79,8 +79,10 @@ function tag(madsmodule::AbstractString, sym::Symbol=:patch)
 	if tag_flag
 		if VERSION < v"0.5"
 			Pkg.tag(madsmodule, sym)
-		else
+		elseif isdefined(:PkgDev)
 			PkgDev.tag(madsmodule, sym)
+		else
+			warn("PkgDev is missing!")
 		end
 		info("$madsmodule is now tagged!")
 	else
