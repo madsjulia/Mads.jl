@@ -20,10 +20,10 @@ mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=201
 md = Mads.loadmadsfile(workdir * "w01.mads")
 rootname = Mads.getmadsrootname(md)
 mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
+mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
 Mads.forward(md, mcmcchain.value)
 if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
-	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
 	Mads.spaghettiplots(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplots(md, 3, keyword="test")

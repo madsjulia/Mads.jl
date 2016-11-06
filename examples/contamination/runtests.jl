@@ -53,6 +53,9 @@ if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 end
 
+Mads.addsource!(md)
+Mads.computemass(md; time=50.0)
+
 (outRead, outWrite) = redirect_stdout();
 quiet_status = Mads.quiet
 Mads.quietoff()

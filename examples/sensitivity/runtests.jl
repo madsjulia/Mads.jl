@@ -10,6 +10,7 @@ end
 
 md = Mads.loadmadsfile(problemdir * "sobol.mads")
 sa_results = Mads.efast(md, N=385, seed=2015)
+Mads.computeparametersensitities(md, sa_results)
 
 if Mads.create_tests
 	warn("* Generating test file examples/sensitivity/sobol-efast-results_correct.json ... ")
@@ -21,5 +22,15 @@ else
 	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false )
 	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
 end
+
+sa_results = Mads.saltellibrute(md, N=50, seed=2015)
+sa_results = Mads.saltelli(md, N=50, seed=2015)
+
+originalSTDOUT = STDOUT;
+(outRead, outWrite) = redirect_stdout();
+Mads.printSAresults(md, sa_results)
+close(outWrite);
+close(outRead);
+redirect_stdout(originalSTDOUT);
 
 return

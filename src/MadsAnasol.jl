@@ -222,7 +222,7 @@ Returns:
 - `mass_injected` : total injected mass
 - `mass_reduced` : total reduced mass
 """
-function computemass(madsdata::Associative; time=0)
+function computemass(madsdata::Associative; time::Float64=0.)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
 		if grid_time > 0
@@ -299,6 +299,6 @@ function computemass(madsfiles; time=0, path = ".")
 		mass_injected[i] = mi
 		mass_reduced[i] = mr
 	end
-	plotmass(lambda, mass_injected, mass_reduced, path * "/mass_reduced")
+	graphoutput && plotmass(lambda, mass_injected, mass_reduced, path * "/mass_reduced")
 	return lambda, mass_injected, mass_reduced
 end
