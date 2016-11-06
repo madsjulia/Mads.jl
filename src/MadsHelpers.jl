@@ -8,6 +8,16 @@ function quietoff()
 	global quiet = false;
 end
 
+"MADS graph output on"
+function graphon()
+	global graphoutput = true;
+end
+
+"MADS graph output off"
+function graphoff()
+	global graphoutput = false;
+end
+
 "Turn on the generation of MADS tests (dangerous)"
 function create_tests_on()
 	global create_tests = true;

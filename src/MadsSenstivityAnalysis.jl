@@ -34,7 +34,7 @@ Arguments:
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=true, par=Array(Float64,0), obs=Array(Float64,0))
+function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -923,7 +923,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N=100, M=6, gamma=4, plotresults=false, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints", restart=false)
+function efast(md::Associative; N=100, M=6, gamma=4, plotresults=graphoutput, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints", restart=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
