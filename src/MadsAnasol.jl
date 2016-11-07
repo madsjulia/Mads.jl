@@ -77,9 +77,13 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	function computeconcentrations()
 		paramkeys = Mads.getparamkeys(madsdata)
 		paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
-		computeconcentrations(paramdict)
+		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
+		parameterswithexpressions = merge(paramsnoexpressions, expressions)
+		computeconcentrations(parameterswithexpressions)
 	end
-	function computeconcentrations(parameters::Associative)
+	function computeconcentrations(parametersnoexpressions::Associative)
+		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
+		parameters = merge(parametersnoexpressions, expressions)
 		porosity = parameters["n"]
 		lambda = parameters["lambda"]
 		theta = parameters["theta"]

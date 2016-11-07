@@ -10,7 +10,7 @@ Sources:
   dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
   f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1e+25, min: 0.01, max: 100 },
   t0 : { longname: "Start Time [T]", init: 5, type: null, log: no, step: 1, min: 0, max: 5 },
-  t1 : { longname: "End Time [T]", exp: t0+10 } }
+  t1 : { longname: "End Time [T]", exp: source1_t0+10 } }
 Parameters:
 - n       : { longname: "Porosity [L3/L3]", init: 0.1, type: null, log: no, step: 0.1, min: 0, max: 1 }
 - rf      : { longname: "Retardation Factor [-]", init: 1, type: null, log: yes, step: 1, min: 1, max: 10 }
