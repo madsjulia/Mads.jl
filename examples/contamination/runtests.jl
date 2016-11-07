@@ -8,13 +8,15 @@ end
 md = Mads.loadmadsfile(madsdirname * "w01-w13a_w20a.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 
-if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
+if isdefined(:Gadfly)
 	Mads.plotmadsproblem(md) # display the well locations and the initial source location
 end
 
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
-if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
+of = Mads.partialof(md, forward_predictions, r".*")
+
+if isdefined(:Gadfly)
 	Mads.plotmatches(md, forward_predictions) # plot initial matches
 end
 
@@ -37,7 +39,7 @@ inverse_parameters, inverse_results = Mads.calibraterandom(md, 1, maxEval=1, np_
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
-if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
+if isdefined(:Gadfly)
 	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
 end
 
@@ -49,8 +51,20 @@ Mads.wellon!(md, "w20a") # use well w20a
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues = Mads.parametersample(md, 10)
 
-if !haskey(ENV, "MADS_NO_PLOT") && Mads.long_tests
+if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
+	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
+	Mads.plotseries(rand(4,5), "test.png")
+	rm("test.png")
+end
+
+Mads.setobstime!(md, r"_(.*)")
+Mads.setobstime!(md)
+
+if isdefined(:Gadfly)
+	sa_results = Mads.saltelli(md, N=5, seed=2015)
+	Mads.plotwellSAresults(md, sa_results)
+	Mads.plotobsSAresults(md, sa_results)
 end
 
 Mads.addsource!(md)
@@ -65,7 +79,7 @@ close(outRead);
 redirect_stdout(originalSTDOUT);
 Mads.quieton()
 if quiet_status
-    Mads.quieton()
+	Mads.quieton()
 else
-    Mads.quietoff()
+	Mads.quietoff()
 end

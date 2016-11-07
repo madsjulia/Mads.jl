@@ -69,8 +69,8 @@ function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
 		parameters = madsdata["Parameters"]
 		for key in keys(parameters)
-			if !haskey(parameters[key], "init")
-				Mads.madserror("""Parameter $key does not have initial value; add "init" value!""")
+			if !haskey(parameters[key], "init") && !haskey(parameters[key], "exp")
+				Mads.madserror("""Parameter `$key` does not have initial value; add "init" value!""")
 			end
 			for v in ["init", "init_max", "init_min", "max", "min", "step"]
 				if haskey(parameters[key], v)

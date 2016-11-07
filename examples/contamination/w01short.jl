@@ -79,7 +79,7 @@ close(f)
 saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_mmap=true)
 
 # print saltieli results
-Mads.saltelliprintresults(md, result)
+Mads.printSAresults(md, result)
 
 # plot global SA results for a given observation point
 Mads.plotwellSAresults(md,result,"w1a")

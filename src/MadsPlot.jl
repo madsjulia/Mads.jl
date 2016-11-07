@@ -9,7 +9,7 @@ import Images
 """
 Display image file
 """
-function display(filename::AbstractString)
+function display(filename::String)
 	if isdefined(:TerminalExtensions)
 		trytoopen = false
 		ext = lowercase(Mads.getextension(filename))
@@ -46,7 +46,7 @@ end
 """
 Set the default plot format (`SVG` is the default format)
 """
-function setdefaultplotformat(format::AbstractString)
+function setdefaultplotformat(format::String)
 	if ismatch(r"^PNG|PDF|PS|SVG", uppercase(format))
 		global graphbackend = uppercase(format);
 	else
@@ -57,7 +57,7 @@ end
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`Mads.setplotfileformat(filename::AbstractString, format::AbstractString)`
+`Mads.setplotfileformat(filename::String, format::String)`
 
 Arguments:
 
@@ -69,7 +69,7 @@ Returns:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function setplotfileformat(filename::AbstractString, format::AbstractString)
+function setplotfileformat(filename::String, format::String)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
 	root = Mads.getrootname(filename)
@@ -109,12 +109,13 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 - `keyword` : to be added in the filename
 """
-function plotmadsproblem(madsdata::Associative; format::AbstractString="", filename::AbstractString="", keyword::AbstractString="")
+function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", imagefile::Bool=false)
+	rectangles = Array(Float64, 0, 4)
+	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
 	if haskey(madsdata, "Sources")
-		rectangles = Array(Float64, 0, 4)
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			if sourcetype == "box"
+			if sourcetype == "box" || sourcetype == "gauss"
 				rectangle = Array(Float64, 4)
 				rectangle[1] = madsdata["Sources"][i][sourcetype]["x"]["init"] - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
 				rectangle[2] = madsdata["Sources"][i][sourcetype]["y"]["init"] - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
@@ -124,7 +125,13 @@ function plotmadsproblem(madsdata::Associative; format::AbstractString="", filen
 			end
 		end
 	end
-	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
+	if sizeof(rectangles) > 0
+		gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
+			Compose.fill(parse(Colors.Colorant, "orange")),
+			Compose.fillopacity(0.2),
+			Compose.stroke(parse(Colors.Colorant, "orange"))))
+	end
+	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if madsdata["Wells"][wellkey]["on"]
 			match = false
@@ -155,10 +162,7 @@ function plotmadsproblem(madsdata::Associative; format::AbstractString="", filen
 	ymax = ymax + dy / 6
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Gadfly.Geom.point, Gadfly.Geom.label,
 		Gadfly.Guide.XLabel("x [m]"), Gadfly.Guide.YLabel("y [m]"), Gadfly.Guide.yticks(orientation=:vertical),
-		Gadfly.Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-		Compose.fill(parse(Colors.Colorant, "orange")),
-		Compose.fillopacity(0.2),
-		Compose.stroke(parse(Colors.Colorant, "orange")))),
+		gadfly_source,
 		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
 		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
@@ -169,7 +173,7 @@ function plotmadsproblem(madsdata::Associative; format::AbstractString="", filen
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setplotfileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
+	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p
 	end
@@ -194,12 +198,12 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotmatches(madsdata_in::Associative; filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
-	r = forward(madsdata_in; all=true)
-	plotmatches(madsdata_in, r, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
+function plotmatches(madsdata::Associative; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize=6Gadfly.inch)
+	r = forward(madsdata; all=true)
+	plotmatches(madsdata, r, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::AbstractString="", format::AbstractString="", key2time=k->0., title=rx.pattern, xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::String="", format::String="", key2time=k->0., title=rx.pattern, xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize=6Gadfly.inch)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -216,7 +220,7 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
 
-function plotmatches(madsdata::Associative, dict_in::Associative; filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", separate_files::Bool=false, hsize=6Gadfly.inch)
+function plotmatches(madsdata::Associative, dict_in::Associative; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize=6Gadfly.inch)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -350,7 +354,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::AbstractString; format::AbstractString="", dot_size=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::String; format::String="", dot_size=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -376,7 +380,11 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::Ab
 	vsize = (3 * size(samples, 2))Gadfly.inch
 	filename, format = setplotfileformat(filename, format)
 	try
-		Gadfly.draw( Gadfly.eval((Symbol(format)))(filename, hsize, vsize), Compose.gridstack(cs))
+		pl = Compose.gridstack(cs)
+		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
+		if typeof(pl) == Gadfly.Plot{}
+			pl
+		end
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
@@ -389,12 +397,13 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `result` : sensitivity analysis results
+- `wellname` : well name
 - `xtitle` : x-axis title
 - `ytitle` : y-axis title
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotwellSAresults(madsdata::Associative, result; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="")
+function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madserroror("There is no 'Wells' data in the MADS input dataset")
 		return
@@ -406,20 +415,7 @@ function plotwellSAresults(madsdata::Associative, result; xtitle::AbstractString
 	end
 end
 
-"""
-Plot the sensitivity analysis results for a given well in the MADS problem dictionary (wells class expected)
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `result` : sensitivity analysis results
-- `wellname` : well name
-- `xtitle` : x-axis title
-- `ytitle` : y-axis title
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
-"""
-function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="")
+function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madserroror("There is no 'Wells' class in the MADS input dataset")
 		return
@@ -499,6 +495,9 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Abst
 	end
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
+	if typeof(p) == Gadfly.Plot{}
+		p
+	end
 end
 
 """
@@ -513,7 +512,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", filename::AbstractString="", format::AbstractString="", debug::Bool=false, separate_files::Bool=false, xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]")
+function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
 		Mads.madserroror("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -658,6 +657,9 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 		filename, format = setplotfileformat(filename, format)
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize ), p)
+		if typeof(p) == Gadfly.Plot{}
+			p
+		end
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
@@ -699,7 +701,7 @@ function spaghettiplots(madsdata::Associative, number_of_samples::Int; format=""
 	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
@@ -839,12 +841,12 @@ Dumps:
 
 - Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
-function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
 	paramvalues = parametersample(madsdata, number_of_samples)
 	spaghettiplot(madsdata::Associative, paramvalues; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
 	Mads.setseed(seed)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -882,7 +884,7 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::
 	spaghettiplot(madsdata::Associative, Y; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, array::Array; filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, array::Array; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
 	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -981,6 +983,9 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::AbstractSt
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end
+	if typeof(pl) == Gadfly.Plot{}
+		pl
+	end
 end
 
 """
@@ -997,7 +1002,7 @@ Arguments:
 - `name` : series name
 - `combined` : `true` by default
 """
-function plotseries(X::Matrix, filename::AbstractString; format::AbstractString="", xtitle::AbstractString = "X", ytitle::AbstractString = "Y", title::AbstractString="Sources", name::AbstractString="Source", combined::Bool=true)
+function plotseries(X::Matrix, filename::String; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true)
 	nT = size(X)[1]
 	nS = size(X)[2]
 	if combined
@@ -1021,6 +1026,9 @@ function plotseries(X::Matrix, filename::AbstractString; format::AbstractString=
 	filename, format = setplotfileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pS)
+		if typeof(pS) == Gadfly.Plot{}
+			pS
+		end
 	catch "At least one finite value must be provided to formatter."
 		Mads.madswarn("Gadfly fails!")
 	end

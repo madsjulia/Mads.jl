@@ -20,16 +20,20 @@ Arguments:
 - `nt` : number of threads
 """
 function setprocs(np::Int, nt::Int)
-	np = np <= 0 ? 1 : np
-	nt = nt <= 0 ? 1 : nt
+	np = np < 0 ? 1 : np
+	nt = nt < 0 ? 1 : nt
 	n = np - nprocs()
 	if n > 0
 		addprocs(n)
 	elseif n < 0
 		rmprocs(workers()[end+n+1:end])
 	end
-	blas_set_num_threads(nt)
-	sleep(10)
+	if VERSION < v"0.5"
+		blas_set_num_threads(nt)
+	else
+		BLAS.set_num_threads(nt)
+	end
+	sleep(0.1)
 	getprocs()
 end
 
@@ -204,7 +208,7 @@ function setdir(dir)
 end
 
 function setdir()
-	dir = remotecall_fetch(1, ()->pwd())
+	dir = remotecall_fetch(()->pwd(), 1)
 	setdir(dir)
 end
 

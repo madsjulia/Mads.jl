@@ -187,7 +187,7 @@ function setobstime!(madsdata::Associative, separator::AbstractString="_")
 	for i in 1:length(obskeys)
 		s = split(obskeys[i], separator)
 		if length(s) != 2
-			madserror("String `$(split)` cannot split $(obskeys[i])")
+			madswarn("String `$(split)` cannot split $(obskeys[i])")
 		else
 			settime!(madsdata["Observations"][obskeys[i]], parse(Float64, s[2]))
 		end
@@ -198,7 +198,7 @@ function setobstime!(madsdata::Associative, rx::Regex)
 	for i in 1:length(obskeys)
 		m = match(rx, obskeys[i])
 		if typeof(m) == Void || length(m.captures) != 1
-			madserror("Regular expression `$(rx)` cannot match $(obskeys[i])")
+			madswarn("Regular expression `$(rx)` cannot match $(obskeys[i])")
 		else
 			settime!(madsdata["Observations"][obskeys[i]], parse(Float64, m.captures[1]))
 		end
@@ -367,7 +367,7 @@ function wellon!(madsdata::Associative, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.madserror("""Well name $wellname does not match existing well names!""")
+		Mads.madswarn("""Well name $wellname does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end
@@ -391,7 +391,7 @@ function welloff!(madsdata, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.madserror("""Well name $wellname does not match existing well names!""")
+		Mads.madswarn("""Well name $wellname does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end

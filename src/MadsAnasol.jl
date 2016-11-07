@@ -28,7 +28,15 @@ function addsourceparameters!(madsdata::Associative)
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = keys(madsdata["Sources"][i][sourcetype])
 			for sourceparam in sourceparams
-				madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp") # it is a real parameter, not an expression
+					madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+				else
+					if !haskey(madsdata, "Expressions")
+						madsdata["Expressions"] = DataStructures.OrderedDict()
+					end
+					madsdata["Expressions"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+				end
+
 			end
 		end
 	end

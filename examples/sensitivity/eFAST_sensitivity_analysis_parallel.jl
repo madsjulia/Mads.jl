@@ -32,7 +32,7 @@ resultsefast = Mads.efast(md,N=int(15000), M=6, gamma=4)
 N = resultsefast["samplesize"];
 
 # Print results (sensitivity indices)
-#Mads.saltelliprintresults(md,resultsefast)
+#Mads.printSAresults(md,resultsefast)
 
 # get MADS rootname
 rootname = Mads.getmadsrootname(md)

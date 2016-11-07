@@ -27,6 +27,10 @@ Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(workdir * "external-json.mads")
 # sparam, sresults = Mads.calibrate(md)
 sfor = Mads.forward(md)
+Mads.madsinfo("External coupling using `Command` and JSON ...")
+md = Mads.loadmadsfile(workdir * "external-json-exp.mads")
+# sparam, sresults = Mads.calibrate(md)
+efor = Mads.forward(md)
 if !haskey(ENV, "MADS_NO_PYTHON")
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(workdir * "external-yaml.mads")
@@ -41,4 +45,5 @@ end
 # afor = Mads.forward(md)
 
 @Base.Test.test jfor == sfor
+@Base.Test.test efor == sfor
 @Base.Test.test jfor == ifor
