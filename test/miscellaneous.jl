@@ -22,6 +22,8 @@ originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
 quiet_status = Mads.quiet
 Mads.quietoff()
+Mads.checkout()
+Mads.status()
 Mads.runcmd(`ls`)
 Mads.madsoutput("a")
 Mads.madsdebug("a")
