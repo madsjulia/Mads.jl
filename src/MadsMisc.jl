@@ -150,3 +150,14 @@ function evaluatemadsexpressions(madsdata::Associative, parameters)
 		return Dict()
 	end
 end
+
+"Parse distribution from a string"
+function getdistribution(dist::String, i::String, inputtype::String)
+	distribution = nothing
+	try
+		distribution = Distributions.eval(parse(dist))
+	catch
+		madserror("""Something is wrong with $inputtype '$i' distribution (dist: '$(dist)')""")
+	end
+	return distribution
+end

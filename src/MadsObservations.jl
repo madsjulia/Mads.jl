@@ -66,8 +66,8 @@ for i = 1:length(getobsnames)
 						obsvalue[i] = $(obsdefault)
 					end
 					if ($obsname == "min" || $obsname == "max") && haskey(madsdata["Observations"][obskeys[i]], "dist")
-						distribution = Distributions.eval(parse(madsdata["Observations"][obskeys[i]]["dist"]))
-						if typeof(distribution) == Distributions.Uniform
+						distribution = Mads.getdistribution(madsdata["Observations"][obskeys[i]]["dist"], obskeys[i], "observation")
+						if typeof(distribution) <: Distributions.Uniform
 							if $obsname == "min"
 								obsvalue[i] = distribution.a
 							elseif $obsname == "max"

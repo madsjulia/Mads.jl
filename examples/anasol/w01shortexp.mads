@@ -2,7 +2,7 @@ Problem: { }
 Solution: internal
 Sources:
 - gauss: {
-  x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, step: 25, min: 210, max: 1460 },
+  x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, step: 25, dist: "Uniform(210, 1460)", init_dist: "Uniform(800, 1200)"},
   y  : { longname: "Source y coordinate [L]", init: 1450, type: null, log: no, step: 25, min: 1230, max: 1930 },
   z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
   dx : { longname: "Source x dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
@@ -12,11 +12,11 @@ Sources:
   t0 : { longname: "Start Time [T]", init: 5, type: null, log: no, step: 1, min: 0, max: 5 },
   t1 : { longname: "End Time [T]", exp: source1_t0+10 } }
 Parameters:
-- n       : { longname: "Porosity [L3/L3]", init: 0.1, type: null, log: no, step: 0.1, min: 0, max: 1 }
+- n       : { longname: "Porosity [L3/L3]", init: 0.1, type: opt, log: no, step: 0.1, min: 0, max: 1, dist: "Normal(0.1, 0.001)" }
 - rf      : { longname: "Retardation Factor [-]", init: 1, type: null, log: yes, step: 1, min: 1, max: 10 }
 - lambda  : { longname: "Half-life decay [1/T]", init: 0, type: null, log: yes, step: 1, min: 0, max: 1 }
 - theta   : { longname: "Flow Angle [degrees]", init: 0, type: null, log: no, step: 5, min: -30, max: 30 }
-- vx      : { longname: "Pore x velocity [L/T]", init: 30, type: opt, log: no, step: 10, min: 0.01, max: 200 }
+- vx      : { longname: "Pore x velocity [L/T]", init: 30, type: opt, log: yes, step: 10, min: 0.01, max: 100, dist: "Normal(30, 2)"}
 - vy      : { longname: "Pore y velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
 - vz      : { longname: "Pore z velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
 - ax      : { longname: "Dispersivity x [L]", init: 70, type: opt, log: yes, step: 10, min: 10, max: 140 }
