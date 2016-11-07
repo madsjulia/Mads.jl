@@ -14,6 +14,9 @@ else
 end
 Mads.setdebuglevel(1)
 Mads.setverbositylevel(1)
+Mads.setdefaultplotformat("EPS")
+Mads.setdefaultplotformat("SVG")
+Mads.display("mads.png")
 Mads.resetmodelruns()
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();

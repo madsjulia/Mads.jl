@@ -3,6 +3,8 @@ import JLD
 import Base.Test
 
 workdir = Mads.madsdir * "/../examples/anasol"
+md = Mads.loadmadsfile("$workdir/w01shortexp.mads")
+Mads.forward(md)
 md = Mads.loadmadsfile("$workdir/w01short.mads")
 computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))

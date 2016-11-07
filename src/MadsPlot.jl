@@ -10,6 +10,10 @@ import Images
 Display image file
 """
 function display(filename::String)
+	if !isfile(filename)
+		warn("File `$filename` is missing!")
+		return
+	end
 	if isdefined(:TerminalExtensions)
 		trytoopen = false
 		ext = lowercase(Mads.getextension(filename))
@@ -37,7 +41,7 @@ function display(filename::String)
 			try
 				run(`xdg-open $filename`)
 			catch
-				warn("Do not know how to open $filename")
+				warn("Do not know how to open `$filename`")
 			end
 		end
 	end
@@ -85,11 +89,6 @@ function setplotfileformat(filename::String, format::String)
 			filename = root * ".eps"
 		end
 		format = "PS"
-	elseif format == "SVG"
-		if "SVG" != extension
-			filename = root * ".svg"
-		end
-		format = "SVG"
 	else
 		if graphbackend != extension
 			filename = root * "." * lowercase(graphbackend)
