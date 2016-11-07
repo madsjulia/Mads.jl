@@ -23,4 +23,5 @@ include(workdir * "optimization-lm.jl")
 include(workdir * "optimization_rosenbrock.jl")
 include(workdir * "optimization_callback.jl")
 include(workdir * "optimization_linear_problem.jl")
+# include(workdir * "optimization_linear_problem_nlopt.jl") # requires NLopt
 include(workdir * "optimization_linear_problem+template.jl")

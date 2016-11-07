@@ -147,7 +147,7 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 end
 
 # NLopt is too much of a pain to install at this point
-"Do a calibration using NLopt "
+"Do a calibration using NLopt"
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
