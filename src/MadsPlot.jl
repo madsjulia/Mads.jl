@@ -321,7 +321,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Stri
 			madswarn("Some of the observations do not have `time` field specified!")
 		end
 		if length(tress) + length(tobs) == 0
-			madserror("No data to plot")
+			madswarn("No data to plot")
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=3Gadfly.pt)),
@@ -386,7 +386,7 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 			pl
 		end
 	catch "At least one finite value must be provided to formatter."
-		Mads.madswarn("Gadfly fails!")
+		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
 	end
 end
 
@@ -405,7 +405,7 @@ Arguments:
 """
 function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
-		Mads.madserroror("There is no 'Wells' data in the MADS input dataset")
+		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 		return
 	end
 	for wellname in keys(madsdata["Wells"])
@@ -417,11 +417,11 @@ end
 
 function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
-		Mads.madserroror("There is no 'Wells' class in the MADS input dataset")
+		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
 		return
 	end
 	if !haskey(madsdata["Wells"], wellname)
-		Mads.madserroror("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
+		Mads.madswarn("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
 		return
 	end
 	o = madsdata["Wells"][wellname]["obs"]
@@ -514,7 +514,7 @@ Arguments:
 """
 function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
-		Mads.madserroror("There is no 'Observations' class in the MADS input dataset")
+		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
 	end
 	nsample = result["samplesize"]
@@ -807,7 +807,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
 		catch "At least one finite value must be provided to formatter."
-			Mads.madswarn("Gadfly fails!")
+			Mads.madswarn("Spaghettiplots: Gadfly fails!")
 		end
 	end
 end
@@ -981,7 +981,7 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 	try
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
 	catch "At least one finite value must be provided to formatter."
-		Mads.madswarn("Gadfly fails!")
+		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot{}
 		pl
@@ -1030,6 +1030,6 @@ function plotseries(X::Matrix, filename::String; format::String="", xtitle::Stri
 			pS
 		end
 	catch "At least one finite value must be provided to formatter."
-		Mads.madswarn("Gadfly fails!")
+		Mads.madswarn("Plotseries: Gadfly fails!")
 	end
 end
