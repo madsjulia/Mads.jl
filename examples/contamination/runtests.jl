@@ -56,7 +56,7 @@ if isdefined(:Gadfly)
 	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
 	Mads.plotseries(rand(4,5), "test.png")
 	run(`bash -c "rm -f test.png"`)
-nd
+end
 
 Mads.setobstime!(md, r"_(.*)")
 Mads.setobstime!(md)
