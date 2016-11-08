@@ -7,6 +7,8 @@ println("* miscellaneous ...")
 include("miscellaneous.jl")
 println("* io ...")
 include("io.jl")
+println("* test functions ...")
+include("test_functions.jl")
 
 examples = readdir(Pkg.dir("Mads") * "/examples/")
 
