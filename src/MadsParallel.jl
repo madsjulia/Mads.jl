@@ -59,6 +59,7 @@ Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=32, mads_servers=true)
 Mads.setprocs(ntasks_per_node=64, machinenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, machinenames="wc[096-157,160,175]")
 Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
 ```
 
@@ -73,7 +74,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Array=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Union{String,Array{String,1}}=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(machinenames) > 0 || mads_servers
@@ -81,9 +82,33 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames
 			machinenames = madsservers
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
-		for n = 1:length(machinenames)
-			for j = 1:c
-				push!(h, machinenames[n])
+		if typeof(machinenames) == Array{String,1}
+			for n = 1:length(machinenames)
+				for j = 1:c
+					push!(h, machinenames[n])
+				end
+			end
+		else
+			ss = split(machinenames, "[")
+			name = ss[1]
+			if length(ss) == 1
+				for j = 1:c
+					push!(h, name)
+				end
+			else
+				cm = split( split(ss[2], "]")[1], ",")
+				for n = 1:length(cm)
+					d = split(cm[n], "-")
+					e = length(d) == 1 ? d[1] : d[2]
+					l = length(d[1])
+					f = "%0" * string(l) * "d"
+					for i in collect(parse(Int, d[1]):1:parse(Int, e))
+						nn = name * sprintf(f, i)
+						for j = 1:c
+							push!(h, nn)
+						end
+					end
+				end
 			end
 		end
 	elseif haskey(ENV, "SLURM_JOB_NODELIST") || haskey(ENV, "SLURM_NODELIST")
@@ -180,6 +205,7 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames
 	else
 		warn("No processors found to add!")
 	end
+	return h
 end
 
 "Disable MADS plotting"
