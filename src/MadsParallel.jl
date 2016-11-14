@@ -20,8 +20,8 @@ Arguments:
 - `nt` : number of threads
 """
 function setprocs(np::Int, nt::Int)
-	np = np < 0 ? 1 : np
-	nt = nt < 0 ? 1 : nt
+	np = np < 1 ? 1 : np
+	nt = nt < 1 ? 1 : nt
 	n = np - nprocs()
 	if n > 0
 		addprocs(n)
@@ -44,7 +44,7 @@ end
 "Set number of processors needed for each parallel task at each node"
 function set_nprocs_per_task(local_nprocs_per_task::Int=1)
 	global nprocs_per_task = local_nprocs_per_task
-end 
+end
 
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
@@ -58,8 +58,8 @@ Usage:
 Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=32, mads_servers=true)
-Mads.setprocs(ntasks_per_node=64, machinenames=["madsmax", "madszem"])
-Mads.setprocs(ntasks_per_node=64, machinenames="wc[096-157,160,175]")
+Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
 Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
 ```
 
@@ -67,49 +67,29 @@ Optional arguments:
 
 - `ntasks_per_node` : number of parallel tasks per 
 - `nprocs_per_task` : number of processors needed for each parallel task at each node
-- `machinenames` : array with machines names to invoked
+- `nodenames` : array with names of machines/nodes to be invoked
 - `dir` : common directory shared by all the jobs
 - `exename` : location of the julia executable (the same version of julia is needed on all the workers)
 - `mads_servers` : if `true` use MADS servers (LANL only)
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames::Union{String,Array{String,1}}=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{Any,1}}=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
-	if length(machinenames) > 0 || mads_servers
-		if length(machinenames) == 0
-			machinenames = madsservers
+	if length(nodenames) > 0 || mads_servers
+		if length(nodenames) == 0
+			nodenames = madsservers
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
-		if typeof(machinenames) == Array{String,1}
-			for n = 1:length(machinenames)
+		if typeof(nodenames) == Array{String,1}
+			for n = 1:length(nodenames)
 				for j = 1:c
-					push!(h, machinenames[n])
+					push!(h, nodenames[n])
 				end
 			end
 		else
-			ss = split(machinenames, "[")
-			name = ss[1]
-			if length(ss) == 1
-				for j = 1:c
-					push!(h, name)
-				end
-			else
-				cm = split( split(ss[2], "]")[1], ",")
-				for n = 1:length(cm)
-					d = split(cm[n], "-")
-					e = length(d) == 1 ? d[1] : d[2]
-					l = length(d[1])
-					f = "%0" * string(l) * "d"
-					for i in collect(parse(Int, d[1]):1:parse(Int, e))
-						nn = name * sprintf(f, i)
-						for j = 1:c
-							push!(h, nn)
-						end
-					end
-				end
-			end
+			h = parsenodenames(nodenames, c)
 		end
 	elseif haskey(ENV, "SLURM_JOB_NODELIST") || haskey(ENV, "SLURM_NODELIST")
 		# s = "hmem[05-07,09-17]"
@@ -132,27 +112,7 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames
 				c = 1
 			end
 		end
-		ss = split(s, "[")
-		name = ss[1]
-		if length(ss) == 1
-			for j = 1:c
-				push!(h, name)
-			end
-		else
-			cm = split( split(ss[2], "]")[1], ",")
-			for n = 1:length(cm)
-				d = split(cm[n], "-")
-				e = length(d) == 1 ? d[1] : d[2]
-				l = length(d[1])
-				f = "%0" * string(l) * "d"
-				for i in collect(parse(Int, d[1]):1:parse(Int, e))
-					nn = name * sprintf(f, i)
-					for j = 1:c
-						push!(h, nn)
-					end
-				end
-			end
-		end
+		h = parsenodenames(s, c)
 	else
 		warn("Unknown parallel environment!")
 	end
@@ -208,6 +168,33 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, machinenames
 	return h
 end
 
+"Parse string with node names defined in SLURM"
+function parsenodenames(nodenames::String, ntasks_per_node::Int=1)
+	h = Array(String, 0)
+	ss = split(nodenames, "[")
+	name = ss[1]
+	if length(ss) == 1
+		for j = 1:ntasks_per_node
+			push!(h, name)
+		end
+	else
+		cm = split( split(ss[2], "]")[1], ",")
+		for n = 1:length(cm)
+			d = split(cm[n], "-")
+			e = length(d) == 1 ? d[1] : d[2]
+			l = length(d[1])
+			f = "%0" * string(l) * "d"
+			for i in collect(parse(Int, d[1]):1:parse(Int, e))
+				nn = name * sprintf(f, i)
+				for j = 1:ntasks_per_node
+					push!(h, nn)
+				end
+			end
+		end
+	end
+	return h
+end
+
 "Disable MADS plotting"
 function noplot()
 	if myid() == 1
@@ -238,12 +225,12 @@ function setdir()
 	setdir(dir)
 end
 
-function runremote(machinenames::Array=[], cmd="")
+function runremote(nodenames::Array=[], cmd="")
 	output = Array(String, 0)
-	if length(machinenames) == 0
-		machinenames = madsservers
+	if length(nodenames) == 0
+		nodenames = madsservers
 	end
-	for i in machinenames
+	for i in nodenames
 		try
 			o = readall(`ssh -t $i $cmd`)
 			push!(output, strip(o))
@@ -253,17 +240,17 @@ function runremote(machinenames::Array=[], cmd="")
 			warn("$i is not accessible")
 		end
 	end
-	return output
+	return output;
 end
 
-function madscores(machinenames::Array=[])
-	runremote(machinenames, "grep -c ^processor /proc/cpuinfo")
+function madscores(nodenames::Array=[])
+	runremote(nodenames, "grep -c ^processor /proc/cpuinfo")
 end
 
-function madsup(machinenames::Array=[])
-	runremote(machinenames, "uptime 2>/dev/null")
+function madsup(nodenames::Array=[])
+	runremote(nodenames, "uptime 2>/dev/null")
 end
 
-function madsload(machinenames::Array=[])
-	runremote(machinenames, "top -n 1 2>/dev/null")
+function madsload(nodenames::Array=[])
+	runremote(nodenames, "top -n 1 2>/dev/null")
 end
