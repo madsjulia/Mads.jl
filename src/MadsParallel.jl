@@ -74,7 +74,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{Any,1}}=[], mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(nodenames) > 0 || mads_servers
