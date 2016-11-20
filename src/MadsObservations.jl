@@ -39,7 +39,7 @@ end
 # Make functions to get MADS observation variable names
 getobsnames = ["min", "max", "log", "weight", "target", "time", "dist"]
 getobsaltnames = ["min", "max", "log", "w", "c", "t", "dist"]
-getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, Distributions.Distribution]
+getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, String]
 getobsdefault = [-1e6, 1e6, nothing, 1, NaN, NaN, "Uniform(-1e6, 1e6)"]
 getobslogdefault = [1e-6, 1e6, nothing, 1, NaN, NaN, "Uniform(1e-6, 1e6)"]
 index = 0
