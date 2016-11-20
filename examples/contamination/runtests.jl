@@ -47,6 +47,8 @@ end
 Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
+Mads.getwellsdata(md)
+Mads.getwellsdata(md; time=true)
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues = Mads.parametersample(md, 10)

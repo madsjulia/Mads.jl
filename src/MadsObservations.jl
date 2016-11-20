@@ -3,12 +3,12 @@ import DataStructures
 
 "Is a dictionary containing all the observations"
 function isobs(madsdata::Associative, dict::Associative)
-	flag = true
 	if haskey(madsdata, "Observations") || haskey(madsdata, "Wells")
 		obs = getobskeys(madsdata)
 	else
-		obs = madsdata
+		obs = collect(keys(madsdata))
 	end
+	flag = true
 	for i in obs
 		if !haskey(dict, i)
 			flag = false
@@ -102,7 +102,7 @@ function gettime(o::Associative)
 end
 
 "Set observation time"
-function settime!(o::Associative, time)
+function settime!(o::Associative, time::Number)
 	if haskey(o, "time")
 		o["time"] = time
 	elseif haskey(o, "t")
@@ -289,8 +289,8 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-"Create observations in the MADS problem dictionary based on `time` and `observation` arrays"
-function createobservations!(madsdata::Associative, time, observation; logtransform=false, weight_type="constant", weight=1)
+"Create observations in the MADS problem dictionary based on `time` and `observation` vectors"
+function createobservations!(madsdata::Associative, time::Vector, observation::Vector; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	@assert length(time) == length(observation)
 	observationsdict = DataStructures.OrderedDict()
 	for i in 1:length(time)
@@ -313,7 +313,7 @@ function createobservations!(madsdata::Associative, time, observation; logtransf
 	madsdata["Observations"] = observationsdict
 end
 
-function createobservations!(madsdata::Associative, observations::Associative; logtransform=false, weight_type="constant", weight=1)
+function createobservations!(madsdata::Associative, observations::Associative; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	observationsdict = DataStructures.OrderedDict()
 	for k in keys(observations)
 		data = DataStructures.OrderedDict()
@@ -323,7 +323,7 @@ function createobservations!(madsdata::Associative, observations::Associative; l
 				data["weight"] = weight
 			end
 		else
-			data["weight"] = 1 / observation[i]
+			data["weight"] = 1 / observations[k]
 		end
 		if logtransform == true
 			data["log"] = logtransform
@@ -425,8 +425,8 @@ function wells2observations!(madsdata::Associative)
 	madsdata["Observations"] = observations
 end
 
-"Ger `Wells` class spatial and temporal data"
-function getwellsdata(madsdata::Associative; time=false)
+"Get `Wells` class spatial and temporal data"
+function getwellsdata(madsdata::Associative; time::Bool=false)
 	if time
 		a = Array(Float64, 4, 0)
 	else

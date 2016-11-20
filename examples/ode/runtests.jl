@@ -44,6 +44,10 @@ ys = hcat(y...)' # vectorizing the output and transposing it with '
 
 # create an observation dictionary in the MADS dictionary
 Mads.madsinfo("Create MADS Observations ...")
+Mads.createobservations!(md, t, ys[:,1], weight = 10)
+Mads.createobservations!(md, t, ys[:,1], weight_type = "inverse", logtransform=true)
+Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight = 10)
+Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight_type = "inverse", logtransform=true)
 Mads.createobservations!(md, t, ys[:,1])
 Mads.madsinfo("Show MADS Observations ...")
 # Mads.showobservations(md)

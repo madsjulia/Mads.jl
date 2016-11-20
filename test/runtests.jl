@@ -10,6 +10,9 @@ include("io.jl")
 println("* test functions ...")
 include("test_functions.jl")
 
+println("* observations ...")
+include("observations.jl")
+
 examples = readdir(Pkg.dir("Mads") * "/examples/")
 
 for madstest in examples

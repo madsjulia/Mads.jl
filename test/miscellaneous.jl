@@ -13,10 +13,6 @@ else
 	Mads.long_tests_off()
 end
 Mads.setdebuglevel(1)
-Mads.setverbositylevel(1)
-Mads.setdefaultplotformat("EPS")
-Mads.setdefaultplotformat("SVG")
-Mads.display("mads.png")
 Mads.resetmodelruns()
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
@@ -48,6 +44,12 @@ if quiet_status
 	Mads.quieton()
 else
 	Mads.quietoff()
+end
+Mads.setverbositylevel(1)
+if !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.setdefaultplotformat("EPS")
+	Mads.setdefaultplotformat("SVG")
+	Mads.display("mads.png")
 end
 graph_status = Mads.graphoutput
 Mads.graphoff()
