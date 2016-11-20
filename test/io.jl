@@ -14,3 +14,6 @@ Mads.dumpyamlfile("a.yaml", arr)
 arr1 = Mads.loadyamlfile("a.yaml")
 # @assert arr==arr1
 run(`bash -c "rm -f a.yaml"`)
+
+Mads.searchdir("a")
+Mads.searchdir(r"a")

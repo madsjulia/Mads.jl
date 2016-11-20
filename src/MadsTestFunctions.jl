@@ -144,9 +144,7 @@ end
 function makedixonprice_gradient(N)
     function dixonprice_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
-
         result[1, 1] = sqrt(2)
- 
         for i=2:N
             result[i-1, i] = -sqrt(2*i)
             result[i, i]   = 4*sqrt(2*i)*x[i]
@@ -159,7 +157,6 @@ end
 function makesumsquares(N)
     function sumsquares(x::Vector)
         result = Array(eltype(x), N)
-
         for i=1:N
             result[i] = sqrt(i)*x[i]
         end

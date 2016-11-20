@@ -346,8 +346,8 @@ end
 """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
-- `Mads.searchdir(key)`
-- `Mads.searchdir(key; path = ".")`
+- `Mads.searchdir("a")`
+- `Mads.searchdir(r"[A-B]"; path = ".")`
 
 Arguments:
 

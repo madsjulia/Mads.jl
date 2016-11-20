@@ -9,7 +9,8 @@ println("* io ...")
 include("io.jl")
 println("* test functions ...")
 include("test_functions.jl")
-
+println("* parameters ...")
+include("parameters.jl")
 println("* observations ...")
 include("observations.jl")
 

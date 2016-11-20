@@ -2,15 +2,27 @@ s = Array(Float64,2)
 Mads.rosenbrock_gradient!(rand(2), s)
 s = Array(Float64,2,2)
 Mads.rosenbrock_hessian!(rand(2),s)
-Mads.makerosenbrock(2)
-Mads.makerosenbrock_gradient(2)
-Mads.makepowell(2)
-Mads.makepowell_gradient(2)
-Mads.makesphere(2)
-Mads.makesphere_gradient(2)
-Mads.makedixonprice(2)
-Mads.makedixonprice_gradient(2)
-Mads.makesumsquares(2)
-Mads.makesumsquares_gradient(2)
-Mads.makerotatedhyperellipsoid(2)
-Mads.makerotatedhyperellipsoid_gradient(2)
+f = Mads.makerosenbrock(2)
+f([1,1]);
+f = Mads.makerosenbrock_gradient(2)
+f([1,1]);
+f = Mads.makepowell(2)
+f([1,1]);
+f = Mads.makepowell_gradient(2)
+f([1,1]);
+f = Mads.makesphere(2)
+f([1,1]);
+f = Mads.makesphere_gradient(2)
+f([1,1]);
+f = Mads.makedixonprice(2)
+f([1.,1.]);
+f = Mads.makedixonprice_gradient(2)
+f([1.,1.]);
+f = Mads.makesumsquares(2)
+f([1.,1.]);
+f = Mads.makesumsquares_gradient(2)
+f([1.,1.]);
+f = Mads.makerotatedhyperellipsoid(2)
+f([1.,1.]);
+f = Mads.makerotatedhyperellipsoid_gradient(2)
+f([1.,1.]);

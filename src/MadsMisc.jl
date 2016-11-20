@@ -3,7 +3,7 @@ import MetaProgTools
 """
 Run external command and pipe stdout and stderr
 """
-function runcmd(cmd::Cmd, quiet=false)
+function runcmd(cmd::Cmd, quiet::Bool=false)
 	cmdin = Pipe()
 	cmdout = Pipe()
 	cmderr = Pipe()
@@ -55,7 +55,7 @@ Returns:
 
 - `arrayfunction` : function accepting an array containing the optimal parameters' values
 """
-function makearrayfunction(madsdata::Associative, f=makemadscommandfunction(madsdata))
+function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
@@ -78,7 +78,7 @@ Returns:
 
 - `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
 """
-function makedoublearrayfunction(madsdata::Associative, f=makemadscommandfunction(madsdata))
+function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
 	obskeys = getobskeys(madsdata)
 	function doublearrayfunction(arrayparameters::Vector)
@@ -130,7 +130,7 @@ function setdynamicmodel(madsdata::Associative, f::Function)
 end
 
 "Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
-function evaluatemadsexpression(expressionstring, parameters)
+function evaluatemadsexpression(expressionstring::String, parameters::Associative)
 	expression = parse(expressionstring)
 	expression = MetaProgTools.populateexpression(expression, parameters)
 	local retval::Float64
@@ -139,7 +139,7 @@ function evaluatemadsexpression(expressionstring, parameters)
 end
 
 "Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
-function evaluatemadsexpressions(madsdata::Associative, parameters)
+function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()
 		for exprname in keys(madsdata["Expressions"])

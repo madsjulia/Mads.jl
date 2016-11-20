@@ -280,7 +280,7 @@ Arguments:
 - `paramdist` : dictionary with parameter distributions
 """
 function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
-	if haskey( madsdata["Parameters"], parameterkey )
+	if haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata)
 		end
