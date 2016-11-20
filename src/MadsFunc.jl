@@ -210,19 +210,39 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
-				try
-					results = madsdatacommandfunction(madsdata)
-				catch
-					cd(madsproblemdir)
-					Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+				attempt = 0
+				trying = true
+				while trying
+					try
+						attempt += 1
+						results = madsdatacommandfunction(madsdata)
+						trying = false
+					catch
+						sleep(attempt * 0.5)
+						if attempt > 3
+							cd(madsproblemdir)
+							trying = false
+							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+						end
+					end
 				end
 			else
 				Mads.madsinfo("Executing `Command` '$(madsdata["Command"])' in directory $(tempdirname) ...")
-				try
-					run(`bash -c "$(madsdata["Command"])"`)
-				catch
-					cd(madsproblemdir)
-					Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+				attempt = 0
+				trying = true
+				while trying
+					try
+						attempt += 1
+						run(`bash -c "$(madsdata["Command"])"`)
+						trying = false
+					catch
+						sleep(attempt * 0.5)
+						if attempt > 3
+							cd(madsproblemdir)
+							trying = false
+							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+						end
+					end
 				end
 				results = DataStructures.OrderedDict()
 				if haskey(madsdata, "Instructions") # Templates/Instructions
