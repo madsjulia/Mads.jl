@@ -5,7 +5,7 @@ function madsmodelrun_internal_linearmodel_template(madsdata::Associative) # mad
 	# - a system call executing an external model
 	# - a parser of the model outputs
 	# - return a dictionary with model predictions
-	i = open("parameter.dat", "r")
+	i = open("parameters.dat", "r")
 	param = readdlm(i)
 	close(i)
 	a = param[1]

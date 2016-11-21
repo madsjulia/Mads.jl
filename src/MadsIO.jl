@@ -18,7 +18,7 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 """
-function loadmadsfile(filename::AbstractString; julia::Bool=false, format::AbstractString="yaml")
+function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
 	if format == "yaml"
 		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
 	elseif format == "json"
@@ -159,14 +159,14 @@ Arguments:
 - `julia` : if `true` use Julia JSON module to save
 - `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 """
-function savemadsfile(madsdata::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
 	dumpyamlmadsfile(madsdata, filename, julia=julia)
 end
 
-function savemadsfile(madsdata::Associative, parameters::Associative, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -206,7 +206,7 @@ Arguments:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
 """
-function setmadsinputfile(filename::AbstractString)
+function setmadsinputfile(filename::String)
 	global madsinputfile = filename
 end
 
@@ -278,7 +278,7 @@ r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 """
-function getrootname(filename::AbstractString; first=true, version=false)
+function getrootname(filename::String; first=true, version=false)
 	d = split(filename, "/")
 	s = split(d[end], ".")
 	if !first && length(s) > 1
@@ -419,12 +419,12 @@ function writeparameters(madsdata::Associative, parameters)
 end
 
 "Convert an instruction line in the Mads instruction file into regular expressions"
-function instline2regexs(instline::AbstractString)
+function instline2regexs(instline::String)
 	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
 	regex = r"@[^@]*@|w|![^!]*!"
 	offset = 1
 	regexs = Regex[]
-	obsnames = AbstractString[]
+	obsnames = String[]
 	getparamhere = Bool[]
 	while offset <= length(instline) && ismatch(regex, instline, offset - 1)#this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
@@ -458,7 +458,7 @@ function instline2regexs(instline::AbstractString)
 end
 
 "Match an instruction line in the Mads instruction file with model input file"
-function obslineismatch(obsline::AbstractString, regexs::Array{Regex, 1})
+function obslineismatch(obsline::String, regexs::Array{Regex, 1})
 	bigregex = Regex(string(map(x->x.pattern, regexs)...))
 	return ismatch(bigregex, obsline)
 end
@@ -467,7 +467,7 @@ end
 function regexs2obs(obsline, regexs, obsnames, getparamhere)
 	offset = 1
 	obsnameindex = 1
-	obsdict = Dict{AbstractString, Float64}()
+	obsdict = Dict{String, Float64}()
 	for i = 1:length(regexs)
 		m = match(regexs[i], obsline, offset)
 		if m == nothing
@@ -484,12 +484,12 @@ function regexs2obs(obsline, regexs, obsnames, getparamhere)
 end
 
 "Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`"
-function ins_obs(instructionfilename::AbstractString, inputfilename::AbstractString)
+function ins_obs(instructionfilename::String, inputfilename::String)
 	instfile = open(instructionfilename, "r")
 	obsfile = open(inputfilename, "r")
 	obslineitr = eachline(obsfile)
 	state = start(obslineitr)
-	obsdict = Dict{AbstractString, Float64}()
+	obsdict = Dict{String, Float64}()
 	for instline in eachline(instfile)
 		regexs, obsnames, getparamhere = instline2regexs(instline)
 		gotmatch = false
@@ -557,15 +557,15 @@ function readobservations_cmads(madsdata::Associative)
 end
 
 "Call C MADS ins_obs() function from the MADS dynamic library"
-function cmadsins_obs(obsid::Vector, instructionfilename::AbstractString, inputfilename::AbstractString)
+function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename::String)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
 	obscheck = -1 * ones(n) # initialize to -1
 	debug = 0 # setting debug level 0 or 1 works
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
 	result = ccall( (:ins_obs, "libmads"), Int32,
-								 (Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
-								 n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
-	observations = Dict{AbstractString, Float64}(zip(obsid, obsval))
+					(Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
+					n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
+	observations = Dict{String, Float64}(zip(obsid, obsval))
 	return observations
 end

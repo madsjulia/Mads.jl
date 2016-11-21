@@ -12,11 +12,15 @@ ifor = Mads.forward(md)
 Mads.madsinfo("Internal coupling using `Julia command` ...")
 md = Mads.loadmadsfile(workdir * "internal-linearmodel+template.mads")
 tfor = Mads.forward(md)
+Mads.madsinfo("Internal coupling using `Julia command` and `Instructions` ...")
+md = Mads.loadmadsfile(workdir * "internal-linearmodel+template+instruction.mads")
+tifor = Mads.forward(md)
 Mads.madsinfo("Internal coupling using `MADS model` ...")
 md = Mads.loadmadsfile(workdir * "internal-linearmodel-mads.mads")
 mfor = Mads.forward(md)
 
 @Base.Test.test ifor == tfor
+@Base.Test.test ifor == tifor
 @Base.Test.test ifor == mfor
 
 Mads.madsinfo("External coupling using `Command` and JLD ...")
