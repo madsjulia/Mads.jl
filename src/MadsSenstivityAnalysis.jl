@@ -34,7 +34,7 @@ Arguments:
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::AbstractString="", filename::AbstractString="", datafiles=true, imagefiles=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
+function localsa(madsdata::Associative; format::String="", filename::String="", datafiles=true, imagefiles=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -123,7 +123,7 @@ function localsa(madsdata::Associative; format::AbstractString="", filename::Abs
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 function sampling(param::Vector, J::Array, numsamples::Int; seed::Number=0, scale::Number=1)
@@ -256,7 +256,7 @@ Arguments:
 - `parameterkey` : model parameter key
 - `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 """
-function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::AbstractString=""; init_dist::Bool=false)
+function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::String=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return paramrand(madsdata, parameterkey; numsamples=numsamples)
 	else
@@ -279,7 +279,7 @@ Arguments:
 - `numsamples` : number of samples
 - `paramdist` : dictionary with parameter distributions
 """
-function paramrand(madsdata::Associative, parameterkey::AbstractString; numsamples::Integer=1, paramdist::Associative=Dict())
+function paramrand(madsdata::Associative, parameterkey::String; numsamples::Integer=1, paramdist::Associative=Dict())
 	if haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata)
@@ -497,13 +497,13 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 	A = Array(Float64, (N, 0))
 	B = Array(Float64, (N, 0))
 	C = Array(Float64, (N, nP))
-	variance = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}() # variance
-	mes = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}() # main effect (first order) sensitivities
-	tes = DataStructures.OrderedDict{AbstractString, DataStructures.OrderedDict{AbstractString, Float64}}()	# total effect sensitivities
+	variance = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}() # variance
+	mes = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}() # main effect (first order) sensitivities
+	tes = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}()	# total effect sensitivities
 	for i = 1:nO
-		variance[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
-		mes[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
-		tes[obskeys[i]] = DataStructures.OrderedDict{AbstractString, Float64}()
+		variance[obskeys[i]] = DataStructures.OrderedDict{String, Float64}()
+		mes[obskeys[i]] = DataStructures.OrderedDict{String, Float64}()
+		tes[obskeys[i]] = DataStructures.OrderedDict{String, Float64}()
 	end
 	for key in paramoptkeys
 		delete!(paramalldict,key)
@@ -679,9 +679,9 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 	mes = saresults["mes"]
 	tes = saresults["tes"]
 	var = saresults["var"]
-	pvar = DataStructures.OrderedDict{AbstractString, Float64}() # parameter variance
-	pmes = DataStructures.OrderedDict{AbstractString, Float64}() # parameter main effect (first order) sensitivities
-	ptes = DataStructures.OrderedDict{AbstractString, Float64}()	# parameter total effect sensitivities
+	pvar = DataStructures.OrderedDict{String, Float64}() # parameter variance
+	pmes = DataStructures.OrderedDict{String, Float64}() # parameter main effect (first order) sensitivities
+	ptes = DataStructures.OrderedDict{String, Float64}()	# parameter total effect sensitivities
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)

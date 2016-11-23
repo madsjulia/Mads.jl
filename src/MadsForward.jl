@@ -24,6 +24,9 @@ function forward(madsdata::Associative; all::Bool=false)
 end
 
 function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
+	if length(paramdict) == 0
+		return forward(madsdata; all=all)
+	end
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
@@ -53,16 +56,22 @@ end
 
 function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	madsdata_c = deepcopy(madsdata)
+	if sizeof(paramarray) == 0
+		return forward(madsdata; all=all)
+	end
 	if all
+		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")
 			setwellweights!(madsdata_c, 1)
 		elseif haskey(madsdata_c, "Observations")
 			setobsweights!(madsdata_c, 1)
 		end
+		f = makedoublearrayfunction(madsdata_c)
+		pk = Mads.getoptparamkeys(madsdata_c)
+	else
+		f = makedoublearrayfunction(madsdata)
+		pk = Mads.getoptparamkeys(madsdata)
 	end
-	f = makedoublearrayfunction(madsdata_c)
-	pk = Mads.getoptparamkeys(madsdata_c)
 	np = length(pk)
 	s = size(paramarray)
 	if length(s) > 2

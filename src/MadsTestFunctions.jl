@@ -74,12 +74,12 @@ end
 
 function makepowell(N)                                                                   
     function powell(x::Vector)                                       
-        result = Array(eltype(x),N)
-        for i = 1:(N/4)
+        result = Array(Float64, N)
+        for i = 1:floor(Int64, 10.0/4)
             result[4*i-3] = x[4*i-3] + 10*x[4*i-2]
             result[4*i-2] = sqrt(5) * (x[4*i-1] - x[4*i])
-            result[4*i-1] = ( x[4*i-2] - 2*x[4*i-1]  )^2
-            result[4*i]   = sqrt(10) * ( x[4*i-3] - x[4*i]  )^2
+            result[4*i-1] = (x[4*i-2] - 2*x[4*i-1])^2
+            result[4*i]   = sqrt(10) * ( x[4*i-3] - x[4*i])^2
         end
         return result
     end
@@ -88,8 +88,8 @@ end
     
 function makepowell_gradient(N)                      
     function powell_gradient(x::Vector)
-        result = zeros(eltype(x), N, N)
-        for i= 1:(N/4)
+        result = zeros(Float64, N, N)
+        for i = 1:floor(Int64, 10.0/4)
             result[4*i-3, 4*i-3] = 1
             result[4*i, 4*i-3]   = 2*sqrt(10)*(x[4*i-3] - x[4*i])
 
@@ -131,7 +131,7 @@ end
 
 function makedixonprice(N)
     function dixonprice(x::Vector)
-        result = Array(eltype(x), N)
+        result = Array(Float64, N)
         result[1] = x[1] - 1
         for i=2:N
             result[i] = sqrt(i)*(2*x[i]^2 - x[i-1])
@@ -143,7 +143,7 @@ end
 
 function makedixonprice_gradient(N)
     function dixonprice_gradient(x::Vector)
-        result = zeros(eltype(x), N, N)
+        result = zeros(Float64, N, N)
         result[1, 1] = sqrt(2)
         for i=2:N
             result[i-1, i] = -sqrt(2*i)
@@ -156,7 +156,7 @@ end
 
 function makesumsquares(N)
     function sumsquares(x::Vector)
-        result = Array(eltype(x), N)
+        result = Array(Float64, N)
         for i=1:N
             result[i] = sqrt(i)*x[i]
         end
@@ -168,7 +168,7 @@ end
 
 function makesumsquares_gradient(N)
     function sumsquares_gradient(x::Vector)
-        result = zeros(eltype(x), N, N)
+        result = zeros(Float64, N, N)
         for i=1:N
             result[i, i] = sqrt(2*i)
         end
@@ -179,7 +179,7 @@ end
 
 function makerotatedhyperellipsoid(N)
     function rotatedhyperellipsoid(x::Vector)
-        result = Array(eltype(x), N)
+        result = Array(Float64, N)
         result[1] = x[1]
         for i =2:N
             sum = 0
@@ -195,7 +195,7 @@ end
 
 function makerotatedhyperellipsoid_gradient(N)
     function rotatedhyperellipsoid_gradient(x::Vector)
-        result = zeros(eltype(x), N, N)
+        result = zeros(Float64, N, N)
         result[1, 1] = sqrt(2)
         for i = 2:N
             sum = 0

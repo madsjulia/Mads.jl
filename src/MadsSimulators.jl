@@ -11,7 +11,7 @@ Arguments:
 - `amanzi_exe` : full path to the location of the amanzi executable
 
 """
-function amanzi(filename::AbstractString, nproc::Int=nprocs_per_task, quiet::Bool=true, observation_filename::AbstractString="observations.out", setup::AbstractString="source-amanzi-setup"; amanzi_exe::AbstractString="")
+function amanzi(filename::String, nproc::Int=nprocs_per_task, quiet::Bool=true, observation_filename::String="observations.out", setup::String="source-amanzi-setup"; amanzi_exe::String="")
 	if quiet
 		quiet_string = "&> /dev/null"
 	else

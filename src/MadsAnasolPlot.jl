@@ -15,7 +15,7 @@ Arguments:
 
 Dumps: image file with name `filename` and in specified `format`
 """
-function plotmass(lambda, mass_injected, mass_reduced, filename::AbstractString; format="")
+function plotmass(lambda, mass_injected, mass_reduced, filename::String; format="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Gadfly.Guide.xlabel("Reaction Rate Constant [1/d]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)
 	Base.display(p1)
 	p2 = Gadfly.plot(x=mass_injected, y=mass_reduced, Gadfly.Guide.xlabel("Mass Injected [kg]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)

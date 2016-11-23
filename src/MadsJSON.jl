@@ -2,7 +2,7 @@ import JSON
 import DataStructures
 
 "Load a JSON file"
-function loadjsonfile(filename::AbstractString) # load JSON text file
+function loadjsonfile(filename::String) # load JSON text file
 	sz = filesize(filename)
 	f = open(filename, "r")
 	a = Mmap.mmap(f, Vector{UInt8}, sz)
@@ -14,13 +14,13 @@ function loadjsonfile(filename::AbstractString) # load JSON text file
 end
 
 "Dump a JSON file"
-function dumpjsonfile(filename::AbstractString, data) # dump JSON text file
+function dumpjsonfile(filename::String, data) # dump JSON text file
 	f = open(filename, "w")
 	JSON.print(f, data)
 	close(f)
 end
 
 "Read MADS model predictions from a JSON file"
-function readjsonpredictions(filename::AbstractString) # read JSON text predictions
+function readjsonpredictions(filename::String) # read JSON text predictions
 	return loadjsonfile(filename)
 end

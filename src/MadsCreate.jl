@@ -2,10 +2,10 @@
 """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-- `Mads.createmadsproblem(infilename::AbstractString, outfilename::AbstractString)`
-- `Mads.createmadsproblem(madsdata::Associative, outfilename::AbstractString)`
+- `Mads.createmadsproblem(infilename::String, outfilename::String)`
+- `Mads.createmadsproblem(madsdata::Associative, outfilename::String)`
 - `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
-- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)`
+- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)`
 
 Arguments:
 
@@ -14,7 +14,7 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `predictions` : dictionary of model predictions
 """
-function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
+function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
 	result = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
@@ -40,13 +40,13 @@ function createmadsproblem(infilename::AbstractString, outfilename::AbstractStri
 	return
 end
 
-function createmadsproblem(madsdata::Associative, outfilename::AbstractString)
+function createmadsproblem(madsdata::Associative, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
 
-function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)
+function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)
 	newmadsdata = createmadsproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end

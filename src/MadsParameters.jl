@@ -88,7 +88,7 @@ end
 
 # Make functions to get MADS parameter variable names"
 getparamsnames = ["init", "type", "log", "step", "longname", "plotname"]
-getparamstypes = [Float64, Any, Any, Float64, AbstractString, AbstractString]
+getparamstypes = [Float64, Any, Any, Float64, String, String]
 getparamsdefault = [0, "opt", false, sqrt(eps(Float32)), "", ""]
 getparamslogdefault = [1, "opt", true, sqrt(eps(Float32)), "", ""]
 index = 0

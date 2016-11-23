@@ -16,7 +16,7 @@ Returns:
 
 - `dict` : a dictionary with model observations following MADS requirements
 """
-function amanzi_output_parser(filename::AbstractString="observations.out")
+function amanzi_output_parser(filename::String="observations.out")
 	d = readdlm(filename, ',', skipstart=2)
 	no = size(d)[1]
 	madsinfo("Number of observations $(no)")
@@ -32,7 +32,7 @@ function amanzi_output_parser(filename::AbstractString="observations.out")
 	flag = Array(Char, no)
 	flag[head_index] = 'h'
 	flag[cr_index] = 'c'
-	obs_name = Array(AbstractString, no)
+	obs_name = Array(String, no)
 	for i = 1:no
 		obs_name[i] = w[i] * "$(flag[i])" * "_" * "$(@sprintf("%.1f", time[i]))"
 	end

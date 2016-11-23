@@ -72,10 +72,10 @@ Examples:
 - `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
 - `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
 """
-function haskeyword(madsdata::Associative, keyword::AbstractString)
+function haskeyword(madsdata::Associative, keyword::String)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
 
-function haskeyword(madsdata::Associative, class::AbstractString, keyword::AbstractString)
+function haskeyword(madsdata::Associative, class::String, keyword::String)
 	return haskey(madsdata[class], keyword) ? true : false
 end

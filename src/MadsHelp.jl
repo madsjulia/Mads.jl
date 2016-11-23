@@ -27,7 +27,7 @@ Arguments:
 - `module` : MADS module
 - `string` : matching string
 """
-function functions(string::AbstractString="")
+function functions(string::String="")
 	functions(Mads, string)
 	functions(BIGUQ, string)
 	functions(Anasol, string)
@@ -36,7 +36,7 @@ function functions(string::AbstractString="")
 	functions(RobustPmap, string)
 end
 
-function functions(m::Module, string::AbstractString="")
+function functions(m::Module, string::String="")
 	f = names(m, true)
 	fuctions = Any[]
 	for i in 1:length(f)

@@ -265,9 +265,9 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 				if haskey(madsdata, "ASCIIPredictions") # ASCII
 					predictions = loadasciifile("$(madsdata["ASCIIPredictions"])")
-					obsid=[convert(AbstractString,k) for k in obskeys]
+					obsid=[convert(String,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
-					results = merge(results, DataStructures.OrderedDict{AbstractString, Float64}(zip(obsid, predictions)))
+					results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
 				end
 			end
 			cd(madsproblemdir)
@@ -309,11 +309,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::AbstractString=""; usedict::Bool=true)
+function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
 
-function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart, madscommandfunction::Function, restartdir::AbstractString; usedict::Bool=true)
+function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
 	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
 		if madsdatarestart == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
@@ -336,7 +336,7 @@ end
 """
 Get the directory where restarts will be stored.
 """
-function getrestartdir(madsdata::Associative, suffix::AbstractString="")
+function getrestartdir(madsdata::Associative, suffix::String="")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
@@ -368,7 +368,7 @@ end
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 """
-function importeverywhere(filename::AbstractString)
+function importeverywhere(filename::String)
 	if VERSION < v"0.5"
 		code = readall(filename)
 	else

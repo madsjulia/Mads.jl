@@ -28,7 +28,7 @@ function status(; git::Bool=true, gitmore::Bool=false)
 	end
 end
 
-function status(madsmodule::AbstractString; git::Bool=true, gitmore::Bool=false)
+function status(madsmodule::String; git::Bool=true, gitmore::Bool=false)
 	if git
 		cwd = pwd()
 		info("Git status $(madsmodule) ...")
@@ -78,7 +78,7 @@ function tag(sym::Symbol=:patch)
 	end
 end
 
-function tag(madsmodule::AbstractString, sym::Symbol=:patch)
+function tag(madsmodule::String, sym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
 		if VERSION < v"0.5"

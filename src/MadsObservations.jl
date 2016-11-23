@@ -182,7 +182,7 @@ Mads.setobstime!(madsdata, "_t")
 Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
 """
-function setobstime!(madsdata::Associative, separator::AbstractString="_")
+function setobstime!(madsdata::Associative, separator::String="_")
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		s = split(obskeys[i], separator)
@@ -358,7 +358,7 @@ function allwellson!(madsdata::Associative)
 end
 
 "Turn on a specific well in the MADS problem dictionary"
-function wellon!(madsdata::Associative, wellname::AbstractString)
+function wellon!(madsdata::Associative, wellname::String)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey
@@ -382,7 +382,7 @@ function allwellsoff!(madsdata::Associative)
 end
 
 "Turn off a specific well in the MADS problem dictionary"
-function welloff!(madsdata, wellname::AbstractString)
+function welloff!(madsdata, wellname::String)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey

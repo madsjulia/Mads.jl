@@ -1,12 +1,7 @@
 "Model section information criteria"
-function modelinformationcriteria(madsdata::Associative, par::Array=[])
-	if length(par) > 0
-		f = Mads.forward(madsdata, par)
-		l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, param=par, obs=collect(values(f)))
-	else
-		f = Mads.forward(madsdata)
-		l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, obs=collect(values(f)))
-	end
+function modelinformationcriteria(madsdata::Associative, par::Array=Array(Float64,0))
+	f = Mads.forward(madsdata, par)
+	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
 	of = Mads.of(madsdata, f)
 	np = length(Mads.getoptparamkeys(madsdata))
 	no = length(Mads.gettargetkeys(madsdata))
