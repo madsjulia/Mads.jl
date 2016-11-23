@@ -18,7 +18,7 @@ DataStructures
 DataFrames
 StatsBase
 ODE
-Klara 0.7
+Klara 0.6
 Optim 0.5
 BlackBoxOptim
 Documenter
