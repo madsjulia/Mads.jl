@@ -6,7 +6,7 @@ function loadjsonfile(filename::String) # load JSON text file
 	sz = filesize(filename)
 	f = open(filename, "r")
 	a = Mmap.mmap(f, Vector{UInt8}, sz)
-	s = convert(ASCIIString, a)
+	s = convert(String, a)
 	data = JSON.parse(s; dicttype=DataStructures.OrderedDict)
 	finalize(a)
 	close(f)

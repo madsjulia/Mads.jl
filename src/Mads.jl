@@ -36,6 +36,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 		end
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
+		@tryimport PyCall
 		@tryimport PyPlot
 		if !isdefined(:PyPlot)
 			ENV["MADS_NO_PYPLOT"] = ""
