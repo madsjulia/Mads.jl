@@ -13,21 +13,21 @@ Documentation for Mads.jl
 
 Add an additional contamination source
 
-<a id='Mads.addsourceparameters!-Tuple{Associative}' href='#Mads.addsourceparameters!-Tuple{Associative}'>#</a>
+<a id='Mads.addsourceparameters!-Tuple{Associative{K,V}}' href='#Mads.addsourceparameters!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.addsourceparameters!`** &mdash; *Method*.
 
 
 
 Add contaminant source parameters
 
-<a id='Mads.allwellsoff!-Tuple{Associative}' href='#Mads.allwellsoff!-Tuple{Associative}'>#</a>
+<a id='Mads.allwellsoff!-Tuple{Associative{K,V}}' href='#Mads.allwellsoff!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.allwellsoff!`** &mdash; *Method*.
 
 
 
 Turn off all the wells in the MADS problem dictionary
 
-<a id='Mads.allwellson!-Tuple{Associative}' href='#Mads.allwellson!-Tuple{Associative}'>#</a>
+<a id='Mads.allwellson!-Tuple{Associative{K,V}}' href='#Mads.allwellson!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.allwellson!`** &mdash; *Method*.
 
 
@@ -77,7 +77,7 @@ Returns:
 
 Arcsine transformation of model parameters
 
-<a id='Mads.bayessampling-Tuple{Associative}' href='#Mads.bayessampling-Tuple{Associative}'>#</a>
+<a id='Mads.bayessampling-Tuple{Associative{K,V}}' href='#Mads.bayessampling-Tuple{Associative{K,V}}'>#</a>
 **`Mads.bayessampling`** &mdash; *Method*.
 
 
@@ -100,9 +100,9 @@ Arguments:
 
 Returns:
 
-  * `mcmcchain` :
+  * `mcmcchain` : 
 
-<a id='Mads.calibrate-Tuple{Associative}' href='#Mads.calibrate-Tuple{Associative}'>#</a>
+<a id='Mads.calibrate-Tuple{Associative{K,V}}' href='#Mads.calibrate-Tuple{Associative{K,V}}'>#</a>
 **`Mads.calibrate`** &mdash; *Method*.
 
 
@@ -119,7 +119,7 @@ Arguments:
   * `maxEval` : maximum number of model evaluations
   * `maxIter` : maximum number of optimization iterations
   * `maxJacobians` : maximum number of Jacobian solves
-  * `lambda` : initial Levenberg-Marquardt lambda
+  * `lambda` : initial Levenberg-Marquardt lambda 
   * `lambda_mu` : lambda multiplication factor [10]
   * `np_lambda` : number of parallel lambda solves
   * `show_trace` : shows solution trace [default=false]
@@ -130,13 +130,6 @@ Returns:
 
   * `minimumdict` : model parameter dictionary with the optimal values at the minimum
   * `results` : optimization algorithm results (e.g. results.minimum)
-
-<a id='Mads.calibratenlopt-Tuple{Associative}' href='#Mads.calibratenlopt-Tuple{Associative}'>#</a>
-**`Mads.calibratenlopt`** &mdash; *Method*.
-
-
-
-Do a calibration using NLopt 
 
 <a id='Mads.calibraterandom' href='#Mads.calibraterandom'>#</a>
 **`Mads.calibraterandom`** &mdash; *Function*.
@@ -159,7 +152,7 @@ Arguments:
   * `maxEval` : maximum number of model evaluations
   * `maxIter` : maximum number of optimization iterations
   * `maxJacobians` : maximum number of Jacobian solves
-  * `lambda` : initial Levenberg-Marquardt lambda
+  * `lambda` : initial Levenberg-Marquardt lambda 
   * `lambda_mu` : lambda multiplication factor [10]
   * `np_lambda` : number of parallel lambda solves
   * `show_trace` : shows solution trace [default=false]
@@ -178,6 +171,13 @@ Returns:
 
 Checkout the latest version of the Mads modules
 
+<a id='Mads.checkparameterranges-Tuple{Associative{K,V}}' href='#Mads.checkparameterranges-Tuple{Associative{K,V}}'>#</a>
+**`Mads.checkparameterranges`** &mdash; *Method*.
+
+
+
+Check parameter ranges for model parameters
+
 <a id='Mads.cleancoverage-Tuple{}' href='#Mads.cleancoverage-Tuple{}'>#</a>
 **`Mads.cleancoverage`** &mdash; *Method*.
 
@@ -185,7 +185,7 @@ Checkout the latest version of the Mads modules
 
 Remove Mads coverage files
 
-<a id='Mads.cmadsins_obs-Tuple{Array{T,1},AbstractString,AbstractString}' href='#Mads.cmadsins_obs-Tuple{Array{T,1},AbstractString,AbstractString}'>#</a>
+<a id='Mads.cmadsins_obs-Tuple{Array{T,1},ByteString,ByteString}' href='#Mads.cmadsins_obs-Tuple{Array{T,1},ByteString,ByteString}'>#</a>
 **`Mads.cmadsins_obs`** &mdash; *Method*.
 
 
@@ -205,7 +205,7 @@ Arguments:
 
   * `madsfiles` : matching pattern for Mads input files (string or regular expression accepted)
   * `time` : computational time
-  * `path` : search directory for the mads input files
+  * `path` : search directory for the mads input files 
 
 Returns:
 
@@ -213,7 +213,7 @@ Returns:
   * `mass_injected` : array with associated total injected mass
   * `mass_reduced` : array with associated total reduced mass
 
-<a id='Mads.computemass-Tuple{Associative}' href='#Mads.computemass-Tuple{Associative}'>#</a>
+<a id='Mads.computemass-Tuple{Associative{K,V}}' href='#Mads.computemass-Tuple{Associative{K,V}}'>#</a>
 **`Mads.computemass`** &mdash; *Method*.
 
 
@@ -232,7 +232,7 @@ Returns:
   * `mass_injected` : total injected mass
   * `mass_reduced` : total reduced mass
 
-<a id='Mads.computeparametersensitities-Tuple{Associative,Associative}' href='#Mads.computeparametersensitities-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.computeparametersensitities-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.computeparametersensitities-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.computeparametersensitities`** &mdash; *Method*.
 
 
@@ -268,7 +268,7 @@ Arguments:
   * `ay` - dispersivity in Y direction (transverse horizontal)
   * `az` - dispersivity in Y direction (transverse vertical)
   * `H` - Hurst coefficient for Fractional Brownian dispersion
-  * `x` - X coordinate of contaminant source location
+  * `x` - X coordinate of contaminant source location 
   * `y` - Y coordinate of contaminant source location
   * `z` - Z coordinate of contaminant source location
   * `dx` - source size (extent) in X direction
@@ -312,17 +312,17 @@ Turn off the generation of MADS tests (default)
 
 Turn on the generation of MADS tests (dangerous)
 
-<a id='Mads.createmadsproblem-Tuple{AbstractString,AbstractString}' href='#Mads.createmadsproblem-Tuple{AbstractString,AbstractString}'>#</a>
+<a id='Mads.createmadsproblem-Tuple{ByteString,ByteString}' href='#Mads.createmadsproblem-Tuple{ByteString,ByteString}'>#</a>
 **`Mads.createmadsproblem`** &mdash; *Method*.
 
 
 
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-  * `Mads.createmadsproblem(infilename::AbstractString, outfilename::AbstractString)`
-  * `Mads.createmadsproblem(madsdata::Associative, outfilename::AbstractString)`
+  * `Mads.createmadsproblem(infilename::String, outfilename::String)`
+  * `Mads.createmadsproblem(madsdata::Associative, outfilename::String)`
   * `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
-  * `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::AbstractString)`
+  * `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)`
 
 Arguments:
 
@@ -331,12 +331,12 @@ Arguments:
   * `madsdata` : MADS problem dictionary
   * `predictions` : dictionary of model predictions
 
-<a id='Mads.createobservations!-Tuple{Associative,Any,Any}' href='#Mads.createobservations!-Tuple{Associative,Any,Any}'>#</a>
+<a id='Mads.createobservations!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}' href='#Mads.createobservations!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.createobservations!`** &mdash; *Method*.
 
 
 
-Create observations in the MADS problem dictionary based on `time` and `observation` arrays
+Create observations in the MADS problem dictionary based on `time` and `observation` vectors
 
 <a id='Mads.deleteNaN!-Tuple{DataFrames.DataFrame}' href='#Mads.deleteNaN!-Tuple{DataFrames.DataFrame}'>#</a>
 **`Mads.deleteNaN!`** &mdash; *Method*.
@@ -345,19 +345,19 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 
 Delete rows with NaN in a Dataframe `df`
 
-<a id='Mads.display-Tuple{AbstractString}' href='#Mads.display-Tuple{AbstractString}'>#</a>
+<a id='Mads.display-Tuple{ByteString}' href='#Mads.display-Tuple{ByteString}'>#</a>
 **`Mads.display`** &mdash; *Method*.
 
 
 
 Display image file
 
-<a id='Mads.dobigdt-Tuple{Associative,Int64}' href='#Mads.dobigdt-Tuple{Associative,Int64}'>#</a>
+<a id='Mads.dobigdt-Tuple{Associative{K,V},Int64}' href='#Mads.dobigdt-Tuple{Associative{K,V},Int64}'>#</a>
 **`Mads.dobigdt`** &mdash; *Method*.
 
 
 
-Perform BIG-DT analysis
+Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
 Arguments:
 
@@ -371,28 +371,28 @@ Returns:
 
   * `bigdtresults` : dictionary with BIG-DT results
 
-<a id='Mads.dumpasciifile-Tuple{AbstractString,Any}' href='#Mads.dumpasciifile-Tuple{AbstractString,Any}'>#</a>
+<a id='Mads.dumpasciifile-Tuple{ByteString,Any}' href='#Mads.dumpasciifile-Tuple{ByteString,Any}'>#</a>
 **`Mads.dumpasciifile`** &mdash; *Method*.
 
 
 
 Dump ASCII file
 
-<a id='Mads.dumpjsonfile-Tuple{AbstractString,Any}' href='#Mads.dumpjsonfile-Tuple{AbstractString,Any}'>#</a>
+<a id='Mads.dumpjsonfile-Tuple{ByteString,Any}' href='#Mads.dumpjsonfile-Tuple{ByteString,Any}'>#</a>
 **`Mads.dumpjsonfile`** &mdash; *Method*.
 
 
 
 Dump a JSON file
 
-<a id='Mads.dumpwelldata-Tuple{AbstractString,Any}' href='#Mads.dumpwelldata-Tuple{AbstractString,Any}'>#</a>
+<a id='Mads.dumpwelldata-Tuple{ByteString,Any}' href='#Mads.dumpwelldata-Tuple{ByteString,Any}'>#</a>
 **`Mads.dumpwelldata`** &mdash; *Method*.
 
 
 
 Dump well data from MADS problem dictionary into a ASCII file
 
-<a id='Mads.dumpyamlmadsfile-Tuple{Any,AbstractString}' href='#Mads.dumpyamlmadsfile-Tuple{Any,AbstractString}'>#</a>
+<a id='Mads.dumpyamlmadsfile-Tuple{Any,ByteString}' href='#Mads.dumpyamlmadsfile-Tuple{Any,ByteString}'>#</a>
 **`Mads.dumpyamlmadsfile`** &mdash; *Method*.
 
 
@@ -404,7 +404,7 @@ Arguments:
   * `madsdata` : MADS problem dictionary
   * `filename` : file name
 
-<a id='Mads.efast-Tuple{Associative}' href='#Mads.efast-Tuple{Associative}'>#</a>
+<a id='Mads.efast-Tuple{Associative{K,V}}' href='#Mads.efast-Tuple{Associative{K,V}}'>#</a>
 **`Mads.efast`** &mdash; *Method*.
 
 
@@ -424,10 +424,10 @@ Arguments:
 
 
 
-Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
 ```
-Emcee.sample(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
+Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
 ```
 
 Arguments:
@@ -436,23 +436,23 @@ Arguments:
   * `numwalkers` : number of walkers
   * `x0` : normalized initial parameters (matrix of size (length(params), numwalkers))
   * `thinning` : removal of any `thinning` realization
-  * `a` :
+  * `a` : 
 
 Returns:
 
   * `mcmcchain` : final MCMC chain
   * `llhoodvals` : log likelihoods of the final samples in the chain
 
-<a id='Mads.emcee-Tuple{Associative}' href='#Mads.emcee-Tuple{Associative}'>#</a>
-**`Mads.emcee`** &mdash; *Method*.
+<a id='Mads.emceesampling-Tuple{Associative{K,V}}' href='#Mads.emceesampling-Tuple{Associative{K,V}}'>#</a>
+**`Mads.emceesampling`** &mdash; *Method*.
 
 
 
-Bayesian sampling with emcee: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
 ```
-Mads.emcee(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
-Mads.emcee(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 ```
 
 Arguments:
@@ -471,35 +471,35 @@ Returns:
   * `mcmcchain` : MCMC chain
   * `llhoodvals` : log likelihoods of the final samples in the chain
 
-<a id='Mads.evaluatemadsexpression-Tuple{Any,Any}' href='#Mads.evaluatemadsexpression-Tuple{Any,Any}'>#</a>
+<a id='Mads.evaluatemadsexpression-Tuple{ByteString,Associative{K,V}}' href='#Mads.evaluatemadsexpression-Tuple{ByteString,Associative{K,V}}'>#</a>
 **`Mads.evaluatemadsexpression`** &mdash; *Method*.
 
 
 
 Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-<a id='Mads.evaluatemadsexpressions-Tuple{Associative,Any}' href='#Mads.evaluatemadsexpressions-Tuple{Associative,Any}'>#</a>
+<a id='Mads.evaluatemadsexpressions-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.evaluatemadsexpressions-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.evaluatemadsexpressions`** &mdash; *Method*.
 
 
 
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-<a id='Mads.filterkeys' href='#Mads.filterkeys'>#</a>
-**`Mads.filterkeys`** &mdash; *Function*.
+<a id='Mads.filterkeys-Tuple{Associative{K,V},Regex}' href='#Mads.filterkeys-Tuple{Associative{K,V},Regex}'>#</a>
+**`Mads.filterkeys`** &mdash; *Method*.
 
 
 
 Filter dictionary keys based on a string or regular expression
 
-<a id='Mads.flattenmcmcarray-Tuple{Array,Array}' href='#Mads.flattenmcmcarray-Tuple{Array,Array}'>#</a>
+<a id='Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}' href='#Mads.flattenmcmcarray-Tuple{Array{T,N},Array{T,N}}'>#</a>
 **`Mads.flattenmcmcarray`** &mdash; *Method*.
 
 
 
-Flatten the MCMC arrays
+Flatten MCMC arrays
 
-<a id='Mads.forward-Tuple{Associative}' href='#Mads.forward-Tuple{Associative}'>#</a>
+<a id='Mads.forward-Tuple{Associative{K,V}}' href='#Mads.forward-Tuple{Associative{K,V}}'>#</a>
 **`Mads.forward`** &mdash; *Method*.
 
 
@@ -520,14 +520,14 @@ Returns:
 
   * `obsvalues` : dictionary of model predictions
 
-<a id='Mads.forwardgrid-Tuple{Associative}' href='#Mads.forwardgrid-Tuple{Associative}'>#</a>
+<a id='Mads.forwardgrid-Tuple{Associative{K,V}}' href='#Mads.forwardgrid-Tuple{Associative{K,V}}'>#</a>
 **`Mads.forwardgrid`** &mdash; *Method*.
 
 
 
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-  * `forwardgrid(madsdata)`
+  * `forwardgrid(madsdata)`  
   * `forwardgrid(madsdata, paramvalues))`
 
 Arguments:
@@ -567,12 +567,19 @@ Arguments:
   * `module` : MADS module
   * `string` : matching string
 
-<a id='Mads.getdictvalues' href='#Mads.getdictvalues'>#</a>
-**`Mads.getdictvalues`** &mdash; *Function*.
+<a id='Mads.getdictvalues-Tuple{Associative{K,V},Regex}' href='#Mads.getdictvalues-Tuple{Associative{K,V},Regex}'>#</a>
+**`Mads.getdictvalues`** &mdash; *Method*.
 
 
 
 Get dictionary values for keys based on a string or regular expression
+
+<a id='Mads.getdistribution-Tuple{ByteString,ByteString,ByteString}' href='#Mads.getdistribution-Tuple{ByteString,ByteString,ByteString}'>#</a>
+**`Mads.getdistribution`** &mdash; *Method*.
+
+
+
+Parse distribution from a string
 
 <a id='Mads.getextension-Tuple{Any}' href='#Mads.getextension-Tuple{Any}'>#</a>
 **`Mads.getextension`** &mdash; *Method*.
@@ -587,7 +594,7 @@ Example:
 ext = Mads.getextension("a.mads") # ext = "mads" 
 ```
 
-<a id='Mads.getimportantsamples-Tuple{Array,Array{T,1}}' href='#Mads.getimportantsamples-Tuple{Array,Array{T,1}}'>#</a>
+<a id='Mads.getimportantsamples-Tuple{Array{T,N},Array{T,1}}' href='#Mads.getimportantsamples-Tuple{Array{T,N},Array{T,1}}'>#</a>
 **`Mads.getimportantsamples`** &mdash; *Method*.
 
 
@@ -603,7 +610,7 @@ Returns:
 
   * `imp_samples` : array of important samples
 
-<a id='Mads.getlogparamkeys-Tuple{Any,Any}' href='#Mads.getlogparamkeys-Tuple{Any,Any}'>#</a>
+<a id='Mads.getlogparamkeys-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getlogparamkeys-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getlogparamkeys`** &mdash; *Method*.
 
 
@@ -634,7 +641,7 @@ Returns:
 
   * `filename` : input file name (e.g. `input_file_name.mads`)
 
-<a id='Mads.getmadsproblemdir-Tuple{Associative}' href='#Mads.getmadsproblemdir-Tuple{Associative}'>#</a>
+<a id='Mads.getmadsproblemdir-Tuple{Associative{K,V}}' href='#Mads.getmadsproblemdir-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getmadsproblemdir`** &mdash; *Method*.
 
 
@@ -652,7 +659,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 
 where `madsproblemdir` = `"../../"`
 
-<a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
+<a id='Mads.getmadsrootname-Tuple{Associative{K,V}}' href='#Mads.getmadsrootname-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getmadsrootname`** &mdash; *Method*.
 
 
@@ -661,133 +668,133 @@ Get the MADS problem root name
 
 `madsrootname = Mads.getmadsrootname(madsdata)`
 
-<a id='Mads.getnonlogparamkeys-Tuple{Any,Any}' href='#Mads.getnonlogparamkeys-Tuple{Any,Any}'>#</a>
+<a id='Mads.getnonlogparamkeys-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getnonlogparamkeys-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getnonlogparamkeys`** &mdash; *Method*.
 
 
 
 Get the keys in the MADS problem dictionary for parameters that are NOT log-transformed (`log`)
 
-<a id='Mads.getnonoptparamkeys-Tuple{Any,Any}' href='#Mads.getnonoptparamkeys-Tuple{Any,Any}'>#</a>
+<a id='Mads.getnonoptparamkeys-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getnonoptparamkeys-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getnonoptparamkeys`** &mdash; *Method*.
 
 
 
 Get the keys in the MADS problem dictionary for parameters that are NOT optimized (`opt`)
 
-<a id='Mads.getobsdist-Tuple{Associative,Any}' href='#Mads.getobsdist-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobsdist-Tuple{Associative{K,V},Any}' href='#Mads.getobsdist-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobsdist`** &mdash; *Method*.
 
 
 
 Get an array with `dist` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobsdist-Tuple{Associative}' href='#Mads.getobsdist-Tuple{Associative}'>#</a>
+<a id='Mads.getobsdist-Tuple{Associative{K,V}}' href='#Mads.getobsdist-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobsdist`** &mdash; *Method*.
 
 
 
 Get an array with `dist` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobskeys-Tuple{Associative}' href='#Mads.getobskeys-Tuple{Associative}'>#</a>
+<a id='Mads.getobskeys-Tuple{Associative{K,V}}' href='#Mads.getobskeys-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobskeys`** &mdash; *Method*.
 
 
 
 Get keys for all observations in the MADS problem dictionary
 
-<a id='Mads.getobslog-Tuple{Associative,Any}' href='#Mads.getobslog-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobslog-Tuple{Associative{K,V},Any}' href='#Mads.getobslog-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobslog`** &mdash; *Method*.
 
 
 
 Get an array with `log` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobslog-Tuple{Associative}' href='#Mads.getobslog-Tuple{Associative}'>#</a>
+<a id='Mads.getobslog-Tuple{Associative{K,V}}' href='#Mads.getobslog-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobslog`** &mdash; *Method*.
 
 
 
 Get an array with `log` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobsmax-Tuple{Associative,Any}' href='#Mads.getobsmax-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobsmax-Tuple{Associative{K,V},Any}' href='#Mads.getobsmax-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobsmax`** &mdash; *Method*.
 
 
 
 Get an array with `max` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobsmax-Tuple{Associative}' href='#Mads.getobsmax-Tuple{Associative}'>#</a>
+<a id='Mads.getobsmax-Tuple{Associative{K,V}}' href='#Mads.getobsmax-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobsmax`** &mdash; *Method*.
 
 
 
 Get an array with `max` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobsmin-Tuple{Associative,Any}' href='#Mads.getobsmin-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobsmin-Tuple{Associative{K,V},Any}' href='#Mads.getobsmin-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobsmin`** &mdash; *Method*.
 
 
 
 Get an array with `min` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobsmin-Tuple{Associative}' href='#Mads.getobsmin-Tuple{Associative}'>#</a>
+<a id='Mads.getobsmin-Tuple{Associative{K,V}}' href='#Mads.getobsmin-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobsmin`** &mdash; *Method*.
 
 
 
 Get an array with `min` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobstarget-Tuple{Associative,Any}' href='#Mads.getobstarget-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobstarget-Tuple{Associative{K,V},Any}' href='#Mads.getobstarget-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobstarget`** &mdash; *Method*.
 
 
 
 Get an array with `target` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobstarget-Tuple{Associative}' href='#Mads.getobstarget-Tuple{Associative}'>#</a>
+<a id='Mads.getobstarget-Tuple{Associative{K,V}}' href='#Mads.getobstarget-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobstarget`** &mdash; *Method*.
 
 
 
 Get an array with `target` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobstime-Tuple{Associative,Any}' href='#Mads.getobstime-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobstime-Tuple{Associative{K,V},Any}' href='#Mads.getobstime-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobstime`** &mdash; *Method*.
 
 
 
 Get an array with `time` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobstime-Tuple{Associative}' href='#Mads.getobstime-Tuple{Associative}'>#</a>
+<a id='Mads.getobstime-Tuple{Associative{K,V}}' href='#Mads.getobstime-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobstime`** &mdash; *Method*.
 
 
 
 Get an array with `time` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getobsweight-Tuple{Associative,Any}' href='#Mads.getobsweight-Tuple{Associative,Any}'>#</a>
+<a id='Mads.getobsweight-Tuple{Associative{K,V},Any}' href='#Mads.getobsweight-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.getobsweight`** &mdash; *Method*.
 
 
 
 Get an array with `weight` values for observations in the MADS problem dictionary defined by `obskeys`
 
-<a id='Mads.getobsweight-Tuple{Associative}' href='#Mads.getobsweight-Tuple{Associative}'>#</a>
+<a id='Mads.getobsweight-Tuple{Associative{K,V}}' href='#Mads.getobsweight-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getobsweight`** &mdash; *Method*.
 
 
 
 Get an array with `weight` values for all observations in the MADS problem dictionary
 
-<a id='Mads.getoptparamkeys-Tuple{Any,Any}' href='#Mads.getoptparamkeys-Tuple{Any,Any}'>#</a>
+<a id='Mads.getoptparamkeys-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getoptparamkeys-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getoptparamkeys`** &mdash; *Method*.
 
 
 
 Get the keys in the MADS problem dictionary for parameters that are optimized (`opt`)
 
-<a id='Mads.getparamdict-Tuple{Associative}' href='#Mads.getparamdict-Tuple{Associative}'>#</a>
+<a id='Mads.getparamdict-Tuple{Associative{K,V}}' href='#Mads.getparamdict-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamdict`** &mdash; *Method*.
 
 
@@ -804,7 +811,7 @@ Returns:
 
   * `paramdict` : dictionary with all parameters and their respective initial values
 
-<a id='Mads.getparamdistributions-Tuple{Associative}' href='#Mads.getparamdistributions-Tuple{Associative}'>#</a>
+<a id='Mads.getparamdistributions-Tuple{Associative{K,V}}' href='#Mads.getparamdistributions-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamdistributions`** &mdash; *Method*.
 
 
@@ -822,7 +829,7 @@ Arguments:
   * `madsdata` : MADS problem dictionary
   * `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 
-<a id='Mads.getparamkeys-Tuple{Associative}' href='#Mads.getparamkeys-Tuple{Associative}'>#</a>
+<a id='Mads.getparamkeys-Tuple{Associative{K,V}}' href='#Mads.getparamkeys-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamkeys`** &mdash; *Method*.
 
 
@@ -839,140 +846,140 @@ Returns:
 
   * `paramkeys` : array with the keys of all parameters in the MADS dictionary
 
-<a id='Mads.getparamsinit-Tuple{Any,Any}' href='#Mads.getparamsinit-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsinit-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsinit-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsinit`** &mdash; *Method*.
 
 
 
 Get an array with `init` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsinit-Tuple{Any}' href='#Mads.getparamsinit-Tuple{Any}'>#</a>
+<a id='Mads.getparamsinit-Tuple{Associative{K,V}}' href='#Mads.getparamsinit-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsinit`** &mdash; *Method*.
 
 
 
 Get an array with `init` values for all the MADS model parameters
 
-<a id='Mads.getparamsinit_max-Tuple{Any,Any}' href='#Mads.getparamsinit_max-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsinit_max-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsinit_max-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsinit_max`** &mdash; *Method*.
 
 
 
 Get an array with `init_max` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsinit_max-Tuple{Any}' href='#Mads.getparamsinit_max-Tuple{Any}'>#</a>
+<a id='Mads.getparamsinit_max-Tuple{Associative{K,V}}' href='#Mads.getparamsinit_max-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsinit_max`** &mdash; *Method*.
 
 
 
 Get an array with `init_max` values for all the MADS model parameters
 
-<a id='Mads.getparamsinit_min-Tuple{Any,Any}' href='#Mads.getparamsinit_min-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsinit_min-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsinit_min-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsinit_min`** &mdash; *Method*.
 
 
 
 Get an array with `init_min` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsinit_min-Tuple{Any}' href='#Mads.getparamsinit_min-Tuple{Any}'>#</a>
+<a id='Mads.getparamsinit_min-Tuple{Associative{K,V}}' href='#Mads.getparamsinit_min-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsinit_min`** &mdash; *Method*.
 
 
 
 Get an array with `init_min` values for all the MADS model parameters
 
-<a id='Mads.getparamslog-Tuple{Any,Any}' href='#Mads.getparamslog-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamslog-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamslog-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamslog`** &mdash; *Method*.
 
 
 
 Get an array with `log` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamslog-Tuple{Any}' href='#Mads.getparamslog-Tuple{Any}'>#</a>
+<a id='Mads.getparamslog-Tuple{Associative{K,V}}' href='#Mads.getparamslog-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamslog`** &mdash; *Method*.
 
 
 
 Get an array with `log` values for all the MADS model parameters
 
-<a id='Mads.getparamslongname-Tuple{Any,Any}' href='#Mads.getparamslongname-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamslongname-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamslongname-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamslongname`** &mdash; *Method*.
 
 
 
 Get an array with `longname` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamslongname-Tuple{Any}' href='#Mads.getparamslongname-Tuple{Any}'>#</a>
+<a id='Mads.getparamslongname-Tuple{Associative{K,V}}' href='#Mads.getparamslongname-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamslongname`** &mdash; *Method*.
 
 
 
 Get an array with `longname` values for all the MADS model parameters
 
-<a id='Mads.getparamsmax-Tuple{Any,Any}' href='#Mads.getparamsmax-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsmax-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsmax-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsmax`** &mdash; *Method*.
 
 
 
 Get an array with `max` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsmax-Tuple{Any}' href='#Mads.getparamsmax-Tuple{Any}'>#</a>
+<a id='Mads.getparamsmax-Tuple{Associative{K,V}}' href='#Mads.getparamsmax-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsmax`** &mdash; *Method*.
 
 
 
 Get an array with `min` values for all the MADS model parameters
 
-<a id='Mads.getparamsmin-Tuple{Any,Any}' href='#Mads.getparamsmin-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsmin-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsmin-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsmin`** &mdash; *Method*.
 
 
 
 Get an array with `min` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsmin-Tuple{Any}' href='#Mads.getparamsmin-Tuple{Any}'>#</a>
+<a id='Mads.getparamsmin-Tuple{Associative{K,V}}' href='#Mads.getparamsmin-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsmin`** &mdash; *Method*.
 
 
 
 Get an array with `min` values for all the MADS model parameters
 
-<a id='Mads.getparamsplotname-Tuple{Any,Any}' href='#Mads.getparamsplotname-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsplotname-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsplotname-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsplotname`** &mdash; *Method*.
 
 
 
 Get an array with `plotname` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsplotname-Tuple{Any}' href='#Mads.getparamsplotname-Tuple{Any}'>#</a>
+<a id='Mads.getparamsplotname-Tuple{Associative{K,V}}' href='#Mads.getparamsplotname-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsplotname`** &mdash; *Method*.
 
 
 
 Get an array with `plotname` values for all the MADS model parameters
 
-<a id='Mads.getparamsstep-Tuple{Any,Any}' href='#Mads.getparamsstep-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamsstep-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamsstep-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamsstep`** &mdash; *Method*.
 
 
 
 Get an array with `step` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamsstep-Tuple{Any}' href='#Mads.getparamsstep-Tuple{Any}'>#</a>
+<a id='Mads.getparamsstep-Tuple{Associative{K,V}}' href='#Mads.getparamsstep-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamsstep`** &mdash; *Method*.
 
 
 
 Get an array with `step` values for all the MADS model parameters
 
-<a id='Mads.getparamstype-Tuple{Any,Any}' href='#Mads.getparamstype-Tuple{Any,Any}'>#</a>
+<a id='Mads.getparamstype-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.getparamstype-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.getparamstype`** &mdash; *Method*.
 
 
 
 Get an array with `type` values for parameters defined by `paramkeys`
 
-<a id='Mads.getparamstype-Tuple{Any}' href='#Mads.getparamstype-Tuple{Any}'>#</a>
+<a id='Mads.getparamstype-Tuple{Associative{K,V}}' href='#Mads.getparamstype-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getparamstype`** &mdash; *Method*.
 
 
@@ -993,7 +1000,7 @@ Get the number of processors
 
 Get the directory where restarts will be stored.
 
-<a id='Mads.getrootname-Tuple{AbstractString}' href='#Mads.getrootname-Tuple{AbstractString}'>#</a>
+<a id='Mads.getrootname-Tuple{ByteString}' href='#Mads.getrootname-Tuple{ByteString}'>#</a>
 **`Mads.getrootname`** &mdash; *Method*.
 
 
@@ -1007,7 +1014,7 @@ r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 
-<a id='Mads.getsourcekeys-Tuple{Associative}' href='#Mads.getsourcekeys-Tuple{Associative}'>#</a>
+<a id='Mads.getsourcekeys-Tuple{Associative{K,V}}' href='#Mads.getsourcekeys-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getsourcekeys`** &mdash; *Method*.
 
 
@@ -1024,49 +1031,63 @@ Returns:
 
   * `sourcekeys` : array with keys of all source parameters in the MADS dictionary
 
-<a id='Mads.gettarget-Tuple{Associative}' href='#Mads.gettarget-Tuple{Associative}'>#</a>
+<a id='Mads.gettarget-Tuple{Associative{K,V}}' href='#Mads.gettarget-Tuple{Associative{K,V}}'>#</a>
 **`Mads.gettarget`** &mdash; *Method*.
 
 
 
 Get observation target
 
-<a id='Mads.gettargetkeys-Tuple{Associative}' href='#Mads.gettargetkeys-Tuple{Associative}'>#</a>
+<a id='Mads.gettargetkeys-Tuple{Associative{K,V}}' href='#Mads.gettargetkeys-Tuple{Associative{K,V}}'>#</a>
 **`Mads.gettargetkeys`** &mdash; *Method*.
 
 
 
 Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary
 
-<a id='Mads.gettime-Tuple{Associative}' href='#Mads.gettime-Tuple{Associative}'>#</a>
+<a id='Mads.gettime-Tuple{Associative{K,V}}' href='#Mads.gettime-Tuple{Associative{K,V}}'>#</a>
 **`Mads.gettime`** &mdash; *Method*.
 
 
 
 Get observation time
 
-<a id='Mads.getweight-Tuple{Associative}' href='#Mads.getweight-Tuple{Associative}'>#</a>
+<a id='Mads.getweight-Tuple{Associative{K,V}}' href='#Mads.getweight-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getweight`** &mdash; *Method*.
 
 
 
 Get observation weight
 
-<a id='Mads.getwellkeys-Tuple{Associative}' href='#Mads.getwellkeys-Tuple{Associative}'>#</a>
+<a id='Mads.getwellkeys-Tuple{Associative{K,V}}' href='#Mads.getwellkeys-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getwellkeys`** &mdash; *Method*.
 
 
 
 Get keys for all wells in the MADS problem dictionary
 
-<a id='Mads.getwellsdata-Tuple{Associative}' href='#Mads.getwellsdata-Tuple{Associative}'>#</a>
+<a id='Mads.getwellsdata-Tuple{Associative{K,V}}' href='#Mads.getwellsdata-Tuple{Associative{K,V}}'>#</a>
 **`Mads.getwellsdata`** &mdash; *Method*.
 
 
 
-Ger `Wells` class spatial and temporal data
+Get `Wells` class spatial and temporal data
 
-<a id='Mads.haskeyword-Tuple{Associative,AbstractString}' href='#Mads.haskeyword-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.graphoff-Tuple{}' href='#Mads.graphoff-Tuple{}'>#</a>
+**`Mads.graphoff`** &mdash; *Method*.
+
+
+
+MADS graph output off
+
+<a id='Mads.graphon-Tuple{}' href='#Mads.graphon-Tuple{}'>#</a>
+**`Mads.graphon`** &mdash; *Method*.
+
+
+
+MADS graph output on
+
+<a id='Mads.haskeyword-Tuple{Associative{K,V},ByteString}' href='#Mads.haskeyword-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.haskeyword`** &mdash; *Method*.
 
 
@@ -1096,70 +1117,70 @@ Examples:
 
 Produce MADS help information
 
-<a id='Mads.importeverywhere-Tuple{AbstractString}' href='#Mads.importeverywhere-Tuple{AbstractString}'>#</a>
+<a id='Mads.importeverywhere-Tuple{ByteString}' href='#Mads.importeverywhere-Tuple{ByteString}'>#</a>
 **`Mads.importeverywhere`** &mdash; *Method*.
 
 
 
 Import function everywhere from a file. The first function in the file is the one that will be called by Mads to perform the model simulations.
 
-<a id='Mads.indexkeys' href='#Mads.indexkeys'>#</a>
-**`Mads.indexkeys`** &mdash; *Function*.
+<a id='Mads.indexkeys-Tuple{Associative{K,V},Regex}' href='#Mads.indexkeys-Tuple{Associative{K,V},Regex}'>#</a>
+**`Mads.indexkeys`** &mdash; *Method*.
 
 
 
 Find indexes for dictionary keys based on a string or regular expression
 
-<a id='Mads.ins_obs-Tuple{AbstractString,AbstractString}' href='#Mads.ins_obs-Tuple{AbstractString,AbstractString}'>#</a>
+<a id='Mads.ins_obs-Tuple{ByteString,ByteString}' href='#Mads.ins_obs-Tuple{ByteString,ByteString}'>#</a>
 **`Mads.ins_obs`** &mdash; *Method*.
 
 
 
 Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
 
-<a id='Mads.instline2regexs-Tuple{AbstractString}' href='#Mads.instline2regexs-Tuple{AbstractString}'>#</a>
+<a id='Mads.instline2regexs-Tuple{ByteString}' href='#Mads.instline2regexs-Tuple{ByteString}'>#</a>
 **`Mads.instline2regexs`** &mdash; *Method*.
 
 
 
 Convert an instruction line in the Mads instruction file into regular expressions
 
-<a id='Mads.invobsweights!-Tuple{Associative,Number}' href='#Mads.invobsweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.invobsweights!-Tuple{Associative{K,V},Number}' href='#Mads.invobsweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.invobsweights!`** &mdash; *Method*.
 
 
 
 Inversely proportional observation weights in the MADS problem dictionary
 
-<a id='Mads.invwellweights!-Tuple{Associative,Number}' href='#Mads.invwellweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.invwellweights!-Tuple{Associative{K,V},Number}' href='#Mads.invwellweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.invwellweights!`** &mdash; *Method*.
 
 
 
 Inversely proportional observation weights in the MADS problem dictionary
 
-<a id='Mads.islog-Tuple{Associative,AbstractString}' href='#Mads.islog-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.islog-Tuple{Associative{K,V},ByteString}' href='#Mads.islog-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.islog`** &mdash; *Method*.
 
 
 
 Is parameter with key `parameterkey` log-transformed?
 
-<a id='Mads.isobs-Tuple{Associative,Associative}' href='#Mads.isobs-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.isobs-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.isobs-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.isobs`** &mdash; *Method*.
 
 
 
 Is a dictionary containing all the observations
 
-<a id='Mads.isopt-Tuple{Associative,AbstractString}' href='#Mads.isopt-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.isopt-Tuple{Associative{K,V},ByteString}' href='#Mads.isopt-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.isopt`** &mdash; *Method*.
 
 
 
 Is parameter with key `parameterkey` optimizable?
 
-<a id='Mads.isparam-Tuple{Associative,Associative}' href='#Mads.isparam-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.isparam-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.isparam-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.isparam`** &mdash; *Method*.
 
 
@@ -1194,21 +1215,21 @@ Arguments:
   * `alwaysDoJacobian`: computer Jacobian each iteration [false]
   * `callback` : call back function for debugging
 
-<a id='Mads.loadasciifile-Tuple{AbstractString}' href='#Mads.loadasciifile-Tuple{AbstractString}'>#</a>
+<a id='Mads.loadasciifile-Tuple{ByteString}' href='#Mads.loadasciifile-Tuple{ByteString}'>#</a>
 **`Mads.loadasciifile`** &mdash; *Method*.
 
 
 
 Load ASCII file
 
-<a id='Mads.loadjsonfile-Tuple{AbstractString}' href='#Mads.loadjsonfile-Tuple{AbstractString}'>#</a>
+<a id='Mads.loadjsonfile-Tuple{ByteString}' href='#Mads.loadjsonfile-Tuple{ByteString}'>#</a>
 **`Mads.loadjsonfile`** &mdash; *Method*.
 
 
 
 Load a JSON file
 
-<a id='Mads.loadmadsfile-Tuple{AbstractString}' href='#Mads.loadmadsfile-Tuple{AbstractString}'>#</a>
+<a id='Mads.loadmadsfile-Tuple{ByteString}' href='#Mads.loadmadsfile-Tuple{ByteString}'>#</a>
 **`Mads.loadmadsfile`** &mdash; *Method*.
 
 
@@ -1230,12 +1251,12 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 
-<a id='Mads.localsa-Tuple{Associative}' href='#Mads.localsa-Tuple{Associative}'>#</a>
+<a id='Mads.localsa-Tuple{Associative{K,V}}' href='#Mads.localsa-Tuple{Associative{K,V}}'>#</a>
 **`Mads.localsa`** &mdash; *Method*.
 
 
 
-Local sensitivity analysis based on eigen analysis of covariance matrix
+Local sensitivity analysis based on eigen analysis of the parameter covariance matrix
 
 Arguments:
 
@@ -1260,7 +1281,7 @@ Turn off execution of long MADS tests (default)
 
 Turn on execution of long MADS tests (dangerous)
 
-<a id='Mads.madscritical-Tuple{AbstractString}' href='#Mads.madscritical-Tuple{AbstractString}'>#</a>
+<a id='Mads.madscritical-Tuple{ByteString}' href='#Mads.madscritical-Tuple{ByteString}'>#</a>
 **`Mads.madscritical`** &mdash; *Method*.
 
 
@@ -1274,7 +1295,7 @@ MADS critical error messages
 
 MADS debug messages (controlled by `quiet` and `debuglevel`)
 
-<a id='Mads.madserror-Tuple{AbstractString}' href='#Mads.madserror-Tuple{AbstractString}'>#</a>
+<a id='Mads.madserror-Tuple{ByteString}' href='#Mads.madserror-Tuple{ByteString}'>#</a>
 **`Mads.madserror`** &mdash; *Method*.
 
 
@@ -1286,23 +1307,23 @@ MADS error messages
 
 
 
-MADS information/status messages (controlled by quiet`and`verbositylevel`)
+MADS information/status messages (controlled by quiet` and `verbositylevel`)
 
 <a id='Mads.madsoutput' href='#Mads.madsoutput'>#</a>
 **`Mads.madsoutput`** &mdash; *Function*.
 
 
 
-MADS output (controlled by quiet`and`verbositylevel`)
+MADS output (controlled by quiet` and `verbositylevel`)
 
-<a id='Mads.madswarn-Tuple{AbstractString}' href='#Mads.madswarn-Tuple{AbstractString}'>#</a>
+<a id='Mads.madswarn-Tuple{ByteString}' href='#Mads.madswarn-Tuple{ByteString}'>#</a>
 **`Mads.madswarn`** &mdash; *Method*.
 
 
 
 MADS warning messages
 
-<a id='Mads.makearrayconditionalloglikelihood-Tuple{Associative,Any}' href='#Mads.makearrayconditionalloglikelihood-Tuple{Associative,Any}'>#</a>
+<a id='Mads.makearrayconditionalloglikelihood-Tuple{Associative{K,V},Any}' href='#Mads.makearrayconditionalloglikelihood-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.makearrayconditionalloglikelihood`** &mdash; *Method*.
 
 
@@ -1327,19 +1348,19 @@ Returns:
 
   * `arrayfunction` : function accepting an array containing the optimal parameters' values
 
-<a id='Mads.makearrayloglikelihood-Tuple{Associative,Any}' href='#Mads.makearrayloglikelihood-Tuple{Associative,Any}'>#</a>
+<a id='Mads.makearrayloglikelihood-Tuple{Associative{K,V},Any}' href='#Mads.makearrayloglikelihood-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.makearrayloglikelihood`** &mdash; *Method*.
 
 
 
 Make a log likelihood function that accepts an array containing the opt parameters' values
 
-<a id='Mads.makebigdt!-Tuple{Associative,Associative}' href='#Mads.makebigdt!-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.makebigdt!-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.makebigdt!-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.makebigdt!`** &mdash; *Method*.
 
 
 
-Setup BIG-DT problem
+Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
 Arguments:
 
@@ -1350,12 +1371,12 @@ Returns:
 
   * `bigdtproblem` : BIG-DT problem type
 
-<a id='Mads.makebigdt-Tuple{Associative,Associative}' href='#Mads.makebigdt-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.makebigdt-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.makebigdt-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.makebigdt`** &mdash; *Method*.
 
 
 
-Setup BIG-DT problem
+Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
 Arguments:
 
@@ -1366,7 +1387,7 @@ Returns:
 
   * `bigdtproblem` : BIG-DT problem type
 
-<a id='Mads.makecomputeconcentrations-Tuple{Associative}' href='#Mads.makecomputeconcentrations-Tuple{Associative}'>#</a>
+<a id='Mads.makecomputeconcentrations-Tuple{Associative{K,V}}' href='#Mads.makecomputeconcentrations-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makecomputeconcentrations`** &mdash; *Method*.
 
 
@@ -1414,28 +1435,28 @@ Returns:
 
   * `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
 
-<a id='Mads.makelmfunctions-Tuple{Associative}' href='#Mads.makelmfunctions-Tuple{Associative}'>#</a>
+<a id='Mads.makelmfunctions-Tuple{Associative{K,V}}' href='#Mads.makelmfunctions-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makelmfunctions`** &mdash; *Method*.
 
 
 
 Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 
-<a id='Mads.makelocalsafunction-Tuple{Associative}' href='#Mads.makelocalsafunction-Tuple{Associative}'>#</a>
+<a id='Mads.makelocalsafunction-Tuple{Associative{K,V}}' href='#Mads.makelocalsafunction-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makelocalsafunction`** &mdash; *Method*.
 
 
 
 Make gradient function needed for local sensitivity analysis
 
-<a id='Mads.makelogprior-Tuple{Associative}' href='#Mads.makelogprior-Tuple{Associative}'>#</a>
+<a id='Mads.makelogprior-Tuple{Associative{K,V}}' href='#Mads.makelogprior-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makelogprior`** &mdash; *Method*.
 
 
 
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
-<a id='Mads.makemadscommandfunction-Tuple{Associative}' href='#Mads.makemadscommandfunction-Tuple{Associative}'>#</a>
+<a id='Mads.makemadscommandfunction-Tuple{Associative{K,V}}' href='#Mads.makemadscommandfunction-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makemadscommandfunction`** &mdash; *Method*.
 
 
@@ -1451,9 +1472,13 @@ Mads.makemadscommandfunction(madsdata)
 MADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary. The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS. The fields in the MADS problem dictionary that can be used to define the model coupling are:
 
   * `Model` : execute a Julia function defined in an input Julia file. The function that should accept a `parameter` dictionary with all the model parameters as an input argument and should return an `observation` dictionary with all the model predicted observations. MADS will execute the first function defined in the file.
+
   * `MADS model` : create a Julia function based on an input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary. MADS will execute the first function defined in the file. This function should a create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
+
   * `Julia model` : execute an internal Julia function that accepts a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
+
   * `Command` : execute an external UNIX command or script that will execute an external model.
+
   * `Julia command` : execute a Julia script that will execute an external model. The Julia script is defined in an input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary; MADS will execute the first function defined in the file. The Julia script should be capable to (1) execute the model (making a system call of an external model), (2) parse the model outputs, (3) return an `observation` dictionary with model predictions.
 
 Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
@@ -1478,28 +1503,28 @@ Options for reading model outputs:
   * `YAMLPredictions` : model predictions read from a YAML file
   * `JSONPredictions` : model predictions read from a JSON file
 
-<a id='Mads.makemadscommandfunctionandgradient-Tuple{Associative}' href='#Mads.makemadscommandfunctionandgradient-Tuple{Associative}'>#</a>
+<a id='Mads.makemadscommandfunctionandgradient-Tuple{Associative{K,V}}' href='#Mads.makemadscommandfunctionandgradient-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makemadscommandfunctionandgradient`** &mdash; *Method*.
 
 
 
 Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
 
-<a id='Mads.makemadscommandgradient-Tuple{Associative}' href='#Mads.makemadscommandgradient-Tuple{Associative}'>#</a>
+<a id='Mads.makemadscommandgradient-Tuple{Associative{K,V}}' href='#Mads.makemadscommandgradient-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makemadscommandgradient`** &mdash; *Method*.
 
 
 
 Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
-<a id='Mads.makemadsconditionalloglikelihood-Tuple{Associative}' href='#Mads.makemadsconditionalloglikelihood-Tuple{Associative}'>#</a>
+<a id='Mads.makemadsconditionalloglikelihood-Tuple{Associative{K,V}}' href='#Mads.makemadsconditionalloglikelihood-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makemadsconditionalloglikelihood`** &mdash; *Method*.
 
 
 
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations. Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 
-<a id='Mads.makemadsloglikelihood-Tuple{Associative}' href='#Mads.makemadsloglikelihood-Tuple{Associative}'>#</a>
+<a id='Mads.makemadsloglikelihood-Tuple{Associative{K,V}}' href='#Mads.makemadsloglikelihood-Tuple{Associative{K,V}}'>#</a>
 **`Mads.makemadsloglikelihood`** &mdash; *Method*.
 
 
@@ -1520,21 +1545,21 @@ Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly ca
 
 Model section information criteria
 
-<a id='Mads.modobsweights!-Tuple{Associative,Number}' href='#Mads.modobsweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.modobsweights!-Tuple{Associative{K,V},Number}' href='#Mads.modobsweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.modobsweights!`** &mdash; *Method*.
 
 
 
 Modify (multiply) observation weights in the MADS problem dictionary
 
-<a id='Mads.modwellweights!-Tuple{Associative,Number}' href='#Mads.modwellweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.modwellweights!-Tuple{Associative{K,V},Number}' href='#Mads.modwellweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.modwellweights!`** &mdash; *Method*.
 
 
 
 Modify (multiply) well weights in the MADS problem dictionary
 
-<a id='Mads.montecarlo-Tuple{Associative}' href='#Mads.montecarlo-Tuple{Associative}'>#</a>
+<a id='Mads.montecarlo-Tuple{Associative{K,V}}' href='#Mads.montecarlo-Tuple{Associative{K,V}}'>#</a>
 **`Mads.montecarlo`** &mdash; *Method*.
 
 
@@ -1599,21 +1624,21 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 
 Disable MADS plotting
 
-<a id='Mads.obslineismatch-Tuple{AbstractString,Array{Regex,1}}' href='#Mads.obslineismatch-Tuple{AbstractString,Array{Regex,1}}'>#</a>
+<a id='Mads.obslineismatch-Tuple{ByteString,Array{Regex,1}}' href='#Mads.obslineismatch-Tuple{ByteString,Array{Regex,1}}'>#</a>
 **`Mads.obslineismatch`** &mdash; *Method*.
 
 
 
 Match an instruction line in the Mads instruction file with model input file
 
-<a id='Mads.of-Tuple{Associative,Array{T,1}}' href='#Mads.of-Tuple{Associative,Array{T,1}}'>#</a>
+<a id='Mads.of-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.of-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.of`** &mdash; *Method*.
 
 
 
 Compute objective function
 
-<a id='Mads.paramarray2dict-Tuple{Associative,Array}' href='#Mads.paramarray2dict-Tuple{Associative,Array}'>#</a>
+<a id='Mads.paramarray2dict-Tuple{Associative{K,V},Array{T,N}}' href='#Mads.paramarray2dict-Tuple{Associative{K,V},Array{T,N}}'>#</a>
 **`Mads.paramarray2dict`** &mdash; *Method*.
 
 
@@ -1634,7 +1659,7 @@ Arguments:
   * `parameterkey` : model parameter key
   * `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 
-<a id='Mads.paramrand-Tuple{Associative,AbstractString}' href='#Mads.paramrand-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.paramrand-Tuple{Associative{K,V},ByteString}' href='#Mads.paramrand-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.paramrand`** &mdash; *Method*.
 
 
@@ -1648,7 +1673,7 @@ Arguments:
   * `numsamples` : number of samples
   * `paramdist` : dictionary with parameter distributions
 
-<a id='Mads.parsemadsdata!-Tuple{Associative}' href='#Mads.parsemadsdata!-Tuple{Associative}'>#</a>
+<a id='Mads.parsemadsdata!-Tuple{Associative{K,V}}' href='#Mads.parsemadsdata!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.parsemadsdata!`** &mdash; *Method*.
 
 
@@ -1659,14 +1684,21 @@ Arguments:
 
   * `madsdata` : Mads problem dictionary
 
-<a id='Mads.partialof-Tuple{Associative,Associative,Regex}' href='#Mads.partialof-Tuple{Associative,Associative,Regex}'>#</a>
+<a id='Mads.parsenodenames' href='#Mads.parsenodenames'>#</a>
+**`Mads.parsenodenames`** &mdash; *Function*.
+
+
+
+Parse string with node names defined in SLURM
+
+<a id='Mads.partialof-Tuple{Associative{K,V},Associative{K,V},Regex}' href='#Mads.partialof-Tuple{Associative{K,V},Associative{K,V},Regex}'>#</a>
 **`Mads.partialof`** &mdash; *Method*.
 
 
 
 Compute the sum of squared residuals for observations that match a regular expression
 
-<a id='Mads.plotgrid-Tuple{Associative,Array{Float64,N}}' href='#Mads.plotgrid-Tuple{Associative,Array{Float64,N}}'>#</a>
+<a id='Mads.plotgrid-Tuple{Associative{K,V},Array{Float64,N}}' href='#Mads.plotgrid-Tuple{Associative{K,V},Array{Float64,N}}'>#</a>
 **`Mads.plotgrid`** &mdash; *Method*.
 
 
@@ -1689,7 +1721,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotmadsproblem-Tuple{Associative}' href='#Mads.plotmadsproblem-Tuple{Associative}'>#</a>
+<a id='Mads.plotmadsproblem-Tuple{Associative{K,V}}' href='#Mads.plotmadsproblem-Tuple{Associative{K,V}}'>#</a>
 **`Mads.plotmadsproblem`** &mdash; *Method*.
 
 
@@ -1703,7 +1735,7 @@ Arguments:
   * `format` : output plot format (`png`, `pdf`, etc.)
   * `keyword` : to be added in the filename
 
-<a id='Mads.plotmass-Tuple{Any,Any,Any,AbstractString}' href='#Mads.plotmass-Tuple{Any,Any,Any,AbstractString}'>#</a>
+<a id='Mads.plotmass-Tuple{Any,Any,Any,ByteString}' href='#Mads.plotmass-Tuple{Any,Any,Any,ByteString}'>#</a>
 **`Mads.plotmass`** &mdash; *Method*.
 
 
@@ -1722,7 +1754,7 @@ Arguments:
 
 Dumps: image file with name `filename` and in specified `format`
 
-<a id='Mads.plotmatches-Tuple{Associative}' href='#Mads.plotmatches-Tuple{Associative}'>#</a>
+<a id='Mads.plotmatches-Tuple{Associative{K,V}}' href='#Mads.plotmatches-Tuple{Associative{K,V}}'>#</a>
 **`Mads.plotmatches`** &mdash; *Method*.
 
 
@@ -1745,7 +1777,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotobsSAresults-Tuple{Associative,Any}' href='#Mads.plotobsSAresults-Tuple{Associative,Any}'>#</a>
+<a id='Mads.plotobsSAresults-Tuple{Associative{K,V},Any}' href='#Mads.plotobsSAresults-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.plotobsSAresults`** &mdash; *Method*.
 
 
@@ -1761,7 +1793,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotrobustnesscurves-Tuple{Associative,Dict}' href='#Mads.plotrobustnesscurves-Tuple{Associative,Dict}'>#</a>
+<a id='Mads.plotrobustnesscurves-Tuple{Associative{K,V},Dict{K,V}}' href='#Mads.plotrobustnesscurves-Tuple{Associative{K,V},Dict{K,V}}'>#</a>
 **`Mads.plotrobustnesscurves`** &mdash; *Method*.
 
 
@@ -1775,7 +1807,7 @@ Arguments:
   * `filename` : output file name used to dump plots
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotseries-Tuple{Array{T,2},AbstractString}' href='#Mads.plotseries-Tuple{Array{T,2},AbstractString}'>#</a>
+<a id='Mads.plotseries-Tuple{Array{T,2},ByteString}' href='#Mads.plotseries-Tuple{Array{T,2},ByteString}'>#</a>
 **`Mads.plotseries`** &mdash; *Method*.
 
 
@@ -1793,12 +1825,12 @@ Arguments:
   * `name` : series name
   * `combined` : `true` by default
 
-<a id='Mads.plotwellSAresults-Tuple{Associative,Any,Any}' href='#Mads.plotwellSAresults-Tuple{Associative,Any,Any}'>#</a>
+<a id='Mads.plotwellSAresults-Tuple{Associative{K,V},Any}' href='#Mads.plotwellSAresults-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.plotwellSAresults`** &mdash; *Method*.
 
 
 
-Plot the sensitivity analysis results for a given well in the MADS problem dictionary (wells class expected)
+Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
 
 Arguments:
 
@@ -1810,23 +1842,7 @@ Arguments:
   * `filename` : output file name
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotwellSAresults-Tuple{Associative,Any}' href='#Mads.plotwellSAresults-Tuple{Associative,Any}'>#</a>
-**`Mads.plotwellSAresults`** &mdash; *Method*.
-
-
-
-Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
-
-Arguments:
-
-  * `madsdata` : MADS problem dictionary
-  * `result` : sensitivity analysis results
-  * `xtitle` : x-axis title
-  * `ytitle` : y-axis title
-  * `filename` : output file name
-  * `format` : output plot format (`png`, `pdf`, etc.)
-
-<a id='Mads.printSAresults-Tuple{Associative,Associative}' href='#Mads.printSAresults-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.printSAresults-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.printSAresults-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.printSAresults`** &mdash; *Method*.
 
 
@@ -1847,14 +1863,14 @@ Make MADS not quiet
 
 Make MADS quiet
 
-<a id='Mads.readasciipredictions-Tuple{AbstractString}' href='#Mads.readasciipredictions-Tuple{AbstractString}'>#</a>
+<a id='Mads.readasciipredictions-Tuple{ByteString}' href='#Mads.readasciipredictions-Tuple{ByteString}'>#</a>
 **`Mads.readasciipredictions`** &mdash; *Method*.
 
 
 
 Read MADS predictions from an ASCII file
 
-<a id='Mads.readjsonpredictions-Tuple{AbstractString}' href='#Mads.readjsonpredictions-Tuple{AbstractString}'>#</a>
+<a id='Mads.readjsonpredictions-Tuple{ByteString}' href='#Mads.readjsonpredictions-Tuple{ByteString}'>#</a>
 **`Mads.readjsonpredictions`** &mdash; *Method*.
 
 
@@ -1868,14 +1884,14 @@ Read MADS model predictions from a JSON file
 
 Read observations
 
-<a id='Mads.readobservations_cmads-Tuple{Associative}' href='#Mads.readobservations_cmads-Tuple{Associative}'>#</a>
+<a id='Mads.readobservations_cmads-Tuple{Associative{K,V}}' href='#Mads.readobservations_cmads-Tuple{Associative{K,V}}'>#</a>
 **`Mads.readobservations_cmads`** &mdash; *Method*.
 
 
 
 Read observations using C Mads library
 
-<a id='Mads.readyamlpredictions-Tuple{AbstractString}' href='#Mads.readyamlpredictions-Tuple{AbstractString}'>#</a>
+<a id='Mads.readyamlpredictions-Tuple{ByteString}' href='#Mads.readyamlpredictions-Tuple{ByteString}'>#</a>
 **`Mads.readyamlpredictions`** &mdash; *Method*.
 
 
@@ -1903,14 +1919,14 @@ Reload Mads modules
 
 Reset the model runs count to be equal to zero
 
-<a id='Mads.residuals-Tuple{Associative,Array{T,1}}' href='#Mads.residuals-Tuple{Associative,Array{T,1}}'>#</a>
+<a id='Mads.residuals-Tuple{Associative{K,V},Array{T,1}}' href='#Mads.residuals-Tuple{Associative{K,V},Array{T,1}}'>#</a>
 **`Mads.residuals`** &mdash; *Method*.
 
 
 
 Compute residuals
 
-<a id='Mads.reweighsamples-Tuple{Associative,Array,Array{T,1}}' href='#Mads.reweighsamples-Tuple{Associative,Array,Array{T,1}}'>#</a>
+<a id='Mads.reweighsamples-Tuple{Associative{K,V},Array{T,N},Array{T,1}}' href='#Mads.reweighsamples-Tuple{Associative{K,V},Array{T,N},Array{T,1}}'>#</a>
 **`Mads.reweighsamples`** &mdash; *Method*.
 
 
@@ -1983,7 +1999,7 @@ Rosenbrock test function for LM optimization (returns the 2 components separetel
 
 Run external command and pipe stdout and stderr
 
-<a id='Mads.saltelli-Tuple{Associative}' href='#Mads.saltelli-Tuple{Associative}'>#</a>
+<a id='Mads.saltelli-Tuple{Associative{K,V}}' href='#Mads.saltelli-Tuple{Associative{K,V}}'>#</a>
 **`Mads.saltelli`** &mdash; *Method*.
 
 
@@ -1998,7 +2014,7 @@ Arguments:
   * `restartdir` : directory where files will be stored containing model results for fast simulation restarts
   * `parallel` : set to true if the model runs should be performed in parallel
 
-<a id='Mads.saltellibrute-Tuple{Associative}' href='#Mads.saltellibrute-Tuple{Associative}'>#</a>
+<a id='Mads.saltellibrute-Tuple{Associative{K,V}}' href='#Mads.saltellibrute-Tuple{Associative{K,V}}'>#</a>
 **`Mads.saltellibrute`** &mdash; *Method*.
 
 
@@ -2025,14 +2041,14 @@ Parallel version of saltellibrute
 
 Parallel version of saltelli
 
-<a id='Mads.saltelliprintresults2-Tuple{Associative,Associative}' href='#Mads.saltelliprintresults2-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.saltelliprintresults2-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.saltelliprintresults2-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.saltelliprintresults2`** &mdash; *Method*.
 
 
 
 Print sensitivity analysis results (method 2)
 
-<a id='Mads.savecalibrationresults-Tuple{Associative,Any}' href='#Mads.savecalibrationresults-Tuple{Associative,Any}'>#</a>
+<a id='Mads.savecalibrationresults-Tuple{Associative{K,V},Any}' href='#Mads.savecalibrationresults-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.savecalibrationresults`** &mdash; *Method*.
 
 
@@ -2059,14 +2075,14 @@ Arguments:
   * `julia` : if `true` use Julia JSON module to save
   * `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
 
-<a id='Mads.savemcmcresults-Tuple{Array,AbstractString}' href='#Mads.savemcmcresults-Tuple{Array,AbstractString}'>#</a>
+<a id='Mads.savemcmcresults-Tuple{Array{T,N},ByteString}' href='#Mads.savemcmcresults-Tuple{Array{T,N},ByteString}'>#</a>
 **`Mads.savemcmcresults`** &mdash; *Method*.
 
 
 
 Save MCMC chain in a file
 
-<a id='Mads.scatterplotsamples-Tuple{Associative,Array{T,2},AbstractString}' href='#Mads.scatterplotsamples-Tuple{Associative,Array{T,2},AbstractString}'>#</a>
+<a id='Mads.scatterplotsamples-Tuple{Associative{K,V},Array{T,2},ByteString}' href='#Mads.scatterplotsamples-Tuple{Associative{K,V},Array{T,2},ByteString}'>#</a>
 **`Mads.scatterplotsamples`** &mdash; *Method*.
 
 
@@ -2087,8 +2103,8 @@ Arguments:
 
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
-  * `Mads.searchdir(key)`
-  * `Mads.searchdir(key; path = ".")`
+  * `Mads.searchdir("a")`
+  * `Mads.searchdir(r"[A-B]"; path = ".")`
 
 Arguments:
 
@@ -2106,14 +2122,14 @@ Returns:
 
 Set number of processors needed for each parallel task at each node
 
-<a id='Mads.setallparamsoff!-Tuple{Associative}' href='#Mads.setallparamsoff!-Tuple{Associative}'>#</a>
+<a id='Mads.setallparamsoff!-Tuple{Associative{K,V}}' href='#Mads.setallparamsoff!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.setallparamsoff!`** &mdash; *Method*.
 
 
 
 Set all parameters OFF
 
-<a id='Mads.setallparamson!-Tuple{Associative}' href='#Mads.setallparamson!-Tuple{Associative}'>#</a>
+<a id='Mads.setallparamson!-Tuple{Associative{K,V}}' href='#Mads.setallparamson!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.setallparamson!`** &mdash; *Method*.
 
 
@@ -2127,7 +2143,7 @@ Set all parameters ON
 
 Set MADS debug level
 
-<a id='Mads.setdefaultplotformat-Tuple{AbstractString}' href='#Mads.setdefaultplotformat-Tuple{AbstractString}'>#</a>
+<a id='Mads.setdefaultplotformat-Tuple{ByteString}' href='#Mads.setdefaultplotformat-Tuple{ByteString}'>#</a>
 **`Mads.setdefaultplotformat`** &mdash; *Method*.
 
 
@@ -2146,14 +2162,14 @@ Set the working directory (for parallel environments)
 @everywhere Mads.setdir("/home/monty")
 ```
 
-<a id='Mads.setdynamicmodel-Tuple{Associative,Function}' href='#Mads.setdynamicmodel-Tuple{Associative,Function}'>#</a>
+<a id='Mads.setdynamicmodel-Tuple{Associative{K,V},Function}' href='#Mads.setdynamicmodel-Tuple{Associative{K,V},Function}'>#</a>
 **`Mads.setdynamicmodel`** &mdash; *Method*.
 
 
 
 Set Dynamic Model for MADS model calls using internal Julia functions
 
-<a id='Mads.setmadsinputfile-Tuple{AbstractString}' href='#Mads.setmadsinputfile-Tuple{AbstractString}'>#</a>
+<a id='Mads.setmadsinputfile-Tuple{ByteString}' href='#Mads.setmadsinputfile-Tuple{ByteString}'>#</a>
 **`Mads.setmadsinputfile`** &mdash; *Method*.
 
 
@@ -2166,14 +2182,14 @@ Arguments:
 
   * `filename` : input file name (e.g. `input_file_name.mads`)
 
-<a id='Mads.setnewmadsfilename-Tuple{Associative}' href='#Mads.setnewmadsfilename-Tuple{Associative}'>#</a>
+<a id='Mads.setnewmadsfilename-Tuple{Associative{K,V}}' href='#Mads.setnewmadsfilename-Tuple{Associative{K,V}}'>#</a>
 **`Mads.setnewmadsfilename`** &mdash; *Method*.
 
 
 
 Set new mads file name
 
-<a id='Mads.setobservationtargets!-Tuple{Associative,Associative}' href='#Mads.setobservationtargets!-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.setobservationtargets!-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.setobservationtargets!`** &mdash; *Method*.
 
 
@@ -2207,28 +2223,28 @@ Mads.setobstime!(madsdata, "_t")
 Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
 
-<a id='Mads.setobsweights!-Tuple{Associative,Number}' href='#Mads.setobsweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.setobsweights!-Tuple{Associative{K,V},Number}' href='#Mads.setobsweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.setobsweights!`** &mdash; *Method*.
 
 
 
 Set observation weights in the MADS problem dictionary
 
-<a id='Mads.setparamoff!-Tuple{Associative,Any}' href='#Mads.setparamoff!-Tuple{Associative,Any}'>#</a>
+<a id='Mads.setparamoff!-Tuple{Associative{K,V},ByteString}' href='#Mads.setparamoff!-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.setparamoff!`** &mdash; *Method*.
 
 
 
 Set a specific parameter with a key `parameterkey` OFF
 
-<a id='Mads.setparamon!-Tuple{Associative,AbstractString}' href='#Mads.setparamon!-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.setparamon!-Tuple{Associative{K,V},ByteString}' href='#Mads.setparamon!-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.setparamon!`** &mdash; *Method*.
 
 
 
 Set a specific parameter with a key `parameterkey` ON
 
-<a id='Mads.setparamsdistnormal!-Tuple{Associative,Any,Any}' href='#Mads.setparamsdistnormal!-Tuple{Associative,Any,Any}'>#</a>
+<a id='Mads.setparamsdistnormal!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}' href='#Mads.setparamsdistnormal!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.setparamsdistnormal!`** &mdash; *Method*.
 
 
@@ -2243,7 +2259,7 @@ Arguments:
   * `mean` : array with the mean values
   * `stddev` : array with the standard deviation values
 
-<a id='Mads.setparamsdistuniform!-Tuple{Associative,Any,Any}' href='#Mads.setparamsdistuniform!-Tuple{Associative,Any,Any}'>#</a>
+<a id='Mads.setparamsdistuniform!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}' href='#Mads.setparamsdistuniform!-Tuple{Associative{K,V},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.setparamsdistuniform!`** &mdash; *Method*.
 
 
@@ -2258,7 +2274,7 @@ Arguments:
   * `min` : array with the minimum values
   * `max` : array with the maximum values
 
-<a id='Mads.setparamsinit!-Tuple{Associative,Associative}' href='#Mads.setparamsinit!-Tuple{Associative,Associative}'>#</a>
+<a id='Mads.setparamsinit!-Tuple{Associative{K,V},Associative{K,V}}' href='#Mads.setparamsinit!-Tuple{Associative{K,V},Associative{K,V}}'>#</a>
 **`Mads.setparamsinit!`** &mdash; *Method*.
 
 
@@ -2272,14 +2288,14 @@ Arguments:
   * `madsdata` : MADS problem dictionary
   * `paramdict` : dictionary with initial model parameter values
 
-<a id='Mads.setplotfileformat-Tuple{AbstractString,AbstractString}' href='#Mads.setplotfileformat-Tuple{AbstractString,AbstractString}'>#</a>
+<a id='Mads.setplotfileformat-Tuple{ByteString,ByteString}' href='#Mads.setplotfileformat-Tuple{ByteString,ByteString}'>#</a>
 **`Mads.setplotfileformat`** &mdash; *Method*.
 
 
 
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-`Mads.setplotfileformat(filename::AbstractString, format::AbstractString)`
+`Mads.setplotfileformat(filename::String, format::String)`
 
 Arguments:
 
@@ -2323,15 +2339,16 @@ Usage:
 Mads.setprocs()
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=32, mads_servers=true)
-Mads.setprocs(ntasks_per_node=64, machinenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
 Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
 ```
 
 Optional arguments:
 
-  * `ntasks_per_node` : number of parallel tasks per
+  * `ntasks_per_node` : number of parallel tasks per 
   * `nprocs_per_task` : number of processors needed for each parallel task at each node
-  * `machinenames` : array with machines names to invoked
+  * `nodenames` : array with names of machines/nodes to be invoked
   * `dir` : common directory shared by all the jobs
   * `exename` : location of the julia executable (the same version of julia is needed on all the workers)
   * `mads_servers` : if `true` use MADS servers (LANL only)
@@ -2345,14 +2362,14 @@ Optional arguments:
 
 Set current seed
 
-<a id='Mads.settarget!-Tuple{Associative,Any}' href='#Mads.settarget!-Tuple{Associative,Any}'>#</a>
+<a id='Mads.settarget!-Tuple{Associative{K,V},Any}' href='#Mads.settarget!-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.settarget!`** &mdash; *Method*.
 
 
 
 Set observation target
 
-<a id='Mads.settime!-Tuple{Associative,Any}' href='#Mads.settime!-Tuple{Associative,Any}'>#</a>
+<a id='Mads.settime!-Tuple{Associative{K,V},Number}' href='#Mads.settime!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.settime!`** &mdash; *Method*.
 
 
@@ -2366,35 +2383,35 @@ Set observation time
 
 Set MADS verbosity level
 
-<a id='Mads.setweight!-Tuple{Associative,Any}' href='#Mads.setweight!-Tuple{Associative,Any}'>#</a>
+<a id='Mads.setweight!-Tuple{Associative{K,V},Any}' href='#Mads.setweight!-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.setweight!`** &mdash; *Method*.
 
 
 
 Set observation weight
 
-<a id='Mads.setwellweights!-Tuple{Associative,Number}' href='#Mads.setwellweights!-Tuple{Associative,Number}'>#</a>
+<a id='Mads.setwellweights!-Tuple{Associative{K,V},Number}' href='#Mads.setwellweights!-Tuple{Associative{K,V},Number}'>#</a>
 **`Mads.setwellweights!`** &mdash; *Method*.
 
 
 
 Set well weights in the MADS problem dictionary
 
-<a id='Mads.showallparameters-Tuple{Associative}' href='#Mads.showallparameters-Tuple{Associative}'>#</a>
+<a id='Mads.showallparameters-Tuple{Associative{K,V}}' href='#Mads.showallparameters-Tuple{Associative{K,V}}'>#</a>
 **`Mads.showallparameters`** &mdash; *Method*.
 
 
 
 Show all parameters in the MADS problem dictionary
 
-<a id='Mads.showobservations-Tuple{Associative}' href='#Mads.showobservations-Tuple{Associative}'>#</a>
+<a id='Mads.showobservations-Tuple{Associative{K,V}}' href='#Mads.showobservations-Tuple{Associative{K,V}}'>#</a>
 **`Mads.showobservations`** &mdash; *Method*.
 
 
 
 Show observations in the MADS problem dictionary
 
-<a id='Mads.showparameters-Tuple{Associative}' href='#Mads.showparameters-Tuple{Associative}'>#</a>
+<a id='Mads.showparameters-Tuple{Associative{K,V}}' href='#Mads.showparameters-Tuple{Associative{K,V}}'>#</a>
 **`Mads.showparameters`** &mdash; *Method*.
 
 
@@ -2422,7 +2439,7 @@ Sine transformation of a function
 
 Sine transformation of a gradient function
 
-<a id='Mads.spaghettiplot-Tuple{Associative,Int64}' href='#Mads.spaghettiplot-Tuple{Associative,Int64}'>#</a>
+<a id='Mads.spaghettiplot-Tuple{Associative{K,V},Int64}' href='#Mads.spaghettiplot-Tuple{Associative{K,V},Int64}'>#</a>
 **`Mads.spaghettiplot`** &mdash; *Method*.
 
 
@@ -2455,7 +2472,7 @@ Dumps:
 
   * Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 
-<a id='Mads.spaghettiplots-Tuple{Associative,Int64}' href='#Mads.spaghettiplots-Tuple{Associative,Int64}'>#</a>
+<a id='Mads.spaghettiplots-Tuple{Associative{K,V},Int64}' href='#Mads.spaghettiplots-Tuple{Associative{K,V},Int64}'>#</a>
 **`Mads.spaghettiplots`** &mdash; *Method*.
 
 
@@ -2518,14 +2535,14 @@ Execute Mads tests (the tests will be in parallel if processors are defined)
 
 Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
 
-<a id='Mads.void2nan!-Tuple{Associative}' href='#Mads.void2nan!-Tuple{Associative}'>#</a>
+<a id='Mads.void2nan!-Tuple{Associative{K,V}}' href='#Mads.void2nan!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.void2nan!`** &mdash; *Method*.
 
 
 
 Convert Void's into NaN's in a dictionary
 
-<a id='Mads.weightedstats-Tuple{Array,Array{T,1}}' href='#Mads.weightedstats-Tuple{Array,Array{T,1}}'>#</a>
+<a id='Mads.weightedstats-Tuple{Array{T,N},Array{T,1}}' href='#Mads.weightedstats-Tuple{Array{T,N},Array{T,1}}'>#</a>
 **`Mads.weightedstats`** &mdash; *Method*.
 
 
@@ -2542,35 +2559,35 @@ Returns:
   * `mean` : vector of sample means
   * `var` : vector of sample variances
 
-<a id='Mads.welloff!-Tuple{Any,AbstractString}' href='#Mads.welloff!-Tuple{Any,AbstractString}'>#</a>
+<a id='Mads.welloff!-Tuple{Any,ByteString}' href='#Mads.welloff!-Tuple{Any,ByteString}'>#</a>
 **`Mads.welloff!`** &mdash; *Method*.
 
 
 
 Turn off a specific well in the MADS problem dictionary
 
-<a id='Mads.wellon!-Tuple{Associative,AbstractString}' href='#Mads.wellon!-Tuple{Associative,AbstractString}'>#</a>
+<a id='Mads.wellon!-Tuple{Associative{K,V},ByteString}' href='#Mads.wellon!-Tuple{Associative{K,V},ByteString}'>#</a>
 **`Mads.wellon!`** &mdash; *Method*.
 
 
 
 Turn on a specific well in the MADS problem dictionary
 
-<a id='Mads.wells2observations!-Tuple{Associative}' href='#Mads.wells2observations!-Tuple{Associative}'>#</a>
+<a id='Mads.wells2observations!-Tuple{Associative{K,V}}' href='#Mads.wells2observations!-Tuple{Associative{K,V}}'>#</a>
 **`Mads.wells2observations!`** &mdash; *Method*.
 
 
 
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
-<a id='Mads.writeparameters-Tuple{Associative,Any}' href='#Mads.writeparameters-Tuple{Associative,Any}'>#</a>
+<a id='Mads.writeparameters-Tuple{Associative{K,V},Any}' href='#Mads.writeparameters-Tuple{Associative{K,V},Any}'>#</a>
 **`Mads.writeparameters`** &mdash; *Method*.
 
 
 
 Write parameters
 
-<a id='Mads.writeparameters-Tuple{Associative}' href='#Mads.writeparameters-Tuple{Associative}'>#</a>
+<a id='Mads.writeparameters-Tuple{Associative{K,V}}' href='#Mads.writeparameters-Tuple{Associative{K,V}}'>#</a>
 **`Mads.writeparameters`** &mdash; *Method*.
 
 

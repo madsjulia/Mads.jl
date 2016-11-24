@@ -20,7 +20,7 @@ Get symbols
 
 Find a needle in a haystack
 
-<a id='MetaProgTools.populateexpression-Tuple{Symbol,Associative}' href='#MetaProgTools.populateexpression-Tuple{Symbol,Associative}'>#</a>
+<a id='MetaProgTools.populateexpression-Tuple{Symbol,Associative{K,V}}' href='#MetaProgTools.populateexpression-Tuple{Symbol,Associative{K,V}}'>#</a>
 **`MetaProgTools.populateexpression`** &mdash; *Method*.
 
 
