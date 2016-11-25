@@ -832,7 +832,7 @@ function printSAresults(madsdata::Associative, results::Associative)
 end
 
 "Print sensitivity analysis results (method 2)"
-function saltelliprintresults2(madsdata::Associative, results::Associative)
+function printSAresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
 	N = results["samplesize"]

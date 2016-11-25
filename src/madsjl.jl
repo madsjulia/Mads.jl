@@ -1,16 +1,16 @@
 #!/usr/bin/env julia -q --color=yes
 
-function write_cmdline_hist()
-	f = open("madsjl.cmdline_hist", "a+")
-	write(f, join(["$(Dates.now()) :"; "madsjl.jl"; ARGS; "\n"], " ") )
-	close(f)
-end
-
 function madsjl_help()
 	println("Usage:    madsjl.jl {mads_dictionary_file}.mads commands ...")
 	println("Examples: madsjl.jl my_mads_yaml_file.mads forward efast")
 	println("          madsjl.jl diff my_mads_yaml_file1.mads my_mads_yaml_file2.mads")
 	println("          madsjl.jl help")
+end
+
+function write_cmdline_hist()
+	f = open("madsjl.cmdline_hist", "a+")
+	write(f, join(["$(Dates.now()) :"; "madsjl.jl"; ARGS; "\n"], " ") )
+	close(f)
 end
 
 if length(ARGS) < 1
@@ -50,6 +50,11 @@ if isfile(madsfile)
 	@everywhere md = Mads.loadmadsfile(madsfile)
 	@everywhere dir = Mads.getmadsproblemdir(md)
 	@everywhere root = Mads.getmadsrootname(md)
+elseif ARGS[1] == "help"
+	madsjl_help()
+	quit()
+elseif ARGS[1] == "testing"
+	madsjl_help()
 else
 	warn("Expecting Mads input file or Mads script as a first argument!")
 	madsjl_help()

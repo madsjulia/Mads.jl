@@ -1,3 +1,5 @@
+import Base.Test
+
 if Mads.create_tests
 	Mads.create_tests_off()
 	Mads.create_tests_on()
@@ -12,6 +14,7 @@ else
 	Mads.long_tests_on()
 	Mads.long_tests_off()
 end
+Mads.reload()
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 originalSTDOUT = STDOUT;
@@ -27,14 +30,20 @@ Mads.madsdebug("a")
 # Mads.madserror("a")
 Mads.help()
 Mads.copyright()
+if length(ARGS) < 1
+	push!(ARGS, "testing")
+else
+	ARGS[1] = "testing"
+end
+include("../src/madsjl.jl")
 Mads.set_nprocs_per_task(1)
 Mads.setdir()
 Mads.setprocs()
 Mads.setprocs(1)
 Mads.parsenodenames("wc[096-157,160,175]");
-# Mads.functions()
-# Mads.functions("test")
-# Mads.functions(Mads, "test")
+Mads.functions()
+Mads.functions("createmadsproblem")
+Mads.functions(Mads, "loadmadsfile")
 # Mads.create_documentation()
 close(outWrite);
 close(outRead);
@@ -59,3 +68,12 @@ if graph_status
 else
 	Mads.graphoff()
 end
+
+@Base.Test.test Mads.haskeyword(Dict("Problem"=>"ssdr"),"ssdr") == true
+@Base.Test.test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
+@Base.Test.test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
+
+Mads.addkeyword!(Dict(), "ssdr")
+Mads.addkeyword!(Dict("Problem"=>"ssdr"), "ssdr")
+Mads.addkeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
+Mads.addkeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")

@@ -23,12 +23,15 @@ else
 	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
 end
 
-sa_results = Mads.saltellibrute(md, N=10, seed=2015)
-sa_results = Mads.saltelli(md, N=10, seed=2015)
+sa_results = Mads.saltellibruteparallel(md, 1, N=5, seed=2015)
+sa_results = Mads.saltelliparallel(md, 1, N=5, seed=2015)
+# sa_results = Mads.saltellibrute(md, N=10, seed=2015)
+# sa_results = Mads.saltelli(md, N=10, seed=2015)
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
 Mads.printSAresults(md, sa_results)
+Mads.printSAresults2(md, sa_results)
 close(outWrite);
 close(outRead);
 redirect_stdout(originalSTDOUT);

@@ -2,7 +2,33 @@ gaussiancov(h, maxcov, scale) = maxcov * exp(-(h * h) / (scale * scale))
 expcov(h, maxcov, scale) = maxcov * exp(-h / scale)
 sphericalcov(h, maxcov, scale) = (h <= scale ? maxcov * (1 - 1.5 * h / (scale) + .5 * (h / scale) ^ 3) : 0.)
 
-function krige(x0mat::Matrix, X::Matrix, Z::Vector, cov)
+function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)
+	if h == 0.
+		return 0.
+	elseif h < range
+		return (sill - nugget) * ((3 * h / (2 * range) - h ^ 3 / (2 * range ^ 3))) + nugget
+	else
+		return sill
+	end
+end
+
+function exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)
+	if h == 0.
+		return 0.
+	else
+		return (sill - nugget) * (1 - exp(-h / (3 * range))) + nugget
+	end
+end
+
+function gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)
+	if h == 0.
+		return 0.
+	else
+		return (sill - nugget) * (1 - exp(-h * h / (3 * range * range))) + nugget
+	end
+end
+
+function krige(x0mat::Array, X::Matrix, Z::Vector, cov::Function)
 	result = zeros(size(x0mat, 2))
 	covmat = getcovmat(X, cov)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
@@ -36,7 +62,7 @@ function getcovmat(X::Matrix, cov::Function)
 	return covmat
 end
 
-function getcovvec!(covvec, x0::Vector, X::Matrix, cov::Function)
+function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
 	for i = 1:size(X, 2)
 		d = 0.
 		for j = 1:size(X, 1)
@@ -50,7 +76,8 @@ end
 
 function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
 	covmat = getcovmat(X, cov)
-	covvec = getcovvec(x0, X, cov)
+	covvec = Array(Float64, size(X, 2))
+	covvec = getcovvec!(covvec, x0, X, cov)
 	cov0 = cov(0.)
 	return estimationerror(w, x0, X, covmat, covvec, cov0)
 end

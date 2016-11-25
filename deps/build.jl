@@ -30,8 +30,6 @@ else
 
 	info("Installing Python YAML & MatPlotLib using pip ...")
 	pip.main(args)
-	
-	sleep(10)
 
 	try
 		eval(:(@PyCall.pyimport yaml))

@@ -25,3 +25,12 @@ include(workdir * "optimization_callback.jl")
 include(workdir * "optimization_linear_problem.jl")
 # include(workdir * "optimization_linear_problem_nlopt.jl") # requires NLopt
 include(workdir * "optimization_linear_problem+template.jl")
+
+Mads.addkeyword!(md, "ssdr")
+Mads.residuals(md)
+
+p = Mads.getparamdict(md)
+f = Mads.makemadscommandfunctionandgradient(md) # make MADS command gradient function
+f(p)
+f = Mads.makemadscommandgradient(md)
+f(p)

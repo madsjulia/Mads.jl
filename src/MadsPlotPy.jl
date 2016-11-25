@@ -20,6 +20,10 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
+	if !haskey(madsdata, "Grid")
+		madswarn("Grid properties are not defined in the Mads dictionary")
+		return
+	end
 	if isdefined(:PyCall)
 		eval(:(@PyCall.pyimport matplotlib.ticker as mt))
 		eval(:(@PyCall.pyimport matplotlib.colors as mcc))
@@ -66,8 +70,8 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 end
 
 function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
-	s = forwardgrid(madsdata)
-	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
+	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	plotgrid(madsdata, paramvalues; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
 function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")

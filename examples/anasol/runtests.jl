@@ -24,6 +24,7 @@ if Mads.create_tests
 end
 
 Mads.forwardgrid(md)
+Mads.plotgrid(md)
 Mads.of(md)
 Mads.residuals(md)
 pd = Mads.getparamdict(md)

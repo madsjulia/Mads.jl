@@ -396,7 +396,7 @@ end
 
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
-	function madscommandgradient(parameters::Dict; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
+	function madscommandgradient(parameters::Associative; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		forwardrun, gradient = fg(parameters; dx=dx, center=center)
 		return gradient
 	end

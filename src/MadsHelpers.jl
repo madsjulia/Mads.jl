@@ -75,7 +75,37 @@ Examples:
 function haskeyword(madsdata::Associative, keyword::String)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
-
 function haskeyword(madsdata::Associative, class::String, keyword::String)
-	return haskey(madsdata[class], keyword) ? true : false
+	if typeof(madsdata[class]) <: Associative
+		return haskey(madsdata[class], keyword) ? true : false
+	elseif typeof(madsdata[class]) <: String
+		return madsdata[class] == keyword
+	elseif typeof(madsdata[class]) <: Vector{ASCIIString}
+		for i in madsdata[class]
+			if i == keyword
+				return true
+			end
+		end
+		return false
+	else
+		return false
+	end
+end
+
+function addkeyword!(madsdata::Associative, keyword::String)
+	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
+	return
+end
+function addkeyword!(madsdata::Associative, class::String, keyword::String)
+	if haskeyword(madsdata, class, keyword)
+		madswarn("Keyword already `$keyword` exists")
+		return
+	end
+	if typeof(madsdata[class]) <: Associative
+		push!(madsdata[class], keyword=>true)
+	elseif typeof(madsdata[class]) <: String
+		madsdata[class] = [keyword, madsdata[class]]
+	elseif typeof(madsdata[class]) <: Vector{ASCIIString}
+		push!(madsdata[class], keyword)
+	end
 end
