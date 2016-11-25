@@ -100,3 +100,16 @@ function free()
 		Pkg.free(i)
 	end
 end
+
+"Create web documentation files for Mads functions"
+function create_documentation()
+	Documenter.makedocs(root = Pkg.dir("Mads", "docs"), doctest=false, clean=true)
+
+	d = pwd()
+	cd(Pkg.dir("Mads"))
+	# run(`git pull gh gh-pages`)
+	run(`mkdocs build --clean`)
+	run(`mkdocs gh-deploy --clean`)
+	cd(d)
+	return
+end

@@ -899,8 +899,8 @@ function deleteNaN!(df::DataFrames.DataFrame)
 end
 
 "Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data"
-function maxtorealmaxFloat32!(df::DataFrames.DataFrame)
-	limit = realmax(Float32) / 10
+function maxtorealmax!(df::DataFrames.DataFrame)
+	limit = realmax(Float32)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
 			for j in 1:length(df[i])

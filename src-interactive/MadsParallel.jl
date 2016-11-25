@@ -219,17 +219,16 @@ function setdir(dir)
 		cd(dir)
 	end
 end
-
 function setdir()
 	dir = remotecall_fetch(()->pwd(), 1)
 	setdir(dir)
 end
 
-function runremote(nodenames::Array=[], cmd="")
+"""
+Run remote command on a series of servers
+"""
+function runremote(cmd::String, nodenames::Array=madsservers)
 	output = Array(String, 0)
-	if length(nodenames) == 0
-		nodenames = madsservers
-	end
 	for i in nodenames
 		try
 			o = readall(`ssh -t $i $cmd`)
@@ -243,14 +242,55 @@ function runremote(nodenames::Array=[], cmd="")
 	return output;
 end
 
-function madscores(nodenames::Array=[])
-	runremote(nodenames, "grep -c ^processor /proc/cpuinfo")
+function madscores(nodenames::Array=madsservers)
+	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
-function madsup(nodenames::Array=[])
-	runremote(nodenames, "uptime 2>/dev/null")
+function madsup(nodenames::Array=madsservers)
+	runremote("uptime 2>/dev/null", nodenames)
 end
 
-function madsload(nodenames::Array=[])
-	runremote(nodenames, "top -n 1 2>/dev/null")
+function madsload(nodenames::Array=madsservers)
+	runremote("top -n 1 2>/dev/null", nodenames)
+end
+
+"""
+Run external command and pipe stdout and stderr
+"""
+function runcmd(cmd::Cmd, quiet::Bool=false)
+	cmdin = Pipe()
+	cmdout = Pipe()
+	cmderr = Pipe()
+	cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
+	wait(cmdproc)
+	# @show cmdproc.exitcode
+	# @show cmdproc.termsignal
+	close(cmdin)
+	close(cmdout.in)
+	close(cmderr.in)
+	if !quiet || cmdproc.exitcode != 0
+		erroutput = readlines(cmderr)
+		if length(erroutput) > 0
+			for i in erroutput
+				warn("$(strip(i))")
+			end	
+		end
+	end
+	if !quiet || cmdproc.exitcode != 0
+		output = readlines(cmdout)
+		l = length(output)
+		if l > 0
+			s = (l < 100) ? 1 : l - 100
+			for i in output[s:end]
+				println("$(strip(i))")
+				if ismatch(r"error"i, i)
+					madswarn("$(strip(i))")
+				end
+			end
+		end
+	end
+	if cmdproc.exitcode != 0
+		error("Execution of command `$(string(cmd))` produced an error!")
+	end
+	return cmdout, cmderr
 end

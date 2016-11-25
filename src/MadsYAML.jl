@@ -125,22 +125,3 @@ end
 function readyamlpredictions(filename::String) # read YAML predictions
 	return loadyamlfile(filename)
 end
-
-"Dump well data from MADS problem dictionary into a ASCII file"
-function dumpwelldata(filename::String, madsdata)
-	outfile = open(filename, "w")
-	write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")
-	for n in keys(madsdata["Wells"])
-		x = madsdata["Wells"]["$n"]["x"]
-		y = madsdata["Wells"]["$n"]["y"]
-		z0 = madsdata["Wells"]["$n"]["z0"]
-		z1 = madsdata["Wells"]["$n"]["z1"]
-		o = madsdata["Wells"]["$n"]["obs"]
-		for i in 1:length(o)
-			c = o[i]["c"]
-			t = o[i]["t"]
-			write(outfile, "$n, $x, $y, $z0, $t, $c\n")
-		end
-	end
-	close(outfile)
-end

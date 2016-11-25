@@ -569,3 +569,24 @@ function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename:
 	observations = Dict{String, Float64}(zip(obsid, obsval))
 	return observations
 end
+
+"Dump well data from MADS problem dictionary into a ASCII file"
+function dumpwelldata(madsdata::Associative, filename::String)
+	if haskey(madsdata, "Wells")
+		outfile = open(filename, "w")
+		write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")
+		for n in keys(madsdata["Wells"])
+			x = madsdata["Wells"]["$n"]["x"]
+			y = madsdata["Wells"]["$n"]["y"]
+			z0 = madsdata["Wells"]["$n"]["z0"]
+			z1 = madsdata["Wells"]["$n"]["z1"]
+			o = madsdata["Wells"]["$n"]["obs"]
+			for i in 1:length(o)
+				c = o[i]["c"]
+				t = o[i]["t"]
+				write(outfile, "$n, $x, $y, $z0, $t, $c\n")
+			end
+		end
+		close(outfile)
+	end
+end

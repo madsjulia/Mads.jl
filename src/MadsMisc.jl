@@ -1,47 +1,6 @@
 import MetaProgTools
 
 """
-Run external command and pipe stdout and stderr
-"""
-function runcmd(cmd::Cmd, quiet::Bool=false)
-	cmdin = Pipe()
-	cmdout = Pipe()
-	cmderr = Pipe()
-	cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
-	wait(cmdproc)
-	# @show cmdproc.exitcode
-	# @show cmdproc.termsignal
-	close(cmdin)
-	close(cmdout.in)
-	close(cmderr.in)
-	if !quiet || cmdproc.exitcode != 0
-		erroutput = readlines(cmderr)
-		if length(erroutput) > 0
-			for i in erroutput
-				warn("$(strip(i))")
-			end	
-		end
-	end
-	if !quiet || cmdproc.exitcode != 0
-		output = readlines(cmdout)
-		l = length(output)
-		if l > 0
-			s = (l < 100) ? 1 : l - 100
-			for i in output[s:end]
-				println("$(strip(i))")
-				if ismatch(r"error"i, i)
-					madswarn("$(strip(i))")
-				end
-			end
-		end
-	end
-	if cmdproc.exitcode != 0
-		error("Execution of command $cmd produced an error!")
-	end
-	return cmdout, cmderr
-end
-
-"""
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
 `Mads.makearrayfunction(madsdata, f)`

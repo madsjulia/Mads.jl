@@ -133,33 +133,37 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 		pinit = [1.,1.]
 		pmin = [-10,-5]
 		pmax = [10,5]
-		function fo(t::Number, p::Vector)
+		function fo1(t::Number, p::Vector)
 			return p[1] * t + p[2]
 		end
+		fo = fo1
 	elseif model == 2
 		np = 3
 		pinit = [1.,1.,1.]
 		pmin = [-10,-10,-5]
 		pmax = [10,10,5]
-		function fo(t::Number, p::Vector)
+		function fo2(t::Number, p::Vector)
 			return p[1] * (t ^ 1.1) + p[2] * t + p[3]
 		end
+		fo = fo2
 	elseif model == 3
 		np = 4
 		pinit = [1.,1.,1.,1.]
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
-		function fo(t::Number, p::Vector)
+		function fo3(t::Number, p::Vector)
 			return p[1] * (t ^ p[4]) + p[2] * t + p[3]
 		end
+		fo = fo3
 	elseif model == 4
 		np = 4
 		pinit = [1.,1.,1.,1.]
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
-		function fo(t::Number, p::Vector)
+		function fo4(t::Number, p::Vector)
 			return p[1] * exp(t * p[4]) + p[2] * t + p[3]
 		end
+		fo = fo4
 	end
 	plotrange = 1:0.1:5
 	ymin = Array(Float64, length(plotrange))
