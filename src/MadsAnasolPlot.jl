@@ -16,12 +16,12 @@ Arguments:
 Dumps: image file with name `filename` and in specified `format`
 """
 function plotmass(lambda, mass_injected, mass_reduced, filename::String; format="")
-	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Gadfly.Guide.xlabel("Reaction Rate Constant [1/d]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)
-	Base.display(p1)
-	p2 = Gadfly.plot(x=mass_injected, y=mass_reduced, Gadfly.Guide.xlabel("Mass Injected [kg]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Geom.point, Scale.x_log10, Scale.y_log10)
-	Base.display(p2)
-	p3 = Gadfly.plot(x=mass_injected, y=mass_reduced./mass_injected, Gadfly.Guide.xlabel("Mass Injected [kg]"), Gadfly.Guide.ylabel("Fraction of the Reduced Mass [-]"), Geom.point, Scale.x_log10, Scale.y_log10)
-	Base.display(p3)
+	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Gadfly.Guide.xlabel("Reaction Rate Constant [1/d]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Gadfly.Geom.point, Gadfly.Scale.x_log10, Gadfly.Scale.y_log10)
+	#Base.display(p1)
+	p2 = Gadfly.plot(x=mass_injected, y=mass_reduced, Gadfly.Guide.xlabel("Mass Injected [kg]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Gadfly.Geom.point, Gadfly.Scale.x_log10, Gadfly.Scale.y_log10)
+	#Base.display(p2)
+	p3 = Gadfly.plot(x=mass_injected, y=mass_reduced./mass_injected, Gadfly.Guide.xlabel("Mass Injected [kg]"), Gadfly.Guide.ylabel("Fraction of the Reduced Mass [-]"), Gadfly.Geom.point, Gadfly.Scale.x_log10, Gadfly.Scale.y_log10)
+	#Base.display(p3)
 	filename, format = setplotfileformat(filename, format)
 	p = Gadfly.vstack(p1, p2, p3)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 8Gadfly.inch), p)

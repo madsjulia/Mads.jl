@@ -84,3 +84,6 @@ redirect_stdout(originalSTDOUT);
 
 Mads.setparamsdistnormal!(md, fill(1, length(m)), fill(1, length(m)))
 Mads.setparamsdistuniform!(md, fill(1, length(m)), fill(1, length(m)))
+
+
+Mads.computemass("w01lambda", time=50, path=workdir)

@@ -234,7 +234,7 @@ Returns:
 - `mass_injected` : total injected mass
 - `mass_reduced` : total reduced mass
 """
-function computemass(madsdata::Associative; time::Float64=0.)
+function computemass(madsdata::Associative; time::Number=0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
 		if grid_time > 0
@@ -293,14 +293,14 @@ Returns:
 - `mass_injected` : array with associated total injected mass
 - `mass_reduced` : array with associated total reduced mass
 """
-function computemass(madsfiles; time=0, path = ".")
+function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
-	Mads.madsinfo("""Number of files = $nf""")
+	Mads.madsinfo("Number of files = $nf")
 	lambda = Array(Float64, nf)
 	mass_injected = Array(Float64, nf)
 	mass_reduced = Array(Float64, nf)
-	@ProgressMeter.showprogress 1 "Computing reducted mass ..." for i = 1:nf
+	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(path * "/" * mf[i])
 		l = md["Parameters"]["lambda"]["init"]
 		if l < eps(Float64)
@@ -308,8 +308,8 @@ function computemass(madsfiles; time=0, path = ".")
 		end
 		lambda[i] = l
 		mi, mr = Mads.computemass(md, time=time)
-		mass_injected[i] = mi
-		mass_reduced[i] = mr
+		mass_injected[i] = Float64(mi)
+		mass_reduced[i] = Float64(mi)
 	end
 	graphoutput && plotmass(lambda, mass_injected, mass_reduced, path * "/mass_reduced")
 	return lambda, mass_injected, mass_reduced
