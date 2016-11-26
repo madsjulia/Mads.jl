@@ -27,7 +27,6 @@ function status(; git::Bool=true, gitmore::Bool=false)
 		Mads.status(i, git=git, gitmore=gitmore)
 	end
 end
-
 function status(madsmodule::String; git::Bool=true, gitmore::Bool=false)
 	if git
 		cwd = pwd()
@@ -77,7 +76,6 @@ function tag(sym::Symbol=:patch)
 		Mads.tag(i, sym)
 	end
 end
-
 function tag(madsmodule::String, sym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag

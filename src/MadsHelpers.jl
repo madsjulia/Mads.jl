@@ -54,7 +54,7 @@ function resetmodelruns()
 end
 
 """
-Check for a `keyword` in a class within the Mads dictionary `madsdata`
+Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 - `Mads.haskeyword(madsdata, keyword)`
 - `Mads.haskeyword(madsdata, class, keyword)`
@@ -92,6 +92,7 @@ function haskeyword(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
+"Add a `keyword` in a `class` within the Mads dictionary `madsdata`"
 function addkeyword!(madsdata::Associative, keyword::String)
 	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
 	return

@@ -74,7 +74,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{ASCIIString,1}}=Array(ASCIIString, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(nodenames) > 0 || mads_servers
@@ -227,11 +227,11 @@ end
 """
 Run remote command on a series of servers
 """
-function runremote(cmd::String, nodenames::Array=madsservers)
+function runremote(cmd::String, nodenames::Array{ASCIIString,1}=madsservers)
 	output = Array(String, 0)
 	for i in nodenames
 		try
-			o = readall(`ssh -t $i $cmd`)
+			o = readstring(`ssh -t $i $cmd`)
 			push!(output, strip(o))
 			println("$i: $o")
 		catch
@@ -242,15 +242,24 @@ function runremote(cmd::String, nodenames::Array=madsservers)
 	return output;
 end
 
-function madscores(nodenames::Array=madsservers)
+"""
+Check the number of processors on a series of servers
+"""
+function madscores(nodenames::Array{ASCIIString,1}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
-function madsup(nodenames::Array=madsservers)
+"""
+Check the uptime of a series of servers
+"""
+function madsup(nodenames::Array{ASCIIString,1}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
 end
 
-function madsload(nodenames::Array=madsservers)
+"""
+Check the load of a series of servers
+"""
+function madsload(nodenames::Array{ASCIIString,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
 end
 
