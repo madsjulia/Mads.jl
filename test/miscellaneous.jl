@@ -14,8 +14,10 @@ else
 	Mads.long_tests_on()
 	Mads.long_tests_off()
 end
+
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
+
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
 quiet_status = Mads.quiet
@@ -23,9 +25,6 @@ Mads.quietoff()
 
 Mads.madsoutput("a")
 Mads.madsdebug("a")
-# Mads.madsinfo("a")
-# Mads.madswarn("a")
-# Mads.madserror("a")
 Mads.help()
 Mads.copyright()
 if length(ARGS) < 1

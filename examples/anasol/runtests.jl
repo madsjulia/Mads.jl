@@ -4,7 +4,7 @@ import Base.Test
 
 workdir = Mads.madsdir * "/../examples/anasol"
 md = Mads.loadmadsfile("$workdir/w01shortexp.mads")
-Mads.forward(md)
+Mads.forward(md, all=true)
 Mads.parametersample(md, 5, init_dist=true)
 Mads.parametersample(md, 5, init_dist=false)
 md = Mads.loadmadsfile("$workdir/w01short.mads")
@@ -87,4 +87,3 @@ Mads.setparamsdistnormal!(md, fill(1, length(m)), fill(1, length(m)))
 Mads.setparamsdistuniform!(md, fill(1, length(m)), fill(1, length(m)))
 
 Mads.computemass("w01lambda", time=50, path=workdir)
-Mads.readyamlpredictions("$workdir/w01lambda1.mads"; julia=true)
