@@ -685,21 +685,9 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 	for i = 1:length(paramkeys)
 		pv = pm = pt = 0
 		for j = 1:length(obskeys)
-			if typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Void
-				m = 0
-			else
-				m = saresults["mes"][obskeys[j]][paramkeys[i]]
-			end
-			if typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Void
-				t = 0
-			else
-				t = saresults["tes"][obskeys[j]][paramkeys[i]]
-			end
-			if typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Void
-				v = 0
-			else
-				v = saresults["var"][obskeys[j]][paramkeys[i]]
-			end
+			m = typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
+			t = typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
+			v = typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
 			pv += isnan(v) ? 0 : v
 			pm += isnan(m) ? 0 : m
 			pt += isnan(t) ? 0 : t

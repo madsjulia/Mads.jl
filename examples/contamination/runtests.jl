@@ -58,14 +58,18 @@ if isdefined(:Gadfly)
 	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
 	Mads.plotseries(rand(4,5), "test.png")
 	Mads.display("test.png")
-	rm("test.png")
+	if isfile("test.png")
+		rm("test.png")
+	end
 end
 
 Mads.setobstime!(md, r"_(.*)")
 Mads.setobstime!(md)
 
 Mads.dumpwelldata(md, "wells.dat")
-rm("wells.dat")
+if isfile("wells.dat")
+	rm("wells.dat")
+end
 
 if isdefined(:Gadfly)
 	sa_results = Mads.saltelli(md, N=5, seed=2015)
