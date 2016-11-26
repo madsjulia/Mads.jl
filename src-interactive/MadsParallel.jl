@@ -46,8 +46,10 @@ function set_nprocs_per_task(local_nprocs_per_task::Int=1)
 	global nprocs_per_task = local_nprocs_per_task
 end
 
+if !isdefined(:sprintf)
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
+end
 
 """
 Set the available processors based on environmental variables. Supports SLURM only at the moment.
