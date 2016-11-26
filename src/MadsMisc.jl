@@ -110,6 +110,9 @@ function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	end
 end
 
+"Convert `@sprintf` macro into `sprintf` function"
+sprintf(args...) = eval(:@sprintf($(args...)))
+
 "Parse distribution from a string"
 function getdistribution(dist::String, i::String, inputtype::String)
 	distribution = nothing
