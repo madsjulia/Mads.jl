@@ -131,6 +131,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include("../src-interactive/MadsDisplay.jl")
 	include("../src-external/MadsSimulators.jl")
 	include("../src-external/MadsParsers.jl")
+	include("../src-old/MadsCMads.jl")
 end
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")

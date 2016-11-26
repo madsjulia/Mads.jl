@@ -287,11 +287,11 @@ function paramrand(madsdata::Associative, parameterkey::String; numsamples::Inte
 		if Mads.isopt(madsdata, parameterkey)
 			if Mads.islog(madsdata, parameterkey)
 				dist = paramdist[parameterkey]
-				if typeof(dist) == Distributions.Uniform
+				if typeof(dist) <: Distributions.Uniform
 					a = log10(dist.a)
 					b = log10(dist.b)
 					return 10.^(a + (b - a) * Distributions.rand(numsamples))
-				elseif typeof(dist) == Distributions.Normal
+				elseif typeof(dist) <: Distributions.Normal
 					μ = log10(dist.μ)
 					return 10.^(μ + dist.σ * Distributions.randn(numsamples))
 				end
