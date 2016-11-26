@@ -12,7 +12,7 @@ function setdefaultplotformat(format::String)
 	if ismatch(r"^PNG|PDF|PS|SVG", uppercase(format))
 		global graphbackend = uppercase(format);
 	else
-		madswarn("Provided format is not acceptable! (PNG|PDF|PS|SVG; format == $format)")
+		madswarn("Requested format ($format) is not acceptable! (PNG|PDF|PS|SVG)")
 	end
 end
 

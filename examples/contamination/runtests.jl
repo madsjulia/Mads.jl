@@ -27,6 +27,12 @@ forward_predictions = Mads.forward(md, inverse_parameters) # execute forward mod
 
 localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collect(values(inverse_parameters)), obs=collect(values(forward_predictions))) # perform local sensitivity analysis
 
+(outRead, outWrite) = redirect_stdout();
+Mads.modelinformationcriteria(md)
+close(outWrite);
+close(outRead);
+redirect_stdout(originalSTDOUT);
+
 samples, llhoods = Mads.sampling(param_values, localsa_results["jacobian"], 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
 
 obs_samples = Mads.forward(md, samples)
@@ -73,19 +79,6 @@ if isdefined(:Gadfly)
 	Mads.plotobsSAresults(md, sa_results, separate_files=true)
 end
 
-Mads.addsource!(md)
 Mads.computemass(md; time=50.0)
 
-(outRead, outWrite) = redirect_stdout();
-quiet_status = Mads.quiet
-Mads.quietoff()
-Mads.modelinformationcriteria(md)
-close(outWrite);
-close(outRead);
-redirect_stdout(originalSTDOUT);
-Mads.quieton()
-if quiet_status
-	Mads.quieton()
-else
-	Mads.quietoff()
-end
+Mads.addsource!(md)
