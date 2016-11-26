@@ -29,6 +29,11 @@ include(workdir * "optimization_linear_problem+template.jl")
 Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 
+if isdefined(:Gadfly)
+    Mads.setobstime!(md, "o")
+    Mads.plotmatches(md)
+end
+
 p = Mads.getparamdict(md)
 f = Mads.makemadscommandfunctionandgradient(md) # make MADS command gradient function
 f(p)

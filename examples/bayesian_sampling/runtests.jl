@@ -24,7 +24,7 @@ mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters
 Mads.forward(md, mcmcchain.value)
 if isdefined(:Gadfly)
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
-	Mads.spaghettiplots(md, mcmcvalues, keyword="test")
+	Mads.spaghettiplots(md, mcmcvalues, keyword="test", obs_plot_dots=true)
 	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplots(md, 3, keyword="test")
 	Mads.spaghettiplot(md, 3, keyword="test")

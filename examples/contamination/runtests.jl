@@ -56,11 +56,6 @@ paramvalues = Mads.parametersample(md, 10)
 if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
-	Mads.plotseries(rand(4,5), "test.png")
-	Mads.display("test.png")
-	if isfile("test.png")
-		rm("test.png")
-	end
 end
 
 Mads.setobstime!(md, r"_(.*)")
@@ -75,6 +70,7 @@ if isdefined(:Gadfly)
 	sa_results = Mads.saltelli(md, N=5, seed=2015)
 	Mads.plotwellSAresults(md, sa_results)
 	Mads.plotobsSAresults(md, sa_results)
+	Mads.plotobsSAresults(md, sa_results, separate_files=true)
 end
 
 Mads.addsource!(md)

@@ -37,6 +37,9 @@ include("../src/madsjl.jl")
 Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
+if isdefined(Mads, :runcmd)
+	Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
+end
 # Mads.create_documentation()
 close(outWrite);
 close(outRead);
@@ -47,12 +50,29 @@ if quiet_status
 else
 	Mads.quietoff()
 end
+
 Mads.setverbositylevel(1)
+
 if !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.setplotfileformat("a.ps", "")
+	Mads.setplotfileformat("a", "EPS")
+	Mads.setdefaultplotformat("TIFF")
 	Mads.setdefaultplotformat("EPS")
 	Mads.setdefaultplotformat("SVG")
 	Mads.display("mads.png")
 end
+
+if isdefined(:Gadfly)
+	Mads.plotseries(rand(4,5), "test.png", combined=false)
+	Mads.plotseries(rand(4,5), "test.png")
+	if isdefined(Mads, :display)
+		Mads.display("test.png")
+	end
+	if isfile("test.png")
+		rm("test.png")
+	end
+end
+
 graph_status = Mads.graphoutput
 Mads.graphoff()
 Mads.graphon()
@@ -73,7 +93,6 @@ Mads.addkeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
 
 if !haskey(ENV, "MADS_TRAVIS")
 	Mads.status()
-	Mads.runcmd(`ls`);
 	Mads.set_nprocs_per_task(1)
 	Mads.setdir()
 	Mads.setprocs()

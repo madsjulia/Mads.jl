@@ -128,6 +128,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include("../src-interactive/MadsPublish.jl")
 	include("../src-interactive/MadsParallel.jl")
 	include("../src-interactive/MadsTest.jl")
+	include("../src-interactive/MadsDisplay.jl")
 	include("../src-external/MadsSimulators.jl")
 	include("../src-external/MadsParsers.jl")
 end

@@ -1,64 +1,45 @@
 import JSON
 import YAML
 
-if isdefined(:yaml) && isdefined(:YAML) # using PyCall/PyYAML and YAML
-	"""
-	Load YAML file
+"""
+Load YAML file
 
-	Arguments:
+Arguments:
 
-	- `filename` : file name
-	- `julia=false` : use Python YAML library (if available)
-	- `julia=true` : use Julia YAML library (if available)
-	"""
-	function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
-		yamldata = DataStructures.OrderedDict()
-		f = open(filename)
-		if julia
-			yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
-		else
-			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
-		end
-		close(f)
-		return yamldata # this is not OrderedDict()
+- `filename` : file name
+- `julia=false` : use Python YAML library (if available)
+- `julia=true` : use Julia YAML library (if available)
+"""
+function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
+	julia = isdefined(Mads, :yaml) ? julia : true
+	yamldata = DataStructures.OrderedDict()
+	f = open(filename)
+	if julia
+		yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
+	else
+		yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 	end
+	close(f)
+	return yamldata # this is not OrderedDict()
+end
 
-	"""
-	Dump YAML file
+"""
+Dump YAML file
 
-	Arguments:
+Arguments:
 
-	- `filename` : file name
-	- `yamldata` : YAML data
-	"""
-	function dumpyamlfile(filename::String, yamldata; julia::Bool=false) # dump YAML file
-		f = open(filename, "w")
-		if julia
-			JSON.print(f, yamldata)
-		else
-			write(f, yaml.dump(yamldata, width=255)) # for now we use the python library because the YAML julia library cannot dump
-		end
-		close(f)
+- `filename` : file name
+- `yamldata` : YAML data
+"""
+function dumpyamlfile(filename::String, yamldata; julia::Bool=false) # dump YAML file
+	julia = isdefined(Mads, :yaml) ? julia : true
+	f = open(filename, "w")
+	if julia
+		JSON.print(f, yamldata)
+	else
+		write(f, yaml.dump(yamldata, width=255)) # we use the python library because the YAML julia library cannot dump
 	end
-elseif isdefined(:YAML) # using YAML in Julia
-	warn("Julia YAML module is used")
-	"Load YAML file"
-	function loadyamlfile(filename::String; julia::Bool=true)
-		yamldata = DataStructures.OrderedDict()
-		f = open(filename)
-		yamldata = YAML.load(f)
-		close(f)
-		return yamldata # this is not OrderedDict()
-	end
-
-	"Dump YAML file in JSON format"
-	function dumpyamlfile(filename::String, yamldata; julia::Bool=true)
-		Mads.dumpjsonfile(filename, yamldata)
-		return yamldata # this is OrderedDict()
-	end
-else
-	Mads.madserror("MADS needs YAML (and optionally PyYAML)!")
-	throw("Missing modules!")
+	close(f)
 end
 
 """
@@ -122,6 +103,6 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 end
 
 "Read MADS model predictions from a YAML file `filename`"
-function readyamlpredictions(filename::String) # read YAML predictions
-	return loadyamlfile(filename)
+function readyamlpredictions(filename::String; julia::Bool=false) # read YAML predictions
+	return loadyamlfile(filename; julia=julia)
 end

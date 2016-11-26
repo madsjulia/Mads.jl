@@ -59,8 +59,9 @@ Mads.welloff!(md, "w1a")
 Mads.wellon!(md, "w1a")
 if isdefined(:Gadfly)
 	fp = Mads.forward(md; all=true)
-	Mads.plotmadsproblem(md)
+	Mads.plotmadsproblem(md, keyword="test")
 	Mads.plotmatches(md)
+    Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
 	Mads.plotmatches(md, fp)
 	Mads.plotmatches(md, fp, r"w1a")
 end
@@ -85,5 +86,5 @@ redirect_stdout(originalSTDOUT);
 Mads.setparamsdistnormal!(md, fill(1, length(m)), fill(1, length(m)))
 Mads.setparamsdistuniform!(md, fill(1, length(m)), fill(1, length(m)))
 
-
 Mads.computemass("w01lambda", time=50, path=workdir)
+Mads.readyamlpredictions("$workdir/w01lambda1.mads"; julia=true)

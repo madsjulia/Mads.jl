@@ -4,48 +4,6 @@ import ProgressMeter
 import DataFrames
 import DataStructures
 import Gadfly
-import Images
-
-"""
-Display image file
-"""
-function display(filename::String)
-	if !isfile(filename)
-		warn("File `$filename` is missing!")
-		return
-	end
-	if isdefined(:TerminalExtensions)
-		trytoopen = false
-		ext = lowercase(Mads.getextension(filename))
-		if ext == "svg"
-			root = Mads.getrootname(filename)
-			filename2 = root * ".png"
-			try
-				run(`convert -density 90 -background none $filename $filename2`)
-				img = Images.load(filename2)
-				Base.display(img)
-			catch
-				trytoopen = true
-			end
-		else
-			img = Images.load(filename)
-			Base.display(img)
-		end
-	else
-		trytoopen = true
-	end
-	if trytoopen
-		try
-			run(`open $filename`)
-		catch
-			try
-				run(`xdg-open $filename`)
-			catch
-				warn("Do not know how to open `$filename`")
-			end
-		end
-	end
-end
 
 """
 Set the default plot format (`SVG` is the default format)
@@ -533,11 +491,7 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 	i = 1
 	for obskey in obskeys
 		d[1,i] = obsdict[obskey]["time"]
-		if haskey(obsdict[obskey], "target")
-			d[2,i] = obsdict[obskey]["target"]
-		else
-			d[2,i] = NaN
-		end
+		d[2,i] = haskey(obsdict[obskey], "target") ? obsdict[obskey]["target"] : NaN
 		j = 1
 		for paramkey in paramkeys
 			mes[j,i] = result["mes"][obskey][paramkey]
@@ -583,7 +537,7 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
 			Mads.madswarn("""TES values larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
+			maxtorealmax!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -608,7 +562,7 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
 			Mads.madswarn("""MES values larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
+			maxtorealmax!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -633,7 +587,7 @@ function plotobsSAresults(madsdata::Associative, result; filter="", keyword="", 
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
 			Mads.madswarn("""Variance values larger than $(realmax(Float32))""")
-			maxtorealmaxFloat32!(vdf)
+			maxtorealmax!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -791,11 +745,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 					startj = endj + 1
 				end
 			end
-			if length(pp) > 1
-				pl = Gadfly.vstack(pp...)
-			else
-				pl = p
-			end
+			pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 		end
 		if keyword == ""
 			filename = string("$rootname-$paramkey-$numberofsamples-spaghetti")
@@ -963,11 +913,7 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 				startj = endj + 1
 			end
 		end
-		if length(pp) > 1
-			pl = Gadfly.vstack(pp...)
-		else
-			pl = p
-		end
+		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 	end
 	if filename == ""
 		if keyword == ""
