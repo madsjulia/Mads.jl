@@ -49,5 +49,5 @@ Mads.createobservations!(md, t, ys[:,1], weight_type = "inverse", logtransform=t
 Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight = 10)
 Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight_type = "inverse", logtransform=true)
 Mads.createobservations!(md, t, ys[:,1])
-Mads.madsinfo("Show MADS Observations ...")
+# Mads.madsinfo("Show MADS Observations ...")
 # Mads.showobservations(md)

@@ -1,32 +1,37 @@
 arr = [["a",1] ["b",1.6]]
 
-Mads.dumpasciifile("a.dat", arr)
-arr1 = Mads.loadasciifile("a.dat")
-# @assert arr==arr1
-if isfile("a.dat")
-    rm("a.dat")
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+    workdir = Mads.madsdir * "/../test/"
 end
 
-Mads.dumpjsonfile("a.json", arr)
-arr1 = Mads.loadjsonfile("a.json")
+Mads.dumpasciifile(workdir * "a.dat", arr)
+arr1 = Mads.loadasciifile(workdir * "a.dat")
 # @assert arr==arr1
-if isfile("a.json")
-    rm("a.json")
+if isfile(workdir * "a.dat")
+    rm(workdir * "a.dat")
 end
 
-Mads.dumpyamlfile("a.yaml", arr)
-arr1 = Mads.loadyamlfile("a.yaml")
+Mads.dumpjsonfile(workdir * "a.json", arr)
+arr1 = Mads.loadjsonfile(workdir * "a.json")
 # @assert arr==arr1
-if isfile("a.yaml")
-    rm("a.yaml")
+if isfile(workdir * "a.json")
+    rm(workdir * "a.json")
 end
 
-Mads.dumpyamlfile("a.yaml", arr, julia=true)
-arr1 = Mads.loadyamlfile("a.yaml")
+Mads.dumpyamlfile(workdir * "a.yaml", arr)
+arr1 = Mads.loadyamlfile(workdir * "a.yaml")
 # @assert arr==arr1
-if isfile("a.yaml")
-    rm("a.yaml")
+if isfile(workdir * "a.yaml")
+    rm(workdir * "a.yaml")
 end
 
-Mads.searchdir("a")
-Mads.searchdir(r"a")
+Mads.dumpyamlfile(workdir * "a.yaml", arr, julia=true)
+arr1 = Mads.loadyamlfile(workdir * "a.yaml")
+# @assert arr==arr1
+if isfile(workdir * "a.yaml")
+    rm(workdir * "a.yaml")
+end
+
+Mads.searchdir("a", path = workdir)
+Mads.searchdir(r"a", path = workdir)

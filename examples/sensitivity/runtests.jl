@@ -23,8 +23,9 @@ else
 	@Base.Test.test !in( Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false )
 end
 
-sa_results = Mads.saltellibruteparallel(md, 2, N=5, seed=2015)
-sa_results = Mads.saltelliparallel(md, 2, N=5, seed=2015)
+sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true)
+sa_results = Mads.saltellibruteparallel(md, 2; N=5, seed=2015)
+sa_results = Mads.saltelliparallel(md, 2; N=5, seed=2015)
 # sa_results = Mads.saltellibrute(md, N=10, seed=2015)
 # sa_results = Mads.saltelli(md, N=10, seed=2015)
 
@@ -36,4 +37,9 @@ close(outWrite);
 close(outRead);
 redirect_stdout(originalSTDOUT);
 
-return
+A=[[1,2] [2,3]]
+Mads.savesaltellirestart(A, "A", problemdir)
+Mads.loadsaltellirestart!(A, "A", problemdir)
+if isfile(problemdir * "A_1.jld")
+    rm(problemdir * "A_1.jld")
+end

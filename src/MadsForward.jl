@@ -143,21 +143,9 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	ymax = madsdata["Grid"]["ymax"]
 	zmax = madsdata["Grid"]["zmax"]
 	time = madsdata["Grid"]["time"]
-	if nx == 1
-		dx = 0
-	else
-		dx = ( xmax - xmin ) / ( nx - 1 )
-	end
-	if ny == 1
-		dy = 0
-	else
-		dy = ( ymax - ymin ) / ( ny - 1 )
-	end
-	if nz == 1
-		dz = 0
-	else
-		dz = ( zmax - zmin ) / ( nz - 1 )
-	end
+	dx = nx == 1 ? 0 : dx = ( xmax - xmin ) / ( nx - 1 )	
+	dy = ny == 1 ? 0 : dy = ( ymax - ymin ) / ( ny - 1 )
+	dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
 	x = xmin
 	dictwells = Dict()
 	for i in 1:nx

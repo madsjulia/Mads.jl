@@ -38,12 +38,12 @@ function setplotfileformat(filename::String, format::String)
 	if format == ""
 		format = extension
 	end
-	if ismatch(r"^PNG|PDF|PS|SVG", format)
+	if ismatch(r"^PNG|^PDF|^PS|^SVG", format)
 		if format != extension
 			filename = root * "." * lowercase(format)
 		end
 	elseif format == "EPS"
-		if !ismatch(r"^EPS|PS", extension)
+		if !ismatch(r"^EPS|^PS", extension)
 			filename = root * ".eps"
 		end
 		format = "PS"
@@ -650,7 +650,7 @@ Dumps:
 - A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
 function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
-	paramvalues = parametersample(madsdata, number_of_samples)
+	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
@@ -791,7 +791,7 @@ Dumps:
 - Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
 function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
-	paramvalues = parametersample(madsdata, number_of_samples)
+	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplot(madsdata::Associative, paramvalues; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 

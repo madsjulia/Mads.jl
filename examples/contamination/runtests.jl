@@ -57,7 +57,7 @@ Mads.getwellsdata(md)
 Mads.getwellsdata(md; time=true)
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
-paramvalues = Mads.parametersample(md, 10)
+paramvalues = Mads.getparamrandom(md, 10)
 
 if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")

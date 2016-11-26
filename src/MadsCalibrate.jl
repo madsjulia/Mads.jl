@@ -36,7 +36,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
-	paramoptvalues = Mads.parametersample(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
+	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	if all
 		allresults = Any[]
 	end

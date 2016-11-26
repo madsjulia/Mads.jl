@@ -56,7 +56,7 @@ forward_preds2 = Mads.forward(md)
 
 Mads.madsinfo("Manual sensitivity analysis ...")
 numberofsamples = 10
-paramvalues=Mads.parametersample(md, numberofsamples)
+paramvalues=Mads.getparamrandom(md, numberofsamples)
 Mads.allwellsoff!(md)
 Mads.wellon!(md, "w1a")
 Mads.spaghettiplots(md, paramvalues, keyword="w1a")
@@ -87,7 +87,7 @@ Mads.plotwellSAresults(md,result,"w1a")
 # parameter space exploration
 Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
-paramvalues=Mads.parametersample(md, numberofsamples)
+paramvalues=Mads.getparamrandom(md, numberofsamples)
 Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
 k = 0
 for paramkey in keys(paramvalues)

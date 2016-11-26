@@ -121,7 +121,7 @@ Returns:
 - `bigdtresults` : dictionary with BIG-DT results
 """
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
-	parametersamples = parametersample(madsdata, nummodelruns)
+	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
 	modelparams = Array(Float64, length(parametersamples), nummodelruns)
 	for i = 1:nummodelruns

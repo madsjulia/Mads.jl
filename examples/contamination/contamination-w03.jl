@@ -11,7 +11,7 @@ Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
 
 numberofsamples = 10
-paramdict = Mads.parametersample(md, numberofsamples)
+paramdict = Mads.getparamrandom(md, numberofsamples)
 paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
 predictions = Mads.forward(md, paramdict)'
 wd = Mads.getwellsdata(md, time=true)'

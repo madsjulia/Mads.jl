@@ -247,7 +247,7 @@ end
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
 """
-Independent sampling of model parameters defined in the MADS problem dictionary
+Get independent sampling of model parameters defined in the MADS problem dictionary
 
 Arguments:
 
@@ -256,48 +256,36 @@ Arguments:
 - `parameterkey` : model parameter key
 - `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 """
-function parametersample(madsdata::Associative, numsamples::Integer, parameterkey::String=""; init_dist::Bool=false)
+function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)
 	if parameterkey != ""
-		return paramrand(madsdata, parameterkey; numsamples=numsamples)
+		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
 	else
 		sample = DataStructures.OrderedDict()
+		paramkeys = getoptparamkeys(madsdata)
 		paramdist = getparamdistributions(madsdata; init_dist=init_dist)
-		for k in keys(paramdist)
-			sample[k] = paramrand(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+		for k in paramkeys
+			sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)
 		end
 		return sample
 	end
 end
-
-"""
-Random numbers for a MADS model parameter defined by `parameterkey`
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `parameterkey` : model parameter key
-- `numsamples` : number of samples
-- `paramdist` : dictionary with parameter distributions
-"""
-function paramrand(madsdata::Associative, parameterkey::String; numsamples::Integer=1, paramdist::Associative=Dict())
+function getparamrandom(madsdata::Associative, parameterkey::String; numsamples::Integer=1, paramdist::Associative=Dict(), init_dist::Bool=false)
 	if haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
-			paramdist = getparamdistributions(madsdata)
+			paramdist = getparamdistributions(madsdata; init_dist=init_dist)
 		end
-		if Mads.isopt(madsdata, parameterkey)
-			if Mads.islog(madsdata, parameterkey)
-				dist = paramdist[parameterkey]
-				if typeof(dist) <: Distributions.Uniform
-					a = log10(dist.a)
-					b = log10(dist.b)
-					return 10.^(a + (b - a) * Distributions.rand(numsamples))
-				elseif typeof(dist) <: Distributions.Normal
-					μ = log10(dist.μ)
-					return 10.^(μ + dist.σ * Distributions.randn(numsamples))
-				end
+		if Mads.islog(madsdata, parameterkey)
+			dist = paramdist[parameterkey]
+			if typeof(dist) <: Distributions.Uniform
+				a = log10(dist.a)
+				b = log10(dist.b)
+				return 10.^(a + (b - a) * Distributions.rand(numsamples))
+			elseif typeof(dist) <: Distributions.Normal
+				μ = log10(dist.μ)
+				return 10.^(μ + dist.σ * Distributions.randn(numsamples))
 			end
-			return Distributions.rand(paramdist[parameterkey], numsamples)
 		end
+		return Distributions.rand(paramdist[parameterkey], numsamples)
 	end
 	return Void
 end
@@ -311,7 +299,7 @@ Arguments:
 - `N` : number of samples
 - `seed` : initial random seed
 """
-function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdir=false) # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -447,8 +435,8 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdi
 	Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
-function loadsaltellirestart!(evalmat, matname, restartdir)
-	if restartdir == false
+function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::String)
+	if restartdir == ""
 		return false
 	end
 	filename = joinpath(restartdir, string(matname, "_", myid(), ".jld"))
@@ -460,8 +448,8 @@ function loadsaltellirestart!(evalmat, matname, restartdir)
 	return true
 end
 
-function savesaltellirestart(evalmat, matname, restartdir)
-	if restartdir != false
+function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
+	if restartdir != ""
 		if !isdir(restartdir)
 			mkdir(restartdir)
 		end
@@ -481,7 +469,7 @@ Arguments:
 - `restartdir` : directory where files will be stored containing model results for fast simulation restarts
 - `parallel` : set to true if the model runs should be performed in parallel
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=false, parallel=false, checkpointfrequency=div(N, 10))
+function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Int=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -509,8 +497,8 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 		delete!(paramalldict,key)
 	end
 	for j = 1:nP
-		s1 = Mads.parametersample(madsdata, N, paramoptkeys[j])
-		s2 = Mads.parametersample(madsdata, N, paramoptkeys[j])
+		s1 = Mads.getparamrandom(madsdata, N, paramoptkeys[j])
+		s2 = Mads.getparamrandom(madsdata, N, paramoptkeys[j])
 		A = [A s1]
 		B = [B s2]
 	end
@@ -525,8 +513,10 @@ function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir=fals
 	end
 	yA = Array(Float64, N, length(obskeys))
 	if parallel
-		if !isdir(restartdir)
-			mkdir(restartdir)
+		if restartdir != ""
+			if !isdir(restartdir)
+				mkdir(restartdir)
+			end
 		end
 		Avecs = Array(Array{Float64, 1}, size(A, 1))
 		for i = 1:N
@@ -706,7 +696,7 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir=false)
+		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -911,7 +901,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N=100, M=6, gamma=4, plotresults=graphoutput, seed=0, issvr=false, truncateRanges=0, checkpointfrequency=N, restartdir="efastcheckpoints", restart=false)
+function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresults::Bool=graphoutput, seed=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Int=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -951,8 +941,10 @@ function efast(md::Associative; N=100, M=6, gamma=4, plotresults=graphoutput, se
 	#
 	##
 	if restart
-		if !isdir(restartdir)
-			mkdir(restartdir)
+		if restartdir != ""
+			if !isdir(restartdir)
+				mkdir(restartdir)
+			end
 		end
 	end
 	

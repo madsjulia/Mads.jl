@@ -39,3 +39,8 @@ f = Mads.makemadscommandfunctionandgradient(md) # make MADS command gradient fun
 f(p)
 f = Mads.makemadscommandgradient(md)
 f(p)
+
+files = Mads.searchdir(r"y.*\.jld", path = workdir)
+for i in files
+	rm(i)
+end

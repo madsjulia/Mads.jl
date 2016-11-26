@@ -206,7 +206,7 @@ function montecarlo(madsdata::Associative; N::Int=100, filename::String="")
 end
 
 """
-Convert parameter array to a parameter dictionary of arrays
+Convert a parameter array to a parameter dictionary of arrays
 """
 function paramarray2dict(madsdata::Associative, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
@@ -215,4 +215,11 @@ function paramarray2dict(madsdata::Associative, array::Array)
 		dict[paramkeys[i]] = array[:,i]
 	end
 	return dict
+end
+
+"""
+Convert a parameter dictionary of arrays to a parameter array
+"""
+function paramdict2array(dict::Associative)
+	return hcat(map(i->collect(dict[i]), keys(dict))...)
 end

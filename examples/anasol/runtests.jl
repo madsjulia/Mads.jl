@@ -5,8 +5,8 @@ import Base.Test
 workdir = Mads.madsdir * "/../examples/anasol"
 md = Mads.loadmadsfile("$workdir/w01shortexp.mads")
 Mads.forward(md, all=true)
-Mads.parametersample(md, 5, init_dist=true)
-Mads.parametersample(md, 5, init_dist=false)
+Mads.getparamrandom(md, 5, init_dist=true)
+Mads.getparamrandom(md, 5, init_dist=false)
 md = Mads.loadmadsfile("$workdir/w01short.mads")
 computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
@@ -21,6 +21,16 @@ end
 if Mads.create_tests
 	good_forward_preds = computeconcentrations(paramdict)
 	@JLD.save "$workdir/goodresults.jld" good_forward_preds
+end
+
+if isdefined(:Gadfly)
+	fp = Mads.forward(md; all=true)
+	Mads.plotmadsproblem(md, keyword="test")
+	Mads.plotmatches(md)
+    Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
+	Mads.plotmatches(md, fp)
+	Mads.plotmatches(md, fp, r"w1a")
+    Mads.spaghettiplots(md, 2)
 end
 
 Mads.forwardgrid(md)
@@ -57,14 +67,6 @@ Mads.allwellsoff!(md)
 Mads.allwellson!(md)
 Mads.welloff!(md, "w1a")
 Mads.wellon!(md, "w1a")
-if isdefined(:Gadfly)
-	fp = Mads.forward(md; all=true)
-	Mads.plotmadsproblem(md, keyword="test")
-	Mads.plotmatches(md)
-    Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
-	Mads.plotmatches(md, fp)
-	Mads.plotmatches(md, fp, r"w1a")
-end
 Mads.savemadsfile(md, "$workdir/test.mads")
 Mads.savemadsfile(md, Mads.getparamdict(md), "$workdir/test.mads")
 Mads.savemadsfile(md, Mads.getparamdict(md), "$workdir/test.mads", explicit=true)
