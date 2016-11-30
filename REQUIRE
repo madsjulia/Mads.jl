@@ -1,6 +1,7 @@
 julia 0.4
 Anasol
 BIGUQ
+Emcee
 MetaProgTools
 ReusableFunctions
 RobustPmap

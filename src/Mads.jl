@@ -3,15 +3,14 @@
 """
 MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
 
-http://mads.lanl.gov
-http://github.com/madsjulia
-http://mads.readthedocs.org
+https://mads.lanl.gov
+https://github.com/madsjulia
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-madsmodules = ["Mads", "Anasol", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
+madsmodules = ["Mads", "Anasol", "BIGUQ", "Emcee", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
 
 macro tryimport(s)
 	importq = string(:(import $s))
@@ -116,7 +115,7 @@ include("MadsCalibrate.jl")
 include("MadsLevenbergMarquardt.jl")
 include("MadsSenstivityAnalysis.jl")
 include("MadsMonteCarlo.jl")
-include("MadsEmcee.jl")
+# include("MadsEmcee.jl")
 include("MadsKriging.jl")
 include("MadsBayesInfoGap.jl")
 include("MadsModelSelection.jl")
