@@ -1,7 +1,7 @@
 julia 0.4
 Anasol
 BIGUQ
-Emcee
+AffineInvariantMCMC
 MetaProgTools
 ReusableFunctions
 RobustPmap

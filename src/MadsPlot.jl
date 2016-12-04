@@ -947,7 +947,7 @@ Arguments:
 - `name` : series name
 - `combined` : `true` by default
 """
-function plotseries(X::Matrix, filename::String; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true)
+function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true)
 	nT = size(X)[1]
 	nS = size(X)[2]
 	if combined
@@ -968,9 +968,11 @@ function plotseries(X::Matrix, filename::String; format::String="", xtitle::Stri
 		end
 		pS = Gadfly.vstack(pp...)
 	end
-	filename, format = setplotfileformat(filename, format)
 	try
-		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pS)
+		if filename != ""
+			filename, format = setplotfileformat(filename, format)
+			Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pS)
+		end
 		if typeof(pS) == Gadfly.Plot{}
 			pS
 		end

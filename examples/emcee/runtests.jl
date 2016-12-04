@@ -1,5 +1,6 @@
 import Base.Test
 import Mads
+import AffineInvariantMCMC
 
 srand(0)
 
@@ -20,9 +21,9 @@ function testit()
 		return retval
 	end
 	x0 = rand(numdims, numwalkers) * 10 - 5
-	chain, llhoodvals = Mads.emcee(llhood, numwalkers, x0, burnin, 1)
-	chain, llhoodvals = Mads.emcee(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
-	flatchain, flatllhoodvals = Mads.flattenmcmcarray(chain, llhoodvals)
+	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, x0, burnin, 1)
+	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
+	flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
 	for i = 1:numdims
 		@Base.Test.test_approx_eq_eps mean(flatchain[i, :]) means[i] 0.1 * stds[i]
 		@Base.Test.test_approx_eq_eps std(flatchain[i, :]) stds[i] 0.1 * stds[i]

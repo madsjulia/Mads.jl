@@ -120,3 +120,4 @@ wells
 *.seo
 *madsjl_cmdline_hist*
 examples/anasol/test.mads
+examples/model_coupling_*

@@ -2,10 +2,10 @@ import RobustPmap
 import BlackBoxOptim
 import Klara
 import JSON
-import Emcee
+import AffineInvariantMCMC
 
 """
-Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
 ```
 Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
@@ -56,9 +56,9 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Int=10, nst
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	burninchain, _ = Emcee.sample(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
-	chain, llhoods = Emcee.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
-	return Emcee.flattenmcmcarray(chain, llhoods)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
+	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
 """
