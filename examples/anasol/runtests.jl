@@ -34,7 +34,9 @@ if isdefined(:Gadfly)
 end
 
 Mads.forwardgrid(md)
-Mads.plotgrid(md)
+if isdefined(Mads, :plotgrid)
+	Mads.plotgrid(md)
+end
 Mads.of(md)
 Mads.residuals(md)
 pd = Mads.getparamdict(md)
