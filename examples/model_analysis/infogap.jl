@@ -1,5 +1,6 @@
-# import Mads
+import Mads
 import Gadfly
+
 include(Pkg.dir("Mads") * "/src/MadsInfoGap.jl")
 
 # md = Mads.loadmadsfile("models/internal-polynomial.mads")
@@ -22,3 +23,4 @@ for i = 1:4
 end
 f = Gadfly.plot(lmin..., lmax..., Gadfly.Guide.xlabel("o5"), Gadfly.Guide.ylabel("Horizon of uncertainty"), Gadfly.Guide.title("Opportuneness vs. Robustness"), Gadfly.Guide.manual_color_key("Models", models, colors))
 Gadfly.draw(Gadfly.PNG("infogap_results/opportuneness_vs_robustness.png", 6Gadfly.inch, 4Gadfly.inch), f)
+Mads.display("infogap_results/opportuneness_vs_robustness.png")

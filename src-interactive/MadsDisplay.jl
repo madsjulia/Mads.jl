@@ -17,13 +17,16 @@ function display(filename::String)
 			try
 				run(`convert -density 90 -background none $filename $filename2`)
 				img = Images.load(filename2)
+				rm(filename2)
 				Base.display(img)
+				println("")
 			catch
 				trytoopen = true
 			end
 		else
 			img = Images.load(filename)
 			Base.display(img)
+			println("")
 		end
 	else
 		trytoopen = true
