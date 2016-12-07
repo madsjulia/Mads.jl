@@ -13,7 +13,7 @@ Documentation for RobustPmap.jl module (all functions):
 
 Check for type exceptions
 
-<a id='RobustPmap.crpmap-Tuple{Function,Number,String,Vararg{Any,N}}' href='#RobustPmap.crpmap-Tuple{Function,Number,String,Vararg{Any,N}}'>#</a>
+<a id='RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N}}' href='#RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N}}'>#</a>
 **`RobustPmap.crpmap`** &mdash; *Method*.
 
 

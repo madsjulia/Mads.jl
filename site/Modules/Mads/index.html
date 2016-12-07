@@ -678,6 +678,14 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <p><a id='Mads.dumpwelldata-Tuple{Associative,String}' href='#Mads.dumpwelldata-Tuple{Associative,String}'>#</a>
 <strong><code>Mads.dumpwelldata</code></strong> &mdash; <em>Method</em>.</p>
 <p>Dump well data from MADS problem dictionary into a ASCII file</p>
+<p><a id='Mads.dumpyamlfile-Tuple{String,Any}' href='#Mads.dumpyamlfile-Tuple{String,Any}'>#</a>
+<strong><code>Mads.dumpyamlfile</code></strong> &mdash; <em>Method</em>.</p>
+<p>Dump YAML file</p>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : file name</li>
+<li><code>yamldata</code> : YAML data</li>
+</ul>
 <p><a id='Mads.dumpyamlmadsfile-Tuple{Any,String}' href='#Mads.dumpyamlmadsfile-Tuple{Any,String}'>#</a>
 <strong><code>Mads.dumpyamlmadsfile</code></strong> &mdash; <em>Method</em>.</p>
 <p>Dump YAML Mads file</p>
@@ -697,29 +705,9 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <li><code>gamma</code> : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)</li>
 <li><code>seed</code> : initial random seed</li>
 </ul>
-<p><a id='Mads.emcee' href='#Mads.emcee'>#</a>
-<strong><code>Mads.emcee</code></strong> &mdash; <em>Function</em>.</p>
-<p>Bayesian sampling with EMCEE: Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler</p>
-<div class="codehilite"><pre>Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
-</pre></div>
-
-
-<p>Arguments:</p>
-<ul>
-<li><code>llhood</code> : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())</li>
-<li><code>numwalkers</code> : number of walkers</li>
-<li><code>x0</code> : normalized initial parameters (matrix of size (length(params), numwalkers))</li>
-<li><code>thinning</code> : removal of any <code>thinning</code> realization</li>
-<li><code>a</code> :</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li><code>mcmcchain</code> : final MCMC chain</li>
-<li><code>llhoodvals</code> : log likelihoods of the final samples in the chain</li>
-</ul>
 <p><a id='Mads.emceesampling-Tuple{Associative}' href='#Mads.emceesampling-Tuple{Associative}'>#</a>
 <strong><code>Mads.emceesampling</code></strong> &mdash; <em>Method</em>.</p>
-<p>Bayesian sampling with EMCEE: Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler</p>
+<p>Bayesian sampling with Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)</p>
 <div class="codehilite"><pre>Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
 Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 </pre></div>
@@ -759,9 +747,6 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 <p><a id='Mads.filterkeys-Tuple{Associative,Regex}' href='#Mads.filterkeys-Tuple{Associative,Regex}'>#</a>
 <strong><code>Mads.filterkeys</code></strong> &mdash; <em>Method</em>.</p>
 <p>Filter dictionary keys based on a string or regular expression</p>
-<p><a id='Mads.flattenmcmcarray-Tuple{Array,Array}' href='#Mads.flattenmcmcarray-Tuple{Array,Array}'>#</a>
-<strong><code>Mads.flattenmcmcarray</code></strong> &mdash; <em>Method</em>.</p>
-<p>Flatten MCMC arrays</p>
 <p><a id='Mads.forward-Tuple{Associative}' href='#Mads.forward-Tuple{Associative}'>#</a>
 <strong><code>Mads.forward</code></strong> &mdash; <em>Method</em>.</p>
 <p>Perform a forward run using the initial or provided values for the model parameters</p>
@@ -972,6 +957,16 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 <p>Returns:</p>
 <ul>
 <li><code>paramkeys</code> : array with the keys of all parameters in the MADS dictionary</li>
+</ul>
+<p><a id='Mads.getparamrandom' href='#Mads.getparamrandom'>#</a>
+<strong><code>Mads.getparamrandom</code></strong> &mdash; <em>Function</em>.</p>
+<p>Get independent sampling of model parameters defined in the MADS problem dictionary</p>
+<p>Arguments:</p>
+<ul>
+<li><code>madsdata</code> : MADS problem dictionary</li>
+<li><code>numsamples</code> : number of samples</li>
+<li><code>parameterkey</code> : model parameter key</li>
+<li><code>init_dist</code> : if <code>true</code> use the distribution defined for initialization in the MADS problem dictionary (defined using <code>init_dist</code> parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using <code>dist</code> parameter field)</li>
 </ul>
 <p><a id='Mads.getparamsinit-Tuple{Associative,Array{T,1}}' href='#Mads.getparamsinit-Tuple{Associative,Array{T,1}}'>#</a>
 <strong><code>Mads.getparamsinit</code></strong> &mdash; <em>Method</em>.</p>
@@ -1187,6 +1182,15 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <li><code>madsdata</code> : Mads problem dictionary</li>
 </ul>
 <p>Example: <code>md = loadmadsfile("input_file_name.mads")</code></p>
+<p><a id='Mads.loadyamlfile-Tuple{String}' href='#Mads.loadyamlfile-Tuple{String}'>#</a>
+<strong><code>Mads.loadyamlfile</code></strong> &mdash; <em>Method</em>.</p>
+<p>Load YAML file</p>
+<p>Arguments:</p>
+<ul>
+<li><code>filename</code> : file name</li>
+<li><code>julia=false</code> : use Python YAML library (if available)</li>
+<li><code>julia=true</code> : use Julia YAML library (if available)</li>
+</ul>
 <p><a id='Mads.localsa-Tuple{Associative}' href='#Mads.localsa-Tuple{Associative}'>#</a>
 <strong><code>Mads.localsa</code></strong> &mdash; <em>Method</em>.</p>
 <p>Local sensitivity analysis based on eigen analysis of the parameter covariance matrix</p>
@@ -1430,27 +1434,10 @@ forward_preds = computeconcentrations(paramdict)
 <p>Compute objective function</p>
 <p><a id='Mads.paramarray2dict-Tuple{Associative,Array}' href='#Mads.paramarray2dict-Tuple{Associative,Array}'>#</a>
 <strong><code>Mads.paramarray2dict</code></strong> &mdash; <em>Method</em>.</p>
-<p>Convert parameter array to a parameter dictionary of arrays</p>
-<p><a id='Mads.parametersample' href='#Mads.parametersample'>#</a>
-<strong><code>Mads.parametersample</code></strong> &mdash; <em>Function</em>.</p>
-<p>Independent sampling of model parameters defined in the MADS problem dictionary</p>
-<p>Arguments:</p>
-<ul>
-<li><code>madsdata</code> : MADS problem dictionary</li>
-<li><code>numsamples</code> : number of samples</li>
-<li><code>parameterkey</code> : model parameter key</li>
-<li><code>init_dist</code> : if <code>true</code> use the distribution defined for initialization in the MADS problem dictionary (defined using <code>init_dist</code> parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using <code>dist</code> parameter field)</li>
-</ul>
-<p><a id='Mads.paramrand-Tuple{Associative,String}' href='#Mads.paramrand-Tuple{Associative,String}'>#</a>
-<strong><code>Mads.paramrand</code></strong> &mdash; <em>Method</em>.</p>
-<p>Random numbers for a MADS model parameter defined by <code>parameterkey</code></p>
-<p>Arguments:</p>
-<ul>
-<li><code>madsdata</code> : MADS problem dictionary</li>
-<li><code>parameterkey</code> : model parameter key</li>
-<li><code>numsamples</code> : number of samples</li>
-<li><code>paramdist</code> : dictionary with parameter distributions</li>
-</ul>
+<p>Convert a parameter array to a parameter dictionary of arrays</p>
+<p><a id='Mads.paramdict2array-Tuple{Associative}' href='#Mads.paramdict2array-Tuple{Associative}'>#</a>
+<strong><code>Mads.paramdict2array</code></strong> &mdash; <em>Method</em>.</p>
+<p>Convert a parameter dictionary of arrays to a parameter array</p>
 <p><a id='Mads.parsemadsdata!-Tuple{Associative}' href='#Mads.parsemadsdata!-Tuple{Associative}'>#</a>
 <strong><code>Mads.parsemadsdata!</code></strong> &mdash; <em>Method</em>.</p>
 <p>Parse loaded Mads problem dictionary</p>
@@ -1549,8 +1536,8 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <li><code>filename</code> : output file name used to dump plots</li>
 <li><code>format</code> : output plot format (<code>png</code>, <code>pdf</code>, etc.)</li>
 </ul>
-<p><a id='Mads.plotseries-Tuple{Array{T,2},String}' href='#Mads.plotseries-Tuple{Array{T,2},String}'>#</a>
-<strong><code>Mads.plotseries</code></strong> &mdash; <em>Method</em>.</p>
+<p><a id='Mads.plotseries' href='#Mads.plotseries'>#</a>
+<strong><code>Mads.plotseries</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create plots of data series</p>
 <p>Arguments:</p>
 <ul>

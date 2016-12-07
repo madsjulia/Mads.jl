@@ -399,6 +399,18 @@ Dump a JSON file
 
 Dump well data from MADS problem dictionary into a ASCII file
 
+<a id='Mads.dumpyamlfile-Tuple{String,Any}' href='#Mads.dumpyamlfile-Tuple{String,Any}'>#</a>
+**`Mads.dumpyamlfile`** &mdash; *Method*.
+
+
+
+Dump YAML file
+
+Arguments:
+
+  * `filename` : file name
+  * `yamldata` : YAML data
+
 <a id='Mads.dumpyamlmadsfile-Tuple{Any,String}' href='#Mads.dumpyamlmadsfile-Tuple{Any,String}'>#</a>
 **`Mads.dumpyamlmadsfile`** &mdash; *Method*.
 
@@ -426,36 +438,12 @@ Arguments:
   * `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
   * `seed` : initial random seed
 
-<a id='Mads.emcee' href='#Mads.emcee'>#</a>
-**`Mads.emcee`** &mdash; *Function*.
-
-
-
-Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
-
-```
-Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
-```
-
-Arguments:
-
-  * `llhood` : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())
-  * `numwalkers` : number of walkers
-  * `x0` : normalized initial parameters (matrix of size (length(params), numwalkers))
-  * `thinning` : removal of any `thinning` realization
-  * `a` :
-
-Returns:
-
-  * `mcmcchain` : final MCMC chain
-  * `llhoodvals` : log likelihoods of the final samples in the chain
-
 <a id='Mads.emceesampling-Tuple{Associative}' href='#Mads.emceesampling-Tuple{Associative}'>#</a>
 **`Mads.emceesampling`** &mdash; *Method*.
 
 
 
-Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
+Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
 ```
 Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
@@ -519,13 +507,6 @@ Exponential variogram
 
 
 Filter dictionary keys based on a string or regular expression
-
-<a id='Mads.flattenmcmcarray-Tuple{Array,Array}' href='#Mads.flattenmcmcarray-Tuple{Array,Array}'>#</a>
-**`Mads.flattenmcmcarray`** &mdash; *Method*.
-
-
-
-Flatten MCMC arrays
 
 <a id='Mads.forward-Tuple{Associative}' href='#Mads.forward-Tuple{Associative}'>#</a>
 **`Mads.forward`** &mdash; *Method*.
@@ -901,6 +882,20 @@ Arguments:
 Returns:
 
   * `paramkeys` : array with the keys of all parameters in the MADS dictionary
+
+<a id='Mads.getparamrandom' href='#Mads.getparamrandom'>#</a>
+**`Mads.getparamrandom`** &mdash; *Function*.
+
+
+
+Get independent sampling of model parameters defined in the MADS problem dictionary
+
+Arguments:
+
+  * `madsdata` : MADS problem dictionary
+  * `numsamples` : number of samples
+  * `parameterkey` : model parameter key
+  * `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
 
 <a id='Mads.getparamsinit-Tuple{Associative,Array{T,1}}' href='#Mads.getparamsinit-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamsinit`** &mdash; *Method*.
@@ -1314,6 +1309,19 @@ Returns:
 
 Example: `md = loadmadsfile("input_file_name.mads")`
 
+<a id='Mads.loadyamlfile-Tuple{String}' href='#Mads.loadyamlfile-Tuple{String}'>#</a>
+**`Mads.loadyamlfile`** &mdash; *Method*.
+
+
+
+Load YAML file
+
+Arguments:
+
+  * `filename` : file name
+  * `julia=false` : use Python YAML library (if available)
+  * `julia=true` : use Julia YAML library (if available)
+
 <a id='Mads.localsa-Tuple{Associative}' href='#Mads.localsa-Tuple{Associative}'>#</a>
 **`Mads.localsa`** &mdash; *Method*.
 
@@ -1723,35 +1731,14 @@ Compute objective function
 
 
 
-Convert parameter array to a parameter dictionary of arrays
+Convert a parameter array to a parameter dictionary of arrays
 
-<a id='Mads.parametersample' href='#Mads.parametersample'>#</a>
-**`Mads.parametersample`** &mdash; *Function*.
-
-
-
-Independent sampling of model parameters defined in the MADS problem dictionary
-
-Arguments:
-
-  * `madsdata` : MADS problem dictionary
-  * `numsamples` : number of samples
-  * `parameterkey` : model parameter key
-  * `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
-
-<a id='Mads.paramrand-Tuple{Associative,String}' href='#Mads.paramrand-Tuple{Associative,String}'>#</a>
-**`Mads.paramrand`** &mdash; *Method*.
+<a id='Mads.paramdict2array-Tuple{Associative}' href='#Mads.paramdict2array-Tuple{Associative}'>#</a>
+**`Mads.paramdict2array`** &mdash; *Method*.
 
 
 
-Random numbers for a MADS model parameter defined by `parameterkey`
-
-Arguments:
-
-  * `madsdata` : MADS problem dictionary
-  * `parameterkey` : model parameter key
-  * `numsamples` : number of samples
-  * `paramdist` : dictionary with parameter distributions
+Convert a parameter dictionary of arrays to a parameter array
 
 <a id='Mads.parsemadsdata!-Tuple{Associative}' href='#Mads.parsemadsdata!-Tuple{Associative}'>#</a>
 **`Mads.parsemadsdata!`** &mdash; *Method*.
@@ -1887,8 +1874,8 @@ Arguments:
   * `filename` : output file name used to dump plots
   * `format` : output plot format (`png`, `pdf`, etc.)
 
-<a id='Mads.plotseries-Tuple{Array{T,2},String}' href='#Mads.plotseries-Tuple{Array{T,2},String}'>#</a>
-**`Mads.plotseries`** &mdash; *Method*.
+<a id='Mads.plotseries' href='#Mads.plotseries'>#</a>
+**`Mads.plotseries`** &mdash; *Function*.
 
 
 
