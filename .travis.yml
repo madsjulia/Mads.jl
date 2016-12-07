@@ -9,7 +9,7 @@ notifications:
   email: false
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.update(); Pkg.clone(pwd());'
+  - julia -e 'Pkg.clone(pwd());'
 #  - julia -e 'ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; Pkg.build("Mads"); reload("Mads"); Mads.checkout(false); Pkg.test("Mads"; coverage=true)'
   - julia -e 'ENV["MADS_TRAVIS"]=""; Pkg.build("Mads"); reload("Mads"); Pkg.test("Mads"; coverage=true)'
 after_success:
