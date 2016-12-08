@@ -99,6 +99,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			Mads.madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
 			madsdatacommandfunction = importeverywhere(filename)
 		end
+		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
@@ -301,6 +302,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
+	"MADS command function with expressions"
 	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
@@ -393,7 +395,6 @@ function makemadscommandgradient(madsdata::Associative) # make MADS command grad
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
 end
-
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
 	function madscommandgradient(parameters::Associative; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
@@ -408,7 +409,6 @@ function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
 end
-
 function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
 	optparamkeys = getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
@@ -485,6 +485,7 @@ Make a function to compute the conditional log-likelihood of the model parameter
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 """
 function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Real=1.)
+	"MADS conditional log-likelihood functions"
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
@@ -517,6 +518,7 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor::Real=1.)
 		Mads.madsinfo("Log-likelihood function computed internally ...")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
+		"MADS log-likelihood functions"
 		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
 			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
