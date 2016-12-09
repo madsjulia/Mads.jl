@@ -575,27 +575,27 @@ end
 "Remove directory"
 function rmdir(dir::String)
 	if isdir(dir)
-		rm(dir, recursive=true, force=true)
+		rm(dir, recursive=true)
 	end
 end
 
 "Remove directory"
 function rmfile(filename::String)
 	if isfile(filename)
-		rm(filename, force=true)
+		rm(filename)
 	end
 end
 
 "Remove files with extension `ext`"
 function rmfiles_ext(ext::String; path::String=".")
 	for f in searchdir(Regex(string(".*\\.", ext)); path = path)
-		rm(joinpath(path, f), force=true)
+		rm(joinpath(path, f))
 	end
 end
 
 "Remove files with root `root`"
 function rmfiles_root(root::String; path::String=".")
 	for f in searchdir(Regex(string(root, "\\..*")); path = path)
-		rm(joinpath(path, f), force=true)
+		rm(joinpath(path, f))
 	end
 end

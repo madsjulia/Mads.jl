@@ -29,6 +29,6 @@ if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, 3, keyword="test")
 	Mads.spaghettiplot(md, 3, keyword="test")
     for f in Mads.searchdir(Regex(string(rootname, "\\.*", "-test-", "\\.*", ".svg")))
-        rm(f, force=true)
+        Mads.rmfile(f)
     end
 end

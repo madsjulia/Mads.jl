@@ -1,4 +1,5 @@
 import Base.Test
+import Compat
 
 if Mads.create_tests
 	Mads.create_tests_off()
@@ -38,7 +39,7 @@ Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 if isdefined(Mads, :runcmd)
-	if is_windows()
+	if ( VERSION>=v"0.5" && is_windows() ) || ( VERSION<v"0.5" && OS_NAME == :Windows )
 		Mads.runcmd(`dir $(Pkg.dir("Mads"))`)
 	else
 		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
