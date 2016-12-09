@@ -127,86 +127,59 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
 					filename = instruction["read"]
-					if isfile(filename)
-						rm(filename) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "Templates") # Templates/Instructions
 				for template in madsdata["Templates"]
 					filename = template["write"]
-					if isfile(filename)
-						rm(filename) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 				writeparameters(madsdata, parameters)
 			end
 			#TODO move the writing into the "writeparameters" function
 			if haskey(madsdata, "JLDParameters") # JLD
 				for filename in vcat(madsdata["JLDParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 				JLD.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JLDPredictions") # JLD
 				for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "JSONParameters") # JSON
 				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 				dumpjsonfile("$(madsdata["JSONParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "JSONPredictions") # JSON
 				for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "YAMLParameters") # YAML
 				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 				dumpyamlfile("$(tempdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
 			end
 			if haskey(madsdata, "YAMLPredictions") # YAML
 				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "ASCIIParameters") # ASCII
-				f = madsdata["ASCIIParameters"]
-				if isfile(f)
-					rm(f) # delete the parameter file links
-				end
+				filename = madsdata["ASCIIParameters"]
+				Mads.rmfile(filename) # delete the parameter file links
 				#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 				dumpasciifile("$(tempdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create an ASCII parameter file
 			end
 			if haskey(madsdata, "ASCIIPredictions") # ASCII
 				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					f = filename
-					if isfile(f)
-						rm(f) # delete the parameter file links
-					end
+					Mads.rmfile(filename) # delete the parameter file links
 				end
 			end
 			if haskey(madsdata, "Julia command")

@@ -68,9 +68,7 @@ Mads.setobstime!(md, r"_(.*)")
 Mads.setobstime!(md)
 
 Mads.dumpwelldata(md, "wells.dat")
-if isfile("wells.dat")
-	rm("wells.dat")
-end
+Mads.rmfile("wells.dat")
 
 if isdefined(:Gadfly)
 	sa_results = Mads.saltelli(md, N=5, seed=2015)

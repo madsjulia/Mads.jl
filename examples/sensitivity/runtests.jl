@@ -40,6 +40,4 @@ redirect_stdout(originalSTDOUT);
 A=[[1,2] [2,3]]
 Mads.savesaltellirestart(A, "A", problemdir)
 Mads.loadsaltellirestart!(A, "A", problemdir)
-if isfile(problemdir * "A_1.jld")
-    rm(problemdir * "A_1.jld")
-end
+Mads.rmfile(problemdir * "A_1.jld")

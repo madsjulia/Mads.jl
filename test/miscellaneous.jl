@@ -72,9 +72,7 @@ if isdefined(:Gadfly)
 	if isdefined(Mads, :display)
 		Mads.display("test.png")
 	end
-	if isfile("test.png")
-		rm("test.png")
-	end
+	Mads.rmfile("test.png")
 end
 
 graph_status = Mads.graphoutput
