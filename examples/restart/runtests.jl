@@ -56,5 +56,5 @@ if Mads.long_tests
 	@Base.Test.test no_restart_results == create_restart_results
 	@Base.Test.test create_restart_results == use_restart_results
 
-	run(`rm -fR $(problemdir)/internal-linearmodel_restart`)
+	rm("$(problemdir)/internal-linearmodel_restart")
 end
