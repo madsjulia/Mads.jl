@@ -12,7 +12,7 @@ function cleancoverage()
 	orig_dir = pwd()
 	for i in madsmodules
 		cd(joinpath(Pkg.dir(i), "src"))
-		run(`bash -c "rm -f *.cov"`)
+		Mads.rmfiles_ext("cov")
 	end
 	cd(orig_dir)
 end

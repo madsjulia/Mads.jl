@@ -28,6 +28,7 @@ if isdefined(:Gadfly)
 	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplots(md, 3, keyword="test")
 	Mads.spaghettiplot(md, 3, keyword="test")
-	s = rootname
-	run(`bash -c "rm -f $(s)*-test-*.svg"`)
+    for f in Mads.searchdir(Regex(string(rootname, "\\.*", "-test-", "\\.*", ".svg")))
+        rm(f, force=true)
+    end
 end

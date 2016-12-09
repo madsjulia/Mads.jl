@@ -112,7 +112,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					if !isdir(tempdirname)
 						mkdir(tempdirname)
 					end
-					run(`bash -c "ln -sf $(madsproblemdir)/* $tempdirname"`) # link all the files in the mads problem directory
+					Mads.symlinkdirfiles(madsproblemdir, tempdirname)
 					cd(tempdirname)
 					Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 					trying = false
@@ -234,7 +234,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				while trying
 					try
 						attempt += 1
-						run(`bash -c "$(madsdata["Command"])"`)
+						if is_windows()
+							run(`cmd "$(madsdata["Command"])"`)
+						else
+							run(`bash -c "$(madsdata["Command"])"`)
+						end
 						trying = false
 					catch
 						sleep(attempt * 0.5)

@@ -348,6 +348,7 @@ Get files in the current directory or in a directory defined by `path` matching 
 
 - `Mads.searchdir("a")`
 - `Mads.searchdir(r"[A-B]"; path = ".")`
+- `Mads.searchdir(r".*\.cov"; path = ".")`
 
 Arguments:
 
@@ -358,8 +359,8 @@ Returns:
 
 - `filename` : an array with file names matching the pattern in the specified directory
 """
-searchdir(key::Regex; path = ".") = filter(x->ismatch(key, x), readdir(path))
-searchdir(key::String; path = ".") = filter(x->contains(x, key), readdir(path))
+searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
+searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
 
 "Filter dictionary keys based on a string or regular expression"
 filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
@@ -556,5 +557,45 @@ function dumpwelldata(madsdata::Associative, filename::String)
 			end
 		end
 		close(outfile)
+	end
+end
+
+"Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`"
+function symlinkdirfiles(dirsource::String, dirtarget::String)
+	for f in readdir(dirsource)
+		symlinkdir(f, dirtarget)
+	end
+end
+
+"Create a symbolic link of a file `filename` in a directory `dirtarget`"
+function symlinkdir(filename::String, dirtarget::String)
+	symlink(abspath(filename), dirtarget * "/" * filename)
+end
+
+"Remove directory"
+function rmdir(dir::String)
+	if isdir(dir)
+		rm(dir, recursive=true, force=true)
+	end
+end
+
+"Remove directory"
+function rmfile(filename::String)
+	if isfile(filename)
+		rm(filename, force=true)
+	end
+end
+
+"Remove files with extension `ext`"
+function rmfiles_ext(ext::String; path::String=".")
+	for f in searchdir(Regex(string(".*\\.", ext)); path = path)
+		rm(joinpath(path, f), force=true)
+	end
+end
+
+"Remove files with root `root`"
+function rmfiles_root(root::String; path::String=".")
+	for f in searchdir(Regex(string(root, "\\..*")); path = path)
+		rm(joinpath(path, f), force=true)
 	end
 end

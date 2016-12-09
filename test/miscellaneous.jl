@@ -38,7 +38,11 @@ Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 if isdefined(Mads, :runcmd)
-	Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
+	if is_windows()
+		Mads.runcmd(`dir $(Pkg.dir("Mads"))`)
+	else
+		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
+	end
 end
 # Mads.create_documentation()
 close(outWrite);
