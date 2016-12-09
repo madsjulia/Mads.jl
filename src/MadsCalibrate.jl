@@ -1,5 +1,4 @@
 import DataStructures
-import Optim
 
 """
 Calibrate with random initial guesses
@@ -28,7 +27,7 @@ Arguments:
 
 Returns:
 
-- `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
+- `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
 
 """
 function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, all=false, save_results=true)
@@ -49,7 +48,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
-		phi = results.f_minimum
+		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
 		if phi < bestphi
@@ -96,7 +95,7 @@ Arguments:
 Returns:
 
 - `minimumdict` : model parameter dictionary with the optimal values at the minimum
-- `results` : optimization algorithm results (e.g. results.minimum)
+- `results` : optimization algorithm results (e.g. results.minimizer)
 
 """
 function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, save_results=true)
@@ -137,7 +136,7 @@ function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxE
 	else
 		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
 	end
-	minimum = Mads.sinetransform(results.minimum, lowerbounds, upperbounds, indexlogtransformed)
+	minimum = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
 	minimumdict = DataStructures.OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)

@@ -1,7 +1,7 @@
 import BIGUQ
 import ProgressMeter
 import DataFrames
-import Optim
+import BlackBoxOptim
 
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem

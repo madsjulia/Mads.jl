@@ -159,12 +159,12 @@ function MFlm(X, nk; mads=true, log_W=false, log_H=false, retries=1, tol=1.0e-9,
 		else
 			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxiter)
 		end
-		phi = r.f_minimum
+		phi = r.minimum
 		# Base.display(r)
 		println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
-			x_best = Mads.sinetransform(r.minimum, lowerbounds, upperbounds, indexlogtransformed)
+			x_best = Mads.sinetransform(r.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 			Wbest, Hbest = mf_reshape(x_best)
 		end
 	end

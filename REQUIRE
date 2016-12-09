@@ -20,7 +20,7 @@ DataFrames
 StatsBase
 ODE
 Klara 0.6
-Optim 0.5
+Optim 0.7
 BlackBoxOptim
 Documenter
 Compat 0.7.15
