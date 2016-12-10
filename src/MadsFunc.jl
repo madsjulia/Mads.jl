@@ -208,7 +208,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					try
 						attempt += 1
 						if ( VERSION>=v"0.5" && is_windows() ) || ( VERSION<v"0.5" && OS_NAME == :Windows )
-							run(`cmd "$(madsdata["Command"])"`)
+							run(`$(madsdata["Command"])`)
 						else
 							run(`bash -c "$(madsdata["Command"])"`)
 						end
