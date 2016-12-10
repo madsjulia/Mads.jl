@@ -28,6 +28,11 @@ function status(; git::Bool=true, gitmore::Bool=false)
 	end
 end
 function status(madsmodule::String; git::Bool=true, gitmore::Bool=false)
+	try
+		run(`git`)
+	catch
+		git = false
+	end
 	if git
 		cwd = pwd()
 		info("Git status $(madsmodule) ...")
