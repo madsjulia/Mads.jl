@@ -83,6 +83,7 @@ long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 nprocs_per_task = 1
 const madsdir = join(split(Base.source_path(), '/')[1:end - 1], '/')
+madswindows = (VERSION>=v"0.5" && is_windows()) || (VERSION<v"0.5" && OS_NAME == :Windows)
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	long_tests = true

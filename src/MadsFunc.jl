@@ -102,8 +102,8 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
-			cd(madsproblemdir)
-			tempdirname = "../$(split(pwd(),"/")[end])_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+			cd(madsproblemdir)	
+			tempdirname = "../$(Mads.getmadsproblemdirshort(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
 			attempt = 0
 			trying = true
 			while trying
@@ -112,8 +112,6 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					if !isdir(tempdirname)
 						mkdir(tempdirname)
 					end
-					Mads.symlinkdirfiles(madsproblemdir, tempdirname)
-					cd(tempdirname)
 					Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch
@@ -124,6 +122,23 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					end
 				end
 			end
+			attempt = 0
+			trying = true
+			while trying
+				try
+					attempt += 1
+					Mads.symlinkdirfiles(madsproblemdir, tempdirname)
+					Mads.madsinfo("Links created in temporary directory: $(tempdirname)", 1)
+					trying = false
+				catch
+					sleep(attempt * 0.5)
+					if attempt > 3
+						madscritical("Links cannot be created in temporary directory $tempdirname cannot be created!")
+						trying = false
+					end
+				end
+			end
+			cd(tempdirname)
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]
 					filename = instruction["read"]
@@ -207,7 +222,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				while trying
 					try
 						attempt += 1
-						if ( VERSION>=v"0.5" && is_windows() ) || ( VERSION<v"0.5" && OS_NAME == :Windows )
+						if Mads.windows
 							run(`$(madsdata["Command"])`)
 						else
 							run(`bash -c "$(madsdata["Command"])"`)

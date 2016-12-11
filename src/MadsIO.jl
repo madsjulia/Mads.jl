@@ -242,14 +242,32 @@ Get the directory where the Mads data file is located
 Example:
 
 ```
-madsdata = Mads.loadmadsproblemdir("../../a.mads")
+madsdata = Mads.loadmadsproblem("../../a.mads")
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::Associative)
-	join(split(abspath(madsdata["Filename"]), '/')[1:end - 1], '/')
+	dirname(madsdata["Filename"])
+end
+
+"""
+Get the directory where the Mads data file is located
+
+`Mads.getmadsproblemdirshort(madsdata)`
+
+Example:
+
+```
+madsdata = Mads.loadmadsproblem("../../a.mads")
+madsproblemdir = Mads.getmadsproblemdirshort(madsdata)
+```
+
+where `madsproblemdir` = `"../../"`
+"""
+function getmadsproblemdirshort(madsdata::Associative)
+	splitdir(dirname(madsdata["Filename"]))[2]
 end
 
 """
@@ -279,8 +297,8 @@ r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 """
 function getrootname(filename::String; first=true, version=false)
-	d = split(filename, "/")
-	s = split(d[end], ".")
+	d = splitdir(filename)
+	s = split(d[2], ".")
 	if !first && length(s) > 1
 		r = join(s[1:end-1], ".")
 	else
@@ -291,7 +309,7 @@ function getrootname(filename::String; first=true, version=false)
 		r = r[1:rm.offset-1]
 	end
 	if length(d) > 1
-		r = join(d[1:end-1], "/") * "/" * r
+		r = joinpath(d[1], r)
 	end
 	return r
 end
@@ -306,8 +324,8 @@ ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 """
 function getextension(filename)
-	d = split(filename, "/")
-	s = split(d[end], ".")
+	d = splitdir(filename)
+	s = split(d[2], ".")
 	if length(s) > 1
 		return s[end]
 	else

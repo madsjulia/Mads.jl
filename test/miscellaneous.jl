@@ -39,7 +39,7 @@ Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 if isdefined(Mads, :runcmd)
-	if ( VERSION>=v"0.5" && is_windows() ) || ( VERSION<v"0.5" && OS_NAME == :Windows )
+	if Mads.madswindows
 		run(`dir $(Pkg.dir("Mads"))`)
 	else
 		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
