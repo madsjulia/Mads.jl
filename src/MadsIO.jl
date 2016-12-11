@@ -255,18 +255,18 @@ end
 """
 Get the directory where the Mads data file is located
 
-`Mads.getmadsproblemdirshort(madsdata)`
+`Mads.getmadsproblemdirtail(madsdata)`
 
 Example:
 
 ```
-madsdata = Mads.loadmadsproblem("../../a.mads")
-madsproblemdir = Mads.getmadsproblemdirshort(madsdata)
+madsdata = Mads.loadmadsproblem("../example/a.mads")
+madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
 ```
 
-where `madsproblemdir` = `"../../"`
+where `madsproblemdirtail` = `"example"`
 """
-function getmadsproblemdirshort(madsdata::Associative)
+function getmadsproblemdirtail(madsdata::Associative)
 	splitdir(dirname(madsdata["Filename"]))[2]
 end
 

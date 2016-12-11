@@ -103,7 +103,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)	
-			tempdirname = "../$(Mads.getmadsproblemdirshort(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+			tempdirname = "../$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
 			attempt = 0
 			trying = true
 			while trying
