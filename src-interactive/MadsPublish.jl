@@ -29,7 +29,7 @@ function status(; git::Bool=true, gitmore::Bool=false)
 end
 function status(madsmodule::String; git::Bool=true, gitmore::Bool=false)
 	try
-		run(`git`)
+		run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
 	catch
 		git = false
 	end

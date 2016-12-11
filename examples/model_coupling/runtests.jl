@@ -34,7 +34,7 @@ mfor = Mads.forward(md)
 @Base.Test.test ifor == mfor
 
 Mads.readyamlpredictions("$workdir/internal-linearmodel-mads.mads"; julia=true)
-Mads.readasciipredictions("$workdir/a.dat")
+Mads.readasciipredictions("$workdir/readasciipredictions.dat")
 
 Mads.madsinfo("External coupling using `Command` and JLD ...")
 md = Mads.loadmadsfile(workdir * "external-jld.mads")

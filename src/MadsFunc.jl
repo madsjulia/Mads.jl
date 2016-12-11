@@ -222,7 +222,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				while trying
 					try
 						attempt += 1
-						if Mads.windows
+						if Mads.madswindows
 							run(`$(madsdata["Command"])`)
 						else
 							run(`bash -c "$(madsdata["Command"])"`)
