@@ -5,12 +5,16 @@ println("Running MADS tests:")
 
 println("* miscellaneous ...")
 include("miscellaneous.jl")
+
 println("* io ...")
 include("io.jl")
+
 println("* test functions ...")
 include("test_functions.jl")
+
 println("* parameters ...")
 include("parameters.jl")
+
 println("* observations ...")
 include("observations.jl")
 
@@ -23,3 +27,4 @@ for madstest in examples
 		include(file)
 	end
 end
+:passed
