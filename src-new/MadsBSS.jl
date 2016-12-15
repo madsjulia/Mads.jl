@@ -52,7 +52,7 @@ function NMFnlopt(X, nk; retries=1, tol=1.0e-9, random=false, maxiter=100000, ma
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
 		@JuMP.constraint(m, W .<= 1)
-		@JuMP.NLobjective(m, Min, sum{sum{weights[i, j] * (sum{W[i, k] * H[k, j], k=1:nk} - Xc[i, j])^2, i=1:nP}, j=1:nC})
+		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC})
 		JuMP.solve(m)
 		phi = JuMP.getobjectivevalue(m)	
 		println("OF = $(phi)")
