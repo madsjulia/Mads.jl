@@ -2,12 +2,12 @@ import Mads
 import JLD
 import Base.Test
 
-workdir = Mads.madsdir * "/../examples/anasol"
-md = Mads.loadmadsfile("$workdir/w01shortexp.mads")
+workdir = joinpath(Mads.madsdir, "..", "examples", "anasol")
+md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 Mads.forward(md, all=true)
 Mads.getparamrandom(md, 5, init_dist=true)
 Mads.getparamrandom(md, 5, init_dist=false)
-md = Mads.loadmadsfile("$workdir/w01short.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "w01short.mads"))
 computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
@@ -79,13 +79,17 @@ e = Mads.getextension("test.mads")
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
+reader = @async readstring(outRead);
+
 Mads.showparameters(md)
 Mads.showallparameters(md)
 Mads.showallparameters(md)
 Mads.showobservations(md)
-close(outWrite);
-close(outRead);
+
 redirect_stdout(originalSTDOUT);
+close(outWrite);
+output = wait(reader);
+close(outRead);
 
 Mads.setparamsdistnormal!(md, fill(1, length(m)), fill(1, length(m)))
 Mads.setparamsdistuniform!(md, fill(1, length(m)), fill(1, length(m)))

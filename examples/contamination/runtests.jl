@@ -27,11 +27,14 @@ forward_predictions = Mads.forward(md, inverse_parameters) # execute forward mod
 
 localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collect(values(inverse_parameters)), obs=collect(values(forward_predictions))) # perform local sensitivity analysis
 
+originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
+reader = @async readstring(outRead);
 Mads.modelinformationcriteria(md)
-close(outWrite);
-close(outRead);
 redirect_stdout(originalSTDOUT);
+close(outWrite);
+output = wait(reader);
+close(outRead);
 
 samples, llhoods = Mads.sampling(param_values, localsa_results["jacobian"], 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
 

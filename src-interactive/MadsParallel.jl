@@ -145,15 +145,19 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 				originalSTDERR = STDERR;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
+				outreader = @async readstring(outRead);
+				errreader = @async readstring(errRead);
 			end
 			addprocs(h; arguments...)
 			if quiet
-				close(outWrite);
-				close(outRead);
-				close(errWrite);
-				close(errRead);
 				redirect_stdout(originalSTDOUT);
 				redirect_stderr(originalSTDERR);
+				close(outWrite);
+				output = wait(outreader);
+				close(outRead);
+				close(errWrite);
+				error = wait(errreader);
+				close(errRead);
 			end
 		end
 		sleep(0.1)

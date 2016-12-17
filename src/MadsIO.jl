@@ -598,7 +598,10 @@ function rmdir(dir::String)
 end
 
 "Remove directory"
-function rmfile(filename::String)
+function rmfile(filename::String; path::String="")
+	if path != ""
+		filename = joinpath(path, filename)
+	end
 	if isfile(filename)
 		rm(filename)
 	end
@@ -613,6 +616,11 @@ end
 
 "Remove files with root `root`"
 function rmfiles_root(root::String; path::String=".")
+	s = splitdir(root)
+	if s[1] != ""
+		path = s[1]
+		root = s[2]
+	end
 	for f in searchdir(Regex(string(root, "\\..*")); path = path)
 		rm(joinpath(path, f))
 	end

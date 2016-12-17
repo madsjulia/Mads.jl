@@ -4,10 +4,10 @@ Mads.madsinfo("Bayesian sampling ...")
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
-	workdir = Mads.madsdir * "/../examples/bayesian_sampling/"
+	workdir = joinpath(Mads.madsdir, "..", "examples", "bayesian_sampling")
 end
 
-md = Mads.loadmadsfile(workdir * "internal-linearmodel.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
 mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
@@ -28,7 +28,8 @@ if isdefined(:Gadfly)
 	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplots(md, 3, keyword="test")
 	Mads.spaghettiplot(md, 3, keyword="test")
-    for f in Mads.searchdir(Regex(string(rootname, "\\.*", "-test-", "\\.*", ".svg")))
-        Mads.rmfile(f)
+	s = splitdir(rootname)
+    for f in Mads.searchdir(Regex(string(s[2], "\\.*", "-test-", "\\.*", ".svg")), path=s[1])
+        Mads.rmfile(f, path=s[1])
     end
 end

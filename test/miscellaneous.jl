@@ -1,6 +1,9 @@
 import Base.Test
 import Compat
 
+if isdefined(Mads, :runcmd)
+end
+
 if Mads.create_tests
 	Mads.create_tests_off()
 	Mads.create_tests_on()
@@ -21,8 +24,16 @@ Mads.resetmodelruns()
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
+reader = @async readstring(outRead);
+
 quiet_status = Mads.quiet
 Mads.quietoff()
+
+try
+	run(pipeline(`julia -h`, stdout=DevNull, stderr=DevNull))
+catch
+	Mads.error("Julia executable needs to be in the executable search path!")
+end
 
 Mads.madsoutput("a")
 Mads.madsdebug("a")
@@ -35,20 +46,24 @@ else
 	ARGS[1] = "testing"
 end
 include("../src/madsjl.jl")
+rm("madsjl.cmdline_hist")
 Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 if isdefined(Mads, :runcmd)
 	if Mads.madswindows
-		run(`dir $(Pkg.dir("Mads"))`)
+		run(`cmd /C dir $(Pkg.dir("Mads"))`)
 	else
 		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
 	end
 end
 # Mads.create_documentation()
-close(outWrite);
-close(outRead);
+
 redirect_stdout(originalSTDOUT);
+close(outWrite);
+output = wait(reader);
+close(outRead);
+
 Mads.quieton()
 if quiet_status
 	Mads.quieton()

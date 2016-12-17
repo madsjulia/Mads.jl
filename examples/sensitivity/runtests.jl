@@ -31,11 +31,13 @@ sa_results = Mads.saltelliparallel(md, 2; N=5, seed=2015)
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
+reader = @async readstring(outRead);
 Mads.printSAresults(md, sa_results)
 Mads.printSAresults2(md, sa_results)
-close(outWrite);
-close(outRead);
 redirect_stdout(originalSTDOUT);
+close(outWrite);
+output = wait(reader);
+close(outRead);
 
 A=[[1,2] [2,3]]
 Mads.savesaltellirestart(A, "A", problemdir)
