@@ -1,3 +1,4 @@
+
 import Base.Test
 import Compat
 
@@ -24,7 +25,11 @@ Mads.resetmodelruns()
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
-reader = @async readstring(outRead);
+if VERSION < v"0.5"
+	reader = @async readall(outRead);
+else
+	reader = @async readstring(outRead);
+end
 
 quiet_status = Mads.quiet
 Mads.quietoff()
