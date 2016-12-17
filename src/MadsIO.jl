@@ -280,7 +280,7 @@ function getmadsdir()
 	if typeof(source_path) == Void
 		problemdir = ""
 	else
-		problemdir = string((dirname(source_path))) * "/"
+		problemdir = string((dirname(source_path)))
 		madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir
@@ -587,7 +587,7 @@ end
 
 "Create a symbolic link of a file `filename` in a directory `dirtarget`"
 function symlinkdir(filename::String, dirtarget::String)
-	symlink(abspath(filename), dirtarget * "/" * filename)
+	symlink(abspath(filename), joinpath(dirtarget, filename))
 end
 
 "Remove directory"

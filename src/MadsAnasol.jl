@@ -301,7 +301,7 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
 	mass_injected = Array(Float64, nf)
 	mass_reduced = Array(Float64, nf)
 	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
-		md = Mads.loadmadsfile(path * "/" * mf[i])
+		md = Mads.loadmadsfile(joinpath(path, mf[i]))
 		l = md["Parameters"]["lambda"]["init"]
 		if l < eps(Float64)
 			l = 1e-32
@@ -311,6 +311,6 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
 		mass_injected[i] = Float64(mi)
 		mass_reduced[i] = Float64(mi)
 	end
-	graphoutput && plotmass(lambda, mass_injected, mass_reduced, path * "/mass_reduced")
+	graphoutput && plotmass(lambda, mass_injected, mass_reduced, joinpath(path, "mass_reduced"))
 	return lambda, mass_injected, mass_reduced
 end

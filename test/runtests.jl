@@ -18,10 +18,10 @@ include("parameters.jl")
 println("* observations ...")
 include("observations.jl")
 
-examples = readdir(Pkg.dir("Mads") * "/examples/")
+examples = readdir(joinpath(Pkg.dir("Mads"), "examples"))
 
 for madstest in examples
-	file = Pkg.dir("Mads") * "/examples/" * madstest * "/runtests.jl"
+	file = joinpath(Pkg.dir("Mads"), "examples", madstest, "runtests.jl")
 	if isfile(file)
 		println("* $(madstest) ...")
 		include(file)

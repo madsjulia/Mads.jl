@@ -6,10 +6,10 @@ import DataStructures
 Mads.madsinfo("Loading data ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
-	workdir = Mads.madsdir * "/../examples/ode/"
+	workdir = joinpath(Mads.madsdir, "..", "examples", "ode")
 end
 
-md = Mads.loadmadsfile(workdir * "ode.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "ode.mads"))
 rootname = Mads.getmadsrootname(md)
 
 # get parameter keys

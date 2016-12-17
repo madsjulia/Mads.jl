@@ -29,18 +29,18 @@ end
 function test(testmod::String="")
 	orig_dir = pwd()
 	if testmod == ""
-		include(Pkg.dir("Mads") * "/test/runtests.jl")
+		include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
 		println("* Mads modules ...")
 		for i in madsmodules[2:end]
 			println("* $i testing ...")
 			include(Pkg.dir(i) * "/test/runtests.jl")
 		end
 	else
-		file = Pkg.dir("Mads") * "/examples/$(testmod)/runtests.jl"
+		file = joinpath(Pkg.dir("Mads"), "examples", testmod, "runtests.jl")
 		if isfile(file)
 			include(file)
 		elseif isdefined(Symbol(testmod))
-			file = Pkg.dir(testmod) * "/test/runtests.jl"
+			file = joinpath(Pkg.dir(testmod), "test", "runtests.jl")
 			if isfile(file)
 				include(file)
 			else

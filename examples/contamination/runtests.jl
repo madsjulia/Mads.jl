@@ -2,10 +2,10 @@ import Mads
 
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 if madsdirname == ""
-	madsdirname = Mads.madsdir * "/../examples/contamination/"
+	madsdirname = joinpath(Mads.madsdir, "..", "examples", "contamination")
 end
 
-md = Mads.loadmadsfile(madsdirname * "w01-w13a_w20a.mads") # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile(joinpath(madsdirname, "w01-w13a_w20a.mads")) # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 
 if isdefined(:Gadfly)
@@ -29,7 +29,11 @@ localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collec
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
-reader = @async readstring(outRead);
+if VERSION < v"0.5"
+	reader = @async readall(outRead);
+else
+	reader = @async readstring(outRead);
+end
 Mads.modelinformationcriteria(md)
 redirect_stdout(originalSTDOUT);
 close(outWrite);

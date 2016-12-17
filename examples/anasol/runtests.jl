@@ -11,7 +11,7 @@ md = Mads.loadmadsfile(joinpath(workdir, "w01short.mads"))
 computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
-@JLD.load "$workdir/goodresults.jld" good_forward_preds
+@JLD.load joinpath(workdir, "goodresults.jld") good_forward_preds
 ssr = 0.
 for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
 	ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
@@ -69,17 +69,21 @@ Mads.allwellsoff!(md)
 Mads.allwellson!(md)
 Mads.welloff!(md, "w1a")
 Mads.wellon!(md, "w1a")
-Mads.savemadsfile(md, "$workdir/test.mads")
-Mads.savemadsfile(md, Mads.getparamdict(md), "$workdir/test.mads")
-Mads.savemadsfile(md, Mads.getparamdict(md), "$workdir/test.mads", explicit=true)
-Mads.rmfile(workdir * "/test.mads")
+Mads.savemadsfile(md, joinpath(workdir, "test.mads"))
+Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"))
+Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"), explicit=true)
+Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
 f = Mads.getmadsinputfile()
 e = Mads.getextension("test.mads")
 
 originalSTDOUT = STDOUT;
 (outRead, outWrite) = redirect_stdout();
-reader = @async readstring(outRead);
+if VERSION < v"0.5"
+	reader = @async readall(outRead);
+else
+	reader = @async readstring(outRead);
+end
 
 Mads.showparameters(md)
 Mads.showallparameters(md)

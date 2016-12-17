@@ -4,7 +4,7 @@ currentdir = pwd()
 
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 if madsdirname == ""
-	madsdirname = Mads.madsdir * "/../examples/contamination/"
+	madsdirname = joinpath(Mads.madsdir, "..", "examples", "contamination")
 end
 
 cd(madsdirname)

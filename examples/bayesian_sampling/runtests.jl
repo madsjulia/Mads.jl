@@ -17,7 +17,7 @@ Mads.forward(md, mcmcchain.value)
 mcmcchains = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=1, seed=2016)
 mcmcchains = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 
-md = Mads.loadmadsfile(workdir * "w01.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
 mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays

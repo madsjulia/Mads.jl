@@ -250,7 +250,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue")))
 			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red")))
 			f = Gadfly.plot(ldat, lmin, lmax, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: h=$(h) Model: $(models[model])"))
-			Gadfly.draw(Gadfly.PNG(Pkg.dir("Mads") * "/examples/model_analysis/infogap_results/model_$(model)_h_$(h).png", 6Gadfly.inch, 4Gadfly.inch), f)
+			Gadfly.draw(Gadfly.PNG(joinpath(Pkg.dir("Mads"), "examples", "model_analysis", "infogap_results", "model_$(model)_h_$(h).png"), 6Gadfly.inch, 4Gadfly.inch), f)
 		end
 	end
 	return hmin, hmax

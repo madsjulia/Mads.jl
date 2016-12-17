@@ -145,8 +145,13 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 				originalSTDERR = STDERR;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
-				outreader = @async readstring(outRead);
-				errreader = @async readstring(errRead);
+				if VERSION < v"0.5"
+					outreader = @async readall(outRead);
+					errreader = @async readall(errRead);
+				else
+					outreader = @async readstring(outRead);
+					errreader = @async readstring(errRead);
+				end
 			end
 			addprocs(h; arguments...)
 			if quiet

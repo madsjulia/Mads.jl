@@ -6,3 +6,4 @@ redirect_stdout(originalSTDOUT);
 close(outWrite);
 output = wait(reader);
 close(outRead);
+print(output)

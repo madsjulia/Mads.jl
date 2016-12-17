@@ -1,11 +1,11 @@
 import Mads
 
-problemdir = Mads.getmadsdir() # get the directory where the problem is executed
-if problemdir == ""
-	problemdir = Mads.madsdir * "/../examples/bayesian_sampling/"
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+	workdir = joinpath(Mads.madsdir, "..", "examples", "bayesian_sampling")
 end
 
-md = Mads.loadmadsfile(problemdir * "internal-linearmodel.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
 
 info("Bayesian sampling ...")
@@ -19,7 +19,7 @@ chain_array = vcat(map(chain->chain.value', mcmcchains)...)
 Mads.scatterplotsamples(md, chain_array, rootname * "-parallel-bayes.png")
 Mads.savemcmcresults(chain_array, rootname * "-parallel-bayes.json")
 
-md = Mads.loadmadsfile(problemdir * "w01.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
 
 info("Calibrate a contaminant transport problem (anasol) ...")

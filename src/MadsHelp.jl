@@ -2,12 +2,12 @@ import Documenter
 
 "Produce MADS help information"
 function help()
-	Markdown.parse_file(Pkg.dir("Mads") * "/GETTING_STARTED.md")
+	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "GETTING_STARTED.md"))
 end
 
 "Produce MADS copyright information"
 function copyright()
-	Markdown.parse_file(Pkg.dir("Mads") * "/COPYING.md")
+	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
 
 """

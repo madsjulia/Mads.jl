@@ -35,6 +35,17 @@ catch
 	Mads.error("Julia executable needs to be in the executable search path!")
 end
 
+try
+	symlink(Pkg.dir("Mads"), "test-create-symbolic-link")
+	rm("test-create-symbolic-link")
+catch
+	if Mads.madswindows
+		Mads.error("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
+	else
+		Mads.error("Symbolic links cannot be created!")
+	end
+end
+
 Mads.madsoutput("a")
 Mads.madsdebug("a")
 Mads.madsinfo("Testing ...")

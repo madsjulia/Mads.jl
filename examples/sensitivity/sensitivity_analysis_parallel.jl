@@ -1,15 +1,18 @@
 import Mads
 import Base.Test
 
-problemdir = Mads.getmadsdir()
+workdir = Mads.getmadsdir()
+if workdir == ""
+    @everywhere workdir = joinpath(Mads.madsdir, "..", "examples", "sensitivity")
+end
 
 info("Parallel Saltelli sensitivity analysis: Sobol test ...")
-mdsobol = Mads.loadmadsfile(problemdir * "sobol.mads")
+mdsobol = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))
 results = Mads.saltelliparallel(mdsobol, N=500, 2)
 Mads.printSAresults(mdsobol, results)
 
 info("Parallel Saltelli sensitivity analysis: Linear problem ...")
-mdsaltelli = Mads.loadmadsfile(problemdir * "saltelli.mads")
+mdsaltelli = Mads.loadmadsfile(joinpath(workdir, "saltelli.mads"))
 results = Mads.saltelliparallel(mdsaltelli, N=500, 2)
 Mads.printSAresults(mdsaltelli, results)
 
@@ -28,6 +31,7 @@ results1 = Mads.saltelli(mdsaltelli; N=5000, restartdir="saltellicheckpoint", ch
 results2 = Mads.saltelli(mdsaltelli; N=5000, restartdir="saltellicheckpoint", checkpointfrequency=1000, parallel=true, seed=2016)
 @Base.Test.test results1 == results2
 rm("saltellicheckpoint", recursive=true)
+
 # Mads.madsinfo("Parallel Saltelli sensitivity analysis (brute force): Sobol test:") # TODO Brute force needs to be fixed
 # mdsobol = Mads.loadmadsfile("sobol.mads")
 # results = Mads.saltellibruteparallel(mdsobol, 2) # Slow

@@ -12,7 +12,7 @@ function execute_bigdt(input::Dict, waiting, status, resultbox)
 		md = Mads.loadmadsfile(problemdir * filename)
 		nsample = input[:nsample]
 		bigdtresults = Mads.dobigdt(md, nsample; maxHorizon=0.8, numlikelihoods=5)
-		Mads.plotrobustnesscurves(md, bigdtresults; filename=problemdir * filename * "-robustness-$nsample.svg")
+		Mads.plotrobustnesscurves(md, bigdtresults; filename=joinpath(problemdir, filename * "-robustness-$nsample.svg"))
 		push!(waiting, false)
 	end
 end

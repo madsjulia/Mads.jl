@@ -1,13 +1,13 @@
 import Mads
 
 # setup the directory for the current Mads problem
-problemdir = Mads.getmadsdir() # get the directory where the problem is executed
-if problemdir == ""
-	problemdir = Mads.madsdir * "/../examples/bayesian_sampling/"
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+	workdir = joinpath(Mads.madsdir, "..", "examples", "bayesian_sampling")
 end
 
 # load Mads problem
-md = Mads.loadmadsfile(problemdir * "w01.mads")
+md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
 Mads.plotmadsproblem(md)
 

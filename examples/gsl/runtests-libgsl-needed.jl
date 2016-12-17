@@ -3,7 +3,7 @@ import Base.Test
 
 madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
 if madsdirname == ""
-	madsdirname = Mads.madsdir * "/../examples/gsl/"
+	madsdirname = joinpath(Mads.madsdir, "..", "examples", "gsl")
 end
 
 # Test callback functionality
