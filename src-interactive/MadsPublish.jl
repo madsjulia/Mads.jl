@@ -9,6 +9,7 @@ function checkout(git::Bool=true)
 			info("Checking out $(i) ...")
 			cwd = pwd()
 			cd(Pkg.dir(i))
+			run(`git checkout master`)
 			run(`git pull`)
 			cd(cwd)
 		else
@@ -18,6 +19,26 @@ function checkout(git::Bool=true)
 				warn("$i cannot be checked out; most probably it is dirty!")
 			end
 		end
+	end
+end
+
+"Checkout master branches of the Mads modules"
+function checkoutmaster(modulename::String=""; all::Bool=false)
+	if modulename!=""
+		modulenames = [modulename]
+	else
+		if all
+			modulenames = keys(Pkg.installed())
+		else
+			modulenames = madsmodules
+		end
+	end
+	for i in modulenames
+		info("Checking out master $(i) ...")
+		cwd = pwd()
+		cd(Pkg.dir(i))
+		run(`git checkout master`)
+		cd(cwd)
 	end
 end
 
