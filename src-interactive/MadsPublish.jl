@@ -2,15 +2,39 @@ if VERSION >= v"0.5"
 	@tryimport PkgDev
 end
 
-"Checkout the latest version of the Mads modules"
-function checkout(git::Bool=true)
-	for i in madsmodules
+"List modules required by Mads"
+function required()
+	modules = readdlm(joinpath(Pkg.dir("Mads"), "REQUIRE"))[:,1]
+	modules = modules[modules.!="julia"]
+end
+
+"Checkout the latest version of the Mads / Julia modules"
+function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
+	if modulename!=""
+		modulenames = [modulename]
+	else
+		if required
+			modulenames = Mads.required()
+		elseif all
+			modulenames = keys(Pkg.installed())
+		else
+			modulenames = madsmodules
+		end
+	end
+	if master==true || pull==true
+		git = true
+	end
+	for i in modulenames
 		if git
 			info("Checking out $(i) ...")
 			cwd = pwd()
 			cd(Pkg.dir(i))
-			run(`git checkout master`)
-			run(`git pull`)
+			if master
+				run(`git checkout master`)
+			end
+			if pull
+				run(`git pull`)
+			end
 			cd(cwd)
 		else
 			try
@@ -22,23 +46,21 @@ function checkout(git::Bool=true)
 	end
 end
 
-"Checkout master branches of the Mads modules"
-function checkoutmaster(modulename::String=""; all::Bool=false)
+"Free Mads / Julia modules"
+function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
 	else
-		if all
+		if required
+			modulenames = Mads.required()
+		elseif all
 			modulenames = keys(Pkg.installed())
 		else
 			modulenames = madsmodules
 		end
 	end
 	for i in modulenames
-		info("Checking out master $(i) ...")
-		cwd = pwd()
-		cd(Pkg.dir(i))
-		run(`git checkout master`)
-		cd(cwd)
+		Pkg.free(i)
 	end
 end
 
@@ -115,13 +137,6 @@ function tag(madsmodule::String, sym::Symbol=:patch)
 		info("$madsmodule is now tagged!")
 	else
 		warn("$madsmodule cannot be tagged!")
-	end
-end
-
-"Use the latest tagged versions of the Mads modules"
-function free()
-	for i in madsmodules
-		Pkg.free(i)
 	end
 end
 
