@@ -338,7 +338,7 @@ Set new mads file name
 """
 function setnewmadsfilename(madsdata::Associative)
 	dir = getmadsproblemdir(madsdata)
-	root = getmadsrootname(madsdata)
+	root = splitdir(getmadsrootname(madsdata))[2]
 	if ismatch(r"-v[0-9].$", root)
 		rm = match(r"-v([0-9]).$", root)
 		l = rm.captures[1] 
@@ -346,19 +346,11 @@ function setnewmadsfilename(madsdata::Associative)
 		v = parse(Int, s[2]) + 1
 		l = length(s[2])
 		f = "%0" * string(l) * "d"
-		if contains(root, "/")
-			filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
-		else
-			filename = "$(dir)/$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
-		end
+		filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
 	else
-		if contains(root, "/")
-			filename = "$(root)-rerun.mads"
-		else
-			filename = "$(dir)/$(root)-rerun.mads"
-		end
+		filename = "$(root)-rerun.mads"
 	end
-	return filename
+	return joinpath(dir, filename)
 end
 
 """
