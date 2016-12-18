@@ -33,11 +33,11 @@ println(es(100)) # print all primes less or equal than 100
 1::Int64 # 64-bit integer, no overflow warnings, fails on 32 bit Julia, use Int32 assertion instead
 1.0::Float64 # 64-bit float, defines NaN, -Inf, Inf
 true::Bool # boolean, allows "true" and "false"
-’c’::Char # character, allows Unicode
+'c'::Char # character, allows Unicode
 "s"::String # strings, allows Unicode, see also Strings
 
 int64(1.3) # rounds float to integer
-int64(’a’) # character to integer
+int64('a') # character to integer
 int64("a") # error no conversion possible
 int64(2.0^300) # error - loss of precision
 float64(1) # integer to float
@@ -97,11 +97,11 @@ resize!(x, 5) # resize x in place to hold 5 values (filled with garbage)
 Float64[x^2 for x in 1:4] # casting comprehension result to Float64
 {i/2 for i = 1:3} # comprehension generating array of type Any
 [1 2] # 1x2 matrix (hcat function)
-[1 2]’ # 2x1 matrix (after transposing)
+[1 2]' # 2x1 matrix (after transposing)
 [1, 2] # vector (vcat function)
 [1; 2] # vector (hvcat function)
 [1 2 3; 1 2 3] # 2x3 matrix (hvcat function)
-[1; 2] == [1 2]’ # false, different array dimensions
+[1; 2] == [1 2]' # false, different array dimensions
 [(1, 2)] # 1-element vector
 collect((1, 2)) # 2-element vector by tuple unpacking
 [[1 2] 3] # append to a row vector (hcat)
@@ -181,7 +181,7 @@ x = (Int64=>Int64)[1=>1, 2=>2] # literal syntax creation, optional type informat
 y = {"a"=>1, (2,3)=>true} # dictionary with type Dict(Any, Any)
 y["a"] # element retrieval
 y["b"] # error
-y["b"] = ’b’ # added element
+y["b"] = 'b' # added element
 haskey(y, "b") # check if y contains key "b"
 keys(y), values(y) # tuple of iterators returing keys and values in y
 delete!(y, "b") # delete key from a collection, see also: pop!
@@ -276,7 +276,7 @@ q(10) do x # creation of anonymous function by do construct, useful in IO
 end
 m = reshape(1:12, 3, 4)
 map(x -> x ^ 2, m) # 3x4 array returned with transformed data
-filter(x -> bits(x)[end] == ’0’, 1:12) # a fancy way to choose even integers from the range
+filter(x -> bits(x)[end] == '0', 1:12) # a fancy way to choose even integers from the range
 
 # As a convention functions with name ending with ! change their arguments in-place. See for example resize! in this document.
 
@@ -384,13 +384,13 @@ import M.y
 true || false # binary or operator (singeltons only), || and && use short-circut evaluation
 [1 2] & [2 1] # bitwise and operator
 1 < 2 < 3 # chaining conditions is OK (singeltons only)
-[1 2] .< [2 1] # for vectorized operators need to add ’.’ in front
+[1 2] .< [2 1] # for vectorized operators need to add '.' in front
 x = [1 2 3]
 2x + 2(x+1) # multiplication can be omitted between a literal and a variable or a left parenthesis
 y = [1, 2, 3]
 x + y # error
 x .+ y # 3x3 matrix, dimension broadcasting
-x + y’ # 1x3 matrix
+x + y' # 1x3 matrix
 x * y # array multiplication, 1-element vector (not scalar)
 x .* y # elementwise multiplication
 x == [1 2 3] # true, object looks the same
@@ -426,12 +426,12 @@ fieldtype(1:2,:len) # get type of the field in composite type (passed as symbol)
 zip(1:5, 1:3) |> collect # convert iterables to iterable tuple and pass it to collect
 enumerate("abc") # create iterator of tuples (index, collection element)
 isempty("abc") # check if collection is empty
-’b’ in "abc" # check if element is in a collection
-indexin(collect("abc"), collect("abrakadabra")) # [11, 9, 0] (’c’ not found), needs arrays
-findin("abc", "abrakadabra") # [1, 2] (’c’ was not found)
+'b' in "abc" # check if element is in a collection
+indexin(collect("abc"), collect("abrakadabra")) # [11, 9, 0] ('c' not found), needs arrays
+findin("abc", "abrakadabra") # [1, 2] ('c' was not found)
 unique("abrakadabra") # return unique elements
 issubset("abc", "abcd") # check if every element in fist collection is in the second
-indmax("abrakadabra") # index of maximal element (3 - ’r’ in this case)
+indmax("abrakadabra") # index of maximal element (3 - 'r' in this case)
 findmax("abrakadabra") # tuple: maximal element and its index
 filter(x->mod(x,2)==0, 1:10) # retain elements of collection that meet predicate
 dump(1:2:5) # show all user-visible structure of an object
@@ -442,7 +442,7 @@ sort(rand(10)) # sort 10 uniform random variables
 # For I/O details refer documentation. Basic operations:
 # - readdlm, readcsv: read from file
 # - writedlm, writecsv: write to a file
-# Warning! Trailing spaces are not discarded if delim=’ ’ in file reading.
+# Warning! Trailing spaces are not discarded if delim=' ' in file reading.
 
 # Random numbers
 # Basic random numbers:
@@ -541,7 +541,7 @@ srand(1)
 # generate 100 observations from correlated normal variates
 n = 100
 dist = MvNormal([0.0; 0.0], [1.0 0.5; 0.5 1.0])
-r = rand(dist, n)’
+r = rand(dist, n)'
 # create 100 000 bootstrap replications
 # and fetch time and memory used
 @time bootcor = Float64[cor(r[sample(1:n, n),:])[1, 2] for i in 1:10^5]
