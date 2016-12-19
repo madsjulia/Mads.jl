@@ -2,7 +2,19 @@ if VERSION >= v"0.5"
 	@tryimport PkgDev
 end
 
-"List modules required by Mads"
+"Checks of package is available"
+function pkgisavailable(modulename::String)
+	flag=false
+	try
+		Pkg.available(modulename)
+		flag=true	
+	catch
+		warn("$modulename is not available")
+	end
+	return flag
+end
+
+"Lists modules required by Mads"
 function required()
 	modules = readdlm(joinpath(Pkg.dir("Mads"), "REQUIRE"))[:,1]
 	modules = modules[modules.!="julia"]

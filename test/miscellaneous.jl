@@ -1,4 +1,3 @@
-
 import Base.Test
 import Compat
 
@@ -37,7 +36,15 @@ Mads.quietoff()
 try
 	run(pipeline(`julia -h`, stdout=DevNull, stderr=DevNull))
 catch
-	Mads.error("Julia executable needs to be in the executable search path!")
+	Mads.madscritical("Julia executable needs to be in the executable search path!")
+end
+
+if !Mads.madswindows
+	try
+		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
+	catch
+		Mads.madscritical("bash environment is not available!")
+	end
 end
 
 try
@@ -45,9 +52,9 @@ try
 	rm("test-create-symbolic-link")
 catch
 	if Mads.madswindows
-		Mads.error("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
+		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
 	else
-		Mads.error("Symbolic links cannot be created!")
+		Mads.madscritical("Symbolic links cannot be created!")
 	end
 end
 
