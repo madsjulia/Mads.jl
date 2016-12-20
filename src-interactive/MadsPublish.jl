@@ -3,7 +3,7 @@ if VERSION >= v"0.5"
 end
 
 "Checks of package is available"
-function pkgisavailable(modulename::String)
+function ispkgavailable(modulename::String)
 	flag=false
 	try
 		Pkg.available(modulename)
@@ -14,10 +14,34 @@ function pkgisavailable(modulename::String)
 	return flag
 end
 
-"Lists modules required by Mads"
-function required()
-	modules = readdlm(joinpath(Pkg.dir("Mads"), "REQUIRE"))[:,1]
-	modules = modules[modules.!="julia"]
+"Lists modules required by a module (Mads by default)"
+function required(modulename::String="Mads", filtermodule::String="")
+	filename = joinpath(Pkg.dir(modulename), "REQUIRE")
+	if isfile(filename)
+		modules = readdlm(filename)
+		if filtermodule != ""
+			i = modules[:,1].==filtermodule
+		else
+			i = modules[:,1].!="julia"
+		end
+		return modules[i,:];
+	else
+		return [filtermodule ""];
+	end
+end
+
+"Lists modules dependents on a module (Mads by default)"
+function dependents(modulename::String="Mads", filter::Bool=false)
+	depmodules = Pkg.dependents(modulename)
+	modules = Array(Any, (0, 2))
+	for i in depmodules
+		modules = [modules; [i Mads.required(i, modulename)[:,2]]]
+	end
+	if filter
+		i = modules[:,2].!=""
+		modules = modules[i,:]
+	end
+	return modules;
 end
 
 "Checkout the latest version of the Mads / Julia modules"
@@ -26,7 +50,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pul
 		modulenames = [modulename]
 	else
 		if required
-			modulenames = Mads.required()
+			modulenames = Mads.required()[:,1]
 		elseif all
 			modulenames = keys(Pkg.installed())
 		else
