@@ -311,6 +311,8 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
 		mass_injected[i] = Float64(mi)
 		mass_reduced[i] = Float64(mi)
 	end
-	graphoutput && plotmass(lambda, mass_injected, mass_reduced, joinpath(path, "mass_reduced"))
+	if graphoutput &&isdefined(Mads, :plotmass)
+		plotmass(lambda, mass_injected, mass_reduced, joinpath(path, "mass_reduced"))
+	end
 	return lambda, mass_injected, mass_reduced
 end

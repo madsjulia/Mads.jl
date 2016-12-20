@@ -48,6 +48,7 @@ if !Mads.madswindows
 end
 
 try
+	Mads.rmfile("test-create-symbolic-link")
 	symlink(Pkg.dir("Mads"), "test-create-symbolic-link")
 	rm("test-create-symbolic-link")
 catch

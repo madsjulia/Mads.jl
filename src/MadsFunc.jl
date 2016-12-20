@@ -103,41 +103,9 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)	
-			tempdirname = "../$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
-			attempt = 0
-			trying = true
-			while trying
-				try
-					attempt += 1
-					if !isdir(tempdirname)
-						mkdir(tempdirname)
-					end
-					Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
-					trying = false
-				catch
-					sleep(attempt * 0.5)
-					if attempt > 3
-						madscritical("Temporary directory $tempdirname cannot be created!")
-						trying = false
-					end
-				end
-			end
-			attempt = 0
-			trying = true
-			while trying
-				try
-					attempt += 1
-					Mads.symlinkdirfiles(madsproblemdir, tempdirname)
-					Mads.madsinfo("Links created in temporary directory: $(tempdirname)", 1)
-					trying = false
-				catch
-					sleep(attempt * 0.5)
-					if attempt > 3
-						madscritical("Links cannot be created in temporary directory $tempdirname cannot be created!")
-						trying = false
-					end
-				end
-			end
+			tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
+			Mads.createtempdir(tempdirname)
+			Mads.linktempdir(madsproblemdir, tempdirname)
 			cd(tempdirname)
 			if haskey(madsdata, "Instructions") # Templates/Instructions
 				for instruction in madsdata["Instructions"]

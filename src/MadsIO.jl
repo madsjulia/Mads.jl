@@ -579,7 +579,10 @@ end
 
 "Create a symbolic link of a file `filename` in a directory `dirtarget`"
 function symlinkdir(filename::String, dirtarget::String)
-	symlink(abspath(filename), joinpath(dirtarget, filename))
+	filenametarget = joinpath(dirtarget, filename)
+	if !isfile(filenametarget)
+		symlink(abspath(filename), filenametarget)
+	end
 end
 
 "Remove directory"
@@ -615,5 +618,49 @@ function rmfiles_root(root::String; path::String=".")
 	end
 	for f in searchdir(Regex(string(root, "\\..*")); path = path)
 		rm(joinpath(path, f))
+	end
+end
+
+"Create temporary directory"
+function createtempdir(tempdirname::String)
+	attempt = 0
+	trying = true
+	while trying
+		try
+			attempt += 1
+			if !isdir(tempdirname)
+				mkdir(tempdirname)
+			end
+			Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
+			trying = false
+		catch
+			sleep(attempt * 0.5)
+			if attempt > 3
+				madscritical("Temporary directory $tempdirname cannot be created!")
+				trying = false
+			end
+		end
+	end
+end
+
+"Link files in a temporary directory"
+function linktempdir(madsproblemdir::String, tempdirname::String)
+	attempt = 0
+	trying = true
+	while trying
+		try
+			attempt += 1
+			Mads.symlinkdirfiles(madsproblemdir, tempdirname)
+			Mads.madsinfo("Links created in temporary directory: $(tempdirname)", 1)
+			trying = false
+		catch
+			Mads.rmdir(tempdirname)
+			sleep(attempt * 1)
+			Mads.createtempdir(tempdirname)
+			if attempt > 4
+				madscritical("Links cannot be created in temporary directory $tempdirname cannot be created!")
+				trying = false
+			end
+		end
 	end
 end
