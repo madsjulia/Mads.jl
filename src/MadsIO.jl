@@ -580,7 +580,7 @@ end
 "Create a symbolic link of a file `filename` in a directory `dirtarget`"
 function symlinkdir(filename::String, dirtarget::String)
 	filenametarget = joinpath(dirtarget, filename)
-	if !isfile(filenametarget)
+	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
 		symlink(abspath(filename), filenametarget)
 	end
 end
