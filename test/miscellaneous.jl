@@ -39,14 +39,6 @@ catch
 	Mads.madscritical("Julia executable needs to be in the executable search path!")
 end
 
-if !Mads.madswindows
-	try
-		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
-	catch
-		Mads.madscritical("bash environment is not available!")
-	end
-end
-
 try
 	Mads.rmfile("test-create-symbolic-link")
 	symlink(Pkg.dir("Mads"), "test-create-symbolic-link")

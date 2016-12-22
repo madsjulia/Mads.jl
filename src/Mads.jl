@@ -10,6 +10,24 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
+madswindows = (VERSION>=v"0.5" && is_windows()) || (VERSION<v"0.5" && OS_NAME == :Windows)
+
+madsgit = true
+try
+	run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
+catch
+	madsgit = false
+end
+
+madsbash = true
+if !madswindows
+	try
+		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
+	catch
+		madsbash = false
+	end
+end
+
 madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
 
 macro tryimport(s)
@@ -83,7 +101,6 @@ long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 nprocs_per_task = 1
 const madsdir = splitdir(Base.source_path())[1]
-madswindows = (VERSION>=v"0.5" && is_windows()) || (VERSION<v"0.5" && OS_NAME == :Windows)
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	long_tests = true

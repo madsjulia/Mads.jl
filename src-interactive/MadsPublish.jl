@@ -60,9 +60,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pul
 	if master==true || pull==true
 		git = true
 	end
-	try
-		run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
-	catch
+	if !madsgit
 		git = false
 	end
 	for i in modulenames
@@ -111,12 +109,7 @@ function status(; git::Bool=true, gitmore::Bool=false)
 		Mads.status(i, git=git, gitmore=gitmore)
 	end
 end
-function status(madsmodule::String; git::Bool=true, gitmore::Bool=false)
-	try
-		run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
-	catch
-		git = false
-	end
+function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	if git
 		cwd = pwd()
 		info("Git status $(madsmodule) ...")
