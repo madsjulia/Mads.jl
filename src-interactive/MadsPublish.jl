@@ -60,6 +60,11 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pul
 	if master==true || pull==true
 		git = true
 	end
+	try
+		run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
+	catch
+		git = false
+	end
 	for i in modulenames
 		if git
 			info("Checking out $(i) ...")
