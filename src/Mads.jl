@@ -43,8 +43,6 @@ macro tryimport(s)
 	return :($(esc(q)))
 end
 
-@tryimport LMLin
-
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		@tryimport Gadfly
