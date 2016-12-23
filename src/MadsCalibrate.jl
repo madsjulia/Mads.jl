@@ -72,6 +72,37 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 	end
 end
 
+function calibraterandom_parallel(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, save_results=true)
+	Mads.setseed(seed)
+	paramkeys = Mads.getparamkeys(madsdata)
+	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
+	paramsoptdict = paramdict
+	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
+	allphi = SharedArray(Float64, numberofsamples)
+	allconverged = SharedArray(Bool, numberofsamples)
+	allparameters = SharedArray(Float64, (numberofsamples, length(keys(paramoptvalues))))
+	@sync @parallel for i in 1:numberofsamples
+		for paramkey in keys(paramoptvalues)
+			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
+		end
+		Mads.setparamsinit!(madsdata, paramsoptdict)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		phi = results.minimum
+		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
+		allphi[i] = phi
+		allconverged[i] = converged
+		j = 1
+		for paramkey in keys(paramoptvalues)
+			allparameters[i,j] = parameters[paramkey]
+			j += 1
+		end
+	end
+	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
+	return allphi, allconverged, allparameters
+end
+
+
 """
 Calibrate
 
