@@ -28,13 +28,13 @@ if !madswindows
 	end
 end
 
-madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
+madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
 
 macro tryimport(s)
 	importq = string(:(import $s))
 	warnstring = string(s, " is not available")
 	q = quote
-		try 
+		try
 			eval(parse($importq))
 		catch
 			warn($warnstring)
