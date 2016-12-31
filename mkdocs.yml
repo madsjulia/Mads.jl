@@ -31,6 +31,8 @@ pages:
   - Mads: Modules/Mads.md
   - BIGUQ: Modules/BIGUQ.md
   - Anasol: Modules/Anasol.md
+  - AffineInvariantMCMC: Modules/AffineInvariantMCMC.md
+  - GeostatInversion: Modules/GeostatInversion.md
   - ReusableFunctions: Modules/ReusableFunctions.md
   - MetaProgTools: Modules/MetaProgTools.md
   - RobustPmap: Modules/RobustPmap.md
@@ -56,4 +58,3 @@ extra_javascript:
 extra:
   author:
     github: montyvesselinov
-

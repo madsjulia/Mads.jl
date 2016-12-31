@@ -338,6 +338,24 @@
       
         
   <li>
+    <a class="" title="AffineInvariantMCMC" href="../AffineInvariantMCMC/">
+      AffineInvariantMCMC
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
+    <a class="" title="GeostatInversion" href="../GeostatInversion/">
+      GeostatInversion
+    </a>
+    
+  </li>
+
+      
+        
+  <li>
     <a class="" title="ReusableFunctions" href="../ReusableFunctions/">
       ReusableFunctions
     </a>
@@ -501,7 +519,7 @@ Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, 
 <p>Returns:</p>
 <ul>
 <li><code>minimumdict</code> : model parameter dictionary with the optimal values at the minimum</li>
-<li><code>results</code> : optimization algorithm results (e.g. results.minimum)</li>
+<li><code>results</code> : optimization algorithm results (e.g. results.minimizer)</li>
 </ul>
 <p><a id='Mads.calibraterandom' href='#Mads.calibraterandom'>#</a>
 <strong><code>Mads.calibraterandom</code></strong> &mdash; <em>Function</em>.</p>
@@ -530,11 +548,11 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 </ul>
 <p>Returns:</p>
 <ul>
-<li><code>bestresult</code> : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)</li>
+<li><code>bestresult</code> : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)</li>
 </ul>
 <p><a id='Mads.checkout' href='#Mads.checkout'>#</a>
 <strong><code>Mads.checkout</code></strong> &mdash; <em>Function</em>.</p>
-<p>Checkout the latest version of the Mads modules</p>
+<p>Checkout the latest version of the Mads / Julia modules</p>
 <p><a id='Mads.checkparameterranges-Tuple{Associative}' href='#Mads.checkparameterranges-Tuple{Associative}'>#</a>
 <strong><code>Mads.checkparameterranges</code></strong> &mdash; <em>Method</em>.</p>
 <p>Check parameter ranges for model parameters</p>
@@ -648,9 +666,15 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <p><a id='Mads.createobservations!-Tuple{Associative,Array{T,1},Array{T,1}}' href='#Mads.createobservations!-Tuple{Associative,Array{T,1},Array{T,1}}'>#</a>
 <strong><code>Mads.createobservations!</code></strong> &mdash; <em>Method</em>.</p>
 <p>Create observations in the MADS problem dictionary based on <code>time</code> and <code>observation</code> vectors</p>
+<p><a id='Mads.createtempdir-Tuple{String}' href='#Mads.createtempdir-Tuple{String}'>#</a>
+<strong><code>Mads.createtempdir</code></strong> &mdash; <em>Method</em>.</p>
+<p>Create temporary directory</p>
 <p><a id='Mads.deleteNaN!-Tuple{DataFrames.DataFrame}' href='#Mads.deleteNaN!-Tuple{DataFrames.DataFrame}'>#</a>
 <strong><code>Mads.deleteNaN!</code></strong> &mdash; <em>Method</em>.</p>
 <p>Delete rows with NaN in a Dataframe <code>df</code></p>
+<p><a id='Mads.dependents' href='#Mads.dependents'>#</a>
+<strong><code>Mads.dependents</code></strong> &mdash; <em>Function</em>.</p>
+<p>Lists modules dependents on a module (Mads by default)</p>
 <p><a id='Mads.display-Tuple{String}' href='#Mads.display-Tuple{String}'>#</a>
 <strong><code>Mads.display</code></strong> &mdash; <em>Method</em>.</p>
 <p>Display image file</p>
@@ -781,9 +805,9 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 <ul>
 <li><code>array3d</code> : 3D array with model predictions along a 3D grid</li>
 </ul>
-<p><a id='Mads.free-Tuple{}' href='#Mads.free-Tuple{}'>#</a>
-<strong><code>Mads.free</code></strong> &mdash; <em>Method</em>.</p>
-<p>Use the latest tagged versions of the Mads modules</p>
+<p><a id='Mads.free' href='#Mads.free'>#</a>
+<strong><code>Mads.free</code></strong> &mdash; <em>Function</em>.</p>
+<p>Free Mads / Julia modules</p>
 <p><a id='Mads.functions' href='#Mads.functions'>#</a>
 <strong><code>Mads.functions</code></strong> &mdash; <em>Function</em>.</p>
 <p>List available functions in the MADS modules:</p>
@@ -859,12 +883,23 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 <p>Get the directory where the Mads data file is located</p>
 <p><code>Mads.getmadsproblemdir(madsdata)</code></p>
 <p>Example:</p>
-<div class="codehilite"><pre>madsdata = Mads.loadmadsproblemdir(&quot;../../a.mads&quot;)
+<div class="codehilite"><pre>madsdata = Mads.loadmadsproblem(&quot;../../a.mads&quot;)
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
 </pre></div>
 
 
 <p>where <code>madsproblemdir</code> = <code>"../../"</code></p>
+<p><a id='Mads.getmadsproblemdirtail-Tuple{Associative}' href='#Mads.getmadsproblemdirtail-Tuple{Associative}'>#</a>
+<strong><code>Mads.getmadsproblemdirtail</code></strong> &mdash; <em>Method</em>.</p>
+<p>Get the directory where the Mads data file is located</p>
+<p><code>Mads.getmadsproblemdirtail(madsdata)</code></p>
+<p>Example:</p>
+<div class="codehilite"><pre>madsdata = Mads.loadmadsproblem(&quot;../example/a.mads&quot;)
+madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
+</pre></div>
+
+
+<p>where <code>madsproblemdirtail</code> = <code>"example"</code></p>
 <p><a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
 <strong><code>Mads.getmadsrootname</code></strong> &mdash; <em>Method</em>.</p>
 <p>Get the MADS problem root name</p>
@@ -1131,6 +1166,9 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <p><a id='Mads.isparam-Tuple{Associative,Associative}' href='#Mads.isparam-Tuple{Associative,Associative}'>#</a>
 <strong><code>Mads.isparam</code></strong> &mdash; <em>Method</em>.</p>
 <p>Is the dictionary containing all the parameters</p>
+<p><a id='Mads.ispkgavailable-Tuple{String}' href='#Mads.ispkgavailable-Tuple{String}'>#</a>
+<strong><code>Mads.ispkgavailable</code></strong> &mdash; <em>Method</em>.</p>
+<p>Checks of package is available</p>
 <p><a id='Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}' href='#Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}'>#</a>
 <strong><code>Mads.krige</code></strong> &mdash; <em>Method</em>.</p>
 <p>Kriging</p>
@@ -1158,6 +1196,9 @@ r = Mads.getrootname(&quot;a.rnd.dat&quot;, first=false) # r = &quot;a.rnd&quot;
 <li><code>alwaysDoJacobian</code>: computer Jacobian each iteration [false]</li>
 <li><code>callback</code> : call back function for debugging</li>
 </ul>
+<p><a id='Mads.linktempdir-Tuple{String,String}' href='#Mads.linktempdir-Tuple{String,String}'>#</a>
+<strong><code>Mads.linktempdir</code></strong> &mdash; <em>Method</em>.</p>
+<p>Link files in a temporary directory</p>
 <p><a id='Mads.loadasciifile-Tuple{String}' href='#Mads.loadasciifile-Tuple{String}'>#</a>
 <strong><code>Mads.loadasciifile</code></strong> &mdash; <em>Method</em>.</p>
 <p>Load ASCII file</p>
@@ -1596,6 +1637,9 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <p><a id='Mads.reload-Tuple{}' href='#Mads.reload-Tuple{}'>#</a>
 <strong><code>Mads.reload</code></strong> &mdash; <em>Method</em>.</p>
 <p>Reload Mads modules</p>
+<p><a id='Mads.required' href='#Mads.required'>#</a>
+<strong><code>Mads.required</code></strong> &mdash; <em>Function</em>.</p>
+<p>Lists modules required by a module (Mads by default)</p>
 <p><a id='Mads.resetmodelruns-Tuple{}' href='#Mads.resetmodelruns-Tuple{}'>#</a>
 <strong><code>Mads.resetmodelruns</code></strong> &mdash; <em>Method</em>.</p>
 <p>Reset the model runs count to be equal to zero</p>
@@ -1615,6 +1659,18 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <ul>
 <li><code>newllhoods</code> : vector of log-likelihoods after reweighing</li>
 </ul>
+<p><a id='Mads.rmdir-Tuple{String}' href='#Mads.rmdir-Tuple{String}'>#</a>
+<strong><code>Mads.rmdir</code></strong> &mdash; <em>Method</em>.</p>
+<p>Remove directory</p>
+<p><a id='Mads.rmfile-Tuple{String}' href='#Mads.rmfile-Tuple{String}'>#</a>
+<strong><code>Mads.rmfile</code></strong> &mdash; <em>Method</em>.</p>
+<p>Remove directory</p>
+<p><a id='Mads.rmfiles_ext-Tuple{String}' href='#Mads.rmfiles_ext-Tuple{String}'>#</a>
+<strong><code>Mads.rmfiles_ext</code></strong> &mdash; <em>Method</em>.</p>
+<p>Remove files with extension <code>ext</code></p>
+<p><a id='Mads.rmfiles_root-Tuple{String}' href='#Mads.rmfiles_root-Tuple{String}'>#</a>
+<strong><code>Mads.rmfiles_root</code></strong> &mdash; <em>Method</em>.</p>
+<p>Remove files with root <code>root</code></p>
 <p><a id='Mads.rosenbrock-Tuple{Array{T,1}}' href='#Mads.rosenbrock-Tuple{Array{T,1}}'>#</a>
 <strong><code>Mads.rosenbrock</code></strong> &mdash; <em>Method</em>.</p>
 <p>Rosenbrock test function</p>
@@ -1707,6 +1763,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <ul>
 <li><code>Mads.searchdir("a")</code></li>
 <li><code>Mads.searchdir(r"[A-B]"; path = ".")</code></li>
+<li><code>Mads.searchdir(r".*.cov"; path = ".")</code></li>
 </ul>
 <p>Arguments:</p>
 <ul>
@@ -1968,6 +2025,12 @@ Mads.spaghettiplots(madsdata, number_of_samples; format=&quot;&quot;, keyword=&q
 <p><a id='Mads.status-Tuple{}' href='#Mads.status-Tuple{}'>#</a>
 <strong><code>Mads.status</code></strong> &mdash; <em>Method</em>.</p>
 <p>Status of the Mads modules</p>
+<p><a id='Mads.symlinkdir-Tuple{String,String}' href='#Mads.symlinkdir-Tuple{String,String}'>#</a>
+<strong><code>Mads.symlinkdir</code></strong> &mdash; <em>Method</em>.</p>
+<p>Create a symbolic link of a file <code>filename</code> in a directory <code>dirtarget</code></p>
+<p><a id='Mads.symlinkdirfiles-Tuple{String,String}' href='#Mads.symlinkdirfiles-Tuple{String,String}'>#</a>
+<strong><code>Mads.symlinkdirfiles</code></strong> &mdash; <em>Method</em>.</p>
+<p>Create a symbolic link of all the files in a directory <code>dirsource</code> in a directory <code>dirtarget</code></p>
 <p><a id='Mads.tag' href='#Mads.tag'>#</a>
 <strong><code>Mads.tag</code></strong> &mdash; <em>Function</em>.</p>
 <p>Tag the Mads modules with a default argument <code>:patch</code></p>

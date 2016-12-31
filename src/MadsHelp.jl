@@ -28,12 +28,9 @@ Arguments:
 - `string` : matching string
 """
 function functions(string::String="")
-	functions(Mads, string)
-	functions(BIGUQ, string)
-	functions(Anasol, string)
-	functions(ReusableFunctions, string)
-	functions(MetaProgTools, string)
-	functions(RobustPmap, string)
+	for i in madsmodules
+		functions(eval(Symbol(i)), string)
+	end
 end
 
 function functions(m::Module, string::String="")

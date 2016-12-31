@@ -7,7 +7,7 @@ function ispkgavailable(modulename::String)
 	flag=false
 	try
 		Pkg.available(modulename)
-		flag=true	
+		flag=true
 	catch
 		warn("$modulename is not available")
 	end

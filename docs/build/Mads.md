@@ -136,7 +136,7 @@ Arguments:
 Returns:
 
   * `minimumdict` : model parameter dictionary with the optimal values at the minimum
-  * `results` : optimization algorithm results (e.g. results.minimum)
+  * `results` : optimization algorithm results (e.g. results.minimizer)
 
 <a id='Mads.calibraterandom' href='#Mads.calibraterandom'>#</a>
 **`Mads.calibraterandom`** &mdash; *Function*.
@@ -169,14 +169,14 @@ Arguments:
 
 Returns:
 
-  * `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimum)
+  * `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
 
 <a id='Mads.checkout' href='#Mads.checkout'>#</a>
 **`Mads.checkout`** &mdash; *Function*.
 
 
 
-Checkout the latest version of the Mads modules
+Checkout the latest version of the Mads / Julia modules
 
 <a id='Mads.checkparameterranges-Tuple{Associative}' href='#Mads.checkparameterranges-Tuple{Associative}'>#</a>
 **`Mads.checkparameterranges`** &mdash; *Method*.
@@ -345,12 +345,26 @@ Arguments:
 
 Create observations in the MADS problem dictionary based on `time` and `observation` vectors
 
+<a id='Mads.createtempdir-Tuple{String}' href='#Mads.createtempdir-Tuple{String}'>#</a>
+**`Mads.createtempdir`** &mdash; *Method*.
+
+
+
+Create temporary directory
+
 <a id='Mads.deleteNaN!-Tuple{DataFrames.DataFrame}' href='#Mads.deleteNaN!-Tuple{DataFrames.DataFrame}'>#</a>
 **`Mads.deleteNaN!`** &mdash; *Method*.
 
 
 
 Delete rows with NaN in a Dataframe `df`
+
+<a id='Mads.dependents' href='#Mads.dependents'>#</a>
+**`Mads.dependents`** &mdash; *Function*.
+
+
+
+Lists modules dependents on a module (Mads by default)
 
 <a id='Mads.display-Tuple{String}' href='#Mads.display-Tuple{String}'>#</a>
 **`Mads.display`** &mdash; *Method*.
@@ -548,12 +562,12 @@ Returns:
 
   * `array3d` : 3D array with model predictions along a 3D grid
 
-<a id='Mads.free-Tuple{}' href='#Mads.free-Tuple{}'>#</a>
-**`Mads.free`** &mdash; *Method*.
+<a id='Mads.free' href='#Mads.free'>#</a>
+**`Mads.free`** &mdash; *Function*.
 
 
 
-Use the latest tagged versions of the Mads modules
+Free Mads / Julia modules
 
 <a id='Mads.functions' href='#Mads.functions'>#</a>
 **`Mads.functions`** &mdash; *Function*.
@@ -690,11 +704,29 @@ Get the directory where the Mads data file is located
 Example:
 
 ```
-madsdata = Mads.loadmadsproblemdir("../../a.mads")
+madsdata = Mads.loadmadsproblem("../../a.mads")
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 
 where `madsproblemdir` = `"../../"`
+
+<a id='Mads.getmadsproblemdirtail-Tuple{Associative}' href='#Mads.getmadsproblemdirtail-Tuple{Associative}'>#</a>
+**`Mads.getmadsproblemdirtail`** &mdash; *Method*.
+
+
+
+Get the directory where the Mads data file is located
+
+`Mads.getmadsproblemdirtail(madsdata)`
+
+Example:
+
+```
+madsdata = Mads.loadmadsproblem("../example/a.mads")
+madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
+```
+
+where `madsproblemdirtail` = `"example"`
 
 <a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
 **`Mads.getmadsrootname`** &mdash; *Method*.
@@ -1238,6 +1270,13 @@ Is parameter with key `parameterkey` optimizable?
 
 Is the dictionary containing all the parameters
 
+<a id='Mads.ispkgavailable-Tuple{String}' href='#Mads.ispkgavailable-Tuple{String}'>#</a>
+**`Mads.ispkgavailable`** &mdash; *Method*.
+
+
+
+Checks of package is available
+
 <a id='Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}' href='#Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}'>#</a>
 **`Mads.krige`** &mdash; *Method*.
 
@@ -1272,6 +1311,13 @@ Arguments:
   * `show_trace` : shows solution trace [default=false]
   * `alwaysDoJacobian`: computer Jacobian each iteration [false]
   * `callback` : call back function for debugging
+
+<a id='Mads.linktempdir-Tuple{String,String}' href='#Mads.linktempdir-Tuple{String,String}'>#</a>
+**`Mads.linktempdir`** &mdash; *Method*.
+
+
+
+Link files in a temporary directory
 
 <a id='Mads.loadasciifile-Tuple{String}' href='#Mads.loadasciifile-Tuple{String}'>#</a>
 **`Mads.loadasciifile`** &mdash; *Method*.
@@ -1986,6 +2032,13 @@ Get observations for a set of regular expressions
 
 Reload Mads modules
 
+<a id='Mads.required' href='#Mads.required'>#</a>
+**`Mads.required`** &mdash; *Function*.
+
+
+
+Lists modules required by a module (Mads by default)
+
 <a id='Mads.resetmodelruns-Tuple{}' href='#Mads.resetmodelruns-Tuple{}'>#</a>
 **`Mads.resetmodelruns`** &mdash; *Method*.
 
@@ -2016,6 +2069,34 @@ Arguments:
 Returns:
 
   * `newllhoods` : vector of log-likelihoods after reweighing
+
+<a id='Mads.rmdir-Tuple{String}' href='#Mads.rmdir-Tuple{String}'>#</a>
+**`Mads.rmdir`** &mdash; *Method*.
+
+
+
+Remove directory
+
+<a id='Mads.rmfile-Tuple{String}' href='#Mads.rmfile-Tuple{String}'>#</a>
+**`Mads.rmfile`** &mdash; *Method*.
+
+
+
+Remove directory
+
+<a id='Mads.rmfiles_ext-Tuple{String}' href='#Mads.rmfiles_ext-Tuple{String}'>#</a>
+**`Mads.rmfiles_ext`** &mdash; *Method*.
+
+
+
+Remove files with extension `ext`
+
+<a id='Mads.rmfiles_root-Tuple{String}' href='#Mads.rmfiles_root-Tuple{String}'>#</a>
+**`Mads.rmfiles_root`** &mdash; *Method*.
+
+
+
+Remove files with root `root`
 
 <a id='Mads.rosenbrock-Tuple{Array{T,1}}' href='#Mads.rosenbrock-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock`** &mdash; *Method*.
@@ -2179,6 +2260,7 @@ Get files in the current directory or in a directory defined by `path` matching 
 
   * `Mads.searchdir("a")`
   * `Mads.searchdir(r"[A-B]"; path = ".")`
+  * `Mads.searchdir(r".*.cov"; path = ".")`
 
 Arguments:
 
@@ -2601,6 +2683,20 @@ Convert `@sprintf` macro into `sprintf` function
 
 
 Status of the Mads modules
+
+<a id='Mads.symlinkdir-Tuple{String,String}' href='#Mads.symlinkdir-Tuple{String,String}'>#</a>
+**`Mads.symlinkdir`** &mdash; *Method*.
+
+
+
+Create a symbolic link of a file `filename` in a directory `dirtarget`
+
+<a id='Mads.symlinkdirfiles-Tuple{String,String}' href='#Mads.symlinkdirfiles-Tuple{String,String}'>#</a>
+**`Mads.symlinkdirfiles`** &mdash; *Method*.
+
+
+
+Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`
 
 <a id='Mads.tag' href='#Mads.tag'>#</a>
 **`Mads.tag`** &mdash; *Function*.

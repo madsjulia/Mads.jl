@@ -27,6 +27,13 @@ Make BIGDT analyses for each possible decision assuming that the proposed observ
 
 Makes BIGDT analyses for each possible decision assuming that no more observations will be made
 
+<a id='BIGUQ.BigDT' href='#BIGUQ.BigDT'>#</a>
+**`BIGUQ.BigDT`** &mdash; *Type*.
+
+
+
+BigOED type
+
 <a id='BIGUQ.BigOED' href='#BIGUQ.BigOED'>#</a>
 **`BIGUQ.BigOED`** &mdash; *Type*.
 
