@@ -350,6 +350,28 @@
         
       
       
+        <ul>
+          
+            <li class="anchor">
+              <a title="Module GeostatInversion.FDDerivatives" href="#module-geostatinversionfdderivatives">
+                Module GeostatInversion.FDDerivatives
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Module GeostatInversion.RandMatFact" href="#module-geostatinversionrandmatfact">
+                Module GeostatInversion.RandMatFact
+              </a>
+            </li>
+          
+            <li class="anchor">
+              <a title="Module GeostatInversion.FFTRF" href="#module-geostatinversionfftrf">
+                Module GeostatInversion.FFTRF
+              </a>
+            </li>
+          
+        </ul>
+      
     
   </li>
 
@@ -509,7 +531,27 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <li>xtol : convergence tolerance for the parameters</li>
 <li>callback : a function of the form <code>(params, observations)-&gt;...</code> that is called during each iteration</li>
 </ul>
-<p>GeostatInversion.FDDerivatives</p>
+<p><a id='Module-GeostatInversion.FDDerivatives-1'></a></p>
+<h2 id="module-geostatinversionfdderivatives">Module GeostatInversion.FDDerivatives</h2>
+<p>Documentation for GeostatInversion.FDDerivatives module (all functions):</p>
+<p><a id='GeostatInversion.FDDerivatives.makegradient' href='#GeostatInversion.FDDerivatives.makegradient'>#</a>
+<strong><code>GeostatInversion.FDDerivatives.makegradient</code></strong> &mdash; <em>Function</em>.</p>
+<p>Create Gradient function</p>
+<p><a id='GeostatInversion.FDDerivatives.makejacobian' href='#GeostatInversion.FDDerivatives.makejacobian'>#</a>
+<strong><code>GeostatInversion.FDDerivatives.makejacobian</code></strong> &mdash; <em>Function</em>.</p>
+<p>Create Jacobian function</p>
+<p><a id='Module-GeostatInversion.RandMatFact-1'></a></p>
+<h2 id="module-geostatinversionrandmatfact">Module GeostatInversion.RandMatFact</h2>
+<p>Documentation for GeostatInversion.RandMatFact module (all functions):</p>
+<p><a id='GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}' href='#GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}'>#</a>
+<strong><code>GeostatInversion.RandMatFact.randsvd</code></strong> &mdash; <em>Method</em>.</p>
+<p>Random SVD based on algorithm 5.1 from Halko et al.</p>
+<p><a id='Module-GeostatInversion.FFTRF-1'></a></p>
+<h2 id="module-geostatinversionfftrf">Module GeostatInversion.FFTRF</h2>
+<p>Documentation for GeostatInversion.FFTRF module (all functions):</p>
+<p><a id='GeostatInversion.FFTRF.reducek-Tuple{Any,Any}' href='#GeostatInversion.FFTRF.reducek-Tuple{Any,Any}'>#</a>
+<strong><code>GeostatInversion.FFTRF.reducek</code></strong> &mdash; <em>Method</em>.</p>
+<p>Reduce k</p>
           <aside class="copyright" role="note">
             
             Documentation built with
