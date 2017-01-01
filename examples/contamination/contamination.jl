@@ -2,14 +2,14 @@ import Mads
 
 currentdir = pwd()
 
-madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
+madsdirname = Mads.getmadsdir()
 if madsdirname == ""
-	madsdirname = joinpath(Mads.madsdir, "..", "examples", "contamination")
+	madsdirname = joinpath(Pkg.dir("Mads"), "examples", "contamination")
 end
 
 cd(madsdirname)
 
-md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile("w01.mads") # load Mads input file into Mads Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 Mads.madsinfo("Mads root name: $(rootname)")
 display(md) # show the content of the Mads input file
