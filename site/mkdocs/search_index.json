@@ -467,13 +467,18 @@
         }, 
         {
             "location": "/Notebooks/", 
-            "text": "Jupyter Notebooks\n\n\nContaminant transport", 
+            "text": "Jupyter Notebooks\n\n\nContaminant transport \nDownload\n \nView", 
             "title": "Notebooks"
         }, 
         {
             "location": "/Notebooks/#jupyter-notebooks", 
-            "text": "Contaminant transport", 
+            "text": "", 
             "title": "Jupyter Notebooks"
+        }, 
+        {
+            "location": "/Notebooks/#contaminant-transport-download-view", 
+            "text": "", 
+            "title": "Contaminant transport Download View"
         }, 
         {
             "location": "/model_coupling/", 

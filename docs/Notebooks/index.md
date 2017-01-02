@@ -1,3 +1,3 @@
 ## Jupyter Notebooks
 
-[Contaminant transport](contamination.ipynb)
+### Contaminant transport [Download](contamination.ipynb) [View](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/contamination.ipynb)
