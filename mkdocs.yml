@@ -25,6 +25,7 @@ pages:
   - Contaminant Transport: Examples/contamination/index.md
   - ODE Analysis: Examples/ode/index.md
 - Notebooks: Notebooks/index.md
+- Examples Links: Examples/index.md
 - Model Coupling: model_coupling.md
 - Testing & Verification: test.md
 - Functions: functions.md

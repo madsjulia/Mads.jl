@@ -81,6 +81,14 @@
 
     
     <url>
+     <loc>http://madsjulia.github.io/Mads.jl/Examples/</loc>
+     <lastmod>2017-01-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
      <loc>http://madsjulia.github.io/Mads.jl/model_coupling/</loc>
      <lastmod>2017-01-02</lastmod>
      <changefreq>daily</changefreq>

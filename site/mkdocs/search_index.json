@@ -467,7 +467,7 @@
         }, 
         {
             "location": "/Notebooks/", 
-            "text": "Jupyter Notebooks\n\n\nContaminant transport \nDownload\n \nView", 
+            "text": "Jupyter Notebooks\n\n\nContaminant transport\n -:- \ndownload\n \njupyter", 
             "title": "Notebooks"
         }, 
         {
@@ -476,9 +476,59 @@
             "title": "Jupyter Notebooks"
         }, 
         {
-            "location": "/Notebooks/#contaminant-transport-download-view", 
+            "location": "/Notebooks/#contaminant-transport-download-jupyter", 
             "text": "", 
-            "title": "Contaminant transport Download View"
+            "title": "Contaminant transport -:- download jupyter"
+        }, 
+        {
+            "location": "/Examples/", 
+            "text": "Mads Examples\n\n\nSetup\n\n\nContaminant transport\n\n\nContaminant transport\n\n\nInformation Gap Analysis\n\n\nBayesian Sampling\n\n\nBlind Source Separation\n\n\nContaminant Transport\n\n\nODE Analysis", 
+            "title": "Examples Links"
+        }, 
+        {
+            "location": "/Examples/#mads-examples", 
+            "text": "", 
+            "title": "Mads Examples"
+        }, 
+        {
+            "location": "/Examples/#setup", 
+            "text": "", 
+            "title": "Setup"
+        }, 
+        {
+            "location": "/Examples/#contaminant-transport", 
+            "text": "", 
+            "title": "Contaminant transport"
+        }, 
+        {
+            "location": "/Examples/#contaminant-transport_1", 
+            "text": "", 
+            "title": "Contaminant transport"
+        }, 
+        {
+            "location": "/Examples/#information-gap-analysis", 
+            "text": "", 
+            "title": "Information Gap Analysis"
+        }, 
+        {
+            "location": "/Examples/#bayesian-sampling", 
+            "text": "", 
+            "title": "Bayesian Sampling"
+        }, 
+        {
+            "location": "/Examples/#blind-source-separation", 
+            "text": "", 
+            "title": "Blind Source Separation"
+        }, 
+        {
+            "location": "/Examples/#contaminant-transport_2", 
+            "text": "", 
+            "title": "Contaminant Transport"
+        }, 
+        {
+            "location": "/Examples/#ode-analysis", 
+            "text": "", 
+            "title": "ODE Analysis"
         }, 
         {
             "location": "/model_coupling/", 
