@@ -466,6 +466,16 @@
             "title": "Both parameters"
         }, 
         {
+            "location": "/Notebooks/", 
+            "text": "Jupyter Notebooks\n\n\nContaminant transport", 
+            "title": "Notebooks"
+        }, 
+        {
+            "location": "/Notebooks/#jupyter-notebooks", 
+            "text": "Contaminant transport", 
+            "title": "Jupyter Notebooks"
+        }, 
+        {
             "location": "/model_coupling/", 
             "text": "Model Coupling\n\n\nMADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary. The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS. The fields in the MADS problem dictionary that can be used to define the model coupling are:\n\n\n\n\n\n\nModel\n : Julia model defined in an external Julia file.\n\n\n\n\n\n\nMADS model\n : Julia model defined in an external Julia file using information from the MADS problem dictionary.\n\n\n\n\n\n\nJulia model\n : Julia model defined internally (already in the Julia workspace).\n\n\n\n\n\n\nCommand\n : external model executed by an UNIX command or script.\n\n\n\n\n\n\nJulia command\n : external model executed by a Julia script. The Julia script is defined in an external Julia file.\n\n\n\n\n\n\nBoth \nCommand\n and \nJulia command\n can use different approaches to pass model parameters to the external model. Only \nCommand\n uses different approaches to get back the model outputs. The script defined under \nJulia command\n parses the model outputs using Julia. The available options for writing model inputs and reading model outputs are as follows.\n\n\n\n\n\n\nOptions for writing model inputs:\n\n\n\n\nTemplates\n : template files for writing model input files as defined at \nmads.lanl.gov\n\n\nASCIIParameters\n : model parameters written in a ASCII file\n\n\nJLDParameters\n : model parameters written in a JLD file\n\n\nYAMLParameters\n : model parameters written in a YAML file\n\n\nJSONParameters\n : model parameters written in a JSON file\n\n\n\n\n\n\n\n\nOptions for reading model outputs:\n\n\n\n\nInstructions\n : instruction files for reading model output files as defined at mads.lanl.gov](http://mads.lanl.gov)\n\n\nASCIIPredictions\n : model predictions read from a ASCII file\n\n\nJLDPredictions\n : model predictions read from a JLD file\n\n\nYAMLPredictions\n : model predictions read from a YAML file\n\n\nJSONPredictions\n : model predictions read from a JSON file", 
             "title": "Model Coupling"

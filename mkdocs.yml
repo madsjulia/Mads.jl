@@ -1,5 +1,5 @@
 site_name: MADS
-site_url: http://mads.readthedocs.io
+site_url: http://madsjulia.github.io/Mads.jl
 theme: material
 
 repo_url: https://github.com/madsjulia/Mads.jl
@@ -24,6 +24,7 @@ pages:
   - Blind Source Separation: Examples/blind_source_separation/index.md
   - Contaminant Transport: Examples/contamination/index.md
   - ODE Analysis: Examples/ode/index.md
+- Notebooks: Notebooks/index.md
 - Model Coupling: model_coupling.md
 - Testing & Verification: test.md
 - Functions: functions.md
