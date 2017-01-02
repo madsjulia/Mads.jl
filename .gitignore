@@ -121,4 +121,4 @@ wells
 *madsjl_cmdline_hist*
 examples/anasol/test.mads
 examples/model_coupling_*
-.ipynb_checkpoints/*
+*/.ipynb_checkpoints/*
