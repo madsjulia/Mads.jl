@@ -15,8 +15,10 @@ parray = Mads.paramdict2array(pdict)
 Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 f = Mads.forward(md, pdict)
-Mads.spaghettiplots(md, pdict)
-Mads.spaghettiplot(md, f)
+if isdefined(:Gadfly)
+    Mads.spaghettiplots(md, pdict)
+    Mads.spaghettiplot(md, f)
+end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
 md = Mads.loadmadsfile(joinpath(workdir,  "internal-linearmodel+template.mads"))
