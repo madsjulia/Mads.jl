@@ -42,5 +42,5 @@ f(p)
 
 files = Mads.searchdir(r"y.*\.jld", path = workdir)
 for i in files
-	rm(i)
+	rm(joinpath(workdir, i))
 end

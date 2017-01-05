@@ -174,12 +174,12 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						attempt += 1
 						results = madsdatacommandfunction(madsdata)
 						trying = false
-					catch
+					catch e
 						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
 							trying = false
-							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+							Mads.madscritical("$(e)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 						end
 					end
 				end
@@ -198,12 +198,12 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 							run(`sh -c "$(madsdata["Command"])"`)
 						end
 						trying = false
-					catch
+					catch e
 						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
 							trying = false
-							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							Mads.madscritical("$(e)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
 					end
 				end
@@ -233,7 +233,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
 				end
 			end
-			cd(currentdir)
+			cd(madsproblemdir)
 			attempt = 0
 			trying = true
 			while trying
@@ -246,15 +246,16 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					end
 					trying = false
 					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
-				catch
+				catch e
 					sleep(attempt * 0.5)
 					if attempt > 3
-						madswarn("Temporary directory $tempdirname cannot be deleted!")
+						madswarn("$(e)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
 				end
 			end
 			global modelruns += 1
+			cd(currentdir)
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
@@ -307,9 +308,9 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 		if !isdir(restartdir)
 			try
 				mkdir(restartdir)
-			catch
+			catch e
 				restartdir = ""
-				madscritical("Directory specified under 'RestartDir' ($restartdir) cannot be created!")
+				madscritical("$(e)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
 	end
@@ -319,9 +320,9 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 		if !isdir(restartdir)
 			try
 				mkdir(restartdir)
-			catch
+			catch e
 				restartdir = ""
-				madscritical("Directory ($restartdir) cannot be created!")
+				madscritical("$(e)\nDirectory ($restartdir) cannot be created!")
 			end
 		end
 	end

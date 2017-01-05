@@ -320,7 +320,7 @@ Get file name extension
 Example:
 
 ```
-ext = Mads.getextension("a.mads") # ext = "mads" 
+ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 """
 function getextension(filename)
@@ -341,7 +341,7 @@ function setnewmadsfilename(madsdata::Associative)
 	root = splitdir(getmadsrootname(madsdata))[2]
 	if ismatch(r"-v[0-9].$", root)
 		rm = match(r"-v([0-9]).$", root)
-		l = rm.captures[1] 
+		l = rm.captures[1]
 		s = split(rm.match, "v")
 		v = parse(Int, s[2]) + 1
 		l = length(s[2])
@@ -633,10 +633,10 @@ function createtempdir(tempdirname::String)
 			end
 			Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 			trying = false
-		catch
+		catch e
 			sleep(attempt * 0.5)
 			if attempt > 3
-				madscritical("Temporary directory $tempdirname cannot be created!")
+				madscritical("$(e)\nTemporary directory $tempdirname cannot be created!")
 				trying = false
 			end
 		end
@@ -653,12 +653,12 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			Mads.symlinkdirfiles(madsproblemdir, tempdirname)
 			Mads.madsinfo("Links created in temporary directory: $(tempdirname)", 1)
 			trying = false
-		catch
+		catch e
 			Mads.rmdir(tempdirname)
 			sleep(attempt * 1)
 			Mads.createtempdir(tempdirname)
 			if attempt > 4
-				madscritical("Links cannot be created in temporary directory $tempdirname cannot be created!")
+				madscritical("$(e)\nLinks cannot be created in temporary directory $tempdirname cannot be created!")
 				trying = false
 			end
 		end
