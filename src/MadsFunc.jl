@@ -59,7 +59,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	else
 		madsdata = madsdatawithobs
 	end
-	madsinputdir = Mads.getmadsinputdir(madsdata)
+	modeloutputdirs = Mads.getmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
@@ -103,15 +103,16 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
-			cd(madsproblemdir)
-			if length(madsinputdir) == 1 &&  madsinputdir[1] == "."
+			@show modeloutputdirs, madsproblemdir, currentdir
+			if length(modeloutputdirs) == 1 &&  modeloutputdirs[1] == "."
+				cd(madsproblemdir)
 				tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
+				Mads.createtempdir(tempdirname)
+				Mads.linktempdir(madsproblemdir, tempdirname)
+				cd(tempdirname)
 			else
 			end
-			Mads.createtempdir(tempdirname)
-			Mads.linktempdir(madsproblemdir, tempdirname)
-			cd(tempdirname)
-			Mads.setmadsinputfiles(madsdata, parameters)
+			Mads.setmodelinputs(madsdata, parameters)
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
@@ -154,9 +155,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						end
 					end
 				end
-				results = readmadsinputfiles(madsdata, obskeys=obskeys)
+				results = readmodeloutput(madsdata, obskeys=obskeys)
 			end
-			cd(madsproblemdir)
+			if length(modeloutputdirs) == 1 &&  modeloutputdirs[1] == "."
+				cd(madsproblemdir)
+			end
 			attempt = 0
 			trying = true
 			while trying

@@ -352,7 +352,7 @@ function getdir(filename)
 end
 
 "Get the directories where model outputs should be saved for MADS"
-function getmadsinputdir(madsdata::Associative)
+function getmodeloutputdirs(madsdata::Associative)
 	directories = Array(String, 0)
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		for instruction in madsdata["Instructions"]
@@ -388,7 +388,7 @@ function getmadsinputdir(madsdata::Associative)
 end
 
 "Set model input files; delete files where model output should be saved for MADS"
-function setmadsinputfiles(madsdata::Associative, parameters::Associative; path::String=".")
+function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]
@@ -449,8 +449,8 @@ function setmadsinputfiles(madsdata::Associative, parameters::Associative; path:
 	end
 end
 
-"Get the directories where model inputs should be saved for MADS"
-function readmadsinputfiles(madsdata::Associative; obskeys::Vector=getobskeys(madsdata), path::String="")
+"Read model outputs saved for MADS"
+function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsdata), path::String="")
 	results = DataStructures.OrderedDict()
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		results = readobservations(madsdata, obskeys)
