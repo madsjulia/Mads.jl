@@ -334,6 +334,152 @@ function getextension(filename)
 end
 
 """
+Get directory
+
+Example:
+
+```
+d = Mads.getdir("a.mads") # d = "."
+d = Mads.getdir("test/a.mads") # d = "test"
+```
+"""
+function getdir(filename)
+	d = splitdir(filename)[1]
+	if d == ""
+		d = "."
+	end
+	return d
+end
+
+"Get the directories where model outputs should be saved for MADS"
+function getmadsinputdir(madsdata::Associative)
+	directories = Array(String, 0)
+	if haskey(madsdata, "Instructions") # Templates/Instructions
+		for instruction in madsdata["Instructions"]
+			filename = instruction["read"]
+			push!(directories, getdir(filename))
+		end
+	end
+	if haskey(madsdata, "JLDPredictions") # JLD
+		for filename in vcat(madsdata["JLDPredictions"])
+			push!(directories, getdir(filename))
+		end
+	end
+	if haskey(madsdata, "JSONPredictions") # JSON
+		for filename in vcat(madsdata["JSONPredictions"])
+			push!(directories, getdir(filename))
+		end
+	end
+	if haskey(madsdata, "YAMLPredictions") # YAML
+		for filename in vcat(madsdata["YAMLPredictions"])
+			push!(directories, getdir(filename))
+		end
+	end
+	if haskey(madsdata, "ASCIIPredictions") # ASCII
+		for filename in vcat(madsdata["ASCIIPredictions"])
+			push!(directories, getdir(filename))
+		end
+	end
+	directories = unique(directories)
+	if length(directories) == 0
+		directories = ["."]
+	end
+	return directories
+end
+
+"Set model input files; delete files where model output should be saved for MADS"
+function setmadsinputfiles(madsdata::Associative, parameters::Associative; path::String=".")
+	if haskey(madsdata, "Instructions") # Templates/Instructions
+		for instruction in madsdata["Instructions"]
+			filename = instruction["read"]
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+	end
+	if haskey(madsdata, "Templates") # Templates/Instructions
+		for template in madsdata["Templates"]
+			filename = template["write"]
+			Mads.rmfile(filename) # delete the parameter file links
+		end
+		writeparameters(madsdata, parameters)
+	end
+	#TODO move the writing into the "writeparameters" function
+	if haskey(madsdata, "JLDParameters") # JLD
+		for filename in vcat(madsdata["JLDParameters"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+		JLD.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
+	end
+	if haskey(madsdata, "JLDPredictions") # JLD
+		for filename in vcat(madsdata["JLDPredictions"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+	end
+	if haskey(madsdata, "JSONParameters") # JSON
+		for filename in vcat(madsdata["JSONParameters"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+		dumpjsonfile(madsdata["JSONParameters"], parameters) # create parameter files
+	end
+	if haskey(madsdata, "JSONPredictions") # JSON
+		for filename in vcat(madsdata["JSONPredictions"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+	end
+	if haskey(madsdata, "YAMLParameters") # YAML
+		for filename in vcat(madsdata["YAMLParameters"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+		dumpyamlfile(joinpath(path, madsdata["YAMLParameters"]), parameters) # create parameter files
+	end
+	if haskey(madsdata, "YAMLPredictions") # YAML
+		for filename in vcat(madsdata["YAMLPredictions"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+	end
+	if haskey(madsdata, "ASCIIParameters") # ASCII
+		filename = madsdata["ASCIIParameters"]
+		Mads.rmfile(filename, path=path) # delete the parameter file links
+		#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
+		dumpasciifile(joinpath(path, madsdata["ASCIIParameters"]), values(parameters)) # create an ASCII parameter file
+	end
+	if haskey(madsdata, "ASCIIPredictions") # ASCII
+		for filename in vcat(madsdata["ASCIIPredictions"])
+			Mads.rmfile(filename, path=path) # delete the parameter file links
+		end
+	end
+end
+
+"Get the directories where model inputs should be saved for MADS"
+function readmadsinputfiles(madsdata::Associative; obskeys::Vector=getobskeys(madsdata), path::String="")
+	results = DataStructures.OrderedDict()
+	if haskey(madsdata, "Instructions") # Templates/Instructions
+		results = readobservations(madsdata, obskeys)
+	end
+	if haskey(madsdata, "JLDPredictions") # JLD
+		for filename in vcat(madsdata["JLDPredictions"])
+			results = merge(results, JLD.load(filename))
+		end
+	end
+	if haskey(madsdata, "JSONPredictions") # JSON
+		for filename in vcat(madsdata["JSONPredictions"])
+			results = merge(results, loadjsonfile(filename))
+		end
+	end
+	if haskey(madsdata, "YAMLPredictions") # YAML
+		for filename in vcat(madsdata["YAMLPredictions"])
+			results = merge(results, loadyamlfile(filename))
+		end
+	end
+	if haskey(madsdata, "ASCIIPredictions") # ASCII
+		predictions = loadasciifile(madsdata["ASCIIPredictions"])
+		obsid=[convert(String,k) for k in obskeys]
+		@assert length(obskeys) == length(predictions)
+		results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
+	end
+	return results
+end
+
+"""
 Set new mads file name
 """
 function setnewmadsfilename(madsdata::Associative)
@@ -521,9 +667,9 @@ function ins_obs(instructionfilename::String, inputfilename::String)
 end
 
 "Read observations"
-function readobservations(madsdata::Associative, obsids=getobskeys(madsdata))
+function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
 	observations = Dict()
-	obscount = Dict(zip(obsids, zeros(Int, length(obsids))))
+	obscount = Dict(zip(obskeys, zeros(Int, length(obskeys))))
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])
 		for k in keys(obs)
@@ -586,15 +732,18 @@ function symlinkdir(filename::String, dirtarget::String)
 end
 
 "Remove directory"
-function rmdir(dir::String)
+function rmdir(dir::String; path::String="")
+	if path != "" && path != "."
+		dir = joinpath(path, dir)
+	end
 	if isdir(dir)
 		rm(dir, recursive=true)
 	end
 end
 
-"Remove directory"
+"Remove file"
 function rmfile(filename::String; path::String="")
-	if path != ""
+	if path != "" && path != "."
 		filename = joinpath(path, filename)
 	end
 	if isfile(filename)
@@ -604,7 +753,7 @@ end
 
 "Remove files with extension `ext`"
 function rmfiles_ext(ext::String; path::String=".")
-	for f in searchdir(Regex(string(".*\\.", ext)); path = path)
+	for f in searchdir(Regex(string(".*\\.", ext)); path=path)
 		rm(joinpath(path, f))
 	end
 end
@@ -616,7 +765,7 @@ function rmfiles_root(root::String; path::String=".")
 		path = s[1]
 		root = s[2]
 	end
-	for f in searchdir(Regex(string(root, "\\..*")); path = path)
+	for f in searchdir(Regex(string(root, "\\..*")); path=path)
 		rm(joinpath(path, f))
 	end
 end

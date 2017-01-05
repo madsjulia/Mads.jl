@@ -59,6 +59,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	else
 		madsdata = madsdatawithobs
 	end
+	madsinputdir = Mads.getmadsinputdir(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
@@ -103,68 +104,14 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
 			cd(madsproblemdir)
-			tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
+			if length(madsinputdir) == 1 &&  madsinputdir[1] == "."
+				tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
+			else
+			end
 			Mads.createtempdir(tempdirname)
 			Mads.linktempdir(madsproblemdir, tempdirname)
 			cd(tempdirname)
-			if haskey(madsdata, "Instructions") # Templates/Instructions
-				for instruction in madsdata["Instructions"]
-					filename = instruction["read"]
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-			end
-			if haskey(madsdata, "Templates") # Templates/Instructions
-				for template in madsdata["Templates"]
-					filename = template["write"]
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-				writeparameters(madsdata, parameters)
-			end
-			#TODO move the writing into the "writeparameters" function
-			if haskey(madsdata, "JLDParameters") # JLD
-				for filename in vcat(madsdata["JLDParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-				JLD.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
-			end
-			if haskey(madsdata, "JLDPredictions") # JLD
-				for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-			end
-			if haskey(madsdata, "JSONParameters") # JSON
-				for filename in vcat(madsdata["JSONParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-				dumpjsonfile("$(madsdata["JSONParameters"])", parameters) # create parameter files
-			end
-			if haskey(madsdata, "JSONPredictions") # JSON
-				for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-			end
-			if haskey(madsdata, "YAMLParameters") # YAML
-				for filename in vcat(madsdata["YAMLParameters"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-				dumpyamlfile("$(tempdirname)/$(madsdata["YAMLParameters"])", parameters) # create parameter files
-			end
-			if haskey(madsdata, "YAMLPredictions") # YAML
-				for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-			end
-			if haskey(madsdata, "ASCIIParameters") # ASCII
-				filename = madsdata["ASCIIParameters"]
-				Mads.rmfile(filename) # delete the parameter file links
-				#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
-				dumpasciifile("$(tempdirname)/$(madsdata["ASCIIParameters"])", values(parameters)) # create an ASCII parameter file
-			end
-			if haskey(madsdata, "ASCIIPredictions") # ASCII
-				for filename in vcat(madsdata["ASCIIPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-					Mads.rmfile(filename) # delete the parameter file links
-				end
-			end
+			Mads.setmadsinputfiles(madsdata, parameters)
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
@@ -207,31 +154,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						end
 					end
 				end
-				results = DataStructures.OrderedDict()
-				if haskey(madsdata, "Instructions") # Templates/Instructions
-					results = readobservations(madsdata, obskeys)
-				end
-				if haskey(madsdata, "JLDPredictions") # JLD
-					for filename in vcat(madsdata["JLDPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, JLD.load(filename))
-					end
-				end
-				if haskey(madsdata, "JSONPredictions") # JSON
-					for filename in vcat(madsdata["JSONPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, loadjsonfile(filename))
-					end
-				end
-				if haskey(madsdata, "YAMLPredictions") # YAML
-					for filename in vcat(madsdata["YAMLPredictions"]) # the vcat is needed in case madsdata["..."] contains only one thing
-						results = merge(results, loadyamlfile(filename))
-					end
-				end
-				if haskey(madsdata, "ASCIIPredictions") # ASCII
-					predictions = loadasciifile(madsdata["ASCIIPredictions"])
-					obsid=[convert(String,k) for k in obskeys]
-					@assert length(obskeys) == length(predictions)
-					results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
-				end
+				results = readmadsinputfiles(madsdata, obskeys=obskeys)
 			end
 			cd(madsproblemdir)
 			attempt = 0
