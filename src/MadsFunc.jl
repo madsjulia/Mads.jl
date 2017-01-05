@@ -102,7 +102,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
 			currentdir = pwd()
-			cd(madsproblemdir)	
+			cd(madsproblemdir)
 			tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
 			Mads.createtempdir(tempdirname)
 			Mads.linktempdir(madsproblemdir, tempdirname)
@@ -177,7 +177,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					catch
 						sleep(attempt * 0.5)
 						if attempt > 3
-							cd(madsproblemdir)
+							cd(currentdir)
 							trying = false
 							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 						end
@@ -201,7 +201,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					catch
 						sleep(attempt * 0.5)
 						if attempt > 3
-							cd(madsproblemdir)
+							cd(currentdir)
 							trying = false
 							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
@@ -227,13 +227,13 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 					end
 				end
 				if haskey(madsdata, "ASCIIPredictions") # ASCII
-					predictions = loadasciifile("$(madsdata["ASCIIPredictions"])")
+					predictions = loadasciifile(madsdata["ASCIIPredictions"])
 					obsid=[convert(String,k) for k in obskeys]
 					@assert length(obskeys) == length(predictions)
 					results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
 				end
 			end
-			cd(madsproblemdir)
+			cd(currentdir)
 			attempt = 0
 			trying = true
 			while trying
