@@ -165,7 +165,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			while trying
 				try
 					attempt += 1
-					# Mads.rmdir(tempdirname)
+					Mads.rmdir(tempdirname)
 					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch e
