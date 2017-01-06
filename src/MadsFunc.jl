@@ -59,7 +59,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	else
 		madsdata = madsdatawithobs
 	end
-	modeloutputdirs = Mads.getmodeloutputdirs(madsdata)
+	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
@@ -100,18 +100,20 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			Mads.madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
 			madsdatacommandfunction = importeverywhere(filename)
 		end
+		currentdir = pwd()
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
-			currentdir = pwd()
-			@show modeloutputdirs, madsproblemdir, currentdir
-			if length(modeloutputdirs) == 1 &&  modeloutputdirs[1] == "."
+			if simpleproblem && currentdir != madsproblemdir
 				cd(madsproblemdir)
-				tempdirname = joinpath("..", "$(Mads.getmadsproblemdirtail(madsdata))_$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))")
-				Mads.createtempdir(tempdirname)
-				Mads.linktempdir(madsproblemdir, tempdirname)
-				cd(tempdirname)
+				cwd = madsproblemdir
 			else
+				cwd = currentdir
 			end
+			tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+			tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
+			Mads.createtempdir(tempdirname)
+			Mads.linktempdir(cwd, tempdirname)
+			cd(tempdirname)
 			Mads.setmodelinputs(madsdata, parameters)
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
@@ -157,21 +159,15 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 				results = readmodeloutput(madsdata, obskeys=obskeys)
 			end
-			if length(modeloutputdirs) == 1 &&  modeloutputdirs[1] == "."
-				cd(madsproblemdir)
-			end
+			cd(cwd)
 			attempt = 0
 			trying = true
 			while trying
 				try
 					attempt += 1
-					rm(tempdirname, recursive=true)
-					sleep(0.1)
-					if isdir(tempdirname)
-						rm(tempdirname, recursive=true)
-					end
-					trying = false
+					Mads.rmdir(tempdirname)
 					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
+					trying = false
 				catch e
 					sleep(attempt * 0.5)
 					if attempt > 3
@@ -181,7 +177,9 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				end
 			end
 			global modelruns += 1
-			cd(currentdir)
+			if simpleproblem && currentdir != madsproblemdir
+				cd(currentdir)
+			end
 			return results
 		end
 	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
@@ -241,7 +239,7 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 		end
 	end
 	if restartdir == ""
-		root = getmadsrootname(madsdata, version=true)
+		root = splitdir(getmadsrootname(madsdata, version=true))[2]
 		restartdir = root * "_restart"
 		if !isdir(restartdir)
 			try

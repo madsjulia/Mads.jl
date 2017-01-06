@@ -253,24 +253,6 @@ function getmadsproblemdir(madsdata::Associative)
 end
 
 """
-Get the directory where the Mads data file is located
-
-`Mads.getmadsproblemdirtail(madsdata)`
-
-Example:
-
-```
-madsdata = Mads.loadmadsproblem("../example/a.mads")
-madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
-```
-
-where `madsproblemdirtail` = `"example"`
-"""
-function getmadsproblemdirtail(madsdata::Associative)
-	splitdir(dirname(madsdata["Filename"]))[2]
-end
-
-"""
 Get the directory where currently Mads is running
 
 `problemdir = Mads.getmadsdir()`
@@ -343,7 +325,7 @@ d = Mads.getdir("a.mads") # d = "."
 d = Mads.getdir("test/a.mads") # d = "test"
 ```
 """
-function getdir(filename)
+function getdir(filename::String)
 	d = splitdir(filename)[1]
 	if d == ""
 		d = "."
@@ -351,8 +333,8 @@ function getdir(filename)
 	return d
 end
 
-"Get the directories where model outputs should be saved for MADS"
-function getmodeloutputdirs(madsdata::Associative)
+"Check the directories where model outputs should be saved for MADS"
+function checkmodeloutputdirs(madsdata::Associative)
 	directories = Array(String, 0)
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		for instruction in madsdata["Instructions"]
@@ -380,11 +362,15 @@ function getmodeloutputdirs(madsdata::Associative)
 			push!(directories, getdir(filename))
 		end
 	end
-	directories = unique(directories)
-	if length(directories) == 0
-		directories = ["."]
+	d = unique(directories)
+	nd = length(directories)
+	if nd == 0
+		return true
+	elseif nd == 1 && d[1] == "."
+		return true
+	else
+		return false
 	end
-	return directories
 end
 
 "Set model input files; delete files where model output should be saved for MADS"
@@ -785,7 +771,7 @@ function createtempdir(tempdirname::String)
 		catch e
 			sleep(attempt * 0.5)
 			if attempt > 3
-				madscritical("$(e)\nTemporary directory $tempdirname cannot be created!")
+				madscritical("$(e)\nTemporary directory $(tempdirname) cannot be created!")
 				trying = false
 			end
 		end
@@ -807,7 +793,7 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			sleep(attempt * 1)
 			Mads.createtempdir(tempdirname)
 			if attempt > 4
-				madscritical("$(e)\nLinks cannot be created in temporary directory $tempdirname cannot be created!")
+				madscritical("$(e)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
 				trying = false
 			end
 		end

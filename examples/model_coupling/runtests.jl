@@ -22,17 +22,22 @@ end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
 md = Mads.loadmadsfile(joinpath(workdir,  "internal-linearmodel+template.mads"))
-tfor = Mads.forward(md)
-Mads.madsinfo("Internal coupling using `Julia command`, `Templates` and `Instructions` ...")
-md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel+template+instruction.mads"))
 tifor = Mads.forward(md)
 Mads.madsinfo("Internal coupling using `MADS model` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-mads.mads"))
 mfor = Mads.forward(md)
+Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
+md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
+tefor = Mads.forward(md)
 
-@Base.Test.test ifor == tfor
+cd(workdir)
+md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
+pfor = Mads.forward(md)
+
 @Base.Test.test ifor == tifor
 @Base.Test.test ifor == mfor
+@Base.Test.test ifor == tefor
+@Base.Test.test ifor == pfor
 
 Mads.readyamlpredictions("$workdir/internal-linearmodel-mads.mads"; julia=true)
 Mads.readasciipredictions("$workdir/readasciipredictions.dat")
