@@ -384,7 +384,7 @@ function setmodelinputs(madsdata::Associative, parameters::Associative; path::St
 	if haskey(madsdata, "Templates") # Templates/Instructions
 		for template in madsdata["Templates"]
 			filename = template["write"]
-			Mads.rmfile(filename) # delete the parameter file links
+			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
 		writeparameters(madsdata, parameters)
 	end
@@ -705,7 +705,12 @@ end
 "Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`"
 function symlinkdirfiles(dirsource::String, dirtarget::String)
 	for f in readdir(dirsource)
-		symlinkdir(f, dirtarget)
+		if !isdir(f)
+			symlinkdir(f, dirtarget)
+		else
+			mkdir(joinpath(dirtarget, f))
+			symlinkdirfiles(f, joinpath(dirtarget, f))
+		end
 	end
 end
 
