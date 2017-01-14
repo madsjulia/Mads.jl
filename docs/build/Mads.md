@@ -171,6 +171,13 @@ Returns:
 
   * `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
 
+<a id='Mads.checkmodeloutputdirs-Tuple{Associative}' href='#Mads.checkmodeloutputdirs-Tuple{Associative}'>#</a>
+**`Mads.checkmodeloutputdirs`** &mdash; *Method*.
+
+
+
+Check the directories where model outputs should be saved for MADS
+
 <a id='Mads.checkout' href='#Mads.checkout'>#</a>
 **`Mads.checkout`** &mdash; *Function*.
 
@@ -625,6 +632,20 @@ Get spatial covariance vector
 
 Get dictionary values for keys based on a string or regular expression
 
+<a id='Mads.getdir-Tuple{String}' href='#Mads.getdir-Tuple{String}'>#</a>
+**`Mads.getdir`** &mdash; *Method*.
+
+
+
+Get directory
+
+Example:
+
+```
+d = Mads.getdir("a.mads") # d = "."
+d = Mads.getdir("test/a.mads") # d = "test"
+```
+
 <a id='Mads.getdistribution-Tuple{String,String,String}' href='#Mads.getdistribution-Tuple{String,String,String}'>#</a>
 **`Mads.getdistribution`** &mdash; *Method*.
 
@@ -642,7 +663,7 @@ Get file name extension
 Example:
 
 ```
-ext = Mads.getextension("a.mads") # ext = "mads" 
+ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 
 <a id='Mads.getimportantsamples-Tuple{Array,Array{T,1}}' href='#Mads.getimportantsamples-Tuple{Array,Array{T,1}}'>#</a>
@@ -709,24 +730,6 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 
 where `madsproblemdir` = `"../../"`
-
-<a id='Mads.getmadsproblemdirtail-Tuple{Associative}' href='#Mads.getmadsproblemdirtail-Tuple{Associative}'>#</a>
-**`Mads.getmadsproblemdirtail`** &mdash; *Method*.
-
-
-
-Get the directory where the Mads data file is located
-
-`Mads.getmadsproblemdirtail(madsdata)`
-
-Example:
-
-```
-madsdata = Mads.loadmadsproblem("../example/a.mads")
-madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
-```
-
-where `madsproblemdirtail` = `"example"`
 
 <a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
 **`Mads.getmadsrootname`** &mdash; *Method*.
@@ -1997,6 +2000,13 @@ Read MADS predictions from an ASCII file
 
 Read MADS model predictions from a JSON file
 
+<a id='Mads.readmodeloutput-Tuple{Associative}' href='#Mads.readmodeloutput-Tuple{Associative}'>#</a>
+**`Mads.readmodeloutput`** &mdash; *Method*.
+
+
+
+Read model outputs saved for MADS
+
 <a id='Mads.readobservations' href='#Mads.readobservations'>#</a>
 **`Mads.readobservations`** &mdash; *Function*.
 
@@ -2082,7 +2092,7 @@ Remove directory
 
 
 
-Remove directory
+Remove file
 
 <a id='Mads.rmfiles_ext-Tuple{String}' href='#Mads.rmfiles_ext-Tuple{String}'>#</a>
 **`Mads.rmfiles_ext`** &mdash; *Method*.
@@ -2337,6 +2347,13 @@ Set a default MADS input file
 Arguments:
 
   * `filename` : input file name (e.g. `input_file_name.mads`)
+
+<a id='Mads.setmodelinputs-Tuple{Associative,Associative}' href='#Mads.setmodelinputs-Tuple{Associative,Associative}'>#</a>
+**`Mads.setmodelinputs`** &mdash; *Method*.
+
+
+
+Set model input files; delete files where model output should be saved for MADS
 
 <a id='Mads.setnewmadsfilename-Tuple{Associative}' href='#Mads.setnewmadsfilename-Tuple{Associative}'>#</a>
 **`Mads.setnewmadsfilename`** &mdash; *Method*.

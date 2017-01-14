@@ -568,6 +568,9 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 <ul>
 <li><code>bestresult</code> : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)</li>
 </ul>
+<p><a id='Mads.checkmodeloutputdirs-Tuple{Associative}' href='#Mads.checkmodeloutputdirs-Tuple{Associative}'>#</a>
+<strong><code>Mads.checkmodeloutputdirs</code></strong> &mdash; <em>Method</em>.</p>
+<p>Check the directories where model outputs should be saved for MADS</p>
 <p><a id='Mads.checkout' href='#Mads.checkout'>#</a>
 <strong><code>Mads.checkout</code></strong> &mdash; <em>Function</em>.</p>
 <p>Checkout the latest version of the Mads / Julia modules</p>
@@ -857,6 +860,15 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 <p><a id='Mads.getdictvalues-Tuple{Associative,Regex}' href='#Mads.getdictvalues-Tuple{Associative,Regex}'>#</a>
 <strong><code>Mads.getdictvalues</code></strong> &mdash; <em>Method</em>.</p>
 <p>Get dictionary values for keys based on a string or regular expression</p>
+<p><a id='Mads.getdir-Tuple{String}' href='#Mads.getdir-Tuple{String}'>#</a>
+<strong><code>Mads.getdir</code></strong> &mdash; <em>Method</em>.</p>
+<p>Get directory</p>
+<p>Example:</p>
+<div class="codehilite"><pre>d = Mads.getdir(&quot;a.mads&quot;) # d = &quot;.&quot;
+d = Mads.getdir(&quot;test/a.mads&quot;) # d = &quot;test&quot;
+</pre></div>
+
+
 <p><a id='Mads.getdistribution-Tuple{String,String,String}' href='#Mads.getdistribution-Tuple{String,String,String}'>#</a>
 <strong><code>Mads.getdistribution</code></strong> &mdash; <em>Method</em>.</p>
 <p>Parse distribution from a string</p>
@@ -864,7 +876,7 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 <strong><code>Mads.getextension</code></strong> &mdash; <em>Method</em>.</p>
 <p>Get file name extension</p>
 <p>Example:</p>
-<div class="codehilite"><pre>ext = Mads.getextension(&quot;a.mads&quot;) # ext = &quot;mads&quot; 
+<div class="codehilite"><pre>ext = Mads.getextension(&quot;a.mads&quot;) # ext = &quot;mads&quot;
 </pre></div>
 
 
@@ -907,17 +919,6 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 
 
 <p>where <code>madsproblemdir</code> = <code>"../../"</code></p>
-<p><a id='Mads.getmadsproblemdirtail-Tuple{Associative}' href='#Mads.getmadsproblemdirtail-Tuple{Associative}'>#</a>
-<strong><code>Mads.getmadsproblemdirtail</code></strong> &mdash; <em>Method</em>.</p>
-<p>Get the directory where the Mads data file is located</p>
-<p><code>Mads.getmadsproblemdirtail(madsdata)</code></p>
-<p>Example:</p>
-<div class="codehilite"><pre>madsdata = Mads.loadmadsproblem(&quot;../example/a.mads&quot;)
-madsproblemdirtail = Mads.getmadsproblemdirtail(madsdata)
-</pre></div>
-
-
-<p>where <code>madsproblemdirtail</code> = <code>"example"</code></p>
 <p><a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
 <strong><code>Mads.getmadsrootname</code></strong> &mdash; <em>Method</em>.</p>
 <p>Get the MADS problem root name</p>
@@ -1640,6 +1641,9 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <p><a id='Mads.readjsonpredictions-Tuple{String}' href='#Mads.readjsonpredictions-Tuple{String}'>#</a>
 <strong><code>Mads.readjsonpredictions</code></strong> &mdash; <em>Method</em>.</p>
 <p>Read MADS model predictions from a JSON file</p>
+<p><a id='Mads.readmodeloutput-Tuple{Associative}' href='#Mads.readmodeloutput-Tuple{Associative}'>#</a>
+<strong><code>Mads.readmodeloutput</code></strong> &mdash; <em>Method</em>.</p>
+<p>Read model outputs saved for MADS</p>
 <p><a id='Mads.readobservations' href='#Mads.readobservations'>#</a>
 <strong><code>Mads.readobservations</code></strong> &mdash; <em>Function</em>.</p>
 <p>Read observations</p>
@@ -1682,7 +1686,7 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <p>Remove directory</p>
 <p><a id='Mads.rmfile-Tuple{String}' href='#Mads.rmfile-Tuple{String}'>#</a>
 <strong><code>Mads.rmfile</code></strong> &mdash; <em>Method</em>.</p>
-<p>Remove directory</p>
+<p>Remove file</p>
 <p><a id='Mads.rmfiles_ext-Tuple{String}' href='#Mads.rmfiles_ext-Tuple{String}'>#</a>
 <strong><code>Mads.rmfiles_ext</code></strong> &mdash; <em>Method</em>.</p>
 <p>Remove files with extension <code>ext</code></p>
@@ -1826,6 +1830,9 @@ plotmatches(madsdata, result, r&quot;NO3&quot;; filename=&quot;&quot;, format=&q
 <ul>
 <li><code>filename</code> : input file name (e.g. <code>input_file_name.mads</code>)</li>
 </ul>
+<p><a id='Mads.setmodelinputs-Tuple{Associative,Associative}' href='#Mads.setmodelinputs-Tuple{Associative,Associative}'>#</a>
+<strong><code>Mads.setmodelinputs</code></strong> &mdash; <em>Method</em>.</p>
+<p>Set model input files; delete files where model output should be saved for MADS</p>
 <p><a id='Mads.setnewmadsfilename-Tuple{Associative}' href='#Mads.setnewmadsfilename-Tuple{Associative}'>#</a>
 <strong><code>Mads.setnewmadsfilename</code></strong> &mdash; <em>Method</em>.</p>
 <p>Set new mads file name</p>
