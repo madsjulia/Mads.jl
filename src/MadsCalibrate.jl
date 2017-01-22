@@ -17,7 +17,7 @@ Arguments:
 - `maxEval` : maximum number of model evaluations
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda` : initial Levenberg-Marquardt lambda
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
@@ -30,7 +30,7 @@ Returns:
 - `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
 
 """
-function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, all=false, save_results=true)
+function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
@@ -47,7 +47,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -72,7 +72,7 @@ function calibraterandom(madsdata::Associative, numberofsamples=1; tolX=1e-4, to
 	end
 end
 
-function calibraterandom_parallel(madsdata::Associative, numberofsamples=1; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, seed=0, quiet=true, save_results=true)
+function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
@@ -86,7 +86,7 @@ function calibraterandom_parallel(madsdata::Associative, numberofsamples=1; tolX
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, maxJacobians=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -116,7 +116,7 @@ Arguments:
 - `maxEval` : maximum number of model evaluations
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda` : initial Levenberg-Marquardt lambda
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
@@ -129,7 +129,7 @@ Returns:
 - `results` : optimization algorithm results (e.g. results.minimizer)
 
 """
-function calibrate(madsdata::Associative; tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false, save_results=true)
+function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)

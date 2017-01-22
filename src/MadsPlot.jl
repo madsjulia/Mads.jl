@@ -652,12 +652,12 @@ Dumps:
 
 - A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
-function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed=0)
+function spaghettiplots(madsdata::Associative, number_of_samples::Int; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata)
@@ -793,12 +793,12 @@ Dumps:
 
 - Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
 """
-function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, number_of_samples::Int; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplot(madsdata::Associative, paramvalues; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	Mads.setseed(seed)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -836,7 +836,7 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::
 	spaghettiplot(madsdata::Associative, Y; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
 
-function spaghettiplot(madsdata::Associative, array::Array; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed=0)
+function spaghettiplot(madsdata::Associative, array::Array; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)

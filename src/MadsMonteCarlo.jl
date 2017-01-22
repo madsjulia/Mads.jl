@@ -28,7 +28,7 @@ Returns:
 - `mcmcchain` : MCMC chain
 - `llhoodvals` : log likelihoods of the final samples in the chain
 """
-function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, sigma::Number=0.01, seed=0)
+function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, sigma::Number=0.01, seed::Integer=0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -51,7 +51,7 @@ function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Int=10
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed)
 end
 
-function emceesampling(madsdata::Associative, p0::Array; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed=0)
+function emceesampling(madsdata::Associative, p0::Array; numwalkers::Int=10, nsteps::Int=100, burnin::Int=10, thinning::Int=1, seed::Integer=0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
@@ -80,9 +80,9 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` : 
+- `mcmcchain` :
 """
-function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
+function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed::Integer=0)
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -108,7 +108,7 @@ function bayessampling(madsdata::Associative; nsteps::Int=1000, burnin::Int=100,
 	return chain
 end
 
-function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed=0)
+function bayessampling(madsdata, numsequences; nsteps::Int=1000, burnin::Int=100, thinning::Int=1, seed::Integer=0)
 	if seed != 0
 		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
 	else

@@ -12,7 +12,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 
 "Set current seed"
-function setseed(seed::Number)
+function setseed(seed::Integer)
 	if seed != 0
 		srand(seed)
 		madsinfo("New seed: $seed")
@@ -126,7 +126,7 @@ function localsa(madsdata::Associative; format::String="", filename::String="", 
 	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
-function sampling(param::Vector, J::Array, numsamples::Int; seed::Number=0, scale::Number=1)
+function sampling(param::Vector, J::Array, numsamples::Int; seed::Integer=0, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -299,7 +299,7 @@ Arguments:
 - `N` : number of samples
 - `seed` : initial random seed
 """
-function saltellibrute(madsdata::Associative; N::Integer=1000, seed=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -469,7 +469,7 @@ Arguments:
 - `restartdir` : directory where files will be stored containing model results for fast simulation restarts
 - `parallel` : set to true if the model runs should be performed in parallel
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Int=N)
+function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Int=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -696,7 +696,7 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata, numsaltellis; N=100, seed=0, restartdir="")
+		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=0, restartdir::String="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -901,7 +901,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresults::Bool=graphoutput, seed=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Int=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresults::Bool=graphoutput, seed::Integer=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Int=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)
@@ -947,7 +947,7 @@ function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresul
 			end
 		end
 	end
-	
+
 	Mads.setseed(seed)
 
 	## Setting pathfiles
@@ -1377,7 +1377,7 @@ function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresul
 			return f
 		end
 	end
-	################################### END - DEFINING MODULES 
+	################################### END - DEFINING MODULES
 
 	## Set GSA Parameters
 	# M        = 6          # Max # of Harmonics (usually set to 4 or 6)
@@ -1608,7 +1608,7 @@ function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresul
 		# We still may need to send f to workers only calculating model output??
 		# sendto(collect(2:nprime*Nr), constCell = constCell)
 		sendto(workers(), constCell = constCell)
-	elseif P > 1 
+	elseif P > 1
 		# If there are less workers than resamplings * parameters, we send to all workers available
 		sendto(workers(), constCell = constCell)
 	end
