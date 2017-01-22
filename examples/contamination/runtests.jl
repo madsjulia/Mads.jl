@@ -48,8 +48,8 @@ newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance samp
 goodoprime = Mads.getimportantsamples(obs_samples, newllhoods)
 s_mean, s_var = Mads.weightedstats(obs_samples, newllhoods)
 
-inverse_parameters, inverse_results = Mads.calibraterandom(md, 1, maxEval=1, np_lambda=1, maxJacobians=1)
-Mads.calibraterandom_parallel(md, 1, maxEval=1, np_lambda=1, maxJacobians=1)  
+inverse_parameters, inverse_results = Mads.calibraterandom(md, 1; maxEval=1, np_lambda=1, maxJacobians=1)
+Mads.calibraterandom_parallel(md, 1; maxEval=1, np_lambda=1, maxJacobians=1)
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
