@@ -1,7 +1,9 @@
 import Mads
 import Gadfly
 
-include(joinpath(Pkg.dir("Mads"), "src", "MadsInfoGap.jl"))
+if !isdefined(:infogap_jump)
+	include(joinpath(Pkg.dir("Mads"), "src-new", "MadsInfoGap.jl"))
+end
 
 # md = Mads.loadmadsfile("models/internal-polynomial.mads")
 

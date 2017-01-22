@@ -4,30 +4,13 @@ import Ipopt
 import Gadfly
 
 "Information Gap Decision Analysis using JuMP"
-function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, seed=0)
-	#madsdata = Mads.loadmadsfile("models/internal-polynomial.mads")
-	#Mads.setseed(seed)
+function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
 	if seed != 0
 		srand(seed)
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		info("Current seed: $s")
 	end
-	#=
-	f = Mads.makemadscommandfunction(madsdata)
-	pk = Mads.getoptparamkeys(madsdata)
-	pmin = Mads.getparamsmin(madsdata, pk)
-	pmax = Mads.getparamsmax(madsdata, pk)
-	pinit = Mads.getparamsinit(madsdata, pk)
-	np = length(pk)
-	ok = Mads.gettargetkeys(madsdata)
-	omin = Mads.getobsmin(madsdata, ok)
-	omax = Mads.getobsmax(madsdata, ok)
-	w = Mads.getobsweight(madsdata, ok)
-	t = Mads.getobstarget(madsdata, ok)
-	ti = Mads.getobstime(madsdata)
-	no = length(ok)
-	=#
 	no = 4
 	np = 4
 	t = [1.,2.,3.,4.,0]
@@ -63,7 +46,7 @@ function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.solve(m)
-			phi = JuMP.getobjectivevalue(m)	
+			phi = JuMP.getobjectivevalue(m)
 			println("OF = $(phi)")
 			if phi_best < phi
 				phi_best = phi
@@ -98,7 +81,7 @@ function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Min, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.solve(m)
-			phi = JuMP.getobjectivevalue(m)	
+			phi = JuMP.getobjectivevalue(m)
 			println("OF = $(phi)")
 			if phi_best > phi
 				phi_best = phi
@@ -111,7 +94,7 @@ function infogap_jump(madsdata::Associative=Dict(); retries::Int=1, random::Bool
 	end
 end
 
-function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Int=3000, verbosity::Int=0, quiet::Bool=false, plot::Bool=false, model::Int=1, seed=0)
+function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=0)
 	if seed != 0
 		srand(seed)
 	else
@@ -293,11 +276,13 @@ MathProgBase.eval_jac_g(d::MadsModel, J, p) = nothing
 =#
 MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
 function MathProgBase.eval_jac_g(d::MadsModel, J, p)
+	ji = 1
 	for i = 1:no
-		J[i + 0] = ti[i]^p[4]
-		J[i + 1] = ti[i]
-		J[i + 2] = 1
-		J[i + 3] = p[1] * (ti[i]^p[4]) * log(ti[i])
+		J[ji + 0] = ti[i]^p[4]
+		J[ji + 1] = ti[i]
+		J[ji + 2] = 1
+		J[ji + 3] = p[1] * (ti[i]^p[4]) * log(ti[i])
+		ji += 4
 	end
 end
 #=
@@ -321,7 +306,7 @@ end
 =#
 
 "Information Gap Decision Analysis using MathProgBase"
-function infogap_mpb(madsdata::Associative=Dict(); retries=1, random=false, maxiter=3000, verbosity=0, solver=MathProgBase.defaultNLPsolver, seed=0, pinit=[])
+function infogap_mpb(madsdata::Associative=Dict(); retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver::MathProgBase.DefaultNLPSolver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit=[])
 	# madsdata = Mads.loadmadsfile("models/internal-polynomial.mads")
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
 	if seed != 0
@@ -350,7 +335,7 @@ function infogap_mpb(madsdata::Associative=Dict(); retries=1, random=false, maxi
 	t = [1.,2.,3.,4.,0]
 	np = 4
 	p = [0.,1.,0.,1.]
-	if sizeof(pinit) == 0 
+	if sizeof(pinit) == 0
 		pinit = [1.,0.]
 	end
 	pmin = [-0.1,0.99,-0.1,0.99]
@@ -389,14 +374,7 @@ function infogap_mpb(madsdata::Associative=Dict(); retries=1, random=false, maxi
 		end
 		info("done")
 		of = MathProgBase.eval_f(MadsModel(), par_best)
-		@show of
 		MathProgBase.eval_g(MadsModel(), g, par_best)
-		@show g
-		@show pinit
-		@show omin
-		@show omax
-		@show pmin
-		@show pmax
 		# f = Mads.forward(madsdata, par_best)
 		# @show f
 		println("Max h = $h OF = $(phi_best) par = $par_best")
@@ -417,7 +395,9 @@ function MathProgBase.initialize(d::MadsModelLin, requested_features::Vector{Sym
 	end
 end
 MathProgBase.features_available(d::MadsModelLin) = [:Grad, :Jac]
-MathProgBase.eval_f(d::MadsModelLin, p) = p[1] * ti[5] + p[2]
+function MathProgBase.eval_f(d::MadsModelLin, p)
+	return p[1] * ti[5] + p[2]
+end
 function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f, p)
 	grad_f[1] = ti[5]
 	grad_f[2] = 1
@@ -430,14 +410,16 @@ end
 MathProgBase.jac_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
 MathProgBase.hesslag_structure(d::MadsModelLin) = Int[],Int[]
 function MathProgBase.eval_jac_g(d::MadsModelLin, J, p)
+	ji = 1
 	for i = 1:no
-		J[i + 0] = ti[i]
-		J[i + 1] = 1
+		J[ji + 0] = ti[i]
+		J[ji + 1] = 1
+		ji += 2
 	end
 end
 
 "Information Gap Decision Analysis using MathProgBase"
-function infogap_mpblin(madsdata::Associative=Dict(); retries=1, random=false, maxiter=3000, verbosity=0, solver=MathProgBase.defaultNLPsolver, seed=0, pinit=[])
+function infogap_mpblin(madsdata::Associative=Dict(); retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
 	# madsdata = Mads.loadmadsfile("models/internal-linear.mads")
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
 	if seed != 0
@@ -446,42 +428,31 @@ function infogap_mpblin(madsdata::Associative=Dict(); retries=1, random=false, m
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		info("Current seed: $s")
 	end
-	# Mads.setseed(seed)
-	# f = Mads.makemadscommandfunction(madsdata)
-	# pk = Mads.getoptparamkeys(madsdata)
-	# pmin = Mads.getparamsmin(madsdata, pk)
-	# pmax = Mads.getparamsmax(madsdata, pk)
-	# pinit = Mads.getparamsinit(madsdata, pk)
-	# np = length(pk)
-	# ok = Mads.gettargetkeys(madsdata)
-	# omin = Mads.getobsmin(madsdata, ok)
-	# omax = Mads.getobsmax(madsdata, ok)
-	# w = Mads.getobsweight(madsdata, ok)
-	# t = Mads.getobstarget(madsdata, ok)
-	# ti = Mads.getobstime(madsdata)
-	# no = length(ok)
 	par_best = []
 	omin = [1.,2.,3.,4.]
 	omax = [1.,2.,3.,4.]
+	no = length(omin)
 	t = [1.,2.,3.,4.,0]
 	np = 2
-	if sizeof(pinit) == 0 
+	if sizeof(pinit) == 0
 		pinit = [1.,0.]
 	end
 	p = [1.,0.]
+	np = length(p)
 	pmin = [-10.,-5.]
 	pmax = [10.,5.]
 	g = [1.0,1.0,1.0,1.0]
 	for h = (0.1, 0.2)
 		par_best = pinit
 		phi_best = MathProgBase.eval_f(MadsModelLin(), par_best)
+		# MathProgBase.eval_g(MadsModelLin(), g, par_best)
 		for r = 1:retries
 			m = MathProgBase.NonlinearModel(solver)
 			for i = 1:no
 				omin[i] = t[i] - h
 				omax[i] = t[i] + h
 			end
-			MathProgBase.loadproblem!(m, 2, 4, pmin, pmax, omin, omax, :Max, MadsModelLin())
+			MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, :Max, MadsModelLin())
 			if r > 1 || random
 				for i = 1:np
 					p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
@@ -494,26 +465,19 @@ function infogap_mpblin(madsdata::Associative=Dict(); retries=1, random=false, m
 			stat = MathProgBase.status(m)
 			phi = MathProgBase.getobjval(m)
 			par = MathProgBase.getsolution(m)
-			println("OF = $(phi) $(stat)")
-			if stat == :Optimal && phi_best < phi
+			println("MathProgBase OF = $(phi) $(stat)")
+			if (stat != :Infeasible) && (phi_best < phi)
 				phi_best = phi
 				par_best = par
 			end
 			# @show MathProgBase.getsolution(m)
-			MathProgBase.eval_g(MadsModelLin(), g, par)
-			# @show g
 		end
 		of = MathProgBase.eval_f(MadsModelLin(), par_best)
-		@show of
 		MathProgBase.eval_g(MadsModelLin(), g, par_best)
-		@show g
-		@show pinit
-		@show omin
-		@show omax
-		@show pmin
-		@show pmax
+		println("Optimal observations: $g")
+		# MathProgBase.eval_g(MadsModelLin(), g, par_best)
 		# f = Mads.forward(madsdata, par_best)
 		# @show f
-		println("Max h = $h OF = $(phi_best) par = $par_best")
+		info("Max h = $h OF = $(phi_best) par = $par_best")
 	end
 end
