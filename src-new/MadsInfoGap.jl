@@ -304,12 +304,6 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	end
 	# madsdata = Mads.loadmadsfile("models/internal-polynomial.mads")
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
-	if seed != 0
-		srand(seed)
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		info("Current seed: $s")
-	end
 	# Mads.setseed(seed)
 	# f = Mads.makemadscommandfunction(madsdata)
 	# pk = Mads.getoptparamkeys(madsdata)
