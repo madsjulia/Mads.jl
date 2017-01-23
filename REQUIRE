@@ -1,4 +1,5 @@
 julia 0.5
+Compat 0.8
 Anasol
 BIGUQ
 AffineInvariantMCMC
@@ -24,4 +25,5 @@ Klara 0.7
 Optim 0.7
 BlackBoxOptim
 Documenter 0.8.10
-Compat 0.8
+JuMP 0.15
+Ipopt 0.2.6

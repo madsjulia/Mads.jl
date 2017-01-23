@@ -67,7 +67,7 @@ Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/ju
 
 Optional arguments:
 
-- `ntasks_per_node` : number of parallel tasks per 
+- `ntasks_per_node` : number of parallel tasks per
 - `nprocs_per_task` : number of processors needed for each parallel task at each node
 - `nodenames` : array with names of machines/nodes to be invoked
 - `dir` : common directory shared by all the jobs
@@ -76,7 +76,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{ASCIIString,1}}=Array(ASCIIString, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(nodenames) > 0 || mads_servers
@@ -238,7 +238,7 @@ end
 """
 Run remote command on a series of servers
 """
-function runremote(cmd::String, nodenames::Array{ASCIIString,1}=madsservers)
+function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	output = Array(String, 0)
 	for i in nodenames
 		try
@@ -256,21 +256,21 @@ end
 """
 Check the number of processors on a series of servers
 """
-function madscores(nodenames::Array{ASCIIString,1}=madsservers)
+function madscores(nodenames::Array{String,1}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
 """
 Check the uptime of a series of servers
 """
-function madsup(nodenames::Array{ASCIIString,1}=madsservers)
+function madsup(nodenames::Array{String,1}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
 end
 
 """
 Check the load of a series of servers
 """
-function madsload(nodenames::Array{ASCIIString,1}=madsservers)
+function madsload(nodenames::Array{String,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
 end
 
@@ -293,7 +293,7 @@ function runcmd(cmd::Cmd, quiet::Bool=false)
 		if length(erroutput) > 0
 			for i in erroutput
 				warn("$(strip(i))")
-			end	
+			end
 		end
 	end
 	if !quiet || cmdproc.exitcode != 0

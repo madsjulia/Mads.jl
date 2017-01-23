@@ -80,7 +80,7 @@ function haskeyword(madsdata::Associative, class::String, keyword::String)
 		return haskey(madsdata[class], keyword) ? true : false
 	elseif typeof(madsdata[class]) <: String
 		return madsdata[class] == keyword
-	elseif typeof(madsdata[class]) <: Vector{ASCIIString}
+	elseif typeof(madsdata[class]) <: Vector{String}
 		for i in madsdata[class]
 			if i == keyword
 				return true
@@ -106,7 +106,7 @@ function addkeyword!(madsdata::Associative, class::String, keyword::String)
 		push!(madsdata[class], keyword=>true)
 	elseif typeof(madsdata[class]) <: String
 		madsdata[class] = [keyword, madsdata[class]]
-	elseif typeof(madsdata[class]) <: Vector{ASCIIString}
+	elseif typeof(madsdata[class]) <: Vector{String}
 		push!(madsdata[class], keyword)
 	end
 end
