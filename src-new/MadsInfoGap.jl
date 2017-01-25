@@ -1,7 +1,7 @@
 import JuMP
 import MathProgBase
 import Ipopt
-import Gadfly
+@tryimport Gadfly#doesn't respect the ENV["MADS_NO_GADFLY"] convention
 
 "Information Gap Decision Analysis using JuMP"
 function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
