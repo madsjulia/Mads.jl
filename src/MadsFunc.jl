@@ -103,12 +103,12 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		currentdir = pwd()
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
-			if simpleproblem && currentdir != madsproblemdir
-				cd(madsproblemdir)
-				cwd = madsproblemdir
+			if simpleproblem && currentdir != abspath(madsproblemdir)
+ 				cd(madsproblemdir)
+				cwd = pwd()
 			else
 				cwd = currentdir
-			end
+ 			end
 			tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
 			tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 			Mads.createtempdir(tempdirname)

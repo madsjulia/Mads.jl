@@ -249,7 +249,11 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::Associative)
-	dirname(madsdata["Filename"])
+	d = dirname(madsdata["Filename"])
+    if d == "" || d == nothing
+        d = "."
+    end
+    return d
 end
 
 """
@@ -260,9 +264,12 @@ Get the directory where currently Mads is running
 function getmadsdir()
 	source_path = Base.source_path()
 	if typeof(source_path) == Void
-		problemdir = ""
+		problemdir = "."
 	else
-		problemdir = string((dirname(source_path)))
+		problemdir = string(dirname(source_path))
+        if problemdir == ""
+            problemdir = "."
+        end
 		madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir
