@@ -5,7 +5,6 @@ end
 
 "Mads execution using MathProgBase"
 function madsmathprogbase(madsdata::Associative=Dict())
-
 	function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
