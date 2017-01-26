@@ -239,7 +239,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 	return hmin, hmax
 end
 
-type MadsModel <: MathProgBase.AbstractNLPEvaluator
+type MadsModelPoly <: MathProgBase.AbstractNLPEvaluator
 end
 
 "Information Gap Decision Analysis using MathProgBase"
@@ -262,37 +262,37 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	t = [1.,2.,3.,4.,5.]
 	no = 4
 
-	function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
+	function MathProgBase.initialize(d::MadsModelPoly, requested_features::Vector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
-	function MathProgBase.eval_f(d::MadsModel, p::Vector)
+	MathProgBase.features_available(d::MadsModelPoly) = [:Grad, :Jac]
+	function MathProgBase.eval_f(d::MadsModelPoly, p::Vector)
 		of = p[1] * (t[5]^p[4]) + p[2] * t[5] + p[3]
 		return of
 	end
-	function MathProgBase.eval_grad_f(d::MadsModel, grad_f::Vector, p::Vector)
+	function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::Vector, p::Vector)
 		grad_f[1] = t[5]^p[4]
 		grad_f[2] = t[5]
 		grad_f[3] = 1
 		grad_f[4] = p[1] * (t[5]^p[4]) * log(t[5])
 	end
-	function MathProgBase.eval_g(d::MadsModel, o::Vector, p::Vector)
+	function MathProgBase.eval_g(d::MadsModelPoly, o::Vector, p::Vector)
 		for i = 1:no
 			o[i] = p[1] * (t[i]^p[4]) + p[2] * t[i] + p[3]
 		end
 	end
-	MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
-	MathProgBase.eval_hesslag(d::MadsModel, H, p, σ, μ) = nothing
+	MathProgBase.hesslag_structure(d::MadsModelPoly) = Int[],Int[]
+	MathProgBase.eval_hesslag(d::MadsModelPoly, H, p, σ, μ) = nothing
 	#=
-	MathProgBase.jac_structure(d::MadsModel) = Int[],Int[]
-	MathProgBase.eval_jac_g(d::MadsModel, J, p) = nothing
+	MathProgBase.jac_structure(d::MadsModelPoly) = Int[],Int[]
+	MathProgBase.eval_jac_g(d::MadsModelPoly, J, p) = nothing
 	=#
-	MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-	function MathProgBase.eval_jac_g(d::MadsModel, J::Vector, p::Vector)
+	MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
+	function MathProgBase.eval_jac_g(d::MadsModelPoly, J::Vector, p::Vector)
 		ji = 1
 		for i = 1:no
 			J[ji + 0] = t[i]^p[4]
@@ -325,7 +325,7 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	g = Array(Float64, no)
 	for h in horizons
 		par_best = pinit
-		phi_best = MathProgBase.eval_f(MadsModel(), par_best)
+		phi_best = MathProgBase.eval_f(MadsModelPoly(), par_best)
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
@@ -334,7 +334,7 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 					omin[i] = t[i] - h
 					omax[i] = t[i] + h
 				end
-				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModel())
+				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelPoly())
 				if r > 1 || random
 					for i = 1:np
 						p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
@@ -363,8 +363,8 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 				end
 				#@show MathProgBase.getsolution(m)
 			end
-			# of = MathProgBase.eval_f(MadsModel(), par_best)
-			# MathProgBase.eval_g(MadsModel(), g, par_best)
+			# of = MathProgBase.eval_f(MadsModelPoly(), par_best)
+			# MathProgBase.eval_g(MadsModelPoly(), g, par_best)
 			# println("Optimal observations: $g")
 			# f = Mads.forward(madsdata, par_best)
 			# @show f
