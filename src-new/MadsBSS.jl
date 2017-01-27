@@ -4,7 +4,7 @@ import Ipopt
 import Optim
 
 "Non-negative Matrix Factorization using NMF"
-function NMFm(X, nk; retries=1, tol=1.0e-9, maxiter=10000)
+function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array(Float64, nP, nk)
@@ -23,8 +23,8 @@ function NMFm(X, nk; retries=1, tol=1.0e-9, maxiter=10000)
 	return Wbest, Hbest, phi_best
 end
 
-"Non-negative Matrix Factorization using JuMP/NLopt"
-function NMFnlopt(X, nk; retries=1, tol=1.0e-9, random=false, maxiter=100000, maxguess=10., initW=nothing, initH=nothing, verbosity=0)
+"Non-negative Matrix Factorization using JuMP/Ipopt"
+function NMFnlopt(X, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random=false, maxiter::Integer=100000, maxguess=10., initW=nothing, initH=nothing, verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan(Xc)
@@ -48,13 +48,13 @@ function NMFnlopt(X, nk; retries=1, tol=1.0e-9, random=false, maxiter=100000, ma
 			@JuMP.variable(m, H[k=1:nk, j=1:nC] >= 0., start=initH[k, j])
 		elseif r > 1 || random
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand())
-		else 
+		else
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
 		@JuMP.constraint(m, W .<= 1)
 		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC})
 		JuMP.solve(m)
-		phi = JuMP.getobjectivevalue(m)	
+		phi = JuMP.getobjectivevalue(m)
 		println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
@@ -66,7 +66,7 @@ function NMFnlopt(X, nk; retries=1, tol=1.0e-9, random=false, maxiter=100000, ma
 end
 
 "Matrix Factorization via Levenberg Marquardt"
-function MFlm(X, nk; mads=true, log_W=false, log_H=false, retries=1, tol=1.0e-9, maxiter=10000, initW=nothing, initH=nothing)
+function MFlm(X, nk::Integer; mads=true, log_W=false, log_H=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW=nothing, initH=nothing)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array(Float64, nP, nk)

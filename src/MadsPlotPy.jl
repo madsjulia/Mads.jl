@@ -19,7 +19,7 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	if !haskey(madsdata, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return
@@ -69,12 +69,12 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle=true, title
 	end
 end
 
-function plotgrid(madsdata::Associative; addtitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	plotgrid(madsdata, paramvalues; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-function plotgrid(madsdata::Associative, parameters::Associative; addtitle=true, title="", filename="", format="")
+function plotgrid(madsdata::Associative, parameters::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end

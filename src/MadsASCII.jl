@@ -5,7 +5,7 @@ function loadasciifile(filename::String) # load ASCII text file
 end
 
 "Dump ASCII file"
-function dumpasciifile(filename::String, data) # dump ASCII text file
+function dumpasciifile(filename::String, data::Any) # dump ASCII text file
 	writedlm(filename, data)
 end
 

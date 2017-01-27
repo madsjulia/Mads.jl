@@ -52,7 +52,7 @@ for i = 1:length(getobsnames)
 	index = i
 	q = quote
 		@doc "Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`" ->
-		function $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys) 
+		function $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 			obsvalue = Array($(obstype), length(obskeys))
 			for i in 1:length(obskeys)
 				if haskey(madsdata["Observations"][obskeys[i]], $obsname)
@@ -126,7 +126,7 @@ function getweight(o::Associative)
 end
 
 "Set observation weight"
-function setweight!(o::Associative, weight)
+function setweight!(o::Associative, weight::Number)
 	if haskey(o, "weight")
 		o["weight"] = weight
 	elseif haskey(o, "w")
@@ -150,7 +150,7 @@ function gettarget(o::Associative)
 end
 
 "Set observation target"
-function settarget!(o::Associative, target)
+function settarget!(o::Associative, target::Number)
 	if haskey(o, "target")
 		o["target"] = target
 	elseif haskey(o, "c")
@@ -260,7 +260,7 @@ function invwellweights!(madsdata::Associative, value::Number)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 			t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
-			if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0 
+			if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * value)
 			end
 		end
@@ -382,7 +382,7 @@ function allwellsoff!(madsdata::Associative)
 end
 
 "Turn off a specific well in the MADS problem dictionary"
-function welloff!(madsdata, wellname::String)
+function welloff!(madsdata::Associative, wellname::String)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if wellname == wellkey
@@ -437,7 +437,7 @@ function getwellsdata(madsdata::Associative; time::Bool=false)
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
 			z = (madsdata["Wells"][wellkey]["z0"] + madsdata["Wells"][wellkey]["z1"])/2
-			if !time 
+			if !time
 				a = [a [x, y, z]]
 			else
 				o = madsdata["Wells"][wellkey]["obs"]

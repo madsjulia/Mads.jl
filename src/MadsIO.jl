@@ -285,7 +285,7 @@ r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 """
-function getrootname(filename::String; first=true, version=false)
+function getrootname(filename::String; first::Bool=true, version::Bool=false)
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if !first && length(s) > 1
@@ -312,7 +312,7 @@ Example:
 ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 """
-function getextension(filename)
+function getextension(filename::String)
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if length(s) > 1
@@ -560,7 +560,7 @@ function writeparameters(madsdata::Associative)
 end
 
 "Write parameters"
-function writeparameters(madsdata::Associative, parameters)
+function writeparameters(madsdata::Associative, parameters::Associative)
 	expressions = evaluatemadsexpressions(madsdata, parameters)
 	paramsandexps = merge(parameters, expressions)
 	for template in madsdata["Templates"]
@@ -614,7 +614,7 @@ function obslineismatch(obsline::String, regexs::Array{Regex, 1})
 end
 
 "Get observations for a set of regular expressions"
-function regexs2obs(obsline, regexs, obsnames, getparamhere)
+function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{String, 1}, getparamhere::Array{Bool, 1})
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()

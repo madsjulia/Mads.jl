@@ -10,7 +10,7 @@ Arguments:
 - `filename` : output file name used to dump plots
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename="", format="", maxprob=1.0, maxhoriz=Inf)
+function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename::String="", format::String="", maxprob::Number=1.0, maxhoriz::Number=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]
 	horizons = bigdtresults["horizons"]
 	if filename == ""

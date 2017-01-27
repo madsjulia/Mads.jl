@@ -148,7 +148,7 @@ function makelmfunctions(madsdata::Associative)
 end
 
 "Make gradient function needed for local sensitivity analysis"
-function makelocalsafunction(madsdata::Associative; multiplycenterbyweights=true)
+function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
@@ -204,21 +204,21 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights=true
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function grad(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0))
+	function grad(arrayparameters::Vector{Float64}; dx=Array(Float64,0), center=Array(Float64,0))
 		return reusable_inner_grad((arrayparameters, dx, center))
 	end
 	return grad
 end
 
 "Naive Levenberg-Marquardt optimization: get the LM parameter space step"
-function naive_get_deltax(JpJ::Matrix, Jp::Matrix, f0::Vector, lambda::Real)
+function naive_get_deltax(JpJ::Matrix{Float64}, Jp::Matrix{Float64}, f0::Vector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
 	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
 	return deltax
 end
 
 "Naive Levenberg-Marquardt optimization: perform LM iteration"
-function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector, f0::Vector, lambdas::Vector)
+function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
 	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
@@ -247,7 +247,7 @@ Arguments:
 - `lambda_mu` : lambda multiplication factor μ [10]
 - `np_lambda` : number of parallel lambda solves
 """
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector, o::Function=x->(x'*x)[1]; maxIter=10, maxEval=101, lambda=100., lambda_mu = 10., np_lambda=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
 	currentx = x0
 	currentf = f(x0)
@@ -287,7 +287,7 @@ Arguments:
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
 - `callback` : call back function for debugging
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root="", tolX=1e-4, tolG=1e-6, tolOF=1e-3, maxEval=1001, maxIter=100, maxJacobians=100, lambda=eps(Float32), lambda_scale=1e-3, lambda_mu=10.0, lambda_nu = 2, np_lambda=10, show_trace=false, alwaysDoJacobian::Bool=false, callback=(best_x, of, lambda)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callback::Function=(best_x, of, lambda)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -507,7 +507,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madsinfo("Small parameter step size: $nx < $tolX (tolX)")
 			x_converged = true
 		end
-		ng = norm(J' * fcur, Inf) 
+		ng = norm(J' * fcur, Inf)
 		if ng < tolG
 			Mads.madsinfo("Small gradient: $ng < $tolG (norm(J^T * fcur) < tolG)")
 			g_converged = true

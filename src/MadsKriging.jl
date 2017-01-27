@@ -1,11 +1,11 @@
 "Gaussian spatial covariance function"
-gaussiancov(h, maxcov, scale) = maxcov * exp(-(h * h) / (scale * scale))
+gaussiancov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-(h * h) / (scale * scale))
 
 "Exponential spatial covariance function"
-expcov(h, maxcov, scale) = maxcov * exp(-h / scale)
+expcov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-h / scale)
 
 "Spherical spatial covariance function"
-sphericalcov(h, maxcov, scale) = (h <= scale ? maxcov * (1 - 1.5 * h / (scale) + .5 * (h / scale) ^ 3) : 0.)
+sphericalcov(h::Number, maxcov::Number, scale::Number) = (h <= scale ? maxcov * (1 - 1.5 * h / (scale) + .5 * (h / scale) ^ 3) : 0.)
 
 "Spherical variogram"
 function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)

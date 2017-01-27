@@ -1,10 +1,10 @@
 "Rosenbrock test function (more difficult to solve)"
-function rosenbrock2_lm(x)
+function rosenbrock2_lm(x::Vector)
 	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
 end
 
 "Parameter gradients of the Rosenbrock test function"
-function rosenbrock2_gradient_lm(x)
+function rosenbrock2_gradient_lm(x::Vector)
 	j = Array(Float64,2,2)
 	j[1, 1] = -20.0 * x[1]
 	j[1, 2] =  10.0
@@ -30,7 +30,7 @@ function rosenbrock_gradient!(x::Vector, storage::Vector)
 end
 
 "Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)"
-function rosenbrock_gradient_lm(x::Vector; dx=false, center=Array(Float64,0))
+function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array(Float64,0))
 	storage = Array(Float64,2,2)
 	storage[1,1] = -2.0 * (1.0 - x[1])
 	storage[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]
@@ -47,7 +47,7 @@ function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[2, 2] = 200.0
 end
 
-function makerosenbrock(N)
+function makerosenbrock(N::Integer)
 	function rosenbrock_lm(x::Vector)
 		result = Array(eltype(x), 2 * (N - 1))
 		for i = 1:N - 1
@@ -59,8 +59,8 @@ function makerosenbrock(N)
 	return rosenbrock_lm
 end
 
-function makerosenbrock_gradient(N)
-	function rosenbrock_gradient_lm(x::Vector; dx=false, center=Array(Float64,0))
+function makerosenbrock_gradient(N::Integer)
+	function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array(Float64,0))
 		result = zeros(eltype(x), (2 * (N - 1), N))
 		for i = 1:N - 1
 			result[2 * i - 1, i] = -1
@@ -72,8 +72,8 @@ function makerosenbrock_gradient(N)
 	return rosenbrock_gradient_lm
 end
 
-function makepowell(N)                                                                   
-    function powell(x::Vector)                                       
+function makepowell(N::Integer)
+    function powell(x::Vector)
         result = Array(Float64, N)
         for i = 1:floor(Int64, 10.0/4)
             result[4*i-3] = x[4*i-3] + 10*x[4*i-2]
@@ -85,8 +85,8 @@ function makepowell(N)
     end
     return powell
 end
-    
-function makepowell_gradient(N)                      
+
+function makepowell_gradient(N::Integer)
     function powell_gradient(x::Vector)
         result = zeros(Float64, N, N)
         for i = 1:floor(Int64, 10.0/4)
@@ -103,11 +103,11 @@ function makepowell_gradient(N)
             result[4*i, 4*i]     = -2*sqrt(10)*(x[4*i-3] - x[4*i] )
         end
         return result
-    end       
-    return powell_gradient             
+    end
+    return powell_gradient
 end
 
-function makesphere(N)
+function makesphere(N::Integer)
     function sphere(x::Vector)
         result = Array(eltype(x), N)
         for i = 1:N
@@ -118,7 +118,7 @@ function makesphere(N)
     return sphere
 end
 
-function makesphere_gradient(N)
+function makesphere_gradient(N::Integer)
     function sphere_gradient(x::Vector)
         result = zeros(eltype(x), N, N)
         for i=1:N
@@ -129,7 +129,7 @@ function makesphere_gradient(N)
     return sphere_gradient
 end
 
-function makedixonprice(N)
+function makedixonprice(N::Integer)
     function dixonprice(x::Vector)
         result = Array(Float64, N)
         result[1] = x[1] - 1
@@ -141,20 +141,20 @@ function makedixonprice(N)
     return dixonprice
 end
 
-function makedixonprice_gradient(N)
+function makedixonprice_gradient(N::Integer)
     function dixonprice_gradient(x::Vector)
         result = zeros(Float64, N, N)
         result[1, 1] = sqrt(2)
         for i=2:N
             result[i-1, i] = -sqrt(2*i)
             result[i, i]   = 4*sqrt(2*i)*x[i]
-        end       
+        end
         return result
     end
     return dixonprice_gradient
 end
 
-function makesumsquares(N)
+function makesumsquares(N::Integer)
     function sumsquares(x::Vector)
         result = Array(Float64, N)
         for i=1:N
@@ -166,7 +166,7 @@ function makesumsquares(N)
 end
 
 
-function makesumsquares_gradient(N)
+function makesumsquares_gradient(N::Integer)
     function sumsquares_gradient(x::Vector)
         result = zeros(Float64, N, N)
         for i=1:N
@@ -177,7 +177,7 @@ function makesumsquares_gradient(N)
     return sumsquares_gradient
 end
 
-function makerotatedhyperellipsoid(N)
+function makerotatedhyperellipsoid(N::Integer)
     function rotatedhyperellipsoid(x::Vector)
         result = Array(Float64, N)
         result[1] = x[1]
@@ -190,10 +190,10 @@ function makerotatedhyperellipsoid(N)
         end
         return result
     end
-    return rotatedhyperellipsoid 
+    return rotatedhyperellipsoid
 end
 
-function makerotatedhyperellipsoid_gradient(N)
+function makerotatedhyperellipsoid_gradient(N::Integer)
     function rotatedhyperellipsoid_gradient(x::Vector)
         result = zeros(Float64, N, N)
         result[1, 1] = sqrt(2)
@@ -209,4 +209,4 @@ function makerotatedhyperellipsoid_gradient(N)
         return result
     end
     return rotatedhyperellipsoid_gradient
-end    
+end

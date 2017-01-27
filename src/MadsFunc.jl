@@ -371,7 +371,7 @@ end
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 """
-function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Real=1.)
+function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	"MADS conditional log-likelihood functions"
 	function conditionalloglikelihood(predictions::Associative, observations::Associative)
 		loglhood = 0.
@@ -397,7 +397,7 @@ end
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 """
-function makemadsloglikelihood(madsdata::Associative; weightfactor::Real=1.)
+function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	if haskey(madsdata, "LogLikelihood")
 		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations

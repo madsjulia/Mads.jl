@@ -1,5 +1,5 @@
 "Model section information criteria"
-function modelinformationcriteria(madsdata::Associative, par::Array=Array(Float64,0))
+function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array(Float64,0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
 	of = Mads.of(madsdata, f)

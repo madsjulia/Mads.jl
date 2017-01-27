@@ -34,7 +34,7 @@ Arguments:
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::String="", filename::String="", datafiles=true, imagefiles=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
+function localsa(madsdata::Associative; format::String="", filename::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -126,7 +126,7 @@ function localsa(madsdata::Associative; format::String="", filename::String="", 
 	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
-function sampling(param::Vector, J::Array, numsamples::Int; seed::Integer=0, scale::Number=1)
+function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -469,7 +469,7 @@ Arguments:
 - `restartdir` : directory where files will be stored containing model results for fast simulation restarts
 - `parallel` : set to true if the model runs should be performed in parallel
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Int=N)
+function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -901,7 +901,7 @@ Arguments:
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
 """
-function efast(md::Associative; N::Int=100, M::Int=6, gamma::Number=4, plotresults::Bool=graphoutput, seed::Integer=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Int=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, plotresults::Bool=graphoutput, seed::Integer=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
 	# AV:        Sum of total variances (divided by # of resamples to get mean total variance, V)

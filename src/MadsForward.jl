@@ -23,7 +23,7 @@ function forward(madsdata::Associative; all::Bool=false)
 	forward(madsdata, paramdict; all=all)
 end
 
-function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
+function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	if length(paramdict) == 0
 		return forward(madsdata; all=all)
 	end
@@ -54,7 +54,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 	end
 end
 
-function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Int=0, checkpointfilename="checkpoint_forward")
+function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
@@ -76,7 +76,7 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	s = size(paramarray)
 	if length(s) > 2
 		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
-	elseif length(s) == 2	
+	elseif length(s) == 2
 		mx = max(s...)
 		mn = min(s...)
 	else
@@ -113,7 +113,7 @@ end
 """
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-- `forwardgrid(madsdata)`  
+- `forwardgrid(madsdata)`
 - `forwardgrid(madsdata, paramvalues))`
 
 Arguments:
@@ -143,7 +143,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	ymax = madsdata["Grid"]["ymax"]
 	zmax = madsdata["Grid"]["zmax"]
 	time = madsdata["Grid"]["time"]
-	dx = nx == 1 ? 0 : dx = ( xmax - xmin ) / ( nx - 1 )	
+	dx = nx == 1 ? 0 : dx = ( xmax - xmin ) / ( nx - 1 )
 	dy = ny == 1 ? 0 : dy = ( ymax - ymin ) / ( ny - 1 )
 	dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
 	x = xmin

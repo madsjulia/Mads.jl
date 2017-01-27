@@ -6,7 +6,7 @@ import ProgressMeter
 function addsource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
-		if sourceid <= 0 
+		if sourceid <= 0
 			sourceid = ns
 		end
 		if sourceid <= ns
@@ -177,7 +177,7 @@ Arguments:
 - `ay` - dispersivity in Y direction (transverse horizontal)
 - `az` - dispersivity in Y direction (transverse vertical)
 - `H` - Hurst coefficient for Fractional Brownian dispersion
-- `x` - X coordinate of contaminant source location 
+- `x` - X coordinate of contaminant source location
 - `y` - Y coordinate of contaminant source location
 - `z` - Z coordinate of contaminant source location
 - `dx` - source size (extent) in X direction
@@ -193,7 +193,7 @@ Returns:
 
 - predicted concentration at (wellx, welly, wellz, t)
 """
-function contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")
+function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Number; anasolfunction::Union{String,Function}="long_bbb_ddd_iir_c")
 	anasolfunction = eval(parse("Anasol.$anasolfunction"))
 	d = -theta * pi / 180
 	xshift = wellx - x
@@ -242,7 +242,7 @@ function computemass(madsdata::Associative; time::Number=0)
 		end
 	end
 	parameters = madsdata["Parameters"]
-	lambda = parameters["lambda"]["init"]	
+	lambda = parameters["lambda"]["init"]
 	compute_reduction = lambda > eps(Float64) ? true : false
 	mr = 0
 	mass_injected = 0
@@ -285,7 +285,7 @@ Arguments:
 
 - `madsfiles` : matching pattern for Mads input files (string or regular expression accepted)
 - `time` : computational time
-- `path` : search directory for the mads input files 
+- `path` : search directory for the mads input files
 
 Returns:
 
@@ -293,7 +293,7 @@ Returns:
 - `mass_injected` : array with associated total injected mass
 - `mass_reduced` : array with associated total reduced mass
 """
-function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
+function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::String=".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
 	Mads.madsinfo("Number of files = $nf")
@@ -311,7 +311,7 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path = ".")
 		mass_injected[i] = Float64(mi)
 		mass_reduced[i] = Float64(mi)
 	end
-	if graphoutput &&isdefined(Mads, :plotmass)
+	if graphoutput && isdefined(Mads, :plotmass)
 		plotmass(lambda, mass_injected, mass_reduced, joinpath(path, "mass_reduced"))
 	end
 	return lambda, mass_injected, mass_reduced
