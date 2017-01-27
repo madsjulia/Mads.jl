@@ -11,6 +11,7 @@ Conda 0.4
 PyCall 1.8
 PyPlot 2.2
 Gadfly
+Measures
 Images
 YAML
 JSON
