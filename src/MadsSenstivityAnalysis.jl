@@ -34,7 +34,7 @@ Arguments:
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::String="", filename::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par=Array(Float64,0), obs=Array(Float64,0))
+function localsa(madsdata::Associative; format::String="", filename::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array(Float64,0), obs::Array{Float64,1}=Array(Float64,0))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""

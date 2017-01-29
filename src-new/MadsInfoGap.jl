@@ -293,12 +293,12 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	=#
 	MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
 	function MathProgBase.eval_jac_g(d::MadsModelPoly, J::Vector, p::Vector)
-		ji = 1
+		ji = 0
 		for i = 1:no
-			J[ji + 0] = t[i]^p[4]
-			J[ji + 1] = t[i]
-			J[ji + 2] = 1
-			J[ji + 3] = p[1] * (t[i]^p[4]) * log(t[i])
+			J[ji + 1] = t[i]^p[4]
+			J[ji + 2] = t[i]
+			J[ji + 3] = 1
+			J[ji + 4] = p[1] * (t[i]^p[4]) * log(t[i])
 			ji += 4
 		end
 	end

@@ -469,7 +469,7 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		@assert length(obskeys) == length(predictions)
 		results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
 	end
-	return results
+	return convert(DataStructures.OrderedDict{Any,Float64}, results)
 end
 
 """

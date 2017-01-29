@@ -104,11 +104,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		"MADS command function"
 		function madscommandfunction(parameters::Associative) # MADS command function
 			if simpleproblem && currentdir != abspath(madsproblemdir)
- 				cd(madsproblemdir)
+				cd(madsproblemdir)
 				cwd = pwd()
 			else
 				cwd = currentdir
- 			end
+			end
 			tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
 			tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 			Mads.createtempdir(tempdirname)
@@ -122,7 +122,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				while trying
 					try
 						attempt += 1
-						results = madsdatacommandfunction(madsdata)
+						results = convert(DataStructures.OrderedDict{Any,Float64}, madsdatacommandfunction(madsdata))
 						trying = false
 					catch e
 						sleep(attempt * 0.5)
@@ -198,11 +198,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
+"Make Mads reusable function"
 function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
-
-function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
+function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart::Union{String,Void,Bool}, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
 	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
 		if madsdatarestart == "memory"
 			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
@@ -284,7 +284,7 @@ function makemadscommandgradient(madsdata::Associative) # make MADS command grad
 end
 function makemadscommandgradient(madsdata::Associative, f::Function)
 	fg = makemadscommandfunctionandgradient(madsdata, f)
-	function madscommandgradient(parameters::Associative; dx=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
+	function madscommandgradient(parameters::Associative; dx::Array{Float64,1}=Array(Float64,0), center::Associative=Dict()) #TODO we need the center; this is not working
 		forwardrun, gradient = fg(parameters; dx=dx, center=center)
 		return gradient
 	end

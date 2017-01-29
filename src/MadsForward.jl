@@ -47,7 +47,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 	paraminitdict = DataStructures.OrderedDict(zip(keys(paramdict), getparamsinit(madsdata)))
 	if l == 1
 		p = merge(paraminitdict, paramdict)
-		return f(p)
+		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
 	else
 		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)

@@ -109,7 +109,7 @@ function makelmfunctions(madsdata::Associative)
 		end
 		return residuals
 	end
-	function inner_g_lm(arrayparameters_dx_center_tuple)
+	function inner_g_lm(arrayparameters_dx_center_tuple::Tuple)
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
 		center = arrayparameters_dx_center_tuple[3]
@@ -141,8 +141,8 @@ function makelmfunctions(madsdata::Associative)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::Vector; dx=Array(Float64,0), center=Array(Float64,0)) #TODO we need the center; this is not working
-		return reusable_inner_g_lm((arrayparameters, dx, center))
+	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0)) #TODO we need the center; this is not working
+		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
 end
@@ -204,7 +204,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function grad(arrayparameters::Vector{Float64}; dx=Array(Float64,0), center=Array(Float64,0))
+	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0))
 		return reusable_inner_grad((arrayparameters, dx, center))
 	end
 	return grad
