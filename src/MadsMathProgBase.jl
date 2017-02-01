@@ -42,7 +42,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 		return o_mpb(p)
 	end
 	function MathProgBase.eval_grad_f(d::MadsModel, grad_f::Vector, p::Vector)
-		grad_f = grad_o_mpb(p)
+		grad_f = grad_o_mpb(p, dx=lineardx)
 	end
 	function MathProgBase.eval_g(d::MadsModel, o::Vector, p::Vector)
 		o = f_mpb(p)
@@ -55,7 +55,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	MathProgBase.jac_structure(d::MadsModel) = [repeat(collect(1:nP); inner=nO)],[repeat(collect(1:nP); outer=nO)]
 	function MathProgBase.eval_jac_g(d::MadsModel, J::Vector, p::Vector)
 		center = f_mpb(p)
-		fevals = g_mpb(p)
+		fevals = g_mpb(p, dx=lineardx)
 		ji = 0
 		for j in 1:nO
 			for i in 1:nP
@@ -85,7 +85,7 @@ function makempbfunctions(madsdata::Associative)
 			dx = lineardx
 		end
 		of = o_mpb(arrayparameters)
-		fevals = g_mpb(arrayparameters)
+		fevals = g_mpb(arrayparameters, dx=dx)
 		grad_o = Array(Float64, nP)
 		for i in 1:nP
 			of_i = o_function(fevals[i])
@@ -151,7 +151,7 @@ function makempbfunctions(madsdata::Associative)
 	"""
 	Gradient function for the forward model used for MathProgBase optimization
 	"""
-	function g_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array(Float64,0))
+	function g_mpb(arrayparameters::Vector; dx::Array{Float64,1}=lineardx)
 		return reusable_inner_g_mpb(tuple(arrayparameters, dx))
 	end
 	return o_mpb, grad_o_mpb, f_mpb, g_mpb

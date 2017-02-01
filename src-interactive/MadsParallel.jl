@@ -1,5 +1,10 @@
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 
+quietdefault = true
+if isdefined(:Mads)
+	quietdefault = Mads.quiet
+end
+
 "Get the number of processors"
 function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
@@ -76,7 +81,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=true, dir="", exename="")
+function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir="", exename="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(nodenames) > 0 || mads_servers
@@ -132,7 +137,7 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 		end
 		if test
 			for i = 1:length(h)
-				info("Connecting to $(h[i])")
+				info("Connecting to $(h[i]) ...")
 				try
 					addprocs([h[i]]; arguments...)
 				catch
@@ -153,7 +158,14 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 					errreader = @async readstring(errRead);
 				end
 			end
-			addprocs(h; arguments...)
+			errmsg = ""
+			addprocsfailed = false
+			try
+				addprocs(h; arguments...)
+			catch errmsg
+				addprocsfailed = true
+				warn("Connection to $(h) failed!")
+			end
 			if quiet
 				redirect_stdout(originalSTDOUT);
 				redirect_stderr(originalSTDERR);
@@ -163,6 +175,10 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 				close(errWrite);
 				error = wait(errreader);
 				close(errRead);
+			end
+			if addprocsfailed
+				warn("Connection to $(h) failed!")
+				error(errmsg)
 			end
 		end
 		sleep(0.1)
@@ -277,7 +293,7 @@ end
 """
 Run external command and pipe stdout and stderr
 """
-function runcmd(cmd::Cmd, quiet::Bool=false)
+function runcmd(cmd::Cmd, quiet::Bool=quietdefault)
 	cmdin = Pipe()
 	cmdout = Pipe()
 	cmderr = Pipe()
