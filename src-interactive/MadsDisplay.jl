@@ -24,9 +24,13 @@ function display(filename::String)
 			end
 			rm(filename2)
 		else
-			img = Images.load(filename)
-			Base.display(img)
-			println("")
+			try
+				img = Images.load(filename)
+				Base.display(img)
+				println("")
+			catch
+				trytoopen = true
+			end
 		end
 	else
 		trytoopen = true

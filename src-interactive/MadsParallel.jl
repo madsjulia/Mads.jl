@@ -24,7 +24,7 @@ Arguments:
 - `np` : number of processors
 - `nt` : number of threads
 """
-function setprocs(np::Int, nt::Int)
+function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
 	nt = nt < 1 ? 1 : nt
 	n = np - nprocs()
@@ -42,12 +42,12 @@ function setprocs(np::Int, nt::Int)
 	getprocs()
 end
 
-function setprocs(np::Int)
+function setprocs(np::Integer)
 	setprocs(np, np)
 end
 
 "Set number of processors needed for each parallel task at each node"
-function set_nprocs_per_task(local_nprocs_per_task::Int=1)
+function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
 	global nprocs_per_task = local_nprocs_per_task
 end
 
@@ -81,7 +81,7 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir="", exename="")
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array(String, 0)
 	if length(nodenames) > 0 || mads_servers
@@ -196,7 +196,7 @@ function setprocs(; ntasks_per_node::Int=0, nprocs_per_task::Int=1, nodenames::U
 end
 
 "Parse string with node names defined in SLURM"
-function parsenodenames(nodenames::String, ntasks_per_node::Int=1)
+function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 	h = Array(String, 0)
 	ss = split(nodenames, "[")
 	name = ss[1]
