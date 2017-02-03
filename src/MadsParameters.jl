@@ -282,8 +282,8 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 end
 
 "Get optimizable parameters"
-function getoptparams(madsdata::Associative, optparameterkey::Array=[])
-	getoptparams(madsdata, getparamsinit(madsdata), optparameterkey=optparameterkey)
+function getoptparams(madsdata::Associative)
+	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
 end
 function getoptparams(madsdata::Associative, parameterarray::Array, optparameterkey::Array=[])
 	if length(optparameterkey) == 0
