@@ -14,6 +14,8 @@ end
 
 forward_predictions = Mads.forward(md) # execute forward model simulation based on initial parameter guesses
 
+param_values = Mads.getoptparams(md) # inital parameter values
+
 of = Mads.partialof(md, forward_predictions, r".*")
 
 if isdefined(:Gadfly)

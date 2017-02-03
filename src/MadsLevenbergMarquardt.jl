@@ -200,7 +200,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		end
 		return jacobian
 	end
-	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "grad"; usedict=false)
+	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "g_lm"; usedict=false)
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""

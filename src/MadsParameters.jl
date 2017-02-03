@@ -281,7 +281,10 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	end
 end
 
-"Get optimizable parameters", 
+"Get optimizable parameters"
+function getoptparams(madsdata::Associative, optparameterkey::Array=[])
+	getoptparams(madsdata, getparamsinit(madsdata), optparameterkey=optparameterkey)
+end
 function getoptparams(madsdata::Associative, parameterarray::Array, optparameterkey::Array=[])
 	if length(optparameterkey) == 0
 		optparameterkey = getoptparamkeys(madsdata)
@@ -309,7 +312,7 @@ end
 
 "Is parameter with key `parameterkey` optimizable?"
 function isopt(madsdata::Associative, parameterkey::String)
-	if !haskey(madsdata["Parameters"][parameterkey], "type") || 
+	if !haskey(madsdata["Parameters"][parameterkey], "type") ||
 		haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt"
 		return true
 	else
@@ -462,7 +465,7 @@ function showallparameters(madsdata::Associative)
 			s = ""
 		end
 		s *= @sprintf "%-10s = %15g " parkey pardict[parkey]["init"]
-		if haskey(pardict[parkey], "type") 
+		if haskey(pardict[parkey], "type")
 			if pardict[parkey]["type"] != nothing
 				s *= "<- optimizable "
 			else
