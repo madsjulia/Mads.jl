@@ -195,35 +195,31 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
 		return madscommandfunction(parameterswithexpressions)
 	end
-	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunctionwithexpressions, getrestartdir(madsdata))
+	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
 "Make Mads reusable function"
 function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
-	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), haskey(madsdata, "Restart") ? madsdata["Restart"] : nothing, madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
+	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), getrestart(madsdata), madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
-function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart::Union{String,Void,Bool}, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
-	if isdefined(:ReusableFunctions) && madsdatarestart != nothing
-		if madsdatarestart == "memory"
-			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
-			return madscommandfunctionwithreuse
-		elseif madsdatarestart != false
-			if usedict
-				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, paramkeys, obskeys)
-			else
-				madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir)
-			end
-			return madscommandfunctionwithreuse
+function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart::Union{String,Bool}, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
+	if madsdatarestart == "memory" # this is not very cool
+		madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
+		return madscommandfunctionwithreuse
+	elseif madsdatarestart == true
+		if usedict
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir, paramkeys, obskeys)
 		else
-			return madscommandfunction
+			madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction, restartdir)
 		end
+		return madscommandfunctionwithreuse
 	else
 		return madscommandfunction
 	end
 end
 
 """
-Get the directory where restarts will be stored.
+Get the directory where Mads restarts will be stored.
 """
 function getrestartdir(madsdata::Associative, suffix::String="")
 	restartdir = ""
@@ -237,8 +233,20 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				madscritical("$(e)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
-	end
-	if restartdir == ""
+	elseif haskey(madsdata, "Restart") && typeof(madsdata["Restart"]) == String
+		if madsdata["Restart"] == "memory" # this is not very cool
+			return ""
+		end
+		restartdir = madsdata["Restart"]
+		if !isdir(restartdir)
+			try
+				mkdir(restartdir)
+			catch e
+				restartdir = ""
+				madscritical("$(e)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
+			end
+		end
+	else
 		root = splitdir(getmadsrootname(madsdata, version=true))[2]
 		restartdir = root * "_restart"
 		if !isdir(restartdir)

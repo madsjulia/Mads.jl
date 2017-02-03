@@ -1,3 +1,18 @@
+"MADS restart on"
+function restarton()
+	global restart = true;
+end
+
+"MADS restart off"
+function restartoff()
+	global restart = false;
+end
+
+"Get MADS restart status"
+function getrestart(madsdata::Associative)
+	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
+end
+
 "Make MADS quiet"
 function quieton()
 	global quiet = true;

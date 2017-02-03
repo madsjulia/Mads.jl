@@ -89,6 +89,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 end
 
 quiet = true
+restart = false
 graphoutput = true
 graphbackend = "SVG"
 verbositylevel = 1
