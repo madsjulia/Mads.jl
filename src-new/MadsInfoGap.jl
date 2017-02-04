@@ -1,6 +1,6 @@
 import JuMP
 import MathProgBase
-import Ipopt
+@tryimport Ipopt
 @tryimport Gadfly
 
 "Information Gap Decision Analysis using JuMP"

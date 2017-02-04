@@ -1,7 +1,7 @@
 import NMF
 import JuMP
-import Ipopt
 import Optim
+@tryimport Ipopt
 
 "Non-negative Matrix Factorization using NMF"
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
