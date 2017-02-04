@@ -85,6 +85,22 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pul
 	end
 end
 
+"Push the latest version of the Mads / Julia modules in the repo"
+function push(modulename::String="")
+	if modulename!=""
+		modulenames = [modulename]
+	else
+		modulenames = madsmodules
+	end
+	for i in modulenames
+		info("Pushing $(i) ...")
+		cwd = pwd()
+		cd(Pkg.dir(i))
+		run(`git push`)
+		cd(cwd)
+	end
+end
+
 "Free Mads / Julia modules"
 function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
