@@ -1,9 +1,9 @@
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 
-quietdefault = true
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
 end
+quietdefault = false
 
 "Get the number of processors"
 function getprocs()
@@ -163,8 +163,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 			try
 				addprocs(h; arguments...)
 			catch errmsg
-				addprocsfailed = true
-				warn("Connection to $(h) failed!")
+				#addprocsfailed = true
+				#warn("Connection to $(h) failed!")
 			end
 			if quiet
 				redirect_stdout(originalSTDOUT);
