@@ -1,9 +1,11 @@
-madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+if !isdefined(:madsservers)
+	madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+end
 
+quietdefault = true
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
 end
-quietdefault = false
 
 "Get the number of processors"
 function getprocs()
