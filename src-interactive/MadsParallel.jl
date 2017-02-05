@@ -150,30 +150,25 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 				originalSTDERR = STDERR;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
-				if VERSION < v"0.5"
-					outreader = @async readall(outRead);
-					errreader = @async readall(errRead);
-				else
-					outreader = @async readstring(outRead);
-					errreader = @async readstring(errRead);
-				end
+				outreader = @async readstring(outRead);
+				errreader = @async readstring(errRead);
 			end
 			errmsg = ""
 			addprocsfailed = false
 			try
 				addprocs(h; arguments...)
 			catch errmsg
-				#addprocsfailed = true
-				#warn("Connection to $(h) failed!")
+				addprocsfailed = true
+				warn("Connection to $(h) failed!")
 			end
 			if quiet
 				redirect_stdout(originalSTDOUT);
 				redirect_stderr(originalSTDERR);
 				close(outWrite);
-				output = wait(outreader);
+				# output = wait(outreader); # output is not needed
 				close(outRead);
 				close(errWrite);
-				error = wait(errreader);
+				# error = wait(errreader); # error is not needed
 				close(errRead);
 			end
 			if addprocsfailed
