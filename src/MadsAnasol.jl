@@ -279,7 +279,7 @@ end
 """
 Compute injected/reduced contaminant mass for a given set of mads input files
 
-`Mads.computemass(madsfiles; time = 0, path = ".")`
+`Mads.computemass(madsfiles; time=0, path=".")`
 
 Arguments:
 
