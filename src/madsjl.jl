@@ -20,7 +20,7 @@ if length(ARGS) < 1
 end
 
 if haskey(ENV, "SLURM_NODELIST")
-	include(joinpath(Pkg.dir("Mads"), "src/MadsParallel.jl"))
+	include(joinpath(Pkg.dir("Mads"), "src-interactive/MadsParallel.jl"))
 	setprocs()
 end
 
