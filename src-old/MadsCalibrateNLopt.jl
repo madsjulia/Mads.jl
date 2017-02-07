@@ -1,3 +1,5 @@
+import DataStructures
+
 # NLopt is too much of a pain to install at this point
 "Do a calibration using NLopt"
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
@@ -16,7 +18,7 @@ function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switc
 	end
 	fg = makemadscommandfunctionandgradient(madsdata)
 	function fg_nlopt(arrayparameters::Vector, grad::Vector)
-		parameters = Dict(zip(paramkeys, arrayparameters))
+		parameters = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, arrayparameters))
 		resultdict, gradientdict = fg(parameters)
 		residuals = Array(Float64, length(madsdata["Observations"]))
 		ssr = 0

@@ -1,5 +1,6 @@
 import BIGUQ
 import ProgressMeter
+import DataStructures
 import DataFrames
 import BlackBoxOptim
 
@@ -52,8 +53,8 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return [-horizon]
 	end
 	function performancegoalsatisfied(arrayparams::Vector, horizon::Real)
-		paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
-		optparams = Dict(zip(getoptparamkeys(madsdata), arrayparams))
+		paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)
@@ -77,8 +78,8 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return true
 	end
 	function gethorizonoffailure(arrayparams::Vector)
-		paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
-		optparams = Dict(zip(getoptparamkeys(madsdata), arrayparams))
+		paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)

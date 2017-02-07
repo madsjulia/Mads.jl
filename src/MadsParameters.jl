@@ -53,7 +53,7 @@ Returns:
 function getparamdict(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
 		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+		paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		return paramdict
 	end
 end

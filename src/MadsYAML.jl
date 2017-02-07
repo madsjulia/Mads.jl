@@ -1,5 +1,6 @@
 import JSON
 import YAML
+import DataStructures
 
 """
 Load YAML file
@@ -71,7 +72,7 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 		for well in keys(yamldata["Wells"])
 			delete!(yamldata["Wells"][well], "on" )
 			for i = 1:length(yamldata["Wells"][well]["obs"])
-				dict = Dict(i=>yamldata["Wells"][well]["obs"][i])
+				dict = DataStructures.OrderedDict(i=>yamldata["Wells"][well]["obs"][i])
 				yamldata["Wells"][well]["obs"][i] = dict
 			end
 		end
@@ -81,7 +82,7 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 			a = Array(Any, 0)
 			for key in keys(yamldata[obsorparam])
 				if !ismatch(r"source[1-9]*_", key)
-					push!( a, Dict(key=>yamldata[obsorparam][key]))
+					push!(a, DataStructures.OrderedDict(key=>yamldata[obsorparam][key]))
 				end
 			end
 			yamldata[obsorparam] = a
@@ -93,7 +94,7 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 			i = 1
 			keys = map(string, 1:length(yamldata[tplorins]))
 			for key in keys
-				a[i] = Dict(key=>yamldata[tplorins][i])
+				a[i] = DataStructures.OrderedDict(key=>yamldata[tplorins][i])
 				i += 1
 			end
 			yamldata[tplorins] = a

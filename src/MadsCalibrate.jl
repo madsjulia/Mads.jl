@@ -33,7 +33,7 @@ Returns:
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	if all
@@ -75,7 +75,7 @@ end
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict(zip(paramkeys, Mads.getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	allphi = SharedArray(Float64, numberofsamples)
@@ -140,13 +140,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	indexlogtransformed = find(logtransformed)
 	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
-	sindx = 0.1
-	if Mads.haskeyword(madsdata, "sindx")
-		sindx = madsdata["Problem"]["sindx"]
-		if typeof(sindx) == String
-			sindx = float(sindx)
-		end
-	end
+	sindx = Mads.getsindx(madsdata)
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	if save_results
@@ -154,7 +148,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(Dict(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
+			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
 			close(outfile)
 		end
 	else
@@ -169,7 +163,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	end
 	minimum = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
-	minimumdict = DataStructures.OrderedDict(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	minimumdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimum[i]
 	end

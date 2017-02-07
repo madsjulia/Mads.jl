@@ -1,4 +1,5 @@
 import ProgressMeter
+import DataStructures
 import JLD
 
 """
@@ -19,7 +20,7 @@ Returns:
 - `obsvalues` : dictionary of model predictions
 """
 function forward(madsdata::Associative; all::Bool=false)
-	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forward(madsdata, paramdict; all=all)
 end
 
@@ -44,7 +45,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		l2 = length(paramdict[k])
 		@assert l == l2
 	end
-	paraminitdict = DataStructures.OrderedDict(zip(keys(paramdict), getparamsinit(madsdata)))
+	paraminitdict = DataStructures.OrderedDict{String,Float64}(zip(keys(paramdict), getparamsinit(madsdata)))
 	if l == 1
 		p = merge(paraminitdict, paramdict)
 		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
@@ -55,7 +56,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 end
 
 function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
-	paramdict = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
 	end
@@ -126,7 +127,7 @@ Returns:
 - `array3d` : 3D array with model predictions along a 3D grid
 """
 function forwardgrid(madsdata::Associative)
-	paramvalues = Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramvalues = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forwardgrid(madsdata, paramvalues)
 end
 
@@ -147,7 +148,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	dy = ny == 1 ? 0 : dy = ( ymax - ymin ) / ( ny - 1 )
 	dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
 	x = xmin
-	dictwells = Dict()
+	dictwells = DataStructures.OrderedDict()
 	for i in 1:nx
 		x += dx
 		y = ymin
@@ -157,14 +158,14 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 			for k in 1:nz
 				z += dz
 				wellname = "w_$(i)_$(j)_$(k)"
-				dictwells[wellname] = Dict()
+				dictwells[wellname] = DataStructures.OrderedDict()
 				dictwells[wellname]["x"] = x
 				dictwells[wellname]["y"] = y
 				dictwells[wellname]["z0"] = z
 				dictwells[wellname]["z1"] = z
 				dictwells[wellname]["on"] = true
-				arrayobs = Array(Dict, 0)
-				dictobs = Dict()
+				arrayobs = Array(DataStructures.OrderedDict, 0)
+				dictobs = DataStructures.OrderedDict()
 				dictobs["t"] = time
 				dictobs["c"] = 0
 				dictobs["weight"] = 1

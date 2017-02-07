@@ -1,7 +1,9 @@
-"Read observations using C Mads library" 
+import DataStructures
+
+"Read observations using C Mads library"
 function readobservations_cmads(madsdata::Associative)
 	obsids=getobskeys(madsdata)
-	observations = OrderedDict(zip(obsids, zeros(length(obsids))))
+	observations = DataStructures.OrderedDict{String,Float64}(zip(obsids, zeros(length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
 		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once

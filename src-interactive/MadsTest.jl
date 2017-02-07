@@ -30,7 +30,7 @@ function test(testmod::String="")
 	orig_dir = pwd()
 	if testmod == ""
 		include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
-		println("* Mads modules ...")
+		info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			println("* $i testing ...")
 			include(Pkg.dir(i) * "/test/runtests.jl")

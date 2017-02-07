@@ -1,4 +1,5 @@
 import MetaProgTools
+import DataStructures
 
 """
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
@@ -16,9 +17,9 @@ Returns:
 """
 function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayfunction(arrayparameters::Vector)
-		return f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
+		return f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 	end
 	return arrayfunction
 end
@@ -57,9 +58,9 @@ end
 function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayconditionalloglikelihood(arrayparameters::Vector)
-		predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
+		predictions = f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
 	end
@@ -70,15 +71,15 @@ end
 function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function arrayloglikelihood(arrayparameters::Vector)
-		predictions = Dict()
+		predictions = DataStructures.OrderedDict()
 		try
-			predictions = f(merge(initparams, Dict(zip(optparamkeys, arrayparameters))))
+			predictions = f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 		catch DomainError #TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
 			return -Inf
 		end
-		loglikelihood(Dict(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
+		loglikelihood(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood
 end

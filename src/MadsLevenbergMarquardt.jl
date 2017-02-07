@@ -1,4 +1,5 @@
 import RobustPmap
+import DataStructures
 import Optim
 
 "Compute residuals"
@@ -66,6 +67,7 @@ end
 "Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization"
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
+	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
 	o_lm(x::Vector) = sar ? sum(abs(x)) : dot(x, x)
@@ -85,7 +87,7 @@ function makelmfunctions(madsdata::Associative)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	"""
 	Forward model function for Levenberg-Marquardt optimization
 	"""
@@ -123,11 +125,19 @@ function makelmfunctions(madsdata::Associative)
 			push!(p, a)
 		end
 		if sizeof(center) == 0
-			push!(p, arrayparameters)
+			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
+			center = ReusableFunctions.loadresultfile(filename)
+			center_computed = (center != nothing) && lenght(center) == nO
+			if !center_computed
+				push!(p, arrayparameters)
+			end
+		else
+			center_computed = true
 		end
 		fevals = RobustPmap.rpmap(f_lm, p)
-		if sizeof(center) == 0
+		if !center_computed
 			center = fevals[nP+1]
+			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 		end
 		jacobian = Array(Float64, (nO, nP))
 		for j in 1:nO
@@ -150,13 +160,14 @@ end
 "Make gradient function needed for local sensitivity analysis"
 function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
+	restartdir = getrestartdir(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	function func(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -186,11 +197,19 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 			push!(p, a)
 		end
 		if sizeof(center) == 0
-			push!(p, arrayparameters)
+			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
+			center = ReusableFunctions.loadresultfile(filename)
+			center_computed = (center != nothing) && lenght(center) == nO
+			if !center_computed
+				push!(p, arrayparameters)
+			end
+		else
+			center_computed = true
 		end
 		fevals = RobustPmap.rpmap(func, p)
-		if sizeof(center) == 0
+		if !center_computed
 			center = fevals[nP+1]
+			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 		end
 		jacobian = Array(Float64, (nO, nP))
 		for j in 1:nO
@@ -353,7 +372,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	compute_jacobian = true
 	while (~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = Array(Float64, 1, 1)
+			J = Array(Float64, 0, 0)
 			try
 				J = g(x, center=fcur)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
@@ -365,7 +384,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				Mads.madscritical("Mads quits!")
 			end
 			g_calls += 1
-			Mads.madsoutput("Jacobian #$g_calls\n");
+			Mads.madsoutput("Jacobian #$g_calls\n")
 			compute_jacobian = false
 		end
 		Mads.madsoutput("Current Best OF: $best_residual\n");

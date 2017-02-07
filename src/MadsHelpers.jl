@@ -125,3 +125,25 @@ function addkeyword!(madsdata::Associative, class::String, keyword::String)
 		push!(madsdata[class], keyword)
 	end
 end
+
+"Get sin-space dx"
+function getsindx(madsdata::Associative)
+	sindx = 0.1
+	if Mads.haskeyword(madsdata, "sindx")
+		sindx = madsdata["Problem"]["sindx"]
+		if typeof(sindx) == String
+			sindx = float(sindx)
+		end
+	end
+	return sindx
+end
+
+"Transpose non-numeric vector"
+function transposevector(a::Vector)
+	reshape(a, 1, length(a))
+end
+
+"Transpose non-numeric matrix"
+function transposematrix(a::Matrix)
+	permutedims(a, (2, 1))
+end

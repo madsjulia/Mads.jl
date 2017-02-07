@@ -28,13 +28,12 @@ Local sensitivity analysis based on eigen analysis of the parameter covariance m
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `madsdata` : MADS problem dictionary
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; format::String="", filename::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array(Float64,0), obs::Array{Float64,1}=Array(Float64,0))
+function localsa(madsdata::Associative; sinspace::Bool=true, filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array(Float64,0), obs::Array{Float64,1}=Array(Float64,0), J::Array{Float64,2}=Array(Float64,(0,0)))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -42,8 +41,8 @@ function localsa(madsdata::Associative; format::String="", filename::String="", 
 		rootname = Mads.getrootname(filename)
 		ext = "." * Mads.getextension(filename)
 	end
-	g = makelocalsafunction(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
+	obskeys = getobskeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
@@ -54,14 +53,32 @@ function localsa(madsdata::Associative; format::String="", filename::String="", 
 		param = getparamsinit(madsdata, paramkeys)
 	elseif nPi != nP
 		param = getoptparams(madsdata, par, paramkeys)
+	else
+		param = par
 	end
-	J = g(param, center=obs)
+	if sizeof(J) == 0
+		g = makelocalsafunction(madsdata)
+		if sinspace
+			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
+			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
+			logtransformed = Mads.getparamslog(madsdata, paramkeys)
+			indexlogtransformed = find(logtransformed)
+			lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
+			upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
+			sindx = Mads.getsindx(madsdata)
+			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+			J = g_sin(sinparam, center=obs)
+		else
+			J = g(param, center=obs)
+		end
+	end
 	if any(isnan, J)
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
 		Base.display(J)
 		Mads.madscritical("Mads quits!")
 	end
-	datafiles && writedlm("$(rootname)-jacobian.dat", J)
+	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly)
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
@@ -82,7 +99,7 @@ function localsa(madsdata::Associative; format::String="", filename::String="", 
 		try
 			covar = inv(JpJ)
 		catch "SingularException(4)"
-			Mads.madserror("Singular covariance matrix! Local sensitivity analysis fails.")
+			Mads.madswarn("Singular covariance matrix! Local sensitivity analysis fails.")
 			return
 		end
 	end
@@ -145,7 +162,8 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, 
 			numgooddirections -= 1
 			if numgooddirections <= 0
 				done = true
-				madserror("Reduction in sampling directions failed!")
+				madswar("Reduction in sampling directions failed!")
+				return
 			end
 			gooddirections = vo[:, 1:numgooddirections]
 			newJ = J * gooddirections
@@ -310,7 +328,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
 	results = Array(DataStructures.OrderedDict, numsamples)
-	paramdict = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample
@@ -473,7 +491,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
-	paramalldict = Dict(zip(paramallkeys, Mads.getparamsinit(madsdata)))
+	paramalldict = DataStructures.OrderedDict{String,Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
 	paramoptkeys = Mads.getoptparamkeys(madsdata)
 	nP = length(paramoptkeys)
 	Mads.madsoutput("Number of model paramters to be analyzed: $(nP) \n");
@@ -504,7 +522,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	function farray(Ai)
-		feval = f(merge(paramalldict, Dict(zip(paramoptkeys, Ai))))
+		feval = f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramoptkeys, Ai))))
 		result = Array(Float64, length(obskeys))
 		for i = 1:length(obskeys)
 			result[i] = feval[obskeys[i]]
@@ -531,7 +549,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	else
 		if !loadsaltellirestart!(yA, "yA", restartdir)
 			for i = 1:N
-				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, A[i, :]))))
+				feval = f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramoptkeys, A[i, :]))))
 				for j = 1:length(obskeys)
 					yA[i, j] = feval[obskeys[j]]
 				end
@@ -555,7 +573,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	else
 		if !loadsaltellirestart!(yB, "yB", restartdir)
 			for i = 1:N
-				feval = f(merge(paramalldict, Dict(zip(paramoptkeys, B[i, :]))))
+				feval = f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramoptkeys, B[i, :]))))
 				for j = 1:length(obskeys)
 					yB[i, j] = feval[obskeys[j]]
 				end
@@ -589,7 +607,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		else
 			if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
 				for j = 1:N
-					feval = f(merge(paramalldict, Dict(zip(paramoptkeys, C[j, :]))))
+					feval = f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramoptkeys, C[j, :]))))
 					for k = 1:length(obskeys)
 						yC[j, k] = feval[obskeys[k]]
 					end
@@ -1179,7 +1197,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 				# If # of processors is <= Nr*nprime+(Nr+1) compute model output in serial
 				Mads.madsoutput("""Compute model output in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
 				@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
-					Y[i, :] = collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :]))))))
+					Y[i, :] = collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramkeys, X[i, :]))))))
 				end
 			else
 				=#
@@ -1187,9 +1205,9 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
 				if restart
-					Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
+					Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
 				else
-					Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+					Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 				end
 			#end #End if (processors)
 
@@ -1422,7 +1440,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 
 	paramallkeys  = getparamkeys(md)
 	# Values of this dictionary are intial values
-	paramalldict  = DataStructures.OrderedDict(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
+	paramalldict  = DataStructures.OrderedDict{String,Float64}(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
 	# Only the parameters we wish to analyze
 	paramkeys     = getoptparamkeys(md)
 	# All the observation sites and time points we will analyze them at

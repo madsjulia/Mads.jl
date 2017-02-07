@@ -1,7 +1,7 @@
 import Mads
 import Base.Test
 
-println("Running MADS tests:")
+info("Running MADS tests:")
 
 println("* miscellaneous ...")
 include("miscellaneous.jl")

@@ -1,4 +1,6 @@
 
+import DataStructures
+
 """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
@@ -17,7 +19,7 @@ Arguments:
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
-	result = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	result = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]
@@ -42,7 +44,7 @@ end
 
 function createmadsproblem(madsdata::Associative, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
-	predictions = f(Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	predictions = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
 

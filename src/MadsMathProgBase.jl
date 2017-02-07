@@ -1,4 +1,5 @@
 import MathProgBase
+import DataStructures
 
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
@@ -26,7 +27,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = Mads.getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = Dict(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 
 	o_mpb, grad_o_mpb, f_mpb, g_mpb = makempbfunctions(madsdata)
 
@@ -138,8 +139,8 @@ function makempbfunctions(madsdata::Associative)
 		end
 		fevals = RobustPmap.rpmap(f_mpb, p)
 		if !center_computed
-			ReusableFunctions.saveresultfile(restartdir, fevals[end], arrayparameters)
-			return fevals[1:end-1]
+			ReusableFunctions.saveresultfile(restartdir, fevals[nP+1], arrayparameters)
+			return fevals[1:nP]
 		else
 			return fevals
 		end
