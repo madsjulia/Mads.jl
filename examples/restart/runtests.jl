@@ -2,10 +2,12 @@ import Mads
 import Base.Test
 
 Mads.madsinfo("Restarting ...")
+cwd = pwd()
 workdir = string((dirname(Base.source_path()))) * "/"
 if workdir == ""
 	workdir = joinpath(Mads.madsdir, "..", "examples", "restart")
 end
+cd(workdir)
 
 if Mads.long_tests
 	Mads.rmdir(joinpath(workdir, "external-jld_restart"))
@@ -25,22 +27,30 @@ if Mads.long_tests
 	Mads.rmdir(joinpath(workdir, "external-jld_restart_test"))
 end
 
+ReusableFunctions.quieton()
 Mads.madsinfo("Restarting internal calibration problem ...")
 ReusableFunctions.resetrestarts()
 Mads.rmdir(joinpath(workdir, "w01_restart"))
 md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
 Mads.madsinfo("... no restart ...")
 no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
-@show ReusableFunctions.restarts
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 0
 md["Restart"] = true
 Mads.madsinfo("... create restart ...")
 create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
-@show ReusableFunctions.restarts
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 0
 Mads.madsinfo("... use restart ...")
 use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
-@show ReusableFunctions.restarts
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 3
 Mads.localsa(md, imagefiles=false, datafiles=false)
-@show ReusableFunctions.restarts
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 6
+Mads.localsa(md, imagefiles=false, datafiles=false)
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 7
 Mads.savemadsfile(md)
 
 @Base.Test.test no_restart_results[1] == create_restart_results[1]
@@ -68,3 +78,5 @@ if Mads.long_tests
 
 	Mads.rmdir(joinpath(workdir, "/internal-linearmodel_restart"))
 end
+
+cd(cwd)

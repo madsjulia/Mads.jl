@@ -73,6 +73,8 @@ if isdefined(Mads, :runcmd)
 		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
 	end
 end
+Mads.transposevector(["a";"b"])
+Mads.transposematrix(["a" "b"])
 # Mads.create_documentation()
 
 redirect_stdout(originalSTDOUT);

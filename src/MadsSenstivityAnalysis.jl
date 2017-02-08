@@ -119,7 +119,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])
-	datafiles && writedlm("$(rootname)-eigenmatrix.dat", sortedeigenm)
+	datafiles && writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
 	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	if imagefiles && isdefined(:Gadfly)
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
@@ -336,7 +336,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 		results[i] = f(paramdict) # this got to be slow to process
 	end
 	obskeys = getobskeys(madsdata)
-	sum = DataStructures.OrderedDict()
+	sum = DataStructures.OrderedDict{String,Float64}()
 	for i = 1:length(obskeys)
 		sum[obskeys[i]] = 0.
 	end
@@ -345,7 +345,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 			sum[obskeys[i]] += results[j][obskeys[i]]
 		end
 	end
-	mean = DataStructures.OrderedDict()
+	mean = DataStructures.OrderedDict{String,Float64}()
 	for i = 1:length(obskeys)
 		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
 	end
@@ -357,14 +357,14 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
 		end
 	end
-	variance = DataStructures.OrderedDict()
+	variance = DataStructures.OrderedDict{String,Float64}()
 	for i = 1:length(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
 	madsinfo("Compute the main effect (first order) sensitivities (indices)")
-	mes = DataStructures.OrderedDict()
+	mes = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 	for k = 1:length(obskeys)
-		mes[obskeys[k]] = DataStructures.OrderedDict()
+		mes[obskeys[k]] = DataStructures.OrderedDict{String,Float64}()
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
@@ -399,19 +399,19 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 		end
 	end
 	madsinfo("Compute the total effect sensitivities (indices)") # TODO we should use the same samples for total and main effect
-	tes = DataStructures.OrderedDict()
-	var = DataStructures.OrderedDict()
+	tes = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+	var = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 	for k = 1:length(obskeys)
-		tes[obskeys[k]] = DataStructures.OrderedDict()
-		var[obskeys[k]] = DataStructures.OrderedDict()
+		tes[obskeys[k]] = DataStructures.OrderedDict{String,Float64}()
+		var[obskeys[k]] = DataStructures.OrderedDict{String,Float64}()
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
 		cond_vars = Array(DataStructures.OrderedDict, nummanyparamsamples)
 		cond_means = Array(DataStructures.OrderedDict, nummanyparamsamples)
 		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
-			cond_vars[j] = DataStructures.OrderedDict()
-			cond_means[j] = DataStructures.OrderedDict()
+			cond_vars[j] = DataStructures.OrderedDict{String,Float64}()
+			cond_means[j] = DataStructures.OrderedDict{String,Float64}()
 			for m = 1:length(obskeys)
 				cond_means[j][obskeys[m]] = 0.
 				cond_vars[j][obskeys[m]] = 0.
@@ -531,11 +531,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	end
 	yA = Array(Float64, N, length(obskeys))
 	if parallel
-		if restartdir != ""
-			if !isdir(restartdir)
-				mkdir(restartdir)
-			end
-		end
+		restartdir = getrestartdir(madsdata)
 		Avecs = Array(Array{Float64, 1}, size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])
@@ -959,11 +955,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	#
 	##
 	if restart
-		if restartdir != ""
-			if !isdir(restartdir)
-				mkdir(restartdir)
-			end
-		end
+		restartdir = getrestartdir(md)
 	end
 
 	Mads.setseed(seed)
@@ -1669,13 +1661,13 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	Mads.madsinfo("""Elapsed time for eFAST is $(toq())"""); ## End timer & display elapsed time
 
 	# Save results as dictionary
-	tes = DataStructures.OrderedDict()
-	mes = DataStructures.OrderedDict()
-	var = DataStructures.OrderedDict()
+	tes = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+	mes = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+	var = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 	for j = 1:length(obskeys)
-		tes[obskeys[j]] = DataStructures.OrderedDict()
-		mes[obskeys[j]] = DataStructures.OrderedDict()
-		var[obskeys[j]] = DataStructures.OrderedDict()
+		tes[obskeys[j]] = DataStructures.OrderedDict{String,Float64}()
+		mes[obskeys[j]] = DataStructures.OrderedDict{String,Float64}()
+		var[obskeys[j]] = DataStructures.OrderedDict{String,Float64}()
 	end
 	for k = 1:length(paramkeys)
 		for j = 1:length(obskeys)

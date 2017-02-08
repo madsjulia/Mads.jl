@@ -3,6 +3,7 @@ import JSON
 import Base.Test
 import DataStructures
 
+cwd = pwd()
 workdir = Mads.getmadsdir()
 if workdir == ""
 	@everywhere workdir = joinpath(Mads.madsdir, "..", "examples", "sensitivity")
@@ -47,3 +48,4 @@ A=[[1,2] [2,3]]
 Mads.savesaltellirestart(A, "A", workdir)
 Mads.loadsaltellirestart!(A, "A", workdir)
 Mads.rmfile(joinpath(workdir, "A_1.jld"))
+Mads.rmdir(joinpath(cwd, "sobol_restart"))
