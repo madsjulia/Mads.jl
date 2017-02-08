@@ -12,7 +12,7 @@ if Mads.long_tests
 	md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
 	jparam, jresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 
-	if !haskey(ENV, "MADS_NO_PYTHON")
+	if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :yaml)
 		md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 		yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 		@Base.Test.test yparam == jparam
