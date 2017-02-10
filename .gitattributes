@@ -1,0 +1,5 @@
+docs/* linguist-documentation
+site/* linguist-documentation
+examples/* linguist-documentation
+logo/* linguist-vendored
+*.jl linguist-language=Julia
