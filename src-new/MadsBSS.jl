@@ -1,7 +1,7 @@
 import NMF
 import JuMP
 import Optim
-@tryimport Ipopt
+@Mads.tryimport Ipopt
 
 "Non-negative Matrix Factorization using NMF"
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
@@ -52,7 +52,7 @@ function NMFnlopt(X, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
 		@JuMP.constraint(m, W .<= 1)
-		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC})
+		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
 		JuMP.solve(m)
 		phi = JuMP.getobjectivevalue(m)
 		println("OF = $(phi)")
