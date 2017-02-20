@@ -2,12 +2,10 @@ MADS (Model Analysis & Decision Support)
 =======================================
 
 [![Mads](http://pkg.julialang.org/badges/Mads_0.4.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.4) [![Mads](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
-
 [![Build Status](https://travis-ci.org/madsjulia/Mads.jl.svg?branch=master)](https://travis-ci.org/madsjulia/Mads.jl)
-
 [![Coverage Status](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 
-MADS is an integrated open-source high-performance computational (HPC) framework written in [Julia](http://julialang.org).
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated open-source high-performance computational (HPC) framework in [Julia](http://julialang.org).
 MADS can execute a wide range of data- and model-based analyses:
 
 * Sensitivity Analysis
