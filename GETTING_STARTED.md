@@ -67,7 +67,7 @@ MADS can be executed at the command line using `madsjl.jl`. Link this file in a 
 
 For example, using `madsjl.jl` you can execute:
 
-```
+```bash
 madsjl.jl diff internal-linear.mads internal-parabola.mads
 madsjl.jl internal-parabola.mads forward efast
 ```

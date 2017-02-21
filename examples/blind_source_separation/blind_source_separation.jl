@@ -31,7 +31,7 @@ s1 = (sin(0.05:0.05:5)+1)/2
 s2 = (sin(0.3:0.3:30)+1)/2
 s3 = (sin(0.2:0.2:20)+1)/2
 S = [s1 s2 s3]
-H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
+H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0] [2,2,2] [1,2,1]]
 Mads.plotseries(S, "sin_original_sources.svg", title="Original sources", name="Source", combined=true)
 X = S * H
 Mads.plotseries(X, "sin_mixed_signals.svg", title="Mixed signals", name="Signal", combined=true)
@@ -62,12 +62,12 @@ X = S * H
 Mads.plotseries(X, "sig_mixed_signals.svg", title="Mixed signals", name="Signal", combined=true)
 Mads.plotseries(X, "sig_mixed_signals.png", title="Mixed signals", name="Signal", combined=true)
 info("Reconstruction of sin/rand signals using NMF ...")
-Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk, retries=R)
+Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk, retries=1)
 Mads.plotseries(Wnmf, "sig_unmixed_sources_nmf.svg", title="Unmixed sources", name="Source", combined=true)
 Mads.plotseries(Wnmf, "sig_unmixed_sources_nmf.png", title="Unmixed sources", name="Source", combined=true)
 Mads.plotseries(Wnmf * Hnmf, "sig_reproduced_signals_nmf.svg", title="Reproduced signals", name="Signal", combined=true)
 info("Reconstruction of sin/rand signals using JuMP/NLopt ...")
-Wnlopt, Hnlopt, pnlopt = Mads.NMFnlopt(X, nk, retries=R)
+Wnlopt, Hnlopt, pnlopt = Mads.NMFnlopt(X, nk, retries=1)
 Mads.plotseries(Wnlopt, "sig_unmixed_sources_nlopt.svg", title="Unmixed sources", name="Source", combined=true)
 Mads.plotseries(Wnlopt, "sig_unmixed_sources_nlopt.png", title="Unmixed sources", name="Source", combined=true)
 Mads.plotseries(Wnlopt * Hnlopt, "sig_reproduced_signals_nlopt.svg", title="Reproduced signals", name="Signal", combined=true)

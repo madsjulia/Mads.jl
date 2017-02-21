@@ -560,7 +560,10 @@
                   <h1>Model Coupling</h1>
                 
                 <h2 id="model-coupling">Model Coupling</h2>
-<p>MADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary. The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS. The fields in the MADS problem dictionary that can be used to define the model coupling are:</p>
+<p>MADS can be coupled with any internal or external model.
+The model coupling is defined in the MADS problem dictionary.
+The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS.
+The fields in the MADS problem dictionary that can be used to define the model coupling are:</p>
 <ul>
 <li>
 <p><code>Model</code> : Julia model defined in an external Julia file.</p>
@@ -578,7 +581,10 @@
 <p><code>Julia command</code> : external model executed by a Julia script. The Julia script is defined in an external Julia file.</p>
 </li>
 </ul>
-<p>Both <code>Command</code> and <code>Julia command</code> can use different approaches to pass model parameters to the external model. Only <code>Command</code> uses different approaches to get back the model outputs. The script defined under <code>Julia command</code> parses the model outputs using Julia. The available options for writing model inputs and reading model outputs are as follows.</p>
+<p>Both <code>Command</code> and <code>Julia command</code> can use different approaches to pass model parameters to the external model.
+Only <code>Command</code> uses different approaches to get back the model outputs.
+The script defined under <code>Julia command</code> parses the model outputs using Julia.
+The available options for writing model inputs and reading model outputs are as follows.</p>
 <ul>
 <li>
 <p>Options for writing model inputs:</p>

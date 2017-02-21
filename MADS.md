@@ -1,17 +1,21 @@
 MADS (Model Analysis & Decision Support)
 ----------------------------------------
 
-MADS is an open-source [Julia](http://julialang.org) code designed as an integrated high-performance computational framework performing a wide range of data- & model-based analyses:
+MADS is an integrated open-source high-performance computational (HPC) framework in [Julia](http://julialang.org).
+MADS can execute a wide range of data- and model-based analyses:
 
 * Sensitivity Analysis
 * Parameter Estimation
 * Model Inversion and Calibration
 * Uncertainty Quantification
-* Model Selection and Averaging
-* Decision Support
+* Model Selection and Model Averaging
+* Model Reduction and Surrogate Modeling
+* Machine Learning and Blind Source Separation
+* Decision Analysis and Support
 
-MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input.
-The code provides a series of alternative algorithms to perform each type of model analyses.
+MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel enviromentls (Moab, Slurm, etc.).
+MADS utilizes adaptive rules and techniques which allows the analyses to be performed with a minimum user input.
+The code provides a series of alternative algorithms to execute each type of data- and model-based analyses.
 
 For additional information:
 
@@ -21,7 +25,7 @@ For additional information:
 * documentation:
     - [readthedocs](`http://mads.readthedocs.org/en/latest/`)
     - [github](`http://madsjulia.github.io/Mads.jl`)
-    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov) 
+    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov)
 * repos:
     - [github](http://github.com/madsjulia/Mads.jl)
     - [gitlab](http://gitlab.com/mads/Mads.jl)
@@ -35,7 +39,7 @@ Builds & Tests
 
 **Mads Build & Test Status @ JuliaLang.org**
 
-[![JuliaLang Status](http://pkg.julialang.org/badges/Mads_0.4.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.4) [![Mads](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
+[![Mads](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
 
 **Mads Build & Test Status @ Travis Continuous Integration (CI) service (OS X & linux)**
 

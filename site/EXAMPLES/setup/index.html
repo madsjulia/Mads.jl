@@ -251,8 +251,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#execution-of-mads-examples" title="Execution of MADS examples" class="md-nav__link">
-    Execution of MADS examples
+  <a href="#mads-examples" title="MADS examples" class="md-nav__link">
+    MADS examples
   </a>
   
 </li>
@@ -540,8 +540,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#execution-of-mads-examples" title="Execution of MADS examples" class="md-nav__link">
-    Execution of MADS examples
+  <a href="#mads-examples" title="MADS examples" class="md-nav__link">
+    MADS examples
   </a>
   
 </li>
@@ -563,17 +563,29 @@
                 
                   <h1>Setup</h1>
                 
-                <h2 id="execution-of-mads-examples">Execution of MADS examples</h2>
+                <h2 id="mads-examples">MADS examples</h2>
 <p>In Julia REPL, do the following commands:</p>
-<p><code>import Mads</code></p>
+<div class="codehilite"><pre><span class="k">import</span> <span class="n">Mads</span>
+</pre></div>
+
+
 <p>To explore getting-started instructions, execute:</p>
-<p><code>Mads.help()</code></p>
+<div class="codehilite"><pre><span class="n">Mads</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+
+
 <p>There are various examples located in the <code>examples</code> directory of the <code>Mads</code> repository.</p>
 <p>For example, execute</p>
-<p><code>include(Mads.madsdir * "/../examples/contamination/contamination.jl")</code></p>
-<p>to perform various analyses related to contaminant transport, or execute</p>
-<p><code>include(Mads.madsdir * "/../examples/bigdt/source_termination.jl")</code></p>
-<p>to perform BIG-DT decision analysis.</p>
+<div class="codehilite"><pre><span class="n">include</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">madsdir</span> <span class="o">*</span> <span class="s">&quot;/../examples/contamination/contamination.jl&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>to perform various example analyses related to groundwater contaminant transport, or execute</p>
+<div class="codehilite"><pre><span class="n">include</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">madsdir</span> <span class="o">*</span> <span class="s">&quot;/../examples/bigdt/bigdt.jl&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.</p>
               
             </article>
           </div>

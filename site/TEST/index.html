@@ -560,20 +560,22 @@
                   <h1>Testing & Verification</h1>
                 
                 <h2 id="testing-verification">Testing &amp; Verification</h2>
-<p>MADS includes a series of test and verification problems. These are also provided as examples how to run the code and perform various types of data and model analyses. All the MADS examples can be found in the MADS repository: <a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>.</p>
+<p>MADS includes a series of test and verification problems.
+These are also provided as examples how to run the code and perform various types of data and model analyses.
+All the MADS examples can be found in the MADS repository: <a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>.</p>
 <p>All the test and verification problems can be executed using:</p>
-<div class="codehilite"><pre><span class="kn">import</span> <span class="nn">Mads</span>
+<div class="codehilite"><pre><span class="k">import</span> <span class="n">Mads</span>
 <span class="n">Mads</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
 </pre></div>
 
 
 <p>or</p>
-<div class="codehilite"><pre>Pkg.test(&quot;Mads&quot;)
-Pkg.test(&quot;Anasol&quot;)
-Pkg.test(&quot;BIGUQ&quot;)
-Pkg.test(&quot;ReusableFunctions&quot;)
-Pkg.test(&quot;MetaProgTools&quot;)
-Pkg.test(&quot;RobustPmap&quot;)
+<div class="codehilite"><pre><span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;Mads&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;Anasol&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;BIGUQ&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;ReusableFunctions&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;MetaProgTools&quot;</span><span class="p">)</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;RobustPmap&quot;</span><span class="p">)</span>
 </pre></div>
               
             </article>
