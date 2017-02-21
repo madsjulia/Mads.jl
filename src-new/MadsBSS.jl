@@ -24,7 +24,7 @@ function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, max
 end
 
 "Non-negative Matrix Factorization using JuMP/Ipopt"
-function NMFnlopt(X, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random=false, maxiter::Integer=100000, maxguess=10., initW=nothing, initH=nothing, verbosity::Integer=0)
+function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array(Float64, 0, 0), initH::Matrix=Array(Float64, 0, 0), verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan(Xc)
@@ -37,14 +37,14 @@ function NMFnlopt(X, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random
 	phi_best = Inf
 	for r = 1:retries
 		m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
-		if r == 1 && initW != nothing
+		if r == 1 && sizeof(initW) != 0
 			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
 		elseif r > 1 || random
 			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=rand())
 		else
-			@JuMP.variable(m, W[1:nP, 1:nk] >= 0.)
+			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=0.5)
 		end
-		if r == 1 && initH != nothing
+		if r == 1 && sizeof(initH) != 0
 			@JuMP.variable(m, H[k=1:nk, j=1:nC] >= 0., start=initH[k, j])
 		elseif r > 1 || random
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand())
@@ -66,7 +66,7 @@ function NMFnlopt(X, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random
 end
 
 "Matrix Factorization via Levenberg Marquardt"
-function MFlm(X, nk::Integer; mads=true, log_W=false, log_H=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW=nothing, initH=nothing)
+function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array(Float64, 0, 0), initH::Matrix=Array(Float64, 0, 0))
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array(Float64, nP, nk)
@@ -80,7 +80,7 @@ function MFlm(X, nk::Integer; mads=true, log_W=false, log_H=false, retries::Inte
 		W_lowerbounds = zeros(W_size)
 	end
 	W_upperbounds = ones(W_size)
-	if initW != nothing
+	if sizeof(initW) > 0
 		W_init = initW
 	else
 		W_init = ones(W_size) * 0.5
@@ -94,7 +94,7 @@ function MFlm(X, nk::Integer; mads=true, log_W=false, log_H=false, retries::Inte
 		H_lowerbounds = zeros(H_size)
 	end
 	H_upperbounds = ones(H_size) * maximum(X) * 100
-	if initH != nothing
+	if sizeof(initH) > 0
 		H_init = initH
 	else
 		H_init = ones(H_size)
