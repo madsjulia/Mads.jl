@@ -119,6 +119,22 @@ function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	end
 end
 
+"Commit the latest version of the Mads / Julia modules in the repo"
+function commit(commitmsg::String, modulename::String="")
+	if modulename!=""
+		modulenames = [modulename]
+	else
+		modulenames = madsmodules
+	end
+	for i in modulenames
+		info("Commiting changes in $(i) ...")
+		cwd = pwd()
+		cd(Pkg.dir(i))
+		run(`git commit -a -m $(commitmsg)`)
+		cd(cwd)
+	end
+end
+
 "Status of the Mads modules"
 function status(; git::Bool=true, gitmore::Bool=false)
 	for i in madsmodules

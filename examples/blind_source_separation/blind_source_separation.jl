@@ -31,7 +31,7 @@ s1 = (sin(0.05:0.05:5)+1)/2
 s2 = (sin(0.3:0.3:30)+1)/2
 s3 = (sin(0.2:0.2:20)+1)/2
 S = [s1 s2 s3]
-H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0] [2,2,2] [1,2,1]]
+H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 Mads.plotseries(S, "sin_original_sources.svg", title="Original sources", name="Source", combined=true)
 X = S * H
 Mads.plotseries(X, "sin_mixed_signals.svg", title="Mixed signals", name="Signal", combined=true)
