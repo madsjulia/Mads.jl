@@ -130,7 +130,11 @@ function commit(commitmsg::String, modulename::String="")
 		info("Commiting changes in $(i) ...")
 		cwd = pwd()
 		cd(Pkg.dir(i))
-		run(`git commit -a -m $(commitmsg)`)
+		try
+			run(`git commit -a -m $(commitmsg)`)
+		catch
+			warn("Nothing to commit in $(i).")
+		end
 		cd(cwd)
 	end
 end
