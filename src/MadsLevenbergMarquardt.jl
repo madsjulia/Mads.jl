@@ -279,7 +279,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}
 			break
 		end
 	end
-	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}(), nEval, maxIter, 0)
+	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, true, Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}(), nEval, maxIter, 0)
 end
 
 """
@@ -537,5 +537,5 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 		converged = g_converged | x_converged | of_converged
 	end
-	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, tr, f_calls, g_calls, 0)
+	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, true, tr, f_calls, g_calls, 0)
 end

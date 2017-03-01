@@ -175,8 +175,12 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 			if !haskey(newobs[k], "time")
 				newobs[k]["time"] = key2time(k)
 			end
-			newresult[k] = result[k]
-            title = rx.pattern
+			if !haskey(result, k)
+				warn("Observation `$k` is missing!")
+			else
+				newresult[k] = result[k]
+			end
+			title = rx.pattern
 		end
 	end
 	newmadsdata = copy(madsdata)
