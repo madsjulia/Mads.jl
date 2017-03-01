@@ -512,7 +512,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		tes[obskeys[i]] = DataStructures.OrderedDict{String, Float64}()
 	end
 	for key in paramoptkeys
-		delete!(paramalldict,key)
+		delete!(paramalldict, key)
 	end
 	for j = 1:nP
 		s1 = Mads.getparamrandom(madsdata, N, paramoptkeys[j])
@@ -1499,7 +1499,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	# The parameters of interest will be calculated by eFAST_distributeX
 	# We utilize the "merge" function to combine the two when we are calculating model output
 	for key in paramkeys
-		delete!(paramalldict,key)
+		delete!(paramalldict, key)
 	end
 
 	## Here we define additional parameters (importantly, the frequency for our "Group of Interest", Wi)
