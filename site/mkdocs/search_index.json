@@ -467,23 +467,13 @@
         }, 
         {
             "location": "/Notebooks/", 
-            "text": "Jupyter Notebooks\n\n\nContaminant transport\n -:- \ndownload\n \njupyter\n\n\nBlind Source Separation\n -:- \ndownload\n \njupyter", 
+            "text": "Mads examples using Jupyter notebooks:\n\n\n\n\nContaminant transport\n \n \ndownload\n -:- \nview\n\n\nBlind Source Separation\n \n \ndownload\n -:- \nview", 
             "title": "Notebooks"
         }, 
         {
-            "location": "/Notebooks/#jupyter-notebooks", 
-            "text": "", 
-            "title": "Jupyter Notebooks"
-        }, 
-        {
-            "location": "/Notebooks/#contaminant-transport-download-jupyter", 
-            "text": "", 
-            "title": "Contaminant transport -:- download jupyter"
-        }, 
-        {
-            "location": "/Notebooks/#blind-source-separation-download-jupyter", 
-            "text": "", 
-            "title": "Blind Source Separation -:- download jupyter"
+            "location": "/Notebooks/#mads-examples-using-jupyter-notebooks", 
+            "text": "Contaminant transport     download  -:-  view  Blind Source Separation     download  -:-  view", 
+            "title": "Mads examples using Jupyter notebooks:"
         }, 
         {
             "location": "/Examples/", 
