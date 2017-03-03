@@ -157,9 +157,13 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 """
-function plotmatches(madsdata::Associative; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
+function plotmatches(madsdata::Associative, rx::Regex=r""; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
 	r = forward(madsdata; all=true)
-	plotmatches(madsdata, r, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
+	if rx != r""
+		plotmatches(madsdata, r, rx; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
+	else
+		plotmatches(madsdata, r; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
+	end
 end
 
 function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
@@ -171,12 +175,19 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 			if !haskey(newobs[k], "time")
 				newobs[k]["time"] = key2time(k)
 			end
-			newresult[k] = result[k]
-            title = rx.pattern
+			if !haskey(result, k)
+				warn("Observation `$k` is missing!")
+			else
+				newresult[k] = result[k]
+			end
+			title = rx.pattern
 		end
 	end
 	newmadsdata = copy(madsdata)
 	newmadsdata["Observations"] = newobs
+	if haskey(newmadsdata, "Wells")
+		delete!(newmadsdata, "Wells")
+	end
 	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
 
