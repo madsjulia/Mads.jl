@@ -57,8 +57,8 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, Int(burnin / numwalkers), 1)
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], Int(nsteps / numwalkers), thinning)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, div(burnin, numwalkers), 1)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], div(nsteps, numwalkers), thinning)
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
