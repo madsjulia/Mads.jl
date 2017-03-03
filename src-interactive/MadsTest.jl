@@ -39,15 +39,18 @@ function test(testmod::String="")
 		file = joinpath(Pkg.dir("Mads"), "examples", testmod, "runtests.jl")
 		if isfile(file)
 			include(file)
-		elseif isdefined(Symbol(testmod))
-			file = joinpath(Pkg.dir(testmod), "test", "runtests.jl")
-			if isfile(file)
-				include(file)
+		else
+			eval(Mads, :(@tryimport $(Symbol(testmod))))
+			if isdefined(Symbol(testmod))
+				file = joinpath(Pkg.dir(testmod), "test", "runtests.jl")
+				if isfile(file)
+					include(file)
+				else
+					warn("Test $file is missing!")
+				end
 			else
 				warn("Test $file is missing!")
 			end
-		else
-			warn("Test $file is missing!")
 		end
 	end
 	cd(orig_dir)

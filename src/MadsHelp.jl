@@ -29,6 +29,7 @@ Arguments:
 """
 function functions(string::String="")
 	for i in madsmodules
+		eval(Mads, :(@tryimport $(Symbol(i))))
 		functions(Symbol(i), string)
 	end
 end

@@ -1,5 +1,5 @@
 info("Load Mads.setprocs ...")
-include(joinpath(Pkg.dir("Mads"), "src/MadsParallel.jl"))
+include(joinpath(Pkg.dir("Mads"), "src", "MadsParallel.jl"))
 
 info("Set SLURM processors ...")
 setprocs()

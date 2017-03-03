@@ -114,8 +114,6 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
-import SVR #temp
-
 include("MadsTypes.jl")
 include("MadsLog.jl")
 include("MadsHelp.jl")
