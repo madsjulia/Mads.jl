@@ -29,26 +29,30 @@ Arguments:
 """
 function functions(string::String="")
 	for i in madsmodules
-		functions(eval(Symbol(i)), string)
+		functions(Symbol(i), string)
 	end
 end
 
-function functions(m::Module, string::String="")
-	f = names(m, true)
-	fuctions = Any[]
-	for i in 1:length(f)
-		functionname = "$(f[i])"
-		if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "_")
-			continue
+function functions(m::Union{Symbol, Module}, string::String="")
+	try
+		f = names(eval(m), true)
+		functions = Any[]
+		for i in 1:length(f)
+			functionname = "$(f[i])"
+			if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "_")
+				continue
+			end
+			if string == "" || contains(functionname, string)
+				push!(functions, functionname)
+			end
 		end
-		if string == "" || contains(functionname, string)
-			push!(fuctions, functionname)
+		if length(functions) > 0
+			info("$(m) functions:")
+			sort!(functions)
+			Base.display(functions)
 		end
-	end
-	if length(fuctions) > 0
-		info("$(m) functions:")
-		sort!(fuctions)
-		Base.display(fuctions)
+	catch
+		warn("Module $m not defined!")
 	end
 end
 
