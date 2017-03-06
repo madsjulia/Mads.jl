@@ -28,7 +28,7 @@ if !madswindows
 	end
 end
 
-madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools"]
+madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR"]
 import GeostatInversion
 
 macro tryimport(s::Symbol)
@@ -148,7 +148,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
-	#include(joinpath("..", "src-new", "MadsInfoGap.jl"))
+	# include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 	include(joinpath("..", "src-new", "MadsBSS.jl"))
 end
 if !haskey(ENV, "MADS_NO_GADFLY")

@@ -38,6 +38,7 @@ pages:
   - ReusableFunctions: Modules/ReusableFunctions.md
   - MetaProgTools: Modules/MetaProgTools.md
   - RobustPmap: Modules/RobustPmap.md
+  - SVR: Modules/SVR.md
 - Acknowledgments: acknowledgments.md
 - License: copying.md
 

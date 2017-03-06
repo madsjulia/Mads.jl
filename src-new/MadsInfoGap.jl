@@ -108,7 +108,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 	if isdefined(:Gadfly) && plot
 		ldat = Gadfly.layer(x=time, y=obs, ymin=obs-1, ymax=obs+1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 		f = Gadfly.plot(ldat, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: model setup"))
-		Gadfly.draw(Gadfly.PNG(Pkg.dir("Mads") * "/examples/model_analysis/infogap_results/model_setup.png", 6Gadfly.inch, 4Gadfly.inch), f)
+		Gadfly.draw(Gadfly.PNG(joinpath(Pkg.dir("Mads"), "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
 	end
 	models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = a * exp(t * n) + b * t + c"]
 	if model == 1

@@ -233,28 +233,30 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				madscritical("$(errmsg)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
-	elseif haskey(madsdata, "Restart") && typeof(madsdata["Restart"]) == String
-		if madsdata["Restart"] == "memory" # this is not very cool
-			return ""
-		end
-		restartdir = madsdata["Restart"]
-		if !isdir(restartdir)
-			try
-				mkdir(restartdir)
-			catch errmsg
-				restartdir = ""
-				madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
+	elseif haskey(madsdata, "Restart")
+		if typeof(madsdata["Restart"]) == String
+			if madsdata["Restart"] == "memory" # this is not very cool
+				return ""
 			end
-		end
-	else
-		root = splitdir(getmadsrootname(madsdata, version=true))[2]
-		restartdir = root * "_restart"
-		if !isdir(restartdir)
-			try
-				mkdir(restartdir)
-			catch errmsg
-				restartdir = ""
-				madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
+			restartdir = madsdata["Restart"]
+			if !isdir(restartdir)
+				try
+					mkdir(restartdir)
+				catch errmsg
+					restartdir = ""
+					madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
+				end
+			end
+		else
+			root = splitdir(getmadsrootname(madsdata, version=true))[2]
+			restartdir = root * "_restart"
+			if !isdir(restartdir)
+				try
+					mkdir(restartdir)
+				catch errmsg
+					restartdir = ""
+					madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
+				end
 			end
 		end
 	end
