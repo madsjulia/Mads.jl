@@ -180,7 +180,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		end
 		return results .* weights
 	end
-	function inner_grad(arrayparameters_dx_center_tuple)
+	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
 		center = arrayparameters_dx_center_tuple[3]
@@ -224,7 +224,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
 	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0))
-		return reusable_inner_grad((arrayparameters, dx, center))
+		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return grad
 end

@@ -33,28 +33,29 @@ ReusableFunctions.resetrestarts()
 Mads.rmdir(joinpath(workdir, "w01_restart"))
 md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
 Mads.madsinfo("... no restart ...")
-no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
+no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 0
 md["Restart"] = true
 Mads.madsinfo("... create restart ...")
-create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
+create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 0
 Mads.madsinfo("... use restart ...")
-use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=2, maxJacobians=1)
-# @show ReusableFunctions.restarts
-@Base.Test.test ReusableFunctions.restarts == 3
-Mads.localsa(md, imagefiles=false, datafiles=false)
-# @show ReusableFunctions.restarts
-@Base.Test.test ReusableFunctions.restarts == 6
-Mads.localsa(md, imagefiles=false, datafiles=false)
-# @show ReusableFunctions.restarts
-@Base.Test.test ReusableFunctions.restarts == 7
-Mads.savemadsfile(md)
-
+use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
+@Base.Test.test ReusableFunctions.restarts == 5
 @Base.Test.test no_restart_results[1] == create_restart_results[1]
 @Base.Test.test create_restart_results[1] == use_restart_results[1]
+
+# @show ReusableFunctions.restarts
+Mads.localsa(md, imagefiles=false, datafiles=false)
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 8
+Mads.localsa(md, imagefiles=false, datafiles=false)
+# @show ReusableFunctions.restarts
+@Base.Test.test ReusableFunctions.restarts == 9
+Mads.savemadsfile(md)
+
 
 Mads.rmdir(joinpath(workdir, "w01_restart"))
 rm(joinpath(workdir, "w01-v01.iterationresults"))
