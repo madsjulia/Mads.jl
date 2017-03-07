@@ -152,7 +152,7 @@ function makelmfunctions(madsdata::Associative)
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
 	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0)) #TODO we need the center; this is not working
-		return reusable_inner_g_lm(arrayparameters, dx, center)
+		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
 end
