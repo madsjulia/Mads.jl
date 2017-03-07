@@ -153,7 +153,7 @@ function makempbfunctions(madsdata::Associative)
 	Gradient function for the forward model used for MathProgBase optimization
 	"""
 	function g_mpb(arrayparameters::Vector; dx::Array{Float64,1}=lineardx)
-		return reusable_inner_g_mpb(tuple(arrayparameters, dx))
+		return reusable_inner_g_mpb(arrayparameters, dx)
 	end
 	return o_mpb, grad_o_mpb, f_mpb, g_mpb
 end
