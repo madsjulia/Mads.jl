@@ -396,7 +396,7 @@ function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::N
 					weight = observations[obsname]["weight"]
 				end
 				weight *= weightfactor
-				loglhood -= weight * weight * diff * diff
+				loglhood -= weight * diff * diff
 			end
 		end
 		return loglhood
