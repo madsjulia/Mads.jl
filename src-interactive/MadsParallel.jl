@@ -35,11 +35,7 @@ function setprocs(np::Integer, nt::Integer)
 	elseif n < 0
 		rmprocs(workers()[end+n+1:end])
 	end
-	if VERSION < v"0.5"
-		blas_set_num_threads(nt)
-	else
-		BLAS.set_num_threads(nt)
-	end
+	BLAS.set_num_threads(nt)
 	sleep(0.1)
 	getprocs()
 end

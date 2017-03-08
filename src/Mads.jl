@@ -10,7 +10,7 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-madswindows = (VERSION>=v"0.5" && is_windows()) || (VERSION<v"0.5" && OS_NAME == :Windows)
+madswindows = is_windows()
 
 madsgit = true
 try

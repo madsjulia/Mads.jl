@@ -1,6 +1,4 @@
-if VERSION >= v"0.5"
-	@tryimport PkgDev
-end
+@tryimport PkgDev
 
 "Checks of package is available"
 function ispkgavailable(modulename::String)

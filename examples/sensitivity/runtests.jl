@@ -30,19 +30,12 @@ sa_results = Mads.saltelliparallel(md, 2; N=5, seed=2015)
 # sa_results = Mads.saltellibrute(md, N=10, seed=2015)
 # sa_results = Mads.saltelli(md, N=10, seed=2015)
 
-originalSTDOUT = STDOUT;
-(outRead, outWrite) = redirect_stdout();
-if VERSION < v"0.5"
-    reader = @async readall(outRead);
-else
-    reader = @async readstring(outRead);
-end
+Mads.stdoutcaptureon();
+
 Mads.printSAresults(md, sa_results)
 Mads.printSAresults2(md, sa_results)
-redirect_stdout(originalSTDOUT);
-close(outWrite);
-output = wait(reader);
-close(outRead);
+
+Mads.stdoutcaptureoff();
 
 A=[[1,2] [2,3]]
 Mads.savesaltellirestart(A, "A", workdir)

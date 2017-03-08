@@ -77,23 +77,14 @@ Mads.setmadsinputfile("test.mads")
 f = Mads.getmadsinputfile()
 e = Mads.getextension("test.mads")
 
-originalSTDOUT = STDOUT;
-(outRead, outWrite) = redirect_stdout();
-if VERSION < v"0.5"
-	reader = @async readall(outRead);
-else
-	reader = @async readstring(outRead);
-end
+Mads.stdoutcaptureon()
 
 Mads.showparameters(md)
 Mads.showallparameters(md)
 Mads.showallparameters(md)
 Mads.showobservations(md)
 
-redirect_stdout(originalSTDOUT);
-close(outWrite);
-output = wait(reader);
-close(outRead);
+Mads.stdoutcaptureoff();
 
 Mads.setparamsdistnormal!(md, fill(1, length(m)), fill(1, length(m)))
 Mads.setparamsdistuniform!(md, fill(1, length(m)), fill(1, length(m)))

@@ -22,13 +22,7 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-originalSTDOUT = STDOUT;
-(outRead, outWrite) = redirect_stdout();
-if VERSION < v"0.5"
-	reader = @async readall(outRead);
-else
-	reader = @async readstring(outRead);
-end
+Mads.stdoutcaptureon();
 
 quiet_status = Mads.quiet
 Mads.quietoff()
@@ -77,10 +71,7 @@ Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
 # Mads.create_documentation()
 
-redirect_stdout(originalSTDOUT);
-close(outWrite);
-output = wait(reader);
-close(outRead);
+Mads.stdoutcaptureoff();
 
 Mads.quieton()
 if quiet_status
