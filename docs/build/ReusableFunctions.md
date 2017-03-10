@@ -14,7 +14,7 @@ Documentation for ReusableFunctions.jl module (all functions):
 Check if a file with a filename based on hash exists
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L64' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L64' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.gethashfilename-Tuple{String,Any}' href='#ReusableFunctions.gethashfilename-Tuple{String,Any}'>#</a>
 **`ReusableFunctions.gethashfilename`** &mdash; *Method*.
@@ -24,7 +24,7 @@ Check if a file with a filename based on hash exists
 Define a filename based on hash
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L57' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L57' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.loadresultfile-Tuple{String}' href='#ReusableFunctions.loadresultfile-Tuple{String}'>#</a>
 **`ReusableFunctions.loadresultfile`** &mdash; *Method*.
@@ -34,17 +34,17 @@ Define a filename based on hash
 Load JLD result file
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L70' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L70' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.maker3function-Tuple{Function,String}' href='#ReusableFunctions.maker3function-Tuple{Function,String}'>#</a>
 **`ReusableFunctions.maker3function`** &mdash; *Method*.
 
 
 
-Make a reusable function
+Make a reusable function expecting both regular and keyword arguments
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L93' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L93' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.quietoff-Tuple{}' href='#ReusableFunctions.quietoff-Tuple{}'>#</a>
 **`ReusableFunctions.quietoff`** &mdash; *Method*.
@@ -54,7 +54,7 @@ Make a reusable function
 Make ReusableFunctions not quiet
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L52' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L52' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.quieton-Tuple{}' href='#ReusableFunctions.quieton-Tuple{}'>#</a>
 **`ReusableFunctions.quieton`** &mdash; *Method*.
@@ -64,7 +64,7 @@ Make ReusableFunctions not quiet
 Make ReusableFunctions quiet
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L47' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L47' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.resetrestarts-Tuple{}' href='#ReusableFunctions.resetrestarts-Tuple{}'>#</a>
 **`ReusableFunctions.resetrestarts`** &mdash; *Method*.
@@ -74,7 +74,7 @@ Make ReusableFunctions quiet
 Reset restart counter
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L42' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L42' class='documenter-source'>source</a><br>
 
 <a id='ReusableFunctions.saveresultfile-Tuple{String,Any,Any}' href='#ReusableFunctions.saveresultfile-Tuple{String,Any,Any}'>#</a>
 **`ReusableFunctions.saveresultfile`** &mdash; *Method*.
@@ -84,5 +84,5 @@ Reset restart counter
 Save JLD result file
 
 
-<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/a1c5d86ce3907a0e1328b2de4d6c08d763377267/src/ReusableFunctions.jl#L80' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/ReusableFunctions.jl/tree/507dc26ec77724a9a49b2baa798b84a1f8f0d9e3/src/ReusableFunctions.jl#L80' class='documenter-source'>source</a><br>
 
