@@ -72,6 +72,9 @@ function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX
 	end
 end
 
+"""
+Calibrate with random initial guesses in parallel
+"""
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)

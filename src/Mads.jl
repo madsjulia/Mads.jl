@@ -29,9 +29,11 @@ if !madswindows
 end
 
 madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR"]
-import GeostatInversion
 
-"Try to import module"
+import GeostatInversion
+import SVR
+
+"Try to import a module"
 macro tryimport(s::Symbol)
 	importq = string(:(import $s))
 	warnstring = string(s, " is not available")
