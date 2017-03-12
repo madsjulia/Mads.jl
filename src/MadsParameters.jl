@@ -72,7 +72,7 @@ Returns:
 - `sourcekeys` : array with keys of all source parameters in the MADS dictionary
 """
 function getsourcekeys(madsdata::Associative)
-	sourcekeys = Array(String, 0)
+	sourcekeys = Array{String}( 0)
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			for k = keys(madsdata["Sources"][1])
@@ -101,7 +101,7 @@ for i = 1:length(getparamsnames)
 	q = quote
 		@doc "Get an array with `$(getparamsnames[index])` values for parameters defined by `paramkeys`" ->
 		function $(Symbol(string("getparams", paramname)))(madsdata::Associative, paramkeys::Vector) # create a function to get each parameter name with 2 arguments
-			paramvalue = Array($(paramtype), length(paramkeys))
+			paramvalue = Array{$(paramtype)}(length(paramkeys))
 			for i in 1:length(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
 					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
@@ -126,7 +126,7 @@ end
 
 "Get an array with `min` values for parameters defined by `paramkeys`"
 function getparamsmin(madsdata::Associative, paramkeys::Vector)
-	paramvalue = Array(Float64, length(paramkeys))
+	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "min")
@@ -155,7 +155,7 @@ end
 
 "Get an array with `max` values for parameters defined by `paramkeys`"
 function getparamsmax(madsdata::Associative, paramkeys::Vector)
-	paramvalue = Array(Float64, length(paramkeys))
+	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "max")
@@ -184,7 +184,7 @@ end
 
 "Get an array with `init_min` values for parameters defined by `paramkeys`"
 function getparamsinit_min(madsdata::Associative, paramkeys::Vector)
-	paramvalue = Array(Float64, length(paramkeys))
+	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "init_min")
@@ -225,7 +225,7 @@ end
 
 "Get an array with `init_max` values for parameters defined by `paramkeys`"
 function getparamsinit_max(madsdata::Associative, paramkeys::Vector)
-	paramvalue = Array(Float64, length(paramkeys))
+	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "init_max")
@@ -293,7 +293,7 @@ function getoptparams(madsdata::Associative, parameterarray::Array, optparameter
 	nP = length(parameterkey)
 	nPo = length(optparameterkey)
 	if nP > nPo
-		parameterarraynew = Array(Float64, nPo)
+		parameterarraynew = Array{Float64}(nPo)
 		j = 1
 		for i in 1:nP
 			if optparameterkey[j] == parameterkey[i]
@@ -426,7 +426,7 @@ end
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
-	p = Array(String, 0)
+	p = Array{String}( 0)
 	for parkey in parkeys
 		if haskey(pardict[parkey], "longname" )
 			s = @sprintf "%-30s : " pardict[parkey]["longname"]
@@ -457,7 +457,7 @@ end
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
-	p = Array(String, 0)
+	p = Array{String}( 0)
 	for parkey in parkeys
 		if haskey(pardict[parkey], "longname")
 			s = @sprintf "%-30s : " pardict[parkey]["longname"]

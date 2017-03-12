@@ -43,7 +43,7 @@ function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscomm
 	obskeys = getobskeys(madsdata)
 	function doublearrayfunction(arrayparameters::Vector)
 		dictresult = arrayfunction(arrayparameters)
-		arrayresult = Array(Float64, length(obskeys))
+		arrayresult = Array{Float64}(length(obskeys))
 		i = 1
 		for k in obskeys
 			arrayresult[i] = dictresult[k]

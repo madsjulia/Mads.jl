@@ -35,10 +35,10 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	xmax = madsdata["Grid"]["xmax"]
 	ymax = madsdata["Grid"]["ymax"]
 	t = madsdata["Grid"]["time"]
-	x = Array(Float64, 0)
-	y = Array(Float64, 0)
-	c = Array(Float64, 0)
-	l = Array(String, 0)
+	x = Array{Float64}(0)
+	y = Array{Float64}(0)
+	c = Array{Float64}(0)
+	l = Array{String}( 0)
 	for w in keys(madsdata["Wells"])
 		push!(x, madsdata["Wells"][w]["x"])
 		push!(y, madsdata["Wells"][w]["y"])

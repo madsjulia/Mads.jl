@@ -7,7 +7,7 @@ n = 50
 x = collect(linspace(-3, 3, n))
 y = x
 
-zcos = Array(Float64, n, n)
+zcos = Array{Float64}(n, n)
 fcos(x, y) = cos(x^2 + y^2) / (1 + x^2 + y^2)
 # zcos computed using for loops
 for i in 1:n
@@ -35,7 +35,7 @@ X[1,1,1] = 1
 X[NN,NN,NN] = -1
 x = collect(linspace(1, NN, NN))
 y = x
-z = x   
+z = x
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig[:gca](projection="3d")
 ax[:set_xlim](1, NN)

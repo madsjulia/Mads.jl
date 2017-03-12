@@ -24,8 +24,8 @@ end
 "GSL call of QAG adaptive integration"
 function gsl_integration_qag(f::Function, a::Real, b::Real, epsrel::Real=1e-12, maxintervals::Integer=10^7)
 	s = ccall((:gsl_integration_workspace_alloc,:libgsl), Ptr{Void}, (Csize_t,), maxintervals)
-	result = Array(Cdouble,1)
-	abserr = Array(Cdouble,1)
+	result = Array{Cdouble}(1)
+	abserr = Array{Cdouble}(1)
 	ccall((:gsl_integration_qag,:libgsl), Cint,
 				(Ptr{GSL_Function}, Cdouble, Cdouble, Cdouble, Csize_t, Cint, Ptr{Void}, Ptr{Cdouble}, Ptr{Cdouble}),
 				&GSL_Function(f), a, b, epsrel, maxintervals, 1, s, result, abserr)

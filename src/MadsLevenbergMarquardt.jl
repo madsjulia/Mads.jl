@@ -50,9 +50,9 @@ end
 "Compute the sum of squared residuals for observations that match a regular expression"
 function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	obskeys = getobskeys(madsdata)
-	results = Array(Float64, 0)
-	weights = Array(Float64, 0)
-	targets = Array(Float64, 0)
+	results = Array{Float64}(0)
+	weights = Array{Float64}(0)
+	targets = Array{Float64}(0)
 	for obskey in obskeys
 		if ismatch(regex, obskey)
 			push!(results, resultdict[obskey]) # preserve the expected order
@@ -97,7 +97,7 @@ function makelmfunctions(madsdata::Associative)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array(Float64, 0)
+		results = Array{Float64}(0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end
@@ -139,7 +139,7 @@ function makelmfunctions(madsdata::Associative)
 			center = fevals[nP+1]
 			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 		end
-		jacobian = Array(Float64, (nO, nP))
+		jacobian = Array{Float64}((nO, nP))
 		for j in 1:nO
 			for i in 1:nP
 				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
@@ -151,7 +151,7 @@ function makelmfunctions(madsdata::Associative)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0)) #TODO we need the center; this is not working
+	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0)) #TODO we need the center; this is not working
 		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
@@ -174,7 +174,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array(Float64, 0)
+		results = Array{Float64}(0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end
@@ -211,7 +211,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 			center = fevals[nP+1]
 			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 		end
-		jacobian = Array(Float64, (nO, nP))
+		jacobian = Array{Float64}((nO, nP))
 		for j in 1:nO
 			for i in 1:nP
 				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
@@ -223,7 +223,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array(Float64,0), center::Array{Float64,1}=Array(Float64,0))
+	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return grad
@@ -364,15 +364,15 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		println(os)
 	end
 
-	delta_xp = Array(Float64, (np_lambda, length(x)))
-	trial_fp = Array(Float64, (np_lambda, length(fcur)))
-	lambda_p = Array(Float64, np_lambda)
-	phi = Array(Float64, np_lambda)
+	delta_xp = Array{Float64}((np_lambda, length(x)))
+	trial_fp = Array{Float64}((np_lambda, length(fcur)))
+	lambda_p = Array{Float64}(np_lambda)
+	phi = Array{Float64}(np_lambda)
 	first_lambda = true
 	compute_jacobian = true
 	while (~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = Array(Float64, 0, 0)
+			J = Array{Float64}(0, 0)
 			try
 				J = g(x, center=fcur)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y

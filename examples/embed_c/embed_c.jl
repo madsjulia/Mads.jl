@@ -46,8 +46,8 @@ println("julia ...")
 nP = 100
 nO = 1000000
 x = rand(nP)
-o_c = Array(Float64, nO)
-o_j = Array(Float64, nO)
+o_c = Array{Float64}(nO)
+o_j = Array{Float64}(nO)
 
 # function example #2
 info("func #2 ...")

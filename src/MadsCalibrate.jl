@@ -40,7 +40,7 @@ function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX
 		allresults = Any[]
 	end
 	bestparameters = Any[]
-	bestresult = Array(Any,2)
+	bestresult = Array{Any}(2)
 	bestphi = Inf
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
@@ -81,9 +81,9 @@ function calibraterandom_parallel(madsdata::Associative, numberofsamples::Intege
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	allphi = SharedArray(Float64, numberofsamples)
-	allconverged = SharedArray(Bool, numberofsamples)
-	allparameters = SharedArray(Float64, (numberofsamples, length(keys(paramoptvalues))))
+	allphi = SharedArray{Float64}(numberofsamples)
+	allconverged = SharedArray{Bool}( numberofsamples)
+	allparameters = SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
 	@sync @parallel for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]

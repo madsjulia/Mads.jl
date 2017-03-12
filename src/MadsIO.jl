@@ -120,7 +120,7 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Observations"] = observations
 	end
 	if haskey(madsdata, "Templates")
-		templates = Array(Dict, length(madsdata["Templates"]))
+		templates = Array{Dict}(  length(madsdata["Templates"]))
 		i = 1
 		for dict in madsdata["Templates"]
 			for key in keys(dict) # this should only iterate once
@@ -131,7 +131,7 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Templates"] = templates
 	end
 	if haskey(madsdata, "Instructions")
-		instructions = Array(Dict, length(madsdata["Instructions"]))
+		instructions = Array{Dict}(  length(madsdata["Instructions"]))
 		i = 1
 		for dict in madsdata["Instructions"]
 			for key in keys(dict) # this should only iterate once
@@ -342,7 +342,7 @@ end
 
 "Check the directories where model outputs should be saved for MADS"
 function checkmodeloutputdirs(madsdata::Associative)
-	directories = Array(String, 0)
+	directories = Array{String}( 0)
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]

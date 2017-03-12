@@ -88,7 +88,7 @@ Mads.plotwellSAresults(md,result,"w1a")
 Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
 paramvalues=Mads.getparamrandom(md, numberofsamples)
-Y = Array(Float64,length(md["Observations"]),numberofsamples * length(paramvalues))
+Y = Array{Float64}(length(md["Observations"]),numberofsamples * length(paramvalues))
 k = 0
 for paramkey in keys(paramvalues)
   for i in 1:numberofsamples

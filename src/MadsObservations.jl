@@ -53,7 +53,7 @@ for i = 1:length(getobsnames)
 	q = quote
 		@doc "Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`" ->
 		function $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
-			obsvalue = Array($(obstype), length(obskeys))
+			obsvalue = Array{$(obstype)}(length(obskeys))
 			for i in 1:length(obskeys)
 				if haskey(madsdata["Observations"][obskeys[i]], $obsname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsname]
@@ -272,7 +272,7 @@ end
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = getobskeys(madsdata)
-	p = Array(String, 0)
+	p = Array{String}( 0)
 	for obskey in obskeys
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])
@@ -428,9 +428,9 @@ end
 "Get `Wells` class spatial and temporal data"
 function getwellsdata(madsdata::Associative; time::Bool=false)
 	if time
-		a = Array(Float64, 4, 0)
+		a = Array{Float64}(4, 0)
 	else
-		a = Array(Float64, 3, 0)
+		a = Array{Float64}(3, 0)
 	end
 	for wellkey in collect(keys(madsdata["Wells"]))
 		if madsdata["Wells"][wellkey]["on"]

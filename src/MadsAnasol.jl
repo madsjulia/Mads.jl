@@ -297,9 +297,9 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Strin
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
 	Mads.madsinfo("Number of files = $nf")
-	lambda = Array(Float64, nf)
-	mass_injected = Array(Float64, nf)
-	mass_reduced = Array(Float64, nf)
+	lambda = Array{Float64}(nf)
+	mass_injected = Array{Float64}(nf)
+	mass_reduced = Array{Float64}(nf)
 	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(joinpath(path, mf[i]))
 		l = md["Parameters"]["lambda"]["init"]

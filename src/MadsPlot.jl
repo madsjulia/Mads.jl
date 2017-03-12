@@ -68,13 +68,13 @@ Arguments:
 - `keyword` : to be added in the filename
 """
 function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", imagefile::Bool=false)
-	rectangles = Array(Float64, 0, 4)
+	rectangles = Array{Float64}(0, 4)
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			if sourcetype == "box" || sourcetype == "gauss"
-				rectangle = Array(Float64, 4)
+				rectangle = Array{Float64}(4)
 				rectangle[1] = madsdata["Sources"][i][sourcetype]["x"]["init"] - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
 				rectangle[2] = madsdata["Sources"][i][sourcetype]["y"]["init"] - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
 				rectangle[3] = madsdata["Sources"][i][sourcetype]["dx"]["init"]
@@ -209,16 +209,16 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Stri
 	pl = Any{}
 	didplot = false
 	if haskey(madsdata, "Wells")
-		pp = Array(Gadfly.Plot{}, 0)
+		pp = Array{Gadfly.Plot}( 0)
 		p = Gadfly.Plot{}
 		for wellname in keys(madsdata["Wells"])
 			if madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nT = length(o)
-				c = Array(Float64, 0)
-				tc = Array(Float64, 0)
-				d = Array(Float64, 0)
-				td = Array(Float64, 0)
+				c = Array{Float64}(0)
+				tc = Array{Float64}(0)
+				d = Array{Float64}(0)
+				td = Array{Float64}(0)
 				for i in 1:nT
 					time = gettime(o[i])
 					t = gettarget(o[i])
@@ -265,9 +265,9 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Stri
 	elseif haskey(madsdata, "Observations")
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
-		obs = Array(Float64, 0)
+		obs = Array{Float64}(0)
 		tobs = Any[]
-		ress = Array(Float64, 0)
+		ress = Array{Float64}(0)
 		tress = Any[]
 		time_missing = false
 		for i in 1:nT
@@ -331,7 +331,7 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
-	cs = Array(Compose.Context, (size(samples, 2), size(samples, 2)))
+	cs = Array{Compose.Context}(size(samples, 2), size(samples, 2))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
@@ -400,10 +400,10 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Stri
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
-	d = Array(Float64, 2, nT)
-	mes = Array(Float64, nP, nT)
-	tes = Array(Float64, nP, nT)
-	var = Array(Float64, nP, nT)
+	d = Array{Float64}(2, nT)
+	mes = Array{Float64}(nP, nT)
+	tes = Array{Float64}(nP, nT)
+	var = Array{Float64}(nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i]["t"]
 		d[2,i] = o[i]["c"]
@@ -417,11 +417,11 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Stri
 		end
 	end
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-	pp = Array(Any, 0)
+	pp = Array{Any}(0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.point, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle))
 	push!(pp, pc)
 	vsize = 4Gadfly.inch
-	df = Array(Any, nP)
+	df = Array{Any}(nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
@@ -498,10 +498,10 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	nP = length(paramkeys)
 	obskeys = Mads.filterkeys(obsdict, filter)
 	nT = length(obskeys)
-	d = Array(Float64, 2, nT)
-	mes = Array(Float64, nP, nT)
-	tes = Array(Float64, nP, nT)
-	var = Array(Float64, nP, nT)
+	d = Array{Float64}(2, nT)
+	mes = Array{Float64}(nP, nT)
+	tes = Array{Float64}(nP, nT)
+	var = Array{Float64}(nP, nT)
 	i = 1
 	for obskey in obskeys
 		d[1,i] = obsdict[obskey]["time"]
@@ -526,7 +526,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 	###################################################### DATA
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
-	pp = Array(Any, 0)
+	pp = Array{Any}(0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle) )
 	push!(pp, pd)
 	if debug
@@ -537,7 +537,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	# vsize = 4Gadfly.inch
 	vsize = 0Gadfly.inch
 	###################################################### TES
-	df = Array(Any, nP)
+	df = Array{Any}(nP)
 	for j in 1:length(plotlabels)
 		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
@@ -688,8 +688,8 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	end
 	nT = length(obskeys)
 	if !haskey( madsdata, "Wells" )
-		t = Array(Float64, nT)
-		d = Array(Float64, nT)
+		t = Array{Float64}(nT)
+		d = Array{Float64}(nT)
 		for i in 1:nT
 			if haskey( madsdata["Observations"][obskeys[i]], "time")
 				t[i] = madsdata["Observations"][obskeys[i]]["time"]
@@ -708,7 +708,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	Mads.madsoutput("Spaghetti plots for each selected model parameter (type != null) ...\n")
 	for paramkey in paramoptkeys
 		Mads.madsoutput("Parameter: $paramkey ...\n")
-		Y = Array(Float64, nT, numberofsamples)
+		Y = Array{Float64}(nT, numberofsamples)
 		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
@@ -726,7 +726,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 					for i in 1:numberofsamples]...)
 			vsize = 4Gadfly.inch
 		else
-			pp = Array(Gadfly.Plot{}, 0)
+			pp = Array{Gadfly.Plot}(0)
 			p = Gadfly.Plot{}
 			vsize = 0Gadfly.inch
 			startj = 1
@@ -735,8 +735,8 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 				if madsdata["Wells"][wellname]["on"]
 					o = madsdata["Wells"][wellname]["obs"]
 					nTw = length(o)
-					t = Array(Float64, nTw)
-					d = Array(Float64, nTw)
+					t = Array{Float64}(nTw)
+					d = Array{Float64}(nTw)
 					for i in 1:nTw
 						t[i] = o[i]["t"]
 						if haskey(o[i], "c")
@@ -828,7 +828,7 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::
 	end
 	if flag_params
 		numberofsamples = length(dictarray[paramoptkeys[1]])
-		Y = Array(Float64, nT, numberofsamples)
+		Y = Array{Float64}(nT, numberofsamples)
 		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 			for paramkey in paramoptkeys
 				paramdict[paramkey] = dictarray[paramkey][i]
@@ -894,7 +894,7 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 				for i in 1:numberofsamples]... )
 		vsize = 4Gadfly.inch
 	else
-		pp = Array(Gadfly.Plot{}, 0)
+		pp = Array{Gadfly.Plot}(0)
 		p = Gadfly.Plot{}
 		vsize = 0Gadfly.inch
 		startj = 1
@@ -903,8 +903,8 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 			if madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nTw = length(o)
-				t = Array(Float64, nTw)
-				d = Array(Float64, nTw)
+				t = Array{Float64}(nTw)
+				d = Array{Float64}(nTw)
 				for i in 1:nTw
 					t[i] = o[i]["t"]
 					if haskey(o[i], "c")
@@ -978,7 +978,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	else
 		hsize = 6Gadfly.Gadfly.inch
 		vsize = 2Gadfly.Gadfly.inch * nS
-		pp = Array(Gadfly.Plot{}, nS)
+		pp = Array{Gadfly.Plot}( nS)
 		for i in 1:nS
 			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
 		end

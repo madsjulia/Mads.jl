@@ -81,13 +81,13 @@ function makempbfunctions(madsdata::Associative)
 	"""
 	Objective function gradient for MathProgBase optimization
 	"""
-	function grad_o_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array(Float64,0))
+	function grad_o_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0))
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
 		of = o_mpb(arrayparameters)
 		fevals = g_mpb(arrayparameters, dx=dx)
-		grad_o = Array(Float64, nP)
+		grad_o = Array{Float64}(nP)
 		for i in 1:nP
 			of_i = o_function(fevals[i])
 			grad_o = (of_j - o) / dx[i]
@@ -103,7 +103,7 @@ function makempbfunctions(madsdata::Associative)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array(Float64, 0)
+		results = Array{Float64}(0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end

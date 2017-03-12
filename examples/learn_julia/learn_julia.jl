@@ -229,19 +229,19 @@ empty_dict = Dict() # => Dict{Any,Any}()
 
 # You can create a dictionary using a literal
 filled_dict = ["one"=> 1, "two"=> 2, "three"=> 3]
-# => Dict{ASCIIString,Int64}
+# => Dict{String,Int64}
 
 # Look up values with []
 filled_dict["one"] # => 1
 
 # Get all keys
 keys(filled_dict)
-# => KeyIterator{Dict{ASCIIString,Int64}}(["three"=>3,"one"=>1,"two"=>2])
+# => KeyIterator{Dict{String,Int64}}(["three"=>3,"one"=>1,"two"=>2])
 # Note - dictionary keys are not sorted or in the order you inserted them.
 
 # Get all values
 values(filled_dict)
-# => ValueIterator{Dict{ASCIIString,Int64}}(["three"=>3,"one"=>1,"two"=>2])
+# => ValueIterator{Dict{String,Int64}}(["three"=>3,"one"=>1,"two"=>2])
 # Note - Same as above regarding key ordering.
 
 # Check for existence of keys in a dictionary with in, haskey

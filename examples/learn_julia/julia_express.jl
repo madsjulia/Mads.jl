@@ -76,8 +76,8 @@ x[1] = 1 # error - tuple is not mutable
 a, b = x # tuple unpacking a=1, b=2
 
 # arrays
-Array(Char, 2, 3, 4) # 2x3x4 array of Chars
-Array(Int64, 0, 0) # degenerate 0x0 array of Int64
+Array{Char}(2, 3, 4) # 2x3x4 array of Chars
+Array{Int64}(0, 0) # degenerate 0x0 array of Int64
 cell(2, 3) # 2x3 array of Any
 zeros(5) # vector of Float64 zeros
 ones(Int64, 2, 1) # 2x1 array of Int64 ones

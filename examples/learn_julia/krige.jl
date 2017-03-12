@@ -14,9 +14,9 @@ n = 101
 x = collect(linspace(0, 1, n))
 y = x
 
-loc = Array(Float64, dim)
-k = Array(Float64, n, n)
-c = Array(Float64, n, n)
+loc = Array{Float64}(dim)
+k = Array{Float64}(n, n)
+c = Array{Float64}(n, n)
 for i in 1:n
 	loc[1] = x[i]
 	for j in 1:n

@@ -36,7 +36,7 @@ foo(x, y) = foo(x + y*im)
 
 # this function uses the global function foo
 function foo_grid(n)
-	zcos = Array(Float64, n, n)
+	zcos = Array{Float64}(n, n)
 	x = collect(linspace(-0.5, 1, n))
 	y = collect(linspace(-0.5, 1, n))
 	for i in 1:n

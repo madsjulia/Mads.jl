@@ -41,12 +41,12 @@ function krige(x0mat::Array, X::Matrix, Z::Vector, cov::Function)
 	result = zeros(size(x0mat, 2))
 	covmat = getcovmat(X, cov)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
-	ws = Array(Float64, size(x0mat, 2))
-	bigvec = Array(Float64, size(X, 2) + 1)
+	ws = Array{Float64}(size(x0mat, 2))
+	bigvec = Array{Float64}(size(X, 2) + 1)
 	bigvec[end] = 1
 	bigmatpinv = pinv(bigmat)
-	covvec = Array(Float64, size(X, 2))
-	x = Array(Float64, size(X, 2) + 1)
+	covvec = Array{Float64}(size(X, 2))
+	x = Array{Float64}(size(X, 2) + 1)
 	for i = 1:size(x0mat, 2)
 		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, cov)
 		bigvec[end] = 1
@@ -60,7 +60,7 @@ end
 
 "Get spatial covariance matrix"
 function getcovmat(X::Matrix, cov::Function)
-	covmat = Array(Float64, (size(X, 2), size(X, 2)))
+	covmat = Array{Float64}((size(X, 2), size(X, 2)))
 	cov0 = cov(0)
 	for i = 1:size(X, 2)
 		covmat[i, i] = cov0
@@ -88,7 +88,7 @@ end
 "Estimate kriging error"
 function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
 	covmat = getcovmat(X, cov)
-	covvec = Array(Float64, size(X, 2))
+	covvec = Array{Float64}(size(X, 2))
 	covvec = getcovvec!(covvec, x0, X, cov)
 	cov0 = cov(0.)
 	return estimationerror(w, x0, X, covmat, covvec, cov0)

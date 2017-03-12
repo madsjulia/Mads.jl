@@ -54,8 +54,8 @@ Arguments:
 function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
-	restore = Array(Bool, length(deletekeys))
-	restorevals = Array(Any, length(deletekeys))
+	restore = Array{Bool}( length(deletekeys))
+	restorevals = Array{Any}(length(deletekeys))
 	i = 1
 	for deletekey in deletekeys
 		if haskey(yamldata, deletekey)
@@ -79,7 +79,7 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 	end
 	for obsorparam in ["Observations", "Parameters", "Wells"]
 		if haskey(yamldata, obsorparam)
-			a = Array(Any, 0)
+			a = Array{Any}(0)
 			for key in keys(yamldata[obsorparam])
 				if !ismatch(r"source[1-9]*_", key)
 					push!(a, DataStructures.OrderedDict(key=>yamldata[obsorparam][key]))
@@ -90,7 +90,7 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 	end
 	for tplorins in ["Templates", "Instructions"]
 		if haskey(yamldata, tplorins)
-			a = Array(Any, length(yamldata[tplorins]))
+			a = Array{Any}(length(yamldata[tplorins]))
 			i = 1
 			keys = map(string, 1:length(yamldata[tplorins]))
 			for key in keys

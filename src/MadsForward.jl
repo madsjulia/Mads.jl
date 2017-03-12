@@ -164,7 +164,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 				dictwells[wellname]["z0"] = z
 				dictwells[wellname]["z1"] = z
 				dictwells[wellname]["on"] = true
-				arrayobs = Array(DataStructures.OrderedDict, 0)
+				arrayobs = Array{DataStructures.OrderedDict}( 0)
 				dictobs = DataStructures.OrderedDict()
 				dictobs["t"] = time
 				dictobs["c"] = 0
@@ -177,7 +177,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	madsdata["Wells"] = dictwells
 	Mads.wells2observations!(madsdata)
 	forward_results = f(paramvalues)
-	s = Array(Float64, nx, ny, nz)
+	s = Array{Float64}(nx, ny, nz)
 	for i in 1:nx
 		for j in 1:ny
 			for k in 1:nz

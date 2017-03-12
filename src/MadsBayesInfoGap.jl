@@ -124,14 +124,14 @@ Returns:
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
-	modelparams = Array(Float64, length(parametersamples), nummodelruns)
+	modelparams = Array{Float64}(length(parametersamples), nummodelruns)
 	for i = 1:nummodelruns
 		for j = 1:length(optparamkeys)
 			modelparams[j, i] = parametersamples[optparamkeys[j]][i]
 		end
 	end
 	getfailureprobs = BIGUQ.makegetfailureprobabilities_mc(modelparams)
-	maxfailureprobs = Array(Float64, numhorizons, length(madsdata["Choices"]))
+	maxfailureprobs = Array{Float64}(numhorizons, length(madsdata["Choices"]))
 	local horizons::Array{Float64, 1}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")

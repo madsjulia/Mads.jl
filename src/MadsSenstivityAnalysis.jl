@@ -33,7 +33,7 @@ Arguments:
 - `par` : parameter set
 - `obs` : observations for the parameter set
 """
-function localsa(madsdata::Associative; sinspace::Bool=true, filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array(Float64,0), obs::Array{Float64,1}=Array(Float64,0), J::Array{Float64,2}=Array(Float64,(0,0)))
+function localsa(madsdata::Associative; sinspace::Bool=true, filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -91,7 +91,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	JpJ = J' * J
-	covar = Array(Float64, 0)
+	covar = Array{Float64}(0)
 	try
 		u, s, v = svd(JpJ)
 		covar = v * inv(diagm(s)) * u'
@@ -235,7 +235,7 @@ function getimportantsamples(samples::Array, llhoods::Vector)
 		i += 1
 	end
 	thresholdllhood = log(sortedlhoods[i - 1])
-	imp_samples = Array(Float64, size(samples, 2), 0)
+	imp_samples = Array{Float64}(size(samples, 2), 0)
 	for i = 1:length(llhoods)
 		if llhoods[i] > thresholdllhood
 			imp_samples = hcat(imp_samples, vec(samples[i, :]))
@@ -327,7 +327,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
-	results = Array(DataStructures.OrderedDict, numsamples)
+	results = Array{DataStructures.OrderedDict}( numsamples)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
@@ -368,7 +368,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_means = Array(DataStructures.OrderedDict, numoneparamsamples)
+		cond_means = Array{DataStructures.OrderedDict}( numoneparamsamples)
 		@ProgressMeter.showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
 			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
@@ -390,7 +390,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 				cond_means[j][obskeys[k]] /= nummanyparamsamples
 			end
 		end
-		v = Array(Float64, numoneparamsamples)
+		v = Array{Float64}(numoneparamsamples)
 		for k = 1:length(obskeys)
 			for j = 1:numoneparamsamples
 				v[j] = cond_means[j][obskeys[k]]
@@ -407,8 +407,8 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_vars = Array(DataStructures.OrderedDict, nummanyparamsamples)
-		cond_means = Array(DataStructures.OrderedDict, nummanyparamsamples)
+		cond_vars = Array{DataStructures.OrderedDict}( nummanyparamsamples)
+		cond_means = Array{DataStructures.OrderedDict}( nummanyparamsamples)
 		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = DataStructures.OrderedDict{String,Float64}()
 			cond_means[j] = DataStructures.OrderedDict{String,Float64}()
@@ -421,7 +421,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
 				end
 			end
-			results = Array(DataStructures.OrderedDict, numoneparamsamples)
+			results = Array{DataStructures.OrderedDict}( numoneparamsamples)
 			for k = 1:numoneparamsamples
 				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
 				results[k] = f(paramdict)
@@ -500,9 +500,9 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	nO = length(obskeys)
 	distributions = Mads.getparamdistributions(madsdata)
 	f = Mads.makemadscommandfunction(madsdata)
-	A = Array(Float64, (N, 0))
-	B = Array(Float64, (N, 0))
-	C = Array(Float64, (N, nP))
+	A = Array{Float64}((N, 0))
+	B = Array{Float64}((N, 0))
+	C = Array{Float64}((N, nP))
 	variance = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}() # variance
 	mes = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}() # main effect (first order) sensitivities
 	tes = DataStructures.OrderedDict{String, DataStructures.OrderedDict{String, Float64}}()	# total effect sensitivities
@@ -523,16 +523,16 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample A ...\n""" );
 	function farray(Ai)
 		feval = f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramoptkeys, Ai))))
-		result = Array(Float64, length(obskeys))
+		result = Array{Float64}(length(obskeys))
 		for i = 1:length(obskeys)
 			result[i] = feval[obskeys[i]]
 		end
 		return result
 	end
-	yA = Array(Float64, N, length(obskeys))
+	yA = Array{Float64}(N, length(obskeys))
 	if parallel
 		restartdir = getrestartdir(madsdata)
-		Avecs = Array(Array{Float64, 1}, size(A, 1))
+		Avecs = Array{Array{Float64, 1}}(size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])
 		end
@@ -554,9 +554,9 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		end
 	end
 	Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample B ...\n""" );
-	yB = Array(Float64, N, length(obskeys))
+	yB = Array{Float64}(N, length(obskeys))
 	if parallel
-		Bvecs = Array(Array{Float64, 1}, size(B, 1))
+		Bvecs = Array{Array{Float64, 1}}(size(B, 1))
 		for i = 1:N
 			Bvecs[i] = vec(B[i, :])
 		end
@@ -588,9 +588,9 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 			end
 		end
 		Mads.madsoutput( """Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n""" );
-		yC = Array(Float64, N, length(obskeys))
+		yC = Array{Float64}(N, length(obskeys))
 		if parallel
-			Cvecs = Array(Array{Float64, 1}, size(C, 1))
+			Cvecs = Array{Array{Float64, 1}}(size(C, 1))
 			for j = 1:N
 				Cvecs[j] = vec(C[j, :])
 			end
@@ -1143,7 +1143,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 			## Need to convert data into SVR form
 			# Boolean determining whether inputs are in log scale or not!   ACCORDING TO NATALIA WE SHOULD NOT HAVE TO SCALE
 			islog = 0
-			X_svr = Array(Float64,(Ns*ny,nprime+1))
+			X_svr = Array{Float64}((Ns*ny,nprime+1))
 			predictedY = zeros(size(X_svr,1))
 			for i = 1:Ns
 				for j = 1:ny
@@ -1173,7 +1173,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 			#= This seems like weird test to decide if things should be done in parallel or serial...I suggest we drop it and always pmap
 			if P <= Nr*nprime+(Nr+1)
 				### Adding transformations of X and Y from svrobj into here to accurately compare runtimes of mads and svr
-				#X_svr = Array(Float64,(Ns*ny,nprime+1))
+				#X_svr = Array{Float64}((Ns*ny,nprime+1))
 				#predictedY = zeros(size(X_svr,1))
 				#for i = 1:Ns
 				#  for j = 1:ny
@@ -1294,13 +1294,13 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 		function svrJSONConvert(svrobjJSON::Array{Any,1})
 			svrobjJSON = svrobjJSON[1]
 			totalSVRObject = size(svrobjJSON,1)
-			svrobj = Array(svrOutput, totalSVRObject, 1)
+			svrobj = Array{svrOutput}(totalSVRObject, 1)
 			for svrObjectI = 1 : totalSVRObject
 				alpha = float(svrobjJSON[svrObjectI]["alpha"])
 				b = float(svrobjJSON[svrObjectI]["b"])
 				kernel = svrobjJSON[svrObjectI]["kernelType"]
 				varargin = float(svrobjJSON[svrObjectI]["varargin"])
-				train_data = Array(Float64, size(svrobjJSON[svrObjectI]["train_data"][1],1), size(svrobjJSON[svrObjectI]["train_data"],1))
+				train_data = Array{Float64}(size(svrobjJSON[svrObjectI]["train_data"][1],1), size(svrobjJSON[svrObjectI]["train_data"],1))
 				for i = 1 : size(svrobjJSON[svrObjectI]["train_data"], 1)
 					train_data[:,i] = float(svrobjJSON[svrObjectI]["train_data"][i])
 				end
@@ -1331,7 +1331,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 		# ***************************************************************************************************
 		function predictSVR(data::Array{Float64,2}, svrobj::svrOutput)
 			n_predict = size(x, 1)
-			output = Array(Float64, n_predict)
+			output = Array{Float64}(n_predict)
 			for i = 1:n_predict
 				output[i] = svr_eval(data[i,:], svrobj)
 			end
@@ -1340,7 +1340,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 
 		function predictSVR(data::Array{Float64,1}, svrobj::svrOutput)
 			n_predict = size(x, 1)
-			output = Array(Float64, n_predict)
+			output = Array{Float64}(n_predict)
 			for i = 1:n_predict
 				output[i] = svr_eval(data[i,:], svrobj)
 			end
@@ -1349,12 +1349,12 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 
 		function svr_eval(x::Array{Float64,2}, svrobj::svrOutput)
 			n_predict = size(x, 1)
-			sx = Array(svrFeature, n_predict)
+			sx = Array{svrFeature}(n_predict)
 			for i = 1:n_predict
 				sx[i] = svrFeature(vec(x[i,:]))
 			end
 			n_train = size(svrobj.train_data, 1)
-			sy = Array(svrFeature, n_train)
+			sy = Array{svrFeature}(n_train)
 			for i = 1:n_train
 				sy[i] = svrFeature(vec(svrobj.train_data[i,:]))
 			end
@@ -1369,12 +1369,12 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 
 		function svr_eval(x::Float64, svrobj::svrOutput)
 			n_predict = size(x, 1)
-			sx = Array(svrFeature, n_predict)
+			sx = Array{svrFeature}(n_predict)
 			for i = 1:n_predict
 				sx[i] = svrFeature([x[i,]])
 			end
 			n_train = size(svrobj.train_data, 1)
-			sy =Array(svrFeature, n_train)
+			sy =Array{svrFeature}(n_train)
 			for i = 1:n_train
 				sy[i] = svrFeature([svrobj.train_data[i,]])
 			end
@@ -1444,7 +1444,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	f = makemadscommandfunction(md)
 
 	# Pre-allocating InputData Matrix
-	InputData = Array(Any,length(paramkeys),2)
+	InputData = Array{Any}(length(paramkeys),2)
 
 	### InputData will hold PROBABILITY DISTRIBUTIONS for the parameters we are analyzing (Other parameters stored in paramalldict)
 	for i = 1:length(paramkeys)
@@ -1542,10 +1542,10 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	svrtruncate = 0
 	if directOutput == 1
 		# Reading in data
-		tempOutputData = Array(Any,(Ns*ny, 1, nprime))
-		OutputData     = Array(Any,(Ns, ny, nprime))
+		tempOutputData = Array{Any}((Ns*ny, 1, nprime))
+		OutputData     = Array{Any}((Ns, ny, nprime))
 		if svrtruncate == 1
-			tempOutputData = Array(Any,(Ns*ny, 2,nprime))
+			tempOutputData = Array{Any}((Ns*ny, 2,nprime))
 		end
 		for k = 1:nprime
 			#OutputDataSource = "/Users/jlaughli/Desktop/Julia Code/For SVR/After 8-20-15/eFAST/svr results/res_eFAST_$(paramkeys[k])_5%_mads_output_N=625_predicted.csv"

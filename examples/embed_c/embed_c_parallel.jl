@@ -9,8 +9,8 @@ addprocs(4)
 @everywhere nP = 100
 @everywhere nO = 1000000
 @everywhere x = rand(nP)
-@everywhere o_c = Array(Float64, nO)
-@everywhere o_j = Array(Float64, nO)
+@everywhere o_c = Array{Float64}(nO)
+@everywhere o_j = Array{Float64}(nO)
 
 @everywhere M = ones(nO, nP)
 @everywhere M[:,end] = 100000
