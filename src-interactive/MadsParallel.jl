@@ -79,9 +79,9 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 """
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array(String, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
-	h = Array(String, 0)
+	h = Array{String}(0)
 	if length(nodenames) > 0 || mads_servers
 		if length(nodenames) == 0
 			nodenames = madsservers
@@ -190,7 +190,7 @@ end
 
 "Parse string with node names defined in SLURM"
 function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
-	h = Array(String, 0)
+	h = Array{String}(0)
 	ss = split(nodenames, "[")
 	name = ss[1]
 	if length(ss) == 1
@@ -248,7 +248,7 @@ end
 Run remote command on a series of servers
 """
 function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
-	output = Array(String, 0)
+	output = Array{String}(0)
 	for i in nodenames
 		try
 			o = readstring(`ssh -t $i $cmd`)

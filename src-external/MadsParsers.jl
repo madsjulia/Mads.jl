@@ -29,10 +29,10 @@ function amanzi_output_parser(filename::String="observations.out")
 	cr_index = find(d[:,4] .== " Chromium aqueous concentration")
 	madsinfo("Number of head observations $(length(head_index))")
 	madsinfo("Number of chromium observations $(length(cr_index))")
-	flag = Array(Char, no)
+	flag = Array{Char}(no)
 	flag[head_index] = 'h'
 	flag[cr_index] = 'c'
-	obs_name = Array(String, no)
+	obs_name = Array{String}(no)
 	for i = 1:no
 		obs_name[i] = w[i] * "$(flag[i])" * "_" * "$(@sprintf("%.1f", time[i]))"
 	end

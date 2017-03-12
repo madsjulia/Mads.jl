@@ -7,8 +7,8 @@ import Optim
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array(Float64, nP, nk)
-	Hbest = Array(Float64, nk, nC)
+	Wbest = Array{Float64}(nP, nk)
+	Hbest = Array{Float64}(nk, nC)
 	phi_best = Inf
 	for i = 1:retries
 		nmf_result = NMF.nnmf(X, nk; alg=:multmse, maxiter=maxiter, tol=tol)
@@ -24,7 +24,7 @@ function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, max
 end
 
 "Non-negative Matrix Factorization using JuMP/Ipopt"
-function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array(Float64, 0, 0), initH::Matrix=Array(Float64, 0, 0), verbosity::Integer=0)
+function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan(Xc)
@@ -32,8 +32,8 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 	weights[nans] = 0
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array(Float64, nP, nk)
-	Hbest = Array(Float64, nk, nC)
+	Wbest = Array{Float64}(nP, nk)
+	Hbest = Array{Float64}(nk, nC)
 	phi_best = Inf
 	for r = 1:retries
 		m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
@@ -66,11 +66,11 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 end
 
 "Matrix Factorization via Levenberg Marquardt"
-function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array(Float64, 0, 0), initH::Matrix=Array(Float64, 0, 0))
+function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array(Float64, nP, nk)
-	Hbest = Array(Float64, nk, nC)
+	Wbest = Array{Float64}(nP, nk)
+	Hbest = Array{Float64}(nk, nC)
 	W_size = nP * nk
 	if log_W
 		W_logtransformed = trues(W_size)
@@ -125,7 +125,7 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 		W, H = mf_reshape(x)
 		Wb = zeros(nP, nk)
 		Hb = zeros(nk, nC)
-		J = Array(Float64, nObs, 0)
+		J = Array{Float64}(nObs, 0)
 		for j = 1:nk
 			for i = 1:nP
 				Wb[i,j] = 1

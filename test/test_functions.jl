@@ -1,6 +1,6 @@
-s = Array(Float64,2)
+s = Array{Float64}(2)
 Mads.rosenbrock_gradient!(rand(2), s)
-s = Array(Float64,2,2)
+s = Array{Float64}(2,2)
 Mads.rosenbrock_hessian!(rand(2),s)
 f = Mads.makerosenbrock(2)
 f([1,1]);

@@ -31,7 +31,7 @@ end
 "Lists modules dependents on a module (Mads by default)"
 function dependents(modulename::String="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
-	modules = Array(Any, (0, 2))
+	modules = Array{Any}((0, 2))
 	for i in depmodules
 		modules = [modules; [i Mads.required(i, modulename)[:,2]]]
 	end

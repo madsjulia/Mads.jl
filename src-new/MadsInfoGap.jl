@@ -149,13 +149,13 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 		fo = fo4
 	end
 	plotrange = 1:0.1:5
-	ymin = Array(Float64, length(plotrange))
-	ymax = Array(Float64, length(plotrange))
+	ymin = Array{Float64}(length(plotrange))
+	ymax = Array{Float64}(length(plotrange))
 	pi = similar(pinit)
-	par_best = Array(Float64, 0)
-	obs_best = Array(Float64, 0)
-	hmin = Array(Float64, 0)
-	hmax = Array(Float64, 0)
+	par_best = Array{Float64}(0)
+	obs_best = Array{Float64}(0)
+	hmin = Array{Float64}(0)
+	hmax = Array{Float64}(0)
 	for h in horizons
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
@@ -319,10 +319,10 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	# ti = Mads.getobstime(madsdata)
 	# no = length(ok)
 
-	par_best = Array(Float64, np)
-	omin = Array(Float64, no)
-	omax = Array(Float64, no)
-	g = Array(Float64, no)
+	par_best = Array{Float64}(np)
+	omin = Array{Float64}(no)
+	omax = Array{Float64}(no)
+	g = Array{Float64}(no)
 	for h in horizons
 		par_best = pinit
 		phi_best = MathProgBase.eval_f(MadsModelPoly(), par_best)
@@ -427,10 +427,10 @@ function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0
 	end
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
 
-	par_best = Array(Float64, np)
-	omin = Array(Float64, no)
-	omax = Array(Float64, no)
-	g = Array(Float64, no)
+	par_best = Array{Float64}(np)
+	omin = Array{Float64}(no)
+	omax = Array{Float64}(no)
+	g = Array{Float64}(no)
 	for h in horizons
 		par_best = pinit
 		phi_best = MathProgBase.eval_f(MadsModelLin(), par_best)
