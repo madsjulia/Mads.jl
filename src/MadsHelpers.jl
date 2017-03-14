@@ -15,11 +15,13 @@ end
 
 "Make MADS quiet"
 function quieton()
+	ReusableFunctions.quieton()
 	global quiet = true;
 end
 
 "Make MADS not quiet"
 function quietoff()
+	ReusableFunctions.quietoff()
 	global quiet = false;
 end
 
