@@ -293,9 +293,14 @@ function getrootname(filename::String; first::Bool=true, version::Bool=false)
 	else
 		r = s[1]
 	end
-	if version && ismatch(r"-v[0-9].$", r)
-		rm = match(r"-v[0-9].$", r)
-		r = r[1:rm.offset-1]
+	if version
+		if ismatch(r"-v[0-9].$", r)
+			rm = match(r"-v[0-9].$", r)
+			r = r[1:rm.offset-1]
+		elseif ismatch(r"-rerun$", r)
+			rm = match(r"-rerun$", r)
+			r = r[1:rm.offset-1]
+		end
 	end
 	if length(d) > 1
 		r = joinpath(d[1], r)
