@@ -82,7 +82,7 @@ function calibraterandom_parallel(madsdata::Associative, numberofsamples::Intege
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	allphi = SharedArray{Float64}(numberofsamples)
-	allconverged = SharedArray{Bool}( numberofsamples)
+	allconverged = SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
 	@sync @parallel for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)

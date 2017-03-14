@@ -72,7 +72,7 @@ Returns:
 - `sourcekeys` : array with keys of all source parameters in the MADS dictionary
 """
 function getsourcekeys(madsdata::Associative)
-	sourcekeys = Array{String}( 0)
+	sourcekeys = Array{String}(0)
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			for k = keys(madsdata["Sources"][1])
@@ -426,7 +426,7 @@ end
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
-	p = Array{String}( 0)
+	p = Array{String}(0)
 	for parkey in parkeys
 		if haskey(pardict[parkey], "longname" )
 			s = @sprintf "%-30s : " pardict[parkey]["longname"]
@@ -457,7 +457,7 @@ end
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
-	p = Array{String}( 0)
+	p = Array{String}(0)
 	for parkey in parkeys
 		if haskey(pardict[parkey], "longname")
 			s = @sprintf "%-30s : " pardict[parkey]["longname"]

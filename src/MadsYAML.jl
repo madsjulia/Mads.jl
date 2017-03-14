@@ -54,7 +54,7 @@ Arguments:
 function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
-	restore = Array{Bool}( length(deletekeys))
+	restore = Array{Bool}(length(deletekeys))
 	restorevals = Array{Any}(length(deletekeys))
 	i = 1
 	for deletekey in deletekeys

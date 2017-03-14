@@ -173,7 +173,7 @@ function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	nonlogoptparamsmax = getparamsmax(madsdata, nonlogoptparamkeys)
 	logoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(logoptparamsmin, logoptparamsmax, N)
 	nonlogoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(nonlogoptparamsmin, nonlogoptparamsmax, N)
-	paramdicts = Array{DataStructures.OrderedDict}( N)
+	paramdicts = Array{DataStructures.OrderedDict}(N)
 	params = getparamsinit(madsdata)
 	for i = 1:N
 		klog = 1
@@ -193,7 +193,7 @@ function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	end
 	f = makemadscommandfunction(madsdata)
 	results = RobustPmap.rpmap(f, paramdicts)
-	outputdicts = Array{DataStructures.OrderedDict}( N)
+	outputdicts = Array{DataStructures.OrderedDict}(N)
 	for i = 1:N
 		outputdicts[i] = DataStructures.OrderedDict()
 		outputdicts[i]["Parameters"] = paramdicts[i]

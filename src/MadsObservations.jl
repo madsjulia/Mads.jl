@@ -272,7 +272,7 @@ end
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = getobskeys(madsdata)
-	p = Array{String}( 0)
+	p = Array{String}(0)
 	for obskey in obskeys
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])

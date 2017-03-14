@@ -164,7 +164,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 				dictwells[wellname]["z0"] = z
 				dictwells[wellname]["z1"] = z
 				dictwells[wellname]["on"] = true
-				arrayobs = Array{DataStructures.OrderedDict}( 0)
+				arrayobs = Array{DataStructures.OrderedDict}(0)
 				dictobs = DataStructures.OrderedDict()
 				dictobs["t"] = time
 				dictobs["c"] = 0

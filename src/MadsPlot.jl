@@ -209,7 +209,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Stri
 	pl = Any{}
 	didplot = false
 	if haskey(madsdata, "Wells")
-		pp = Array{Gadfly.Plot}( 0)
+		pp = Array{Gadfly.Plot}(0)
 		p = Gadfly.Plot{}
 		for wellname in keys(madsdata["Wells"])
 			if madsdata["Wells"][wellname]["on"]
@@ -978,7 +978,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	else
 		hsize = 6Gadfly.Gadfly.inch
 		vsize = 2Gadfly.Gadfly.inch * nS
-		pp = Array{Gadfly.Plot}( nS)
+		pp = Array{Gadfly.Plot}(nS)
 		for i in 1:nS
 			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
 		end

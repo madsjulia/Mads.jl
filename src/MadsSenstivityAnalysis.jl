@@ -327,7 +327,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	# find the mean and variance
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
-	results = Array{DataStructures.OrderedDict}( numsamples)
+	results = Array{DataStructures.OrderedDict}(numsamples)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
@@ -368,7 +368,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_means = Array{DataStructures.OrderedDict}( numoneparamsamples)
+		cond_means = Array{DataStructures.OrderedDict}(numoneparamsamples)
 		@ProgressMeter.showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
 			cond_means[j] = DataStructures.OrderedDict()
 			for k = 1:length(obskeys)
@@ -407,8 +407,8 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	end
 	for i = 1:length(paramkeys)
 		madsinfo("""Parameter : $(paramkeys[i])""")
-		cond_vars = Array{DataStructures.OrderedDict}( nummanyparamsamples)
-		cond_means = Array{DataStructures.OrderedDict}( nummanyparamsamples)
+		cond_vars = Array{DataStructures.OrderedDict}(nummanyparamsamples)
+		cond_means = Array{DataStructures.OrderedDict}(nummanyparamsamples)
 		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = DataStructures.OrderedDict{String,Float64}()
 			cond_means[j] = DataStructures.OrderedDict{String,Float64}()
@@ -421,7 +421,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
 				end
 			end
-			results = Array{DataStructures.OrderedDict}( numoneparamsamples)
+			results = Array{DataStructures.OrderedDict}(numoneparamsamples)
 			for k = 1:numoneparamsamples
 				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
 				results[k] = f(paramdict)
