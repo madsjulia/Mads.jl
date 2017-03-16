@@ -627,7 +627,7 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <li>q : number of power iterations when estimating the range of the covariance matrix (see Halko et al, SIAM Rev., 2011)</li>
 <li>seed : an optional seed to use when doing the randomized matrix factorization</li>
 </ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/GeostatInversion.jl#L35-L52' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/GeostatInversion.jl#L35-L52' class='documenter-source'>source</a><br></p>
 <p><a id='GeostatInversion.pcgadirect-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}' href='#GeostatInversion.pcgadirect-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}'>#</a>
 <strong><code>GeostatInversion.pcgadirect</code></strong> &mdash; <em>Method</em>.</p>
 <p>Direct principal component geostatistical approach</p>
@@ -648,7 +648,7 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <li>xtol : convergence tolerence for the parameters</li>
 <li>callback : a function of the form <code>(params, observations)-&gt;...</code> that is called during each iteration</li>
 </ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/direct.jl#L1-L20' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/direct.jl#L1-L20' class='documenter-source'>source</a><br></p>
 <p><a id='GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}' href='#GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}'>#</a>
 <strong><code>GeostatInversion.pcgalsqr</code></strong> &mdash; <em>Method</em>.</p>
 <p>Iterative principal component geostatistical approach</p>
@@ -668,7 +668,7 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <li>delta : the finite difference step size</li>
 <li>xtol : convergence tolerence for the parameters</li>
 </ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br></p>
 <p><a id='GeostatInversion.rga-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1},Any}' href='#GeostatInversion.rga-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1},Any}'>#</a>
 <strong><code>GeostatInversion.rga</code></strong> &mdash; <em>Method</em>.</p>
 <p>Randomized (principal component) geostatistical approach</p>
@@ -691,32 +691,32 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <li>xtol : convergence tolerance for the parameters</li>
 <li>callback : a function of the form <code>(params, observations)-&gt;...</code> that is called during each iteration</li>
 </ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/GeostatInversion.jl#L73-L95' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/GeostatInversion.jl#L73-L95' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.FDDerivatives-1'></a></p>
 <h2 id="module-geostatinversionfdderivatives">Module GeostatInversion.FDDerivatives</h2>
 <p>Documentation for GeostatInversion.FDDerivatives module (all functions):</p>
 <p><a id='GeostatInversion.FDDerivatives.makegradient' href='#GeostatInversion.FDDerivatives.makegradient'>#</a>
 <strong><code>GeostatInversion.FDDerivatives.makegradient</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create Gradient function</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br></p>
 <p><a id='GeostatInversion.FDDerivatives.makejacobian' href='#GeostatInversion.FDDerivatives.makejacobian'>#</a>
 <strong><code>GeostatInversion.FDDerivatives.makejacobian</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create Jacobian function</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.RandMatFact-1'></a></p>
 <h2 id="module-geostatinversionrandmatfact">Module GeostatInversion.RandMatFact</h2>
 <p>Documentation for GeostatInversion.RandMatFact module (all functions):</p>
 <p><a id='GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}' href='#GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}'>#</a>
 <strong><code>GeostatInversion.RandMatFact.randsvd</code></strong> &mdash; <em>Method</em>.</p>
 <p>Random SVD based on algorithm 5.1 from Halko et al.</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.FFTRF-1'></a></p>
 <h2 id="module-geostatinversionfftrf">Module GeostatInversion.FFTRF</h2>
 <p>Documentation for GeostatInversion.FFTRF module (all functions):</p>
 <p><a id='GeostatInversion.FFTRF.reducek-Tuple{Any,Any}' href='#GeostatInversion.FFTRF.reducek-Tuple{Any,Any}'>#</a>
 <strong><code>GeostatInversion.FFTRF.reducek</code></strong> &mdash; <em>Method</em>.</p>
 <p>Reduce k</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/89e84f128bb342d93d991c34e7034be8e05a4213/src/FFTRF.jl#L6' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/23e9b74d7a69b995acc7bfb0ef9708682860a7f2/src/FFTRF.jl#L6' class='documenter-source'>source</a><br></p>
               
             </article>
           </div>
