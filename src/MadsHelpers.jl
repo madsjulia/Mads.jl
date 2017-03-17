@@ -146,6 +146,26 @@ function addkeyword!(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
+"Delete a `keyword` in a `class` within the Mads dictionary `madsdata`"
+function deletekeyword!(madsdata::Associative, keyword::String)
+	if haskeyword(madsdata, keyword)
+		deletekeyword!(madsdata, "Problem", keyword)
+	end
+	return
+end
+function deletekeyword!(madsdata::Associative, class::String, keyword::String)
+	if haskeyword(madsdata, class, keyword)
+		if typeof(madsdata[class]) <: Associative && haskey(madsdata[class], keyword)
+			delete!(madsdata[class], keyword)
+		elseif typeof(madsdata[class]) <: String
+			madsdata[class] = ""
+		elseif typeof(madsdata[class]) <: Vector{String}
+			v = madsdata[class]
+			madsdata[class] = v[v .!= keyword]
+		end
+	end
+end
+
 "Get sin-space dx"
 function getsindx(madsdata::Associative)
 	sindx = 0.1

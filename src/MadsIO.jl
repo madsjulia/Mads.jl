@@ -529,7 +529,7 @@ getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(d
 getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
 "Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
-function writeparametersviatemplate(parameters, templatefilename, outputfilename)
+function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
 	if length(line) >= 10 && line[1:9] == "template "
@@ -549,27 +549,33 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		end
 		for i = 1:div(length(splitline)-1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
-			Mads.madsinfo("Replacing " * strip(splitline[2 * i]) * " -> " * string(parameters[strip(splitline[2 * i])]), 1)
-			write(outfile, string(parameters[strip(splitline[2 * i])])) # splitline[2 * i] in this case is parameter ID
+			varname = strip(splitline[2 * i])
+			if respect_space
+				l = length(splitline[2 * i])
+				s = Mads.sprintf("%.$(l)g", parameters[varname])
+			else
+				s = string(parameters[varname])
+			end
+			write(outfile, s)
+			madsinfo("Replacing " * varname * " -> " * s, 1)
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
 	end
 	close(outfile)
 end
 
-"Write initial parameters"
+"Write initial parameters (inital if parameter set not provided"
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)))
+	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)); respect_space=respect_space)
 end
-
-"Write parameters"
 function writeparameters(madsdata::Associative, parameters::Associative)
 	expressions = evaluatemadsexpressions(madsdata, parameters)
 	paramsandexps = merge(parameters, expressions)
+	respect_space = Mads.haskeyword(madsdata, "respect_space")
 	for template in madsdata["Templates"]
-		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"])
+		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
 	end
 end
 
