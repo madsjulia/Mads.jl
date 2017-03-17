@@ -26,30 +26,35 @@ function reload()
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
-function test(testmod::String="")
+function test(testname::String="")
 	orig_dir = pwd()
-	if testmod == ""
+	if testname == ""
 		include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
 		info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			println("* $i testing ...")
-			include(Pkg.dir(i) * "/test/runtests.jl")
+			include(joinpath(Pkg.dir(i), "test", "runtests.jl"))
 		end
 	else
-		file = joinpath(Pkg.dir("Mads"), "examples", testmod, "runtests.jl")
+		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
 		if isfile(file)
 			include(file)
 		else
-			eval(Mads, :(@tryimport $(Symbol(testmod))))
-			if isdefined(Symbol(testmod))
-				file = joinpath(Pkg.dir(testmod), "test", "runtests.jl")
-				if isfile(file)
-					include(file)
-				else
-					warn("Test $file is missing!")
-				end
+			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
+			if isfile(file)
+				println("* $testname testing ...")
+				include(file)
 			else
-				warn("Test $file is missing!")
+				eval(Mads, :(@tryimport $(Symbol(testname))))
+				if isdefined(Symbol(testname))
+					println("* $testname testing ...")
+					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
+					if isfile(file)
+						include(file)
+					else
+						warn("Test $file for module $testname is missing!")
+					end
+				end
 			end
 		end
 	end
