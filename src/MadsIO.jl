@@ -235,6 +235,24 @@ function getmadsrootname(madsdata::Associative; first=true, version=false)
 end
 
 """
+Get directory
+
+Example:
+
+```
+d = Mads.getdir("a.mads") # d = "."
+d = Mads.getdir("test/a.mads") # d = "test"
+```
+"""
+function getdir(filename::String)
+	d = dirname(filename)
+	if d == ""
+		d = "."
+	end
+	return d
+end
+
+"""
 Get the directory where the Mads data file is located
 
 `Mads.getmadsproblemdir(madsdata)`
@@ -249,11 +267,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::Associative)
-	d = dirname(madsdata["Filename"])
-    if d == "" || d == nothing
-        d = "."
-    end
-    return d
+	getdir(madsdata["Filename"])
 end
 
 """
@@ -266,10 +280,7 @@ function getmadsdir()
 	if typeof(source_path) == Void
 		problemdir = "."
 	else
-		problemdir = string(dirname(source_path))
-        if problemdir == ""
-            problemdir = "."
-        end
+		problemdir = getdir(source_path)
 		madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir
@@ -309,6 +320,51 @@ function getrootname(filename::String; first::Bool=true, version::Bool=false)
 end
 
 """
+Set new mads file name
+"""
+function setnewmadsfilename(madsdata::Associative)
+	setnewmadsfilename(madsdata["Filename"])
+end
+function setnewmadsfilename(filename::String)
+	dir = getdir(filename)
+	root = splitdir(getrootname(filename))[end]
+	if ismatch(r"-v[0-9].$", root)
+		rm = match(r"-v([0-9]).$", root)
+		l = rm.captures[1]
+		s = split(rm.match, "v")
+		v = parse(Int, s[2]) + 1
+		l = length(s[2])
+		f = "%0" * string(l) * "d"
+		filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
+	else
+		filename = "$(root)-rerun.mads"
+	end
+	return joinpath(dir, filename)
+end
+
+"Get next mads file name"
+function getnextmadsfilename(filename::String)
+	t0 = 0
+	filename_old = filename
+	while isfile(filename)
+		t = mtime(filename)
+		if t < t0
+			filename = filename_old
+			break
+		else
+			t0 = t
+			filename_old = filename
+			filename = setnewmadsfilename(filename_old)
+			if !isfile(filename)
+				filename = filename_old
+				break
+			end
+		end
+	end
+	return filename
+end
+
+"""
 Get file name extension
 
 Example:
@@ -325,24 +381,6 @@ function getextension(filename::String)
 	else
 		return ""
 	end
-end
-
-"""
-Get directory
-
-Example:
-
-```
-d = Mads.getdir("a.mads") # d = "."
-d = Mads.getdir("test/a.mads") # d = "test"
-```
-"""
-function getdir(filename::String)
-	d = splitdir(filename)[1]
-	if d == ""
-		d = "."
-	end
-	return d
 end
 
 "Check the directories where model outputs should be saved for MADS"
@@ -475,26 +513,6 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
 	end
 	return convert(DataStructures.OrderedDict{Any,Float64}, results)
-end
-
-"""
-Set new mads file name
-"""
-function setnewmadsfilename(madsdata::Associative)
-	dir = getmadsproblemdir(madsdata)
-	root = splitdir(getmadsrootname(madsdata))[2]
-	if ismatch(r"-v[0-9].$", root)
-		rm = match(r"-v([0-9]).$", root)
-		l = rm.captures[1]
-		s = split(rm.match, "v")
-		v = parse(Int, s[2]) + 1
-		l = length(s[2])
-		f = "%0" * string(l) * "d"
-		filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
-	else
-		filename = "$(root)-rerun.mads"
-	end
-	return joinpath(dir, filename)
 end
 
 """

@@ -113,6 +113,9 @@ end
 @Base.Test.test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
 @Base.Test.test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
 
+@Base.Test.test Mads.getdir("a.mads") == "."
+@Base.Test.test Mads.getdir("test/a.mads") == "test"
+
 Mads.addkeyword!(Dict(), "ssdr")
 Mads.addkeyword!(Dict("Problem"=>"ssdr"), "ssdr")
 Mads.addkeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")

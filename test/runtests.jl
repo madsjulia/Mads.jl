@@ -9,6 +9,9 @@ include("miscellaneous.jl")
 println("* io ...")
 include("io.jl")
 
+println("* file naming ...")
+include("filename.jl")
+
 println("* test functions ...")
 include("test_functions.jl")
 
