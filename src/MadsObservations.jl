@@ -28,7 +28,7 @@ function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
 	k = getobskeys(madsdata)
-	return k[w.>0 | isnan(t)]
+	return k[w.>0 .| isnan(t)]
 end
 
 "Get keys for all wells in the MADS problem dictionary"
