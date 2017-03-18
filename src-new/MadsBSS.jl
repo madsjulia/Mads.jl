@@ -27,7 +27,7 @@ end
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
-	nans = isnan(Xc)
+	nans = isnan.(Xc)
 	Xc[nans] = 0
 	weights[nans] = 0
 	nP = size(X, 1) # number of observation points
@@ -106,8 +106,8 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 	lowerbounds = [W_lowerbounds; H_lowerbounds]
 	upperbounds = [W_upperbounds; H_upperbounds]
 	indexlogtransformed = find(logtransformed)
-	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
-	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 
 	function mf_reshape(x::Vector)
 		W = reshape(x[1:W_size], nP, nk)

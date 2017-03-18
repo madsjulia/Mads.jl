@@ -8,7 +8,7 @@ function residuals(madsdata::Associative, results::Vector)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
-	isn = isnan(targets)
+	isn = isnan.(targets)
 	index = find(isn)
 	weights[index] = 0
 	targets[index] = 0
@@ -70,11 +70,11 @@ function makelmfunctions(madsdata::Associative)
 	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
-	o_lm(x::Vector) = sar ? sum(abs(x)) : dot(x, x)
+	o_lm(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
-	index = find(isnan(targets))
+	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr

@@ -63,8 +63,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
 			logtransformed = Mads.getparamslog(madsdata, paramkeys)
 			indexlogtransformed = find(logtransformed)
-			lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
-			upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+			lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+			upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
 			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
@@ -103,7 +103,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 			return
 		end
 	end
-	stddev = sqrt(abs(diag(covar)))
+	stddev = sqrt.(abs.(diag(covar)))
 	if datafiles
 		writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
@@ -115,7 +115,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 	correl = covar ./ diag(covar)
 	datafiles && writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
-	eigenv = abs(eigenv)
+	eigenv = abs.(eigenv)
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])
@@ -613,9 +613,9 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		end
 		maxnnans = 0
 		for j = 1:nO
-			yAnonan = isnan(yA[:,j])
-			yBnonan = isnan(yB[:,j])
-			yCnonan = isnan(yC[:,j])
+			yAnonan = isnan.(yA[:,j])
+			yBnonan = isnan.(yB[:,j])
+			yCnonan = isnan.(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
 			yT = vcat( yA[nonan,j], yB[nonan,j] ) # this should not include C
 			nanindices = find(~nonan)
@@ -692,9 +692,9 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 			m = typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
 			t = typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
 			v = typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
-			pv += isnan(v) ? 0 : v
-			pm += isnan(m) ? 0 : m
-			pt += isnan(t) ? 0 : t
+			pv += isnan.(v) ? 0 : v
+			pm += isnan.(m) ? 0 : m
+			pt += isnan.(t) ? 0 : t
 		end
 		pvar[paramkeys[i]] = pv / length(obskeys)
 		pmes[paramkeys[i]] = pm / length(obskeys)
@@ -882,7 +882,7 @@ end
 function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
-			DataFrames.deleterows!(df, find(isnan(df[i][:])))
+			DataFrames.deleterows!(df, find(isnan.(df[i][:])))
 			if size(df)[1] == 0
 				return
 			end

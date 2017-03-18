@@ -28,7 +28,7 @@ function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml"
 	madsdata["Filename"] = filename
 	if haskey(madsdata, "Observations")
 		t = getobstarget(madsdata)
-		isn = isnan(t)
+		isn = isnan.(t)
 		if any(isn)
 			l = length(isn[isn.==true])
 			if l == 1

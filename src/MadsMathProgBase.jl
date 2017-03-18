@@ -10,11 +10,11 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
 	restartdir = getrestartdir(madsdata)
-	o_function(x::Vector) = sar ? sum(abs(x)) : dot(x, x)
+	o_function(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
-	index = find(isnan(targets))
+	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
