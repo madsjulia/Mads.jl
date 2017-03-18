@@ -1120,7 +1120,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 		if phase == 0
 			alpha = W_vec'*S_vec'
 		end
-		X = .5 + asin(sin(alpha'))/pi   	# Transformation function Saltelli suggests
+		X = .5 + asin.(sin.(alpha'))/pi # Transformation function Saltelli suggests
 
 		# In this function we assign probability distributions to parameters we are analyzing
 		# and set parameters that we aren't analyzing to constants.
@@ -1236,16 +1236,16 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 			## Calculating Fourier coefficients associated with MAIN INDICES
 			# p corresponds to the harmonics of Wi
 			for p = 1 : 1 : M
-				A = dot(Y[:], cos(Wi*p*S_vec))
-				B = dot(Y[:], sin(Wi*p*S_vec))
+				A = dot(Y[:], cos.(Wi*p*S_vec))
+				B = dot(Y[:], sin.(Wi*p*S_vec))
 				AVi += A^2 + B^2
 			end
 			# 1/Ns taken out of both A and B for optimization!
 			AVi = AVi / Ns^2
 			## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
 			for j = 1 : Wcmax * M
-				A = dot(Y[:], cos(j * S_vec))
-				B = dot(Y[:], sin(j * S_vec))
+				A = dot(Y[:], cos.(j * S_vec))
+				B = dot(Y[:], sin.(j * S_vec))
 				AVci = AVci + A^2 + B^2
 			end
 			AVci = AVci / Ns^2
@@ -1267,16 +1267,16 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 				## Calculating Fourier coefficients associated with MAIN INDICES
 				# p corresponds to the harmonics of Wi
 				for p = 1:M
-					A = dot(Y[:,i], cos(Wi * p * S_vec))
-					B = dot(Y[:,i], sin(Wi * p * S_vec))
+					A = dot(Y[:,i], cos.(Wi * p * S_vec))
+					B = dot(Y[:,i], sin.(Wi * p * S_vec))
 					AVi[i]  = AVi[i] + A^2 + B^2
 				end
 				# 1/Ns taken out of both A and B for optimization!
 				AVi[i] = AVi[i] / Ns^2
 				## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
 				for j = 1:Wcmax * M
-					A = dot(Y[:,i], cos(j * S_vec))
-					B = dot(Y[:,i], sin(j * S_vec))
+					A = dot(Y[:,i], cos.(j * S_vec))
+					B = dot(Y[:,i], sin.(j * S_vec))
 					AVci[i] = AVci[i] + A^2 + B^2
 				end
 				AVci[i] = AVci[i] / Ns^2
