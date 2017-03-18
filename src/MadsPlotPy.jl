@@ -64,7 +64,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	plotc = [minimum(levels); maximum(levels); map(x->min(maximum(levels), max(minimum(levels), x)), c)]
 	alpha = ones(length(plotx))
 	alpha[1] = alpha[2] = 0
-	PyPlot.scatter(plotx, ploty, marker="o", c=log10(plotc), s=70, cmap="jet")
+	PyPlot.scatter(plotx, ploty, marker="o", c=log10.(plotc), s=70, cmap="jet")
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
