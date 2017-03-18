@@ -12,7 +12,7 @@ Arguments:
 - `julia=true` : use Julia YAML library (if available)
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
-	julia = isdefined(Mads, :yaml) ? julia : true
+	julia = isdefined(:yaml) ? julia : true
 	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	if julia
@@ -33,7 +33,7 @@ Arguments:
 - `yamldata` : YAML data
 """
 function dumpyamlfile(filename::String, yamldata; julia::Bool=false) # dump YAML file
-	julia = isdefined(Mads, :yaml) ? julia : true
+	julia = isdefined(:yaml) ? julia : true
 	f = open(filename, "w")
 	if julia
 		JSON.print(f, yamldata)

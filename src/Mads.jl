@@ -10,8 +10,6 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-madswindows = is_windows()
-
 madsgit = true
 try
 	run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
@@ -20,7 +18,7 @@ catch
 end
 
 madsbash = true
-if !madswindows
+if !is_windows()
 	try
 		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
 	catch

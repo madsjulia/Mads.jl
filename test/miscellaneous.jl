@@ -38,7 +38,7 @@ try
 	symlink(Pkg.dir("Mads"), "test-create-symbolic-link")
 	rm("test-create-symbolic-link")
 catch
-	if Mads.madswindows
+	if is_windows()
 		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
 	else
 		Mads.madscritical("Symbolic links cannot be created!")
@@ -61,7 +61,7 @@ Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 if isdefined(Mads, :runcmd)
-	if Mads.madswindows
+	if is_windows()
 		run(`cmd /C dir $(Pkg.dir("Mads"))`)
 	else
 		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
