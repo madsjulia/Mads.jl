@@ -26,10 +26,10 @@ function reload()
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
-function test(testname::String="")
+function test(testname::String="", madstest::Bool=true)
 	orig_dir = pwd()
 	if testname == ""
-		include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
+		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
 		info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			println("* $i testing ...")
