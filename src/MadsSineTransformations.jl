@@ -2,13 +2,13 @@
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
 	sineparams = copy(params)
 	sineparams[indexlogtransformed] = log10.(sineparams[indexlogtransformed])
-	sineparams = asin((sineparams - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
+	sineparams = asin.((sineparams - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
 	return sineparams
 end
 
 "Sine transformation of model parameters"
 function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
-	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin(sineparams)) * .5) # untransformed parameters (regular parameter space)
+	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin.(sineparams)) * .5) # untransformed parameters (regular parameter space)
 	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
 	return params
 end
