@@ -79,7 +79,7 @@ function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
 		for j = 1:size(X, 1)
 			d += (X[j, i] - x0[j]) ^ 2
 		end
-		d = sqrt(d)
+		d = sqrt.(d)
 		covvec[i] = cov(d)
 	end
 	return covvec

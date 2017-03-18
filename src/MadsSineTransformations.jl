@@ -1,7 +1,7 @@
 "Arcsine transformation of model parameters"
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
 	sineparams = copy(params)
-	sineparams[indexlogtransformed] = log10(sineparams[indexlogtransformed])
+	sineparams[indexlogtransformed] = log10.(sineparams[indexlogtransformed])
 	sineparams = asin((sineparams - lowerbounds) ./ (upperbounds - lowerbounds) * 2 - 1)
 	return sineparams
 end

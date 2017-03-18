@@ -63,8 +63,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
 			logtransformed = Mads.getparamslog(madsdata, paramkeys)
 			indexlogtransformed = find(logtransformed)
-			lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
-			upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+			lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+			upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
 			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
@@ -103,7 +103,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 			return
 		end
 	end
-	stddev = sqrt(abs(diag(covar)))
+	stddev = sqrt.(abs.(diag(covar)))
 	if datafiles
 		writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
@@ -115,7 +115,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, filename::String=""
 	correl = covar ./ diag(covar)
 	datafiles && writedlm("$(rootname)-correlation.dat", correl)
 	eigenv, eigenm = eig(covar)
-	eigenv = abs(eigenv)
+	eigenv = abs.(eigenv)
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])

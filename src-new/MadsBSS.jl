@@ -106,8 +106,8 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 	lowerbounds = [W_lowerbounds; H_lowerbounds]
 	upperbounds = [W_upperbounds; H_upperbounds]
 	indexlogtransformed = find(logtransformed)
-	lowerbounds[indexlogtransformed] = log10(lowerbounds[indexlogtransformed])
-	upperbounds[indexlogtransformed] = log10(upperbounds[indexlogtransformed])
+	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 
 	function mf_reshape(x::Vector)
 		W = reshape(x[1:W_size], nP, nk)
