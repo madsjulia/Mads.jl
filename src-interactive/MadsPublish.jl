@@ -43,7 +43,7 @@ function dependents(modulename::String="Mads", filter::Bool=false)
 end
 
 "Checkout the latest version of the Mads / Julia modules"
-function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
+function checkout(modulename::String=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -67,7 +67,11 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, pul
 			cwd = pwd()
 			cd(Pkg.dir(i))
 			if master
-				run(`git checkout master`)
+				if force
+					run(`git checkout -f master`)
+				else
+					run(`git checkout master`)
+				end
 			end
 			if pull
 				run(`git pull`)

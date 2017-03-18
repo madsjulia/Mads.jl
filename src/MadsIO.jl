@@ -102,8 +102,8 @@ function parsemadsdata!(madsdata::Associative)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
 				for i = 1:length(wells[key]["obs"])
-					for keys in keys(wells[key]["obs"][i])
-						wells[key]["obs"][i] = wells[key]["obs"][i][keys]
+					for k in keys(wells[key]["obs"][i])
+						wells[key]["obs"][i] = wells[key]["obs"][i][k]
 					end
 				end
 			end
