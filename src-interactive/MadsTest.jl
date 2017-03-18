@@ -26,7 +26,7 @@ function reload()
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
-function test(testname::String=""; madstest::Bool=true)
+function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
 	orig_dir = pwd()
 	if testname == ""
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
@@ -37,11 +37,11 @@ function test(testname::String=""; madstest::Bool=true)
 		end
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
-		if isfile(file)
+		if isfile(file) && !moduletest
 			include(file)
 		else
 			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
-			if isfile(file)
+			if isfile(file) && !moduletest
 				println("* $testname testing ...")
 				include(file)
 			else
