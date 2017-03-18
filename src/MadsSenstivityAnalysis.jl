@@ -613,9 +613,9 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		end
 		maxnnans = 0
 		for j = 1:nO
-			yAnonan = isnan(yA[:,j])
-			yBnonan = isnan(yB[:,j])
-			yCnonan = isnan(yC[:,j])
+			yAnonan = isnan.(yA[:,j])
+			yBnonan = isnan.(yB[:,j])
+			yCnonan = isnan.(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
 			yT = vcat( yA[nonan,j], yB[nonan,j] ) # this should not include C
 			nanindices = find(~nonan)
@@ -692,9 +692,9 @@ function computeparametersensitities(madsdata::Associative, saresults::Associati
 			m = typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
 			t = typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
 			v = typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Void ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
-			pv += isnan(v) ? 0 : v
-			pm += isnan(m) ? 0 : m
-			pt += isnan(t) ? 0 : t
+			pv += isnan.(v) ? 0 : v
+			pm += isnan.(m) ? 0 : m
+			pt += isnan.(t) ? 0 : t
 		end
 		pvar[paramkeys[i]] = pv / length(obskeys)
 		pmes[paramkeys[i]] = pm / length(obskeys)
@@ -882,7 +882,7 @@ end
 function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
-			DataFrames.deleterows!(df, find(isnan(df[i][:])))
+			DataFrames.deleterows!(df, find(isnan.(df[i][:])))
 			if size(df)[1] == 0
 				return
 			end

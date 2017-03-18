@@ -27,7 +27,7 @@ end
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
-	nans = isnan(Xc)
+	nans = isnan.(Xc)
 	Xc[nans] = 0
 	weights[nans] = 0
 	nP = size(X, 1) # number of observation points

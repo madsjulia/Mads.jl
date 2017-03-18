@@ -8,7 +8,7 @@ function residuals(madsdata::Associative, results::Vector)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
-	isn = isnan(targets)
+	isn = isnan.(targets)
 	index = find(isn)
 	weights[index] = 0
 	targets[index] = 0
@@ -74,7 +74,7 @@ function makelmfunctions(madsdata::Associative)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
 	targets = Mads.getobstarget(madsdata)
-	index = find(isnan(targets))
+	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
