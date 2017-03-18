@@ -26,7 +26,7 @@ function reload()
 end
 
 "Execute Mads tests (the tests will be in parallel if processors are defined)"
-function test(testname::String="", madstest::Bool=true)
+function test(testname::String=""; madstest::Bool=true)
 	orig_dir = pwd()
 	if testname == ""
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
