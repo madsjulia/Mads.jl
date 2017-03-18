@@ -226,7 +226,7 @@ Returns:
 - `imp_samples` : array of important samples
 """
 function getimportantsamples(samples::Array, llhoods::Vector)
-	sortedlhoods = sort(exp(llhoods), rev=true)
+	sortedlhoods = sort(exp.(llhoods), rev=true)
 	sortedprobs = sortedlhoods / sum(sortedlhoods)
 	cumprob = 0.
 	i = 1
@@ -258,7 +258,7 @@ Returns:
 - `var` : vector of sample variances
 """
 function weightedstats(samples::Array, llhoods::Vector)
-	wv = StatsBase.WeightVec(exp(llhoods))
+	wv = StatsBase.WeightVec(exp.(llhoods))
 	return mean(samples, wv, 1), var(samples, wv, 1)
 end
 
