@@ -562,6 +562,10 @@ end
 """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
+$(documentfunction(searchdir))
+
+Examples:
+
 - `Mads.searchdir("a")`
 - `Mads.searchdir(r"[A-B]"; path = ".")`
 - `Mads.searchdir(r".*\.cov"; path = ".")`
@@ -578,15 +582,27 @@ Returns:
 searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
 searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
 
-"Filter dictionary keys based on a string or regular expression"
+"""
+Filter dictionary keys based on a string or regular expression
+
+$(documentfunction(filterkeys))
+"""
 filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
 
-"Find indexes for dictionary keys based on a string or regular expression"
+"""
+Find indexes for dictionary keys based on a string or regular expression
+
+$(documentfunction(indexkeys))
+"""
 indexkeys(dict::Associative, key::Regex) = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
 indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
 
-"Get dictionary values for keys based on a string or regular expression"
+"""
+Get dictionary values for keys based on a string or regular expression
+
+$(documentfunction(getdictvalues))
+"""
 getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
 getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
