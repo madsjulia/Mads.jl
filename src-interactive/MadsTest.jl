@@ -25,7 +25,12 @@ function reload()
 	end
 end
 
-"Execute Mads tests (the tests will be in parallel if processors are defined)"
+"""
+Execute Mads tests (the tests will be in parallel if processors are defined)
+
+$(Mads.documentfunction(Mads.test))
+
+"""
 function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
 	orig_dir = pwd()
 	if testname == ""

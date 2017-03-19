@@ -26,6 +26,9 @@ if !is_windows()
 	end
 end
 
+"""
+Mads Modules: $madsmodules
+"""
 madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR"]
 
 import GeostatInversion
@@ -115,6 +118,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
+include("MadsDocumentation.jl")
 include("MadsTypes.jl")
 include("MadsLog.jl")
 include("MadsHelp.jl")
