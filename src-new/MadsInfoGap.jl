@@ -3,7 +3,11 @@ import MathProgBase
 @tryimport Ipopt
 @tryimport Gadfly
 
-"Information Gap Decision Analysis using JuMP"
+"""
+Information Gap Decision Analysis using JuMP
+
+$(documentfunction(infogap_jump(madsdata::Associative=Dict))
+"""
 function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
 	if seed != 0
 		srand(seed)
@@ -242,7 +246,11 @@ end
 type MadsModelPoly <: MathProgBase.AbstractNLPEvaluator
 end
 
-"Information Gap Decision Analysis using MathProgBase"
+"""
+Information Gap Decision Analysis using MathProgBase
+
+$(documentfunction(infogap_mpb_polinomial(madsdata::Associative=Dict))
+"""
 function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver::MathProgBase.DefaultNLPSolver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
 	if seed != 0
 		srand(seed)
@@ -376,7 +384,11 @@ end
 type MadsModelLin <: MathProgBase.AbstractNLPEvaluator
 end
 
-"Information Gap Decision Analysis using MathProgBase"
+"""
+Information Gap Decision Analysis using MathProgBase
+
+$(documentfunction(infogap_mpb_lin(madsdata::Associative=Dict))
+"""
 function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
 	if seed != 0
 		srand(seed)

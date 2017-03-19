@@ -14,6 +14,8 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 
 Dumps: image file with name `filename` and in specified `format`
+
+$(documentfunction(plotmass))
 """
 function plotmass(lambda::Vector{Float64}, mass_injected::Vector{Float64}, mass_reduced::Vector{Float64}, filename::String; format::String="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Gadfly.Guide.xlabel("Reaction Rate Constant [1/d]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Gadfly.Geom.point, Gadfly.Scale.x_log10, Gadfly.Scale.y_log10)

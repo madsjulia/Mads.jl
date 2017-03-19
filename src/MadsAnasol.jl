@@ -2,7 +2,11 @@ import Anasol
 import DataStructures
 import ProgressMeter
 
-"Add an additional contamination source"
+"""
+Add an additional contamination source
+
+$(documentfunction(addsource!))
+"""
 function addsource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
@@ -21,7 +25,11 @@ function addsource!(madsdata::Associative, sourceid::Int=0)
 	info("There are $(length(madsdata["Sources"])) sources now!")
 end
 
-"Add contaminant source parameters"
+"""
+Add contaminant source parameters
+
+$(documentfunction(addsourceparameters!))
+"""
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
@@ -45,7 +53,7 @@ end
 """
 Create a function to compute concentrations for all the observation points using Anasol
 
-`Mads.makecomputeconcentrations(madsdata)`
+$(documentfunction(makecomputeconcentrations))
 
 Arguments:
 
@@ -160,7 +168,7 @@ end
 """
 Compute concentration for a point in space and time (x,y,z,t)
 
-`Mads.contamination(wellx, welly, wellz, n, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction="long_bbb_ddd_iir_c")`
+$(documentfunction(contamination))
 
 Arguments:
 
@@ -222,7 +230,7 @@ end
 """
 Compute injected/reduced contaminant mass
 
-`Mads.computemass(madsdata; time = 0)`
+$(documentfunction(computemass))
 
 Arguments:
 
@@ -279,7 +287,13 @@ end
 """
 Compute injected/reduced contaminant mass for a given set of mads input files
 
-`Mads.computemass(madsfiles; time=0, path=".")`
+$(documentfunction(computemass))
+
+Example
+
+```
+Mads.computemass(madsfiles; time=0, path=".")
+```
 
 Arguments:
 

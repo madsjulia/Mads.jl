@@ -17,6 +17,8 @@ Returns:
 - `madsdata` : Mads problem dictionary
 
 Example: `md = loadmadsfile("input_file_name.mads")`
+
+$(documentfunction(loadmadsfile))
 """
 function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
 	if format == "yaml"
@@ -47,6 +49,8 @@ Parse loaded Mads problem dictionary
 Arguments:
 
 - `madsdata` : Mads problem dictionary
+
+$(documentfunction(parsemadsdata!))
 """
 function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
@@ -158,6 +162,8 @@ Arguments:
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
 - `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
+
+$(documentfunction(savemadsfile))
 """
 function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
@@ -190,7 +196,11 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 	end
 end
 
-"Save calibration results"
+"""
+Save calibration results
+
+$(documentfunction(savecalibrationresults))
+"""
 function savecalibrationresults(madsdata::Associative, results)
 	#TODO map estimated parameters on a new madsdata structure
 	#TODO save madsdata in yaml file using dumpyamlmadsfile
@@ -205,6 +215,8 @@ Set a default MADS input file
 Arguments:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
+
+$(documentfunction(setmadsinputfile))
 """
 function setmadsinputfile(filename::String)
 	global madsinputfile = filename
@@ -220,6 +232,8 @@ Arguments: `none`
 Returns:
 
 - `filename` : input file name (e.g. `input_file_name.mads`)
+
+$(documentfunction(getmadsinputfile))
 """
 function getmadsinputfile()
 	return madsinputfile
@@ -229,6 +243,8 @@ end
 Get the MADS problem root name
 
 `madsrootname = Mads.getmadsrootname(madsdata)`
+
+$(documentfunction(getmadsrootname))
 """
 function getmadsrootname(madsdata::Associative; first=true, version=false)
 	return getrootname(madsdata["Filename"]; first=first, version=version)
@@ -243,6 +259,8 @@ Example:
 d = Mads.getdir("a.mads") # d = "."
 d = Mads.getdir("test/a.mads") # d = "test"
 ```
+
+$(documentfunction(getdir))
 """
 function getdir(filename::String)
 	d = dirname(filename)
@@ -265,6 +283,8 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 
 where `madsproblemdir` = `"../../"`
+
+$(documentfunction(getmadsproblemdir))
 """
 function getmadsproblemdir(madsdata::Associative)
 	getdir(madsdata["Filename"])
@@ -274,6 +294,8 @@ end
 Get the directory where currently Mads is running
 
 `problemdir = Mads.getmadsdir()`
+
+$(documentfunction(getmadsdir))
 """
 function getmadsdir()
 	source_path = Base.source_path()
@@ -295,6 +317,8 @@ Example:
 r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
+
+$(documentfunction(getrootname))
 """
 function getrootname(filename::String; first::Bool=true, version::Bool=false)
 	d = splitdir(filename)
@@ -321,6 +345,8 @@ end
 
 """
 Set new mads file name
+
+$(documentfunction(setnewmadsfilename))
 """
 function setnewmadsfilename(madsdata::Associative)
 	setnewmadsfilename(madsdata["Filename"])
@@ -342,7 +368,11 @@ function setnewmadsfilename(filename::String)
 	return joinpath(dir, filename)
 end
 
-"Get next mads file name"
+"""
+Get next mads file name
+
+$(documentfunction(getnextmadsfilename))
+"""
 function getnextmadsfilename(filename::String)
 	t0 = 0
 	filename_old = filename
@@ -372,6 +402,8 @@ Example:
 ```
 ext = Mads.getextension("a.mads") # ext = "mads"
 ```
+
+$(documentfunction(getextension))
 """
 function getextension(filename::String)
 	d = splitdir(filename)
@@ -383,7 +415,11 @@ function getextension(filename::String)
 	end
 end
 
-"Check the directories where model outputs should be saved for MADS"
+"""
+Check the directories where model outputs should be saved for MADS
+
+$(documentfunction(checkmodeloutputdirs))
+"""
 function checkmodeloutputdirs(madsdata::Associative)
 	directories = Array{String}(0)
 	if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -423,7 +459,11 @@ function checkmodeloutputdirs(madsdata::Associative)
 	end
 end
 
-"Set model input files; delete files where model output should be saved for MADS"
+"""
+Set model input files; delete files where model output should be saved for MADS
+
+$(documentfunction(setmodelinputs))
+"""
 function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		for instruction in madsdata["Instructions"]
@@ -485,7 +525,11 @@ function setmodelinputs(madsdata::Associative, parameters::Associative; path::St
 	end
 end
 
-"Read model outputs saved for MADS"
+"""
+Read model outputs saved for MADS
+
+$(documentfunction(readmodeloutput))
+"""
 function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsdata), path::String="")
 	results = DataStructures.OrderedDict()
 	if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -546,7 +590,11 @@ indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(d
 getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
 getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
-"Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)"
+"""
+Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+
+$(documentfunction(writeparametersviatemplate))
+"""
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -582,7 +630,11 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	close(outfile)
 end
 
-"Write initial parameters (inital if parameter set not provided"
+"""
+Write initial parameters (inital if parameter set not provided
+
+$(documentfunction(writeparameters))
+"""
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -597,7 +649,11 @@ function writeparameters(madsdata::Associative, parameters::Associative)
 	end
 end
 
-"Convert an instruction line in the Mads instruction file into regular expressions"
+"""
+Convert an instruction line in the Mads instruction file into regular expressions
+
+$(documentfunction(instline2regexs))
+"""
 function instline2regexs(instline::String)
 	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
 	regex = r"@[^@]*@|w|![^!]*!"
@@ -636,13 +692,21 @@ function instline2regexs(instline::String)
 	return regexs, obsnames, getparamhere
 end
 
-"Match an instruction line in the Mads instruction file with model input file"
+"""
+Match an instruction line in the Mads instruction file with model input file
+
+$(documentfunction(obslineismatch))
+"""
 function obslineismatch(obsline::String, regexs::Array{Regex, 1})
 	bigregex = Regex(string(map(x->x.pattern, regexs)...))
 	return ismatch(bigregex, obsline)
 end
 
-"Get observations for a set of regular expressions"
+"""
+Get observations for a set of regular expressions
+
+$(documentfunction(regexs2obs))
+"""
 function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{String, 1}, getparamhere::Array{Bool, 1})
 	offset = 1
 	obsnameindex = 1
@@ -662,7 +726,11 @@ function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{St
 	return obsdict
 end
 
-"Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`"
+"""
+Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
+
+$(documentfunction(ins_obs))
+"""
 function ins_obs(instructionfilename::String, inputfilename::String)
 	instfile = open(instructionfilename, "r")
 	obsfile = open(inputfilename, "r")
@@ -688,7 +756,11 @@ function ins_obs(instructionfilename::String, inputfilename::String)
 	return obsdict
 end
 
-"Read observations"
+"""
+Read observations
+
+$(documentfunction(readobservations))
+"""
 function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
 	observations = Dict()
 	obscount = Dict(zip(obskeys, zeros(Int, length(obskeys))))
@@ -717,7 +789,11 @@ function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(mads
 	return observations
 end
 
-"Dump well data from MADS problem dictionary into a ASCII file"
+"""
+Dump well data from MADS problem dictionary into a ASCII file
+
+$(documentfunction(dumpwelldata))
+"""
 function dumpwelldata(madsdata::Associative, filename::String)
 	if haskey(madsdata, "Wells")
 		outfile = open(filename, "w")
@@ -738,7 +814,11 @@ function dumpwelldata(madsdata::Associative, filename::String)
 	end
 end
 
-"Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`"
+"""
+Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`
+
+$(documentfunction(symlinkdirfiles))
+"""
 function symlinkdirfiles(dirsource::String, dirtarget::String)
 	for f in readdir(dirsource)
 		if !isdir(f)
@@ -750,7 +830,11 @@ function symlinkdirfiles(dirsource::String, dirtarget::String)
 	end
 end
 
-"Create a symbolic link of a file `filename` in a directory `dirtarget`"
+"""
+Create a symbolic link of a file `filename` in a directory `dirtarget`
+
+$(documentfunction(symlinkdir))
+"""
 function symlinkdir(filename::String, dirtarget::String)
 	filenametarget = joinpath(dirtarget, filename)
 	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
@@ -758,7 +842,11 @@ function symlinkdir(filename::String, dirtarget::String)
 	end
 end
 
-"Remove directory"
+"""
+Remove directory
+
+$(documentfunction(rmdir))
+"""
 function rmdir(dir::String; path::String="")
 	if path != "" && path != "."
 		dir = joinpath(path, dir)
@@ -768,7 +856,11 @@ function rmdir(dir::String; path::String="")
 	end
 end
 
-"Remove file"
+"""
+Remove file
+
+$(documentfunction(rmfile))
+"""
 function rmfile(filename::String; path::String="")
 	if path != "" && path != "."
 		filename = joinpath(path, filename)
@@ -778,14 +870,22 @@ function rmfile(filename::String; path::String="")
 	end
 end
 
-"Remove files with extension `ext`"
+"""
+Remove files with extension `ext`
+
+$(documentfunction(rmfiles_ext))
+"""
 function rmfiles_ext(ext::String; path::String=".")
 	for f in searchdir(Regex(string(".*\\.", ext)); path=path)
 		rm(joinpath(path, f))
 	end
 end
 
-"Remove files with root `root`"
+"""
+Remove files with root `root`
+
+$(documentfunction(rmfiles_root))
+"""
 function rmfiles_root(root::String; path::String=".")
 	s = splitdir(root)
 	if s[1] != ""
@@ -797,7 +897,11 @@ function rmfiles_root(root::String; path::String=".")
 	end
 end
 
-"Create temporary directory"
+"""
+Create temporary directory
+
+$(documentfunction(createtempdir))
+"""
 function createtempdir(tempdirname::String)
 	attempt = 0
 	trying = true
@@ -819,7 +923,11 @@ function createtempdir(tempdirname::String)
 	end
 end
 
-"Link files in a temporary directory"
+"""
+Link files in a temporary directory
+
+$(documentfunction(linktempdir))
+"""
 function linktempdir(madsproblemdir::String, tempdirname::String)
 	attempt = 0
 	trying = true

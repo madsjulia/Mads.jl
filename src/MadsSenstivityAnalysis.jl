@@ -11,7 +11,11 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	import Gadfly
 end
 
-"Set current seed"
+"""
+Set current seed
+
+$(documentfunction(setseed))
+"""
 function setseed(seed::Integer)
 	if seed != 0
 		srand(seed)
@@ -32,6 +36,8 @@ Arguments:
 - `format` : output plot format (`png`, `pdf`, etc.)
 - `par` : parameter set
 - `obs` : observations for the parameter set
+
+$(documentfunction(localsa))
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
 	if filename == ""
@@ -197,6 +203,8 @@ Arguments:
 Returns:
 
 - `newllhoods` : vector of log-likelihoods after reweighing
+
+$(documentfunction(reweighsamples))
 """
 function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
@@ -224,6 +232,8 @@ Arguments:
 Returns:
 
 - `imp_samples` : array of important samples
+
+$(documentfunction(getimportantsamples))
 """
 function getimportantsamples(samples::Array, llhoods::Vector)
 	sortedlhoods = sort(exp.(llhoods), rev=true)
@@ -256,6 +266,8 @@ Returns:
 
 - `mean` : vector of sample means
 - `var` : vector of sample variances
+
+$(documentfunction(weightedstats))
 """
 function weightedstats(samples::Array, llhoods::Vector)
 	wv = StatsBase.WeightVec(exp.(llhoods))
@@ -273,6 +285,8 @@ Arguments:
 - `numsamples` : number of samples
 - `parameterkey` : model parameter key
 - `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
+
+$(documentfunction(getparamrandom))
 """
 function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)
 	if parameterkey != ""
@@ -316,6 +330,8 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `N` : number of samples
 - `seed` : initial random seed
+
+$(documentfunction(saltellibrute))
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed)
@@ -486,6 +502,8 @@ Arguments:
 - `seed` : initial random seed
 - `restartdir` : directory where files will be stored containing model results for fast simulation restarts
 - `parallel` : set to true if the model runs should be performed in parallel
+
+$(documentfunction(saltelli))
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
@@ -676,6 +694,8 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `saresults` : sensitivity analysis results
+
+$(documentfunction(computeparametersensitities))
 """
 function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
@@ -747,7 +767,11 @@ for mi = 1:length(saltelli_functions)
 	eval(q)
 end
 
-"Print sensitivity analysis results"
+"""
+Print sensitivity analysis results
+
+$(documentfunction(printSAresults))
+"""
 function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -823,7 +847,11 @@ function printSAresults(madsdata::Associative, results::Associative)
 	print("\n")
 end
 
-"Print sensitivity analysis results (method 2)"
+"""
+Print sensitivity analysis results (method 2)
+
+$(documentfunction(printSAresults2))
+"""
 function printSAresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
 	tes = results["tes"]
@@ -858,7 +886,11 @@ function printSAresults2(madsdata::Associative, results::Associative)
 	end
 end
 
-"Convert Void's into NaN's in a dictionary"
+"""
+Convert Void's into NaN's in a dictionary
+
+$(documentfunction(void2nan!))
+"""
 function void2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: DataStructures.OrderedDict
@@ -878,7 +910,11 @@ function void2nan!(dict::Associative) # TODO generalize using while loop and rec
 	end
 end
 
-"Delete rows with NaN in a Dataframe `df`"
+"""
+Delete rows with NaN in a Dataframe `df`
+
+$(documentfunction(deleteNaN!))
+"""
 function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:length(df)
 		if typeof(df[i][1]) <: Number
@@ -890,7 +926,11 @@ function deleteNaN!(df::DataFrames.DataFrame)
 	end
 end
 
-"Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data"
+"""
+Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
+
+$(documentfunction(maxtorealmax!))
+"""
 function maxtorealmax!(df::DataFrames.DataFrame)
 	limit = realmax(Float32)
 	for i in 1:length(df)
@@ -914,6 +954,8 @@ Arguments:
 - `M` : maximum number of harmonics
 - `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
 - `seed` : initial random seed
+
+$(documentfunction(efast))
 """
 function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, plotresults::Bool=graphoutput, seed::Integer=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)

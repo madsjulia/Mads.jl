@@ -4,7 +4,11 @@ import DataStructures
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
 
-"Mads execution using MathProgBase"
+"""
+Mads execution using MathProgBase
+
+$(documentfunction(madsmathprogbase))
+"""
 function madsmathprogbase(madsdata::Associative=Dict())
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -69,7 +73,11 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	MathProgBase.eval_hesslag(d::MadsModel, H, p, σ, μ) = nothing
 end
 
-"Make forward model, gradient, objective functions needed for MathProgBase optimization"
+"""
+Make forward model, gradient, objective functions needed for MathProgBase optimization
+
+$(documentfunction(makempbfunctions))
+"""
 function makempbfunctions(madsdata::Associative)
 	"""
 	Objective function for MathProgBase optimization

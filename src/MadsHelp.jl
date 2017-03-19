@@ -1,11 +1,19 @@
 import Documenter
 
-"Produce MADS help information"
+"""
+Produce MADS help information
+
+$(documentfunction(help))
+"""
 function help()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "GETTING_STARTED.md"))
 end
 
-"Produce MADS copyright information"
+"""
+Produce MADS copyright information
+
+$(documentfunction(copyright))
+"""
 function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
@@ -26,6 +34,8 @@ Arguments:
 
 - `module` : MADS module
 - `string` : matching string
+
+$(documentfunction(functions))
 """
 function functions(string::String="")
 	for i in madsmodules

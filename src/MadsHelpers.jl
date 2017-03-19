@@ -1,91 +1,129 @@
-"MADS restart on"
+"""
+MADS restart on
+
+$(documentfunction(restarton))
+"""
 function restarton()
 	global restart = true;
 end
 
-"MADS restart off"
+"""
+MADS restart off
+
+$(documentfunction(restartoff))
+"""
 function restartoff()
 	global restart = false;
 end
 
-"Get MADS restart status"
+"""
+Get MADS restart status
+
+$(documentfunction(getrestart))
+"""
 function getrestart(madsdata::Associative)
 	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
 end
 
-"Make MADS quiet"
+"""
+Make MADS quiet
+
+$(documentfunction(quieton))
+"""
 function quieton()
 	ReusableFunctions.quieton()
 	global quiet = true;
 end
 
-"Make MADS not quiet"
+"""
+Make MADS not quiet
+
+$(documentfunction(quietoff))
+"""
 function quietoff()
 	ReusableFunctions.quietoff()
 	global quiet = false;
 end
 
-"MADS graph output on"
+"""
+MADS graph output on
+
+$(documentfunction(graphon))
+"""
 function graphon()
 	global graphoutput = true;
 end
 
-"MADS graph output off"
+"""
+MADS graph output off
+
+$(documentfunction(graphoff))
+"""
 function graphoff()
 	global graphoutput = false;
 end
 
-"Turn on the generation of MADS tests (dangerous)"
+"""
+Turn on the generation of MADS tests (dangerous)
+
+$(documentfunction(create_tests_on))
+"""
 function create_tests_on()
 	global create_tests = true;
 end
 
-"Turn off the generation of MADS tests (default)"
+"""
+Turn off the generation of MADS tests (default)
+
+$(documentfunction(create_tests_off))
+"""
 function create_tests_off()
 	global create_tests = false;
 end
 
-"Turn on execution of long MADS tests (dangerous)"
+"""
+Turn on execution of long MADS tests (dangerous)
+
+$(documentfunction(long_tests_on))
+"""
 function long_tests_on()
 	global long_tests = true;
 end
 
-"Turn off execution of long MADS tests (default)"
+"""
+Turn off execution of long MADS tests (default)
+
+$(documentfunction(long_tests_off))
+"""
 function long_tests_off()
 	global long_tests = false;
 end
 
-"Set MADS debug level"
+"""
+Set MADS debug level
+
+$(documentfunction(setdebuglevel))
+"""
 function setdebuglevel(level::Int)
 	global debuglevel = level
 end
 
-"Set MADS verbosity level"
+"""
+Set MADS verbosity level
+
+$(documentfunction(setverbositylevel))
+"""
 function setverbositylevel(level::Int)
 	global verbositylevel = level
 end
 
-"Reset the model runs count to be equal to zero"
+"""
+Reset the model runs count to be equal to zero
+
+$(documentfunction(resetmodelruns))
+"""
 function resetmodelruns()
 	global modelruns = 0
-end
-
-"Redirect STDOUT to a reader"
-function stdoutcaptureon()
-	global outputoriginal = STDOUT;
-	(outR, outW) = redirect_stdout();
-	global outputread = outR;
-	global outputwrite = outW;
-	global outputreader = @async readstring(outputread);
-end
-
-"Restore STDOUT"
-function stdoutcaptureoff()
-	redirect_stdout(outputoriginal);
-	close(outputwrite);
-	output = wait(outputreader);
-	close(outputread);
-	return output
 end
 
 """
@@ -106,6 +144,8 @@ Examples:
 
 - `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
 - `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
+
+$(documentfunction(haskeyword))
 """
 function haskeyword(madsdata::Associative, keyword::String)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
@@ -127,7 +167,11 @@ function haskeyword(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
-"Add a `keyword` in a `class` within the Mads dictionary `madsdata`"
+"""
+Add a `keyword` in a `class` within the Mads dictionary `madsdata`
+
+$(documentfunction(addkeyword!))
+"""
 function addkeyword!(madsdata::Associative, keyword::String)
 	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
 	return
@@ -146,7 +190,11 @@ function addkeyword!(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
-"Delete a `keyword` in a `class` within the Mads dictionary `madsdata`"
+"""
+Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
+
+$(documentfunction(deletekeyword!))
+"""
 function deletekeyword!(madsdata::Associative, keyword::String)
 	if haskeyword(madsdata, keyword)
 		deletekeyword!(madsdata, "Problem", keyword)
@@ -166,7 +214,11 @@ function deletekeyword!(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
-"Get sin-space dx"
+"""
+Get sin-space dx
+
+$(documentfunction(getsindx))
+"""
 function getsindx(madsdata::Associative)
 	sindx = 0.1
 	if Mads.haskeyword(madsdata, "sindx")
@@ -178,12 +230,20 @@ function getsindx(madsdata::Associative)
 	return sindx
 end
 
-"Transpose non-numeric vector"
+"""
+Transpose non-numeric vector
+
+$(documentfunction(transposevector))
+"""
 function transposevector(a::Vector)
 	reshape(a, 1, length(a))
 end
 
-"Transpose non-numeric matrix"
+"""
+Transpose non-numeric matrix
+
+$(documentfunction(transposematrix))
+"""
 function transposematrix(a::Matrix)
 	permutedims(a, (2, 1))
 end

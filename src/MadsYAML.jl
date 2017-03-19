@@ -10,6 +10,8 @@ Arguments:
 - `filename` : file name
 - `julia=false` : use Python YAML library (if available)
 - `julia=true` : use Julia YAML library (if available)
+
+$(documentfunction(loadyamlfile))
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 	julia = isdefined(:yaml) ? julia : true
@@ -31,6 +33,8 @@ Arguments:
 
 - `filename` : file name
 - `yamldata` : YAML data
+
+$(documentfunction(dumpyamlfile))
 """
 function dumpyamlfile(filename::String, yamldata; julia::Bool=false) # dump YAML file
 	julia = isdefined(:yaml) ? julia : true
@@ -50,6 +54,8 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `filename` : file name
+
+$(documentfunction(dumpyamlmadsfile))
 """
 function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
@@ -103,7 +109,11 @@ function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load 
 	dumpyamlfile(filename, yamldata, julia=julia)
 end
 
-"Read MADS model predictions from a YAML file `filename`"
+"""
+Read MADS model predictions from a YAML file `filename`
+
+$(documentfunction(readyamlpredictions))
+"""
 function readyamlpredictions(filename::String; julia::Bool=false) # read YAML predictions
 	return loadyamlfile(filename; julia=julia)
 end

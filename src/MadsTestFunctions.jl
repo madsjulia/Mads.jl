@@ -1,9 +1,17 @@
-"Rosenbrock test function (more difficult to solve)"
+"""
+Rosenbrock test function (more difficult to solve)
+
+$(documentfunction(rosenbrock2_lm))
+"""
 function rosenbrock2_lm(x::Vector)
 	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
 end
 
-"Parameter gradients of the Rosenbrock test function"
+"""
+Parameter gradients of the Rosenbrock test function
+
+$(documentfunction(rosenbrock2_gradient_lm))
+"""
 function rosenbrock2_gradient_lm(x::Vector)
 	j = Array{Float64}(2,2)
 	j[1, 1] = -20.0 * x[1]
@@ -13,23 +21,39 @@ function rosenbrock2_gradient_lm(x::Vector)
 	return j
 end
 
-"Rosenbrock test function"
+"""
+Rosenbrock test function
+
+$(documentfunction(rosenbrock))
+"""
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
 end
 
-"Rosenbrock test function for LM optimization (returns the 2 components separetely)"
+"""
+Rosenbrock test function for LM optimization (returns the 2 components separetely)
+
+$(documentfunction(rosenbrock_lm))
+"""
 function rosenbrock_lm(x::Vector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
 end
 
-"Parameter gradients of the Rosenbrock test function"
+"""
+Parameter gradients of the Rosenbrock test function
+
+$(documentfunction(rosenbrock_gradient!))
+"""
 function rosenbrock_gradient!(x::Vector, storage::Vector)
 	storage[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
 	storage[2] = 200.0 * (x[2] - x[1]^2)
 end
 
-"Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)"
+"""
+Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)
+
+$(documentfunction(rosenbrock_gradient_lm))
+"""
 function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(0))
 	storage = Array{Float64}(2,2)
 	storage[1,1] = -2.0 * (1.0 - x[1])
@@ -39,7 +63,11 @@ function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}
 	return storage
 end
 
-"Parameter Hessian of the Rosenbrock test function"
+"""
+Parameter Hessian of the Rosenbrock test function
+
+$(documentfunction(rosenbrock_hessian!))
+"""
 function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
 	storage[1, 2] = -400.0 * x[1]

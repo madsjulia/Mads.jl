@@ -1,40 +1,46 @@
 """
 Create function document
 """
-function documentfunction(f::Function)
+function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict())
 	stdoutcaptureon()
-	println("## $(f)")
+	println("**$(f)**\n")
 	m = methods(f)
-	nm = 0
-	try
-		nm = length(m.ms)
-	catch
-		nm = 0
-	end
+	nm = getmethodscount(m)
 	if nm == 0
-		println("### No methods\n")
+		println("No methods\n")
 	else
 		ma = collect(m)
-		println("### Methods")
+		println("Methods")
 		for i = 1:nm
-			println(" * Mads." * strip(string((ma[i]))))
+			s = strip.(split(string((ma[i])), " at "))
+			println(" - `Mads.$(s[1])` : $(s[2])")
 		end
-		a = getfunctionarguments(f)
-		l = length(a)
-		if l == 0
-			println("Function `$(f)` takes no arguments")
-		else
-			println("### Arguments")
-			for i = 1:l
-				println(" * " * strip(string(a[i])))
-			end
-		end
-		a = getfunctionkeywords(f)
+		a = getfunctionarguments(f, m)
 		l = length(a)
 		if l > 0
-			println("### Keywords")
+			println("Arguments")
 			for i = 1:l
-				println(" * " * strip(string(a[i])))
+				arg = strip(string(a[i]))
+				print(" - `$(arg)`")
+				if haskey(argtext, arg)
+					println(" : $(argtext[arg]))")
+				else
+					println("")
+				end
+			end
+		end
+		a = getfunctionkeywords(f, m)
+		l = length(a)
+		if l > 0
+			println("Keywords")
+			for i = 1:l
+				key = strip(string(a[i]))
+				print(" - `$(key)`")
+				if haskey(keytext, key)
+					println(" : $(keytext[key]))")
+				else
+					println("")
+				end
 			end
 		end
 	end
@@ -45,14 +51,10 @@ end
 Get function arguments
 """
 function getfunctionarguments(f::Function)
-	m = methods(f)
+	getfunctionarguments(f, methods(f))
+end
+function getfunctionarguments(f::Function, m::Base.MethodList, l::Integer=getmethodscount(m))
 	mp = Array{Symbol}(0)
-	l = 0
-	try
-		l = length(m.ms)
-	catch
-		l = 0
-	end
 	for i in 1:l
 		fargs = Array{Symbol}(0)
 		try
@@ -73,15 +75,11 @@ end
 Get function keywords
 """
 function getfunctionkeywords(f::Function)
+	getfunctionkeywords(f, methods(f))
+end
+function getfunctionkeywords(f::Function, m::Base.MethodList, l::Integer=getmethodscount(m))
 	# getfunctionarguments(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
-	m = methods(f)
 	mp = Array{Symbol}(0)
-	l = 0
-	try
-		l = length(m.ms)
-	catch
-		l = 0
-	end
 	for i in 1:l
 		kwargs = Array{Symbol}(0)
 		try
@@ -96,4 +94,14 @@ function getfunctionkeywords(f::Function)
 		end
 	end
 	return sort(unique(mp))
+end
+
+function getmethodscount(m::Base.MethodList)
+	nm = 0
+	try
+		nm = length(m.ms)
+	catch
+		nm = 0
+	end
+	return nm
 end

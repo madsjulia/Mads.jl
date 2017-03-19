@@ -1,4 +1,8 @@
-"Model section information criteria"
+"""
+Model section information criteria
+
+$(documentfunction(modelinformationcriteria))
+"""
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))

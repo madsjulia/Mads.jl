@@ -14,6 +14,8 @@ Arguments:
 Returns:
 
 - `arrayfunction` : function accepting an array containing the optimal parameters' values
+
+$(documentfunction(makearrayfunction))
 """
 function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
@@ -37,6 +39,8 @@ Arguments:
 Returns:
 
 - `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
+
+$(documentfunction(makedoublearrayfunction))
 """
 function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
@@ -54,7 +58,11 @@ function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscomm
 	return doublearrayfunction
 end
 
-"Make a conditional log likelihood function that accepts an array containing the opt parameters' values"
+"""
+Make a conditional log likelihood function that accepts an array containing the opt parameters' values
+
+$(documentfunction(makearrayconditionalloglikelihood))
+"""
 function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -67,7 +75,11 @@ function makearrayconditionalloglikelihood(madsdata::Associative, conditionallog
 	return arrayconditionalloglikelihood
 end
 
-"Make a log likelihood function that accepts an array containing the opt parameters' values"
+"""
+Make a log likelihood function that accepts an array containing the opt parameters' values
+
+$(documentfunction(makearrayloglikelihood))
+"""
 function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
@@ -84,12 +96,20 @@ function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log
 	return arrayloglikelihood
 end
 
-"Set Dynamic Model for MADS model calls using internal Julia functions"
+"""
+Set Dynamic Model for MADS model calls using internal Julia functions
+
+$(documentfunction(setdynamicmodel))
+"""
 function setdynamicmodel(madsdata::Associative, f::Function)
 	madsdata["Dynamic model"] = f
 end
 
-"Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
+"""
+Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
+
+$(documentfunction(evaluatemadsexpression))
+"""
 function evaluatemadsexpression(expressionstring::String, parameters::Associative)
 	expression = parse(expressionstring)
 	expression = MetaProgTools.populateexpression(expression, parameters)
@@ -98,7 +118,11 @@ function evaluatemadsexpression(expressionstring::String, parameters::Associativ
 	return retval
 end
 
-"Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values"
+"""
+Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
+
+$(documentfunction(evaluatemadsexpressions))
+"""
 function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()
@@ -114,7 +138,11 @@ end
 "Convert `@sprintf` macro into `sprintf` function"
 sprintf(args...) = eval(:@sprintf($(args...)))
 
-"Parse distribution from a string"
+"""
+Parse distribution from a string
+
+$(documentfunction(getdistribution))
+"""
 function getdistribution(dist::String, i::String, inputtype::String)
 	distribution = nothing
 	try

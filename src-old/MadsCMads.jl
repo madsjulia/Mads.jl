@@ -1,6 +1,10 @@
 import DataStructures
 
-"Read observations using C Mads library"
+"""
+Read observations using C Mads library
+
+$(documentfunction(readobservations_cmads))
+"""
 function readobservations_cmads(madsdata::Associative)
 	obsids=getobskeys(madsdata)
 	observations = DataStructures.OrderedDict{String,Float64}(zip(obsids, zeros(length(obsids))))
@@ -14,7 +18,11 @@ function readobservations_cmads(madsdata::Associative)
 	return observations
 end
 
-"Call C MADS ins_obs() function from the MADS dynamic library"
+"""
+Call C MADS ins_obs() function from the MADS dynamic library
+
+$(documentfunction(cmadsins_obs))
+"""
 function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename::String)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0

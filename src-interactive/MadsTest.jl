@@ -1,4 +1,8 @@
-"Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)"
+"""
+Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
+
+$(documentfunction(testj))
+"""
 function testj(coverage::Bool=false)
 	orig_dir = pwd()
 	for i in madsmodules
@@ -7,7 +11,11 @@ function testj(coverage::Bool=false)
 	cd(orig_dir)
 end
 
-"Remove Mads coverage files"
+"""
+Remove Mads coverage files
+
+$(documentfunction(cleancoverage))
+"""
 function cleancoverage()
 	orig_dir = pwd()
 	for i in madsmodules
@@ -17,7 +25,11 @@ function cleancoverage()
 	cd(orig_dir)
 end
 
-"Reload Mads modules"
+"""
+Reload Mads modules
+
+$(documentfunction(reload))
+"""
 function reload()
 	for i in madsmodules[end:-1:1]
 		println("* $i reloading ...")
@@ -26,10 +38,11 @@ function reload()
 end
 
 """
-Execute Mads tests (the tests will be in parallel if processors are defined)
+Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)
 
-$(Mads.documentfunction(Mads.test))
-
+$(documentfunction(test;
+                   argtext=Dict("testname"=>"name of the test to execute (module or example"),
+                   keytext=Dict("madstest"=>"test Mads [default=`true`]", "moduletest"=>"test modules [default=`false`]")))
 """
 function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
 	orig_dir = pwd()

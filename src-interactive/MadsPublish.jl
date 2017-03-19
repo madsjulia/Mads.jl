@@ -1,6 +1,10 @@
 @tryimport PkgDev
 
-"Checks of package is available"
+"""
+Checks of package is available
+
+$(documentfunction(ispkgavailable))
+"""
 function ispkgavailable(modulename::String)
 	flag=false
 	try
@@ -12,7 +16,11 @@ function ispkgavailable(modulename::String)
 	return flag
 end
 
-"Lists modules required by a module (Mads by default)"
+"""
+Lists modules required by a module (Mads by default)
+
+$(documentfunction(required))
+"""
 function required(modulename::String="Mads", filtermodule::String="")
 	filename = joinpath(Pkg.dir(modulename), "REQUIRE")
 	if isfile(filename)
@@ -28,7 +36,11 @@ function required(modulename::String="Mads", filtermodule::String="")
 	end
 end
 
-"Lists modules dependents on a module (Mads by default)"
+"""
+Lists modules dependents on a module (Mads by default)
+
+$(documentfunction(dependents))
+"""
 function dependents(modulename::String="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
 	modules = Array{Any}((0, 2))
@@ -42,7 +54,11 @@ function dependents(modulename::String="Mads", filter::Bool=false)
 	return modules;
 end
 
-"Checkout the latest version of the Mads / Julia modules"
+"""
+Checkout the latest version of the Mads / Julia modules
+
+$(documentfunction(checkout))
+"""
 function checkout(modulename::String=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
@@ -87,7 +103,11 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 	end
 end
 
-"Push the latest version of the Mads / Julia modules in the repo"
+"""
+Push the latest version of the Mads / Julia modules in the repo
+
+$(documentfunction(push))
+"""
 function push(modulename::String="")
 	if modulename!=""
 		modulenames = [modulename]
@@ -103,7 +123,11 @@ function push(modulename::String="")
 	end
 end
 
-"Free Mads / Julia modules"
+"""
+Free Mads / Julia modules
+
+$(documentfunction(free))
+"""
 function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
@@ -121,7 +145,11 @@ function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	end
 end
 
-"Commit the latest version of the Mads / Julia modules in the repo"
+"""
+Commit the latest version of the Mads / Julia modules in the repo
+
+$(documentfunction(commit))
+"""
 function commit(commitmsg::String, modulename::String="")
 	if modulename!=""
 		modulenames = [modulename]
@@ -141,7 +169,11 @@ function commit(commitmsg::String, modulename::String="")
 	end
 end
 
-"Status of the Mads modules"
+"""
+Status of the Mads modules
+
+$(documentfunction(status))
+"""
 function status(; git::Bool=true, gitmore::Bool=false)
 	for i in madsmodules
 		Mads.status(i, git=git, gitmore=gitmore)
@@ -190,7 +222,11 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	end
 end
 
-"Tag the Mads modules with a default argument `:patch`"
+"""
+Tag the Mads modules with a default argument `:patch`
+
+$(documentfunction(tag))
+"""
 function tag(sym::Symbol=:patch)
 	for i in madsmodules
 		Mads.tag(i, sym)
@@ -212,7 +248,11 @@ function tag(madsmodule::String, sym::Symbol=:patch)
 	end
 end
 
-"Create web documentation files for Mads functions"
+"""
+Create web documentation files for Mads functions
+
+$(documentfunction(create_documentation))
+"""
 function create_documentation()
 	Documenter.makedocs(root = Pkg.dir("Mads", "docs"), doctest=false, clean=true)
 

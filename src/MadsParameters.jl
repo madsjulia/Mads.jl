@@ -1,7 +1,11 @@
 import Distributions
 import DataStructures
 
-"Is the dictionary containing all the parameters"
+"""
+Is the dictionary containing all the parameters
+
+$(documentfunction(isparam))
+"""
 function isparam(madsdata::Associative, dict::Associative)
 	if haskey(madsdata, "Parameters")
 		par = getparamkeys(madsdata)
@@ -30,6 +34,8 @@ Arguments:
 Returns:
 
 - `paramkeys` : array with the keys of all parameters in the MADS dictionary
+
+$(documentfunction(getparamkeys))
 """
 function getparamkeys(madsdata::Associative; filter::String="")
 	if haskey(madsdata, "Parameters")
@@ -49,6 +55,8 @@ Arguments:
 Returns:
 
 - `paramdict` : dictionary with all parameters and their respective initial values
+
+$(documentfunction(getparamdict))
 """
 function getparamdict(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
@@ -70,6 +78,8 @@ Arguments:
 Returns:
 
 - `sourcekeys` : array with keys of all source parameters in the MADS dictionary
+
+$(documentfunction(getsourcekeys))
 """
 function getsourcekeys(madsdata::Associative)
 	sourcekeys = Array{String}(0)
@@ -124,7 +134,11 @@ for i = 1:length(getparamsnames)
 	eval(q)
 end
 
-"Get an array with `min` values for parameters defined by `paramkeys`"
+"""
+Get an array with `min` values for parameters defined by `paramkeys`
+
+$(documentfunction(getparamsmin))
+"""
 function getparamsmin(madsdata::Associative, paramkeys::Vector)
 	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
@@ -147,13 +161,21 @@ function getparamsmin(madsdata::Associative, paramkeys::Vector)
 	end
 	return paramvalue # returns the parameter values
 end
-"Get an array with `min` values for all the MADS model parameters"
+"""
+Get an array with `min` values for all the MADS model parameters
+
+$(documentfunction(getparamsmin))
+"""
 function getparamsmin(madsdata::Associative)
 	paramkeys = getparamkeys(madsdata)
 	return getparamsmin(madsdata, paramkeys)
 end
 
-"Get an array with `max` values for parameters defined by `paramkeys`"
+"""
+Get an array with `max` values for parameters defined by `paramkeys`
+
+$(documentfunction(getparamsmax))
+"""
 function getparamsmax(madsdata::Associative, paramkeys::Vector)
 	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
@@ -176,13 +198,21 @@ function getparamsmax(madsdata::Associative, paramkeys::Vector)
 	end
 	return paramvalue # returns the parameter values
 end
-"Get an array with `min` values for all the MADS model parameters"
+"""
+Get an array with `min` values for all the MADS model parameters
+
+$(documentfunction(getparamsmax))
+"""
 function getparamsmax(madsdata::Associative)
 	paramkeys = getparamkeys(madsdata)
 	return getparamsmax(madsdata, paramkeys)
 end
 
-"Get an array with `init_min` values for parameters defined by `paramkeys`"
+"""
+Get an array with `init_min` values for parameters defined by `paramkeys`
+
+$(documentfunction(getparamsinit_min))
+"""
 function getparamsinit_min(madsdata::Associative, paramkeys::Vector)
 	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
@@ -217,13 +247,21 @@ function getparamsinit_min(madsdata::Associative, paramkeys::Vector)
 	end
 	return paramvalue # returns the parameter values
 end
-"Get an array with `init_min` values for all the MADS model parameters"
+"""
+Get an array with `init_min` values for all the MADS model parameters
+
+$(documentfunction(getparamsinit_min))
+"""
 function getparamsinit_min(madsdata::Associative)
 	paramkeys = getparamkeys(madsdata)
 	return getparamsinit_min(madsdata, paramkeys)
 end
 
-"Get an array with `init_max` values for parameters defined by `paramkeys`"
+"""
+Get an array with `init_max` values for parameters defined by `paramkeys`
+
+$(documentfunction(getparamsinit_max))
+"""
 function getparamsinit_max(madsdata::Associative, paramkeys::Vector)
 	paramvalue = Array{Float64}(length(paramkeys))
 	for i in 1:length(paramkeys)
@@ -258,7 +296,11 @@ function getparamsinit_max(madsdata::Associative, paramkeys::Vector)
 	end
 	return paramvalue # returns the parameter values
 end
-"Get an array with `init_max` values for all the MADS model parameters"
+"""
+Get an array with `init_max` values for all the MADS model parameters
+
+$(documentfunction(getparamsinit_max))
+"""
 function getparamsinit_max(madsdata::Associative)
 	paramkeys = getparamkeys(madsdata)
 	return getparamsinit_max(madsdata, paramkeys)
@@ -273,6 +315,8 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `paramdict` : dictionary with initial model parameter values
+
+$(documentfunction(setparamsinit!))
 """
 function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	paramkeys = getparamkeys(madsdata)
@@ -281,7 +325,11 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	end
 end
 
-"Get optimizable parameters"
+"""
+Get optimizable parameters
+
+$(documentfunction(getoptparams))
+"""
 function getoptparams(madsdata::Associative)
 	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
 end
@@ -310,7 +358,11 @@ function getoptparams(madsdata::Associative, parameterarray::Array, optparameter
 	end
 end
 
-"Is parameter with key `parameterkey` optimizable?"
+"""
+Is parameter with key `parameterkey` optimizable?
+
+$(documentfunction(isopt))
+"""
 function isopt(madsdata::Associative, parameterkey::String)
 	if !haskey(madsdata["Parameters"][parameterkey], "type") ||
 		haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt"
@@ -320,7 +372,11 @@ function isopt(madsdata::Associative, parameterkey::String)
 	end
 end
 
-"Is parameter with key `parameterkey` log-transformed?"
+"""
+Is parameter with key `parameterkey` log-transformed?
+
+$(documentfunction(islog))
+"""
 function islog(madsdata::Associative, parameterkey::String)
 	if haskey(madsdata["Parameters"][parameterkey], "log") && madsdata["Parameters"][parameterkey]["log"] == true
 		return true
@@ -329,7 +385,11 @@ function islog(madsdata::Associative, parameterkey::String)
 	end
 end
 
-"Set all parameters ON"
+"""
+Set all parameters ON
+
+$(documentfunction(setallparamson!))
+"""
 function setallparamson!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for i in 1:length(paramkeys)
@@ -337,7 +397,11 @@ function setallparamson!(madsdata::Associative; filter::String="")
 	end
 end
 
-"Set all parameters OFF"
+"""
+Set all parameters OFF
+
+$(documentfunction(setallparamsoff!))
+"""
 function setallparamsoff!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for i in 1:length(paramkeys)
@@ -345,12 +409,20 @@ function setallparamsoff!(madsdata::Associative; filter::String="")
 	end
 end
 
-"Set a specific parameter with a key `parameterkey` ON"
+"""
+Set a specific parameter with a key `parameterkey` ON
+
+$(documentfunction(setparamon!))
+"""
 function setparamon!(madsdata::Associative, parameterkey::String)
 	madsdata["Parameters"][parameterkey]["type"] = "opt";
 end
 
-"Set a specific parameter with a key `parameterkey` OFF"
+"""
+Set a specific parameter with a key `parameterkey` OFF
+
+$(documentfunction(setparamoff!))
+"""
 function setparamoff!(madsdata::Associative, parameterkey::String)
 	madsdata["Parameters"][parameterkey]["type"] = nothing
 end
@@ -365,6 +437,8 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `mean` : array with the mean values
 - `stddev` : array with the standard deviation values
+
+$(documentfunction(setparamsdistnormal!))
 """
 function setparamsdistnormal!(madsdata::Associative, mean::Vector, stddev::Vector)
 	paramkeys = getparamkeys(madsdata)
@@ -383,6 +457,8 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `min` : array with the minimum values
 - `max` : array with the maximum values
+
+$(documentfunction(setparamsdistuniform!))
 """
 function setparamsdistuniform!(madsdata::Associative, min::Vector, max::Vector)
 	paramkeys = getparamkeys(madsdata)
@@ -422,7 +498,11 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
-"Show optimizable parameters in the MADS problem dictionary"
+"""
+Show optimizable parameters in the MADS problem dictionary
+
+$(documentfunction(showparameters))
+"""
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
@@ -453,7 +533,11 @@ function showparameters(madsdata::Associative)
 	println("Number of parameters is $(length(p))")
 end
 
-"Show all parameters in the MADS problem dictionary"
+"""
+Show all parameters in the MADS problem dictionary
+
+$(documentfunction(showallparameters))
+"""
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
@@ -506,6 +590,8 @@ Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
+
+$(documentfunction(getparamdistributions))
 """
 function getparamdistributions(madsdata::Associative; init_dist::Bool=false)
 	paramkeys = getoptparamkeys(madsdata)
@@ -546,7 +632,11 @@ function getparamdistributions(madsdata::Associative; init_dist::Bool=false)
 	return distributions
 end
 
-"Check parameter ranges for model parameters"
+"""
+Check parameter ranges for model parameters
+
+$(documentfunction(checkparameterranges))
+"""
 function checkparameterranges(madsdata::Associative)
 	paramkeys = Mads.getparamkeys(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)

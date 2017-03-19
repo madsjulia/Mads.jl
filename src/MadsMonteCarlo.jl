@@ -28,6 +28,8 @@ Returns:
 
 - `mcmcchain` : MCMC chain
 - `llhoodvals` : log likelihoods of the final samples in the chain
+
+$(documentfunction(emceesampling))
 """
 function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor=1.0)
 	if numwalkers <= 1
@@ -82,6 +84,8 @@ Arguments:
 Returns:
 
 - `mcmcchain` :
+
+$(documentfunction(bayessampling))
 """
 function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
 	Mads.setseed(seed)
@@ -118,7 +122,11 @@ function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Int
 	return mcmcchains
 end
 
-"Save MCMC chain in a file"
+"""
+Save MCMC chain in a file
+
+$(documentfunction(savemcmcresults))
+"""
 function savemcmcresults(chain::Array, filename::String)
 	f = open(filename, "w")
 	print(f, "Min: ")
@@ -159,6 +167,8 @@ Returns:
 Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
+
+$(documentfunction(montecarlo))
 """
 function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	paramkeys = getparamkeys(madsdata)
@@ -209,6 +219,8 @@ end
 
 """
 Convert a parameter array to a parameter dictionary of arrays
+
+$(documentfunction(paramarray2dict))
 """
 function paramarray2dict(madsdata::Associative, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
@@ -221,6 +233,8 @@ end
 
 """
 Convert a parameter dictionary of arrays to a parameter array
+
+$(documentfunction(paramdict2array))
 """
 function paramdict2array(dict::Associative)
 	return hcat(map(i->collect(dict[i]), keys(dict))...)

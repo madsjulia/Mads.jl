@@ -118,6 +118,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
+include("MadsSTDOUT.jl")
 include("MadsDocumentation.jl")
 include("MadsTypes.jl")
 include("MadsLog.jl")

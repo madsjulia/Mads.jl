@@ -1,7 +1,11 @@
 import DataStructures
 
 # NLopt is too much of a pain to install at this point
-"Do a calibration using NLopt"
+"""
+Do a calibration using NLopt
+
+$(documentfunction(calibratenlopt))
+"""
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)

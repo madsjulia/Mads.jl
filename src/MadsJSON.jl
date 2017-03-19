@@ -1,7 +1,11 @@
 import JSON
 import DataStructures
 
-"Load a JSON file"
+"""
+Load a JSON file
+
+$(documentfunction(loadjsonfile))
+"""
 function loadjsonfile(filename::String) # load JSON text file
 	sz = filesize(filename)
 	f = open(filename, "r")
@@ -13,14 +17,22 @@ function loadjsonfile(filename::String) # load JSON text file
 	return data
 end
 
-"Dump a JSON file"
+"""
+Dump a JSON file
+
+$(documentfunction(dumpjsonfile))
+"""
 function dumpjsonfile(filename::String, data) # dump JSON text file
 	f = open(filename, "w")
 	JSON.print(f, data)
 	close(f)
 end
 
-"Read MADS model predictions from a JSON file"
+"""
+Read MADS model predictions from a JSON file
+
+$(documentfunction(readjsonpredictions))
+"""
 function readjsonpredictions(filename::String) # read JSON text predictions
 	return loadjsonfile(filename)
 end

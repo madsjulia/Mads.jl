@@ -2,6 +2,8 @@ import Images
 
 """
 Display image file
+
+$(documentfunction(display))
 """
 function display(filename::String)
 	if !isfile(filename)

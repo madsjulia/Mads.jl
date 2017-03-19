@@ -29,6 +29,8 @@ Returns:
 
 - `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
 
+
+$(documentfunction(calibraterandom))
 """
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
@@ -74,6 +76,8 @@ end
 
 """
 Calibrate with random initial guesses in parallel
+
+$(documentfunction(calibraterandom_parallel))
 """
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true)
 	Mads.setseed(seed)
@@ -131,6 +135,8 @@ Returns:
 - `minimumdict` : model parameter dictionary with the optimal values at the minimum
 - `results` : optimization algorithm results (e.g. results.minimizer)
 
+
+$(documentfunction(calibrate))
 """
 function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true)
 	rootname = Mads.getmadsrootname(madsdata)

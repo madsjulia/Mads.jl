@@ -1,7 +1,11 @@
 import Distributions
 import DataStructures
 
-"Is a dictionary containing all the observations"
+"""
+Is a dictionary containing all the observations
+
+$(documentfunction(isobs))
+"""
 function isobs(madsdata::Associative, dict::Associative)
 	if haskey(madsdata, "Observations") || haskey(madsdata, "Wells")
 		obs = getobskeys(madsdata)
@@ -18,12 +22,20 @@ function isobs(madsdata::Associative, dict::Associative)
 	return flag
 end
 
-"Get keys for all observations in the MADS problem dictionary"
+"""
+Get keys for all observations in the MADS problem dictionary
+
+$(documentfunction(getobskeys))
+"""
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
 end
 
-"Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary"
+"""
+Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary
+
+$(documentfunction(gettargetkeys))
+"""
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
@@ -31,7 +43,11 @@ function gettargetkeys(madsdata::Associative)
 	return k[w.>0 | isnan.(t)]
 end
 
-"Get keys for all wells in the MADS problem dictionary"
+"""
+Get keys for all wells in the MADS problem dictionary
+
+$(documentfunction(getwellkeys))
+"""
 function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
 end
@@ -88,7 +104,11 @@ for i = 1:length(getobsnames)
 	eval(q)
 end
 
-"Get observation time"
+"""
+Get observation time
+
+$(documentfunction(gettime))
+"""
 function gettime(o::Associative)
 	if haskey(o, "time")
 		time = o["time"]
@@ -101,7 +121,11 @@ function gettime(o::Associative)
 	return time
 end
 
-"Set observation time"
+"""
+Set observation time
+
+$(documentfunction(settime!))
+"""
 function settime!(o::Associative, time::Number)
 	if haskey(o, "time")
 		o["time"] = time
@@ -112,7 +136,11 @@ function settime!(o::Associative, time::Number)
 	end
 end
 
-"Get observation weight"
+"""
+Get observation weight
+
+$(documentfunction(getweight))
+"""
 function getweight(o::Associative)
 	if haskey(o, "weight")
 		weight = o["weight"]
@@ -125,7 +153,11 @@ function getweight(o::Associative)
 	return weight
 end
 
-"Set observation weight"
+"""
+Set observation weight
+
+$(documentfunction(setweight!))
+"""
 function setweight!(o::Associative, weight::Number)
 	if haskey(o, "weight")
 		o["weight"] = weight
@@ -136,7 +168,11 @@ function setweight!(o::Associative, weight::Number)
 	end
 end
 
-"Get observation target"
+"""
+Get observation target
+
+$(documentfunction(gettarget))
+"""
 function gettarget(o::Associative)
 	if haskey(o, "target")
 		target = o["target"]
@@ -149,7 +185,11 @@ function gettarget(o::Associative)
 	return target
 end
 
-"Set observation target"
+"""
+Set observation target
+
+$(documentfunction(settarget!))
+"""
 function settarget!(o::Associative, target::Number)
 	if haskey(o, "target")
 		o["target"] = target
@@ -181,6 +221,8 @@ Examples:
 Mads.setobstime!(madsdata, "_t")
 Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
+
+$(documentfunction(setobstime!))
 """
 function setobstime!(madsdata::Associative, separator::String="_")
 	obskeys = getobskeys(madsdata)
@@ -205,7 +247,11 @@ function setobstime!(madsdata::Associative, rx::Regex)
 	end
 end
 
-"Set observation weights in the MADS problem dictionary"
+"""
+Set observation weights in the MADS problem dictionary
+
+$(documentfunction(setobsweights!))
+"""
 function setobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -213,7 +259,11 @@ function setobsweights!(madsdata::Associative, value::Number)
 	end
 end
 
-"Modify (multiply) observation weights in the MADS problem dictionary"
+"""
+Modify (multiply) observation weights in the MADS problem dictionary
+
+$(documentfunction(modobsweights!))
+"""
 function modobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -221,7 +271,11 @@ function modobsweights!(madsdata::Associative, value::Number)
 	end
 end
 
-"Inversely proportional observation weights in the MADS problem dictionary"
+"""
+Inversely proportional observation weights in the MADS problem dictionary
+
+$(documentfunction(invobsweights!))
+"""
 function invobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -232,7 +286,11 @@ function invobsweights!(madsdata::Associative, value::Number)
 	end
 end
 
-"Set well weights in the MADS problem dictionary"
+"""
+Set well weights in the MADS problem dictionary
+
+$(documentfunction(setwellweights!))
+"""
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
@@ -243,7 +301,11 @@ function setwellweights!(madsdata::Associative, value::Number)
 	setobsweights!(madsdata, value)
 end
 
-"Modify (multiply) well weights in the MADS problem dictionary"
+"""
+Modify (multiply) well weights in the MADS problem dictionary
+
+$(documentfunction(modwellweights!))
+"""
 function modwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
@@ -254,7 +316,11 @@ function modwellweights!(madsdata::Associative, value::Number)
 	modobsweights!(madsdata, value)
 end
 
-"Inversely proportional observation weights in the MADS problem dictionary"
+"""
+Inversely proportional observation weights in the MADS problem dictionary
+
+$(documentfunction(invwellweights!))
+"""
 function invwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
@@ -268,7 +334,11 @@ function invwellweights!(madsdata::Associative, value::Number)
 	invobsweights!(madsdata, value)
 end
 
-"Show observations in the MADS problem dictionary"
+"""
+Show observations in the MADS problem dictionary
+
+$(documentfunction(showobservations))
+"""
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
 	obskeys = getobskeys(madsdata)
@@ -289,7 +359,11 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-"Create observations in the MADS problem dictionary based on `time` and `observation` vectors"
+"""
+Create observations in the MADS problem dictionary based on `time` and `observation` vectors
+
+$(documentfunction(createobservations!))
+"""
 function createobservations!(madsdata::Associative, time::Vector, observation::Vector; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	@assert length(time) == length(observation)
 	observationsdict = DataStructures.OrderedDict()
@@ -333,7 +407,11 @@ function createobservations!(madsdata::Associative, observations::Associative; l
 	madsdata["Observations"] = observationsdict
 end
 
-"Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary"
+"""
+Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary
+
+$(documentfunction(setobservationtargets!))
+"""
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
 	if haskey(madsdata, "Wells")
@@ -349,7 +427,11 @@ function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	end
 end
 
-"Turn on all the wells in the MADS problem dictionary"
+"""
+Turn on all the wells in the MADS problem dictionary
+
+$(documentfunction(allwellson!))
+"""
 function allwellson!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = true
@@ -357,7 +439,11 @@ function allwellson!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-"Turn on a specific well in the MADS problem dictionary"
+"""
+Turn on a specific well in the MADS problem dictionary
+
+$(documentfunction(wellon!))
+"""
 function wellon!(madsdata::Associative, wellname::String)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -373,7 +459,11 @@ function wellon!(madsdata::Associative, wellname::String)
 	end
 end
 
-"Turn off all the wells in the MADS problem dictionary"
+"""
+Turn off all the wells in the MADS problem dictionary
+
+$(documentfunction(allwellsoff!))
+"""
 function allwellsoff!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
 		madsdata["Wells"][wellkey]["on"] = false
@@ -381,7 +471,11 @@ function allwellsoff!(madsdata::Associative)
 	wells2observations!(madsdata)
 end
 
-"Turn off a specific well in the MADS problem dictionary"
+"""
+Turn off a specific well in the MADS problem dictionary
+
+$(documentfunction(welloff!))
+"""
 function welloff!(madsdata::Associative, wellname::String)
 	error = true
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -397,7 +491,11 @@ function welloff!(madsdata::Associative, wellname::String)
 	end
 end
 
-"Convert `Wells` class to `Observations` class in the MADS problem dictionary"
+"""
+Convert `Wells` class to `Observations` class in the MADS problem dictionary
+
+$(documentfunction(wells2observations!))
+"""
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -425,7 +523,11 @@ function wells2observations!(madsdata::Associative)
 	madsdata["Observations"] = observations
 end
 
-"Get `Wells` class spatial and temporal data"
+"""
+Get `Wells` class spatial and temporal data
+
+$(documentfunction(getwellsdata))
+"""
 function getwellsdata(madsdata::Associative; time::Bool=false)
 	if time
 		a = Array{Float64}(4, 0)

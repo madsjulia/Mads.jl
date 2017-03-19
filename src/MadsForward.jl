@@ -18,6 +18,8 @@ Arguments:
 Returns:
 
 - `obsvalues` : dictionary of model predictions
+
+$(documentfunction(forward))
 """
 function forward(madsdata::Associative; all::Bool=false)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
@@ -125,6 +127,8 @@ Arguments:
 Returns:
 
 - `array3d` : 3D array with model predictions along a 3D grid
+
+$(documentfunction(forwardgrid))
 """
 function forwardgrid(madsdata::Associative)
 	paramvalues = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))

@@ -3,7 +3,11 @@ import JuMP
 import Optim
 @Mads.tryimport Ipopt
 
-"Non-negative Matrix Factorization using NMF"
+"""
+Non-negative Matrix Factorization using NMF
+
+$(documentfunction(NMFm))
+"""
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
@@ -23,7 +27,11 @@ function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, max
 	return Wbest, Hbest, phi_best
 end
 
-"Non-negative Matrix Factorization using JuMP/Ipopt"
+"""
+Non-negative Matrix Factorization using JuMP/Ipopt
+
+$(documentfunction(NMFipopt))
+"""
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
 	Xc = copy(X)
 	weights = ones(size(Xc))
@@ -65,7 +73,11 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 	return Wbest, Hbest, phi_best
 end
 
-"Matrix Factorization via Levenberg Marquardt"
+"""
+Matrix Factorization via Levenberg Marquardt
+
+$(documentfunction(MFlm))
+"""
 function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients

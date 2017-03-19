@@ -2,7 +2,11 @@ import RobustPmap
 import DataStructures
 import Optim
 
-"Compute residuals"
+"""
+Compute residuals
+
+$(documentfunction(residuals))
+"""
 function residuals(madsdata::Associative, results::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
@@ -34,7 +38,11 @@ function residuals(madsdata::Associative)
 	residuals(madsdata, collect(values(resultdict)))
 end
 
-"Compute objective function"
+"""
+Compute objective function
+
+$(documentfunction(of))
+"""
 function of(madsdata::Associative, results::Vector)
 	r = residuals(madsdata, results)
 	sum(r .^ 2)
@@ -47,7 +55,11 @@ function of(madsdata::Associative)
 	of(madsdata, collect(values(resultdict)))
 end
 
-"Compute the sum of squared residuals for observations that match a regular expression"
+"""
+Compute the sum of squared residuals for observations that match a regular expression
+
+$(documentfunction(partialof))
+"""
 function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	obskeys = getobskeys(madsdata)
 	results = Array{Float64}(0)
@@ -64,7 +76,11 @@ function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	return sum(residuals .^ 2)
 end
 
-"Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization"
+"""
+Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
+
+$(documentfunction(makelmfunctions))
+"""
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
@@ -157,7 +173,11 @@ function makelmfunctions(madsdata::Associative)
 	return f_lm, g_lm, o_lm
 end
 
-"Make gradient function needed for local sensitivity analysis"
+"""
+Make gradient function needed for local sensitivity analysis
+
+$(documentfunction(makelocalsafunction))
+"""
 function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
@@ -229,14 +249,22 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	return grad
 end
 
-"Naive Levenberg-Marquardt optimization: get the LM parameter space step"
+"""
+Naive Levenberg-Marquardt optimization: get the LM parameter space step
+
+$(documentfunction(naive_get_deltax))
+"""
 function naive_get_deltax(JpJ::Matrix{Float64}, Jp::Matrix{Float64}, f0::Vector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
 	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
 	return deltax
 end
 
-"Naive Levenberg-Marquardt optimization: perform LM iteration"
+"""
+Naive Levenberg-Marquardt optimization: perform LM iteration
+
+$(documentfunction(naive_lm_iteration))
+"""
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
 	J = g(x0) # get jacobian
 	Jp = J'
@@ -265,6 +293,8 @@ Arguments:
 - `lambda` : initial Levenberg-Marquardt lambda [100]
 - `lambda_mu` : lambda multiplication factor μ [10]
 - `np_lambda` : number of parallel lambda solves
+
+$(documentfunction(naive_levenberg_marquardt))
 """
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
@@ -305,6 +335,8 @@ Arguments:
 - `show_trace` : shows solution trace [default=false]
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
 - `callback` : call back function for debugging
+
+$(documentfunction(levenberg_marquardt))
 """
 function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callback::Function=(best_x, of, lambda)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm

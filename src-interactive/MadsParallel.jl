@@ -7,7 +7,11 @@ if isdefined(:Mads)
 	quietdefault = Mads.quiet
 end
 
-"Get the number of processors"
+"""
+Get the number of processors
+
+$(documentfunction(getprocs))
+"""
 function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
 end
@@ -25,6 +29,8 @@ Arguments:
 
 - `np` : number of processors
 - `nt` : number of threads
+
+$(documentfunction(setprocs))
 """
 function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
@@ -44,7 +50,11 @@ function setprocs(np::Integer)
 	setprocs(np, np)
 end
 
-"Set number of processors needed for each parallel task at each node"
+"""
+Set number of processors needed for each parallel task at each node
+
+$(documentfunction(set_nprocs_per_task))
+"""
 function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
 	global nprocs_per_task = local_nprocs_per_task
 end
@@ -78,6 +88,8 @@ Optional arguments:
 - `mads_servers` : if `true` use MADS servers (LANL only)
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
+
+$(documentfunction(setprocs))
 """
 function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
@@ -188,7 +200,11 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 	return h
 end
 
-"Parse string with node names defined in SLURM"
+"""
+Parse string with node names defined in SLURM
+
+$(documentfunction(parsenodenames))
+"""
 function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 	h = Array{String}(0)
 	ss = split(nodenames, "[")
@@ -215,7 +231,11 @@ function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 	return h
 end
 
-"Disable MADS plotting"
+"""
+Disable MADS plotting
+
+$(documentfunction(noplot))
+"""
 function noplot()
 	if myid() == 1
 		for i in workers()
@@ -233,6 +253,8 @@ Set the working directory (for parallel environments)
 @everywhere Mads.setdir()
 @everywhere Mads.setdir("/home/monty")
 ```
+
+$(documentfunction(setdir))
 """
 function setdir(dir)
 	if isdir(dir)
@@ -246,6 +268,8 @@ end
 
 """
 Run remote command on a series of servers
+
+$(documentfunction(runremote))
 """
 function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	output = Array{String}(0)
@@ -264,6 +288,8 @@ end
 
 """
 Check the number of processors on a series of servers
+
+$(documentfunction(madscores))
 """
 function madscores(nodenames::Array{String,1}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
@@ -271,6 +297,8 @@ end
 
 """
 Check the uptime of a series of servers
+
+$(documentfunction(madsup))
 """
 function madsup(nodenames::Array{String,1}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
@@ -278,6 +306,8 @@ end
 
 """
 Check the load of a series of servers
+
+$(documentfunction(madsload))
 """
 function madsload(nodenames::Array{String,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
@@ -285,6 +315,8 @@ end
 
 """
 Run external command and pipe stdout and stderr
+
+$(documentfunction(runcmd))
 """
 function runcmd(cmd::Cmd, quiet::Bool=quietdefault)
 	cmdin = Pipe()

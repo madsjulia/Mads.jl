@@ -19,6 +19,8 @@ Returns:
 
 - `mcmcchain` : final MCMC chain
 - `llhoodvals` : log likelihoods of the final samples in the chain
+
+$(documentfunction(emcee))
 """
 function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalker::Int, thinning::Int, a=2.)
 	@assert length(size(x0)) == 2
@@ -56,7 +58,11 @@ function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalke
 	return chain, llhoodvals
 end
 
-"Flatten MCMC arrays"
+"""
+Flatten MCMC arrays
+
+$(documentfunction(flattenmcmcarray))
+"""
 function flattenmcmcarray(chain::Array, llhoodvals::Array)
 	numdims, numwalkers, numsteps = size(chain)
 	newchain = Array{Float64}(numdims, numwalkers * numsteps)

@@ -8,6 +8,8 @@ import Measures
 
 """
 Set the default plot format (`SVG` is the default format)
+
+$(documentfunction(setdefaultplotformat))
 """
 function setdefaultplotformat(format::String)
 	if ismatch(r"^PNG|PDF|PS|SVG", uppercase(format))
@@ -31,6 +33,8 @@ Returns:
 
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(setplotfileformat))
 """
 function setplotfileformat(filename::String, format::String)
 	format = uppercase(format)
@@ -66,6 +70,8 @@ Arguments:
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
 - `keyword` : to be added in the filename
+
+$(documentfunction(plotmadsproblem))
 """
 function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", imagefile::Bool=false)
 	rectangles = Array{Float64}(0, 4)
@@ -156,6 +162,8 @@ Arguments:
 - `rx` : regular expression to filter the outputs
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(plotmatches))
 """
 function plotmatches(madsdata::Associative, rx::Regex=r""; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
 	r = forward(madsdata; all=true)
@@ -324,6 +332,8 @@ Arguments:
 - `samples` : matrix with model parameters
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(scatterplotsamples))
 """
 function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::String; format::String="", dot_size::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
@@ -373,6 +383,8 @@ Arguments:
 - `ytitle` : y-axis title
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(plotwellSAresults))
 """
 function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
@@ -482,6 +494,8 @@ Arguments:
 - `keyword` : to be added in the auto-generated filename
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(plotobsSAresults))
 """
 function plotobsSAresults(madsdata::Associative, result::Associative; filter::Union{String,Regex}="", keyword::String="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]")
 	if !haskey(madsdata, "Observations")
@@ -664,6 +678,8 @@ Arguments:
 Dumps:
 
 - A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
+
+$(documentfunction(spaghettiplots))
 """
 function spaghettiplots(madsdata::Associative, number_of_samples::Integer; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
@@ -805,6 +821,8 @@ Returns: `none`
 Dumps:
 
 - Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+
+$(documentfunction(spaghettiplot))
 """
 function spaghettiplot(madsdata::Associative, number_of_samples::Integer; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
@@ -962,6 +980,8 @@ Arguments:
 - `title` : plot title
 - `name` : series name
 - `combined` : `true` by default
+
+$(documentfunction(plotseries))
 """
 function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true)
 	nT = size(X)[1]

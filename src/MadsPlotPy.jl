@@ -19,6 +19,8 @@ Arguments:
 - `title` : plot title
 - `filename` : output file name
 - `format` : output plot format (`png`, `pdf`, etc.)
+
+$(documentfunction(plotgrid))
 """
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	if !haskey(madsdata, "Grid")
