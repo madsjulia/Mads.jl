@@ -5,32 +5,6 @@ import Klara
 import JSON
 import AffineInvariantMCMC
 
-"""
-Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
-
-```
-Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
-Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
-- `numwalkers` : number of walkers (if in parallel this can be the number of available processors)
-- `nsteps` : number of final realizations in the chain
-- `burnin` :  number of initial realizations before the MCMC are recorded
-- `thinning` : removal of any `thinning` realization
-- `seed` : initial random number seed
-- `sigma` : a standard deviation parameter used to initialize the walkers
-
-Returns:
-
-- `mcmcchain` : MCMC chain
-- `llhoodvals` : log likelihoods of the final samples in the chain
-
-$(documentfunction(emceesampling))
-"""
 function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor=1.0)
 	if numwalkers <= 1
 		numwalkers = 2
@@ -53,7 +27,6 @@ function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Intege
 	end
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor)
 end
-
 function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=0, weightfactor=1.0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
@@ -64,29 +37,36 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
-"""
-Bayesian Sampling
+@doc """
+Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
+
+$(documentfunction(emceesampling))
+
+Examples:
 
 ```
-Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
-Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
+Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 ```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `numsequences` : number of sequences executed in parallel
+- `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
+- `numwalkers` : number of walkers (if in parallel this can be the number of available processors)
 - `nsteps` : number of final realizations in the chain
 - `burnin` :  number of initial realizations before the MCMC are recorded
 - `thinning` : removal of any `thinning` realization
 - `seed` : initial random number seed
+- `sigma` : a standard deviation parameter used to initialize the walkers
 
 Returns:
 
-- `mcmcchain` :
+- `mcmcchain` : MCMC chain
+- `llhoodvals` : log likelihoods of the final samples in the chain
 
-$(documentfunction(bayessampling))
-"""
+""" emceesampling
+
 function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
@@ -112,7 +92,6 @@ function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Inte
 	chain = Klara.output(job)
 	return chain
 end
-
 function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
 	if seed != 0
 		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
@@ -121,6 +100,32 @@ function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Int
 	end
 	return mcmcchains
 end
+
+@doc """
+Bayesian Sampling
+
+$(documentfunction(bayessampling))
+
+Examples:
+
+```
+Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
+Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `numsequences` : number of sequences executed in parallel
+- `nsteps` : number of final realizations in the chain
+- `burnin` :  number of initial realizations before the MCMC are recorded
+- `thinning` : removal of any `thinning` realization
+- `seed` : initial random number seed
+
+Returns:
+
+- `mcmcchain` :
+""" bayessampling
 
 """
 Save MCMC chain in a file

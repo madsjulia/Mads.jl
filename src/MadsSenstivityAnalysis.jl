@@ -276,18 +276,6 @@ end
 
 #TODO use this function in all the MADS sampling strategies (for example, SA below)
 #TODO add LHC sampling strategy
-"""
-Get independent sampling of model parameters defined in the MADS problem dictionary
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `numsamples` : number of samples
-- `parameterkey` : model parameter key
-- `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
-
-$(documentfunction(getparamrandom))
-"""
 function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
@@ -321,6 +309,20 @@ function getparamrandom(madsdata::Associative, parameterkey::String; numsamples:
 	end
 	return Void
 end
+
+@doc """
+Get independent sampling of model parameters defined in the MADS problem dictionary
+
+$(documentfunction(getparamrandom))
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `numsamples` : number of samples
+- `parameterkey` : model parameter key
+- `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
+
+""" getparamrandom
 
 """
 Saltelli sensitivity analysis (brute force)

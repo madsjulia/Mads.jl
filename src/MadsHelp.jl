@@ -18,32 +18,12 @@ function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
 
-"""
-List available functions in the MADS modules:
-
-Examples:
-
-```
-Mads.functions()
-Mads.functions(BIGUQ)
-Mads.functions("get")
-Mads.functions(Mads, "get")
-```
-
-Arguments:
-
-- `module` : MADS module
-- `string` : matching string
-
-$(documentfunction(functions))
-"""
 function functions(string::String="")
 	for i in madsmodules
 		eval(Mads, :(@tryimport $(Symbol(i))))
 		functions(Symbol(i), string)
 	end
 end
-
 function functions(m::Union{Symbol, Module}, string::String="")
 	try
 		f = names(eval(m), true)
@@ -66,6 +46,27 @@ function functions(m::Union{Symbol, Module}, string::String="")
 		warn("Module $m not defined!")
 	end
 end
+
+@doc """
+List available functions in the MADS modules:
+
+$(documentfunction(functions))
+
+Examples:
+
+```
+Mads.functions()
+Mads.functions(BIGUQ)
+Mads.functions("get")
+Mads.functions(Mads, "get")
+```
+
+Arguments:
+
+- `module` : MADS module
+- `string` : matching string
+
+""" functions
 
 #=
 #TODO IMPORTANT

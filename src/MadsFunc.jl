@@ -200,11 +200,6 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-"""
-Make Mads reusable function
-
-$(documentfunction(makemadsreusablefunction))
-"""
 function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), getrestart(madsdata), madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
@@ -223,6 +218,12 @@ function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatare
 		return madscommandfunction
 	end
 end
+
+@doc """
+Make Mads reusable function
+
+$(documentfunction(makemadsreusablefunction))
+""" makemadsreusablefunction
 
 """
 Get the directory where Mads restarts will be stored.

@@ -1,23 +1,6 @@
 
 import DataStructures
 
-"""
-Create a new Mads problem where the observation targets are computed based on the model predictions
-
-- `Mads.createmadsproblem(infilename::String, outfilename::String)`
-- `Mads.createmadsproblem(madsdata::Associative, outfilename::String)`
-- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
-- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)`
-
-Arguments:
-
-- `infilename` : input Mads file
-- `outfilename` : output Mads file
-- `madsdata` : MADS problem dictionary
-- `predictions` : dictionary of model predictions
-
-$(documentfunction(createmadsproblem))
-"""
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
@@ -43,18 +26,15 @@ function createmadsproblem(infilename::String, outfilename::String)
 	Mads.dumpyamlfile(outfilename, outyaml)
 	return
 end
-
 function createmadsproblem(madsdata::Associative, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
-
 function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)
 	newmadsdata = createmadsproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end
-
 function createmadsproblem(madsdata::Associative, predictions::Associative)
 	newmadsdata = deepcopy(madsdata)
 	observationsdict = newmadsdata["Observations"]
@@ -71,3 +51,21 @@ function createmadsproblem(madsdata::Associative, predictions::Associative)
 	end
 	return newmadsdata
 end
+
+@doc """
+Create a new Mads problem where the observation targets are computed based on the model predictions
+
+- `Mads.createmadsproblem(infilename::String, outfilename::String)`
+- `Mads.createmadsproblem(madsdata::Associative, outfilename::String)`
+- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
+- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)`
+
+Arguments:
+
+- `infilename` : input Mads file
+- `outfilename` : output Mads file
+- `madsdata` : MADS problem dictionary
+- `predictions` : dictionary of model predictions
+
+$(documentfunction(createmadsproblem))
+""" createmadsproblem

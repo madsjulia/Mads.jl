@@ -144,27 +144,6 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	end
 end
 
-"""
-Plot the matches between model predictions and observations
-
-```
-plotmatches(madsdata; filename="", format="")
-plotmatches(madsdata, param; filename="", format="")
-plotmatches(madsdata, result; filename="", format="")
-plotmatches(madsdata, result, r"NO3"; filename="", format="")
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `param` : dictionary with model parameters
-- `result` : dictionary with model predictions
-- `rx` : regular expression to filter the outputs
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
-
-$(documentfunction(plotmatches))
-"""
 function plotmatches(madsdata::Associative, rx::Regex=r""; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
 	r = forward(madsdata; all=true)
 	if rx != r""
@@ -173,7 +152,6 @@ function plotmatches(madsdata::Associative, rx::Regex=r""; filename::String="", 
 		plotmatches(madsdata, r; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 	end
 end
-
 function plotmatches(madsdata::Associative, result::Associative, rx::Regex; filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
@@ -198,7 +176,6 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; file
 	end
 	plotmatches(newmadsdata, newresult; filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize)
 end
-
 function plotmatches(madsdata::Associative, dict_in::Associative; filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
@@ -323,6 +300,28 @@ function plotmatches(madsdata::Associative, dict_in::Associative; filename::Stri
 	end
 end
 
+@doc """
+Plot the matches between model predictions and observations
+
+$(documentfunction(plotmatches))
+
+```
+plotmatches(madsdata; filename="", format="")
+plotmatches(madsdata, param; filename="", format="")
+plotmatches(madsdata, result; filename="", format="")
+plotmatches(madsdata, result, r"NO3"; filename="", format="")
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `param` : dictionary with model parameters
+- `result` : dictionary with model predictions
+- `rx` : regular expression to filter the outputs
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+""" plotmatches
+
 """
 Create histogram/scatter plots of model parameter samples
 
@@ -371,21 +370,6 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 	end
 end
 
-"""
-Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `result` : sensitivity analysis results
-- `wellname` : well name
-- `xtitle` : x-axis title
-- `ytitle` : y-axis title
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
-
-$(documentfunction(plotwellSAresults))
-"""
 function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
@@ -397,7 +381,6 @@ function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [
 		end
 	end
 end
-
 function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
@@ -482,6 +465,22 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Stri
 		p
 	end
 end
+
+@doc """
+Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
+
+$(documentfunction(plotwellSAresults))
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `result` : sensitivity analysis results
+- `wellname` : well name
+- `xtitle` : x-axis title
+- `ytitle` : y-axis title
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+""" plotwellSAresults
 
 """
 Plot the sensitivity analysis results for the observations
@@ -655,37 +654,10 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 end
 
-"""
-Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
-
-```
-Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `paramdictarray` : parameter dictionary containing the data arrays to be plotted
-- `number_of_samples` : number of samples
-- `keyword` : keyword to be added in the file name used to output the produced plots
-- `format` : output plot format (`png`, `pdf`, etc.)
-- `xtitle` : `x` axis title
-- `ytitle` : `y` axis title
-- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
-- `seed` : initial random seed
-
-Dumps:
-
-- A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
-
-$(documentfunction(spaghettiplots))
-"""
 function spaghettiplots(madsdata::Associative, number_of_samples::Integer; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
-
 function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
@@ -793,42 +765,39 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	end
 end
 
-"""
-Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
+@doc """
+Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
+
+$(documentfunction(spaghettiplots))
 
 ```
-Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplot(madsdata, obsmdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
 ```
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `paramdictarray` : parameter dictionary array containing the data arrays to be plotted
-- `obsdictarray` : observation dictionary array containing the data arrays to be plotted
+- `paramdictarray` : parameter dictionary containing the data arrays to be plotted
 - `number_of_samples` : number of samples
-- `filename` : output file name used to output the produced plots
-- `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
+- `keyword` : keyword to be added in the file name used to output the produced plots
 - `format` : output plot format (`png`, `pdf`, etc.)
 - `xtitle` : `x` axis title
 - `ytitle` : `y` axis title
 - `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
 - `seed` : initial random seed
 
-Returns: `none`
-
 Dumps:
 
-- Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+- A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
 
-$(documentfunction(spaghettiplot))
-"""
+""" spaghettiplots
+
+
 function spaghettiplot(madsdata::Associative, number_of_samples::Integer; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplot(madsdata::Associative, paramvalues; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
-
 function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	Mads.setseed(seed)
 	func = makemadscommandfunction(madsdata)
@@ -866,7 +835,6 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; filename::
 	end
 	spaghettiplot(madsdata::Associative, Y; format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed)
 end
-
 function spaghettiplot(madsdata::Associative, array::Array; filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=0)
 	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
@@ -966,6 +934,39 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 		pl
 	end
 end
+
+@doc """
+Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
+
+$(documentfunction(spaghettiplot))
+
+```
+Mads.spaghettiplot(madsdata, paramdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, obsmdictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `paramdictarray` : parameter dictionary array containing the data arrays to be plotted
+- `obsdictarray` : observation dictionary array containing the data arrays to be plotted
+- `number_of_samples` : number of samples
+- `filename` : output file name used to output the produced plots
+- `keyword` : keyword to be added in the file name used to output the produced plots (if `filename` is not defined)
+- `format` : output plot format (`png`, `pdf`, etc.)
+- `xtitle` : `x` axis title
+- `ytitle` : `y` axis title
+- `obs_plot_dots` : plot observation as dots (`true` [default] or `false`)
+- `seed` : initial random seed
+
+Returns: `none`
+
+Dumps:
+
+- Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+""" spaghettiplot
+
 
 """
 Create plots of data series

@@ -1,27 +1,6 @@
 import PyPlot
 import DataStructures
 
-"""
-Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
-
-```
-plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
-plotgrid(madsdata; addtitle=true, title="", filename="", format="")
-plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `parameters` : dictionary with model parameters
-- `s` : model predictions array
-- `addtitle` : add plot title [true]
-- `title` : plot title
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
-
-$(documentfunction(plotgrid))
-"""
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	if !haskey(madsdata, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
@@ -81,3 +60,25 @@ function plotgrid(madsdata::Associative, parameters::Associative; addtitle::Bool
 	s = forwardgrid(madsdata, parameters)
 	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 end
+
+@doc """
+Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
+
+$(documentfunction(plotgrid))
+
+```
+plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
+plotgrid(madsdata; addtitle=true, title="", filename="", format="")
+plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `parameters` : dictionary with model parameters
+- `s` : model predictions array
+- `addtitle` : add plot title [true]
+- `title` : plot title
+- `filename` : output file name
+- `format` : output plot format (`png`, `pdf`, etc.)
+""" plotgrid

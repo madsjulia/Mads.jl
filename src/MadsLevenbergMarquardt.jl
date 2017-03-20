@@ -2,11 +2,6 @@ import RobustPmap
 import DataStructures
 import Optim
 
-"""
-Compute residuals
-
-$(documentfunction(residuals))
-"""
 function residuals(madsdata::Associative, results::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
@@ -38,11 +33,13 @@ function residuals(madsdata::Associative)
 	residuals(madsdata, collect(values(resultdict)))
 end
 
-"""
-Compute objective function
+@doc """
+Compute residuals
 
-$(documentfunction(of))
-"""
+$(documentfunction(residuals))
+""" residuals
+
+
 function of(madsdata::Associative, results::Vector)
 	r = residuals(madsdata, results)
 	sum(r .^ 2)
@@ -54,6 +51,12 @@ function of(madsdata::Associative)
 	resultdict = Mads.forward(madsdata)
 	of(madsdata, collect(values(resultdict)))
 end
+
+@doc """
+Compute objective function
+
+$(documentfunction(of))
+""" of
 
 """
 Compute the sum of squared residuals for observations that match a regular expression
@@ -315,6 +318,8 @@ end
 """
 Levenberg-Marquardt optimization
 
+$(documentfunction(levenberg_marquardt))
+
 Arguments:
 
 - `f` : forward model function
@@ -336,7 +341,6 @@ Arguments:
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
 - `callback` : call back function for debugging
 
-$(documentfunction(levenberg_marquardt))
 """
 function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callback::Function=(best_x, of, lambda)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm

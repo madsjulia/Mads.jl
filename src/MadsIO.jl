@@ -559,7 +559,10 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 	return convert(DataStructures.OrderedDict{Any,Float64}, results)
 end
 
-"""
+searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
+searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
+
+@doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
 $(documentfunction(searchdir))
@@ -578,39 +581,35 @@ Arguments:
 Returns:
 
 - `filename` : an array with file names matching the pattern in the specified directory
-"""
-searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
-searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
+""" searchdir
 
-"""
-Filter dictionary keys based on a string or regular expression
-
-$(documentfunction(filterkeys))
-"""
 filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
 filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
 
-"""
-Find indexes for dictionary keys based on a string or regular expression
+@doc """
+Filter dictionary keys based on a string or regular expression
 
-$(documentfunction(indexkeys))
-"""
+$(documentfunction(filterkeys))
+""" filterkeys
+
 indexkeys(dict::Associative, key::Regex) = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
 indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
 
-"""
-Get dictionary values for keys based on a string or regular expression
+@doc """
+Find indexes for dictionary keys based on a string or regular expression
 
-$(documentfunction(getdictvalues))
-"""
+$(documentfunction(indexkeys))
+""" indexkeys
+
 getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
 getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
-"""
-Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+@doc """
+Get dictionary values for keys based on a string or regular expression
 
-$(documentfunction(writeparametersviatemplate))
-"""
+$(documentfunction(getdictvalues))
+""" getdictvalues
+
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -645,12 +644,6 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	end
 	close(outfile)
 end
-
-"""
-Write initial parameters (inital if parameter set not provided
-
-$(documentfunction(writeparameters))
-"""
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -664,6 +657,12 @@ function writeparameters(madsdata::Associative, parameters::Associative)
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
 	end
 end
+
+@doc """
+Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+
+$(documentfunction(writeparametersviatemplate))
+""" writeparameters
 
 """
 Convert an instruction line in the Mads instruction file into regular expressions

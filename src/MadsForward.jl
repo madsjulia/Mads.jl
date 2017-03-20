@@ -2,30 +2,10 @@ import ProgressMeter
 import DataStructures
 import JLD
 
-"""
-Perform a forward run using the initial or provided values for the model parameters
-
-- `forward(madsdata)`
-- `forward(madsdata, paramdict)`
-- `forward(madsdata, paramarray)`
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `paramdict` : dictionary of model parameter values
-- `paramarray` : array of model parameter values
-
-Returns:
-
-- `obsvalues` : dictionary of model predictions
-
-$(documentfunction(forward))
-"""
 function forward(madsdata::Associative; all::Bool=false)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forward(madsdata, paramdict; all=all)
 end
-
 function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	if length(paramdict) == 0
 		return forward(madsdata; all=all)
@@ -56,7 +36,6 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
-
 function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	if sizeof(paramarray) == 0
@@ -113,23 +92,26 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	return hcat(r[:]...)'
 end
 
-"""
-Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
+@doc """
+Perform a forward run using the initial or provided values for the model parameters
 
-- `forwardgrid(madsdata)`
-- `forwardgrid(madsdata, paramvalues))`
+- `forward(madsdata)`
+- `forward(madsdata, paramdict)`
+- `forward(madsdata, paramarray)`
 
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `paramvalues` : dictionary of model parameter values
+- `paramdict` : dictionary of model parameter values
+- `paramarray` : array of model parameter values
 
 Returns:
 
-- `array3d` : 3D array with model predictions along a 3D grid
+- `obsvalues` : dictionary of model predictions
 
-$(documentfunction(forwardgrid))
-"""
+$(documentfunction(forward))
+""" forward
+
 function forwardgrid(madsdata::Associative)
 	paramvalues = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	forwardgrid(madsdata, paramvalues)
@@ -192,3 +174,21 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	end
 	return s
 end
+
+@doc """
+Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
+
+- `forwardgrid(madsdata)`
+- `forwardgrid(madsdata, paramvalues))`
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `paramvalues` : dictionary of model parameter values
+
+Returns:
+
+- `array3d` : 3D array with model predictions along a 3D grid
+
+$(documentfunction(forwardgrid))
+""" forwardgrid

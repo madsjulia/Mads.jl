@@ -200,30 +200,6 @@ function settarget!(o::Associative, target::Number)
 	end
 end
 
-"""
-Set observation time based on the observation name in the MADS problem dictionary
-
-Usage:
-
-```
-Mads.setobstime!(madsdata, separator)
-Mads.setobstime!(madsdata, regex)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `separator` : string to separator
-- `regex` : regular expression to match
-
-Examples:
-```
-Mads.setobstime!(madsdata, "_t")
-Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
-```
-
-$(documentfunction(setobstime!))
-"""
 function setobstime!(madsdata::Associative, separator::String="_")
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
@@ -246,6 +222,33 @@ function setobstime!(madsdata::Associative, rx::Regex)
 		end
 	end
 end
+
+@doc """
+Set observation time based on the observation name in the MADS problem dictionary
+
+$(documentfunction(setobstime!))
+
+Usage:
+
+```
+Mads.setobstime!(madsdata, separator)
+Mads.setobstime!(madsdata, regex)
+```
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `separator` : string to separator
+- `regex` : regular expression to match
+
+Examples:
+```
+Mads.setobstime!(madsdata, "_t")
+Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
+```
+
+""" setobstime!
+
 
 """
 Set observation weights in the MADS problem dictionary
@@ -359,11 +362,6 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-"""
-Create observations in the MADS problem dictionary based on `time` and `observation` vectors
-
-$(documentfunction(createobservations!))
-"""
 function createobservations!(madsdata::Associative, time::Vector, observation::Vector; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	@assert length(time) == length(observation)
 	observationsdict = DataStructures.OrderedDict()
@@ -386,7 +384,6 @@ function createobservations!(madsdata::Associative, time::Vector, observation::V
 	end
 	madsdata["Observations"] = observationsdict
 end
-
 function createobservations!(madsdata::Associative, observations::Associative; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	observationsdict = DataStructures.OrderedDict()
 	for k in keys(observations)
@@ -406,6 +403,12 @@ function createobservations!(madsdata::Associative, observations::Associative; l
 	end
 	madsdata["Observations"] = observationsdict
 end
+
+@doc """
+Create observations in the MADS problem dictionary based on `time` and `observation` vectors
+
+$(documentfunction(createobservations!))
+""" createobservations!
 
 """
 Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary

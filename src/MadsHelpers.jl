@@ -126,27 +126,6 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
-"""
-Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
-
-- `Mads.haskeyword(madsdata, keyword)`
-- `Mads.haskeyword(madsdata, class, keyword)`
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
-- `keyword` : dictionary key
-
-Returns: `true` or `false`
-
-Examples:
-
-- `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
-- `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
-
-$(documentfunction(haskeyword))
-"""
 function haskeyword(madsdata::Associative, keyword::String)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
@@ -167,11 +146,28 @@ function haskeyword(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
-"""
-Add a `keyword` in a `class` within the Mads dictionary `madsdata`
+@doc """
+Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(documentfunction(addkeyword!))
-"""
+- `Mads.haskeyword(madsdata, keyword)`
+- `Mads.haskeyword(madsdata, class, keyword)`
+
+Arguments:
+
+- `madsdata` : MADS problem dictionary
+- `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
+- `keyword` : dictionary key
+
+Returns: `true` or `false`
+
+Examples:
+
+- `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
+- `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
+
+$(documentfunction(haskeyword))
+""" haskeyword
+
 function addkeyword!(madsdata::Associative, keyword::String)
 	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
 	return
@@ -190,11 +186,12 @@ function addkeyword!(madsdata::Associative, class::String, keyword::String)
 	end
 end
 
-"""
-Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
+@doc """
+Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(documentfunction(deletekeyword!))
-"""
+$(documentfunction(addkeyword!))
+""" addkeyword!
+
 function deletekeyword!(madsdata::Associative, keyword::String)
 	if haskeyword(madsdata, keyword)
 		deletekeyword!(madsdata, "Problem", keyword)
@@ -213,6 +210,12 @@ function deletekeyword!(madsdata::Associative, class::String, keyword::String)
 		end
 	end
 end
+
+@doc """
+Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
+
+$(documentfunction(deletekeyword!))
+""" deletekeyword!
 
 """
 Get sin-space dx
