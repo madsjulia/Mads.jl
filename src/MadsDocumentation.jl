@@ -78,7 +78,7 @@ function getfunctionkeywords(f::Function)
 	getfunctionkeywords(f, methods(f))
 end
 function getfunctionkeywords(f::Function, m::Base.MethodList, l::Integer=getmethodscount(m))
-	# getfunctionarguments(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
+	# getfunctionkeywords(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
 	mp = Array{Symbol}(0)
 	for i in 1:l
 		kwargs = Array{Symbol}(0)
