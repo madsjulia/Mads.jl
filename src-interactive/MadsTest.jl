@@ -44,7 +44,7 @@ $(documentfunction(test;
                    argtext=Dict("testname"=>"name of the test to execute (module or example"),
                    keytext=Dict("madstest"=>"test Mads [default=`true`]", "moduletest"=>"test modules [default=`false`]")))
 """
-function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
+function test(testname::String=""; madstest::Bool=true)
 	orig_dir = pwd()
 	if testname == ""
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
@@ -55,23 +55,22 @@ function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
 		end
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
-		if isfile(file) && !moduletest
+		if isfile(file)
+			include(file)
+		end
+		file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
+		if isfile(file)
+			println("* $testname testing ...")
 			include(file)
 		else
-			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
-			if isfile(file) && !moduletest
+			eval(Mads, :(@tryimport $(Symbol(testname))))
+			if isdefined(Symbol(testname))
 				println("* $testname testing ...")
-				include(file)
-			else
-				eval(Mads, :(@tryimport $(Symbol(testname))))
-				if isdefined(Symbol(testname))
-					println("* $testname testing ...")
-					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
-					if isfile(file)
-						include(file)
-					else
-						warn("Test $file for module $testname is missing!")
-					end
+				file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
+				if isfile(file)
+					include(file)
+				else
+					warn("Test $file for module $testname is missing!")
 				end
 			end
 		end

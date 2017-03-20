@@ -37,7 +37,7 @@ import SVR
 "Try to import a module"
 macro tryimport(s::Symbol)
 	importq = string(:(import $s))
-	warnstring = string(s, " is not available")
+	warnstring = string("Module ", s, " is not available")
 	q = quote
 		try
 			eval(parse($importq))

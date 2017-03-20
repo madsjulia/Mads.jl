@@ -61,7 +61,7 @@ function getfunctionarguments(f::Function, m::Vector{String}, l::Integer=length(
 		if typeof(r) != Void && length(r.captures) > 1
 			fargs = strip.(split(r.captures[2], ", "))
 			for j in 1:length(fargs)
-				if !contains(string(fargs[j]), "...")
+				if !contains(string(fargs[j]), "...") && fargs[j] != ""
 					push!(mp, fargs[j])
 				end
 			end
@@ -85,7 +85,7 @@ function getfunctionkeywords(f::Function, m::Vector{String}, l::Integer=length(m
 		if typeof(r) != Void != Void && length(r.captures) > 2
 			kwargs = strip.(split(r.captures[2], ", "))
 			for j in 1:length(kwargs)
-				if !contains(string(kwargs[j]), "...")
+				if !contains(string(kwargs[j]), "...") && kwargs[j] != ""
 					push!(mp, kwargs[j])
 				end
 			end
