@@ -95,7 +95,6 @@ wells
 *.a
 *.so
 *.zip
-*.jld
 *.orig
 # LINUX files
 .nfs*

@@ -839,7 +839,7 @@ function symlinkdirfiles(dirsource::String, dirtarget::String)
 		if !isdir(f)
 			symlinkdir(f, dirtarget)
 		else
-			mkdir(joinpath(dirtarget, f))
+			Base.mkdir(joinpath(dirtarget, f))
 			symlinkdirfiles(f, joinpath(dirtarget, f))
 		end
 	end
@@ -923,9 +923,7 @@ function createtempdir(tempdirname::String)
 	while trying
 		try
 			attempt += 1
-			if !isdir(tempdirname)
-				mkdir(tempdirname)
-			end
+			Mads.mkdir(tempdirname)
 			Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 			trying = false
 		catch errmsg
@@ -961,5 +959,11 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 				trying = false
 			end
 		end
+	end
+end
+
+function mkdir(dirname::String)
+	if !isdir(dirname)
+		Base.mkdir(dirname)
 	end
 end

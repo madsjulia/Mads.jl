@@ -2,9 +2,7 @@ import Mads
 import Gadfly
 md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
-if !isdir("calibration_results")
-	mkdir("calibration_results")
-end
+Mads.mkdir("calibration_results")
 
 n = 100
 info("Calibration using $n random initial guesses for model parameters")

@@ -2,9 +2,7 @@ import Mads
 import Gadfly
 md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
-if !isdir("bayes_results")
-	mkdir("bayes_results")
-end
+Mads.mkdir("bayes_results")
 
 info("Bayesian analysis with different initial parameter sets and observation weights (standard deviation errors)")
 info("Bayesian analysis for the initial parameter guesses:")

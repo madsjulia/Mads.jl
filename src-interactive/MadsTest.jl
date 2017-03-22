@@ -56,24 +56,26 @@ function test(testname::String=""; madstest::Bool=true)
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
 		if isfile(file)
-			include(file)
-		end
-		file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
-		if isfile(file)
-			println("* $testname testing ...")
+            println("* $testname testing ...")
 			include(file)
 		else
-			eval(Mads, :(@tryimport $(Symbol(testname))))
-			if isdefined(Symbol(testname))
-				println("* $testname testing ...")
-				file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
-				if isfile(file)
-					include(file)
-				else
-					warn("Test $file for module $testname is missing!")
-				end
-			end
-		end
+    		file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
+    		if isfile(file)
+    			println("* $testname testing ...")
+    			include(file)
+    		else
+    			eval(Mads, :(@tryimport $(Symbol(testname))))
+    			if isdefined(Symbol(testname))
+    				println("* $testname testing ...")
+    				file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
+    				if isfile(file)
+    					include(file)
+    				else
+    					warn("Test $file for module $testname is missing!")
+    				end
+    			end
+    		end
+        end
 	end
 	cd(orig_dir)
 end

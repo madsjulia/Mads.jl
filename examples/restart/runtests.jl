@@ -30,15 +30,18 @@ end
 ReusableFunctions.quieton()
 Mads.madsinfo("Restarting internal calibration problem ...")
 ReusableFunctions.resetrestarts()
+
 Mads.rmdir(joinpath(workdir, "w01_restart"))
 md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
 Mads.madsinfo("... no restart ...")
 no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
+
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 0
 md["Restart"] = true
 Mads.madsinfo("... create restart ...")
 create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
+
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 0
 Mads.madsinfo("... use restart ...")
@@ -49,9 +52,11 @@ use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2
 
 # @show ReusableFunctions.restarts
 Mads.localsa(md, imagefiles=false, datafiles=false)
+
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 8
 Mads.localsa(md, imagefiles=false, datafiles=false)
+
 # @show ReusableFunctions.restarts
 @Base.Test.test ReusableFunctions.restarts == 9
 Mads.savemadsfile(md)

@@ -2,9 +2,7 @@ import Mads
 import Gadfly
 md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
-if !isdir("bayes_results")
-	mkdir("bayes_results")
-end
+Mads.mkdir("bayes_results")
 
 Mads.setobsweights!(md, 10)
 mcmcchain = Mads.bayessampling(md; nsteps=1000000, burnin=1000, thinning=1000, seed=2016)

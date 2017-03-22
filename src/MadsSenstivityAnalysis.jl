@@ -486,9 +486,7 @@ end
 
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
 	if restartdir != ""
-		if !isdir(restartdir)
-			mkdir(restartdir)
-		end
+		Mads.mkdir(restartdir)
 		JLD.save(joinpath(restartdir, string(matname, "_", myid(), ".jld")), "mat", evalmat)
 	end
 	return nothing
@@ -550,8 +548,10 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		return result
 	end
 	yA = Array{Float64}(N, length(obskeys))
-	if parallel
-		restartdir = getrestartdir(madsdata)
+    if restartdir == ""
+        restartdir = getrestartdir(madsdata)
+    end
+ 	if parallel
 		Avecs = Array{Array{Float64, 1}}(size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])

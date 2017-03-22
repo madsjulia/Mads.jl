@@ -7,9 +7,7 @@ end
 
 # md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
-if !isdir("infogap_results")
-	mkdir("infogap_results")
-end
+Mads.mkdir("infogap_results")
 
 info("Information Gap analysis")
 

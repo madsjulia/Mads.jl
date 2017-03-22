@@ -8,9 +8,7 @@ problem = split(Mads.getmadsrootname(md),"-")[2]
 
 info("Problem: $(problem)")
 
-if !isdir("uncertainty_results")
-	mkdir("uncertainty_results")
-end
+Mads.mkdir("uncertainty_results")
 
 info("Local uncertainty analysis")
 
