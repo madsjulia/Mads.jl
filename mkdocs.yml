@@ -59,5 +59,9 @@ extra_javascript:
 #  - assets/mathjaxhelper.js
 
 extra:
+  palette:
+    primary: 'orange'
+    accent: 'teal'
+  logo: 'logo/mads_black_swan_logo_big_text_new_3inch.png'
   author:
     github: madsjulia
