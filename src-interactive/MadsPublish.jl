@@ -222,11 +222,6 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	end
 end
 
-"""
-Tag the Mads modules with a default argument `:patch`
-
-$(documentfunction(tag))
-"""
 function tag(sym::Symbol=:patch)
 	for i in madsmodules
 		Mads.tag(i, sym)
@@ -247,6 +242,12 @@ function tag(madsmodule::String, sym::Symbol=:patch)
 		warn("$madsmodule cannot be tagged!")
 	end
 end
+
+@doc """
+Tag the Mads modules with a default argument `:patch`
+
+$(documentfunction(tag))
+""" tag
 
 """
 Create web documentation files for Mads functions

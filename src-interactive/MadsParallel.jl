@@ -2,9 +2,29 @@ if !isdefined(:madsservers)
 	madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 end
 
+if !isdefined(:documentfunction)
+	d = dirname(@__FILE__)
+	include(joinpath(d, "..", "src", "MadsSTDOUT.jl"))
+	include(joinpath(d, "..", "src", "MadsDocumentation.jl"))
+end
+
+if !isdefined(:sprintf)
+	"Convert `@sprintf` macro into `sprintf` function"
+	sprintf(args...) = eval(:@sprintf($(args...)))
+end
+
 quietdefault = true
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
+end
+
+"""
+Set number of processors needed for each parallel task at each node
+
+$(documentfunction(set_nprocs_per_task))
+"""
+function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
+	global nprocs_per_task = local_nprocs_per_task
 end
 
 """
@@ -16,22 +36,6 @@ function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
 end
 
-"""
-Set the number of processors to `np` and the number of threads to `nt`
-
-Usage:
-```
-Mads.setprocs(4)
-Mads.setprocs(4, 8)
-```
-
-Arguments:
-
-- `np` : number of processors
-- `nt` : number of threads
-
-$(documentfunction(setprocs))
-"""
 function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
 	nt = nt < 1 ? 1 : nt
@@ -50,47 +54,6 @@ function setprocs(np::Integer)
 	setprocs(np, np)
 end
 
-"""
-Set number of processors needed for each parallel task at each node
-
-$(documentfunction(set_nprocs_per_task))
-"""
-function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
-	global nprocs_per_task = local_nprocs_per_task
-end
-
-if !isdefined(:sprintf)
-"Convert `@sprintf` macro into `sprintf` function"
-sprintf(args...) = eval(:@sprintf($(args...)))
-end
-
-"""
-Set the available processors based on environmental variables. Supports SLURM only at the moment.
-
-Usage:
-
-```
-Mads.setprocs()
-Mads.setprocs(ntasks_per_node=4)
-Mads.setprocs(ntasks_per_node=32, mads_servers=true)
-Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
-Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
-Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
-```
-
-Optional arguments:
-
-- `ntasks_per_node` : number of parallel tasks per
-- `nprocs_per_task` : number of processors needed for each parallel task at each node
-- `nodenames` : array with names of machines/nodes to be invoked
-- `dir` : common directory shared by all the jobs
-- `exename` : location of the julia executable (the same version of julia is needed on all the workers)
-- `mads_servers` : if `true` use MADS servers (LANL only)
-- `quiet` : suppress output [default `true`]
-- `test` : test the servers and connect to each one ones at a time [default `false`]
-
-$(documentfunction(setprocs))
-"""
 function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array{String}(0)
@@ -200,6 +163,42 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 	return h
 end
 
+@doc """
+Set the available processors based on environmental variables. Supports SLURM only at the moment.
+
+Usage:
+
+```julia
+Mads.setprocs()
+Mads.setprocs(4)
+Mads.setprocs(4, 8)
+Mads.setprocs(ntasks_per_node=4)
+Mads.setprocs(ntasks_per_node=32, mads_servers=true)
+Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
+Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
+Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
+```
+
+Arguments:
+
+- `np` : number of processors
+- `nt` : number of threads
+
+
+Optional arguments:
+
+- `ntasks_per_node` : number of parallel tasks per
+- `nprocs_per_task` : number of processors needed for each parallel task at each node
+- `nodenames` : array with names of machines/nodes to be invoked
+- `dir` : common directory shared by all the jobs
+- `exename` : location of the julia executable (the same version of julia is needed on all the workers)
+- `mads_servers` : if `true` use MADS servers (LANL only)
+- `quiet` : suppress output [default `true`]
+- `test` : test the servers and connect to each one ones at a time [default `false`]
+
+$(documentfunction(setprocs))
+""" setprocs
+
 """
 Parse string with node names defined in SLURM
 
@@ -246,16 +245,6 @@ function noplot()
 	end
 end
 
-"""
-Set the working directory (for parallel environments)
-
-```
-@everywhere Mads.setdir()
-@everywhere Mads.setdir("/home/monty")
-```
-
-$(documentfunction(setdir))
-"""
 function setdir(dir)
 	if isdir(dir)
 		cd(dir)
@@ -265,6 +254,19 @@ function setdir()
 	dir = remotecall_fetch(()->pwd(), 1)
 	setdir(dir)
 end
+
+@doc """
+Set the working directory (for parallel environments)
+
+Usage:
+
+```
+@everywhere Mads.setdir()
+@everywhere Mads.setdir("/home/monty")
+``` 
+
+$(documentfunction(setdir))
+""" setdir
 
 """
 Run remote command on a series of servers

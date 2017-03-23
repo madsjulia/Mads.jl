@@ -5,7 +5,7 @@ function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict(
 	stdoutcaptureon()
 	println("**$(f)**\n")
 	m = methods(f)
-	ms = string.(collect(m.ms))
+	ms = convert(Array{String, 1}, strip.(split(string(m.mt), "\n"))[2:end])
 	nm = length(ms)
 	if nm == 0
 		println("No methods\n")
@@ -57,7 +57,10 @@ end
 function getfunctionarguments(f::Function, m::Vector{String}, l::Integer=length(m))
 	mp = Array{Symbol}(0)
 	for i in 1:l
-		r = match(r"(.*)\((.*)\)", m[i])
+		r = match(r"(.*)\(([^;]*);(.*)\)", m[i])
+		if typeof(r) == Void
+			r = match(r"(.*)\((.*)\)", m[i])
+		end
 		if typeof(r) != Void && length(r.captures) > 1
 			fargs = strip.(split(r.captures[2], ", "))
 			for j in 1:length(fargs)
@@ -81,9 +84,9 @@ function getfunctionkeywords(f::Function, m::Vector{String}, l::Integer=length(m
 	# getfunctionkeywords(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
 	mp = Array{Symbol}(0)
 	for i in 1:l
-		r = match(r"(.*)\((.*);(.*)\)", m[i])
-		if typeof(r) != Void != Void && length(r.captures) > 2
-			kwargs = strip.(split(r.captures[2], ", "))
+		r = match(r"(.*)\(([^;]*);(.*)\)", m[i])
+		if typeof(r) != Void && length(r.captures) > 2
+			kwargs = strip.(split(r.captures[3], ", "))
 			for j in 1:length(kwargs)
 				if !contains(string(kwargs[j]), "...") && kwargs[j] != ""
 					push!(mp, kwargs[j])
