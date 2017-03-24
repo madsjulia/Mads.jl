@@ -1,6 +1,3 @@
-"""
-Create function document
-"""
 function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict())
 	stdoutcaptureon()
 	println("**$(f)**\n")
@@ -47,9 +44,6 @@ function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict(
 	stdoutcaptureoff()
 end
 
-"""
-Get function arguments
-"""
 function getfunctionarguments(f::Function)
 	m = methods(f)
 	getfunctionarguments(f, string.(collect(m.ms)))
@@ -73,9 +67,6 @@ function getfunctionarguments(f::Function, m::Vector{String}, l::Integer=length(
 	return sort(unique(mp))
 end
 
-"""
-Get function keywords
-"""
 function getfunctionkeywords(f::Function)
 	m = methods(f)
 	getfunctionkeywords(f, string.(collect(m.ms)))
@@ -96,6 +87,24 @@ function getfunctionkeywords(f::Function, m::Vector{String}, l::Integer=length(m
 	end
 	return sort(unique(mp))
 end
+
+@doc """
+Create function documentation
+
+$(documentfunction(documentfunction))
+""" documentfunction
+
+@doc """
+Get function arguments
+
+$(documentfunction(getfunctionarguments))
+""" getfunctionarguments
+
+@doc """
+Get function keywords
+
+$(documentfunction(getfunctionkeywords))
+""" getfunctionkeywords
 
 """
 Get function arguments
