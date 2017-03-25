@@ -24,12 +24,13 @@ mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters
 Mads.forward(md, mcmcchain.value)
 if isdefined(:Gadfly)
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
+	Mads.rmfile(rootname * "-test-bayes-results.svg")
 	Mads.spaghettiplots(md, mcmcvalues, keyword="", obs_plot_dots=false)
 	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
 	Mads.spaghettiplots(md, 3, keyword="test")
 	Mads.spaghettiplot(md, 3, keyword="test")
 	s = splitdir(rootname)
-    for f in Mads.searchdir(Regex(string(s[2], "\\.*", "-test-", "\\.*", ".svg")), path=s[1])
-        Mads.rmfile(f, path=s[1])
-    end
+	for f in Mads.searchdir(Regex(string(s[2], "-", "\.*", "spaghetti.svg")), path=s[1])
+		Mads.rmfile(f, path=s[1])
+	end
 end

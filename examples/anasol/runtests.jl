@@ -30,7 +30,11 @@ if isdefined(:Gadfly)
     Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
 	Mads.plotmatches(md, fp)
 	Mads.plotmatches(md, fp, r"w1a")
+	Mads.rmfile(joinpath(workdir, "w01short-match-w1a.svg"))
+	Mads.rmfile(joinpath(workdir, "w01short-match.svg"))
     Mads.spaghettiplots(md, 2)
+    Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
+    Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
 end
 
 Mads.forwardgrid(md)

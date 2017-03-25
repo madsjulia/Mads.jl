@@ -18,6 +18,9 @@ f = Mads.forward(md, pdict)
 if isdefined(:Gadfly)
     Mads.spaghettiplots(md, pdict)
     Mads.spaghettiplot(md, f)
+    Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
+    Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
+    Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
 end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
