@@ -158,7 +158,7 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 Arguments:
 
 - `madsdata` : Mads problem dictionary
-- `parameters` : Dictinary with parameters (optional)
+- `parameters` : Dictionary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
 - `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file

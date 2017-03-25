@@ -5,7 +5,7 @@ import Klara
 import JSON
 import AffineInvariantMCMC
 
-function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor=1.0)
+function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -27,7 +27,7 @@ function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Intege
 	end
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor)
 end
-function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=0, weightfactor=1.0)
+function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=0, weightfactor::Number=1.0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
