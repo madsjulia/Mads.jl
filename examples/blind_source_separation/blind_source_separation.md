@@ -38,7 +38,7 @@ We want to find the original unknown signals (sources) based on the observed mix
 BSS method in MADS allow us to do this.
 From the mixture at the 4 monitoring locations (observation points), we can reconstruct (unmix) original signals (sources) almost perfectly:
 
-![](sig_unmixed_observations_nlopt.svg)
+![](sig_unmixed_signals_ipopt.svg)
 
 ### Sources generated using sine functions and random noise representing a disturbance of normal pace of life
 
@@ -52,7 +52,7 @@ From the mixture at the 4 monitoring locations (observation points), we can reco
 
 #### Reconstructed (unmixed) original signals based on the observed data
 
-![](disturbance_unmixed_observations_nlopt.svg)
+![](disturbance_unmixed_signals_ipopt.svg)
 
 ### Sources generated using sine functions
 
@@ -66,7 +66,7 @@ From the mixture at the 4 monitoring locations (observation points), we can reco
 
 #### Reconstructed (unmixed) original signals based on the observed data
 
-![](sin_unmixed_observations_nlopt.svg)
+![](sin_unmixed_signals_ipopt.svg)
 
 ### Sources generated using random noise
 
@@ -80,4 +80,4 @@ From the mixture at the 4 monitoring locations (observation points), we can reco
 
 #### Reconstructed (unmixed) original signals based on the observed data
 
-![](rand_unmixed_observations_nlopt.svg)
+![](rand_unmixed_signals_ipopt.svg)
