@@ -548,10 +548,10 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		return result
 	end
 	yA = Array{Float64}(N, length(obskeys))
-    if restartdir == ""
-        restartdir = getrestartdir(madsdata)
-    end
- 	if parallel
+	if restartdir == ""
+		restartdir = getrestartdir(madsdata)
+	end
+	if parallel
 		Avecs = Array{Array{Float64, 1}}(size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])

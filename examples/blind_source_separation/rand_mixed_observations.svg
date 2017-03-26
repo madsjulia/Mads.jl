@@ -190,9 +190,6 @@
   </g>
 </g>
 <defs>
-  <clipPath id="img-edb40650-17">
-  <path d="M14.84,112.21 L 147.4 112.21 147.4 133.12 14.84 133.12" />
-</clipPath>
   <clipPath id="img-edb40650-30">
   <path d="M14.84,61.41 L 147.4 61.41 147.4 82.32 14.84 82.32" />
 </clipPath>
@@ -201,6 +198,9 @@
 </clipPath>
   <clipPath id="img-edb40650-4">
   <path d="M14.84,163.01 L 147.4 163.01 147.4 183.91 14.84 183.91" />
+</clipPath>
+  <clipPath id="img-edb40650-17">
+  <path d="M14.84,112.21 L 147.4 112.21 147.4 133.12 14.84 133.12" />
 </clipPath>
 </defs>
 </svg>

@@ -143,14 +143,14 @@
   </g>
 </g>
 <defs>
+  <clipPath id="img-383fbaf4-17">
+  <path d="M18.86,61.41 L 147.4 61.41 147.4 82.31 18.86 82.31" />
+</clipPath>
   <clipPath id="img-383fbaf4-30">
   <path d="M17.18,10.61 L 147.4 10.61 147.4 31.51 17.18 31.51" />
 </clipPath>
   <clipPath id="img-383fbaf4-4">
   <path d="M17.18,112.21 L 147.4 112.21 147.4 133.11 17.18 133.11" />
-</clipPath>
-  <clipPath id="img-383fbaf4-17">
-  <path d="M18.86,61.41 L 147.4 61.41 147.4 82.31 18.86 82.31" />
 </clipPath>
 </defs>
 </svg>

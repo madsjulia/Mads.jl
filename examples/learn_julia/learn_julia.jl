@@ -97,7 +97,7 @@ some_var # => 5
 try
     some_other_var # => ERROR: some_other_var not defined
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # Variable names start with a letter.
@@ -168,7 +168,7 @@ try
     a[0] # => ERROR: BoundsError() in getindex at array.jl:270
     a[end+1] # => ERROR: BoundsError() in getindex at array.jl:270
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # Errors list the line and file they came from, even if it's in the standard
@@ -202,7 +202,7 @@ tup[1] # => 1
 try:
     tup[1] = 3 # => ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # Many list functions also work on tuples
@@ -254,7 +254,7 @@ haskey(filled_dict, 1) # => false
 try
     filled_dict["four"] # => ERROR: key not found: four in getindex at dict.jl:489
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # Use the get method to avoid that error by providing a default value
@@ -407,7 +407,7 @@ try
     defaults('h') # => ERROR: no method defaults(Char,)
     defaults() # => ERROR: no methods defaults()
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # You can define functions that take keyword arguments
@@ -596,7 +596,7 @@ pet_cat(Lion("42")) # => prints "The cat says 42"
 try
     pet_cat(tigger) # => ERROR: no method pet_cat(Tiger,)
 catch e
-    println(e)
+    println(e.msg)
 end
 
 # In OO languages, single dispatch is common;

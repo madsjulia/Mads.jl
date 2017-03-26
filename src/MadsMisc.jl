@@ -88,7 +88,7 @@ function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log
 		predictions = DataStructures.OrderedDict()
 		try
 			predictions = f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
-		catch DomainError #TODO fix this so that we don't call f if the prior likelihood is zero...this is a dirty hack
+		catch e
 			return -Inf
 		end
 		loglikelihood(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
@@ -147,7 +147,8 @@ function getdistribution(dist::String, i::String, inputtype::String)
 	distribution = nothing
 	try
 		distribution = Distributions.eval(parse(dist))
-	catch
+	catch e
+		println(e.msg)
 		madserror("""Something is wrong with $inputtype '$i' distribution (dist: '$(dist)')""")
 	end
 	return distribution

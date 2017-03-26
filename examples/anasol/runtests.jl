@@ -18,14 +18,14 @@ if isdefined(:Gadfly)
 	fp = Mads.forward(md; all=true)
 	Mads.plotmadsproblem(md, keyword="test")
 	Mads.plotmatches(md)
-    Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
+	Mads.plotmatches(md, Mads.getparamdict(md); separate_files=true)
 	Mads.plotmatches(md, fp)
 	Mads.plotmatches(md, fp, r"w1a")
 	Mads.rmfile(joinpath(workdir, "w01short-match-w1a.svg"))
 	Mads.rmfile(joinpath(workdir, "w01short-match.svg"))
-    Mads.spaghettiplots(md, 2)
-    Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
-    Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
+	Mads.spaghettiplots(md, 2)
+	Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
 end
 
 Mads.forwardgrid(md)
@@ -89,9 +89,9 @@ Mads.computemass("w01lambda", time=50, path=workdir)
 Mads.rmdir(joinpath(workdir, "mass_reduced.svg"))
 
 if Mads.create_tests
-    d = joinpath(workdir, "test_results")
-    Mads.mkdir(d)
-    
+	d = joinpath(workdir, "test_results")
+	Mads.mkdir(d)
+	
 	JLD.save(joinpath(d, "goodresults.jld"), "forward_preds", forward_preds)
 	JLD.save(joinpath(d, "forward_results.jld"), "forward_results", forward_results)
 	JLD.save(joinpath(d, "paramrandom_true.jld"), "paramrandom_true", paramrandom_true)

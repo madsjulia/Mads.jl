@@ -30,9 +30,9 @@ Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 
 if isdefined(:Gadfly)
-    Mads.setobstime!(md, "o")
-    Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
-    Mads.rmfile("internal-linearmodel+template-match.svg")
+	Mads.setobstime!(md, "o")
+	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
+	Mads.rmfile("internal-linearmodel+template-match.svg")
 end
 
 p = Mads.getparamdict(md)

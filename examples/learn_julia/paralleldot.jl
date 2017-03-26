@@ -16,26 +16,26 @@ Z = convert(SharedArray, z)
 Xt = X'
 
 @everywhere function dotcol(a, B, j)
-    length(a) == size(B,1) || throw(DimensionMismatch("a and B must have the same number of rows"))
-    s = 0.0
-    @inbounds @simd for i = 1:length(a)
-        s += a[i]*B[i,j]
-    end
-    s
+	length(a) == size(B,1) || throw(DimensionMismatch("a and B must have the same number of rows"))
+	s = 0.0
+	@inbounds @simd for i = 1:length(a)
+		s += a[i]*B[i,j]
+	end
+	s
 end
 
 function run1!(Z, Y, Xt)
-    for j = 1:size(Xt, 2)
-        Z[j] = dotcol(Y, Xt, j)
-    end
-    Z
+	for j = 1:size(Xt, 2)
+		Z[j] = dotcol(Y, Xt, j)
+	end
+	Z
 end
 
 function runp!(Z, Y, Xt)
-    @sync @parallel for j = 1:size(Xt, 2)
-        Z[j] = dotcol(Y, Xt, j)
-    end
-    Z
+	@sync @parallel for j = 1:size(Xt, 2)
+		Z[j] = dotcol(Y, Xt, j)
+	end
+	Z
 end
 
 run1!(Z, Y, Xt);

@@ -65,7 +65,7 @@ Mads.plotseries(X, "sig_mixed_observations.svg", title="Mixed observations", nam
 # Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk, retries=1)
 # Mads.plotseries(Wnmf, "sig_unmixed_signals_nmf.svg", title="Unmixed signals", name="Signal", combined=true)
 # Mads.plotseries(Wnmf, "sig_unmixed_signals_nmf.png", title="Unmixed signals", name="Signal", combined=true)
-Mads.plotseries(Wnmf * Hnmf, "sig_reproduced_observations_nmf.svg", title="Reproduced observations", name="Signal", combined=true)
+# Mads.plotseries(Wnmf * Hnmf, "sig_reproduced_observations_nmf.svg", title="Reproduced observations", name="Signal", combined=true)
 info("Reconstruction of sin/rand signals using JuMP/NLopt ...")
 Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
 Mads.plotseries(Wipopt, "sig_unmixed_signals_ipopt.svg", title="Unmixed signals", name="Signal", combined=true)
@@ -82,11 +82,11 @@ s3[1:50] = 0
 s3[70:end] = 0
 S = [s1 s2 s3]
 Mads.plotseries(S, "disturbance_original_signals.svg", title="Original signals", name="Signal", combined=true)
-# Mads.plotseries(S, "disturbance_original_signals.png", title="Original signals", name="Signal", combined=true)
+Mads.plotseries(S, "disturbance_original_signals.png", title="Original signals", name="Signal", combined=true)
 H = [[1,1,1] [0,2,1] [0,2,1] [1,0,2] [2,0,1] [1,2,0] [2,1,0]]
 X = S * H
 Mads.plotseries(X, "disturbance_mixed_observations.svg", title="Mixed observations", name="Observation", combined=true)
-# Mads.plotseries(X, "disturbance_mixed_observations.png", title="Mixed observations", name="Signal", combined=true)
+Mads.plotseries(X, "disturbance_mixed_observations.png", title="Mixed observations", name="Signal", combined=true)
 # info("Reconstruction of sin/rand signals using NMF ...")
 # Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk, retries=1)
 # Mads.plotseries(Wnmf, "disturbance_unmixed_signals_nmf.svg", title="Unmixed signals", name="Signal", combined=true)
@@ -95,8 +95,9 @@ Mads.plotseries(X, "disturbance_mixed_observations.svg", title="Mixed observatio
 info("Reconstruction of sin/rand signals using JuMP/NLopt ...")
 Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
 Mads.plotseries(Wipopt, "disturbance_unmixed_signals_ipopt.svg", title="Unmixed signals", name="Signal", combined=true)
-# Mads.plotseries(Wipopt, "disturbance_unmixed_signals_ipopt.png", title="Unmixed signals", name="Signal", combined=true)
+Mads.plotseries(Wipopt, "disturbance_unmixed_signals_ipopt.png", title="Unmixed signals", name="Signal", combined=true)
 Mads.plotseries(Wipopt * Hipopt, "disturbance_reproduced_observations_ipopt.svg", title="Reproduced observations", name="Observation", combined=true)
+Mads.plotseries(Wipopt * Hipopt, "disturbance_reproduced_observations_ipopt.png", title="Reproduced observations", name="Observation", combined=true)
 
 # info("Reconstruction of sin/rand signals using LM ...")
 # Wlm, Hlm, plm = Mads.MFlm(X, nk)

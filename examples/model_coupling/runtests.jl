@@ -3,7 +3,7 @@ import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
-    workdir = joinpath(Mads.madsdir, "..", "examples", "model_coupling")
+	workdir = joinpath(Mads.madsdir, "..", "examples", "model_coupling")
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")
@@ -16,11 +16,11 @@ Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 f = Mads.forward(md, pdict)
 if isdefined(:Gadfly)
-    Mads.spaghettiplots(md, pdict)
-    Mads.spaghettiplot(md, f)
-    Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
-    Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
-    Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
+	Mads.spaghettiplots(md, pdict)
+	Mads.spaghettiplot(md, f)
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
 end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")

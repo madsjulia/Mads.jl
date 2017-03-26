@@ -363,7 +363,8 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 		if typeof(pl) == Gadfly.Plot{}
 			pl
 		end
-	catch "At least one finite value must be provided to formatter."
+	catch e
+		println(e.msg)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
 	end
 end
@@ -757,7 +758,8 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		filename, format = setplotfileformat(filename, format)
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
-		catch "At least one finite value must be provided to formatter."
+		catch e
+			println(e.msg)
 			Mads.madswarn("Spaghettiplots: Gadfly fails!")
 		end
 	end
@@ -925,7 +927,8 @@ function spaghettiplot(madsdata::Associative, array::Array; filename::String="",
 	filename, format = setplotfileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 6Gadfly.inch, vsize), pl)
-	catch "At least one finite value must be provided to formatter."
+	catch e
+		println(e.msg)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot{}
@@ -1011,7 +1014,8 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		if typeof(pS) == Gadfly.Plot{}
 			pS
 		end
-	catch "At least one finite value must be provided to formatter."
+	catch e
+			println(e.msg)
 		Mads.madswarn("Plotseries: Gadfly fails!")
 	end
 end

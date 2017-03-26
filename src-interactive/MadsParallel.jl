@@ -113,7 +113,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 				info("Connecting to $(h[i]) ...")
 				try
 					addprocs([h[i]]; arguments...)
-				catch
+				catch e
+					println(e.msg)
 					warn("Connection to $(h[i]) failed!")
 				end
 			end
@@ -130,7 +131,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 			addprocsfailed = false
 			try
 				addprocs(h; arguments...)
-			catch errmsg
+			catch e
+				println(e.msg)
 				addprocsfailed = true
 				warn("Connection to $(h) failed!")
 			end
@@ -280,7 +282,8 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 			o = readstring(`ssh -t $i $cmd`)
 			push!(output, strip(o))
 			println("$i: $o")
-		catch
+		catch e
+			println(e.msg)
 			push!(output, "")
 			warn("$i is not accessible")
 		end
