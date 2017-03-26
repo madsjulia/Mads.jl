@@ -46,8 +46,8 @@ Mads.setallparamson!(md)
 Mads.setparamoff!(md, "vx")
 Mads.setparamon!(md, "vx")
 tk = Mads.gettargetkeys(md)
-Mads.gettime(md["Observations"][tk[1]])
-Mads.getweight(md["Observations"][tk[1]])
+@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
+@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
 Mads.settarget!(md["Observations"][tk[1]], 1)
 o1 = Mads.indexkeys(md["Observations"], "o")
 o2 = Mads.indexkeys(md["Observations"], r"o")
@@ -75,7 +75,7 @@ f = Mads.getmadsinputfile()
 e = Mads.getextension("test.mads")
 @Base.Test.test e == "mads"
 
-Mads.stdoutcaptureon() # nothing to test here
+Mads.stdoutcaptureon()
 Mads.showparameters(md)
 Mads.showallparameters(md)
 Mads.showallparameters(md)
