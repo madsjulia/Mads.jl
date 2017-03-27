@@ -114,7 +114,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 				try
 					addprocs([h[i]]; arguments...)
 				catch e
-					println(e.msg)
+					print(e.msg)
 					warn("Connection to $(h[i]) failed!")
 				end
 			end
@@ -132,7 +132,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 			try
 				addprocs(h; arguments...)
 			catch e
-				println(e.msg)
+				print(e.msg)
 				addprocsfailed = true
 				warn("Connection to $(h) failed!")
 			end
@@ -283,7 +283,7 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 			push!(output, strip(o))
 			println("$i: $o")
 		catch e
-			println(e.msg)
+			print(e.msg)
 			push!(output, "")
 			warn("$i is not accessible")
 		end

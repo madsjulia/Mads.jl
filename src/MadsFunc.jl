@@ -131,7 +131,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						if attempt > 3
 							cd(currentdir)
 							trying = false
-							println(errmsg.msg)
+							print(errmsg.msg)
 							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 						end
 					end
@@ -155,7 +155,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
-							println(errmsg.msg)
+							print(errmsg.msg)
 							trying = false
 							Mads.madscritical("$(errmsg)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
@@ -175,7 +175,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				catch errmsg
 					sleep(attempt * 0.5)
 					if attempt > 3
-						println(errmsg.msg)
+						print(errmsg.msg)
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
@@ -242,7 +242,7 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				mkdir(restartdir)
 			catch errmsg
 				restartdir = ""
-				println(errmsg.msg)
+				print(errmsg.msg)
 				madscritical("$(errmsg)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
@@ -256,7 +256,7 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				mkdir(restartdir)
 			catch errmsg
 				restartdir = ""
-				println(errmsg.msg)
+				print(errmsg.msg)
 				madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
 			end
 		end
@@ -269,7 +269,7 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				mkdir(restartdir)
 			catch errmsg
 				restartdir = ""
-				println(errmsg.msg)
+				print(errmsg.msg)
 				madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
 			end
 		end

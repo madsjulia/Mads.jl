@@ -11,7 +11,7 @@ else
 		info("Installing python pip using PyCall ...")
 		eval(:(@PyCall.pyimport pip))
 	catch e
-		println(e.msg)
+		print(e.msg)
 		info("Downloading & installing python pip ...")
 		get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
 		download("https://bootstrap.pypa.io/get-pip.py", get_pip)
@@ -36,7 +36,7 @@ else
 		eval(:(@PyCall.pyimport yaml))
 		info("Python pip YAML (pyyaml) is installed!")
 	catch e
-		println(e.msg)
+		print(e.msg)
 		warn("Python pip YAML (pyyaml) installation has failed! Using Conda instead ...")
 		import Conda
 		Conda.add("yaml")
@@ -46,7 +46,7 @@ else
 		eval(:(@PyCall.pyimport matplotlib))
 		info("Python pip MatPlotLib is installed!")
 	catch e
-		println(e.msg)
+		print(e.msg)
 		warn("Python pip MatPlotLib installation has failed! Using Conda instead ...")
 		import Conda
 		Conda.add("matplotlib")
