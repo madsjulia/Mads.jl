@@ -30,8 +30,9 @@ Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 
 if isdefined(:Gadfly)
-    Mads.setobstime!(md, "o")
-    Mads.plotmatches(md)
+	Mads.setobstime!(md, "o")
+	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
+	Mads.rmfile("internal-linearmodel+template-match.svg")
 end
 
 p = Mads.getparamdict(md)
@@ -42,5 +43,5 @@ f(p)
 
 files = Mads.searchdir(r"y.*\.jld", path = workdir)
 for i in files
-	rm(joinpath(workdir, i))
+	Mads.rmfile(joinpath(workdir, i))
 end

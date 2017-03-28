@@ -131,6 +131,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						if attempt > 3
 							cd(currentdir)
 							trying = false
+							print(errmsg.msg)
 							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 						end
 					end
@@ -154,6 +155,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
+							print(errmsg.msg)
 							trying = false
 							Mads.madscritical("$(errmsg)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
@@ -173,6 +175,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				catch errmsg
 					sleep(attempt * 0.5)
 					if attempt > 3
+						print(errmsg.msg)
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
@@ -239,33 +242,35 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 				mkdir(restartdir)
 			catch errmsg
 				restartdir = ""
+				print(errmsg.msg)
 				madscritical("$(errmsg)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
 		end
-	elseif haskey(madsdata, "Restart")
-		if typeof(madsdata["Restart"]) == String
-			if madsdata["Restart"] == "memory" # this is not very cool
-				return ""
+	elseif haskey(madsdata, "Restart") && typeof(madsdata["Restart"]) == String
+		if madsdata["Restart"] == "memory" # this is not very cool
+			return ""
+		end
+		restartdir = madsdata["Restart"]
+		if !isdir(restartdir)
+			try
+				mkdir(restartdir)
+			catch errmsg
+				restartdir = ""
+				print(errmsg.msg)
+				madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
 			end
-			restartdir = madsdata["Restart"]
-			if !isdir(restartdir)
-				try
-					mkdir(restartdir)
-				catch errmsg
-					restartdir = ""
-					madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
-				end
-			end
-		else
-			root = splitdir(getmadsrootname(madsdata, version=true))[2]
-			restartdir = root * "_restart"
-			if !isdir(restartdir)
-				try
-					mkdir(restartdir)
-				catch errmsg
-					restartdir = ""
-					madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
-				end
+		end
+	end
+	if restartdir == ""
+		root = splitdir(getmadsrootname(madsdata, version=true))[end]
+		restartdir = root * "_restart"
+		if !isdir(restartdir)
+			try
+				mkdir(restartdir)
+			catch errmsg
+				restartdir = ""
+				print(errmsg.msg)
+				madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
 			end
 		end
 	end

@@ -2,7 +2,7 @@ arr = [["a",1] ["b",1.6]]
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == ""
-    workdir = joinpath(Mads.madsdir, "..", "test")
+	workdir = joinpath(Mads.madsdir, "..", "test")
 end
 
 Mads.dumpasciifile(joinpath(workdir, "a.dat"), arr)

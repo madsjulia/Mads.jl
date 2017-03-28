@@ -41,10 +41,10 @@ end
 Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)
 
 $(documentfunction(test;
-                   argtext=Dict("testname"=>"name of the test to execute (module or example"),
-                   keytext=Dict("madstest"=>"test Mads [default=`true`]", "moduletest"=>"test modules [default=`false`]")))
+				   argtext=Dict("testname"=>"name of the test to execute (module or example"),
+				   keytext=Dict("madstest"=>"test Mads [default=`true`]", "moduletest"=>"test modules [default=`false`]")))
 """
-function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
+function test(testname::String=""; madstest::Bool=true)
 	orig_dir = pwd()
 	if testname == ""
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
@@ -55,11 +55,12 @@ function test(testname::String=""; madstest::Bool=true, moduletest::Bool=false)
 		end
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
-		if isfile(file) && !moduletest
+		if isfile(file)
+			println("* $testname testing ...")
 			include(file)
 		else
 			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
-			if isfile(file) && !moduletest
+			if isfile(file)
 				println("* $testname testing ...")
 				include(file)
 			else

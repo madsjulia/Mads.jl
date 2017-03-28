@@ -158,7 +158,7 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 Arguments:
 
 - `madsdata` : Mads problem dictionary
-- `parameters` : Dictinary with parameters (optional)
+- `parameters` : Dictionary with parameters (optional)
 - `filename` : input file name (e.g. `input_file_name.mads`)
 - `julia` : if `true` use Julia JSON module to save
 - `explicit` : if `true` ignores MADS YAML file modifications and rereads the original input file
@@ -839,7 +839,7 @@ function symlinkdirfiles(dirsource::String, dirtarget::String)
 		if !isdir(f)
 			symlinkdir(f, dirtarget)
 		else
-			mkdir(joinpath(dirtarget, f))
+			Base.mkdir(joinpath(dirtarget, f))
 			symlinkdirfiles(f, joinpath(dirtarget, f))
 		end
 	end
@@ -923,14 +923,13 @@ function createtempdir(tempdirname::String)
 	while trying
 		try
 			attempt += 1
-			if !isdir(tempdirname)
-				mkdir(tempdirname)
-			end
+			Mads.mkdir(tempdirname)
 			Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
 			trying = false
 		catch errmsg
 			sleep(attempt * 0.5)
 			if attempt > 3
+				print(errmsg.msg)
 				madscritical("$(e)\nTemporary directory $(tempdirname) cannot be created!")
 				trying = false
 			end
@@ -957,9 +956,16 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			sleep(attempt * 1)
 			Mads.createtempdir(tempdirname)
 			if attempt > 4
+				print(errmsg.msg)
 				madscritical("$(e)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
 				trying = false
 			end
 		end
+	end
+end
+
+function mkdir(dirname::String)
+	if !isdir(dirname)
+		Base.mkdir(dirname)
 	end
 end

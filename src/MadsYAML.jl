@@ -32,17 +32,17 @@ Dump YAML file
 Arguments:
 
 - `filename` : file name
-- `yamldata` : YAML data
+- `data` : YAML data
 
 $(documentfunction(dumpyamlfile))
 """
-function dumpyamlfile(filename::String, yamldata; julia::Bool=false) # dump YAML file
+function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
 	julia = isdefined(:yaml) ? julia : true
 	f = open(filename, "w")
 	if julia
-		JSON.print(f, yamldata)
+		JSON.print(f, data)
 	else
-		write(f, yaml.dump(yamldata, width=255)) # we use the python library because the YAML julia library cannot dump
+		write(f, yaml.dump(data, width=255)) # we use the python library because the YAML julia library cannot dump
 	end
 	close(f)
 end
@@ -57,7 +57,7 @@ Arguments:
 
 $(documentfunction(dumpyamlmadsfile))
 """
-function dumpyamlmadsfile(madsdata, filename::String; julia::Bool=false) # load MADS input file in YAML forma
+function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Dynamic model", "Filename"]
 	restore = Array{Bool}(length(deletekeys))

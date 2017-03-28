@@ -3,14 +3,14 @@ import Gadfly
 """
 Plot BIG-DT robustness curves
 
+$(documentfunction(plotrobustnesscurves))
+
 Arguments:
 
 - `madsdata` : MADS problem dictionary
 - `bigdtresults` : BIG-DT results
 - `filename` : output file name used to dump plots
 - `format` : output plot format (`png`, `pdf`, etc.)
-
-$(documentfunction(plotrobustnesscurves))
 """
 function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename::String="", format::String="", maxprob::Number=1.0, maxhoriz::Number=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]

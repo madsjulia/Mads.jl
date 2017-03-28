@@ -11,9 +11,9 @@ zcos = Array{Float64}(n, n)
 fcos(x, y) = cos(x^2 + y^2) / (1 + x^2 + y^2)
 # zcos computed using for loops
 for i in 1:n
-    for j in 1:n
-        zcos[j, i] = fcos(x[i], y[j])
-    end
+	for j in 1:n
+		zcos[j, i] = fcos(x[i], y[j])
+	end
 end
 # zcos computed using broadcast
 zcos = broadcast(fcos, x', y)

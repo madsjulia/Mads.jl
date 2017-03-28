@@ -6,8 +6,6 @@ syntax: glob
 *.s_point
 *.wells
 *.wells_debug
-*.svg
-*.png
 *_[0-9]
 *.dat
 *.json
@@ -97,7 +95,6 @@ wells
 *.a
 *.so
 *.zip
-*.jld
 *.orig
 # LINUX files
 .nfs*

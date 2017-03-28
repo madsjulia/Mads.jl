@@ -1,11 +1,11 @@
 import Mads
 
-madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
-if madsdirname == ""
-	madsdirname = joinpath(Mads.madsdir, "..", "examples", "contamination")
+workdir = Mads.getmadsdir() # get the directory where the problem is executed
+if workdir == ""
+	workdir = joinpath(Mads.madsdir, "..", "examples", "contamination")
 end
 
-md = Mads.loadmadsfile(joinpath(madsdirname, "w01-w13a_w20a.mads")) # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads")) # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 
 if isdefined(:Gadfly)
@@ -20,6 +20,7 @@ of = Mads.partialof(md, forward_predictions, r".*")
 
 if isdefined(:Gadfly)
 	Mads.plotmatches(md, forward_predictions) # plot initial matches
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 end
 
 inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
@@ -50,6 +51,7 @@ inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward mod
 
 if isdefined(:Gadfly)
 	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 end
 
 # use only two wells
@@ -65,6 +67,11 @@ paramvalues = Mads.getparamrandom(md, 10)
 if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
+	s = splitdir(rootname)
+	for f in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "\.*", "spaghetti.svg")), path=s[1])
+		Mads.rmfile(f, path=s[1])
+	end
+
 end
 
 Mads.setobstime!(md, r"_(.*)")
@@ -78,6 +85,11 @@ if isdefined(:Gadfly)
 	Mads.plotwellSAresults(md, sa_results)
 	Mads.plotobsSAresults(md, sa_results)
 	Mads.plotobsSAresults(md, sa_results, separate_files=true)
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-saltelli-5-main_effect.svg"))
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-saltelli-5-total_effect.svg"))
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-saltelli-5.svg"))
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w13a-saltelli-5.svg"))
+	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w20a-saltelli-5.svg"))
 end
 
 Mads.computemass(md; time=50.0)

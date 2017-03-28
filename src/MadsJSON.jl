@@ -22,7 +22,7 @@ Dump a JSON file
 
 $(documentfunction(dumpjsonfile))
 """
-function dumpjsonfile(filename::String, data) # dump JSON text file
+function dumpjsonfile(filename::String, data::Any) # dump JSON text file
 	f = open(filename, "w")
 	JSON.print(f, data)
 	close(f)

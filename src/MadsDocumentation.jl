@@ -1,11 +1,8 @@
-"""
-Create function document
-"""
 function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict())
 	stdoutcaptureon()
 	println("**$(f)**\n")
 	m = methods(f)
-	ms = string.(collect(m.ms))
+	ms = convert(Array{String, 1}, strip.(split(string(m.mt), "\n"))[2:end])
 	nm = length(ms)
 	if nm == 0
 		println("No methods\n")
@@ -47,9 +44,6 @@ function documentfunction(f::Function; argtext::Dict=Dict(), keytext::Dict=Dict(
 	stdoutcaptureoff()
 end
 
-"""
-Get function arguments
-"""
 function getfunctionarguments(f::Function)
 	m = methods(f)
 	getfunctionarguments(f, string.(collect(m.ms)))
@@ -57,11 +51,14 @@ end
 function getfunctionarguments(f::Function, m::Vector{String}, l::Integer=length(m))
 	mp = Array{Symbol}(0)
 	for i in 1:l
-		r = match(r"(.*)\((.*)\)", m[i])
+		r = match(r"(.*)\(([^;]*);(.*)\)", m[i])
+		if typeof(r) == Void
+			r = match(r"(.*)\((.*)\)", m[i])
+		end
 		if typeof(r) != Void && length(r.captures) > 1
 			fargs = strip.(split(r.captures[2], ", "))
 			for j in 1:length(fargs)
-				if !contains(string(fargs[j]), "...")
+				if !contains(string(fargs[j]), "...") && fargs[j] != ""
 					push!(mp, fargs[j])
 				end
 			end
@@ -70,9 +67,6 @@ function getfunctionarguments(f::Function, m::Vector{String}, l::Integer=length(
 	return sort(unique(mp))
 end
 
-"""
-Get function keywords
-"""
 function getfunctionkeywords(f::Function)
 	m = methods(f)
 	getfunctionkeywords(f, string.(collect(m.ms)))
@@ -81,11 +75,11 @@ function getfunctionkeywords(f::Function, m::Vector{String}, l::Integer=length(m
 	# getfunctionkeywords(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
 	mp = Array{Symbol}(0)
 	for i in 1:l
-		r = match(r"(.*)\((.*);(.*)\)", m[i])
-		if typeof(r) != Void != Void && length(r.captures) > 2
-			kwargs = strip.(split(r.captures[2], ", "))
+		r = match(r"(.*)\(([^;]*);(.*)\)", m[i])
+		if typeof(r) != Void && length(r.captures) > 2
+			kwargs = strip.(split(r.captures[3], ", "))
 			for j in 1:length(kwargs)
-				if !contains(string(kwargs[j]), "...")
+				if !contains(string(kwargs[j]), "...") && kwargs[j] != ""
 					push!(mp, kwargs[j])
 				end
 			end
@@ -94,61 +88,20 @@ function getfunctionkeywords(f::Function, m::Vector{String}, l::Integer=length(m
 	return sort(unique(mp))
 end
 
-"""
+@doc """
+Create function documentation
+
+$(documentfunction(documentfunction))
+""" documentfunction
+
+@doc """
 Get function arguments
-"""
-function getfunctionargumentsold(f::Function)
-	getfunctionarguments(f, methods(f))
-end
-function getfunctionargumentsold(f::Function, m::Base.MethodList, l::Integer=getmethodscount(m))
-	mp = Array{Symbol}(0)
-	for i in 1:l
-		fargs = Array{Symbol}(0)
-		try
-			fargs = collect(m.ms[i].lambda_template.slotnames[2:end])
-		catch
-			fargs = Array{Symbol}(0)
-		end
-		for j in 1:length(fargs)
-			if !contains(string(fargs[j]), "...")
-				push!(mp, fargs[j])
-			end
-		end
-	end
-	return sort(unique(mp))
-end
 
-"""
+$(documentfunction(getfunctionarguments))
+""" getfunctionarguments
+
+@doc """
 Get function keywords
-"""
-function getfunctionkeywordsold(f::Function)
-	getfunctionkeywords(f, methods(f))
-end
-function getfunctionkeywordsold(f::Function, m::Base.MethodList, l::Integer=getmethodscount(m))
-	# getfunctionkeywords(f::Function) = methods(methods(f).mt.kwsorter).mt.defs.func.lambda_template.slotnames[4:end-4]
-	mp = Array{Symbol}(0)
-	for i in 1:l
-		kwargs = Array{Symbol}(0)
-		try
-			kwargs = Base.kwarg_decl(m.ms[i].sig, typeof(m.mt.kwsorter))
-		catch
-			kwargs = Array{Symbol}(0)
-		end
-		for j in 1:length(kwargs)
-			if !contains(string(kwargs[j]), "...")
-				push!(mp, kwargs[j])
-			end
-		end
-	end
-	return sort(unique(mp))
-end
 
-function getmethodscount(m::Base.MethodList)
-	nm = 0
-	try
-		nm = length(m.ms)
-	catch
-		nm = 0
-	end
-	return nm
-end
+$(documentfunction(getfunctionkeywords))
+""" getfunctionkeywords

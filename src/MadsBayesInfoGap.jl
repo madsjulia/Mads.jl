@@ -7,6 +7,8 @@ import BlackBoxOptim
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
+$(documentfunction(makebigdt))
+
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -15,8 +17,6 @@ Arguments:
 Returns:
 
 - `bigdtproblem` : BIG-DT problem type
-
-$(documentfunction(makebigdt))
 """
 function makebigdt(madsdata::Associative, choice::Associative)
 	return makebigdt!(deepcopy(madsdata), choice)
@@ -25,6 +25,8 @@ end
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
+$(documentfunction(makebigdt!))
+
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -33,8 +35,6 @@ Arguments:
 Returns:
 
 - `bigdtproblem` : BIG-DT problem type
-
-$(documentfunction(makebigdt!))
 """
 function makebigdt!(madsdata::Associative, choice::Associative)
 	Mads.madsinfo("Decision parameters:")
@@ -46,7 +46,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		madsdata["Parameters"][paramname]["init"] = c
 		Mads.madsinfo("Decision parameter $paramname set to $c.")
 	end
-	makeloglikelihood = makemakearrayconditionalloglikelihood(madsdata)
+	makeloglikelihood = makearrayconditionalloglikelihood(madsdata)
 	logprior = makearrayfunction(madsdata, makelogprior(madsdata))
 	nominalparams = getparamsinit(madsdata)
 	f = makemadscommandfunction(madsdata; calczeroweightobs=true, calcpredictions=true)
@@ -113,6 +113,8 @@ end
 """
 Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
+$(documentfunction(dobigdt))
+
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -124,8 +126,6 @@ Arguments:
 Returns:
 
 - `bigdtresults` : dictionary with BIG-DT results
-
-$(documentfunction(dobigdt))
 """
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
@@ -154,7 +154,13 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 	return Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
 end
 
-function makemakearrayconditionalloglikelihood(madsdata::Associative)
+"""
+Make array of conditional log-likelihoods
+
+$(documentfunction(makearrayconditionalloglikelihood))
+
+"""
+function makearrayconditionalloglikelihood(madsdata::Associative)
 	function makeloglikelihood(likelihoodparams::Vector)
 		log10weightfactor = likelihoodparams[1]
 		return makearrayconditionalloglikelihood(madsdata, makemadsconditionalloglikelihood(madsdata; weightfactor=10 ^ log10weightfactor))
