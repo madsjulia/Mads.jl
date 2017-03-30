@@ -45,3 +45,7 @@ files = Mads.searchdir(r"y.*\.jld", path = workdir)
 for i in files
 	Mads.rmfile(joinpath(workdir, i))
 end
+
+Mads.rmfiles_ext("svg"; path=workdir)
+Mads.rmfiles_ext("dat"; path=workdir)
+Mads.rmfiles_ext("iterationresults"; path=workdir)
