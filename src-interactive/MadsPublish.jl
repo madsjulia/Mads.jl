@@ -71,8 +71,11 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 			modulenames = madsmodules
 		end
 	end
-	if master==true || pull==true
+	if master==true || pull==true || force==true
 		git = true
+	end
+	if force==true
+		master = true
 	end
 	if !madsgit
 		git = false
