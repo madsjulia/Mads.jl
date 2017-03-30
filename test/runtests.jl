@@ -28,6 +28,10 @@ for madstest in examples
 	if isfile(file)
 		println("* $(madstest) ...")
 		include(file)
+		#try
+		#	run(`bash -c "ls -d $(Pkg.dir("Mads"))/examples/*/*_restart"`)
+		#catch
+		#end
 	end
 end
 :passed

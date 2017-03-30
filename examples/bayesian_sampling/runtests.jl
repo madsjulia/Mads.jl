@@ -34,3 +34,5 @@ if isdefined(:Gadfly)
 		Mads.rmfile(f, path=s[1])
 	end
 end
+
+Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))

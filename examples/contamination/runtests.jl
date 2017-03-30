@@ -95,3 +95,5 @@ end
 Mads.computemass(md; time=50.0)
 
 Mads.addsource!(md)
+
+Mads.rmdir("w01-w13a_w20a_restart")

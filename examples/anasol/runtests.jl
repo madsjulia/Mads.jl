@@ -165,3 +165,5 @@ end
 
 # Test Mads.gettargetkeys(md)
 @Base.Test.test tk == good_targetkeys
+
+Mads.rmdir("w01-w13a_w20a_restart")

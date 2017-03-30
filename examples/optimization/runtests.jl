@@ -49,3 +49,7 @@ end
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_ext("iterationresults"; path=workdir)
+
+
+Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel+template_restart"))
+Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))

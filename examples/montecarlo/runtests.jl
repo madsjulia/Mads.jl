@@ -19,3 +19,5 @@ end
 
 good_results = JLD.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
 @Base.Test.test results == good_results
+
+Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))

@@ -46,8 +46,8 @@ pfor = Mads.forward(md)
 @Base.Test.test ifor == tefor
 @Base.Test.test ifor == pfor
 
-Mads.readyamlpredictions("$workdir/internal-linearmodel-mads.mads"; julia=true)
-Mads.readasciipredictions("$workdir/readasciipredictions.dat")
+Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-mads.mads"); julia=true)
+Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
 Mads.madsinfo("External coupling using `Command` and JLD ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
@@ -77,3 +77,14 @@ end
 @Base.Test.test jfor == sfor
 @Base.Test.test efor == sfor
 @Base.Test.test jfor == ifor
+
+Mads.rmdir(joinpath(workdir, "external-jld_restart"))
+Mads.rmdir(joinpath(workdir, "external-json-exp_restart"))
+Mads.rmdir(joinpath(workdir, "external-json_restart"))
+Mads.rmdir(joinpath(workdir, "external-linearmodel+template+instruction+path_restart"))
+Mads.rmdir(joinpath(workdir, "internal-linearmodel+template_restart"))
+Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+Mads.rmdir("external-linearmodel+template+instruction_restart")
+Mads.rmdir("internal-linearmodel+template_restart")
+Mads.rmdir("internal-linearmodel-mads_restart")
+Mads.rmdir("internal-linearmodel_restart")
