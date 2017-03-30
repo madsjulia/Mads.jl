@@ -342,7 +342,7 @@ Arguments:
 - `callback` : call back function for debugging
 
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callback::Function=(best_x, of, lambda)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::Vector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::Vector, J::Matrix)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -388,7 +388,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
-	callback(x, residual, NaN)
+	callbackiteration(x, residual, NaN)
 	Mads.madsoutput("Initial OF: $residual\n");
 
 	# Maintain a trace of the system.
@@ -419,8 +419,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				Base.display(J)
 				Mads.madscritical("Mads quits!")
 			end
+            f_calls += length(x)
 			g_calls += 1
 			Mads.madsoutput("Jacobian #$g_calls\n")
+            callbackjacobian(x, J)
 			compute_jacobian = false
 		end
 		Mads.madsoutput("Current Best OF: $best_residual\n");
@@ -554,7 +556,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			push!(tr, os)
 			println(os)
 		end
-		callback(best_x, best_residual, lambda)
+		callbackiteration(best_x, best_residual, lambda)
 
 		# check convergence criteria:
 		nx = norm(delta_x)

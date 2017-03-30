@@ -39,13 +39,16 @@ Arguments:
 
 $(documentfunction(localsa))
 """
-function localsa(madsdata::Associative; sinspace::Bool=true, filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
+function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
 	else
 		rootname = Mads.getrootname(filename)
 		ext = "." * Mads.getextension(filename)
+	end
+	if keyword != ""
+		rootname = string(rootname, "-", keyword)
 	end
 	paramkeys = getoptparamkeys(madsdata)
 	obskeys = getobskeys(madsdata)

@@ -138,7 +138,7 @@ Returns:
 
 $(documentfunction(calibrate))
 """
-function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true)
+function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -152,25 +152,39 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	sindx = Mads.getsindx(madsdata)
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+	# Mads.restarton()
+	# ReusableFunctions.quietoff()
 	if save_results
-		calibratecallback = (x_best, of, lambda)->begin
+		interationcallback = (x_best::Vector, of::Number, lambda::Number)->begin
+			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
+			if localsa || Mads.getrestart(madsdata)
+				Mads.localsa(madsdata; par=x_best_real, keyword="best")
+			end
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, Mads.sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed))), "\n"))
+			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys,x_best_real)), "\n"))
 			close(outfile)
 		end
+		jacobiancallback = (x::Vector, J::Matrix)->begin
+			x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
+			if localsa || Mads.getrestart(madsdata)
+				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
+			end
+		end
 	else
-		calibratecallback = (x_best, of, lambda)->nothing
+		interationcallback = (x_best::Vector, of::Number, lambda::Number)->nothing
+		jacobiancallback = (x::Vector, J::Matrix)->nothing
 	end
 	if usenaive == true
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
 	elseif usenaive == :lmlin
-		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->calibratecallback(best_x, of, lambda))
+		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->interationcallback(best_x, of, lambda))
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callback=calibratecallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackiteration=interationcallback, callbackjacobian=jacobiancallback)
 	end
-	minimum = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
+	global modelruns += results.f_calls
+	minimum = sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
 	minimumdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
