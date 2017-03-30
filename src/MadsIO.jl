@@ -647,9 +647,9 @@ end
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)); respect_space=respect_space)
+	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)); respect_space=false)
 end
-function writeparameters(madsdata::Associative, parameters::Associative)
+function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
 	expressions = evaluatemadsexpressions(madsdata, parameters)
 	paramsandexps = merge(parameters, expressions)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")

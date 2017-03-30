@@ -14,7 +14,7 @@ Arguments:
 $(documentfunction(loadyamlfile))
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
-	julia = isdefined(:yaml) ? julia : true
+	julia = isdefined(Mads, :yaml) ? julia : true
 	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	if julia
