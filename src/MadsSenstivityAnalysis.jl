@@ -277,8 +277,6 @@ function weightedstats(samples::Array, llhoods::Vector)
 	return mean(samples, wv, 1), var(samples, wv, 1)
 end
 
-#TODO use this function in all the MADS sampling strategies (for example, SA below)
-#TODO add LHC sampling strategy
 function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
