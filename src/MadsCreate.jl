@@ -1,4 +1,3 @@
-
 import DataStructures
 
 function createmadsproblem(infilename::String, outfilename::String)
