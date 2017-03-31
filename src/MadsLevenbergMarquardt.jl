@@ -146,7 +146,7 @@ function makelmfunctions(madsdata::Associative)
 		if sizeof(center) == 0
 			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center != nothing) && lenght(center) == nO
+			center_computed = (center != nothing) && length(center) == nO
 			if !center_computed
 				push!(p, arrayparameters)
 			end
@@ -224,7 +224,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		if sizeof(center) == 0
 			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center != nothing) && lenght(center) == nO
+			center_computed = (center != nothing) && length(center) == nO
 			if !center_computed
 				push!(p, arrayparameters)
 			end
