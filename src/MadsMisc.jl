@@ -148,7 +148,7 @@ function getdistribution(dist::String, i::String, inputtype::String)
 	try
 		distribution = Distributions.eval(parse(dist))
 	catch e
-		print(e.msg)
+		printerrormsg(e)
 		madserror("""Something is wrong with $inputtype '$i' distribution (dist: '$(dist)')""")
 	end
 	return distribution

@@ -250,3 +250,12 @@ $(documentfunction(transposematrix))
 function transposematrix(a::Matrix)
 	permutedims(a, (2, 1))
 end
+
+"Print error message"
+function printerrormsg(e::Any)
+	if in(:msg, fieldnames(e))
+		print(e.msg)
+	else
+		print(e)
+	end
+end

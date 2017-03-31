@@ -24,7 +24,9 @@ function display(filename::String)
 			catch
 				trytoopen = true
 			end
-			rm(filename2)
+			if isfile(filename2)
+				rm(filename2)
+			end
 		else
 			try
 				img = Images.load(filename)

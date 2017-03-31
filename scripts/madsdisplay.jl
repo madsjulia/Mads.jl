@@ -10,7 +10,7 @@ function madsgetextension(filename)
 	end
 end
 
-function madsgetrootname(filename::AbstractString; first=true)
+function madsgetrootname(filename::String; first=true)
 	d = split(filename, "/")
 	s = split(d[end], ".")
 	if !first && length(s) > 1
@@ -24,7 +24,11 @@ function madsgetrootname(filename::AbstractString; first=true)
 	return r
 end
 
-function madsdisplay(filename::AbstractString)
+function madsdisplay(filename::String)
+	if !isfile(filename)
+		warn("File `$filename` is missing!")
+		return
+	end
 	if isdefined(:TerminalExtensions)
 		trytoopen = false
 		ext = lowercase(madsgetextension(filename))
@@ -37,6 +41,9 @@ function madsdisplay(filename::AbstractString)
 				Base.display(img)
 			catch
 				trytoopen = true
+			end
+			if isfile(filename2)
+				rm(filename2)
 			end
 		else
 			img = Images.load(filename)
