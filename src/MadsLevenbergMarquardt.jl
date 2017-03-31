@@ -156,7 +156,9 @@ function makelmfunctions(madsdata::Associative)
 		fevals = RobustPmap.rpmap(f_lm, p)
 		if !center_computed
 			center = fevals[nP+1]
-			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
+			if restartdir != ""
+				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
+			end
 		end
 		jacobian = Array{Float64}((nO, nP))
 		for j in 1:nO
@@ -232,7 +234,9 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		fevals = RobustPmap.rpmap(func, p)
 		if !center_computed
 			center = fevals[nP+1]
-			ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
+			if restartdir != ""
+				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
+			end
 		end
 		jacobian = Array{Float64}((nO, nP))
 		for j in 1:nO

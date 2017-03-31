@@ -147,7 +147,9 @@ function makempbfunctions(madsdata::Associative)
 		end
 		fevals = RobustPmap.rpmap(f_mpb, p)
 		if !center_computed
-			ReusableFunctions.saveresultfile(restartdir, fevals[nP+1], arrayparameters)
+			if restartdir != ""
+				ReusableFunctions.saveresultfile(restartdir, fevals[nP+1], arrayparameters)
+			end
 			return fevals[1:nP]
 		else
 			return fevals

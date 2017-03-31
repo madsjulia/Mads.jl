@@ -554,12 +554,17 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 	if restartdir == ""
 		restartdir = getrestartdir(madsdata)
 	end
+	flagrestart = restartdir != ""
 	if parallel
 		Avecs = Array{Array{Float64, 1}}(size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])
 		end
-		pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
+		if flagrestart
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
+		else
+			pmapresult = RobustPmap.rpmap(farray, Avecs; t=Array{Float64, 1})
+		end
 		for i = 1:N
 			for j = 1:length(obskeys)
 				yA[i, j] = pmapresult[i][j]
@@ -583,7 +588,11 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 		for i = 1:N
 			Bvecs[i] = vec(B[i, :])
 		end
-		pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
+		if flagrestart
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
+		else
+			pmapresult = RobustPmap.rpmap(farray, Bvecs; t=Array{Float64, 1})
+		end
 		for i = 1:N
 			for j = 1:length(obskeys)
 				yB[i, j] = pmapresult[i][j]
@@ -617,7 +626,11 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 			for j = 1:N
 				Cvecs[j] = vec(C[j, :])
 			end
-			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
+			if flagrestart
+				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
+			else
+				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Array{Float64, 1})
+			end
 			for j = 1:N
 				for k = 1:length(obskeys)
 					yC[j, k] = pmapresult[j][k]

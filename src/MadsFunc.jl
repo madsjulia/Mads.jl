@@ -261,7 +261,7 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 			end
 		end
 	end
-	if restartdir == ""
+	if restartdir == "" && (Mads.restart || haskey(madsdata, "Restart"))
 		root = splitdir(getmadsrootname(madsdata, version=true))[end]
 		restartdir = root * "_restart"
 		if !isdir(restartdir)
