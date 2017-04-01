@@ -187,7 +187,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			end
 			return results
 		end
-	elseif haskey(madsdata, "Sources") # we may still use "Wells" instead of "Observations"
+	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model")# we may still use "Wells" instead of "Observations"
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else

@@ -20,6 +20,6 @@ function madsmodelrun(parameters::Associative)
 	initialconditions = [1.,0.]
 	t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
 	ys = hcat(y...).' # vecorize the output and transpose with '
-	predictions = DataStructures.OrderedDict{AbstractString, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
+	predictions = DataStructures.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
 	return predictions
 end

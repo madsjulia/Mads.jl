@@ -536,13 +536,13 @@ super(Any) # => Any
 # <: is the subtyping operator
 type Lion <: Cat # Lion is a subtype of Cat
   mane_color
-  roar::AbstractString
+  roar::String
 end
 
 # You can define more constructors for your type
 # Just define a function of the same name as the type
 # and call an existing constructor to get a value of the correct type
-Lion(roar::AbstractString) = Lion("green",roar)
+Lion(roar::String) = Lion("green",roar)
 # This is an outer constructor because it's outside the type definition
 
 type Panther <: Cat # Panther is also a subtype of Cat

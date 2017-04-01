@@ -12,6 +12,6 @@ function madsmodelrun_internal_linearmodel_template(madsdata::Associative) # mad
 	b = param[2]
 	f(t) = a * t - b # a * t - b
 	times = 1:4
-	predictions = DataStructures.OrderedDict{AbstractString, Float64}(zip(map(i -> string("o", i), times), map(f, times)))
+	predictions = DataStructures.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), map(f, times)))
 	return predictions
 end

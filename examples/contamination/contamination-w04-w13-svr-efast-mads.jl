@@ -7,7 +7,7 @@ rootname = Mads.getmadsrootname(md)
 Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 
-svrexec, svrclean = Mads.makesvrmodel(md; check=true)
+svrexec, svrclean = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)
@@ -25,4 +25,16 @@ Mads.madsinfo("SVR predictions ...")
 Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")
 Mads.display("$rootname-w13a-svr-$numberofsamples-spaghetti.png")
 
-svrclean()
+sa = Mads.efast(md)
+Mads.plotobsSAresults(md, sa)
+Mads.display("$rootname-efast-385.svg")
+
+mdsvr["Julia model"] = svrexec
+mdsvr = deepcopy(md)
+mdsvr["Filename"] = "$rootname-svr.mads"
+
+sasvr = Mads.efast(mdsvr)
+Mads.plotobsSAresults(mdsvr, sasvr)
+Mads.display("$rootname-svr-efast-385.svg")
+
+# svrclean()
