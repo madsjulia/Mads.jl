@@ -115,6 +115,8 @@ wells
 *.rst
 *.sen
 *.seo
+svrmodels
+*.svr
 *madsjl_cmdline_hist*
 examples/anasol/test.mads
 examples/model_coupling_*
