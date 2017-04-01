@@ -1,7 +1,7 @@
 import Mads
 import SVR
 
-md = Mads.loadmadsfile("w03.mads") # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile("w04.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md)
 
 Mads.allwellsoff!(md) # turn off all wells
