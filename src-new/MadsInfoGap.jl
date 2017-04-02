@@ -6,15 +6,10 @@ import MathProgBase
 """
 Information Gap Decision Analysis using JuMP
 
-$(documentfunction(infogap_jump(madsdata::Associative=Dict))
+$(documentfunction(infogap_jump))
 """
 function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
-	if seed != 0
-		srand(seed)
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		info("Current seed: $s")
-	end
+	setseed(seed, quiet)
 	no = 4
 	np = 4
 	t = [1.,2.,3.,4.,0]
@@ -98,13 +93,13 @@ function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1,
 	end
 end
 
+"""
+Information Gap Decision Analysis using JuMP
+
+$(documentfunction(infogap_jump_polinomial))
+"""
 function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=0)
-	if seed != 0
-		srand(seed)
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		!quiet && info("Current seed: $s")
-	end
+	setseed(seed, quiet)
 	no = 4
 	time = [1.,2.,3.,4.]
 	ti = [1.,2.,3.,4.,5.]
@@ -249,15 +244,10 @@ end
 """
 Information Gap Decision Analysis using MathProgBase
 
-$(documentfunction(infogap_mpb_polinomial(madsdata::Associative=Dict))
+$(documentfunction(infogap_mpb_polinomial))
 """
 function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver::MathProgBase.DefaultNLPSolver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
-	if seed != 0
-		srand(seed)
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		info("Current seed: $s")
-	end
+	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
 	np = length(p)
@@ -387,15 +377,10 @@ end
 """
 Information Gap Decision Analysis using MathProgBase
 
-$(documentfunction(infogap_mpb_lin(madsdata::Associative=Dict))
+$(documentfunction(infogap_mpb_lin))
 """
 function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
-	if seed != 0
-		srand(seed)
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		info("Current seed: $s")
-	end
+	setseed(seed, quiet)
 
 	p = [1.,0.]
 	np = length(p)

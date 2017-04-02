@@ -12,21 +12,6 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 
 """
-Set current seed
-
-$(documentfunction(setseed))
-"""
-function setseed(seed::Integer)
-	if seed != 0
-		srand(seed)
-		madsinfo("New seed: $seed")
-	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
-		madsinfo("Current seed: $s")
-	end
-end
-
-"""
 Local sensitivity analysis based on eigen analysis of the parameter covariance matrix
 
 Arguments:
@@ -337,7 +322,7 @@ Arguments:
 $(documentfunction(saltellibrute))
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
-	Mads.setseed(seed)
+	setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
 	nummanyparamsamples = numsamples

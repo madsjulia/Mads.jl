@@ -272,3 +272,17 @@ function meshgrid(min::Vector, max::Vector)
     min = reshape(min, m, 1)
     (repmat(max, m, 1), repmat(min, 1, n))
 end
+
+"""
+Set / get seed
+
+$(documentfunction(setseed))
+"""
+function setseed(seed::Integer=0, quiet::Bool=false)
+	if seed != 0
+		srand(seed)
+	else
+		s = Int(Base.Random.GLOBAL_RNG.seed[1])
+		!quiet && info("Current seed: $s")
+	end
+end
