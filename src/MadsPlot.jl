@@ -562,7 +562,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""TES values larger than $(realmax(Float32))""")
+			Mads.madswarn("TES values larger than $(realmax(Float32))")
 			maxtorealmax!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
@@ -588,7 +588,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""MES values larger than $(realmax(Float32))""")
+			Mads.madswarn("MES values larger than $(realmax(Float32))")
 			maxtorealmax!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
@@ -614,7 +614,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 	if length(vdf[1]) > 0
 		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("""Variance values larger than $(realmax(Float32))""")
+			Mads.madswarn("Variance values larger than $(realmax(Float32))")
 			maxtorealmax!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
@@ -666,12 +666,13 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
+	obs_plot = Any[]
 	if obs_plot_dots
-		obs_plot1 = """Gadfly.Geom.point"""
-		obs_plot2 = replace("""Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=$pointsize)""", "mm", "Gadfly.mm")
+		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=pointsize))
+		push!(obs_plot, Gadfly.Geom.point)
 	else
-		obs_plot1 = """Gadfly.Geom.line"""
-		obs_plot2 = replace("""Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=$linewidth)""", "mm", "Gadfly.mm")
+		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))
+		push!(obs_plot, Gadfly.Geom.line)
 	end
 	nT = length(obskeys)
 	if !haskey( madsdata, "Wells" )
@@ -706,7 +707,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			paramdict[paramkey] = original
 		end
 		if !haskey( madsdata, "Wells" )
-			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
@@ -737,7 +738,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 						end
 					end
 					endj += nTw
-					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
+					p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 							Gadfly.Guide.title(wellname),
 							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
@@ -863,37 +864,33 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		madswarn("Incorrect array size: size(array) = $(s)")
 		return
 	end
+	obs_plot = Any[]
 	if plotdata
 		if obs_plot_dots
-			obs_plot1 = "Gadfly.Geom.point"
-			obs_plot2 = replace("""Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=$pointsize)""", "mm", "Gadfly.mm")
+			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=pointsize))
+			push!(obs_plot, Gadfly.Geom.point)
 		else
-			obs_plot1 = "Gadfly.Geom.line"
-			obs_plot2 = replace("""Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=$linewidth)""", "mm", "Gadfly.mm")
+			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))
+			push!(obs_plot, Gadfly.Geom.line)
 		end
 	end
+	pa = Any[]
 	if yfit
 		ymin = minimum(Y, 2)
 		ymax = maximum(Y, 2)
-		obs_plot3 = "Gadfly.Guide.XLabel($xtitle), Gadfly.Guide.YLabel($ytitle), Gadfly.Coord.Cartesian(xmin=$ymin, xmax=$ymax)"
-	else
-		obs_plot3 = "Gadfly.Guide.XLabel($xtitle), Gadfly.Guide.YLabel($ytitle)"
+		push!(pa, Gadfly.Coord.Cartesian(xmin=ymin, xmax=ymax))
 	end
 	if !haskey(madsdata, "Wells")
 		if plotdata
 			t = getobstime(madsdata)		
 			d = getobstarget(madsdata)
-			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-					for i in 1:numberofsamples]... )
-		else
-			pl = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-					for i in 1:numberofsamples]... )
+			push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 		end
+		pl = Gadfly.plot(pa...,
+			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+			for i in 1:numberofsamples]... )
 		vsize = 4Gadfly.inch
 	else
 		pp = Array{Gadfly.Plot}(0)
@@ -905,35 +902,30 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 			if madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nTw = length(o)
-				t = Array{Float64}(nTw)
-				d = Array{Float64}(nTw)
-				for i in 1:nTw
-					t[i] = o[i]["t"]
-					if haskey(o[i], "c")
-						d[i] = o[i]["c"]
-					elseif haskey(o[i], "target")
-						d[i] = o[i]["target"]
-					else
-						madswarn("Observation/calibration data are missing for well $(wellname)!")
-						t[i] = 0
-						d[i] = 0
+				if plotdata
+					t = Array{Float64}(nTw)
+					d = Array{Float64}(nTw)
+					for i in 1:nTw
+						t[i] = o[i]["t"]
+						if haskey(o[i], "c")
+							d[i] = o[i]["c"]
+						elseif haskey(o[i], "target")
+							d[i] = o[i]["target"]
+						else
+							madswarn("Observation/calibration data are missing for well $(wellname)!")
+							t[i] = 0
+							d[i] = 0
+						end
 					end
+					push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 				end
 				endj += nTw
-				if plotdata
-					p = Gadfly.plot(Gadfly.layer(x=t, y=d, eval(parse(obs_plot1)), eval(parse(obs_plot2))),
-							Gadfly.Guide.title(wellname),
-							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-							for i in 1:numberofsamples]...)
-				else
-					p = Gadfly.plot(Gadfly.Guide.title(wellname),
-							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
-							for i in 1:numberofsamples]...)
-				end
+				p = Gadfly.plot(pa...,
+						Gadfly.Guide.title(wellname),
+						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
+						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+						for i in 1:numberofsamples]...)
 				push!(pp, p)
 				vsize += 4Gadfly.inch
 				startj = endj + 1
