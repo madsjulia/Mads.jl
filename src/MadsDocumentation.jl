@@ -1,6 +1,6 @@
 function documentfunction(f::Function; maintext::String="", argtext::Dict=Dict(), keytext::Dict=Dict())
 	stdoutcaptureon()
-	if maintext! != ""
+	if maintext != ""
 		println("**$(f)**\n")
 		println("$(maintext)\n")
 	end
