@@ -281,6 +281,7 @@ $(documentfunction(setseed))
 function setseed(seed::Integer=0, quiet::Bool=true)
 	if seed != 0
 		srand(seed)
+		!quiet && info("New seed: $s")
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		!quiet && info("Current seed: $s")
