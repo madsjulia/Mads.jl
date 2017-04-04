@@ -1,11 +1,12 @@
 import DataStructures
 
 """
+Load MADS input file defining a MADS problem dictionary
+
 $(documentfunction(loadmadsfile;
-                   maintext="Load MADS input file defining a MADS problem dictionary",
-				   argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
-				   keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
-				                "format"=>"acceptable formats are `yaml` and`json`,  [default=`yaml`]")))
+argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
+keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
+             "format"=>"acceptable formats are `yaml` and`json`,  [default=`yaml`]")))
 
 Usage:
 

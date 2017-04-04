@@ -1,7 +1,9 @@
 function documentfunction(f::Function; maintext::String="", argtext::Dict=Dict(), keytext::Dict=Dict())
 	stdoutcaptureon()
-	println("**$(f)**\n")
-	println("$(maintext)\n")
+	if maintext! != ""
+		println("**$(f)**\n")
+		println("$(maintext)\n")
+	end
 	m = methods(f)
 	ms = convert(Array{String, 1}, strip.(split(string(m.mt), "\n"))[2:end])
 	nm = length(ms)
