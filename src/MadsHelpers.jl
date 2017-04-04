@@ -278,7 +278,7 @@ Set / get seed
 
 $(documentfunction(setseed))
 """
-function setseed(seed::Integer=0, quiet::Bool=false)
+function setseed(seed::Integer=0, quiet::Bool=true)
 	if seed != 0
 		srand(seed)
 	else
