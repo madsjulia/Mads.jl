@@ -38,10 +38,9 @@ function reload()
 end
 
 """
-Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)
-
 $(documentfunction(test;
-				   argtext=Dict("testname"=>"name of the test to execute (module or example"),
+                   maintext="""Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)""",
+				   argtext=Dict("testname"=>"name of the test to execute (module or example)"),
 				   keytext=Dict("madstest"=>"test Mads [default=`true`]", "moduletest"=>"test modules [default=`false`]")))
 """
 function test(testname::String=""; madstest::Bool=true)
