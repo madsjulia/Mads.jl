@@ -4,6 +4,8 @@ import JSON
 import Gadfly
 import DataStructures
 
+include("ode-driver.jl")
+
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
@@ -22,7 +24,7 @@ Mads.showparameters(md)
 paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # function to create a function for the ODE solver
-function makefunc(parameterdict::OrderedDict)
+function makefunc(parameterdict::DataStructures.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
@@ -45,10 +47,10 @@ t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
 ys = hcat(y...)' # vectorizing the output and transposing it with '
 
 # draw initial solution
-p = Gadfly.plot(layer(x=t, y=ys[:,1], Geom.line, Theme(default_color=parse(Colors.Colorant, "orange"))),
-				layer(x=t, y=ys[:,2], Geom.line, Theme(default_color=parse(Colors.Colorant, "blue"))),
-				Guide.manual_color_key("ODE", ["x(t)", "x'(t)"], ["orange", "blue"]))
-Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"), 6inch, 4inch), p)
+p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "orange"))),
+				Gadfly.layer(x=t, y=ys[:,2], Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"))),
+				Gadfly.Guide.manual_color_key("ODE", ["x(t)", "x'(t)"], ["orange", "blue"]))
+Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"), 6Gadfly.inch, 4Gadfly.inch), p)
 
 # create an observation dictionary in the MADS dictionary
 Mads.madsinfo("Create MADS Observations ...")
