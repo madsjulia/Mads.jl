@@ -50,11 +50,12 @@ end
 """
 Parse loaded Mads problem dictionary
 
+$(documentfunction(parsemadsdata!))
+
 Arguments:
 
 - `madsdata` : Mads problem dictionary
 
-$(documentfunction(parsemadsdata!))
 """
 function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
