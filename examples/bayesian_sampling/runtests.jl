@@ -3,7 +3,7 @@ import Mads
 Mads.madsinfo("Bayesian sampling ...")
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "bayesian_sampling")
 end
 

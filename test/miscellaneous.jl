@@ -55,7 +55,7 @@ if length(ARGS) < 1
 else
 	ARGS[1] = "testing"
 end
-include("../src/madsjl.jl")
+include(joinpath("..", "src", "madsjl.jl"))
 rm("madsjl.cmdline_hist")
 Mads.functions()
 Mads.functions("createmadsproblem")

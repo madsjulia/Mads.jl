@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "optimization")
 end
 

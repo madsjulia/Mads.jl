@@ -5,7 +5,7 @@ import DataStructures
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "ode")
 end
 

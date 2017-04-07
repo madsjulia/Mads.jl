@@ -1240,9 +1240,9 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 				Mads.madsoutput("""Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n""")
 				Mads.madsoutput("""Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n""")
 				if restart
-					Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
+					Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
 				else
-					Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String,Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+					Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, DataStructures.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 				end
 			#end #End if (processors)
 
