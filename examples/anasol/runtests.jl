@@ -82,8 +82,9 @@ Mads.showallparameters(md)
 Mads.showobservations(md)
 Mads.stdoutcaptureoff();
 
-Mads.setparamsdistnormal!(md, fill(1, length(m1)), fill(1, length(m1)))
-Mads.setparamsdistuniform!(md, fill(1, length(m1)), fill(1, length(m1)))
+mdbad = deepcopy(md)
+Mads.setparamsdistnormal!(mdbad, fill(1, length(m1)), fill(2, length(m1)))
+Mads.setparamsdistuniform!(mdbad, fill(1, length(m1)), fill(2, length(m1)))
 
 Mads.computemass("w01lambda", time=50, path=workdir)
 Mads.rmdir(joinpath(workdir, "mass_reduced.svg"))
@@ -166,10 +167,13 @@ end
 # Test Mads.gettargetkeys(md)
 @Base.Test.test tk == good_targetkeys
 
+md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
+md["Restart"] = true
 Mads.localsa(md)
-Mads.calibrate(md)
+Mads.calibrate(md, localsa=true)
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_ext("iterationresults"; path=workdir)
+Mads.rmdir("w01shortexp_restart")
 
 Mads.rmdir("w01-w13a_w20a_restart")

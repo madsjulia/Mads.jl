@@ -79,7 +79,7 @@ Calibrate with random initial guesses in parallel
 
 $(documentfunction(calibraterandom_parallel))
 """
-function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true)
+function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
 	paramkeys = Mads.getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
@@ -93,7 +93,7 @@ function calibraterandom_parallel(madsdata::Associative, numberofsamples::Intege
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -152,12 +152,11 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	sindx = Mads.getsindx(madsdata)
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-	# Mads.restarton()
-	# ReusableFunctions.quietoff()
+	restart_flag = Mads.getrestart(madsdata)
 	if save_results
 		interationcallback = (x_best::Vector, of::Number, lambda::Number)->begin
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
-			if localsa || Mads.getrestart(madsdata)
+			if localsa || restart_flag
 				Mads.localsa(madsdata; par=x_best_real, keyword="best")
 			end
 			outfile = open("$rootname.iterationresults", "a+")
@@ -166,15 +165,12 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys,x_best_real)), "\n"))
 			close(outfile)
 		end
-		jacobiancallback = (x::Vector, J::Matrix)->nothing
-		#=
 		jacobiancallback = (x::Vector, J::Matrix)->begin
-			x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
-			if localsa || Mads.getrestart(madsdata)
+			if localsa || restart_flag
+				x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
 				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
 			end
 		end
-		=#
 	else
 		interationcallback = (x_best::Vector, of::Number, lambda::Number)->nothing
 		jacobiancallback = (x::Vector, J::Matrix)->nothing
