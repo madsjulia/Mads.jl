@@ -5,7 +5,7 @@ import Klara
 import JSON
 import AffineInvariantMCMC
 
-function emceesampling(madsdata::Associative; numwalkers::Int=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
+function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
