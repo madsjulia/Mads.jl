@@ -179,84 +179,6 @@ function makelmfunctions(madsdata::Associative)
 end
 
 """
-Make gradient function needed for local sensitivity analysis
-
-$(documentfunction(makelocalsafunction))
-"""
-function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
-	f = makemadscommandfunction(madsdata)
-	restartdir = getrestartdir(madsdata)
-	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	nO = length(obskeys)
-	optparamkeys = Mads.getoptparamkeys(madsdata)
-	lineardx = getparamsstep(madsdata, optparamkeys)
-	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
-	function func(arrayparameters::Vector)
-		parameters = copy(initparams)
-		for i = 1:length(arrayparameters)
-			parameters[optparamkeys[i]] = arrayparameters[i]
-		end
-		resultdict = f(parameters)
-		results = Array{Float64}(0)
-		for obskey in obskeys
-			push!(results, resultdict[obskey]) # preserve the expected order
-		end
-		return results .* weights
-	end
-	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
-		arrayparameters = arrayparameters_dx_center_tuple[1]
-		dx = arrayparameters_dx_center_tuple[2]
-		center = arrayparameters_dx_center_tuple[3]
-		if sizeof(center) > 0 && multiplycenterbyweights
-			center = center .* weights
-		end
-		if sizeof(dx) == 0
-			dx = lineardx
-		end
-		p = Vector{Float64}[]
-		for i in 1:nP
-			a = copy(arrayparameters)
-			a[i] += dx[i]
-			push!(p, a)
-		end
-		if sizeof(center) == 0
-			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
-			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center != nothing) && length(center) == nO
-			if !center_computed
-				push!(p, arrayparameters)
-			end
-		else
-			center_computed = true
-		end
-		fevals = RobustPmap.rpmap(func, p)
-		if !center_computed
-			center = fevals[nP+1]
-			if restartdir != ""
-				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
-			end
-		end
-		jacobian = Array{Float64}((nO, nP))
-		for j in 1:nO
-			for i in 1:nP
-				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
-			end
-		end
-		return jacobian
-	end
-	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "g_lm"; usedict=false)
-	"""
-	Gradient function for the forward model used for local sensitivity analysis
-	"""
-	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
-		return reusable_inner_grad(tuple(arrayparameters, dx, center))
-	end
-	return grad
-end
-
-"""
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 $(documentfunction(naive_get_deltax))
@@ -343,7 +265,8 @@ Arguments:
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
 - `alwaysDoJacobian`: computer Jacobian each iteration [false]
-- `callback` : call back function for debugging
+- `callbackiteration` : call back function for each iteration
+- `callbackjacobian` : call back function for each jacobian
 
 """
 function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::Vector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::Vector, J::Matrix)->nothing)

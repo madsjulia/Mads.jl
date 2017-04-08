@@ -710,7 +710,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 					for i in 1:numberofsamples]...)
 			vsize = 4Gadfly.inch
 		else
@@ -742,7 +742,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 							Gadfly.Guide.title(wellname),
 							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 							for i in 1:numberofsamples]...)
 					push!(pp, p)
 					vsize += 4Gadfly.inch
@@ -889,7 +889,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		pl = Gadfly.plot(pa...,
 			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
 			for i in 1:numberofsamples]... )
 		vsize = 4Gadfly.inch
 	else
@@ -924,7 +924,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 						Gadfly.Guide.title(wellname),
 						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][i%6+1])))
+						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
 						for i in 1:numberofsamples]...)
 				push!(pp, p)
 				vsize += 4Gadfly.inch
@@ -1001,19 +1001,30 @@ Arguments:
 
 $(documentfunction(plotseries))
 """
-function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt)
+function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Array(String,0))
 	nT = size(X)[1]
 	nS = size(X)[2]
 	if combined
 		hsize_plot = hsize
 		vsize_plot = vsize
-		pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
-			Gadfly.Geom.line,
-            Gadfly.Theme(line_width=linewidth),
-			color = ["$name $i" for j in 1:nT])
-			for i in 1:nS]...,
-			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-			Gadfly.Guide.colorkey(title))
+		ncolors = length(colors)
+		@show filename
+		if ncolors == 0 || ncolors != nS
+			pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
+				Gadfly.Geom.line,
+				Gadfly.Theme(line_width=linewidth),
+				color = ["$name $i" for j in 1:nT])
+				for i in 1:nS]...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.colorkey(title))
+		else
+			pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
+				Gadfly.Geom.line,
+				Gadfly.Theme(line_width=linewidth, default_color=parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
+				for i in 1:nS]...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.manual_color_key(title, ["$name $i" for i in 1:nS], [colors[(i-1)%ncolors+1] for i in 1:nS]))
+		end
 	else
 		hsize_plot = hsize
 		vsize_plot = vsize / 2 * nS
@@ -1026,7 +1037,11 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	try
 		if filename != ""
 			filename, format = setplotfileformat(filename, format)
-			Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot), pS)
+			if format == "SVG"
+				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot), pS)
+			else
+				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
+			end
 		end
 		if typeof(pS) == Gadfly.Plot{}
 			pS

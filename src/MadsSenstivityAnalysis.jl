@@ -12,6 +12,84 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 
 """
+Make gradient function needed for local sensitivity analysis
+
+$(documentfunction(makelocalsafunction))
+"""
+function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
+	f = makemadscommandfunction(madsdata)
+	restartdir = getrestartdir(madsdata)
+	obskeys = Mads.getobskeys(madsdata)
+	weights = Mads.getobsweight(madsdata)
+	nO = length(obskeys)
+	optparamkeys = Mads.getoptparamkeys(madsdata)
+	lineardx = getparamsstep(madsdata, optparamkeys)
+	nP = length(optparamkeys)
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	function func(arrayparameters::Vector)
+		parameters = copy(initparams)
+		for i = 1:length(arrayparameters)
+			parameters[optparamkeys[i]] = arrayparameters[i]
+		end
+		resultdict = f(parameters)
+		results = Array{Float64}(0)
+		for obskey in obskeys
+			push!(results, resultdict[obskey]) # preserve the expected order
+		end
+		return results .* weights
+	end
+	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
+		arrayparameters = arrayparameters_dx_center_tuple[1]
+		dx = arrayparameters_dx_center_tuple[2]
+		center = arrayparameters_dx_center_tuple[3]
+		if sizeof(center) > 0 && multiplycenterbyweights
+			center = center .* weights
+		end
+		if sizeof(dx) == 0
+			dx = lineardx
+		end
+		p = Vector{Float64}[]
+		for i in 1:nP
+			a = copy(arrayparameters)
+			a[i] += dx[i]
+			push!(p, a)
+		end
+		if sizeof(center) == 0
+			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
+			center = ReusableFunctions.loadresultfile(filename)
+			center_computed = (center != nothing) && length(center) == nO
+			if !center_computed
+				push!(p, arrayparameters)
+			end
+		else
+			center_computed = true
+		end
+		fevals = RobustPmap.rpmap(func, p)
+		if !center_computed
+			center = fevals[nP+1]
+			if restartdir != ""
+				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
+			end
+		end
+		jacobian = Array{Float64}((nO, nP))
+		for j in 1:nO
+			for i in 1:nP
+				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
+			end
+		end
+		return jacobian
+	end
+	reusable_inner_grad = makemadsreusablefunction(madsdata, inner_grad, "g_lm"; usedict=false)
+	"""
+	Gradient function for the forward model used for local sensitivity analysis
+	"""
+	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+		return reusable_inner_grad(tuple(arrayparameters, dx, center))
+	end
+	return grad
+end
+
+"""
 Local sensitivity analysis based on eigen analysis of the parameter covariance matrix
 
 Arguments:
@@ -1275,10 +1353,10 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 			Mads.madsoutput("Calculating Fourier coefficients for observations ...\n")
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Subtract the average value from Y
-			Y[:] = (Y[:] - mean(Y[:]))'
+			Y = (Y - mean(Y))'
 			## Calculating Fourier coefficients associated with MAIN INDICES
 			# p corresponds to the harmonics of Wi
-			for p = 1 : 1 : M
+			for p = 1:M
 				A = dot(Y[:], cos.(Wi*p*S_vec))
 				B = dot(Y[:], sin.(Wi*p*S_vec))
 				AVi += A^2 + B^2
@@ -1286,7 +1364,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 			# 1/Ns taken out of both A and B for optimization!
 			AVi = AVi / Ns^2
 			## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
-			for j = 1 : Wcmax * M
+			for j = 1:Wcmax * M
 				A = dot(Y[:], cos.(j * S_vec))
 				B = dot(Y[:], sin.(j * S_vec))
 				AVci = AVci + A^2 + B^2

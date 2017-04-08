@@ -96,6 +96,7 @@ quiet = true
 restart = false
 graphoutput = true
 graphbackend = "SVG"
+dpi=300
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0

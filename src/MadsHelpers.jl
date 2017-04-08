@@ -254,9 +254,9 @@ end
 "Print error message"
 function printerrormsg(e::Any)
 	if in(:msg, fieldnames(e))
-		print(e.msg)
+		println(e.msg)
 	else
-		print(e)
+		println(e)
 	end
 end
 

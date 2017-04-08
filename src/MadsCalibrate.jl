@@ -167,12 +167,14 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			close(outfile)
 		end
 		jacobiancallback = (x::Vector, J::Matrix)->nothing
-		#jacobiancallback = (x::Vector, J::Matrix)->begin
-			#x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
-			#if localsa || Mads.getrestart(madsdata)
-			#	Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
-			#end
-		#end
+		#=
+		jacobiancallback = (x::Vector, J::Matrix)->begin
+			x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
+			if localsa || Mads.getrestart(madsdata)
+				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
+			end
+		end
+		=#
 	else
 		interationcallback = (x_best::Vector, of::Number, lambda::Number)->nothing
 		jacobiancallback = (x::Vector, J::Matrix)->nothing

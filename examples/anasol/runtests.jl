@@ -166,4 +166,10 @@ end
 # Test Mads.gettargetkeys(md)
 @Base.Test.test tk == good_targetkeys
 
+Mads.localsa(md)
+Mads.calibrate(md)
+Mads.rmfiles_ext("svg"; path=workdir)
+Mads.rmfiles_ext("dat"; path=workdir)
+Mads.rmfiles_ext("iterationresults"; path=workdir)
+
 Mads.rmdir("w01-w13a_w20a_restart")
