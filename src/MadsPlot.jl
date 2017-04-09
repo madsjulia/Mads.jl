@@ -142,15 +142,15 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	end
 end
 
-function plotmatches(madsdata::Associative, rx::Regex=r""; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0))
+function plotmatches(madsdata::Associative, rx::Regex=r""; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
 	r = forward(madsdata; all=true)
 	if rx != r""
-		plotmatches(madsdata, r, rx; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors)
+		plotmatches(madsdata, r, rx; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
 	else
-		plotmatches(madsdata, r; plotdata=plotdata, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors)
+		plotmatches(madsdata, r; plotdata=plotdata, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
 	end
 end
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0))
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -172,9 +172,9 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plot
 	if haskey(newmadsdata, "Wells")
 		delete!(newmadsdata, "Wells")
 	end
-	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors)
+	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
 end
-function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0))
+function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -255,13 +255,13 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 					else
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize), p)
 					end
-					Mads.display(filename_w)
+					display && Mads.display(filename_w)
 				else
 					push!(pp, p)
 				end
 			end
 		end
-		if length(pp) > 1
+		if length(pp) > 0
 			vsize = vsize * length(pp)
 			pl = Gadfly.vstack(pp...)
 		end
@@ -316,7 +316,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		if typeof(pl) == Gadfly.Plot{}
 			pl
 		else
-			Mads.display(filename)
+			display && Mads.display(filename)
 		end
 	end
 end
