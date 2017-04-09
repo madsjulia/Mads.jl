@@ -26,6 +26,30 @@ function addsource!(madsdata::Associative, sourceid::Int=0)
 end
 
 """
+Remove a contamination source
+
+$(documentfunction(removesource!))
+"""
+function removesource!(madsdata::Associative, sourceid::Int=0)
+	if haskey(madsdata, "Sources")
+		ns = length(madsdata["Sources"])
+		if sourceid <= 0
+			sourceid = ns
+		end
+		if sourceid <= ns
+			removesourceparameters!(madsdata)
+			deleteat!(madsdata["Sources"], sourceid)
+			addsourceparameters!(madsdata)
+		else
+			madserror("There are only $(ns) sources in the Mads dictionary!")
+		end
+	else
+		madserror("There are no sources in the Mads dictionary!")
+	end
+	info("There are $(length(madsdata["Sources"])) sources now!")
+end
+
+"""
 Add contaminant source parameters
 
 $(documentfunction(addsourceparameters!))
@@ -36,13 +60,41 @@ function addsourceparameters!(madsdata::Associative)
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = keys(madsdata["Sources"][i][sourcetype])
 			for sourceparam in sourceparams
-				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp") # it is a real parameter, not an expression
+				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
 					madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
 				else
 					if !haskey(madsdata, "Expressions")
 						madsdata["Expressions"] = DataStructures.OrderedDict()
 					end
 					madsdata["Expressions"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+				end
+
+			end
+		end
+	end
+end
+
+"""
+Remove contaminant source parameters
+
+$(documentfunction(removesourceparameters!))
+"""
+function removesourceparameters!(madsdata::Associative)
+	if haskey(madsdata, "Sources")
+		for i = 1:length(madsdata["Sources"])
+			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
+			sourceparams = keys(madsdata["Sources"][i][sourcetype])
+			for sourceparam in sourceparams
+				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
+					if haskey(madsdata["Parameters"], string("source", i, "_", sourceparam))
+						delete!(madsdata["Parameters"], string("source", i, "_", sourceparam))
+					end
+				else
+					if haskey(madsdata, "Expressions")
+						if haskey(madsdata["Expressions"], string("source", i, "_", sourceparam))
+							delete!(madsdata["Expressions"], string("source", i, "_", sourceparam))
+						end
+					end
 				end
 
 			end
