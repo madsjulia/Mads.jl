@@ -5,13 +5,13 @@ import DataStructures
 """
 Load YAML file
 
-Arguments:
+$(documentfunction(loadyamlfile;
+argtext=Dict("filename"=>"file name"),
+keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 
-- `filename` : file name
-- `julia=false` : use Python YAML library (if available)
-- `julia=true` : use Julia YAML library (if available)
+Returns:
 
-$(documentfunction(loadyamlfile))
+- `yamldata` : yaml data from input file
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 	julia = isdefined(Mads, :yaml) ? julia : true
@@ -29,12 +29,10 @@ end
 """
 Dump YAML file
 
-Arguments:
-
-- `filename` : file name
-- `data` : YAML data
-
-$(documentfunction(dumpyamlfile))
+$(documentfunction(dumpyamlfile;
+argtext=Dict("filename"=>"output file name",
+            "data"=>"YAML data"),
+keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 """
 function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
 	julia = isdefined(:yaml) ? julia : true
@@ -50,12 +48,10 @@ end
 """
 Dump YAML Mads file
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `filename` : file name
-
-$(documentfunction(dumpyamlmadsfile))
+$(documentfunction(dumpyamlmadsfile;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "filename"=>"output file name"),
+keytext=Dict("julia"=>"[default=`false`]")))
 """
 function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
@@ -112,7 +108,13 @@ end
 """
 Read MADS model predictions from a YAML file `filename`
 
-$(documentfunction(readyamlpredictions))
+$(documentfunction(readyamlpredictions;
+argtext=Dict("filename"=>"file name"),
+keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
+
+Returns:
+
+- yaml data from input file
 """
 function readyamlpredictions(filename::String; julia::Bool=false) # read YAML predictions
 	return loadyamlfile(filename; julia=julia)
