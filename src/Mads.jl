@@ -96,6 +96,7 @@ quiet = true
 restart = false
 graphoutput = true
 graphbackend = "SVG"
+dpi=300
 verbositylevel = 1
 debuglevel = 1
 modelruns = 0
@@ -147,7 +148,7 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 if !haskey(ENV, "MADS_TRAVIS")
 	include("MadsMathProgBase.jl")
-	include("MadsSVR.jl")
+	#include("MadsSVR.jl")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))

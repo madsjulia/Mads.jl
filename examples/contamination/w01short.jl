@@ -91,17 +91,17 @@ paramvalues=Mads.getparamrandom(md, numberofsamples)
 Y = Array{Float64}(length(md["Observations"]),numberofsamples * length(paramvalues))
 k = 0
 for paramkey in keys(paramvalues)
-  for i in 1:numberofsamples
-	original = paramdict[paramkey]
-	paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
+	for i in 1:numberofsamples
+		original = paramdict[paramkey]
+		paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
 		forward_preds = computeconcentrations(paramdict)
-	paramdict[paramkey] = original
+		paramdict[paramkey] = original
 		j = 1
 		for obskey in keys(forward_preds)
 			Y[j,i + k] = forward_preds[obskey]
 			j += 1
 		end
-  end
+	end
 	k += numberofsamples
 end
 # save model inputs (not recommended)

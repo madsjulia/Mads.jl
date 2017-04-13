@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "optimization")
 end
 
@@ -49,7 +49,6 @@ end
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_ext("iterationresults"; path=workdir)
-
 
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel+template_restart"))
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))

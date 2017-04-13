@@ -318,8 +318,12 @@ function getoptparams(madsdata::Associative, parameterarray::Array, optparameter
 	end
 	parameterkey = getparamkeys(madsdata)
 	nP = length(parameterkey)
+	nP2 = length(parameterarray)
 	nPo = length(optparameterkey)
-	if nP > nPo
+	if nP2 == nPo
+		return parameterarray
+	elseif nP > nPo
+		@assert nP2 == nP
 		parameterarraynew = Array{Float64}(nPo)
 		j = 1
 		for i in 1:nP

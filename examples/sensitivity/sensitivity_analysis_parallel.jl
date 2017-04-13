@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 workdir = Mads.getmadsdir()
-if workdir == ""
+if workdir == "."
 	@everywhere workdir = joinpath(Mads.madsdir, "..", "examples", "sensitivity")
 end
 

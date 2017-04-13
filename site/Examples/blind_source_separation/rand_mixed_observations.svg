@@ -193,14 +193,14 @@
   <clipPath id="img-edb40650-30">
   <path d="M14.54,60.61 L 147.4 60.61 147.4 83.83 14.54 83.83" />
 </clipPath>
+  <clipPath id="img-edb40650-17">
+  <path d="M14.54,111.41 L 147.4 111.41 147.4 134.63 14.54 134.63" />
+</clipPath>
   <clipPath id="img-edb40650-4">
   <path d="M14.54,162.21 L 147.4 162.21 147.4 185.43 14.54 185.43" />
 </clipPath>
   <clipPath id="img-edb40650-43">
   <path d="M14.54,9.81 L 147.4 9.81 147.4 33.03 14.54 33.03" />
-</clipPath>
-  <clipPath id="img-edb40650-17">
-  <path d="M14.54,111.41 L 147.4 111.41 147.4 134.63 14.54 134.63" />
 </clipPath>
 </defs>
 </svg>

@@ -1,7 +1,7 @@
 import Mads
 
 workdir = Mads.getmadsdir()
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "wells")
 end
 cdir = pwd()

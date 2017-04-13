@@ -249,7 +249,6 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 
 """ setobstime!
 
-
 """
 Set observation weights in the MADS problem dictionary
 
@@ -362,28 +361,51 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-function createobservations!(madsdata::Associative, time::Vector, observation::Vector; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
-	@assert length(time) == length(observation)
-	observationsdict = DataStructures.OrderedDict()
-	for i in 1:length(time)
-		obskey = string("o", time[i])
-		data = DataStructures.OrderedDict()
-		data["target"] = observation[i]
-		if weight_type == "constant"
-			if weight != 1
+function createobservations!(madsdata::Associative, time::Vector, observation::Vector=zeros(length(time)); logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
+	nT = length(time)
+	@assert nT == length(observation)
+	if !haskey(madsdata, "Wells")
+		observationsdict = DataStructures.OrderedDict()
+		for i in 1:nT
+			obskey = string("o", time[i])
+			data = DataStructures.OrderedDict()
+			data["target"] = observation[i]
+			if weight_type == "constant"
 				data["weight"] = weight
+			else
+				data["weight"] = 1 / observation[i]
 			end
-		else
-			data["weight"] = 1 / observation[i]
+			data["time"] = time[i]
+			if logtransform == true
+				data["log"] = logtransform
+			end
+			observationsdict[obskey] = data
 		end
-		data["time"] = time[i]
-		if logtransform == true
-			data["log"] = logtransform
+		madsdata["Observations"] = observationsdict
+	else
+		for wellname in keys(madsdata["Wells"])
+			observationsarray = Array{Dict{Any,Any}}(nT)
+			for i in 1:nT
+				data = DataStructures.OrderedDict()
+				data["c"] = observation[i]
+				if weight_type == "constant"
+					data["weight"] = weight
+				else
+					data["weight"] = 1 / observation[i]
+				end
+				data["t"] = time[i]
+				if logtransform == true
+					data["log"] = logtransform
+				end
+				observationsarray[i] = data
+			end
+			madsdata["Wells"][wellname]["obs"] = observationsarray	
 		end
-		observationsdict[obskey] = data
+		wells2observations!(madsdata)
 	end
-	madsdata["Observations"] = observationsdict
+	nothing
 end
+
 function createobservations!(madsdata::Associative, observations::Associative; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	observationsdict = DataStructures.OrderedDict()
 	for k in keys(observations)

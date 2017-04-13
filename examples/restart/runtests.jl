@@ -4,7 +4,7 @@ import Base.Test
 Mads.madsinfo("Restarting ...")
 cwd = pwd()
 workdir = string((dirname(Base.source_path()))) * "/"
-if workdir == ""
+if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "restart")
 end
 cd(workdir)
