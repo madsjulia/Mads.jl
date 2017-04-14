@@ -22,8 +22,11 @@ function documentfunction(f::Function; maintext::String="", argtext::Dict=Dict()
 			for i = 1:l
 				arg = strip(string(a[i]))
 				print(" - `$(arg)`")
+				if contains(arg, "::")
+					arg = split(arg, "::")[1]
+				end
 				if haskey(argtext, arg)
-					println(" : $(argtext[arg]))")
+					println(" : $(argtext[arg])")
 				else
 					println("")
 				end
