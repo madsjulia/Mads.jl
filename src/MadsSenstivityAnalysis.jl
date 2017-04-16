@@ -230,11 +230,12 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, 
 			covmat = (v * diagm(1 ./ d) * u') .* scale
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
-		catch
+		catch errmsg
+			# printerrormsg(errmsg)
 			numgooddirections -= 1
 			if numgooddirections <= 0
 				done = true
-				madswar("Reduction in sampling directions failed!")
+				madswarn("Reduction in sampling directions failed!")
 				return
 			end
 			gooddirections = vo[:, 1:numgooddirections]
@@ -245,7 +246,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, 
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
 	setseed(seed)
 	gooddsamples = Distributions.rand(dist, numsamples)
-	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i]''), 1:numsamples)
+	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]''), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
 	else
