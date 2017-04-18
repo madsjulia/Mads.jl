@@ -673,6 +673,15 @@ argtext=Dict("dict"=>"dictionary",
              "key"=>"the key to find value for")))
 """ getdictvalues
 
+"""
+Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+
+$(documentfunction(writeparametersviatemplate;
+argtext=Dict("parameters"=>"parameters",
+            "templatefilename"=>"tmplate file name",
+            "outputfilename"=>"output file name"),
+keytext=Dict("respect_space"=>"[default=`false`]")))
+"""
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -707,6 +716,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	end
 	close(outfile)
 end
+
 function writeparameters(madsdata::Associative)
 	paramsinit = getparamsinit(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -722,13 +732,11 @@ function writeparameters(madsdata::Associative, parameters::Associative; respect
 end
 
 @doc """
-Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+Write `parameters`
 
-$(documentfunction(writeparametersviatemplate;
+$(documentfunction(writeparameters;
 argtext=Dict("madsdata"=>"",
-            "parameters"=>"parameters",
-            "templatefilename"=>"tmplate file name",
-            "outputfilename"=>"output file name"),
+            "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"[default=`false`]")))
 """ writeparameters
 
