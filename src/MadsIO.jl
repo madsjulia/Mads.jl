@@ -148,30 +148,12 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-"""
-Save MADS problem dictionary `madsdata` in MADS input file `filename`
-
-$(documentfunction(savemadsfile;
-argtext=Dict("madsdata"=>"Mads problem dictionar",
-            "parameters"=>"Dictionary with parameters (optional)",
-            "filename"=>"input file name (e.g. `input_file_name.mads`)"),
-keytext=Dict("julia"=>"if `true` use Julia JSON module to save, [default=`false`]",
-            "explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file, [default=`false`]")))
-
-Usage:
-
-- `Mads.savemadsfile(madsdata)`
-- `Mads.savemadsfile(madsdata, "test.mads")`
-- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
-- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
-"""
 function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
 	dumpyamlmadsfile(madsdata, filename, julia=julia)
 end
-
 function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
@@ -195,6 +177,24 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 		dumpyamlmadsfile(madsdata2, filename, julia=julia)
 	end
 end
+
+@doc """
+Save MADS problem dictionary `madsdata` in MADS input file `filename`
+
+$(documentfunction(savemadsfile;
+argtext=Dict("madsdata"=>"Mads problem dictionar",
+            "parameters"=>"Dictionary with parameters (optional)",
+            "filename"=>"input file name (e.g. `input_file_name.mads`)"),
+keytext=Dict("julia"=>"if `true` use Julia JSON module to save, [default=`false`]",
+            "explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file, [default=`false`]")))
+
+Usage:
+
+- `Mads.savemadsfile(madsdata)`
+- `Mads.savemadsfile(madsdata, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
+- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
+""" savemadsfile
 
 """
 Save calibration results
@@ -374,17 +374,6 @@ function getrootname(filename::String; first::Bool=true, version::Bool=false)
 	return r
 end
 
-"""
-Set new mads file name
-
-$(documentfunction(setnewmadsfilename;
-argtext=Dict("madsdata"=>"",
-            "filename"=>"file name")))
-
-Returns:
-
-- the new file name 
-"""
 function setnewmadsfilename(madsdata::Associative)
 	setnewmadsfilename(madsdata["Filename"])
 end
@@ -404,6 +393,18 @@ function setnewmadsfilename(filename::String)
 	end
 	return joinpath(dir, filename)
 end
+
+@doc """
+Set new mads file name
+
+$(documentfunction(setnewmadsfilename;
+argtext=Dict("madsdata"=>"",
+            "filename"=>"file name")))
+
+Returns:
+
+- the new file name 
+""" setnewmadsfilename
 
 """
 Get next mads file name
@@ -616,7 +617,10 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 	return convert(DataStructures.OrderedDict{Any,Float64}, results)
 end
 
-"""
+searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
+searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
+
+@doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
 $(documentfunction(searchdir;
@@ -634,29 +638,29 @@ Examples:
 - `Mads.searchdir(r"[A-B]"; path = ".")`
 - `Mads.searchdir(r".*\.cov"; path = ".")`
 ```
-"""
-searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
-searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
+""" searchdir
 
-"""
+filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
+filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
+
+@doc """
 Filter dictionary keys based on a string or regular expression
 
 $(documentfunction(filterkeys;
 argtext=Dict("dict"=>"dictionary",
             "key"=>"the regular expression or string used to filter dictionary keys")))
-"""
-filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
-filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
+""" filterkeys
 
-"""
+indexkeys(dict::Associative, key::Regex) = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
+indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
+
+@doc """
 Find indexes for dictionary keys based on a string or regular expression
 
 $(documentfunction(indexkeys;
 argtext=Dict("dict"=>"dictionary",
             "key"=>"the key to find index for")))
-"""
-indexkeys(dict::Associative, key::Regex) = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
-indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
+""" indexkeys
 
 getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
 getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
@@ -669,15 +673,6 @@ argtext=Dict("dict"=>"dictionary",
              "key"=>"the key to find value for")))
 """ getdictvalues
 
-"""
-Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
-
-$(documentfunction(writeparametersviatemplate;
-argtext=Dict("parameters"=>"parameters",
-            "templatefilename"=>"tmplate file name",
-            "outputfilename"=>"output file name"),
-keytext=Dict("respect_space"=>"[default=`false`]")))
-"""
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
 	line = readline(tplfile) # read the first line that says "template $separator\n"
@@ -725,6 +720,17 @@ function writeparameters(madsdata::Associative, parameters::Associative; respect
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
 	end
 end
+
+@doc """
+Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
+
+$(documentfunction(writeparametersviatemplate;
+argtext=Dict("madsdata"=>"",
+            "parameters"=>"parameters",
+            "templatefilename"=>"tmplate file name",
+            "outputfilename"=>"output file name"),
+keytext=Dict("respect_space"=>"[default=`false`]")))
+""" writeparameters
 
 """
 Convert an instruction line in the Mads instruction file into regular expressions
