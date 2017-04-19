@@ -557,7 +557,7 @@ Load saltelli sensitivity analysis results for fast simulation restarts
 
 $(documentfunction(loadsaltellirestart!;
 argtext=Dict("evalmat"=>"",
-            "matname"=>""
+            "matname"=>"",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 
 Returns:
