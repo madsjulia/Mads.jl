@@ -268,7 +268,7 @@ argtext=Dict("filename"=>"file name")))
 
 Returns:
 
-- `d` : directory in file name
+- directory in file name
 
 Example:
 
@@ -319,7 +319,7 @@ Usage:
 
 Returns:
 
-- `problemdir` : problem directory
+- Mads problem directory
 """
 function getmadsdir()
 	source_path = Base.source_path()
@@ -342,7 +342,7 @@ keytext=Dict("first"=>"use the first . in filename as the seperator between root
 
 Returns:
 
-- `r` : root of file name
+- root of file name
 
 Example:
 
@@ -414,7 +414,7 @@ argtext=Dict("filename"=>"file name")))
 
 Returns:
 
-- `filename` : next mads file name
+- next mads file name
 """
 function getnextmadsfilename(filename::String)
 	t0 = 0
@@ -883,7 +883,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Returns:
 
-- `observations` : observations
+- Dictionary with Mads observations
 """
 function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
 	observations = Dict()
@@ -1094,6 +1094,12 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 	end
 end
 
+"""
+Create a directory (if does not already exist)
+
+$(documentfunction(mkdir;
+argtext=Dict("dirname"=>"directory")))
+"""
 function mkdir(dirname::String)
 	if !isdir(dirname)
 		Base.mkdir(dirname)
