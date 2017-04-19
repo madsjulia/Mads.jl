@@ -553,12 +553,12 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 end
 
 """
-Load saltelli sensitivity analysis results for fast simulation restarts
+Load Saltelli sensitivity analysis results for fast simulation restarts
 
 $(documentfunction(loadsaltellirestart!;
-argtext=Dict("evalmat"=>"",
-            "matname"=>"",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
+argtext=Dict("evalmat"=>"Loaded array",
+"matname"=>"Matrix (array) name (defines the name of the loaded file)",
+"restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 
 Returns:
 
@@ -578,12 +578,12 @@ function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::Strin
 end
 
 """
-Save saltelli sensitivity analysis results for fast simulation restarts
+Save Saltelli sensitivity analysis results for fast simulation restarts
 
 $(documentfunction(savesaltellirestart;
-argtext=Dict("evalmat"=>"",
-            "matname"=>"",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
+argtext=Dict("evalmat"=>"Saved array",
+"matname"=>"Matrix (array) name (defines the name of the loaded file)",
+"restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 
 Returns:
 
