@@ -271,7 +271,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, 
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
 	setseed(seed)
 	gooddsamples = Distributions.rand(dist, numsamples)
-	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]''), 1:numsamples)
+	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
 	else

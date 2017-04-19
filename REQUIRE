@@ -18,7 +18,7 @@ YAML
 JSON
 JLD
 ProgressMeter
-Distributions 0.12.3
+Distributions 0.12.5
 DataStructures
 DataFrames
 StatsBase
