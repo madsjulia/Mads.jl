@@ -14,7 +14,13 @@ end
 """
 Make gradient function needed for local sensitivity analysis
 
-$(documentfunction(makelocalsafunction))
+$(documentfunction(makelocalsafunction;
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
+
+Returns:
+
+- `grad` : gradient function
 """
 function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
@@ -92,15 +98,21 @@ end
 """
 Local sensitivity analysis based on eigen analysis of the parameter covariance matrix
 
-Arguments:
+$(documentfunction(localsa;
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("sinspace"=>"[default=`true`]",
+            "keyword"=>"",
+            "filename"=>"output file name",
+            "format"=>"output plot format (`png`, `pdf`, etc.)",
+            "datafiles"=>"[default=`true`]",
+            "imagefiles"=>"[default=`graphoutput`]",
+            "par"=>"parameter set",
+            "obs"=>"observations for the parameter set",
+            "J"=>"")))
 
-- `madsdata` : MADS problem dictionary
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
-- `par` : parameter set
-- `obs` : observations for the parameter set
+Dumps:
 
-$(documentfunction(localsa))
+- `filename` : output plot file
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
 	if filename == ""
@@ -215,6 +227,19 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
+"""
+$(documentfunction(sampling;
+argtext=Dict("param"=>"",
+            "J"=>"",
+            "numsamples"=>""),
+keytext=Dict("seed"=>"[default=`0`]", 
+             "scale"=>"[default=`1`]")))
+
+Returns:
+
+- `samples` : 
+- `llhoods` : vector of log-likelihoods
+"""
 function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
@@ -261,17 +286,14 @@ end
 """
 Reweigh samples using importance sampling -- returns a vector of log-likelihoods after reweighing
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `predictions` : the model predictions for each of the samples
-- `oldllhoods` : the log likelihoods of the parameters in the old distribution
+$(documentfunction(reweighsamples;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "predictions"=>"the model predictions for each of the samples",
+            "oldllhoods"=>"the log likelihoods of the parameters in the old distribution")))
 
 Returns:
 
 - `newllhoods` : vector of log-likelihoods after reweighing
-
-$(documentfunction(reweighsamples))
 """
 function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
@@ -291,16 +313,13 @@ end
 """
 Get important samples
 
-Arguments:
-
-- `samples` : array of samples
-- `llhoods` : vector of log-likelihoods
+$(documentfunction(getimportantsamples;
+argtext=Dict("samples"=>"array of samples"
+            "llhoods"=>"vector of log-likelihoods")))
 
 Returns:
 
 - `imp_samples` : array of important samples
-
-$(documentfunction(getimportantsamples))
 """
 function getimportantsamples(samples::Array, llhoods::Vector)
 	sortedlhoods = sort(exp.(llhoods), rev=true)
@@ -324,17 +343,14 @@ end
 """
 Get weighted mean and variance samples
 
-Arguments:
-
-- `samples` : array of samples
-- `llhoods` : vector of log-likelihoods
+$(documentfunction(weightedstats;
+argtext=Dict("samples"=>"array of samples",
+            "llhoods"=>"vector of log-likelihoods")))
 
 Returns:
 
 - `mean` : vector of sample means
 - `var` : vector of sample variances
-
-$(documentfunction(weightedstats))
 """
 function weightedstats(samples::Array, llhoods::Vector)
 	wv = StatsBase.WeightVec(exp.(llhoods))
@@ -378,27 +394,27 @@ end
 @doc """
 Get independent sampling of model parameters defined in the MADS problem dictionary
 
-$(documentfunction(getparamrandom))
+$(documentfunction(getparamrandom;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "parameterkey"=>"model parameter key",
+            "numsamples"=>"number of samples,  [default=`1`]"),
+keytext=Dict("init_dist"=>"if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); if `false` (default) use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)",
+            "numsamples"=>"number of samples",
+            "paramdist"=>"")))
 
-Arguments:
+Returns:
 
-- `madsdata` : MADS problem dictionary
-- `numsamples` : number of samples
-- `parameterkey` : model parameter key
-- `init_dist` : if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)
-
+- `sample` :
 """ getparamrandom
 
 """
 Saltelli sensitivity analysis (brute force)
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `N` : number of samples
-- `seed` : initial random seed
-
-$(documentfunction(saltellibrute))
+$(documentfunction(saltellibrute;
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("N"=>"number of samples, [default=`1000`]",
+            "seed"=>"initial random seed, [default=`0`]",
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	setseed(seed)
@@ -536,6 +552,18 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, 
 	Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => N, "seed" => seed, "method" => "saltellibrute")
 end
 
+"""
+Load saltelli sensitivity analysis results for fast simulation restarts
+
+$(documentfunction(loadsaltellirestart!;
+argtext=Dict("evalmat"=>"",
+            "matname"=>""
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
+
+Returns:
+
+- `true` when successfully loaded, `false` when it is not
+"""
 function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::String)
 	if restartdir == ""
 		return false
@@ -549,6 +577,18 @@ function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::Strin
 	return true
 end
 
+"""
+Save saltelli sensitivity analysis results for fast simulation restarts
+
+$(documentfunction(savesaltellirestart;
+argtext=Dict("evalmat"=>"",
+            "matname"=>""
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
+
+Returns:
+
+- nothing
+"""
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
@@ -560,15 +600,13 @@ end
 """
 Saltelli sensitivity analysis
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `N` : number of samples
-- `seed` : initial random seed
-- `restartdir` : directory where files will be stored containing model results for fast simulation restarts
-- `parallel` : set to true if the model runs should be performed in parallel
-
-$(documentfunction(saltelli))
+$(documentfunction(saltelli;
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("N"=>"number of samples, [default=`100`]",
+            "seed"=>"initial random seed, [default=`0`]",
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
+            "parallel"=>"set to true if the model runs should be performed in parallel, [default=`false`]",
+            "checkpointfrequency"=>"[default=`N`]")))
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
@@ -770,12 +808,9 @@ end
 """
 Compute sensitivities for each model parameter; averaging the sensitivity indices over the entire observation range
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `saresults` : sensitivity analysis results
-
-$(documentfunction(computeparametersensitities))
+$(documentfunction(computeparametersensitities;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "saresults"=>"sensitivity analysis results")))
 """
 function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
@@ -850,7 +885,9 @@ end
 """
 Print sensitivity analysis results
 
-$(documentfunction(printSAresults))
+$(documentfunction(printSAresults;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "results"=>"sensitivity analysis results")))
 """
 function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
@@ -930,7 +967,9 @@ end
 """
 Print sensitivity analysis results (method 2)
 
-$(documentfunction(printSAresults2))
+$(documentfunction(printSAresults2;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "results"=>"sensitivity analysis results (method 2)")))
 """
 function printSAresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
@@ -969,7 +1008,8 @@ end
 """
 Convert Void's into NaN's in a dictionary
 
-$(documentfunction(void2nan!))
+$(documentfunction(void2nan!;
+argtext=Dict("dict"=>"dictionary")))
 """
 function void2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
@@ -993,7 +1033,8 @@ end
 """
 Delete rows with NaN in a Dataframe `df`
 
-$(documentfunction(deleteNaN!))
+$(documentfunction(deleteNaN!;
+argtext=Dict("df"=>"dataframe")))
 """
 function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:length(df)
@@ -1009,7 +1050,8 @@ end
 """
 Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
 
-$(documentfunction(maxtorealmax!))
+$(documentfunction(maxtorealmax!;
+argtext=Dict("df"=>"dataframe")))
 """
 function maxtorealmax!(df::DataFrames.DataFrame)
 	limit = realmax(Float32)
@@ -1027,15 +1069,22 @@ end
 """
 Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Testing (eFAST) method
 
-Arguments:
+$(documentfunction(efast;
+argtext=Dict("md"=>"MADS problem dictionary"),
+keytext=Dict("N"=>"number of samples, [default=`100`]",
+            "M"=>"maximum number of harmonics, [default=`6`]",
+            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4), [default=`4`]",
+            "plotresults"=>"plot of results, [default=`graphoutput`]",
+            "seed"=>"initial random seed, [default=`0`]",
+            "issvr"=>"[default=`false`]",
+            "truncateRanges"=>"[default=`0`]",
+            "checkpointfrequency"=>"[default=`N`]",
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts, [default=`efastcheckpoints`]",
+            "restart"=>"[default=`false`]")))
 
-- `madsdata` : MADS problem dictionary
-- `N` : number of samples
-- `M` : maximum number of harmonics
-- `gamma` : multiplication factor (Saltelli 1999 recommends gamma = 2 or 4)
-- `seed` : initial random seed
+Dumps:
 
-$(documentfunction(efast))
+- plot of results, default from `graphoutput`
 """
 function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, plotresults::Bool=graphoutput, seed::Integer=0, issvr::Bool=false, truncateRanges::Number=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
