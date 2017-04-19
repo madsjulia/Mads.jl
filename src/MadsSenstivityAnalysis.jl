@@ -20,7 +20,7 @@ keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
 
 Returns:
 
-- `grad` : gradient function
+- gradient function
 """
 function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
@@ -229,16 +229,16 @@ end
 
 """
 $(documentfunction(sampling;
-argtext=Dict("param"=>"",
-            "J"=>"",
-            "numsamples"=>""),
+argtext=Dict("param"=>"Parameter vector",
+            "J"=>"Jacobian matrix",
+            "numsamples"=>"Number of samples"),
 keytext=Dict("seed"=>"[default=`0`]", 
              "scale"=>"[default=`1`]")))
 
 Returns:
 
-- `samples` : 
-- `llhoods` : vector of log-likelihoods
+- generated samples (vector or array)
+- vector of log-likelihoods
 """
 function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, scale::Number=1)
 	u, d, v = svd(J' * J)
@@ -293,7 +293,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- `newllhoods` : vector of log-likelihoods after reweighing
+- vector of log-likelihoods after reweighing
 """
 function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::Vector)
 	obskeys = getobskeys(madsdata)
@@ -319,7 +319,7 @@ argtext=Dict("samples"=>"array of samples",
 
 Returns:
 
-- `imp_samples` : array of important samples
+- array of important samples
 """
 function getimportantsamples(samples::Array, llhoods::Vector)
 	sortedlhoods = sort(exp.(llhoods), rev=true)
@@ -349,8 +349,8 @@ argtext=Dict("samples"=>"array of samples",
 
 Returns:
 
-- `mean` : vector of sample means
-- `var` : vector of sample variances
+- vector of sample means
+- vector of sample variances
 """
 function weightedstats(samples::Array, llhoods::Vector)
 	wv = StatsBase.WeightVec(exp.(llhoods))
@@ -404,7 +404,7 @@ keytext=Dict("init_dist"=>"if `true` use the distribution defined for initializa
 
 Returns:
 
-- `sample` :
+- generated sample
 """ getparamrandom
 
 """
@@ -584,10 +584,6 @@ $(documentfunction(savesaltellirestart;
 argtext=Dict("evalmat"=>"Saved array",
 "matname"=>"Matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
-
-Returns:
-
-- nothing
 """
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
 	if restartdir != ""

@@ -1043,7 +1043,7 @@ end
 Create temporary directory
 
 $(documentfunction(createtempdir;
-argtext=Dict("tempdirname"=>"tmporary directory name")))
+argtext=Dict("tempdirname"=>"temporary directory name")))
 """
 function createtempdir(tempdirname::String)
 	attempt = 0
