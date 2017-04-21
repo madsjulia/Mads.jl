@@ -40,7 +40,7 @@ function documentfunction(f::Function; maintext::String="", argtext::Dict=Dict()
 				key = strip(string(a[i]))
 				print(" - `$(key)`")
 				if haskey(keytext, key)
-					println(" : $(keytext[key]))")
+					println(" : $(keytext[key])")
 				else
 					println("")
 				end

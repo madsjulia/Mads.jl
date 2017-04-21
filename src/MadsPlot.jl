@@ -329,34 +329,35 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
             "rx"=>"regular expression to filter the outputs",
             "result"=>"dictionary with model predictions",
             "dict_in"=>"dictionary with model parameters"),
-keytext=Dict("plotdata"=>"[default=`true`]",
-            "format"=>"output plot format (`png`, `pdf`, etc.)",
+keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted only) [default=`true`]",
+            "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "filename"=>"output file name",
-            "title"=>"",
-            "xtitle"=>"[default=`time`]",
-            "ytitle"=>"y",
-            "separate_files"=>"[default=`false`]",
-            "hsize"=>"[default=`6Gadfly.inch`]",
-            "vsize"=>"[default=`4Gadfly.inch`]",
-            "linewidth"=>"[default=`2Gadfly.pt`]",
-            "pointsize"=>"[default=`4Gadfly.pt`]",
-            "obs_plot_dots"=>"[default=`true`]",
-            "noise"=>"[default=`0`]",
-            "dpi"=>"[default=`Mads.dpi`]",
-            "colors"=>"",
+            "title"=>"graph title",
+            "xtitle"=>"x-axis title [default=`\"Time\"`]",
+            "ytitle"=>"y-axis title",
+            "key2time"=>"user provided function to convert observation keys to observation times",
+            "separate_files"=>"plot data for multiple wells separately [default=`false`]",
+            "hsize"=>"graph horizontal size[default=`6Gadfly.inch`]",
+            "vsize"=>"graph vertical size [default=`4Gadfly.inch`]",
+            "linewidth"=>"line width [default=`2Gadfly.pt`]",
+            "pointsize"=>"data dot size [default=`4Gadfly.pt`]",
+            "obs_plot_dots"=>"plot data as dots or line [default=`true`]",
+            "noise"=>"random noise magnitude [default=`0`; no noise]",
+            "dpi"=>"graph resolution [default=`Mads.dpi`]",
+            "colors"=>"array with plot colors",
             "display"=>"[default=`false`]")))
 
 Dumps:
 
 - plot of the matches between model predictions and observations
 
-Example:
+Examples:
 
 ```julia
-plotmatches(madsdata; filename="", format="")
-plotmatches(madsdata, dict_in; filename="", format="")
-plotmatches(madsdata, result; filename="", format="")
-plotmatches(madsdata, result, r"NO3"; filename="", format="")
+Mads.plotmatches(madsdata; filename="", format="")
+Mads.plotmatches(madsdata, dict_in; filename="", format="")
+Mads.plotmatches(madsdata, result; filename="", format="")
+Mads.plotmatches(madsdata, result, r"NO3"; filename="", format="")
 ```
 """ plotmatches
 
