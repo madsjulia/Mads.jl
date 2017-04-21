@@ -174,7 +174,7 @@ function addkeyword!(madsdata::Associative, keyword::String)
 end
 function addkeyword!(madsdata::Associative, class::String, keyword::String)
 	if haskeyword(madsdata, class, keyword)
-		madswarn("Keyword already `$keyword` exists")
+		madswarn("Keyword `$keyword` already exists")
 		return
 	end
 	if typeof(madsdata[class]) <: Associative
