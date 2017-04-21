@@ -65,7 +65,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
             "filename"=>"output file name",
             "keyword"=>"to be added in the filename",
-            "imagefile"=>"[default=`false`]")))
+            "imagefile"=>"dump image file [default=`false`]")))
 
 Dumps:
 
@@ -515,8 +515,8 @@ $(documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
-keytext=Dict("xtitle"=>"x-axis title, [default=`Time years`]",
-            "ytitle"=>"y-axis title, [default=`Concentration ppb`]",
+keytext=Dict("xtitle"=>"x-axis title, [default=`\"Time years\"`]",
+            "ytitle"=>"y-axis title, [default=`\"Concentration ppb\"`]",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)")))
 
@@ -537,8 +537,8 @@ keytext=Dict("filter"=>"string or regex to plot only observations containing `fi
             "format"=>"output plot format (`png`, `pdf`, etc.)",
             "debug"=>"[default=`false`]",
             "separate_files"=>"[default=`false`]",
-            "xtitle"=>"[default=`Time years`]",
-            "ytitle"=>"[default=`Concentration ppb`]",
+            "xtitle"=>"[default=`\"Time \[years\]\"`]",
+            "ytitle"=>"[default=`\"Concentration \[ppb\]\"`]",
             "linewidth"=>"[default=`2Gadfly.pt`]",
             "pointsize"=>"[default=`2Gadfly.pt`]")))
 
