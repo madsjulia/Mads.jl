@@ -536,7 +536,7 @@ keytext=Dict("filter"=>"string or regex to plot only observations containing `fi
             "format"=>"output plot format (`png`, `pdf`, etc.)",
             "debug"=>"[default=`false`]",
             "separate_files"=>"[default=`false`]",
-            "xtitle"=>"[default=`"Time [years]"`]",
+            "xtitle"=>"[default=`"Time[years]"`]",
             "ytitle"=>"[default=`"Concentration [ppb]"`]",
             "linewidth"=>"[default=`2Gadfly.pt`]",
             "pointsize"=>"[default=`2Gadfly.pt`]")))
