@@ -514,8 +514,8 @@ $(documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
-keytext=Dict("xtitle"=>"x-axis title, [default=`"Time[years]"`]",
-            "ytitle"=>"y-axis title, [default=`"Concentration[ppb]"`]",
+keytext=Dict("xtitle"=>"x-axis title, [default=`"Time years"`]",
+            "ytitle"=>"y-axis title, [default=`"Concentration ppb"`]",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)")))
 
