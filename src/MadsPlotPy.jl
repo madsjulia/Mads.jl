@@ -66,10 +66,12 @@ Plot a 3D grid solution based on model predictions in array `s`, initial paramet
 
 $(documentfunction(plotgrid))
 
-```
-plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
-plotgrid(madsdata; addtitle=true, title="", filename="", format="")
-plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
+Examples:
+
+```julia
+Mads.plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
+Mads.plotgrid(madsdata; addtitle=true, title="", filename="", format="")
+Mads.plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
 ```
 
 Arguments:

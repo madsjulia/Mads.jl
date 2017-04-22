@@ -230,7 +230,7 @@ $(documentfunction(setobstime!))
 
 Usage:
 
-```
+```julia
 Mads.setobstime!(madsdata, separator)
 Mads.setobstime!(madsdata, regex)
 ```
@@ -242,7 +242,7 @@ Arguments:
 - `regex` : regular expression to match
 
 Examples:
-```
+```julia
 Mads.setobstime!(madsdata, "_t")
 Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```

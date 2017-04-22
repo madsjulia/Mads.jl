@@ -44,7 +44,7 @@ $(documentfunction(emceesampling))
 
 Examples:
 
-```
+```julia
 Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
 Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 ```

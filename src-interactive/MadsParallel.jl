@@ -262,7 +262,7 @@ Set the working directory (for parallel environments)
 
 Usage:
 
-```
+```julia
 @everywhere Mads.setdir()
 @everywhere Mads.setdir("/home/monty")
 ``` 

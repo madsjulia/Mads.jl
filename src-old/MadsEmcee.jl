@@ -3,7 +3,7 @@ import RobustPmap
 """
 Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
-```
+```julia
 Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
 ```
 

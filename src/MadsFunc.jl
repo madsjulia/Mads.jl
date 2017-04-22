@@ -8,7 +8,8 @@ import JLD
 Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`
 
 Usage:
-```
+
+```julia
 Mads.makemadscommandfunction(madsdata)
 ```
 

@@ -3,7 +3,9 @@ import DataStructures
 """
 Parse Amanzi output provided in an external file (`filename`)
 
-```
+Usage:
+
+```julia
 Mads.amanzi_output_parser()
 Mads.amanzi_output_parser("observations.out")
 ```

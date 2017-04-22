@@ -117,11 +117,7 @@ Returns:
 
 Examples:
 
-`computeconcentrations()`
-
-or
-
-```
+```julia
 computeconcentrations = Mads.makecomputeconcentrations(madsdata)
 paramkeys = Mads.getparamkeys(madsdata)
 paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
@@ -343,7 +339,7 @@ $(documentfunction(computemass))
 
 Example
 
-```
+```julia
 Mads.computemass(madsfiles; time=0, path=".")
 ```
 

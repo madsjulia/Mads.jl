@@ -54,7 +54,7 @@ $(documentfunction(functions))
 
 Examples:
 
-```
+```julia
 Mads.functions()
 Mads.functions(BIGUQ)
 Mads.functions("get")

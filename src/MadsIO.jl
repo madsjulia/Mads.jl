@@ -21,7 +21,7 @@ Returns:
 Example:
 
 ```julia
-md = loadmadsfile("input_file_name.mads")
+md = Mads.loadmadsfile("input_file_name.mads")
 ```	
 """
 function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
