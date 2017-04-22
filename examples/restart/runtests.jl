@@ -61,7 +61,6 @@ Mads.localsa(md, imagefiles=false, datafiles=false)
 @Base.Test.test ReusableFunctions.restarts == 17
 Mads.savemadsfile(md)
 
-
 Mads.rmdir(joinpath(workdir, "w01_restart"))
 rm(joinpath(workdir, "w01-v01.iterationresults"))
 rm(joinpath(workdir, "w01-v02.mads"))
