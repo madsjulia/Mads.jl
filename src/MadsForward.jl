@@ -95,9 +95,11 @@ end
 @doc """
 Perform a forward run using the initial or provided values for the model parameters
 
-- `forward(madsdata)`
-- `forward(madsdata, paramdict)`
-- `forward(madsdata, paramarray)`
+```julia
+Mads.forward(madsdata)
+Mads.forward(madsdata, paramdict)
+Mads.forward(madsdata, paramarray)
+```
 
 Arguments:
 
@@ -178,8 +180,10 @@ end
 @doc """
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-- `forwardgrid(madsdata)`
-- `forwardgrid(madsdata, paramvalues))`
+```julia
+Mads.forwardgrid(madsdata)
+Mads.forwardgrid(madsdata, paramvalues)
+```
 
 Arguments:
 

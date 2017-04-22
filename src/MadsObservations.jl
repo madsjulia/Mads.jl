@@ -242,6 +242,7 @@ Arguments:
 - `regex` : regular expression to match
 
 Examples:
+
 ```julia
 Mads.setobstime!(madsdata, "_t")
 Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")

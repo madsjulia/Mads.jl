@@ -54,11 +54,6 @@ end
 @doc """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-- `Mads.createmadsproblem(infilename::String, outfilename::String)`
-- `Mads.createmadsproblem(madsdata::Associative, outfilename::String)`
-- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative)`
-- `Mads.createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)`
-
 Arguments:
 
 - `infilename` : input Mads file

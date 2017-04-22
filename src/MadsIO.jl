@@ -10,9 +10,11 @@ keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `fal
 
 Usage:
 
-- `Mads.loadmadsfile(filename)`
-- `Mads.loadmadsfile(filename; julia=false)`
-- `Mads.loadmadsfile(filename; julia=true)`
+```
+Mads.loadmadsfile(filename)
+Mads.loadmadsfile(filename; julia=false)
+Mads.loadmadsfile(filename; julia=true)
+```
 
 Returns:
 
@@ -190,10 +192,12 @@ keytext=Dict("julia"=>"if `true` use Julia JSON module to save, [default=`false`
 
 Usage:
 
-- `Mads.savemadsfile(madsdata)`
-- `Mads.savemadsfile(madsdata, "test.mads")`
-- `Mads.savemadsfile(madsdata, parameters, "test.mads")`
-- `Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)`
+```julia
+Mads.savemadsfile(madsdata)
+Mads.savemadsfile(madsdata, "test.mads")
+Mads.savemadsfile(madsdata, parameters, "test.mads")
+Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)
+```
 """ savemadsfile
 
 """
@@ -217,7 +221,9 @@ argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
 
 Usage:
 
-`Mads.setmadsinputfile(filename)`
+```
+Mads.setmadsinputfile(filename)
+```
 """
 function setmadsinputfile(filename::String)
 	global madsinputfile = filename
@@ -230,7 +236,9 @@ $(documentfunction(getmadsinputfile))
 
 Usage:
 
-`Mads.getmadsinputfile()`
+```julia
+Mads.getmadsinputfile()
+```
 
 Returns:
 
@@ -250,7 +258,9 @@ keytext=Dict("first"=>"use the first . in filename as the seperator between root
 
 Usage:
 
-`madsrootname = Mads.getmadsrootname(madsdata)`
+```julia
+madsrootname = Mads.getmadsrootname(madsdata)
+```
 
 Returns:
 
@@ -315,7 +325,9 @@ $(documentfunction(getmadsdir))
 
 Usage:
 
-- `problemdir = Mads.getmadsdir()`
+```julia
+problemdir = Mads.getmadsdir()
+```
 
 Returns:
 

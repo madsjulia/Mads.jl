@@ -25,8 +25,6 @@ end
 """
 Get keys of all parameters in the MADS dictionary
 
-`Mads.getparamkeys(madsdata)`
-
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -45,8 +43,6 @@ end
 
 """
 Get dictionary with all parameters and their respective initial values
-
-`Mads.getparamdict(madsdata)`
 
 Arguments:
 
@@ -68,8 +64,6 @@ end
 
 """
 Get keys of all source parameters in the MADS dictionary
-
-`Mads.getsourcekeys(madsdata)`
 
 Arguments:
 
@@ -293,8 +287,6 @@ $(documentfunction(getparamsinit_max))
 """
 Set initial parameter guesses in the MADS dictionary
 
-`Mads.setparamsinit!(madsdata, paramdict)`
-
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -419,8 +411,6 @@ end
 """
 Set normal parameter distributions for all the model parameters in the MADS problem dictionary
 
-`Mads.setparamsdistnormal!(madsdata, mean, stddev)`
-
 Arguments:
 
 - `madsdata` : MADS problem dictionary
@@ -438,8 +428,6 @@ end
 
 """
 Set uniform parameter distributions for all the model parameters in the MADS problem dictionary
-
-`Mads.setparamsdistuniform!(madsdata, min, max)`
 
 Arguments:
 
@@ -563,8 +551,6 @@ $(documentfunction(showallparameters))
 
 """
 Get probabilistic distributions of all parameters in the MADS problem dictionary
-
-`Mads.getparamdistributions(madsdata; init_dist=false)`
 
 Note:
 

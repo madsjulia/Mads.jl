@@ -4,7 +4,9 @@ import DataStructures
 """
 Make a version of the function `f` that accepts an array containing the optimal parameters' values
 
-`Mads.makearrayfunction(madsdata, f)`
+```julia
+Mads.makearrayfunction(madsdata, f)
+```
 
 Arguments:
 
@@ -29,7 +31,9 @@ end
 """
 Make a version of the function `f` that accepts an array containing the optimal parameters' values, and returns an array of observations
 
-`Mads.makedoublearrayfunction(madsdata, f)`
+```julia
+Mads.makedoublearrayfunction(madsdata, f)
+```
 
 Arguments:
 

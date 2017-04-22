@@ -108,7 +108,7 @@ $(documentfunction(bayessampling))
 
 Examples:
 
-```
+```julia
 Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
 Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
 ```
@@ -158,7 +158,9 @@ end
 """
 Monte Carlo analysis
 
-`Mads.montecarlo(madsdata; N=100)`
+```julia
+Mads.montecarlo(madsdata; N=100)
+```
 
 Arguments:
 

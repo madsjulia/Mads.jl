@@ -68,7 +68,7 @@ function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Array{Float64,
 end
 
 @doc """
-Train SVR
+Predict SVR
 
 $(documentfunction(svrpredict))
 """ svrpredict
