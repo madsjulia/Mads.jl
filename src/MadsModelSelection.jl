@@ -1,7 +1,7 @@
 """
 Model section information criteria
 
-$(documentfunction(modelinformationcriteria))
+$(DocumentFunction.documentfunction(modelinformationcriteria))
 """
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
 	f = Mads.forward(madsdata, par)

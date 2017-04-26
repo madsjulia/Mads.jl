@@ -14,7 +14,7 @@ end
 """
 Make gradient function needed for local sensitivity analysis
 
-$(documentfunction(makelocalsafunction;
+$(DocumentFunction.documentfunction(makelocalsafunction;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
 
@@ -98,7 +98,7 @@ end
 """
 Local sensitivity analysis based on eigen analysis of the parameter covariance matrix
 
-$(documentfunction(localsa;
+$(DocumentFunction.documentfunction(localsa;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("sinspace"=>"[default=`true`]",
             "keyword"=>"",
@@ -228,7 +228,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 end
 
 """
-$(documentfunction(sampling;
+$(DocumentFunction.documentfunction(sampling;
 argtext=Dict("param"=>"Parameter vector",
             "J"=>"Jacobian matrix",
             "numsamples"=>"Number of samples"),
@@ -286,7 +286,7 @@ end
 """
 Reweigh samples using importance sampling -- returns a vector of log-likelihoods after reweighing
 
-$(documentfunction(reweighsamples;
+$(DocumentFunction.documentfunction(reweighsamples;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "predictions"=>"the model predictions for each of the samples",
             "oldllhoods"=>"the log likelihoods of the parameters in the old distribution")))
@@ -313,7 +313,7 @@ end
 """
 Get important samples
 
-$(documentfunction(getimportantsamples;
+$(DocumentFunction.documentfunction(getimportantsamples;
 argtext=Dict("samples"=>"array of samples",
             "llhoods"=>"vector of log-likelihoods")))
 
@@ -343,7 +343,7 @@ end
 """
 Get weighted mean and variance samples
 
-$(documentfunction(weightedstats;
+$(DocumentFunction.documentfunction(weightedstats;
 argtext=Dict("samples"=>"array of samples",
             "llhoods"=>"vector of log-likelihoods")))
 
@@ -394,7 +394,7 @@ end
 @doc """
 Get independent sampling of model parameters defined in the MADS problem dictionary
 
-$(documentfunction(getparamrandom;
+$(DocumentFunction.documentfunction(getparamrandom;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"model parameter key",
             "numsamples"=>"number of samples,  [default=`1`]"),
@@ -410,7 +410,7 @@ Returns:
 """
 Saltelli sensitivity analysis (brute force)
 
-$(documentfunction(saltellibrute;
+$(DocumentFunction.documentfunction(saltellibrute;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples, [default=`1000`]",
             "seed"=>"initial random seed, [default=`0`]",
@@ -555,7 +555,7 @@ end
 """
 Load Saltelli sensitivity analysis results for fast simulation restarts
 
-$(documentfunction(loadsaltellirestart!;
+$(DocumentFunction.documentfunction(loadsaltellirestart!;
 argtext=Dict("evalmat"=>"Loaded array",
 "matname"=>"Matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
@@ -580,7 +580,7 @@ end
 """
 Save Saltelli sensitivity analysis results for fast simulation restarts
 
-$(documentfunction(savesaltellirestart;
+$(DocumentFunction.documentfunction(savesaltellirestart;
 argtext=Dict("evalmat"=>"Saved array",
 "matname"=>"Matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
@@ -596,7 +596,7 @@ end
 """
 Saltelli sensitivity analysis
 
-$(documentfunction(saltelli;
+$(DocumentFunction.documentfunction(saltelli;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples, [default=`100`]",
             "seed"=>"initial random seed, [default=`0`]",
@@ -804,7 +804,7 @@ end
 """
 Compute sensitivities for each model parameter; averaging the sensitivity indices over the entire observation range
 
-$(documentfunction(computeparametersensitities;
+$(DocumentFunction.documentfunction(computeparametersensitities;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "saresults"=>"sensitivity analysis results")))
 """
@@ -881,7 +881,7 @@ end
 """
 Print sensitivity analysis results
 
-$(documentfunction(printSAresults;
+$(DocumentFunction.documentfunction(printSAresults;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "results"=>"sensitivity analysis results")))
 """
@@ -963,7 +963,7 @@ end
 """
 Print sensitivity analysis results (method 2)
 
-$(documentfunction(printSAresults2;
+$(DocumentFunction.documentfunction(printSAresults2;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "results"=>"sensitivity analysis results (method 2)")))
 """
@@ -1004,7 +1004,7 @@ end
 """
 Convert Void's into NaN's in a dictionary
 
-$(documentfunction(void2nan!;
+$(DocumentFunction.documentfunction(void2nan!;
 argtext=Dict("dict"=>"dictionary")))
 """
 function void2nan!(dict::Associative) # TODO generalize using while loop and recursive calls ....
@@ -1029,7 +1029,7 @@ end
 """
 Delete rows with NaN in a Dataframe `df`
 
-$(documentfunction(deleteNaN!;
+$(DocumentFunction.documentfunction(deleteNaN!;
 argtext=Dict("df"=>"dataframe")))
 """
 function deleteNaN!(df::DataFrames.DataFrame)
@@ -1046,7 +1046,7 @@ end
 """
 Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
 
-$(documentfunction(maxtorealmax!;
+$(DocumentFunction.documentfunction(maxtorealmax!;
 argtext=Dict("df"=>"dataframe")))
 """
 function maxtorealmax!(df::DataFrames.DataFrame)
@@ -1065,7 +1065,7 @@ end
 """
 Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Testing (eFAST) method
 
-$(documentfunction(efast;
+$(DocumentFunction.documentfunction(efast;
 argtext=Dict("md"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples, [default=`100`]",
             "M"=>"maximum number of harmonics, [default=`6`]",

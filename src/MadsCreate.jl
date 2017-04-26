@@ -61,5 +61,5 @@ Arguments:
 - `madsdata` : MADS problem dictionary
 - `predictions` : dictionary of model predictions
 
-$(documentfunction(createmadsproblem))
+$(DocumentFunction.documentfunction(createmadsproblem))
 """ createmadsproblem

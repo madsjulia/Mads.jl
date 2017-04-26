@@ -2,10 +2,8 @@ if !isdefined(:madsservers)
 	madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 end
 
-if !isdefined(:documentfunction)
-	d = dirname(@__FILE__)
-	include(joinpath(d, "..", "src", "MadsSTDOUT.jl"))
-	include(joinpath(d, "..", "src", "MadsDocumentation.jl"))
+if !isdefined(DocumentFunction, :documentfunction)
+	import DocumentFunction
 end
 
 if !isdefined(:sprintf)
@@ -21,7 +19,7 @@ end
 """
 Set number of processors needed for each parallel task at each node
 
-$(documentfunction(set_nprocs_per_task))
+$(DocumentFunction.documentfunction(set_nprocs_per_task))
 """
 function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
 	global nprocs_per_task = local_nprocs_per_task
@@ -30,7 +28,7 @@ end
 """
 Get the number of processors
 
-$(documentfunction(getprocs))
+$(DocumentFunction.documentfunction(getprocs))
 """
 function getprocs()
 	info("Number of processors: $(nprocs()) $(workers())\n")
@@ -198,13 +196,13 @@ Optional arguments:
 - `quiet` : suppress output [default `true`]
 - `test` : test the servers and connect to each one ones at a time [default `false`]
 
-$(documentfunction(setprocs))
+$(DocumentFunction.documentfunction(setprocs))
 """ setprocs
 
 """
 Parse string with node names defined in SLURM
 
-$(documentfunction(parsenodenames))
+$(DocumentFunction.documentfunction(parsenodenames))
 """
 function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 	h = Array{String}(0)
@@ -235,7 +233,7 @@ end
 """
 Disable MADS plotting
 
-$(documentfunction(noplot))
+$(DocumentFunction.documentfunction(noplot))
 """
 function noplot()
 	if myid() == 1
@@ -267,13 +265,13 @@ Usage:
 @everywhere Mads.setdir("/home/monty")
 ``` 
 
-$(documentfunction(setdir))
+$(DocumentFunction.documentfunction(setdir))
 """ setdir
 
 """
 Run remote command on a series of servers
 
-$(documentfunction(runremote))
+$(DocumentFunction.documentfunction(runremote))
 """
 function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	output = Array{String}(0)
@@ -294,7 +292,7 @@ end
 """
 Check the number of processors on a series of servers
 
-$(documentfunction(madscores))
+$(DocumentFunction.documentfunction(madscores))
 """
 function madscores(nodenames::Array{String,1}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
@@ -303,7 +301,7 @@ end
 """
 Check the uptime of a series of servers
 
-$(documentfunction(madsup))
+$(DocumentFunction.documentfunction(madsup))
 """
 function madsup(nodenames::Array{String,1}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
@@ -312,7 +310,7 @@ end
 """
 Check the load of a series of servers
 
-$(documentfunction(madsload))
+$(DocumentFunction.documentfunction(madsload))
 """
 function madsload(nodenames::Array{String,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
@@ -321,7 +319,7 @@ end
 """
 Run external command and pipe stdout and stderr
 
-$(documentfunction(runcmd))
+$(DocumentFunction.documentfunction(runcmd))
 """
 function runcmd(cmd::Cmd, quiet::Bool=quietdefault)
 	cmdin = Pipe()

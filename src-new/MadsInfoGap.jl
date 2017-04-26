@@ -6,7 +6,7 @@ import MathProgBase
 """
 Information Gap Decision Analysis using JuMP
 
-$(documentfunction(infogap_jump))
+$(DocumentFunction.documentfunction(infogap_jump))
 """
 function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
 	setseed(seed, quiet)
@@ -96,7 +96,7 @@ end
 """
 Information Gap Decision Analysis using JuMP
 
-$(documentfunction(infogap_jump_polinomial))
+$(DocumentFunction.documentfunction(infogap_jump_polinomial))
 """
 function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=0)
 	setseed(seed, quiet)
@@ -244,7 +244,7 @@ end
 """
 Information Gap Decision Analysis using MathProgBase
 
-$(documentfunction(infogap_mpb_polinomial))
+$(DocumentFunction.documentfunction(infogap_mpb_polinomial))
 """
 function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver::MathProgBase.DefaultNLPSolver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)
@@ -377,7 +377,7 @@ end
 """
 Information Gap Decision Analysis using MathProgBase
 
-$(documentfunction(infogap_mpb_lin))
+$(DocumentFunction.documentfunction(infogap_mpb_lin))
 """
 function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)

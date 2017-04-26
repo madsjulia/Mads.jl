@@ -3,7 +3,7 @@ import Gadfly
 """
 Plot injected/reduced contaminant mass
 
-$(documentfunction(plotmass))
+$(DocumentFunction.documentfunction(plotmass))
 
 - `Mads.plotmass(lambda, mass_injected, mass_reduced, filename="file_name")`
 

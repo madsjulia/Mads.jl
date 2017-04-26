@@ -1,7 +1,7 @@
 """
 MADS restart on
 
-$(documentfunction(restarton))
+$(DocumentFunction.documentfunction(restarton))
 """
 function restarton()
 	global restart = true;
@@ -10,7 +10,7 @@ end
 """
 MADS restart off
 
-$(documentfunction(restartoff))
+$(DocumentFunction.documentfunction(restartoff))
 """
 function restartoff()
 	global restart = false;
@@ -19,7 +19,7 @@ end
 """
 Get MADS restart status
 
-$(documentfunction(getrestart))
+$(DocumentFunction.documentfunction(getrestart))
 """
 function getrestart(madsdata::Associative)
 	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
@@ -28,7 +28,7 @@ end
 """
 Make MADS quiet
 
-$(documentfunction(quieton))
+$(DocumentFunction.documentfunction(quieton))
 """
 function quieton()
 	ReusableFunctions.quieton()
@@ -38,7 +38,7 @@ end
 """
 Make MADS not quiet
 
-$(documentfunction(quietoff))
+$(DocumentFunction.documentfunction(quietoff))
 """
 function quietoff()
 	ReusableFunctions.quietoff()
@@ -48,7 +48,7 @@ end
 """
 MADS graph output on
 
-$(documentfunction(graphon))
+$(DocumentFunction.documentfunction(graphon))
 """
 function graphon()
 	global graphoutput = true;
@@ -57,7 +57,7 @@ end
 """
 MADS graph output off
 
-$(documentfunction(graphoff))
+$(DocumentFunction.documentfunction(graphoff))
 """
 function graphoff()
 	global graphoutput = false;
@@ -66,7 +66,7 @@ end
 """
 Turn on the generation of MADS tests (dangerous)
 
-$(documentfunction(create_tests_on))
+$(DocumentFunction.documentfunction(create_tests_on))
 """
 function create_tests_on()
 	global create_tests = true;
@@ -75,7 +75,7 @@ end
 """
 Turn off the generation of MADS tests (default)
 
-$(documentfunction(create_tests_off))
+$(DocumentFunction.documentfunction(create_tests_off))
 """
 function create_tests_off()
 	global create_tests = false;
@@ -84,7 +84,7 @@ end
 """
 Turn on execution of long MADS tests (dangerous)
 
-$(documentfunction(long_tests_on))
+$(DocumentFunction.documentfunction(long_tests_on))
 """
 function long_tests_on()
 	global long_tests = true;
@@ -93,7 +93,7 @@ end
 """
 Turn off execution of long MADS tests (default)
 
-$(documentfunction(long_tests_off))
+$(DocumentFunction.documentfunction(long_tests_off))
 """
 function long_tests_off()
 	global long_tests = false;
@@ -102,7 +102,7 @@ end
 """
 Set MADS debug level
 
-$(documentfunction(setdebuglevel))
+$(DocumentFunction.documentfunction(setdebuglevel))
 """
 function setdebuglevel(level::Int)
 	global debuglevel = level
@@ -111,7 +111,7 @@ end
 """
 Set MADS verbosity level
 
-$(documentfunction(setverbositylevel))
+$(DocumentFunction.documentfunction(setverbositylevel))
 """
 function setverbositylevel(level::Int)
 	global verbositylevel = level
@@ -120,7 +120,7 @@ end
 """
 Reset the model runs count to be equal to zero
 
-$(documentfunction(resetmodelruns))
+$(DocumentFunction.documentfunction(resetmodelruns))
 """
 function resetmodelruns()
 	global modelruns = 0
@@ -165,7 +165,7 @@ Examples:
 - `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
 - `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
 
-$(documentfunction(haskeyword))
+$(DocumentFunction.documentfunction(haskeyword))
 """ haskeyword
 
 function addkeyword!(madsdata::Associative, keyword::String)
@@ -189,7 +189,7 @@ end
 @doc """
 Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(documentfunction(addkeyword!))
+$(DocumentFunction.documentfunction(addkeyword!))
 """ addkeyword!
 
 function deletekeyword!(madsdata::Associative, keyword::String)
@@ -214,13 +214,13 @@ end
 @doc """
 Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(documentfunction(deletekeyword!))
+$(DocumentFunction.documentfunction(deletekeyword!))
 """ deletekeyword!
 
 """
 Get sin-space dx
 
-$(documentfunction(getsindx))
+$(DocumentFunction.documentfunction(getsindx))
 """
 function getsindx(madsdata::Associative)
 	sindx = 0.1
@@ -236,7 +236,7 @@ end
 """
 Transpose non-numeric vector
 
-$(documentfunction(transposevector))
+$(DocumentFunction.documentfunction(transposevector))
 """
 function transposevector(a::Vector)
 	reshape(a, 1, length(a))
@@ -245,7 +245,7 @@ end
 """
 Transpose non-numeric matrix
 
-$(documentfunction(transposematrix))
+$(DocumentFunction.documentfunction(transposematrix))
 """
 function transposematrix(a::Matrix)
 	permutedims(a, (2, 1))
@@ -263,7 +263,7 @@ end
 """
 Mesh grid
 
-$(documentfunction(meshgrid))
+$(DocumentFunction.documentfunction(meshgrid))
 """
 function meshgrid(min::Vector, max::Vector)
     m = length(min)
@@ -276,7 +276,7 @@ end
 """
 Set / get seed
 
-$(documentfunction(setseed))
+$(DocumentFunction.documentfunction(setseed))
 """
 function setseed(seed::Integer=0, quiet::Bool=true)
 	if seed != 0

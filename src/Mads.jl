@@ -29,10 +29,11 @@ end
 """
 Mads Modules: $madsmodules
 """
-madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR"]
+madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
 import GeostatInversion
 import SVR
+import DocumentFunction
 
 "Try to import a module"
 macro tryimport(s::Symbol)
@@ -120,7 +121,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 end
 
 include("MadsSTDOUT.jl")
-include("MadsDocumentation.jl")
+# include("MadsDocumentation.jl")
 include("MadsTypes.jl")
 include("MadsLog.jl")
 include("MadsHelp.jl")

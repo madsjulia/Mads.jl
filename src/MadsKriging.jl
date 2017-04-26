@@ -1,28 +1,28 @@
 """
 Gaussian spatial covariance function
 
-$(documentfunction(gaussiancov))
+$(DocumentFunction.documentfunction(gaussiancov))
 """
 gaussiancov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-(h * h) / (scale * scale))
 
 """
 Exponential spatial covariance function
 
-$(documentfunction(expcov))
+$(DocumentFunction.documentfunction(expcov))
 """
 expcov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-h / scale)
 
 """
 Spherical spatial covariance function
 
-$(documentfunction(sphericalcov))
+$(DocumentFunction.documentfunction(sphericalcov))
 """
 sphericalcov(h::Number, maxcov::Number, scale::Number) = (h <= scale ? maxcov * (1 - 1.5 * h / (scale) + .5 * (h / scale) ^ 3) : 0.)
 
 """
 Spherical variogram
 
-$(documentfunction(sphericalvariogram))
+$(DocumentFunction.documentfunction(sphericalvariogram))
 """
 function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -37,7 +37,7 @@ end
 """
 Exponential variogram
 
-$(documentfunction(exponentialvariogram))
+$(DocumentFunction.documentfunction(exponentialvariogram))
 """
 function exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -50,7 +50,7 @@ end
 """
 Gaussian variogram
 
-$(documentfunction(gaussianvariogram))
+$(DocumentFunction.documentfunction(gaussianvariogram))
 """
 function gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -63,7 +63,7 @@ end
 """
 Kriging
 
-$(documentfunction(krige))
+$(DocumentFunction.documentfunction(krige))
 """
 function krige(x0mat::Array, X::Matrix, Z::Vector, cov::Function)
 	result = zeros(size(x0mat, 2))
@@ -89,7 +89,7 @@ end
 """
 Get spatial covariance matrix
 
-$(documentfunction(getcovmat))
+$(DocumentFunction.documentfunction(getcovmat))
 """
 function getcovmat(X::Matrix, cov::Function)
 	covmat = Array{Float64}((size(X, 2), size(X, 2)))
@@ -107,7 +107,7 @@ end
 """
 Get spatial covariance vector
 
-$(documentfunction(getcovvec!))
+$(DocumentFunction.documentfunction(getcovvec!))
 """
 function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
 	for i = 1:size(X, 2)
@@ -124,7 +124,7 @@ end
 """
 Estimate kriging error
 
-$(documentfunction(estimationerror))
+$(DocumentFunction.documentfunction(estimationerror))
 """
 function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
 	covmat = getcovmat(X, cov)

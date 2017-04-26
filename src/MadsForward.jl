@@ -111,7 +111,7 @@ Returns:
 
 - `obsvalues` : dictionary of model predictions
 
-$(documentfunction(forward))
+$(DocumentFunction.documentfunction(forward))
 """ forward
 
 function forwardgrid(madsdata::Associative)
@@ -194,5 +194,5 @@ Returns:
 
 - `array3d` : 3D array with model predictions along a 3D grid
 
-$(documentfunction(forwardgrid))
+$(DocumentFunction.documentfunction(forwardgrid))
 """ forwardgrid

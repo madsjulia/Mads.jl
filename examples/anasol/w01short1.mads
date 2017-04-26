@@ -1,0 +1,41 @@
+Sources:
+- box: {
+  x  : { longname: "Source x coordinate [L]", init: 0, type: null, log: no, step: 25, min: -1000, max: 1000 },
+  y  : { longname: "Source y coordinate [L]", init: 0, type: null, log: no, step: 25, min: -1000, max: 1000 },
+  z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
+  dx : { longname: "Source x dimension [L]", init: 50, type: null, log: no, step: 1, min: 1, max: 500 },
+  dy : { longname: "Source y dimension [L]", init: 50, type: null, log: no, step: 1, min: 1, max: 500 },
+  dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
+  f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1e+25, min: 0.01, max: 100 },
+  t0 : { longname: "Start Time [T]", init: 5, type: null, log: no, step: 1, min: 0, max: 100 },
+  t1 : { longname: "End Time [T]", init: 15, type: null, log: no, step: 1, min: 5, max: 100 } }
+- box: {
+  x  : { longname: "Source x coordinate [L]", init: 500, type: null, log: no, step: 25, min: -1000, max: 1000 },
+  y  : { longname: "Source y coordinate [L]", init: 0, type: null, log: no, step: 25, min: -1000, max: 1000 },
+  z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
+  dx : { longname: "Source x dimension [L]", init: 50, type: null, log: no, step: 1, min: 1, max: 500 },
+  dy : { longname: "Source y dimension [L]", init: 50, type: null, log: no, step: 1, min: 1, max: 500 },
+  dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
+  f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1e+25, min: 0.01, max: 100 },
+  t0 : { longname: "Start Time [T]", init: 30, type: null, log: no, step: 1, min: 0, max: 100 },
+  t1 : { longname: "End Time [T]", init: 45, type: null, log: no, step: 1, min: 5, max: 100 } }
+Parameters:
+- n       : { longname: "Porosity [L3/L3]", init: 0.1, type: null, log: no, step: 0.1, min: 0, max: 1 }
+- rf      : { longname: "Retardation Factor [-]", init: 1, type: null, log: yes, step: 1, min: 1, max: 10 }
+- lambda  : { longname: "Half-life decay [1/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
+- theta   : { longname: "Flow Angle [degrees]", init: 0, type: null, log: no, step: 5, min: -30, max: 30 }
+- vx      : { longname: "Pore x velocity [L/T]", init: 30, type: opt, log: no, step: 10, min: 0.01, max: 200 }
+- vy      : { longname: "Pore y velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
+- vz      : { longname: "Pore z velocity [L/T]", init: 0, type: null, log: no, step: 1, min: 0, max: 1 }
+- ax      : { longname: "Dispersivity x [L]", init: 70, type: opt, log: yes, step: 10, min: 10, max: 140 }
+- ay      : { longname: "Dispersivity y [L]", init: 15, type: null, log: yes, step: 10, min: 1, max: 30 }
+- az      : { longname: "Dispersivity z [L]", init: 0.3, type: null, log: yes, step: 1.25893, min: 0.1, max: 1 }
+- ts_dsp  : { longname: "Time Scale Dispersivity [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- ts_adv  : { longname: "Time Scale Advection [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- ts_rct  : { longname: "Time Scale Reaction [-]", init: 1, type: null, log: no, step: 0.1, min: 0.1, max: 10 }
+- alpha   : { longname: "Levy alpha [-]", init: 2, type: null, log: no, step: 0.1, min: 1.1, max: 2 }
+- beta    : { longname: "Levy beta [-]", init: 0, type: null, log: no, step: 0.1, min: -1, max: 1 }
+- nlc0    : { longname: "NLC 0 [T]", init: 0, type: null, log: no, step: 0.1, min: -1, max: 1 }
+- nlc1    : { longname: "NLC 1 [T]", init: 1, type: null, log: no, step: 1, min: 0.1, max: 10 }
+Wells:
+- w1a   : { x: 600, y: 0, z0: 3, z1: 3, obs: [] }

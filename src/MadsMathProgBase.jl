@@ -7,7 +7,7 @@ end
 """
 Mads execution using MathProgBase
 
-$(documentfunction(madsmathprogbase))
+$(DocumentFunction.documentfunction(madsmathprogbase))
 """
 function madsmathprogbase(madsdata::Associative=Dict())
 	f = makemadscommandfunction(madsdata)
@@ -76,7 +76,7 @@ end
 """
 Make forward model, gradient, objective functions needed for MathProgBase optimization
 
-$(documentfunction(makempbfunctions))
+$(DocumentFunction.documentfunction(makempbfunctions))
 """
 function makempbfunctions(madsdata::Associative)
 	"""

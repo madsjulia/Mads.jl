@@ -4,7 +4,7 @@ import DataStructures
 """
 Do a calibration using NLopt
 
-$(documentfunction(calibratenlopt))
+$(DocumentFunction.documentfunction(calibratenlopt))
 """
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)

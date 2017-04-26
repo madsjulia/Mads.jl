@@ -1,7 +1,7 @@
 """
 MADS output (controlled by quiet` and `verbositylevel`)
 
-$(documentfunction(madsoutput))
+$(DocumentFunction.documentfunction(madsoutput))
 """
 function madsoutput(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
@@ -13,7 +13,7 @@ end
 """
 MADS debug messages (controlled by `quiet` and `debuglevel`)
 
-$(documentfunction(madsdebug))
+$(DocumentFunction.documentfunction(madsdebug))
 """
 function madsdebug(message::String, level::Int=0)
 	if !quiet && level < debuglevel
@@ -25,7 +25,7 @@ end
 """
 MADS information/status messages (controlled by quiet` and `verbositylevel`)
 
-$(documentfunction(madsinfo))
+$(DocumentFunction.documentfunction(madsinfo))
 """
 function madsinfo(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
@@ -37,7 +37,7 @@ end
 """
 MADS warning messages
 
-$(documentfunction(madswarn))
+$(DocumentFunction.documentfunction(madswarn))
 """
 function madswarn(message::String)
 	print_with_color(:red, "WARNING: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message  * "\n");
@@ -48,7 +48,7 @@ end
 """
 MADS error messages
 
-$(documentfunction(madserror))
+$(DocumentFunction.documentfunction(madserror))
 """
 function madserror(message::String)
 	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
@@ -59,7 +59,7 @@ end
 """
 MADS critical error messages
 
-$(documentfunction(madscritical))
+$(DocumentFunction.documentfunction(madscritical))
 """
 function madscritical(message::String)
 	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)

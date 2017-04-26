@@ -3,7 +3,7 @@ import DataStructures
 """
 Read observations using C Mads library
 
-$(documentfunction(readobservations_cmads))
+$(DocumentFunction.documentfunction(readobservations_cmads))
 """
 function readobservations_cmads(madsdata::Associative)
 	obsids=getobskeys(madsdata)
@@ -21,7 +21,7 @@ end
 """
 Call C MADS ins_obs() function from the MADS dynamic library
 
-$(documentfunction(cmadsins_obs))
+$(DocumentFunction.documentfunction(cmadsins_obs))
 """
 function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename::String)
 	n = length(obsid)

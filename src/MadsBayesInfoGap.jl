@@ -7,7 +7,7 @@ import BlackBoxOptim
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
-$(documentfunction(makebigdt))
+$(DocumentFunction.documentfunction(makebigdt))
 
 Arguments:
 
@@ -25,7 +25,7 @@ end
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
-$(documentfunction(makebigdt!))
+$(DocumentFunction.documentfunction(makebigdt!))
 
 Arguments:
 
@@ -113,7 +113,7 @@ end
 """
 Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
-$(documentfunction(dobigdt))
+$(DocumentFunction.documentfunction(dobigdt))
 
 Arguments:
 
@@ -157,7 +157,7 @@ end
 """
 Make array of conditional log-likelihoods
 
-$(documentfunction(makearrayconditionalloglikelihood))
+$(DocumentFunction.documentfunction(makearrayconditionalloglikelihood))
 
 """
 function makearrayconditionalloglikelihood(madsdata::Associative)

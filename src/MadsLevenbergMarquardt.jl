@@ -36,7 +36,7 @@ end
 @doc """
 Compute residuals
 
-$(documentfunction(residuals))
+$(DocumentFunction.documentfunction(residuals))
 """ residuals
 
 
@@ -55,13 +55,13 @@ end
 @doc """
 Compute objective function
 
-$(documentfunction(of))
+$(DocumentFunction.documentfunction(of))
 """ of
 
 """
 Compute the sum of squared residuals for observations that match a regular expression
 
-$(documentfunction(partialof))
+$(DocumentFunction.documentfunction(partialof))
 """
 function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	obskeys = getobskeys(madsdata)
@@ -82,7 +82,7 @@ end
 """
 Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 
-$(documentfunction(makelmfunctions))
+$(DocumentFunction.documentfunction(makelmfunctions))
 """
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
@@ -181,7 +181,7 @@ end
 """
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
-$(documentfunction(naive_get_deltax))
+$(DocumentFunction.documentfunction(naive_get_deltax))
 """
 function naive_get_deltax(JpJ::Matrix{Float64}, Jp::Matrix{Float64}, f0::Vector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
@@ -192,7 +192,7 @@ end
 """
 Naive Levenberg-Marquardt optimization: perform LM iteration
 
-$(documentfunction(naive_lm_iteration))
+$(DocumentFunction.documentfunction(naive_lm_iteration))
 """
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
 	J = g(x0) # get jacobian
@@ -223,7 +223,7 @@ Arguments:
 - `lambda_mu` : lambda multiplication factor μ [10]
 - `np_lambda` : number of parallel lambda solves
 
-$(documentfunction(naive_levenberg_marquardt))
+$(DocumentFunction.documentfunction(naive_levenberg_marquardt))
 """
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
@@ -244,7 +244,7 @@ end
 """
 Levenberg-Marquardt optimization
 
-$(documentfunction(levenberg_marquardt))
+$(DocumentFunction.documentfunction(levenberg_marquardt))
 
 Arguments:
 

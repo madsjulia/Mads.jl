@@ -3,7 +3,7 @@ import Documenter
 """
 Produce MADS help information
 
-$(documentfunction(help))
+$(DocumentFunction.documentfunction(help))
 """
 function help()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "GETTING_STARTED.md"))
@@ -12,7 +12,7 @@ end
 """
 Produce MADS copyright information
 
-$(documentfunction(copyright))
+$(DocumentFunction.documentfunction(copyright))
 """
 function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
@@ -50,7 +50,7 @@ end
 @doc """
 List available functions in the MADS modules:
 
-$(documentfunction(functions))
+$(DocumentFunction.documentfunction(functions))
 
 Examples:
 

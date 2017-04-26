@@ -4,7 +4,7 @@ import DataStructures
 """
 Is a dictionary containing all the observations
 
-$(documentfunction(isobs))
+$(DocumentFunction.documentfunction(isobs))
 """
 function isobs(madsdata::Associative, dict::Associative)
 	if haskey(madsdata, "Observations") || haskey(madsdata, "Wells")
@@ -25,7 +25,7 @@ end
 """
 Get keys for all observations in the MADS problem dictionary
 
-$(documentfunction(getobskeys))
+$(DocumentFunction.documentfunction(getobskeys))
 """
 function getobskeys(madsdata::Associative)
 	return collect(keys(madsdata["Observations"]))
@@ -34,7 +34,7 @@ end
 """
 Get keys for all targets (observations with weights greater than zero) in the MADS problem dictionary
 
-$(documentfunction(gettargetkeys))
+$(DocumentFunction.documentfunction(gettargetkeys))
 """
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
@@ -46,7 +46,7 @@ end
 """
 Get keys for all wells in the MADS problem dictionary
 
-$(documentfunction(getwellkeys))
+$(DocumentFunction.documentfunction(getwellkeys))
 """
 function getwellkeys(madsdata::Associative)
 	return collect(keys(madsdata["Wells"]))
@@ -107,7 +107,7 @@ end
 """
 Get observation time
 
-$(documentfunction(gettime))
+$(DocumentFunction.documentfunction(gettime))
 """
 function gettime(o::Associative)
 	if haskey(o, "time")
@@ -124,7 +124,7 @@ end
 """
 Set observation time
 
-$(documentfunction(settime!))
+$(DocumentFunction.documentfunction(settime!))
 """
 function settime!(o::Associative, time::Number)
 	if haskey(o, "time")
@@ -139,7 +139,7 @@ end
 """
 Get observation weight
 
-$(documentfunction(getweight))
+$(DocumentFunction.documentfunction(getweight))
 """
 function getweight(o::Associative)
 	if haskey(o, "weight")
@@ -156,7 +156,7 @@ end
 """
 Set observation weight
 
-$(documentfunction(setweight!))
+$(DocumentFunction.documentfunction(setweight!))
 """
 function setweight!(o::Associative, weight::Number)
 	if haskey(o, "weight")
@@ -171,7 +171,7 @@ end
 """
 Get observation target
 
-$(documentfunction(gettarget))
+$(DocumentFunction.documentfunction(gettarget))
 """
 function gettarget(o::Associative)
 	if haskey(o, "target")
@@ -188,7 +188,7 @@ end
 """
 Set observation target
 
-$(documentfunction(settarget!))
+$(DocumentFunction.documentfunction(settarget!))
 """
 function settarget!(o::Associative, target::Number)
 	if haskey(o, "target")
@@ -226,7 +226,7 @@ end
 @doc """
 Set observation time based on the observation name in the MADS problem dictionary
 
-$(documentfunction(setobstime!))
+$(DocumentFunction.documentfunction(setobstime!))
 
 Usage:
 
@@ -253,7 +253,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 """
 Set observation weights in the MADS problem dictionary
 
-$(documentfunction(setobsweights!))
+$(DocumentFunction.documentfunction(setobsweights!))
 """
 function setobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
@@ -265,7 +265,7 @@ end
 """
 Modify (multiply) observation weights in the MADS problem dictionary
 
-$(documentfunction(modobsweights!))
+$(DocumentFunction.documentfunction(modobsweights!))
 """
 function modobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
@@ -277,7 +277,7 @@ end
 """
 Inversely proportional observation weights in the MADS problem dictionary
 
-$(documentfunction(invobsweights!))
+$(DocumentFunction.documentfunction(invobsweights!))
 """
 function invobsweights!(madsdata::Associative, value::Number)
 	obskeys = getobskeys(madsdata)
@@ -292,7 +292,7 @@ end
 """
 Set well weights in the MADS problem dictionary
 
-$(documentfunction(setwellweights!))
+$(DocumentFunction.documentfunction(setwellweights!))
 """
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
@@ -307,7 +307,7 @@ end
 """
 Modify (multiply) well weights in the MADS problem dictionary
 
-$(documentfunction(modwellweights!))
+$(DocumentFunction.documentfunction(modwellweights!))
 """
 function modwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
@@ -322,7 +322,7 @@ end
 """
 Inversely proportional observation weights in the MADS problem dictionary
 
-$(documentfunction(invwellweights!))
+$(DocumentFunction.documentfunction(invwellweights!))
 """
 function invwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
@@ -340,7 +340,7 @@ end
 """
 Show observations in the MADS problem dictionary
 
-$(documentfunction(showobservations))
+$(DocumentFunction.documentfunction(showobservations))
 """
 function showobservations(madsdata::Associative)
 	obsdict = madsdata["Observations"]
@@ -430,13 +430,13 @@ end
 @doc """
 Create observations in the MADS problem dictionary based on `time` and `observation` vectors
 
-$(documentfunction(createobservations!))
+$(DocumentFunction.documentfunction(createobservations!))
 """ createobservations!
 
 """
 Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary
 
-$(documentfunction(setobservationtargets!))
+$(DocumentFunction.documentfunction(setobservationtargets!))
 """
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
@@ -456,7 +456,7 @@ end
 """
 Turn on all the wells in the MADS problem dictionary
 
-$(documentfunction(allwellson!))
+$(DocumentFunction.documentfunction(allwellson!))
 """
 function allwellson!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -468,7 +468,7 @@ end
 """
 Turn on a specific well in the MADS problem dictionary
 
-$(documentfunction(wellon!))
+$(DocumentFunction.documentfunction(wellon!))
 """
 function wellon!(madsdata::Associative, wellname::String)
 	error = true
@@ -488,7 +488,7 @@ end
 """
 Turn off all the wells in the MADS problem dictionary
 
-$(documentfunction(allwellsoff!))
+$(DocumentFunction.documentfunction(allwellsoff!))
 """
 function allwellsoff!(madsdata::Associative)
 	for wellkey in collect(keys(madsdata["Wells"]))
@@ -500,7 +500,7 @@ end
 """
 Turn off a specific well in the MADS problem dictionary
 
-$(documentfunction(welloff!))
+$(DocumentFunction.documentfunction(welloff!))
 """
 function welloff!(madsdata::Associative, wellname::String)
 	error = true
@@ -520,7 +520,7 @@ end
 """
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
-$(documentfunction(wells2observations!))
+$(DocumentFunction.documentfunction(wells2observations!))
 """
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
@@ -552,7 +552,7 @@ end
 """
 Get `Wells` class spatial and temporal data
 
-$(documentfunction(getwellsdata))
+$(DocumentFunction.documentfunction(getwellsdata))
 """
 function getwellsdata(madsdata::Associative; time::Bool=false)
 	if time

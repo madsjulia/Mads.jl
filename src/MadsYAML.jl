@@ -5,7 +5,7 @@ import DataStructures
 """
 Load YAML file
 
-$(documentfunction(loadyamlfile;
+$(DocumentFunction.documentfunction(loadyamlfile;
 argtext=Dict("filename"=>"file name"),
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 
@@ -29,7 +29,7 @@ end
 """
 Dump YAML file
 
-$(documentfunction(dumpyamlfile;
+$(DocumentFunction.documentfunction(dumpyamlfile;
 argtext=Dict("filename"=>"output file name",
             "data"=>"YAML data"),
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
@@ -48,7 +48,7 @@ end
 """
 Dump YAML Mads file
 
-$(documentfunction(dumpyamlmadsfile;
+$(DocumentFunction.documentfunction(dumpyamlmadsfile;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"output file name"),
 keytext=Dict("julia"=>"[default=`false`]")))
@@ -108,7 +108,7 @@ end
 """
 Read MADS model predictions from a YAML file `filename`
 
-$(documentfunction(readyamlpredictions;
+$(DocumentFunction.documentfunction(readyamlpredictions;
 argtext=Dict("filename"=>"file name"),
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 

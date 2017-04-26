@@ -8,6 +8,7 @@ MetaProgTools
 ReusableFunctions
 RobustPmap
 SVR
+DocumentFunction
 Conda 0.4
 PyCall 1.8
 PyPlot 2.2

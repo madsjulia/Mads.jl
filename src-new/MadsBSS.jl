@@ -6,7 +6,7 @@ import Optim
 """
 Non-negative Matrix Factorization using NMF
 
-$(documentfunction(NMFm))
+$(DocumentFunction.documentfunction(NMFm))
 """
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
@@ -30,7 +30,7 @@ end
 """
 Non-negative Matrix Factorization using JuMP/Ipopt
 
-$(documentfunction(NMFipopt))
+$(DocumentFunction.documentfunction(NMFipopt))
 """
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
 	Xc = copy(X)
@@ -76,7 +76,7 @@ end
 """
 Matrix Factorization via Levenberg Marquardt
 
-$(documentfunction(MFlm))
+$(DocumentFunction.documentfunction(MFlm))
 """
 function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
 	nP = size(X, 1) # number of observation points

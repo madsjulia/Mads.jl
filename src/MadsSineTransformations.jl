@@ -1,7 +1,7 @@
 """
 Arcsine transformation of model parameters
 
-$(documentfunction(asinetransform))
+$(DocumentFunction.documentfunction(asinetransform))
 """
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
 	sineparams = copy(params)
@@ -13,7 +13,7 @@ end
 """
 Sine transformation of model parameters
 
-$(documentfunction(sinetransform))
+$(DocumentFunction.documentfunction(sinetransform))
 """
 function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
 	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin.(sineparams)) * .5) # untransformed parameters (regular parameter space)
@@ -24,7 +24,7 @@ end
 """
 Sine transformation of a function
 
-$(documentfunction(sinetransformfunction))
+$(DocumentFunction.documentfunction(sinetransformfunction))
 """
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
@@ -36,7 +36,7 @@ end
 """
 Sine transformation of a gradient function
 
-$(documentfunction(sinetransformgradient))
+$(DocumentFunction.documentfunction(sinetransformgradient))
 """
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(0))

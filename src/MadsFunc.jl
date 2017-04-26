@@ -47,7 +47,7 @@ Options for reading model outputs:
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 
-$(documentfunction(makemadscommandfunction))
+$(DocumentFunction.documentfunction(makemadscommandfunction))
 """
 function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
@@ -226,13 +226,13 @@ end
 @doc """
 Make Mads reusable function
 
-$(documentfunction(makemadsreusablefunction))
+$(DocumentFunction.documentfunction(makemadsreusablefunction))
 """ makemadsreusablefunction
 
 """
 Get the directory where Mads restarts will be stored.
 
-$(documentfunction(getrestartdir))
+$(DocumentFunction.documentfunction(getrestartdir))
 """
 function getrestartdir(madsdata::Associative, suffix::String="")
 	restartdir = ""
@@ -282,7 +282,7 @@ end
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 
-$(documentfunction(importeverywhere))
+$(DocumentFunction.documentfunction(importeverywhere))
 """
 function importeverywhere(filename::String)
 	code = readstring(filename)
@@ -303,7 +303,7 @@ end
 """
 Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
-$(documentfunction(makemadscommandgradient))
+$(DocumentFunction.documentfunction(makemadscommandgradient))
 """
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
@@ -321,7 +321,7 @@ end
 """
 Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
 
-$(documentfunction(makemadscommandfunctionandgradient))
+$(DocumentFunction.documentfunction(makemadscommandfunctionandgradient))
 """
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
@@ -389,7 +389,7 @@ end
 """
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
-$(documentfunction(makelogprior))
+$(DocumentFunction.documentfunction(makelogprior))
 """
 function makelogprior(madsdata::Associative)
 	distributions = getparamdistributions(madsdata::Associative)
@@ -406,7 +406,7 @@ end
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 
-$(documentfunction(makemadsconditionalloglikelihood))
+$(DocumentFunction.documentfunction(makemadsconditionalloglikelihood))
 """
 function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	"MADS conditional log-likelihood functions"
@@ -434,7 +434,7 @@ end
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 
-$(documentfunction(makemadsloglikelihood))
+$(DocumentFunction.documentfunction(makemadsloglikelihood))
 """
 function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	if haskey(madsdata, "LogLikelihood")

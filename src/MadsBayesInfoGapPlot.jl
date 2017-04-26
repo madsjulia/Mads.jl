@@ -3,7 +3,7 @@ import Gadfly
 """
 Plot BIG-DT robustness curves
 
-$(documentfunction(plotrobustnesscurves))
+$(DocumentFunction.documentfunction(plotrobustnesscurves))
 
 Arguments:
 

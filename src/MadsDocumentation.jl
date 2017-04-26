@@ -97,17 +97,17 @@ end
 @doc """
 Create function documentation
 
-$(documentfunction(documentfunction))
+$(DocumentFunction.documentfunction(documentfunction))
 """ documentfunction
 
 @doc """
 Get function arguments
 
-$(documentfunction(getfunctionarguments))
+$(DocumentFunction.documentfunction(getfunctionarguments))
 """ getfunctionarguments
 
 @doc """
 Get function keywords
 
-$(documentfunction(getfunctionkeywords))
+$(DocumentFunction.documentfunction(getfunctionkeywords))
 """ getfunctionkeywords

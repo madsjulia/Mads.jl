@@ -1,10 +1,10 @@
 import Mads
 
-workdir = Mads.getmadsdir()
+@everywhere workdir = Mads.getmadsdir()
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "..", "examples", "wells")
+	@everywhere workdir = joinpath(Mads.madsdir, "..", "examples", "wells")
 end
-cdir = pwd()
+@everywhere cdir = pwd()
 @everywhere cd(workdir)
 
 info("Levenberg-Marquardt optimization of an external call problem using the code WELLS ...")

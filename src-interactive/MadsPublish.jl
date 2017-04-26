@@ -3,7 +3,7 @@
 """
 Checks of package is available
 
-$(documentfunction(ispkgavailable))
+$(DocumentFunction.documentfunction(ispkgavailable))
 """
 function ispkgavailable(modulename::String)
 	flag=false
@@ -19,7 +19,7 @@ end
 """
 Lists modules required by a module (Mads by default)
 
-$(documentfunction(required))
+$(DocumentFunction.documentfunction(required))
 """
 function required(modulename::String="Mads", filtermodule::String="")
 	filename = joinpath(Pkg.dir(modulename), "REQUIRE")
@@ -39,7 +39,7 @@ end
 """
 Lists modules dependents on a module (Mads by default)
 
-$(documentfunction(dependents))
+$(DocumentFunction.documentfunction(dependents))
 """
 function dependents(modulename::String="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
@@ -57,7 +57,7 @@ end
 """
 Checkout the latest version of the Mads / Julia modules
 
-$(documentfunction(checkout))
+$(DocumentFunction.documentfunction(checkout))
 """
 function checkout(modulename::String=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
 	if modulename!=""
@@ -109,7 +109,7 @@ end
 """
 Push the latest version of the Mads / Julia modules in the repo
 
-$(documentfunction(push))
+$(DocumentFunction.documentfunction(push))
 """
 function push(modulename::String="")
 	if modulename!=""
@@ -129,7 +129,7 @@ end
 """
 Free Mads / Julia modules
 
-$(documentfunction(free))
+$(DocumentFunction.documentfunction(free))
 """
 function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
@@ -151,7 +151,7 @@ end
 """
 Commit the latest version of the Mads / Julia modules in the repo
 
-$(documentfunction(commit))
+$(DocumentFunction.documentfunction(commit))
 """
 function commit(commitmsg::String, modulename::String="")
 	if modulename!=""
@@ -175,7 +175,7 @@ end
 """
 Status of the Mads modules
 
-$(documentfunction(status))
+$(DocumentFunction.documentfunction(status))
 """
 function status(; git::Bool=true, gitmore::Bool=false)
 	for i in madsmodules
@@ -249,13 +249,13 @@ end
 @doc """
 Tag the Mads modules with a default argument `:patch`
 
-$(documentfunction(tag))
+$(DocumentFunction.documentfunction(tag))
 """ tag
 
 """
 Create web documentation files for Mads functions
 
-$(documentfunction(create_documentation))
+$(DocumentFunction.documentfunction(create_documentation))
 """
 function create_documentation()
 	Documenter.makedocs(root = Pkg.dir("Mads", "docs"), doctest=false, clean=true)

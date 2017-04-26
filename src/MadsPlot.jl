@@ -9,7 +9,7 @@ import Measures
 """
 Set the default plot format (`SVG` is the default format)
 
-$(documentfunction(setdefaultplotformat;
+$(DocumentFunction.documentfunction(setdefaultplotformat;
 argtext=Dict("format"=>"plot format")))
 """
 function setdefaultplotformat(format::String)
@@ -23,7 +23,7 @@ end
 """
 Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
-$(documentfunction(setplotfileformat;
+$(DocumentFunction.documentfunction(setplotfileformat;
 argtext=Dict("filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)")))
 
@@ -60,7 +60,7 @@ end
 """
 Plot contaminant sources and wells defined in MADS problem dictionary
 
-$(documentfunction(plotmadsproblem;
+$(DocumentFunction.documentfunction(plotmadsproblem;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
             "filename"=>"output file name",
@@ -324,7 +324,7 @@ end
 @doc """
 Plot the matches between model predictions and observations
 
-$(documentfunction(plotmatches;
+$(DocumentFunction.documentfunction(plotmatches;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "rx"=>"regular expression to filter the outputs",
             "result"=>"dictionary with model predictions",
@@ -364,7 +364,7 @@ Mads.plotmatches(madsdata, result, r"NO3"; filename="", format="")
 """
 Create histogram/scatter plots of model parameter samples
 
-$(documentfunction(scatterplotsamples;
+$(DocumentFunction.documentfunction(scatterplotsamples;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "samples"=>"matrix with model parameters",
             "filename"=>"output file name"),
@@ -511,7 +511,7 @@ end
 @doc """
 Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
 
-$(documentfunction(plotwellSAresults;
+$(DocumentFunction.documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
@@ -528,7 +528,7 @@ Dumps:
 """
 Plot the sensitivity analysis results for the observations
 
-$(documentfunction(plotobsSAresults;
+$(DocumentFunction.documentfunction(plotobsSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results"),
 keytext=Dict("filter"=>"string or regex to plot only observations containing `filter`",
@@ -820,7 +820,7 @@ end
 @doc """
 Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
 
-$(documentfunction(spaghettiplots;
+$(DocumentFunction.documentfunction(spaghettiplots;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "number_of_samples"=>"number of samples",
             "paramdictarray"=>"parameter dictionary containing the data arrays to be plotted"),
@@ -1005,7 +1005,7 @@ end
 @doc """
 Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
 
-$(documentfunction(spaghettiplot;
+$(DocumentFunction.documentfunction(spaghettiplot;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "number_of_samples"=>"number of samples",
             "dictarray"=>"dictionary array containing the data arrays to be plotted",
@@ -1039,7 +1039,7 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", forma
 """
 Create plots of data series
 
-$(documentfunction(plotseries;
+$(DocumentFunction.documentfunction(plotseries;
 argtext=Dict("X"=>"matrix with the series data",
             "filename"=>"output file name"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",

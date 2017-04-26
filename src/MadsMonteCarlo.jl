@@ -40,7 +40,7 @@ end
 @doc """
 Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
-$(documentfunction(emceesampling))
+$(DocumentFunction.documentfunction(emceesampling))
 
 Examples:
 
@@ -104,7 +104,7 @@ end
 @doc """
 Bayesian Sampling
 
-$(documentfunction(bayessampling))
+$(DocumentFunction.documentfunction(bayessampling))
 
 Examples:
 
@@ -130,7 +130,7 @@ Returns:
 """
 Save MCMC chain in a file
 
-$(documentfunction(savemcmcresults))
+$(DocumentFunction.documentfunction(savemcmcresults))
 """
 function savemcmcresults(chain::Array, filename::String)
 	f = open(filename, "w")
@@ -175,7 +175,7 @@ Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
 
-$(documentfunction(montecarlo))
+$(DocumentFunction.documentfunction(montecarlo))
 """
 function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	paramkeys = getparamkeys(madsdata)
@@ -227,7 +227,7 @@ end
 """
 Convert a parameter array to a parameter dictionary of arrays
 
-$(documentfunction(paramarray2dict))
+$(DocumentFunction.documentfunction(paramarray2dict))
 """
 function paramarray2dict(madsdata::Associative, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
@@ -241,7 +241,7 @@ end
 """
 Convert a parameter dictionary of arrays to a parameter array
 
-$(documentfunction(paramdict2array))
+$(DocumentFunction.documentfunction(paramdict2array))
 """
 function paramdict2array(dict::Associative)
 	return hcat(map(i->collect(dict[i]), keys(dict))...)

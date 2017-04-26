@@ -17,7 +17,7 @@ Returns:
 
 - `arrayfunction` : function accepting an array containing the optimal parameters' values
 
-$(documentfunction(makearrayfunction))
+$(DocumentFunction.documentfunction(makearrayfunction))
 """
 function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
@@ -44,7 +44,7 @@ Returns:
 
 - `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
 
-$(documentfunction(makedoublearrayfunction))
+$(DocumentFunction.documentfunction(makedoublearrayfunction))
 """
 function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
@@ -65,7 +65,7 @@ end
 """
 Make a conditional log likelihood function that accepts an array containing the opt parameters' values
 
-$(documentfunction(makearrayconditionalloglikelihood))
+$(DocumentFunction.documentfunction(makearrayconditionalloglikelihood))
 """
 function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
@@ -82,7 +82,7 @@ end
 """
 Make a log likelihood function that accepts an array containing the opt parameters' values
 
-$(documentfunction(makearrayloglikelihood))
+$(DocumentFunction.documentfunction(makearrayloglikelihood))
 """
 function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
@@ -103,7 +103,7 @@ end
 """
 Set Dynamic Model for MADS model calls using internal Julia functions
 
-$(documentfunction(setdynamicmodel))
+$(DocumentFunction.documentfunction(setdynamicmodel))
 """
 function setdynamicmodel(madsdata::Associative, f::Function)
 	madsdata["Dynamic model"] = f
@@ -112,7 +112,7 @@ end
 """
 Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-$(documentfunction(evaluatemadsexpression))
+$(DocumentFunction.documentfunction(evaluatemadsexpression))
 """
 function evaluatemadsexpression(expressionstring::String, parameters::Associative)
 	expression = parse(expressionstring)
@@ -125,7 +125,7 @@ end
 """
 Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
 
-$(documentfunction(evaluatemadsexpressions))
+$(DocumentFunction.documentfunction(evaluatemadsexpressions))
 """
 function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	if haskey(madsdata, "Expressions")
@@ -145,7 +145,7 @@ sprintf(args...) = eval(:@sprintf($(args...)))
 """
 Parse distribution from a string
 
-$(documentfunction(getdistribution))
+$(DocumentFunction.documentfunction(getdistribution))
 """
 function getdistribution(dist::String, i::String, inputtype::String)
 	distribution = nothing

@@ -3,7 +3,7 @@ import DataStructures
 """
 Load MADS input file defining a MADS problem dictionary
 
-$(documentfunction(loadmadsfile;
+$(DocumentFunction.documentfunction(loadmadsfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
              "format"=>"acceptable formats are `yaml` and`json`,  [default=`yaml`]")))
@@ -52,7 +52,7 @@ end
 """
 Parse loaded Mads problem dictionary
 
-$(documentfunction(parsemadsdata!;
+$(DocumentFunction.documentfunction(parsemadsdata!;
 argtext=Dict("madsdata"=>"Mads problem dictionary")))
 """
 function parsemadsdata!(madsdata::Associative)
@@ -183,7 +183,7 @@ end
 @doc """
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
-$(documentfunction(savemadsfile;
+$(DocumentFunction.documentfunction(savemadsfile;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "parameters"=>"Dictionary with parameters (optional)",
             "filename"=>"input file name (e.g. `input_file_name.mads`)"),
@@ -203,7 +203,7 @@ Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)
 """
 Save calibration results
 
-$(documentfunction(savecalibrationresults;
+$(DocumentFunction.documentfunction(savecalibrationresults;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "results"=>"the calibration results")))
 """
@@ -216,7 +216,7 @@ end
 """
 Set a default MADS input file
 
-$(documentfunction(setmadsinputfile;
+$(DocumentFunction.documentfunction(setmadsinputfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
 
 Usage:
@@ -232,7 +232,7 @@ end
 """
 Get the default MADS input file set as a MADS global variable using `setmadsinputfile(filename)`
 
-$(documentfunction(getmadsinputfile))
+$(DocumentFunction.documentfunction(getmadsinputfile))
 
 Usage:
 
@@ -251,7 +251,7 @@ end
 """
 Get the MADS problem root name
 
-$(documentfunction(getmadsrootname;
+$(DocumentFunction.documentfunction(getmadsrootname;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
             "version"=>"delete version information from filename for the returned rootname, [default=`false`]")))
@@ -273,7 +273,7 @@ end
 """
 Get directory
 
-$(documentfunction(getdir;
+$(DocumentFunction.documentfunction(getdir;
 argtext=Dict("filename"=>"file name")))
 
 Returns:
@@ -298,7 +298,7 @@ end
 """
 Get the directory where the Mads data file is located
 
-$(documentfunction(getmadsproblemdir;
+$(DocumentFunction.documentfunction(getmadsproblemdir;
 argtext=Dict("madsdata"=>"Mads problem dictionary")))
 
 Usage:
@@ -321,7 +321,7 @@ end
 """
 Get the directory where currently Mads is running
 
-$(documentfunction(getmadsdir))
+$(DocumentFunction.documentfunction(getmadsdir))
 
 Usage:
 
@@ -347,7 +347,7 @@ end
 """
 Get file name root
 
-$(documentfunction(getrootname;
+$(DocumentFunction.documentfunction(getrootname;
 argtext=Dict("filename"=>"file name"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
             "version"=>"delete version information from filename for the returned rootname, [default=`false`]")))
@@ -409,7 +409,7 @@ end
 @doc """
 Set new mads file name
 
-$(documentfunction(setnewmadsfilename;
+$(DocumentFunction.documentfunction(setnewmadsfilename;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "filename"=>"file name")))
 
@@ -421,7 +421,7 @@ Returns:
 """
 Get next mads file name
 
-$(documentfunction(getnextmadsfilename;
+$(DocumentFunction.documentfunction(getnextmadsfilename;
 argtext=Dict("filename"=>"file name")))
 
 Returns:
@@ -452,7 +452,7 @@ end
 """
 Get file name extension
 
-$(documentfunction(getextension;
+$(DocumentFunction.documentfunction(getextension;
 argtext=Dict("filename"=>"file name")))
 
 Returns:
@@ -478,7 +478,7 @@ end
 """
 Check the directories where model outputs should be saved for MADS
 
-$(documentfunction(checkmodeloutputdirs;
+$(DocumentFunction.documentfunction(checkmodeloutputdirs;
 argtext=Dict("madsdata"=>"Mads problem dictionary")))
 
 Returns:
@@ -527,7 +527,7 @@ end
 """
 Set model input files; delete files where model output should be saved for MADS
 
-$(documentfunction(setmodelinputs;
+$(DocumentFunction.documentfunction(setmodelinputs;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "parameters"=>""),
 keytext=Dict("path"=>"path for the files, [default=`.`]")))
@@ -596,7 +596,7 @@ end
 """
 Read model outputs saved for MADS
 
-$(documentfunction(readmodeloutput;
+$(DocumentFunction.documentfunction(readmodeloutput;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("obskeys"=>"[default=getobskeys(madsdata)]")))
 """
@@ -635,7 +635,7 @@ searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir
 @doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
-$(documentfunction(searchdir;
+$(DocumentFunction.documentfunction(searchdir;
 argtext=Dict("key"=>"matching pattern for Mads input files (string or regular expression accepted)"),
 keytext=Dict("path"=>"search directory for the mads input files, [default=`.`]")))
 
@@ -658,7 +658,7 @@ filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)
 @doc """
 Filter dictionary keys based on a string or regular expression
 
-$(documentfunction(filterkeys;
+$(DocumentFunction.documentfunction(filterkeys;
 argtext=Dict("dict"=>"dictionary",
             "key"=>"the regular expression or string used to filter dictionary keys")))
 """ filterkeys
@@ -669,7 +669,7 @@ indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(d
 @doc """
 Find indexes for dictionary keys based on a string or regular expression
 
-$(documentfunction(indexkeys;
+$(DocumentFunction.documentfunction(indexkeys;
 argtext=Dict("dict"=>"dictionary",
             "key"=>"the key to find index for")))
 """ indexkeys
@@ -680,7 +680,7 @@ getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filter
 @doc """
 Get dictionary values for keys based on a string or regular expression
 
-$(documentfunction(getdictvalues;
+$(DocumentFunction.documentfunction(getdictvalues;
 argtext=Dict("dict"=>"dictionary",
              "key"=>"the key to find value for")))
 """ getdictvalues
@@ -688,7 +688,7 @@ argtext=Dict("dict"=>"dictionary",
 """
 Write `parameters` via MADS template (`templatefilename`) to an output file (`outputfilename`)
 
-$(documentfunction(writeparametersviatemplate;
+$(DocumentFunction.documentfunction(writeparametersviatemplate;
 argtext=Dict("parameters"=>"parameters",
             "templatefilename"=>"tmplate file name",
             "outputfilename"=>"output file name"),
@@ -746,7 +746,7 @@ end
 @doc """
 Write `parameters`
 
-$(documentfunction(writeparameters;
+$(DocumentFunction.documentfunction(writeparameters;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"[default=`false`]")))
@@ -755,7 +755,7 @@ keytext=Dict("respect_space"=>"[default=`false`]")))
 """
 Convert an instruction line in the Mads instruction file into regular expressions
 
-$(documentfunction(instline2regexs;
+$(DocumentFunction.documentfunction(instline2regexs;
 argtext=Dict("instline"=>"instruction line")))
 
 Returns:
@@ -805,7 +805,7 @@ end
 """
 Match an instruction line in the Mads instruction file with model input file
 
-$(documentfunction(obslineismatch;
+$(DocumentFunction.documentfunction(obslineismatch;
 argtext=Dict("obsline"=>"instruction line",
             "regexs"=>"")))
 
@@ -821,7 +821,7 @@ end
 """
 Get observations for a set of regular expressions
 
-$(documentfunction(regexs2obs;
+$(DocumentFunction.documentfunction(regexs2obs;
 argtext=Dict("obsline"=>"",
             "regexs"=>"regular expressions",
             "obsnames"=>"",
@@ -853,7 +853,7 @@ end
 """
 Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
 
-$(documentfunction(ins_obs;
+$(DocumentFunction.documentfunction(ins_obs;
 argtext=Dict("instructionfilename"=>"instruction file name",
             "inputfilename"=>"read model input file")))
 
@@ -889,7 +889,7 @@ end
 """
 Read observations
 
-$(documentfunction(readobservations;
+$(DocumentFunction.documentfunction(readobservations;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "obskeys"=>"observation keys, [default=`getobskeys(madsdata)`]")))
 
@@ -928,7 +928,7 @@ end
 """
 Dump well data from MADS problem dictionary into a ASCII file
 
-$(documentfunction(dumpwelldata;
+$(DocumentFunction.documentfunction(dumpwelldata;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "filename"=>"output file name")))
 
@@ -959,7 +959,7 @@ end
 """
 Create a symbolic link of all the files in a directory `dirsource` in a directory `dirtarget`
 
-$(documentfunction(symlinkdirfiles;
+$(DocumentFunction.documentfunction(symlinkdirfiles;
 argtext=Dict("dirsource"=>"source directory",
             "dirtarget"=>"target directory")))
 """
@@ -977,7 +977,7 @@ end
 """
 Create a symbolic link of a file `filename` in a directory `dirtarget`
 
-$(documentfunction(symlinkdir;
+$(DocumentFunction.documentfunction(symlinkdir;
 argtext=Dict("filename"=>"file name",
             "dirtarget"=>"target directory")))
 """
@@ -991,7 +991,7 @@ end
 """
 Remove directory
 
-$(documentfunction(rmdir;
+$(DocumentFunction.documentfunction(rmdir;
 argtext=Dict("dir"=>"the directory to be removed"),
 keytext=Dict("path"=>"path of the directory, [default=`current path`]")))
 """
@@ -1007,7 +1007,7 @@ end
 """
 Remove file
 
-$(documentfunction(rmfile;
+$(DocumentFunction.documentfunction(rmfile;
 argtext=Dict("filename"=>"the file to be removed"),
 keytext=Dict("path"=>"path of the file, [default=`current path`]")))
 """
@@ -1023,7 +1023,7 @@ end
 """
 Remove files with extension `ext`
 
-$(documentfunction(rmfiles_ext;
+$(DocumentFunction.documentfunction(rmfiles_ext;
 argtext=Dict("ext"=>"extension"),
 keytext=Dict("path"=>"path of the files to be removed, [default=`.`]")))
 """
@@ -1036,7 +1036,7 @@ end
 """
 Remove files with root `root`
 
-$(documentfunction(rmfiles_root;
+$(DocumentFunction.documentfunction(rmfiles_root;
 argtext=Dict("root"=>"root"),
 keytext=Dict("path"=>"path of the files to be removed, [default=`.`]")))
 """
@@ -1054,7 +1054,7 @@ end
 """
 Create temporary directory
 
-$(documentfunction(createtempdir;
+$(DocumentFunction.documentfunction(createtempdir;
 argtext=Dict("tempdirname"=>"temporary directory name")))
 """
 function createtempdir(tempdirname::String)
@@ -1080,7 +1080,7 @@ end
 """
 Link files in a temporary directory
 
-$(documentfunction(linktempdir;
+$(DocumentFunction.documentfunction(linktempdir;
 argtext=Dict("madsproblemdir"=>"mads problem directory",
             "tempdirname"=>"temporary directory name")))
 """
@@ -1109,7 +1109,7 @@ end
 """
 Create a directory (if does not already exist)
 
-$(documentfunction(mkdir;
+$(DocumentFunction.documentfunction(mkdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function mkdir(dirname::String)
