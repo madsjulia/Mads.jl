@@ -62,8 +62,8 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` : MCMC chain
-- `llhoodvals` : log likelihoods of the final samples in the chain
+- MCMC chain
+- log likelihoods of the final samples in the chain
 
 """ emceesampling
 
@@ -124,7 +124,7 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` :
+- MCMC chain
 """ bayessampling
 
 """
@@ -169,7 +169,7 @@ Arguments:
 
 Returns:
 
-- `outputdicts` : parameter dictionary containing the data arrays
+- parameter dictionary containing the data arrays
 
 Dumps:
 

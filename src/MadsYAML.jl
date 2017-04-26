@@ -11,7 +11,7 @@ keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `f
 
 Returns:
 
-- `yamldata` : yaml data from input file
+- data in the yaml input file
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 	julia = isdefined(Mads, :yaml) ? julia : true
@@ -114,7 +114,7 @@ keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `f
 
 Returns:
 
-- yaml data from input file
+- data in yaml input file
 """
 function readyamlpredictions(filename::String; julia::Bool=false) # read YAML predictions
 	return loadyamlfile(filename; julia=julia)

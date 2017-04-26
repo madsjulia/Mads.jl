@@ -17,8 +17,8 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` : final MCMC chain
-- `llhoodvals` : log likelihoods of the final samples in the chain
+- final MCMC chain
+- log likelihoods of the final samples in the chain
 
 $(DocumentFunction.documentfunction(emcee))
 """

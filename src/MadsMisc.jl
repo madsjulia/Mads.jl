@@ -11,11 +11,11 @@ Mads.makearrayfunction(madsdata, f)
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `f` : ...
+- `f` : function
 
 Returns:
 
-- `arrayfunction` : function accepting an array containing the optimal parameters' values
+- function accepting an array containing the optimal parameter values
 
 $(DocumentFunction.documentfunction(makearrayfunction))
 """
@@ -29,7 +29,7 @@ function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfun
 end
 
 """
-Make a version of the function `f` that accepts an array containing the optimal parameters' values, and returns an array of observations
+Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
 
 ```julia
 Mads.makedoublearrayfunction(madsdata, f)
@@ -38,11 +38,11 @@ Mads.makedoublearrayfunction(madsdata, f)
 Arguments:
 
 - `madsdata` : MADS problem dictionary
-- `f` : ...
+- `f` : function
 
 Returns:
 
-- `doublearrayfunction` : function accepting an array containing the optimal parameters' values, and returning an array of observations
+- function accepting an array containing the optimal parameters' values, and returning an array of observations
 
 $(DocumentFunction.documentfunction(makedoublearrayfunction))
 """
