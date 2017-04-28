@@ -15,6 +15,7 @@ parray = Mads.paramdict2array(pdict)
 Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 f = Mads.forward(md, pdict)
+
 if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, f)
@@ -41,10 +42,12 @@ cd(workdir)
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
 pfor = Mads.forward(md)
 
-@Base.Test.test ifor == tifor
-@Base.Test.test ifor == mfor
-@Base.Test.test ifor == tefor
-@Base.Test.test ifor == pfor
+@Base.Test.testset "Internal coupling" begin
+    @Base.Test.test ifor == tifor
+    @Base.Test.test ifor == mfor
+    @Base.Test.test ifor == tefor
+    @Base.Test.test ifor == pfor
+end
 
 Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-mads.mads"); julia=true)
 Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
@@ -61,6 +64,7 @@ Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-json-exp.mads"))
 # sparam, sresults = Mads.calibrate(md)
 efor = Mads.forward(md)
+
 if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :yaml)
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
@@ -74,9 +78,11 @@ end
 # aparam, aresults = Mads.calibrate(md)
 # afor = Mads.forward(md)
 
-@Base.Test.test jfor == sfor
-@Base.Test.test efor == sfor
-@Base.Test.test jfor == ifor
+@Base.Test.testset "External coupling" begin
+    @Base.Test.test jfor == sfor
+    @Base.Test.test efor == sfor
+    @Base.Test.test jfor == ifor
+end
 
 Mads.rmdir(joinpath(workdir, "external-jld_restart"))
 Mads.rmdir(joinpath(workdir, "external-json-exp_restart"))
