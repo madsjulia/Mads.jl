@@ -46,12 +46,11 @@ Mads.setallparamson!(md)
 Mads.setparamoff!(md, "vx")
 Mads.setparamon!(md, "vx")
 tk = Mads.gettargetkeys(md)
-@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
-@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
 Mads.settarget!(md["Observations"][tk[1]], 1)
+
 o1 = Mads.indexkeys(md["Observations"], "o")
 o2 = Mads.indexkeys(md["Observations"], r"o")
-@Base.Test.test o1 == o2
+
 Mads.setobstime!(md, "_")
 Mads.setobstime!(md, r"[A-x]*_([0-9,.]+)")
 Mads.invwellweights!(md, 1)
@@ -70,10 +69,19 @@ Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"))
 Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"), explicit=true)
 Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
+
 f = Mads.getmadsinputfile()
-@Base.Test.test f == "test.mads"
 e = Mads.getextension("test.mads")
-@Base.Test.test e == "mads"
+
+@Base.Test.testset "VerifySetup" begin
+	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
+	@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
+
+	@Base.Test.test o1 == o2
+
+	@Base.Test.test f == "test.mads"
+	@Base.Test.test e == "mads"
+end
 
 Mads.stdoutcaptureon()
 Mads.showparameters(md)
@@ -118,54 +126,56 @@ good_params_init_min = JLD.load(joinpath(workdir, "test_results", "params_init_m
 good_params_init_max = JLD.load(joinpath(workdir, "test_results", "params_init_max.jld"), "m4")
 good_targetkeys = JLD.load(joinpath(workdir, "test_results", "targetkeys.jld"), "tk")
 
-# Test Mads.forward(md, all=true)
-ssr = 0.
-for obskey in union(Set(keys(forward_results)), Set(keys(good_forward_results)))
-	ssr += (forward_results[obskey] - good_forward_results[obskey])^2
+@Base.Test.testset "Anasol" begin
+	# Test Mads.forward(md, all=true)
+	ssr = 0.
+	for obskey in union(Set(keys(forward_results)), Set(keys(good_forward_results)))
+		ssr += (forward_results[obskey] - good_forward_results[obskey])^2
+	end
+	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+
+	# Test Mads.getparamrandom(md, 5, init_dist=true)
+	for obskey in union(Set(keys(paramrandom_true)), Set(keys(good_paramrandom_true)))
+		@Base.Test.test isapprox(paramrandom_true[obskey], good_paramrandom_true[obskey], atol=1e-8)
+	end
+
+	# Test Mads.getparamrandom(md, 5, init_dist=false)
+	for obskey in union(Set(keys(paramrandom_false)), Set(keys(good_paramrandom_false)))
+		@Base.Test.test isapprox(paramrandom_false[obskey], good_paramrandom_false[obskey], atol=1e-8)
+	end
+
+	# Test Mads.getparamdict(md)
+	ssr = 0.
+	for obskey in union(Set(keys(pd)), Set(keys(good_pd)))
+		ssr += (pd[obskey] - good_pd[obskey])^2
+	end
+	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+
+	# Test computeconcentrations(paramdict)
+	ssr = 0.
+	for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
+		ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
+	end
+	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+
+	# Test Mads.of(md)
+	@Base.Test.test isapprox(madsOf, 628789.775106828, atol=1e-8) #test
+
+	# Test Mads.residuals(md)
+	@Base.Test.test isapprox(good_residuals, residuals_results, atol=1e-8)
+
+	# Test Mads.getsourcekeys(md)
+	@Base.Test.test sk == ["Source1_dz", "Source1_f", "Source1_t0", "Source1_x", "Source1_dy", "Source1_dx", "Source1_z", "Source1_t1", "Source1_y"]
+
+	# Test Mads.getparamsmin(md), getparamsmax, getparamsinit_min, getparamsinit_max
+	@Base.Test.test isapprox(m1, good_params_min, atol=1e-8)
+	@Base.Test.test isapprox(m2, good_params_max, atol=1e-8)
+	@Base.Test.test isapprox(m3, good_params_init_min, atol=1e-8)
+	@Base.Test.test isapprox(m4, good_params_init_max, atol=1e-8)
+
+	# Test Mads.gettargetkeys(md)
+	@Base.Test.test tk == good_targetkeys
 end
-@Base.Test.test_approx_eq_eps ssr 0. 1e-8
-
-# Test Mads.getparamrandom(md, 5, init_dist=true)
-for obskey in union(Set(keys(paramrandom_true)), Set(keys(good_paramrandom_true)))
-	@Base.Test.test_approx_eq_eps paramrandom_true[obskey] good_paramrandom_true[obskey] 1e-8
-end
-
-# Test Mads.getparamrandom(md, 5, init_dist=false)
-for obskey in union(Set(keys(paramrandom_false)), Set(keys(good_paramrandom_false)))
-	@Base.Test.test_approx_eq_eps paramrandom_false[obskey] good_paramrandom_false[obskey] 1e-8
-end
-
-# Test Mads.getparamdict(md)
-ssr = 0.
-for obskey in union(Set(keys(pd)), Set(keys(good_pd)))
-	ssr += (pd[obskey] - good_pd[obskey])^2
-end
-@Base.Test.test_approx_eq_eps ssr 0. 1e-8
-
-# Test computeconcentrations(paramdict)
-ssr = 0.
-for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
-	ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
-end
-@Base.Test.test_approx_eq_eps ssr 0. 1e-8
-
-# Test Mads.of(md)
-@Base.Test.test_approx_eq_eps madsOf 628789.775106828 1e-8 #test
-
-# Test Mads.residuals(md)
-@Base.Test.test_approx_eq_eps good_residuals residuals_results 1e-8
-
-# Test Mads.getsourcekeys(md)
-@Base.Test.test sk == ["Source1_dz", "Source1_f", "Source1_t0", "Source1_x", "Source1_dy", "Source1_dx", "Source1_z", "Source1_t1", "Source1_y"]
-
-# Test Mads.getparamsmin(md), getparamsmax, getparamsinit_min, getparamsinit_max
-@Base.Test.test_approx_eq_eps m1 good_params_min 1e-8
-@Base.Test.test_approx_eq_eps m2 good_params_max 1e-8
-@Base.Test.test_approx_eq_eps m3 good_params_init_min 1e-8
-@Base.Test.test_approx_eq_eps m4 good_params_init_max 1e-8
-
-# Test Mads.gettargetkeys(md)
-@Base.Test.test tk == good_targetkeys
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true

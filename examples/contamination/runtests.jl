@@ -18,6 +18,7 @@ param_values = Mads.getoptparams(md) # inital parameter values
 
 of = Mads.partialof(md, forward_predictions, r".*")
 
+###### PLOT MD & FORWARD_PREDICTIONS
 if isdefined(:Gadfly)
 	Mads.plotmatches(md, forward_predictions) # plot initial matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
@@ -49,6 +50,7 @@ Mads.calibraterandom_parallel(md, 1; maxEval=1, np_lambda=1, maxJacobians=1)
 
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
+#PLOT MD && INVERSE_PREDICTIONS
 if isdefined(:Gadfly)
 	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
@@ -63,6 +65,7 @@ Mads.getwellsdata(md; time=true)
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues = Mads.getparamrandom(md, 10)
+
 
 if isdefined(:Gadfly)
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
