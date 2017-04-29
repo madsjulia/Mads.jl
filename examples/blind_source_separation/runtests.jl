@@ -2,6 +2,10 @@ import Mads
 import NMF
 import Ipopt
 import Base.Test
+import JLD
+
+workdir = joinpath(Mads.madsdir, "..", "examples", "blind_source_separation")
+d = joinpath(workdir, "test_results")
 
 function reconstruct_rand(R, nk)
     srand(2015)
@@ -16,11 +20,13 @@ function reconstruct_rand(R, nk)
 
     Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=R)
 
-    print("1:\n")
-    print(Wipopt)
-    print("\n")
+    if Mads.create_tests
+        Mads.mkdir(d)
+        JLD.save(joinpath(d, "rand.jld"), "Wipopt", Wipopt)
+    end
 
-    #@Base.Test.test SOME Wipopt TEST HERE
+    good_Wipopt = JLD.load(joinpath(workdir, "test_results", "rand.jld"), "Wipopt")
+    @Base.Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 end
 
 function reconstruct_sin(R, nk)
@@ -36,14 +42,19 @@ function reconstruct_sin(R, nk)
 
     Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=R)
     
-    print("2:\n")
-    print(Wipopt)
-    print("\n")
-    print(Wipopt * Hipopt)
-    print("\n")
+    WHipopt = (Wipopt*Hipopt)
 
-    #@Base.Test.test SOME Wipopt TEST HERE
-    #@Base.Test.test SOME Wipopt * Hipopt TEST HERE
+    if Mads.create_tests
+        Mads.mkdir(d)
+        JLD.save(joinpath(d, "sin_1.jld"), "Wipopt", Wipopt)
+        JLD.save(joinpath(d, "sin_2.jld"), "WHipopt", WHipopt)
+    end
+
+    good_Wipopt = JLD.load(joinpath(workdir, "test_results", "sin_1.jld"), "Wipopt")
+    good_WHipopt = JLD.load(joinpath(workdir, "test_results", "sin_2.jld"), "WHipopt")
+
+    @Base.Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+    @Base.Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 end
 
 function reconstruct_sin_rand(R, nk)
@@ -59,14 +70,19 @@ function reconstruct_sin_rand(R, nk)
 
     Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
     
-    print("3:\n")
-    print(Wipopt)
-    print("\n")
-    print(Wipopt * Hipopt)
-    print("\n")
+    WHipopt = (Wipopt*Hipopt)
 
-    #@Base.Test.test SOME Wipopt TEST HERE
-    #@Base.Test.test SOME Wipopt * Hipopt TEST HERE
+    if Mads.create_tests
+        Mads.mkdir(d)
+        JLD.save(joinpath(d, "sin_rand_1.jld"), "Wipopt", Wipopt)
+        JLD.save(joinpath(d, "sin_rand_2.jld"), "WHipopt", WHipopt)
+    end
+
+    good_Wipopt = JLD.load(joinpath(workdir, "test_results", "sin_rand_1.jld"), "Wipopt")
+    good_WHipopt = JLD.load(joinpath(workdir, "test_results", "sin_rand_2.jld"), "WHipopt")
+
+    @Base.Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+    @Base.Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 end
 
 function reconstruct_disturbance(R, nk)
@@ -84,14 +100,19 @@ function reconstruct_disturbance(R, nk)
 
     Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
 
-    print("4:\n")
-    print(Wipopt)
-    print("\n")
-    print(Wipopt * Hipopt)
-    print("\n")
+    WHipopt = (Wipopt*Hipopt)
 
-    #@Base.Test.test SOME Wipopt TEST HERE
-    #@Base.Test.test SOME Wipopt * Hipopt TEST HERE
+    if Mads.create_tests
+        Mads.mkdir(d)
+        JLD.save(joinpath(d, "disturb_1.jld"), "Wipopt", Wipopt)
+        JLD.save(joinpath(d, "disturb_2.jld"), "WHipopt", WHipopt)
+    end
+
+    good_Wipopt = JLD.load(joinpath(workdir, "test_results", "disturb_1.jld"), "Wipopt")
+    good_WHipopt = JLD.load(joinpath(workdir, "test_results", "disturb_2.jld"), "WHipopt")
+
+    @Base.Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+    @Base.Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 end
 
 R = 1
@@ -99,7 +120,7 @@ nk = 3
 
 @Base.Test.testset "Blind source seperation" begin
     reconstruct_rand(R, nk)
-    #reconstruct_sin(R, nk)
-    #reconstruct_sin_rand(R, nk)
-    #reconstruct_disturbance(R, nk)
+    reconstruct_sin(R, nk)
+    reconstruct_sin_rand(R, nk)
+    reconstruct_disturbance(R, nk)
 end

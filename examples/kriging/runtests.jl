@@ -72,12 +72,15 @@ estimation_error_3 = Mads.estimationerror(ones(size(xs, 2)), zs, xs, mycov3)
         @Base.Test.test isapprox(gaussian_2, 3.13287854235668, atol=1e-6)
     end
 
-    # Uncomment - 
+    # Note - this is a *poor* but workable implementation.
+    #    Array checking all(A == B), A .== B, isapprox(), ==, do not work
+    #    typeof() is identical Array{Float64, 1}
+    #    Not sure how to get equivalence to work other than string()
     # Testing Mads.krige()
     @Base.Test.testset "Krige" begin
-    #   @Base.Test.test krige_results_1 == Float64[-4.75601, -4.75602]
-    #   @Base.Test.test isapprox(krige_results_2, Float64[-6.50204, -6.50191], atol=1e-6)
-    #   @Base.Test.test isapprox(krige_results_3, Float64[-6.49796, -6.49782], atol=1e-6)
+       @Base.Test.test isequal(string(krige_results_1), string([-4.75601, -4.75602]))
+       @Base.Test.test isequal(string(krige_results_2), string([-6.50204, -6.50191]))
+       @Base.Test.test isequal(string(krige_results_3), string([-6.49796, -6.49782]))
     end
 
     # Testing Mads.estimationerror()
