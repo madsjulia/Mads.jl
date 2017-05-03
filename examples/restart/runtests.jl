@@ -64,20 +64,12 @@ cd(workdir)
 	Mads.savemadsfile(md)
 
 
-<<<<<<< HEAD
-Mads.rmdir(joinpath(workdir, "w01_restart"))
-rm(joinpath(workdir, "w01-v01.iterationresults"))
-rm(joinpath(workdir, "w01-v02.mads"))
-Mads.rmfiles_ext("svg")
-Mads.rmfiles_ext("dat")
-=======
 	Mads.rmdir(joinpath(workdir, "w01_restart"))
 	rm(joinpath(workdir, "w01-v01.iterationresults"))
 	rm(joinpath(workdir, "w01-v02.mads"))
 	Mads.rmfiles_ext("svg")
 	Mads.rmfiles_ext("dat")
 
->>>>>>> unit_tests
 
 	if Mads.long_tests
 		Mads.rmdir(joinpath(workdir, "/internal-linearmodel_restart"))
