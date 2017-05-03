@@ -1,8 +1,16 @@
 import Base.Test
 
+workdir = joinpath(Mads.madsdir, "..", "examples", "embed_c")
+
+# Build the C library if it doesn't exist
+if isfile(joinpath(workdir, "libmy.dylib")) != true
+    run(`make`)
+end
+
 # Test Julia's sqrt against C's sqrt in <math.h>
 function test_sqrt(d)
     fcsqrt(d) = ccall( (:my_c_sqrt, "libmy.dylib"), Float64, (Float64,), d )
+
     @Base.Test.test fcsqrt(d) ≈ sqrt(d)
 end
 
@@ -20,11 +28,10 @@ end
 
 # Run the tests
 @Base.Test.testset "Calling C" begin
-    if isfile("libmy.dylib")
+    if isfile(joinpath(workdir, "libmy.dylib"))
         test_sqrt(2)
         test_ex1(100, 6.4)
     else
         println("C library doesn't exist! Navigate to this directory and `make`")
     end
 end
-
