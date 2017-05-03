@@ -12,7 +12,7 @@ DocumentFunction
 Conda 0.4
 PyCall 1.8
 PyPlot 2.2
-Gadfly 0.6.0 0.6.1
+Gadfly 0.6.0 0.6.2
 Measures
 Images
 YAML
