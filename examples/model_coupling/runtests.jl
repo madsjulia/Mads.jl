@@ -43,10 +43,10 @@ md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path"
 pfor = Mads.forward(md)
 
 @Base.Test.testset "Internal coupling" begin
-    @Base.Test.test ifor == tifor
-    @Base.Test.test ifor == mfor
-    @Base.Test.test ifor == tefor
-    @Base.Test.test ifor == pfor
+	@Base.Test.test ifor == tifor
+	@Base.Test.test ifor == mfor
+	@Base.Test.test ifor == tefor
+	@Base.Test.test ifor == pfor
 end
 
 Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-mads.mads"); julia=true)
@@ -79,9 +79,9 @@ end
 # afor = Mads.forward(md)
 
 @Base.Test.testset "External coupling" begin
-    @Base.Test.test jfor == sfor
-    @Base.Test.test efor == sfor
-    @Base.Test.test jfor == ifor
+	@Base.Test.test jfor == sfor
+	@Base.Test.test efor == sfor
+	@Base.Test.test jfor == ifor
 end
 
 Mads.rmdir(joinpath(workdir, "external-jld_restart"))

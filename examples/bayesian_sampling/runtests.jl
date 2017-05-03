@@ -52,12 +52,12 @@ end
 
 	@Base.Test.testset "bayes" begin
 		good_mcmcvalues = JLD.load(joinpath(workdir, "test_results", "mcmcvalues.jld"), "mcmcvalues")
-	    @Base.Test.test good_mcmcvalues == mcmcvalues
+		@Base.Test.test good_mcmcvalues == mcmcvalues
 	end
 
 	@Base.Test.testset "emcee" begin
-	    good_mcmcchains_emcee = JLD.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
-	    @Base.Test.test good_mcmcchains_emcee == mcmcchains_emcee
+		good_mcmcchains_emcee = JLD.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
+		@Base.Test.test good_mcmcchains_emcee == mcmcchains_emcee
 	end
 
 end

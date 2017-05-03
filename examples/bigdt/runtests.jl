@@ -22,16 +22,16 @@ end
 
 # If enabled, save output as test file
 if Mads.create_tests
-    d = joinpath(workdir, "test_results")
-    Mads.mkdir(d)
+	d = joinpath(workdir, "test_results")
+	Mads.mkdir(d)
 
-    JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
+	JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
 end
 
 # Testing for bigdt 
 @testset "Bigdt" begin
-    good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
+	good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
 
-    @test isapprox(bigdt_results["maxfailureprobs"], good_bigdt_results["maxfailureprobs"], atol=1e-6)
-    @test isapprox(bigdt_results["horizons"], good_bigdt_results["horizons"], atol=1e-6)
+	@test isapprox(bigdt_results["maxfailureprobs"], good_bigdt_results["maxfailureprobs"], atol=1e-6)
+	@test isapprox(bigdt_results["horizons"], good_bigdt_results["horizons"], atol=1e-6)
 end

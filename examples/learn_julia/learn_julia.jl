@@ -95,9 +95,9 @@ some_var # => 5
 
 # Accessing a previously unassigned variable is an error
 try
-    some_other_var # => ERROR: some_other_var not defined
+	some_other_var # => ERROR: some_other_var not defined
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # Variable names start with a letter.
@@ -165,10 +165,10 @@ sort!(arr) # => [4,5,6]; arr is now [4,5,6]
 
 # Looking out of bounds is a BoundsError
 try
-    a[0] # => ERROR: BoundsError() in getindex at array.jl:270
-    a[end+1] # => ERROR: BoundsError() in getindex at array.jl:270
+	a[0] # => ERROR: BoundsError() in getindex at array.jl:270
+	a[end+1] # => ERROR: BoundsError() in getindex at array.jl:270
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # Errors list the line and file they came from, even if it's in the standard
@@ -200,9 +200,9 @@ length(a) # => 8
 tup = (1, 2, 3) # => (1,2,3) # an (Int64,Int64,Int64) tuple.
 tup[1] # => 1
 try:
-    tup[1] = 3 # => ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)
+	tup[1] = 3 # => ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # Many list functions also work on tuples
@@ -252,9 +252,9 @@ haskey(filled_dict, 1) # => false
 
 # Trying to look up a non-existent key will raise an error
 try
-    filled_dict["four"] # => ERROR: key not found: four in getindex at dict.jl:489
+	filled_dict["four"] # => ERROR: key not found: four in getindex at dict.jl:489
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # Use the get method to avoid that error by providing a default value
@@ -290,11 +290,11 @@ some_var = 5
 
 # Here is an if statement. Indentation is not meaningful in Julia.
 if some_var > 10
-    println("some_var is totally bigger than 10.")
+	println("some_var is totally bigger than 10.")
 elseif some_var < 10    # This elseif clause is optional.
-    println("some_var is smaller than 10.")
+	println("some_var is smaller than 10.")
 else                    # The else clause is optional too.
-    println("some_var is indeed 10.")
+	println("some_var is indeed 10.")
 end
 # => prints "some var is smaller than 10"
 
@@ -302,8 +302,8 @@ end
 # For loops iterate over iterables.
 # Iterable types include Range, Array, Set, Dict, and String.
 for animal=["dog", "cat", "mouse"]
-    println("$animal is a mammal")
-    # You can use $ to interpolate variables or expression into strings
+	println("$animal is a mammal")
+	# You can use $ to interpolate variables or expression into strings
 end
 # prints:
 #    dog is a mammal
@@ -312,7 +312,7 @@ end
 
 # You can use 'in' instead of '='.
 for animal in ["dog", "cat", "mouse"]
-    println("$animal is a mammal")
+	println("$animal is a mammal")
 end
 # prints:
 #    dog is a mammal
@@ -320,7 +320,7 @@ end
 #    mouse is a mammal
 
 for a in ["dog"=>"mammal","cat"=>"mammal","mouse"=>"mammal"]
-    println("$(a[1]) is a $(a[2])")
+	println("$(a[1]) is a $(a[2])")
 end
 # prints:
 #    dog is a mammal
@@ -328,7 +328,7 @@ end
 #    mouse is a mammal
 
 for (k,v) in ["dog"=>"mammal","cat"=>"mammal","mouse"=>"mammal"]
-    println("$k is a $v")
+	println("$k is a $v")
 end
 # prints:
 #    dog is a mammal
@@ -338,8 +338,8 @@ end
 # While loops loop while a condition is true
 x = 0
 while x < 4
-    println(x)
-    x += 1  # Shorthand for x = x + 1
+	println(x)
+	x += 1  # Shorthand for x = x + 1
 end
 # prints:
 #   0
@@ -365,10 +365,10 @@ end
 #  body...
 #end
 function add(x, y)
-    println("x is $x and y is $y")
+	println("x is $x and y is $y")
 
-    # Functions return the value of their last statement
-    x + y
+	# Functions return the value of their last statement
+	x + y
 end
 
 add(5, 6) # => 11 after printing out "x is 5 and y is 6"
@@ -376,8 +376,8 @@ add(5, 6) # => 11 after printing out "x is 5 and y is 6"
 # You can define functions that take a variable number of
 # positional arguments
 function varargs(args...)
-    return args
-    # use the keyword return to return anywhere in the function
+	return args
+	# use the keyword return to return anywhere in the function
 end
 # => varargs (generic function with 1 method)
 
@@ -397,22 +397,22 @@ Set(x...)       # => Set{Int64}(2,3,1)
 
 # You can define functions with optional positional arguments
 function defaults(a,b,x=5,y=6)
-    return "$a $b and $x $y"
+	return "$a $b and $x $y"
 end
 
 defaults('h','g') # => "h g and 5 6"
 defaults('h','g','j') # => "h g and j 6"
 defaults('h','g','j','k') # => "h g and j k"
 try
-    defaults('h') # => ERROR: no method defaults(Char,)
-    defaults() # => ERROR: no methods defaults()
+	defaults('h') # => ERROR: no method defaults(Char,)
+	defaults() # => ERROR: no methods defaults()
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # You can define functions that take keyword arguments
 function keyword_args(;k1=4,name2="hello") # note the ;
-    return ["k1"=>k1,"name2"=>name2]
+	return ["k1"=>k1,"name2"=>name2]
 end
 
 keyword_args(name2="ness") # => ["name2"=>"ness","k1"=>4]
@@ -421,9 +421,9 @@ keyword_args() # => ["name2"=>"hello","k1"=>4]
 
 # You can combine all kinds of arguments in the same function
 function all_the_args(normal_arg, optional_positional_arg=2; keyword_arg="foo")
-    println("normal arg: $normal_arg")
-    println("optional arg: $optional_positional_arg")
-    println("keyword arg: $keyword_arg")
+	println("normal arg: $normal_arg")
+	println("optional arg: $optional_positional_arg")
+	println("keyword arg: $keyword_arg")
 end
 
 all_the_args(1, 3, keyword_arg=4)
@@ -434,10 +434,10 @@ all_the_args(1, 3, keyword_arg=4)
 
 # Julia has first class functions
 function create_adder(x)
-    adder = function (y)
-        return x + y
-    end
-    return adder
+	adder = function (y)
+		return x + y
+	end
+	return adder
 end
 
 # This is "stabby lambda syntax" for creating anonymous functions
@@ -445,15 +445,15 @@ end
 
 # This function is identical to create_adder implementation above.
 function create_adder(x)
-    y -> x + y
+	y -> x + y
 end
 
 # You can also name the internal function, if you want
 function create_adder(x)
-    function adder(y)
-        x + y
-    end
-    adder
+	function adder(y)
+		x + y
+	end
+	adder
 end
 
 add_10 = create_adder(10)
@@ -515,12 +515,12 @@ abstract Cat # just a name and point in the type hierarchy
 # Abstract types cannot be instantiated, but can have subtypes.
 # For example, Number is an abstract type
 subtypes(Number) # => 6-element Array{Any,1}:
-                 #     Complex{Float16}
-                 #     Complex{Float32}
-                 #     Complex{Float64}
-                 #     Complex{T<:Real}
-                 #     ImaginaryUnit
-                 #     Real
+				 #     Complex{Float16}
+				 #     Complex{Float32}
+				 #     Complex{Float64}
+				 #     Complex{T<:Real}
+				 #     ImaginaryUnit
+				 #     Real
 subtypes(Cat) # => 0-element Array{Any,1}
 
 # Every type has a super type; use the `super` function to get it.
@@ -594,9 +594,9 @@ end
 
 pet_cat(Lion("42")) # => prints "The cat says 42"
 try
-    pet_cat(tigger) # => ERROR: no method pet_cat(Tiger,)
+	pet_cat(tigger) # => ERROR: no method pet_cat(Tiger,)
 catch e
-    print(e.msg)
+	print(e.msg)
 end
 
 # In OO languages, single dispatch is common;
@@ -657,39 +657,39 @@ square_area(5) #25
 
 # What happens when we feed square_area an integer?
 code_native(square_area, (Int32,))
-    #       .section    __TEXT,__text,regular,pure_instructions
-    #   Filename: none
-    #   Source line: 1              # Prologue
-    #       push    RBP
-    #       mov RBP, RSP
-    #   Source line: 1
-    #       movsxd  RAX, EDI        # Fetch l from memory?
-    #       imul    RAX, RAX        # Square l and store the result in RAX
-    #       pop RBP                 # Restore old base pointer
-    #       ret                     # Result will still be in RAX
+	#       .section    __TEXT,__text,regular,pure_instructions
+	#   Filename: none
+	#   Source line: 1              # Prologue
+	#       push    RBP
+	#       mov RBP, RSP
+	#   Source line: 1
+	#       movsxd  RAX, EDI        # Fetch l from memory?
+	#       imul    RAX, RAX        # Square l and store the result in RAX
+	#       pop RBP                 # Restore old base pointer
+	#       ret                     # Result will still be in RAX
 
 code_native(square_area, (Float32,))
-    #       .section    __TEXT,__text,regular,pure_instructions
-    #   Filename: none
-    #   Source line: 1
-    #       push    RBP
-    #       mov RBP, RSP
-    #   Source line: 1
-    #       vmulss  XMM0, XMM0, XMM0  # Scalar single precision multiply (AVX)
-    #       pop RBP
-    #       ret
+	#       .section    __TEXT,__text,regular,pure_instructions
+	#   Filename: none
+	#   Source line: 1
+	#       push    RBP
+	#       mov RBP, RSP
+	#   Source line: 1
+	#       vmulss  XMM0, XMM0, XMM0  # Scalar single precision multiply (AVX)
+	#       pop RBP
+	#       ret
 
 code_native(square_area, (Float64,))
-    #       .section    __TEXT,__text,regular,pure_instructions
-    #   Filename: none
-    #   Source line: 1
-    #       push    RBP
-    #       mov RBP, RSP
-    #   Source line: 1
-    #       vmulsd  XMM0, XMM0, XMM0 # Scalar double precision multiply (AVX)
-    #       pop RBP
-    #       ret
-    #
+	#       .section    __TEXT,__text,regular,pure_instructions
+	#   Filename: none
+	#   Source line: 1
+	#       push    RBP
+	#       mov RBP, RSP
+	#   Source line: 1
+	#       vmulsd  XMM0, XMM0, XMM0 # Scalar double precision multiply (AVX)
+	#       pop RBP
+	#       ret
+	#
 # Note that julia will use floating point instructions if any of the
 # arguements are floats.
 # Let's calculate the area of a circle
@@ -697,30 +697,30 @@ circle_area(r) = pi * r * r     # circle_area (generic function with 1 method)
 circle_area(5)                  # 78.53981633974483
 
 code_native(circle_area, (Int32,))
-    #       .section    __TEXT,__text,regular,pure_instructions
-    #   Filename: none
-    #   Source line: 1
-    #       push    RBP
-    #       mov RBP, RSP
-    #   Source line: 1
-    #       vcvtsi2sd   XMM0, XMM0, EDI          # Load integer (r) from memory
-    #       movabs  RAX, 4593140240              # Load pi
-    #       vmulsd  XMM1, XMM0, QWORD PTR [RAX]  # pi * r
-    #       vmulsd  XMM0, XMM0, XMM1             # (pi * r) * r
-    #       pop RBP
-    #       ret
-    #
+	#       .section    __TEXT,__text,regular,pure_instructions
+	#   Filename: none
+	#   Source line: 1
+	#       push    RBP
+	#       mov RBP, RSP
+	#   Source line: 1
+	#       vcvtsi2sd   XMM0, XMM0, EDI          # Load integer (r) from memory
+	#       movabs  RAX, 4593140240              # Load pi
+	#       vmulsd  XMM1, XMM0, QWORD PTR [RAX]  # pi * r
+	#       vmulsd  XMM0, XMM0, XMM1             # (pi * r) * r
+	#       pop RBP
+	#       ret
+	#
 
 code_native(circle_area, (Float64,))
-    #       .section    __TEXT,__text,regular,pure_instructions
-    #   Filename: none
-    #   Source line: 1
-    #       push    RBP
-    #       mov RBP, RSP
-    #       movabs  RAX, 4593140496
-    #   Source line: 1
-    #       vmulsd  XMM1, XMM0, QWORD PTR [RAX]
-    #       vmulsd  XMM0, XMM1, XMM0
-    #       pop RBP
-    #       ret
-    #
+	#       .section    __TEXT,__text,regular,pure_instructions
+	#   Filename: none
+	#   Source line: 1
+	#       push    RBP
+	#       mov RBP, RSP
+	#       movabs  RAX, 4593140496
+	#   Source line: 1
+	#       vmulsd  XMM1, XMM0, QWORD PTR [RAX]
+	#       vmulsd  XMM0, XMM1, XMM0
+	#       pop RBP
+	#       ret
+	#
