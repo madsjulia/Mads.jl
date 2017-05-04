@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 function parallel_findpi(n)
-    # Simple Monte Carlo to estimate pi
+	# Simple Monte Carlo to estimate pi
 
 	srand(2017)
 	inside = @parallel (+) for i = 1:n
@@ -13,8 +13,8 @@ function parallel_findpi(n)
 end
 
 function time_dilation()
-    # Einstein Special Relativity: time dilation 
-    # t' = t / sqrt(1 - v^2 / c^2)
+	# Einstein Special Relativity: time dilation 
+	# t' = t / sqrt(1 - v^2 / c^2)
 
 	c = 299792458   # Speed of light (m/s)
 	t = 20          # Time (s)

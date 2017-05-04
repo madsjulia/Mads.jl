@@ -32,9 +32,9 @@ end
 
 
 @Base.Test.testset "Optimization" begin
-    run_optimization_tests()
+	run_optimization_tests()
 
-    if Mads.long_tests
+	if Mads.long_tests
 		Mads.madsinfo("External optimization ...")
 
 		md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))

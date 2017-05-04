@@ -1,4 +1,4 @@
-import Mads
+ import Mads
 import ODE
 import DataStructures
 import JLD
@@ -39,8 +39,7 @@ function makefunc(parameterdict::DataStructures.OrderedDict)
 end
 
 @Base.Test.testset "ODE Solver" begin
-    
-    # create a function for the ODE solver
+	# create a function for the ODE solver
 	funcosc = makefunc(paramdict)
 	Mads.madsinfo("Solve ODE ...")
 	times = collect(0:.1:100)
