@@ -31,7 +31,7 @@ Arguments:
 
 Returns:
 
-- `paramkeys` : array with the keys of all parameters in the MADS dictionary
+- array with the keys of all parameters in the MADS dictionary
 
 $(DocumentFunction.documentfunction(getparamkeys))
 """
@@ -50,7 +50,7 @@ Arguments:
 
 Returns:
 
-- `paramdict` : dictionary with all parameters and their respective initial values
+- dictionary with all parameters and their respective initial values
 
 $(DocumentFunction.documentfunction(getparamdict))
 """
@@ -71,7 +71,7 @@ Arguments:
 
 Returns:
 
-- `sourcekeys` : array with keys of all source parameters in the MADS dictionary
+- array with keys of all source parameters in the MADS dictionary
 
 $(DocumentFunction.documentfunction(getsourcekeys))
 """

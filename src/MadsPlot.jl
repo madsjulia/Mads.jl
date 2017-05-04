@@ -29,8 +29,8 @@ argtext=Dict("filename"=>"output file name",
 
 Returns:
 
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
+- output file name
+- output plot format (`png`, `pdf`, etc.)
 """
 function setplotfileformat(filename::String, format::String)
 	format = uppercase(format)

@@ -32,7 +32,7 @@ Non-negative Matrix Factorization using JuMP/Ipopt
 
 $(DocumentFunction.documentfunction(NMFipopt))
 """
-function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0)
+function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan.(Xc)
@@ -63,7 +63,7 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
 		JuMP.solve(m)
 		phi = JuMP.getobjectivevalue(m)
-		println("OF = $(phi)")
+		!quiet && println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
 			Wbest = JuMP.getvalue(W)

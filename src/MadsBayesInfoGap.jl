@@ -16,7 +16,7 @@ Arguments:
 
 Returns:
 
-- `bigdtproblem` : BIG-DT problem type
+- BIG-DT problem type
 """
 function makebigdt(madsdata::Associative, choice::Associative)
 	return makebigdt!(deepcopy(madsdata), choice)
@@ -34,7 +34,7 @@ Arguments:
 
 Returns:
 
-- `bigdtproblem` : BIG-DT problem type
+- BIG-DT problem type
 """
 function makebigdt!(madsdata::Associative, choice::Associative)
 	Mads.madsinfo("Decision parameters:")
@@ -125,7 +125,7 @@ Arguments:
 
 Returns:
 
-- `bigdtresults` : dictionary with BIG-DT results
+- dictionary with BIG-DT results
 """
 function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)

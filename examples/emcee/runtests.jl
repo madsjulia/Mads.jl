@@ -28,8 +28,8 @@ function testit()
 	flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
 
 	@Base.Test.testset "AffineInvariantMCMC" begin
-	    for i = 1:numdims
-	    	@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
+		for i = 1:numdims
+			@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
 		end
 	end
 end

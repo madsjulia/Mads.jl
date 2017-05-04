@@ -27,7 +27,8 @@ Arguments:
 
 Returns:
 
-- `bestresult` : optimal results tuple: [1] model parameter dictionary with the optimal values at the minimum; [2] optimization algorithm results (e.g. bestresult[2].minimizer)
+- model parameter dictionary with the optimal values at the minimum
+- optimization algorithm results (e.g. bestresult[2].minimizer)
 
 $(DocumentFunction.documentfunction(calibraterandom))
 """
@@ -131,8 +132,8 @@ Arguments:
 
 Returns:
 
-- `minimumdict` : model parameter dictionary with the optimal values at the minimum
-- `results` : optimization algorithm results (e.g. results.minimizer)
+- model parameter dictionary with the optimal values at the minimum
+- optimization algorithm results (e.g. results.minimizer)
 
 $(DocumentFunction.documentfunction(calibrate))
 """

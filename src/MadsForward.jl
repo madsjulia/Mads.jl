@@ -109,7 +109,7 @@ Arguments:
 
 Returns:
 
-- `obsvalues` : dictionary of model predictions
+- dictionary of model predictions
 
 $(DocumentFunction.documentfunction(forward))
 """ forward
@@ -192,7 +192,7 @@ Arguments:
 
 Returns:
 
-- `array3d` : 3D array with model predictions along a 3D grid
+- 3D array with model predictions along a 3D grid
 
 $(DocumentFunction.documentfunction(forwardgrid))
 """ forwardgrid

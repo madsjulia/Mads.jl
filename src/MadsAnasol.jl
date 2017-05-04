@@ -113,7 +113,7 @@ Arguments:
 
 Returns:
 
-- `computeconcentrations` : function to compute concentrations; `computeconcentrations` returns a dictionary of observations and model predicted concentrations
+- function to compute concentrations; the new function returns a dictionary of observations and model predicted concentrations
 
 Examples:
 
@@ -287,8 +287,8 @@ Arguments:
 
 Returns:
 
-- `mass_injected` : total injected mass
-- `mass_reduced` : total reduced mass
+- total injected mass
+- total reduced mass
 """
 function computemass(madsdata::Associative; time::Number=0)
 	if time == 0
@@ -351,9 +351,9 @@ Arguments:
 
 Returns:
 
-- `lambda` : array with all the lambda values
-- `mass_injected` : array with associated total injected mass
-- `mass_reduced` : array with associated total reduced mass
+- array with all the lambda values
+- array with associated total injected mass
+- array with associated total reduced mass
 """
 function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::String=".")
 	mf = searchdir(madsfiles, path=path)

@@ -73,7 +73,7 @@ Mads.setmadsinputfile("test.mads")
 f = Mads.getmadsinputfile()
 e = Mads.getextension("test.mads")
 
-@Base.Test.testset "VerifySetup" begin
+@Base.Test.testset "Observation Setup" begin
 	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
 	@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
 

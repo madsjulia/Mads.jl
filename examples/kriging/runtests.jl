@@ -53,40 +53,40 @@ estimation_error_2 = Mads.estimationerror(ones(size(xs, 2)), zs, xs, mycov2)
 estimation_error_3 = Mads.estimationerror(ones(size(xs, 2)), zs, xs, mycov3)
 
 @Base.Test.testset "Kriging" begin
-    # Testing Mads.sphericalvariogram()
-    @Base.Test.testset "Spherical Variogram" begin
-        @Base.Test.test isapprox(spherical_1, 0.0, atol=1e-6)
-        @Base.Test.test isapprox(spherical_2, 2.82007, atol=1e-6)
-        @Base.Test.test isapprox(spherical_3, 1, atol=1e-6)
-    end
+	# Testing Mads.sphericalvariogram()
+	@Base.Test.testset "Spherical Variogram" begin
+		@Base.Test.test isapprox(spherical_1, 0.0, atol=1e-6)
+		@Base.Test.test isapprox(spherical_2, 2.82007, atol=1e-6)
+		@Base.Test.test isapprox(spherical_3, 1, atol=1e-6)
+	end
 
-    # Testing Mads.exponentialvariogram()
-    @Base.Test.testset "Exponential Variogram" begin
-        @Base.Test.test isapprox(exponential_1, 0.0, atol=1e-6)
-        @Base.Test.test isapprox(exponential_2, 3.069842455031493, atol=1e-6)
-    end
+	# Testing Mads.exponentialvariogram()
+	@Base.Test.testset "Exponential Variogram" begin
+		@Base.Test.test isapprox(exponential_1, 0.0, atol=1e-6)
+		@Base.Test.test isapprox(exponential_2, 3.069842455031493, atol=1e-6)
+	end
 
-    # Testing Mads.gaussianvariogram()
-    @Base.Test.testset "Gaussian Variogram" begin
-        @Base.Test.test isapprox(gaussian_1, 0.0, atol=1e-6)
-        @Base.Test.test isapprox(gaussian_2, 3.13287854235668, atol=1e-6)
-    end
+	# Testing Mads.gaussianvariogram()
+	@Base.Test.testset "Gaussian Variogram" begin
+		@Base.Test.test isapprox(gaussian_1, 0.0, atol=1e-6)
+		@Base.Test.test isapprox(gaussian_2, 3.13287854235668, atol=1e-6)
+	end
 
-    # Note - this is a *poor* but workable implementation.
-    #    Array checking all(A == B), A .== B, isapprox(), ==, do not work
-    #    typeof() is identical Array{Float64, 1}
-    #    Not sure how to get equivalence to work other than string()
-    # Testing Mads.krige()
-    @Base.Test.testset "Krige" begin
-       @Base.Test.test isequal(string(krige_results_1), string([-4.75601, -4.75602]))
-       @Base.Test.test isequal(string(krige_results_2), string([-6.50204, -6.50191]))
-       @Base.Test.test isequal(string(krige_results_3), string([-6.49796, -6.49782]))
-    end
+	# Note - this is a *poor* but workable implementation.
+	#    Array checking all(A == B), A .== B, isapprox(), ==, do not work
+	#    typeof() is identical Array{Float64, 1}
+	#    Not sure how to get equivalence to work other than string()
+	# Testing Mads.krige()
+	@Base.Test.testset "Krige" begin
+	   @Base.Test.test isequal(string(krige_results_1), string([-4.75601, -4.75602]))
+	   @Base.Test.test isequal(string(krige_results_2), string([-6.50204, -6.50191]))
+	   @Base.Test.test isequal(string(krige_results_3), string([-6.49796, -6.49782]))
+	end
 
-    # Testing Mads.estimationerror()
-    @Base.Test.testset "Estimation Error" begin
-        @Base.Test.test isapprox(estimation_error_1, 2.0690127188550758, atol=1e-6)
-        @Base.Test.test isapprox(estimation_error_2, 2.692667005054859, atol=1e-6)
-        @Base.Test.test isapprox(estimation_error_3, 3.0861743200363456, atol=1e-6)
-    end
+	# Testing Mads.estimationerror()
+	@Base.Test.testset "Estimation Error" begin
+		@Base.Test.test isapprox(estimation_error_1, 2.0690127188550758, atol=1e-6)
+		@Base.Test.test isapprox(estimation_error_2, 2.692667005054859, atol=1e-6)
+		@Base.Test.test isapprox(estimation_error_3, 3.0861743200363456, atol=1e-6)
+	end
 end

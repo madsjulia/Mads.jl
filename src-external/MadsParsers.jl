@@ -16,7 +16,7 @@ Arguments:
 
 Returns:
 
-- `dict` : a dictionary with model observations following MADS requirements
+- a dictionary with model observations following MADS requirements
 """
 function amanzi_output_parser(filename::String="observations.out")
 	d = readdlm(filename, ',', skipstart=2)

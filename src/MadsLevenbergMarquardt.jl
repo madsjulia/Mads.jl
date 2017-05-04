@@ -346,10 +346,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				Base.display(J)
 				Mads.madscritical("Mads quits!")
 			end
-            f_calls += length(x)
+			f_calls += length(x)
 			g_calls += 1
 			Mads.madsoutput("Jacobian #$g_calls\n")
-            callbackjacobian(x, J)
+			callbackjacobian(x, J)
 			compute_jacobian = false
 		end
 		Mads.madsoutput("Current Best OF: $best_residual\n");

@@ -18,7 +18,7 @@ Mads.loadmadsfile(filename; julia=true)
 
 Returns:
 
-- `madsdata` : Mads problem dictionary
+- Mads problem dictionary
 
 Example:
 
@@ -242,7 +242,7 @@ Mads.getmadsinputfile()
 
 Returns:
 
-- `filename` : input file name (e.g. `input_file_name.mads`)
+- input file name (e.g. `input_file_name.mads`)
 """
 function getmadsinputfile()
 	return madsinputfile
@@ -264,7 +264,7 @@ madsrootname = Mads.getmadsrootname(madsdata)
 
 Returns:
 
-- `r` : root of file name
+- root of file name
 """
 function getmadsrootname(madsdata::Associative; first=true, version=false)
 	return getrootname(madsdata["Filename"]; first=first, version=version)
@@ -415,7 +415,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Returns:
 
-- the new file name 
+- new file name 
 """ setnewmadsfilename
 
 """
