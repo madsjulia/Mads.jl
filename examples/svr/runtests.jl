@@ -29,6 +29,6 @@ savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
 	good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
 	good_predictions = JLD.load(joinpath(savedir, "test_results", "model_predictions.jld"), "model_predictions")
 
-	@Base.Test.test abs(mean(svrpredictions .- good_svrpredictions)) < 10. # Test that predictions are 
-	@Base.Test.test abs(mean(model_predictions .- good_predictions)) < 10. # within 10% (?) of each other
+	@Base.Test.test abs(mean(svrpredictions .- good_svrpredictions)) < 20. # Test that predictions are 
+	@Base.Test.test abs(mean(model_predictions .- good_predictions)) < 20. # within 10% (?) of each other
 end

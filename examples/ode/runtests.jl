@@ -62,15 +62,13 @@ end
 	@Base.Test.test isapprox(t, good_ode_t, atol=1e-6)
 	@Base.Test.test isapprox(ys, good_ode_ys, atol=1e-6)
 
+	# create an observation dictionary in the MADS dictionary
+	Mads.madsinfo("Create MADS Observations ...")
+	Mads.createobservations!(md, t, ys[:,1], weight = 10)
+	Mads.createobservations!(md, t, ys[:,1], weight_type = "inverse", logtransform=true)
+	Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight = 10)
+	Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight_type = "inverse", logtransform=true)
+	Mads.createobservations!(md, t, ys[:,1])
+	# Mads.madsinfo("Show MADS Observations ...")
+	# Mads.showobservations(md)
 end
-
-
-# create an observation dictionary in the MADS dictionary
-Mads.madsinfo("Create MADS Observations ...")
-Mads.createobservations!(md, t, ys[:,1], weight = 10)
-Mads.createobservations!(md, t, ys[:,1], weight_type = "inverse", logtransform=true)
-Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight = 10)
-Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight_type = "inverse", logtransform=true)
-Mads.createobservations!(md, t, ys[:,1])
-# Mads.madsinfo("Show MADS Observations ...")
-# Mads.showobservations(md)
