@@ -5,9 +5,9 @@ workdir = joinpath(Mads.madsdir, "..", "examples", "embed_c")
 cd(workdir)
 
 if is_apple()
-	const embed_c_mylib = "libmy.dylib"
+	const embed_c_mylib = joinpath(workdir, "libmy.dylib")
 elseif is_linux()
-	const embed_c_mylib = "libmy.so"
+	const embed_c_mylib = joinpath(workdir, "libmy.so")
 else
 	const embed_c_mylib = ""
 end

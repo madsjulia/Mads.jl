@@ -290,6 +290,21 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 end
 
 """
+Check remote node and directory
+
+$(DocumentFunction.documentfunction(checkremotedir))
+"""
+function checkremotedir(node::String, dir::String)
+	proc = spawn(`ssh -t $node $dir`)
+	timedwait(() -> process_exited(proc), 10.) # 10 seconds
+	if process_running(proc)
+		kill(proc)
+		return false
+	end
+	return true
+end
+
+"""
 Check the number of processors on a series of servers
 
 $(DocumentFunction.documentfunction(madscores))
