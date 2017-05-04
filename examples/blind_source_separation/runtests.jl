@@ -21,7 +21,7 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=R)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=R, quiet=true)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
@@ -43,7 +43,7 @@ else
 
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=R)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=R, quiet=true)
 		
 		WHipopt = (Wipopt*Hipopt)
 
@@ -71,7 +71,7 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=1, quiet=true)
 		
 		WHipopt = (Wipopt*Hipopt)
 
@@ -101,7 +101,7 @@ else
 		H = [[1,1,1] [0,2,1] [0,2,1] [1,0,2] [2,0,1] [1,2,0] [2,1,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, retries=1)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=1, quiet=true)
 
 		WHipopt = (Wipopt*Hipopt)
 
@@ -121,7 +121,7 @@ else
 	R = 1
 	nk = 3
 
-	@Base.Test.testset "Blind source seperation" begin
+	@Base.Test.testset "Blind source separation" begin
 		reconstruct_rand(R, nk)
 		reconstruct_sin(R, nk)
 		reconstruct_sin_rand(R, nk)

@@ -13,7 +13,7 @@ else
 end
 
 if embed_c_mylib == ""
-	warn("embed_c test is skipped")
+	warn("embed_c test is skipped!")
 else
 	# Build the C library if it doesn't exist
 	if isfile(joinpath(workdir, embed_c_mylib)) != true
@@ -45,7 +45,7 @@ else
 			test_sqrt(2)
 			test_ex1(100, 6.4)
 		else
-			println("C library doesn't exist! Navigate to this directory and `make`")
+			warn("C library does not exist!")
 		end
 	end
 end
