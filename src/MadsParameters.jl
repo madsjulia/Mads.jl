@@ -516,6 +516,12 @@ for i = 1:length(getfunction)
 	eval(q)
 end
 
+"""
+Show parameters in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(showparameters;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+"""
 function showparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
@@ -545,6 +551,13 @@ function showparameters(madsdata::Associative)
 	print(p...)
 	println("Number of parameters is $(length(p))")
 end
+
+"""
+Show all parameters in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(showallparameters;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+"""
 function showallparameters(madsdata::Associative)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
@@ -583,13 +596,6 @@ function showallparameters(madsdata::Associative)
 	print(p...)
 	println("Number of parameters is $(length(p))")
 end
-
-@doc """
-Show all parameters in the MADS problem dictionary
-
-$(DocumentFunction.documentfunction(showallparameters;
-argtext=Dict("madsdata"=>"MADS problem dictionary")))
-""" showallparameters
 
 """
 Get probabilistic distributions of all parameters in the MADS problem dictionary
