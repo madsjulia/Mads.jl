@@ -1,4 +1,5 @@
 # OS type
+CC = gcc
 SOURCES = my.c
 OBJECTS = $(addsuffix .o,$(basename $(SOURCES)))
 OS = $(shell uname -s)

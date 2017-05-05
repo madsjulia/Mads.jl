@@ -11,7 +11,6 @@ numsamples_perwalker = 1000
 burnin = 100
 
 function testit()
-
 	const stds = exp(5 * randn(numdims))
 	const means = 1 + 5 * rand(numdims)
 	llhood = x->begin
@@ -28,8 +27,8 @@ function testit()
 	flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
 
 	@Base.Test.testset "AffineInvariantMCMC" begin
-	    for i = 1:numdims
-	    	@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
+		for i = 1:numdims
+			@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
 		end
 	end
 end

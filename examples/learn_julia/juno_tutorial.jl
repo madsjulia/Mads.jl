@@ -11,7 +11,7 @@ r = 朱莉婭 * 4
 
 # Function
 function double(x)
-  return 2 * x
+	return 2 * x
 end
 double(x) = 2 * x
 
@@ -22,13 +22,13 @@ x = rand(5, 5)
 const ϕ = golden
 
 function foo(z)
-  c = (φ-2)+(φ-1)im
-  max = 80
-  for n = 1:max
-    abs(z) ≥ 2 && return n-1
-    z = z^2 + c
-  end
-  return max
+	c = (φ-2)+(φ-1)im
+	max = 80
+	for n = 1:max
+		abs(z) ≥ 2 && return n-1
+		z = z^2 + c
+	end
+	return max
 end
 
 foo(0)

@@ -281,12 +281,27 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 			push!(output, strip(o))
 			println("$i: $o")
 		catch e
-			print(e.msg)
+			println(strip(e.msg))
 			push!(output, "")
-			warn("$i is not accessible")
+			warn("$i is not accessible or command failed")
 		end
 	end
 	return output;
+end
+
+"""
+Check remote node and directory
+
+$(DocumentFunction.documentfunction(checkremotedir))
+"""
+function checkremotedir(node::String, dir::String)
+	proc = spawn(`ssh -t $node $dir`)
+	timedwait(() -> process_exited(proc), 10.) # 10 seconds
+	if process_running(proc)
+		kill(proc)
+		return false
+	end
+	return true
 end
 
 """

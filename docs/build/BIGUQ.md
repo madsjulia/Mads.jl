@@ -14,7 +14,7 @@ Documentation for BIGUQ.jl module (all functions):
 Get MCMC chain
 
 
-<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/5d88963a078ea7ea9d13ae5690a5618dc14faa8a/src/BIGDT.jl#L22' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/c553995a370305d99827b877c3f5cdad9e533cc2/src/BIGDT.jl#L22' class='documenter-source'>source</a><br>
 
 <a id='BIGUQ.makebigdts-Tuple{BIGUQ.BigOED,Any,Any}' href='#BIGUQ.makebigdts-Tuple{BIGUQ.BigOED,Any,Any}'>#</a>
 **`BIGUQ.makebigdts`** &mdash; *Method*.
@@ -24,7 +24,7 @@ Get MCMC chain
 Make BIGDT analyses for each possible decision assuming that the proposed observations `proposedobs` are observed
 
 
-<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/5d88963a078ea7ea9d13ae5690a5618dc14faa8a/src/BIGOED.jl#L50' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/c553995a370305d99827b877c3f5cdad9e533cc2/src/BIGOED.jl#L50' class='documenter-source'>source</a><br>
 
 <a id='BIGUQ.makebigdts-Tuple{BIGUQ.BigOED}' href='#BIGUQ.makebigdts-Tuple{BIGUQ.BigOED}'>#</a>
 **`BIGUQ.makebigdts`** &mdash; *Method*.
@@ -34,7 +34,7 @@ Make BIGDT analyses for each possible decision assuming that the proposed observ
 Makes BIGDT analyses for each possible decision assuming that no more observations will be made
 
 
-<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/5d88963a078ea7ea9d13ae5690a5618dc14faa8a/src/BIGOED.jl#L23' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/c553995a370305d99827b877c3f5cdad9e533cc2/src/BIGOED.jl#L23' class='documenter-source'>source</a><br>
 
 <a id='BIGUQ.BigDT' href='#BIGUQ.BigDT'>#</a>
 **`BIGUQ.BigDT`** &mdash; *Type*.
@@ -44,7 +44,7 @@ Makes BIGDT analyses for each possible decision assuming that no more observatio
 BigOED type
 
 
-<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/5d88963a078ea7ea9d13ae5690a5618dc14faa8a/src/BIGDT.jl#L2' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/c553995a370305d99827b877c3f5cdad9e533cc2/src/BIGDT.jl#L2' class='documenter-source'>source</a><br>
 
 <a id='BIGUQ.BigOED' href='#BIGUQ.BigOED'>#</a>
 **`BIGUQ.BigOED`** &mdash; *Type*.
@@ -54,5 +54,5 @@ BigOED type
 BigOED type
 
 
-<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/5d88963a078ea7ea9d13ae5690a5618dc14faa8a/src/BIGOED.jl#L1' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/BIGUQ.jl/tree/c553995a370305d99827b877c3f5cdad9e533cc2/src/BIGOED.jl#L1' class='documenter-source'>source</a><br>
 
