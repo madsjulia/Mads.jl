@@ -122,11 +122,11 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 				Mads.linktempdir(cwd, tempdirname)
 				cd(tempdirname)
 				Mads.setmodelinputs(madsdata, parameters)
-				readattempt = 0
-				while !checkdir(tempstring)
-					readattempt += 1
+				execattempt = 0
+				while (trying = !checknodedir(tempstring))
+					execattempt += 1
 					sleep(10)
-					if readattempt > 3
+					if execattempt > 3
 						attempt +=1
 						if attempt > 3
 							cd(currentdir)
@@ -136,7 +136,6 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 						break
 					end
 				end
-				trying = !checkdir(tempstring)
 			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")

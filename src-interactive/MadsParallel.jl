@@ -289,7 +289,7 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	return output;
 end
 
-function checkdir(node::String, dir::String)
+function checknodedir(node::String, dir::String)
 	proc = spawn(`ssh -t $node ls $dir`)
 	timedwait(() -> process_exited(proc), 10.) # 10 seconds
 	if process_running(proc)
@@ -298,15 +298,15 @@ function checkdir(node::String, dir::String)
 	end
 	return true
 end
-function checkdir(dir::String)
+function checknodedir(dir::String)
 	if is_windows()
 		proc = spawn(`cmd /C dir $dir)`)
 	elseif Mads.madsbash
-		proc = spawn(`bash -c "ls $dir"`)
+		proc = spawn(`bash -c "ls $dir; julia -p 2 -e '@everywhere @show pwd()' > julia-test.out"`)
 	else
 		proc = spawn(`sh -c "ls $dir"`)
 	end
-	timedwait(() -> process_exited(proc), 10.) # 10 seconds
+	timedwait(() -> process_exited(proc), 20.) # 20 seconds
 	if process_running(proc)
 		kill(proc)
 		return false
@@ -316,8 +316,8 @@ end
 @doc """
 Check if a directory is readable
 
-$(DocumentFunction.documentfunction(checkdir))
-""" checkdir
+$(DocumentFunction.documentfunction(checknodedir))
+""" checknodedir
 
 """
 Check the number of processors on a series of servers
