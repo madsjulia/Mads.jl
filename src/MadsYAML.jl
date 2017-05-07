@@ -35,7 +35,7 @@ argtext=Dict("filename"=>"output file name",
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 """
 function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
-	julia = isdefined(:yaml) ? julia : true
+	julia = isdefined(Mads, :yaml) ? julia : true
 	f = open(filename, "w")
 	if julia
 		JSON.print(f, data)

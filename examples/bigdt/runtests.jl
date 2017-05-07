@@ -5,7 +5,7 @@ using Base.Test
 problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "..", "examples", "bigdt")
 
-if isdefined(:yaml)
+if isdefined(Mads, :yaml)
 	md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
 else
 	md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json")

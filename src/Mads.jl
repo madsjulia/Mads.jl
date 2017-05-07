@@ -76,19 +76,22 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 			eval(:(@PyCall.pyimport yaml))
 		catch
 			ENV["PYTHON"] = ""
-		end
-		if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
-			@tryimport Conda
-		end
-		pyyamlok = false
-		try
-			eval(:(@PyCall.pyimport yaml))
-			pyyamlok = true
-		catch
 			warn("PyYAML is not available")
 		end
-		if pyyamlok
-			eval(:(@PyCall.pyimport yaml))
+		if !isdefined(Mads, :yaml)
+			if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
+				@tryimport Conda
+			end
+			pyyamlok = false
+			try
+				eval(:(@PyCall.pyimport yaml))
+				pyyamlok = true
+			catch
+				warn("PyYAML is not available (under Conda)")
+			end
+			if pyyamlok
+				eval(:(@PyCall.pyimport yaml))
+			end
 		end
 	end
 end
