@@ -2,7 +2,7 @@ if !isdefined(:madsservers)
 	madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 end
 
-if !isdefined(DocumentFunction, :documentfunction)
+if !isdefined(:DocumentFunction)
 	import DocumentFunction
 end
 
