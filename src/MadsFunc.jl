@@ -55,7 +55,7 @@ Options for reading model outputs:
 
 Returns:
 
-- `madscommandfunction` to execute the model
+- Mads function to execute a forward model simulation
 """
 function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
@@ -232,25 +232,25 @@ function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatare
 end
 
 @doc """
-Make Mads reusable function
+Make Reusable Mads function to execute a forward model simulation (automatically restarts if restart data exists)
 
 $(DocumentFunction.documentfunction(makemadsreusablefunction;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "madscommandfunction"=>"",
-            "suffix"=>"Suffix to be applied for storage of the reusable model results",
-            "paramkeys"=>"Dictionary of parameter keys",
-            "obskeys"=>"Dictionary of observation keys",
-            "madsdatarestart"=>"Restart type (memory/disk) and on/off status",
-            "restartdir"=>"Restart directory where the reusable model results are stored"),
+             "madscommandfunction"=>"Mads function to execute a forward model simulation",
+             "suffix"=>"Suffix to be added to the name of restart directory",
+             "paramkeys"=>"Dictionary of parameter keys",
+             "obskeys"=>"Dictionary of observation keys",
+             "madsdatarestart"=>"Restart type (memory/disk) or on/off status",
+             "restartdir"=>"Restart directory where the reusable model results are stored"),
 keytext=Dict("usedict"=>"Use dictionary [default=`true`]")))
 
 Returns:
 
-- Reusable `madscommandfunction` to execute the model
+- Reusable Mads function to execute a forward model simulation (automatically restarts if restart data exists)
 """ makemadsreusablefunction
 
 """
-Get the directory where Mads restarts will be stored.
+Get the directory where Mads restarts will be stored
 
 $(DocumentFunction.documentfunction(getrestartdir;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
@@ -429,7 +429,8 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Returns:
 
-- 
+- Mads forward function for the model defined in the MADS problem dictionary `madsdata`
+- Mads gradient function for the model defined in the MADS problem dictionary `madsdata`
 """ makemadscommandfunctionandgradient
 
 """
