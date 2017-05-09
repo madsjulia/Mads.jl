@@ -3,9 +3,15 @@ import ReusableFunctions
 import DataStructures
 import Distributions
 import JLD
+import DocumentFunction
 
 """
 Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`
+
+$(DocumentFunction.documentfunction(makemadscommandfunction;
+argtext=Dict("madsdatawithobs"=>""),
+keytext=Dict("calczeroweightobs"=>"[default=`false`]",
+            "calcpredictions"=>"[default=`true`]")))
 
 Usage:
 
@@ -47,7 +53,9 @@ Options for reading model outputs:
 - `YAMLPredictions` : model predictions read from a YAML file
 - `JSONPredictions` : model predictions read from a JSON file
 
-$(DocumentFunction.documentfunction(makemadscommandfunction))
+Returns:
+
+- 
 """
 function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
@@ -112,31 +120,12 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 			else
 				cwd = currentdir
 			end
-			attempt = 0
-			trying = true
-			tempdirname = ""
-			while trying
-				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
-				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
-				Mads.createtempdir(tempdirname)
-				Mads.linktempdir(cwd, tempdirname)
-				cd(tempdirname)
-				Mads.setmodelinputs(madsdata, parameters)
-				execattempt = 0
-				while (trying = !checknodedir(tempstring))
-					execattempt += 1
-					sleep(10)
-					if execattempt > 3
-						attempt +=1
-						if attempt > 3
-							cd(currentdir)
-							trying = false
-							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(ENV["HOSTNAME"])!")
-						end
-						break
-					end
-				end
-			end
+			tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+			tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
+			Mads.createtempdir(tempdirname)
+			Mads.linktempdir(cwd, tempdirname)
+			cd(tempdirname)
+			Mads.setmodelinputs(madsdata, parameters)
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
@@ -152,7 +141,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 							cd(currentdir)
 							trying = false
 							printerrormsg(errmsg)
-							Mads.madscritical("Julia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
 						end
 					end
 				end
@@ -177,7 +166,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 							cd(currentdir)
 							printerrormsg(errmsg)
 							trying = false
-							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							Mads.madscritical("$(errmsg)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
 					end
 				end
@@ -245,13 +234,31 @@ end
 @doc """
 Make Mads reusable function
 
-$(DocumentFunction.documentfunction(makemadsreusablefunction))
+$(DocumentFunction.documentfunction(makemadsreusablefunction;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "madscommandfunction"=>"",
+            "suffix"=>"",
+            "paramkeys"=>"",
+            "obskeys"=>"",
+            "madsdatarestart"=>"",
+            "restartdir"=>""),
+keytext=Dict("usedict"=>"[default=`true`]")))
+
+Returns:
+
+- 
 """ makemadsreusablefunction
 
 """
 Get the directory where Mads restarts will be stored.
 
-$(DocumentFunction.documentfunction(getrestartdir))
+$(DocumentFunction.documentfunction(getrestartdir;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "suffix"=>"")))
+
+Returns:
+
+- the directory where Mads restarts will be stored.
 """
 function getrestartdir(madsdata::Associative, suffix::String="")
 	restartdir = ""
@@ -301,7 +308,12 @@ end
 Import function everywhere from a file.
 The first function in the file is the one that will be called by Mads to perform the model simulations.
 
-$(DocumentFunction.documentfunction(importeverywhere))
+$(DocumentFunction.documentfunction(importeverywhere;
+argtext=Dict("filename"=>"file name")))
+
+Returns:
+
+- commandfunction
 """
 function importeverywhere(filename::String)
 	code = readstring(filename)
@@ -319,11 +331,7 @@ function importeverywhere(filename::String)
 	return commandfunction
 end
 
-"""
-Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
-$(DocumentFunction.documentfunction(makemadscommandgradient))
-"""
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
@@ -337,11 +345,18 @@ function makemadscommandgradient(madsdata::Associative, f::Function)
 	return madscommandgradient
 end
 
-"""
-Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
+@doc """
+Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
-$(DocumentFunction.documentfunction(makemadscommandfunctionandgradient))
-"""
+$(DocumentFunction.documentfunction(makemadscommandgradient;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "f"=>"function")))
+
+Returns:
+
+- the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
+""" makemadscommandgradient
+
 function makemadscommandfunctionandgradient(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandfunctionandgradient(madsdata, f)
@@ -405,10 +420,27 @@ function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) 
 	return makemadsreusablefunction(madsdata, madscommandfunctionandgradient, "jacobian")
 end
 
+@doc """
+Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
+
+$(DocumentFunction.documentfunction(makemadscommandfunctionandgradient;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "f"=>"function")))
+
+Returns:
+
+- 
+""" makemadscommandfunctionandgradient
+
 """
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
-$(DocumentFunction.documentfunction(makelogprior))
+$(DocumentFunction.documentfunction(makelogprior;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Return:
+
+- the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 """
 function makelogprior(madsdata::Associative)
 	distributions = getparamdistributions(madsdata::Associative)
@@ -425,7 +457,13 @@ end
 Make a function to compute the conditional log-likelihood of the model parameters conditioned on the model predictions/observations.
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 
-$(DocumentFunction.documentfunction(makemadsconditionalloglikelihood))
+$(DocumentFunction.documentfunction(makemadsconditionalloglikelihood;
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("weightfactor"=>"[default=`1`]")))
+
+Return:
+
+- the conditional log-likelihood
 """
 function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	"MADS conditional log-likelihood functions"
@@ -453,7 +491,13 @@ end
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 
-$(DocumentFunction.documentfunction(makemadsloglikelihood))
+$(DocumentFunction.documentfunction(makemadsloglikelihood;
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("weightfactor"=>"[default=`1`]")))
+
+Returns:
+
+- the log-likelihood for a given set of model parameters
 """
 function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	if haskey(madsdata, "LogLikelihood")
