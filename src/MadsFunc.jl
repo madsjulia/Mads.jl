@@ -6,12 +6,12 @@ import JLD
 import DocumentFunction
 
 """
-Make MADS function to execute the model defined in the MADS problem dictionary `madsdata`
+Make MADS function to execute the model defined in the inpit MADS problem dictionary
 
 $(DocumentFunction.documentfunction(makemadscommandfunction;
-argtext=Dict("madsdatawithobs"=>""),
-keytext=Dict("calczeroweightobs"=>"[default=`false`]",
-            "calcpredictions"=>"[default=`true`]")))
+argtext=Dict("madsdata_in"=>"Mads problem dictionary"),
+keytext=Dict("calczeroweightobs"=>"Calculate zero weight observations [default=`false`]",
+             "calcpredictions"=>"Calculate predictions [default=`true`]")))
 
 Usage:
 
@@ -55,20 +55,20 @@ Options for reading model outputs:
 
 Returns:
 
-- 
+- `madscommandfunction` to execute the model
 """
-function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
+function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
-	obskeys = getobskeys(madsdatawithobs)#keep just the keys of the obs
+	obskeys = getobskeys(madsdata_in)#keep just the keys of the obs
 	madsdata = Dict()
-	if !haskey(madsdatawithobs, "Sources")
-		for k in keys(madsdatawithobs)
+	if !haskey(madsdata_in, "Sources")
+		for k in keys(madsdata_in)
 			if k != "Observations"
-				madsdata[k] = madsdatawithobs[k]
+				madsdata[k] = madsdata_in[k]
 			end
 		end
 	else
-		madsdata = madsdatawithobs
+		madsdata = madsdata_in
 	end
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
@@ -79,7 +79,7 @@ function makemadscommandfunction(madsdatawithobs::Associative; calczeroweightobs
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
 		madsdatacommandfunction = importeverywhere(filename)
-		madscommandfunction = madsdatacommandfunction(madsdatawithobs)
+		madscommandfunction = madsdatacommandfunction(madsdata_in)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
@@ -237,16 +237,16 @@ Make Mads reusable function
 $(DocumentFunction.documentfunction(makemadsreusablefunction;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "madscommandfunction"=>"",
-            "suffix"=>"",
-            "paramkeys"=>"",
-            "obskeys"=>"",
-            "madsdatarestart"=>"",
-            "restartdir"=>""),
-keytext=Dict("usedict"=>"[default=`true`]")))
+            "suffix"=>"Suffix to be applied for storage of the reusable model results",
+            "paramkeys"=>"Dictionary of parameter keys",
+            "obskeys"=>"Dictionary of observation keys",
+            "madsdatarestart"=>"Restart type (memory/disk) and on/off status",
+            "restartdir"=>"Restart directory where the reusable model results are stored"),
+keytext=Dict("usedict"=>"Use dictionary [default=`true`]")))
 
 Returns:
 
-- 
+- Reusable `madscommandfunction` to execute the model
 """ makemadsreusablefunction
 
 """
@@ -254,11 +254,11 @@ Get the directory where Mads restarts will be stored.
 
 $(DocumentFunction.documentfunction(getrestartdir;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "suffix"=>"")))
+             "suffix"=>"Suffix to be added to the name of restart directory")))
 
 Returns:
 
-- the directory where Mads restarts will be stored.
+- restart directory where reusable model results will be stored
 """
 function getrestartdir(madsdata::Associative, suffix::String="")
 	restartdir = ""
@@ -313,7 +313,7 @@ argtext=Dict("filename"=>"file name")))
 
 Returns:
 
-- commandfunction
+- `madscommandfunction` to execute the model
 """
 function importeverywhere(filename::String)
 	code = readstring(filename)
@@ -350,7 +350,7 @@ Make MADS gradient function to compute the parameter-space gradient for the mode
 
 $(DocumentFunction.documentfunction(makemadscommandgradient;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "f"=>"function")))
+             "f"=>"Mads forward model function")))
 
 Returns:
 
@@ -425,7 +425,7 @@ Make MADS forward & gradient functions for the model defined in the MADS problem
 
 $(DocumentFunction.documentfunction(makemadscommandfunctionandgradient;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "f"=>"function")))
+            "f"=>"Mads forward model function")))
 
 Returns:
 
@@ -459,7 +459,7 @@ Model parameters and observations are defined in the MADS problem dictionary `ma
 
 $(DocumentFunction.documentfunction(makemadsconditionalloglikelihood;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("weightfactor"=>"[default=`1`]")))
+keytext=Dict("weightfactor"=>"Weight factor [default=`1`]")))
 
 Return:
 
@@ -493,7 +493,7 @@ The function can be provided as an external function in the MADS problem diction
 
 $(DocumentFunction.documentfunction(makemadsloglikelihood;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("weightfactor"=>"[default=`1`]")))
+keytext=Dict("weightfactor"=>"Weight factor [default=`1`]")))
 
 Returns:
 

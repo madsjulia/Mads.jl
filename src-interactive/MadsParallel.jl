@@ -289,16 +289,16 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	return output;
 end
 
-function checknodedir(node::String, dir::String)
+function checknodedir(node::String, dir::String, wait::Float64=10.)
 	proc = spawn(`ssh -t $node ls $dir`)
-	timedwait(() -> process_exited(proc), 10.) # 10 seconds
+	timedwait(() -> process_exited(proc), wait) # 10 seconds
 	if process_running(proc)
 		kill(proc)
 		return false
 	end
 	return true
 end
-function checknodedir(dir::String)
+function checknodedir(dir::String, wait::Float64=20.)
 	if is_windows()
 		proc = spawn(`cmd /C dir $dir)`)
 	elseif Mads.madsbash
@@ -306,7 +306,7 @@ function checknodedir(dir::String)
 	else
 		proc = spawn(`sh -c "ls $dir"`)
 	end
-	timedwait(() -> process_exited(proc), 20.) # 20 seconds
+	timedwait(() -> process_exited(proc), wait) # 20 seconds
 	if process_running(proc)
 		kill(proc)
 		return false
