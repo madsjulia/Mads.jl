@@ -613,8 +613,8 @@ end
 Get `Wells` class spatial and temporal data
 
 $(DocumentFunction.documentfunction(getwellsdata;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "time"=>"[default=`false`]")))
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("time"=>"[default=`false`]")))
 
 Returns:
 
