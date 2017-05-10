@@ -1,11 +1,14 @@
 import Anasol
 import DataStructures
 import ProgressMeter
+import DocumentFunction
 
 """
 Add an additional contamination source
 
-$(DocumentFunction.documentfunction(addsource!))
+$(DocumentFunction.documentfunction(addsource!;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "sourceid"=>"source id, [default=`0`]")))
 """
 function addsource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
@@ -28,7 +31,9 @@ end
 """
 Remove a contamination source
 
-$(DocumentFunction.documentfunction(removesource!))
+$(DocumentFunction.documentfunction(removesource!;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "sourceid"=>"source id, [default=`0`]")))
 """
 function removesource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
@@ -52,7 +57,8 @@ end
 """
 Add contaminant source parameters
 
-$(DocumentFunction.documentfunction(addsourceparameters!))
+$(DocumentFunction.documentfunction(addsourceparameters!;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
 """
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
@@ -77,7 +83,8 @@ end
 """
 Remove contaminant source parameters
 
-$(DocumentFunction.documentfunction(removesourceparameters!))
+$(DocumentFunction.documentfunction(removesourceparameters!;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
 """
 function removesourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
@@ -105,11 +112,10 @@ end
 """
 Create a function to compute concentrations for all the observation points using Anasol
 
-$(DocumentFunction.documentfunction(makecomputeconcentrations))
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
+$(DocumentFunction.documentfunction(makecomputeconcentrations;
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("calczeroweightobs"=>"[default=`false`]",
+            "calcpredictions"=>"[default=`true`]")))
 
 Returns:
 
@@ -216,34 +222,31 @@ end
 """
 Compute concentration for a point in space and time (x,y,z,t)
 
-$(DocumentFunction.documentfunction(contamination))
-
-Arguments:
-
-- `wellx` - observation point (well) X coordinate
-- `welly` - observation point (well) Y coordinate
-- `wellz` - observation point (well) Z coordinate
-- `n` - porosity
-- `lambda` - first-order reaction rate
-- `theta` - groundwater flow direction
-- `vx` - advective transport velocity in X direction
-- `vy` - advective transport velocity in Y direction
-- `vz` - advective transport velocity in Z direction
-- `ax` - dispersivity in X direction (longitudinal)
-- `ay` - dispersivity in Y direction (transverse horizontal)
-- `az` - dispersivity in Y direction (transverse vertical)
-- `H` - Hurst coefficient for Fractional Brownian dispersion
-- `x` - X coordinate of contaminant source location
-- `y` - Y coordinate of contaminant source location
-- `z` - Z coordinate of contaminant source location
-- `dx` - source size (extent) in X direction
-- `dy` - source size (extent) in Y direction
-- `dz` - source size (extent) in Z direction
-- `f` - source mass flux
-- `t0` - source starting time
-- `t1` - source termination time
-- `t` - time to compute concentration at the observation point
-- `anasolfunction` : Anasol function to call (check out the Anasol module) [long_bbb_ddd_iir_c]
+$(DocumentFunction.documentfunction(contamination;
+argtext=Dict("wellx"=>"observation point (well) X coordinate",
+            "welly"=>"observation point (well) Y coordinate",
+            "wellz"=>"observation point (well) Z coordinate",
+            "n"=>"porosity",
+            "lambda"=>"first-order reaction rate",
+            "theta"=>"groundwater flow direction",
+            "vx"=>"advective transport velocity in X direction",
+            "vy"=>"advective transport velocity in Y direction",
+            "vz"=>"advective transport velocity in Z direction",
+            "ax"=>"dispersivity in X direction (longitudinal)",
+            "ay"=>"dispersivity in Y direction (transverse horizontal)",
+            "az"=>"dispersivity in Y direction (transverse vertical)",
+            "H"=>"Hurst coefficient for Fractional Brownian dispersion",
+            "x"=>"X coordinate of contaminant source location",
+            "y"=>"Y coordinate of contaminant source location",
+            "z"=>"Z coordinate of contaminant source location",
+            "dx"=>"source size (extent) in X direction",
+            "dy"=>"source size (extent) in Y direction",
+            "dz"=>"source size (extent) in Z direction",
+            "f"=>"source mass flux",
+            "t0"=>"source starting time",
+            "t1"=>"source termination time",
+            "t"=>"time to compute concentration at the observation point"),
+keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module), [default=`\"long_bbb_ddd_iir_c\"`]")))
 
 Returns:
 
@@ -275,21 +278,6 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	return 1e6 * f * anasolresult / n
 end
 
-"""
-Compute injected/reduced contaminant mass
-
-$(DocumentFunction.documentfunction(computemass))
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `time` : computational time
-
-Returns:
-
-- total injected mass
-- total reduced mass
-"""
 function computemass(madsdata::Associative; time::Number=0)
 	if time == 0
 		grid_time = madsdata["Grid"]["time"]
@@ -331,30 +319,6 @@ function computemass(madsdata::Associative; time::Number=0)
 	end
 	return mass_injected, mass_reduced
 end
-
-"""
-Compute injected/reduced contaminant mass for a given set of mads input files
-
-$(DocumentFunction.documentfunction(computemass))
-
-Example
-
-```julia
-Mads.computemass(madsfiles; time=0, path=".")
-```
-
-Arguments:
-
-- `madsfiles` : matching pattern for Mads input files (string or regular expression accepted)
-- `time` : computational time
-- `path` : search directory for the mads input files
-
-Returns:
-
-- array with all the lambda values
-- array with associated total injected mass
-- array with associated total reduced mass
-"""
 function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::String=".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
@@ -378,3 +342,25 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Strin
 	end
 	return lambda, mass_injected, mass_reduced
 end
+
+@doc """
+Compute injected/reduced contaminant mass (for a given set of mads input files when "path" is provided)
+
+$(DocumentFunction.documentfunction(computemass;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "madsfiles"=>"matching pattern for Mads input files (string or regular expression accepted)"),
+keytext=Dict("time"=>"computational time, [default=`0`]",
+            "path"=>"search directory for the mads input files, [default=`\".\"`]")))
+
+Returns:
+
+- array with all the lambda values
+- array with associated total injected mass
+- array with associated total reduced mass
+
+Example:
+
+```julia
+Mads.computemass(madsfiles; time=0, path=".")
+```
+""" computemass
