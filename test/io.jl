@@ -1,34 +1,57 @@
-arr = [["a",1] ["b",1.6]]
+import Mads
+import Base.Test
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
-if workdir == "."
-	workdir = joinpath(Mads.madsdir, "..", "test")
+# If madsdir = '.' then joinpath, else madsdir 
+workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "test") : Mads.getmadsdir()
+jpath(file) = joinpath(workdir, file) # A small function for condensing join path
+
+arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
+
+# Parse extensions and dump/load data accordingly
+function test_IO(file, data, julia_flag=false)
+	ext = Mads.getextension(jpath(file))
+
+	if ext == "dat"
+		Mads.dumpasciifile(jpath(file), data)	
+		loaded_data = Mads.loadasciifile(jpath(file))
+		loaded_data = Dict{String,Float64}(zip((loaded_data[1], loaded_data[2]), (loaded_data[3], loaded_data[4])))
+	elseif ext == "json"
+		Mads.dumpjsonfile(jpath(file), data)
+		loaded_data = Mads.loadjsonfile(jpath(file))
+	elseif ext == "yaml"
+		Mads.dumpyamlfile(jpath(file), data, julia=julia_flag)
+		loaded_data = Mads.loadyamlfile(jpath(file))
+	else
+		println("Unrecognized filetype")
+		Mads.rmfile(jpath(file))
+		return
+	end
+
+	@Base.Test.test (data["a"] == loaded_data["a"]) && (data["b"] == loaded_data["b"])	  
+
+	Mads.rmfile(jpath(file))
 end
 
-Mads.dumpasciifile(joinpath(workdir, "a.dat"), arr)
-arr1 = Mads.loadasciifile(joinpath(workdir, "a.dat"))
-# @assert arr==arr1
-Mads.rmfile(joinpath(workdir, "a.dat"))
+# Test removal of files based on root/extension
+function test_filename_parse(file)
+	Mads.dumpasciifile(jpath(file), arr)
+	@Base.Test.test isfile(file) == true
+	Mads.rmfiles_ext(String(Mads.getextension(file)); path=workdir)
+	@Base.Test.test isfile(file) == false
 
-Mads.dumpjsonfile(joinpath(workdir, "a.json"), arr)
-arr1 = Mads.loadjsonfile(joinpath(workdir, "a.json"))
-# @assert arr==arr1
-Mads.rmfile(joinpath(workdir, "a.json"))
+	Mads.dumpasciifile(jpath(file), arr)
+	@Base.Test.test isfile(file) == true
+	Mads.rmfiles_root(String(Mads.getrootname(file)); path=workdir)
+	@Base.Test.test isfile(file) == false
+end
 
-Mads.dumpyamlfile(joinpath(workdir, "a.yaml"), arr)
-arr1 = Mads.loadyamlfile(joinpath(workdir, "a.yaml"))
-# @assert arr==arr1
-Mads.rmfile(joinpath(workdir, "a.yaml"))
+# Begin the main test block
+@Base.Test.testset "IO" begin
+	
+	test_IO("a.dat", arr)
+	test_IO("a.json", arr)
+	test_IO("a.yaml", arr)
+	test_IO("a.yaml", arr, true)
+	test_filename_parse("root_testing.extension_testing")
 
-Mads.dumpyamlfile(joinpath(workdir, "a.yaml"), arr, julia=true)
-arr1 = Mads.loadyamlfile(joinpath(workdir, "a.yaml"))
-# @assert arr==arr1
-Mads.rmfile(joinpath(workdir, "a.yaml"))
-
-Mads.searchdir("a", path = workdir)
-Mads.searchdir(r"a", path = workdir)
-
-Mads.dumpasciifile(joinpath(workdir, "root_testing.extension_testing"), arr)
-Mads.rmfiles_ext("extension_testing"; path = workdir)
-Mads.dumpasciifile(joinpath(workdir, "root_testing.extension_testing"), arr)
-Mads.rmfiles_root("root_testing"; path = workdir)
+end
