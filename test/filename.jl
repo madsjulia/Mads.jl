@@ -25,6 +25,5 @@ import Base.Test
     @Base.Test.test Mads.getextension(joinpath(test_dir, "a-v01.mads")) == "mads"
 
     Mads.rmdir("filename_testing")
-    println(Mads.getmadsinputfile())
 
 end
