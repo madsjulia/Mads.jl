@@ -1,6 +1,7 @@
 import RobustPmap
 import DataStructures
 import Optim
+import DocumentFunction
 
 function residuals(madsdata::Associative, results::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -36,7 +37,14 @@ end
 @doc """
 Compute residuals
 
-$(DocumentFunction.documentfunction(residuals))
+$(DocumentFunction.documentfunction(residuals;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "results"=>"results",
+            "resultdict"=>"result dictionary")))
+
+Returns:
+
+- 
 """ residuals
 
 
@@ -55,13 +63,23 @@ end
 @doc """
 Compute objective function
 
-$(DocumentFunction.documentfunction(of))
+$(DocumentFunction.documentfunction(of;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "results"=>"results",
+            "resultdict"=>"result dictionary")))
 """ of
 
 """
 Compute the sum of squared residuals for observations that match a regular expression
 
-$(DocumentFunction.documentfunction(partialof))
+$(DocumentFunction.documentfunction(partialof;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "resultdict"=>"result dictionary",
+            "regex"=>"regular expression")))
+
+Returns:
+
+- the sum of squared residuals for observations that match the regular expression
 """
 function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	obskeys = getobskeys(madsdata)
@@ -82,7 +100,12 @@ end
 """
 Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 
-$(DocumentFunction.documentfunction(makelmfunctions))
+$(DocumentFunction.documentfunction(makelmfunctions;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Returns:
+
+- forward model, gradient, objective functions
 """
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
@@ -181,7 +204,15 @@ end
 """
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
-$(DocumentFunction.documentfunction(naive_get_deltax))
+$(DocumentFunction.documentfunction(naive_get_deltax;
+argtext=Dict("JpJ"=>"",
+            "Jp"=>"",
+            "f0"=>"",
+            "lambda"=>"")))
+
+Returns:
+
+- the LM parameter space step
 """
 function naive_get_deltax(JpJ::Matrix{Float64}, Jp::Matrix{Float64}, f0::Vector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
@@ -192,7 +223,17 @@ end
 """
 Naive Levenberg-Marquardt optimization: perform LM iteration
 
-$(DocumentFunction.documentfunction(naive_lm_iteration))
+$(DocumentFunction.documentfunction(naive_lm_iteration;
+argtext=Dict("f"=>"forward model function",
+            "g"=>"gradient function for the forward model",
+            "o"=>"objective function",
+            "x0"=>"initial parameter guess",
+            "f0"=>"",
+            "lambdas"=>"")))
+
+Returns:
+
+- 
 """
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
 	J = g(x0) # get jacobian
@@ -208,22 +249,20 @@ end
 """
 Naive Levenberg-Marquardt optimization
 
-Arguments:
+$(DocumentFunction.documentfunction(naive_levenberg_marquardt;
+argtext=Dict("f"=>"forward model function",
+            "g"=>"gradient function for the forward model",
+            "x0"=>"initial parameter guess",
+            "o"=>"objective function, [default=x->(x'*x)[1]]"),
+keytext=Dict("maxIter"=>"maximum number of optimization iterations, [default=`10`]",
+            "maxEval"=>"maximum number of model evaluations, [default=`101`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`100`]",
+            "lambda_mu"=>"lambda multiplication factor μ, [default=`10`]",
+            "np_lambda"=>"number of parallel lambda solves, [default=`10`]")))
 
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `o` : objective function
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `lambda` : initial Levenberg-Marquardt lambda [100]
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `np_lambda` : number of parallel lambda solves
+Returns:
 
-$(DocumentFunction.documentfunction(naive_levenberg_marquardt))
+- 
 """
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
@@ -244,30 +283,27 @@ end
 """
 Levenberg-Marquardt optimization
 
-$(DocumentFunction.documentfunction(levenberg_marquardt))
-
-Arguments:
-
-- `f` : forward model function
-- `g` : gradient function for the forward model
-- `x0` : initial parameter guess
-- `root` : Mads problem root name
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `tolOF` : objective function update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda [eps(Float32)]
-- `lambda_scale` : lambda scaling factor
-- `lambda_mu` : lambda multiplication factor μ [10]
-- `lambda_nu` : lambda multiplication factor ν [10]
-- `np_lambda` : number of parallel lambda solves
-- `show_trace` : shows solution trace [default=false]
-- `alwaysDoJacobian`: computer Jacobian each iteration [false]
-- `callbackiteration` : call back function for each iteration
-- `callbackjacobian` : call back function for each jacobian
-
+$(DocumentFunction.documentfunction(levenberg_marquardt;
+argtext=Dict("f"=>"forward model function",
+            "g"=>"gradient function for the forward model",
+            "x0"=>"initial parameter guess",
+            "o"=>"objective function, [default=x->(x'*x)[1]]"),
+keytext=Dict("root"=>"Mads problem root name",
+            "tolX"=>"parameter space tolerance, [default=`1e-4`]",
+            "tolG"=>"parameter space update tolerance, [default=`1e-6`]",
+            "tolOF"=>"objective function update tolerance, [default=`1e-3`]",
+            "maxEval"=>"maximum number of model evaluations, [default=`1001`]",
+            "maxIter"=>"maximum number of optimization iterations, [default=`100`]",
+            "maxJacobians"=>"maximum number of Jacobian solves, [default=`100`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`eps(Float32)`]",
+            "lambda_scale"=>"lambda scaling factor, [default=`1e-3,`]",
+            "lambda_mu"=>"lambda multiplication factor μ, [default=`10`]",
+            "lambda_nu"=>"lambda multiplication factor ν, [default=`2`]",
+            "np_lambda"=>"number of parallel lambda solves, [default=`10`]",
+            "show_trace"=>"shows solution trace, [default=`false`]",
+            "alwaysDoJacobian"=>"computer Jacobian each iteration, [default=`false`]",
+            "callbackiteration"=>"call back function for each iteration, [default=`(best_x::Vector, of::Number, lambda::Number)->nothing`]",
+            "callbackjacobian"=>"call back function for each jacobian, [default=`(x::Vector, J::Matrix)->nothing`]")))
 """
 function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::Vector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::Vector, J::Matrix)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
