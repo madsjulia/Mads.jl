@@ -3,16 +3,14 @@ import ProgressMeter
 import DataStructures
 import DataFrames
 import BlackBoxOptim
+import DocumentFunction
 
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
-$(DocumentFunction.documentfunction(makebigdt))
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `choice` : dictionary of BIG-DT choices (scenarios)
+$(DocumentFunction.documentfunction(makebigdt;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "choice"=>"dictionary of BIG-DT choices (scenarios)")))
 
 Returns:
 
@@ -25,12 +23,9 @@ end
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem
 
-$(DocumentFunction.documentfunction(makebigdt!))
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `choice` : dictionary of BIG-DT choices (scenarios)
+$(DocumentFunction.documentfunction(makebigdt!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "choice"=>"dictionary of BIG-DT choices (scenarios)")))
 
 Returns:
 
@@ -113,15 +108,12 @@ end
 """
 Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
-$(DocumentFunction.documentfunction(dobigdt))
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `nummodelruns` : number of model runs
-- `numhorizons` : number of info-gap horizons of uncertainty
-- `maxHorizon` : maximum info-gap horizons of uncertainty
-- `numlikelihoods` : number of Bayesian likelihoods
+$(DocumentFunction.documentfunction(dobigdt;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "nummodelruns"=>"number of model runs"),
+keytext=Dict("numhorizons"=>"number of info-gap horizons of uncertainty [default=`100`]",
+            "maxHorizon"=>"maximum info-gap horizons of uncertainty [default=`3`]",
+            "numlikelihoods"=>"number of Bayesian likelihoods [default=`25`]")))
 
 Returns:
 
@@ -157,8 +149,12 @@ end
 """
 Make array of conditional log-likelihoods
 
-$(DocumentFunction.documentfunction(makearrayconditionalloglikelihood))
+$(DocumentFunction.documentfunction(makearrayconditionalloglikelihood;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
+Returns:
+
+- array of conditional log-likelihoods
 """
 function makearrayconditionalloglikelihood(madsdata::Associative)
 	function makeloglikelihood(likelihoodparams::Vector)
