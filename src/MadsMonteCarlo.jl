@@ -4,6 +4,7 @@ import BlackBoxOptim
 import Klara
 import JSON
 import AffineInvariantMCMC
+import DocumentFunction
 
 function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
 	if numwalkers <= 1
@@ -40,7 +41,21 @@ end
 @doc """
 Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
-$(DocumentFunction.documentfunction(emceesampling))
+$(DocumentFunction.documentfunction(emceesampling;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "p0"=>"initial parameters (matrix of size (length(optparams), numwalkers))"),
+keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors) [default=`10`]",
+            "nsteps"=>"number of final realizations in the chain [default=`100`]",
+            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
+            "thinning"=>"removal of any `thinning` realization [default=`1`]",
+            "sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
+            "seed"=>"initial random number seed [default=`0`]",
+            "weightfactor"=>"weight factor [default=`1.0`]")))
+
+Returns:
+
+- MCMC chain
+- log likelihoods of the final samples in the chain
 
 Examples:
 
@@ -48,23 +63,6 @@ Examples:
 Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
 Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
 ```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `p0` : initial parameters (matrix of size (length(optparams), numwalkers))
-- `numwalkers` : number of walkers (if in parallel this can be the number of available processors)
-- `nsteps` : number of final realizations in the chain
-- `burnin` :  number of initial realizations before the MCMC are recorded
-- `thinning` : removal of any `thinning` realization
-- `seed` : initial random number seed
-- `sigma` : a standard deviation parameter used to initialize the walkers
-
-Returns:
-
-- MCMC chain
-- log likelihoods of the final samples in the chain
-
 """ emceesampling
 
 function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
@@ -104,7 +102,17 @@ end
 @doc """
 Bayesian Sampling
 
-$(DocumentFunction.documentfunction(bayessampling))
+$(DocumentFunction.documentfunction(bayessampling;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "numsequences"=>"number of sequences executed in parallel"),
+keytext=Dict("nsteps"=>"number of final realizations in the chain [default=`1000`]",
+            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`100`]",
+            "thinning"=>"removal of any `thinning` realization [default=`1`]",
+            "seed"=>"initial random number seed [default=`0`]")))
+
+Returns:
+
+- MCMC chain
 
 Examples:
 
@@ -112,25 +120,18 @@ Examples:
 Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
 Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
 ```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `numsequences` : number of sequences executed in parallel
-- `nsteps` : number of final realizations in the chain
-- `burnin` :  number of initial realizations before the MCMC are recorded
-- `thinning` : removal of any `thinning` realization
-- `seed` : initial random number seed
-
-Returns:
-
-- MCMC chain
 """ bayessampling
 
 """
 Save MCMC chain in a file
 
-$(DocumentFunction.documentfunction(savemcmcresults))
+$(DocumentFunction.documentfunction(savemcmcresults;
+argtext=Dict("chain"=>"MCMC chain",
+            "filename"=>"file name")))
+
+Dumps:
+
+- the file containing MCMC chain
 """
 function savemcmcresults(chain::Array, filename::String)
 	f = open(filename, "w")
@@ -158,14 +159,10 @@ end
 """
 Monte Carlo analysis
 
-```julia
-Mads.montecarlo(madsdata; N=100)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary sampling uniformly between mins/maxs
-- `N` : number of samples (default = 100)
+$(DocumentFunction.documentfunction(montecarlo;
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("N"=>"number of samples [default=`100`]",
+            "filename"=>"file name")))
 
 Returns:
 
@@ -175,7 +172,11 @@ Dumps:
 
 - YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
 
-$(DocumentFunction.documentfunction(montecarlo))
+Example:
+
+```julia
+Mads.montecarlo(madsdata; N=100)
+```
 """
 function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	paramkeys = getparamkeys(madsdata)
@@ -227,7 +228,13 @@ end
 """
 Convert a parameter array to a parameter dictionary of arrays
 
-$(DocumentFunction.documentfunction(paramarray2dict))
+$(DocumentFunction.documentfunction(paramarray2dict;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "array"=>"parameter array")))
+
+Returns:
+
+- a parameter dictionary of arrays
 """
 function paramarray2dict(madsdata::Associative, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
@@ -241,7 +248,12 @@ end
 """
 Convert a parameter dictionary of arrays to a parameter array
 
-$(DocumentFunction.documentfunction(paramdict2array))
+$(DocumentFunction.documentfunction(paramdict2array;
+argtext=Dict("dict"=>"parameter dictionary of arrays")))
+
+Returns:
+
+- a parameter array
 """
 function paramdict2array(dict::Associative)
 	return hcat(map(i->collect(dict[i]), keys(dict))...)
