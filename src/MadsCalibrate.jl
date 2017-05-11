@@ -1,36 +1,39 @@
 import DataStructures
+import DocumentFunction
 
 """
 Calibrate with random initial guesses
 
-```julia
-Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
-Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `numberofsamples` : number of random initial samples
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda
-- `lambda_mu` : lambda multiplication factor [10]
-- `np_lambda` : number of parallel lambda solves
-- `show_trace` : shows solution trace [default=false]
-- `save_results` : save intermediate results [default=true]
-- `usenaive` : use naive Levenberg-Marquardt solver
-- `seed` : initial random seed
+$(DocumentFunction.documentfunction(calibraterandom;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "numberofsamples"=>"number of random initial samples, [default=`1`]"),
+keytext=Dict("tolX"=>"parameter space tolerance, [default=`1e-4`]",
+            "tolG"=>"parameter space update tolerance, [default=`1e-6`]",
+            "tolOF"=>"[default=`1e-3`]",
+            "maxEval"=>"maximum number of model evaluations, [default=`1000`]",
+            "maxIter"=>"maximum number of optimization iterations, [default=`100`]",
+            "maxJacobians"=>"maximum number of Jacobian solves, [default=`100`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`100.0`]",
+            "lambda_mu"=>"lambda multiplication factor, [default=`10.0`]",
+            "np_lambda"=>"number of parallel lambda solves, [default=`10`]",
+            "show_trace"=>"shows solution trace [default=`false`]",
+            "usenaive"=>"use naive Levenberg-Marquardt solver, [default=`false`]",
+            "seed"=>"initial random seed, [default=`0`]",
+            "quiet"=>"[default=`true`]",
+            "all"=>"[default=`false`]",
+            "save_results"=>"save intermediate results [default=`true`]")))
 
 Returns:
 
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. bestresult[2].minimizer)
 
-$(DocumentFunction.documentfunction(calibraterandom))
+Example:
+
+```julia
+Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
+```
 """
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
@@ -77,7 +80,28 @@ end
 """
 Calibrate with random initial guesses in parallel
 
-$(DocumentFunction.documentfunction(calibraterandom_parallel))
+$(DocumentFunction.documentfunction(calibraterandom_parallel;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "numberofsamples"=>"number of random initial samples, [default=`1`]"),
+keytext=Dict("tolX"=>"parameter space tolerance, [default=`1e-4`]",
+            "tolG"=>"parameter space update tolerance, [default=`1e-6`]",
+            "tolOF"=>"[default=`1e-3`]",
+            "maxEval"=>"maximum number of model evaluations, [default=`1000`]",
+            "maxIter"=>"maximum number of optimization iterations, [default=`100`]",
+            "maxJacobians"=>"maximum number of Jacobian solves, [default=`100`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`100.0`]",
+            "lambda_mu"=>"lambda multiplication factor, [default=`10.0`]",
+            "np_lambda"=>"number of parallel lambda solves, [default=`10`]",
+            "show_trace"=>"shows solution trace [default=`false`]",
+            "usenaive"=>"use naive Levenberg-Marquardt solver, [default=`false`]",
+            "seed"=>"initial random seed, [default=`0`]",
+            "quiet"=>"[default=`true`]",
+            "save_results"=>"save intermediate results [default=`true`]",
+            "localsa"=>"[default=`false`]")))
+
+Returns:
+
+- allphi, allconverged, allparameters
 """
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
@@ -115,27 +139,26 @@ Calibrate
 
 `Mads.calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
 
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `tolX` : parameter space tolerance
-- `tolG` : parameter space update tolerance
-- `maxEval` : maximum number of model evaluations
-- `maxIter` : maximum number of optimization iterations
-- `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda
-- `lambda_mu` : lambda multiplication factor [10]
-- `np_lambda` : number of parallel lambda solves
-- `show_trace` : shows solution trace [default=false]
-- `save_results` : save intermediate results [default=true]
-- `usenaive` : use naive Levenberg-Marquardt solver
+$(DocumentFunction.documentfunction(calibrate;
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("tolX"=>"parameter space tolerance, [default=`1e-4`]",
+            "tolG"=>"parameter space update tolerance, [default=`1e-6`]",
+            "tolOF"=>"[default=`1e-3`]",
+            "maxEval"=>"maximum number of model evaluations, [default=`1000`]",
+            "maxIter"=>"maximum number of optimization iterations, [default=`100`]",
+            "maxJacobians"=>"maximum number of Jacobian solves, [default=`100`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`100.0`]",
+            "lambda_mu"=>"lambda multiplication factor, [default=`10.0`]",
+            "np_lambda"=>"number of parallel lambda solves, [default=`10`]",
+            "show_trace"=>"shows solution trace [default=`false`]",
+            "usenaive"=>"use naive Levenberg-Marquardt solver, [default=`false`]",
+            "save_results"=>"save intermediate results [default=`true`]",
+            "localsa"=>"[default=`false`]")))
 
 Returns:
 
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
-
-$(DocumentFunction.documentfunction(calibrate))
 """
 function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
 	rootname = Mads.getmadsrootname(madsdata)
