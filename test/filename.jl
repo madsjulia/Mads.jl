@@ -4,12 +4,12 @@ import Mads
 import Base.Test
 
 @Base.Test.testset "Filename" begin
-	test_dir = "filename_testing"
-	jpath(file) = joinpath(test_dir, file)
+	workdir = "filename_testing"
+	jpath(file::String) = joinpath(workdir, file)
 	
 	curdir = pwd()
-	Mads.rmdir(test_dir)
-	Mads.mkdir(test_dir)
+	Mads.rmdir(workdir)
+	Mads.mkdir(workdir)
 	
 	touch(jpath("a-v01.mads"))
 	touch(jpath("a-v02.mads"))
@@ -26,6 +26,5 @@ import Base.Test
 	@Base.Test.test Mads.getrootname(jpath("test.file.name.txt")) == jpath("test")
 	@Base.Test.test Mads.getextension(jpath("a-v01.mads")) == "mads"
 
-	Mads.rmdir("filename_testing")
-
+	Mads.rmdir(workdir)
 end

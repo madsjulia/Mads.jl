@@ -20,7 +20,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
             "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
             "seed"=>"initial random seed [default=`0`]",
             "quiet"=>"[default=`true`]",
-            "all"=>"all results are returned [default=`false`]",
+            "all"=>"all model results are returned [default=`false`]",
             "save_results"=>"save intermediate results [default=`true`]")))
 
 Returns:
@@ -85,7 +85,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "numberofsamples"=>"number of random initial samples [default=`1`]"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
             "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"[default=`1e-3`]",
+            "tolOF"=>"objective function tolerance [default=`1e-3`]",
             "maxEval"=>"maximum number of model evaluations [default=`1000`]",
             "maxIter"=>"maximum number of optimization iterations [default=`100`]",
             "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
@@ -95,13 +95,15 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
             "show_trace"=>"shows solution trace [default=`false`]",
             "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
             "seed"=>"initial random seed [default=`0`]",
-            "quiet"=>"[default=`true`]",
+            "quiet"=>"suppress output [default=`true`]",
             "save_results"=>"save intermediate results [default=`true`]",
-            "localsa"=>"[default=`false`]")))
+            "localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
 
-- allphi, allconverged, allparameters
+- vector with all objective function values
+- boolean vector (converged/not converged)
+- array with estimate model parameters
 """
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=0, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
@@ -143,7 +145,7 @@ $(DocumentFunction.documentfunction(calibrate;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
             "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"[default=`1e-3`]",
+            "tolOF"=>"objective function tolerance [default=`1e-3`]",
             "maxEval"=>"maximum number of model evaluations [default=`1000`]",
             "maxIter"=>"maximum number of optimization iterations [default=`100`]",
             "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
@@ -153,7 +155,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
             "show_trace"=>"shows solution trace [default=`false`]",
             "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
             "save_results"=>"save intermediate results [default=`true`]",
-            "localsa"=>"[default=`false`]")))
+            "localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
 

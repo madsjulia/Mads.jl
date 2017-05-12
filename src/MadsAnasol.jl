@@ -8,7 +8,7 @@ Add an additional contamination source
 
 $(DocumentFunction.documentfunction(addsource!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "sourceid"=>"source id, [default=`0`]")))
+            "sourceid"=>"source id [default=`0`]")))
 """
 function addsource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
@@ -33,7 +33,7 @@ Remove a contamination source
 
 $(DocumentFunction.documentfunction(removesource!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "sourceid"=>"source id, [default=`0`]")))
+            "sourceid"=>"source id [default=`0`]")))
 """
 function removesource!(madsdata::Associative, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
@@ -246,7 +246,7 @@ argtext=Dict("wellx"=>"observation point (well) X coordinate",
             "t0"=>"source starting time",
             "t1"=>"source termination time",
             "t"=>"time to compute concentration at the observation point"),
-keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module), [default=`\"long_bbb_ddd_iir_c\"`]")))
+keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module) [default=`\"long_bbb_ddd_iir_c\"`]")))
 
 Returns:
 
@@ -349,8 +349,8 @@ Compute injected/reduced contaminant mass (for a given set of mads input files w
 $(DocumentFunction.documentfunction(computemass;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "madsfiles"=>"matching pattern for Mads input files (string or regular expression accepted)"),
-keytext=Dict("time"=>"computational time, [default=`0`]",
-            "path"=>"search directory for the mads input files, [default=`\".\"`]")))
+keytext=Dict("time"=>"computational time [default=`0`]",
+            "path"=>"search directory for the mads input files [default=`\".\"`]")))
 
 Returns:
 

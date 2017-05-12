@@ -3,7 +3,7 @@ import DataStructures
 import Optim
 import DocumentFunction
 
-function residuals(madsdata::Associative, results::Vector)
+function residuals(madsdata::Associative, resultvec::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata)
@@ -12,14 +12,14 @@ function residuals(madsdata::Associative, results::Vector)
 	index = find(isn)
 	weights[index] = 0
 	targets[index] = 0
-	residuals = (results .- targets) .* weights
+	residuals = (resultvec .- targets) .* weights
 	if ssdr
 		mins = Mads.getobsmin(madsdata)
 		maxs = Mads.getobsmax(madsdata)
 		mins[index] = -Inf
 		maxs[index] = Inf
-		rmax = (results .- maxs) .* weights
-		rmin = (results .- mins) .* weights
+		rmax = (resultvec .- maxs) .* weights
+		rmin = (resultvec .- mins) .* weights
 		rmax[rmax .< 0] = 0
 		rmin[rmin .> 0] = 0
 		residuals .+= (rmax .+ rmin)
@@ -39,7 +39,7 @@ Compute residuals
 
 $(DocumentFunction.documentfunction(residuals;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "results"=>"results",
+            "resultvec"=>"result vector",
             "resultdict"=>"result dictionary")))
 
 Returns:
@@ -48,8 +48,8 @@ Returns:
 """ residuals
 
 
-function of(madsdata::Associative, results::Vector)
-	r = residuals(madsdata, results)
+function of(madsdata::Associative, resultvec::Vector)
+	r = residuals(madsdata, resultvec)
 	sum(r .^ 2)
 end
 function of(madsdata::Associative, resultdict::Associative)
@@ -65,7 +65,7 @@ Compute objective function
 
 $(DocumentFunction.documentfunction(of;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "results"=>"results",
+            "resultvec"=>"result vector",
             "resultdict"=>"result dictionary")))
 """ of
 
@@ -253,12 +253,12 @@ $(DocumentFunction.documentfunction(naive_levenberg_marquardt;
 argtext=Dict("f"=>"forward model function",
             "g"=>"gradient function for the forward model",
             "x0"=>"initial parameter guess",
-            "o"=>"objective function, [default=x->(x'*x)[1]]"),
-keytext=Dict("maxIter"=>"maximum number of optimization iterations, [default=`10`]",
-            "maxEval"=>"maximum number of model evaluations, [default=`101`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`100`]",
-            "lambda_mu"=>"lambda multiplication factor μ, [default=`10`]",
-            "np_lambda"=>"number of parallel lambda solves, [default=`10`]")))
+            "o"=>"objective function [default=x->(x'*x)[1]]"),
+keytext=Dict("maxIter"=>"maximum number of optimization iterations [default=`10`]",
+            "maxEval"=>"maximum number of model evaluations [default=`101`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda [default=`100`]",
+            "lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
+            "np_lambda"=>"number of parallel lambda solves [default=`10`]")))
 
 Returns:
 
@@ -287,23 +287,23 @@ $(DocumentFunction.documentfunction(levenberg_marquardt;
 argtext=Dict("f"=>"forward model function",
             "g"=>"gradient function for the forward model",
             "x0"=>"initial parameter guess",
-            "o"=>"objective function, [default=x->(x'*x)[1]]"),
+            "o"=>"objective function [default=`x->(x'*x)[1]`]"),
 keytext=Dict("root"=>"Mads problem root name",
-            "tolX"=>"parameter space tolerance, [default=`1e-4`]",
-            "tolG"=>"parameter space update tolerance, [default=`1e-6`]",
-            "tolOF"=>"objective function update tolerance, [default=`1e-3`]",
-            "maxEval"=>"maximum number of model evaluations, [default=`1001`]",
-            "maxIter"=>"maximum number of optimization iterations, [default=`100`]",
-            "maxJacobians"=>"maximum number of Jacobian solves, [default=`100`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda, [default=`eps(Float32)`]",
-            "lambda_scale"=>"lambda scaling factor, [default=`1e-3,`]",
-            "lambda_mu"=>"lambda multiplication factor μ, [default=`10`]",
-            "lambda_nu"=>"lambda multiplication factor ν, [default=`2`]",
-            "np_lambda"=>"number of parallel lambda solves, [default=`10`]",
-            "show_trace"=>"shows solution trace, [default=`false`]",
-            "alwaysDoJacobian"=>"computer Jacobian each iteration, [default=`false`]",
-            "callbackiteration"=>"call back function for each iteration, [default=`(best_x::Vector, of::Number, lambda::Number)->nothing`]",
-            "callbackjacobian"=>"call back function for each jacobian, [default=`(x::Vector, J::Matrix)->nothing`]")))
+            "tolX"=>"parameter space tolerance [default=`1e-4`]",
+            "tolG"=>"parameter space update tolerance [default=`1e-6`]",
+            "tolOF"=>"objective function update tolerance [default=`1e-3`]",
+            "maxEval"=>"maximum number of model evaluations [default=`1001`]",
+            "maxIter"=>"maximum number of optimization iterations [default=`100`]",
+            "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
+            "lambda"=>"initial Levenberg-Marquardt lambda [default=`eps(Float32)`]",
+            "lambda_scale"=>"lambda scaling factor [default=`1e-3,`]",
+            "lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
+            "lambda_nu"=>"lambda multiplication factor ν [default=`2`]",
+            "np_lambda"=>"number of parallel lambda solves [default=`10`]",
+            "show_trace"=>"shows solution trace [default=`false`]",
+            "alwaysDoJacobian"=>"computer Jacobian each iteration [default=`false`]",
+            "callbackiteration"=>"call back function for each iteration [default=`(best_x::Vector, of::Number, lambda::Number)->nothing`]",
+            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::Vector, J::Matrix)->nothing`]")))
 """
 function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::Vector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::Vector, J::Matrix)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm

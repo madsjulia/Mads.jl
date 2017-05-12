@@ -134,7 +134,7 @@ argtext=Dict("o"=>"observation data")))
 
 Returns:
 
-- observation time ("NaN" when time is missing)
+- observation time ("NaN" it time is missing)
 """
 function gettime(o::Associative)
 	if haskey(o, "time")
@@ -271,7 +271,7 @@ Set observation time based on the observation name in the MADS problem dictionar
 
 $(DocumentFunction.documentfunction(setobstime!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "separator"=>"string to be separator, [default=`_`]",
+            "separator"=>"separator [default=`_`]",
             "rx"=>"regular expression to match")))
 
 Examples:
@@ -311,18 +311,18 @@ function modobsweights!(madsdata::Associative, value::Number)
 end
 
 """
-Inversely proportional observation weights in the MADS problem dictionary
+Set inversely proportional observation weights in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(invobsweights!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "value"=>"")))
+            "multiplier"=>"weight multiplier")))
 """
-function invobsweights!(madsdata::Associative, value::Number)
+function invobsweights!(madsdata::Associative, multiplier::Number)
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		t = gettarget(madsdata["Observations"][obskeys[i]])
 		if getweight(madsdata["Observations"][obskeys[i]]) > 0 && t > 0
-			setweight!(madsdata["Observations"][obskeys[i]], (1. / t) * value)
+			setweight!(madsdata["Observations"][obskeys[i]], (1. / t) * multiplier)
 		end
 	end
 end
@@ -362,23 +362,23 @@ function modwellweights!(madsdata::Associative, value::Number)
 end
 
 """
-Inversely proportional well weights in the MADS problem dictionary
+Set inversely proportional well weights in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(invwellweights!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "value"=>"")))
+            "multiplier"=>"weight multiplier")))
 """
-function invwellweights!(madsdata::Associative, value::Number)
+function invwellweights!(madsdata::Associative, multiplier::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
 		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 			t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
 			if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
-				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * value)
+				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * multiplier)
 			end
 		end
 	end
-	invobsweights!(madsdata, value)
+	invobsweights!(madsdata, multiplier)
 end
 
 """
@@ -451,17 +451,17 @@ function createobservations!(madsdata::Associative, time::Vector, observation::V
 	end
 	nothing
 end
-function createobservations!(madsdata::Associative, observations::Associative; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
+function createobservations!(madsdata::Associative, observation::Associative; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	observationsdict = DataStructures.OrderedDict()
-	for k in keys(observations)
+	for k in keys(observation)
 		data = DataStructures.OrderedDict()
-		data["target"] = observations[k]
+		data["target"] = observation[k]
 		if weight_type == "constant"
 			if weight != 1
 				data["weight"] = weight
 			end
 		else
-			data["weight"] = 1 / observations[k]
+			data["weight"] = 1 / observation[k]
 		end
 		if logtransform == true
 			data["log"] = logtransform
@@ -476,12 +476,12 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 
 $(DocumentFunction.documentfunction(createobservations!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "time"=>"",
-            "observation"=>"[default=`zeros(length(time))`]",
-            "observations"=>""),
-keytext=Dict("logtransform"=>"[default=`false`]",
-            "weight_type"=>"[default=`constant`]",
-            "weight"=>"[default=`1`]")))
+            "time"=>"vector of observation times",
+            "observation"=>"vector of observations [default=`zeros(length(time))`]",
+            "observation"=>"dictionary of observations"),
+keytext=Dict("logtransform"=>"log transform observations [default=`false`]",
+            "weight_type"=>"weight type [default=`constant`]",
+            "weight"=>"weight value [default=`1`]")))
 """ createobservations!
 
 """
@@ -610,7 +610,7 @@ function wells2observations!(madsdata::Associative)
 end
 
 """
-Get `Wells` class spatial and temporal data
+Get spatial and temporal data in the `Wells` class
 
 $(DocumentFunction.documentfunction(getwellsdata;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
@@ -618,7 +618,7 @@ keytext=Dict("time"=>"[default=`false`]")))
 
 Returns:
 
-- `Wells` class spatial and temporal data
+- array with spatial and temporal data in the `Wells` class
 """
 function getwellsdata(madsdata::Associative; time::Bool=false)
 	if time

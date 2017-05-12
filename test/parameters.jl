@@ -45,7 +45,7 @@ function test_misc()
 	#@Base.Test.test realmax(Float32) == Mads.maxtorealmax!(convert(DataFrames.DataFrame, [[1,2] [1,realmax(Float64)]]))
 end
 
-@Base.Test.testset "asd" begin
+@Base.Test.testset "Parameters" begin
 	test_params()
 	test_misc()
 end
