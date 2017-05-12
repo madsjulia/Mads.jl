@@ -1,3 +1,5 @@
+import DocumentFunction
+
 """
 MADS restart on
 
@@ -19,7 +21,8 @@ end
 """
 Get MADS restart status
 
-$(DocumentFunction.documentfunction(getrestart))
+$(DocumentFunction.documentfunction(getrestart;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
 """
 function getrestart(madsdata::Associative)
 	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
@@ -102,7 +105,8 @@ end
 """
 Set MADS debug level
 
-$(DocumentFunction.documentfunction(setdebuglevel))
+$(DocumentFunction.documentfunction(setdebuglevel;
+argtext=Dict("level"=>"debug level")))
 """
 function setdebuglevel(level::Int)
 	global debuglevel = level
@@ -111,7 +115,8 @@ end
 """
 Set MADS verbosity level
 
-$(DocumentFunction.documentfunction(setverbositylevel))
+$(DocumentFunction.documentfunction(setverbositylevel;
+argtext=Dict("level"=>"debug level")))
 """
 function setverbositylevel(level::Int)
 	global verbositylevel = level
@@ -149,23 +154,19 @@ end
 @doc """
 Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-- `Mads.haskeyword(madsdata, keyword)`
-- `Mads.haskeyword(madsdata, class, keyword)`
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `class` : dictionary class; if not provided searches for `keyword` in `Problem` class
-- `keyword` : dictionary key
+$(DocumentFunction.documentfunction(haskeyword;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "keyword"=>"dictionary key",
+            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 
 Returns: `true` or `false`
 
 Examples:
 
+```julia
 - `Mads.haskeyword(madsdata, "disp")` ... searches in `Problem` class by default
 - `Mads.haskeyword(madsdata, "Wells", "R-28")` ... searches in `Wells` class for a keyword "R-28"
-
-$(DocumentFunction.documentfunction(haskeyword))
+```
 """ haskeyword
 
 function addkeyword!(madsdata::Associative, keyword::String)
@@ -189,7 +190,10 @@ end
 @doc """
 Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(DocumentFunction.documentfunction(addkeyword!))
+$(DocumentFunction.documentfunction(addkeyword!;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "keyword"=>"dictionary key",
+            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ addkeyword!
 
 function deletekeyword!(madsdata::Associative, keyword::String)
@@ -214,13 +218,21 @@ end
 @doc """
 Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 
-$(DocumentFunction.documentfunction(deletekeyword!))
+$(DocumentFunction.documentfunction(deletekeyword!;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "keyword"=>"dictionary key",
+            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ deletekeyword!
 
 """
 Get sin-space dx
 
-$(DocumentFunction.documentfunction(getsindx))
+$(DocumentFunction.documentfunction(getsindx;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Returns:
+
+- sin-space dx
 """
 function getsindx(madsdata::Associative)
 	sindx = 0.1
@@ -236,7 +248,8 @@ end
 """
 Transpose non-numeric vector
 
-$(DocumentFunction.documentfunction(transposevector))
+$(DocumentFunction.documentfunction(transposevector;
+argtext=Dict("a"=>"vector")))
 """
 function transposevector(a::Vector)
 	reshape(a, 1, length(a))
@@ -245,13 +258,18 @@ end
 """
 Transpose non-numeric matrix
 
-$(DocumentFunction.documentfunction(transposematrix))
+$(DocumentFunction.documentfunction(transposematrix;
+argtext=Dict("a"=>"matrix")))
 """
 function transposematrix(a::Matrix)
 	permutedims(a, (2, 1))
 end
 
-"Print error message"
+"""
+Print error message
+$(DocumentFunction.documentfunction(printerrormsg;
+argtext=Dict("e"=>"error message")))
+"""
 function printerrormsg(e::Any)
 	if in(:msg, fieldnames(e))
 		println(strip(e.msg))
@@ -263,7 +281,9 @@ end
 """
 Mesh grid
 
-$(DocumentFunction.documentfunction(meshgrid))
+$(DocumentFunction.documentfunction(meshgrid;
+argtext=Dict("min"=>"",
+            "max"=>"")))
 """
 function meshgrid(min::Vector, max::Vector)
 	m = length(min)
@@ -276,7 +296,9 @@ end
 """
 Set / get seed
 
-$(DocumentFunction.documentfunction(setseed))
+$(DocumentFunction.documentfunction(setseed;
+argtext=Dict("seed"=>"seed",
+            "quiet"=>"[default=`true`]")))
 """
 function setseed(seed::Integer=0, quiet::Bool=true)
 	if seed != 0
