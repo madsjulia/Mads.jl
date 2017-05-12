@@ -1,6 +1,7 @@
 import ProgressMeter
 import DataStructures
 import JLD
+import DocumentFunction
 
 function forward(madsdata::Associative; all::Bool=false)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
@@ -95,23 +96,17 @@ end
 @doc """
 Perform a forward run using the initial or provided values for the model parameters
 
-```julia
-Mads.forward(madsdata)
-Mads.forward(madsdata, paramdict)
-Mads.forward(madsdata, paramarray)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `paramdict` : dictionary of model parameter values
-- `paramarray` : array of model parameter values
+$(DocumentFunction.documentfunction(forward;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "paramdict"=>"dictionary of model parameter values",
+            "paramarray"=>"array of model parameter values"),
+keytext=Dict("all"=>"[default=`false`]",
+            "checkpointfrequency"=>"[default=`0`]",
+            "checkpointfilename"=>"[default=\"checkpoint_forward\"]")))
 
 Returns:
 
 - dictionary of model predictions
-
-$(DocumentFunction.documentfunction(forward))
 """ forward
 
 function forwardgrid(madsdata::Associative)
@@ -180,19 +175,11 @@ end
 @doc """
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-```julia
-Mads.forwardgrid(madsdata)
-Mads.forwardgrid(madsdata, paramvalues)
-```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `paramvalues` : dictionary of model parameter values
+$(DocumentFunction.documentfunction(forwardgrid;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "paramvalues"=>"dictionary of model parameter values")))
 
 Returns:
 
 - 3D array with model predictions along a 3D grid
-
-$(DocumentFunction.documentfunction(forwardgrid))
 """ forwardgrid
