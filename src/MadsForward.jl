@@ -177,7 +177,7 @@ Perform a forward run over a 3D grid defined in `madsdata` using the initial or 
 
 $(DocumentFunction.documentfunction(forwardgrid;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "madsdatain"=>"Mads problem dictionary"
+            "madsdatain"=>"Mads problem dictionary",
             "paramvalues"=>"dictionary of model parameter values")))
 
 Returns:
