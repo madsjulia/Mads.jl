@@ -289,16 +289,16 @@ function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	return output;
 end
 
-function checknodedir(node::String, dir::String, wait::Float64=10.)
+function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 seconds
 	proc = spawn(`ssh -t $node ls $dir`)
-	timedwait(() -> process_exited(proc), wait) # 10 seconds
+	timedwait(() -> process_exited(proc), waittime)
 	if process_running(proc)
 		kill(proc)
 		return false
 	end
 	return true
 end
-function checknodedir(dir::String, wait::Float64=20.)
+function checknodedir(dir::String, waittime::Float64=20.) # 20 seconds
 	if is_windows()
 		proc = spawn(`cmd /C dir $dir)`)
 	elseif Mads.madsbash
@@ -306,7 +306,7 @@ function checknodedir(dir::String, wait::Float64=20.)
 	else
 		proc = spawn(`sh -c "ls $dir"`)
 	end
-	timedwait(() -> process_exited(proc), wait) # 20 seconds
+	timedwait(() -> process_exited(proc), waittime)
 	if process_running(proc)
 		kill(proc)
 		return false
@@ -346,45 +346,74 @@ function madsload(nodenames::Array{String,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
 end
 
-"""
-Run external command and pipe stdout and stderr
-
-$(DocumentFunction.documentfunction(runcmd))
-"""
-function runcmd(cmd::Cmd, quiet::Bool=quietdefault)
-	cmdin = Pipe()
-	cmdout = Pipe()
-	cmderr = Pipe()
-	cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
-	wait(cmdproc)
+function runcmd(cmd::Cmd; quiet::Bool=quietdefault, pipe::Bool=false, waittime::Float64=executionwaittime)
+	if pipe
+		cmdin = Pipe()
+		cmdout = Pipe()
+		cmderr = Pipe()
+		cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
+	else
+		cmdproc = spawn(cmd)
+	end
+	if waittime > 0
+		timedwait(() -> process_exited(cmdproc), waittime)
+		if process_running(cmdproc)
+			kill(cmdproc)
+			return false
+		end
+	else
+		wait(cmdproc)
+	end
 	# @show cmdproc.exitcode
 	# @show cmdproc.termsignal
-	close(cmdin)
-	close(cmdout.in)
-	close(cmderr.in)
-	if !quiet || cmdproc.exitcode != 0
-		erroutput = readlines(cmderr)
-		if length(erroutput) > 0
-			for i in erroutput
-				warn("$(strip(i))")
+	if pipe
+		close(cmdin)
+		close(cmdout.in)
+		close(cmderr.in)
+		if !quiet || cmdproc.exitcode != 0
+			erroutput = readlines(cmderr)
+			if length(erroutput) > 0
+				for i in erroutput
+					warn("$(strip(i))")
+				end
 			end
 		end
-	end
-	if !quiet || cmdproc.exitcode != 0
-		output = readlines(cmdout)
-		l = length(output)
-		if l > 0
-			s = (l < 100) ? 1 : l - 100
-			for i in output[s:end]
-				println("$(strip(i))")
-				if ismatch(r"error"i, i)
-					madswarn("$(strip(i))")
+		if !quiet || cmdproc.exitcode != 0
+			output = readlines(cmdout)
+			l = length(output)
+			if l > 0
+				s = (l < 100) ? 1 : l - 100
+				for i in output[s:end]
+					println("$(strip(i))")
+					if ismatch(r"error"i, i)
+						madswarn("$(strip(i))")
+					end
 				end
 			end
 		end
 	end
 	if cmdproc.exitcode != 0
-		error("Execution of command `$(string(cmd))` produced an error!")
+		warn("Execution of command `$(string(cmd))` produced an error ($(mdproc.exitcode))!")
 	end
-	return cmdout, cmderr
+	if pipe
+		return cmdout, cmderr
+	else
+		return nothing
+	end
 end
+function runcmd(cmdstring::String; quiet::Bool=quietdefault, pipe::Bool=false, waittime::Float64=executionwaittime)
+	if is_windows()
+		r = runcmd(`cmd /C $(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
+	elseif Mads.madsbash
+		r = runcmd(`bash -c "$(cmdstring)"`; quiet=quiet, pipe=pipe, waittime=waittime)
+	else
+		r = runcmd(`sh -c "$(cmdstring)"`; quiet=quiet, pipe=pipe, waittime=waittime)
+	end
+	return r
+end
+
+@doc """
+Run external command and pipe stdout and stderr
+
+$(DocumentFunction.documentfunction(runcmd))
+""" runcmd

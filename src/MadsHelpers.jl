@@ -123,6 +123,16 @@ function setverbositylevel(level::Int)
 end
 
 """
+Set maximum execution wait time for forward model runs in seconds
+
+$(DocumentFunction.documentfunction(setexecutionwaittime;
+argtext=Dict("waitime"=>"maximum execution wait time for forward model runs in seconds")))
+"""
+function setexecutionwaittime(waitime::Float64)
+	global executionwaittime = waitime
+end
+
+"""
 Reset the model runs count to be equal to zero
 
 $(DocumentFunction.documentfunction(resetmodelruns))

@@ -171,13 +171,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				while trying
 					try
 						attempt += 1
-						if is_windows()
-							run(`cmd /C $(madsdata["Command"])`)
-						elseif Mads.madsbash
-							run(`bash -c "$(madsdata["Command"])"`)
-						else
-							run(`sh -c "$(madsdata["Command"])"`)
-						end
+						runcmd(madsdata["Command"])
 						trying = false
 					catch errmsg
 						sleep(attempt * 0.5)

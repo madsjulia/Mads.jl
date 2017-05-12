@@ -60,11 +60,16 @@ rm("madsjl.cmdline_hist")
 Mads.functions()
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
+Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
 	if is_windows()
-		run(`cmd /C dir $(Pkg.dir("Mads"))`)
+		Mads.runcmd("dir $(Pkg.dir("Mads"))")
+		Mads.runcmd("dir $(Pkg.dir("Mads"))"; pipe=true)
+		Mads.runcmd("dir $(Pkg.dir("Mads"))"; waittime=10.)
 	else
-		Mads.runcmd(`ls $(Pkg.dir("Mads"))`)
+		Mads.runcmd("ls $(Pkg.dir("Mads"))")
+		Mads.runcmd("ls $(Pkg.dir("Mads"))"; pipe=true)
+		Mads.runcmd("ls $(Pkg.dir("Mads"))"; waittime=10.)
 	end
 end
 Mads.transposevector(["a";"b"])

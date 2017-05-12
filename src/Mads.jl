@@ -105,6 +105,7 @@ verbositylevel = 1
 debuglevel = 1
 modelruns = 0
 madsinputfile = ""
+executionwaittime = 0.0
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
