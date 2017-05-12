@@ -85,7 +85,7 @@ function create_tests_off()
 end
 
 """
-Turn on execution of long MADS tests (dangerous)
+Turn on execution of long MADS tests
 
 $(DocumentFunction.documentfunction(long_tests_on))
 """
@@ -267,6 +267,7 @@ end
 
 """
 Print error message
+
 $(DocumentFunction.documentfunction(printerrormsg;
 argtext=Dict("e"=>"error message")))
 """
@@ -279,25 +280,29 @@ function printerrormsg(e::Any)
 end
 
 """
-Mesh grid
+Create mesh grid
 
 $(DocumentFunction.documentfunction(meshgrid;
-argtext=Dict("min"=>"",
-            "max"=>"")))
+argtext=Dict("x"=>"vector of grid x coordinates",
+            "y"=>"vector of grid y coordinates")))
+
+Returns:
+
+- 2D grid coordinates based on the coordinates contained in vectors `x` and `y`
 """
-function meshgrid(min::Vector, max::Vector)
-	m = length(min)
-	n = length(max)
-	max = reshape(max, 1, n)
-	min = reshape(min, m, 1)
-	(repmat(max, m, 1), repmat(min, 1, n))
+function meshgrid(x::Vector, y::Vector)
+	m = length(x)
+	n = length(y)
+	xx = reshape(x, 1, n)
+	yy = reshape(y, m, 1)
+	(repmat(xx, m, 1), repmat(yy, 1, n))
 end
 
 """
-Set / get seed
+Set / get current random seed
 
 $(DocumentFunction.documentfunction(setseed;
-argtext=Dict("seed"=>"seed",
+argtext=Dict("seed"=>"random seed",
             "quiet"=>"[default=`true`]")))
 """
 function setseed(seed::Integer=0, quiet::Bool=true)

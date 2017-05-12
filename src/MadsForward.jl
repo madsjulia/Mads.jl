@@ -101,8 +101,8 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
             "paramdict"=>"dictionary of model parameter values",
             "paramarray"=>"array of model parameter values"),
 keytext=Dict("all"=>"[default=`false`]",
-            "checkpointfrequency"=>"[default=`0`]",
-            "checkpointfilename"=>"[default=\"checkpoint_forward\"]")))
+            "checkpointfrequency"=>"check point frequency for storing restart information [default=`0`]",
+            "checkpointfilename"=>"check point file name [default=\"checkpoint_forward\"]")))
 
 Returns:
 

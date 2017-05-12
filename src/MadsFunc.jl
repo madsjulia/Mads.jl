@@ -120,12 +120,31 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 			else
 				cwd = currentdir
 			end
-			tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
-			tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
-			Mads.createtempdir(tempdirname)
-			Mads.linktempdir(cwd, tempdirname)
-			cd(tempdirname)
-			Mads.setmodelinputs(madsdata, parameters)
+			attempt = 0
+			trying = true
+			tempdirname = ""
+			while trying
+				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(randstring(6))"
+				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
+				Mads.createtempdir(tempdirname)
+				Mads.linktempdir(cwd, tempdirname)
+				cd(tempdirname)
+				Mads.setmodelinputs(madsdata, parameters)
+				execattempt = 0
+				while (trying = !checknodedir(tempstring))
+					execattempt += 1
+					sleep(10)
+					if execattempt > 3
+						attempt +=1
+						if attempt > 3
+							cd(currentdir)
+							trying = false
+							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+						end
+						break
+					end
+				end
+			end
 			if haskey(madsdata, "Julia command")
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
