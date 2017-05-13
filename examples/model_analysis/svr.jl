@@ -2,7 +2,8 @@ import Mads
 
 info("Support Vector Regression (SVR) analysis")
 
-md = Mads.loadmadsfile("models/internal-polynomial.mads")
+md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
+rootname = Mads.getmadsrootname(md)
 svrexec, svrread, svrsave, svrclean  = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
