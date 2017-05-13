@@ -25,7 +25,14 @@ savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
 
 	good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
 
-	@Base.Test.test abs(mean(svrpredictions .- good_svrpredictions)) < 100. # Test that predictions are 
+	@Base.Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
+
+	svrsave()
+	svrclean()
+	svrread()
+	svrclean()
 end
+
+Mads.rmdir(joinpath(workdir, "svrmodels"))
 
 :passed
