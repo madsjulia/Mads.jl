@@ -29,7 +29,7 @@ Check if a directory is readable
 $(DocumentFunction.documentfunction(checknodedir))
 """ checknodedir
 
-function runcmd(cmd::Cmd; quiet::Bool=quietdefault, pipe::Bool=false, waittime::Float64=executionwaittime)
+function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
 	if pipe
 		cmdin = Pipe()
 		cmdout = Pipe()
@@ -84,7 +84,7 @@ function runcmd(cmd::Cmd; quiet::Bool=quietdefault, pipe::Bool=false, waittime::
 		return nothing
 	end
 end
-function runcmd(cmdstring::String; quiet::Bool=quietdefault, pipe::Bool=false, waittime::Float64=executionwaittime)
+function runcmd(cmdstring::String; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
 	if is_windows()
 		r = runcmd(`cmd /C $(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
 	elseif Mads.madsbash
