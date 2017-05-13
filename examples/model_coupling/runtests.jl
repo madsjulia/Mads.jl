@@ -16,7 +16,7 @@ Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 f = Mads.forward(md, pdict)
 
-if isdefined(:Gadfly)
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, f)
 	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))

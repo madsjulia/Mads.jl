@@ -98,7 +98,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.display("mads.png")
 end
 
-if isdefined(:Gadfly)
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotseries(rand(4,5), "test.png", combined=false)
 	Mads.plotseries(rand(4,5), "test.png")
 	if isdefined(Mads, :display)

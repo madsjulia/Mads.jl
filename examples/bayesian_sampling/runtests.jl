@@ -25,7 +25,7 @@ mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
 Mads.forward(md, mcmcchain.value)
 
-if isdefined(:Gadfly)
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
 	Mads.rmfile(rootname * "-test-bayes-results.svg")
 	Mads.spaghettiplots(md, mcmcvalues, keyword="", obs_plot_dots=false)

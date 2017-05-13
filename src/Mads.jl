@@ -49,26 +49,6 @@ macro tryimport(s::Symbol)
 	return :($(esc(q)))
 end
 
-if !haskey(ENV, "MADS_NO_PLOT")
-	if !haskey(ENV, "MADS_NO_GADFLY")
-		@tryimport Gadfly
-		if !isdefined(:Gadfly)
-			ENV["MADS_NO_GADFLY"] = ""
-		end
-	end
-	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-		@tryimport PyCall
-		@tryimport PyPlot
-		if !isdefined(:PyPlot)
-			ENV["MADS_NO_PYPLOT"] = ""
-		end
-	end
-else
-	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
-	warn("Mads plotting is disabled")
-end
-
 if !haskey(ENV, "MADS_NO_PYTHON")
 	@tryimport PyCall
 	if isdefined(:PyCall)
@@ -144,7 +124,6 @@ include("MadsFunc.jl")
 include("MadsExecute.jl")
 include("MadsCalibrate.jl")
 include("MadsLevenbergMarquardt.jl")
-include("MadsSenstivityAnalysis.jl")
 include("MadsMonteCarlo.jl")
 # include("MadsEmcee.jl")
 include("MadsKriging.jl")
@@ -153,6 +132,7 @@ include("MadsModelSelection.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
+
 if !haskey(ENV, "MADS_TRAVIS")
 	include("MadsMathProgBase.jl")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
@@ -165,16 +145,41 @@ if !haskey(ENV, "MADS_TRAVIS")
 	# include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 	include(joinpath("..", "src-new", "MadsBSS.jl"))
 end
-if Mads.pkgversion("Gadfly") == v"0.6.1"
+
+if true
 	ENV["MADS_NO_GADFLY"] = ""
 	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
 	warn("Gadfly plotting is disabled!")
 end
+
+include("MadsSenstivityAnalysis.jl")
+
+if !haskey(ENV, "MADS_NO_PLOT")
+	if !haskey(ENV, "MADS_NO_GADFLY")
+		@tryimport Gadfly
+		if !isdefined(:Gadfly)
+			ENV["MADS_NO_GADFLY"] = ""
+		end
+	end
+	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
+		@tryimport PyCall
+		@tryimport PyPlot
+		if !isdefined(:PyPlot)
+			ENV["MADS_NO_PYPLOT"] = ""
+		end
+	end
+else
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
+	warn("Mads plotting is disabled")
+end
+
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")
 	include("MadsBayesInfoGapPlot.jl")
 	include("MadsPlot.jl")
 end
+
 if !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end

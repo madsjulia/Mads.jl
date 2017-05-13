@@ -1,7 +1,9 @@
 import JuMP
 import MathProgBase
 @tryimport Ipopt
-@tryimport Gadfly
+if !haskey(ENV, "MADS_NO_GADFLY")
+	@tryimport Gadfly
+end
 
 """
 Information Gap Decision Analysis using JuMP
@@ -104,7 +106,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 	time = [1.,2.,3.,4.]
 	ti = [1.,2.,3.,4.,5.]
 	obs = [1.,2.,3.,4.]
-	if isdefined(:Gadfly) && plot
+	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
 		ldat = Gadfly.layer(x=time, y=obs, ymin=obs-1, ymax=obs+1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 		f = Gadfly.plot(ldat, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: model setup"))
 		Gadfly.draw(Gadfly.PNG(joinpath(Pkg.dir("Mads"), "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
@@ -227,7 +229,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 				ymax = map(t->fo(t, par_best), plotrange)
 			end
 		end
-		if isdefined(:Gadfly) && plot
+		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
 			ldat = Gadfly.layer(x=time, y=obs, ymin=obs-h, ymax=obs+h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue")))
 			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red")))

@@ -14,7 +14,7 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
 
-if isdefined(:Gadfly)
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	fp = Mads.forward(md; all=true)
 	Mads.plotmadsproblem(md, keyword="test")
 	Mads.plotmatches(md)
