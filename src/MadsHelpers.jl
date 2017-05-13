@@ -324,3 +324,23 @@ function setseed(seed::Integer=0, quiet::Bool=true)
 		!quiet && info("Current seed: $s")
 	end
 end
+
+"""
+Get package version
+
+$(DocumentFunction.documentfunction(pkgversion))
+"""
+function pkgversion(modulestr::String)
+	try
+		stdoutcaptureon()
+		Pkg.status(modulestr)
+		o = stdoutcaptureoff()
+		a = ascii(String(o))
+		m = match(r"\s+-\s+(\S+)\s+([0-9](\.[0-9])+)", a)
+		return convert(VersionNumber, m[2])
+	catch
+		o = stdoutcaptureoff()
+		warn("Module $(modulestr) is not available")
+		return v"0.0.0"
+	end
+end

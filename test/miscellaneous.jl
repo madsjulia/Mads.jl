@@ -22,6 +22,8 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
+Mads.pkgversion("ModuleThatDoesNotExist")
+
 Mads.stdoutcaptureon();
 
 quiet_status = Mads.quiet

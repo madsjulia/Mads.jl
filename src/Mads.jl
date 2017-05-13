@@ -165,6 +165,11 @@ if !haskey(ENV, "MADS_TRAVIS")
 	# include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 	include(joinpath("..", "src-new", "MadsBSS.jl"))
 end
+if Mads.pkgversion("Gadfly") == v"0.6.1"
+	ENV["MADS_NO_GADFLY"] = ""
+	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
+	warn("Gadfly plotting is disabled!")
+end
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")
 	include("MadsBayesInfoGapPlot.jl")

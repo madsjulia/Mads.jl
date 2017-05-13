@@ -196,18 +196,15 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		end
 		cd(cwd)
 	else
-		originalSTDOUT = STDOUT;
 		tag_flag = false
 		o = ""
 		try
-			(outRead, outWrite) = redirect_stdout();
+			stdoutcaptureon()
 			Pkg.status(madsmodule)
-			o = readavailable(outRead);
-			close(outWrite);
-			close(outRead);
-			redirect_stdout(originalSTDOUT);
+			o = stdoutcaptureoff()
 		catch
-			redirect_stdout(originalSTDOUT);
+			o = stdoutcaptureoff()
+			warn("Module $(modulestr) is not available")
 		end
 		a = ascii(String(o))
 		print(a)
