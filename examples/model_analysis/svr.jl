@@ -2,6 +2,7 @@ import Mads
 
 info("Support Vector Regression (SVR) analysis")
 
+srand(2017)
 
 md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
 rootname = Mads.getmadsrootname(md)
