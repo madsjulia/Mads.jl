@@ -344,7 +344,6 @@ function importeverywhere(filename::String)
 	return commandfunction
 end
 
-
 function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
 	f = makemadscommandfunction(madsdata)
 	return makemadscommandgradient(madsdata, f)
@@ -438,7 +437,7 @@ Make MADS forward & gradient functions for the model defined in the MADS problem
 
 $(DocumentFunction.documentfunction(makemadscommandfunctionandgradient;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "f"=>"Mads forward model function")))
+             "f"=>"Mads forward model function")))
 
 Returns:
 
