@@ -1,6 +1,6 @@
 import Base.Test
 
-rmprocs(1:nworkers())
+rmprocs(workers())
 
 fcsqrt(d) = ccall( (:my_c_sqrt, "libmy.dylib"), Float64, (Float64,), d )
 fcfunc_ex1(n, d) = ccall( (:my_c_func_ex1, "libmy.dylib"), Float64, (Int64, Float64), n, d )

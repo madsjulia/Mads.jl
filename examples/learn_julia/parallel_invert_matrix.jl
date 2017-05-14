@@ -7,12 +7,12 @@ h = rand(n)
 rmprocs(workers())
 blas_set_num_threads(1)
 sleep(1)
-@printf( "Number of processors %d\n", nprocs())
+@printf( "Number of processors %d\n", nworkers())
 @time A = X * X';
 @time x = A \ h;
 addprocs(8)
 blas_set_num_threads(8)
-@printf( "Number of processors %d\n", nprocs())
+@printf( "Number of processors %d\n", nworkers())
 @time A = X * X';
 @time x = A \ h;
 @printf( "Done.")

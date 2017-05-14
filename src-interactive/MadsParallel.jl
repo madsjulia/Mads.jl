@@ -31,7 +31,7 @@ Get the number of processors
 $(DocumentFunction.documentfunction(getprocs))
 """
 function getprocs()
-	info("Number of processors: $(nprocs()) $(workers())\n")
+	info("Number of processors: $(nworkers()) $(workers())\n")
 end
 
 function setprocs(np::Integer, nt::Integer)
@@ -151,11 +151,11 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 		end
 		sleep(0.1)
 		if nprocs() > 1
-			info("Number of processors: $(nprocs())")
+			info("Number of processors: $(nworkers())")
 			info("Workers: $(join(h, " "))")
 		else
 			warn("No workers found to add!")
-			info("Number of processors: $(nprocs())")
+			info("Number of processors: $(nworkers())")
 		end
 	else
 		warn("No processors found to add!")

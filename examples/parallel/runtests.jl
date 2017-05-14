@@ -8,7 +8,7 @@ import Base.Test
 		x, y = rand(2)
 		x^2 + y^2 <= 1 ? 1 : 0
 	end
-	isapprox((4 * inside / n), 3.14, atol=1e-2)
+	isapprox((4 * inside / n), 3.14, atol=1e-1)
 end
 
 @Mads.stderrcapture function time_dilation()
@@ -30,7 +30,7 @@ end
 	E = 6 # Edges
 	F = 4 # Faces
 
-	((V - E + F) == 2)
+	(V - E + F) == 2
 end
 
 @Mads.stderrcapture function schrodinger()
@@ -45,16 +45,15 @@ end
 	isapprox(psi, 0.0, atol=1e-6)
 end
 
-addprocs()
-@Base.Test.testset "Parallel" begin
-	if nprocs() > 1
-		@Base.Test.test parallel_findpi(100000)
-		@Base.Test.test time_dilation()
-		@Base.Test.test eulers_equation()
-		@Base.Test.test schrodinger()
-		@spawn time_dilation()
-		@spawn eulers_equation()
-		@spawn schrodinger()
-	end
+if !haskey(ENV, "MADS_TRAVIS")
+	addprocs()
 end
-rmprocs(2:nprocs())
+@Base.Test.testset "Parallel" begin
+	@Base.Test.test parallel_findpi(100000)
+	@Base.Test.test time_dilation()
+	@Base.Test.test eulers_equation()
+	@Base.Test.test schrodinger()
+end
+if !haskey(ENV, "MADS_TRAVIS")
+	rmprocs(workers())
+end

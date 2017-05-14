@@ -2,7 +2,7 @@ import Mads
 import AffineInvariantMCMC
 import Base.Test
 
-srand(0)
+srand(2017)
 
 numdims = 5
 numwalkers = 100
@@ -31,10 +31,9 @@ end
 @Base.Test.testset "Emcee" begin
 	for _ in 1:10
 		flatchain, means, stds = testemcee()
-		@Base.Test.testset "AffineInvariantMCMC" begin
-			for i = 1:numdims
-				@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
-			end
+		for i = 1:numdims
+			@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.5 * stds[i]))
+			@Base.Test.test isapprox(std(flatchain[i, :]), stds[i], atol=(5 * stds[i]))
 		end
 	end
 end

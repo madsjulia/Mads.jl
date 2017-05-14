@@ -9,7 +9,7 @@ setprocs()
 # @everywhere @show isdefined(:Mads)
 
 @everywhere nt = 10000
-@everywhere np = nprocs()
+@everywhere np = nworkers()
 
 @everywhere function fp(i::Integer, j::Integer)
 	# println("fp $i $j done")

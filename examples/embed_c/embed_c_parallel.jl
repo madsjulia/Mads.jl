@@ -31,6 +31,6 @@ println("Julia ...")
 @time map(i->fjmxv(M, x), 1:10);
 @time pmap(i->fjmxv(M, x), 1:10);
 
-rmprocs(1:nworkers())
+rmprocs(workers())
 
 println("Done.")

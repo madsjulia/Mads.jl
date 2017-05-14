@@ -1105,7 +1105,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	# Ns_total:  Total amount of sample points including all resamples (computational cost
 	#            of calculating all main and total indices is C=Ns_total*nprime)
 	# phi:       Random phase shift between (0 2pi)
-	# P:         P = nprocs(); (Number of processors
+	# P:         P = nworkers(); (Number of processors
 	# resultvec: Components of resultvec are [AV, AVi, AVci] which correspond to "all" (sum) of total variance, variance component for
 	#            parameter i, and complementary variance for parameter i.  Sum is over ALL RESAMPLES (so resultvec is divided by Nr at end).
 	#            If system has dynamic output (i.e. ny>1) then each component of resultvec will have length ny.
@@ -1594,7 +1594,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	# If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
 	# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 	# the model output quicker.
-	P = nprocs()
+	P = nworkers()
 	madsoutput("Number of processors is $P\n")
 
 	paramallkeys  = getparamkeys(md)
@@ -1755,7 +1755,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 	# Parallelized over n AND Nr
 
 	#if P > nprime*Nr + 1
-	# nprocs() is quite high, we choose to parallelize over n, Nr, AND also model output
+	# nworkers() is quite high, we choose to parallelize over n, Nr, AND also model output
 
 	if P>1
 		madsinfo("""Parallelizing resamplings AND parameters""");
