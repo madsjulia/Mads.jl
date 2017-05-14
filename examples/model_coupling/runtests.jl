@@ -42,7 +42,7 @@ cd(workdir)
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
 pfor = Mads.forward(md)
 
-@Base.Test.testset "Internal coupling" begin
+@Base.Test.testset "Internal" begin
 	@Base.Test.test ifor == tifor
 	@Base.Test.test ifor == mfor
 	@Base.Test.test ifor == tefor
@@ -78,7 +78,7 @@ end
 # aparam, aresults = Mads.calibrate(md)
 # afor = Mads.forward(md)
 
-@Base.Test.testset "External coupling" begin
+@Base.Test.testset "External" begin
 	@Base.Test.test jfor == sfor
 	@Base.Test.test efor == sfor
 	@Base.Test.test jfor == ifor

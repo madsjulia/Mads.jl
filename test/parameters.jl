@@ -1,8 +1,7 @@
 import Mads
 import Base.Test
 
-# Test parameter functions
-function test_params()
+@Base.Test.testset "Parameters" begin
 	test_dict = Dict("a"=>1)
 	@Base.Test.test Mads.isparam(test_dict, Dict("a"=>1)) == true
 	test_dict["b"] = 1
@@ -27,10 +26,6 @@ function test_params()
 	@Base.Test.test isapprox(Mads.getparamrandom(dist_dict, "a")[1], 14.5, atol=0.5)
 	#dist_dict["Parameters"]["a"]["dist"] = "Normal(14,7)"
 	#println(Mads.getparamrandom(dist_dict, "a"))
-end
-
-# Test various dictionary filtering functions
-function test_misc()
 	@Base.Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>nothing))) == nothing
 	@Base.Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>Dict{Any,Any}("a"=>nothing)))) == nothing
 	
@@ -43,9 +38,4 @@ function test_misc()
 	# TODO: Verify that maxtorealmax! is working correctly...returns `nothing` currently
 	#@Base.Test.test 4 == Mads.maxtorealmax!(convert(DataFrames.DataFrame, [1:4 1:4]))
 	#@Base.Test.test realmax(Float32) == Mads.maxtorealmax!(convert(DataFrames.DataFrame, [[1,2] [1,realmax(Float64)]]))
-end
-
-@Base.Test.testset "Parameters" begin
-	test_params()
-	test_misc()
 end

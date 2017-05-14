@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 callbacksucceeded = false
-@everywhere function callback(x_best::Vector, of::Number, lambda::Number)
+@Mads.stderrcapture @everywhere function callback(x_best::Vector, of::Number, lambda::Number)
 	global callbacksucceeded
 	callbacksucceeded = true
 	# println("The callback function was called: $x_best, $of, $lambda")

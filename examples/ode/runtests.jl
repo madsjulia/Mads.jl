@@ -1,4 +1,4 @@
- import Mads
+import Mads
 import ODE
 import DataStructures
 import JLD
@@ -22,11 +22,10 @@ paramkeys = Mads.getparamkeys(md)
 paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # function to create a function for the ODE solver
-function makefunc(parameterdict::DataStructures.OrderedDict)
+@Mads.stderrcapture function makefunc(parameterdict::DataStructures.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
-
 	function func(t, y) # function needed by the ODE solver
 		# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
 		f = similar(y)
@@ -34,7 +33,6 @@ function makefunc(parameterdict::DataStructures.OrderedDict)
 		f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
 		return f
 	end
-
 	return func
 end
 

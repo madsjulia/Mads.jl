@@ -1,8 +1,8 @@
 import Mads
 import Base.Test
 
-@everywhere fopt(x) = [x[1], 2.0 - x[2]]
-@everywhere gopt(x) = [1.0 0.0; 0.0 -1.0]
+@Mads.stderrcapture @everywhere fopt(x) = [x[1], 2.0 - x[2]]
+@Mads.stderrcapture @everywhere gopt(x) = [1.0 0.0; 0.0 -1.0]
 
 results = Mads.naive_levenberg_marquardt(fopt, gopt, [100.0, 100.0])
 @Base.Test.test norm(results.minimizer - [0.0, 2.0]) < 0.01

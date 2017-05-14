@@ -6,7 +6,7 @@ if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "optimization")
 end
 
-function clean_directory()
+@Mads.stderrcapture function clean_directory()
 	files = Mads.searchdir(r"y.*\.jld", path = workdir)
 	for i in files
 		Mads.rmfile(joinpath(workdir, i))
@@ -20,7 +20,7 @@ function clean_directory()
 	Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))
 end
 
-function run_optimization_tests()
+@Mads.stderrcapture function run_optimization_tests()
 	include(joinpath(workdir, "optimization-lm.jl")) # good
 	include(joinpath(workdir, "optimization_rosenbrock.jl")) # good
 	include(joinpath(workdir, "optimization_callback.jl")) # good?
@@ -28,8 +28,6 @@ function run_optimization_tests()
 #	# include(joinpath(workdir, "optimization_linear_problem_nlopt.jl")) # requires NLopt
 	include(joinpath(workdir, "optimization_linear_problem+template.jl")) # fix
 end
-
-
 
 @Base.Test.testset "Optimization" begin
 	run_optimization_tests()

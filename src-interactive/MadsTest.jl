@@ -51,23 +51,23 @@ function test(testname::String=""; madstest::Bool=true)
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
 		info("Mads modules testing:")
 		for i in madsmodules[2:end]
-			println("* $i testing ...")
+			print_with_color(:cyan, "* $i testing ...\n")
 			include(joinpath(Pkg.dir(i), "test", "runtests.jl"))
 		end
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
 		if isfile(file)
-			println("* $testname testing ...")
+			print_with_color(:cyan, "* $testname testing ...\n")
 			include(file)
 		else
 			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
 			if isfile(file)
-				println("* $testname testing ...")
+				print_with_color(:cyan, "* $testname testing ...\n")
 				include(file)
 			else
 				eval(Mads, :(@tryimport $(Symbol(testname))))
 				if isdefined(Symbol(testname))
-					println("* $testname testing ...")
+					print_with_color(:cyan, "* $testname testing ...\n")
 					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
 					if isfile(file)
 						include(file)

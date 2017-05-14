@@ -3,12 +3,14 @@ import Base.Test
 
 # If madsdir = '.' then joinpath, else madsdir 
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "test") : Mads.getmadsdir()
-jpath(file::String) = joinpath(workdir, file) # A small function for condensing join path
+@Mads.stderrcapture function jpath(file::String)
+	joinpath(workdir, file)
+end
 
 arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 
 # Parse extensions and dump/load data accordingly
-function test_IO(file, data, julia_flag=false)
+@Mads.stderrcapture function test_IO(file, data, julia_flag::Bool=false)
 	ext = Mads.getextension(jpath(file))
 
 	if ext == "dat"
@@ -26,14 +28,21 @@ function test_IO(file, data, julia_flag=false)
 		Mads.rmfile(jpath(file))
 		return
 	end
-
-	@Base.Test.test (data["a"] == loaded_data["a"]) && (data["b"] == loaded_data["b"])
-
 	Mads.rmfile(jpath(file))
+	
+	return (data["a"] == loaded_data["a"]) && (data["b"] == loaded_data["b"])
 end
 
-# Test removal of files based on root/extension
-function test_filename_parse(file)
+# Begin the main test block
+@Base.Test.testset "IO" begin
+	@Base.Test.test test_IO("a.dat", arr)
+	@Base.Test.test test_IO("a.json", arr)
+	@Base.Test.test test_IO("a.yaml", arr)
+	@Base.Test.test test_IO("a.yaml", arr, true)
+	
+	# Test removal of files based on root/extension
+	file = "root_testing.extension_testing"
+
 	Mads.dumpasciifile(jpath(file), arr)
 	@Base.Test.test isfile(jpath(file)) == true
 	Mads.rmfiles_ext(String(Mads.getextension(file)); path=workdir)
@@ -43,13 +52,4 @@ function test_filename_parse(file)
 	@Base.Test.test isfile(jpath(file)) == true
 	Mads.rmfiles_root(String(Mads.getrootname(file)); path=workdir)
 	@Base.Test.test isfile(jpath(file)) == false
-end
-
-# Begin the main test block
-@Base.Test.testset "IO" begin
-	test_IO("a.dat", arr)
-	test_IO("a.json", arr)
-	test_IO("a.yaml", arr)
-	test_IO("a.yaml", arr, true)
-	test_filename_parse("root_testing.extension_testing")
 end

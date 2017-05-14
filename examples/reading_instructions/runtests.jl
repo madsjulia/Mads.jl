@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 # Test array values against a dictionary loaded from two files
-@Base.Test.testset "Read Instructions" begin
+@Base.Test.testset "Instructions" begin
 	problemdir = string((dirname(Base.source_path())))
 
 	instructionfilename = joinpath(problemdir, "pm1.inst")

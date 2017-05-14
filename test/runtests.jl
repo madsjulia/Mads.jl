@@ -3,22 +3,22 @@ import Base.Test
 
 info("Running MADS tests:")
 
-println("* miscellaneous ...")
+print_with_color(:cyan, "* miscellaneous ...\n")
 include("miscellaneous.jl")
 
-println("* io ...")
+print_with_color(:cyan,"* io ...\n")
 include("io.jl")
 
-println("* file naming ...")
+print_with_color(:cyan, "* file naming ...\n")
 include("filename.jl")
 
-println("* test functions ...")
+print_with_color(:cyan, "* test functions ...\n")
 include("test_functions.jl")
 
-println("* parameters ...")
+print_with_color(:cyan, "* parameters ...\n")
 include("parameters.jl")
 
-println("* observations ...")
+print_with_color(:cyan, "* observations ...\n")
 include("observations.jl")
 
 examples = readdir(joinpath(Pkg.dir("Mads"), "examples"))
@@ -26,12 +26,8 @@ examples = readdir(joinpath(Pkg.dir("Mads"), "examples"))
 for madstest in examples
 	file = joinpath(Pkg.dir("Mads"), "examples", madstest, "runtests.jl")
 	if isfile(file)
-		println("* $(madstest) ...")
+		print_with_color(:cyan, "* $(madstest) ...\n")
 		include(file)
-		#try
-		#	run(`bash -c "ls -d $(Pkg.dir("Mads"))/examples/*/*_restart"`)
-		#catch
-		#end
 	end
 end
 :passed

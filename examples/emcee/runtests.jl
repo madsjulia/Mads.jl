@@ -10,7 +10,7 @@ thinning = 10
 numsamples_perwalker = 1000
 burnin = 100
 
-function testit()
+@Mads.stderrcapture function testemcee()
 	const stds = exp(5 * randn(numdims))
 	const means = 1 + 5 * rand(numdims)
 	llhood = x->begin
@@ -25,17 +25,17 @@ function testit()
 	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, x0, burnin, 1)
 	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
 	flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
-
-	@Base.Test.testset "AffineInvariantMCMC" begin
-		for i = 1:numdims
-			@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
-		end
-	end
+	return flatchain, means, stds
 end
 
 @Base.Test.testset "Emcee" begin
 	for _ in 1:10
-		testit()
+		flatchain, means, stds = testemcee()
+		@Base.Test.testset "AffineInvariantMCMC" begin
+			for i = 1:numdims
+				@Base.Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.1*stds[i]))
+			end
+		end
 	end
 end
 :passed

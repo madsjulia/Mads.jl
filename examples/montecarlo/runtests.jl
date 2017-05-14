@@ -7,18 +7,15 @@ if workdir == "."
 	workdir = joinpath(Mads.madsdir, "..", "examples", "montecarlo")
 end
 
-function run_monte_carlo()
-
+@Mads.stderrcapture function run_monte_carlo()
 	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 	srand(2015)
 	results = Mads.montecarlo(md; N=10)
-
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
 		@JLD.save joinpath(d, "montecarlo.jld") results
 	end
-
 	return results
 end
 

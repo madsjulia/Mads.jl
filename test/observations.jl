@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 # Test observations functions
-function test_obs()
+@Base.Test.testset "Observations" begin
 	test_dict = Dict("a"=>1)
 	@Base.Test.test Mads.isobs(test_dict, Dict("a"=>1)) == true
 	
@@ -18,10 +18,8 @@ function test_obs()
 	obs_dict = Dict("Observations"=>Dict("a"=>Dict("dist"=>"Uniform(14,15)")))
 	@Base.Test.test Mads.getobsmin(obs_dict) == [14]
 	@Base.Test.test Mads.getobsmax(obs_dict) == [15]
-end
 
-# Test parameter setting functions
-function test_params(a=4,b=12,c=7)
+	a=4; b=12; c=7
 	test_dict = Dict("a"=>1)
 	
 	Mads.settime!(test_dict, a)
@@ -31,10 +29,4 @@ function test_params(a=4,b=12,c=7)
 	@Base.Test.test Mads.gettime(test_dict) == a
 	@Base.Test.test Mads.getweight(test_dict) == b
 	@Base.Test.test Mads.gettarget(test_dict) == c
-end
-
-
-@Base.Test.testset "Observations" begin
-	test_obs()
-	test_params()
 end

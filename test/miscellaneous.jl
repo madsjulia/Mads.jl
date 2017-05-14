@@ -47,6 +47,10 @@ catch
 	end
 end
 
+Mads.stdoutcaptureoff();
+
+Mads.stdouterrcaptureon();
+
 Mads.madsoutput("a")
 Mads.madsdebug("a")
 Mads.madsinfo("Testing ...")
@@ -78,7 +82,7 @@ Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
 # Mads.create_documentation()
 
-Mads.stdoutcaptureoff();
+Mads.stdouterrcaptureoff();
 
 Mads.quieton()
 if quiet_status

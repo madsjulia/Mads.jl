@@ -1,5 +1,68 @@
 """
+Capture STDOUT of a block
+"""
+macro stdoutcapture(block)
+	quote
+		if ccall(:jl_generating_output, Cint, ()) == 0
+			outputoriginal = STDOUT;
+			(outR, outW) = redirect_stdout();
+			outputreader = @async readstring(outR);
+			evalvalue = $(esc(block))
+			redirect_stdout(outputoriginal);
+			close(outW);
+			close(outR);
+			return evalvalue
+		end
+	end
+end
+
+"""
+Capture STDERR of a block
+"""
+macro stderrcapture(block)
+	quote
+		if ccall(:jl_generating_output, Cint, ()) == 0
+			errororiginal = STDERR;
+			(errR, errW) = redirect_stderr();
+			errorreader = @async readstring(errR);
+			evalvalue = $(esc(block))
+			redirect_stderr(errororiginal);
+			close(errW);
+			close(errR);
+			return evalvalue
+		end
+	end
+end
+
+"""
+Capture STDERR & STDERR of a block
+"""
+macro stdouterrcapture(block)
+	quote
+		if ccall(:jl_generating_output, Cint, ()) == 0
+			outputoriginal = STDOUT;
+			(outR, outW) = redirect_stdout();
+			outputreader = @async readstring(outR);
+			errororiginal = STDERR;
+			(errR, errW) = redirect_stderr();
+			errorreader = @async readstring(errR);
+			evalvalue = $(esc(block))
+			redirect_stdout(outputoriginal);
+			close(outW);
+			close(outR);
+			redirect_stderr(errororiginal);
+			close(errW);
+			close(errR);
+			return evalvalue
+		end
+	end
+end
+
+
+"""
 Redirect STDOUT to a reader
+
+$(DocumentFunction.documentfunction(stdoutcaptureon))
 """
 function stdoutcaptureon()
 	global outputoriginal = STDOUT;
@@ -11,6 +74,8 @@ end
 
 """
 Restore STDOUT
+
+$(DocumentFunction.documentfunction(stdoutcaptureoff))
 """
 function stdoutcaptureoff()
 	redirect_stdout(outputoriginal);
@@ -18,4 +83,49 @@ function stdoutcaptureoff()
 	output = wait(outputreader);
 	close(outputread);
 	return output
+end
+
+"""
+Redirect STDERR to a reader
+
+$(DocumentFunction.documentfunction(stderrcaptureon))
+"""
+function stderrcaptureon()
+	global errororiginal = STDERR;
+	(errR, errW) = redirect_stderr();
+	global errorread = errR;
+	global errorwrite = errW;
+	global errorreader = @async readstring(errorread);
+end
+
+"""
+Restore STDERR 
+
+$(DocumentFunction.documentfunction(stderrcaptureoff))
+"""
+function stderrcaptureoff()
+	redirect_stderr(errororiginal);
+	close(errorwrite);
+	erroro = wait(errorreader)
+	close(errorread);
+	return erroro
+end
+
+"""
+Redirect STDOUT & STDERR to readers
+
+$(DocumentFunction.documentfunction(stdouterrcaptureon))
+"""
+function stdouterrcaptureon()
+	stdoutcaptureon()
+	stderrcaptureon()
+end
+
+"""
+Restore STDOUT & STDERR
+
+$(DocumentFunction.documentfunction(stdouterrcaptureoff))
+"""
+function stdouterrcaptureoff()
+	return stdoutcaptureoff(), stderrcaptureoff()
 end
