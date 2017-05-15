@@ -55,7 +55,16 @@ function dependents(modulename::String="Mads", filter::Bool=false)
 end
 
 """
-Checkout the latest version of the Mads / Julia modules
+Pull (checkout) the latest version of the Mads / Julia modules
+
+$(DocumentFunction.documentfunction(pull))
+"""
+function pull(modulename::String=""; kw...)
+	checkout(modulename; kw...)
+end
+
+"""
+Checkout (pull) the latest version of the Mads / Julia modules
 
 $(DocumentFunction.documentfunction(checkout))
 """
