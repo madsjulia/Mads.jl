@@ -1,7 +1,10 @@
+import DocumentFunction
+
 """
 Rosenbrock test function (more difficult to solve)
 
-$(DocumentFunction.documentfunction(rosenbrock2_lm))
+$(DocumentFunction.documentfunction(rosenbrock2_lm;
+argtext=Dict("x"=>"")))
 """
 function rosenbrock2_lm(x::Vector)
 	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
@@ -10,7 +13,12 @@ end
 """
 Parameter gradients of the Rosenbrock test function
 
-$(DocumentFunction.documentfunction(rosenbrock2_gradient_lm))
+$(DocumentFunction.documentfunction(rosenbrock2_gradient_lm;
+argtext=Dict("x"=>"")))
+
+Returns:
+
+- Parameter gradients
 """
 function rosenbrock2_gradient_lm(x::Vector)
 	j = Array{Float64}(2,2)
@@ -24,7 +32,12 @@ end
 """
 Rosenbrock test function
 
-$(DocumentFunction.documentfunction(rosenbrock))
+$(DocumentFunction.documentfunction(rosenbrock;
+argtext=Dict("x"=>"")))
+
+Returns:
+
+- 
 """
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
@@ -33,7 +46,8 @@ end
 """
 Rosenbrock test function for LM optimization (returns the 2 components separetely)
 
-$(DocumentFunction.documentfunction(rosenbrock_lm))
+$(DocumentFunction.documentfunction(rosenbrock_lm;
+argtext=Dict("x"=>"")))
 """
 function rosenbrock_lm(x::Vector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
@@ -42,7 +56,9 @@ end
 """
 Parameter gradients of the Rosenbrock test function
 
-$(DocumentFunction.documentfunction(rosenbrock_gradient!))
+$(DocumentFunction.documentfunction(rosenbrock_gradient!;
+argtext=Dict("x"=>"",
+            "storage"=>"")))
 """
 function rosenbrock_gradient!(x::Vector, storage::Vector)
 	storage[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
@@ -52,7 +68,14 @@ end
 """
 Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)
 
-$(DocumentFunction.documentfunction(rosenbrock_gradient_lm))
+$(DocumentFunction.documentfunction(rosenbrock_gradient_lm;
+argtext=Dict("x"=>""),
+keytext=Dict("dx"=>"[default=`false`]",
+            "center"=>"[default=`Array{Float64}(0)`]")))
+
+Returns:
+
+- storage
 """
 function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(0))
 	storage = Array{Float64}(2,2)
@@ -66,7 +89,9 @@ end
 """
 Parameter Hessian of the Rosenbrock test function
 
-$(DocumentFunction.documentfunction(rosenbrock_hessian!))
+$(DocumentFunction.documentfunction(rosenbrock_hessian!;
+argtext=Dict("x"=>"",
+            "storage"=>"")))
 """
 function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
@@ -75,6 +100,16 @@ function rosenbrock_hessian!(x::Vector, storage::Matrix)
 	storage[2, 2] = 200.0
 end
 
+"""
+Make Rosenbrock test function for LM optimization
+
+$(DocumentFunction.documentfunction(makerosenbrock;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- Rosenbrock test function for LM optimization
+"""
 function makerosenbrock(N::Integer)
 	function rosenbrock_lm(x::Vector)
 		result = Array{eltype(x)}(2 * (N - 1))
@@ -87,6 +122,16 @@ function makerosenbrock(N::Integer)
 	return rosenbrock_lm
 end
 
+"""
+Make parameter gradients of the Rosenbrock test function for LM optimization
+
+$(DocumentFunction.documentfunction(makerosenbrock_gradient;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- parameter gradients of the Rosenbrock test function for LM optimization
+"""
 function makerosenbrock_gradient(N::Integer)
 	function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(0))
 		result = zeros(eltype(x), (2 * (N - 1), N))
@@ -100,6 +145,14 @@ function makerosenbrock_gradient(N::Integer)
 	return rosenbrock_gradient_lm
 end
 
+"""
+$(DocumentFunction.documentfunction(makepowell;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- powell
+"""
 function makepowell(N::Integer)
 	function powell(x::Vector)
 		result = Array{Float64}(N)
@@ -114,6 +167,14 @@ function makepowell(N::Integer)
 	return powell
 end
 
+"""
+$(DocumentFunction.documentfunction(makepowell_gradient;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- 
+"""
 function makepowell_gradient(N::Integer)
 	function powell_gradient(x::Vector)
 		result = zeros(Float64, N, N)
@@ -135,6 +196,16 @@ function makepowell_gradient(N::Integer)
 	return powell_gradient
 end
 
+"""
+Make sphere
+
+$(DocumentFunction.documentfunction(makesphere;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- sphere
+"""
 function makesphere(N::Integer)
 	function sphere(x::Vector)
 		result = Array{eltype(x)}(N)
@@ -146,6 +217,16 @@ function makesphere(N::Integer)
 	return sphere
 end
 
+"""
+Make sphere gradient
+
+$(DocumentFunction.documentfunction(makesphere_gradient;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- sphere gradient
+"""
 function makesphere_gradient(N::Integer)
 	function sphere_gradient(x::Vector)
 		result = zeros(eltype(x), N, N)
@@ -157,6 +238,16 @@ function makesphere_gradient(N::Integer)
 	return sphere_gradient
 end
 
+"""
+Make dixon price
+
+$(DocumentFunction.documentfunction(makedixonprice;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- dixon price
+"""
 function makedixonprice(N::Integer)
 	function dixonprice(x::Vector)
 		result = Array{Float64}(N)
@@ -169,6 +260,14 @@ function makedixonprice(N::Integer)
 	return dixonprice
 end
 
+"""
+$(DocumentFunction.documentfunction(makedixonprice;
+argtext=Dict("N"=>"")))
+
+Returns:
+
+- dixon price gradient
+"""
 function makedixonprice_gradient(N::Integer)
 	function dixonprice_gradient(x::Vector)
 		result = zeros(Float64, N, N)
@@ -182,6 +281,10 @@ function makedixonprice_gradient(N::Integer)
 	return dixonprice_gradient
 end
 
+"""
+$(DocumentFunction.documentfunction(makesumsquares;
+argtext=Dict("N"=>"")))
+"""
 function makesumsquares(N::Integer)
 	function sumsquares(x::Vector)
 		result = Array{Float64}(N)
@@ -193,7 +296,10 @@ function makesumsquares(N::Integer)
 	return sumsquares
 end
 
-
+"""
+$(DocumentFunction.documentfunction(makesumsquares_gradient;
+argtext=Dict("N"=>"")))
+"""
 function makesumsquares_gradient(N::Integer)
 	function sumsquares_gradient(x::Vector)
 		result = zeros(Float64, N, N)
@@ -205,6 +311,10 @@ function makesumsquares_gradient(N::Integer)
 	return sumsquares_gradient
 end
 
+"""
+$(DocumentFunction.documentfunction(makerotatedhyperellipsoid;
+argtext=Dict("N"=>"")))
+"""
 function makerotatedhyperellipsoid(N::Integer)
 	function rotatedhyperellipsoid(x::Vector)
 		result = Array{Float64}(N)
@@ -221,6 +331,10 @@ function makerotatedhyperellipsoid(N::Integer)
 	return rotatedhyperellipsoid
 end
 
+"""
+$(DocumentFunction.documentfunction(makerotatedhyperellipsoid_gradient;
+argtext=Dict("N"=>"")))
+"""
 function makerotatedhyperellipsoid_gradient(N::Integer)
 	function rotatedhyperellipsoid_gradient(x::Vector)
 		result = zeros(Float64, N, N)
