@@ -239,10 +239,13 @@ end
 function tag(madsmodule::String, sym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
-		if VERSION < v"0.5"
-			Pkg.tag(madsmodule, sym)
-		elseif isdefined(:PkgDev)
-			PkgDev.tag(madsmodule, sym)
+		if isdefined(:PkgDev)
+			try
+				PkgDev.tag(madsmodule, sym)
+			catch e
+				printerrormsg(e)
+				warn("$madsmodule cannot be tagged!")
+			end
 		else
 			warn("PkgDev is missing!")
 		end
