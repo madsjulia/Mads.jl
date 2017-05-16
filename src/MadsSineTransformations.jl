@@ -1,7 +1,17 @@
+import DocumentFunction
+
 """
 Arcsine transformation of model parameters
 
-$(DocumentFunction.documentfunction(asinetransform))
+$(DocumentFunction.documentfunction(asinetransform;
+argtext=Dict("params"=>"model parameters",
+            "lowerbounds"=>"lower bounds",
+            "upperbounds"=>"upper bounds",
+            "indexlogtransformed"=>"")))
+
+Returns:
+
+- Arcsine transformation of model parameters
 """
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
 	sineparams = copy(params)
@@ -13,7 +23,15 @@ end
 """
 Sine transformation of model parameters
 
-$(DocumentFunction.documentfunction(sinetransform))
+$(DocumentFunction.documentfunction(sinetransform;
+argtext=Dict("sineparams"=>"model parameters",
+            "lowerbounds"=>"lower bounds",
+            "upperbounds"=>"upper bounds",
+            "indexlogtransformed"=>"")))
+
+Returns:
+
+- Sine transformation of model parameters
 """
 function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
 	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin.(sineparams)) * .5) # untransformed parameters (regular parameter space)
@@ -24,7 +42,15 @@ end
 """
 Sine transformation of a function
 
-$(DocumentFunction.documentfunction(sinetransformfunction))
+$(DocumentFunction.documentfunction(sinetransformfunction;
+argtext=Dict("f"=>"function",
+            "lowerbounds"=>"lower bounds",
+            "upperbounds"=>"upper bounds",
+            "indexlogtransformed"=>"")))
+
+Returns:
+
+- Sine transformation
 """
 function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
 	function sinetransformedf(sineparams::Vector)
@@ -36,7 +62,16 @@ end
 """
 Sine transformation of a gradient function
 
-$(DocumentFunction.documentfunction(sinetransformgradient))
+$(DocumentFunction.documentfunction(sinetransformgradient;
+argtext=Dict("g"=>"a gradient function",
+            "lowerbounds"=>"lower bounds",
+            "upperbounds"=>"upper bounds",
+            "indexlogtransformed"=>""),
+keytext=Dict("sindx"=>"[default=`0.1`]")))
+
+Returns:
+
+- Sine transformation of a gradient function
 """
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1) # sine transformation a gradient function
 	function sinetransformedg(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(0))
