@@ -1,3 +1,5 @@
+import DocumentFunction
+
 function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 seconds
 	proc = spawn(`ssh -t $node ls $dir`)
 	timedwait(() -> process_exited(proc), waittime)
@@ -26,7 +28,14 @@ end
 @doc """
 Check if a directory is readable
 
-$(DocumentFunction.documentfunction(checknodedir))
+$(DocumentFunction.documentfunction(checknodedir;
+argtext=Dict("node"=>"",
+            "dir"=>"directory",
+            "waittime"=>"wait time [default=`10`when node is used, `20`otherwise]")))
+
+Returns:
+
+- `true` if the directory is readable, `false` otherwise
 """ checknodedir
 
 function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
@@ -98,5 +107,14 @@ end
 @doc """
 Run external command and pipe stdout and stderr
 
-$(DocumentFunction.documentfunction(runcmd))
+$(DocumentFunction.documentfunction(runcmd;
+argtext=Dict("cmd"=>"command",
+            "cmdstring"=>"command string"),
+keytext=Dict("quiet"=>"[default=`Mads.quiet`]",
+            "pipe"=>"[default=`false`]",
+            "waittime"=>"wait time [default=`executionwaittime`]")))
+
+Returns:
+
+- cmdout, cmderr or `false`
 """ runcmd
