@@ -1,3 +1,5 @@
+import DocumentFunction
+
 """
 Capture STDOUT of a block
 """
