@@ -204,7 +204,10 @@ $(DocumentFunction.documentfunction(estimationerror;
 argtext=Dict("w"=>"",
             "x0"=>"",
             "X"=>"",
-            "cov"=>"")))
+            "cov"=>"",
+            "covmat"=>"",
+            "covvec"=>"covariance vector",
+            "cov0"=>"")))
 
 Returns:
 
