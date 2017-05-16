@@ -1,5 +1,6 @@
 import PyPlot
 import DataStructures
+import DocumentFunction
 
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	if !haskey(madsdata, "Grid")
@@ -64,7 +65,14 @@ end
 @doc """
 Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
 
-$(DocumentFunction.documentfunction(plotgrid))
+$(DocumentFunction.documentfunction(plotgrid;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "parameters"=>"dictionary with model parameters",
+            "s"=>"model predictions array"),
+keytext=Dict("addtitle"=>"add plot title [default=`true`]",
+            "title"=>"plot title",
+            "filename"=>"output file name",
+            "format"=>"output plot format (`png`, `pdf`, etc.)")))
 
 Examples:
 
@@ -73,14 +81,4 @@ Mads.plotgrid(madsdata, s; addtitle=true, title="", filename="", format="")
 Mads.plotgrid(madsdata; addtitle=true, title="", filename="", format="")
 Mads.plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
 ```
-
-Arguments:
-
-- `madsdata` : MADS problem dictionary
-- `parameters` : dictionary with model parameters
-- `s` : model predictions array
-- `addtitle` : add plot title [true]
-- `title` : plot title
-- `filename` : output file name
-- `format` : output plot format (`png`, `pdf`, etc.)
 """ plotgrid
