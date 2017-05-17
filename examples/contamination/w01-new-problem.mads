@@ -4,7 +4,7 @@ Parameters:
 - rf: {init: 1.0, log: true, longname: 'Retardation Factor [-]', max: 10.0, min: 1.0, step: 1.0, type: null}
 - lambda: {init: 0.0, log: true, longname: 'Half-life decay [1/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
 - theta: {init: 0.0, log: false, longname: 'Flow Angle [degrees]', max: 30.0, min: -30.0, step: 5.0, type: null}
-- vx: {init: 25, log: true, longname: 'Pore x velocity [L/T]', max: 200.0, min: 0.01, step: 10.0, type: opt}
+- vx: {init: 25, log: true, longname: 'Pore x velocity [L/T]', max: 200.0, min: 0.01, plotname: v, step: 10.0, type: opt}
 - vy: {init: 0.0, log: false, longname: 'Pore y velocity [L/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
 - vz: {init: 0.0, log: false, longname: 'Pore z velocity [L/T]', max: 1.0, min: 0.0, step: 1.0, type: null}
 - ax: {init: 70.0, log: true, longname: 'Dispersivity x [L]', max: 140.0, min: 10.0, step: 10.0, type: null}
@@ -23,8 +23,8 @@ Sources:
     dy: {init: 0, log: false, longname: 'Source y dimension [L]', max: 500.0, min: 1.0, step: 1.0, type: null}
     dz: {init: 0, log: false, longname: 'Source z dimension [L]', max: 10.0, min: 1.0, step: 1.0, type: null}
     f: {init: 50.0, log: true, longname: 'Contaminant flux [M/T]', max: 100.0, min: 0.01, step: 1.0, type: null}
-    t0: {init: 4, log: false, longname: 'Start Time [T]', max: 10.0, min: 0.0, step: 1.0, type: opt}
-    t1: {init: 5, log: false, longname: 'End Time [T]', max: 40.0, min: 5.0, step: 1.0, type: opt}
+    t0: {init: 4, log: false, longname: 'Start Time [T]', max: 10.0, min: 0.0, plotname: t<sub>0</sub>, step: 1.0, type: opt}
+    t1: {init: 5, log: false, longname: 'End Time [T]', max: 40.0, min: 5.0, plotname: t<sub>1</sub>, step: 1.0, type: opt}
     x: {init: 1000.0, log: false, longname: 'Source x coordinate [L]', max: 1460.0, min: 210.0, step: 25.0, type: null}
     y: {init: 1450.0, log: false, longname: 'Source y coordinate [L]', max: 1930.0, min: 1230.0, step: 25.0, type: null}
     z: {init: 0.0, log: false, longname: 'Source z coordinate [L]', max: 100.0, min: 0.0, step: 1.0, type: null}

@@ -18,7 +18,13 @@ function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	if julia
-		yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
+		try
+			yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
+		catch e
+			printerrormsg(e)
+			warn("Python YAML fails!")
+			yamldata = yaml.load(f)
+		end
 	else
 		yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 	end
