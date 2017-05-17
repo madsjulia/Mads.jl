@@ -14,7 +14,7 @@ Documentation for RobustPmap.jl module (all functions):
 Check for type exceptions
 
 
-<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/73833222c805c0e3c91d1324d06b0ef4108ff637/src/RobustPmap.jl#L39' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/27dc55b10fb9efa99011e5bbea713633ed45cb48/src/RobustPmap.jl#L39' class='documenter-source'>source</a><br>
 
 <a id='RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N}}' href='#RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N}}'>#</a>
 **`RobustPmap.crpmap`** &mdash; *Method*.
@@ -24,7 +24,7 @@ Check for type exceptions
 Robust pmap call with checkpoints
 
 
-<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/73833222c805c0e3c91d1324d06b0ef4108ff637/src/RobustPmap.jl#L62' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/27dc55b10fb9efa99011e5bbea713633ed45cb48/src/RobustPmap.jl#L62' class='documenter-source'>source</a><br>
 
 <a id='RobustPmap.rpmap-Tuple{Function,Vararg{Any,N}}' href='#RobustPmap.rpmap-Tuple{Function,Vararg{Any,N}}'>#</a>
 **`RobustPmap.rpmap`** &mdash; *Method*.
@@ -34,5 +34,5 @@ Robust pmap call with checkpoints
 Robust pmap call
 
 
-<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/73833222c805c0e3c91d1324d06b0ef4108ff637/src/RobustPmap.jl#L51' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/tree/27dc55b10fb9efa99011e5bbea713633ed45cb48/src/RobustPmap.jl#L51' class='documenter-source'>source</a><br>
 

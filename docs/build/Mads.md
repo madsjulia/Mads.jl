@@ -34,7 +34,7 @@ Keywords
   * `tol`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-new/MadsBSS.jl#L76-L80' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-new/MadsBSS.jl#L76-L80' class='documenter-source'>source</a><br>
 
 <a id='Mads.NMFipopt-Tuple{Array{T,2},Integer}' href='#Mads.NMFipopt-Tuple{Array{T,2},Integer}'>#</a>
 **`Mads.NMFipopt`** &mdash; *Method*.
@@ -65,7 +65,7 @@ Keywords
   * `verbosity`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-new/MadsBSS.jl#L30-L34' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-new/MadsBSS.jl#L30-L34' class='documenter-source'>source</a><br>
 
 <a id='Mads.NMFm-Tuple{Array,Integer}' href='#Mads.NMFm-Tuple{Array,Integer}'>#</a>
 **`Mads.NMFm`** &mdash; *Method*.
@@ -90,7 +90,7 @@ Keywords
   * `tol`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-new/MadsBSS.jl#L6-L10' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-new/MadsBSS.jl#L6-L10' class='documenter-source'>source</a><br>
 
 <a id='Mads.addkeyword!' href='#Mads.addkeyword!'>#</a>
 **`Mads.addkeyword!`** &mdash; *Function*.
@@ -111,7 +111,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L200-L204' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L200-L204' class='documenter-source'>source</a><br>
 
 <a id='Mads.addsource!' href='#Mads.addsource!'>#</a>
 **`Mads.addsource!`** &mdash; *Function*.
@@ -131,7 +131,7 @@ Arguments
   * `sourceid::Int64` : source id [default=`0`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L6-L10' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L6-L10' class='documenter-source'>source</a><br>
 
 <a id='Mads.addsourceparameters!-Tuple{Associative}' href='#Mads.addsourceparameters!-Tuple{Associative}'>#</a>
 **`Mads.addsourceparameters!`** &mdash; *Method*.
@@ -149,7 +149,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L57-L61' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L57-L61' class='documenter-source'>source</a><br>
 
 <a id='Mads.allwellsoff!-Tuple{Associative}' href='#Mads.allwellsoff!-Tuple{Associative}'>#</a>
 **`Mads.allwellsoff!`** &mdash; *Method*.
@@ -167,7 +167,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L544-L548' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L544-L548' class='documenter-source'>source</a><br>
 
 <a id='Mads.allwellson!-Tuple{Associative}' href='#Mads.allwellson!-Tuple{Associative}'>#</a>
 **`Mads.allwellson!`** &mdash; *Method*.
@@ -185,7 +185,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L509-L513' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L509-L513' class='documenter-source'>source</a><br>
 
 <a id='Mads.amanzi' href='#Mads.amanzi'>#</a>
 **`Mads.amanzi`** &mdash; *Function*.
@@ -204,7 +204,7 @@ Arguments:
   * `amanzi_exe` : full path to the location of the amanzi executable
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-external/MadsSimulators.jl#L1-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-external/MadsSimulators.jl#L1-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.amanzi_output_parser' href='#Mads.amanzi_output_parser'>#</a>
 **`Mads.amanzi_output_parser`** &mdash; *Function*.
@@ -229,7 +229,7 @@ Returns:
   * a dictionary with model observations following MADS requirements
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-external/MadsParsers.jl#L3-L20' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-external/MadsParsers.jl#L3-L20' class='documenter-source'>source</a><br>
 
 <a id='Mads.asinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}' href='#Mads.asinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.asinetransform`** &mdash; *Method*.
@@ -240,17 +240,21 @@ Arcsine transformation of model parameters
 
 Methods
 
-  * `Mads.asinetransform(params::Array{T<:Any,1}, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:7
+  * `Mads.asinetransform(params::Array{T<:Any,1}, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:17
 
 Arguments
 
-  * `indexlogtransformed::Array{T<:Any,1}`
-  * `lowerbounds::Array{T<:Any,1}`
-  * `params::Array{T<:Any,1}`
-  * `upperbounds::Array{T<:Any,1}`
+  * `indexlogtransformed::Array{T<:Any,1}` : index vector of log-transformed parameters
+  * `lowerbounds::Array{T<:Any,1}` : lower bounds
+  * `params::Array{T<:Any,1}` : model parameters
+  * `upperbounds::Array{T<:Any,1}` : upper bounds
+
+Returns:
+
+  * Arcsine transformation of model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSineTransformations.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSineTransformations.jl#L3-L11' class='documenter-source'>source</a><br>
 
 <a id='Mads.bayessampling' href='#Mads.bayessampling'>#</a>
 **`Mads.bayessampling`** &mdash; *Function*.
@@ -288,7 +292,7 @@ Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, 
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L102-L117' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L102-L117' class='documenter-source'>source</a><br>
 
 <a id='Mads.calibrate-Tuple{Associative}' href='#Mads.calibrate-Tuple{Associative}'>#</a>
 **`Mads.calibrate`** &mdash; *Method*.
@@ -329,7 +333,7 @@ Returns:
   * optimization algorithm results (e.g. results.minimizer)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsCalibrate.jl#L139-L150' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsCalibrate.jl#L139-L150' class='documenter-source'>source</a><br>
 
 <a id='Mads.calibraterandom' href='#Mads.calibraterandom'>#</a>
 **`Mads.calibraterandom`** &mdash; *Function*.
@@ -379,7 +383,7 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsCalibrate.jl#L4-L20' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsCalibrate.jl#L4-L20' class='documenter-source'>source</a><br>
 
 <a id='Mads.calibraterandom_parallel' href='#Mads.calibraterandom_parallel'>#</a>
 **`Mads.calibraterandom_parallel`** &mdash; *Function*.
@@ -423,7 +427,7 @@ Returns:
   * array with estimate model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsCalibrate.jl#L80-L90' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsCalibrate.jl#L80-L90' class='documenter-source'>source</a><br>
 
 <a id='Mads.checkmodeloutputdirs-Tuple{Associative}' href='#Mads.checkmodeloutputdirs-Tuple{Associative}'>#</a>
 **`Mads.checkmodeloutputdirs`** &mdash; *Method*.
@@ -445,7 +449,7 @@ Returns:
   * true or false
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L478-L486' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L478-L486' class='documenter-source'>source</a><br>
 
 <a id='Mads.checknodedir' href='#Mads.checknodedir'>#</a>
 **`Mads.checknodedir`** &mdash; *Function*.
@@ -456,31 +460,35 @@ Check if a directory is readable
 
 Methods
 
-  * `Mads.checknodedir(dir::String, waittime::Float64)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:11
-  * `Mads.checknodedir(dir::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:11
-  * `Mads.checknodedir(node::String, dir::String, waittime::Float64)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:2
-  * `Mads.checknodedir(node::String, dir::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:2
+  * `Mads.checknodedir(dir::String, waittime::Float64)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:13
+  * `Mads.checknodedir(dir::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:13
+  * `Mads.checknodedir(node::String, dir::String, waittime::Float64)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:4
+  * `Mads.checknodedir(node::String, dir::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:4
 
 Arguments
 
-  * `dir::String`
-  * `node::String`
-  * `waittime::Float64`
+  * `dir::String` : directory
+  * `node::String` : computational node name (e.g. `madsmax.lanl.gov`, `wf03`, or `127.0.0.1`)
+  * `waittime::Float64` : wait time in seconds [default=`10`]
+
+Returns:
+
+  * `true` if the directory is readable, `false` otherwise
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsExecute.jl#L26-L30' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsExecute.jl#L28-L36' class='documenter-source'>source</a><br>
 
 <a id='Mads.checkout' href='#Mads.checkout'>#</a>
 **`Mads.checkout`** &mdash; *Function*.
 
 
 
-Checkout the latest version of the Mads / Julia modules
+Checkout (pull) the latest version of the Mads / Julia modules
 
 Methods
 
-  * `Mads.checkout(modulename::String; git, master, force, pull, required, all)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:63
-  * `Mads.checkout()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:63
+  * `Mads.checkout(modulename::String; git, master, force, pull, required, all)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:72
+  * `Mads.checkout()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:72
 
 Arguments
 
@@ -496,7 +504,7 @@ Keywords
   * `required`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L57-L61' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L66-L70' class='documenter-source'>source</a><br>
 
 <a id='Mads.checkparameterranges-Tuple{Associative}' href='#Mads.checkparameterranges-Tuple{Associative}'>#</a>
 **`Mads.checkparameterranges`** &mdash; *Method*.
@@ -514,7 +522,7 @@ Arguments
   * `madsdata::Associative` : MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L654-L658' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L654-L658' class='documenter-source'>source</a><br>
 
 <a id='Mads.cleancoverage-Tuple{}' href='#Mads.cleancoverage-Tuple{}'>#</a>
 **`Mads.cleancoverage`** &mdash; *Method*.
@@ -528,7 +536,7 @@ Methods
   * `Mads.cleancoverage()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsTest.jl:20
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsTest.jl#L14-L18' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsTest.jl#L14-L18' class='documenter-source'>source</a><br>
 
 <a id='Mads.cmadsins_obs-Tuple{Array{T,1},String,String}' href='#Mads.cmadsins_obs-Tuple{Array{T,1},String,String}'>#</a>
 **`Mads.cmadsins_obs`** &mdash; *Method*.
@@ -548,7 +556,7 @@ Arguments
   * `obsid::Array{T<:Any,1}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-old/MadsCMads.jl#L21-L25' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-old/MadsCMads.jl#L21-L25' class='documenter-source'>source</a><br>
 
 <a id='Mads.commit' href='#Mads.commit'>#</a>
 **`Mads.commit`** &mdash; *Function*.
@@ -559,8 +567,8 @@ Commit the latest version of the Mads / Julia modules in the repo
 
 Methods
 
-  * `Mads.commit(commitmsg::String, modulename::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:157
-  * `Mads.commit(commitmsg::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:157
+  * `Mads.commit(commitmsg::String, modulename::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:166
+  * `Mads.commit(commitmsg::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:166
 
 Arguments
 
@@ -568,7 +576,7 @@ Arguments
   * `modulename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L151-L155' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L160-L164' class='documenter-source'>source</a><br>
 
 <a id='Mads.computemass' href='#Mads.computemass'>#</a>
 **`Mads.computemass`** &mdash; *Function*.
@@ -605,7 +613,7 @@ Mads.computemass(madsfiles; time=0, path=".")
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L346-L362' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L346-L362' class='documenter-source'>source</a><br>
 
 <a id='Mads.computeparametersensitities-Tuple{Associative,Associative}' href='#Mads.computeparametersensitities-Tuple{Associative,Associative}'>#</a>
 **`Mads.computeparametersensitities`** &mdash; *Method*.
@@ -624,7 +632,7 @@ Arguments
   * `saresults::Associative` : sensitivity analysis results
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L804-L808' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L804-L808' class='documenter-source'>source</a><br>
 
 <a id='Mads.contamination-Tuple{Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number}' href='#Mads.contamination-Tuple{Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Number}'>#</a>
 **`Mads.contamination`** &mdash; *Method*.
@@ -672,7 +680,7 @@ Returns:
   * predicted concentration at (wellx, welly, wellz, t)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L222-L230' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L222-L230' class='documenter-source'>source</a><br>
 
 <a id='Mads.copyright-Tuple{}' href='#Mads.copyright-Tuple{}'>#</a>
 **`Mads.copyright`** &mdash; *Method*.
@@ -686,7 +694,7 @@ Methods
   * `Mads.copyright()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelp.jl:18
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelp.jl#L12-L16' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelp.jl#L12-L16' class='documenter-source'>source</a><br>
 
 <a id='Mads.create_documentation-Tuple{}' href='#Mads.create_documentation-Tuple{}'>#</a>
 **`Mads.create_documentation`** &mdash; *Method*.
@@ -697,10 +705,10 @@ Create web documentation files for Mads functions
 
 Methods
 
-  * `Mads.create_documentation()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:258
+  * `Mads.create_documentation()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:270
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L252-L256' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L264-L268' class='documenter-source'>source</a><br>
 
 <a id='Mads.create_tests_off-Tuple{}' href='#Mads.create_tests_off-Tuple{}'>#</a>
 **`Mads.create_tests_off`** &mdash; *Method*.
@@ -714,7 +722,7 @@ Methods
   * `Mads.create_tests_off()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:84
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L78-L82' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L78-L82' class='documenter-source'>source</a><br>
 
 <a id='Mads.create_tests_on-Tuple{}' href='#Mads.create_tests_on-Tuple{}'>#</a>
 **`Mads.create_tests_on`** &mdash; *Method*.
@@ -728,7 +736,7 @@ Methods
   * `Mads.create_tests_on()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:75
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L69-L73' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L69-L73' class='documenter-source'>source</a><br>
 
 <a id='Mads.createmadsproblem' href='#Mads.createmadsproblem'>#</a>
 **`Mads.createmadsproblem`** &mdash; *Function*.
@@ -759,7 +767,7 @@ Arguments
   * `predictions::Associative`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsCreate.jl#L54-L65' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsCreate.jl#L54-L65' class='documenter-source'>source</a><br>
 
 <a id='Mads.createobservations!' href='#Mads.createobservations!'>#</a>
 **`Mads.createobservations!`** &mdash; *Function*.
@@ -788,7 +796,7 @@ Keywords
   * `weight_type` : weight type [default=`constant`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L474-L478' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L474-L478' class='documenter-source'>source</a><br>
 
 <a id='Mads.createtempdir-Tuple{String}' href='#Mads.createtempdir-Tuple{String}'>#</a>
 **`Mads.createtempdir`** &mdash; *Method*.
@@ -806,7 +814,7 @@ Arguments
   * `tempdirname::String` : temporary directory name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1054-L1058' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1054-L1058' class='documenter-source'>source</a><br>
 
 <a id='Mads.deleteNaN!-Tuple{DataFrames.DataFrame}' href='#Mads.deleteNaN!-Tuple{DataFrames.DataFrame}'>#</a>
 **`Mads.deleteNaN!`** &mdash; *Method*.
@@ -824,7 +832,7 @@ Arguments
   * `df::DataFrames.DataFrame` : dataframe
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L1029-L1033' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L1029-L1033' class='documenter-source'>source</a><br>
 
 <a id='Mads.deletekeyword!' href='#Mads.deletekeyword!'>#</a>
 **`Mads.deletekeyword!`** &mdash; *Function*.
@@ -845,7 +853,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L228-L232' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L228-L232' class='documenter-source'>source</a><br>
 
 <a id='Mads.dependents' href='#Mads.dependents'>#</a>
 **`Mads.dependents`** &mdash; *Function*.
@@ -866,7 +874,7 @@ Arguments
   * `modulename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L39-L43' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L39-L43' class='documenter-source'>source</a><br>
 
 <a id='Mads.display-Tuple{String}' href='#Mads.display-Tuple{String}'>#</a>
 **`Mads.display`** &mdash; *Method*.
@@ -884,7 +892,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsDisplay.jl#L3-L7' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsDisplay.jl#L3-L7' class='documenter-source'>source</a><br>
 
 <a id='Mads.dobigdt-Tuple{Associative,Int64}' href='#Mads.dobigdt-Tuple{Associative,Int64}'>#</a>
 **`Mads.dobigdt`** &mdash; *Method*.
@@ -913,7 +921,7 @@ Returns:
   * dictionary with BIG-DT results
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsBayesInfoGap.jl#L108-L116' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsBayesInfoGap.jl#L108-L116' class='documenter-source'>source</a><br>
 
 <a id='Mads.dumpasciifile-Tuple{String,Any}' href='#Mads.dumpasciifile-Tuple{String,Any}'>#</a>
 **`Mads.dumpasciifile`** &mdash; *Method*.
@@ -932,7 +940,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsASCII.jl#L11-L15' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsASCII.jl#L11-L15' class='documenter-source'>source</a><br>
 
 <a id='Mads.dumpjsonfile-Tuple{String,Any}' href='#Mads.dumpjsonfile-Tuple{String,Any}'>#</a>
 **`Mads.dumpjsonfile`** &mdash; *Method*.
@@ -951,7 +959,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsJSON.jl#L20-L24' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsJSON.jl#L20-L24' class='documenter-source'>source</a><br>
 
 <a id='Mads.dumpwelldata-Tuple{Associative,String}' href='#Mads.dumpwelldata-Tuple{Associative,String}'>#</a>
 **`Mads.dumpwelldata`** &mdash; *Method*.
@@ -974,7 +982,7 @@ Dumps:
   * `filename` : a ASCII file
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L928-L936' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L928-L936' class='documenter-source'>source</a><br>
 
 <a id='Mads.dumpyamlfile-Tuple{String,Any}' href='#Mads.dumpyamlfile-Tuple{String,Any}'>#</a>
 **`Mads.dumpyamlfile`** &mdash; *Method*.
@@ -985,7 +993,7 @@ Dump YAML file
 
 Methods
 
-  * `Mads.dumpyamlfile(filename::String, data; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:38
+  * `Mads.dumpyamlfile(filename::String, data; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:44
 
 Arguments
 
@@ -997,7 +1005,7 @@ Keywords
   * `julia` : if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsYAML.jl#L29-L33' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsYAML.jl#L35-L39' class='documenter-source'>source</a><br>
 
 <a id='Mads.dumpyamlmadsfile-Tuple{Associative,String}' href='#Mads.dumpyamlmadsfile-Tuple{Associative,String}'>#</a>
 **`Mads.dumpyamlmadsfile`** &mdash; *Method*.
@@ -1008,7 +1016,7 @@ Dump YAML Mads file
 
 Methods
 
-  * `Mads.dumpyamlmadsfile(madsdata::Associative, filename::String; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:57
+  * `Mads.dumpyamlmadsfile(madsdata::Associative, filename::String; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:63
 
 Arguments
 
@@ -1020,7 +1028,7 @@ Keywords
   * `julia` : [default=`false`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsYAML.jl#L48-L52' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsYAML.jl#L54-L58' class='documenter-source'>source</a><br>
 
 <a id='Mads.efast-Tuple{Associative}' href='#Mads.efast-Tuple{Associative}'>#</a>
 **`Mads.efast`** &mdash; *Method*.
@@ -1055,7 +1063,7 @@ Dumps:
   * plot of results, default from `graphoutput`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L1065-L1073' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L1065-L1073' class='documenter-source'>source</a><br>
 
 <a id='Mads.emceesampling' href='#Mads.emceesampling'>#</a>
 **`Mads.emceesampling`** &mdash; *Function*.
@@ -1097,10 +1105,10 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L41-L57' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L41-L57' class='documenter-source'>source</a><br>
 
-<a id='Mads.estimationerror-Tuple{Array{T,1},Array{T,1},Array{T,2},Function}' href='#Mads.estimationerror-Tuple{Array{T,1},Array{T,1},Array{T,2},Function}'>#</a>
-**`Mads.estimationerror`** &mdash; *Method*.
+<a id='Mads.estimationerror' href='#Mads.estimationerror'>#</a>
+**`Mads.estimationerror`** &mdash; *Function*.
 
 
 
@@ -1108,55 +1116,71 @@ Estimate kriging error
 
 Methods
 
-  * `Mads.estimationerror(w::Array{T<:Any,1}, x0::Array{T<:Any,1}, X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:130
+  * `Mads.estimationerror(w::Array{T<:Any,1}, x0::Array{T<:Any,1}, X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:190
+  * `Mads.estimationerror(w::Array{T<:Any,1}, covmat::Array{T<:Any,2}, covvec::Array{T<:Any,1}, cov0::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:197
 
 Arguments
 
-  * `X::Array{T<:Any,2}`
-  * `cov::Function`
-  * `w::Array{T<:Any,1}`
-  * `x0::Array{T<:Any,1}`
+  * `X::Array{T<:Any,2}` :
+  * `cov0::Number` : zero-separation covariance
+  * `cov::Function` : spatial covariance function
+  * `covmat::Array{T<:Any,2}` : covariance matrix
+  * `covvec::Array{T<:Any,1}` : covariance vector
+  * `w::Array{T<:Any,1}` : kriging weights
+  * `x0::Array{T<:Any,1}` :
+
+Returns:
+
+  * estimation kriging error
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L124-L128' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L200-L208' class='documenter-source'>source</a><br>
 
 <a id='Mads.evaluatemadsexpression-Tuple{String,Associative}' href='#Mads.evaluatemadsexpression-Tuple{String,Associative}'>#</a>
 **`Mads.evaluatemadsexpression`** &mdash; *Method*.
 
 
 
-Evaluate the expression in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
+Evaluate an expression string based on a parameter dictionary
 
 Methods
 
-  * `Mads.evaluatemadsexpression(expressionstring::String, parameters::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:118
+  * `Mads.evaluatemadsexpression(expressionstring::String, parameters::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:125
 
 Arguments
 
-  * `expressionstring::String`
-  * `parameters::Associative`
+  * `expressionstring::String` : expression string
+  * `parameters::Associative` : parameter dictionary applied to evaluate the expression string
+
+Returns:
+
+  * dictionary containing the expression names as keys, and the values of the expression as values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L112-L116' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L113-L121' class='documenter-source'>source</a><br>
 
 <a id='Mads.evaluatemadsexpressions-Tuple{Associative,Associative}' href='#Mads.evaluatemadsexpressions-Tuple{Associative,Associative}'>#</a>
 **`Mads.evaluatemadsexpressions`** &mdash; *Method*.
 
 
 
-Evaluate the expressions in terms of the parameters, return a Dict() containing the expression names as keys, and the values of the expression as values
+Evaluate all the expressions in the Mads problem dictiorany based on a parameter dictionary
 
 Methods
 
-  * `Mads.evaluatemadsexpressions(madsdata::Associative, parameters::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:131
+  * `Mads.evaluatemadsexpressions(madsdata::Associative, parameters::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:144
 
 Arguments
 
-  * `madsdata::Associative`
-  * `parameters::Associative`
+  * `madsdata::Associative` : Mads problem dictionary
+  * `parameters::Associative` : parameter dictionary applied to evaluate the expression strings
+
+Returns:
+
+  * dictionary containing the expression names as keys, and the values of the expression as values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L125-L129' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L132-L140' class='documenter-source'>source</a><br>
 
 <a id='Mads.expcov-Tuple{Number,Number,Number}' href='#Mads.expcov-Tuple{Number,Number,Number}'>#</a>
 **`Mads.expcov`** &mdash; *Method*.
@@ -1167,16 +1191,20 @@ Exponential spatial covariance function
 
 Methods
 
-  * `Mads.expcov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:13
+  * `Mads.expcov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:29
 
 Arguments
 
-  * `h::Number`
-  * `maxcov::Number`
-  * `scale::Number`
+  * `h::Number` : separation distance
+  * `maxcov::Number` : maximum covariance
+  * `scale::Number` : scale
+
+Returns:
+
+  * covariance
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L8-L12' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L17-L25' class='documenter-source'>source</a><br>
 
 <a id='Mads.exponentialvariogram-Tuple{Number,Number,Number,Number}' href='#Mads.exponentialvariogram-Tuple{Number,Number,Number,Number}'>#</a>
 **`Mads.exponentialvariogram`** &mdash; *Method*.
@@ -1187,17 +1215,21 @@ Exponential variogram
 
 Methods
 
-  * `Mads.exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:43
+  * `Mads.exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:82
 
 Arguments
 
-  * `h::Number`
-  * `nugget::Number`
-  * `range::Number`
-  * `sill::Number`
+  * `h::Number` : separation distance
+  * `nugget::Number` : nugget
+  * `range::Number` : range
+  * `sill::Number` : sill
+
+Returns:
+
+  * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L37-L41' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L68-L76' class='documenter-source'>source</a><br>
 
 <a id='Mads.filterkeys' href='#Mads.filterkeys'>#</a>
 **`Mads.filterkeys`** &mdash; *Function*.
@@ -1219,7 +1251,7 @@ Arguments
   * `key::String` : the regular expression or string used to filter dictionary keys
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L658-L662' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L658-L662' class='documenter-source'>source</a><br>
 
 <a id='Mads.forward' href='#Mads.forward'>#</a>
 **`Mads.forward`** &mdash; *Function*.
@@ -1251,7 +1283,7 @@ Returns:
   * dictionary of model predictions
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsForward.jl#L96-L104' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsForward.jl#L96-L104' class='documenter-source'>source</a><br>
 
 <a id='Mads.forwardgrid' href='#Mads.forwardgrid'>#</a>
 **`Mads.forwardgrid`** &mdash; *Function*.
@@ -1276,7 +1308,7 @@ Returns:
   * 3D array with model predictions along a 3D grid
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsForward.jl#L175-L183' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsForward.jl#L175-L183' class='documenter-source'>source</a><br>
 
 <a id='Mads.free' href='#Mads.free'>#</a>
 **`Mads.free`** &mdash; *Function*.
@@ -1287,8 +1319,8 @@ Free Mads / Julia modules
 
 Methods
 
-  * `Mads.free(modulename::String; required, all)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:135
-  * `Mads.free()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:135
+  * `Mads.free(modulename::String; required, all)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:144
+  * `Mads.free()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:144
 
 Arguments
 
@@ -1300,7 +1332,7 @@ Keywords
   * `required`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L129-L133' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L138-L142' class='documenter-source'>source</a><br>
 
 <a id='Mads.functions' href='#Mads.functions'>#</a>
 **`Mads.functions`** &mdash; *Function*.
@@ -1336,7 +1368,7 @@ Arguments:
   * `string` : matching string
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelp.jl#L50-L69' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelp.jl#L50-L69' class='documenter-source'>source</a><br>
 
 <a id='Mads.gaussiancov-Tuple{Number,Number,Number}' href='#Mads.gaussiancov-Tuple{Number,Number,Number}'>#</a>
 **`Mads.gaussiancov`** &mdash; *Method*.
@@ -1347,16 +1379,20 @@ Gaussian spatial covariance function
 
 Methods
 
-  * `Mads.gaussiancov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:6
+  * `Mads.gaussiancov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:15
 
 Arguments
 
-  * `h::Number`
-  * `maxcov::Number`
-  * `scale::Number`
+  * `h::Number` : separation distance
+  * `maxcov::Number` : maximum covariance
+  * `scale::Number` : scale
+
+Returns:
+
+  * covariance
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L3-L11' class='documenter-source'>source</a><br>
 
 <a id='Mads.gaussianvariogram-Tuple{Number,Number,Number,Number}' href='#Mads.gaussianvariogram-Tuple{Number,Number,Number,Number}'>#</a>
 **`Mads.gaussianvariogram`** &mdash; *Method*.
@@ -1367,17 +1403,21 @@ Gaussian variogram
 
 Methods
 
-  * `Mads.gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:56
+  * `Mads.gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:103
 
 Arguments
 
-  * `h::Number`
-  * `nugget::Number`
-  * `range::Number`
-  * `sill::Number`
+  * `h::Number` : separation distance
+  * `nugget::Number` : nugget
+  * `range::Number` : range
+  * `sill::Number` : sill
+
+Returns:
+
+  * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L50-L54' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L89-L97' class='documenter-source'>source</a><br>
 
 <a id='Mads.getcovmat-Tuple{Array{T,2},Function}' href='#Mads.getcovmat-Tuple{Array{T,2},Function}'>#</a>
 **`Mads.getcovmat`** &mdash; *Method*.
@@ -1388,17 +1428,17 @@ Get spatial covariance matrix
 
 Methods
 
-  * `Mads.getcovmat(X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:95
+  * `Mads.getcovmat(X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:152
 
 Arguments
 
-  * `X::Array{T<:Any,2}`
-  * `cov::Function`
+  * `X::Array{T<:Any,2}` : matrix with coordinates of the data points (x or y)
+  * `cov::Function` : spatial covariance function
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L89-L93' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L144-L148' class='documenter-source'>source</a><br>
 
-<a id='Mads.getcovvec!-Tuple{Array,Array{T,1},Array{T,2},Function}' href='#Mads.getcovvec!-Tuple{Array,Array{T,1},Array{T,2},Function}'>#</a>
+<a id='Mads.getcovvec!-Tuple{Array{T,1},Array{T,1},Array{T,2},Function}' href='#Mads.getcovvec!-Tuple{Array{T,1},Array{T,1},Array{T,2},Function}'>#</a>
 **`Mads.getcovvec!`** &mdash; *Method*.
 
 
@@ -1407,17 +1447,21 @@ Get spatial covariance vector
 
 Methods
 
-  * `Mads.getcovvec!(covvec::Array, x0::Array{T<:Any,1}, X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:113
+  * `Mads.getcovvec!(covvec::Array{T<:Any,1}, x0::Array{T<:Any,1}, X::Array{T<:Any,2}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:178
 
 Arguments
 
-  * `X::Array{T<:Any,2}`
-  * `cov::Function`
-  * `covvec::Array`
-  * `x0::Array{T<:Any,1}`
+  * `X::Array{T<:Any,2}` : matrix with coordinates of the data points
+  * `cov::Function` : spatial covariance function
+  * `covvec::Array{T<:Any,1}` : spatial covariance vector
+  * `x0::Array{T<:Any,1}` : vector with coordinates of the estimation points (x or y)
+
+Returns:
+
+  * spatial covariance vector
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L107-L111' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L164-L172' class='documenter-source'>source</a><br>
 
 <a id='Mads.getdictvalues' href='#Mads.getdictvalues'>#</a>
 **`Mads.getdictvalues`** &mdash; *Function*.
@@ -1439,7 +1483,7 @@ Arguments
   * `key::String` : the key to find value for
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L680-L684' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L680-L684' class='documenter-source'>source</a><br>
 
 <a id='Mads.getdir-Tuple{String}' href='#Mads.getdir-Tuple{String}'>#</a>
 **`Mads.getdir`** &mdash; *Method*.
@@ -1468,27 +1512,31 @@ d = Mads.getdir("test/a.mads") # d = "test"
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L273-L288' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L273-L288' class='documenter-source'>source</a><br>
 
 <a id='Mads.getdistribution-Tuple{String,String,String}' href='#Mads.getdistribution-Tuple{String,String,String}'>#</a>
 **`Mads.getdistribution`** &mdash; *Method*.
 
 
 
-Parse distribution from a string
+Parse parameter distribution from a string
 
 Methods
 
-  * `Mads.getdistribution(dist::String, i::String, inputtype::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:151
+  * `Mads.getdistribution(dist::String, i::String, inputtype::String)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:171
 
 Arguments
 
-  * `dist::String`
+  * `dist::String` : parameter distribution
   * `i::String`
-  * `inputtype::String`
+  * `inputtype::String` : input type (parameter or observation)
+
+Returns:
+
+  * distribution
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L145-L149' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L158-L166' class='documenter-source'>source</a><br>
 
 <a id='Mads.getextension-Tuple{String}' href='#Mads.getextension-Tuple{String}'>#</a>
 **`Mads.getextension`** &mdash; *Method*.
@@ -1516,7 +1564,7 @@ ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L452-L466' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L452-L466' class='documenter-source'>source</a><br>
 
 <a id='Mads.getimportantsamples-Tuple{Array,Array{T,1}}' href='#Mads.getimportantsamples-Tuple{Array,Array{T,1}}'>#</a>
 **`Mads.getimportantsamples`** &mdash; *Method*.
@@ -1539,7 +1587,7 @@ Returns:
   * array of important samples
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L313-L321' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L313-L321' class='documenter-source'>source</a><br>
 
 <a id='Mads.getlogparamkeys-Tuple{Associative,Array{T,1}}' href='#Mads.getlogparamkeys-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getlogparamkeys`** &mdash; *Method*.
@@ -1549,7 +1597,7 @@ Returns:
 Get the keys in the MADS problem dictionary for parameters that are log-transformed (`log`)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
 
 <a id='Mads.getmadsdir-Tuple{}' href='#Mads.getmadsdir-Tuple{}'>#</a>
 **`Mads.getmadsdir`** &mdash; *Method*.
@@ -1573,7 +1621,7 @@ Returns:
   * Mads problem directory
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L321-L335' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L321-L335' class='documenter-source'>source</a><br>
 
 <a id='Mads.getmadsinputfile-Tuple{}' href='#Mads.getmadsinputfile-Tuple{}'>#</a>
 **`Mads.getmadsinputfile`** &mdash; *Method*.
@@ -1597,7 +1645,7 @@ Returns:
   * input file name (e.g. `input_file_name.mads`)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L232-L246' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L232-L246' class='documenter-source'>source</a><br>
 
 <a id='Mads.getmadsproblemdir-Tuple{Associative}' href='#Mads.getmadsproblemdir-Tuple{Associative}'>#</a>
 **`Mads.getmadsproblemdir`** &mdash; *Method*.
@@ -1628,7 +1676,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L298-L315' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L298-L315' class='documenter-source'>source</a><br>
 
 <a id='Mads.getmadsrootname-Tuple{Associative}' href='#Mads.getmadsrootname-Tuple{Associative}'>#</a>
 **`Mads.getmadsrootname`** &mdash; *Method*.
@@ -1661,7 +1709,7 @@ Returns:
   * root of file name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L251-L265' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L251-L265' class='documenter-source'>source</a><br>
 
 <a id='Mads.getnextmadsfilename-Tuple{String}' href='#Mads.getnextmadsfilename-Tuple{String}'>#</a>
 **`Mads.getnextmadsfilename`** &mdash; *Method*.
@@ -1683,7 +1731,7 @@ Returns:
   * next mads file name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L421-L429' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L421-L429' class='documenter-source'>source</a><br>
 
 <a id='Mads.getnonlogparamkeys-Tuple{Associative,Array{T,1}}' href='#Mads.getnonlogparamkeys-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getnonlogparamkeys`** &mdash; *Method*.
@@ -1693,7 +1741,7 @@ Returns:
 Get the keys in the MADS problem dictionary for parameters that are NOT log-transformed (`log`)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
 
 <a id='Mads.getnonoptparamkeys-Tuple{Associative,Array{T,1}}' href='#Mads.getnonoptparamkeys-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getnonoptparamkeys`** &mdash; *Method*.
@@ -1703,7 +1751,7 @@ Get the keys in the MADS problem dictionary for parameters that are NOT log-tran
 Get the keys in the MADS problem dictionary for parameters that are NOT optimized (`opt`)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsdist-Tuple{Associative,Any}' href='#Mads.getobsdist-Tuple{Associative,Any}'>#</a>
 **`Mads.getobsdist`** &mdash; *Method*.
@@ -1713,7 +1761,7 @@ Get the keys in the MADS problem dictionary for parameters that are NOT optimize
 Get an array with `dist` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsdist-Tuple{Associative}' href='#Mads.getobsdist-Tuple{Associative}'>#</a>
 **`Mads.getobsdist`** &mdash; *Method*.
@@ -1723,7 +1771,7 @@ Get an array with `dist` values for observations in the MADS problem dictionary 
 Get an array with `dist` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobskeys-Tuple{Associative}' href='#Mads.getobskeys-Tuple{Associative}'>#</a>
 **`Mads.getobskeys`** &mdash; *Method*.
@@ -1745,7 +1793,7 @@ Returns:
   * keys for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L32-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L32-L40' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobslog-Tuple{Associative,Any}' href='#Mads.getobslog-Tuple{Associative,Any}'>#</a>
 **`Mads.getobslog`** &mdash; *Method*.
@@ -1755,7 +1803,7 @@ Returns:
 Get an array with `log` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobslog-Tuple{Associative}' href='#Mads.getobslog-Tuple{Associative}'>#</a>
 **`Mads.getobslog`** &mdash; *Method*.
@@ -1765,7 +1813,7 @@ Get an array with `log` values for observations in the MADS problem dictionary d
 Get an array with `log` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsmax-Tuple{Associative,Any}' href='#Mads.getobsmax-Tuple{Associative,Any}'>#</a>
 **`Mads.getobsmax`** &mdash; *Method*.
@@ -1775,7 +1823,7 @@ Get an array with `log` values for all observations in the MADS problem dictiona
 Get an array with `max` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsmax-Tuple{Associative}' href='#Mads.getobsmax-Tuple{Associative}'>#</a>
 **`Mads.getobsmax`** &mdash; *Method*.
@@ -1785,7 +1833,7 @@ Get an array with `max` values for observations in the MADS problem dictionary d
 Get an array with `max` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsmin-Tuple{Associative,Any}' href='#Mads.getobsmin-Tuple{Associative,Any}'>#</a>
 **`Mads.getobsmin`** &mdash; *Method*.
@@ -1795,7 +1843,7 @@ Get an array with `max` values for all observations in the MADS problem dictiona
 Get an array with `min` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsmin-Tuple{Associative}' href='#Mads.getobsmin-Tuple{Associative}'>#</a>
 **`Mads.getobsmin`** &mdash; *Method*.
@@ -1805,7 +1853,7 @@ Get an array with `min` values for observations in the MADS problem dictionary d
 Get an array with `min` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobstarget-Tuple{Associative,Any}' href='#Mads.getobstarget-Tuple{Associative,Any}'>#</a>
 **`Mads.getobstarget`** &mdash; *Method*.
@@ -1815,7 +1863,7 @@ Get an array with `min` values for all observations in the MADS problem dictiona
 Get an array with `target` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobstarget-Tuple{Associative}' href='#Mads.getobstarget-Tuple{Associative}'>#</a>
 **`Mads.getobstarget`** &mdash; *Method*.
@@ -1825,7 +1873,7 @@ Get an array with `target` values for observations in the MADS problem dictionar
 Get an array with `target` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobstime-Tuple{Associative,Any}' href='#Mads.getobstime-Tuple{Associative,Any}'>#</a>
 **`Mads.getobstime`** &mdash; *Method*.
@@ -1835,7 +1883,7 @@ Get an array with `target` values for all observations in the MADS problem dicti
 Get an array with `time` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobstime-Tuple{Associative}' href='#Mads.getobstime-Tuple{Associative}'>#</a>
 **`Mads.getobstime`** &mdash; *Method*.
@@ -1845,7 +1893,7 @@ Get an array with `time` values for observations in the MADS problem dictionary 
 Get an array with `time` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsweight-Tuple{Associative,Any}' href='#Mads.getobsweight-Tuple{Associative,Any}'>#</a>
 **`Mads.getobsweight`** &mdash; *Method*.
@@ -1855,7 +1903,7 @@ Get an array with `time` values for all observations in the MADS problem diction
 Get an array with `weight` values for observations in the MADS problem dictionary defined by `obskeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getobsweight-Tuple{Associative}' href='#Mads.getobsweight-Tuple{Associative}'>#</a>
 **`Mads.getobsweight`** &mdash; *Method*.
@@ -1865,7 +1913,7 @@ Get an array with `weight` values for observations in the MADS problem dictionar
 Get an array with `weight` values for all observations in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L84' class='documenter-source'>source</a><br>
 
 <a id='Mads.getoptparamkeys-Tuple{Associative,Array{T,1}}' href='#Mads.getoptparamkeys-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getoptparamkeys`** &mdash; *Method*.
@@ -1875,7 +1923,7 @@ Get an array with `weight` values for all observations in the MADS problem dicti
 Get the keys in the MADS problem dictionary for parameters that are optimized (`opt`)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L494' class='documenter-source'>source</a><br>
 
 <a id='Mads.getoptparams' href='#Mads.getoptparams'>#</a>
 **`Mads.getoptparams`** &mdash; *Function*.
@@ -1901,7 +1949,7 @@ Returns:
   * parameter array
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L356-L364' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L356-L364' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamdict-Tuple{Associative}' href='#Mads.getparamdict-Tuple{Associative}'>#</a>
 **`Mads.getparamdict`** &mdash; *Method*.
@@ -1923,7 +1971,7 @@ Returns:
   * dictionary with all parameters and their respective initial values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L49-L57' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L49-L57' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamdistributions-Tuple{Associative}' href='#Mads.getparamdistributions-Tuple{Associative}'>#</a>
 **`Mads.getparamdistributions`** &mdash; *Method*.
@@ -1953,7 +2001,7 @@ Returns:
   * probabilistic distributions
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L600-L612' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L600-L612' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamkeys-Tuple{Associative}' href='#Mads.getparamkeys-Tuple{Associative}'>#</a>
 **`Mads.getparamkeys`** &mdash; *Method*.
@@ -1979,7 +2027,7 @@ Returns:
   * array with the keys of all parameters in the MADS dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L32-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L32-L40' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamrandom' href='#Mads.getparamrandom'>#</a>
 **`Mads.getparamrandom`** &mdash; *Function*.
@@ -2012,7 +2060,7 @@ Returns:
   * generated sample
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L394-L402' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L394-L402' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsinit-Tuple{Associative,Array{T,1}}' href='#Mads.getparamsinit-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamsinit`** &mdash; *Method*.
@@ -2022,7 +2070,7 @@ Returns:
 Get an array with `init` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsinit-Tuple{Associative}' href='#Mads.getparamsinit-Tuple{Associative}'>#</a>
 **`Mads.getparamsinit`** &mdash; *Method*.
@@ -2032,7 +2080,7 @@ Get an array with `init` values for parameters defined by `paramkeys`
 Get an array with `init` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsinit_max' href='#Mads.getparamsinit_max'>#</a>
 **`Mads.getparamsinit_max`** &mdash; *Function*.
@@ -2056,7 +2104,7 @@ Returns:
   * the parameter values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L298-L306' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L298-L306' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsinit_min' href='#Mads.getparamsinit_min'>#</a>
 **`Mads.getparamsinit_min`** &mdash; *Function*.
@@ -2080,7 +2128,7 @@ Returns:
   * the parameter values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L247-L255' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L247-L255' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamslog-Tuple{Associative,Array{T,1}}' href='#Mads.getparamslog-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamslog`** &mdash; *Method*.
@@ -2090,7 +2138,7 @@ Returns:
 Get an array with `log` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamslog-Tuple{Associative}' href='#Mads.getparamslog-Tuple{Associative}'>#</a>
 **`Mads.getparamslog`** &mdash; *Method*.
@@ -2100,7 +2148,7 @@ Get an array with `log` values for parameters defined by `paramkeys`
 Get an array with `log` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamslongname-Tuple{Associative,Array{T,1}}' href='#Mads.getparamslongname-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamslongname`** &mdash; *Method*.
@@ -2110,7 +2158,7 @@ Get an array with `log` values for all the MADS model parameters
 Get an array with `longname` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamslongname-Tuple{Associative}' href='#Mads.getparamslongname-Tuple{Associative}'>#</a>
 **`Mads.getparamslongname`** &mdash; *Method*.
@@ -2120,7 +2168,7 @@ Get an array with `longname` values for parameters defined by `paramkeys`
 Get an array with `longname` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsmax' href='#Mads.getparamsmax'>#</a>
 **`Mads.getparamsmax`** &mdash; *Function*.
@@ -2144,7 +2192,7 @@ Returns:
   * returns the parameter values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L196-L204' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L196-L204' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsmin' href='#Mads.getparamsmin'>#</a>
 **`Mads.getparamsmin`** &mdash; *Function*.
@@ -2168,7 +2216,7 @@ Returns:
   * the parameter values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L157-L165' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L157-L165' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsplotname-Tuple{Associative,Array{T,1}}' href='#Mads.getparamsplotname-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamsplotname`** &mdash; *Method*.
@@ -2178,7 +2226,7 @@ Returns:
 Get an array with `plotname` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsplotname-Tuple{Associative}' href='#Mads.getparamsplotname-Tuple{Associative}'>#</a>
 **`Mads.getparamsplotname`** &mdash; *Method*.
@@ -2188,7 +2236,7 @@ Get an array with `plotname` values for parameters defined by `paramkeys`
 Get an array with `plotname` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsstep-Tuple{Associative,Array{T,1}}' href='#Mads.getparamsstep-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamsstep`** &mdash; *Method*.
@@ -2198,7 +2246,7 @@ Get an array with `plotname` values for all the MADS model parameters
 Get an array with `step` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamsstep-Tuple{Associative}' href='#Mads.getparamsstep-Tuple{Associative}'>#</a>
 **`Mads.getparamsstep`** &mdash; *Method*.
@@ -2208,7 +2256,7 @@ Get an array with `step` values for parameters defined by `paramkeys`
 Get an array with `step` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamstype-Tuple{Associative,Array{T,1}}' href='#Mads.getparamstype-Tuple{Associative,Array{T,1}}'>#</a>
 **`Mads.getparamstype`** &mdash; *Method*.
@@ -2218,7 +2266,7 @@ Get an array with `step` values for all the MADS model parameters
 Get an array with `type` values for parameters defined by `paramkeys`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getparamstype-Tuple{Associative}' href='#Mads.getparamstype-Tuple{Associative}'>#</a>
 **`Mads.getparamstype`** &mdash; *Method*.
@@ -2228,7 +2276,7 @@ Get an array with `type` values for parameters defined by `paramkeys`
 Get an array with `type` values for all the MADS model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L98' class='documenter-source'>source</a><br>
 
 <a id='Mads.getprocs-Tuple{}' href='#Mads.getprocs-Tuple{}'>#</a>
 **`Mads.getprocs`** &mdash; *Method*.
@@ -2242,7 +2290,7 @@ Methods
   * `Mads.getprocs()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsParallel.jl:34
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L28-L32' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L28-L32' class='documenter-source'>source</a><br>
 
 <a id='Mads.getrestart-Tuple{Associative}' href='#Mads.getrestart-Tuple{Associative}'>#</a>
 **`Mads.getrestart`** &mdash; *Method*.
@@ -2260,7 +2308,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L21-L25' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L21-L25' class='documenter-source'>source</a><br>
 
 <a id='Mads.getrestartdir' href='#Mads.getrestartdir'>#</a>
 **`Mads.getrestartdir`** &mdash; *Function*.
@@ -2284,7 +2332,7 @@ Returns:
   * restart directory where reusable model results will be stored
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L265-L273' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L265-L273' class='documenter-source'>source</a><br>
 
 <a id='Mads.getrootname-Tuple{String}' href='#Mads.getrootname-Tuple{String}'>#</a>
 **`Mads.getrootname`** &mdash; *Method*.
@@ -2318,7 +2366,7 @@ r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L347-L362' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L347-L362' class='documenter-source'>source</a><br>
 
 <a id='Mads.getsindx-Tuple{Associative}' href='#Mads.getsindx-Tuple{Associative}'>#</a>
 **`Mads.getsindx`** &mdash; *Method*.
@@ -2340,7 +2388,7 @@ Returns:
   * sin-space dx
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L237-L245' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L237-L245' class='documenter-source'>source</a><br>
 
 <a id='Mads.getsourcekeys-Tuple{Associative}' href='#Mads.getsourcekeys-Tuple{Associative}'>#</a>
 **`Mads.getsourcekeys`** &mdash; *Method*.
@@ -2362,7 +2410,7 @@ Returns:
   * array with keys of all source parameters in the MADS dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L67-L75' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L67-L75' class='documenter-source'>source</a><br>
 
 <a id='Mads.gettarget-Tuple{Associative}' href='#Mads.gettarget-Tuple{Associative}'>#</a>
 **`Mads.gettarget`** &mdash; *Method*.
@@ -2384,7 +2432,7 @@ Returns:
   * observation target
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L207-L215' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L207-L215' class='documenter-source'>source</a><br>
 
 <a id='Mads.gettargetkeys-Tuple{Associative}' href='#Mads.gettargetkeys-Tuple{Associative}'>#</a>
 **`Mads.gettargetkeys`** &mdash; *Method*.
@@ -2406,7 +2454,7 @@ Returns:
   * keys for all targets in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L46-L54' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L46-L54' class='documenter-source'>source</a><br>
 
 <a id='Mads.gettime-Tuple{Associative}' href='#Mads.gettime-Tuple{Associative}'>#</a>
 **`Mads.gettime`** &mdash; *Method*.
@@ -2428,7 +2476,7 @@ Returns:
   * observation time ("NaN" it time is missing)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L129-L137' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L129-L137' class='documenter-source'>source</a><br>
 
 <a id='Mads.getweight-Tuple{Associative}' href='#Mads.getweight-Tuple{Associative}'>#</a>
 **`Mads.getweight`** &mdash; *Method*.
@@ -2450,7 +2498,7 @@ Returns:
   * observation weight ("NaN" when weight is missing)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L168-L176' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L168-L176' class='documenter-source'>source</a><br>
 
 <a id='Mads.getwellkeys-Tuple{Associative}' href='#Mads.getwellkeys-Tuple{Associative}'>#</a>
 **`Mads.getwellkeys`** &mdash; *Method*.
@@ -2472,7 +2520,7 @@ Returns:
   * keys for all wells in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L63-L71' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L63-L71' class='documenter-source'>source</a><br>
 
 <a id='Mads.getwellsdata-Tuple{Associative}' href='#Mads.getwellsdata-Tuple{Associative}'>#</a>
 **`Mads.getwellsdata`** &mdash; *Method*.
@@ -2498,7 +2546,7 @@ Returns:
   * array with spatial and temporal data in the `Wells` class
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L612-L620' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L612-L620' class='documenter-source'>source</a><br>
 
 <a id='Mads.graphoff-Tuple{}' href='#Mads.graphoff-Tuple{}'>#</a>
 **`Mads.graphoff`** &mdash; *Method*.
@@ -2512,7 +2560,7 @@ Methods
   * `Mads.graphoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:66
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L60-L64' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L60-L64' class='documenter-source'>source</a><br>
 
 <a id='Mads.graphon-Tuple{}' href='#Mads.graphon-Tuple{}'>#</a>
 **`Mads.graphon`** &mdash; *Method*.
@@ -2526,7 +2574,7 @@ Methods
   * `Mads.graphon()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:57
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L51-L55' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L51-L55' class='documenter-source'>source</a><br>
 
 <a id='Mads.haskeyword' href='#Mads.haskeyword'>#</a>
 **`Mads.haskeyword`** &mdash; *Function*.
@@ -2556,7 +2604,7 @@ Examples:
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L164-L177' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L164-L177' class='documenter-source'>source</a><br>
 
 <a id='Mads.help-Tuple{}' href='#Mads.help-Tuple{}'>#</a>
 **`Mads.help`** &mdash; *Method*.
@@ -2570,7 +2618,7 @@ Methods
   * `Mads.help()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelp.jl:9
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelp.jl#L3-L7' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelp.jl#L3-L7' class='documenter-source'>source</a><br>
 
 <a id='Mads.importeverywhere-Tuple{String}' href='#Mads.importeverywhere-Tuple{String}'>#</a>
 **`Mads.importeverywhere`** &mdash; *Method*.
@@ -2592,7 +2640,7 @@ Returns:
   * `madscommandfunction` to execute the model
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L320-L329' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L320-L329' class='documenter-source'>source</a><br>
 
 <a id='Mads.indexkeys' href='#Mads.indexkeys'>#</a>
 **`Mads.indexkeys`** &mdash; *Function*.
@@ -2614,7 +2662,7 @@ Arguments
   * `key::String` : the key to find index for
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L669-L673' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L669-L673' class='documenter-source'>source</a><br>
 
 <a id='Mads.ins_obs-Tuple{String,String}' href='#Mads.ins_obs-Tuple{String,String}'>#</a>
 **`Mads.ins_obs`** &mdash; *Method*.
@@ -2637,7 +2685,7 @@ Returns:
   * `obsdict` : result dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L853-L861' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L853-L861' class='documenter-source'>source</a><br>
 
 <a id='Mads.instline2regexs-Tuple{String}' href='#Mads.instline2regexs-Tuple{String}'>#</a>
 **`Mads.instline2regexs`** &mdash; *Method*.
@@ -2661,7 +2709,7 @@ Returns:
   * `getparamhere` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L755-L765' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L755-L765' class='documenter-source'>source</a><br>
 
 <a id='Mads.invobsweights!-Tuple{Associative,Number}' href='#Mads.invobsweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.invobsweights!`** &mdash; *Method*.
@@ -2680,7 +2728,7 @@ Arguments
   * `multiplier::Number` : weight multiplier
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L313-L317' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L313-L317' class='documenter-source'>source</a><br>
 
 <a id='Mads.invwellweights!-Tuple{Associative,Number}' href='#Mads.invwellweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.invwellweights!`** &mdash; *Method*.
@@ -2699,7 +2747,7 @@ Arguments
   * `multiplier::Number` : weight multiplier
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L364-L368' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L364-L368' class='documenter-source'>source</a><br>
 
 <a id='Mads.islog-Tuple{Associative,String}' href='#Mads.islog-Tuple{Associative,String}'>#</a>
 **`Mads.islog`** &mdash; *Method*.
@@ -2722,7 +2770,7 @@ Returns:
   * `ture` if log-transformed, `false` otherwise
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L389-L397' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L389-L397' class='documenter-source'>source</a><br>
 
 <a id='Mads.isobs-Tuple{Associative,Associative}' href='#Mads.isobs-Tuple{Associative,Associative}'>#</a>
 **`Mads.isobs`** &mdash; *Method*.
@@ -2745,7 +2793,7 @@ Returns:
   * `true` if the dictionary contain all the observations, `false` otherwise
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L5-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L5-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.isopt-Tuple{Associative,String}' href='#Mads.isopt-Tuple{Associative,String}'>#</a>
 **`Mads.isopt`** &mdash; *Method*.
@@ -2768,7 +2816,7 @@ Returns:
   * `ture` if optimizable, `false` if not
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L369-L377' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L369-L377' class='documenter-source'>source</a><br>
 
 <a id='Mads.isparam-Tuple{Associative,Associative}' href='#Mads.isparam-Tuple{Associative,Associative}'>#</a>
 **`Mads.isparam`** &mdash; *Method*.
@@ -2791,7 +2839,7 @@ Returns:
   * `true` if the dictionary containing all the parameters, `false` otherwise
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L5-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L5-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.ispkgavailable-Tuple{String}' href='#Mads.ispkgavailable-Tuple{String}'>#</a>
 **`Mads.ispkgavailable`** &mdash; *Method*.
@@ -2809,9 +2857,9 @@ Arguments
   * `modulename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L3-L7' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L3-L7' class='documenter-source'>source</a><br>
 
-<a id='Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}' href='#Mads.krige-Tuple{Array,Array{T,2},Array{T,1},Function}'>#</a>
+<a id='Mads.krige-Tuple{Array{T,2},Array{T,2},Array{T,1},Function}' href='#Mads.krige-Tuple{Array{T,2},Array{T,2},Array{T,1},Function}'>#</a>
 **`Mads.krige`** &mdash; *Method*.
 
 
@@ -2820,17 +2868,21 @@ Kriging
 
 Methods
 
-  * `Mads.krige(x0mat::Array, X::Array{T<:Any,2}, Z::Array{T<:Any,1}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:69
+  * `Mads.krige(x0mat::Array{T<:Any,2}, X::Array{T<:Any,2}, Z::Array{T<:Any,1}, cov::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:124
 
 Arguments
 
-  * `X::Array{T<:Any,2}`
-  * `Z::Array{T<:Any,1}`
-  * `cov::Function`
-  * `x0mat::Array`
+  * `X::Array{T<:Any,2}` : coordinates of the observation (conditioning) data
+  * `Z::Array{T<:Any,1}` : values for the observation (conditioning) data
+  * `cov::Function` : spatial covariance function
+  * `x0mat::Array{T<:Any,2}` : point coordinates at which to obtain kriging estimates
+
+Returns:
+
+  * kriging estimates at `x0mat`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L63-L67' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L110-L118' class='documenter-source'>source</a><br>
 
 <a id='Mads.levenberg_marquardt' href='#Mads.levenberg_marquardt'>#</a>
 **`Mads.levenberg_marquardt`** &mdash; *Function*.
@@ -2871,7 +2923,7 @@ Keywords
   * `tolX` : parameter space tolerance [default=`1e-4`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L283-L287' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L283-L287' class='documenter-source'>source</a><br>
 
 <a id='Mads.linktempdir-Tuple{String,String}' href='#Mads.linktempdir-Tuple{String,String}'>#</a>
 **`Mads.linktempdir`** &mdash; *Method*.
@@ -2890,7 +2942,7 @@ Arguments
   * `tempdirname::String` : temporary directory name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1080-L1084' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1080-L1084' class='documenter-source'>source</a><br>
 
 <a id='Mads.loadasciifile-Tuple{String}' href='#Mads.loadasciifile-Tuple{String}'>#</a>
 **`Mads.loadasciifile`** &mdash; *Method*.
@@ -2908,7 +2960,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsASCII.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsASCII.jl#L1-L5' class='documenter-source'>source</a><br>
 
 <a id='Mads.loadjsonfile-Tuple{String}' href='#Mads.loadjsonfile-Tuple{String}'>#</a>
 **`Mads.loadjsonfile`** &mdash; *Method*.
@@ -2926,7 +2978,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsJSON.jl#L4-L8' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsJSON.jl#L4-L8' class='documenter-source'>source</a><br>
 
 <a id='Mads.loadmadsfile-Tuple{String}' href='#Mads.loadmadsfile-Tuple{String}'>#</a>
 **`Mads.loadmadsfile`** &mdash; *Method*.
@@ -2967,7 +3019,7 @@ md = Mads.loadmadsfile("input_file_name.mads")
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L3-L25' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L3-L25' class='documenter-source'>source</a><br>
 
 <a id='Mads.loadsaltellirestart!-Tuple{Array,String,String}' href='#Mads.loadsaltellirestart!-Tuple{Array,String,String}'>#</a>
 **`Mads.loadsaltellirestart!`** &mdash; *Method*.
@@ -2991,7 +3043,7 @@ Returns:
   * `true` when successfully loaded, `false` when it is not
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L555-L563' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L555-L563' class='documenter-source'>source</a><br>
 
 <a id='Mads.loadyamlfile-Tuple{String}' href='#Mads.loadyamlfile-Tuple{String}'>#</a>
 **`Mads.loadyamlfile`** &mdash; *Method*.
@@ -3017,7 +3069,7 @@ Returns:
   * data in the yaml input file
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsYAML.jl#L5-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsYAML.jl#L5-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.localsa-Tuple{Associative}' href='#Mads.localsa-Tuple{Associative}'>#</a>
 **`Mads.localsa`** &mdash; *Method*.
@@ -3051,7 +3103,7 @@ Dumps:
   * `filename` : output plot file
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L98-L106' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L98-L106' class='documenter-source'>source</a><br>
 
 <a id='Mads.long_tests_off-Tuple{}' href='#Mads.long_tests_off-Tuple{}'>#</a>
 **`Mads.long_tests_off`** &mdash; *Method*.
@@ -3065,7 +3117,7 @@ Methods
   * `Mads.long_tests_off()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:102
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L96-L100' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L96-L100' class='documenter-source'>source</a><br>
 
 <a id='Mads.long_tests_on-Tuple{}' href='#Mads.long_tests_on-Tuple{}'>#</a>
 **`Mads.long_tests_on`** &mdash; *Method*.
@@ -3079,7 +3131,7 @@ Methods
   * `Mads.long_tests_on()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:93
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L87-L91' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L87-L91' class='documenter-source'>source</a><br>
 
 <a id='Mads.madscores' href='#Mads.madscores'>#</a>
 **`Mads.madscores`** &mdash; *Function*.
@@ -3098,7 +3150,7 @@ Arguments
   * `nodenames::Array{String,1}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L292-L296' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L292-L296' class='documenter-source'>source</a><br>
 
 <a id='Mads.madscritical-Tuple{String}' href='#Mads.madscritical-Tuple{String}'>#</a>
 **`Mads.madscritical`** &mdash; *Method*.
@@ -3116,7 +3168,7 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L59-L63' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L59-L63' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsdebug' href='#Mads.madsdebug'>#</a>
 **`Mads.madsdebug`** &mdash; *Function*.
@@ -3136,7 +3188,7 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L13-L17' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L13-L17' class='documenter-source'>source</a><br>
 
 <a id='Mads.madserror-Tuple{String}' href='#Mads.madserror-Tuple{String}'>#</a>
 **`Mads.madserror`** &mdash; *Method*.
@@ -3154,7 +3206,7 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L48-L52' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L48-L52' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsinfo' href='#Mads.madsinfo'>#</a>
 **`Mads.madsinfo`** &mdash; *Function*.
@@ -3174,7 +3226,7 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L25-L29' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L25-L29' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsload' href='#Mads.madsload'>#</a>
 **`Mads.madsload`** &mdash; *Function*.
@@ -3193,26 +3245,26 @@ Arguments
   * `nodenames::Array{String,1}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L310-L314' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L310-L314' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsmathprogbase' href='#Mads.madsmathprogbase'>#</a>
 **`Mads.madsmathprogbase`** &mdash; *Function*.
 
 
 
-Mads execution using MathProgBase
+Define `MadsModel` type applied for Mads execution using `MathProgBase`
 
 Methods
 
-  * `Mads.madsmathprogbase()` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:13
-  * `Mads.madsmathprogbase(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:13
+  * `Mads.madsmathprogbase()` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:18
+  * `Mads.madsmathprogbase(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:18
 
 Arguments
 
-  * `madsdata::Associative`
+  * `madsdata::Associative` : Mads problem dictionary [default=`Dict()`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMathProgBase.jl#L7-L11' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMathProgBase.jl#L11-L15' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsoutput' href='#Mads.madsoutput'>#</a>
 **`Mads.madsoutput`** &mdash; *Function*.
@@ -3232,7 +3284,7 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L1-L5' class='documenter-source'>source</a><br>
 
 <a id='Mads.madsup' href='#Mads.madsup'>#</a>
 **`Mads.madsup`** &mdash; *Function*.
@@ -3251,7 +3303,7 @@ Arguments
   * `nodenames::Array{String,1}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L301-L305' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L301-L305' class='documenter-source'>source</a><br>
 
 <a id='Mads.madswarn-Tuple{String}' href='#Mads.madswarn-Tuple{String}'>#</a>
 **`Mads.madswarn`** &mdash; *Method*.
@@ -3269,26 +3321,30 @@ Arguments
   * `message::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLog.jl#L37-L41' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLog.jl#L37-L41' class='documenter-source'>source</a><br>
 
 <a id='Mads.makearrayconditionalloglikelihood-Tuple{Associative,Any}' href='#Mads.makearrayconditionalloglikelihood-Tuple{Associative,Any}'>#</a>
 **`Mads.makearrayconditionalloglikelihood`** &mdash; *Method*.
 
 
 
-Make a conditional log likelihood function that accepts an array containing the opt parameters' values
+Make a conditional log likelihood function that accepts an array containing the optimal parameter values
 
 Methods
 
-  * `Mads.makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:71
+  * `Mads.makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:64
 
 Arguments
 
-  * `conditionalloglikelihood`
-  * `madsdata::Associative`
+  * `conditionalloglikelihood` : conditional log likelihood
+  * `madsdata::Associative` : Mads problem dictionary
+
+Returns:
+
+  * a conditional log likelihood function that accepts an array
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L65-L69' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L52-L60' class='documenter-source'>source</a><br>
 
 <a id='Mads.makearrayconditionalloglikelihood-Tuple{Associative}' href='#Mads.makearrayconditionalloglikelihood-Tuple{Associative}'>#</a>
 **`Mads.makearrayconditionalloglikelihood`** &mdash; *Method*.
@@ -3300,7 +3356,7 @@ Make array of conditional log-likelihoods
 Methods
 
   * `Mads.makearrayconditionalloglikelihood(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsBayesInfoGap.jl:160
-  * `Mads.makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:71
+  * `Mads.makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:64
 
 Arguments
 
@@ -3312,59 +3368,54 @@ Returns:
   * array of conditional log-likelihoods
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsBayesInfoGap.jl#L149-L157' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsBayesInfoGap.jl#L149-L157' class='documenter-source'>source</a><br>
 
 <a id='Mads.makearrayfunction' href='#Mads.makearrayfunction'>#</a>
 **`Mads.makearrayfunction`** &mdash; *Function*.
 
 
 
-Make a version of the function `f` that accepts an array containing the optimal parameters' values
+Make a version of the function `f` that accepts an array containing the optimal parameter values
 
-```julia
-Mads.makearrayfunction(madsdata, f)
-```
+Methods
 
-Arguments:
+  * `Mads.makearrayfunction(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:17
+  * `Mads.makearrayfunction(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:17
 
-  * `madsdata` : MADS problem dictionary
-  * `f` : function
+Arguments
+
+  * `f::Function` : function [default=`makemadscommandfunction(madsdata)`]
+  * `madsdata::Associative` : Mads problem dictionary
 
 Returns:
 
   * function accepting an array containing the optimal parameter values
 
-Methods
 
-  * `Mads.makearrayfunction(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:23
-  * `Mads.makearrayfunction(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:23
-
-Arguments
-
-  * `f::Function`
-  * `madsdata::Associative`
-
-
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L4-L21' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L5-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.makearrayloglikelihood-Tuple{Associative,Any}' href='#Mads.makearrayloglikelihood-Tuple{Associative,Any}'>#</a>
 **`Mads.makearrayloglikelihood`** &mdash; *Method*.
 
 
 
-Make a log likelihood function that accepts an array containing the opt parameters' values
+Make a log likelihood function that accepts an array containing the optimal parameter values
 
 Methods
 
-  * `Mads.makearrayloglikelihood(madsdata::Associative, loglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:88
+  * `Mads.makearrayloglikelihood(madsdata::Associative, loglikelihood)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:87
 
 Arguments
 
-  * `loglikelihood`
-  * `madsdata::Associative`
+  * `loglikelihood` : log likelihood
+  * `madsdata::Associative` : Mads problem dictionary
+
+Returns:
+
+  * a log likelihood function that accepts an array
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L82-L86' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L75-L83' class='documenter-source'>source</a><br>
 
 <a id='Mads.makebigdt!-Tuple{Associative,Associative}' href='#Mads.makebigdt!-Tuple{Associative,Associative}'>#</a>
 **`Mads.makebigdt!`** &mdash; *Method*.
@@ -3387,7 +3438,7 @@ Returns:
   * BIG-DT problem type
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsBayesInfoGap.jl#L23-L31' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsBayesInfoGap.jl#L23-L31' class='documenter-source'>source</a><br>
 
 <a id='Mads.makebigdt-Tuple{Associative,Associative}' href='#Mads.makebigdt-Tuple{Associative,Associative}'>#</a>
 **`Mads.makebigdt`** &mdash; *Method*.
@@ -3410,7 +3461,7 @@ Returns:
   * BIG-DT problem type
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsBayesInfoGap.jl#L8-L16' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsBayesInfoGap.jl#L8-L16' class='documenter-source'>source</a><br>
 
 <a id='Mads.makecomputeconcentrations-Tuple{Associative}' href='#Mads.makecomputeconcentrations-Tuple{Associative}'>#</a>
 **`Mads.makecomputeconcentrations`** &mdash; *Method*.
@@ -3446,7 +3497,49 @@ forward_preds = computeconcentrations(paramdict)
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L112-L129' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L112-L129' class='documenter-source'>source</a><br>
+
+<a id='Mads.makedixonprice-Tuple{Integer}' href='#Mads.makedixonprice-Tuple{Integer}'>#</a>
+**`Mads.makedixonprice`** &mdash; *Method*.
+
+
+
+Make dixon price
+
+Methods
+
+  * `Mads.makedixonprice(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:256
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * dixon price
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L245-L253' class='documenter-source'>source</a><br>
+
+<a id='Mads.makedixonprice_gradient-Tuple{Integer}' href='#Mads.makedixonprice_gradient-Tuple{Integer}'>#</a>
+**`Mads.makedixonprice_gradient`** &mdash; *Method*.
+
+
+
+Methods
+
+  * `Mads.makedixonprice(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:256
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * dixon price gradient
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L267-L272' class='documenter-source'>source</a><br>
 
 <a id='Mads.makedoublearrayfunction' href='#Mads.makedoublearrayfunction'>#</a>
 **`Mads.makedoublearrayfunction`** &mdash; *Function*.
@@ -3455,31 +3548,22 @@ forward_preds = computeconcentrations(paramdict)
 
 Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
 
-```julia
-Mads.makedoublearrayfunction(madsdata, f)
-```
-
-Arguments:
-
-  * `madsdata` : MADS problem dictionary
-  * `f` : function
-
-Returns:
-
-  * function accepting an array containing the optimal parameters' values, and returning an array of observations
-
 Methods
 
-  * `Mads.makedoublearrayfunction(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:50
-  * `Mads.makedoublearrayfunction(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:50
+  * `Mads.makedoublearrayfunction(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:37
+  * `Mads.makedoublearrayfunction(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:37
 
 Arguments
 
-  * `f::Function`
-  * `madsdata::Associative`
+  * `f::Function` : function [default=`makemadscommandfunction(madsdata)`]
+  * `madsdata::Associative` : Mads problem dictionary
+
+Returns:
+
+  * function accepting an array containing the optimal parameter values, and returning an array of observations
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L31-L48' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L25-L33' class='documenter-source'>source</a><br>
 
 <a id='Mads.makelmfunctions-Tuple{Associative}' href='#Mads.makelmfunctions-Tuple{Associative}'>#</a>
 **`Mads.makelmfunctions`** &mdash; *Method*.
@@ -3501,7 +3585,7 @@ Returns:
   * forward model, gradient, objective functions
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L100-L108' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L100-L108' class='documenter-source'>source</a><br>
 
 <a id='Mads.makelocalsafunction-Tuple{Associative}' href='#Mads.makelocalsafunction-Tuple{Associative}'>#</a>
 **`Mads.makelocalsafunction`** &mdash; *Method*.
@@ -3527,7 +3611,7 @@ Returns:
   * gradient function
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L14-L22' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L14-L22' class='documenter-source'>source</a><br>
 
 <a id='Mads.makelogprior-Tuple{Associative}' href='#Mads.makelogprior-Tuple{Associative}'>#</a>
 **`Mads.makelogprior`** &mdash; *Method*.
@@ -3549,7 +3633,7 @@ Return:
   * the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L448-L456' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L448-L456' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadscommandfunction-Tuple{Associative}' href='#Mads.makemadscommandfunction-Tuple{Associative}'>#</a>
 **`Mads.makemadscommandfunction`** &mdash; *Method*.
@@ -3612,7 +3696,7 @@ Returns:
   * Mads function to execute a forward model simulation
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L8-L56' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L8-L56' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadscommandfunctionandgradient' href='#Mads.makemadscommandfunctionandgradient'>#</a>
 **`Mads.makemadscommandfunctionandgradient`** &mdash; *Function*.
@@ -3637,7 +3721,7 @@ Returns:
   * Mads gradient function for the model defined in the MADS problem dictionary `madsdata`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L435-L444' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L435-L444' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadscommandgradient' href='#Mads.makemadscommandgradient'>#</a>
 **`Mads.makemadscommandgradient`** &mdash; *Function*.
@@ -3661,7 +3745,7 @@ Returns:
   * the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L360-L368' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L360-L368' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadsconditionalloglikelihood-Tuple{Associative}' href='#Mads.makemadsconditionalloglikelihood-Tuple{Associative}'>#</a>
 **`Mads.makemadsconditionalloglikelihood`** &mdash; *Method*.
@@ -3687,7 +3771,7 @@ Return:
   * the conditional log-likelihood
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L469-L478' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L469-L478' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadsloglikelihood-Tuple{Associative}' href='#Mads.makemadsloglikelihood-Tuple{Associative}'>#</a>
 **`Mads.makemadsloglikelihood`** &mdash; *Method*.
@@ -3713,7 +3797,7 @@ Returns:
   * the log-likelihood for a given set of model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L503-L512' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L503-L512' class='documenter-source'>source</a><br>
 
 <a id='Mads.makemadsreusablefunction' href='#Mads.makemadsreusablefunction'>#</a>
 **`Mads.makemadsreusablefunction`** &mdash; *Function*.
@@ -3747,7 +3831,7 @@ Returns:
   * Reusable Mads function to execute a forward model simulation (automatically restarts if restart data exists)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsFunc.jl#L247-L255' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsFunc.jl#L247-L255' class='documenter-source'>source</a><br>
 
 <a id='Mads.makempbfunctions-Tuple{Associative}' href='#Mads.makempbfunctions-Tuple{Associative}'>#</a>
 **`Mads.makempbfunctions`** &mdash; *Method*.
@@ -3758,14 +3842,214 @@ Make forward model, gradient, objective functions needed for MathProgBase optimi
 
 Methods
 
-  * `Mads.makempbfunctions(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:82
+  * `Mads.makempbfunctions(madsdata::Associative)` : /Users/monty/.julia/v0.5/Mads/src/MadsMathProgBase.jl:92
 
 Arguments
 
-  * `madsdata::Associative`
+  * `madsdata::Associative` : Mads problem dictionary
+
+Returns:
+
+  * forward model, gradient, objective functions
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMathProgBase.jl#L76-L80' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMathProgBase.jl#L81-L89' class='documenter-source'>source</a><br>
+
+<a id='Mads.makepowell-Tuple{Integer}' href='#Mads.makepowell-Tuple{Integer}'>#</a>
+**`Mads.makepowell`** &mdash; *Method*.
+
+
+
+Make Powell test function for LM optimization
+
+Methods
+
+  * `Mads.makepowell(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:159
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * Powell test function for LM optimization
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L148-L156' class='documenter-source'>source</a><br>
+
+<a id='Mads.makepowell_gradient-Tuple{Integer}' href='#Mads.makepowell_gradient-Tuple{Integer}'>#</a>
+**`Mads.makepowell_gradient`** &mdash; *Method*.
+
+
+
+ake parameter gradients of the Powell test function for LM optimization
+
+Methods
+
+  * `Mads.makepowell_gradient(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:183
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * arameter gradients of the Powell test function for LM optimization
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L172-L180' class='documenter-source'>source</a><br>
+
+<a id='Mads.makerosenbrock-Tuple{Integer}' href='#Mads.makerosenbrock-Tuple{Integer}'>#</a>
+**`Mads.makerosenbrock`** &mdash; *Method*.
+
+
+
+Make Rosenbrock test function for LM optimization
+
+Methods
+
+  * `Mads.makerosenbrock(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:114
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * Rosenbrock test function for LM optimization
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L103-L111' class='documenter-source'>source</a><br>
+
+<a id='Mads.makerosenbrock_gradient-Tuple{Integer}' href='#Mads.makerosenbrock_gradient-Tuple{Integer}'>#</a>
+**`Mads.makerosenbrock_gradient`** &mdash; *Method*.
+
+
+
+Make parameter gradients of the Rosenbrock test function for LM optimization
+
+Methods
+
+  * `Mads.makerosenbrock_gradient(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:136
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * parameter gradients of the Rosenbrock test function for LM optimization
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L125-L133' class='documenter-source'>source</a><br>
+
+<a id='Mads.makerotatedhyperellipsoid-Tuple{Integer}' href='#Mads.makerotatedhyperellipsoid-Tuple{Integer}'>#</a>
+**`Mads.makerotatedhyperellipsoid`** &mdash; *Method*.
+
+
+
+Methods
+
+  * `Mads.makerotatedhyperellipsoid(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:323
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L318-L323' class='documenter-source'>source</a><br>
+
+<a id='Mads.makerotatedhyperellipsoid_gradient-Tuple{Integer}' href='#Mads.makerotatedhyperellipsoid_gradient-Tuple{Integer}'>#</a>
+**`Mads.makerotatedhyperellipsoid_gradient`** &mdash; *Method*.
+
+
+
+Methods
+
+  * `Mads.makerotatedhyperellipsoid_gradient(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:343
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L338-L343' class='documenter-source'>source</a><br>
+
+<a id='Mads.makesphere-Tuple{Integer}' href='#Mads.makesphere-Tuple{Integer}'>#</a>
+**`Mads.makesphere`** &mdash; *Method*.
+
+
+
+Make sphere
+
+Methods
+
+  * `Mads.makesphere(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:214
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * sphere
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L203-L211' class='documenter-source'>source</a><br>
+
+<a id='Mads.makesphere_gradient-Tuple{Integer}' href='#Mads.makesphere_gradient-Tuple{Integer}'>#</a>
+**`Mads.makesphere_gradient`** &mdash; *Method*.
+
+
+
+Make sphere gradient
+
+Methods
+
+  * `Mads.makesphere_gradient(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:235
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+Returns:
+
+  * sphere gradient
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L224-L232' class='documenter-source'>source</a><br>
+
+<a id='Mads.makesumsquares-Tuple{Integer}' href='#Mads.makesumsquares-Tuple{Integer}'>#</a>
+**`Mads.makesumsquares`** &mdash; *Method*.
+
+
+
+Methods
+
+  * `Mads.makesumsquares(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:293
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L288-L293' class='documenter-source'>source</a><br>
+
+<a id='Mads.makesumsquares_gradient-Tuple{Integer}' href='#Mads.makesumsquares_gradient-Tuple{Integer}'>#</a>
+**`Mads.makesumsquares_gradient`** &mdash; *Method*.
+
+
+
+Methods
+
+  * `Mads.makesumsquares_gradient(N::Integer)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:308
+
+Arguments
+
+  * `N::Integer` : number of observations
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L303-L308' class='documenter-source'>source</a><br>
 
 <a id='Mads.makesvrmodel' href='#Mads.makesvrmodel'>#</a>
 **`Mads.makesvrmodel`** &mdash; *Function*.
@@ -3810,7 +4094,7 @@ Returns:
   * svrexec, svrread, svrsave, svrclean
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L170-L178' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L170-L178' class='documenter-source'>source</a><br>
 
 <a id='Mads.maxtorealmax!-Tuple{DataFrames.DataFrame}' href='#Mads.maxtorealmax!-Tuple{DataFrames.DataFrame}'>#</a>
 **`Mads.maxtorealmax!`** &mdash; *Method*.
@@ -3828,7 +4112,7 @@ Arguments
   * `df::DataFrames.DataFrame` : dataframe
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L1046-L1050' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L1046-L1050' class='documenter-source'>source</a><br>
 
 <a id='Mads.meshgrid-Tuple{Array{T,1},Array{T,1}}' href='#Mads.meshgrid-Tuple{Array{T,1},Array{T,1}}'>#</a>
 **`Mads.meshgrid`** &mdash; *Method*.
@@ -3851,7 +4135,7 @@ Returns:
   * 2D grid coordinates based on the coordinates contained in vectors `x` and `y`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L292-L300' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L292-L300' class='documenter-source'>source</a><br>
 
 <a id='Mads.mkdir-Tuple{String}' href='#Mads.mkdir-Tuple{String}'>#</a>
 **`Mads.mkdir`** &mdash; *Method*.
@@ -3869,7 +4153,7 @@ Arguments
   * `dirname::String` : directory
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1109-L1113' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1109-L1113' class='documenter-source'>source</a><br>
 
 <a id='Mads.modelinformationcriteria' href='#Mads.modelinformationcriteria'>#</a>
 **`Mads.modelinformationcriteria`** &mdash; *Function*.
@@ -3889,7 +4173,7 @@ Arguments
   * `par::Array{Float64,N<:Any}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsModelSelection.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsModelSelection.jl#L1-L5' class='documenter-source'>source</a><br>
 
 <a id='Mads.modobsweights!-Tuple{Associative,Number}' href='#Mads.modobsweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.modobsweights!`** &mdash; *Method*.
@@ -3908,7 +4192,7 @@ Arguments
   * `value::Number` : value for modifing observation weights
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L299-L303' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L299-L303' class='documenter-source'>source</a><br>
 
 <a id='Mads.modwellweights!-Tuple{Associative,Number}' href='#Mads.modwellweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.modwellweights!`** &mdash; *Method*.
@@ -3927,7 +4211,7 @@ Arguments
   * `value::Number` : value for well weights
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L347-L351' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L347-L351' class='documenter-source'>source</a><br>
 
 <a id='Mads.montecarlo-Tuple{Associative}' href='#Mads.montecarlo-Tuple{Associative}'>#</a>
 **`Mads.montecarlo`** &mdash; *Method*.
@@ -3964,7 +4248,7 @@ Mads.montecarlo(madsdata; N=100)
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L159-L177' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L159-L177' class='documenter-source'>source</a><br>
 
 <a id='Mads.naive_get_deltax-Tuple{Array{Float64,2},Array{Float64,2},Array{Float64,1},Number}' href='#Mads.naive_get_deltax-Tuple{Array{Float64,2},Array{Float64,2},Array{Float64,1},Number}'>#</a>
 **`Mads.naive_get_deltax`** &mdash; *Method*.
@@ -3989,7 +4273,7 @@ Returns:
   * the LM parameter space step
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L204-L212' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L204-L212' class='documenter-source'>source</a><br>
 
 <a id='Mads.naive_levenberg_marquardt' href='#Mads.naive_levenberg_marquardt'>#</a>
 **`Mads.naive_levenberg_marquardt`** &mdash; *Function*.
@@ -4023,7 +4307,7 @@ Returns:
   * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L249-L257' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L249-L257' class='documenter-source'>source</a><br>
 
 <a id='Mads.naive_lm_iteration-Tuple{Function,Function,Function,Array{Float64,1},Array{Float64,1},Array{Float64,1}}' href='#Mads.naive_lm_iteration-Tuple{Function,Function,Function,Array{Float64,1},Array{Float64,1},Array{Float64,1}}'>#</a>
 **`Mads.naive_lm_iteration`** &mdash; *Method*.
@@ -4050,7 +4334,7 @@ Returns:
   * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L223-L231' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L223-L231' class='documenter-source'>source</a><br>
 
 <a id='Mads.noplot-Tuple{}' href='#Mads.noplot-Tuple{}'>#</a>
 **`Mads.noplot`** &mdash; *Method*.
@@ -4064,7 +4348,7 @@ Methods
   * `Mads.noplot()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsParallel.jl:239
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L233-L237' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L233-L237' class='documenter-source'>source</a><br>
 
 <a id='Mads.obslineismatch-Tuple{String,Array{Regex,1}}' href='#Mads.obslineismatch-Tuple{String,Array{Regex,1}}'>#</a>
 **`Mads.obslineismatch`** &mdash; *Method*.
@@ -4087,7 +4371,7 @@ Returns:
   * true or false
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L805-L813' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L805-L813' class='documenter-source'>source</a><br>
 
 <a id='Mads.of' href='#Mads.of'>#</a>
 **`Mads.of`** &mdash; *Function*.
@@ -4109,7 +4393,7 @@ Arguments
   * `resultvec::Array{T<:Any,1}` : result vector
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L63-L67' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L63-L67' class='documenter-source'>source</a><br>
 
 <a id='Mads.paramarray2dict-Tuple{Associative,Array}' href='#Mads.paramarray2dict-Tuple{Associative,Array}'>#</a>
 **`Mads.paramarray2dict`** &mdash; *Method*.
@@ -4132,7 +4416,7 @@ Returns:
   * a parameter dictionary of arrays
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L228-L236' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L228-L236' class='documenter-source'>source</a><br>
 
 <a id='Mads.paramdict2array-Tuple{Associative}' href='#Mads.paramdict2array-Tuple{Associative}'>#</a>
 **`Mads.paramdict2array`** &mdash; *Method*.
@@ -4154,7 +4438,7 @@ Returns:
   * a parameter array
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L248-L256' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L248-L256' class='documenter-source'>source</a><br>
 
 <a id='Mads.parsemadsdata!-Tuple{Associative}' href='#Mads.parsemadsdata!-Tuple{Associative}'>#</a>
 **`Mads.parsemadsdata!`** &mdash; *Method*.
@@ -4172,7 +4456,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L52-L56' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L52-L56' class='documenter-source'>source</a><br>
 
 <a id='Mads.parsenodenames' href='#Mads.parsenodenames'>#</a>
 **`Mads.parsenodenames`** &mdash; *Function*.
@@ -4192,7 +4476,7 @@ Arguments
   * `ntasks_per_node::Integer`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L202-L206' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L202-L206' class='documenter-source'>source</a><br>
 
 <a id='Mads.partialof-Tuple{Associative,Associative,Regex}' href='#Mads.partialof-Tuple{Associative,Associative,Regex}'>#</a>
 **`Mads.partialof`** &mdash; *Method*.
@@ -4216,7 +4500,7 @@ Returns:
   * the sum of squared residuals for observations that match the regular expression
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L72-L80' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L72-L80' class='documenter-source'>source</a><br>
 
 <a id='Mads.pkgversion-Tuple{String}' href='#Mads.pkgversion-Tuple{String}'>#</a>
 **`Mads.pkgversion`** &mdash; *Method*.
@@ -4234,7 +4518,7 @@ Arguments
   * `modulestr::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L328-L332' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L328-L332' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotgrid' href='#Mads.plotgrid'>#</a>
 **`Mads.plotgrid`** &mdash; *Function*.
@@ -4245,22 +4529,22 @@ Plot a 3D grid solution based on model predictions in array `s`, initial paramet
 
 Methods
 
-  * `Mads.plotgrid(madsdata::Associative; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:55
-  * `Mads.plotgrid(madsdata::Associative, s::Array{Float64,N<:Any}; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:5
-  * `Mads.plotgrid(madsdata::Associative, parameters::Associative; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:60
+  * `Mads.plotgrid(madsdata::Associative; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:56
+  * `Mads.plotgrid(madsdata::Associative, s::Array{Float64,N<:Any}; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:6
+  * `Mads.plotgrid(madsdata::Associative, parameters::Associative; addtitle, title, filename, format)` : /Users/monty/.julia/v0.5/Mads/src/MadsPlotPy.jl:61
 
 Arguments
 
-  * `madsdata::Associative`
-  * `parameters::Associative`
-  * `s::Array{Float64,N<:Any}`
+  * `madsdata::Associative` : Mads problem dictionary
+  * `parameters::Associative` : dictionary with model parameters
+  * `s::Array{Float64,N<:Any}` : model predictions array
 
 Keywords
 
-  * `addtitle`
-  * `filename`
-  * `format`
-  * `title`
+  * `addtitle` : add plot title [default=`true`]
+  * `filename` : output file name
+  * `format` : output plot format (`png`, `pdf`, etc.)
+  * `title` : plot title
 
 Examples:
 
@@ -4270,18 +4554,8 @@ Mads.plotgrid(madsdata; addtitle=true, title="", filename="", format="")
 Mads.plotgrid(madsdata, parameters; addtitle=true, title="", filename="", format="")
 ```
 
-Arguments:
 
-  * `madsdata` : MADS problem dictionary
-  * `parameters` : dictionary with model parameters
-  * `s` : model predictions array
-  * `addtitle` : add plot title [true]
-  * `title` : plot title
-  * `filename` : output file name
-  * `format` : output plot format (`png`, `pdf`, etc.)
-
-
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlotPy.jl#L64-L86' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlotPy.jl#L65-L77' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotmadsproblem-Tuple{Associative}' href='#Mads.plotmadsproblem-Tuple{Associative}'>#</a>
 **`Mads.plotmadsproblem`** &mdash; *Method*.
@@ -4310,7 +4584,7 @@ Dumps:
   * plot of contaminant sources and wells
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L60-L68' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L60-L68' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotmass-Tuple{Array{Float64,1},Array{Float64,1},Array{Float64,1},String}' href='#Mads.plotmass-Tuple{Array{Float64,1},Array{Float64,1},Array{Float64,1},String}'>#</a>
 **`Mads.plotmass`** &mdash; *Method*.
@@ -4347,7 +4621,7 @@ Arguments:
 Dumps: image file with name `filename` and in specified `format`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasolPlot.jl#L3-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasolPlot.jl#L3-L19' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotmatches' href='#Mads.plotmatches'>#</a>
 **`Mads.plotmatches`** &mdash; *Function*.
@@ -4404,7 +4678,7 @@ Mads.plotmatches(madsdata, result, r"NO3"; filename="", format="")
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L324-L341' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L324-L341' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotobsSAresults-Tuple{Associative,Associative}' href='#Mads.plotobsSAresults-Tuple{Associative,Associative}'>#</a>
 **`Mads.plotobsSAresults`** &mdash; *Method*.
@@ -4440,7 +4714,7 @@ Dumps:
   * plot of the sensitivity analysis results for the observations
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L528-L536' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L528-L536' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotrobustnesscurves-Tuple{Associative,Dict}' href='#Mads.plotrobustnesscurves-Tuple{Associative,Dict}'>#</a>
 **`Mads.plotrobustnesscurves`** &mdash; *Method*.
@@ -4473,7 +4747,7 @@ Arguments:
   * `format` : output plot format (`png`, `pdf`, etc.)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsBayesInfoGapPlot.jl#L3-L14' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsBayesInfoGapPlot.jl#L3-L14' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotseries' href='#Mads.plotseries'>#</a>
 **`Mads.plotseries`** &mdash; *Function*.
@@ -4511,7 +4785,7 @@ Dumps:
   * Plots of data series
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L1039-L1047' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L1039-L1047' class='documenter-source'>source</a><br>
 
 <a id='Mads.plotwellSAresults' href='#Mads.plotwellSAresults'>#</a>
 **`Mads.plotwellSAresults`** &mdash; *Function*.
@@ -4543,7 +4817,7 @@ Dumps:
   * Plot of the sensitivity analysis results for all the wells in the MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L511-L519' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L511-L519' class='documenter-source'>source</a><br>
 
 <a id='Mads.printSAresults-Tuple{Associative,Associative}' href='#Mads.printSAresults-Tuple{Associative,Associative}'>#</a>
 **`Mads.printSAresults`** &mdash; *Method*.
@@ -4562,7 +4836,7 @@ Arguments
   * `results::Associative` : sensitivity analysis results
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L881-L885' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L881-L885' class='documenter-source'>source</a><br>
 
 <a id='Mads.printSAresults2-Tuple{Associative,Associative}' href='#Mads.printSAresults2-Tuple{Associative,Associative}'>#</a>
 **`Mads.printSAresults2`** &mdash; *Method*.
@@ -4581,7 +4855,7 @@ Arguments
   * `results::Associative` : sensitivity analysis results (method 2)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L963-L967' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L963-L967' class='documenter-source'>source</a><br>
 
 <a id='Mads.printerrormsg-Tuple{Any}' href='#Mads.printerrormsg-Tuple{Any}'>#</a>
 **`Mads.printerrormsg`** &mdash; *Method*.
@@ -4599,7 +4873,26 @@ Arguments
   * `e` : error message
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L278-L282' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L278-L282' class='documenter-source'>source</a><br>
+
+<a id='Mads.pull' href='#Mads.pull'>#</a>
+**`Mads.pull`** &mdash; *Function*.
+
+
+
+Pull (checkout) the latest version of the Mads / Julia modules
+
+Methods
+
+  * `Mads.pull(modulename::String; kw...)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:63
+  * `Mads.pull()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:63
+
+Arguments
+
+  * `modulename::String`
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L57-L61' class='documenter-source'>source</a><br>
 
 <a id='Mads.push' href='#Mads.push'>#</a>
 **`Mads.push`** &mdash; *Function*.
@@ -4610,15 +4903,15 @@ Push the latest version of the Mads / Julia modules in the repo
 
 Methods
 
-  * `Mads.push(modulename::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:115
-  * `Mads.push()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:115
+  * `Mads.push(modulename::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:124
+  * `Mads.push()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:124
 
 Arguments
 
   * `modulename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L109-L113' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L118-L122' class='documenter-source'>source</a><br>
 
 <a id='Mads.quietoff-Tuple{}' href='#Mads.quietoff-Tuple{}'>#</a>
 **`Mads.quietoff`** &mdash; *Method*.
@@ -4632,7 +4925,7 @@ Methods
   * `Mads.quietoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:47
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L41-L45' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L41-L45' class='documenter-source'>source</a><br>
 
 <a id='Mads.quieton-Tuple{}' href='#Mads.quieton-Tuple{}'>#</a>
 **`Mads.quieton`** &mdash; *Method*.
@@ -4646,7 +4939,7 @@ Methods
   * `Mads.quieton()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:37
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L31-L35' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L31-L35' class='documenter-source'>source</a><br>
 
 <a id='Mads.readasciipredictions-Tuple{String}' href='#Mads.readasciipredictions-Tuple{String}'>#</a>
 **`Mads.readasciipredictions`** &mdash; *Method*.
@@ -4664,7 +4957,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsASCII.jl#L20-L24' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsASCII.jl#L20-L24' class='documenter-source'>source</a><br>
 
 <a id='Mads.readjsonpredictions-Tuple{String}' href='#Mads.readjsonpredictions-Tuple{String}'>#</a>
 **`Mads.readjsonpredictions`** &mdash; *Method*.
@@ -4682,7 +4975,7 @@ Arguments
   * `filename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsJSON.jl#L31-L35' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsJSON.jl#L31-L35' class='documenter-source'>source</a><br>
 
 <a id='Mads.readmodeloutput-Tuple{Associative}' href='#Mads.readmodeloutput-Tuple{Associative}'>#</a>
 **`Mads.readmodeloutput`** &mdash; *Method*.
@@ -4704,7 +4997,7 @@ Keywords
   * `obskeys` : [default=getobskeys(madsdata)]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L596-L600' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L596-L600' class='documenter-source'>source</a><br>
 
 <a id='Mads.readobservations' href='#Mads.readobservations'>#</a>
 **`Mads.readobservations`** &mdash; *Function*.
@@ -4728,7 +5021,7 @@ Returns:
   * Dictionary with Mads observations
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L889-L897' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L889-L897' class='documenter-source'>source</a><br>
 
 <a id='Mads.readobservations_cmads-Tuple{Associative}' href='#Mads.readobservations_cmads-Tuple{Associative}'>#</a>
 **`Mads.readobservations_cmads`** &mdash; *Method*.
@@ -4746,7 +5039,7 @@ Arguments
   * `madsdata::Associative`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-old/MadsCMads.jl#L3-L7' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-old/MadsCMads.jl#L3-L7' class='documenter-source'>source</a><br>
 
 <a id='Mads.readyamlpredictions-Tuple{String}' href='#Mads.readyamlpredictions-Tuple{String}'>#</a>
 **`Mads.readyamlpredictions`** &mdash; *Method*.
@@ -4757,7 +5050,7 @@ Read MADS model predictions from a YAML file `filename`
 
 Methods
 
-  * `Mads.readyamlpredictions(filename::String; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:120
+  * `Mads.readyamlpredictions(filename::String; julia)` : /Users/monty/.julia/v0.5/Mads/src/MadsYAML.jl:126
 
 Arguments
 
@@ -4772,7 +5065,7 @@ Returns:
   * data in yaml input file
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsYAML.jl#L108-L116' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsYAML.jl#L114-L122' class='documenter-source'>source</a><br>
 
 <a id='Mads.regexs2obs-Tuple{String,Array{Regex,1},Array{String,1},Array{Bool,1}}' href='#Mads.regexs2obs-Tuple{String,Array{Regex,1},Array{String,1},Array{Bool,1}}'>#</a>
 **`Mads.regexs2obs`** &mdash; *Method*.
@@ -4797,7 +5090,7 @@ Returns:
   * `obsdict` : observations
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L821-L829' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L821-L829' class='documenter-source'>source</a><br>
 
 <a id='Mads.reload-Tuple{}' href='#Mads.reload-Tuple{}'>#</a>
 **`Mads.reload`** &mdash; *Method*.
@@ -4811,7 +5104,7 @@ Methods
   * `Mads.reload()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsTest.jl:34
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsTest.jl#L28-L32' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsTest.jl#L28-L32' class='documenter-source'>source</a><br>
 
 <a id='Mads.removesource!' href='#Mads.removesource!'>#</a>
 **`Mads.removesource!`** &mdash; *Function*.
@@ -4831,7 +5124,7 @@ Arguments
   * `sourceid::Int64` : source id [default=`0`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L31-L35' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L31-L35' class='documenter-source'>source</a><br>
 
 <a id='Mads.removesourceparameters!-Tuple{Associative}' href='#Mads.removesourceparameters!-Tuple{Associative}'>#</a>
 **`Mads.removesourceparameters!`** &mdash; *Method*.
@@ -4849,7 +5142,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsAnasol.jl#L83-L87' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsAnasol.jl#L83-L87' class='documenter-source'>source</a><br>
 
 <a id='Mads.required' href='#Mads.required'>#</a>
 **`Mads.required`** &mdash; *Function*.
@@ -4870,7 +5163,7 @@ Arguments
   * `modulename::String`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L19-L23' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L19-L23' class='documenter-source'>source</a><br>
 
 <a id='Mads.resetmodelruns-Tuple{}' href='#Mads.resetmodelruns-Tuple{}'>#</a>
 **`Mads.resetmodelruns`** &mdash; *Method*.
@@ -4884,7 +5177,7 @@ Methods
   * `Mads.resetmodelruns()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:141
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L135-L139' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L135-L139' class='documenter-source'>source</a><br>
 
 <a id='Mads.residuals' href='#Mads.residuals'>#</a>
 **`Mads.residuals`** &mdash; *Function*.
@@ -4910,7 +5203,7 @@ Returns:
   * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsLevenbergMarquardt.jl#L37-L45' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsLevenbergMarquardt.jl#L37-L45' class='documenter-source'>source</a><br>
 
 <a id='Mads.restartoff-Tuple{}' href='#Mads.restartoff-Tuple{}'>#</a>
 **`Mads.restartoff`** &mdash; *Method*.
@@ -4924,7 +5217,7 @@ Methods
   * `Mads.restartoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:18
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L12-L16' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L12-L16' class='documenter-source'>source</a><br>
 
 <a id='Mads.restarton-Tuple{}' href='#Mads.restarton-Tuple{}'>#</a>
 **`Mads.restarton`** &mdash; *Method*.
@@ -4938,7 +5231,7 @@ Methods
   * `Mads.restarton()` : /Users/monty/.julia/v0.5/Mads/src/MadsHelpers.jl:9
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L3-L7' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L3-L7' class='documenter-source'>source</a><br>
 
 <a id='Mads.reweighsamples-Tuple{Associative,Array,Array{T,1}}' href='#Mads.reweighsamples-Tuple{Associative,Array,Array{T,1}}'>#</a>
 **`Mads.reweighsamples`** &mdash; *Method*.
@@ -4962,7 +5255,7 @@ Returns:
   * vector of log-likelihoods after reweighing
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L286-L294' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L286-L294' class='documenter-source'>source</a><br>
 
 <a id='Mads.rmdir-Tuple{String}' href='#Mads.rmdir-Tuple{String}'>#</a>
 **`Mads.rmdir`** &mdash; *Method*.
@@ -4984,7 +5277,7 @@ Keywords
   * `path` : path of the directory, [default=`current path`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L991-L995' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L991-L995' class='documenter-source'>source</a><br>
 
 <a id='Mads.rmfile-Tuple{String}' href='#Mads.rmfile-Tuple{String}'>#</a>
 **`Mads.rmfile`** &mdash; *Method*.
@@ -5006,7 +5299,7 @@ Keywords
   * `path` : path of the file, [default=`current path`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1007-L1011' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1007-L1011' class='documenter-source'>source</a><br>
 
 <a id='Mads.rmfiles_ext-Tuple{String}' href='#Mads.rmfiles_ext-Tuple{String}'>#</a>
 **`Mads.rmfiles_ext`** &mdash; *Method*.
@@ -5028,7 +5321,7 @@ Keywords
   * `path` : path of the files to be removed, [default=`.`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1023-L1027' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1023-L1027' class='documenter-source'>source</a><br>
 
 <a id='Mads.rmfiles_root-Tuple{String}' href='#Mads.rmfiles_root-Tuple{String}'>#</a>
 **`Mads.rmfiles_root`** &mdash; *Method*.
@@ -5050,7 +5343,7 @@ Keywords
   * `path` : path of the files to be removed, [default=`.`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L1036-L1040' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L1036-L1040' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock-Tuple{Array{T,1}}' href='#Mads.rosenbrock-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock`** &mdash; *Method*.
@@ -5061,14 +5354,18 @@ Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:30
+  * `Mads.rosenbrock(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:43
 
 Arguments
 
-  * `x::Array{T<:Any,1}`
+  * `x::Array{T<:Any,1}` : argument
+
+Returns:
+
+  * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L24-L28' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L32-L40' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock2_gradient_lm-Tuple{Array{T,1}}' href='#Mads.rosenbrock2_gradient_lm-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock2_gradient_lm`** &mdash; *Method*.
@@ -5079,14 +5376,18 @@ Parameter gradients of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock2_gradient_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:16
+  * `Mads.rosenbrock2_gradient_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:24
 
 Arguments
 
-  * `x::Array{T<:Any,1}`
+  * `x::Array{T<:Any,1}` : argument
+
+Returns:
+
+  * Parameter gradients
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L10-L14' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L13-L21' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock2_lm-Tuple{Array{T,1}}' href='#Mads.rosenbrock2_lm-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock2_lm`** &mdash; *Method*.
@@ -5097,14 +5398,14 @@ Rosenbrock test function (more difficult to solve)
 
 Methods
 
-  * `Mads.rosenbrock2_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:7
+  * `Mads.rosenbrock2_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:10
 
 Arguments
 
-  * `x::Array{T<:Any,1}`
+  * `x::Array{T<:Any,1}` : argument
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L3-L7' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock_gradient!-Tuple{Array{T,1},Array{T,1}}' href='#Mads.rosenbrock_gradient!-Tuple{Array{T,1},Array{T,1}}'>#</a>
 **`Mads.rosenbrock_gradient!`** &mdash; *Method*.
@@ -5115,38 +5416,42 @@ Parameter gradients of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock_gradient!(x::Array{T<:Any,1}, storage::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:48
+  * `Mads.rosenbrock_gradient!(x::Array{T<:Any,1}, storage::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:64
 
 Arguments
 
-  * `storage::Array{T<:Any,1}`
-  * `x::Array{T<:Any,1}`
+  * `storage::Array{T<:Any,1}` : Jacobian vector
+  * `x::Array{T<:Any,1}` : argument
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L42-L46' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L56-L60' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock_gradient_lm-Tuple{Array{T,1}}' href='#Mads.rosenbrock_gradient_lm-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock_gradient_lm`** &mdash; *Method*.
 
 
 
-Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separetely)
+Parameter gradients of the Rosenbrock test function for LM optimization (returns the gradients for the 2 components separately)
 
 Methods
 
-  * `Mads.rosenbrock_gradient_lm(x::Array{T<:Any,1}; dx, center)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:58
+  * `Mads.rosenbrock_gradient_lm(x::Array{T<:Any,1}; dx, center)` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:81
 
 Arguments
 
-  * `x::Array{T<:Any,1}`
+  * `x::Array{T<:Any,1}` : argument
 
 Keywords
 
-  * `center`
-  * `dx`
+  * `center` : [default=`Array{Float64}(0)`]
+  * `dx` : [default=`false`]
+
+Returns:
+
+  * storage
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L52-L56' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L68-L76' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock_hessian!-Tuple{Array{T,1},Array{T,2}}' href='#Mads.rosenbrock_hessian!-Tuple{Array{T,1},Array{T,2}}'>#</a>
 **`Mads.rosenbrock_hessian!`** &mdash; *Method*.
@@ -5157,33 +5462,33 @@ Parameter Hessian of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock_hessian!(x::Array{T<:Any,1}, storage::Array{T<:Any,2})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:72
+  * `Mads.rosenbrock_hessian!(x::Array{T<:Any,1}, storage::Array{T<:Any,2})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:97
 
 Arguments
 
-  * `storage::Array{T<:Any,2}`
-  * `x::Array{T<:Any,1}`
+  * `storage::Array{T<:Any,2}` : Hessian matrix
+  * `x::Array{T<:Any,1}` : argument
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L66-L70' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L89-L93' class='documenter-source'>source</a><br>
 
 <a id='Mads.rosenbrock_lm-Tuple{Array{T,1}}' href='#Mads.rosenbrock_lm-Tuple{Array{T,1}}'>#</a>
 **`Mads.rosenbrock_lm`** &mdash; *Method*.
 
 
 
-Rosenbrock test function for LM optimization (returns the 2 components separetely)
+Rosenbrock test function for LM optimization (returns the 2 components separately)
 
 Methods
 
-  * `Mads.rosenbrock_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:39
+  * `Mads.rosenbrock_lm(x::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsTestFunctions.jl:53
 
 Arguments
 
-  * `x::Array{T<:Any,1}`
+  * `x::Array{T<:Any,1}` : argument
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsTestFunctions.jl#L33-L37' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsTestFunctions.jl#L46-L50' class='documenter-source'>source</a><br>
 
 <a id='Mads.runcmd' href='#Mads.runcmd'>#</a>
 **`Mads.runcmd`** &mdash; *Function*.
@@ -5194,22 +5499,27 @@ Run external command and pipe stdout and stderr
 
 Methods
 
-  * `Mads.runcmd(cmdstring::String; pipe, quiet, waittime)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:88
-  * `Mads.runcmd(cmd::Cmd; pipe, quiet, waittime)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:33
+  * `Mads.runcmd(cmdstring::String; pipe, quiet, waittime)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:97
+  * `Mads.runcmd(cmd::Cmd; pipe, quiet, waittime)` : /Users/monty/.julia/v0.5/Mads/src/MadsExecute.jl:42
 
 Arguments
 
-  * `cmd::Cmd`
-  * `cmdstring::String`
+  * `cmd::Cmd` : command (as a julia command; e.g. `ls`)
+  * `cmdstring::String` : command (as a string; e.g. "ls")
 
 Keywords
 
-  * `pipe`
-  * `quiet`
-  * `waittime`
+  * `pipe` : [default=`false`]
+  * `quiet` : [default=`Mads.quiet`]
+  * `waittime` : wait time is second [default=`Mads.executionwaittime`]
+
+Returns:
+
+  * cmdout
+  * cmderr
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsExecute.jl#L98-L102' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsExecute.jl#L107-L116' class='documenter-source'>source</a><br>
 
 <a id='Mads.runremote' href='#Mads.runremote'>#</a>
 **`Mads.runremote`** &mdash; *Function*.
@@ -5229,7 +5539,7 @@ Arguments
   * `nodenames::Array{String,1}`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L271-L275' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L271-L275' class='documenter-source'>source</a><br>
 
 <a id='Mads.saltelli-Tuple{Associative}' href='#Mads.saltelli-Tuple{Associative}'>#</a>
 **`Mads.saltelli`** &mdash; *Method*.
@@ -5255,7 +5565,7 @@ Keywords
   * `seed` : initial random seed, [default=`0`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L596-L600' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L596-L600' class='documenter-source'>source</a><br>
 
 <a id='Mads.saltellibrute-Tuple{Associative}' href='#Mads.saltellibrute-Tuple{Associative}'>#</a>
 **`Mads.saltellibrute`** &mdash; *Method*.
@@ -5279,7 +5589,7 @@ Keywords
   * `seed` : initial random seed, [default=`0`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L410-L414' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L410-L414' class='documenter-source'>source</a><br>
 
 <a id='Mads.saltellibruteparallel-Tuple{Associative,Integer}' href='#Mads.saltellibruteparallel-Tuple{Associative,Integer}'>#</a>
 **`Mads.saltellibruteparallel`** &mdash; *Method*.
@@ -5289,7 +5599,7 @@ Keywords
 Parallel version of saltellibrute
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L840' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L840' class='documenter-source'>source</a><br>
 
 <a id='Mads.saltelliparallel-Tuple{Associative,Integer}' href='#Mads.saltelliparallel-Tuple{Associative,Integer}'>#</a>
 **`Mads.saltelliparallel`** &mdash; *Method*.
@@ -5299,7 +5609,7 @@ Parallel version of saltellibrute
 Parallel version of saltelli
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L840' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L840' class='documenter-source'>source</a><br>
 
 <a id='Mads.sampling-Tuple{Array{T,1},Array,Number}' href='#Mads.sampling-Tuple{Array{T,1},Array,Number}'>#</a>
 **`Mads.sampling`** &mdash; *Method*.
@@ -5327,7 +5637,7 @@ Returns:
   * vector of log-likelihoods
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L230-L240' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L230-L240' class='documenter-source'>source</a><br>
 
 <a id='Mads.savecalibrationresults-Tuple{Associative,Any}' href='#Mads.savecalibrationresults-Tuple{Associative,Any}'>#</a>
 **`Mads.savecalibrationresults`** &mdash; *Method*.
@@ -5346,7 +5656,7 @@ Arguments
   * `results` : the calibration results
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L203-L207' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L203-L207' class='documenter-source'>source</a><br>
 
 <a id='Mads.savemadsfile' href='#Mads.savemadsfile'>#</a>
 **`Mads.savemadsfile`** &mdash; *Function*.
@@ -5383,7 +5693,7 @@ Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L183-L196' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L183-L196' class='documenter-source'>source</a><br>
 
 <a id='Mads.savemcmcresults-Tuple{Array,String}' href='#Mads.savemcmcresults-Tuple{Array,String}'>#</a>
 **`Mads.savemcmcresults`** &mdash; *Method*.
@@ -5406,7 +5716,7 @@ Dumps:
   * the file containing MCMC chain
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMonteCarlo.jl#L125-L133' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMonteCarlo.jl#L125-L133' class='documenter-source'>source</a><br>
 
 <a id='Mads.savesaltellirestart-Tuple{Array,String,String}' href='#Mads.savesaltellirestart-Tuple{Array,String,String}'>#</a>
 **`Mads.savesaltellirestart`** &mdash; *Method*.
@@ -5426,7 +5736,7 @@ Arguments
   * `restartdir::String` : directory where files will be stored containing model results for fast simulation restarts
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L580-L584' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L580-L584' class='documenter-source'>source</a><br>
 
 <a id='Mads.scatterplotsamples-Tuple{Associative,Array{T,2},String}' href='#Mads.scatterplotsamples-Tuple{Associative,Array{T,2},String}'>#</a>
 **`Mads.scatterplotsamples`** &mdash; *Method*.
@@ -5455,7 +5765,7 @@ Dumps:
   * histogram/scatter plots of model parameter samples
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L364-L372' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L364-L372' class='documenter-source'>source</a><br>
 
 <a id='Mads.searchdir' href='#Mads.searchdir'>#</a>
 **`Mads.searchdir`** &mdash; *Function*.
@@ -5491,7 +5801,7 @@ Examples:
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L635-L651' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L635-L651' class='documenter-source'>source</a><br>
 
 <a id='Mads.set_nprocs_per_task' href='#Mads.set_nprocs_per_task'>#</a>
 **`Mads.set_nprocs_per_task`** &mdash; *Function*.
@@ -5510,7 +5820,7 @@ Arguments
   * `local_nprocs_per_task::Integer`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L19-L23' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L19-L23' class='documenter-source'>source</a><br>
 
 <a id='Mads.setallparamsoff!-Tuple{Associative}' href='#Mads.setallparamsoff!-Tuple{Associative}'>#</a>
 **`Mads.setallparamsoff!`** &mdash; *Method*.
@@ -5532,7 +5842,7 @@ Keywords
   * `filter` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L422-L426' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L422-L426' class='documenter-source'>source</a><br>
 
 <a id='Mads.setallparamson!-Tuple{Associative}' href='#Mads.setallparamson!-Tuple{Associative}'>#</a>
 **`Mads.setallparamson!`** &mdash; *Method*.
@@ -5554,7 +5864,7 @@ Keywords
   * `filter` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L408-L412' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L408-L412' class='documenter-source'>source</a><br>
 
 <a id='Mads.setdebuglevel-Tuple{Int64}' href='#Mads.setdebuglevel-Tuple{Int64}'>#</a>
 **`Mads.setdebuglevel`** &mdash; *Method*.
@@ -5572,7 +5882,7 @@ Arguments
   * `level::Int64` : debug level
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L105-L109' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L105-L109' class='documenter-source'>source</a><br>
 
 <a id='Mads.setdefaultplotformat-Tuple{String}' href='#Mads.setdefaultplotformat-Tuple{String}'>#</a>
 **`Mads.setdefaultplotformat`** &mdash; *Method*.
@@ -5590,7 +5900,7 @@ Arguments
   * `format::String` : plot format
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L9-L13' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L9-L13' class='documenter-source'>source</a><br>
 
 <a id='Mads.setdir' href='#Mads.setdir'>#</a>
 **`Mads.setdir`** &mdash; *Function*.
@@ -5616,26 +5926,26 @@ Arguments
   * `dir`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L258-L269' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L258-L269' class='documenter-source'>source</a><br>
 
 <a id='Mads.setdynamicmodel-Tuple{Associative,Function}' href='#Mads.setdynamicmodel-Tuple{Associative,Function}'>#</a>
 **`Mads.setdynamicmodel`** &mdash; *Method*.
 
 
 
-Set Dynamic Model for MADS model calls using internal Julia functions
+Set Dynamic Model for MADS model calls using an internal Julia function
 
 Methods
 
-  * `Mads.setdynamicmodel(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:109
+  * `Mads.setdynamicmodel(madsdata::Associative, f::Function)` : /Users/monty/.julia/v0.5/Mads/src/MadsMisc.jl:110
 
 Arguments
 
-  * `f::Function`
-  * `madsdata::Associative`
+  * `f::Function` : Julia function
+  * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L103-L107' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L102-L106' class='documenter-source'>source</a><br>
 
 <a id='Mads.setexecutionwaittime-Tuple{Float64}' href='#Mads.setexecutionwaittime-Tuple{Float64}'>#</a>
 **`Mads.setexecutionwaittime`** &mdash; *Method*.
@@ -5653,7 +5963,7 @@ Arguments
   * `waitime::Float64` : maximum execution wait time for forward model runs in seconds
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L125-L129' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L125-L129' class='documenter-source'>source</a><br>
 
 <a id='Mads.setmadsinputfile-Tuple{String}' href='#Mads.setmadsinputfile-Tuple{String}'>#</a>
 **`Mads.setmadsinputfile`** &mdash; *Method*.
@@ -5677,7 +5987,7 @@ Mads.setmadsinputfile(filename)
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L216-L226' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L216-L226' class='documenter-source'>source</a><br>
 
 <a id='Mads.setmodelinputs-Tuple{Associative,Associative}' href='#Mads.setmodelinputs-Tuple{Associative,Associative}'>#</a>
 **`Mads.setmodelinputs`** &mdash; *Method*.
@@ -5700,7 +6010,7 @@ Keywords
   * `path` : path for the files, [default=`.`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L527-L531' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L527-L531' class='documenter-source'>source</a><br>
 
 <a id='Mads.setnewmadsfilename' href='#Mads.setnewmadsfilename'>#</a>
 **`Mads.setnewmadsfilename`** &mdash; *Function*.
@@ -5724,7 +6034,7 @@ Returns:
   * new file name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L409-L417' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L409-L417' class='documenter-source'>source</a><br>
 
 <a id='Mads.setobservationtargets!-Tuple{Associative,Associative}' href='#Mads.setobservationtargets!-Tuple{Associative,Associative}'>#</a>
 **`Mads.setobservationtargets!`** &mdash; *Method*.
@@ -5743,7 +6053,7 @@ Arguments
   * `predictions::Associative` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L487-L491' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L487-L491' class='documenter-source'>source</a><br>
 
 <a id='Mads.setobstime!' href='#Mads.setobstime!'>#</a>
 **`Mads.setobstime!`** &mdash; *Function*.
@@ -5772,7 +6082,7 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L269-L280' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L269-L280' class='documenter-source'>source</a><br>
 
 <a id='Mads.setobsweights!-Tuple{Associative,Number}' href='#Mads.setobsweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.setobsweights!`** &mdash; *Method*.
@@ -5791,7 +6101,7 @@ Arguments
   * `value::Number` : value for observation weights
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L285-L289' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L285-L289' class='documenter-source'>source</a><br>
 
 <a id='Mads.setparamoff!-Tuple{Associative,String}' href='#Mads.setparamoff!-Tuple{Associative,String}'>#</a>
 **`Mads.setparamoff!`** &mdash; *Method*.
@@ -5810,7 +6120,7 @@ Arguments
   * `parameterkey::String` : parameter key
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L447-L451' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L447-L451' class='documenter-source'>source</a><br>
 
 <a id='Mads.setparamon!-Tuple{Associative,String}' href='#Mads.setparamon!-Tuple{Associative,String}'>#</a>
 **`Mads.setparamon!`** &mdash; *Method*.
@@ -5829,7 +6139,7 @@ Arguments
   * `parameterkey::String` : parameter key
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L436-L440' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L436-L440' class='documenter-source'>source</a><br>
 
 <a id='Mads.setparamsdistnormal!-Tuple{Associative,Array{T,1},Array{T,1}}' href='#Mads.setparamsdistnormal!-Tuple{Associative,Array{T,1},Array{T,1}}'>#</a>
 **`Mads.setparamsdistnormal!`** &mdash; *Method*.
@@ -5849,7 +6159,7 @@ Arguments
   * `stddev::Array{T<:Any,1}` : array with the standard deviation values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L458-L462' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L458-L462' class='documenter-source'>source</a><br>
 
 <a id='Mads.setparamsdistuniform!-Tuple{Associative,Array{T,1},Array{T,1}}' href='#Mads.setparamsdistuniform!-Tuple{Associative,Array{T,1},Array{T,1}}'>#</a>
 **`Mads.setparamsdistuniform!`** &mdash; *Method*.
@@ -5869,7 +6179,7 @@ Arguments
   * `min::Array{T<:Any,1}` : array with the minimum values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L473-L477' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L473-L477' class='documenter-source'>source</a><br>
 
 <a id='Mads.setparamsinit!-Tuple{Associative,Associative}' href='#Mads.setparamsinit!-Tuple{Associative,Associative}'>#</a>
 **`Mads.setparamsinit!`** &mdash; *Method*.
@@ -5888,7 +6198,7 @@ Arguments
   * `paramdict::Associative` : dictionary with initial model parameter values
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L310-L314' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L310-L314' class='documenter-source'>source</a><br>
 
 <a id='Mads.setplotfileformat-Tuple{String,String}' href='#Mads.setplotfileformat-Tuple{String,String}'>#</a>
 **`Mads.setplotfileformat`** &mdash; *Method*.
@@ -5912,7 +6222,7 @@ Returns:
   * output plot format (`png`, `pdf`, etc.)
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L23-L32' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L23-L32' class='documenter-source'>source</a><br>
 
 <a id='Mads.setprocs' href='#Mads.setprocs'>#</a>
 **`Mads.setprocs`** &mdash; *Function*.
@@ -5973,7 +6283,7 @@ Keywords
   * `test`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsParallel.jl#L166-L200' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsParallel.jl#L166-L200' class='documenter-source'>source</a><br>
 
 <a id='Mads.setseed' href='#Mads.setseed'>#</a>
 **`Mads.setseed`** &mdash; *Function*.
@@ -5994,7 +6304,7 @@ Arguments
   * `seed::Integer` : random seed
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L311-L315' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L311-L315' class='documenter-source'>source</a><br>
 
 <a id='Mads.settarget!-Tuple{Associative,Number}' href='#Mads.settarget!-Tuple{Associative,Number}'>#</a>
 **`Mads.settarget!`** &mdash; *Method*.
@@ -6013,7 +6323,7 @@ Arguments
   * `target::Number` : observation target
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L229-L233' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L229-L233' class='documenter-source'>source</a><br>
 
 <a id='Mads.settime!-Tuple{Associative,Number}' href='#Mads.settime!-Tuple{Associative,Number}'>#</a>
 **`Mads.settime!`** &mdash; *Method*.
@@ -6032,7 +6342,7 @@ Arguments
   * `time::Number` : observation time
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L151-L155' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L151-L155' class='documenter-source'>source</a><br>
 
 <a id='Mads.setverbositylevel-Tuple{Int64}' href='#Mads.setverbositylevel-Tuple{Int64}'>#</a>
 **`Mads.setverbositylevel`** &mdash; *Method*.
@@ -6050,7 +6360,7 @@ Arguments
   * `level::Int64` : debug level
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L115-L119' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L115-L119' class='documenter-source'>source</a><br>
 
 <a id='Mads.setweight!-Tuple{Associative,Number}' href='#Mads.setweight!-Tuple{Associative,Number}'>#</a>
 **`Mads.setweight!`** &mdash; *Method*.
@@ -6069,7 +6379,7 @@ Arguments
   * `weight::Number` : observation weight
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L190-L194' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L190-L194' class='documenter-source'>source</a><br>
 
 <a id='Mads.setwellweights!-Tuple{Associative,Number}' href='#Mads.setwellweights!-Tuple{Associative,Number}'>#</a>
 **`Mads.setwellweights!`** &mdash; *Method*.
@@ -6088,7 +6398,7 @@ Arguments
   * `value::Number` : value for well weights
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L330-L334' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L330-L334' class='documenter-source'>source</a><br>
 
 <a id='Mads.showallparameters-Tuple{Associative}' href='#Mads.showallparameters-Tuple{Associative}'>#</a>
 **`Mads.showallparameters`** &mdash; *Method*.
@@ -6106,7 +6416,7 @@ Arguments
   * `madsdata::Associative` : MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L555-L559' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L555-L559' class='documenter-source'>source</a><br>
 
 <a id='Mads.showobservations-Tuple{Associative}' href='#Mads.showobservations-Tuple{Associative}'>#</a>
 **`Mads.showobservations`** &mdash; *Method*.
@@ -6124,7 +6434,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L384-L388' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L384-L388' class='documenter-source'>source</a><br>
 
 <a id='Mads.showparameters-Tuple{Associative}' href='#Mads.showparameters-Tuple{Associative}'>#</a>
 **`Mads.showparameters`** &mdash; *Method*.
@@ -6142,7 +6452,7 @@ Arguments
   * `madsdata::Associative` : MADS problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsParameters.jl#L519-L523' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsParameters.jl#L519-L523' class='documenter-source'>source</a><br>
 
 <a id='Mads.sinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}' href='#Mads.sinetransform-Tuple{Array{T,1},Array{T,1},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.sinetransform`** &mdash; *Method*.
@@ -6153,17 +6463,21 @@ Sine transformation of model parameters
 
 Methods
 
-  * `Mads.sinetransform(sineparams::Array{T<:Any,1}, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:19
+  * `Mads.sinetransform(sineparams::Array{T<:Any,1}, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:37
 
 Arguments
 
-  * `indexlogtransformed::Array{T<:Any,1}`
-  * `lowerbounds::Array{T<:Any,1}`
-  * `sineparams::Array{T<:Any,1}`
-  * `upperbounds::Array{T<:Any,1}`
+  * `indexlogtransformed::Array{T<:Any,1}` : index vector of log-transformed parameters
+  * `lowerbounds::Array{T<:Any,1}` : lower bounds
+  * `sineparams::Array{T<:Any,1}` : model parameters
+  * `upperbounds::Array{T<:Any,1}` : upper bounds
+
+Returns:
+
+  * Sine transformation of model parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSineTransformations.jl#L13-L17' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSineTransformations.jl#L23-L31' class='documenter-source'>source</a><br>
 
 <a id='Mads.sinetransformfunction-Tuple{Function,Array{T,1},Array{T,1},Array{T,1}}' href='#Mads.sinetransformfunction-Tuple{Function,Array{T,1},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.sinetransformfunction`** &mdash; *Method*.
@@ -6174,17 +6488,21 @@ Sine transformation of a function
 
 Methods
 
-  * `Mads.sinetransformfunction(f::Function, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:30
+  * `Mads.sinetransformfunction(f::Function, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1})` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:56
 
 Arguments
 
-  * `f::Function`
-  * `indexlogtransformed::Array{T<:Any,1}`
-  * `lowerbounds::Array{T<:Any,1}`
-  * `upperbounds::Array{T<:Any,1}`
+  * `f::Function` : function
+  * `indexlogtransformed::Array{T<:Any,1}` : index vector of log-transformed parameters
+  * `lowerbounds::Array{T<:Any,1}` : lower bounds
+  * `upperbounds::Array{T<:Any,1}` : upper bounds
+
+Returns:
+
+  * Sine transformation
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSineTransformations.jl#L24-L28' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSineTransformations.jl#L42-L50' class='documenter-source'>source</a><br>
 
 <a id='Mads.sinetransformgradient-Tuple{Function,Array{T,1},Array{T,1},Array{T,1}}' href='#Mads.sinetransformgradient-Tuple{Function,Array{T,1},Array{T,1},Array{T,1}}'>#</a>
 **`Mads.sinetransformgradient`** &mdash; *Method*.
@@ -6195,21 +6513,25 @@ Sine transformation of a gradient function
 
 Methods
 
-  * `Mads.sinetransformgradient(g::Function, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1}; sindx)` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:42
+  * `Mads.sinetransformgradient(g::Function, lowerbounds::Array{T<:Any,1}, upperbounds::Array{T<:Any,1}, indexlogtransformed::Array{T<:Any,1}; sindx)` : /Users/monty/.julia/v0.5/Mads/src/MadsSineTransformations.jl:77
 
 Arguments
 
-  * `g::Function`
-  * `indexlogtransformed::Array{T<:Any,1}`
-  * `lowerbounds::Array{T<:Any,1}`
-  * `upperbounds::Array{T<:Any,1}`
+  * `g::Function` : a gradient function
+  * `indexlogtransformed::Array{T<:Any,1}` :
+  * `lowerbounds::Array{T<:Any,1}` : lower bounds
+  * `upperbounds::Array{T<:Any,1}` : upper bounds
 
 Keywords
 
-  * `sindx`
+  * `sindx` : [default=`0.1`]
+
+Returns:
+
+  * Sine transformation of a gradient function
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSineTransformations.jl#L36-L40' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSineTransformations.jl#L62-L70' class='documenter-source'>source</a><br>
 
 <a id='Mads.spaghettiplot' href='#Mads.spaghettiplot'>#</a>
 **`Mads.spaghettiplot`** &mdash; *Function*.
@@ -6258,7 +6580,7 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", forma
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L1005-L1021' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L1005-L1021' class='documenter-source'>source</a><br>
 
 <a id='Mads.spaghettiplots' href='#Mads.spaghettiplots'>#</a>
 **`Mads.spaghettiplots`** &mdash; *Function*.
@@ -6301,7 +6623,7 @@ Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="
 ```
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsPlot.jl#L820-L835' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsPlot.jl#L820-L835' class='documenter-source'>source</a><br>
 
 <a id='Mads.sphericalcov-Tuple{Number,Number,Number}' href='#Mads.sphericalcov-Tuple{Number,Number,Number}'>#</a>
 **`Mads.sphericalcov`** &mdash; *Method*.
@@ -6312,16 +6634,20 @@ Spherical spatial covariance function
 
 Methods
 
-  * `Mads.sphericalcov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:20
+  * `Mads.sphericalcov(h::Number, maxcov::Number, scale::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:43
 
 Arguments
 
-  * `h::Number`
-  * `maxcov::Number`
-  * `scale::Number`
+  * `h::Number` : separation distance
+  * `maxcov::Number` : max covariance
+  * `scale::Number` : scale
+
+Returns:
+
+  * covariance
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L15-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L31-L39' class='documenter-source'>source</a><br>
 
 <a id='Mads.sphericalvariogram-Tuple{Number,Number,Number,Number}' href='#Mads.sphericalvariogram-Tuple{Number,Number,Number,Number}'>#</a>
 **`Mads.sphericalvariogram`** &mdash; *Method*.
@@ -6332,17 +6658,21 @@ Spherical variogram
 
 Methods
 
-  * `Mads.sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:28
+  * `Mads.sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)` : /Users/monty/.julia/v0.5/Mads/src/MadsKriging.jl:59
 
 Arguments
 
-  * `h::Number`
-  * `nugget::Number`
-  * `range::Number`
-  * `sill::Number`
+  * `h::Number` : separation distance
+  * `nugget::Number` : nugget
+  * `range::Number` : range
+  * `sill::Number` : sill
+
+Returns:
+
+  * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsKriging.jl#L22-L26' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsKriging.jl#L45-L53' class='documenter-source'>source</a><br>
 
 <a id='Mads.sprintf-Tuple' href='#Mads.sprintf-Tuple'>#</a>
 **`Mads.sprintf`** &mdash; *Method*.
@@ -6352,7 +6682,7 @@ Arguments
 Convert `@sprintf` macro into `sprintf` function
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsMisc.jl#L142' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMisc.jl#L155' class='documenter-source'>source</a><br>
 
 <a id='Mads.status-Tuple{}' href='#Mads.status-Tuple{}'>#</a>
 **`Mads.status`** &mdash; *Method*.
@@ -6363,7 +6693,7 @@ Status of the Mads modules
 
 Methods
 
-  * `Mads.status(; git, gitmore)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:181
+  * `Mads.status(; git, gitmore)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:190
 
 Keywords
 
@@ -6371,7 +6701,7 @@ Keywords
   * `gitmore`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L175-L179' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L184-L188' class='documenter-source'>source</a><br>
 
 <a id='Mads.stderrcaptureoff-Tuple{}' href='#Mads.stderrcaptureoff-Tuple{}'>#</a>
 **`Mads.stderrcaptureoff`** &mdash; *Method*.
@@ -6382,10 +6712,10 @@ Restore STDERR
 
 Methods
 
-  * `Mads.stderrcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:107
+  * `Mads.stderrcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:109
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L101-L105' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L103-L107' class='documenter-source'>source</a><br>
 
 <a id='Mads.stderrcaptureon-Tuple{}' href='#Mads.stderrcaptureon-Tuple{}'>#</a>
 **`Mads.stderrcaptureon`** &mdash; *Method*.
@@ -6396,10 +6726,10 @@ Redirect STDERR to a reader
 
 Methods
 
-  * `Mads.stderrcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:94
+  * `Mads.stderrcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:96
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L88-L92' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L90-L94' class='documenter-source'>source</a><br>
 
 <a id='Mads.stdoutcaptureoff-Tuple{}' href='#Mads.stdoutcaptureoff-Tuple{}'>#</a>
 **`Mads.stdoutcaptureoff`** &mdash; *Method*.
@@ -6410,10 +6740,10 @@ Restore STDOUT
 
 Methods
 
-  * `Mads.stdoutcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:81
+  * `Mads.stdoutcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:83
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L75-L79' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L77-L81' class='documenter-source'>source</a><br>
 
 <a id='Mads.stdoutcaptureon-Tuple{}' href='#Mads.stdoutcaptureon-Tuple{}'>#</a>
 **`Mads.stdoutcaptureon`** &mdash; *Method*.
@@ -6424,10 +6754,10 @@ Redirect STDOUT to a reader
 
 Methods
 
-  * `Mads.stdoutcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:68
+  * `Mads.stdoutcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:70
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L62-L66' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L64-L68' class='documenter-source'>source</a><br>
 
 <a id='Mads.stdouterrcaptureoff-Tuple{}' href='#Mads.stdouterrcaptureoff-Tuple{}'>#</a>
 **`Mads.stdouterrcaptureoff`** &mdash; *Method*.
@@ -6438,10 +6768,10 @@ Restore STDOUT & STDERR
 
 Methods
 
-  * `Mads.stdouterrcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:130
+  * `Mads.stdouterrcaptureoff()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:132
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L124-L128' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L126-L130' class='documenter-source'>source</a><br>
 
 <a id='Mads.stdouterrcaptureon-Tuple{}' href='#Mads.stdouterrcaptureon-Tuple{}'>#</a>
 **`Mads.stdouterrcaptureon`** &mdash; *Method*.
@@ -6452,10 +6782,10 @@ Redirect STDOUT & STDERR to readers
 
 Methods
 
-  * `Mads.stdouterrcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:120
+  * `Mads.stdouterrcaptureon()` : /Users/monty/.julia/v0.5/Mads/src/MadsSTDOUT.jl:122
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSTDOUT.jl#L114-L118' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSTDOUT.jl#L116-L120' class='documenter-source'>source</a><br>
 
 <a id='Mads.svrdump-Tuple{Array{SVR.svmmodel,1},String,Int64}' href='#Mads.svrdump-Tuple{Array{SVR.svmmodel,1},String,Int64}'>#</a>
 **`Mads.svrdump`** &mdash; *Method*.
@@ -6475,7 +6805,7 @@ Arguments
   * `svrmodel::Array{SVR.svmmodel,1}` : SVR model
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L126-L130' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L126-L130' class='documenter-source'>source</a><br>
 
 <a id='Mads.svrfree-Tuple{Array{SVR.svmmodel,1}}' href='#Mads.svrfree-Tuple{Array{SVR.svmmodel,1}}'>#</a>
 **`Mads.svrfree`** &mdash; *Method*.
@@ -6493,7 +6823,7 @@ Arguments
   * `svrmodel::Array{SVR.svmmodel,1}` : SVR model
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L110-L114' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L110-L114' class='documenter-source'>source</a><br>
 
 <a id='Mads.svrload-Tuple{Int64,String,Int64}' href='#Mads.svrload-Tuple{Int64,String,Int64}'>#</a>
 **`Mads.svrload`** &mdash; *Method*.
@@ -6517,7 +6847,7 @@ Returns:
   * SVR model
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L145-L153' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L145-L153' class='documenter-source'>source</a><br>
 
 <a id='Mads.svrpredict' href='#Mads.svrpredict'>#</a>
 **`Mads.svrpredict`** &mdash; *Function*.
@@ -6542,7 +6872,7 @@ Returns:
   * 
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L98-L106' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L98-L106' class='documenter-source'>source</a><br>
 
 <a id='Mads.svrtrain' href='#Mads.svrtrain'>#</a>
 **`Mads.svrtrain`** &mdash; *Function*.
@@ -6587,7 +6917,7 @@ Returns:
   * SVR model
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSVR.jl#L53-L61' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSVR.jl#L53-L61' class='documenter-source'>source</a><br>
 
 <a id='Mads.symlinkdir-Tuple{String,String}' href='#Mads.symlinkdir-Tuple{String,String}'>#</a>
 **`Mads.symlinkdir`** &mdash; *Method*.
@@ -6606,7 +6936,7 @@ Arguments
   * `filename::String` : file name
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L977-L981' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L977-L981' class='documenter-source'>source</a><br>
 
 <a id='Mads.symlinkdirfiles-Tuple{String,String}' href='#Mads.symlinkdirfiles-Tuple{String,String}'>#</a>
 **`Mads.symlinkdirfiles`** &mdash; *Method*.
@@ -6625,7 +6955,7 @@ Arguments
   * `dirtarget::String` : target directory
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L959-L963' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L959-L963' class='documenter-source'>source</a><br>
 
 <a id='Mads.tag' href='#Mads.tag'>#</a>
 **`Mads.tag`** &mdash; *Function*.
@@ -6636,10 +6966,10 @@ Tag the Mads modules with a default argument `:patch`
 
 Methods
 
-  * `Mads.tag(madsmodule::String, sym::Symbol)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:231
-  * `Mads.tag(madsmodule::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:231
-  * `Mads.tag(sym::Symbol)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:226
-  * `Mads.tag()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:226
+  * `Mads.tag(madsmodule::String, sym::Symbol)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:240
+  * `Mads.tag(madsmodule::String)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:240
+  * `Mads.tag(sym::Symbol)` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:235
+  * `Mads.tag()` : /Users/monty/.julia/v0.5/Mads/src/../src-interactive/MadsPublish.jl:235
 
 Arguments
 
@@ -6647,7 +6977,7 @@ Arguments
   * `sym::Symbol`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsPublish.jl#L246-L250' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsPublish.jl#L258-L262' class='documenter-source'>source</a><br>
 
 <a id='Mads.test' href='#Mads.test'>#</a>
 **`Mads.test`** &mdash; *Function*.
@@ -6670,7 +7000,7 @@ Keywords
   * `madstest` : test Mads [default=`true`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsTest.jl#L40-L44' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsTest.jl#L40-L44' class='documenter-source'>source</a><br>
 
 <a id='Mads.testj' href='#Mads.testj'>#</a>
 **`Mads.testj`** &mdash; *Function*.
@@ -6689,7 +7019,7 @@ Arguments
   * `coverage::Bool`
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/../src-interactive/MadsTest.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/../src-interactive/MadsTest.jl#L1-L5' class='documenter-source'>source</a><br>
 
 <a id='Mads.transposematrix-Tuple{Array{T,2}}' href='#Mads.transposematrix-Tuple{Array{T,2}}'>#</a>
 **`Mads.transposematrix`** &mdash; *Method*.
@@ -6707,7 +7037,7 @@ Arguments
   * `a::Array{T<:Any,2}` : matrix
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L268-L272' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L268-L272' class='documenter-source'>source</a><br>
 
 <a id='Mads.transposevector-Tuple{Array{T,1}}' href='#Mads.transposevector-Tuple{Array{T,1}}'>#</a>
 **`Mads.transposevector`** &mdash; *Method*.
@@ -6725,7 +7055,7 @@ Arguments
   * `a::Array{T<:Any,1}` : vector
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsHelpers.jl#L258-L262' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsHelpers.jl#L258-L262' class='documenter-source'>source</a><br>
 
 <a id='Mads.void2nan!-Tuple{Associative}' href='#Mads.void2nan!-Tuple{Associative}'>#</a>
 **`Mads.void2nan!`** &mdash; *Method*.
@@ -6743,7 +7073,7 @@ Arguments
   * `dict::Associative` : dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L1004-L1008' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L1004-L1008' class='documenter-source'>source</a><br>
 
 <a id='Mads.weightedstats-Tuple{Array,Array{T,1}}' href='#Mads.weightedstats-Tuple{Array,Array{T,1}}'>#</a>
 **`Mads.weightedstats`** &mdash; *Method*.
@@ -6767,7 +7097,7 @@ Returns:
   * vector of sample variances
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsSenstivityAnalysis.jl#L343-L352' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsSenstivityAnalysis.jl#L343-L352' class='documenter-source'>source</a><br>
 
 <a id='Mads.welloff!-Tuple{Associative,String}' href='#Mads.welloff!-Tuple{Associative,String}'>#</a>
 **`Mads.welloff!`** &mdash; *Method*.
@@ -6786,7 +7116,7 @@ Arguments
   * `wellname::String` : name of the well to be turned off
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L557-L561' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L557-L561' class='documenter-source'>source</a><br>
 
 <a id='Mads.wellon!-Tuple{Associative,String}' href='#Mads.wellon!-Tuple{Associative,String}'>#</a>
 **`Mads.wellon!`** &mdash; *Method*.
@@ -6805,7 +7135,7 @@ Arguments
   * `wellname::String` : name of the well to be turned on
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L522-L526' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L522-L526' class='documenter-source'>source</a><br>
 
 <a id='Mads.wells2observations!-Tuple{Associative}' href='#Mads.wells2observations!-Tuple{Associative}'>#</a>
 **`Mads.wells2observations!`** &mdash; *Method*.
@@ -6823,7 +7153,7 @@ Arguments
   * `madsdata::Associative` : Mads problem dictionary
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsObservations.jl#L579-L583' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsObservations.jl#L579-L583' class='documenter-source'>source</a><br>
 
 <a id='Mads.writeparameters' href='#Mads.writeparameters'>#</a>
 **`Mads.writeparameters`** &mdash; *Function*.
@@ -6847,7 +7177,7 @@ Keywords
   * `respect_space` : [default=`false`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L746-L750' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L746-L750' class='documenter-source'>source</a><br>
 
 <a id='Mads.writeparametersviatemplate-Tuple{Any,Any,Any}' href='#Mads.writeparametersviatemplate-Tuple{Any,Any,Any}'>#</a>
 **`Mads.writeparametersviatemplate`** &mdash; *Method*.
@@ -6871,5 +7201,15 @@ Keywords
   * `respect_space` : [default=`false`]
 
 
-<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/52a855a18967480a1501a0257625be38acf79599/src/MadsIO.jl#L688-L692' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsIO.jl#L688-L692' class='documenter-source'>source</a><br>
+
+<a id='Mads.MadsModel' href='#Mads.MadsModel'>#</a>
+**`Mads.MadsModel`** &mdash; *Type*.
+
+
+
+MadsModel type applied for MathProgBase analyses
+
+
+<a target='_blank' href='https://github.com/madsjulia/Mads.jl/tree/2d1b34e3eb16a3f93612912f574d0078614e5421/src/MadsMathProgBase.jl#L5-L7' class='documenter-source'>source</a><br>
 
