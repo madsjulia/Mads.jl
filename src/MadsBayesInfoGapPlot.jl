@@ -1,16 +1,20 @@
 import Gadfly
+import DocumentFunction
 
 """
 Plot BIG-DT robustness curves
 
-$(DocumentFunction.documentfunction(plotrobustnesscurves))
+$(DocumentFunction.documentfunction(plotrobustnesscurves;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "bigdtresults"=>"BIG-DT results"),
+keytext=Dict("filename"=>"output file name used to dump plots",
+            "format"=>"output plot format (`png`, `pdf`, etc.)",
+            "maxprob"=>"[default=`1.0`]",
+            "maxhoriz"=>"[default=`Inf`]")))
 
-Arguments:
+Dumps:
 
-- `madsdata` : MADS problem dictionary
-- `bigdtresults` : BIG-DT results
-- `filename` : output file name used to dump plots
-- `format` : output plot format (`png`, `pdf`, etc.)
+- image file with name `filename` and in specified `format`
 """
 function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename::String="", format::String="", maxprob::Number=1.0, maxhoriz::Number=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]

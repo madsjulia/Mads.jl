@@ -1,4 +1,5 @@
 import Documenter
+import DocumentFunction
 
 """
 Produce MADS help information
@@ -50,7 +51,9 @@ end
 @doc """
 List available functions in the MADS modules:
 
-$(DocumentFunction.documentfunction(functions))
+$(DocumentFunction.documentfunction(functions;
+argtext=Dict("string"=>"matching string",
+            "m"=>"MADS module")))
 
 Examples:
 
@@ -60,12 +63,6 @@ Mads.functions(BIGUQ)
 Mads.functions("get")
 Mads.functions(Mads, "get")
 ```
-
-Arguments:
-
-- `module` : MADS module
-- `string` : matching string
-
 """ functions
 
 #=
