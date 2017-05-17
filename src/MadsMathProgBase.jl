@@ -1,5 +1,6 @@
 import MathProgBase
 import DataStructures
+import DocumentFunction
 
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
@@ -7,7 +8,8 @@ end
 """
 Mads execution using MathProgBase
 
-$(DocumentFunction.documentfunction(madsmathprogbase))
+$(DocumentFunction.documentfunction(madsmathprogbase;
+argtext=Dict("madsdata"=>"Mads problem dictionary [default=`Dict()`]")))
 """
 function madsmathprogbase(madsdata::Associative=Dict())
 	f = makemadscommandfunction(madsdata)
@@ -76,7 +78,12 @@ end
 """
 Make forward model, gradient, objective functions needed for MathProgBase optimization
 
-$(DocumentFunction.documentfunction(makempbfunctions))
+$(DocumentFunction.documentfunction(makempbfunctions;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Returns:
+
+- forward model, gradient, objective functions
 """
 function makempbfunctions(madsdata::Associative)
 	"""

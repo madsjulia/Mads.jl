@@ -1,28 +1,59 @@
+import DocumentFunction
+
 """
 Gaussian spatial covariance function
 
-$(DocumentFunction.documentfunction(gaussiancov))
+$(DocumentFunction.documentfunction(gaussiancov;
+argtext=Dict("h"=>"",
+            "maxcov"=>"max covariance",
+            "scale"=>"")))
+
+Returns:
+
+- covariance
 """
 gaussiancov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-(h * h) / (scale * scale))
 
 """
 Exponential spatial covariance function
 
-$(DocumentFunction.documentfunction(expcov))
+$(DocumentFunction.documentfunction(expcov;
+argtext=Dict("h"=>"",
+            "maxcov"=>"max covariance",
+            "scale"=>"")))
+
+Returns:
+
+- covariance
 """
 expcov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-h / scale)
 
 """
 Spherical spatial covariance function
 
-$(DocumentFunction.documentfunction(sphericalcov))
+$(DocumentFunction.documentfunction(sphericalcov;
+argtext=Dict("h"=>"",
+            "maxcov"=>"max covariance",
+            "scale"=>"")))
+
+Returns:
+
+- covariance
 """
 sphericalcov(h::Number, maxcov::Number, scale::Number) = (h <= scale ? maxcov * (1 - 1.5 * h / (scale) + .5 * (h / scale) ^ 3) : 0.)
 
 """
 Spherical variogram
 
-$(DocumentFunction.documentfunction(sphericalvariogram))
+$(DocumentFunction.documentfunction(sphericalvariogram;
+argtext=Dict("h"=>"",
+            "sill"=>"",
+            "range"=>"",
+            "nugget"=>"")))
+
+Returns:
+
+- 
 """
 function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -37,7 +68,15 @@ end
 """
 Exponential variogram
 
-$(DocumentFunction.documentfunction(exponentialvariogram))
+$(DocumentFunction.documentfunction(exponentialvariogram;
+argtext=Dict("h"=>"",
+            "sill"=>"",
+            "range"=>"",
+            "nugget"=>"")))
+
+Returns:
+
+- 
 """
 function exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -50,7 +89,15 @@ end
 """
 Gaussian variogram
 
-$(DocumentFunction.documentfunction(gaussianvariogram))
+$(DocumentFunction.documentfunction(gaussianvariogram;
+argtext=Dict("h"=>"",
+            "sill"=>"",
+            "range"=>"",
+            "nugget"=>"")))
+
+Returns:
+
+- 
 """
 function gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -63,7 +110,15 @@ end
 """
 Kriging
 
-$(DocumentFunction.documentfunction(krige))
+$(DocumentFunction.documentfunction(krige;
+argtext=Dict("x0mat"=>"",
+            "X"=>"",
+            "Z"=>"",
+            "cov"=>"")))
+
+Returns:
+
+- 
 """
 function krige(x0mat::Array, X::Matrix, Z::Vector, cov::Function)
 	result = zeros(size(x0mat, 2))
@@ -89,7 +144,9 @@ end
 """
 Get spatial covariance matrix
 
-$(DocumentFunction.documentfunction(getcovmat))
+$(DocumentFunction.documentfunction(getcovmat;
+argtext=Dict("X"=>"",
+            "cov"=>"")))
 """
 function getcovmat(X::Matrix, cov::Function)
 	covmat = Array{Float64}((size(X, 2), size(X, 2)))
@@ -107,7 +164,15 @@ end
 """
 Get spatial covariance vector
 
-$(DocumentFunction.documentfunction(getcovvec!))
+$(DocumentFunction.documentfunction(getcovvec!;
+argtext=Dict("covvec"=>"covariance vector",
+            "x0"=>"",
+            "X"=>"",
+            "cov"=>"")))
+
+Returns:
+
+- spatial covariance vector
 """
 function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
 	for i = 1:size(X, 2)
@@ -121,11 +186,6 @@ function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
 	return covvec
 end
 
-"""
-Estimate kriging error
-
-$(DocumentFunction.documentfunction(estimationerror))
-"""
 function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
 	covmat = getcovmat(X, cov)
 	covvec = Array{Float64}(size(X, 2))
@@ -136,3 +196,20 @@ end
 function estimationerror(w::Vector, x0::Vector, X::Matrix, covmat::Matrix, covvec::Vector, cov0::Number)
 	return cov0 + dot(w, covmat * w) - 2 * dot(w, covvec)
 end
+
+@doc """
+Estimate kriging error
+
+$(DocumentFunction.documentfunction(estimationerror;
+argtext=Dict("w"=>"",
+            "x0"=>"",
+            "X"=>"",
+            "cov"=>"",
+            "covmat"=>"",
+            "covvec"=>"covariance vector",
+            "cov0"=>"")))
+
+Returns:
+
+- estimation kriging error
+""" estimationerror
