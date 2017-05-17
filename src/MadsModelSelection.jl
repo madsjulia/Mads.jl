@@ -1,7 +1,11 @@
+import DocumentFunction
+
 """
 Model section information criteria
 
-$(DocumentFunction.documentfunction(modelinformationcriteria))
+$(DocumentFunction.documentfunction(modelinformationcriteria;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "par"=>"parameter")))
 """
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
 	f = Mads.forward(madsdata, par)
