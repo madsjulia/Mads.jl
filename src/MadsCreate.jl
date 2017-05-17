@@ -1,4 +1,5 @@
 import DataStructures
+import DocumentFunction
 
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
@@ -54,12 +55,9 @@ end
 @doc """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-Arguments:
-
-- `infilename` : input Mads file
-- `outfilename` : output Mads file
-- `madsdata` : MADS problem dictionary
-- `predictions` : dictionary of model predictions
-
-$(DocumentFunction.documentfunction(createmadsproblem))
+$(DocumentFunction.documentfunction(createmadsproblem;
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "infilename"=>"input Mads file",
+            "outfilename"=>"output Mads file",
+            "predictions"=>"dictionary of model predictions")))
 """ createmadsproblem
