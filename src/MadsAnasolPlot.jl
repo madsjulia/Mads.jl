@@ -1,21 +1,19 @@
 import Gadfly
+import DocumentFunction
 
 """
 Plot injected/reduced contaminant mass
 
-$(DocumentFunction.documentfunction(plotmass))
+$(DocumentFunction.documentfunction(plotmass;
+argtext=Dict("lambda"=>"array with all the lambda values",
+            "mass_injected"=>"array with associated total injected mass",
+            "mass_reduced"=>"array with associated total reduced mass",
+            "filename"=>"output filename for the generated plot"),
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)")))
 
-- `Mads.plotmass(lambda, mass_injected, mass_reduced, filename="file_name")`
+Dumps:
 
-Arguments:
-
-- `lambda` : array with all the lambda values
-- `mass_injected` : array with associated total injected mass
-- `mass_reduced` : array with associated total reduced mass
-- `filename` : output filename for the generated plot
-- `format` : output plot format (`png`, `pdf`, etc.)
-
-Dumps: image file with name `filename` and in specified `format`
+- image file with name `filename` and in specified `format`
 """
 function plotmass(lambda::Vector{Float64}, mass_injected::Vector{Float64}, mass_reduced::Vector{Float64}, filename::String; format::String="")
 	p1 = Gadfly.plot(x=lambda, y=mass_reduced, Gadfly.Guide.xlabel("Reaction Rate Constant [1/d]"), Gadfly.Guide.ylabel("Mass Reduced [kg]"), Gadfly.Geom.point, Gadfly.Scale.x_log10, Gadfly.Scale.y_log10)
