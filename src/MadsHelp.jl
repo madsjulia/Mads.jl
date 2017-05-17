@@ -52,7 +52,7 @@ end
 List available functions in the MADS modules:
 
 $(DocumentFunction.documentfunction(functions;
-argtext=Dict("string"=>"matching string",
+argtext=Dict("string"=>"string to display functions with matching names",
             "m"=>"MADS module")))
 
 Examples:

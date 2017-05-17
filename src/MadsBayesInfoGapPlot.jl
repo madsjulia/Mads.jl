@@ -9,8 +9,8 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
             "bigdtresults"=>"BIG-DT results"),
 keytext=Dict("filename"=>"output file name used to dump plots",
             "format"=>"output plot format (`png`, `pdf`, etc.)",
-            "maxprob"=>"[default=`1.0`]",
-            "maxhoriz"=>"[default=`Inf`]")))
+            "maxprob"=>"maximum probability [default=`1.0`]",
+            "maxhoriz"=>"maximum horizon [default=`Inf`]")))
 
 Dumps:
 
