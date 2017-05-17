@@ -4,9 +4,9 @@ import DocumentFunction
 Gaussian spatial covariance function
 
 $(DocumentFunction.documentfunction(gaussiancov;
-argtext=Dict("h"=>"",
-            "maxcov"=>"max covariance",
-            "scale"=>"")))
+argtext=Dict("h"=>"separation distance",
+            "maxcov"=>"maximum covariance",
+            "scale"=>"scale")))
 
 Returns:
 
@@ -18,9 +18,9 @@ gaussiancov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-(h * h) / 
 Exponential spatial covariance function
 
 $(DocumentFunction.documentfunction(expcov;
-argtext=Dict("h"=>"",
-            "maxcov"=>"max covariance",
-            "scale"=>"")))
+argtext=Dict("h"=>"separation distance",
+            "maxcov"=>"maximum covariance",
+            "scale"=>"scale")))
 
 Returns:
 
@@ -32,9 +32,9 @@ expcov(h::Number, maxcov::Number, scale::Number) = maxcov * exp(-h / scale)
 Spherical spatial covariance function
 
 $(DocumentFunction.documentfunction(sphericalcov;
-argtext=Dict("h"=>"",
+argtext=Dict("h"=>"separation distance",
             "maxcov"=>"max covariance",
-            "scale"=>"")))
+            "scale"=>"scale")))
 
 Returns:
 
@@ -46,10 +46,10 @@ sphericalcov(h::Number, maxcov::Number, scale::Number) = (h <= scale ? maxcov * 
 Spherical variogram
 
 $(DocumentFunction.documentfunction(sphericalvariogram;
-argtext=Dict("h"=>"",
-            "sill"=>"",
-            "range"=>"",
-            "nugget"=>"")))
+argtext=Dict("h"=>"separation distance",
+            "sill"=>"sill",
+            "range"=>"range",
+            "nugget"=>"nugget")))
 
 Returns:
 
@@ -69,10 +69,10 @@ end
 Exponential variogram
 
 $(DocumentFunction.documentfunction(exponentialvariogram;
-argtext=Dict("h"=>"",
-            "sill"=>"",
-            "range"=>"",
-            "nugget"=>"")))
+argtext=Dict("h"=>"separation distance",
+            "sill"=>"sill",
+            "range"=>"range",
+            "nugget"=>"nugget")))
 
 Returns:
 
@@ -90,10 +90,10 @@ end
 Gaussian variogram
 
 $(DocumentFunction.documentfunction(gaussianvariogram;
-argtext=Dict("h"=>"",
-            "sill"=>"",
-            "range"=>"",
-            "nugget"=>"")))
+argtext=Dict("h"=>"separation distance",
+            "sill"=>"sill",
+            "range"=>"range",
+            "nugget"=>"nugget")))
 
 Returns:
 
@@ -111,16 +111,16 @@ end
 Kriging
 
 $(DocumentFunction.documentfunction(krige;
-argtext=Dict("x0mat"=>"",
-            "X"=>"",
-            "Z"=>"",
-            "cov"=>"")))
+argtext=Dict("x0mat"=>"point coordinates at which to obtain kriging estimates",
+            "X"=>"coordinates of the observation (conditioning) data",
+            "Z"=>"values for the observation (conditioning) data",
+            "cov"=>"spatial covariance function")))
 
 Returns:
 
-- 
+- kriging estimates at `x0mat`
 """
-function krige(x0mat::Array, X::Matrix, Z::Vector, cov::Function)
+function krige(x0mat::Matrix, X::Matrix, Z::Vector, cov::Function)
 	result = zeros(size(x0mat, 2))
 	covmat = getcovmat(X, cov)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
@@ -145,8 +145,8 @@ end
 Get spatial covariance matrix
 
 $(DocumentFunction.documentfunction(getcovmat;
-argtext=Dict("X"=>"",
-            "cov"=>"")))
+argtext=Dict("X"=>"matrix with coordinates of the data points (x or y)",
+            "cov"=>"spatial covariance function")))
 """
 function getcovmat(X::Matrix, cov::Function)
 	covmat = Array{Float64}((size(X, 2), size(X, 2)))
@@ -165,16 +165,16 @@ end
 Get spatial covariance vector
 
 $(DocumentFunction.documentfunction(getcovvec!;
-argtext=Dict("covvec"=>"covariance vector",
-            "x0"=>"",
-            "X"=>"",
-            "cov"=>"")))
+argtext=Dict("covvec"=>"spatial covariance vector",
+            "x0"=>"vector with coordinates of the estimation points (x or y)",
+            "X"=>"matrix with coordinates of the data points",
+            "cov"=>"spatial covariance function")))
 
 Returns:
 
 - spatial covariance vector
 """
-function getcovvec!(covvec::Array, x0::Vector, X::Matrix, cov::Function)
+function getcovvec!(covvec::Vector, x0::Vector, X::Matrix, cov::Function)
 	for i = 1:size(X, 2)
 		d = 0.
 		for j = 1:size(X, 1)
@@ -191,9 +191,9 @@ function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
 	covvec = Array{Float64}(size(X, 2))
 	covvec = getcovvec!(covvec, x0, X, cov)
 	cov0 = cov(0.)
-	return estimationerror(w, x0, X, covmat, covvec, cov0)
+	return estimationerror(w, covmat, covvec, cov0)
 end
-function estimationerror(w::Vector, x0::Vector, X::Matrix, covmat::Matrix, covvec::Vector, cov0::Number)
+function estimationerror(w::Vector, covmat::Matrix, covvec::Vector, cov0::Number)
 	return cov0 + dot(w, covmat * w) - 2 * dot(w, covvec)
 end
 
@@ -201,13 +201,13 @@ end
 Estimate kriging error
 
 $(DocumentFunction.documentfunction(estimationerror;
-argtext=Dict("w"=>"",
+argtext=Dict("w"=>"kriging weights",
             "x0"=>"",
             "X"=>"",
-            "cov"=>"",
-            "covmat"=>"",
+            "cov"=>"spatial covariance function",
+            "covmat"=>"covariance matrix",
             "covvec"=>"covariance vector",
-            "cov0"=>"")))
+            "cov0"=>"zero-separation covariance")))
 
 Returns:
 

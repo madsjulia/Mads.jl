@@ -60,7 +60,6 @@ macro stdouterrcapture(block)
 	end
 end
 
-
 """
 Redirect STDOUT to a reader
 

@@ -9,7 +9,7 @@ function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 sec
 	end
 	return true
 end
-function checknodedir(dir::String, waittime::Float64=20.) # 20 seconds
+function checknodedir(dir::String, waittime::Float64=10.) # 10 seconds
 	if is_windows()
 		proc = spawn(`cmd /C dir $dir)`)
 	elseif Mads.madsbash
@@ -29,9 +29,9 @@ end
 Check if a directory is readable
 
 $(DocumentFunction.documentfunction(checknodedir;
-argtext=Dict("node"=>"",
+argtext=Dict("node"=>"computational node name (e.g. `madsmax.lanl.gov`, `wf03`, or `127.0.0.1`)",
             "dir"=>"directory",
-            "waittime"=>"wait time [default=`10`when node is used, `20`otherwise]")))
+            "waittime"=>"wait time in seconds [default=`10`]")))
 
 Returns:
 
@@ -108,13 +108,14 @@ end
 Run external command and pipe stdout and stderr
 
 $(DocumentFunction.documentfunction(runcmd;
-argtext=Dict("cmd"=>"command",
-            "cmdstring"=>"command string"),
+argtext=Dict("cmd"=>"command (as a julia command; e.g. \\`ls\\`)",
+            "cmdstring"=>"command (as a string; e.g. \"ls\")"),
 keytext=Dict("quiet"=>"[default=`Mads.quiet`]",
             "pipe"=>"[default=`false`]",
-            "waittime"=>"wait time [default=`executionwaittime`]")))
+            "waittime"=>"wait time is second [default=`Mads.executionwaittime`]")))
 
 Returns:
 
-- cmdout, cmderr or `false`
+- cmdout
+- cmderr
 """ runcmd

@@ -7,7 +7,7 @@ $(DocumentFunction.documentfunction(asinetransform;
 argtext=Dict("params"=>"model parameters",
             "lowerbounds"=>"lower bounds",
             "upperbounds"=>"upper bounds",
-            "indexlogtransformed"=>"")))
+            "indexlogtransformed"=>"index vector of log-transformed parameters")))
 
 Returns:
 
@@ -27,7 +27,7 @@ $(DocumentFunction.documentfunction(sinetransform;
 argtext=Dict("sineparams"=>"model parameters",
             "lowerbounds"=>"lower bounds",
             "upperbounds"=>"upper bounds",
-            "indexlogtransformed"=>"")))
+            "indexlogtransformed"=>"index vector of log-transformed parameters")))
 
 Returns:
 
@@ -46,7 +46,7 @@ $(DocumentFunction.documentfunction(sinetransformfunction;
 argtext=Dict("f"=>"function",
             "lowerbounds"=>"lower bounds",
             "upperbounds"=>"upper bounds",
-            "indexlogtransformed"=>"")))
+            "indexlogtransformed"=>"index vector of log-transformed parameters")))
 
 Returns:
 

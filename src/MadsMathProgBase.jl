@@ -2,11 +2,14 @@ import MathProgBase
 import DataStructures
 import DocumentFunction
 
+"""
+MadsModel type applied for MathProgBase analyses
+"""
 type MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
 
 """
-Mads execution using MathProgBase
+Define `MadsModel` type applied for Mads execution using `MathProgBase`
 
 $(DocumentFunction.documentfunction(madsmathprogbase;
 argtext=Dict("madsdata"=>"Mads problem dictionary [default=`Dict()`]")))
