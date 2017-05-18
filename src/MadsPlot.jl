@@ -334,10 +334,10 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted onl
             "filename"=>"output file name",
             "title"=>"graph title",
             "xtitle"=>"x-axis title [default=`\"Time\"`]",
-            "ytitle"=>"y-axis title",
+            "ytitle"=>"y-axis title [default=`\"y\"`]",
             "key2time"=>"user provided function to convert observation keys to observation times",
             "separate_files"=>"plot data for multiple wells separately [default=`false`]",
-            "hsize"=>"graph horizontal size[default=`6Gadfly.inch`]",
+            "hsize"=>"graph horizontal size [default=`6Gadfly.inch`]",
             "vsize"=>"graph vertical size [default=`4Gadfly.inch`]",
             "linewidth"=>"line width [default=`2Gadfly.pt`]",
             "pointsize"=>"data dot size [default=`4Gadfly.pt`]",
@@ -369,7 +369,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "samples"=>"matrix with model parameters",
             "filename"=>"output file name"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
-            "pointsize"=>"[default=`0.9Gadfly.mm`]")))
+            "pointsize"=>"point size [default=`0.9Gadfly.mm`]")))
 
 Dumps:
 
@@ -515,8 +515,8 @@ $(DocumentFunction.documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
-keytext=Dict("xtitle"=>"x-axis title, [default=`\"Time years\"`]",
-            "ytitle"=>"y-axis title, [default=`\"Concentration ppb\"`]",
+keytext=Dict("xtitle"=>"x-axis title [default=`\"Time years\"`]",
+            "ytitle"=>"y-axis title [default=`\"Concentration ppb\"`]",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)")))
 
@@ -536,11 +536,11 @@ keytext=Dict("filter"=>"string or regex to plot only observations containing `fi
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)",
             "debug"=>"[default=`false`]",
-            "separate_files"=>"[default=`false`]",
-            "xtitle"=>"[default=`\"Time \[years\]\"`]",
-            "ytitle"=>"[default=`\"Concentration \[ppb\]\"`]",
-            "linewidth"=>"[default=`2Gadfly.pt`]",
-            "pointsize"=>"[default=`2Gadfly.pt`]")))
+            "separate_files"=>"plot data for multiple wells separately [default=`false`]",
+            "xtitle"=>"x-axis title [default=`\"Time \[years\]\"`]",
+            "ytitle"=>"y-axis title [default=`\"Concentration \[ppb\]\"`]",
+            "linewidth"=>"line width [default=`2Gadfly.pt`]",
+            "pointsize"=>"point size [default=`2Gadfly.pt`]")))
 
 Dumps:
 
@@ -826,12 +826,12 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdictarray"=>"parameter dictionary containing the data arrays to be plotted"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
             "keyword"=>"keyword to be added in the file name used to output the produced plots",
-            "xtitle"=>"`x` axis title, [default=`X`]",
-            "ytitle"=>"`y` axis title, [default=`Y`]",
+            "xtitle"=>"`x` axis title [default=`X`]",
+            "ytitle"=>"`y` axis title [default=`Y`]",
             "obs_plot_dots"=>"plot observation as dots (`true` (default) or `false`)",
             "seed"=>"initial random seed, [default=`0`]",
-            "linewidth"=>"[default=`2Gadfly.pt`]",
-            "pointsize"=>"[default=`4Gadfly.pt`]")))
+            "linewidth"=>"width of the lines on the plot [default=`2Gadfly.pt`]",
+            "pointsize"=>"size of the markers on the plot [default=`4Gadfly.pt`]")))
 
 Dumps:
 
@@ -1010,17 +1010,17 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "number_of_samples"=>"number of samples",
             "dictarray"=>"dictionary array containing the data arrays to be plotted",
             "array"=>""),
-keytext=Dict("plotdata"=>"[default=`true`]",
+keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted only) [default=`true`]",
             "filename"=>"output file name used to output the produced plots",
             "keyword"=>"keyword to be added in the file name used to output the produced plots (if `filename` is not defined)",
             "format"=>"output plot format (`png`, `pdf`, etc.)",
-            "xtitle"=>"`x` axis title, [default=`X`]",
-            "ytitle"=>"`y` axis title, [default=`Y`]",
+            "xtitle"=>"`x` axis title [default=`X`]",
+            "ytitle"=>"`y` axis title [default=`Y`]",
             "yfit"=>"[default=`false`]",
             "obs_plot_dots"=>"plot observation as dots (`true` [default] or `false`)",
-            "seed"=>"initial random seed, [default=`0`]",
-            "linewidth"=>"[default=`2Gadfly.pt`]",
-            "pointsize"=>"[default=`4Gadfly.pt`]")))
+            "seed"=>"initial random seed [default=`0`]",
+            "linewidth"=>"width of the lines in plot [default=`2Gadfly.pt`]",
+            "pointsize"=>"size of the markers in plot [default=`4Gadfly.pt`]")))
 
 Dumps:
 
@@ -1043,16 +1043,16 @@ $(DocumentFunction.documentfunction(plotseries;
 argtext=Dict("X"=>"matrix with the series data",
             "filename"=>"output file name"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
-            "xtitle"=>"x-axis title, [default=`X`]",
-            "ytitle"=>"y-axis title, [default=`Y`]",
-            "title"=>"plot title, [default=`Sources`]",
-            "name"=>"series name, [default=`Sources`]",
+            "xtitle"=>"x-axis title [default=`X`]",
+            "ytitle"=>"y-axis title [default=`Y`]",
+            "title"=>"plot title [default=`Sources`]",
+            "name"=>"series name [default=`Sources`]",
             "combined"=>"[default=`true`]",
-            "hsize"=>"[default=`6Gadfly.inch`]",
-            "vsize"=>"[default=`4Gadfly.inch`]",
-            "linewidth"=>"[default=`2Gadfly.pt`]",
-            "dpi"=>"[default=`Mads.dpi`]",
-            "colors"=>"")))
+            "hsize"=>"horizontal size [default=`6Gadfly.inch`]",
+            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
+            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
+            "dpi"=>"graph resolution [default=`Mads.dpi`]",
+            "colors"=>"colors to use in plots")))
 
 Dumps:
 
