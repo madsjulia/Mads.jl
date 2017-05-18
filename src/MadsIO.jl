@@ -6,15 +6,7 @@ Load MADS input file defining a MADS problem dictionary
 $(DocumentFunction.documentfunction(loadmadsfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
-             "format"=>"acceptable formats are `yaml` and`json`,  [default=`yaml`]")))
-
-Usage:
-
-```
-Mads.loadmadsfile(filename)
-Mads.loadmadsfile(filename; julia=false)
-Mads.loadmadsfile(filename; julia=true)
-```
+             "format"=>"acceptable formats are `yaml` and`json` [default=`yaml`]")))
 
 Returns:
 
@@ -187,10 +179,10 @@ $(DocumentFunction.documentfunction(savemadsfile;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
             "parameters"=>"Dictionary with parameters (optional)",
             "filename"=>"input file name (e.g. `input_file_name.mads`)"),
-keytext=Dict("julia"=>"if `true` use Julia JSON module to save, [default=`false`]",
-            "explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file, [default=`false`]")))
+keytext=Dict("julia"=>"if `true` use Julia JSON module to save [default=`false`]",
+            "explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file [default=`false`]")))
 
-Usage:
+Example:
 
 ```julia
 Mads.savemadsfile(madsdata)
@@ -218,12 +210,6 @@ Set a default MADS input file
 
 $(DocumentFunction.documentfunction(setmadsinputfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
-
-Usage:
-
-```
-Mads.setmadsinputfile(filename)
-```
 """
 function setmadsinputfile(filename::String)
 	global madsinputfile = filename
@@ -233,12 +219,6 @@ end
 Get the default MADS input file set as a MADS global variable using `setmadsinputfile(filename)`
 
 $(DocumentFunction.documentfunction(getmadsinputfile))
-
-Usage:
-
-```julia
-Mads.getmadsinputfile()
-```
 
 Returns:
 
@@ -254,9 +234,9 @@ Get the MADS problem root name
 $(DocumentFunction.documentfunction(getmadsrootname;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
-            "version"=>"delete version information from filename for the returned rootname, [default=`false`]")))
+            "version"=>"delete version information from filename for the returned rootname [default=`false`]")))
 
-Usage:
+Example:
 
 ```julia
 madsrootname = Mads.getmadsrootname(madsdata)
@@ -301,10 +281,6 @@ Get the directory where the Mads data file is located
 $(DocumentFunction.documentfunction(getmadsproblemdir;
 argtext=Dict("madsdata"=>"Mads problem dictionary")))
 
-Usage:
-
-- `Mads.getmadsproblemdir(madsdata)`
-
 Example:
 
 ```julia
@@ -323,7 +299,7 @@ Get the directory where currently Mads is running
 
 $(DocumentFunction.documentfunction(getmadsdir))
 
-Usage:
+Example:
 
 ```julia
 problemdir = Mads.getmadsdir()
@@ -350,7 +326,7 @@ Get file name root
 $(DocumentFunction.documentfunction(getrootname;
 argtext=Dict("filename"=>"file name"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
-            "version"=>"delete version information from filename for the returned rootname, [default=`false`]")))
+            "version"=>"delete version information from filename for the returned rootname [default=`false`]")))
 
 Returns:
 
@@ -529,8 +505,8 @@ Set model input files; delete files where model output should be saved for MADS
 
 $(DocumentFunction.documentfunction(setmodelinputs;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "parameters"=>""),
-keytext=Dict("path"=>"path for the files, [default=`.`]")))
+            "parameters"=>"parameters"),
+keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
 function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
 	if haskey(madsdata, "Instructions") # Templates/Instructions
@@ -637,7 +613,7 @@ Get files in the current directory or in a directory defined by `path` matching 
 
 $(DocumentFunction.documentfunction(searchdir;
 argtext=Dict("key"=>"matching pattern for Mads input files (string or regular expression accepted)"),
-keytext=Dict("path"=>"search directory for the mads input files, [default=`.`]")))
+keytext=Dict("path"=>"search directory for the mads input files [default=`.`]")))
 
 Returns:
 
@@ -761,8 +737,8 @@ argtext=Dict("instline"=>"instruction line")))
 Returns:
 
 - `regexs` : regular expressions
-- `obsnames` : 
-- `getparamhere` :
+- `obsnames` : observation names
+- `getparamhere` : parameters
 """
 function instline2regexs(instline::String)
 	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
@@ -807,7 +783,7 @@ Match an instruction line in the Mads instruction file with model input file
 
 $(DocumentFunction.documentfunction(obslineismatch;
 argtext=Dict("obsline"=>"instruction line",
-            "regexs"=>"")))
+            "regexs"=>"regular expressions")))
 
 Returns:
 
@@ -822,10 +798,10 @@ end
 Get observations for a set of regular expressions
 
 $(DocumentFunction.documentfunction(regexs2obs;
-argtext=Dict("obsline"=>"",
+argtext=Dict("obsline"=>"observation line",
             "regexs"=>"regular expressions",
-            "obsnames"=>"",
-            "getparamhere"=>"")))
+            "obsnames"=>"observation names",
+            "getparamhere"=>"parameters")))
 
 Returns:
 
@@ -891,7 +867,7 @@ Read observations
 
 $(DocumentFunction.documentfunction(readobservations;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "obskeys"=>"observation keys, [default=`getobskeys(madsdata)`]")))
+            "obskeys"=>"observation keys [default=`getobskeys(madsdata)`]")))
 
 Returns:
 
@@ -993,7 +969,7 @@ Remove directory
 
 $(DocumentFunction.documentfunction(rmdir;
 argtext=Dict("dir"=>"the directory to be removed"),
-keytext=Dict("path"=>"path of the directory, [default=`current path`]")))
+keytext=Dict("path"=>"path of the directory [default=`current path`]")))
 """
 function rmdir(dir::String; path::String="")
 	if path != "" && path != "."
@@ -1009,7 +985,7 @@ Remove file
 
 $(DocumentFunction.documentfunction(rmfile;
 argtext=Dict("filename"=>"the file to be removed"),
-keytext=Dict("path"=>"path of the file, [default=`current path`]")))
+keytext=Dict("path"=>"path of the file [default=`current path`]")))
 """
 function rmfile(filename::String; path::String="")
 	if path != "" && path != "."
@@ -1025,7 +1001,7 @@ Remove files with extension `ext`
 
 $(DocumentFunction.documentfunction(rmfiles_ext;
 argtext=Dict("ext"=>"extension"),
-keytext=Dict("path"=>"path of the files to be removed, [default=`.`]")))
+keytext=Dict("path"=>"path of the files to be removed [default=`.`]")))
 """
 function rmfiles_ext(ext::String; path::String=".")
 	for f in searchdir(Regex(string(".*\\.", ext)); path=path)
@@ -1038,7 +1014,7 @@ Remove files with root `root`
 
 $(DocumentFunction.documentfunction(rmfiles_root;
 argtext=Dict("root"=>"root"),
-keytext=Dict("path"=>"path of the files to be removed, [default=`.`]")))
+keytext=Dict("path"=>"path of the files to be removed [default=`.`]")))
 """
 function rmfiles_root(root::String; path::String=".")
 	s = splitdir(root)
