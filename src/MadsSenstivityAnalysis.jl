@@ -16,7 +16,7 @@ Make gradient function needed for local sensitivity analysis
 
 $(DocumentFunction.documentfunction(makelocalsafunction;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
+keytext=Dict("multiplycenterbyweights"=>"multiply center by weights [default=`true`]")))
 
 Returns:
 
@@ -101,14 +101,14 @@ Local sensitivity analysis based on eigen analysis of the parameter covariance m
 $(DocumentFunction.documentfunction(localsa;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("sinspace"=>"[default=`true`]",
-            "keyword"=>"",
+            "keyword"=>"key word",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)",
-            "datafiles"=>"[default=`true`]",
-            "imagefiles"=>"[default=`graphoutput`]",
+            "datafiles"=>"data files [default=`true`]",
+            "imagefiles"=>"image files [default=`graphoutput`]",
             "par"=>"parameter set",
             "obs"=>"observations for the parameter set",
-            "J"=>"")))
+            "J"=>"Jacobian matrix")))
 
 Dumps:
 
@@ -397,7 +397,7 @@ Get independent sampling of model parameters defined in the MADS problem diction
 $(DocumentFunction.documentfunction(getparamrandom;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"model parameter key",
-            "numsamples"=>"number of samples,  [default=`1`]"),
+            "numsamples"=>"number of samples [default=`1`]"),
 keytext=Dict("init_dist"=>"if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); if `false` (default) use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)",
             "numsamples"=>"number of samples",
             "paramdist"=>"")))
@@ -412,8 +412,8 @@ Saltelli sensitivity analysis (brute force)
 
 $(DocumentFunction.documentfunction(saltellibrute;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("N"=>"number of samples, [default=`1000`]",
-            "seed"=>"initial random seed, [default=`0`]",
+keytext=Dict("N"=>"number of samples [default=`1000`]",
+            "seed"=>"initial random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
@@ -598,10 +598,10 @@ Saltelli sensitivity analysis
 
 $(DocumentFunction.documentfunction(saltelli;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("N"=>"number of samples, [default=`100`]",
-            "seed"=>"initial random seed, [default=`0`]",
+keytext=Dict("N"=>"number of samples [default=`100`]",
+            "seed"=>"initial random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
-            "parallel"=>"set to true if the model runs should be performed in parallel, [default=`false`]",
+            "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"[default=`N`]")))
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
@@ -1067,15 +1067,15 @@ Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Tes
 
 $(DocumentFunction.documentfunction(efast;
 argtext=Dict("md"=>"MADS problem dictionary"),
-keytext=Dict("N"=>"number of samples, [default=`100`]",
-            "M"=>"maximum number of harmonics, [default=`6`]",
-            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4), [default=`4`]",
-            "plotresults"=>"plot of results, [default=`graphoutput`]",
-            "seed"=>"initial random seed, [default=`0`]",
+keytext=Dict("N"=>"number of samples [default=`100`]",
+            "M"=>"maximum number of harmonics [default=`6`]",
+            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
+            "plotresults"=>"plot of results [default=`graphoutput`]",
+            "seed"=>"initial random seed [default=`0`]",
             "issvr"=>"[default=`false`]",
-            "truncateRanges"=>"[default=`0`]",
-            "checkpointfrequency"=>"[default=`N`]",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts, [default=`efastcheckpoints`]",
+            "truncateRanges"=>"truncate ranges [default=`0`]",
+            "checkpointfrequency"=>"check point frequency [default=`N`]",
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts [default=`efastcheckpoints`]",
             "restart"=>"[default=`false`]")))
 
 Dumps:

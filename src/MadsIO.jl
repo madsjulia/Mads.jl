@@ -6,7 +6,7 @@ Load MADS input file defining a MADS problem dictionary
 $(DocumentFunction.documentfunction(loadmadsfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
-             "format"=>"acceptable formats are `yaml` and`json` [default=`yaml`]")))
+             "format"=>"acceptable formats are `yaml` and `json` [default=`yaml`]")))
 
 Returns:
 
