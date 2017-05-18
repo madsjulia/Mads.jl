@@ -24,7 +24,7 @@ argtext=Dict("filename"=>"ASCII file name",
 
 Dumps:
 
-- ASCII file with the name in filename
+- ASCII file with the name in "filename"
 """
 function dumpasciifile(filename::String, data::Any) # dump ASCII text file
 	writedlm(filename, data)
