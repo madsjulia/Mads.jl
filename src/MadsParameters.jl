@@ -358,7 +358,7 @@ Get optimizable parameters
 
 $(DocumentFunction.documentfunction(getoptparams;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameterarray"=>"",
+            "parameterarray"=>"parameter array",
             "optparameterkey"=>"optimizable parameter keys")))
 
 Returns:
@@ -606,7 +606,7 @@ Probabilistic distribution of parameters can be defined only if `dist` or `min`/
 
 $(DocumentFunction.documentfunction(getparamdistributions;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("init_dist"=>"if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field, [default=`false`]")))
+keytext=Dict("init_dist"=>"if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); else use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field [default=`false`]")))
 
 Returns:
 
