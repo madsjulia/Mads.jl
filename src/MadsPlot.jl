@@ -829,7 +829,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.g
             "xtitle"=>"`x` axis title [default=`X`]",
             "ytitle"=>"`y` axis title [default=`Y`]",
             "obs_plot_dots"=>"plot observation as dots (`true` (default) or `false`)",
-            "seed"=>"random seed, [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines on the plot [default=`2Gadfly.pt`]",
             "pointsize"=>"size of the markers on the plot [default=`4Gadfly.pt`]")))
 
@@ -1018,7 +1018,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted onl
             "ytitle"=>"`y` axis title [default=`Y`]",
             "yfit"=>"[default=`false`]",
             "obs_plot_dots"=>"plot observation as dots (`true` [default] or `false`)",
-            "seed"=>"initial random seed [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines in plot [default=`2Gadfly.pt`]",
             "pointsize"=>"size of the markers in plot [default=`4Gadfly.pt`]")))
 
