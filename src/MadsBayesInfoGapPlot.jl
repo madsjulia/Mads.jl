@@ -1,4 +1,4 @@
-import Gadfly
+@tryimport Gadfly
 import DocumentFunction
 
 """
