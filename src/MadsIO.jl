@@ -5,7 +5,7 @@ Load MADS input file defining a MADS problem dictionary
 
 $(DocumentFunction.documentfunction(loadmadsfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
-keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions", 
+keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions",
              "format"=>"acceptable formats are `yaml` and `json` [default=`yaml`]")))
 
 Returns:
@@ -16,7 +16,7 @@ Example:
 
 ```julia
 md = Mads.loadmadsfile("input_file_name.mads")
-```	
+```
 """
 function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
 	if format == "yaml"
@@ -391,7 +391,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Returns:
 
-- new file name 
+- new file name
 """ setnewmadsfilename
 
 """
@@ -747,7 +747,7 @@ function instline2regexs(instline::String)
 	regexs = Regex[]
 	obsnames = String[]
 	getparamhere = Bool[]
-	while offset <= length(instline) && ismatch(regex, instline, offset - 1)#this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
+	while offset <= length(instline) && ismatch(regex, instline, offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
 		if m == nothing
 			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
@@ -827,19 +827,19 @@ function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{St
 end
 
 """
-Apply Mads instruction file `instructionfilename` to read model input file `inputfilename`
+Apply Mads instruction file `instructionfilename` to read model output file `modeloutputfilename`
 
 $(DocumentFunction.documentfunction(ins_obs;
 argtext=Dict("instructionfilename"=>"instruction file name",
-            "inputfilename"=>"read model input file")))
+            "modeloutputfilename"=>"model output file name")))
 
 Returns:
 
-- `obsdict` : result dictionary
+- `obsdict` : observation dictionary with the model outputs
 """
-function ins_obs(instructionfilename::String, inputfilename::String)
+function ins_obs(instructionfilename::String, modeloutputfilename::String)
 	instfile = open(instructionfilename, "r")
-	obsfile = open(inputfilename, "r")
+	obsfile = open(modeloutputfilename, "r")
 	obslineitr = eachline(obsfile)
 	state = start(obslineitr)
 	obsdict = Dict{String, Float64}()
@@ -871,7 +871,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Returns:
 
-- Dictionary with Mads observations
+- dictionary with Mads observations
 """
 function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
 	observations = Dict()
@@ -910,7 +910,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 
 Dumps:
 
-- `filename` : a ASCII file 
+- `filename` : a ASCII file
 """
 function dumpwelldata(madsdata::Associative, filename::String)
 	if haskey(madsdata, "Wells")
@@ -968,7 +968,7 @@ end
 Remove directory
 
 $(DocumentFunction.documentfunction(rmdir;
-argtext=Dict("dir"=>"the directory to be removed"),
+argtext=Dict("dir"=>"directory to be removed"),
 keytext=Dict("path"=>"path of the directory [default=`current path`]")))
 """
 function rmdir(dir::String; path::String="")
@@ -984,7 +984,7 @@ end
 Remove file
 
 $(DocumentFunction.documentfunction(rmfile;
-argtext=Dict("filename"=>"the file to be removed"),
+argtext=Dict("filename"=>"file to be removed"),
 keytext=Dict("path"=>"path of the file [default=`current path`]")))
 """
 function rmfile(filename::String; path::String="")
@@ -1057,7 +1057,7 @@ end
 Link files in a temporary directory
 
 $(DocumentFunction.documentfunction(linktempdir;
-argtext=Dict("madsproblemdir"=>"mads problem directory",
+argtext=Dict("madsproblemdir"=>"Mads problem directory",
             "tempdirname"=>"temporary directory name")))
 """
 function linktempdir(madsproblemdir::String, tempdirname::String)
