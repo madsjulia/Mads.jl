@@ -1,4 +1,4 @@
-import Images
+@tryimport Images
 
 """
 Display image file

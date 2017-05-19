@@ -22,7 +22,7 @@ end
 Get MADS restart status
 
 $(DocumentFunction.documentfunction(getrestart;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function getrestart(madsdata::Associative)
 	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
@@ -165,7 +165,7 @@ end
 Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(haskeyword;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "keyword"=>"dictionary key",
             "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 
@@ -201,7 +201,7 @@ end
 Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(addkeyword!;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "keyword"=>"dictionary key",
             "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ addkeyword!
@@ -229,7 +229,7 @@ end
 Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(deletekeyword!;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "keyword"=>"dictionary key",
             "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ deletekeyword!
@@ -238,7 +238,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 Get sin-space dx
 
 $(DocumentFunction.documentfunction(getsindx;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 

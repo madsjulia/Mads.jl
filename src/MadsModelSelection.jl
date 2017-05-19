@@ -4,7 +4,7 @@ import DocumentFunction
 Model section information criteria
 
 $(DocumentFunction.documentfunction(modelinformationcriteria;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "par"=>"parameter array")))
 """
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))

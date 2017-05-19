@@ -57,7 +57,7 @@ Dump YAML Mads file
 $(DocumentFunction.documentfunction(dumpyamlmadsfile;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"output file name"),
-keytext=Dict("julia"=>"[default=`false`]")))
+keytext=Dict("julia"=>"use julia YAML [default=`false`]")))
 """
 function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)

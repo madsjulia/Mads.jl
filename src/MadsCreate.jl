@@ -56,7 +56,7 @@ end
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
 $(DocumentFunction.documentfunction(createmadsproblem;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "infilename"=>"input Mads file",
             "outfilename"=>"output Mads file",
             "predictions"=>"dictionary of model predictions")))

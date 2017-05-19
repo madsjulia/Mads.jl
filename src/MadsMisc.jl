@@ -6,7 +6,7 @@ import DocumentFunction
 Make a version of the function `f` that accepts an array containing the optimal parameter values
 
 $(DocumentFunction.documentfunction(makearrayfunction;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
 
 Returns:
@@ -26,7 +26,7 @@ end
 Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
 
 $(DocumentFunction.documentfunction(makedoublearrayfunction;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
 
 Returns:
@@ -53,7 +53,7 @@ end
 Make a conditional log likelihood function that accepts an array containing the optimal parameter values
 
 $(DocumentFunction.documentfunction(makearrayconditionalloglikelihood;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "conditionalloglikelihood"=>"conditional log likelihood")))
 
 Returns:
@@ -76,7 +76,7 @@ end
 Make a log likelihood function that accepts an array containing the optimal parameter values
 
 $(DocumentFunction.documentfunction(makearrayloglikelihood;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "loglikelihood"=>"log likelihood")))
 
 Returns:
@@ -103,7 +103,7 @@ end
 Set Dynamic Model for MADS model calls using an internal Julia function
 
 $(DocumentFunction.documentfunction(setdynamicmodel;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "f"=>"Julia function")))
 """
 function setdynamicmodel(madsdata::Associative, f::Function)
@@ -133,7 +133,7 @@ end
 Evaluate all the expressions in the Mads problem dictiorany based on a parameter dictionary
 
 $(DocumentFunction.documentfunction(evaluatemadsexpressions;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameter dictionary applied to evaluate the expression strings")))
 
 Returns:

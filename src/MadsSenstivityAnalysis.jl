@@ -8,15 +8,15 @@ import JSON
 import JLD
 
 if !haskey(ENV, "MADS_NO_GADFLY")
-	import Gadfly
+	@tryimport Gadfly
 end
 
 """
 Make gradient function needed for local sensitivity analysis
 
 $(DocumentFunction.documentfunction(makelocalsafunction;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("multiplycenterbyweights"=>"multiply center by weights [default=`true`]")))
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
+keytext=Dict("multiplycenterbyweights"=>"multiply center by observation weights [default=`true`]")))
 
 Returns:
 
@@ -100,12 +100,12 @@ Local sensitivity analysis based on eigen analysis of the parameter covariance m
 
 $(DocumentFunction.documentfunction(localsa;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("sinspace"=>"[default=`true`]",
-            "keyword"=>"key word",
+keytext=Dict("sinspace"=>"apply sin transformation [default=`true`]",
+            "keyword"=>"keyword to be added in the filename root",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.)",
-            "datafiles"=>"data files [default=`true`]",
-            "imagefiles"=>"image files [default=`graphoutput`]",
+            "datafiles"=>"flag to write data files [default=`true`]",
+            "imagefiles"=>"flag to create image files [default=`Mads.graphoutput`]",
             "par"=>"parameter set",
             "obs"=>"observations for the parameter set",
             "J"=>"Jacobian matrix")))
@@ -232,8 +232,8 @@ $(DocumentFunction.documentfunction(sampling;
 argtext=Dict("param"=>"Parameter vector",
             "J"=>"Jacobian matrix",
             "numsamples"=>"Number of samples"),
-keytext=Dict("seed"=>"[default=`0`]", 
-             "scale"=>"[default=`1`]")))
+keytext=Dict("seed"=>"random esee [default=`0`]",
+             "scale"=>"data scaling [default=`1`]")))
 
 Returns:
 
@@ -397,10 +397,10 @@ Get independent sampling of model parameters defined in the MADS problem diction
 $(DocumentFunction.documentfunction(getparamrandom;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"model parameter key",
-            "numsamples"=>"number of samples [default=`1`]"),
-keytext=Dict("init_dist"=>"if `true` use the distribution defined for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); if `false` (default) use the regular distribution defined in the MADS problem dictionary (defined using `dist` parameter field)",
+            "numsamples"=>"number of samples,  [default=`1`]"),
+keytext=Dict("init_dist"=>"if `true` use the distribution set for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); if `false` (default) use the regular distribution set in the MADS problem dictionary (defined using `dist` parameter field)",
             "numsamples"=>"number of samples",
-            "paramdist"=>"")))
+            "paramdist"=>"dictionary of parameter distributions")))
 
 Returns:
 
@@ -413,7 +413,7 @@ Saltelli sensitivity analysis (brute force)
 $(DocumentFunction.documentfunction(saltellibrute;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`1000`]",
-            "seed"=>"initial random seed [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
 function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
@@ -556,8 +556,8 @@ end
 Load Saltelli sensitivity analysis results for fast simulation restarts
 
 $(DocumentFunction.documentfunction(loadsaltellirestart!;
-argtext=Dict("evalmat"=>"Loaded array",
-"matname"=>"Matrix (array) name (defines the name of the loaded file)",
+argtext=Dict("evalmat"=>"loaded array",
+"matname"=>"matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 
 Returns:
@@ -581,8 +581,8 @@ end
 Save Saltelli sensitivity analysis results for fast simulation restarts
 
 $(DocumentFunction.documentfunction(savesaltellirestart;
-argtext=Dict("evalmat"=>"Saved array",
-"matname"=>"Matrix (array) name (defines the name of the loaded file)",
+argtext=Dict("evalmat"=>"saved array",
+"matname"=>"matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
@@ -599,10 +599,10 @@ Saltelli sensitivity analysis
 $(DocumentFunction.documentfunction(saltelli;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
-            "seed"=>"initial random seed [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
-            "checkpointfrequency"=>"[default=`N`]")))
+            "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
@@ -806,7 +806,7 @@ Compute sensitivities for each model parameter; averaging the sensitivity indice
 
 $(DocumentFunction.documentfunction(computeparametersensitities;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "saresults"=>"sensitivity analysis results")))
+            "saresults"=>"dictionary with sensitivity analysis results")))
 """
 function computeparametersensitities(madsdata::Associative, saresults::Associative)
 	paramkeys = getoptparamkeys(madsdata)
@@ -882,8 +882,8 @@ end
 Print sensitivity analysis results
 
 $(DocumentFunction.documentfunction(printSAresults;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "results"=>"sensitivity analysis results")))
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults(madsdata::Associative, results::Associative)
 	mes = results["mes"]
@@ -964,8 +964,8 @@ end
 Print sensitivity analysis results (method 2)
 
 $(DocumentFunction.documentfunction(printSAresults2;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "results"=>"sensitivity analysis results (method 2)")))
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults2(madsdata::Associative, results::Associative)
 	mes = results["mes"]
@@ -1027,7 +1027,7 @@ function void2nan!(dict::Associative) # TODO generalize using while loop and rec
 end
 
 """
-Delete rows with NaN in a Dataframe `df`
+Delete rows with NaN in a dataframe `df`
 
 $(DocumentFunction.documentfunction(deleteNaN!;
 argtext=Dict("df"=>"dataframe")))
@@ -1044,7 +1044,7 @@ function deleteNaN!(df::DataFrames.DataFrame)
 end
 
 """
-Scale down values larger than max(Float32) in a Dataframe `df` so that Gadfly can plot the data
+Scale down values larger than max(Float32) in a dataframe `df` so that Gadfly can plot the data
 
 $(DocumentFunction.documentfunction(maxtorealmax!;
 argtext=Dict("df"=>"dataframe")))
@@ -1070,13 +1070,13 @@ argtext=Dict("md"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
             "M"=>"maximum number of harmonics [default=`6`]",
             "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
-            "plotresults"=>"plot of results [default=`graphoutput`]",
-            "seed"=>"initial random seed [default=`0`]",
-            "issvr"=>"[default=`false`]",
-            "truncateRanges"=>"truncate ranges [default=`0`]",
+            "plotresults"=>"plot results [default=`Mads.graphoutput`]",
+            "seed"=>"random seed [default=`0`]",
+            "issvr"=>"use SVR [default=`false`]",
+            "truncateRanges"=>"truncate parameter ranges [default=`0`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts [default=`efastcheckpoints`]",
-            "restart"=>"[default=`false`]")))
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts [default=`\"efastcheckpoints\"`]",
+            "restart"=>"save restart information [default=`false`]")))
 
 Dumps:
 
