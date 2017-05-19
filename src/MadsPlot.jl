@@ -25,7 +25,7 @@ Set image file `format` based on the `filename` extension, or sets the `filename
 
 $(DocumentFunction.documentfunction(setplotfileformat;
 argtext=Dict("filename"=>"output file name",
-            "format"=>"output plot format (`png`, `pdf`, etc.)")))
+            "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]")))
 
 Returns:
 
@@ -62,7 +62,7 @@ Plot contaminant sources and wells defined in MADS problem dictionary
 
 $(DocumentFunction.documentfunction(plotmadsproblem;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "filename"=>"output file name",
             "keyword"=>"to be added in the filename",
             "imagefile"=>"dump image file [default=`false`]")))
@@ -368,7 +368,7 @@ $(DocumentFunction.documentfunction(scatterplotsamples;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "samples"=>"matrix with model parameters",
             "filename"=>"output file name"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "pointsize"=>"point size [default=`0.9Gadfly.mm`]")))
 
 Dumps:
@@ -479,7 +479,7 @@ function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::Stri
 	end
 	vdf = vcat(df...)
 	if length(vdf[1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position = :none) )
+		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position = :none))
 		push!(pp, pmes)
 		vsize += 4Gadfly.inch
 	end
@@ -515,10 +515,10 @@ $(DocumentFunction.documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
-keytext=Dict("xtitle"=>"x-axis title [default=`\"Time years\"`]",
-            "ytitle"=>"y-axis title [default=`\"Concentration ppb\"`]",
+keytext=Dict("xtitle"=>"x-axis title [default=`\"Time \[years\]\"`]",
+            "ytitle"=>"y-axis title [default=`\"Concentration \[ppb\]\"`]",
             "filename"=>"output file name",
-            "format"=>"output plot format (`png`, `pdf`, etc.)")))
+            "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]")))
 
 Dumps:
 
@@ -534,7 +534,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("filter"=>"string or regex to plot only observations containing `filter`",
             "keyword"=>"to be added in the auto-generated filename",
             "filename"=>"output file name",
-            "format"=>"output plot format (`png`, `pdf`, etc.)",
+            "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "debug"=>"[default=`false`]",
             "separate_files"=>"plot data for multiple wells separately [default=`false`]",
             "xtitle"=>"x-axis title [default=`\"Time \[years\]\"`]",
@@ -824,12 +824,12 @@ $(DocumentFunction.documentfunction(spaghettiplots;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "number_of_samples"=>"number of samples",
             "paramdictarray"=>"parameter dictionary containing the data arrays to be plotted"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "keyword"=>"keyword to be added in the file name used to output the produced plots",
             "xtitle"=>"`x` axis title [default=`X`]",
             "ytitle"=>"`y` axis title [default=`Y`]",
             "obs_plot_dots"=>"plot observation as dots (`true` (default) or `false`)",
-            "seed"=>"initial random seed, [default=`0`]",
+            "seed"=>"random seed, [default=`0`]",
             "linewidth"=>"width of the lines on the plot [default=`2Gadfly.pt`]",
             "pointsize"=>"size of the markers on the plot [default=`4Gadfly.pt`]")))
 
@@ -1013,7 +1013,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted only) [default=`true`]",
             "filename"=>"output file name used to output the produced plots",
             "keyword"=>"keyword to be added in the file name used to output the produced plots (if `filename` is not defined)",
-            "format"=>"output plot format (`png`, `pdf`, etc.)",
+            "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "xtitle"=>"`x` axis title [default=`X`]",
             "ytitle"=>"`y` axis title [default=`Y`]",
             "yfit"=>"[default=`false`]",
@@ -1042,7 +1042,7 @@ Create plots of data series
 $(DocumentFunction.documentfunction(plotseries;
 argtext=Dict("X"=>"matrix with the series data",
             "filename"=>"output file name"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "xtitle"=>"x-axis title [default=`X`]",
             "ytitle"=>"y-axis title [default=`Y`]",
             "title"=>"plot title [default=`Sources`]",
