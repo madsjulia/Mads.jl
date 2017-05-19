@@ -30,7 +30,7 @@ function isparam(madsdata::Associative, dict::Associative)
 end
 
 """
-Get keys of all parameters in the MADS dictionary
+Get keys of all parameters in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(getparamkeys;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
@@ -38,7 +38,7 @@ keytext=Dict("filter"=>"")))
 
 Returns:
 
-- array with the keys of all parameters in the MADS dictionary
+- array with the keys of all parameters in the MADS problem dictionary
 """
 function getparamkeys(madsdata::Associative; filter::String="")
 	if haskey(madsdata, "Parameters")
@@ -65,14 +65,14 @@ function getparamdict(madsdata::Associative)
 end
 
 """
-Get keys of all source parameters in the MADS dictionary
+Get keys of all source parameters in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(getsourcekeys;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 
-- array with keys of all source parameters in the MADS dictionary
+- array with keys of all source parameters in the MADS problem dictionary
 """
 function getsourcekeys(madsdata::Associative)
 	sourcekeys = Array{String}(0)
@@ -308,7 +308,7 @@ Returns:
 """ getparamsinit_max
 
 """
-Set initial parameter guesses in the MADS dictionary
+Set initial parameter guesses in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(setparamsinit!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
@@ -395,7 +395,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- `ture` if log-transformed, `false` otherwise
+- `true` if log-transformed, `false` otherwise
 """
 function islog(madsdata::Associative, parameterkey::String)
 	if haskey(madsdata["Parameters"][parameterkey], "log") && madsdata["Parameters"][parameterkey]["log"] == true
