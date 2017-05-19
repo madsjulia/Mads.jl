@@ -53,7 +53,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
-- 
+-
 """
 function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -76,7 +76,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
-- 
+-
 """
 function exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -97,7 +97,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
-- 
+-
 """
 function gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -202,8 +202,8 @@ Estimate kriging error
 
 $(DocumentFunction.documentfunction(estimationerror;
 argtext=Dict("w"=>"kriging weights",
-            "x0"=>"",
-            "X"=>"",
+            "x0"=>"estimated locations",
+            "X"=>"observation matrix",
             "cov"=>"spatial covariance function",
             "covmat"=>"covariance matrix",
             "covvec"=>"covariance vector",

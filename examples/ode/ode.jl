@@ -52,7 +52,7 @@ p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(defa
 				Gadfly.Guide.manual_color_key("ODE", ["x(t)", "x'(t)"], ["orange", "blue"]))
 Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"), 6Gadfly.inch, 4Gadfly.inch), p)
 
-# create an observation dictionary in the MADS dictionary
+# create an observation dictionary in the MADS problem dictionary
 Mads.madsinfo("Create MADS Observations ...")
 Mads.createobservations!(md, t, ys[:,1])
 Mads.madsinfo("Show MADS Observations ...")
@@ -87,7 +87,7 @@ Mads.madsinfo("Bayesian scatter plots ...")
 Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
 
 # convert the parameters in the chain to a parameter dictionary of arrays
-mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') 
+mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plots ...")
 Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")

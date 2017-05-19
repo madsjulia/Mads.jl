@@ -63,11 +63,11 @@ end
 Sine transformation of a gradient function
 
 $(DocumentFunction.documentfunction(sinetransformgradient;
-argtext=Dict("g"=>"a gradient function",
-            "lowerbounds"=>"lower bounds",
-            "upperbounds"=>"upper bounds",
-            "indexlogtransformed"=>""),
-keytext=Dict("sindx"=>"[default=`0.1`]")))
+argtext=Dict("g"=>"gradient function",
+            "lowerbounds"=>"vector with parameter lower bounds",
+            "upperbounds"=>"vector with parameter upper bounds",
+            "indexlogtransformed"=>"index vector of log-transformed parameters"),
+keytext=Dict("sindx"=>"sin-space parameter step applied to compute numerical derivatives [default=`0.1`]")))
 
 Returns:
 

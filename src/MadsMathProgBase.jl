@@ -12,7 +12,7 @@ end
 Define `MadsModel` type applied for Mads execution using `MathProgBase`
 
 $(DocumentFunction.documentfunction(madsmathprogbase;
-argtext=Dict("madsdata"=>"Mads problem dictionary [default=`Dict()`]")))
+argtext=Dict("madsdata"=>"MADS problem dictionary [default=`Dict()`]")))
 """
 function madsmathprogbase(madsdata::Associative=Dict())
 	f = makemadscommandfunction(madsdata)
@@ -82,7 +82,7 @@ end
 Make forward model, gradient, objective functions needed for MathProgBase optimization
 
 $(DocumentFunction.documentfunction(makempbfunctions;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 
