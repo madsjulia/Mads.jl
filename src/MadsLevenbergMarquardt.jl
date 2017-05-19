@@ -208,7 +208,7 @@ $(DocumentFunction.documentfunction(naive_get_deltax;
 argtext=Dict("JpJ"=>"",
             "Jp"=>"",
             "f0"=>"",
-            "lambda"=>"")))
+            "lambda"=>"initial Levenberg-Marquardt lambda")))
 
 Returns:
 
@@ -229,7 +229,7 @@ argtext=Dict("f"=>"forward model function",
             "o"=>"objective function",
             "x0"=>"initial parameter guess",
             "f0"=>"",
-            "lambdas"=>"")))
+            "lambdas"=>"initial Levenberg-Marquardt lambdas")))
 
 Returns:
 

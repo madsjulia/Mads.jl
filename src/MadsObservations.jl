@@ -489,7 +489,7 @@ Set observations (calibration targets) in the MADS problem dictionary based on a
 
 $(DocumentFunction.documentfunction(setobservationtargets!;
 argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "predictions"=>"")))
+            "predictions"=>"predictions dictionary")))
 """
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
@@ -614,7 +614,7 @@ Get spatial and temporal data in the `Wells` class
 
 $(DocumentFunction.documentfunction(getwellsdata;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("time"=>"[default=`false`]")))
+keytext=Dict("time"=>"whether to include `time` in returned data [default=`false`]")))
 
 Returns:
 

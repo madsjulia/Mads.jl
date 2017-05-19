@@ -13,7 +13,7 @@ argtext=Dict("madsdata_in"=>"Mads problem dictionary"),
 keytext=Dict("calczeroweightobs"=>"Calculate zero weight observations [default=`false`]",
              "calcpredictions"=>"Calculate predictions [default=`true`]")))
 
-Usage:
+Example:
 
 ```julia
 Mads.makemadscommandfunction(madsdata)
