@@ -34,7 +34,7 @@ Get keys of all parameters in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(getparamkeys;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("filter"=>"")))
+keytext=Dict("filter"=>"parameter filter")))
 
 Returns:
 
@@ -410,7 +410,7 @@ Set all parameters ON
 
 $(DocumentFunction.documentfunction(setallparamson!;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("filter"=>"")))
+keytext=Dict("filter"=>"parameter filter")))
 """
 function setallparamson!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
@@ -424,7 +424,7 @@ Set all parameters OFF
 
 $(DocumentFunction.documentfunction(setallparamsoff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("filter"=>"")))
+keytext=Dict("filter"=>"parameter filter")))
 """
 function setallparamsoff!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)

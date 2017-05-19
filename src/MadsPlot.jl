@@ -345,7 +345,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted onl
             "noise"=>"random noise magnitude [default=`0`; no noise]",
             "dpi"=>"graph resolution [default=`Mads.dpi`]",
             "colors"=>"array with plot colors",
-            "display"=>"[default=`false`]")))
+            "display"=>"display plots [default=`false`]")))
 
 Dumps:
 
@@ -1009,14 +1009,14 @@ $(DocumentFunction.documentfunction(spaghettiplot;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "number_of_samples"=>"number of samples",
             "dictarray"=>"dictionary array containing the data arrays to be plotted",
-            "array"=>""),
-keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted only) [default=`true`]",
+            "array"=>"data arrays to be plotted"),
+keytext=Dict("plotdata"=>"plot data (if `false` model predictions are plotted only) [default=`true`]",
             "filename"=>"output file name used to output the produced plots",
             "keyword"=>"keyword to be added in the file name used to output the produced plots (if `filename` is not defined)",
             "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "xtitle"=>"`x` axis title [default=`X`]",
             "ytitle"=>"`y` axis title [default=`Y`]",
-            "yfit"=>"[default=`false`]",
+            "yfit"=>"fit vertical axis range [default=`false`]",
             "obs_plot_dots"=>"plot observation as dots (`true` [default] or `false`)",
             "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines in plot [default=`2Gadfly.pt`]",
@@ -1047,7 +1047,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.g
             "ytitle"=>"y-axis title [default=`Y`]",
             "title"=>"plot title [default=`Sources`]",
             "name"=>"series name [default=`Sources`]",
-            "combined"=>"[default=`true`]",
+            "combined"=>"combine plots [default=`true`]",
             "hsize"=>"horizontal size [default=`6Gadfly.inch`]",
             "vsize"=>"vertical size [default=`4Gadfly.inch`]",
             "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",

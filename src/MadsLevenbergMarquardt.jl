@@ -205,10 +205,10 @@ end
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 $(DocumentFunction.documentfunction(naive_get_deltax;
-argtext=Dict("JpJ"=>"",
-            "Jp"=>"",
-            "f0"=>"",
-            "lambda"=>"")))
+argtext=Dict("JpJ"=>"Jacobian matrix times model parameters times transposed Jacobian matrix",
+            "Jp"=>"Jacobian matrix times model parameters",
+            "f0"=>"initial model observations",
+            "lambda"=>"Levenberg-Marquardt lambda")))
 
 Returns:
 
@@ -228,8 +228,8 @@ argtext=Dict("f"=>"forward model function",
             "g"=>"gradient function for the forward model",
             "o"=>"objective function",
             "x0"=>"initial parameter guess",
-            "f0"=>"",
-            "lambdas"=>"")))
+            "f0"=>"initial model observations",
+            "lambdas"=>"Levenberg-Marquardt lambdas")))
 
 Returns:
 

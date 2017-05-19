@@ -114,8 +114,8 @@ Create a function to compute concentrations for all the observation points using
 
 $(DocumentFunction.documentfunction(makecomputeconcentrations;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("calczeroweightobs"=>"[default=`false`]",
-            "calcpredictions"=>"[default=`true`]")))
+keytext=Dict("calczeroweightobs"=>"calculate zero weight observations[default=`false`]",
+            "calcpredictions"=>"calculate zero weight predictions [default=`true`]")))
 
 Returns:
 

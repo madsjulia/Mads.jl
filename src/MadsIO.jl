@@ -574,7 +574,7 @@ Read model outputs saved for MADS
 
 $(DocumentFunction.documentfunction(readmodeloutput;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("obskeys"=>"[default=getobskeys(madsdata)]")))
+keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsdata))
 	results = DataStructures.OrderedDict()
@@ -668,7 +668,7 @@ $(DocumentFunction.documentfunction(writeparametersviatemplate;
 argtext=Dict("parameters"=>"parameters",
             "templatefilename"=>"tmplate file name",
             "outputfilename"=>"output file name"),
-keytext=Dict("respect_space"=>"[default=`false`]")))
+keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename) # open template file
@@ -725,7 +725,7 @@ Write `parameters`
 $(DocumentFunction.documentfunction(writeparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
-keytext=Dict("respect_space"=>"[default=`false`]")))
+keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """ writeparameters
 
 """

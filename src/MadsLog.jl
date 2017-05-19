@@ -5,7 +5,7 @@ MADS output (controlled by `quiet` and `verbositylevel`)
 
 $(DocumentFunction.documentfunction(madsoutput;
 argtext=Dict("message"=>"output message",
-            "level"=>"[default=`0`]")))
+            "level"=>"output verbosity level [default=`0`]")))
 """
 function madsoutput(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
@@ -19,7 +19,7 @@ MADS debug messages (controlled by `quiet` and `debuglevel`)
 
 $(DocumentFunction.documentfunction(madsdebug;
 argtext=Dict("message"=>"debug message",
-            "level"=>"[default=`0`]")))
+            "level"=>"output verbosity level [default=`0`]")))
 """
 function madsdebug(message::String, level::Int=0)
 	if !quiet && level < debuglevel
@@ -33,7 +33,7 @@ MADS information/status messages (controlled by quiet` and `verbositylevel`)
 
 $(DocumentFunction.documentfunction(madsinfo;
 argtext=Dict("message"=>"information/status message",
-            "level"=>"[default=`0`]")))
+            "level"=>"output verbosity level [default=`0`]")))
 """
 function madsinfo(message::String, level::Int=0)
 	if !quiet && level < verbositylevel

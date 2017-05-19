@@ -146,7 +146,7 @@ end
 Load SVR models from files
 
 $(DocumentFunction.documentfunction(svrload;
-argtext=Dict("npred"=>"",
+argtext=Dict("npred"=>"number of model predictions",
 			"rootname"=>"root name",
 			"numberofsamples"=>"number of samples")))
 

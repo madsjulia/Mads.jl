@@ -16,7 +16,7 @@ Make gradient function needed for local sensitivity analysis
 
 $(DocumentFunction.documentfunction(makelocalsafunction;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
+keytext=Dict("multiplycenterbyweights"=>"multiply center by observation weights [default=`true`]")))
 
 Returns:
 
@@ -412,7 +412,7 @@ Saltelli sensitivity analysis (brute force)
 
 $(DocumentFunction.documentfunction(saltellibrute;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("N"=>"number of samples, [default=`1000`]",
+keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
@@ -602,7 +602,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
-            "checkpointfrequency"=>"check point frequency[default=`N`]")))
+            "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
 function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
@@ -1069,14 +1069,14 @@ $(DocumentFunction.documentfunction(efast;
 argtext=Dict("md"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
             "M"=>"maximum number of harmonics [default=`6`]",
-            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4), [default=`4`]",
-            "plotresults"=>"plot of results [default=`Mads.graphoutput`]",
+            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
+            "plotresults"=>"plot results [default=`Mads.graphoutput`]",
             "seed"=>"random seed [default=`0`]",
             "issvr"=>"use SVR [default=`false`]",
-            "truncateRanges"=>"[default=`0`]",
-            "checkpointfrequency"=>"[default=`N`]",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts, [default=`\"efastcheckpoints\"`]",
-            "restart"=>"[default=`false`]")))
+            "truncateRanges"=>"truncate parameter ranges [default=`0`]",
+            "checkpointfrequency"=>"check point frequency [default=`N`]",
+            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts [default=`\"efastcheckpoints\"`]",
+            "restart"=>"save restart information [default=`false`]")))
 
 Dumps:
 

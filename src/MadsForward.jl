@@ -100,7 +100,7 @@ $(DocumentFunction.documentfunction(forward;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdict"=>"dictionary of model parameter values",
             "paramarray"=>"array of model parameter values"),
-keytext=Dict("all"=>"[default=`false`]",
+keytext=Dict("all"=>"all model results are returned [default=`false`]",
             "checkpointfrequency"=>"check point frequency for storing restart information [default=`0`]",
             "checkpointfilename"=>"check point file name [default=\"checkpoint_forward\"]")))
 
