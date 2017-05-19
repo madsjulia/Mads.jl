@@ -5,7 +5,7 @@ import DocumentFunction
 Plot BIG-DT robustness curves
 
 $(DocumentFunction.documentfunction(plotrobustnesscurves;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "bigdtresults"=>"BIG-DT results"),
 keytext=Dict("filename"=>"output file name used to dump plots",
             "format"=>"output plot format (`png`, `pdf`, etc.)",

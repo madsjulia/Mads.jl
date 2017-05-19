@@ -7,7 +7,7 @@ import DocumentFunction
 Add an additional contamination source
 
 $(DocumentFunction.documentfunction(addsource!;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "sourceid"=>"source id [default=`0`]")))
 """
 function addsource!(madsdata::Associative, sourceid::Int=0)
@@ -32,7 +32,7 @@ end
 Remove a contamination source
 
 $(DocumentFunction.documentfunction(removesource!;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "sourceid"=>"source id [default=`0`]")))
 """
 function removesource!(madsdata::Associative, sourceid::Int=0)
@@ -58,7 +58,7 @@ end
 Add contaminant source parameters
 
 $(DocumentFunction.documentfunction(addsourceparameters!;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
@@ -84,7 +84,7 @@ end
 Remove contaminant source parameters
 
 $(DocumentFunction.documentfunction(removesourceparameters!;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function removesourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
@@ -113,7 +113,7 @@ end
 Create a function to compute concentrations for all the observation points using Anasol
 
 $(DocumentFunction.documentfunction(makecomputeconcentrations;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("calczeroweightobs"=>"[default=`false`]",
             "calcpredictions"=>"[default=`true`]")))
 
@@ -347,7 +347,7 @@ end
 Compute injected/reduced contaminant mass (for a given set of mads input files when "path" is provided)
 
 $(DocumentFunction.documentfunction(computemass;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "madsfiles"=>"matching pattern for Mads input files (string or regular expression accepted)"),
 keytext=Dict("time"=>"computational time [default=`0`]",
             "path"=>"search directory for the mads input files [default=`\".\"`]")))

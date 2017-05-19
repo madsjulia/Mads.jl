@@ -6,10 +6,10 @@ import JLD
 import DocumentFunction
 
 """
-Make MADS function to execute the model defined in the inpit MADS problem dictionary
+Make MADS function to execute the model defined in the input MADS problem dictionary
 
 $(DocumentFunction.documentfunction(makemadscommandfunction;
-argtext=Dict("madsdata_in"=>"Mads problem dictionary"),
+argtext=Dict("madsdata_in"=>"MADS problem dictionary"),
 keytext=Dict("calczeroweightobs"=>"Calculate zero weight observations [default=`false`]",
              "calcpredictions"=>"Calculate predictions [default=`true`]")))
 
@@ -248,7 +248,7 @@ end
 Make Reusable Mads function to execute a forward model simulation (automatically restarts if restart data exists)
 
 $(DocumentFunction.documentfunction(makemadsreusablefunction;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
              "madscommandfunction"=>"Mads function to execute a forward model simulation",
              "suffix"=>"Suffix to be added to the name of restart directory",
              "paramkeys"=>"Dictionary of parameter keys",
@@ -266,7 +266,7 @@ Returns:
 Get the directory where Mads restarts will be stored
 
 $(DocumentFunction.documentfunction(getrestartdir;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
              "suffix"=>"Suffix to be added to the name of restart directory")))
 
 Returns:
@@ -361,7 +361,7 @@ end
 Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(makemadscommandgradient;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
              "f"=>"Mads forward model function")))
 
 Returns:
@@ -436,7 +436,7 @@ end
 Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(makemadscommandfunctionandgradient;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
              "f"=>"Mads forward model function")))
 
 Returns:
@@ -449,7 +449,7 @@ Returns:
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(makelogprior;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Return:
 
@@ -471,7 +471,7 @@ Make a function to compute the conditional log-likelihood of the model parameter
 Model parameters and observations are defined in the MADS problem dictionary `madsdata`.
 
 $(DocumentFunction.documentfunction(makemadsconditionalloglikelihood;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("weightfactor"=>"Weight factor [default=`1`]")))
 
 Return:
@@ -505,7 +505,7 @@ Make a function to compute the log-likelihood for a given set of model parameter
 The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
 
 $(DocumentFunction.documentfunction(makemadsloglikelihood;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("weightfactor"=>"Weight factor [default=`1`]")))
 
 Returns:

@@ -61,7 +61,7 @@ end
 Plot contaminant sources and wells defined in MADS problem dictionary
 
 $(DocumentFunction.documentfunction(plotmadsproblem;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
             "filename"=>"output file name",
             "keyword"=>"to be added in the filename",
@@ -325,7 +325,7 @@ end
 Plot the matches between model predictions and observations
 
 $(DocumentFunction.documentfunction(plotmatches;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "rx"=>"regular expression to filter the outputs",
             "result"=>"dictionary with model predictions",
             "dict_in"=>"dictionary with model parameters"),
@@ -932,7 +932,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 	end
 	if !haskey(madsdata, "Wells")
 		if plotdata
-			t = getobstime(madsdata)		
+			t = getobstime(madsdata)
 			d = getobstarget(madsdata)
 			push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 		end
@@ -1056,7 +1056,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.)",
 
 Dumps:
 
-- Plots of data series   
+- Plots of data series
 """
 function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Array{String}(0))
 	nT = size(X)[1]

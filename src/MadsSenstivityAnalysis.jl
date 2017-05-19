@@ -15,7 +15,7 @@ end
 Make gradient function needed for local sensitivity analysis
 
 $(DocumentFunction.documentfunction(makelocalsafunction;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("multiplycenterbyweights"=>"[default=`true`]")))
 
 Returns:
@@ -882,7 +882,7 @@ end
 Print sensitivity analysis results
 
 $(DocumentFunction.documentfunction(printSAresults;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults(madsdata::Associative, results::Associative)
@@ -964,7 +964,7 @@ end
 Print sensitivity analysis results (method 2)
 
 $(DocumentFunction.documentfunction(printSAresults2;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults2(madsdata::Associative, results::Associative)

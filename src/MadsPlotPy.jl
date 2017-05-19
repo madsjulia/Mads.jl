@@ -66,7 +66,7 @@ end
 Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
 
 $(DocumentFunction.documentfunction(plotgrid;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"dictionary with model parameters",
             "s"=>"model predictions array"),
 keytext=Dict("addtitle"=>"add plot title [default=`true`]",

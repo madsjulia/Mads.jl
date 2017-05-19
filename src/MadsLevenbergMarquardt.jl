@@ -38,13 +38,13 @@ end
 Compute residuals
 
 $(DocumentFunction.documentfunction(residuals;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "resultvec"=>"result vector",
             "resultdict"=>"result dictionary")))
 
 Returns:
 
-- 
+-
 """ residuals
 
 
@@ -64,7 +64,7 @@ end
 Compute objective function
 
 $(DocumentFunction.documentfunction(of;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "resultvec"=>"result vector",
             "resultdict"=>"result dictionary")))
 """ of
@@ -73,7 +73,7 @@ argtext=Dict("madsdata"=>"Mads problem dictionary",
 Compute the sum of squared residuals for observations that match a regular expression
 
 $(DocumentFunction.documentfunction(partialof;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "resultdict"=>"result dictionary",
             "regex"=>"regular expression")))
 
@@ -101,7 +101,7 @@ end
 Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 
 $(DocumentFunction.documentfunction(makelmfunctions;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 
@@ -233,7 +233,7 @@ argtext=Dict("f"=>"forward model function",
 
 Returns:
 
-- 
+-
 """
 function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
 	J = g(x0) # get jacobian
@@ -262,7 +262,7 @@ keytext=Dict("maxIter"=>"maximum number of optimization iterations [default=`10`
 
 Returns:
 
-- 
+-
 """
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)

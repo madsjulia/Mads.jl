@@ -10,7 +10,7 @@ keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `fal
 
 Returns:
 
-- Mads problem dictionary
+- MADS problem dictionary
 
 Example:
 
@@ -42,10 +42,10 @@ function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml"
 end
 
 """
-Parse loaded Mads problem dictionary
+Parse loaded MADS problem dictionary
 
 $(DocumentFunction.documentfunction(parsemadsdata!;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
@@ -176,7 +176,7 @@ end
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 $(DocumentFunction.documentfunction(savemadsfile;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"Dictionary with parameters (optional)",
             "filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true` use Julia JSON module to save [default=`false`]",
@@ -196,7 +196,7 @@ Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)
 Save calibration results
 
 $(DocumentFunction.documentfunction(savecalibrationresults;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "results"=>"the calibration results")))
 """
 function savecalibrationresults(madsdata::Associative, results)
@@ -232,7 +232,7 @@ end
 Get the MADS problem root name
 
 $(DocumentFunction.documentfunction(getmadsrootname;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
             "version"=>"delete version information from filename for the returned rootname [default=`false`]")))
 
@@ -279,7 +279,7 @@ end
 Get the directory where the Mads data file is located
 
 $(DocumentFunction.documentfunction(getmadsproblemdir;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Example:
 
@@ -386,7 +386,7 @@ end
 Set new mads file name
 
 $(DocumentFunction.documentfunction(setnewmadsfilename;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"file name")))
 
 Returns:
@@ -455,7 +455,7 @@ end
 Check the directories where model outputs should be saved for MADS
 
 $(DocumentFunction.documentfunction(checkmodeloutputdirs;
-argtext=Dict("madsdata"=>"Mads problem dictionary")))
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 
@@ -504,7 +504,7 @@ end
 Set model input files; delete files where model output should be saved for MADS
 
 $(DocumentFunction.documentfunction(setmodelinputs;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
@@ -573,7 +573,7 @@ end
 Read model outputs saved for MADS
 
 $(DocumentFunction.documentfunction(readmodeloutput;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"[default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsdata))
@@ -723,7 +723,7 @@ end
 Write `parameters`
 
 $(DocumentFunction.documentfunction(writeparameters;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"[default=`false`]")))
 """ writeparameters
@@ -866,7 +866,7 @@ end
 Read observations
 
 $(DocumentFunction.documentfunction(readobservations;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "obskeys"=>"observation keys [default=`getobskeys(madsdata)`]")))
 
 Returns:
@@ -905,7 +905,7 @@ end
 Dump well data from MADS problem dictionary into a ASCII file
 
 $(DocumentFunction.documentfunction(dumpwelldata;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"output file name")))
 
 Dumps:

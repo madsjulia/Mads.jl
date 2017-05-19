@@ -97,7 +97,7 @@ end
 Perform a forward run using the initial or provided values for the model parameters
 
 $(DocumentFunction.documentfunction(forward;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdict"=>"dictionary of model parameter values",
             "paramarray"=>"array of model parameter values"),
 keytext=Dict("all"=>"[default=`false`]",
@@ -176,8 +176,8 @@ end
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
 $(DocumentFunction.documentfunction(forwardgrid;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
-            "madsdatain"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "madsdatain"=>"MADS problem dictionary",
             "paramvalues"=>"dictionary of model parameter values")))
 
 Returns:

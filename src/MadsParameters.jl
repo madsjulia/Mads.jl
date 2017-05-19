@@ -3,10 +3,10 @@ import DataStructures
 import DocumentFunction
 
 """
-Is the dictionary containing all the parameters
+Check if a dictionary containing all the Mads model parameters
 
 $(DocumentFunction.documentfunction(isparam;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
             "dict"=>"dictionary")))
 
 Returns:
@@ -33,7 +33,7 @@ end
 Get keys of all parameters in the MADS dictionary
 
 $(DocumentFunction.documentfunction(getparamkeys;
-argtext=Dict("madsdata"=>"Mads problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("filter"=>"")))
 
 Returns:

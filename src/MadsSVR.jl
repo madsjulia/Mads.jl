@@ -32,7 +32,7 @@ function svrtrain(madsdata::Associative, paramarray::Array{Float64,2}; check::Bo
 		Mads.spaghettiplot(madsdata, svrpredictions, keyword="svr-prediction", format="PNG")
 		Mads.display("$rootname-svr-prediction-$numberofsamples-spaghetti.png")
 	end
-	return svrmodel   
+	return svrmodel
 end
 function svrtrain(madsdata::Associative, numberofsamples::Integer=100; addminmax::Bool=true, kw...)
 	rootname = splitdir(Mads.getmadsrootname(madsdata))[end]
@@ -54,7 +54,7 @@ end
 Train SVR
 
 $(DocumentFunction.documentfunction(svrtrain;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"numberofsamples"=>"number of random samples in the training set [default=`100`]"),
 keytext=Dict("check"=>"[default=`false`]",
 			"savefile"=>"[default=`false`]",
@@ -104,11 +104,11 @@ argtext=Dict("svrmodel"=>"SVR model",
 
 Returns:
 
-- 
+-
 """ svrpredict
 
 """
-Free SVR 
+Free SVR
 
 $(DocumentFunction.documentfunction(svrfree;
 argtext=Dict("svrmodel"=>"SVR model")))
@@ -134,7 +134,7 @@ argtext=Dict("svrmodel"=>"SVR model",
 function svrdump(svrmodel::Array{SVR.svmmodel, 1}, rootname::String, numberofsamples::Int)
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
-	for i=1:npred		
+	for i=1:npred
 		if isdefined(svrmodel, i)
 			SVR.savemodel(svrmodel[i], joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr"))
 		end
@@ -157,7 +157,7 @@ Returns:
 function svrload(npred::Int, rootname::String, numberofsamples::Int)
 	svrmodel = Array(SVR.svmmodel, npred)
 	for i=1:npred
-		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")	
+		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")
 		if isfile(filename)
 			svrmodel[i] = SVR.loadmodel(filename)
 		else
@@ -171,7 +171,7 @@ end
 Make SVR model functions (executor and cleaner)
 
 $(DocumentFunction.documentfunction(makesvrmodel;
-argtext=Dict("madsdata"=>"Mads problem dictionary",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"numberofsamples"=>"number of samples [default=`100`]"),
 keytext=Dict("check"=>"[default=`false`]",
 			"addminmax"=>"[default=`true`]",
