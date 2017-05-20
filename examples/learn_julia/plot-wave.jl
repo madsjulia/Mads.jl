@@ -10,7 +10,7 @@ z = 0.1
 w = 20
 wn = w / sqrt(1 - z^2)
 y1 = exp(-z * wn * t)
-y2 = sin(w * t) .+ rand(1001)
+y2 = sin.(w * t) .+ rand(1001)
 y = y1 .* y2
 yf11 = [zeros(151); y; zeros(850)] .+ rand(2002) ./ 10
 yf12 = [zeros(561); y; zeros(440)] .+ rand(2002) ./ 10
@@ -26,10 +26,10 @@ p = Gadfly.plot(x=tf, y=yf13, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, 
 Gadfly.draw(Gadfly.PNG("wave1-3.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
 
 t1 = 0:0.003:3
-y1 = sin(10 * t1) * -1
+y1 = sin.(10 * t1) * -1
 y1[1:483] = 0
 y1[664:end] = 0
-y2 = sin(50 * t) .+ rand(1001)
+y2 = sin.(50 * t) .+ rand(1001)
 y = y1[end:-1:1] .* y2
 yf21 = [zeros(1); y; zeros(1000)] .+ rand(2002) ./ 10
 yf22 = [zeros(301); y; zeros(700)] .+ rand(2002) ./ 10

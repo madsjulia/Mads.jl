@@ -488,7 +488,7 @@ writetable("filename", df) # write to disk; see documentation for options for re
 
 using PyPlot # load PyPlot, example taken from Matplotlib documentation
 x = linspace(0, 1)
-y = sin(4 * pi * x) .* exp(-5 * x)
+y = sin.(4 * pi * x) .* exp(-5 * x)
 fill(x, y) # you can access any matplotlib.pyplot function
 grid(true)
 using Distributions # second example
@@ -556,7 +556,7 @@ savefig("corboot.pdf", format = "pdf") # save results to pdf
 # Interactive work
 # Define a simple piece of code inside module to be able to change function definition without restarting Julia.
 module MCint
-f(x) = sin(x * x)
+f(x) = sin.(x * x)
 # vectorize f as x * x does not work on vectors
 @vectorize_1arg Float64 f
 lo = 0.0
@@ -575,6 +575,6 @@ println("quadgk err:\t$(int_gk[2])")
 end
 # We save it to test.jl and load it with include("test.jl").
 # Now we notice that we could remove line @vectorize_1arg Float64 f and change definition of
-# integrated function to f(x) = sin(x .* x). We can run include("test.jl").
+# integrated function to f(x) = sin.(x .* x). We can run include("test.jl").
 # You get a warning about module redefinition, but function was
 # redefined. Surprisingly — at least on my machine — this version of code is a bit slower.

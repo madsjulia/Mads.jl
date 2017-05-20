@@ -3,7 +3,7 @@
 # Expression
 3 * 6 + 4
 pi
-r = sin(pi / 2)
+r = sin.(pi / 2)
 
 # Chinese can be used
 朱莉婭 = 5

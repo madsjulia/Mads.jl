@@ -12,12 +12,12 @@ zz = 0.1
 ww = 20
 wn = ww / sqrt(1 - zz^2)
 y1 = exp(-zz * wn * t)
-y2 = sin(ww * t) .+ rand(1001)
+y2 = sin.(ww * t) .+ rand(1001)
 ys1 = y1 .* y2
 
 # signal 2
 t1 = 0:0.003:3
-y1 = sin(10 * t1) * -1
+y1 = sin.(10 * t1) * -1
 y1[1:483] = 0
 y1[664:end] = 0
 ys2 = y1[end:-1:1] .* y2
@@ -33,7 +33,7 @@ pg = Array{Gadfly.Plot}(length(xm), length(ym))
 
 function shift(d::Number, y::Vector)
 	i = Int(floor(d * 300))
-	if i > 999 
+	if i > 999
 		i = 999
 	end
 	[zeros(1+i); y; zeros(1000-i)] .+ rand(2002) ./ 10

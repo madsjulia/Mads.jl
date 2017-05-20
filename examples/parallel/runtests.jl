@@ -12,7 +12,7 @@ import Base.Test
 end
 
 @Mads.stderrcapture function time_dilation()
-	# Einstein Special Relativity: time dilation 
+	# Einstein Special Relativity: time dilation
 	# t' = t / sqrt(1 - v^2 / c^2)
 
 	c = 299792458   # Speed of light (m/s)
@@ -35,13 +35,13 @@ end
 
 @Mads.stderrcapture function schrodinger()
 	# Schrodinger's equation in a 1D box:
-	#  ψ(x) = sqrt(2/L)*sin(nπx/L)
+	#  ψ(x) = sqrt(2/L)*sin.(nπx/L)
 
 	L = 1 # Length of box
 	x = 1 # Position from [0, L]
 	n = 0 # Energy level
 
-	psi = sqrt(2/L)*sin(n*π*x/L)
+	psi = sqrt(2/L)*sin.(n*π*x/L)
 	isapprox(psi, 0.0, atol=1e-6)
 end
 

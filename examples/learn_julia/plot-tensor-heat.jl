@@ -16,7 +16,7 @@ pg = Array{Gadfly.Plot}(length(xm), length(ym))
 
 function shift(d::Number, t::Vector, scale::Number)
 	ss = d * 1
-	s = sin(scale * t + ss) .+ rand(2001) ./ 10
+	s = sin.(scale * t + ss) .+ rand(2001) ./ 10
 	q = Int(floor((4-d)^2 * 100))
 	for i = 1:q
 		s[i] *= i/q

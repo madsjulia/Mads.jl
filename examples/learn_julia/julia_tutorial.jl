@@ -88,7 +88,7 @@ PyPlot.legend()
 
 PyPlot.figure()
 x = linspace(0, 25, 100)
-PyPlot.plot(x, sin(x))
+PyPlot.plot(x, sin.(x))
 PyPlot.plot(y, cos(x))
 PyPlot.legend(["sin","cos"],loc="lower left")
 

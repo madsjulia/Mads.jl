@@ -28,9 +28,9 @@ Mads.plotseries(Wipopt, "rand_unmixed_signals_ipopt.svg", title="Unmixed signals
 info("Reconstruction of sin signals ...")
 srand(2015)
 nk = 3
-s1 = (sin(0.05:0.05:5)+1)/2
-s2 = (sin(0.3:0.3:30)+1)/2
-s3 = (sin(0.2:0.2:20)+1)/2
+s1 = (sin.(0.05:0.05:5)+1)/2
+s2 = (sin.(0.3:0.3:30)+1)/2
+s3 = (sin.(0.2:0.2:20)+1)/2
 S = [s1 s2 s3]
 Mads.plotseries(S, "sin_original_signals.svg", title="Original signals", name="Signal", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch)
 H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
@@ -52,8 +52,8 @@ Mads.plotseries(Wipopt * Hipopt, "sin_reproduced_observations_ipopt.svg", title=
 info("Reconstruction of sin/rand signals ...")
 srand(2015)
 nk = 3
-s1 = (sin(0.05:0.05:5)+1)/2
-s2 = (sin(0.3:0.3:30)+1)/2
+s1 = (sin.(0.05:0.05:5)+1)/2
+s2 = (sin.(0.3:0.3:30)+1)/2
 s3 = rand(100)
 S = [s1 s2 s3]
 Mads.plotseries(S, "sig_original_signals.svg", title="Original signals", name="Signal", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch)
@@ -76,7 +76,7 @@ Mads.plotseries(Wipopt * Hipopt, "sig_reproduced_observations_ipopt.svg", title=
 info("Reconstruction of sin/rand disturbance signal ...")
 srand(2015)
 nk = 3
-s1 = (sin(0.3:0.3:30)+1)/2
+s1 = (sin.(0.3:0.3:30)+1)/2
 s2 = rand(100) * 0.5
 s3 = rand(100)
 s3[1:50] = 0

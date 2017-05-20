@@ -152,7 +152,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
 			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-			J = g_sin(sinparam, center=obs)
+			J = g_sin.(sinparam, center=obs)
 		else
 			J = g(param, center=obs)
 		end
@@ -1480,7 +1480,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, p
 				elseif kernel == "periodic"
 					l = varargin[1]
 					p = varargin[2]
-					kernel_function = (x,y)->exp(-2*sin(pi*norm(x.feature-y.feature,2)/p)^2/l^2)
+					kernel_function = (x,y)->exp(-2*sin.(pi*norm(x.feature-y.feature,2)/p)^2/l^2)
 				elseif kernel == "tangent"
 					a = varargin[1]
 					c = varargin[2]
