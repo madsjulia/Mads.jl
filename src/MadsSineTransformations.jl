@@ -74,7 +74,7 @@ Returns:
 - Sine transformation of a gradient function
 """
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1) # sine transformation a gradient function
-	function sinetransformedg(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(0))
+	function sinetransformed(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
 		lineardx = dxparams - params
@@ -88,5 +88,5 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 		end
 		return result
 	end
-	return sinetransformedg
+	return sinetransformed
 end

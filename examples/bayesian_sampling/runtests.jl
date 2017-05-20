@@ -14,7 +14,7 @@ rootname = Mads.getmadsrootname(md)
 
 mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=1, seed=2016)
 
-if isdefined(:Klara, :BasicContMuvParameter)
+if isdefined(Klara, :BasicContMuvParameter)
 	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 	Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
@@ -24,25 +24,23 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
-if isdefined(:Klara, :BasicContMuvParameter)
+if isdefined(Klara, :BasicContMuvParameter)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
 	Mads.forward(md, mcmcchain.value)
-end
-
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
-	Mads.rmfile(rootname * "-test-bayes-results.svg")
-	Mads.spaghettiplots(md, mcmcvalues, keyword="", obs_plot_dots=false)
-	Mads.spaghettiplot(md, mcmcvalues, keyword="test")
-	Mads.spaghettiplots(md, 3, keyword="test")
-	Mads.spaghettiplot(md, 3, keyword="test")
-	s = splitdir(rootname)
-	for f in Mads.searchdir(Regex(string(s[2], "-", "\.*", "spaghetti.svg")), path=s[1])
-		Mads.rmfile(f, path=s[1])
+	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+		Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
+		Mads.rmfile(rootname * "-test-bayes-results.svg")
+		Mads.spaghettiplots(md, mcmcvalues, keyword="", obs_plot_dots=false)
+		Mads.spaghettiplot(md, mcmcvalues, keyword="test")
+		Mads.spaghettiplots(md, 3, keyword="test")
+		Mads.spaghettiplot(md, 3, keyword="test")
+		s = splitdir(rootname)
+		for f in Mads.searchdir(Regex(string(s[2], "-", "\.*", "spaghetti.svg")), path=s[1])
+			Mads.rmfile(f, path=s[1])
+		end
 	end
 end
-
 
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")

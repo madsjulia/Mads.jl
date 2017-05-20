@@ -152,7 +152,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
 			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-			J = g_sin.(sinparam, center=obs)
+			J = g_sin(sinparam, center=obs)
 		else
 			J = g(param, center=obs)
 		end
