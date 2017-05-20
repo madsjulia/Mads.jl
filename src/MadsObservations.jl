@@ -57,7 +57,11 @@ function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
 	k = getobskeys(madsdata)
-	return k[w.>0 | isnan.(t)]
+	if VERSION >= v"0.6-"
+		return k[w.>0 .| isnan.(t)]
+	else
+		return k[w.>0 | isnan.(t)]
+	end
 end
 
 """
