@@ -146,9 +146,9 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-new", "MadsBSS.jl"))
 end
 
-if Mads.pkgversion("Gadfly") >= v"0.6.1"
+if Mads.pkgversion("Gadfly") == v"0.6.1"
 	ENV["MADS_NO_GADFLY"] = ""
-	warn("Gadfly v0.6.1 & v0.6.2 has bugs; update or downgrade to another version!")
+	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
 	warn("Gadfly plotting is disabled!")
 end
 

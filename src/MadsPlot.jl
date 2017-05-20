@@ -230,7 +230,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 				plot_args = Any[]
 				if plotdata
 					if obs_plot_dots
-						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=pointsize)))
+						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize)))
 					else
 						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), line_width=linewidth)))
 					end
@@ -238,7 +238,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 				if npp > 1
 					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[iw]), line_width=linewidth)))
 				else npp = 1
-					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[iw]), default_point_size=pointsize)))
+					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				p = Gadfly.plot(Gadfly.Guide.title(wellname), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), plot_args...)
 				if separate_files
@@ -299,7 +299,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=linewidth)),
-					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
+					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
 		didplot = true
 		vsize += 4Gadfly.inch
 	end
@@ -392,7 +392,7 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 			else
 				cs[j, i] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j],
 					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
-					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, default_point_size=pointsize)
+					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, point_size=pointsize)
 					))
 			end
 		end
@@ -618,7 +618,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=linewidth, default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 				Gadfly.Coord.Cartesian(ymin=0, ymax=1),
 				# Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 				Gadfly.Guide.XLabel(xtitle),
@@ -644,7 +644,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=linewidth, default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 				Gadfly.Coord.Cartesian(ymin=0, ymax=1),
 				# Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
 				Gadfly.Guide.XLabel(xtitle),
@@ -670,7 +670,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-			Gadfly.Theme(default_point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+			Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
@@ -719,7 +719,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	obskeys = Mads.getobskeys(madsdata)
 	obs_plot = Any[]
 	if obs_plot_dots
-		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=pointsize))
+		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize))
 		push!(obs_plot, Gadfly.Geom.point)
 	else
 		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))
@@ -917,7 +917,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 	obs_plot = Any[]
 	if plotdata
 		if obs_plot_dots
-			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), default_point_size=pointsize))
+			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize))
 			push!(obs_plot, Gadfly.Geom.point)
 		else
 			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))

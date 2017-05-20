@@ -35,7 +35,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 	p = Gadfly.plot(df, x="horizon", y="maxfailureprob", color="Choices", Gadfly.Geom.line,
 		Gadfly.Guide.xlabel("Horizon of uncertainty"), Gadfly.Guide.ylabel("Maximum probability of failure"),
 		Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
-		Gadfly.Scale.color_discrete_manual(["red" "blue" "green" "cyan" "magenta" "yellow"]...))
+		Gadfly.Scale.color_discrete_manual("red", "blue", "green", "cyan", "magenta", "yellow"))
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot{}
 		p

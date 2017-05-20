@@ -25,7 +25,7 @@ for i in 1:n
 	end
 end
 
-Gadfly.plot(Gadfly.layer(z=k, x=x, y=y, Gadfly.Geom.contour(levels=linspace(minimum(k),maximum(k),51))),Gadfly.layer(x=X[1,:], y=X[2,:], Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), Gadfly.default_point_size=4pt)))
+Gadfly.plot(Gadfly.layer(z=k, x=x, y=y, Gadfly.Geom.contour(levels=linspace(minimum(k),maximum(k),51))),Gadfly.layer(x=X[1,:], y=X[2,:], Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), Gadfly.point_size=4pt)))
 
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig[:gca](projection="3d")
