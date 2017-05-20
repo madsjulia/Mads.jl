@@ -130,7 +130,12 @@ function push(modulename::String="")
 		info("Pushing $(i) ...")
 		cwd = pwd()
 		cd(Pkg.dir(i))
-		run(`git push`)
+		try
+			run(`git push`)
+		catch e
+			printerrormsg(e)
+			warn("$madsmodule cannot be pushed!")
+		end
 		cd(cwd)
 	end
 end
