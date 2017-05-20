@@ -488,8 +488,13 @@ keytext=Dict("logtransform"=>"log transform observations [default=`false`]",
 Set observations (calibration targets) in the MADS problem dictionary based on a `predictions` dictionary
 
 $(DocumentFunction.documentfunction(setobservationtargets!;
+<<<<<<< HEAD
+argtext=Dict("madsdata"=>"Mads problem dictionary",
+            "predictions"=>"predictions dictionary")))
+=======
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "predictions"=>"dictionary with model predictions")))
+>>>>>>> fa6e398adf7501cd7ced01e6ec040aeac5288467
 """
 function setobservationtargets!(madsdata::Associative, predictions::Associative)
 	observationsdict = madsdata["Observations"]
@@ -613,8 +618,13 @@ end
 Get spatial and temporal data in the `Wells` class
 
 $(DocumentFunction.documentfunction(getwellsdata;
+<<<<<<< HEAD
+argtext=Dict("madsdata"=>"Mads problem dictionary"),
+keytext=Dict("time"=>"whether to include `time` in returned data [default=`false`]")))
+=======
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("time"=>"get observation times [default=`false`]")))
+>>>>>>> fa6e398adf7501cd7ced01e6ec040aeac5288467
 
 Returns:
 
