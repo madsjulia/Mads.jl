@@ -116,7 +116,7 @@ argtext=Dict("svrmodel"=>"SVR model")))
 function svrfree(svrmodel::Array{SVR.svmmodel, 1})
 	npred = length(svrmodel)
 	for i=1:npred
-		if isdefined(svrmodel, i)
+		if isassigned(svrmodel, i)
 			SVR.freemodel(svrmodel[i])
 		end
 	end
@@ -135,7 +135,7 @@ function svrdump(svrmodel::Array{SVR.svmmodel, 1}, rootname::String, numberofsam
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
 	for i=1:npred
-		if isdefined(svrmodel, i)
+		if isassigned(svrmodel, i)
 			SVR.savemodel(svrmodel[i], joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr"))
 		end
 	end

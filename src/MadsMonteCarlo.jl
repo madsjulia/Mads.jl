@@ -49,7 +49,7 @@ keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the nu
             "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
             "thinning"=>"removal of any `thinning` realization [default=`1`]",
             "sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
-            "seed"=>"initial random number seed [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
             "weightfactor"=>"weight factor [default=`1.0`]")))
 
 Returns:
@@ -108,7 +108,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("nsteps"=>"number of final realizations in the chain [default=`1000`]",
             "burnin"=>"number of initial realizations before the MCMC are recorded [default=`100`]",
             "thinning"=>"removal of any `thinning` realization [default=`1`]",
-            "seed"=>"initial random number seed [default=`0`]")))
+            "seed"=>"random seed [default=`0`]")))
 
 Returns:
 
