@@ -701,6 +701,9 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 			madsinfo("Replacing " * varname * " -> " * s, 1)
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
+		if VERSION >= v"0.6-"
+			write(outfile, "\n")
+		end
 	end
 	close(outfile)
 end

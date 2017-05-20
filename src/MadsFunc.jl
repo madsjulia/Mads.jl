@@ -332,118 +332,17 @@ function importeverywhere(filename::String)
 	code = readstring(filename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	if quiet
-		fullcode = "@everywhere begin if !isdefined(:$functionname) $code\n$functionname\nend\nend"
+		fullcode = "@everywhere begin if !isdefined(:$functionname) $code end end"
 	else
-		fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined, going with that definition\")\n$functionname\nelse\n$code\n$functionname\nend\nend"
+		fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined\") else $code end end"
 	end
 	q = parse(fullcode)
 	eval(Main, q)
 	functionsymbol = Symbol(functionname)
-	q = Expr(:., :Main, QuoteNode(functionsymbol))
+	q = Expr(:., :Main, Meta.quot(functionsymbol))
 	commandfunction = eval(q)
 	return commandfunction
 end
-
-function makemadscommandgradient(madsdata::Associative) # make MADS command gradient function
-	f = makemadscommandfunction(madsdata)
-	return makemadscommandgradient(madsdata, f)
-end
-function makemadscommandgradient(madsdata::Associative, f::Function)
-	fg = makemadscommandfunctionandgradient(madsdata, f)
-	function madscommandgradient(parameters::Associative; dx::Array{Float64,1}=Array{Float64}(0), center::Associative=Dict()) #TODO we need the center; this is not working
-		forwardrun, gradient = fg(parameters; dx=dx, center=center)
-		return gradient
-	end
-	return madscommandgradient
-end
-
-@doc """
-Make MADS gradient function to compute the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
-
-$(DocumentFunction.documentfunction(makemadscommandgradient;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-             "f"=>"Mads forward model function")))
-
-Returns:
-
-- the parameter-space gradient for the model defined in the MADS problem dictionary `madsdata`
-""" makemadscommandgradient
-
-function makemadscommandfunctionandgradient(madsdata::Associative)
-	f = makemadscommandfunction(madsdata)
-	return makemadscommandfunctionandgradient(madsdata, f)
-end
-function makemadscommandfunctionandgradient(madsdata::Associative, f::Function) # make MADS command gradient function
-	optparamkeys = getoptparamkeys(madsdata)
-	lineardx = getparamsstep(madsdata, optparamkeys)
-	obskeys = getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	ssdr = Mads.haskeyword(madsdata, "ssdr")
-	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
-	end
-	function madscommandfunctionandgradient(parameters::Associative; dx=Array{Float64}(0), center::Associative=Dict()) #TODO we need the center; this is not working
-		if sizeof(dx) == 0
-			dx = lineardx
-		end
-		xph = Dict()
-		if length(center) == 0
-			xph["noparametersvaried"] = parameters
-		end
-		i = 1
-		for optparamkey in optparamkeys
-			xph[optparamkey] = copy(parameters)
-			xph[optparamkey][optparamkey] += dx[i] # TODO make sure that the order matches
-			i += 1
-		end
-		fevals = RobustPmap.rpmap(keyval->[keyval[1], f(keyval[2])], xph)
-		fevalsdict = Dict()
-		for feval in fevals
-			fevalsdict[feval[1]] = feval[2]
-		end
-		if length(center) > 0
-			fevalsdict["noparametersvaried"] = center
-		end
-		gradient = Dict()
-		k = 1
-		for obskey in obskeys
-			gradient[obskey] = Dict()
-			i = 1
-			c = fevalsdict["noparametersvaried"][obskey]
-			if ssdr
-					c += ( mins[k] < c ) ? mins[k] - c : 0
-					c += ( c > maxs[k] ) ? c - maxs[k] : 0
-			end
-			for optparamkey in optparamkeys
-				o = fevalsdict[optparamkey][obskey]
-				if ssdr
-					o += ( mins[k] < o ) ? mins[k] - o : 0
-					o += ( o > maxs[k] ) ? o - maxs[k] : 0
-				end
-				gradient[obskey][optparamkey] = weights[k] * (o - c) / dx[i]
-				# println("$optparamkey $resultkey : (", fevalsdict[optparamkey][resultkey], " - ", fevalsdict["noparametersvaried"][resultkey], ") / ", dx[i], "=", gradient[resultkey][optparamkey])
-				i += 1
-			end
-			k += 1
-		end
-		return fevalsdict["noparametersvaried"], gradient
-	end
-	return makemadsreusablefunction(madsdata, madscommandfunctionandgradient, "jacobian")
-end
-
-@doc """
-Make MADS forward & gradient functions for the model defined in the MADS problem dictionary `madsdata`
-
-$(DocumentFunction.documentfunction(makemadscommandfunctionandgradient;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-             "f"=>"Mads forward model function")))
-
-Returns:
-
-- Mads forward function for the model defined in the MADS problem dictionary `madsdata`
-- Mads gradient function for the model defined in the MADS problem dictionary `madsdata`
-""" makemadscommandfunctionandgradient
 
 """
 Make a function to compute the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`

@@ -11,19 +11,24 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
-mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
-rm(rootname * "-test-mcmcchain1.json")
-Mads.forward(md, mcmcchain.value)
 
 mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=1, seed=2016)
-mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
+
+if isdefined(:Klara, :BasicContMuvParameter)
+	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
+	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
+	Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
+	rm(rootname * "-test-mcmcchain1.json")
+	Mads.forward(md, mcmcchain.value)
+end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
-mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
-Mads.forward(md, mcmcchain.value)
+if isdefined(:Klara, :BasicContMuvParameter)
+	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
+	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
+	Mads.forward(md, mcmcchain.value)
+end
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
@@ -42,19 +47,16 @@ end
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-	
+
 	JLD.save(joinpath(d, "mcmcchains_emcee.jld"), "mcmcchains_emcee", mcmcchains_emcee)
 	JLD.save(joinpath(d, "mcmcvalues.jld"), "mcmcvalues", mcmcvalues)
 end
 
-
 @Base.Test.testset "Bayesian" begin
-
 	@Base.Test.testset "bayes" begin
 		good_mcmcvalues = JLD.load(joinpath(workdir, "test_results", "mcmcvalues.jld"), "mcmcvalues")
-		@Base.Test.test good_mcmcvalues == mcmcvalues
+		isdefined(:mcmcvalues) && @Base.Test.test good_mcmcvalues == mcmcvalues
 	end
-
 	@Base.Test.testset "emcee" begin
 		good_mcmcchains_emcee = JLD.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
 		@Base.Test.test good_mcmcchains_emcee == mcmcchains_emcee

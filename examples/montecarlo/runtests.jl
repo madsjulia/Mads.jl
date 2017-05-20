@@ -14,7 +14,7 @@ end
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		@JLD.save joinpath(d, "montecarlo.jld") results
+		JLD.save(joinpath(d, "montecarlo.jld"), "results", results)
 	end
 	return results
 end
@@ -22,7 +22,8 @@ end
 # Test Mads.montecarlo(md; N=10) against saved results
 @Base.Test.testset "Monte Carlo" begin
 	good_results = JLD.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
-	@Base.Test.test run_monte_carlo() == good_results
+	results = run_monte_carlo()
+	@Base.Test.test results == good_results
 end
 
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))

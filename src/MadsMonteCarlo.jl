@@ -1,10 +1,10 @@
 import DataStructures
 import RobustPmap
-import BlackBoxOptim
-import Klara
 import JSON
 import AffineInvariantMCMC
 import DocumentFunction
+@tryimport BlackBoxOptim
+@tryimport Klara
 
 function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
 	if numwalkers <= 1

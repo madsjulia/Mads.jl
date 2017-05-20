@@ -25,7 +25,7 @@ end
 	include(joinpath(workdir, "optimization_rosenbrock.jl")) # good
 	include(joinpath(workdir, "optimization_callback.jl")) # good?
 	include(joinpath(workdir, "optimization_linear_problem.jl")) # fix
-#	# include(joinpath(workdir, "optimization_linear_problem_nlopt.jl")) # requires NLopt
+	# include(joinpath(workdir, "optimization_linear_problem_nlopt.jl")) # requires NLopt
 	include(joinpath(workdir, "optimization_linear_problem+template.jl")) # fix
 end
 
@@ -55,11 +55,5 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
 	Mads.rmfile("internal-linearmodel+template-match.svg")
 end
-
-p = Mads.getparamdict(md)
-f = Mads.makemadscommandfunctionandgradient(md) # make MADS command gradient function
-f(p)
-f = Mads.makemadscommandgradient(md)
-f(p)
 
 clean_directory()

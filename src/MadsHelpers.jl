@@ -285,7 +285,7 @@ function printerrormsg(e::Any)
 	if in(:msg, fieldnames(e))
 		println(strip(e.msg))
 	else
-		println(strip(e))
+		println(e)
 	end
 end
 

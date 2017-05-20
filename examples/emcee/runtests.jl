@@ -11,7 +11,7 @@ numsamples_perwalker = 1000
 burnin = 100
 
 @Mads.stderrcapture function testemcee()
-	const stds = exp(5 * randn(numdims))
+	const stds = exp.(5 * randn(numdims))
 	const means = 1 + 5 * rand(numdims)
 	llhood = x->begin
 		retval = 0.
@@ -20,7 +20,7 @@ burnin = 100
 		end
 		return retval
 	end
-	
+
 	x0 = rand(numdims, numwalkers) * 10 - 5
 	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, x0, burnin, 1)
 	chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
