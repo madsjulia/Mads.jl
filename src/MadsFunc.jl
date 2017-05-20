@@ -318,15 +318,15 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 end
 
 """
-Import function everywhere from a file.
-The first function in the file is the one that will be called by Mads to perform the model simulations.
+Import Julia function everywhere from a file.
+The first function in the Julia input file is the one that will be called by Mads to perform the model simulations.
 
 $(DocumentFunction.documentfunction(importeverywhere;
 argtext=Dict("filename"=>"file name")))
 
 Returns:
 
-- `madscommandfunction` to execute the model
+- Julia function to execute the model
 """
 function importeverywhere(filename::String)
 	code = readstring(filename)
@@ -334,7 +334,7 @@ function importeverywhere(filename::String)
 	if quiet
 		fullcode = "@everywhere begin if !isdefined(:$functionname) $code end end"
 	else
-		fullcode = "@everywhere begin if isdefined(:$functionname) warn(\"$functionname already defined\") else $code end end"
+		fullcode = "@everywhere begin if !isdefined(:$functionname) $code else warn(\"$functionname already defined\")  end end"
 	end
 	q = parse(fullcode)
 	eval(Main, q)
