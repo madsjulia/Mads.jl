@@ -1077,7 +1077,7 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			sleep(attempt * 1)
 			Mads.createtempdir(tempdirname)
 			if attempt > 4
-				pprinterrormsg(errmsg)
+				printerrormsg(errmsg)
 				madscritical("$(e)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
 				trying = false
 			end

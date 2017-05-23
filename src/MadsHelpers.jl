@@ -329,6 +329,10 @@ end
 Get package version
 
 $(DocumentFunction.documentfunction(pkgversion))
+
+Returns:
+
+- package version
 """
 function pkgversion(modulestr::String)
 	try
