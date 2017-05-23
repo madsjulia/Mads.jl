@@ -139,7 +139,8 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						if attempt > 3
 							cd(currentdir)
 							trying = false
-							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+							hostmachine = haskey(ENV, "HOSTNAME") ? ENV["HOSTNAME"] : "local machine"
+							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(hostmachine)!")
 						end
 						break
 					end
@@ -160,7 +161,8 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 							cd(currentdir)
 							trying = false
 							printerrormsg(errmsg)
-							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(ENV["HOSTNAME"])!")
+							hostmachine = haskey(ENV, "HOSTNAME") ? ENV["HOSTNAME"] : "local machine"
+							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(hostmachine)!")
 						end
 					end
 				end
