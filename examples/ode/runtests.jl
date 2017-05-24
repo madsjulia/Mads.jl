@@ -5,6 +5,21 @@ import Base.Test
 
 @Mads.tryimport ODE
 
+# function to create a function for the ODE solver
+@Mads.stderrcapture function makefunc(parameterdict::DataStructures.OrderedDict)
+	# ODE parameters
+	omega = parameterdict["omega"]
+	k = parameterdict["k"]
+	function func(t, y) # function needed by the ODE solver
+		# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
+		f = similar(y)
+		f[1] = y[2] # u' = v
+		f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
+		return f
+	end
+	return func
+end
+
 if isdefined(:ODE)
 	# load parameter data from MADS YAML file
 	Mads.madsinfo("Loading data ...")
@@ -22,21 +37,6 @@ if isdefined(:ODE)
 
 	# create parameter dictionary
 	paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
-
-	# function to create a function for the ODE solver
-	@Mads.stderrcapture function makefunc(parameterdict::DataStructures.OrderedDict)
-		# ODE parameters
-		omega = parameterdict["omega"]
-		k = parameterdict["k"]
-		function func(t, y) # function needed by the ODE solver
-			# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
-			f = similar(y)
-			f[1] = y[2] # u' = v
-			f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
-			return f
-		end
-		return func
-	end
 
 	@Base.Test.testset "ODE Solver" begin
 		# create a function for the ODE solver
@@ -72,4 +72,6 @@ if isdefined(:ODE)
 		# Mads.madsinfo("Show MADS Observations ...")
 		# Mads.showobservations(md)
 	end
+else
+	warn("ODE is missing")
 end

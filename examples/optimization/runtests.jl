@@ -50,7 +50,7 @@ end
 Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_PLOT")
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.setobstime!(md, "o")
 	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
 	Mads.rmfile("internal-linearmodel+template-match.svg")
