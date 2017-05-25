@@ -77,6 +77,10 @@ end
 Restore STDOUT
 
 $(DocumentFunction.documentfunction(stdoutcaptureoff))
+
+Returns:
+
+- standered output
 """
 function stdoutcaptureoff()
 	redirect_stdout(outputoriginal);
@@ -103,6 +107,10 @@ end
 Restore STDERR 
 
 $(DocumentFunction.documentfunction(stderrcaptureoff))
+
+Returns:
+
+- standered error
 """
 function stderrcaptureoff()
 	redirect_stderr(errororiginal);
@@ -126,6 +134,10 @@ end
 Restore STDOUT & STDERR
 
 $(DocumentFunction.documentfunction(stdouterrcaptureoff))
+
+Returns:
+
+- standered output amd standered error
 """
 function stdouterrcaptureoff()
 	return stdoutcaptureoff(), stderrcaptureoff()

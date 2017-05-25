@@ -60,4 +60,8 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "infilename"=>"input Mads file",
             "outfilename"=>"output Mads file",
             "predictions"=>"dictionary of model predictions")))
+
+Returns:
+
+- new madsdata
 """ createmadsproblem

@@ -116,6 +116,6 @@ keytext=Dict("quiet"=>"[default=`Mads.quiet`]",
 
 Returns:
 
-- cmdout
-- cmderr
+- command output
+- command error message
 """ runcmd

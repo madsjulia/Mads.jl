@@ -37,7 +37,7 @@ argtext=Dict("x"=>"parameter vector")))
 
 Returns:
 
--
+- test result
 """
 function rosenbrock(x::Vector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
@@ -48,6 +48,10 @@ Rosenbrock test function for LM optimization (returns the 2 components separatel
 
 $(DocumentFunction.documentfunction(rosenbrock_lm;
 argtext=Dict("x"=>"parameter vector")))
+
+Returns:
+
+- test result
 """
 function rosenbrock_lm(x::Vector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
@@ -288,6 +292,10 @@ end
 """
 $(DocumentFunction.documentfunction(makesumsquares;
 argtext=Dict("n"=>"number of observations")))
+
+Returns:
+
+- sumsquares
 """
 function makesumsquares(n::Integer)
 	function sumsquares(x::Vector)
@@ -303,6 +311,10 @@ end
 """
 $(DocumentFunction.documentfunction(makesumsquares_gradient;
 argtext=Dict("n"=>"number of observations")))
+
+Returns:
+
+- sumsquares gradient
 """
 function makesumsquares_gradient(n::Integer)
 	function sumsquares_gradient(x::Vector)
@@ -318,6 +330,10 @@ end
 """
 $(DocumentFunction.documentfunction(makerotatedhyperellipsoid;
 argtext=Dict("n"=>"number of observations")))
+
+Returns:
+
+- rotated hyperellipsoid
 """
 function makerotatedhyperellipsoid(n::Integer)
 	function rotatedhyperellipsoid(x::Vector)
@@ -338,6 +354,10 @@ end
 """
 $(DocumentFunction.documentfunction(makerotatedhyperellipsoid_gradient;
 argtext=Dict("n"=>"number of observations")))
+
+Returns:
+
+- rotated hyperellipsoid gradient
 """
 function makerotatedhyperellipsoid_gradient(n::Integer)
 	function rotatedhyperellipsoid_gradient(x::Vector)

@@ -53,7 +53,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
--
+- Spherical variogram
 """
 function sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -76,7 +76,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
--
+- Exponential variogram
 """
 function exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -97,7 +97,7 @@ argtext=Dict("h"=>"separation distance",
 
 Returns:
 
--
+- Gaussian variogram
 """
 function gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number)
 	if h == 0.
@@ -147,6 +147,10 @@ Get spatial covariance matrix
 $(DocumentFunction.documentfunction(getcovmat;
 argtext=Dict("X"=>"matrix with coordinates of the data points (x or y)",
             "cov"=>"spatial covariance function")))
+
+Returns:
+
+- spatial covariance matrix
 """
 function getcovmat(X::Matrix, cov::Function)
 	covmat = Array{Float64}((size(X, 2), size(X, 2)))
