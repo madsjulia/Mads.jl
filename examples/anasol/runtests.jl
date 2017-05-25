@@ -26,8 +26,8 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, 2)
 	Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
 	Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
-	Mads.plotmass([1.,2.],[10.,20.],[5.,10.], joinpath(workdir, "plotmass-test.png"))
-	Mads.rmfile(joinpath(workdir, "plotmass-test.png"))
+	Mads.plotmass([1.,2.],[10.,20.],[5.,10.], joinpath(workdir, "plotmass-test.svg"))
+	Mads.rmfile(joinpath(workdir, "plotmass-test.svg"))
 end
 
 Mads.forwardgrid(md)
