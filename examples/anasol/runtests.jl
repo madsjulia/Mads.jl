@@ -26,6 +26,8 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, 2)
 	Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
 	Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
+	Mads.plotmass([1.,2.],[10.,20.],[5.,10.], joinpath(workdir, "plotmass-test.png"))
+	Mads.rmfile(joinpath(workdir, "plotmass-test.png"))
 end
 
 Mads.forwardgrid(md)
@@ -100,7 +102,7 @@ Mads.rmdir(joinpath(workdir, "mass_reduced.svg"))
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-	
+
 	JLD.save(joinpath(d, "goodresults.jld"), "forward_preds", forward_preds)
 	JLD.save(joinpath(d, "forward_results.jld"), "forward_results", forward_results)
 	JLD.save(joinpath(d, "paramrandom_true.jld"), "paramrandom_true", paramrandom_true)
