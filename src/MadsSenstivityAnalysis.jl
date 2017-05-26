@@ -183,8 +183,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		try
 			covar = inv(JpJ)
 		catch "SingularException(4)"
-			Mads.madswarn("Singular covariance matrix! Local sensitivity analysis fails.")
-			return
+			Mads.madscritical("Singular covariance matrix! Local sensitivity analysis fails.")
 		end
 	end
 	stddev = sqrt.(abs.(diag(covar)))
@@ -259,9 +258,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, 
 			# printerrormsg(errmsg)
 			numgooddirections -= 1
 			if numgooddirections <= 0
-				done = true
-				madswarn("Reduction in sampling directions failed!")
-				return
+				madscritical("Reduction in sampling directions failed!")
 			end
 			gooddirections = vo[:, 1:numgooddirections]
 			newJ = J * gooddirections
@@ -1204,8 +1201,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 				# dist contains all data about distribution so this will apply any necessary distributions to X
 				X[:,k] = quantile(dist[k],X[:,k])
 			else
-				madscritical("ERROR in assinging Input Data! (Check InputData matrix and/or eFAST_distributeX.jl")
-				return
+				madscritical("eFAST error in assigning input data!")
 			end # End if
 		end # End k=1:nprime (looping over parameters of interest)
 		return X
@@ -1513,9 +1509,8 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	# omega = 1 : step : M*Wi - step  # Frequency domain, can be used to plot power spectrum
 
 	## Error Check (Wi=8 is the minimum frequency required for eFAST. Ns_total must be at least 65 to satisfy this criterion)
-	if Wi<8
-		madscritical("ERROR! Choose larger Ns_total value! (Ns_total = 65 is minimum for eFAST)")
-		return
+	if Wi < 8
+		madscritical("eFAST error: specify larger sample size (65 is the minimum for eFAST)")
 	end
 
 	## If our output is read directly from some sort of data file rather than using a model function
@@ -1570,7 +1565,6 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
-		# sendto(collect(2:nprime*Nr), constCell = constCell)
 		sendto(workers(), constCell = constCell)
 	elseif P > 1
 		# If there are less workers than resamplings * parameters, we send to all workers available
