@@ -8,7 +8,7 @@ Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 
 numberofsamples = 100
-if !isdefined(predictions) || size(predictions) != numberofsamples
+if !isdefined(:predictions) || size(predictions) != numberofsamples
 	paramdict = Mads.getparamrandom(md, numberofsamples)
 	paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
 	predictions = Mads.forward(md, paramdict)'
@@ -20,7 +20,7 @@ Mads.display("$rootname-w13a-training-set-$numberofsamples-spaghetti.png")
 
 svrpredictions = Array(Float64, 0, numberofsamples)
 for i=1:50
-	pmodel = SVR.train(predictions[i,:], paramarray'; p=0.001, C=10000.);
+	pmodel = SVR.train(predictions[i,:], paramarray'; eps=0.001, C=10000.);
 	y_pr = SVR.predict(pmodel, paramarray');
 	SVR.freemodel(pmodel)
 	svrpredictions = [svrpredictions; y_pr']

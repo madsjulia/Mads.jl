@@ -7,7 +7,7 @@ savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
 @Base.Test.testset "SVR" begin
 	srand(2017)
 
-	numberofsamples = 1000 # Set the number 
+	numberofsamples = 1000 # Set the number
 
 	md = Mads.loadmadsfile(joinpath(workdir, "models", "internal-polynomial.mads"))
 	paramdict = Mads.getparamrandom(md, numberofsamples, init_dist=true)
