@@ -134,7 +134,6 @@ include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 
 if !haskey(ENV, "MADS_TRAVIS")
-	include("MadsMathProgBase.jl")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))
@@ -144,6 +143,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
 	# include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 	include(joinpath("..", "src-new", "MadsBSS.jl"))
+	include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
 end
 
 if Mads.pkgversion("Gadfly") == v"0.6.1"

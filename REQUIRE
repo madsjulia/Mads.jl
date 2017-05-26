@@ -7,7 +7,7 @@ GeostatInversion
 MetaProgTools
 ReusableFunctions
 RobustPmap
-SVR
+SVR 0.2.3
 DocumentFunction
 Conda 0.4
 PyCall 1.8
