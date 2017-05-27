@@ -188,4 +188,4 @@ Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_ext("iterationresults"; path=workdir)
 Mads.rmdir("w01shortexp_restart")
 
-Mads.rmdir("w01-w13a_w20a_restart")
+Mads.rmdir("w01-w13a_w20a_restart"; path=pwd())

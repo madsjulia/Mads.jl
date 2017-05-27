@@ -4,7 +4,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/installation/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -20,7 +20,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/getting_started/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -29,43 +29,43 @@
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/setup/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/bigdt/source_termination/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/infogap/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/bayesian_sampling/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/blind_source_separation/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/contamination/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/ode/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -74,7 +74,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Notebooks/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -82,7 +82,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Examples/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -90,7 +90,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/model_coupling/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -98,7 +98,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/test/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -106,7 +106,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/functions/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -115,55 +115,55 @@
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/Mads/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/BIGUQ/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/Anasol/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/AffineInvariantMCMC/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/GeostatInversion/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/ReusableFunctions/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/MetaProgTools/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/RobustPmap/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/Modules/SVR/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -172,7 +172,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/acknowledgments/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -180,7 +180,7 @@
     
     <url>
      <loc>http://madsjulia.github.io/Mads.jl/copying/</loc>
-     <lastmod>2017-05-25</lastmod>
+     <lastmod>2017-05-26</lastmod>
      <changefreq>daily</changefreq>
     </url>
     

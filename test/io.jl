@@ -1,7 +1,7 @@
 import Mads
 import Base.Test
 
-# If madsdir = '.' then joinpath, else madsdir 
+# If madsdir = '.' then joinpath, else madsdir
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "test") : Mads.getmadsdir()
 @Mads.stderrcapture function jpath(file::String)
 	joinpath(workdir, file)
@@ -14,7 +14,7 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 	ext = Mads.getextension(jpath(file))
 
 	if ext == "dat"
-		Mads.dumpasciifile(jpath(file), data)	
+		Mads.dumpasciifile(jpath(file), data)
 		loaded_data = Mads.loadasciifile(jpath(file))
 		loaded_data = Dict{String,Float64}(zip((loaded_data[1], loaded_data[2]), (loaded_data[3], loaded_data[4])))
 	elseif ext == "json"
@@ -29,7 +29,7 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 		return
 	end
 	Mads.rmfile(jpath(file))
-	
+
 	return (data["a"] == loaded_data["a"]) && (data["b"] == loaded_data["b"])
 end
 
@@ -39,7 +39,7 @@ end
 	@Base.Test.test test_IO("a.json", arr)
 	@Base.Test.test test_IO("a.yaml", arr)
 	@Base.Test.test test_IO("a.yaml", arr, true)
-	
+
 	# Test removal of files based on root/extension
 	file = "root_testing.extension_testing"
 
