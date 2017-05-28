@@ -15,9 +15,9 @@ nsample = 10
 bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	f = joinpath(problemdir, "source_termination-robustness-$nsample")
-	Mads.plotrobustnesscurves(md, bigdt_results; filename=f)
-	Mads.rmfiles_root(f)
+	filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
+	Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
+	Mads.rmfiles_root(filenameroot)
 end
 
 # If enabled, save output as test file
@@ -28,7 +28,7 @@ if Mads.create_tests
 	JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
 end
 
-# Testing for bigdt 
+# Testing for bigdt
 @testset "Bigdt" begin
 	good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
 
