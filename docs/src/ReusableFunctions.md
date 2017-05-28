@@ -1,8 +1,10 @@
 # ReusableFunctions.jl
 
-Documentation for ReusableFunctions.jl module (all functions):
+Module ReusableFunctions provides automated storage and retrieval of results for functions calls.
+
+ReusableFunctions.jl module functions:
 
 ```@autodocs
 Modules = [ReusableFunctions]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```

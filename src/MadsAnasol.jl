@@ -280,10 +280,8 @@ end
 
 function computemass(madsdata::Associative; time::Number=0)
 	if time == 0
-		grid_time = madsdata["Grid"]["time"]
-		if grid_time > 0
-			time = grid_time
-		end
+		grid_time = (haskey(madsdata, "Grid") && haskey(madsdata["Grid"], "time")) ? madsdata["Grid"]["time"] : 0
+		time = grid_time > 0 ? grid_time : 0
 	end
 	parameters = madsdata["Parameters"]
 	lambda = parameters["lambda"]["init"]

@@ -1,8 +1,8 @@
 # AffineInvariantMCMC.jl
 
-Documentation for AffineInvariantMCMC.jl module (all functions):
+AffineInvariantMCMC.jl module functions:
 
 ```@autodocs
 Modules = [AffineInvariantMCMC]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```

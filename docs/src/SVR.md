@@ -1,8 +1,11 @@
 # SVR.jl
 
-Documentation for SVR.jl module (all functions):
+Module SVR provides Support Vector Regression (SVR) using libSVM.
+
+
+SVR.jl module functions:
 
 ```@autodocs
 Modules = [SVR]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```

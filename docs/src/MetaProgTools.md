@@ -1,8 +1,10 @@
 # MetaProgTools.jl
 
-Documentation for MetaProgTools.jl module (all functions):
+Module with Meta Programming Tools.
+
+MetaProgTools.jl module functions:
 
 ```@autodocs
 Modules = [MetaProgTools]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```

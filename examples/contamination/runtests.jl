@@ -97,7 +97,9 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 end
 
 Mads.computemass(md; time=50.0)
+Mads.computemass(md)
 
 Mads.addsource!(md)
+Mads.removesource!(md)
 
 Mads.rmdir("w01-w13a_w20a_restart")

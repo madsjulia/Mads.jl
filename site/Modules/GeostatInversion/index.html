@@ -434,8 +434,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../BIGUQ/" title="BIGUQ" class="md-nav__link">
-      BIGUQ
+    <a href="../AffineInvariantMCMC/" title="AffineInvariantMCMC" class="md-nav__link">
+      AffineInvariantMCMC
     </a>
   </li>
 
@@ -458,8 +458,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../AffineInvariantMCMC/" title="AffineInvariantMCMC" class="md-nav__link">
-      AffineInvariantMCMC
+    <a href="../BIGUQ/" title="BIGUQ" class="md-nav__link">
+      BIGUQ
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../DocumentFunction/" title="DocumentFunction" class="md-nav__link">
+      DocumentFunction
     </a>
   </li>
 
@@ -532,8 +544,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../ReusableFunctions/" title="ReusableFunctions" class="md-nav__link">
-      ReusableFunctions
+    <a href="../MetaProgTools/" title="MetaProgTools" class="md-nav__link">
+      MetaProgTools
     </a>
   </li>
 
@@ -544,8 +556,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../MetaProgTools/" title="MetaProgTools" class="md-nav__link">
-      MetaProgTools
+    <a href="../ReusableFunctions/" title="ReusableFunctions" class="md-nav__link">
+      ReusableFunctions
     </a>
   </li>
 
@@ -663,7 +675,8 @@
                 
                 <p><a id='GeostatInversion.jl-1'></a></p>
 <h1 id="geostatinversionjl">GeostatInversion.jl</h1>
-<p>Documentation for GeostatInversion.jl module (all functions):</p>
+<p>Module for Geostatistical Inversion.</p>
+<p>GeostatInversion.jl module functions:</p>
 <p><a id='GeostatInversion.getxis' href='#GeostatInversion.getxis'>#</a>
 <strong><code>GeostatInversion.getxis</code></strong> &mdash; <em>Function</em>.</p>
 <p>Get the parameter subspace that will be explored during the inverse analysis</p>
@@ -749,7 +762,7 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/9d43a55b11aac8f0beeaec0d3847b1f3b47ff741/src/GeostatInversion.jl#L73-L95' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.FDDerivatives-1'></a></p>
 <h2 id="module-geostatinversionfdderivatives">Module GeostatInversion.FDDerivatives</h2>
-<p>Documentation for GeostatInversion.FDDerivatives module (all functions):</p>
+<p>GeostatInversion.FDDerivatives module functions:</p>
 <p><a id='GeostatInversion.FDDerivatives.makegradient' href='#GeostatInversion.FDDerivatives.makegradient'>#</a>
 <strong><code>GeostatInversion.FDDerivatives.makegradient</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create Gradient function</p>
@@ -760,18 +773,22 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
 <p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/9d43a55b11aac8f0beeaec0d3847b1f3b47ff741/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.RandMatFact-1'></a></p>
 <h2 id="module-geostatinversionrandmatfact">Module GeostatInversion.RandMatFact</h2>
-<p>Documentation for GeostatInversion.RandMatFact module (all functions):</p>
+<p>GeostatInversion.RandMatFact module functions:</p>
 <p><a id='GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}' href='#GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}'>#</a>
 <strong><code>GeostatInversion.RandMatFact.randsvd</code></strong> &mdash; <em>Method</em>.</p>
 <p>Random SVD based on algorithm 5.1 from Halko et al.</p>
 <p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/9d43a55b11aac8f0beeaec0d3847b1f3b47ff741/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.FFTRF-1'></a></p>
 <h2 id="module-geostatinversionfftrf">Module GeostatInversion.FFTRF</h2>
-<p>Documentation for GeostatInversion.FFTRF module (all functions):</p>
+<p>GeostatInversion.FFTRF module functions:</p>
 <p><a id='GeostatInversion.FFTRF.reducek-Tuple{Any,Any}' href='#GeostatInversion.FFTRF.reducek-Tuple{Any,Any}'>#</a>
 <strong><code>GeostatInversion.FFTRF.reducek</code></strong> &mdash; <em>Method</em>.</p>
 <p>Reduce k</p>
 <p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/9d43a55b11aac8f0beeaec0d3847b1f3b47ff741/src/FFTRF.jl#L20' class='documenter-source'>source</a><br></p>
+<p><a id='GeostatInversion.FFTRF.@tryimport-Tuple{Symbol}' href='#GeostatInversion.FFTRF.@tryimport-Tuple{Symbol}'>#</a>
+<strong><code>GeostatInversion.FFTRF.@tryimport</code></strong> &mdash; <em>Macro</em>.</p>
+<p>Try to import a module</p>
+<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/9d43a55b11aac8f0beeaec0d3847b1f3b47ff741/src/FFTRF.jl#L3' class='documenter-source'>source</a><br></p>
                 
                   
                 
@@ -790,7 +807,7 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../AffineInvariantMCMC/" title="AffineInvariantMCMC" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../DocumentFunction/" title="DocumentFunction" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -799,19 +816,19 @@ getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                AffineInvariantMCMC
+                DocumentFunction
               </span>
             </div>
           </a>
         
         
-          <a href="../ReusableFunctions/" title="ReusableFunctions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../MetaProgTools/" title="MetaProgTools" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                ReusableFunctions
+                MetaProgTools
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

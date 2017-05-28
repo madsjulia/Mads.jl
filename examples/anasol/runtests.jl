@@ -72,8 +72,6 @@ Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"), exp
 Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
 
-f = Mads.getmadsinputfile()
-e = Mads.getextension("test.mads")
 
 @Base.Test.testset "Observations" begin
 	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
@@ -81,8 +79,8 @@ e = Mads.getextension("test.mads")
 
 	@Base.Test.test o1 == o2
 
-	@Base.Test.test f == "test.mads"
-	@Base.Test.test e == "mads"
+	@Base.Test.test Mads.getmadsinputfile() == "test.mads"
+	@Base.Test.test Mads.getextension("test.mads") == "mads"
 end
 
 Mads.stdoutcaptureon()

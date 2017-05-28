@@ -31,12 +31,13 @@ pages:
 - Functions: functions.md
 - Modules:
   - Mads: Modules/Mads.md
-  - BIGUQ: Modules/BIGUQ.md
-  - Anasol: Modules/Anasol.md
   - AffineInvariantMCMC: Modules/AffineInvariantMCMC.md
+  - Anasol: Modules/Anasol.md
+  - BIGUQ: Modules/BIGUQ.md
+  - DocumentFunction: Modules/DocumentFunction.md
   - GeostatInversion: Modules/GeostatInversion.md
-  - ReusableFunctions: Modules/ReusableFunctions.md
   - MetaProgTools: Modules/MetaProgTools.md
+  - ReusableFunctions: Modules/ReusableFunctions.md
   - RobustPmap: Modules/RobustPmap.md
   - SVR: Modules/SVR.md
 - Acknowledgments: acknowledgments.md

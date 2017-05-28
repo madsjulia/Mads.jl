@@ -1,36 +1,38 @@
 # GeostatInversion.jl
 
-Documentation for GeostatInversion.jl module (all functions):
+Module for Geostatistical Inversion.
+
+GeostatInversion.jl module functions:
 
 ```@autodocs
 Modules = [GeostatInversion]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```
 
 ## Module GeostatInversion.FDDerivatives
 
-Documentation for GeostatInversion.FDDerivatives module (all functions):
+GeostatInversion.FDDerivatives module functions:
 
 ```@autodocs
 Modules = [GeostatInversion.FDDerivatives]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```
 
 ## Module GeostatInversion.RandMatFact
 
-Documentation for GeostatInversion.RandMatFact module (all functions):
+GeostatInversion.RandMatFact module functions:
 
 ```@autodocs
 Modules = [GeostatInversion.RandMatFact]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```
 
 ## Module GeostatInversion.FFTRF
 
-Documentation for GeostatInversion.FFTRF module (all functions):
+GeostatInversion.FFTRF module functions:
 
 ```@autodocs
 Modules = [GeostatInversion.FFTRF]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```
 

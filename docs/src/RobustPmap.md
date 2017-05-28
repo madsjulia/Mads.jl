@@ -1,8 +1,10 @@
 # RobustPmap.jl
 
-Documentation for RobustPmap.jl module (all functions):
+Module RobustPmap provides robust pmap calls for efficient parallelization and high-performance computing.
+
+RobustPmap.jl module functions:
 
 ```@autodocs
 Modules = [RobustPmap]
-Order   = [:function, :type]
+Order   = [:function, :macro, :type]
 ```
