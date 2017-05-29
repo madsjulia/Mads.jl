@@ -4,6 +4,9 @@ import Compat
 if isdefined(Mads, :runcmd)
 end
 
+Mads.restarton()
+Mads.restartoff()
+
 if Mads.create_tests
 	Mads.create_tests_off()
 	Mads.create_tests_on()
@@ -129,8 +132,17 @@ end
 
 Mads.addkeyword!(Dict(), "ssdr")
 Mads.addkeyword!(Dict("Problem"=>"ssdr"), "ssdr")
+Mads.addkeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr2")
 Mads.addkeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
 Mads.addkeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
+
+Mads.deletekeyword!(Dict(), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>"ssdr"), "ssdr")
+Mads.deletekeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
+
+Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 
 if !haskey(ENV, "MADS_TRAVIS")
 	Mads.status()

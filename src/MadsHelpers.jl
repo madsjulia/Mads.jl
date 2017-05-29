@@ -246,7 +246,7 @@ Returns:
 """
 function getsindx(madsdata::Associative)
 	sindx = 0.1
-	if Mads.haskeyword(madsdata, "sindx")
+	if Mads.haskeyword(madsdata, "Problem", "sindx")
 		sindx = madsdata["Problem"]["sindx"]
 		if typeof(sindx) == String
 			sindx = float(sindx)

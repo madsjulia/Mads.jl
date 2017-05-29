@@ -1068,12 +1068,11 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "M"=>"maximum number of harmonics [default=`6`]",
             "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
              "seed"=>"random seed [default=`0`]",
-            "truncateRanges"=>"truncate parameter ranges [default=`0`]",
-            "checkpointfrequency"=>"check point frequency [default=`N`]",
+             "checkpointfrequency"=>"check point frequency [default=`N`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=0, truncateRanges::Number=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1438,42 +1437,6 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	# ny > 1 means system is dynamic (model output is a vector)
 	ny     = length(obskeys)
 
-	##### Truncate paramkeys here
-	#paramkeys = paramkeys[1:2]
-
-	if truncateRanges ==1
-		##### Truncated ranges Boian asked for (ranges were too large for SVR)
-		############## FORCED INPUT ##############
-		percentDict = Dict("vx"=>.20, "ax"=>.50, "ts_dsp"=>.30, "source1_f"=>.10, "source1_t0"=>.20, "source1_x"=>.05, "source1_t1"=>.10)
-		#Increasing ranges
-		if increaserange == 1
-			#percentDict = ["vx"=>.40, "ax"=>.95, "ts_dsp"=>.60, "source1_f"=>.20, "source1_t0"=>.40, "source1_x"=>.10, "source1_t1"=>.20]
-			percentDict["source1_t1"] = .40
-		end
-
-		logdistribution = 1
-		for k = 1:length(paramkeys)
-			# Initial value for parameter k
-			initvalue 	   = paramalldict["$(paramkeys[k])"]
-			percentvalue   = percentDict["$(paramkeys[k])"]
-
-			# Special case for source1_t0 since initial value == max value
-			if logdistribution == 1
-				if paramkeys[k] == "source1_t0"
-					InputData[k,2] = Uniform(log(initvalue - 2*initvalue*percentvalue), log(initvalue))
-				else
-					InputData[k,2] = Uniform(log(initvalue - initvalue*percentvalue), log(initvalue + initvalue*percentvalue))
-				end
-			else
-				if paramkeys[k] == "source1_t0"
-					InputData[k,2] = Uniform(initvalue - 2*initvalue*percentvalue, initvalue)
-				else
-					InputData[k,2] = Uniform(initvalue - initvalue*percentvalue, initvalue + initvalue*percentvalue)
-				end
-			end
-		end
-	end
-
 	# This is here to delete parameters of interest from paramalldict
 	# The parameters of interest will be calculated by eFAST_distributeX
 	# We utilize the "merge" function to combine the two when we are calculating model output
@@ -1486,23 +1449,6 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	# Adjusts Ns (upwards) if necessary
 
 	Nr, Wi, Ns, Ns_total = eFAST_optimalSearch(Ns_total, M, gamma)
-
-	forced = 0
-	if forced == 1
-		## Forced inputs here:
-		# Note: Ns must be odd, eFAST_optimalSearch.jl will adjust for this if necessary but if you use a forced input
-		# make sure to keep this in mind.
-		# Ns =
-		Wi = int(100)
-		Nr = int(ceil(Ns_total/(gamma*M*Wi+1)))
-
-		Ns       = int((gamma*M*Wi+1))
-		if mod(Ns,2) != 1
-			Ns += 1
-		end
-		Ns_total = int(Ns*Nr)
-		info("eFAST parameters after forced inputs: \n Ns_total = $(Nr*Ns) Nr = $Nr ... Wi = $Wi ... Ns = $Ns")
-	end
 
 	## For debugging and/or graphs
 	# step  = (M*Wi - 1)/Ns

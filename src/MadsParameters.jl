@@ -375,7 +375,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- `ture` if optimizable, `false` if not
+- `true` if optimizable, `false` if not
 """
 function isopt(madsdata::Associative, parameterkey::String)
 	if !haskey(madsdata["Parameters"][parameterkey], "type") ||
