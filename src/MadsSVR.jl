@@ -215,13 +215,19 @@ function makesvrmodel(madsdata::Associative, numberofsamples::Integer=100; check
 		return svrpredict(svrmodel, paramarray)
 	end
 	function svrexec(paramdict::Associative)
-		d = DataStructures.OrderedDict{String, Float64}()
-		for k in optnames
-			d[k] = paramdict[k]
+		if length(paramdict[optnames[1]]) == 1
+			d = DataStructures.OrderedDict{String, Float64}()
+			for k in optnames
+				d[k] = paramdict[k]
+			end
+			parvector = collect(values(d))
+			p = svrpredict(svrmodel, parvector')
+			d = DataStructures.OrderedDict{String, Float64}(zip(obsnames, p))
+		else
+			paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+			d = svrpredict(svrmodel, paramarray)
 		end
-		parvector = collect(values(d))
-		p = svrpredict(svrmodel, parvector')
-		DataStructures.OrderedDict{String, Float64}(zip(obsnames, p))
+		return d
 	end
 	function svrclean()
 		svrfree(svrmodel)

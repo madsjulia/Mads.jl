@@ -11,6 +11,7 @@ function madsoutput(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
 		print(message)
 		flush(STDOUT)
+		flush(STDERR)
 	end
 end
 
@@ -25,6 +26,7 @@ function madsdebug(message::String, level::Int=0)
 	if !quiet && level < debuglevel
 		print_with_color(:green,  "DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n")
 		flush(STDOUT)
+		flush(STDERR)
 	end
 end
 
@@ -39,6 +41,7 @@ function madsinfo(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
 		print_with_color(:blue, "INFO: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n");
 		flush(STDOUT)
+		flush(STDERR)
 	end
 end
 
@@ -62,8 +65,7 @@ argtext=Dict("message"=>"error message")))
 """
 function madserror(message::String)
 	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
-	flush(STDOUT)
-	flush(STDERR)
+	flush(STDOUT); flush(STDERR)
 end
 
 """
@@ -74,5 +76,5 @@ argtext=Dict("message"=>"critical error message")))
 """
 function madscritical(message::String)
 	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
-	throw("Mads quits!")
+	flush(STDOUT); flush(STDERR); throw("Mads quits!")
 end

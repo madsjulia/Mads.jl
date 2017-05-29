@@ -179,11 +179,14 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true
-Mads.localsa(md)
+Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
 Mads.calibrate(md, localsa=true)
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
+Mads.rmfiles_root("w01shortexp"; path=joinpath(Mads.madsdir, "..",  "examples", "model_analysis"))
 Mads.rmfiles_ext("iterationresults"; path=workdir)
 Mads.rmdir("w01shortexp_restart")
 
 Mads.rmdir("w01-w13a_w20a_restart"; path=pwd())
+
+Mads.createobservations!(md, collect(0:0.1:50))

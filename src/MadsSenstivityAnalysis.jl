@@ -368,7 +368,7 @@ function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterk
 	end
 end
 function getparamrandom(madsdata::Associative, parameterkey::String; numsamples::Integer=1, paramdist::Associative=Dict(), init_dist::Bool=false)
-	if haskey(madsdata["Parameters"], parameterkey)
+	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata; init_dist=init_dist)
 		end
@@ -385,7 +385,7 @@ function getparamrandom(madsdata::Associative, parameterkey::String; numsamples:
 		end
 		return Distributions.rand(paramdist[parameterkey], numsamples)
 	end
-	return Void
+	return nothing
 end
 
 @doc """
@@ -1253,7 +1253,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 		alpha = W_vec' * S_vec' + phi_mat    # W*S + phi
 		# If we want a simpler system this removes the phase shift
 		if phase == 0
-			alpha = W_vec'*S_vec'
+			alpha = W_vec' * S_vec'
 		end
 		X = .5 + asin.(sin.(alpha'))/pi # Transformation function Saltelli suggests
 

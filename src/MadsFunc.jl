@@ -87,11 +87,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
-			if m != nothing
-				npt = parse(Int, m.captures[1])
-			else
-				npt = 1
-			end
+			npt = m != nothing ? parse(Int, m.captures[1]) : 1
 			if nprocs_per_task > 1 && npt != nprocs_per_task
 				if m != nothing
 					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task "))
@@ -132,15 +128,12 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
 				while (trying = !checknodedir(tempstring))
-					execattempt += 1
-					sleep(10)
+					execattempt += 1; sleep(10)
 					if execattempt > 3
 						attempt +=1
 						if attempt > 3
 							cd(currentdir)
-							trying = false
-							hostmachine = gethostname() * "(" * string(getipaddr()) * ")"
-							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(hostmachine)!")
+							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
 						end
 						break
 					end
@@ -159,10 +152,8 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
-							trying = false
 							printerrormsg(errmsg)
-							hostmachine = gethostname() * "(" * string(getipaddr()) * ")"
-							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(hostmachine)!")
+							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
 						end
 					end
 				end
@@ -180,7 +171,6 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						if attempt > 3
 							cd(currentdir)
 							printerrormsg(errmsg)
-							trying = false
 							Mads.madscritical("$(errmsg)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
 					end
@@ -283,7 +273,6 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 			try
 				mkdir(restartdir)
 			catch errmsg
-				restartdir = ""
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
 			end
@@ -297,7 +286,6 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 			try
 				mkdir(restartdir)
 			catch errmsg
-				restartdir = ""
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
 			end
@@ -310,7 +298,6 @@ function getrestartdir(madsdata::Associative, suffix::String="")
 			try
 				mkdir(restartdir)
 			catch errmsg
-				restartdir = ""
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
 			end
@@ -333,11 +320,8 @@ Returns:
 function importeverywhere(filename::String)
 	code = readstring(filename)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
-	if quiet
-		fullcode = "@everywhere begin if !isdefined(:$functionname) $code end end"
-	else
-		fullcode = "@everywhere begin if !isdefined(:$functionname) $code else warn(\"$functionname already defined\")  end end"
-	end
+	extracode = quiet ? "" : "else warn(\"$functionname already defined\")"
+	fullcode = "@everywhere begin if !isdefined(:$functionname) $code $extracode end end"
 	q = parse(fullcode)
 	eval(Main, q)
 	functionsymbol = Symbol(functionname)
