@@ -46,7 +46,12 @@ savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
 
 	good_sasvr = JLD.load(joinpath(savedir, "test_results", "sasvr.jld"), "sasvr")
 
-	# @Base.Test.test sasvr == good_sasvr
+	if !haskey(ENV, "MADS_TRAVIS")
+		@Base.Test.test sasvr == good_sasvr
+	else
+		@show good_sasvr
+		@show sasvr
+	end
 
 	Mads.makesvrmodel(md, 100, loadsvr=true)
 
