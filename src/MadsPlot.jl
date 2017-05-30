@@ -412,18 +412,18 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 	end
 end
 
-function plotwellSAresults(madsdata::Associative, result; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
+function plotwellSAresults(madsdata::Associative, result::Associative; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
-		return
-	end
-	for wellname in keys(madsdata["Wells"])
-		if madsdata["Wells"][wellname]["on"]
-			plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle, filename = filename, format = format)
+	else
+		for wellname in keys(madsdata["Wells"])
+			if madsdata["Wells"][wellname]["on"]
+				plotwellSAresults(madsdata, result, wellname; xtitle = xtitle, ytitle = ytitle, filename = filename, format = format)
+			end
 		end
 	end
 end
-function plotwellSAresults(madsdata::Associative, result, wellname; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
+function plotwellSAresults(madsdata::Associative, result::Associative, wellname::String; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
 		return

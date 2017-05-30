@@ -49,6 +49,7 @@ end
 
 Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
+Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.setobstime!(md, "o")

@@ -73,5 +73,5 @@ Mads.maxtorealmax!(df)
 	@Base.Test.test Mads.settarget!(Dict("c"=>1),2) == 2
 	@Base.Test.test isnan(Mads.getweight(Dict("ww"=>10)))
 	srand(2017)
-	@Base.Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"dist"=>"Normal(0,1)"))), "k")..., -0.0968372; atol=1e-5)
+	@Base.Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 0.107554; atol=1e-5)
 end

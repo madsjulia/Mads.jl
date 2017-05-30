@@ -67,11 +67,12 @@ Mads.allwellson!(md)
 Mads.welloff!(md, "w1a")
 Mads.wellon!(md, "w1a")
 Mads.savemadsfile(md, joinpath(workdir, "test.mads"))
+Mads.savemadsfile(md, Mads.getparamdict(md))
 Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"))
 Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"), explicit=true)
+Mads.rmfile(joinpath(workdir, "w01shortexp-rerun.mads"))
 Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
-
 
 @Base.Test.testset "Observations" begin
 	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
@@ -81,6 +82,8 @@ Mads.setmadsinputfile("test.mads")
 
 	@Base.Test.test Mads.getmadsinputfile() == "test.mads"
 	@Base.Test.test Mads.getextension("test.mads") == "mads"
+
+	@Base.Test.test Mads.getrootname("w01short3-rerun.mads"; version=true) == "w01short3"
 end
 
 Mads.stdoutcaptureon()

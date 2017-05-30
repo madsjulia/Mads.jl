@@ -85,6 +85,12 @@ Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
 # Mads.create_documentation()
 
+Mads.plotwellSAresults(Dict(), Dict())
+Mads.plotwellSAresults(Dict("W"=>Dict()), Dict(), "w1")
+Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
+
+Mads.plotobsSAresults(Dict(), Dict())
+
 Mads.stdouterrcaptureoff();
 
 Mads.quieton()

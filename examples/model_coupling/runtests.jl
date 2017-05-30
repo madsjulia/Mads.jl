@@ -77,10 +77,10 @@ if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :yaml)
 	@Base.Test.test yfor == jfor
 end
 # TODO ASCII does NOT work; `parameters` are not required to be Ordered Dictionary
-# info("External coupling using ASCII ...")
-# md = Mads.loadmadsfile(workdir * "external-ascii.mads")
-# aparam, aresults = Mads.calibrate(md)
-# afor = Mads.forward(md)
+Mads.madsinfo("External coupling using ASCII ...")
+md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
+aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
+afor = Mads.forward(md)
 
 @Base.Test.testset "External" begin
 	@Base.Test.test jfor == sfor

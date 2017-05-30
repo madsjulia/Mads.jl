@@ -193,19 +193,6 @@ Mads.savemadsfile(madsdata, parameters, "test.mads", explicit=true)
 """ savemadsfile
 
 """
-Save calibration results
-
-$(DocumentFunction.documentfunction(savecalibrationresults;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "results"=>"the calibration results")))
-"""
-function savecalibrationresults(madsdata::Associative, results)
-	#TODO map estimated parameters on a new madsdata structure
-	#TODO save madsdata in yaml file using dumpyamlmadsfile
-	#TODO save residuals, predictions, observations (yaml?)
-end
-
-"""
 Set a default MADS input file
 
 $(DocumentFunction.documentfunction(setmadsinputfile;
@@ -708,11 +695,14 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	close(outfile)
 end
 
-function writeparameters(madsdata::Associative)
-	paramsinit = getparamsinit(madsdata)
-	paramkeys = getparamkeys(madsdata)
-	writeparameters(madsdata, Dict(zip(paramkeys, paramsinit)); respect_space=false)
-end
+"""
+Write model `parameters`
+
+$(DocumentFunction.documentfunction(writeparameters;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "parameters"=>"parameters"),
+keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
+"""
 function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
 	expressions = evaluatemadsexpressions(madsdata, parameters)
 	paramsandexps = merge(parameters, expressions)
@@ -721,15 +711,6 @@ function writeparameters(madsdata::Associative, parameters::Associative; respect
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
 	end
 end
-
-@doc """
-Write `parameters`
-
-$(DocumentFunction.documentfunction(writeparameters;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameters"=>"parameters"),
-keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
-""" writeparameters
 
 """
 Convert an instruction line in the Mads instruction file into regular expressions
@@ -1051,7 +1032,6 @@ function createtempdir(tempdirname::String)
 			if attempt > 3
 				printerrormsg(errmsg)
 				madscritical("$(e)\nTemporary directory $(tempdirname) cannot be created!")
-				trying = false
 			end
 		end
 	end
@@ -1080,7 +1060,6 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			if attempt > 4
 				printerrormsg(errmsg)
 				madscritical("$(e)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
-				trying = false
 			end
 		end
 	end
