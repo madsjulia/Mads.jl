@@ -4,16 +4,23 @@ Module Anasol.jl provides a series of analytical solutions for groundwater conta
 The provided solutions have:
 
 * different source types
+
     - instantaneous contaminant release
     - continuous contaminant release with a unit flux
     - continuous contaminant release with a given constant flux
+
 * different source shapes
+
     - constrained (within predefined limits)
     - distributed (assuming normal distribution)
+
 * different dispersion models
+
     - classical (Fickian)
-    - Brownian
+    - fractional Brownian
+
 * different boundaries along each axis
+
     - infinite (no boundary)
     - reflecting
     - absorbing
@@ -28,7 +35,7 @@ All functions have the following arguments:
 - `v1`/`v2`/`v3`: groundwater flow velocity components
 - `sigma1`/`sigma2`/`sigma3`: groundwater flow dispersion components
 - `lambda`: half-life contaminant decay
-- `H1`/`H2`/`H3`: Hurst coefficients in the case of Brownian dispersion
+- `H1`/`H2`/`H3`: Hurst coefficients in the case of fractional Brownian dispersion
 - `xb1`/`xb2`/`xb3`: locations of the domain boundaries
 
 Anasol.jl module functions:
