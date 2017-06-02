@@ -1,3 +1,4 @@
+import Mads
 import Base.Test
 import Compat
 
@@ -25,7 +26,6 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-
 Mads.stdoutcaptureon();
 
 Mads.printerrormsg("a")
@@ -51,10 +51,6 @@ catch
 		Mads.madscritical("Symbolic links cannot be created!")
 	end
 end
-
-Mads.stdoutcaptureoff();
-
-Mads.stdouterrcaptureon();
 
 Mads.madsoutput("a")
 Mads.madsdebug("a")
@@ -86,7 +82,6 @@ if isdefined(Mads, :runcmd)
 end
 Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
-# Mads.create_documentation()
 
 Mads.plotwellSAresults(Dict(), Dict())
 Mads.plotwellSAresults(Dict("W"=>Dict()), Dict(), "w1")
@@ -94,7 +89,7 @@ Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
 
 Mads.plotobsSAresults(Dict(), Dict())
 
-Mads.stdouterrcaptureoff();
+Mads.stdoutcaptureoff();
 
 Mads.quieton()
 if quiet_status
@@ -112,15 +107,6 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.setdefaultplotformat("EPS")
 	Mads.setdefaultplotformat("SVG")
 	Mads.display("mads.png")
-end
-
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.plotseries(rand(4,5), "test.png", combined=false)
-	Mads.plotseries(rand(4,5), "test.png")
-	if isdefined(Mads, :display)
-		Mads.display("test.png")
-	end
-	Mads.rmfile("test.png")
 end
 
 graph_status = Mads.graphoutput
@@ -163,3 +149,14 @@ if !haskey(ENV, "MADS_TRAVIS")
 	Mads.setprocs(1)
 	Mads.parsenodenames("wc[096-157,160,175]");
 end
+
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.plotseries(rand(4,5), "test.png", combined=false)
+	Mads.plotseries(rand(4,5), "test.png")
+	if isdefined(Mads, :display)
+		Mads.display("test.png")
+	end
+	Mads.rmfile("test.png")
+end
+
+:passed

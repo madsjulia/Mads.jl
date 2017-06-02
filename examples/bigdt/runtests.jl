@@ -15,7 +15,7 @@ nsample = 10
 bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
+	filenameroot = joinpath(problemdir, "source_termination-robustness")
 	Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
 	Mads.plotrobustnesscurves(md, bigdt_results)
 	Mads.rmfiles_root(filenameroot)

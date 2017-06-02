@@ -77,3 +77,5 @@ Mads.maxtorealmax!(df)
 	srand(2017)
 	@Base.Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 0.107554; atol=1e-5)
 end
+
+:passed

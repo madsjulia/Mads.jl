@@ -115,6 +115,10 @@ function forwardgrid(madsdata::Associative)
 end
 
 function forwardgrid(madsdatain::Associative, paramvalues::Associative)
+	if !haskey(madsdatain, "Grid")
+		madswarn("Grid properties are not defined in the Mads dictionary")
+		return
+	end
 	madsdata = copy(madsdatain)
 	f = Mads.makemadscommandfunction(madsdata)
 	nx = madsdata["Grid"]["xcount"]

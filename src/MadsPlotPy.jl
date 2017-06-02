@@ -59,7 +59,9 @@ end
 
 function plotgrid(madsdata::Associative, parameters::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	s = forwardgrid(madsdata, parameters)
-	plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
+	if typeof(s) != Void
+		plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
+	end
 end
 
 @doc """
