@@ -358,7 +358,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	tr = Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}()
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
-		os = Optim.OptimizationState(g_calls, o(fcur), NaN, d)
+		os = Optim.OptimizationState{typeof(Optim.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
 	end
@@ -512,10 +512,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			end
 		end
 
-		if show_trace
+		if !Mads.quiet && show_trace
 			gradnorm = norm(J'*fcur, Inf)
 			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
-			os = Optim.OptimizationState(iterCt, o(fcur), gradnorm, d)
+			os = Optim.OptimizationState{typeof(Optim.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 			push!(tr, os)
 			println(os)
 		end

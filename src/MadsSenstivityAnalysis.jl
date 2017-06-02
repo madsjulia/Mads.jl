@@ -162,6 +162,9 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		Base.display(J)
 		Mads.madscritical("Mads quits!")
 	end
+	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
+		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
+	end
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")

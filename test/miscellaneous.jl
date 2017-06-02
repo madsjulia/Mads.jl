@@ -25,9 +25,11 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-Mads.pkgversion("ModuleThatDoesNotExist")
 
 Mads.stdoutcaptureon();
+
+Mads.printerrormsg("a")
+Mads.pkgversion("ModuleThatDoesNotExist")
 
 quiet_status = Mads.quiet
 Mads.quietoff()
@@ -67,6 +69,7 @@ end
 include(joinpath("..", "src", "madsjl.jl"))
 rm("madsjl.cmdline_hist")
 Mads.functions()
+Mads.functions(:ModuleThatDoesNotExist)
 Mads.functions("createmadsproblem")
 Mads.functions(Mads, "loadmadsfile")
 Mads.setexecutionwaittime(0.)
@@ -147,6 +150,8 @@ Mads.deletekeyword!(Dict("Problem"=>"ssdr"), "ssdr")
 Mads.deletekeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr"=>true)), "Problem", "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>["ssdr","paranoid"]), "Problem", "ssdr")
 
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 

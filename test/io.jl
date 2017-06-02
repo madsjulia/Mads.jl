@@ -64,12 +64,14 @@ Mads.maxtorealmax!(df)
 	@Base.Test.test Mads.getparamrandom(Dict(), "k") == nothing
 	@Base.Test.test Mads.getparamrandom(Dict("Parameters"=>Dict("a"=>1)), "k") == nothing
 	@Base.Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k") == false
+	@Base.Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>"opt"))), "k") == true
 	Mads.setparamon!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
 	Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
 	Mads.getparamdistributions(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"init_dist"=>"Normal(0,1)"))); init_dist=true)
 	Mads.gettime(Dict("o1"=>Dict("c"=>1)))
 	@Base.Test.test Mads.settime!(Dict("t"=>1),2) == 2
 	@Base.Test.test Mads.setweight!(Dict("w"=>1),2) == 2
+	@Base.Test.test Mads.getweight(Dict("w"=>1)) == 1
 	@Base.Test.test Mads.settarget!(Dict("c"=>1),2) == 2
 	@Base.Test.test isnan(Mads.getweight(Dict("ww"=>10)))
 	srand(2017)

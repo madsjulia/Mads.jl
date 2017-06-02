@@ -100,17 +100,6 @@ function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log
 end
 
 """
-Set Dynamic Model for MADS model calls using an internal Julia function
-
-$(DocumentFunction.documentfunction(setdynamicmodel;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "f"=>"Julia function")))
-"""
-function setdynamicmodel(madsdata::Associative, f::Function)
-	madsdata["Dynamic model"] = f
-end
-
-"""
 Evaluate an expression string based on a parameter dictionary
 
 $(DocumentFunction.documentfunction(evaluatemadsexpression;
@@ -173,7 +162,7 @@ function getdistribution(dist::String, i::String, inputtype::String)
 		distribution = Distributions.eval(parse(dist))
 	catch e
 		printerrormsg(e)
-		madserror("""Something is wrong with $inputtype '$inputname' distribution (dist: '$(dist)')""")
+		madserror("Something is wrong with $(inputtype) '$(inputname)' distribution (dist: '$(dist)')")
 	end
 	return distribution
 end

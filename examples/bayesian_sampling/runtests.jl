@@ -12,14 +12,15 @@ end
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
 
-mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=1, seed=2016)
+mcmcchains_emcee = Mads.emceesampling(md; numwalkers=1, nsteps=10, burnin=2, thinning=1, seed=2016)
 
 if isdefined(Klara, :BasicContMuvParameter)
+	Mads.bayessampling(md, 1; nsteps=1, burnin=1, thinning=1)
 	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 	Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
 	rm(rootname * "-test-mcmcchain1.json")
-	Mads.forward(md, mcmcchain.value)
+	Mads.forward(md, mcmcchain.value; all=true)
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))

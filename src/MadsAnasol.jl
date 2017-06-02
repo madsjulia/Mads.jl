@@ -139,8 +139,8 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	function computeconcentrations()
 		paramkeys = Mads.getparamkeys(madsdata)
 		paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
-		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
-		parameterswithexpressions = merge(paramsnoexpressions, expressions)
+		expressions = evaluatemadsexpressions(madsdata, paramdict)
+		parameterswithexpressions = merge(paramdict, expressions)
 		computeconcentrations(parameterswithexpressions)
 	end
 	function computeconcentrations(parametersnoexpressions::Associative)

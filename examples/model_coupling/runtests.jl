@@ -40,6 +40,10 @@ tefor = Mads.forward(md)
 
 cd(workdir)
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
+Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
+
+Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
+Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
 pfor = Mads.forward(md)
 
 @Base.Test.testset "Internal" begin

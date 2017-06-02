@@ -205,7 +205,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
-		Mads.madserror("Cannot create a function to call model without an entry in the MADS problem dictionary!")
+		Mads.madswarn("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
 	"MADS command function with expressions"

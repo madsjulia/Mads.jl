@@ -5,10 +5,10 @@ using Base.Test
 problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "..", "examples", "bigdt")
 
+md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
+
 if isdefined(Mads, :yaml)
 	md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
-else
-	md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json")
 end
 
 nsample = 10
@@ -17,6 +17,7 @@ bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
 	Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
+	Mads.plotrobustnesscurves(md, bigdt_results)
 	Mads.rmfiles_root(filenameroot)
 end
 

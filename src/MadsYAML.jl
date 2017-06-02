@@ -61,7 +61,7 @@ keytext=Dict("julia"=>"use julia YAML [default=`false`]")))
 """
 function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
-	deletekeys = ["Dynamic model", "Filename"]
+	deletekeys = ["Julia model", "Filename"]
 	restore = Array{Bool}(length(deletekeys))
 	restorevals = Array{Any}(length(deletekeys))
 	i = 1

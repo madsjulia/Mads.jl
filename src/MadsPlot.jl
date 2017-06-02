@@ -145,6 +145,7 @@ end
 function plotmatches(madsdata::Associative, rx::Regex=r""; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
 	r = forward(madsdata; all=true)
 	if rx != r""
+		@show rx
 		plotmatches(madsdata, r, rx; filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
 	else
 		plotmatches(madsdata, r; plotdata=plotdata, filename=filename, format=format, xtitle=xtitle, ytitle=ytitle, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
@@ -679,11 +680,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	if filename == ""
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
-		if keyword != ""
-			filename = "$rootname-$method-$keyword-$nsample"
-		else
-			filename = "$rootname-$method-$nsample"
-		end
+		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
 	end
 	if !separate_files
 		filename, format = setplotfileformat(filename, format)
@@ -802,11 +799,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			end
 			pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 		end
-		if keyword == ""
-			filename = string("$rootname-$paramkey-$numberofsamples-spaghetti")
-		else
-			filename = string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
-		end
+		filename = keyword == "" ? string("$rootname-$paramkey-$numberofsamples-spaghetti") : string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
 		filename, format = setplotfileformat(filename, format)
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
@@ -984,11 +977,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 	end
 	if filename == ""
-		if keyword == ""
-			filename = "$rootname-$numberofsamples-spaghetti"
-		else
-			filename = "$rootname-$keyword-$numberofsamples-spaghetti"
-		end
+		filename = keyword == "" ?  "$rootname-$numberofsamples-spaghetti" : "$rootname-$keyword-$numberofsamples-spaghetti"
 	end
 	filename, format = setplotfileformat(filename, format)
 	try

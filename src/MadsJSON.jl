@@ -39,17 +39,3 @@ function dumpjsonfile(filename::String, data::Any) # dump JSON text file
 	JSON.print(f, data)
 	close(f)
 end
-
-"""
-Read MADS model predictions from a JSON file
-
-$(DocumentFunction.documentfunction(readjsonpredictions;
-argtext=Dict("filename"=>"JSON file name")))
-
-Returns:
-
-- MADS model predictions
-"""
-function readjsonpredictions(filename::String) # read JSON text predictions
-	return loadjsonfile(filename)
-end

@@ -158,7 +158,7 @@ Monte Carlo analysis
 $(DocumentFunction.documentfunction(montecarlo;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
-            "filename"=>"file name")))
+            "filename"=>"file name to save Monte-Carlo results")))
 
 Returns:
 
@@ -166,7 +166,7 @@ Returns:
 
 Dumps:
 
-- YAML output file with the parameter dictionary containing the data arrays (`<mads_root_name>.mcresults.yaml`)
+- YAML output file with the parameter dictionary containing the data arrays
 
 Example:
 
@@ -213,11 +213,7 @@ function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 		outputdicts[i]["Parameters"] = paramdicts[i]
 		outputdicts[i]["Results"] = results[i]
 	end
-	#rootname = Mads.getmadsrootname(madsdata)
-	#filename = rootname * ".mcresults.yaml"
-	if filename != ""
-		dumpyamlfile(filename, outputdicts)
-	end
+	filename != "" && dumpyamlfile(filename, outputdicts)
 	return outputdicts
 end
 
