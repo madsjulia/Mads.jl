@@ -26,10 +26,9 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-Mads.stdoutcaptureon();
+Mads.stdouterrcaptureon();
 
 Mads.printerrormsg("a")
-Mads.pkgversion("ModuleThatDoesNotExist")
 
 quiet_status = Mads.quiet
 Mads.quietoff()
@@ -89,7 +88,9 @@ Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
 
 Mads.plotobsSAresults(Dict(), Dict())
 
-Mads.stdoutcaptureoff();
+Mads.stdouterrcaptureoff();
+
+Mads.pkgversion("ModuleThatDoesNotExist") # this captures output
 
 Mads.quieton()
 if quiet_status

@@ -64,8 +64,7 @@ $(DocumentFunction.documentfunction(madserror;
 argtext=Dict("message"=>"error message")))
 """
 function madserror(message::String)
-	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
-	flush(STDOUT); flush(STDERR)
+	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(STDOUT); flush(STDERR)
 end
 
 """
@@ -75,6 +74,5 @@ $(DocumentFunction.documentfunction(madscritical;
 argtext=Dict("message"=>"critical error message")))
 """
 function madscritical(message::String)
-	error(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message)
-	flush(STDOUT); flush(STDERR); throw("Mads quits!")
+	madserror(message); throw("Mads quits!")
 end

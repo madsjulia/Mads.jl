@@ -1007,7 +1007,6 @@ function rmfiles_root(root::String; path::String=".")
 		root = s[2]
 	end
 	for f in searchdir(Regex(string(root, ".*")); path=path)
-		@show f
 		rm(joinpath(path, f))
 	end
 end

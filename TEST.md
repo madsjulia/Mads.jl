@@ -11,14 +11,3 @@ All the test and verification problems can be executed using:
 import Mads
 Mads.test()
 ```
-
-or
-
-```julia
-Pkg.test("Mads")
-Pkg.test("Anasol")
-Pkg.test("BIGUQ")
-Pkg.test("ReusableFunctions")
-Pkg.test("MetaProgTools")
-Pkg.test("RobustPmap")
-```

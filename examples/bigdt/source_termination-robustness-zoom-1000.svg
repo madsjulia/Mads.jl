@@ -9,71 +9,73 @@
      stroke-width="0.3"
      font-size="3.88"
 >
-<g class="plotroot xscalable yscalable" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-1">
-  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-2">
-    <text x="39.63" y="64.59" text-anchor="middle" dy="0.6em">Horizon of uncertainty</text>
+<g class="plotroot xscalable yscalable" id="img-3e0290ad-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e0290ad-2">
+    <text x="40.58" y="64.66" text-anchor="middle" dy="0.6em">Horizon of uncertainty</text>
   </g>
-  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-3">
-    <text x="20.63" y="57.91" text-anchor="middle" dy="0.6em">0.0</text>
-    <text x="30.13" y="57.91" text-anchor="middle" dy="0.6em">0.2</text>
-    <text x="39.63" y="57.91" text-anchor="middle" dy="0.6em">0.4</text>
-    <text x="49.12" y="57.91" text-anchor="middle" dy="0.6em">0.6</text>
-    <text x="58.62" y="57.91" text-anchor="middle" dy="0.6em">0.8</text>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e0290ad-3">
+    <text x="22" y="58.61" text-anchor="middle" dy="0.6em">0.0</text>
+    <text x="31.29" y="58.61" text-anchor="middle" dy="0.6em">0.2</text>
+    <text x="40.58" y="58.61" text-anchor="middle" dy="0.6em">0.4</text>
+    <text x="49.88" y="58.61" text-anchor="middle" dy="0.6em">0.6</text>
+    <text x="59.17" y="58.61" text-anchor="middle" dy="0.6em">0.8</text>
   </g>
-  <g class="guide colorkey" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-4">
-    <g fill="#4C404B" font-size="2.82" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-5">
-      <text x="64.43" y="27.33" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-6" class="color_Source_terminated_in_2015">Source terminated in 2015</text>
-      <text x="64.43" y="30.96" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-7" class="color_Source_terminated_in_2020">Source terminated in 2020</text>
-      <text x="64.43" y="34.58" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-8" class="color_Source_terminated_in_2025">Source terminated in 2025</text>
-      <text x="64.43" y="38.21" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-9" class="color_Source_terminated_in_2030">Source terminated in 2030</text>
+  <g class="guide colorkey" id="img-3e0290ad-4">
+    <g fill="#4C404B" font-size="2.82" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-3e0290ad-5">
+      <text x="64.69" y="28.26" dy="0.35em" id="img-3e0290ad-6" class="color_Source_terminated_in_2015">Source terminated in 2015</text>
+      <text x="64.69" y="31.3" dy="0.35em" id="img-3e0290ad-7" class="color_Source_terminated_in_2020">Source terminated in 2020</text>
+      <text x="64.69" y="34.35" dy="0.35em" id="img-3e0290ad-8" class="color_Source_terminated_in_2025">Source terminated in 2025</text>
+      <text x="64.69" y="37.39" dy="0.35em" id="img-3e0290ad-9" class="color_Source_terminated_in_2030">Source terminated in 2030</text>
     </g>
-    <g stroke="#000000" stroke-opacity="0.000" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-10">
-      <rect x="61.62" y="26.42" width="1.81" height="1.81" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-11" fill="#FF0000" class="color_Source_terminated_in_2015"/>
-      <rect x="61.62" y="30.05" width="1.81" height="1.81" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-12" fill="#0000FF" class="color_Source_terminated_in_2020"/>
-      <rect x="61.62" y="33.68" width="1.81" height="1.81" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-13" fill="#008000" class="color_Source_terminated_in_2025"/>
-      <rect x="61.62" y="37.3" width="1.81" height="1.81" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-14" fill="#00FFFF" class="color_Source_terminated_in_2030"/>
+    <g stroke="#000000" stroke-opacity="0.000" id="img-3e0290ad-10">
+      <rect x="62.17" y="27.5" width="1.52" height="1.52" id="img-3e0290ad-11" fill="#FF0000" class="color_Source_terminated_in_2015"/>
+      <rect x="62.17" y="30.54" width="1.52" height="1.52" id="img-3e0290ad-12" fill="#0000FF" class="color_Source_terminated_in_2020"/>
+      <rect x="62.17" y="33.59" width="1.52" height="1.52" id="img-3e0290ad-13" fill="#008000" class="color_Source_terminated_in_2025"/>
+      <rect x="62.17" y="36.63" width="1.52" height="1.52" id="img-3e0290ad-14" fill="#00FFFF" class="color_Source_terminated_in_2030"/>
     </g>
-    <g fill="#362A35" font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-15">
-      <text x="61.62" y="23.51" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-16">Choices</text>
+    <g fill="#362A35" font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-3e0290ad-15">
+      <text x="62.17" y="24.62" id="img-3e0290ad-16">Choices</text>
     </g>
   </g>
-  <g clip-path="url(#fig-0f14087af58c4e4c9ee2687c29bb7b55-element-18)" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-17">
-    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-19">
-      <rect x="18.63" y="5" width="41.99" height="51.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-20"/>
+<g clip-path="url(#img-3e0290ad-17)">
+  <g id="img-3e0290ad-18">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-3e0290ad-19">
+      <rect x="20" y="5" width="41.17" height="52.61" id="img-3e0290ad-20"/>
     </g>
-    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-21">
-      <path fill="none" d="M18.63,54.91 L 60.62 54.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-22"/>
-      <path fill="none" d="M18.63,30.96 L 60.62 30.96" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-23"/>
-      <path fill="none" d="M18.63,7 L 60.62 7" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-24"/>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e0290ad-21">
+      <path fill="none" d="M20,55.61 L 61.17 55.61" id="img-3e0290ad-22"/>
+      <path fill="none" d="M20,31.3 L 61.17 31.3" id="img-3e0290ad-23"/>
+      <path fill="none" d="M20,7 L 61.17 7" id="img-3e0290ad-24"/>
     </g>
-    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-25">
-      <path fill="none" d="M20.63,5 L 20.63 56.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-26"/>
-      <path fill="none" d="M30.13,5 L 30.13 56.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-27"/>
-      <path fill="none" d="M39.63,5 L 39.63 56.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-28"/>
-      <path fill="none" d="M49.12,5 L 49.12 56.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-29"/>
-      <path fill="none" d="M58.62,5 L 58.62 56.91" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-30"/>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e0290ad-25">
+      <path fill="none" d="M22,5 L 22 57.61" id="img-3e0290ad-26"/>
+      <path fill="none" d="M31.29,5 L 31.29 57.61" id="img-3e0290ad-27"/>
+      <path fill="none" d="M40.58,5 L 40.58 57.61" id="img-3e0290ad-28"/>
+      <path fill="none" d="M49.88,5 L 49.88 57.61" id="img-3e0290ad-29"/>
+      <path fill="none" d="M59.17,5 L 59.17 57.61" id="img-3e0290ad-30"/>
     </g>
-    <g class="plotpanel" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-31">
-      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" stroke-dasharray="none" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-32">
-        <path fill="none" d="M20.63,54.91 L 21.02 54.91 21.4 54.91 21.78 54.91 22.17 54.91 22.55 54.91 22.93 54.91 23.32 54.91 23.7 54.91 24.09 54.91 24.47 54.91 24.85 54.91 25.24 54.91 25.62 54.91 26 54.91 26.39 54.91 26.77 54.91 27.15 54.91 27.54 54.91 27.92 54.91 28.31 54.91 28.69 54.91 29.07 54.91 29.46 54.91 29.84 54.91 30.22 54.91 30.61 54.91 30.99 54.91 31.38 54.91 31.76 54.91 32.14 54.91 32.53 54.91 32.91 54.91 33.29 54.53 33.68 52.57 34.06 51.08 34.45 48.76 34.83 47.06 35.21 45.29 35.6 44.36 35.98 42.22 36.36 40.33 36.75 38.26 37.13 37.14 37.52 35.55 37.9 33.69 38.28 32.54 38.67 31.14 39.05 29.59 39.43 28.57 39.82 27.06 40.2 25.28 40.59 23.31 40.97 21.7 41.35 19.83 41.74 18.36 42.12 16.75 42.5 14.58 42.89 12.99 43.27 11.59 43.65 10.27 44.04 9.12 44.42 7.69 44.81 7.41 45.19 7 45.57 7 45.96 7 46.34 7 46.72 7 47.11 7 47.49 7 47.88 7 48.26 7 48.64 7 49.03 7 49.41 7 49.79 7 50.18 7 50.56 7 50.95 7 51.33 7 51.71 7 52.1 7 52.48 7 52.86 7 53.25 7 53.63 7 54.02 7 54.4 7 54.78 7 55.17 7 55.55 7 55.93 7 56.32 7 56.7 7 57.09 7 57.47 7 57.85 7 58.24 7 58.62 7" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-33" stroke="#0000FF" class="geometry color_Source_terminated_in_2020"/>
-        <path fill="none" d="M20.63,54.91 L 21.02 54.91 21.4 54.91 21.78 54.91 22.17 54.91 22.55 54.91 22.93 54.91 23.32 54.91 23.7 54.91 24.09 54.91 24.47 54.91 24.85 54.91 25.24 54.91 25.62 54.91 26 54.91 26.39 54.91 26.77 54.91 27.15 54.91 27.54 54.91 27.92 54.91 28.31 54.91 28.69 54.91 29.07 54.91 29.46 54.91 29.84 54.91 30.22 54.91 30.61 54.91 30.99 54.91 31.38 54.91 31.76 54.91 32.14 54.91 32.53 54.7 32.91 52.47 33.29 50.52 33.68 48.38 34.06 46.18 34.45 44.7 34.83 42.87 35.21 40.03 35.6 38.08 35.98 37.03 36.36 35.14 36.75 33.87 37.13 31.72 37.52 30.21 37.9 28.64 38.28 27.65 38.67 24.73 39.05 23.07 39.43 20.87 39.82 18.92 40.2 16.86 40.59 14.88 40.97 13.13 41.35 11.16 41.74 9.7 42.12 8.54 42.5 7.28 42.89 7 43.27 7 43.65 7 44.04 7 44.42 7 44.81 7 45.19 7 45.57 7 45.96 7 46.34 7 46.72 7 47.11 7 47.49 7 47.88 7 48.26 7 48.64 7 49.03 7 49.41 7 49.79 7 50.18 7 50.56 7 50.95 7 51.33 7 51.71 7 52.1 7 52.48 7 52.86 7 53.25 7 53.63 7 54.02 7 54.4 7 54.78 7 55.17 7 55.55 7 55.93 7 56.32 7 56.7 7 57.09 7 57.47 7 57.85 7 58.24 7 58.62 7" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-34" stroke="#008000" class="geometry color_Source_terminated_in_2025"/>
-        <path fill="none" d="M20.63,54.91 L 21.02 54.91 21.4 54.91 21.78 54.91 22.17 54.91 22.55 54.91 22.93 54.91 23.32 54.91 23.7 54.91 24.09 54.91 24.47 54.91 24.85 54.91 25.24 54.91 25.62 54.91 26 54.91 26.39 54.91 26.77 54.91 27.15 54.91 27.54 54.91 27.92 54.91 28.31 54.91 28.69 54.91 29.07 54.91 29.46 54.91 29.84 54.91 30.22 54.91 30.61 54.91 30.99 54.91 31.38 54.91 31.76 54.91 32.14 54.91 32.53 53.96 32.91 51.9 33.29 49.82 33.68 47.39 34.06 45.48 34.45 44.11 34.83 41.13 35.21 39.18 35.6 37.56 35.98 36.3 36.36 34.22 36.75 32.79 37.13 30.77 37.52 29.02 37.9 27.9 38.28 25.64 38.67 23.27 39.05 21.19 39.43 19.06 39.82 16.96 40.2 14.78 40.59 13.02 40.97 11.18 41.35 9.75 41.74 8.61 42.12 7.48 42.5 7 42.89 7 43.27 7 43.65 7 44.04 7 44.42 7 44.81 7 45.19 7 45.57 7 45.96 7 46.34 7 46.72 7 47.11 7 47.49 7 47.88 7 48.26 7 48.64 7 49.03 7 49.41 7 49.79 7 50.18 7 50.56 7 50.95 7 51.33 7 51.71 7 52.1 7 52.48 7 52.86 7 53.25 7 53.63 7 54.02 7 54.4 7 54.78 7 55.17 7 55.55 7 55.93 7 56.32 7 56.7 7 57.09 7 57.47 7 57.85 7 58.24 7 58.62 7" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-35" stroke="#00FFFF" class="geometry color_Source_terminated_in_2030"/>
-        <path fill="none" d="M20.63,54.91 L 21.02 54.91 21.4 54.91 21.78 54.91 22.17 54.91 22.55 54.91 22.93 54.91 23.32 54.91 23.7 54.91 24.09 54.91 24.47 54.91 24.85 54.91 25.24 54.91 25.62 54.91 26 54.91 26.39 54.91 26.77 54.91 27.15 54.91 27.54 54.91 27.92 54.91 28.31 54.91 28.69 54.91 29.07 54.91 29.46 54.91 29.84 54.91 30.22 54.91 30.61 54.91 30.99 54.91 31.38 54.91 31.76 54.91 32.14 54.91 32.53 54.91 32.91 54.91 33.29 54.91 33.68 54.91 34.06 54.91 34.45 54.91 34.83 54.91 35.21 54.91 35.6 54.91 35.98 54.53 36.36 53.1 36.75 51.96 37.13 50.71 37.52 49.27 37.9 48.07 38.28 46.61 38.67 45.82 39.05 44.04 39.43 42.74 39.82 41.38 40.2 39.73 40.59 38.39 40.97 37.04 41.35 35.57 41.74 34.09 42.12 33.1 42.5 31.76 42.89 30.42 43.27 29.78 43.65 28.35 44.04 27.38 44.42 26.02 44.81 24.21 45.19 23.41 45.57 22.43 45.96 21.08 46.34 19.81 46.72 18.12 47.11 16.7 47.49 14.35 47.88 13.36 48.26 12.62 48.64 11.88 49.03 9.77 49.41 8.62 49.79 8.2 50.18 7.81 50.56 7.63 50.95 7.29 51.33 7 51.71 7 52.1 7 52.48 7 52.86 7 53.25 7 53.63 7 54.02 7 54.4 7 54.78 7 55.17 7 55.55 7 55.93 7 56.32 7 56.7 7 57.09 7 57.47 7 57.85 7 58.24 7 58.62 7" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-36" stroke="#FF0000" class="geometry color_Source_terminated_in_2015"/>
+    <g class="plotpanel" id="img-3e0290ad-31">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" stroke-dasharray="none" id="img-3e0290ad-32">
+        <path fill="none" d="M22,55.61 L 22.37 55.61 22.75 55.61 23.12 55.61 23.5 55.61 23.88 55.61 24.25 55.61 24.63 55.61 25 55.61 25.38 55.61 25.75 55.61 26.13 55.61 26.5 55.61 26.88 55.61 27.25 55.61 27.63 55.61 28.01 55.61 28.38 55.61 28.76 55.61 29.13 55.61 29.51 55.61 29.88 55.61 30.26 55.61 30.63 55.61 31.01 55.61 31.38 55.61 31.76 55.61 32.14 55.61 32.51 55.61 32.89 55.61 33.26 55.61 33.64 55.61 34.01 55.61 34.39 55.61 34.76 55.61 35.14 55.61 35.51 55.61 35.89 55.61 36.27 55.61 36.64 55.61 37.02 55.61 37.39 55.61 37.77 55.61 38.14 55.61 38.52 55.61 38.89 55.61 39.27 55.61 39.64 55.61 40.02 55.61 40.4 55.61 40.77 55.61 41.15 55.61 41.52 55.61 41.9 55.61 42.27 55.61 42.65 55.61 43.02 55.61 43.4 55.61 43.77 55.61 44.15 55.61 44.53 55.61 44.9 55.61 45.28 55.61 45.65 55.61 46.03 55.61 46.4 55.61 46.78 55.61 47.15 55.61 47.53 55.61 47.9 55.61 48.28 55.61 48.66 55.61 49.03 55.61 49.41 55.61 49.78 55.61 50.16 55.61 50.53 55.61 50.91 55.61 51.28 55.61 51.66 55.61 52.03 55.61 52.41 55.61 52.79 55.61 53.16 55.61 53.54 55.61 53.91 55.61 54.29 55.61 54.66 55.61 55.04 55.61 55.41 55.61 55.79 55.61 56.16 55.61 56.54 55.61 56.91 55.61 57.29 55.61 57.67 55.61 58.04 55.61 58.42 55.61 58.79 55.61 59.17 55.61" id="img-3e0290ad-33" stroke="#0000FF" class="geometry color_Source_terminated_in_2020"/>
+        <path fill="none" d="M22,55.61 L 22.37 55.61 22.75 55.61 23.12 55.61 23.5 55.61 23.88 55.61 24.25 55.61 24.63 55.61 25 55.61 25.38 55.61 25.75 55.61 26.13 55.61 26.5 55.61 26.88 55.61 27.25 55.61 27.63 55.61 28.01 55.61 28.38 55.61 28.76 55.61 29.13 55.61 29.51 55.61 29.88 55.61 30.26 55.61 30.63 55.61 31.01 55.61 31.38 55.61 31.76 55.61 32.14 55.61 32.51 55.61 32.89 55.61 33.26 55.61 33.64 55.61 34.01 55.61 34.39 55.61 34.76 55.61 35.14 55.61 35.51 55.61 35.89 55.61 36.27 55.61 36.64 55.61 37.02 55.61 37.39 55.61 37.77 55.61 38.14 55.61 38.52 55.61 38.89 55.61 39.27 55.61 39.64 55.61 40.02 55.61 40.4 55.61 40.77 55.61 41.15 55.61 41.52 55.61 41.9 55.61 42.27 55.61 42.65 55.61 43.02 55.61 43.4 55.61 43.77 55.61 44.15 55.61 44.53 55.61 44.9 55.61 45.28 55.61 45.65 55.61 46.03 55.61 46.4 55.61 46.78 55.61 47.15 55.61 47.53 55.61 47.9 55.61 48.28 55.61 48.66 55.61 49.03 55.61 49.41 55.61 49.78 55.61 50.16 55.61 50.53 55.61 50.91 55.61 51.28 55.61 51.66 55.61 52.03 55.61 52.41 55.61 52.79 55.61 53.16 55.61 53.54 55.61 53.91 55.61 54.29 55.61 54.66 55.61 55.04 55.61 55.41 55.61 55.79 55.61 56.16 55.61 56.54 55.61 56.91 55.61 57.29 55.61 57.67 55.61 58.04 55.61 58.42 55.61 58.79 55.61 59.17 55.61" id="img-3e0290ad-34" stroke="#008000" class="geometry color_Source_terminated_in_2025"/>
+        <path fill="none" d="M22,55.61 L 22.37 55.61 22.75 55.61 23.12 55.61 23.5 55.61 23.88 55.61 24.25 55.61 24.63 55.61 25 55.61 25.38 55.61 25.75 55.61 26.13 55.61 26.5 55.61 26.88 55.61 27.25 55.61 27.63 55.61 28.01 55.61 28.38 55.61 28.76 55.61 29.13 55.61 29.51 55.61 29.88 55.61 30.26 55.61 30.63 55.61 31.01 55.61 31.38 55.61 31.76 55.61 32.14 55.61 32.51 55.61 32.89 55.61 33.26 55.61 33.64 55.61 34.01 55.61 34.39 55.61 34.76 55.61 35.14 55.61 35.51 55.61 35.89 55.61 36.27 55.61 36.64 55.61 37.02 55.61 37.39 55.61 37.77 55.61 38.14 55.61 38.52 55.61 38.89 55.61 39.27 55.61 39.64 55.61 40.02 55.61 40.4 55.61 40.77 55.61 41.15 55.61 41.52 55.61 41.9 55.61 42.27 55.61 42.65 55.61 43.02 55.61 43.4 55.61 43.77 55.61 44.15 55.61 44.53 55.61 44.9 55.61 45.28 55.61 45.65 55.61 46.03 55.61 46.4 55.61 46.78 55.61 47.15 55.61 47.53 55.61 47.9 55.61 48.28 55.61 48.66 55.61 49.03 55.61 49.41 55.61 49.78 55.61 50.16 55.61 50.53 55.61 50.91 55.61 51.28 55.61 51.66 55.61 52.03 55.61 52.41 55.61 52.79 55.61 53.16 55.61 53.54 55.61 53.91 55.61 54.29 55.61 54.66 55.61 55.04 55.61 55.41 55.61 55.79 55.61 56.16 55.61 56.54 55.61 56.91 55.61 57.29 55.61 57.67 55.61 58.04 55.61 58.42 55.61 58.79 55.61 59.17 55.61" id="img-3e0290ad-35" stroke="#00FFFF" class="geometry color_Source_terminated_in_2030"/>
+        <path fill="none" d="M22,55.61 L 22.37 55.61 22.75 55.61 23.12 55.61 23.5 55.61 23.88 55.61 24.25 55.61 24.63 55.61 25 55.61 25.38 55.61 25.75 55.61 26.13 55.61 26.5 55.61 26.88 55.61 27.25 55.61 27.63 55.61 28.01 55.61 28.38 55.61 28.76 55.61 29.13 55.61 29.51 55.61 29.88 55.61 30.26 55.61 30.63 55.61 31.01 55.61 31.38 55.61 31.76 55.61 32.14 55.61 32.51 55.61 32.89 55.61 33.26 55.61 33.64 55.61 34.01 55.61 34.39 55.61 34.76 55.61 35.14 55.61 35.51 55.61 35.89 55.61 36.27 55.61 36.64 55.61 37.02 55.61 37.39 55.61 37.77 55.61 38.14 55.61 38.52 55.61 38.89 55.61 39.27 55.61 39.64 55.61 40.02 55.61 40.4 55.61 40.77 55.61 41.15 55.61 41.52 55.61 41.9 55.61 42.27 55.61 42.65 55.61 43.02 55.61 43.4 55.61 43.77 55.61 44.15 55.61 44.53 55.61 44.9 55.61 45.28 55.61 45.65 55.61 46.03 55.61 46.4 55.61 46.78 55.61 47.15 55.61 47.53 55.61 47.9 55.61 48.28 55.61 48.66 55.61 49.03 55.61 49.41 55.61 49.78 55.61 50.16 55.61 50.53 55.61 50.91 55.61 51.28 55.61 51.66 55.61 52.03 55.61 52.41 55.61 52.79 55.61 53.16 55.61 53.54 55.61 53.91 55.61 54.29 55.61 54.66 55.61 55.04 55.61 55.41 55.61 55.79 55.61 56.16 55.61 56.54 55.61 56.91 55.61 57.29 55.61 57.67 55.61 58.04 55.61 58.42 55.61 58.79 55.61 59.17 55.61" id="img-3e0290ad-36" stroke="#FF0000" class="geometry color_Source_terminated_in_2015"/>
       </g>
     </g>
   </g>
-  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-37">
-    <text x="17.63" y="54.91" text-anchor="end" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-38">0.0</text>
-    <text x="17.63" y="30.96" text-anchor="end" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-39">0.5</text>
-    <text x="17.63" y="7" text-anchor="end" dy="0.35em" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-40">1.0</text>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e0290ad-37">
+    <text x="19" y="55.61" text-anchor="end" dy="0.35em" id="img-3e0290ad-38">0.00</text>
+    <text x="19" y="31.3" text-anchor="end" dy="0.35em" id="img-3e0290ad-39">0.05</text>
+    <text x="19" y="7" text-anchor="end" dy="0.35em" id="img-3e0290ad-40">0.10</text>
   </g>
-  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-41">
-    <text x="8.81" y="28.96" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.81, 30.96)" id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-42">Maximum probability of failure</text>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e0290ad-41">
+    <text x="8.77" y="29.3" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.77, 31.3)" id="img-3e0290ad-42">Maximum probability of failure</text>
   </g>
 </g>
 <defs>
-<clipPath id="fig-0f14087af58c4e4c9ee2687c29bb7b55-element-18">
-  <path d="M18.63,5 L 60.62 5 60.62 56.91 18.63 56.91" />
-</clipPath
-></defs>
+  <clipPath id="img-3e0290ad-17">
+  <path d="M20,5 L 61.17 5 61.17 57.61 20 57.61" />
+</clipPath>
+</defs>
 </svg>

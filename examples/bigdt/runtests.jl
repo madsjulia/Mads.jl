@@ -15,17 +15,17 @@ nsample = 10
 bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	filenameroot = joinpath(problemdir, "source_termination-robustness")
+	filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
 	Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
-	Mads.plotrobustnesscurves(md, bigdt_results)
 	Mads.rmfiles_root(filenameroot)
+	Mads.plotrobustnesscurves(md, bigdt_results)
+	Mads.rmfile(joinpath(problemdir, "source_termination-robustness.svg"))
 end
 
 # If enabled, save output as test file
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-
 	JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
 end
 

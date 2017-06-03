@@ -134,7 +134,31 @@ function push(modulename::String="")
 			run(`git push`)
 		catch e
 			printerrormsg(e)
-			warn("$madsmodule cannot be pushed!")
+			warn("$i cannot be pushed!")
+		end
+		cd(cwd)
+	end
+end
+
+"""
+Diff the latest version of the Mads / Julia modules in the repo
+
+$(DocumentFunction.documentfunction(push))
+"""
+function diff(modulename::String="")
+	if modulename!=""
+		modulenames = [modulename]
+	else
+		modulenames = madsmodules
+	end
+	for i in modulenames
+		cwd = pwd()
+		cd(Pkg.dir(i))
+		try
+			run(`git diff --word-diff *.jl`)
+		catch e
+			printerrormsg(e)
+			warn("$i cannot be diffed!")
 		end
 		cd(cwd)
 	end

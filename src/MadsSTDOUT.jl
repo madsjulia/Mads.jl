@@ -104,7 +104,7 @@ function stderrcaptureon()
 end
 
 """
-Restore STDERR 
+Restore STDERR
 
 $(DocumentFunction.documentfunction(stderrcaptureoff))
 
