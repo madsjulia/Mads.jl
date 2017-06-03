@@ -19,16 +19,20 @@ function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
 
-function functions(string::String=""; stdout::Bool=false)
+function functions(string::String=""; stdout::Bool=false, quiet::Bool=Mads.quiet)
 	n = 0
 	for i in madsmodules
 		eval(Mads, :(@tryimport $(Symbol(i))))
-		n += functions(Symbol(i), string; stdout=stdout)
+		n += functions(Symbol(i), string; stdout=stdout, quiet=quiet)
 	end
-	n > 0 && info("Total number of functions: $n")
+	n > 0 && string == "" && info("Total number of functions: $n")
+	return
 end
-function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=false)
+function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=false, quiet::Bool=Mads.quiet)
 	n = 0
+	if string != ""
+		quiet=false
+	end
 	try
 		f = names(eval(m), true)
 		functions = Any[]
@@ -42,19 +46,19 @@ function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=fal
 			end
 		end
 		if length(functions) > 0
-			info("$(m) functions:")
+			!quiet && info("$(m) functions:")
 			sort!(functions)
 			n = length(functions)
 			if stdout
-				Base.display(TextDisplay(STDOUT), functions)
+				!quiet && Base.display(TextDisplay(STDOUT), functions)
 			else
-				Base.display(functions)
+				!quiet && Base.display(functions)
 			end
 		end
 	catch
 		warn("Module $m not defined!")
 	end
-	n > 0 && info("Number of functions in module $m: $n")
+	n > 0 && string == "" && info("Number of functions in module $m: $n")
 	return n
 end
 

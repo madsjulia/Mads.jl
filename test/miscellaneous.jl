@@ -26,11 +26,8 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-if !haskey(ENV, "MADS_TRAVIS")
-	Mads.functions()
-else
-	@Mads.stdouterrcapture Mads.functions()
-end
+
+Mads.functions(quiet=true)
 
 Mads.stdouterrcaptureon();
 

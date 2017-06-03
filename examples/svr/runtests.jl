@@ -40,6 +40,10 @@ good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions
 	mdsvr["Julia model"] = svrexec
 	sasvr = Mads.efast(mdsvr)
 
+	sasvr_mes = hcat(map(i->collect(i), values.(vcat(collect(values(sasvr["mes"])))))...)
+	sasvr_tes = hcat(map(i->collect(i), values.(vcat(collect(values(sasvr["tes"])))))...)
+
+
 	if Mads.create_tests
 		d = joinpath(savedir, "test_results")
 		Mads.mkdir(d)
@@ -48,12 +52,11 @@ good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions
 
 	good_sasvr = JLD.load(joinpath(savedir, "test_results", "sasvr.jld"), "sasvr")
 
-	if !haskey(ENV, "MADS_TRAVIS")
-		@Base.Test.test sasvr == good_sasvr
-	else
-		@show good_sasvr
-		@show sasvr
-	end
+	good_sasvr_mes = hcat(map(i->collect(i), values.(vcat(collect(values(good_sasvr["mes"])))))...)
+	good_sasvr_tes = hcat(map(i->collect(i), values.(vcat(collect(values(good_sasvr["tes"])))))...)
+
+	@Base.Test.test sasvr_mes == good_sasvr_mes
+	@Base.Test.test sasvr_tes == good_sasvr_tes
 end
 
 Mads.makesvrmodel(md, 100, loadsvr=true)
