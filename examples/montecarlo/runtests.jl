@@ -1,4 +1,5 @@
 import Mads
+import DataStructures
 import Base.Test
 
 Mads.madsinfo("Monte Carlo analysis ...")

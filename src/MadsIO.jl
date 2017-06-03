@@ -981,6 +981,19 @@ function rmfile(filename::String; path::String="")
 end
 
 """
+Remove files
+
+$(DocumentFunction.documentfunction(rmfile;
+argtext=Dict("filenamepattern"=>"name pattern for files to be removed"),
+keytext=Dict("path"=>"path of the file [default=`current path`]")))
+"""
+function rmfiles(filenamepattern::Regex; path::String=".")
+	for f in searchdir(filenamepattern; path=path)
+		rmfile(f; path=path)
+	end
+end
+
+"""
 Remove files with extension `ext`
 
 $(DocumentFunction.documentfunction(rmfiles_ext;
@@ -989,7 +1002,7 @@ keytext=Dict("path"=>"path of the files to be removed [default=`.`]")))
 """
 function rmfiles_ext(ext::String; path::String=".")
 	for f in searchdir(Regex(string(".*\\.", ext)); path=path)
-		rm(joinpath(path, f))
+		rmfile(f; path=path)
 	end
 end
 
@@ -1007,7 +1020,7 @@ function rmfiles_root(root::String; path::String=".")
 		root = s[2]
 	end
 	for f in searchdir(Regex(string(root, ".*")); path=path)
-		rm(joinpath(path, f))
+		rmfile(f; path=path)
 	end
 end
 

@@ -353,8 +353,8 @@ Returns:
 - vector of sample variances
 """
 function weightedstats(samples::Array, llhoods::Vector)
-	wv = StatsBase.WeightVec(exp.(llhoods))
-	return mean(samples, wv, 1), var(samples, wv, 1)
+	wv = StatsBase.Weights(exp.(llhoods))
+	return mean(samples, wv, 1), var(samples, wv, 1; corrected=false)
 end
 
 function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)

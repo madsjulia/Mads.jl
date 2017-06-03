@@ -22,11 +22,13 @@ touch(jpath("a-v03.mads"))
 	sleep(1)
 	touch(jpath("a-v02.mads"))
 	@Base.Test.test Mads.getnextmadsfilename(jpath("a-v01.mads")) == jpath("a-v02.mads")
-	
+
 	# Verify that Mads parses filename prefixes and extensions
 	touch(jpath("test.file.name.txt"))
 	@Base.Test.test Mads.getrootname(jpath("test.file.name.txt")) == jpath("test")
 	@Base.Test.test Mads.getextension(jpath("a-v01.mads")) == "mads"
 end
+
+Mads.rmdir(workdir)
 
 :passed

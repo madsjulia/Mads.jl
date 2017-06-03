@@ -19,19 +19,22 @@ function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
 
-function functions(string::String="")
+function functions(string::String=""; stdout::Bool=false)
+	n = 0
 	for i in madsmodules
 		eval(Mads, :(@tryimport $(Symbol(i))))
-		functions(Symbol(i), string)
+		n += functions(Symbol(i), string; stdout=stdout)
 	end
+	n > 0 && info("Total number of functions: $n")
 end
-function functions(m::Union{Symbol, Module}, string::String="")
+function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=false)
+	n = 0
 	try
 		f = names(eval(m), true)
 		functions = Any[]
 		for i in 1:length(f)
 			functionname = "$(f[i])"
-			if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "_")
+			if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "__") || functionname == "$m"
 				continue
 			end
 			if string == "" || contains(functionname, string)
@@ -41,11 +44,18 @@ function functions(m::Union{Symbol, Module}, string::String="")
 		if length(functions) > 0
 			info("$(m) functions:")
 			sort!(functions)
-			Base.display(functions)
+			n = length(functions)
+			if stdout
+				Base.display(TextDisplay(STDOUT), functions)
+			else
+				Base.display(functions)
+			end
 		end
 	catch
 		warn("Module $m not defined!")
 	end
+	n > 0 && info("Number of functions in module $m: $n")
+	return n
 end
 
 @doc """

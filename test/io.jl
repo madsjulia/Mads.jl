@@ -37,6 +37,9 @@ df = DataFrames.DataFrame()
 df[:Values] = rand(10) * realmax(Float64)
 Mads.maxtorealmax!(df)
 
+@Mads.stdoutcapture Mads.gettime(Dict("o1"=>Dict("c"=>1)))
+@Mads.stdoutcapture resultshouldbenan = Mads.getweight(Dict("ww"=>10))
+
 # Begin the main test block
 @Base.Test.testset "IO" begin
 	@Base.Test.test test_IO("a.dat", arr)
@@ -50,6 +53,9 @@ Mads.maxtorealmax!(df)
 	Mads.dumpasciifile(jpath(file), arr)
 	@Base.Test.test isfile(jpath(file)) == true
 	Mads.rmfiles_ext(String(Mads.getextension(file)); path=workdir)
+	@Base.Test.test isfile(jpath(file)) == false
+	Mads.dumpasciifile(jpath(file), arr)
+	Mads.rmfiles(Regex(file); path=workdir)
 	@Base.Test.test isfile(jpath(file)) == false
 
 	Mads.dumpasciifile(jpath(file), arr)
@@ -68,12 +74,13 @@ Mads.maxtorealmax!(df)
 	Mads.setparamon!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
 	Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
 	Mads.getparamdistributions(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"init_dist"=>"Normal(0,1)"))); init_dist=true)
-	Mads.gettime(Dict("o1"=>Dict("c"=>1)))
+
 	@Base.Test.test Mads.settime!(Dict("t"=>1),2) == 2
 	@Base.Test.test Mads.setweight!(Dict("w"=>1),2) == 2
 	@Base.Test.test Mads.getweight(Dict("w"=>1)) == 1
 	@Base.Test.test Mads.settarget!(Dict("c"=>1),2) == 2
-	@Base.Test.test isnan(Mads.getweight(Dict("ww"=>10)))
+	@Base.Test.test isnan(resultshouldbenan)
+
 	srand(2017)
 	@Base.Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 0.107554; atol=1e-5)
 end

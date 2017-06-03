@@ -26,6 +26,8 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
+Mads.functions()
+
 Mads.stdouterrcaptureon();
 
 Mads.printerrormsg("a")
@@ -63,10 +65,9 @@ else
 end
 include(joinpath("..", "src", "madsjl.jl"))
 rm("madsjl.cmdline_hist")
-Mads.functions()
 Mads.functions(:ModuleThatDoesNotExist)
-Mads.functions("createmadsproblem")
-Mads.functions(Mads, "loadmadsfile")
+Mads.functions("createmadsproblem"; stdout=true)
+Mads.functions(Mads, "loadmadsfile"; stdout=true)
 Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
 	if is_windows()
@@ -88,6 +89,29 @@ Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
 
 Mads.plotobsSAresults(Dict(), Dict())
 
+if !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.setplotfileformat("a.ps", "")
+	Mads.setplotfileformat("a", "EPS")
+	Mads.setdefaultplotformat("TIFF")
+	Mads.setdefaultplotformat("EPS")
+	Mads.setdefaultplotformat("SVG")
+	Mads.display("mads.png")
+end
+
+Mads.addkeyword!(Dict(), "ssdr")
+Mads.addkeyword!(Dict("Problem"=>"ssdr"), "ssdr")
+Mads.addkeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr2")
+Mads.addkeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
+Mads.addkeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
+
+Mads.deletekeyword!(Dict(), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>"ssdr"), "ssdr")
+Mads.deletekeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr"=>true)), "Problem", "ssdr")
+Mads.deletekeyword!(Dict("Problem"=>["ssdr","paranoid"]), "Problem", "ssdr")
+
 Mads.stdouterrcaptureoff();
 
 Mads.pkgversion("ModuleThatDoesNotExist") # this captures output
@@ -100,15 +124,6 @@ else
 end
 
 Mads.setverbositylevel(1)
-
-if !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.setplotfileformat("a.ps", "")
-	Mads.setplotfileformat("a", "EPS")
-	Mads.setdefaultplotformat("TIFF")
-	Mads.setdefaultplotformat("EPS")
-	Mads.setdefaultplotformat("SVG")
-	Mads.display("mads.png")
-end
 
 graph_status = Mads.graphoutput
 Mads.graphoff()
@@ -125,20 +140,6 @@ end
 
 @Base.Test.test Mads.getdir("a.mads") == "."
 @Base.Test.test Mads.getdir("test/a.mads") == "test"
-
-Mads.addkeyword!(Dict(), "ssdr")
-Mads.addkeyword!(Dict("Problem"=>"ssdr"), "ssdr")
-Mads.addkeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr2")
-Mads.addkeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
-Mads.addkeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
-
-Mads.deletekeyword!(Dict(), "ssdr")
-Mads.deletekeyword!(Dict("Problem"=>"ssdr"), "ssdr")
-Mads.deletekeyword!(Dict{String,Any}("Problem"=>"ssdr"), "Problem", "ssdr")
-Mads.deletekeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
-Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
-Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr"=>true)), "Problem", "ssdr")
-Mads.deletekeyword!(Dict("Problem"=>["ssdr","paranoid"]), "Problem", "ssdr")
 
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 
