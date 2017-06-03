@@ -19,7 +19,7 @@ function copyright()
 	Markdown.parse_file(joinpath(Pkg.dir("Mads"), "COPYING.md"))
 end
 
-function functions(string::String=""; stdout::Bool=false, quiet::Bool=Mads.quiet)
+function functions(string::String=""; stdout::Bool=false, quiet::Bool=false)
 	n = 0
 	for i in madsmodules
 		eval(Mads, :(@tryimport $(Symbol(i))))
@@ -28,7 +28,7 @@ function functions(string::String=""; stdout::Bool=false, quiet::Bool=Mads.quiet
 	n > 0 && string == "" && info("Total number of functions: $n")
 	return
 end
-function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=false, quiet::Bool=Mads.quiet)
+function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=false, quiet::Bool=false)
 	n = 0
 	if string != ""
 		quiet=false

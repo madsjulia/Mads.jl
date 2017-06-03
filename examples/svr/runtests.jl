@@ -28,35 +28,35 @@ end
 
 good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
 
-@Base.Test.testset "SVR" begin
-	import DataStructures
+srand(2017)
 
+mdsvr = deepcopy(md)
+mdsvr["Julia model"] = svrexec
+sasvr = Mads.efast(mdsvr)
+
+sasvr_mes = hcat(map(i->collect(i), values.(collect(values(sasvr["mes"]))))...)
+sasvr_tes = hcat(map(i->collect(i), values.(collect(values(sasvr["tes"]))))...)
+sasvr_var = hcat(map(i->collect(i), values.(collect(values(sasvr["var"]))))...)
+
+if Mads.create_tests
+	d = joinpath(savedir, "test_results")
+	Mads.mkdir(d)
+	JLD.save(joinpath(d, "sasvr.jld"), "sasvr", sasvr)
+end
+
+good_sasvr = JLD.load(joinpath(savedir, "test_results", "sasvr.jld"), "sasvr")
+
+good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"]))))...)
+good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)
+good_sasvr_var = hcat(map(i->collect(i), values.(collect(values(good_sasvr["var"]))))...)
+
+@Base.Test.testset "SVR" begin
 	@Base.Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
 	@Base.Test.test sum((svrpredictionsdict .- good_svrpredictions).^2) < 0.1
 
-	srand(2017)
-
-	mdsvr = deepcopy(md)
-	mdsvr["Julia model"] = svrexec
-	sasvr = Mads.efast(mdsvr)
-
-	sasvr_mes = hcat(map(i->collect(i), values.(vcat(collect(values(sasvr["mes"])))))...)
-	sasvr_tes = hcat(map(i->collect(i), values.(vcat(collect(values(sasvr["tes"])))))...)
-
-
-	if Mads.create_tests
-		d = joinpath(savedir, "test_results")
-		Mads.mkdir(d)
-		JLD.save(joinpath(d, "sasvr.jld"), "sasvr", sasvr)
-	end
-
-	good_sasvr = JLD.load(joinpath(savedir, "test_results", "sasvr.jld"), "sasvr")
-
-	good_sasvr_mes = hcat(map(i->collect(i), values.(vcat(collect(values(good_sasvr["mes"])))))...)
-	good_sasvr_tes = hcat(map(i->collect(i), values.(vcat(collect(values(good_sasvr["tes"])))))...)
-
 	@Base.Test.test sasvr_mes == good_sasvr_mes
 	@Base.Test.test sasvr_tes == good_sasvr_tes
+	@Base.Test.test sasvr_var == good_sasvr_var
 end
 
 Mads.makesvrmodel(md, 100, loadsvr=true)
