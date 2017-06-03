@@ -301,9 +301,9 @@ function create_documentation()
 	d = pwd()
 	cd(Pkg.dir("Mads"))
 	# run(`git pull gh gh-pages`)
-	info("mkdocs starts ...")
-	run(`mkdocs build --clean`)
+	info("mkdocs build & deploy ...")
 	run(`mkdocs gh-deploy --clean`)
+	info("mkdocs done.")
 	cd(d)
 	return
 end
