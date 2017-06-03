@@ -4,26 +4,27 @@ Module Anasol.jl provides a series of analytical solutions for groundwater conta
 The provided solutions have:
 
 * different source types
-	- instantaneous contaminant release
-	- continuous contaminant release with a unit flux
-	- continuous contaminant release with a given constant flux
+	+ instantaneous contaminant release
+	+ continuous contaminant release with a unit flux
+	+ continuous contaminant release with a given constant flux
 * different source shapes
-	- constrained (within predefined limits)
-	- distributed (assuming normal distribution)
+	+ constrained (within predefined limits)
+	+ distributed (assuming normal distribution)
 * different dispersion models
-	- classical (Fickian)
-	- fractional Brownian
+	+ classical (Fickian)
+	+ fractional Brownian
 * different boundaries along each axis
-	- infinite (no boundary)
-	- reflecting
-	- absorbing
+	+ infinite (no boundary)
+	+ reflecting
+	+ absorbing
 
-All functions have the following arguments:
+Functions have the following arguments:
 
 - `t`: time to compute the concentration
 - `x`: spatial coordinates of the point to compute the concentration
 - `x01`/`x02`/`x03`: contaminant source coordinates
 - `sigma01`/`sigma02`/`sigma01`: contaminant source sizes (if a constrained source) or standard deviations (if a distributed source)
+- `sourcestrength`: user-provided function defining time-dependent source strength
 - `t0`/`t1`: contaminant release times (source is released  between `t0` and `t1`)
 - `v1`/`v2`/`v3`: groundwater flow velocity components
 - `sigma1`/`sigma2`/`sigma3`: groundwater flow dispersion components
