@@ -9,6 +9,7 @@ ReusableFunctions
 RobustPmap
 SVR 0.2.3
 DocumentFunction
+Documenter 0.8.10
 Conda 0.4
 PyCall 1.8
 PyPlot 2.2
@@ -23,12 +24,11 @@ ProgressMeter
 Distributions
 DataStructures
 DataFrames
-StatsBase
 ODE
 NMF
+BlackBoxOptim
 Klara 0.7
 Optim 0.7
-BlackBoxOptim
-Documenter 0.8.10
+StatsBase 0.15
 JuMP 0.15
 MathProgBase 0.5.10
