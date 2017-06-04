@@ -4,19 +4,19 @@ Module Anasol.jl provides a series of analytical solutions for groundwater conta
 The provided solutions have:
 
 * different source types
-	+ instantaneous contaminant release
-	+ continuous contaminant release with a unit flux
-	+ continuous contaminant release with a given constant flux
+	- instantaneous contaminant release
+	- continuous contaminant release with a unit flux
+	- continuous contaminant release with a given constant flux
 * different source shapes
-	+ constrained (within predefined limits)
-	+ distributed (assuming normal distribution)
+	- constrained (within predefined limits)
+	- distributed (assuming normal distribution)
 * different dispersion models
-	+ classical (Fickian)
-	+ fractional Brownian
+	- classical (Fickian)
+	- fractional Brownian
 * different boundaries along each axis
-	+ infinite (no boundary)
-	+ reflecting
-	+ absorbing
+	- infinite (no boundary)
+	- reflecting
+	- absorbing
 
 Functions have the following arguments:
 

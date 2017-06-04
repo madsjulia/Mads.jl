@@ -54,9 +54,9 @@ good_sasvr_var = hcat(map(i->collect(i), values.(collect(values(good_sasvr["var"
 	@Base.Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
 	@Base.Test.test sum((svrpredictionsdict .- good_svrpredictions).^2) < 0.1
 
-	@Base.Test.test sasvr_mes == good_sasvr_mes
-	@Base.Test.test sasvr_tes == good_sasvr_tes
-	@Base.Test.test sasvr_var == good_sasvr_var
+	@Base.Test.test sum((sasvr_mes .- good_sasvr_mes).^2) < 0.1
+	@Base.Test.test sum((sasvr_tes .- good_sasvr_tes).^2) < 0.1
+	@Base.Test.test sum((sasvr_var .- good_sasvr_var).^2) < 0.1
 end
 
 Mads.makesvrmodel(md, 100, loadsvr=true)
