@@ -327,15 +327,12 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Strin
 	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(joinpath(path, mf[i]))
 		l = md["Parameters"]["lambda"]["init"]
-		if l < eps(Float64)
-			l = 1e-32
-		end
-		lambda[i] = l
+		lambda[i] = l < eps(Float64) ? 1e-32 : l
 		mi, mr = Mads.computemass(md, time=time)
 		mass_injected[i] = Float64(mi)
 		mass_reduced[i] = Float64(mi)
 	end
-	if graphoutput && isdefined(:plotmass)
+	if graphoutput && isdefined(Mads, :plotmass)
 		plotmass(lambda, mass_injected, mass_reduced, joinpath(path, "mass_reduced"))
 	end
 	return lambda, mass_injected, mass_reduced

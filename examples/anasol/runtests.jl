@@ -36,6 +36,7 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.rmfile(joinpath(workdir, "plotmass-test.svg"))
 end
 
+Mads.montecarlo(md; N=2)
 Mads.forwardgrid(md)
 if isdefined(Mads, :plotgrid)
 	Mads.plotgrid(md)
