@@ -274,6 +274,7 @@ function tag(madsmodule::String, sym::Symbol=:patch)
 			catch e
 				printerrormsg(e)
 				warn("$madsmodule cannot be tagged!")
+				return
 			end
 		else
 			warn("PkgDev is missing!")
@@ -289,6 +290,25 @@ Tag the Mads modules with a default argument `:patch`
 
 $(DocumentFunction.documentfunction(tag))
 """ tag
+
+"""
+Untag specific version
+
+$(DocumentFunction.documentfunction(untag))
+"""
+function untag(madsmodule::String, version::String)
+	cwd = pwd()
+	info("Git untag $(madsmodule) ...")
+	cd(Pkg.dir(madsmodule))
+	try
+		run(`git tag -d $version`)
+		run(`git push origin :refs/tags/$version`)
+	catch e
+		printerrormsg(e)
+		warn("Untag of $madsmodule failed!")
+	end
+	cd(cwd)
+end
 
 """
 Create web documentation files for Mads functions
