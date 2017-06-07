@@ -1,0 +1,5 @@
+Parameters:
+- a1 : { init:  1, dist: "Uniform(-10,10)" }
+- b1 : { init: -1, dist: "Uniform(-10,10)" }
+- a2 : { init:  2, dist: "Uniform(-10,10)" }
+- b2 : { init:  1, dist: "Uniform(-10,10)" }

@@ -171,7 +171,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						if attempt > 3
 							cd(currentdir)
 							printerrormsg(errmsg)
-							Mads.madscritical("$(errmsg)\nCommand '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 						end
 					end
 				end

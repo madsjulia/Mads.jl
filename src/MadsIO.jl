@@ -826,8 +826,21 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 	obsfile = open(modeloutputfilename, "r")
 	obslineitr = eachline(obsfile)
 	state = start(obslineitr)
-	obsdict = Dict{String, Float64}()
+	obsdict = DataStructures.OrderedDict{String, Float64}()
 	for instline in eachline(instfile)
+		if length(instline) == 0
+			obsline, state = next(obslineitr, state)
+			continue
+		elseif instline[1] == 'l'
+			l = 1
+			try
+				l = parse(Int, instline[2:end])
+			end
+			for i = 1:l
+				obsline, state = next(obslineitr, state)
+			end
+			continue
+		end
 		regexs, obsnames, getparamhere = instline2regexs(instline)
 		gotmatch = false
 		while !gotmatch && !done(obslineitr, state)
@@ -858,7 +871,7 @@ Returns:
 - dictionary with Mads observations
 """
 function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
-	observations = Dict()
+	observations = DataStructures.OrderedDict()
 	obscount = Dict(zip(obskeys, zeros(Int, length(obskeys))))
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])

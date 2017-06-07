@@ -85,7 +85,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		end
 	end
 	if cmdproc.exitcode != 0
-		warn("Execution of command `$(string(cmd))` produced an error ($(mdproc.exitcode))!")
+		warn("Execution of command `$(string(cmd))` produced an error ($(cmdproc.exitcode))!")
 	end
 	if pipe
 		return cmdout, cmderr
