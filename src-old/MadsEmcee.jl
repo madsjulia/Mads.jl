@@ -1,26 +1,27 @@
 import RobustPmap
+import DocumentFunction
 
 """
 Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler
 
-```julia
-Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
-```
-
-Arguments:
-
-- `llhood` : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())
-- `numwalkers` : number of walkers
-- `x0` : normalized initial parameters (matrix of size (length(params), numwalkers))
-- `thinning` : removal of any `thinning` realization
-- `a` :
+$(DocumentFunction.documentfunction(emcee;
+argtext=Dict("llhood"=>"function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())",
+            "numwalkers"=>"number of walkers",
+            "x0"=>"normalized initial parameters (matrix of size (length(params), numwalkers))",
+            "numsamples_perwalker"=>"number of samples per walker",
+            "thinning"=>"removal of any `thinning` realization",
+            "a"=>"[default=`2`]")))
 
 Returns:
 
 - final MCMC chain
 - log likelihoods of the final samples in the chain
 
-$(DocumentFunction.documentfunction(emcee))
+Example:
+
+```julia
+Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
+```
 """
 function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalker::Int, thinning::Int, a=2.)
 	@assert length(size(x0)) == 2
@@ -61,7 +62,14 @@ end
 """
 Flatten MCMC arrays
 
-$(DocumentFunction.documentfunction(flattenmcmcarray))
+$(DocumentFunction.documentfunction(flattenmcmcarray;
+argtext=Dict("chain"=>"input MCMC array",
+            "llhoodvals"=>"log likelihoods of the samples in the input chain ")))
+
+Returns:
+
+- new MCMC chain
+- log likelihoods of the samples in the new chain 
 """
 function flattenmcmcarray(chain::Array, llhoodvals::Array)
 	numdims, numwalkers, numsteps = size(chain)
