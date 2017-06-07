@@ -1,15 +1,15 @@
+import DocumentFunction
+
 """
 Execute amanzi external groundwater flow and transport simulator 
 
-Arguments:
-
-- `filename` : amanzi input file name
-- `nproc` : number of processor to be used by amanzi
-- `quiet` : : suppress output [default `true`]
-- `observation_filename` : amanzi observation filename [default "observations.out"]
-- `setup` : bash script to setup amanzi environmental variables
-- `amanzi_exe` : full path to the location of the amanzi executable
-
+$(DocumentFunction.documentfunction(amanzi;
+argtext=Dict("filename"=>"amanzi input file name",
+            "nproc"=>"number of processor to be used by amanzi [default=`nprocs_per_task`]",
+            "quiet"=>"suppress output [default=`true`]",
+            "observation_filename"=>"amanzi observation filename [default=`\"observations.out\"`]",
+            "setup"=>"bash script to setup amanzi environmental variables [default=`\"source-amanzi-setup\"`]"),
+keytext=Dict("amanzi_exe"=>"full path to the location of the amanzi executable")))
 """
 function amanzi(filename::String, nproc::Int=nprocs_per_task, quiet::Bool=true, observation_filename::String="observations.out", setup::String="source-amanzi-setup"; amanzi_exe::String="")
 	if quiet

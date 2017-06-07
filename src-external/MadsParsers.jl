@@ -1,22 +1,22 @@
 import DataStructures
+import DocumentFunction
 
 """
 Parse Amanzi output provided in an external file (`filename`)
 
-Usage:
+$(DocumentFunction.documentfunction(amanzi_output_parser;
+argtext=Dict("filename"=>"external file name (optional) [default=`\"observations.out\"`]")))
+
+Returns:
+
+- a dictionary with model observations following MADS requirements
+
+Example:
 
 ```julia
 Mads.amanzi_output_parser()
 Mads.amanzi_output_parser("observations.out")
 ```
-
-Arguments:
-
-- `filename` : external file name (optional)
-
-Returns:
-
-- a dictionary with model observations following MADS requirements
 """
 function amanzi_output_parser(filename::String="observations.out")
 	d = readdlm(filename, ',', skipstart=2)
