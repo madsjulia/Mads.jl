@@ -828,6 +828,19 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 	state = start(obslineitr)
 	obsdict = Dict{String, Float64}()
 	for instline in eachline(instfile)
+		if length(instline) == 0
+			obsline, state = next(obslineitr, state)
+			continue
+		elseif instline[1] == 'l'
+			l = 1
+			try
+				l = parse(Int, instline[2:end])
+			end
+			for i = 1:l
+				obsline, state = next(obslineitr, state)
+			end
+			continue
+		end
 		regexs, obsnames, getparamhere = instline2regexs(instline)
 		gotmatch = false
 		while !gotmatch && !done(obslineitr, state)

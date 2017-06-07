@@ -35,6 +35,9 @@ Mads.madsinfo("Internal coupling using `MADS model` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-mads.mads"))
 mfor = Mads.forward(md)
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
+md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction+l1.mads"))
+teforl1 = Mads.forward(md)
+Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
 tefor = Mads.forward(md)
 
@@ -50,6 +53,7 @@ pfor = Mads.forward(md)
 	@Base.Test.test ifor == tifor
 	@Base.Test.test ifor == mfor
 	@Base.Test.test ifor == tefor
+	@Base.Test.test ifor == teforl1
 	@Base.Test.test ifor == pfor
 end
 

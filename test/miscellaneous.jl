@@ -143,6 +143,9 @@ end
 @Base.Test.test Mads.getdir("a.mads") == "."
 @Base.Test.test Mads.getdir("test/a.mads") == "test"
 
+Mads.createmadsobservations(4, 2; filename="a.inst")
+Mads.rmfile("a.inst")
+
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 
 if !haskey(ENV, "MADS_TRAVIS")

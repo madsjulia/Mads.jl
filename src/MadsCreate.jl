@@ -65,3 +65,39 @@ Returns:
 
 - new madsdata
 """ createmadsproblem
+
+"""
+Create Mads dictionary of observations and instruction file
+
+$(DocumentFunction.documentfunction(createmadsobservations;
+argtext=Dict("nrow"=>"number of rows",
+             "ncol"=>"number of columns [default 1]"),
+keytext=Dict("obstring"=>"observation string",
+             "pretext"=>"preamble instructions",
+			 "prestring"=>"pre instruction file string",
+			 "poststring"=>"post instruction file string",
+			 "filename"=>"file name")
+)))
+
+Returns:
+
+- observation dictionary
+"""
+function createmadsobservations(nrow::Int, ncol::Int=1; obstring::String="", pretext::String="", prestring::String="", poststring::String="", filename::String="")
+	dump = filename != "" ? true : false
+	dump && (f = open(filename, "w"))
+	dump && write(f, pretext)
+	uniquecolumns = map(i->string(Char(65 + (i-1)%26))^Int(ceil(i/26)), 1:ncol)
+	observationdict = DataStructures.OrderedDict{String,Dict}()
+	for i = 1:nrow
+		dump && write(f, prestring)
+		for j in uniquecolumns
+			obsname = string(obstring, j, i)
+			dump && write(f, string(" !", obsname, "!"))
+			observationdict[obsname] = Dict("target"=>0)
+		end
+		dump && write(f, string(poststring, "\n"))
+	end
+	dump && close(f)
+	return observationdict
+end
