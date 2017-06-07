@@ -7,19 +7,19 @@ workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "examples", 
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 rootname = Mads.getmadsrootname(md)
 
-function plot_results(md, inverse_predictions, paramvalues)
+@Mads.stderrcapture function plot_results(md, inverse_predictions, paramvalues)
 	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		
+
 		Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
 		Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
-		
+
 		Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 		Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
 		s = splitdir(rootname)
 		for filesinadir in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "\.*", "spaghetti.svg")), path=s[1])
 			Mads.rmfile(filesinadir, path=s[1])
 		end
-		
+
 		sa_results = Mads.saltelli(md, N=5, seed=2015)
 		Mads.plotwellSAresults(md, sa_results)
 		Mads.plotobsSAresults(md, sa_results)
@@ -42,18 +42,18 @@ end
 
 	# Test param_values
 	@Base.Test.test isapprox(mean([abs(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
-		
+
 	forward_predictions = Mads.forward(md, inverse_parameters)
 	localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collect(values(inverse_parameters)), obs=collect(values(forward_predictions)))
 	samples, llhoods = Mads.sampling(param_values, localsa_results["jacobian"], 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
-	
+
 	# Arrays to test samples and llhoods against
 	good_samples = [40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0; 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0; 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0]
 	good_llhoods = [9.60999,10.2521,9.26273,10.3345,10.222,9.79228,9.86957,9.73196,8.14828,9.90393]
 
 	@Base.Test.test isapprox(mean([abs(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
-	
+
 	obs_samples = Mads.forward(md, samples)
 	newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance sampling to the 95% of the solutions, keeping the most likely solutions
 	goodoprime = Mads.getimportantsamples(obs_samples, newllhoods)
@@ -71,9 +71,9 @@ end
 	Mads.allwellsoff!(md) # turn off all wells
 	Mads.wellon!(md, "w13a") # use well w13a
 	Mads.wellon!(md, "w20a") # use well w20a
-	
+
 	@Base.Test.test all(Mads.getwellsdata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
-	
+
 	welldata_time = Mads.getwellsdata(md; time=true)
 
 	# Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
@@ -85,7 +85,7 @@ end
 	Mads.dumpwelldata(md, "wells.dat")
 	Mads.rmfile("wells.dat")
 
-	#plot_results(md, inverse_predictions, paramvalues)
+	plot_results(md, inverse_predictions, paramvalues)
 
 	@Base.Test.test isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
 	@Base.Test.test isapprox(mean([abs(Mads.computemass(md)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
@@ -117,8 +117,9 @@ end
 	end
 	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
 
-	@Mads.stdouterrcapture Mads.addsource!(md)
-	@Mads.stdouterrcapture Mads.removesource!(md)
 end
-	
+
+@Mads.stdouterrcapture Mads.addsource!(md)
+@Mads.stdouterrcapture Mads.removesource!(md)
+
 Mads.rmdir("w01-w13a_w20a_restart")
