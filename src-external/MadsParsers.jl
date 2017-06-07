@@ -9,7 +9,7 @@ argtext=Dict("filename"=>"external file name (optional) [default=`\"observations
 
 Returns:
 
-- a dictionary with model observations following MADS requirements
+- dictionary with model observations following MADS requirements
 
 Example:
 
