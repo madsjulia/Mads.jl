@@ -1,6 +1,5 @@
-"""
-Get function arguments
-"""
+import DocumentFunction
+
 function getfunctionargumentsold(f::Function)
 	getfunctionarguments(f, methods(f))
 end
@@ -22,9 +21,19 @@ function getfunctionargumentsold(f::Function, m::Base.MethodList, l::Integer=get
 	return sort(unique(mp))
 end
 
-"""
-Get function keywords
-"""
+@doc """
+Get function arguments
+
+$(DocumentFunction.documentfunction(getfunctionargumentsold;
+argtext=Dict("f"=>"function of interest",
+            "m"=>"method list",
+            "l"=>"number of method in argument m [default=`getmethodscount(m)`]")))
+
+Returns:
+
+- function arguments
+""" getfunctionargumentsold
+
 function getfunctionkeywordsold(f::Function)
 	getfunctionkeywords(f, methods(f))
 end
@@ -47,6 +56,29 @@ function getfunctionkeywordsold(f::Function, m::Base.MethodList, l::Integer=getm
 	return sort(unique(mp))
 end
 
+@doc """
+Get function keywords
+
+$(DocumentFunction.documentfunction(getfunctionkeywordsold;
+argtext=Dict("f"=>"function of interest",
+            "m"=>"method list",
+            "l"=>"number of method in argument m [default=`getmethodscount(m)`]")))
+
+Returns:
+
+- function keywords    
+""" getfunctionkeywordsold
+
+"""
+Get methods count
+
+$(DocumentFunction.documentfunction(getmethodscount;
+argtext=Dict("m"=>"method list")))
+
+Returns:
+
+- number of methods
+"""
 function getmethodscount(m::Base.MethodList)
 	nm = 0
 	try
@@ -56,3 +88,4 @@ function getmethodscount(m::Base.MethodList)
 	end
 	return nm
 end
+

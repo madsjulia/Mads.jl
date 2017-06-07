@@ -1,9 +1,15 @@
 import DataStructures
+import DocumentFunction
 
 """
 Read observations using C Mads library
 
-$(DocumentFunction.documentfunction(readobservations_cmads))
+$(DocumentFunction.documentfunction(readobservations_cmads;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Returns:
+
+- observations
 """
 function readobservations_cmads(madsdata::Associative)
 	obsids=getobskeys(madsdata)
@@ -21,7 +27,14 @@ end
 """
 Call C MADS ins_obs() function from the MADS dynamic library
 
-$(DocumentFunction.documentfunction(cmadsins_obs))
+$(DocumentFunction.documentfunction(cmadsins_obs;
+argtext=Dict("obsid"=>"observation id",
+            "instructionfilename"=>"instruction file name",
+            "inputfilename"=>"input file name")))
+
+Return:
+
+- observations
 """
 function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename::String)
 	n = length(obsid)
