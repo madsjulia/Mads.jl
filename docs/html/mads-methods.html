@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MADS Methods</title>
+<META NAME="Description" CONTENT="MADS methods for parameter estimation, sensitivity analysis, uncertainty quantification, performance and probabilistic risk assessment, model selection and averaging, highly-parameterized inversion, experiment design, remedy selection, remedial design, data-worth analysis, value of information, expert knowledge, monitoring network design, multi-objective optimization, calibration, Monte Carlo, Latin Hypercube sampling, SQUADS, ABAGUS" />
+<script>
+    !window.jQuery && document.write('<script src="./js/jquery-1.7.min.js"><\/script>');
+	!window.jQuery && document.write('<script type="text/javascript" src="./fancybox/jquery.fancybox-1.3.4.pack.js"><\/script>');
+	!window.jQuery && document.write('<script type="text/javascript" src="./fancybox/jquery.mousewheel-3.0.4.pack.js"><\/script>');
+    !window.jQuery && document.write('<script type="text/javascript" src="./js/mads-ajax-links.js"><\/script>');
+</script>
+<link rel="stylesheet" type="text/css" href="css/mads.css" />
+<style type="text/css">
+.body p { margin-top: 10px; margin-bottom: 0px; }
+.body ul { margin-top:1px; padding-top:0px; }
+.body li { margin-top:1px; padding-top:0px; }
+</style>
+<script type="text/javascript" src="./js/mads.js"></script>
+</head>
+
+<body class="body">
+<div class="animatescroll" >
+<a name="methods:top" id="methods:top"></a>
+<h1><span><strong>MADS</strong> Methods</span></h1>
+<ul>
+<li><a href="#methods:analyses" id="anim-links">Model analyses</a></li>
+<li><a href="#methods:decision" class="anim-links">Decision support</a></li>
+<li><a href="#methods:simulators" class="anim-links">Contaminant transport simulators</a></li>
+<li><a href="#methods:functions" class="anim-links">Test functions</a></li>
+</ul>
+<p><a name="methods:analyses" id="methods:analyses"></a><strong>MADS</strong> includes a wide range of techniques for model-based analyses that can perform local and global exploration of model parameter space:</p>
+<ul>
+  <li><a name="methods:optimization" id="methods:optimization"></a>Optimization techniques for Parameter Estimation (<strong>PE</strong>), Model Inversion, Model Calibration, and Decision Support (<strong>DS</strong>)</li>
+  <ul>
+  <li>Several different implementations of the local Levenberg-Marquardt (<strong>LM</strong>) optimization technique: <a href="http://www.gnu.org/s/gsl/" target="_blank">GSL</a>, <a href="http://www.roguewave.com/products/imsl-numerical-libraries.aspx" target="_blank">IMSL</a>, <a href="http://www.ics.forth.gr/~lourakis/levmar/" target="_blank">LevMar</a>.<br />
+   The Levenberg-Marquardt (<strong>LM</strong>) optimization technique can be performed using <a href="http://link.aps.org/doi/10.1103/PhysRevE.83.036701" target="_blank">acceleration and delayed gratification approaches</a>.<br />
+   In 
+   <strong>LM</strong>, the inversion of Jacobian (sensitivity) matrix can be performed using a wide range of techniques: BK (Bunch and Kaufman), LU, QR, QRLS, Cholesky, and SVD (singular value) decompositions using LAPACK and SVDPACK libraries.<br />
+    <strong>SVD decomposition</strong> allows for highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called <a href="http://www.pesthomepage.org/Highly-parameterized_inversion.php">SVD-assist</a> in <a href="http://www.pesthomepage.org" target="_blank">PEST</a>.  </li>
+  <li>Multi-Start Levenberg-Marquardt (<strong>MSLM</strong>) optimization technique</li>
+  <li>Global Particle Swarm Optimization (<a href="http://clerc.maurice.free.fr/pso/" target="_blank">PSO</a>)</li>
+  <li>Global Adaptive Particle Swarm Optimization <a href="www.particleswarm.info/Tribes_2006_Cooren.pdf" target="_blank">TRIBES</a></li>
+  <li>Global Optimization technique coupling Particle Swarm  and Levenberg-Marquardt optimization technique <a href="papers/squads_v04.pdf" target="_blank">SQUADS</a></li>
+  </ul>
+  <li><a name="methods:sensitivity" id="methods:sensitivity"></a>Sensitivity Analysis (<strong>SA</strong>) techniques</li>
+  <ul>
+  <li>Global Monte-Carlo based analysis</li>
+  <li>Local eigen analysis of Jacobian matrix of model parameters</li>
+  <li><a href="http://www.mlmatrix.com/uploadfile/200712418203522.pdf" target="_blank">Sobol's global sensitivity indices</a></li>
+  <li>Agent-based Global Uncertainty and Sensitivity <a href="papers/Harp &amp; Vesselinov ABAGUS 2011.pdf" target="_blank">ABAGUS</a> analysis</li>
+  </ul>
+  <li><a name="methods:sampling" id="methods:sampling"></a>Sampling (design of experiment) techniques (based on random or user provided seed):</li>
+  <ul>
+  <li>Pseudo random sampling</li>
+  <li>Latin-Hypercube sampling techniques: random, center, edge</li>
+  <li><a href="http://people.sc.fsu.edu/~jburkardt/datasets/ihs/ihs.html" target="_blank">Improved Distributed Hypercube Sampling</a> (<strong>IDLHS</strong>; aka <strong>IHS</strong>)</li>
+  </ul>
+  <li><a name="methods:uncertainty" id="methods:uncertainty"></a>Uncertainty Quantification (<strong>UQ</strong>) techniques</li>
+  <ul>
+  <li>Global Monte-Carlo based analysis</li>
+  <li>Local analysis based on Jacobian matrix of model parameters</li>
+  <li>Agent-based Global Uncertainty and Sensitivity <a href="papers/Harp &amp; Vesselinov ABAGUS 2011.pdf" target="_blank">ABAGUS</a> analysis</li>
+  </ul>
+</ul>
+<a href="#methods:top" class="anim-links">Back to top</a>
+<a name="methods:decision" id="methods:decision"></a><p><strong>MADS</strong> includes methods for Model-based Decision Support (<strong>DS</strong>)</p>
+  <ul>
+  <li>Bayesian  analysis utilizing <a href="http://www.biometris.wur.nl/UK/Staff/Cajo+ter+Braak/Software+and+Data/DE-MC+and+DREAM+software+page/" target="_blank">DREAM</a></li>
+  <li>non-Bayesian  analysis utilizing <a href="http://www.sciencedirect.com/science/article/pii/S0004370206000245">minimax</a>, <a href="papers/Harp &amp; Vesselinov infogap source 2011.pdf" target="_blank">info-gap</a> and <a href="http://www.sciencedirect.com/science/article/pii/S0022169401004218">GLUE</a></li>
+<li>Global Optimization technique coupling Particle Swarm  and Levenberg-Marquardt optimization techniques <a href="papers/squads_v04.pdf" target="_blank">SQUADS</a></li>
+  <li>Agent-based Global Uncertainty and Sensitivity <a href="papers/Harp &amp; Vesselinov ABAGUS 2011.pdf" target="_blank">ABAGUS</a> analysis</li>
+  </ul>
+
+<a name="methods:simulators" id="methods:simulators"></a>
+<p><strong>MADS</strong> includes several analytical simulators for representation of 3D contaminant transport in aquifers. The analytical simulation is based on the solutions developed by <a href="http://pubs.usgs.gov/twri/twri3-b7/">Wexler (1992)</a> and <a href="http://www.sciencedirect.com/science/article/pii/S016977220100136X">Park &amp; Zhan (2001)</a>. The solutions are solved using <a href="http://www.gnu.org/s/gsl/" target="_blank">GSL</a> subroutines. Alternative solutions are available for contaminant sources with different geometry:</p>
+  <ul>
+  <li>point source</li>
+  <li>plane source (along the top of the aquifer)</li>
+  <li>3D box (straight parallelepiped) source </li>
+  </ul>
+  
+<a name="methods:functions" id="methods:functions" ></a>
+<p><strong>MADS</strong> includes a series of test functions that can be applied for efficient testing of model-analysis and decision support techniques. These test functions are commonly used in the practice. The list of all the test functions built-in in <strong>MADS</strong> are listed in the <a href="#manual" class="ajax-links">manual</a></p>
+<a href="#methods:top" class="anim-links">Back to top</a>
+</div>
+</body>
+</html>
