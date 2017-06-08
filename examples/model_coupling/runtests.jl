@@ -85,10 +85,22 @@ md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
 aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 afor = Mads.forward(md)
 
+cwd = pwd()
+cd(workdir)
+md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
+md["Instructions"] = [Dict("ins"=>"external-linearmodel-matrix.inst", "read"=>"model_coupling_matrix.dat")]
+md["Observations"] = Mads.createmadsobservations(10, 2, pretext="l4\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
+ro1 = Mads.readobservations(md)
+md["Observations"] = Mads.createmadsobservations(10, 2, pretext="\n\n\n\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
+ro2 = Mads.readobservations(md)
+Mads.rmfile("external-linearmodel-matrix.inst")
+cd(cwd)
+
 @Base.Test.testset "External" begin
 	@Base.Test.test jfor == sfor
 	@Base.Test.test efor == sfor
 	@Base.Test.test jfor == ifor
+	@Base.Test.test ro1 == ro2
 end
 
 Mads.rmdir(joinpath(workdir, "external-jld_restart"))
