@@ -1,11 +1,9 @@
-Problem: { }
-Solution: internal
 Sources:
 - gauss: {
-  x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, step: 25, min: 210, max: 1460 },
+  x  : { longname: "Source x coordinate [L]", init: 1000, type: null, log: no, min: 210, max: 1460, dist: "Uniform(210,1460)" },
   y  : { longname: "Source y coordinate [L]", init: 1450, type: null, log: no, step: 25, min: 1230, max: 1930 },
   z  : { longname: "Source z coordinate [L]", init: 0, type: null, log: no, step: 1, min: 0, max: 100 },
-  dx : { longname: "Source x dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
+  dx : { longname: "Source x standard deviation [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
   dy : { longname: "Source y dimension [L]", init: 250, type: null, log: no, step: 1, min: 1, max: 500 },
   dz : { longname: "Source z dimension [L]", init: 1, type: null, log: no, step: 1, min: 1, max: 10 },
   f  : { longname: "Contaminant flux [M/T]", init: 50, type: null, log: yes, step: 1e+25, min: 0.01, max: 100 },
