@@ -27,8 +27,8 @@ DataFrames
 ODE
 NMF
 BlackBoxOptim
-Klara 0.7
+Klara 0.8.6
 Optim 0.7
 StatsBase 0.15
-JuMP 0.15
-MathProgBase 0.5.10
+JuMP 0.17
+MathProgBase 0.6.4

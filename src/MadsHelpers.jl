@@ -327,7 +327,7 @@ argtext=Dict("seed"=>"random seed",
 function setseed(seed::Integer=0, quiet::Bool=true)
 	if seed != 0
 		srand(seed)
-		!quiet && info("New seed: $s")
+		!quiet && info("New seed: $seed")
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		!quiet && info("Current seed: $s")
