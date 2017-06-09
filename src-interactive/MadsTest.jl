@@ -1,7 +1,11 @@
+import DocumentFunction
+import Base
+
 """
 Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
 
-$(DocumentFunction.documentfunction(testj))
+$(DocumentFunction.documentfunction(testj;
+argtext=Dict("coverage"=>"[default=`false`]")))
 """
 function testj(coverage::Bool=false)
 	orig_dir = pwd()
@@ -41,9 +45,8 @@ end
 Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)
 
 $(DocumentFunction.documentfunction(test;
-argtext=Dict("testname"=>"name of the test to execute (module or example)"),
-keytext=Dict("madstest"=>"test Mads [default=`true`]",
-             "moduletest"=>"test modules [default=`false`]")))
+argtext=Dict("testname"=>"name of the test to execute \(module or example\)"),
+keytext=Dict("madstest"=>"test Mads [default=`true`]")))
 """
 function test(testname::String=""; madstest::Bool=true)
 	orig_dir = pwd()

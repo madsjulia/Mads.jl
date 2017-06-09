@@ -1,9 +1,15 @@
-@tryimport PkgDev
+@Mads.tryimport PkgDev
+import DocumentFunction
 
 """
-Checks of package is available
+Checks if package is available
 
-$(DocumentFunction.documentfunction(ispkgavailable))
+$(DocumentFunction.documentfunction(ispkgavailable;
+argtext=Dict("modulename"=>"module name")))
+
+Returns:
+
+- `true` or `false`
 """
 function ispkgavailable(modulename::String)
 	flag=false
@@ -19,7 +25,13 @@ end
 """
 Lists modules required by a module (Mads by default)
 
-$(DocumentFunction.documentfunction(required))
+$(DocumentFunction.documentfunction(required;
+argtext=Dict("modulename"=>"module name [default=`\"Mads\"`]",
+            "filtermodule"=>"filter module name")))
+
+Returns:
+
+- filtered modules
 """
 function required(modulename::String="Mads", filtermodule::String="")
 	filename = joinpath(Pkg.dir(modulename), "REQUIRE")
@@ -39,7 +51,13 @@ end
 """
 Lists modules dependents on a module (Mads by default)
 
-$(DocumentFunction.documentfunction(dependents))
+$(DocumentFunction.documentfunction(dependents;
+argtext=Dict("modulename"=>"module name [default=`\"Mads\"`]",
+            "filter"=>"whether to filter modules [default=`false`]")))
+
+Returns:
+
+- modules that are dependents of the input module
 """
 function dependents(modulename::String="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
@@ -57,7 +75,9 @@ end
 """
 Pull (checkout) the latest version of the Mads / Julia modules
 
-$(DocumentFunction.documentfunction(pull))
+$(DocumentFunction.documentfunction(pull;
+argtext=Dict("modulename"=>"module name"),
+keytext=Dict("kw"=>"keyword arguments for calling function \"checkout\"")))
 """
 function pull(modulename::String=""; kw...)
 	checkout(modulename; kw...)
@@ -66,7 +86,14 @@ end
 """
 Checkout (pull) the latest version of the Mads / Julia modules
 
-$(DocumentFunction.documentfunction(checkout))
+$(DocumentFunction.documentfunction(checkout;
+argtext=Dict("modulename"=>"module name"),
+keytext=Dict("git"=>"whether to use \"git checkout\" [default=`true`]",
+            "master"=>"whether on master branch [default=`false`]",
+            "force"=>"whether to overwrite local changes when checkout [default=`false`]",
+            "pull"=>"whether to run \"git pull\" [default=`true`]",
+            "required"=>"whether only checkout Mads.required modules [default=`false`]",
+            "all"=>"whether to checkout all the modules [default=`false`]")))
 """
 function checkout(modulename::String=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
 	if modulename!=""
@@ -118,7 +145,8 @@ end
 """
 Push the latest version of the Mads / Julia modules in the repo
 
-$(DocumentFunction.documentfunction(push))
+$(DocumentFunction.documentfunction(push;
+argtext=Dict("modulename"=>"module name")))
 """
 function push(modulename::String="")
 	if modulename!=""
@@ -143,7 +171,8 @@ end
 """
 Diff the latest version of the Mads / Julia modules in the repo
 
-$(DocumentFunction.documentfunction(push))
+$(DocumentFunction.documentfunction(diff;
+argtext=Dict("modulename"=>"module name")))
 """
 function diff(modulename::String="")
 	if modulename!=""
@@ -167,7 +196,10 @@ end
 """
 Free Mads / Julia modules
 
-$(DocumentFunction.documentfunction(free))
+$(DocumentFunction.documentfunction(free;
+argtext=Dict("modulename"=>"module name"),
+keytext=Dict("required"=>"only free Mads.required modules [default=`false`]",
+            "all"=>"free all the modules [default=`false`]")))
 """
 function free(modulename::String=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
@@ -189,7 +221,9 @@ end
 """
 Commit the latest version of the Mads / Julia modules in the repo
 
-$(DocumentFunction.documentfunction(commit))
+$(DocumentFunction.documentfunction(commit;
+argtext=Dict("commitmsg"=>"commit message",
+            "modulename"=>"module name")))
 """
 function commit(commitmsg::String, modulename::String="")
 	if modulename!=""
@@ -210,11 +244,6 @@ function commit(commitmsg::String, modulename::String="")
 	end
 end
 
-"""
-Status of the Mads modules
-
-$(DocumentFunction.documentfunction(status))
-"""
 function status(; git::Bool=true, gitmore::Bool=false)
 	for i in madsmodules
 		Mads.status(i, git=git, gitmore=gitmore)
@@ -260,6 +289,19 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	end
 end
 
+@doc """
+Status of the Mads modules
+
+$(DocumentFunction.documentfunction(status;
+argtext=Dict("madsmodule"=>"mads module"),
+keytext=Dict("git"=>"[default=`true` or `madsgit`]",
+            "gitmore"=>"[default=`false`]")))
+
+Returns:
+
+- `true` or `false`
+""" status
+
 function tag(sym::Symbol=:patch)
 	for i in madsmodules
 		Mads.tag(i, sym)
@@ -288,13 +330,17 @@ end
 @doc """
 Tag the Mads modules with a default argument `:patch`
 
-$(DocumentFunction.documentfunction(tag))
+$(DocumentFunction.documentfunction(tag;
+argtext=Dict("madsmodule"=>"mads module name",
+            "sym"=>"the argument to tag the mads module with [default=`:patch`]")))
 """ tag
 
 """
 Untag specific version
 
-$(DocumentFunction.documentfunction(untag))
+$(DocumentFunction.documentfunction(untag;
+argtext=Dict("madsmodule"=>"mads module name",
+            "version"=>"version")))
 """
 function untag(madsmodule::String, version::String)
 	cwd = pwd()

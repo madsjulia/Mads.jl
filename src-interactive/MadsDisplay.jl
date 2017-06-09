@@ -1,9 +1,10 @@
-@tryimport Images
+@Mads.tryimport Images
 
 """
 Display image file
 
-$(DocumentFunction.documentfunction(display))
+$(DocumentFunction.documentfunction(display;
+argtext=Dict("filename"=>"image file name")))
 """
 function display(filename::String)
 	if !isfile(filename)
