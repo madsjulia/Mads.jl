@@ -49,7 +49,7 @@ function required(modulename::String="Mads", filtermodule::String="")
 end
 
 """
-Lists modules dependents on a module (Mads by default)
+Lists module dependents on a module (Mads by default)
 
 $(DocumentFunction.documentfunction(dependents;
 argtext=Dict("modulename"=>"module name [default=`\"Mads\"`]",
@@ -143,7 +143,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 end
 
 """
-Push the latest version of the Mads / Julia modules in the repo
+Push the latest version of the Mads / Julia modules in the default remote repository
 
 $(DocumentFunction.documentfunction(push;
 argtext=Dict("modulename"=>"module name")))
@@ -169,7 +169,7 @@ function push(modulename::String="")
 end
 
 """
-Diff the latest version of the Mads / Julia modules in the repo
+Diff the latest version of the Mads / Julia modules in the repository
 
 $(DocumentFunction.documentfunction(diff;
 argtext=Dict("modulename"=>"module name")))
@@ -219,7 +219,7 @@ function free(modulename::String=""; required::Bool=false, all::Bool=false)
 end
 
 """
-Commit the latest version of the Mads / Julia modules in the repo
+Commit the latest version of the Mads / Julia modules in the repository
 
 $(DocumentFunction.documentfunction(commit;
 argtext=Dict("commitmsg"=>"commit message",
@@ -294,25 +294,25 @@ Status of the Mads modules
 
 $(DocumentFunction.documentfunction(status;
 argtext=Dict("madsmodule"=>"mads module"),
-keytext=Dict("git"=>"[default=`true` or `madsgit`]",
-            "gitmore"=>"[default=`false`]")))
+keytext=Dict("git"=>"use git [default=`true` or `Mads.madsgit`]",
+            "gitmore"=>"use even more git [default=`false`]")))
 
 Returns:
 
 - `true` or `false`
 """ status
 
-function tag(sym::Symbol=:patch)
+function tag(versionsym::Symbol=:patch)
 	for i in madsmodules
-		Mads.tag(i, sym)
+		Mads.tag(i, versionsym)
 	end
 end
-function tag(madsmodule::String, sym::Symbol=:patch)
+function tag(madsmodule::String, versionsym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
 		if isdefined(:PkgDev)
 			try
-				PkgDev.tag(madsmodule, sym)
+				PkgDev.tag(madsmodule, versionsym)
 			catch e
 				printerrormsg(e)
 				warn("$madsmodule cannot be tagged!")
@@ -332,7 +332,7 @@ Tag the Mads modules with a default argument `:patch`
 
 $(DocumentFunction.documentfunction(tag;
 argtext=Dict("madsmodule"=>"mads module name",
-            "sym"=>"the argument to tag the mads module with [default=`:patch`]")))
+            "versionsym"=>"version symbol [default=`:patch`]")))
 """ tag
 
 """

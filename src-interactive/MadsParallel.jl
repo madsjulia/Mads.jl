@@ -165,13 +165,13 @@ keytext=Dict("ntasks_per_node"=>"number of parallel tasks per node [default=`0`]
             "nodenames"=>"array with names of machines/nodes to be invoked",
             "mads_servers"=>"if `true` use MADS servers (LANL only) [default=`false`]",
             "test"=>"test the servers and connect to each one ones at a time [default=`false`]",
-            "quiet"=>"suppress output [default=`quietdefault`]",
+            "quiet"=>"suppress output [default=`Mads.quietdefault`]",
             "dir"=>"common directory shared by all the jobs",
             "exename"=>"location of the julia executable (the same version of julia is needed on all the workers)")))
 
 Returns:
 
-- h
+- vector with names of compute nodes (hosts)
 
 Example:
 
@@ -191,12 +191,12 @@ Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/ju
 Parse string with node names defined in SLURM
 
 $(DocumentFunction.documentfunction(parsenodenames;
-argtext=Dict("nodenames"=>"names of machines/nodes",
+argtext=Dict("nodenames"=>"string with node names defined in SLURM",
             "ntasks_per_node"=>"number of parallel tasks per node [default=`1`]")))
 
 Returns:
 
-- string with node names defined in SLURM
+- vector with names of compute nodes (hosts)
 """
 function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 	h = Array{String}(0)
@@ -207,7 +207,7 @@ function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 			push!(h, name)
 		end
 	else
-		cm = split( split(ss[2], "]")[1], ",")
+		cm = split(split(ss[2], "]")[1], ",")
 		for n = 1:length(cm)
 			d = split(cm[n], "-")
 			e = length(d) == 1 ? d[1] : d[2]
