@@ -16,7 +16,7 @@ keytext=Dict("retries"=>"[default=`1`]",
 
 Returns:
 
-- 
+-
 """
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
@@ -55,7 +55,7 @@ keytext=Dict("retries"=>"[default=`1`]",
 
 Returns:
 
-- 
+-
 """
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
@@ -99,7 +99,7 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 end
 
 """
-Matrix Factorization via Levenberg Marquardt
+Matrix Factorization using Levenberg Marquardt
 
 $(DocumentFunction.documentfunction(MFlm;
 argtext=Dict("X"=>"",
@@ -115,7 +115,7 @@ keytext=Dict("mads"=>"[default=`true`]",
 
 Returns:
 
-- 
+-
 """
 function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
 	nP = size(X, 1) # number of observation points
