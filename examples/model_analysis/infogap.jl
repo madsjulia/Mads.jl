@@ -1,10 +1,6 @@
 import Mads
 import Gadfly
 
-if !isdefined(:infogap_jump)
-	include(joinpath(Pkg.dir("Mads"), "src-new", "MadsInfoGap.jl"))
-end
-
 # md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
 Mads.mkdir("infogap_results")
@@ -17,7 +13,7 @@ lmax = Array{Any}(4)
 colors = ["blue", "red", "green", "orange"]
 	models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = a * exp(t * n) + b * t + c"]
 for i = 1:4
-	min, max = infogap_jump_polinomial(model=i, plot=true, horizons=h, retries=10, maxiter=1000, verbosity=0, seed=2015)
+	min, max = Mads.infogap_jump_polinomial(model=i, plot=true, horizons=h, retries=10, maxiter=1000, verbosity=0, seed=2015)
 	lmin[i] = Gadfly.layer(x=min, y=h, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[i])))
 	lmax[i] = Gadfly.layer(x=max, y=h, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[i])))
 end

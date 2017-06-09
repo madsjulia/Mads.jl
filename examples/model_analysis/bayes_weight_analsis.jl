@@ -1,6 +1,6 @@
 import Mads
 import Gadfly
-md = Mads.loadmadsfile("models/internal-polynomial.mads")
+md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
 
 Mads.mkdir("bayes_results")
 

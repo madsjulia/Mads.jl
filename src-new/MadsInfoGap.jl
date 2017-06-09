@@ -248,7 +248,7 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_polinomial))
 """
-function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver::MathProgBase.DefaultNLPSolver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
+function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -381,7 +381,7 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_lin))
 """
-function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, solver=MathProgBase.defaultNLPsolver, seed::Integer=0, pinit::Vector=[])
+function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [1.,0.]
