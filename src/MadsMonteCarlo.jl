@@ -22,7 +22,8 @@ function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::In
 		alpha = (1 - sigma ^ 2 - sigma ^ 2 * ((1 - mu) / mu) - mu) / (sigma ^ 2 + 2 * sigma ^ 2 * ((1 - mu) / mu) + sigma ^ 2 * ((1 - mu) / mu) ^ 2)
 		beta = alpha * ((1 - mu) / mu)
 		d = Distributions.Beta(alpha, beta)
-		for j = 1:numwalkers
+		p0[i, 1] = pinit[i]
+		for j = 2:numwalkers
 			p0[i, j] = pmin[i] + rand(d) * (pmax[i] - pmin[i])
 		end
 	end
