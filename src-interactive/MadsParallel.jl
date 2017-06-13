@@ -165,7 +165,7 @@ keytext=Dict("ntasks_per_node"=>"number of parallel tasks per node [default=`0`]
             "nodenames"=>"array with names of machines/nodes to be invoked",
             "mads_servers"=>"if `true` use MADS servers (LANL only) [default=`false`]",
             "test"=>"test the servers and connect to each one ones at a time [default=`false`]",
-            "quiet"=>"suppress output [default=`Mads.quietdefault`]",
+            "quiet"=>"suppress output [default=`Mads.quiet`]",
             "dir"=>"common directory shared by all the jobs",
             "exename"=>"location of the julia executable (the same version of julia is needed on all the workers)")))
 

@@ -11,7 +11,7 @@ keytext=Dict("algorithm"=>"[default=`:LD_LBFGS`]")))
 
 Returns:
 
-- 
+- optimization results
 """
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
