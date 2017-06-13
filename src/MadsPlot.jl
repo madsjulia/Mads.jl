@@ -1136,7 +1136,11 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 		filename = "$(rootname)-jacobian" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
+		try
+			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
+		catch
+			madswarn("Gadfly could not plot!")
+		end
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	Cin = readdlm("$(filenameroot)-covariance.dat")
