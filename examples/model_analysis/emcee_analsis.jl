@@ -2,19 +2,19 @@ import Mads
 import Gadfly
 md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
 
-Mads.mkdir("bayes_results")
+Mads.mkdir("emcee_results")
 
-info("Bayesian analysis with different initial parameter sets and observation weights (standard deviation errors)")
-info("Bayesian analysis for the initial parameter guesses:")
+info("AffineInvariantMCMC (EMCEE) Bayesian analysis with different initial parameter sets and observation weights (standard deviation errors)")
+info("AffineInvariantMCMC (EMCEE) Bayesian analysis for the initial parameter guesses:")
 for w = (1000000, 1000, 1)
 	Mads.setobsweights!(md, w)
-	mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
-	Mads.scatterplotsamples(md, mcmcchain.value', "bayes_results/bayes_init_w$w.png")
-	o = Mads.forward(md, mcmcchain.value)
-	Mads.spaghettiplot(md, o, filename="bayes_results/bayes_init_w$(w)_spaghetti.png")
+	chain, llhoods  = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
+	Mads.scatterplotsamples(md, chain', "emcee_results/emcee_init_w$w.png")
+	o = Mads.forward(md, chain')
+	Mads.spaghettiplot(md, o, filename="emcee_results/emcee_init_w$(w)_spaghetti.png")
 	@printf "Init: Observation Weight %d StdDev %f ->`o5` prediction: min = %f max = %f\n" w 1/w min(o[:,5]...) max(o[:,5]...)
 	f = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-	Gadfly.draw(Gadfly.PNG("bayes_results/bayes_init_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), f)
+	Gadfly.draw(Gadfly.PNG("emcee_results/emcee_init_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), f)
 end
 pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 
@@ -36,18 +36,18 @@ pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 optnames = ["n0", "n1", "n01"]
 v = [in0, in1, in01]
 
-info("Bayesian analysis for the 3 different global optima")
+info("AffineInvariantMCMC (EMCEE)  Bayesian analysis for the 3 different global optima")
 for i = 1:3
 	Mads.setparamsinit!(md, r[v[i],3])
 	for w = (1000000, 1000, 1)
 		Mads.setobsweights!(md, w)
-		mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
-		Mads.scatterplotsamples(md, mcmcchain.value', "bayes_results/bayes_opt_$(optnames[i])_w$w.png")
-		o = Mads.forward(md, mcmcchain.value)
-		Mads.spaghettiplot(md, o, filename="bayes_results/bayes_opt_$(optnames[i])_w$(w)_spaghetti.png")
+		chain, llhoods  = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
+		Mads.scatterplotsamples(md, chain', "emcee_results/emcee_opt_$(optnames[i])_w$w.png")
+		o = Mads.forward(md, chain')
+		Mads.spaghettiplot(md, o, filename="emcee_results/emcee_opt_$(optnames[i])_w$(w)_spaghetti.png")
 		@printf "O%-3s: Observation Weight %d StdDev %f -> `o5` prediction: min = %f max = %f\n" optnames[i] w 1/w min(o[:,5]...) max(o[:,5]...)
 		f = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-		Gadfly.draw(Gadfly.PNG("bayes_results/bayes_opt_$(optnames[i])_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), f)
+		Gadfly.draw(Gadfly.PNG("emcee_results/emcee_opt_$(optnames[i])_w$(w)_o5.png", 6Gadfly.inch, 4Gadfly.inch), f)
 	end
 end
 Mads.setparamsinit!(md, pinit)
