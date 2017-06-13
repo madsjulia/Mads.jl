@@ -168,7 +168,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
+		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
