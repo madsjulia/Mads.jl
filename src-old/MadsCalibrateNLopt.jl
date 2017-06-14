@@ -3,7 +3,7 @@ import DocumentFunction
 
 # NLopt is too much of a pain to install at this point
 """
-Do a calibration using NLopt
+Calibrate using NLopt
 
 $(DocumentFunction.documentfunction(calibratenlopt;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),

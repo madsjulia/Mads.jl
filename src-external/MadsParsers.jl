@@ -5,7 +5,7 @@ import DocumentFunction
 Parse Amanzi output provided in an external file (`filename`)
 
 $(DocumentFunction.documentfunction(amanzi_output_parser;
-argtext=Dict("filename"=>"external file name (optional) [default=`\"observations.out\"`]")))
+argtext=Dict("filename"=>"external file name [default=`\"observations.out\"`]")))
 
 Returns:
 

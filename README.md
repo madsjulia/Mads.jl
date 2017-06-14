@@ -49,7 +49,8 @@ Pkg.add("Mads")
 Installation of MADS behind a firewall
 ------------------------------
 
-Julia uses git for package management. Add in the `.gitconfig` file in your home directory:
+Julia uses git for package management.
+Add in the `.gitconfig` file in your home directory to support git behind a firewall:
 
 ```
 [url "https://"]
@@ -62,7 +63,7 @@ or execute:
 git config --global url."https://".insteadOf git://
 ```
 
-Set proxies:
+Set proxies executing the following lines in the bash command-line environment:
 
 ```
 export ftp_proxy=http://proxyout.<your_site>:8080
@@ -72,8 +73,7 @@ export https_proxy=http://proxyout.<your_site>:8080
 export no_proxy=.<your_site>
 ```
 
-For example, if you are doing this at LANL, you will need to execute the
-following lines in your bash command-line environment:
+For example, at LANL, you will need to execute the following lines in the bash command-line environment:
 
 ```
 export ftp_proxy=http://proxyout.lanl.gov:8080
@@ -89,7 +89,7 @@ MADS examples
 In Julia REPL, do the following commands:
 
 ```julia
-import Mads
+reload("Mads")
 ```
 
 To explore getting-started instructions, execute:

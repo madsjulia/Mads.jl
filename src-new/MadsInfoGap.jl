@@ -1,11 +1,10 @@
+import DocumentFunction
 import JuMP
 import MathProgBase
 @Mads.tryimport Ipopt
 if !haskey(ENV, "MADS_NO_GADFLY")
 	@Mads.tryimport Gadfly
 end
-
-import DocumentFunction
 
 """
 Information Gap Decision Analysis using JuMP
