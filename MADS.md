@@ -50,3 +50,10 @@ Builds & Tests
 [![Coverage Status](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 
 LA-CC-15-080
+
+Developers
+----------
+
+* [Velimir (monty)](http://ees.lanl.gov/monty) [Vesselinov](http://www.lanl.gov/orgs/ees/staff/monty) [(pubs)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ)
+* [Dan O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(pubs)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
+* [see also](https://github.com/madsjulia/Mads.jl/graphs/contributors)
