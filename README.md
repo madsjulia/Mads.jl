@@ -117,6 +117,13 @@ to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
 Developers
 ==========
 
-* [Velimir (monty)](http://ees.lanl.gov/monty) [Vesselinov](http://www.lanl.gov/orgs/ees/staff/monty) [(pubs)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ)
-* [Dan O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(pubs)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
+* [Velimir (monty) Vesselinov](http://www.lanl.gov/orgs/ees/staff/monty) [(publications)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ)
+* [Daniel O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(publications)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
 * [see also](https://github.com/madsjulia/Mads.jl/graphs/contributors)
+
+Publications, Presentations, Projects
+=====================================
+
+* [mads.lanl.gov/](http://mads.lanl.gov/)
+* [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
+
