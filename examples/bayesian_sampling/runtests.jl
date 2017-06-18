@@ -12,7 +12,7 @@ end
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
 
-mcmcchains_emcee = Mads.emceesampling(md; numwalkers=1, nsteps=10, burnin=2, thinning=1, seed=2016)
+mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=2, seed=2016)
 
 if isdefined(Klara, :BasicContMuvParameter)
 	Mads.bayessampling(md, 1; nsteps=1, burnin=1, thinning=1)
