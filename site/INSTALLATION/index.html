@@ -674,7 +674,8 @@
 
 
 <h2 id="installation-of-mads-without-python">Installation of MADS without PYTHON</h2>
-<p>MADS uses PyYAML and matplotlib. To avoid using these libraries set the following environmental variable:</p>
+<p>MADS uses PyYAML and matplotlib.
+To avoid using these libraries set the following environmental variable:</p>
 <p>(bash)</p>
 <div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">MADS_NO_PYTHON</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 </pre></div>
@@ -686,8 +687,15 @@
 </pre></div>
 
 
+<p>or</p>
+<p>(julia)</p>
+<div class="codehilite"><pre><span></span><span class="nb">ENV</span><span class="p">[</span><span class="s">&quot;MADS_NO_PYTHON&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+
+
 <h2 id="installation-of-mads-without-plotting-modules">Installation of MADS without plotting modules</h2>
-<p>MADS uses Gadfly and matplotlib for plotting. To avoid using these libraries set the following environmental variable:</p>
+<p>MADS uses Gadfly and matplotlib for plotting.
+To avoid using these modules set the following environmental variable:</p>
 <p>(bash)</p>
 <div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">MADS_NO_PLOT</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
 </pre></div>
@@ -699,34 +707,40 @@
 </pre></div>
 
 
+<p>or</p>
+<p>(julia)</p>
+<div class="codehilite"><pre><span></span><span class="nb">ENV</span><span class="p">[</span><span class="s">&quot;MADS_NO_PLOT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</pre></div>
+
+
 <h2 id="installation-of-mads-behind-a-firewall">Installation of MADS behind a firewall</h2>
-<p>Julia uses git for package management. Add in the <code>.gitconfig</code> file in your home directory:</p>
+<p>ulia uses git for package management.
+Add in the <code>.gitconfig</code> file in your home directory to support git behind a firewall:</p>
 <div class="codehilite"><pre><span></span><span class="k">[url &quot;https://&quot;]</span>
         <span class="na">insteadOf</span> <span class="o">=</span> <span class="s">git://</span>
 </pre></div>
 
 
 <p>or execute:</p>
-<div class="codehilite"><pre><span></span>git config --global url.<span class="s2">&quot;https://&quot;</span>.insteadOf git://
+<div class="codehilite"><pre><span></span>git config --global url.&quot;https://&quot;.insteadOf git://
 </pre></div>
 
 
-<p>Set proxies:</p>
-<div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">ftp_proxy</span><span class="o">=</span>http://proxyout.&lt;your_site&gt;:8080
-<span class="nb">export</span> <span class="nv">rsync_proxy</span><span class="o">=</span>http://proxyout.&lt;your_site&gt;:8080
-<span class="nb">export</span> <span class="nv">http_proxy</span><span class="o">=</span>http://proxyout.&lt;your_site&gt;:8080
-<span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span>http://proxyout.&lt;your_site&gt;:8080
-<span class="nb">export</span> <span class="nv">no_proxy</span><span class="o">=</span>.&lt;your_site&gt;
+<p>Set proxies executing the following lines in the bash command-line environment:</p>
+<div class="codehilite"><pre><span></span>export ftp_proxy=http://proxyout.&lt;your_site&gt;:8080
+export rsync_proxy=http://proxyout.&lt;your_site&gt;:8080
+export http_proxy=http://proxyout.&lt;your_site&gt;:8080
+export https_proxy=http://proxyout.&lt;your_site&gt;:8080
+export no_proxy=.&lt;your_site&gt;
 </pre></div>
 
 
-<p>For example, if you are doing this at LANL, you will need to execute the
-following lines in your bash command-line environment:</p>
-<div class="codehilite"><pre><span></span><span class="nb">export</span> <span class="nv">ftp_proxy</span><span class="o">=</span>http://proxyout.lanl.gov:8080
-<span class="nb">export</span> <span class="nv">rsync_proxy</span><span class="o">=</span>http://proxyout.lanl.gov:8080
-<span class="nb">export</span> <span class="nv">http_proxy</span><span class="o">=</span>http://proxyout.lanl.gov:8080
-<span class="nb">export</span> <span class="nv">https_proxy</span><span class="o">=</span>http://proxyout.lanl.gov:8080
-<span class="nb">export</span> <span class="nv">no_proxy</span><span class="o">=</span>.lanl.gov
+<p>For example, at LANL, you will need to execute the following lines in the bash command-line environment:</p>
+<div class="codehilite"><pre><span></span>export ftp_proxy=http://proxyout.lanl.gov:8080
+export rsync_proxy=http://proxyout.lanl.gov:8080
+export http_proxy=http://proxyout.lanl.gov:8080
+export https_proxy=http://proxyout.lanl.gov:8080
+export no_proxy=.lanl.gov
 </pre></div>
                 
                   

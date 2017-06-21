@@ -1,22 +1,22 @@
+import DocumentFunction
 import NMF
 import JuMP
 import Optim
 @Mads.tryimport Ipopt
-import DocumentFunction
 
 """
 Non-negative Matrix Factorization using NMF
 
 $(DocumentFunction.documentfunction(NMFm;
-argtext=Dict("X"=>"",
-            "nk"=>""),
-keytext=Dict("retries"=>"[default=`1`]",
-            "tol"=>"[default=`1.0e-9`]",
-            "maxiter"=>"[default=`10000`]")))
+argtext=Dict("X"=>"matrix to factorize",
+            "nk"=>"number of features to extract"),
+keytext=Dict("retries"=>"number of solution retries [default=`1`]",
+            "tol"=>"solution tolerance [default=`1.0e-9`]",
+            "maxiter"=>"maximum number of iterations [default=`10000`]")))
 
 Returns:
 
--
+- NMF results
 """
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
@@ -41,21 +41,21 @@ end
 Non-negative Matrix Factorization using JuMP/Ipopt
 
 $(DocumentFunction.documentfunction(NMFipopt;
-argtext=Dict("X"=>"",
-            "nk"=>""),
-keytext=Dict("retries"=>"[default=`1`]",
-            "tol"=>"[default=`1.0e-9`]",
-            "random"=>"[default=`false`]",
-            "maxiter"=>"[default=`100000`]",
-            "maxguess"=>"[default=`1`]",
-            "initW"=>"",
-            "initH"=>"",
-            "verbosity"=>"[default=`0`]",
-            "quiet"=>"[default=`false`]")))
+argtext=Dict("X"=>"matrix to factorize",
+            "nk"=>"number of features to extract"),
+keytext=Dict("retries"=>"number of solution retries [default=`1`]",
+            "tol"=>"solution tolerance [default=`1.0e-9`]",
+            "random"=>"random initial guesses [default=`false`]",
+            "maxiter"=>"maximum number of iterations [default=`100000`]",
+            "maxguess"=>"guess about the maximum for the H (feature) matrix [default=`1`]",
+            "initW"=>"initial W (weight) matrix",
+            "initH"=>"initial H (feature) matrix",
+            "verbosity"=>"verbosity output level [default=`0`]",
+            "quiet"=>"quiet [default=`false`]")))
 
 Returns:
 
--
+- NMF results
 """
 function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
@@ -102,20 +102,20 @@ end
 Matrix Factorization using Levenberg Marquardt
 
 $(DocumentFunction.documentfunction(MFlm;
-argtext=Dict("X"=>"",
-            "nk"=>""),
-keytext=Dict("mads"=>"[default=`true`]",
-            "log_W"=>"[default=`false`]",
-            "log_H"=>"[default=`false`]",
-            "retries"=>"[default=`1`]",
-            "tol"=>"[default=`1.0e-9`]",
-            "maxiter"=>"[default=`10000`]",
-            "initW"=>"",
-            "initH"=>"")))
+argtext=Dict("X"=>"matrix to factorize",
+            "nk"=>"number of features to extract"),
+keytext=Dict("mads"=>"use MADS Levenberg-Marquardt algorithm [default=`true`]",
+            "log_W"=>"log-transform W (weight) matrix [default=`false`]",
+            "log_H"=>"log-transform H (feature) matrix[default=`false`]",
+            "retries"=>"number of solution retries [default=`1`]",
+            "tol"=>"solution tolerance [default=`1.0e-9`]",
+            "maxiter"=>"maximum number of iterations [default=`10000`]",
+            "initW"=>"initial W (weight) matrix",
+            "initH"=>"initial H (feature) matrix")))
 
 Returns:
 
--
+- NMF results
 """
 function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
 	nP = size(X, 1) # number of observation points

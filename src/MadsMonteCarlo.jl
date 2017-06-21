@@ -22,7 +22,8 @@ function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::In
 		alpha = (1 - sigma ^ 2 - sigma ^ 2 * ((1 - mu) / mu) - mu) / (sigma ^ 2 + 2 * sigma ^ 2 * ((1 - mu) / mu) + sigma ^ 2 * ((1 - mu) / mu) ^ 2)
 		beta = alpha * ((1 - mu) / mu)
 		d = Distributions.Beta(alpha, beta)
-		for j = 1:numwalkers
+		p0[i, 1] = pinit[i]
+		for j = 2:numwalkers
 			p0[i, j] = pmin[i] + rand(d) * (pmax[i] - pmin[i])
 		end
 	end
@@ -33,8 +34,16 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, div(burnin, numwalkers), 1)
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], div(nsteps, numwalkers), thinning)
+	newnsteps = div(burnin, numwalkers)
+	if newnsteps < 2
+		newnsteps = 2
+	end
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1)
+	newnsteps = div(nsteps, numwalkers)
+	if newnsteps < 2
+		newnsteps = 2
+	end
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning)
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
@@ -43,8 +52,8 @@ Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Car
 
 $(DocumentFunction.documentfunction(emceesampling;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "p0"=>"initial parameters (matrix of size (length(optparams), numwalkers))"),
-keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors) [default=`10`]",
+            "p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
+keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors; in general, the higher the number of walkers, the better the results and computational time [default=`10`]",
             "nsteps"=>"number of final realizations in the chain [default=`100`]",
             "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
             "thinning"=>"removal of any `thinning` realization [default=`1`]",

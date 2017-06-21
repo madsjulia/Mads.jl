@@ -3,7 +3,7 @@ import DocumentFunction
 
 # NLopt is too much of a pain to install at this point
 """
-Do a calibration using NLopt
+Calibrate using NLopt
 
 $(DocumentFunction.documentfunction(calibratenlopt;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
@@ -11,7 +11,7 @@ keytext=Dict("algorithm"=>"[default=`:LD_LBFGS`]")))
 
 Returns:
 
-- 
+- optimization results
 """
 function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)

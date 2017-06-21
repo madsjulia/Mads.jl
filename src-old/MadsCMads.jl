@@ -2,7 +2,7 @@ import DataStructures
 import DocumentFunction
 
 """
-Read observations using C Mads library
+Read observations using C MADS dynamic library
 
 $(DocumentFunction.documentfunction(readobservations_cmads;
 argtext=Dict("madsdata"=>"Mads problem dictionary")))
@@ -25,7 +25,7 @@ function readobservations_cmads(madsdata::Associative)
 end
 
 """
-Call C MADS ins_obs() function from the MADS dynamic library
+Call C MADS ins_obs() function from MADS dynamic library
 
 $(DocumentFunction.documentfunction(cmadsins_obs;
 argtext=Dict("obsid"=>"observation id",

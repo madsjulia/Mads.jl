@@ -43,7 +43,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=Mads.nprocs_per_task, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array{String}(0)
 	if length(nodenames) > 0 || mads_servers
@@ -155,17 +155,17 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=1, node
 end
 
 @doc """
-Set the available processors based on environmental variables. Supports SLURM only at the moment.
+Set the available processors based on environmental variables (supports SLURM only at the moment)
 
 $(DocumentFunction.documentfunction(setprocs;
-argtext=Dict("np"=>"number of processors",
-            "nt"=>"number of threads"),
+argtext=Dict("np"=>"number of processors [default=`1`]",
+            "nt"=>"number of threads[default=`1`]"),
 keytext=Dict("ntasks_per_node"=>"number of parallel tasks per node [default=`0`]",
-            "nprocs_per_task"=>"number of processors needed for each parallel task at each node [default=`1`]",
+            "nprocs_per_task"=>"number of processors needed for each parallel task at each node [default=`Mads.nprocs_per_task`]",
             "nodenames"=>"array with names of machines/nodes to be invoked",
             "mads_servers"=>"if `true` use MADS servers (LANL only) [default=`false`]",
             "test"=>"test the servers and connect to each one ones at a time [default=`false`]",
-            "quiet"=>"suppress output [default=`Mads.quietdefault`]",
+            "quiet"=>"suppress output [default=`Mads.quiet`]",
             "dir"=>"common directory shared by all the jobs",
             "exename"=>"location of the julia executable (the same version of julia is needed on all the workers)")))
 
@@ -181,6 +181,7 @@ Mads.setprocs(4)
 Mads.setprocs(4, 8)
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=32, mads_servers=true)
+Mads.setprocs(ntasks_per_node=64, nodenames=Mads.madsservers)
 Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
 Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
 Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
@@ -268,13 +269,13 @@ Run remote command on a series of servers
 
 $(DocumentFunction.documentfunction(runremote;
 argtext=Dict("cmd"=>"remote command",
-            "nodenames"=>"names of machines/nodes [default=`madsservers`]")))
+            "nodenames"=>"names of machines/nodes [default=`Mads.madsservers`]")))
 
 Returns:
 
 - output of running remote command
 """
-function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
+function runremote(cmd::String, nodenames::Array{String,1}=Mads.madsservers)
 	output = Array{String}(0)
 	for i in nodenames
 		try
@@ -294,9 +295,9 @@ end
 Check the number of processors on a series of servers
 
 $(DocumentFunction.documentfunction(madscores;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
 """
-function madscores(nodenames::Array{String,1}=madsservers)
+function madscores(nodenames::Array{String,1}=Mads.madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
@@ -304,9 +305,9 @@ end
 Check the uptime of a series of servers
 
 $(DocumentFunction.documentfunction(madsup;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
 """
-function madsup(nodenames::Array{String,1}=madsservers)
+function madsup(nodenames::Array{String,1}=Mads.madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
 end
 
@@ -314,8 +315,8 @@ end
 Check the load of a series of servers
 
 $(DocumentFunction.documentfunction(madsload;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
 """
-function madsload(nodenames::Array{String,1}=madsservers)
+function madsload(nodenames::Array{String,1}=Mads.madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
 end

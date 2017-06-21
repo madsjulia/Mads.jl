@@ -73,7 +73,7 @@ function dependents(modulename::String="Mads", filter::Bool=false)
 end
 
 """
-Pull (checkout) the latest version of the Mads / Julia modules
+Pull (checkout) the latest version of Mads modules
 
 $(DocumentFunction.documentfunction(pull;
 argtext=Dict("modulename"=>"module name"),
@@ -84,7 +84,7 @@ function pull(modulename::String=""; kw...)
 end
 
 """
-Checkout (pull) the latest version of the Mads / Julia modules
+Checkout (pull) the latest version of Mads modules
 
 $(DocumentFunction.documentfunction(checkout;
 argtext=Dict("modulename"=>"module name"),
@@ -143,7 +143,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 end
 
 """
-Push the latest version of the Mads / Julia modules in the default remote repository
+Push the latest version of Mads modules in the default remote repository
 
 $(DocumentFunction.documentfunction(push;
 argtext=Dict("modulename"=>"module name")))
@@ -169,7 +169,7 @@ function push(modulename::String="")
 end
 
 """
-Diff the latest version of the Mads / Julia modules in the repository
+Diff the latest version of Mads modules in the repository
 
 $(DocumentFunction.documentfunction(diff;
 argtext=Dict("modulename"=>"module name")))
@@ -194,7 +194,7 @@ function diff(modulename::String="")
 end
 
 """
-Free Mads / Julia modules
+Free Mads modules
 
 $(DocumentFunction.documentfunction(free;
 argtext=Dict("modulename"=>"module name"),
@@ -219,7 +219,7 @@ function free(modulename::String=""; required::Bool=false, all::Bool=false)
 end
 
 """
-Commit the latest version of the Mads / Julia modules in the repository
+Commit the latest version of Mads modules in the repository
 
 $(DocumentFunction.documentfunction(commit;
 argtext=Dict("commitmsg"=>"commit message",
@@ -290,7 +290,7 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 end
 
 @doc """
-Status of the Mads modules
+Status of Mads modules
 
 $(DocumentFunction.documentfunction(status;
 argtext=Dict("madsmodule"=>"mads module"),
@@ -328,7 +328,7 @@ function tag(madsmodule::String, versionsym::Symbol=:patch)
 end
 
 @doc """
-Tag the Mads modules with a default argument `:patch`
+Tag Mads modules with a default argument `:patch`
 
 $(DocumentFunction.documentfunction(tag;
 argtext=Dict("madsmodule"=>"mads module name",

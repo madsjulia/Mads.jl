@@ -1,3 +1,4 @@
+import DocumentFunction
 import JuMP
 import MathProgBase
 @Mads.tryimport Ipopt
@@ -5,19 +6,17 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	@Mads.tryimport Gadfly
 end
 
-import DocumentFunction
-
 """
 Information Gap Decision Analysis using JuMP
 
 $(DocumentFunction.documentfunction(infogap_jump;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"[default=`\[0.05, 0.1, 0.2, 0.5\]`]",
-            "retries"=>"[default=`1`]",
-            "random"=>"[default=`false`]",
-            "maxiter"=>"[default=`3000`]",
-            "verbosity"=>"[default=`0`]",
-            "seed"=>"[default=`0`]")))
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+            "retries"=>"number of solution retries [default=`1`]",
+            "random"=>"random initial guesses [default=`false`]",
+            "maxiter"=>"maximum number of iterations [default=`3000`]",
+            "verbosity"=>"verbosity output level [default=`0`]",
+            "seed"=>"random seed [default=`0`]")))
 """
 function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
 	setseed(seed, quiet)
@@ -109,15 +108,15 @@ Information Gap Decision Analysis using JuMP
 
 $(DocumentFunction.documentfunction(infogap_jump_polinomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"[default=`\[0.05, 0.1, 0.2, 0.5\]`]",
-            "retries"=>"[default=`1`]",
-            "random"=>"[default=`false`]",
-            "maxiter"=>"[default=`3000`]",
-            "verbosity"=>"[default=`0`]",
-            "quiet"=>"[default=`false`]",
-            "plot"=>"[default=`false`]",
-            "model"=>"[default=`1`]",
-            "seed"=>"[default=`0`]")))
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+            "retries"=>"number of solution retries [default=`1`]",
+            "random"=>"random initial guesses [default=`false`]",
+            "maxiter"=>"maximum number of iterations [default=`3000`]",
+            "verbosity"=>"verbosity output level [default=`0`]",
+            "quiet"=>"quiet [default=`false`]",
+            "plot"=>"activate plotting [default=`false`]",
+            "model"=>"model id [default=`1`]",
+            "seed"=>"random seed [default=`0`]")))
 
 Returns:
 
@@ -271,14 +270,13 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_polinomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"[default=`\[0.05, 0.1, 0.2, 0.5\]`]",
-            "retries"=>"[default=`1`]",
-            "random"=>"[default=`false`]",
-            "maxiter"=>"[default=`3000`]",
-            "verbosity"=>"[default=`0`]",
-            "seed"=>"[default=`0`]",
-            "pinit"=>"")))
-
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+            "retries"=>"number of solution retries [default=`1`]",
+            "random"=>"random initial guesses [default=`false`]",
+            "maxiter"=>"maximum number of iterations [default=`3000`]",
+            "verbosity"=>"verbosity output level [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
+            "pinit"=>"vector with initial parameters")))
 """
 function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)
@@ -413,13 +411,13 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_lin;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"[default=`\[0.05, 0.1, 0.2, 0.5\]`]",
-            "retries"=>"[default=`1`]",
-            "random"=>"[default=`false`]",
-            "maxiter"=>"[default=`3000`]",
-            "verbosity"=>"[default=`0`]",
-            "seed"=>"[default=`0`]",
-            "pinit"=>"")))
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+            "retries"=>"number of solution retries [default=`1`]",
+            "random"=>"random initial guesses [default=`false`]",
+            "maxiter"=>"maximum number of iterations [default=`3000`]",
+            "verbosity"=>"verbosity output level [default=`0`]",
+            "seed"=>"random seed [default=`0`]",
+            "pinit"=>"vector with initial parameters")))
 """
 function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
 	setseed(seed, quiet)

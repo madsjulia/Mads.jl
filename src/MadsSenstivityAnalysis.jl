@@ -140,6 +140,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	else
 		param = par
 	end
+	nO = length(obskeys)
 	if sizeof(J) == 0
 		g = makelocalsafunction(madsdata)
 		if sinspace
@@ -168,13 +169,17 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete,
+		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 		filename = "$(rootname)-jacobian" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 12Gadfly.inch), jacmat)
+		try
+			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
+		catch
+			madswarn("Gadfly could not plot!")
+		end
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	JpJ = J' * J
@@ -215,7 +220,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenmatrix" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename,6Gadfly.inch,6Gadfly.inch), eigenmat)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP), eigenmat)
 		Mads.madsinfo("Eigen matrix plot saved in $filename")
 		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 					Gadfly.Geom.bar,
@@ -223,7 +228,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenvalues" * ext
 		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), eigenval)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
 	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
