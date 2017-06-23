@@ -37,7 +37,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 		Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
 		Gadfly.Scale.color_discrete_manual("red", "blue", "green", "cyan", "magenta", "yellow"))
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
-	if typeof(p) == Gadfly.Plot{}
+	if typeof(p) == Gadfly.Plot
 		p
 	end
 end
