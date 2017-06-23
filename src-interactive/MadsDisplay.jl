@@ -1,3 +1,4 @@
+import Gadfly
 @Mads.tryimport Images
 
 """
@@ -51,4 +52,9 @@ function display(filename::String)
 			end
 		end
 	end
+end
+
+function display(p::Gadfly.Plot)
+	Base.display(p)
+	println()
 end
