@@ -85,8 +85,8 @@ function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Inte
 	end
 	mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
 	model = Klara.likelihood_model(mcparams, false)
-	# sampler = Klara.MH(fill(1e-1, length(initvals)))
-	sampler = Klara.RAM(fill(1e-1, length(initvals)))
+	sampler = Klara.MH(fill(1e-1, length(initvals)))
+	# sampler = Klara.RAM(fill(1e-1, length(initvals)))
 	mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
 	mcparams0 = Dict(:p=>initvals)
 	outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])

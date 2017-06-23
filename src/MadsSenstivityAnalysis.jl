@@ -755,7 +755,7 @@ function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restar
 			yCnonan = isnan.(yC[:,j])
 			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
 			yT = vcat( yA[nonan,j], yB[nonan,j] ) # this should not include C
-			nanindices = find(~nonan)
+			nanindices = find(map(~, nonan))
 			# println("$nanindices")
 			nnans = length(nanindices)
 			if nnans > maxnnans

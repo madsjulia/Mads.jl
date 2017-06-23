@@ -184,7 +184,7 @@ function diff(modulename::String="")
 		cwd = pwd()
 		cd(Pkg.dir(i))
 		try
-			run(`git diff --word-diff *.jl`)
+			run(`git diff --word-diff "*.jl"`)
 		catch e
 			printerrormsg(e)
 			warn("$i cannot be diffed!")

@@ -11,7 +11,7 @@ function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 sec
 end
 function checknodedir(dir::String, waittime::Float64=10.) # 10 seconds
 	if is_windows()
-		proc = spawn(`cmd /C dir $dir)`)
+		proc = spawn(`cmd /C dir $dir`)
 	elseif Mads.madsbash
 		proc = spawn(`bash -c "ls $dir; julia -p 2 -e '@everywhere @show pwd()' > julia-test.out"`)
 	else
