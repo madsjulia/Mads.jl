@@ -31,13 +31,13 @@ function testme2(init::Vector, targets::Vector)
 	function myf2(a...)
 		sum((collect(a).-targets).^2)
 	end
-	result = wrapppertestme2(Val{nvar}, init, myf2)
+	result = generatedtestme2(Val{nvar}, init, myf2)
 	@show result
 	@show targets
 	return result
 end
 
-@generated function wrapppertestme2{nvar}(::Type{Val{nvar}}, init::Vector, myf2::Function)
+@generated function generatedtestme2{nvar}(::Type{Val{nvar}}, init::Vector, myf2::Function)
 	myfcall = macroexpand(:(@Base.Cartesian.ncall $nvar myf2 i->x[i]))
 	q = quote
 		nvar = length(init)
