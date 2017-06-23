@@ -22,4 +22,22 @@ function testme()
 	JuMP.solve(m)
 end
 
-testme()
+@generated function testme2{nvar}(::Type{Val{nvar}}, t::Vector)
+	myfcall = macroexpand(:(@Base.Cartesian.ncall $nvar myf i->x[i]))
+	q = quote
+		nvar = length(t)
+		function myf(a...)
+			sum((collect(a).-t).^2)
+		end
+		m = JuMP.Model(solver=Ipopt.IpoptSolver())
+		JuMP.register(m, :myf, nvar, myf, autodiff=true)
+		@JuMP.variable(m, x[1:nvar], start=rand())
+		@JuMP.NLobjective(m, Min, $myfcall)
+		JuMP.solve(m)
+		return JuMP.getvalue(x)
+	end
+	return q
+end
+
+testme2(Val{12}, rand(12))
+# testme()
