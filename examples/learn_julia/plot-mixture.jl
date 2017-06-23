@@ -1,9 +1,13 @@
-
 import DataFrames
 import Gadfly
 import rMF
 
+cwd = pwd()
+
+cd(joinpath(rMF.rmfdir, "AquiferMixing"))
 rMF.loaddata("test", nw=7, nc=6, ns=3)
+rMF.execute(3)
+cd(cwd)
 
 observations = DataFrames.DataFrame()
 
@@ -15,8 +19,6 @@ observations[:Concentration] = [rMF.datamatrix...]
 
 p = Gadfly.plot(observations, xgroup="Well", x="Species", y="Concentration", color="Species", Gadfly.Geom.subplot_grid(Gadfly.Geom.bar()))
 Gadfly.draw(Gadfly.PNG("observations.png", 10Gadfly.inch, 4Gadfly.inch, dpi=300), p)
-
-rMF.execute(3)
 
 mixer = DataFrames.DataFrame()
 

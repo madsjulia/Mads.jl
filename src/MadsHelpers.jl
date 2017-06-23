@@ -312,9 +312,9 @@ Returns:
 function meshgrid(x::Vector, y::Vector)
 	m = length(x)
 	n = length(y)
-	xx = reshape(x, 1, n)
-	yy = reshape(y, m, 1)
-	(repmat(xx, m, 1), repmat(yy, 1, n))
+	xx = reshape(x, 1, m)
+	yy = reshape(y, n, 1)
+	(repmat(xx, n, 1), repmat(yy, 1, m))
 end
 
 """
