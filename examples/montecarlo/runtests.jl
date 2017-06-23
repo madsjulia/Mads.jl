@@ -22,8 +22,8 @@ end
 
 # Test Mads.montecarlo(md; N=10) against saved results
 @Base.Test.testset "Monte Carlo" begin
-	good_results = JLD.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
 	results = run_monte_carlo()
+	good_results = JLD.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
 	@Base.Test.test results == good_results
 end
 
