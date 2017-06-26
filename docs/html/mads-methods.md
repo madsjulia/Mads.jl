@@ -2,13 +2,12 @@
 
 # <span>**MADS** Methods</span>
 
-*   [Model analyses](#methods:analyses)
-*   [Decision support](#methods:decision)
-*   [Contaminant transport simulators](#methods:simulators)
-*   [Test functions](#methods:functions)
-*   [test](#test-link)
+*   [Model analyses](#model-analyses)
+*   [Decision support](#decision-support)
+*   [Contaminant transport simulators](#contaminant-transport-simulators)
+*   [Test functions](#test-functions)
 
-# Test Link
+### Model analyses
 <a name="methods:analyses" id="methods:analyses"></a>**MADS** includes a wide range of techniques for model-based analyses that can perform local and global exploration of model parameter space:
 
 *   <a name="methods:optimization" id="methods:optimization"></a>Optimization techniques for Parameter Estimation (**PE**), Model Inversion, Model Calibration, and Decision Support (**DS**)
@@ -41,7 +40,7 @@
      *   Local analysis based on Jacobian matrix of model parameters
      *   Agent-based Global Uncertainty and Sensitivity [ABAGUS](papers/Harp & Vesselinov ABAGUS 2011.pdf) analysis
 
-
+### Decision support
 **MADS** includes methods for Model-based Decision Support (**DS**)
 
 *   Bayesian analysis utilizing [DREAM](http://www.biometris.wur.nl/UK/Staff/Cajo+ter+Braak/Software+and+Data/DE-MC+and+DREAM+software+page/)
@@ -51,6 +50,7 @@
 
 <a name="methods:simulators" id="methods:simulators"></a>
 
+### Contaminant transport simulators
 **MADS** includes several analytical simulators for representation of 3D contaminant transport in aquifers. The analytical simulation is based on the solutions developed by [Wexler (1992)](http://pubs.usgs.gov/twri/twri3-b7/) and [Park & Zhan (2001)](http://www.sciencedirect.com/science/article/pii/S016977220100136X). The solutions are solved using [GSL](http://www.gnu.org/s/gsl/) subroutines. Alternative solutions are available for contaminant sources with different geometry:
 
 *   point source
@@ -59,4 +59,5 @@
 
 <a name="methods:functions" id="methods:functions"></a>
 
+### Test functions
 **MADS** includes a series of test functions that can be applied for efficient testing of model-analysis and decision support techniques. These test functions are commonly used in the practice. The list of all the test functions built-in in **MADS** are listed in the [manual](#manual)
