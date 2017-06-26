@@ -60,4 +60,4 @@
 <a name="methods:functions" id="methods:functions"></a>
 
 ### Test functions
-**MADS** includes a series of test functions that can be applied for efficient testing of model-analysis and decision support techniques. These test functions are commonly used in the practice. The list of all the test functions built-in in **MADS** are listed in the [manual](#manual)
+**MADS** includes a series of test functions that can be applied for efficient testing of model-analysis and decision support techniques. These test functions are commonly used in the practice. The list of all the test functions built-in in **MADS** are listed in the [manual](mads-manual.html)
