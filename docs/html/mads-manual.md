@@ -4,12 +4,12 @@
 
 *   [Overview and Features](#overview-and-features)
 *   [Execution](#mads-execution)
-*   [Command-line keywords and options](#manual:keywords)
-*   [Input and output files](#manual:files)
-*   [Format of MADS input files](#manual:format)
-*   [Compilation](#manual:compilation)
-*   [Verification](#manual:verification)
-*   [Test examples](#manual:examples)
+*   [Command-line keywords and options](#mads-command-line-keywords-and-options)
+*   [Input and output files](#mads-input-and-output-files)
+*   [Format of MADS input files](#mads-input-files)
+*   [Compilation](#mads-compilation)
+*   [Verification](#mads-verification)
+*   [Test examples](#mads-test-examples)
 
 ### Overview and Features
 <a name="manual:overview" id="manual:overview"></a>
@@ -82,7 +82,7 @@ Executing **MADS** without any arguments (‘**mads**’) produces screen output
 
 [Back to top](#mads-manual)
 
-# <a name="manual:keywords" id="manual:keywords"></a>**MADS** Command-line keywords and options:
+## <a name="manual:keywords" id="manual:keywords"></a>**MADS** Command-line keywords and options:
 
 ## Problem type keywords (all the keywords and options are case insensitive):
 
@@ -1361,7 +1361,7 @@ Debug the parallel execution [default pardebug=0]
 
 </table>
 
-# <a name="manual:files" id="manual:files"></a>**MADS** Input and output files
+## <a name="manual:files" id="manual:files"></a>**MADS** Input and output files
 
 **_problem_name_****.mads**: an input file that can completely define the analyzed problem. The file follows a predefined **MADS** input format. It includes information about the simulation type, model parameters, and model observations.  
 **_problem_name_****.results**: an output file containing the **MADS** results  
@@ -1383,7 +1383,7 @@ Debug the parallel execution [default pardebug=0]
 
 [Back to top](#mads-manual)
 
-# <a name="manual:format" id="manual:format"></a>Format of **MADS** input files
+## <a name="manual:format" id="manual:format"></a>Format of **MADS** input files
 
 ## **MADS** Problem files (***.mads**)
 
@@ -1431,7 +1431,7 @@ Comparing ‘**w01-v3.inst**’ and ‘**w01-v4.inst**’ it is clear that the s
 
 The instruction files can be debugged using the keyword ‘**insdebug**’ (for example: ‘**mads w01 insdebug**’).
 
-# <a name="manual:compilation" id="manual:compilation"></a>**MADS** Compilation
+## <a name="manual:compilation" id="manual:compilation"></a>**MADS** Compilation
 
 To compile, extract the provided **mads.tgz** file (**tar xvf mads.tgz**) and execute '**make**'. GSL, LAPACK and BLAS libraries are expected to be available.
 
@@ -1447,14 +1447,12 @@ If **macports** is installed ([www.macports.org](http://www.macports.org)), thes
 
 [Back to top](#mads-manual)
 
-# <a name="manual:verification" id="manual:verification"></a>**MADS** Verification
+## <a name="manual:verification" id="manual:verification"></a>**MADS** Verification
 
 To verify that **MADS** is running properly, execute '**make verify**'.
 
-# <a name="manual:examples" id="manual:examples"></a>**MADS** Test Examples
+## <a name="manual:examples" id="manual:examples"></a>**MADS** Test Examples
 
 To run some of the available **MADS** examples, execute '**make examples**'.
 
 [Back to top](#mads-manual)
-
-<script type="text/javascript"><!-- hide from old browsers // if( window.top.location.href == window.self.location.href ) // location.replace("http://mads.lanl.gov/index.html?info"); // end hide --></script>
