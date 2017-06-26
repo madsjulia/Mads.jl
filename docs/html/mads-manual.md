@@ -2,8 +2,8 @@
 
 # **MADS** Manual
 
-*   [Overview and Features](#manual:overview)
-*   [Execution](#manual:execution)
+*   [Overview and Features](#overview-and-features)
+*   [Execution](#mads-execution)
 *   [Command-line keywords and options](#manual:keywords)
 *   [Input and output files](#manual:files)
 *   [Format of MADS input files](#manual:format)
@@ -11,6 +11,7 @@
 *   [Verification](#manual:verification)
 *   [Test examples](#manual:examples)
 
+### Overview and Features
 <a name="manual:overview" id="manual:overview"></a>
 
 **MADS** (Model Analyses & Decision Support) is an object-oriented code that is capable of performing various types of model analyses, and supporting model-based decision making. The code can be executed under different computational modes, which include (1) sensitivity analysis, (2) model calibration (parameter estimation), (3) uncertainty quantification, (4) model selection, (5) model averaging, and (6) decision analysis.
@@ -55,7 +56,7 @@
 
 [Back to top](#mads-manual)
 
-# <a name="manual:execution" id="manual:execution"></a>**MADS** Execution:
+## <a name="manual:execution" id="manual:execution"></a>**MADS** Execution:
 
 <div class="console">
 
