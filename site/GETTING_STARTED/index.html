@@ -680,14 +680,20 @@
                 <h2 id="mads-getting-started">MADS Getting Started</h2>
 <p>Install <a href="http://julialang.org">Julia</a> and <a href="http://github.com/madsjulia/Mads.jl">MADS</a> (<code>Pkg.add("Mads")</code>) using the installation instruction in the <code>README.md</code> (<a href="https://github.com/madsjulia/Mads.jl">see also</a>).
 If you are not familiar with Julia, checkout <a href="http://samuelcolvin.github.io/JuliaByExample/">Julia By Example</a>, <a href="https://learnxinyminutes.com/docs/julia/">learn X in Y minutes</a>, <a href="http://bogumilkaminski.pl/files/julia_express.pdf">Julia Express</a>).
-You can also explore the Julia examples in the <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia">github</a>).</p>
+You can also explore Julia examples provided in Mads: <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia">github</a>).</p>
 <p>To start using MADS, initiate the Julia REPL and execute <code>import Mads</code> to load MADS modules.</p>
 <p>All the MADS analyses are based on a MADS problem dictionary that defines the problem.</p>
 <p>The MADS problem dictionary is typically loaded from a YAML MADS input file.
 The loading of a MADS file can be executed as follows:</p>
-<p><code>madsdata = Mads.loadmadsfile("&lt;input_file_name&gt;.mads")</code></p>
+<div class="codehilite"><pre><span></span><span class="n">madsdata</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">loadmadsfile</span><span class="p">(</span><span class="s">&quot;&lt;input_file_name&gt;.mads&quot;</span><span class="p">)</span>
+</pre></div>
+
+
 <p>For example, you can execute:</p>
-<p><code>madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")</code></p>
+<div class="codehilite"><pre><span></span><span class="n">madsdata</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">loadmadsfile</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">madsdir</span> <span class="o">*</span> <span class="s">&quot;/../examples/getting_started/internal-linear.mads&quot;</span><span class="p">)</span>
+</pre></div>
+
+
 <p>The file <code>internal-linear.mads</code> is located in <code>examples/getting_started</code> directory of the <code>Mads.jl</code> repository.</p>
 <p>Typically, the MADS problem dictionary includes several classes:</p>
 <ul>
@@ -696,15 +702,15 @@ The loading of a MADS file can be executed as follows:</p>
 <li><code>Model</code> : defines a model to predict the model observations using the model parameters</li>
 </ul>
 <p>The file <code>internal-linear.mads</code> looks like this:</p>
-<div class="codehilite"><pre><span></span>Parameters:
-- a : { init:  1, dist: &quot;Uniform(-10, 10)&quot; }
-- b : { init: -1, dist: &quot;Uniform(-10, 10)&quot; }
-Observations:
-- o1: { target: -3 }
-- o2: { target:  1 }
-- o3: { target:  5 }
-- o4: { target:  9 }
-Model: internal-linear.jl
+<div class="codehilite"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">Parameters</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">a</span> <span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">init</span><span class="p p-Indicator">:</span>  <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">dist</span><span class="p p-Indicator">:</span> <span class="s">&quot;Uniform(-10,</span><span class="nv"> </span><span class="s">10)&quot;</span> <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">b</span> <span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">init</span><span class="p p-Indicator">:</span> <span class="nv">-1</span><span class="p p-Indicator">,</span> <span class="nv">dist</span><span class="p p-Indicator">:</span> <span class="s">&quot;Uniform(-10,</span><span class="nv"> </span><span class="s">10)&quot;</span> <span class="p p-Indicator">}</span>
+<span class="l l-Scalar l-Scalar-Plain">Observations</span><span class="p p-Indicator">:</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">o1</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">target</span><span class="p p-Indicator">:</span> <span class="nv">-3</span> <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">o2</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">target</span><span class="p p-Indicator">:</span>  <span class="nv">1</span> <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">o3</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">target</span><span class="p p-Indicator">:</span>  <span class="nv">5</span> <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">o4</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span> <span class="nv">target</span><span class="p p-Indicator">:</span>  <span class="nv">9</span> <span class="p p-Indicator">}</span>
+<span class="l l-Scalar l-Scalar-Plain">Model</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">internal-linear.jl</span>
 </pre></div>
 
 

@@ -675,7 +675,18 @@
                 
                 <p><a id='GeostatInversion.jl-1'></a></p>
 <h1 id="geostatinversionjl">GeostatInversion.jl</h1>
-<p>Module for Geostatistical Inversion.</p>
+<p>This package provides methods for inverse analysis using parameter fields that are represented using geostatistical (stochastic) methods. Currently, two geostatistical methods are implemented. One is the Principal Component Geostatistical Approach (PCGA) proposed by <a href="http://dx.doi.org/10.1002/2013WR014630">Kitanidis</a> &amp; <a href="http://dx.doi.org/10.1002/2014WR015483">Lee</a>. The other utilizes a Randomized Geostatistical Approach (RGA) that builds on PCGA.</p>
+<p>Randomized Geostatistical Approach (RGA) references:</p>
+<ul>
+<li><a href="http://adsabs.harvard.edu/abs/2015AGUFM.T31E..03O">O'Malley, D., Le, E., Vesselinov, V.V., Fast Geostatistical Inversion using Randomized Matrix Decompositions and Sketchings for Heterogeneous Aquifer Characterization, AGU Fall Meeting, San Francisco, CA, December 14–18, 2015.</a></li>
+<li><a href="../submitted">Lin, Y, Le, E.B, O'Malley, D., Vesselinov, V.V., Bui-Thanh, T., Large-Scale Inverse Model Analyses Employing Fast Randomized Data Reduction, 2016.</a></li>
+</ul>
+<p>Two versions of PCGA are implemented in this package</p>
+<ul>
+<li><code>pcgadirect</code>, which uses full matrices and direct solvers during iterations</li>
+<li><code>pcgalsqr</code>, which uses low rank representations of the matrices combined with iterative solvers during iterations</li>
+</ul>
+<p>The RGA method, <code>rga</code>, can use either of these approaches using the keyword argument. That is, by doing <code>rga(...; pcgafunc=GeostatInversion.pcgadirect)</code> or <code>rga(...; pcgafunc=GeostatInversion.pcgalsqr)</code>.</p>
 <p>GeostatInversion.jl module functions:</p>
 <p><a id='GeostatInversion.getxis' href='#GeostatInversion.getxis'>#</a>
 <strong><code>GeostatInversion.getxis</code></strong> &mdash; <em>Function</em>.</p>

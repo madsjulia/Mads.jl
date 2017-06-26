@@ -41,8 +41,8 @@ end
 
 for i = 1:length(xm)
 	for j = 1:length(ym)
-		x = xg[i, j]
-		y = yg[i, j]
+		x = xg[j, i]
+		y = yg[j, i]
 		d1 = sqrt((x-s1[1])^2 + (y-s1[2])^2)
 		d2 = sqrt((x-s2[1])^2 + (y-s2[2])^2)
 		s = shift(d1, ys1) + shift(d2, ys2)

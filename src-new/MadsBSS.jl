@@ -1,8 +1,8 @@
+import DocumentFunction
 import NMF
 import JuMP
 import Optim
 @Mads.tryimport Ipopt
-import DocumentFunction
 
 """
 Non-negative Matrix Factorization using NMF

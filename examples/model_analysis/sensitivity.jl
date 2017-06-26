@@ -1,9 +1,7 @@
 import Mads
 md = Mads.loadmadsfile("models/internal-polynomial.mads")
 
-if !isdir("sensitivity_results")
-	mkdir("sensitivity_results")
-end
+Mads.mkdir("sensitivity_results")
 
 n = 100
 info("Calibration using $n random initial guesses for model parameters")

@@ -3,7 +3,7 @@ MADS Getting Started
 
 Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`Pkg.add("Mads")`) using the installation instruction in the `README.md` ([see also](https://github.com/madsjulia/Mads.jl)).
 If you are not familiar with Julia, checkout [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/), [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/), [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)).
-You can also explore the Julia examples in the `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
+You can also explore Julia examples provided in Mads: `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
 
 To start using MADS, initiate the Julia REPL and execute `import Mads` to load MADS modules.
 
@@ -12,11 +12,15 @@ All the MADS analyses are based on a MADS problem dictionary that defines the pr
 The MADS problem dictionary is typically loaded from a YAML MADS input file.
 The loading of a MADS file can be executed as follows:
 
-`madsdata = Mads.loadmadsfile("<input_file_name>.mads")`
+```julia
+madsdata = Mads.loadmadsfile("<input_file_name>.mads")
+```
 
 For example, you can execute:
 
-`madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")`
+```julia
+madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")
+```
 
 The file `internal-linear.mads` is located in `examples/getting_started` directory of the `Mads.jl` repository.
 
@@ -28,7 +32,7 @@ Typically, the MADS problem dictionary includes several classes:
 
 The file `internal-linear.mads` looks like this:
 
-```
+```yaml
 Parameters:
 - a : { init:  1, dist: "Uniform(-10, 10)" }
 - b : { init: -1, dist: "Uniform(-10, 10)" }

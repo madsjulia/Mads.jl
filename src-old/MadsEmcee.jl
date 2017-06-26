@@ -69,7 +69,7 @@ argtext=Dict("chain"=>"input MCMC array",
 Returns:
 
 - new MCMC chain
-- log likelihoods of the samples in the new chain 
+- log likelihoods of the samples in the new chain
 """
 function flattenmcmcarray(chain::Array, llhoodvals::Array)
 	numdims, numwalkers, numsteps = size(chain)

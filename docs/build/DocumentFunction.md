@@ -4,7 +4,7 @@
 # DocumentFunction.jl
 
 
-Document Julia Functions (methods, arguments, keywords)
+Module provides tools for documenting Julia functions providing information about function methods, arguments and keywords.
 
 
 DocumentFunction.jl module functions:

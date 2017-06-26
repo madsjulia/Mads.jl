@@ -24,7 +24,7 @@ function residuals(madsdata::Associative, resultvec::Vector)
 		rmin[rmin .> 0] = 0
 		residuals .+= (rmax .+ rmin)
 	end
-	return residuals[!isn]
+	return residuals[map(!, isn)]
 end
 function residuals(madsdata::Associative, resultdict::Associative)
 	residuals(madsdata, collect(values(resultdict)))

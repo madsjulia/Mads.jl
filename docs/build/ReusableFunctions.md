@@ -4,7 +4,7 @@
 # ReusableFunctions.jl
 
 
-Module ReusableFunctions provides automated storage and retrieval of results for functions calls.
+Module ReusableFunctions provides automated storage and retrieval of results for Julia function calls.
 
 
 ReusableFunctions.jl module functions:
