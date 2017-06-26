@@ -38,13 +38,13 @@
 *   Highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called [SVD-assist](http://www.pesthomepage.org/Highly-parameterized_inversion.php) in [PEST](http://www.pesthomepage.org).
 *   Permits the use of 'acceptable' calibration ranges for each optimization target.  
     In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.  
-    This feature is implemented using the keyword ‘**<u>[obsrange](#manual:terminate)</u>**’.
+    This feature is implemented using the keyword ‘**<u>[obsrange](#calibration-termination-criteria)</u>**’.
 *   Allows the use of an acceptable calibration range for the objective function.  
-    In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword ‘**<u>[cutoff](#manual:terminate)</u>**’.
+    In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword ‘**<u>[cutoff](#calibration-termination-criteria)</u>**’.
 *   Implements a series of alternative objective functions (OF).
 *   By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process.
 *   Provides the option to perform a series of optimizations with random initial guesses for optimization parameters.
-*   Provides the option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword ‘**[retry](#manual:caliboptions)**’).
+*   Provides the option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword ‘**[retry](#calibration-options)**’).
 *   Automatically detects and utilizes multi-processor resources for parallel execution.
 *   Analyzes the runtime performance of the available parallel hosts (processors); hosts not capable of performing the requested parallel jobs are dynamically ignored.
 *   Tracks the multiple model files during parallel execution automatically; for the user, there is no difference between serial (using single processor) and parallel modes of execution.
@@ -189,7 +189,7 @@ the parameter space discretization is defined in the **MADS** input file.
 
 </table>
 
-## <a name="manual:terminate" id="manual:terminate"></a>Calibration termination criteria:
+### <a name="manual:terminate" id="manual:terminate"></a>Calibration termination criteria:
 
 <table class="keywords">
 
@@ -282,7 +282,7 @@ _[default obserror=0; i.e. termination criteria is not applied]
 
 </table>
 
-## <a name="manual:caliboptions" id="manual:caliboptions"></a>Calibration options:
+### <a name="manual:caliboptions" id="manual:caliboptions"></a>Calibration options:
 
 <table class="keywords">
 
