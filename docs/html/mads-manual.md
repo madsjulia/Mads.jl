@@ -54,6 +54,7 @@
 *   Object-oriented design of **MADS** allows for relatively easy integration with other object-oriented optimization or sampling techniques.
 
 [Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 # <a name="manual:execution" id="manual:execution"></a>**MADS** Execution:
 
