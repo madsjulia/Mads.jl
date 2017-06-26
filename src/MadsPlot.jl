@@ -504,7 +504,7 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	end
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
-	if typeof(p) == Gadfly.Plot
+	if typeof(p) == Gadfly.Plot || typeof(p) == Compose.Context
 		p
 	end
 end
@@ -986,7 +986,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		printerrormsg(e)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
-	if typeof(pl) == Gadfly.Plot
+	if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
 		pl
 	end
 end
