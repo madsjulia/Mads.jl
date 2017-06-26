@@ -873,7 +873,7 @@ Returns:
 function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
 	dictelements = zip(obskeys, zeros(Int, length(obskeys)))
 	observations = DataStructures.OrderedDict{String,Float64}(dictelements)
-	obscount = Dict{String,Int}(dictelements)
+	obscount = DataStructures.DefaultDict{String,Int}(0)
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])
 		for k in keys(obs)
@@ -883,7 +883,7 @@ function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(mads
 	end
 	missing = 0
 	c = 0
-	for k in keys(obscount)
+	for k in obskeys
 		c += 1
 		if obscount[k] == 0
 			missing += 1
