@@ -6,7 +6,7 @@
 *   [Execution](#mads-execution)
 *   [Command-line keywords and options](#mads-command-line-keywords-and-options)
 *   [Input and output files](#mads-input-and-output-files)
-*   [Format of MADS input files](#mads-input-files)
+*   [Format of MADS input files](#format-of-mads-input-files)
 *   [Compilation](#mads-compilation)
 *   [Verification](#mads-verification)
 *   [Test examples](#mads-test-examples)
