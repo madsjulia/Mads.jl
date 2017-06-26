@@ -17,7 +17,7 @@
     **SVD decomposition** allows for highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called [SVD-assist](http://www.pesthomepage.org/Highly-parameterized_inversion.php) in [PEST](http://www.pesthomepage.org).
      *   Multi-Start Levenberg-Marquardt (**MSLM**) optimization technique
      *   Global Particle Swarm Optimization ([PSO](http://clerc.maurice.free.fr/pso/))
-     *   Global Adaptive Particle Swarm Optimization [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf)
+     *   Global Adaptive Particle Swarm Optimization [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf)
      *   Global Optimization technique coupling Particle Swarm and Levenberg-Marquardt optimization technique [SQUADS](papers/squads_v04.pdf)
 
 *   <a name="methods:sensitivity" id="methods:sensitivity"></a>Sensitivity Analysis (**SA**) techniques
