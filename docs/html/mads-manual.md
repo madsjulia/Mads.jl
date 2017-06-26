@@ -53,7 +53,6 @@
 *   Automatically renames the files obtained during previous **MADS** runs by default using unique date & time information in the file names to avoid overwriting.
 *   Object-oriented design of **MADS** allows for relatively easy integration with other object-oriented optimization or sampling techniques.
 
-[Back to top](#manual:top)
 [Back to top](#mads-manual)
 
 # <a name="manual:execution" id="manual:execution"></a>**MADS** Execution:
@@ -80,7 +79,7 @@ The keywords and options can be specified in any order; if there are contradicti
 
 Executing **MADS** without any arguments (‘**mads**’) produces screen output describing **MADS** keywords and options for quick reference.
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 # <a name="manual:keywords" id="manual:keywords"></a>**MADS** Command-line keywords and options:
 
@@ -108,7 +107,7 @@ Executing **MADS** without any arguments (‘**mads**’) produces screen output
 
 Examples for executing different types of model-based analyses with **MADS** are presented in [Examples](#examples), [Demos](#demos), [Screenshots](#screenshots), and [Comparisons](#comparisons.html) sections.
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 ## Calibration method keywords:
 
@@ -372,7 +371,7 @@ eigen analysis of the final optimized solution
 
 </table>
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 ## Optimization method (**opt=**[string]; various combinations are possible, e.g. pso_std_lm_gsl):
 
@@ -767,7 +766,7 @@ sum of the squared discrepancies and squared residuals
 
 </table>
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 ## Transformation of parameter space and observations (calibration targets):
 
@@ -1027,7 +1026,7 @@ name of **ABAGUS** results file to perform predictive uncertainty analysis
 
 </table>
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 ## Build-in analytical solutions:
 
@@ -1381,7 +1380,7 @@ Debug the parallel execution [default pardebug=0]
 **_problem_name.pssa_**: output files containing **ABAGUS** results  
 **_problem_name.pua_**: output files containing predictive uncertainty analysis (**postpua**) results
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 # <a name="manual:format" id="manual:format"></a>Format of **MADS** input files
 
@@ -1445,7 +1444,7 @@ If **macports** is installed ([www.macports.org](http://www.macports.org)), thes
 *   sudo port install lapack
 *   sudo port install gsl
 
-[Back to top](#manual:top)
+[Back to top](#mads-manual)
 
 # <a name="manual:verification" id="manual:verification"></a>**MADS** Verification
 
@@ -1455,6 +1454,6 @@ To verify that **MADS** is running properly, execute '**make verify**'.
 
 To run some of the available **MADS** examples, execute '**make examples**'.
 
-[Back to top](#manual:top)</div>
+[Back to top](#mads-manual)
 
 <script type="text/javascript"><!-- hide from old browsers // if( window.top.location.href == window.self.location.href ) // location.replace("http://mads.lanl.gov/index.html?info"); // end hide --></script>
