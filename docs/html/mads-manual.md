@@ -106,7 +106,7 @@ Executing **MADS** without any arguments (‘**mads**’) produces screen output
 
 <a name="manual:infogap" id="manual:infogap"></a>**<u>infogap</u>**: Perform an information gap decision analysis. Results are stored in files named **_problem_name-pred_**k**_.igap_**, where k is the index of the performance metric prediction (one file is generated for each performance metric prediction). Performance metric predictions are identified in **_problem_name.mads_** as “**observations**” with weight=-1.
 
-Examples for executing different types of model-based analyses with **MADS** are presented in [Examples](#examples), [Demos](#demos), [Screenshots](#screenshots), and [Comparisons](#comparisons.html) sections.
+Examples for executing different types of model-based analyses with **MADS** are presented in [Examples](mads-examples.md), [Demos](mads-demos.md), [Screenshots](mads-screenshots.md), and [Comparisons](mads-comparisons.md) sections.
 
 [Back to top](#mads-manual)
 
