@@ -126,7 +126,7 @@ single
 
 <td class="keywordsright">
 
-_single calibration using initial guesses provided in the input file_;  
+**_single calibration using initial guesses provided in the input file_**;  
 this type of calibration is performed by default; the keyword does not need to be provided
 
 </td>
@@ -143,7 +143,7 @@ igrnd
 
 <td class="keywordsright">
 
-_sequential multi-start (multi-try) calibrations using a set of random initial values_;  
+**_sequential multi-start (multi-try) calibrations using a set of random initial values_**;  
 the number of initial guess realizations is defined by **real**=X
 
 </td>
@@ -160,7 +160,7 @@ igpd
 
 <td class="keywordsright">
 
-_sequential multi-start (multi-try) calibrations using a set of discretized initial values_;  
+**_sequential multi-start (multi-try) calibrations using a set of discretized initial values_**;  
 the parameter space discretization is defined in the **MADS** input file
 
 </td>
@@ -177,8 +177,8 @@ ppsd
 
 <td class="keywordsright">
 
-_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method;  
-_in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
+**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method;  
+_**in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
 the parameter space discretization is defined in the **MADS** input file.
 
 </td>
