@@ -76,7 +76,7 @@ The root of the input file defines the **_problem_name_** used to specify file n
 
 After the **_problem_name_** or the **_input_file_name_** a series of keywords and options can be provided (all optional). All the keywords are case insensitive. If there are no keywords or options, model calibration will be performed by default. The keywords and options can be provided to **MADS** either on the command-line or on the first line of the problem input file (**_problem_name_.mads**).
 
-The keywords and options can be specified in any order; if there are contradictions (for example both ‘__**<u>montecarlo</u>**__’ and ‘**__<u>calibrate</u>__**’ are provided), the priorities are defined by the keyword order in the problem input file followed by the command-line queue (e.g. the last command-line keyword can overwrite any previous definitions).
+The keywords and options can be specified in any order; if there are contradictions (for example both ‘**<u>montecarlo</u>**’ and ‘**<u>calibrate</u>**’ are provided), the priorities are defined by the keyword order in the problem input file followed by the command-line queue (e.g. the last command-line keyword can overwrite any previous definitions).
 
 Executing **MADS** without any arguments (‘**mads**’) produces screen output describing **MADS** keywords and options for quick reference.
 
