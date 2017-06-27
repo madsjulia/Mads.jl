@@ -177,7 +177,7 @@ ppsd
 
 <td class="keywordsright">
 
-**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method;_**
+**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method_**; 
 in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
 the parameter space discretization is defined in the **MADS** input file.
 
@@ -205,7 +205,7 @@ eval=[integer]
 
 <td class="keywordsright">
 
-terminate calibration if the _number of functional evaluations exceeds a predefined value_ [default eval=5000]
+terminate calibration if the **_number of functional evaluations exceeds a predefined value_** [default eval=5000]
 
 </td>
 
@@ -221,7 +221,7 @@ cutoff=[real]
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if the _objective function is below the cutoff value_ [default cutoff=0]
+terminate calibration (or collect solution in the case of **abagus**) if the **_objective function is below the cutoff value_** [default cutoff=0]
 
 </td>
 
@@ -237,7 +237,7 @@ parerror=[real]
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if the _estimated model parameters are within a predefined absolute error_ range from their known true values  
+terminate calibration (or collect solution in the case of **abagus**) if the **_estimated model parameters are within a predefined absolute error_** range from their known true values  
 applied in the case of test functions with known solution  
 [default parerror=0; i.e. termination criteria is not applied]
 
@@ -255,7 +255,7 @@ obsrange
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if _model predictions are within predefined calibration ranges_
+terminate calibration (or collect solution in the case of **abagus**) if **_model predictions are within predefined calibration ranges_**
 
 </td>
 
@@ -271,8 +271,8 @@ obserror=[real]
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if _model predictions are within _within a predefined absolute error_ range from their observed values  
-_[default obserror=0; i.e. termination criteria is not applied]
+terminate calibration (or collect solution in the case of **abagus**) if **_model predictions are within a predefined absolute error range from their observed values_**  
+[default obserror=0; i.e. termination criteria is not applied]
 
 </td>
 
