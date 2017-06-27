@@ -177,8 +177,8 @@ ppsd
 
 <td class="keywordsright">
 
-**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method;  
-_**in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
+**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method;_**
+in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
 the parameter space discretization is defined in the **MADS** input file.
 
 </td>
