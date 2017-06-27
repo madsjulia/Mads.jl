@@ -398,13 +398,13 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 			end
 		end
 	end
-	hsize = (3 * size(samples, 2))Gadfly.inch
-	vsize = (3 * size(samples, 2))Gadfly.inch
+	hsize = (6 * size(samples, 2))Gadfly.inch
+	vsize = (6 * size(samples, 2))Gadfly.inch
 	filename, format = setplotfileformat(filename, format)
 	try
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
-		if typeof(pl) == Gadfly.Plot
+		if typeof(pl) == Gadfly.Plot #|| typeof(pl) == Compose.Context
 			pl
 		end
 	catch e
@@ -504,9 +504,10 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	end
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
-	if typeof(p) == Gadfly.Plot || typeof(p) == Compose.Context
+	if typeof(p) == Gadfly.Plot 
 		p
 	end
+	
 end
 
 @doc """
@@ -986,7 +987,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		printerrormsg(e)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
-	if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
+	if typeof(pl) == Gadfly.Plot 
 		pl
 	end
 end
