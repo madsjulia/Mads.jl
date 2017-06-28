@@ -1377,9 +1377,9 @@ _problem_name_**.igrnd***: output files containing Random Initial Guesses (**IGR
 _problem_name_**.igpd***: output files containing Partially Discretized Initial Guesses (**IGPD**) results  
 _problem_name_**.ppsd***: output files containing Partial Parameter Space Discretization (**PPSD**) results  
 _problem_name_**-rerun.mads**: an output file that can be used as a **MADS** input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined **MADS** input format.  
-_problem_name**.igap_**: output files containing remediation information gap (**infogap**) results  
-_problem_name**.pssa_**: output files containing **ABAGUS** results  
-_problem_name**.pua_**: output files containing predictive uncertainty analysis (**postpua**) results
+_problem_name_**._igap_**: output files containing remediation information gap (**infogap**) results  
+_problem_name_**._pssa_**: output files containing **ABAGUS** results  
+_problem_name_**._pua_**: output files containing predictive uncertainty analysis (**postpua**) results
 
 [Back to top](#mads-manual)
 
