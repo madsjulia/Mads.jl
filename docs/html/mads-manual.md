@@ -1417,7 +1417,7 @@ The template files can be debugged using the keyword ‘**tpldebug**’ (for exa
 
 ## **MADS** Instruction files (***.inst**)
 
-The **MADS** instruction files are applied to read the current model observations (predictions) obtained from the external simulator based on the current model parameters. In this case, the file ‘**w01.inst**’ is applied to read the model output file ‘**w01.s_point**’. There are several alternative versions of the instruction file (‘**w01-v*.inst**’) provided in directory ‘**example/wells-short**’. The instruction files typically have the following format:
+The **MADS** instruction files are applied to read the current model observations (predictions) obtained from the external simulator based on the current model parameters. In this case, the file ‘**w01.inst**’ is applied to read the model output file ‘**w01.s_point**’. There are several alternative versions of the instruction file (‘__w01-v*.inst__’) provided in directory ‘**example/wells-short**’. The instruction files typically have the following format:
 
 [![](manual_images/mads-file-format5.jpg)[click to enlarge]](manual_images/mads-file-format5.jpg "MADS File Format: Instruction file")
 
