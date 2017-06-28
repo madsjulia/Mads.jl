@@ -1363,23 +1363,23 @@ Debug the parallel execution [default pardebug=0]
 
 ## <a name="manual:files" id="manual:files"></a>**MADS** Input and output files
 
-**_problem_name_.mads**: an input file that can completely define the analyzed problem. The file follows a predefined **MADS** input format. It includes information about the simulation type, model parameters, and model observations.  
-**_problem_name_.results**: an output file containing the **MADS** results  
-**_problem_name_.residuals**: an output file containing the residuals between model predictions and calibration targets (if applicable)  
-**_problem_name_.jacobian**: an output file containing the Jacobian (local sensitivity) matrix  
-**_problem_name_.covariance**: an output file containing the covariance matrix  
-**_problem_name_.correlation**: an output file containing the correlation matrix  
-**_problem_name_.eigen**: an output file containing the eigen matrix and eigen values  
-**_problem_name_.phi**: an output file containing information about the final objective function  
-**_problem_name_.ofe**: an output file containing information about the objective function minimization progress as a function of model evaluations  
-**_problem_name_.mcrnd***: output files containing Monte Carlo (**MC**) analysis results  
-**_problem_name_.igrnd***: output files containing Random Initial Guesses (**IGRND**) results  
-**_problem_name_.igpd***: output files containing Partially Discretized Initial Guesses (**IGPD**) results  
-**_problem_name_.ppsd***: output files containing Partial Parameter Space Discretization (**PPSD**) results  
-**_problem_name_-rerun.mads**: an output file that can be used as a **MADS** input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined **MADS** input format.  
-**_problem_name.igap_**: output files containing remediation information gap (**infogap**) results  
-**_problem_name.pssa_**: output files containing **ABAGUS** results  
-**_problem_name.pua_**: output files containing predictive uncertainty analysis (**postpua**) results
+_problem_name_**.mads**: an input file that can completely define the analyzed problem. The file follows a predefined **MADS** input format. It includes information about the simulation type, model parameters, and model observations.  
+_problem_name_**.results**: an output file containing the **MADS** results  
+_problem_name_**.residuals**: an output file containing the residuals between model predictions and calibration targets (if applicable)  
+_problem_name_**.jacobian**: an output file containing the Jacobian (local sensitivity) matrix  
+_problem_name_**.covariance**: an output file containing the covariance matrix  
+_problem_name_**.correlation**: an output file containing the correlation matrix  
+_problem_name_**.eigen**: an output file containing the eigen matrix and eigen values  
+_problem_name_**.phi**: an output file containing information about the final objective function  
+_problem_name_**.ofe**: an output file containing information about the objective function minimization progress as a function of model evaluations  
+_problem_name_**.mcrnd***: output files containing Monte Carlo (**MC**) analysis results  
+_problem_name_**.igrnd***: output files containing Random Initial Guesses (**IGRND**) results  
+_problem_name_**.igpd***: output files containing Partially Discretized Initial Guesses (**IGPD**) results  
+_problem_name_**.ppsd***: output files containing Partial Parameter Space Discretization (**PPSD**) results  
+_problem_name_**-rerun.mads**: an output file that can be used as a **MADS** input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined **MADS** input format.  
+_problem_name**.igap_**: output files containing remediation information gap (**infogap**) results  
+_problem_name**.pssa_**: output files containing **ABAGUS** results  
+_problem_name**.pua_**: output files containing predictive uncertainty analysis (**postpua**) results
 
 [Back to top](#mads-manual)
 
