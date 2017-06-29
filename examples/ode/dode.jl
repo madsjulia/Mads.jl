@@ -1,8 +1,9 @@
 import Base.Test
 import Mads
 md = Mads.loadmadsfile("ode.mads")
-t, y = ode23s(funcosc, initialconditions, times, points=:specified)
-ys = hcat(y...)' # vectorizing the output and transposing it with '
+prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
+sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
+ys = convert(Array,sol)
 Mads.createobservations!(md, t, ys[:,1])
 if isdir("odecheckpoints")
 	rm("odecheckpoints"; recursive=true)
