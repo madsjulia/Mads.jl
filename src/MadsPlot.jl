@@ -251,7 +251,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 						filename_w = "$rootfile-$wellname.$extension"
 					end
 					filename_w, format = setplotfileformat(filename_w, format)
-					if format != "SVG"
+					if format != "SVG" && format != "PDF"
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize; dpi=dpi), p)
 					else
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize), p)
@@ -309,7 +309,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 			filename = "$rootname-match"
 		end
 		filename, format = setplotfileformat(filename, format)
-		if format != "SVG"
+		if format != "SVG" && format != "PDF"
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize; dpi=dpi), pl)
 		else
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
@@ -504,10 +504,10 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	end
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
-	if typeof(p) == Gadfly.Plot 
+	if typeof(p) == Gadfly.Plot
 		p
 	end
-	
+
 end
 
 @doc """
@@ -987,7 +987,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		printerrormsg(e)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
-	if typeof(pl) == Gadfly.Plot 
+	if typeof(pl) == Gadfly.Plot
 		pl
 	end
 end
@@ -1083,7 +1083,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	try
 		if filename != ""
 			filename, format = setplotfileformat(filename, format)
-			if format == "SVG"
+			if format == "SVG" || format == "PDF"
 				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot), pS)
 			else
 				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
