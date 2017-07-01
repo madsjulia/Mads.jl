@@ -1,5 +1,5 @@
 import Mads
-import ODE
+import OrdinaryDiffEq
 import JSON
 import Gadfly
 import DataStructures
@@ -28,12 +28,10 @@ function makefunc(parameterdict::DataStructures.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
-	function func(t, y) # function needed by the ODE solver
+	function func(t, y, f) # function needed by the ODE solver
 		# ODE: x''[t] = -\omega^2 * x[t] - k * x'[t]
-		f = similar(y)
 		f[1] = y[2] # u' = v
 		f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
-		return f
 	end
 	return func
 end
@@ -43,8 +41,9 @@ funcosc = makefunc(paramdict)
 Mads.madsinfo("Solve ODE ...")
 times = collect(0:.1:100)
 initialconditions = [1.,0.]
-t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
-ys = hcat(y...)' # vectorizing the output and transposing it with '
+prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
+sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
+ys = convert(Array,sol)
 
 # draw initial solution
 p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "orange"))),

@@ -3,24 +3,22 @@ import DataStructures
 import JLD
 import Base.Test
 
-@Mads.tryimport ODE
+@Mads.tryimport OrdinaryDiffEq
 
 # function to create a function for the ODE solver
 @Mads.stderrcapture function makefunc(parameterdict::DataStructures.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
-	function func(t, y) # function needed by the ODE solver
+	function func(t, y, f) # function needed by the ODE solver
 		# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
-		f = similar(y)
 		f[1] = y[2] # u' = v
 		f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
-		return f
 	end
 	return func
 end
 
-if isdefined(:ODE)
+if isdefined(:OrdinaryDiffEq)
 	# load parameter data from MADS YAML file
 	Mads.madsinfo("Loading data ...")
 	workdir = Mads.getmadsdir() # get the directory where the problem is executed
@@ -44,8 +42,9 @@ if isdefined(:ODE)
 		Mads.madsinfo("Solve ODE ...")
 		times = collect(0:.1:100)
 		initialconditions = [1.,0.]
-		t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
-		ys = hcat(y...)' # vectorizing the output and transposing it with '
+		prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
+		sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
+		ys = convert(Array,sol)
 
 		# Write good test results to directory
 		if Mads.create_tests
@@ -73,5 +72,5 @@ if isdefined(:ODE)
 		# Mads.showobservations(md)
 	end
 else
-	warn("ODE is missing")
+	warn("OrdinaryDiffEq.jl is missing")
 end
