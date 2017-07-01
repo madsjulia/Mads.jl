@@ -40,11 +40,11 @@ if isdefined(:OrdinaryDiffEq)
 		# create a function for the ODE solver
 		funcosc = makefunc(paramdict)
 		Mads.madsinfo("Solve ODE ...")
-		times = collect(0:.1:100)
-		initialconditions = [1.,0.]
-		prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
-		sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
-		ys = convert(Array,sol)
+		t = collect(0:.1:100)
+		initialconditions = [1., 0.]
+		odeprob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0, 100.0))
+		sol = OrdinaryDiffEq.solve(odeprob, OrdinaryDiffEq.Tsit5(), saveat=t)
+		ys = convert(Array, sol)'
 
 		# Write good test results to directory
 		if Mads.create_tests
