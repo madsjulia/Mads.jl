@@ -79,7 +79,12 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
 		madsdatacommandfunction = importeverywhere(filename)
-		madscommandfunction = madsdatacommandfunction(madsdata_in)
+		local madscommandfunction
+		try
+			madscommandfunction = madsdatacommandfunction(madsdata_in)
+		catch
+			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+		end
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
@@ -212,7 +217,13 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
-		return madscommandfunction(parameterswithexpressions)
+		local out
+		try
+			out = madscommandfunction(parameterswithexpressions)
+		catch
+			out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
+		end
+		return out
 	end
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
