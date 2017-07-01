@@ -82,8 +82,19 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		local madscommandfunction
 		try
 			madscommandfunction = madsdatacommandfunction(madsdata_in)
-		catch
-			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+		catch errmsg
+			if VERSION >= v"0.6.0"
+				try
+					madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+				catch errmsg
+					printerrormsg(errmsg)
+					Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
+				end
+				madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+			else
+				printerrormsg(errmsg)
+				Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
+			end
 		end
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
@@ -121,6 +132,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 			else
 				cwd = currentdir
 			end
+			local results
 			attempt = 0
 			trying = true
 			tempdirname = ""
@@ -148,17 +160,27 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
 				trying = true
+				latest = false
 				while trying
 					try
 						attempt += 1
-						results = convert(DataStructures.OrderedDict{Any,Float64}, madsdatacommandfunction(madsdata))
+						if latest
+							out = Base.invokelatest(madsdatacommandfunction, madsdata)
+						else
+							out = madsdatacommandfunction(madsdata)
+						end
+						results = convert(DataStructures.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
-						sleep(attempt * 0.5)
-						if attempt > 3
-							cd(currentdir)
-							printerrormsg(errmsg)
-							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+						if VERSION >= v"0.6.0" && !latest
+							latest = true
+						else
+							sleep(attempt * 0.5)
+							if attempt > 3
+								cd(currentdir)
+								printerrormsg(errmsg)
+								Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							end
 						end
 					end
 				end
@@ -218,10 +240,21 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
 		local out
+		latest = false
 		try
 			out = madscommandfunction(parameterswithexpressions)
-		catch
-			out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
+		catch errmsg
+			if VERSION >= v"0.6.0"
+				try
+					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
+				catch errmsg
+					printerrormsg(errmsg)
+					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+				end
+			else
+				printerrormsg(errmsg)
+				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+			end
 		end
 		return out
 	end
