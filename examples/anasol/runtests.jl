@@ -196,7 +196,9 @@ end
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true
 Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
-Mads.plotlocalsa("w01shortexp")
+if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.plotlocalsa("w01shortexp")
+end
 Mads.quietoff()
 @Mads.stdoutcapture Mads.calibrate(md, localsa=true, show_trace=true)
 Mads.quieton()
