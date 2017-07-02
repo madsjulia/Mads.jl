@@ -156,6 +156,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 else
 	ENV["MADS_NO_GADFLY"] = ""
 	ENV["MADS_NO_PYPLOT"] = ""
+	ENV["MADS_NO_DISPLAY"] = ""
 	warn("Mads plotting is disabled")
 end
 
@@ -163,7 +164,9 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))
-	include(joinpath("..", "src-interactive", "MadsDisplay.jl"))
+	if !haskey(ENV, "MADS_NO_DISPLAY")
+		include(joinpath("..", "src-interactive", "MadsDisplay.jl"))
+	end
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
