@@ -104,15 +104,15 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
 			npt = m != nothing ? parse(Int, m.captures[1]) : 1
-			if nprocs_per_task > 1 && npt != nprocs_per_task
+			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
 				if m != nothing
-					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task "))
-					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
+					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task_default "))
+					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m != nothing
-						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task "))
-						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
+						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task_default "))
+						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
 					end
 				end
 			end
