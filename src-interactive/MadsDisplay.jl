@@ -3,12 +3,6 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 @Mads.tryimport Images
 
-"""
-Display image file
-
-$(DocumentFunction.documentfunction(display;
-argtext=Dict("filename"=>"image file name")))
-"""
 function display(filename::String)
 	if !isfile(filename)
 		warn("File `$filename` is missing!")
@@ -62,3 +56,10 @@ if isdefined(:Gadfly)
 		println()
 	end
 end
+
+@doc """
+Display image file
+
+$(DocumentFunction.documentfunction(display;
+argtext=Dict("filename"=>"image file name")))
+""" display
