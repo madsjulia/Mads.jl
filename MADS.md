@@ -23,15 +23,15 @@ For additional information:
     - [mads.lanl.gov](http://mads.lanl.gov)
     - [madsc.lanl.gov](http://madsc.lanl.gov) (C version of MADS)
 * documentation:
-    - [readthedocs](`http://mads.readthedocs.org/en/latest/`)
-    - [github](`http://madsjulia.github.io/Mads.jl`)
-    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov)
+    - [github](`http://madsjulia.github.io/Mads.jl`) (recommended)
+    - [readthedocs](`http://mads.readthedocs.org`)
+    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov) (it might not be up-to-date)
 * repos:
-    - [github](http://github.com/madsjulia/Mads.jl)
-    - [gitlab](http://gitlab.com/mads/Mads.jl)
+    - [github](http://github.com/madsjulia/Mads.jl) (recommended)
+    - [gitlab](http://gitlab.com/mads/Mads.jl) (it might not be up-to-date)
 * git:
-    - `git clone git@github.com:madsjulia/Mads.jl`
-    - `git clone git@gitlab.com:mads/Mads.jl`
+    - `git clone git@github.com:madsjulia/Mads.jl` (recommended)
+    - `git clone git@gitlab.com:mads/Mads.jl` (it might not be up-to-date)
 * email: [mads@lanl.gov](mailto:mads@lanl.gov)
 
 Builds & Tests
@@ -54,7 +54,7 @@ LA-CC-15-080
 Developers
 ----------
 
-* [Velimir (monty) Vesselinov](http://www.lanl.gov/orgs/ees/staff/monty) [(publications)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ)
+* [Velimir (monty) Vesselinov](http://ees.lanl.gov/monty) [(publications)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ) [(git)](https://montyv.github.io)[(hub)](https://montyvesselinov.github.io)
 * [Daniel O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(publications)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
 * [see also](https://github.com/madsjulia/Mads.jl/graphs/contributors)
 
