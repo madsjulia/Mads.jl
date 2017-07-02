@@ -1,6 +1,7 @@
 import DataFrames
 import Gadfly
 import rMF
+import Mads
 
 nsource = 3
 nwell = 7

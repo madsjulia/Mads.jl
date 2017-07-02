@@ -247,7 +247,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, scale::Number=1)
+function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -421,7 +421,7 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=-1, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -609,7 +609,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
+function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=-1, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -846,7 +846,7 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=0, restartdir::String="")
+		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::String="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -1080,7 +1080,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1127,7 +1127,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	Mads.setseed(seed)
 
 	## Setting pathfiles
-	efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
+	# efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
 
 	function eFAST_getCompFreq(Wi, nprime, M)
 		if nprime == 1 # Special case if n' == 1 -> W_comp is the null set
@@ -1222,7 +1222,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 
 		# If we want to use a seed for our random phis
 		# +kL because we want to have the same string of seeds for any initial seed
-		srand(seed+kL)
+		srand(seed+1+kL)
 
 		# Determining which parameter we are on
 		k = Int(ceil(kL/Nr))

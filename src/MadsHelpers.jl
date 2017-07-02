@@ -315,8 +315,8 @@ $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
             "quiet"=>"[default=`true`]")))
 """
-function setseed(seed::Integer=0, quiet::Bool=true)
-	if seed != 0
+function setseed(seed::Integer=-1, quiet::Bool=true)
+	if seed != -1
 		srand(seed)
 		!quiet && info("New seed: $seed")
 	else

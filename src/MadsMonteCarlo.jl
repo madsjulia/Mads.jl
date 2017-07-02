@@ -6,7 +6,7 @@ import DocumentFunction
 @tryimport BlackBoxOptim
 @tryimport Klara
 
-function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=0, weightfactor::Number=1.0)
+function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -29,7 +29,7 @@ function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::In
 	end
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor)
 end
-function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=0, weightfactor::Number=1.0)
+function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
@@ -74,7 +74,7 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 ```
 """ emceesampling
 
-function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
+function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -95,7 +95,7 @@ function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Inte
 	chain = Klara.output(job)
 	return chain
 end
-function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=0)
+function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 	if seed != 0
 		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
 	else
