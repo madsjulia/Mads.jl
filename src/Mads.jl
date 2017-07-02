@@ -35,6 +35,8 @@ import GeostatInversion
 import SVR
 import DocumentFunction
 
+include("MadsHelpers.jl")
+
 "Try to import a module"
 macro tryimport(s::Symbol)
 	importq = string(:(import $s))
@@ -115,7 +117,6 @@ include("MadsASCII.jl")
 include("MadsJSON.jl")
 include("MadsSineTransformations.jl")
 include("MadsMisc.jl")
-include("MadsHelpers.jl")
 include("MadsParameters.jl")
 include("MadsObservations.jl")
 include("MadsForward.jl")
