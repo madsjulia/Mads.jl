@@ -1,4 +1,4 @@
-import Gadfly
+@Mads.tryimport Gadfly
 @Mads.tryimport Images
 
 """

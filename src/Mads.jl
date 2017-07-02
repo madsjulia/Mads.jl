@@ -42,7 +42,8 @@ macro tryimport(s::Symbol)
 	q = quote
 		try
 			eval(parse($importq))
-		catch
+		catch errmsg
+			Mads.printerrormsg(errmsg)
 			warn($warnstring)
 		end
 	end
@@ -154,14 +155,14 @@ include("MadsSenstivityAnalysis.jl")
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
-		@tryimport Gadfly
+		@Mads.tryimport Gadfly
 		if !isdefined(:Gadfly)
 			ENV["MADS_NO_GADFLY"] = ""
 		end
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-		@tryimport PyCall
-		@tryimport PyPlot
+		@Mads.tryimport PyCall
+		@Mads.tryimport PyPlot
 		if !isdefined(:PyPlot)
 			ENV["MADS_NO_PYPLOT"] = ""
 		end
