@@ -8,11 +8,11 @@ if !isdefined(:sprintf)
 end
 
 quietdefault = true
-nprocs_per_task = 1
+nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
-	nprocs_per_task = Mads.nprocs_per_task
+	nprocs_per_task_default = Mads.nprocs_per_task_default
 	madsservers = Mads.madsservers
 end
 
@@ -22,7 +22,7 @@ Set number of processors needed for each parallel task at each node
 $(DocumentFunction.documentfunction(set_nprocs_per_task))
 """
 function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
-	global nprocs_per_task = local_nprocs_per_task
+	global nprocs_per_task_default = local_nprocs_per_task
 end
 
 """
@@ -50,7 +50,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
 	set_nprocs_per_task(nprocs_per_task)
 	h = Array{String}(0)
 	if length(nodenames) > 0 || mads_servers

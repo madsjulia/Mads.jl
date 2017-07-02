@@ -92,7 +92,7 @@ executionwaittime = 0.0
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
-nprocs_per_task = 1
+nprocs_per_task_default = 1
 const madsdir = splitdir(Base.source_path())[1]
 
 if haskey(ENV, "MADS_LONG_TESTS")
