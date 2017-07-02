@@ -1,4 +1,6 @@
-@Mads.tryimport Gadfly
+if !haskey(ENV, "MADS_NO_GADFLY")
+	@Mads.tryimport Gadfly
+end
 @Mads.tryimport Images
 
 """
