@@ -240,7 +240,6 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
 		local out
-		latest = false
 		try
 			out = madscommandfunction(parameterswithexpressions)
 		catch errmsg
@@ -249,11 +248,11 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 				catch errmsg
 					printerrormsg(errmsg)
-					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+					Mads.madserror("0.6 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
 				end
 			else
 				printerrormsg(errmsg)
-				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+				Mads.madserror("0.5 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
 			end
 		end
 		return out
