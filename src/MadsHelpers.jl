@@ -1,6 +1,15 @@
 import DocumentFunction
 
 """
+Set number of processors needed for each parallel task at each node
+
+$(DocumentFunction.documentfunction(set_nprocs_per_task))
+"""
+function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
+	global nprocs_per_task_default = local_nprocs_per_task
+end
+
+"""
 MADS restart on
 
 $(DocumentFunction.documentfunction(restarton))
