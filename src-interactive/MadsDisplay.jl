@@ -54,7 +54,9 @@ function display(filename::String)
 	end
 end
 
-function display(p::Gadfly.Plot)
-	Base.display(p)
-	println()
+if isdefined(:Gadfly)
+	function display(p::Gadfly.Plot)
+		Base.display(p)
+		println()
+	end
 end
