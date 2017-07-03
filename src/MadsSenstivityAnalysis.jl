@@ -1222,7 +1222,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 
 		# If we want to use a seed for our random phis
 		# +kL because we want to have the same string of seeds for any initial seed
-		srand(seed+1+kL)
+		srand(seed+kL)
 
 		# Determining which parameter we are on
 		k = Int(ceil(kL/Nr))
