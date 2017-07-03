@@ -51,14 +51,11 @@ cd(workdir)
 	@Base.Test.test no_restart_results[1] == create_restart_results[1]
 	@Base.Test.test create_restart_results[1] == use_restart_results[1]
 
-	# @show ReusableFunctions.restarts
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	# @show ReusableFunctions.restarts
 	@Base.Test.test ReusableFunctions.restarts == 16
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	# @show ReusableFunctions.restarts
 	@Base.Test.test ReusableFunctions.restarts == 17
 	Mads.savemadsfile(md)
 

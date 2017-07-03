@@ -157,6 +157,7 @@ else
 	ENV["MADS_NO_GADFLY"] = ""
 	ENV["MADS_NO_PYPLOT"] = ""
 	ENV["MADS_NO_DISPLAY"] = ""
+	graphoutput = false
 	warn("Mads plotting is disabled")
 end
 

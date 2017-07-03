@@ -115,6 +115,9 @@ Dumps:
 - `filename` : output plot file
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
+	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(:Gadfly)
+		imagefiles = false
+	end
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -168,7 +171,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	end
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if imagefiles
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -212,7 +215,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	sortedeigenm = real(eigenm[:,index])
 	datafiles && writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
 	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if imagefiles
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
