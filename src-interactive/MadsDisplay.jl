@@ -8,22 +8,28 @@ function display(filename::String)
 		warn("File `$filename` is missing!")
 		return
 	end
-	if isdefined(:TerminalExtensions) || isdefined(:IJulia)
+	if isdefined(:TerminalExtensions) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
 		trytoopen = false
 		ext = lowercase(Mads.getextension(filename))
 		if ext == "svg"
-			root = Mads.getrootname(filename)
-			filename2 = root * ".png"
-			try
-				run(`convert -density 90 -background none $filename $filename2`)
-				img = Images.load(filename2)
-				Base.display(img)
-				println("")
-			catch
-				trytoopen = true
-			end
-			if isfile(filename2)
-				rm(filename2)
+			if isdefined(Main, :IJulia) && Main.IJulia.inited
+				open(filename) do f
+					display("image/svg+xml", readstring(f))
+				end
+			else
+				root = Mads.getrootname(filename)
+				filename2 = root * ".png"
+				try
+					run(`convert -density 90 -background none $filename $filename2`)
+					img = Images.load(filename2)
+					Base.display(img)
+					println("")
+				catch
+					trytoopen = true
+				end
+				if isfile(filename2)
+					rm(filename2)
+				end
 			end
 		else
 			try
