@@ -27,19 +27,19 @@
 **MADS** is characterized by several unique features:
 
 *   Provides an integrated computational framework for a wide range of model-based analyses, and supports model-based decision making.
-*   **MADS** is designed to be capable to work in an adaptive mode with minimum input from the user.  
-    For example, ‘**mads s01**’ is sufficient to perform calibration of problem ‘**s01**’ and ‘**mads montecarlo s01**’ is sufficient to perform uncertainty analysis of problem ‘**s01**’. All the parameters controlling the performance of these analyses are estimated internally by **MADS**.  
+*   **MADS** is designed to be capable to work in an adaptive mode with minimum input from the user.
+    For example, ‘**mads s01**’ is sufficient to perform calibration of problem ‘**s01**’ and ‘**mads montecarlo s01**’ is sufficient to perform uncertainty analysis of problem ‘**s01**’. All the parameters controlling the performance of these analyses are estimated internally by **MADS**.
     Nevertheless, if needed, the user has the flexibility to specify a wide range of options.
-*   The same problem input file(in the previous case, ‘**s01.mads**’)is sufficient and can be applied to perform all the possible model analyses supported by **MADS**.  
-    Different analyses can be invoked using different command-line keywords and options.  
+*   The same problem input file(in the previous case, ‘**s01.mads**’)is sufficient and can be applied to perform all the possible model analyses supported by **MADS**.
+    Different analyses can be invoked using different command-line keywords and options.
     If preferred, the keywords can be provided on the first line of the problem input file as well.
-*   Most of the model analysis can be performed using a discretized parameter space (e.g. **PPSD**, **IGPD**, **ABAGUS**).  
+*   Most of the model analysis can be performed using a discretized parameter space (e.g. **PPSD**, **IGPD**, **ABAGUS**).
     This can substantially reduce the computational effort to perform various model analyses (e.g. calibration, uncertainty quantification, and sensitivity analysis, performance assessment).
 *   Highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called [SVD-assist](http://www.pesthomepage.org/Highly-parameterized_inversion.php) in [PEST](http://www.pesthomepage.org).
-*   Permits the use of 'acceptable' calibration ranges for each optimization target.  
-    In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.  
+*   Permits the use of 'acceptable' calibration ranges for each optimization target.
+    In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.
     This feature is implemented using the keyword ‘**<u>[obsrange](#calibration-termination-criteria)</u>**’.
-*   Allows the use of an acceptable calibration range for the objective function.  
+*   Allows the use of an acceptable calibration range for the objective function.
     In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword ‘**<u>[cutoff](#calibration-termination-criteria)</u>**’.
 *   Implements a series of alternative objective functions (OF).
 *   By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process.
@@ -58,11 +58,9 @@
 
 ## <a name="manual:execution" id="manual:execution"></a>**MADS** Execution:
 
-<div class="console">
-
-**mads [ problem_name | input_file_name ] [ keywords | options ]**
-
-</div>
+```bash
+mads [ problem_name | input_file_name ] [ keywords | options ]
+```
 
 **MADS** execution requires at minimum either a **problem name (_problem_name_)** or **problem input file (_input_file_name_)**.
 
@@ -126,7 +124,7 @@ single
 
 <td class="keywordsright">
 
-**_single calibration using initial guesses provided in the input file_**;  
+**_single calibration using initial guesses provided in the input file_**;
 this type of calibration is performed by default; the keyword does not need to be provided
 
 </td>
@@ -143,7 +141,7 @@ igrnd
 
 <td class="keywordsright">
 
-**_sequential multi-start (multi-try) calibrations using a set of random initial values_**;  
+**_sequential multi-start (multi-try) calibrations using a set of random initial values_**;
 the number of initial guess realizations is defined by **real**=X
 
 </td>
@@ -160,7 +158,7 @@ igpd
 
 <td class="keywordsright">
 
-**_sequential multi-start (multi-try) calibrations using a set of discretized initial values_**;  
+**_sequential multi-start (multi-try) calibrations using a set of discretized initial values_**;
 the parameter space discretization is defined in the **MADS** input file
 
 </td>
@@ -177,8 +175,8 @@ ppsd
 
 <td class="keywordsright">
 
-**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method_**; 
-in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;  
+**_sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (**PPSD**) method_**;
+in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration;
 the parameter space discretization is defined in the **MADS** input file.
 
 </td>
@@ -237,8 +235,8 @@ parerror=[real]
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if the **_estimated model parameters are within a predefined absolute error_** range from their known true values  
-applied in the case of test functions with known solution  
+terminate calibration (or collect solution in the case of **abagus**) if the **_estimated model parameters are within a predefined absolute error_** range from their known true values
+applied in the case of test functions with known solution
 [default parerror=0; i.e. termination criteria is not applied]
 
 </td>
@@ -271,7 +269,7 @@ obserror=[real]
 
 <td class="keywordsright">
 
-terminate calibration (or collect solution in the case of **abagus**) if **_model predictions are within a predefined absolute error range from their observed values_**  
+terminate calibration (or collect solution in the case of **abagus**) if **_model predictions are within a predefined absolute error range from their observed values_**
 [default obserror=0; i.e. termination criteria is not applied]
 
 </td>
@@ -528,7 +526,7 @@ smp=olh
 
 <td class="keywordsright">
 
-Optimal Latin Hypercube Sampling [default] (if real = 1 **RANDOM**; if real > **IDLHS**; if real > 500 **LHS**)  
+Optimal Latin Hypercube Sampling [default] (if real = 1 **RANDOM**; if real > **IDLHS**; if real > 500 **LHS**)
 Sampling is performed using internally computed or user provided seed.
 
 </td>
@@ -1103,36 +1101,36 @@ test=[integer]
 
 <td class="keywordsright">
 
-test problem ID [default=1]:  
-1: Parabola  
-2: Griewank  
-3: Rosenbrock  
-4: De Jong's Function #4  
-5: Step  
-6: Alpine function (Clerc's Function #1)  
-7: Rastrigin  
-8: Krishna Kumar  
-9: 2D Tripod function  
-10: Shekel's Foxholes 2D  
-11: Shekel's Foxholes 5D  
-12: Shekel's Foxholes 10D  
-20: Shekel's Foxholes 2D (alternative; global methods only)  
-21: Polynomial fitting (global methods only)  
-22: Ackley (global methods only)  
-23: Eason 2D (global methods only)  
-31: Rosenbrock (simplified)  
-32: Griewank (alternative)  
-33: Rosenbrock (alternative)  
-34: Powell's Quadratic  
-35: Booth  
-36: Beale  
+test problem ID [default=1]:
+1: Parabola
+2: Griewank
+3: Rosenbrock
+4: De Jong's Function #4
+5: Step
+6: Alpine function (Clerc's Function #1)
+7: Rastrigin
+8: Krishna Kumar
+9: 2D Tripod function
+10: Shekel's Foxholes 2D
+11: Shekel's Foxholes 5D
+12: Shekel's Foxholes 10D
+20: Shekel's Foxholes 2D (alternative; global methods only)
+21: Polynomial fitting (global methods only)
+22: Ackley (global methods only)
+23: Eason 2D (global methods only)
+31: Rosenbrock (simplified)
+32: Griewank (alternative)
+33: Rosenbrock (alternative)
+34: Powell's Quadratic
+35: Booth
+36: Beale
 37: Parsopoulos
 
-Curve-fitting test functions:  
-40: Sin/Cos data fitting (2 parameters)  
-41: Sin/Cos data fitting (4 parameters)  
-42: Sin/Cos data fitting (2 parameters; simplified)  
-43: Exp data fitting I (5 parameters)  
+Curve-fitting test functions:
+40: Sin/Cos data fitting (2 parameters)
+41: Sin/Cos data fitting (4 parameters)
+42: Sin/Cos data fitting (2 parameters; simplified)
+43: Exp data fitting I (5 parameters)
 44: Exp data fitting II (11 parameters)
 
 </td>
@@ -1363,22 +1361,22 @@ Debug the parallel execution [default pardebug=0]
 
 ## <a name="manual:files" id="manual:files"></a>**MADS** Input and output files
 
-_problem_name_**.mads**: an input file that can completely define the analyzed problem. The file follows a predefined **MADS** input format. It includes information about the simulation type, model parameters, and model observations.  
-_problem_name_**.results**: an output file containing the **MADS** results  
-_problem_name_**.residuals**: an output file containing the residuals between model predictions and calibration targets (if applicable)  
-_problem_name_**.jacobian**: an output file containing the Jacobian (local sensitivity) matrix  
-_problem_name_**.covariance**: an output file containing the covariance matrix  
-_problem_name_**.correlation**: an output file containing the correlation matrix  
-_problem_name_**.eigen**: an output file containing the eigen matrix and eigen values  
-_problem_name_**.phi**: an output file containing information about the final objective function  
-_problem_name_**.ofe**: an output file containing information about the objective function minimization progress as a function of model evaluations  
-_problem_name_**.mcrnd***: output files containing Monte Carlo (**MC**) analysis results  
-_problem_name_**.igrnd***: output files containing Random Initial Guesses (**IGRND**) results  
-_problem_name_**.igpd***: output files containing Partially Discretized Initial Guesses (**IGPD**) results  
-_problem_name_**.ppsd***: output files containing Partial Parameter Space Discretization (**PPSD**) results  
-_problem_name_**-rerun.mads**: an output file that can be used as a **MADS** input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined **MADS** input format.  
-_problem_name_**._igap_**: output files containing remediation information gap (**infogap**) results  
-_problem_name_**._pssa_**: output files containing **ABAGUS** results  
+_problem_name_**.mads**: an input file that can completely define the analyzed problem. The file follows a predefined **MADS** input format. It includes information about the simulation type, model parameters, and model observations.
+_problem_name_**.results**: an output file containing the **MADS** results
+_problem_name_**.residuals**: an output file containing the residuals between model predictions and calibration targets (if applicable)
+_problem_name_**.jacobian**: an output file containing the Jacobian (local sensitivity) matrix
+_problem_name_**.covariance**: an output file containing the covariance matrix
+_problem_name_**.correlation**: an output file containing the correlation matrix
+_problem_name_**.eigen**: an output file containing the eigen matrix and eigen values
+_problem_name_**.phi**: an output file containing information about the final objective function
+_problem_name_**.ofe**: an output file containing information about the objective function minimization progress as a function of model evaluations
+_problem_name_**.mcrnd***: output files containing Monte Carlo (**MC**) analysis results
+_problem_name_**.igrnd***: output files containing Random Initial Guesses (**IGRND**) results
+_problem_name_**.igpd***: output files containing Partially Discretized Initial Guesses (**IGPD**) results
+_problem_name_**.ppsd***: output files containing Partial Parameter Space Discretization (**PPSD**) results
+_problem_name_**-rerun.mads**: an output file that can be used as a **MADS** input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined **MADS** input format.
+_problem_name_**._igap_**: output files containing remediation information gap (**infogap**) results
+_problem_name_**._pssa_**: output files containing **ABAGUS** results
 _problem_name_**._pua_**: output files containing predictive uncertainty analysis (**postpua**) results
 
 [Back to top](#mads-manual)
@@ -1439,7 +1437,7 @@ To compile, extract the provided **mads.tgz** file (**tar xvf mads.tgz**) and ex
 *   [LAPACK](http://www.netlib.org/lapack/):              http://www.netlib.org/lapack/
 *   [BLAS](http://www.netlib.org/blas/):                   http://www.netlib.org/blas/
 
-If **macports** is installed ([www.macports.org](http://www.macports.org)), these packages can be installed on MAC OS X machines using the following commands (requiring administrative privileges):  
+If **macports** is installed ([www.macports.org](http://www.macports.org)), these packages can be installed on MAC OS X machines using the following commands (requiring administrative privileges):
 
 *   sudo port install blas
 *   sudo port install lapack

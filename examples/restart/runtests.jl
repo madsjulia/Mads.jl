@@ -31,6 +31,7 @@ cd(workdir)
 	ReusableFunctions.quieton()
 	Mads.madsinfo("Restarting internal calibration problem ...")
 	ReusableFunctions.resetrestarts()
+	ReusableFunctions.resetcomputes()
 
 	Mads.rmdir(joinpath(workdir, "w01_restart"))
 	md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
@@ -51,14 +52,11 @@ cd(workdir)
 	@Base.Test.test no_restart_results[1] == create_restart_results[1]
 	@Base.Test.test create_restart_results[1] == use_restart_results[1]
 
-	# @show ReusableFunctions.restarts
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	# @show ReusableFunctions.restarts
 	@Base.Test.test ReusableFunctions.restarts == 16
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	# @show ReusableFunctions.restarts
 	@Base.Test.test ReusableFunctions.restarts == 17
 	Mads.savemadsfile(md)
 
@@ -68,24 +66,52 @@ cd(workdir)
 	Mads.rmfiles_ext("svg")
 	Mads.rmfiles_ext("dat")
 
-	if Mads.long_tests
-		Mads.rmdir(joinpath(workdir, "/internal-linearmodel_restart"))
+	ReusableFunctions.quieton()
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
+	delete!(md, "Restart")
+	Mads.madsinfo("... no restart ...")
+	ReusableFunctions.resetrestarts()
+	ReusableFunctions.resetcomputes()
+	no_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 0
+	@Base.Test.test ReusableFunctions.computes == 0
+	md["Restart"] = true
+	Mads.madsinfo("... create restart ...")
+	create_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 0
+	@Base.Test.test ReusableFunctions.computes == 20
+	Mads.madsinfo("... use restart ...")
+	use_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 0
+	@Base.Test.test ReusableFunctions.computes == 20
 
-		Mads.madsinfo("Restarting internal sensitivity analysis problem ...")
-		md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
-		Mads.madsinfo("... no restart ...")
-		no_restart_results = Mads.saltelli(md, N=5, seed=2016)
-		md["Restart"] = true
-		Mads.madsinfo("... create restart ...")
-		create_restart_results = Mads.saltelli(md, N=5, seed=2016)
-		Mads.madsinfo("... use restart ...")
-		use_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	@Base.Test.test no_restart_results == create_restart_results
+	@Base.Test.test create_restart_results == use_restart_results
 
-		@Base.Test.test no_restart_results == create_restart_results
-		@Base.Test.test create_restart_results == use_restart_results
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
 
-		Mads.rmdir(joinpath(workdir, "/internal-linearmodel_restart"))
-	end
+	delete!(md, "Restart")
+	Mads.madsinfo("... no restart ...")
+	ReusableFunctions.resetrestarts()
+	ReusableFunctions.resetcomputes()
+	no_restart_results = Mads.efast(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 0
+	@Base.Test.test ReusableFunctions.computes == 0
+	md["Restart"] = true
+	Mads.madsinfo("... create restart ...")
+	create_restart_results = Mads.efast(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 0
+	@Base.Test.test ReusableFunctions.computes == 770
+	Mads.madsinfo("... use restart ...")
+	use_restart_results = Mads.efast(md, N=5, seed=2016)
+	@Base.Test.test ReusableFunctions.restarts == 770
+	@Base.Test.test ReusableFunctions.computes == 770
+
+	@Base.Test.test no_restart_results == create_restart_results
+	@Base.Test.test create_restart_results == use_restart_results
+
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
 end
 
 cd(cwd)

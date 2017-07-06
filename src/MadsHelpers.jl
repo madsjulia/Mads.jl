@@ -6,7 +6,7 @@ Set number of processors needed for each parallel task at each node
 $(DocumentFunction.documentfunction(set_nprocs_per_task))
 """
 function set_nprocs_per_task(local_nprocs_per_task::Integer=1)
-	global nprocs_per_task = local_nprocs_per_task
+	global nprocs_per_task_default = local_nprocs_per_task
 end
 
 """
@@ -324,8 +324,8 @@ $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
             "quiet"=>"[default=`true`]")))
 """
-function setseed(seed::Integer=0, quiet::Bool=true)
-	if seed != 0
+function setseed(seed::Integer=-1, quiet::Bool=true)
+	if seed != -1
 		srand(seed)
 		!quiet && info("New seed: $seed")
 	else

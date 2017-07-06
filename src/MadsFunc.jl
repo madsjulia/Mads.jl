@@ -79,7 +79,23 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
 		Mads.madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
 		madsdatacommandfunction = importeverywhere(filename)
-		madscommandfunction = madsdatacommandfunction(madsdata_in)
+		local madscommandfunction
+		try
+			madscommandfunction = madsdatacommandfunction(madsdata_in)
+		catch errmsg
+			if VERSION >= v"0.6.0"
+				try
+					madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+				catch errmsg
+					printerrormsg(errmsg)
+					Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
+				end
+				madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+			else
+				printerrormsg(errmsg)
+				Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
+			end
+		end
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
@@ -88,15 +104,15 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
 			npt = m != nothing ? parse(Int, m.captures[1]) : 1
-			if nprocs_per_task > 1 && npt != nprocs_per_task
+			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
 				if m != nothing
-					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task "))
-					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
+					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task_default "))
+					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m != nothing
-						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task "))
-						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task)")
+						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task_default "))
+						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
 					end
 				end
 			end
@@ -116,6 +132,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 			else
 				cwd = currentdir
 			end
+			local results
 			attempt = 0
 			trying = true
 			tempdirname = ""
@@ -143,17 +160,27 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
 				attempt = 0
 				trying = true
+				latest = false
 				while trying
 					try
 						attempt += 1
-						results = convert(DataStructures.OrderedDict{Any,Float64}, madsdatacommandfunction(madsdata))
+						if latest
+							out = Base.invokelatest(madsdatacommandfunction, madsdata)
+						else
+							out = madsdatacommandfunction(madsdata)
+						end
+						results = convert(DataStructures.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
-						sleep(attempt * 0.5)
-						if attempt > 3
-							cd(currentdir)
-							printerrormsg(errmsg)
-							Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+						if VERSION >= v"0.6.0" && !latest
+							latest = true
+						else
+							sleep(attempt * 0.5)
+							if attempt > 3
+								cd(currentdir)
+								printerrormsg(errmsg)
+								Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							end
 						end
 					end
 				end
@@ -212,7 +239,23 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		parameterswithexpressions = merge(paramsnoexpressions, expressions)
-		return madscommandfunction(parameterswithexpressions)
+		local out
+		try
+			out = madscommandfunction(parameterswithexpressions)
+		catch errmsg
+			if VERSION >= v"0.6.0"
+				try
+					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
+				catch errmsg
+					printerrormsg(errmsg)
+					Mads.madserror("0.6 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+				end
+			else
+				printerrormsg(errmsg)
+				Mads.madserror("0.5 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+			end
+		end
+		return out
 	end
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end

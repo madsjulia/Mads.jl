@@ -84,13 +84,12 @@ end
 Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
 
-Mads.plotwellSAresults(Dict(), Dict())
-Mads.plotwellSAresults(Dict("W"=>Dict()), Dict(), "w1")
-Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
-
-Mads.plotobsSAresults(Dict(), Dict())
-
 if !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.plotwellSAresults(Dict(), Dict())
+	Mads.plotwellSAresults(Dict("W"=>Dict()), Dict(), "w1")
+	Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
+
+	Mads.plotobsSAresults(Dict(), Dict())
 	Mads.setplotfileformat("a.ps", "")
 	Mads.setplotfileformat("a", "EPS")
 	Mads.setdefaultplotformat("TIFF")

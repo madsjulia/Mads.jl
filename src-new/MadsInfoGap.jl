@@ -18,7 +18,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1
             "verbosity"=>"verbosity output level [default=`0`]",
             "seed"=>"random seed [default=`0`]")))
 """
-function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0)
+function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	np = 4
@@ -122,7 +122,7 @@ Returns:
 
 - hmin, hmax
 """
-function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=0)
+function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	time = [1.,2.,3.,4.]
@@ -278,7 +278,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
+function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -419,7 +419,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=0, pinit::Vector=[])
+function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [1.,0.]

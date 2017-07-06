@@ -35,6 +35,8 @@ import GeostatInversion
 import SVR
 import DocumentFunction
 
+include("MadsHelpers.jl")
+
 "Try to import a module"
 macro tryimport(s::Symbol)
 	importq = string(:(import $s))
@@ -42,7 +44,8 @@ macro tryimport(s::Symbol)
 	q = quote
 		try
 			eval(parse($importq))
-		catch
+		catch errmsg
+			Mads.printerrormsg(errmsg)
 			warn($warnstring)
 		end
 	end
@@ -89,7 +92,7 @@ executionwaittime = 0.0
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
-nprocs_per_task = 1
+nprocs_per_task_default = 1
 const madsdir = splitdir(Base.source_path())[1]
 
 if haskey(ENV, "MADS_LONG_TESTS")
@@ -114,7 +117,6 @@ include("MadsASCII.jl")
 include("MadsJSON.jl")
 include("MadsSineTransformations.jl")
 include("MadsMisc.jl")
-include("MadsHelpers.jl")
 include("MadsParameters.jl")
 include("MadsObservations.jl")
 include("MadsForward.jl")
@@ -131,11 +133,41 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 
+if Mads.pkgversion("Gadfly") == v"0.6.1"
+	ENV["MADS_NO_GADFLY"] = ""
+	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
+	warn("Gadfly plotting is disabled!")
+end
+
+if !haskey(ENV, "MADS_NO_PLOT")
+	if !haskey(ENV, "MADS_NO_GADFLY")
+		@Mads.tryimport Gadfly
+		if !isdefined(:Gadfly)
+			ENV["MADS_NO_GADFLY"] = ""
+		end
+	end
+	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
+		@Mads.tryimport PyCall
+		@Mads.tryimport PyPlot
+		if !isdefined(:PyPlot)
+			ENV["MADS_NO_PYPLOT"] = ""
+		end
+	end
+else
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
+	ENV["MADS_NO_DISPLAY"] = ""
+	graphoutput = false
+	warn("Mads plotting is disabled")
+end
+
 if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))
-	include(joinpath("..", "src-interactive", "MadsDisplay.jl"))
+	if !haskey(ENV, "MADS_NO_DISPLAY")
+		include(joinpath("..", "src-interactive", "MadsDisplay.jl"))
+	end
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
@@ -144,33 +176,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
 end
 
-if Mads.pkgversion("Gadfly") == v"0.6.1"
-	ENV["MADS_NO_GADFLY"] = ""
-	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
-	warn("Gadfly plotting is disabled!")
-end
-
 include("MadsSenstivityAnalysis.jl")
-
-if !haskey(ENV, "MADS_NO_PLOT")
-	if !haskey(ENV, "MADS_NO_GADFLY")
-		@tryimport Gadfly
-		if !isdefined(:Gadfly)
-			ENV["MADS_NO_GADFLY"] = ""
-		end
-	end
-	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-		@tryimport PyCall
-		@tryimport PyPlot
-		if !isdefined(:PyPlot)
-			ENV["MADS_NO_PYPLOT"] = ""
-		end
-	end
-else
-	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
-	warn("Mads plotting is disabled")
-end
 
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")

@@ -7,8 +7,8 @@ function svrtrain(madsdata::Associative, paramarray::Array{Float64,2}; check::Bo
 	predictions = Mads.forward(madsdata, paramarray)'
 
 	npred = size(predictions, 1)
-	svrmodel = Array(SVR.svmmodel, npred)
-	svrpredictions2 = Array(Float64, 0, numberofsamples)
+	svrmodel = Array{SVR.svmmodel}(npred)
+	svrpredictions2 = Array{Float64}(0, numberofsamples)
 	for i=1:npred
 		sm = SVR.train(predictions[i,:], paramarray'; svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, eps=eps, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size);
 		svrmodel[i] = sm
@@ -94,7 +94,7 @@ end
 =#
 function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Array{Float64, 2})
 	npred = length(svrmodel)
-	y = Array(Float64, 0, size(paramarray, 1))
+	y = Array{Float64}(0, size(paramarray, 1))
 	for i=1:npred
 		y = [y; SVR.predict(svrmodel[i], paramarray')'];
 	end
@@ -161,7 +161,7 @@ Returns:
 - Array of SVR models for each model prediction
 """
 function svrload(npred::Int, rootname::String, numberofsamples::Int)
-	svrmodel = Array(SVR.svmmodel, npred)
+	svrmodel = Array{SVR.svmmodel}(npred)
 	for i=1:npred
 		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")
 		if isfile(filename)
@@ -206,7 +206,7 @@ Returns:
 - function saving SVR models
 - function removing SVR models from the memory
 """
-function makesvrmodel(madsdata::Associative, numberofsamples::Integer=100; check::Bool=false, addminmax::Bool=true, loadsvr::Bool=false, savesvr::Bool=false, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, eps::Float64=0.001, cache_size::Float64=100.0, tol::Float64=0.001, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, seed::Integer=0)
+function makesvrmodel(madsdata::Associative, numberofsamples::Integer=100; check::Bool=false, addminmax::Bool=true, loadsvr::Bool=false, savesvr::Bool=false, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, eps::Float64=0.001, cache_size::Float64=100.0, tol::Float64=0.001, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, seed::Integer=-1)
 	rootname = splitdir(Mads.getmadsrootname(madsdata))[end]
 	optnames = Mads.getoptparamkeys(madsdata)
 	obsnames = Mads.getobskeys(madsdata)
@@ -221,7 +221,9 @@ function makesvrmodel(madsdata::Associative, numberofsamples::Integer=100; check
 				d[k] = paramdict[k]
 			end
 			parvector = collect(values(d))
-			p = svrpredict(svrmodel, parvector')
+			n = length(parvector)
+			parvector = reshape(parvector, 1, n)
+			p = svrpredict(svrmodel, parvector)
 			d = DataStructures.OrderedDict{String, Float64}(zip(obsnames, p))
 		else
 			paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)

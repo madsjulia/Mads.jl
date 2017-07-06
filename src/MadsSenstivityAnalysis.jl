@@ -115,6 +115,9 @@ Dumps:
 - `filename` : output plot file
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
+	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(:Gadfly)
+		imagefiles = false
+	end
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
 		ext = ""
@@ -168,7 +171,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	end
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if imagefiles
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -212,7 +215,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	sortedeigenm = real(eigenm[:,index])
 	datafiles && writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
 	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
-	if imagefiles && isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if imagefiles
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -247,7 +250,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=0, scale::Number=1)
+function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	uo = u
@@ -421,7 +424,7 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=0, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=-1, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
 	setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -609,7 +612,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=0, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
+function saltelli(madsdata::Associative; N::Integer=100, seed::Integer=-1, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -846,7 +849,7 @@ for mi = 1:length(saltelli_functions)
 	index = mi
 	q = quote
 		@doc "Parallel version of $(saltelli_functions[index])" ->
-		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=0, restartdir::String="")
+		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::String="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -1080,7 +1083,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=0, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1127,7 +1130,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	Mads.setseed(seed)
 
 	## Setting pathfiles
-	efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
+	# efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
 
 	function eFAST_getCompFreq(Wi, nprime, M)
 		if nprime == 1 # Special case if n' == 1 -> W_comp is the null set
