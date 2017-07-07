@@ -1,6 +1,6 @@
 import DocumentFunction
-@Mads.tryimport JuMP
-@Mads.tryimport MathProgBase
+import JuMP
+import MathProgBase
 @Mads.tryimport Ipopt
 if !haskey(ENV, "MADS_NO_GADFLY")
 	@Mads.tryimport Gadfly

@@ -171,9 +171,12 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
-	include(joinpath("..", "src-new", "MadsInfoGap.jl"))
-	include(joinpath("..", "src-new", "MadsBSS.jl"))
-	include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
+	@Mads.tryimport JuMP
+	if isdefined(:JuMP)
+		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
+		include(joinpath("..", "src-new", "MadsBSS.jl"))
+		include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
+	end
 end
 
 include("MadsSenstivityAnalysis.jl")
