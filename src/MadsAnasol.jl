@@ -192,6 +192,14 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			H = 0.5
 			anasolfunctionroot = "long_bbb_"
 		end
+		anasolfunctions = Array{String}(numberofsources)
+		for i = 1:numberofsources
+			if haskey(madsdata["Sources"][i], "box")
+				anasolfunctions[i] = anasolfunctionroot * "bbb_iir_c"
+			elseif haskey(madsdata["Sources"][i], "gauss" )
+				anasolfunctions[i] = anasolfunctionroot * "ddd_iir_c"
+			end
+		end
 		c = DataStructures.OrderedDict()
 		for wellkey in Mads.getwellkeys(madsdata)
 			if madsdata["Wells"][wellkey]["on"]
@@ -210,11 +218,6 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 						conc = background
 						for i = 1:numberofsources
-							if haskey(madsdata["Sources"][i], "box")
-								anasolfunction = anasolfunctionroot * "bbb_iir_c"
-							elseif haskey(madsdata["Sources"][i], "gauss" )
-								anasolfunction = anasolfunctionroot * "ddd_iir_c"
-							end
 							x = parameters[string("source", i, "_", "x")]
 							y = parameters[string("source", i, "_", "y")]
 							z = parameters[string("source", i, "_", "z")]
@@ -225,10 +228,10 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 							t0 = parameters[string("source", i, "_", "t0")]
 							t1 = parameters[string("source", i, "_", "t1")]
 							if screen
-								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
-											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
+								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i]) +
+											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i]))
 							else
-								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
+								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i])
 							end
 						end
 						c[string(wellkey, "_", t)] = conc
