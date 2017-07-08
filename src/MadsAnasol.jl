@@ -143,6 +143,9 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		parameterswithexpressions = merge(paramdict, expressions)
 		computeconcentrations(parameterswithexpressions)
 	end
+	function computeconcentrations(parameters::Vector)
+		warn("Vectors not defined yet!")
+	end
 	function computeconcentrations(parametersnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 		parameters = merge(parametersnoexpressions, expressions)
@@ -185,9 +188,9 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 						conc = background
 						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
-							if haskey( madsdata["Sources"][i], "box" )
+							if haskey(madsdata["Sources"][i], "box")
 								anasolfunction = anasolfunctionroot * "bbb_iir_c"
-							elseif haskey( madsdata["Sources"][i], "gauss" )
+							elseif haskey(madsdata["Sources"][i], "gauss")
 								anasolfunction = anasolfunctionroot * "ddd_iir_c"
 							end
 							x = parameters[string("source", i, "_", "x")]

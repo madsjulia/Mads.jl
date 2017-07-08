@@ -2,7 +2,28 @@ import MetaProgTools
 import DataStructures
 import DocumentFunction
 
-"""
+function makearrayfunction_vector(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+	function arrayfunction(arrayparameters::Vector)
+		return f(arrayparameters)
+	end
+	return arrayfunction
+end
+
+function makearrayfunction_dictionary(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+	optparamkeys = getoptparamkeys(madsdata)
+	initvalues = getparamsinit(madsdata)
+	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), initvalues))
+	function arrayfunction(arrayparameters::Vector)
+		return f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
+	end
+	return arrayfunction
+end
+
+function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+	arrayfunction = vectorflag ? makearrayfunction_vector(madsdata, f) : makearrayfunction_dictionary(madsdata, f)
+end
+
+@doc """
 Make a version of the function `f` that accepts an array containing the optimal parameter values
 
 $(DocumentFunction.documentfunction(makearrayfunction;
@@ -12,28 +33,18 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 Returns:
 
 - function accepting an array containing the optimal parameter values
-"""
-function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
-	optparamkeys = getoptparamkeys(madsdata)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
-	function arrayfunction(arrayparameters::Vector)
-		return f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
+""" makearrayfunction
+
+function makedoublearrayfunction_vector(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+	arrayfunction = makearrayfunction(madsdata, f)
+	function doublearrayfunction(arrayparameters::Vector)
+		vectorresult = arrayfunction(arrayparameters)
+		return vcat(vectorresult)
 	end
-	return arrayfunction
+	return doublearrayfunction
 end
 
-"""
-Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
-
-$(DocumentFunction.documentfunction(makedoublearrayfunction;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
-
-Returns:
-
-- function accepting an array containing the optimal parameter values, and returning an array of observations
-"""
-function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+function makedoublearrayfunction_dictionary(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
 	obskeys = getobskeys(madsdata)
 	function doublearrayfunction(arrayparameters::Vector)
@@ -48,6 +59,22 @@ function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscomm
 	end
 	return doublearrayfunction
 end
+
+function makedoublearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
+	doublearrayfunction = vectorflag ? makedoublearrayfunction_vector(madsdata, f) : makedoublearrayfunction_dictionary(madsdata, f)
+end
+
+@doc """
+Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
+
+$(DocumentFunction.documentfunction(makedoublearrayfunction;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
+
+Returns:
+
+- function accepting an array containing the optimal parameter values, and returning an array of observations
+""" makedoublearrayfunction
 
 """
 Make a conditional log likelihood function that accepts an array containing the optimal parameter values

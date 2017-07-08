@@ -79,6 +79,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 	end
 end
 
+vectorflag = false
 quiet = true
 restart = false
 graphoutput = true

@@ -1,6 +1,24 @@
 import DocumentFunction
 
 """
+MADS vector calls on
+
+$(DocumentFunction.documentfunction(vectoron))
+"""
+function vectoron()
+	global vectorflag = true;
+end
+
+"""
+MADS vector calls off
+
+$(DocumentFunction.documentfunction(vectoroff))
+"""
+function vectoroff()
+	global vectorflag = false;
+end
+
+"""
 Set number of processors needed for each parallel task at each node
 
 $(DocumentFunction.documentfunction(set_nprocs_per_task))
@@ -26,6 +44,7 @@ $(DocumentFunction.documentfunction(restartoff))
 function restartoff()
 	global restart = false;
 end
+
 
 """
 Get MADS restart status
