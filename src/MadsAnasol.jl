@@ -136,9 +136,28 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	if haskeyword(madsdata, "background")
 		background = madsdata["Problem"]["background"]
 	end
+	anasolparametersrequired = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az"]
+	anasolparametersall = vcat(anasolparametersrequired, ["rf", "ts_dsp", "ts_adv", "ts_rct", "alpha", "beta", "nlc0", "nlc1"])
+	anasolsourcerequired = ["x", "y", "z", "dx", "dy", "dz", "f", "t0", "t1"]
+	numberofsources = length(madsdata["Sources"])
+	for i = 1:numberofsources
+		for p in anasolsourcerequired
+			pn = string("source", i, "_", p)
+			anasolparametersrequired = [anasolparametersrequired; pn]
+			anasolparametersall = [anasolparametersall; pn]
+		end
+	end
+	parametersnoexpressions = Mads.getparamdict(madsdata)
+	expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
+	parameters = merge(parametersnoexpressions, expressions)
+	paramkeys = collect(keys(parameters))
+	if length(findin(anasolparametersrequired, paramkeys)) < length(anasolparametersrequired)
+		Mads.madswarn("Missing: $(anasolparametersrequired[indexin(anasolparametersrequired, paramkeys).==0]))")
+		Mads.madscritical("There are missing Anasol parameters!")
+	end
+	# indexall = indexin(anasolparametersall, paramkeys)
 	function computeconcentrations()
-		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+		paramdict = Mads.getparamdict(madsdata)
 		expressions = evaluatemadsexpressions(madsdata, paramdict)
 		parameterswithexpressions = merge(paramdict, expressions)
 		computeconcentrations(parameterswithexpressions)
@@ -162,6 +181,9 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		else
 			ay = parameters["ay"]
 			az = parameters["az"]
+		end
+		if haskey(parameters, "rf")
+			rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
 		end
 		if haskey(parameters, "ts_dsp") && parameters["ts_dsp"] != 1.
 			H = 0.5 * parameters["ts_dsp"]
@@ -187,10 +209,10 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
 					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 						conc = background
-						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
+						for i = 1:numberofsources
 							if haskey(madsdata["Sources"][i], "box")
 								anasolfunction = anasolfunctionroot * "bbb_iir_c"
-							elseif haskey(madsdata["Sources"][i], "gauss")
+							elseif haskey(madsdata["Sources"][i], "gauss" )
 								anasolfunction = anasolfunctionroot * "ddd_iir_c"
 							end
 							x = parameters[string("source", i, "_", "x")]
@@ -296,24 +318,12 @@ function computemass(madsdata::Associative; time::Number=0)
 		f = parameters[string("source", i, "_", "f")]["init"]
 		t0 = parameters[string("source", i, "_", "t0")]["init"]
 		t1 = parameters[string("source", i, "_", "t1")]["init"]
-		#=
-		if i == 1
-			f = 10
-			t0 = 1960
-			t1 = 1963
-		else
-			f = 10
-			t0 = 2010
-			t1 = 2100
-		end
-		=#
 		if time > t0
 			tmin = min(time, t1)
 			mi = f * (tmin - t0)
 			if compute_reduction
 				mr = mi - (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
 			end
-			# @show t0, t1, tmin, mi, mr
 			mass_injected += mi
 			mass_reduced += mr
 		end
