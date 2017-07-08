@@ -378,8 +378,8 @@ Returns:
 - `true` if optimizable, `false` if not
 """
 function isopt(madsdata::Associative, parameterkey::String)
-	if !haskey(madsdata["Parameters"][parameterkey], "type") ||
-		haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt"
+	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey) &&
+		(!haskey(madsdata["Parameters"][parameterkey], "type") || haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt")
 		return true
 	else
 		return false

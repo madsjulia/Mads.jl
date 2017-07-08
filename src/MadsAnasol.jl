@@ -3,6 +3,11 @@ import DataStructures
 import ProgressMeter
 import DocumentFunction
 
+anasolarguments = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az", "H"]
+anasolparametersrequired = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az"]
+anasolparametersall = [anasolparametersrequired; ["H", "rf", "ts_dsp", "ts_adv", "ts_rct", "alpha", "beta", "nlc0", "nlc1"]]
+anasolsourcerequired = ["x", "y", "z", "dx", "dy", "dz", "f", "t0", "t1"]
+
 """
 Add an additional contamination source
 
@@ -64,8 +69,13 @@ function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			sourceparams = keys(madsdata["Sources"][i][sourcetype])
-			for sourceparam in sourceparams
+			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
+			if length(findin(anasolsourcerequired, sourceparams)) < length(anasolsourcerequired)
+				Mads.madswarn("Missing: $(anasolsourcerequired[indexin(anasolsourcerequired, sourceparams).==0]))")
+				Mads.madscritical("There are missing Anasol parameters!")
+			end
+			extraparams = sourceparams[indexin(sourceparams, anasolsourcerequired).==0]
+			for sourceparam in [anasolsourcerequired; extraparams]
 				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
 					madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
 				else
@@ -74,7 +84,6 @@ function addsourceparameters!(madsdata::Associative)
 					end
 					madsdata["Expressions"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
 				end
-
 			end
 		end
 	end
@@ -103,7 +112,6 @@ function removesourceparameters!(madsdata::Associative)
 						end
 					end
 				end
-
 			end
 		end
 	end
@@ -136,26 +144,38 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	if haskeyword(madsdata, "background")
 		background = madsdata["Problem"]["background"]
 	end
-	anasolparametersrequired = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az"]
-	anasolparametersall = vcat(anasolparametersrequired, ["rf", "ts_dsp", "ts_adv", "ts_rct", "alpha", "beta", "nlc0", "nlc1"])
-	anasolsourcerequired = ["x", "y", "z", "dx", "dy", "dz", "f", "t0", "t1"]
+	parameters = Mads.getparamdict(madsdata)
+	ts_dsp = haskey(parameters, "ts_dsp") ? parameters["ts_dsp"] : 1.
+	H = haskey(parameters, "H") ? parameters["H"] : 0.5
+	if (ts_dsp == 1. && !Mads.isopt(madsdata, "ts_dsp")) && (H == 0.5 && !Mads.isopt(madsdata, "H"))
+		anasolfunctionroot = "long_bbb_"
+	else
+		anasolfunctionroot = "long_fff_"
+	end
 	numberofsources = length(madsdata["Sources"])
+	anasolfunctions = Array{String}(numberofsources)
+	local anasolallparametersrequired, anasolallparametersall
 	for i = 1:numberofsources
 		for p in anasolsourcerequired
 			pn = string("source", i, "_", p)
-			anasolparametersrequired = [anasolparametersrequired; pn]
-			anasolparametersall = [anasolparametersall; pn]
+			anasolallparametersrequired = [anasolparametersrequired; pn]
+			anasolallparametersall = [anasolparametersall; pn]
+		end
+		if haskey(madsdata["Sources"][i], "box")
+			anasolfunctions[i] = anasolfunctionroot * "bbb_iir_c"
+		elseif haskey(madsdata["Sources"][i], "gauss" )
+			anasolfunctions[i] = anasolfunctionroot * "ddd_iir_c"
 		end
 	end
 	parametersnoexpressions = Mads.getparamdict(madsdata)
 	expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 	parameters = merge(parametersnoexpressions, expressions)
 	paramkeys = collect(keys(parameters))
-	if length(findin(anasolparametersrequired, paramkeys)) < length(anasolparametersrequired)
-		Mads.madswarn("Missing: $(anasolparametersrequired[indexin(anasolparametersrequired, paramkeys).==0]))")
+	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+		Mads.madswarn("Missing: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]))")
 		Mads.madscritical("There are missing Anasol parameters!")
 	end
-	# indexall = indexin(anasolparametersall, paramkeys)
+	# indexall = indexin(anasolallparametersall, paramkeys)
 	function computeconcentrations()
 		paramdict = Mads.getparamdict(madsdata)
 		expressions = evaluatemadsexpressions(madsdata, paramdict)
@@ -185,20 +205,12 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		if haskey(parameters, "rf")
 			rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
 		end
-		if haskey(parameters, "ts_dsp") && parameters["ts_dsp"] != 1.
+		if haskey(parameters, "H")
+			H = parameters["H"]
+		elseif haskey(parameters, "ts_dsp")
 			H = 0.5 * parameters["ts_dsp"]
-			anasolfunctionroot = "long_fff_"
 		else
 			H = 0.5
-			anasolfunctionroot = "long_bbb_"
-		end
-		anasolfunctions = Array{String}(numberofsources)
-		for i = 1:numberofsources
-			if haskey(madsdata["Sources"][i], "box")
-				anasolfunctions[i] = anasolfunctionroot * "bbb_iir_c"
-			elseif haskey(madsdata["Sources"][i], "gauss" )
-				anasolfunctions[i] = anasolfunctionroot * "ddd_iir_c"
-			end
 		end
 		c = DataStructures.OrderedDict()
 		for wellkey in Mads.getwellkeys(madsdata)
