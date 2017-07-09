@@ -37,9 +37,13 @@ Returns:
 
 function makedoublearrayfunction_vector(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
-	function doublearrayfunction(arrayparameters::Vector)
-		vectorresult = arrayfunction(arrayparameters)
-		return vcat(vectorresult)
+	function doublearrayfunction(arrayparameters::Matrix)
+		nr = size(arrayparameters, 2)
+		vectorresult = Array{Float64}(nr)
+		for i = 1:nr
+			vectorresult[i] = arrayfunction(arrayparameters[:,i])
+		end
+		return vectorresult
 	end
 	return doublearrayfunction
 end

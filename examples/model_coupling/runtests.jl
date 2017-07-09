@@ -41,6 +41,7 @@ Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions`
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
 tefor = Mads.forward(md)
 
+cwd = pwd()
 cd(workdir)
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
 Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
@@ -85,7 +86,6 @@ md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
 aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 afor = Mads.forward(md)
 
-cwd = pwd()
 cd(workdir)
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
 md["Instructions"] = [Dict("ins"=>"external-linearmodel-matrix.inst", "read"=>"model_coupling_matrix.dat")]

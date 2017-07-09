@@ -183,7 +183,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		computeconcentrations(parameterswithexpressions)
 	end
 	function computeconcentrations(parameters::Vector)
-		warn("Vectors not defined yet!")
+		contamination(parameters...; anasolfunction=anasolfunctions[1])
 	end
 	function computeconcentrations(parametersnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
