@@ -153,7 +153,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		anasolfunctionroot = "long_fff_"
 	end
 	numberofsources = length(madsdata["Sources"])
-	anasolfunctions = Array{String}(numberofsources)
+	anasolfunctions = Array{Function}(numberofsources)
 	local anasolallparametersrequired, anasolallparametersall
 	for i = 1:numberofsources
 		for p in anasolsourcerequired
@@ -162,10 +162,11 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			anasolallparametersall = [anasolparametersall; pn]
 		end
 		if haskey(madsdata["Sources"][i], "box")
-			anasolfunctions[i] = anasolfunctionroot * "bbb_iir_c"
+			anasolfunction = anasolfunctionroot * "bbb_iir_c"
 		elseif haskey(madsdata["Sources"][i], "gauss" )
-			anasolfunctions[i] = anasolfunctionroot * "ddd_iir_c"
+			anasolfunction = anasolfunctionroot * "ddd_iir_c"
 		end
+		anasolfunctions[i] = eval(parse("Anasol.$anasolfunction"))
 	end
 	parametersnoexpressions = Mads.getparamdict(madsdata)
 	expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
@@ -183,7 +184,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		computeconcentrations(parameterswithexpressions)
 	end
 	function computeconcentrations(parameters::Vector)
-		contamination(parameters...; anasolfunction=anasolfunctions[1])
+		contamination(parameters..., anasolfunctions[1])
 	end
 	function computeconcentrations(parametersnoexpressions::Associative)
 		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
@@ -240,10 +241,10 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 							t0 = parameters[string("source", i, "_", "t0")]
 							t1 = parameters[string("source", i, "_", "t1")]
 							if screen
-								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i]) +
-											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i]))
+								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i]) +
+											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i]))
 							else
-								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunctions[i])
+								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i])
 							end
 						end
 						c[string(wellkey, "_", t)] = conc
@@ -292,14 +293,13 @@ Returns:
 
 - predicted concentration at (wellx, welly, wellz, t)
 """
-function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Number; anasolfunction::Union{String,Function}="long_bbb_ddd_iir_c")
-	anasolfunction = eval(parse("Anasol.$anasolfunction"))
+function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Number, anasolfunction::Function)
 	d = -theta * pi / 180
 	xshift = wellx - x
 	yshift = welly - y
 	ztrans = wellz - z
-	xtrans = xshift * cos(d) - yshift * sin.(d)
-	ytrans = xshift * sin.(d) + yshift * cos(d)
+	xtrans = xshift * cos(d) - yshift * sin(d)
+	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
 	#sigma01 = sigma02 = sigma03 = 0. #point source
 	sigma01 = dx
@@ -308,14 +308,13 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	v1 = vx
 	v2 = vy
 	v3 = vz
-	speed = sqrt(vx * vx + vy * vy + vz * vz)
-	sigma1 = sqrt(ax * speed * 2)
-	sigma2 = sqrt(ay * speed * 2)
-	sigma3 = sqrt(az * speed * 2)
+	twospeed = 2 * sqrt(vx * vx + vy * vy + vz * vz)
+	sigma1 = sqrt(ax * twospeed)
+	sigma2 = sqrt(ay * twospeed)
+	sigma3 = sqrt(az * twospeed)
 	H1 = H2 = H3 = H
 	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
-	anasolresult = anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
-	return 1e6 * f * anasolresult / n
+	anasolresult = 1e6 * f / n * anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
 end
 
 function computemass(madsdata::Associative; time::Number=0)
