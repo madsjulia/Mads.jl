@@ -33,7 +33,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		p = merge(paraminitdict, paramdict)
 		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
 	else
-		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...) # converts dictionary into array of size (num_samples, num_params)
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
@@ -55,13 +55,13 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 		f = makedoublearrayfunction(madsdata)
 		pk = Mads.getoptparamkeys(madsdata)
 	end
-	np = length(pk)
+	np = length(pk) # number of parameters 
 	s = size(paramarray)
 	if length(s) > 2
 		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
 	elseif length(s) == 2
-		mx = max(s...)
-		mn = min(s...)
+		mx = max(s...) # returns maximum(s) (number of parameters)
+		mn = min(s...) # returns minimum(s) (should be 1)
 	else
 		mx = s[1]
 		mn = 1
@@ -69,11 +69,17 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	if mn != np && mx != np
 		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
 	end
-	nr = (mn == np) ? mx : mn
+	
+	if mn == np # set the variable nr to be the number of parameters - does the equivalent of " nr = (mn == np) ? mx : mn "
+		nr = mx
+	else
+		nr = mn
+	end
+	
 	r = []
 	if length(s) == 2
 		restartdir = getrestartdir(madsdata)
-		if checkpointfrequency != 0 && restartdir != ""
+		if checkpointfrequency != 0 && restartdir != "" # if you want data saved to file
 			if s[2] == np
 				r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			else
