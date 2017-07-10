@@ -373,7 +373,11 @@ function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterk
 		paramkeys = getoptparamkeys(madsdata)
 		paramdist = getparamdistributions(madsdata; init_dist=init_dist)
 		for k in paramkeys
-			sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+			if numsamples == 1 # if only one sample, don't write a 1-element array to each dictionary key. write a scalar.
+				sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)[1]
+			else
+				sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+			end
 		end
 		return sample
 	end

@@ -321,6 +321,20 @@ function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	end
 end
 
+"""
+Set initial optimized parameter guesses in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(setparamsinit!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "paramdict"=>"dictionary with initial model parameter values")))
+"""
+function setoptparamsinit!(madsdata::Associative, paramdict::Associative)
+	paramkeys = getoptparamkeys(madsdata)
+	for i in 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
+	end
+end
+
 function getoptparams(madsdata::Associative)
 	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
 end
