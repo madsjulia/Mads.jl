@@ -328,10 +328,10 @@ $(DocumentFunction.documentfunction(setparamsinit!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdict"=>"dictionary with initial model parameter values")))
 """
-function setoptparamsinit!(madsdata::Associative, paramdict::Associative)
+function setoptparamsinit!(madsdata::Associative, paramdict::Associative, idx::Int=1)
 	paramkeys = getoptparamkeys(madsdata)
 	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
+		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]][idx]
 	end
 end
 
