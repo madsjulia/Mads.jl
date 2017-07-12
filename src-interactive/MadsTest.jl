@@ -55,25 +55,33 @@ function test(testname::String=""; madstest::Bool=true)
 		info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			print_with_color(:cyan, "* $i testing ...\n")
+			tic()
 			include(joinpath(Pkg.dir(i), "test", "runtests.jl"))
+			toc()
 		end
 	else
 		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
 		if isfile(file)
 			print_with_color(:cyan, "* $testname testing ...\n")
+			tic()
 			include(file)
+			toc()
 		else
 			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
 			if isfile(file)
 				print_with_color(:cyan, "* $testname testing ...\n")
+				tic()
 				include(file)
+				toc()
 			else
 				eval(Mads, :(@tryimport $(Symbol(testname))))
 				if isdefined(Symbol(testname))
 					print_with_color(:cyan, "* $testname testing ...\n")
 					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
 					if isfile(file)
+						tic()
 						include(file)
+						toc()
 					else
 						warn("Test $file for module $testname is missing!")
 					end
