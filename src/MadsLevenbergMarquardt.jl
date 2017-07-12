@@ -129,7 +129,7 @@ function makelmfunctions(madsdata::Associative)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 	"""
 	Forward model function for Levenberg-Marquardt optimization
 	"""

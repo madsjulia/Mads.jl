@@ -52,7 +52,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return [-horizon]
 	end
 	function performancegoalsatisfied(arrayparams::Vector, horizon::Real)
-		paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		paramdict = Mads.getparamdict(madsdata)
 		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
@@ -77,7 +77,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 		return true
 	end
 	function gethorizonoffailure(arrayparams::Vector)
-		paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+		paramdict = Mads.getparamdict(madsdata)
 		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
@@ -133,7 +133,7 @@ function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100,
 	local horizons::Array{Float64, 1}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
-	@ProgressMeter.showprogress 1 "Computing ... " for i = 1:length(madsdata["Choices"])
+	for i = 1:length(madsdata["Choices"])
 		Mads.madsinfo("Choice #$i: $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
 		if length(likelihoodparams) == 0

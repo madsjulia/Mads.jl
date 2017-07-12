@@ -11,12 +11,18 @@ end
 
 function makearrayfunction_dictionary(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
-	initvalues = getparamsinit(madsdata)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), initvalues))
-	function arrayfunction(arrayparameters::Vector)
+	initparams = Mads.getparamdict(madsdata)
+	function arrayfunction_merge(arrayparameters::Vector)
 		return f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 	end
-	return arrayfunction
+	function arrayfunction(arrayparameters::Vector)
+		return f(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)))
+	end
+	if length(initparams) == length(optparamkeys)
+		return arrayfunction
+	else
+		return arrayfunction_merge
+	end
 end
 
 function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
@@ -94,7 +100,7 @@ Returns:
 function makearrayconditionalloglikelihood(madsdata::Associative, conditionalloglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 	function arrayconditionalloglikelihood(arrayparameters::Vector)
 		predictions = f(merge(initparams, DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
@@ -117,7 +123,7 @@ Returns:
 function makearrayloglikelihood(madsdata::Associative, loglikelihood) # make log likelihood array
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 	function arrayloglikelihood(arrayparameters::Vector)
 		predictions = DataStructures.OrderedDict()
 		try
@@ -158,7 +164,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- dictionary containing the expression names as keys, and the values of the expression as values
+- dictionary containing the parameter and expression names as keys, and the values of the expression as values
 """
 function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	if haskey(madsdata, "Expressions")
@@ -166,9 +172,9 @@ function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 		for exprname in keys(madsdata["Expressions"])
 			expressions[exprname] = evaluatemadsexpression(madsdata["Expressions"][exprname]["exp"], parameters)
 		end
-		return expressions
+		return merge(parameters, expressions)
 	else
-		return Dict()
+		return parameters
 	end
 end
 

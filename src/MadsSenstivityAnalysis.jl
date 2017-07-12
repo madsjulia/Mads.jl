@@ -31,7 +31,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 	function func(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -311,7 +311,7 @@ function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::V
 	j = 1
 	for okey in obskeys
 		if haskey(madsdata["Observations"][okey], "weight")
-			newllhoods -= .5 * weights[j] ^ 2 * (predictions[:, j] - targets[j]) .^ 2
+			newllhoods -= .5 * (weights[j] * (predictions[j, :] - targets[j])) .^ 2
 		end
 		j += 1
 	end
@@ -435,7 +435,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=-1,
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
 	results = Array{DataStructures.OrderedDict}(numsamples)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	paramdict = Mads.getparamdict(madsdata)
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample

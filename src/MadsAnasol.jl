@@ -140,11 +140,10 @@ forward_preds = computeconcentrations(paramdict)
 """
 function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
-	background = 0
-	if haskeyword(madsdata, "background")
-		background = madsdata["Problem"]["background"]
-	end
-	parameters = Mads.getparamdict(madsdata)
+	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.
+	parametersnoexpressions = Mads.getparamdict(madsdata)
+	parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
+	paramkeys = collect(keys(parameters))
 	ts_dsp = haskey(parameters, "ts_dsp") ? parameters["ts_dsp"] : 1.
 	H = haskey(parameters, "H") ? parameters["H"] : 0.5
 	if (ts_dsp == 1. && !Mads.isopt(madsdata, "ts_dsp")) && (H == 0.5 && !Mads.isopt(madsdata, "H"))
@@ -168,27 +167,65 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		end
 		anasolfunctions[i] = eval(parse("Anasol.$anasolfunction"))
 	end
-	parametersnoexpressions = Mads.getparamdict(madsdata)
-	expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
-	parameters = merge(parametersnoexpressions, expressions)
-	paramkeys = collect(keys(parameters))
 	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
 		Mads.madswarn("Missing: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]))")
 		Mads.madscritical("There are missing Anasol parameters!")
 	end
+	nW = 0
+	for wellkey in Mads.getwellkeys(madsdata)
+		if madsdata["Wells"][wellkey]["on"]
+			nW += 1
+		end
+	end
+	wellx = Array{Float64}(nW)
+	welly = Array{Float64}(nW)
+	wellz0 = Array{Float64}(nW)
+	wellz1 = Array{Float64}(nW)
+	wellscreen = Array{Bool}(nW)
+	wellnO = Array{Int}(nW)
+	wellt = Array{Array{Float64}}(nW)
+	wellp = Array{Array{Int}}(nW)
+	wellc = Array{Array{Float64}}(nW)
+	wellkeys = Array{String}(0)
+	w = 0
+	for wellkey in Mads.getwellkeys(madsdata)
+		if madsdata["Wells"][wellkey]["on"]
+			w += 1
+			wellx[w] = madsdata["Wells"][wellkey]["x"]
+			welly[w] = madsdata["Wells"][wellkey]["y"]
+			wellz0[w] = madsdata["Wells"][wellkey]["z0"]
+			wellz1[w] = madsdata["Wells"][wellkey]["z1"]
+			if abs(wellz1[w]  - wellz0[w] ) > 0.1
+				wellscreen[w] = true
+			else
+				wellz0[w]  = (wellz1[w]  + wellz0[w] ) / 2
+				wellscreen[w] = false
+			end
+			obst = Array{Float64}(0)
+			obsp = Array{Int}(0)
+			co = 1
+			for o in 1:length(madsdata["Wells"][wellkey]["obs"])
+				t = madsdata["Wells"][wellkey]["obs"][o]["t"]
+				if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
+					push!(obst, t)
+					push!(obsp, co)
+					push!(wellkeys, string(wellkey, "_", t))
+				end
+				co += 1
+			end
+			wellt[w] = obst
+			wellp[w] = obsp
+			wellc[w] = Array{Float64}(length(wellt[w]))
+		end
+	end
 	# indexall = indexin(anasolallparametersall, paramkeys)
 	function computeconcentrations()
 		paramdict = Mads.getparamdict(madsdata)
-		expressions = evaluatemadsexpressions(madsdata, paramdict)
-		parameterswithexpressions = merge(paramdict, expressions)
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
 		computeconcentrations(parameterswithexpressions)
 	end
-	function computeconcentrations(parameters::Vector)
-		contamination(parameters..., anasolfunctions[1])
-	end
 	function computeconcentrations(parametersnoexpressions::Associative)
-		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
-		parameters = merge(parametersnoexpressions, expressions)
+		parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 		porosity = parameters["n"]
 		lambda = parameters["lambda"]
 		theta = parameters["theta"]
@@ -213,49 +250,30 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		else
 			H = 0.5
 		end
-		c = DataStructures.OrderedDict()
-		for wellkey in Mads.getwellkeys(madsdata)
-			if madsdata["Wells"][wellkey]["on"]
-				wellx = madsdata["Wells"][wellkey]["x"]
-				welly = madsdata["Wells"][wellkey]["y"]
-				wellz0 = madsdata["Wells"][wellkey]["z0"]
-				wellz1 = madsdata["Wells"][wellkey]["z1"]
-				if abs(wellz1 - wellz0) > 0.1
-					screen = true
+		for w in 1:nW
+			wellc[w] .= background
+		end
+		for i=1:numberofsources
+			x = parameters[string("source", i, "_", "x")]
+			y = parameters[string("source", i, "_", "y")]
+			z = parameters[string("source", i, "_", "z")]
+			dx = parameters[string("source", i, "_", "dx")]
+			dy = parameters[string("source", i, "_", "dy")]
+			dz = parameters[string("source", i, "_", "dz")]
+			f = parameters[string("source", i, "_", "f")]
+			t0 = parameters[string("source", i, "_", "t0")]
+			t1 = parameters[string("source", i, "_", "t1")]
+			for w in 1:nW
+				if wellscreen[w]
+					wellc[w] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
+					             contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
 				else
-					wellz = (wellz1 + wellz0) / 2
-					screen = false
-				end
-				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
-					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
-						conc = background
-						for i = 1:numberofsources
-							x = parameters[string("source", i, "_", "x")]
-							y = parameters[string("source", i, "_", "y")]
-							z = parameters[string("source", i, "_", "z")]
-							dx = parameters[string("source", i, "_", "dx")]
-							dy = parameters[string("source", i, "_", "dy")]
-							dz = parameters[string("source", i, "_", "dz")]
-							f = parameters[string("source", i, "_", "f")]
-							t0 = parameters[string("source", i, "_", "t0")]
-							t1 = parameters[string("source", i, "_", "t1")]
-							if screen
-								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i]) +
-											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i]))
-							else
-								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t, anasolfunctions[i])
-							end
-						end
-						c[string(wellkey, "_", t)] = conc
-					else
-						c[string(wellkey, "_", t)] = 0
-					end
+					wellc[w] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
 				end
 			end
 		end
 		global modelruns += 1
-		return c
+		return DataStructures.OrderedDict{String,Float64}(zip(wellkeys, vcat(wellc...)))
 	end
 	return computeconcentrations
 end
@@ -286,14 +304,15 @@ argtext=Dict("wellx"=>"observation point (well) X coordinate",
             "f"=>"source mass flux",
             "t0"=>"source starting time",
             "t1"=>"source termination time",
-            "t"=>"time to compute concentration at the observation point"),
+            "t"=>"vector of times to compute concentration at the observation point"),
 keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module) [default=`\"long_bbb_ddd_iir_c\"`]")))
 
 Returns:
 
-- predicted concentration at (wellx, welly, wellz, t)
+- a vector of predicted concentration at (wellx, welly, wellz, t)
 """
-function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Number, anasolfunction::Function)
+
+function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Vector, anasolfunction::Function)
 	d = -theta * pi / 180
 	xshift = wellx - x
 	yshift = welly - y
@@ -314,7 +333,13 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	sigma3 = sqrt(az * twospeed)
 	H1 = H2 = H3 = H
 	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
-	anasolresult = 1e6 * f / n * anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	nt = length(t)
+	xtransvec = [xtrans, ytrans, ztrans]
+	anasolresult = Vector{Float64}(nt)
+	for i = 1:nt
+		anasolresult[i] = 1e6 * f / n * anasolfunction(xtransvec, t[i], x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	end
+	return anasolresult
 end
 
 function computemass(madsdata::Associative; time::Number=0)

@@ -36,7 +36,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = Mads.getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 
 	o_mpb, grad_o_mpb, f_mpb, g_mpb = makempbfunctions(madsdata)
 

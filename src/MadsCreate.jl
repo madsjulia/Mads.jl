@@ -4,7 +4,7 @@ import DocumentFunction
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
-	result = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	result = f(Mads.getparamdict(madsdata))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]
@@ -28,7 +28,7 @@ function createmadsproblem(infilename::String, outfilename::String)
 end
 function createmadsproblem(madsdata::Associative, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
-	predictions = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	predictions = f(Mads.getparamdict(madsdata))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
 function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)

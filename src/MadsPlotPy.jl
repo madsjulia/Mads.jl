@@ -53,7 +53,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 end
 
 function plotgrid(madsdata::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
-	paramvalues = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramvalues = Mads.getparamdict(madsdata)
 	plotgrid(madsdata, paramvalues; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 

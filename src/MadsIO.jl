@@ -704,8 +704,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
-	expressions = evaluatemadsexpressions(madsdata, parameters)
-	paramsandexps = merge(parameters, expressions)
+	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
 	for template in madsdata["Templates"]
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)

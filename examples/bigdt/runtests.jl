@@ -5,10 +5,11 @@ using Base.Test
 problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "..", "examples", "bigdt")
 
-@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
-
+md = Dict()
 if isdefined(Mads, :yaml)
 	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
+else
+	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
 end
 
 nsample = 10
@@ -29,10 +30,10 @@ if Mads.create_tests
 	JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
 end
 
+good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
+
 # Testing for bigdt
 @testset "Bigdt" begin
-	good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
-
 	@test isapprox(bigdt_results["maxfailureprobs"], good_bigdt_results["maxfailureprobs"], atol=1e-6)
 	@test isapprox(bigdt_results["horizons"], good_bigdt_results["horizons"], atol=1e-6)
 end

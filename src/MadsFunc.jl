@@ -237,8 +237,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 	end
 	"MADS command function with expressions"
 	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
-		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
-		parameterswithexpressions = merge(paramsnoexpressions, expressions)
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		local out
 		try
 			out = madscommandfunction(parameterswithexpressions)
