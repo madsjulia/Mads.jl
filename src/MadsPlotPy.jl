@@ -50,6 +50,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	for i = 1:length(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
+	PyPlot.close()
 end
 
 function plotgrid(madsdata::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
