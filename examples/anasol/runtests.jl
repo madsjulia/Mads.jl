@@ -208,6 +208,7 @@ Mads.rmfiles_root("w01shortexp-"; path=pwd())
 Mads.rmfile("w01short-match-w1a.svg")
 Mads.rmfiles_ext("iterationresults"; path=workdir)
 Mads.rmdir("w01shortexp_restart")
+Mads.rmdir("w01shortexp_restart"; path=workdir)
 
 Mads.rmdir("w01-w13a_w20a_restart"; path=pwd())
 Mads.rmfile("w01short-rerun.mads")
