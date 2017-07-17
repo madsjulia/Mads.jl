@@ -26,7 +26,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
@@ -169,6 +169,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
 		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
 	end
+	f = Mads.forward(madsdata, param)
+	ofval = Mads.of(madsdata, f)
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles
@@ -234,7 +236,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("of"=>ofval, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 """

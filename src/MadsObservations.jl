@@ -41,7 +41,11 @@ Returns:
 - keys for all observations in the MADS problem dictionary
 """
 function getobskeys(madsdata::Associative)
-	return collect(keys(madsdata["Observations"]))
+	if haskey(madsdata, "Sources")
+		return gettargetkeys(madsdata)
+	else
+		return collect(keys(madsdata["Observations"]))
+	end
 end
 
 """
@@ -57,7 +61,7 @@ Returns:
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
-	k = getobskeys(madsdata)
+	k = collect(keys(madsdata["Observations"]))
 	return k[w.>0 .| isnan.(t)]
 end
 
@@ -120,7 +124,7 @@ for i = 1:length(getobsnames)
 		end
 		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
 		function $(Symbol(string("getobs", obsname)))(madsdata::Associative)
-			obskeys = getobskeys(madsdata)
+			obskeys = collect(keys(madsdata["Observations"]))
 			return $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
 	end

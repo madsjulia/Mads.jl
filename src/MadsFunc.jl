@@ -59,7 +59,7 @@ Returns:
 """
 function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
-	obskeys = getobskeys(madsdata_in)#keep just the keys of the obs
+	obskeys = getobskeys(madsdata_in) # keep just the keys of the obs
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)

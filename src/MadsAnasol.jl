@@ -224,6 +224,30 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
 		computeconcentrations(parameterswithexpressions)
 	end
+	function computeconcentrations(parameters::Vector)
+		paramdict = Mads.getparamdict(madsdata)
+		nP = length(paramdict)
+		if length(parameters) == nP
+			i = 1
+			for k in keys(paramdict)
+				paramdict[k] = parameters[i]
+				i += 1
+			end
+		else
+			optkeys = Mads.getoptparamkeys(madsdata)
+			if length(parameters) == length(optkeys)
+				i = 1
+				for k in optkeys
+					paramdict[k] = parameters[i]
+					i += 1
+				end
+			else
+				Mads.madscritical("Parameter vector length does not match!")
+			end
+		end
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
+		computeconcentrations(parameterswithexpressions)
+	end
 	function computeconcentrations(parametersnoexpressions::Associative)
 		parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 		porosity = parameters["n"]

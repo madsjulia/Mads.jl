@@ -6,16 +6,16 @@ import DocumentFunction
 function residuals(madsdata::Associative, resultvec::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	targets = Mads.getobstarget(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
+	targets = Mads.getobstarget(madsdata, obskeys)
 	isn = isnan.(targets)
 	index = find(isn)
 	weights[index] = 0
 	targets[index] = 0
 	residuals = (resultvec .- targets) .* weights
 	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
+		mins = Mads.getobsmin(madsdata, obskeys)
+		maxs = Mads.getobsmax(madsdata, obskeys)
 		mins[index] = -Inf
 		maxs[index] = Inf
 		rmax = (resultvec .- maxs) .* weights
@@ -114,14 +114,14 @@ function makelmfunctions(madsdata::Associative)
 	sar = Mads.haskeyword(madsdata, "sar")
 	o_lm(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	targets = Mads.getobstarget(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
+	targets = Mads.getobstarget(madsdata, obskeys)
 	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
+		mins = Mads.getobsmin(madsdata, obskeys)
+		maxs = Mads.getobsmax(madsdata, obskeys)
 		mins[index] = -Inf
 		maxs[index] = Inf
 	end

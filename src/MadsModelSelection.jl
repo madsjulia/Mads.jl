@@ -10,14 +10,15 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
-	of = Mads.of(madsdata, f)
+	ofval = Mads.of(madsdata, f)
 	np = length(Mads.getoptparamkeys(madsdata))
 	no = length(Mads.gettargetkeys(madsdata))
 	dof = (no > np) ? no - np : 1
 	w = Mads.getobsweight(madsdata)
 	det_w = prod(w)
 	ln_det_w = log(det_w)
-	gf = of / dof
+	gf = ofval / dof
+	println("Objective function value                               : $(ofval)")
 	println("Posterior measurement variance                         : $(gf)")
 	ln_det_v = ln_det_w + no * log(gf) / 2
 	aopt = sum(diag(l["covar"]))
