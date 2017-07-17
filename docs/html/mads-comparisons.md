@@ -4,7 +4,7 @@
 
 ## **MADS** vs [PEST](http://www.pesthomepage.org/Home.php)
 
-*   [Solving a source identification optimization problem](#test-#1:-solving-a-source-identification-optimization-problem)
+*   [Solving a source identification optimization problem](#test-1-solving-a-source-identification-optimization-problem)
 *   [Identification of aquifer parameters based on pumping test data](#comparisons:pumping): **MADS** is executed using PEST control files (*.pst, *.ins, *.tpl)
 
 **MADS** is distributed with a series of example files that can be used to compare **MADS** and [PEST](http://www.pesthomepage.org/Home.php) performance. The following executions can be performed after both codes have been successfully installed.
