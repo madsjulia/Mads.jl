@@ -158,7 +158,7 @@ Execution date & time stamp: 20111107-211800
 
 </div>
 
-[Back to top](#comparisons:top)
+[Back to top](#mads-comparisons)
 
 <div class="console">
 
@@ -260,7 +260,7 @@ See file s02pest.res for residuals.
 
 </div>
 
-[Back to top](#comparisons:top)
+[Back to top](#mads-comparisons)
 
 ## <a name="comparisons:pumping" id="comparisons:pumping"></a>Test #2: Identification of aquifer parameters based on pumping test data
 
@@ -473,7 +473,7 @@ Execution date & time stamp: 20111107-212952
 
 </div>
 
-[Back to top](#comparisons:top)
+[Back to top](#mads-comparisons)
 
 <div class="console">
 
