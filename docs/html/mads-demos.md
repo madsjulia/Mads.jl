@@ -2,8 +2,8 @@
 
 # **MADS** Demos
 
-*   [ABAGUS](#demos:ABAGUS)
-*   [Squads](#demos:Squads)
+*   [ABAGUS](#abagus-agent-based-global-uncertainty-and-sensitivity-analysis)
+*   [Squads](#squads-global-optimization-technique-coupling-particle-swarm-and-levenberg-marquardt-optimization-techniques)
 
 ## <a name="demos:ABAGUS" id="ABAGUS"></a>**ABAGUS**: Agent-based Global Uncertainty and Sensitivity analysis
 
@@ -23,11 +23,11 @@ The movie above shows an animation of the hierarchical еxploration of 2D parame
 
 The results demonstrate that **ABAGUS** outperforms the Monte Carlo analysis using Improved Distributed Latin Hypercube Sampling (**IDLHS**).
 
-[Back to top](#demos:top)
+[Back to top](#mads-demos)
 
 ## <a name="demos:Squads" id="Squads"></a>**Squads**: Global Optimization technique coupling Particle Swarm and Levenberg-Marquardt optimization techniques
 
-Comparisons are performed between **LM** (Levenberg-Marquardt), [PSO](http://clerc.maurice.free.fr/pso/) (Particle Swarm Optimization), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf) , [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) and **Squads** to solve **Rosenbrock** and **Griewank** test problem with different dimensionality (i.e. number of adjustable parameters).
+Comparisons are performed between **LM** (Levenberg-Marquardt), [PSO](http://clerc.maurice.free.fr/pso/) (Particle Swarm Optimization), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf) , [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) and **Squads** to solve **Rosenbrock** and **Griewank** test problem with different dimensionality (i.e. number of adjustable parameters).
 
 Figures below present boxplots for the number of function evaluations for successful runs for 2D, 5D, and 10D **Rosenbrock** and **Griewank** test functions, respectively. In the figures, the boxes represent the 25th to 75th percentile ranges, the bars inside of the boxes represent the median values, and the whiskers represent the minimum and maximum values. The fraction of successful runs out of the attempted runs are presented above the boxes.
 
@@ -35,9 +35,9 @@ The **robustness** of the strategies is defined as the percentage of successful 
 
 The **efficiency** of the strategies is defined by the number of functional evaluations required to achieve the global minimum.
 
-**Squads** is as robust or more robust than the other tested strategies (**LM**, [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m)) in all cases.
+**Squads** is as robust or more robust than the other tested strategies (**LM**, [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m)) in all cases.
 
-**Squads** is more efficient than [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) in all cases.
+**Squads** is more efficient than [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) in all cases.
 
 For the 2D, 5D, and 10D **Rosenbrock** test functions, **Squads** has comparable efficiency to **LM**.  
 However, in these cases, the robustness of **Squads** (**100%**) is considerably better than the robustness of **LM** (less than **36%**).
@@ -47,36 +47,17 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 **Squads** is observed to have the best performance when both robustness and efficiency are taken into consideration than the other strategies.
 
-[Back to top](#demos:top)
-
-<div width="100%" style="float:left">
+[Back to top](#mads-demos)
 
 ## **Rosenbrock** function
+<img src="CrPlots_plot.png" width="500">
 
-<div width="50%" style="float:left">[![](demos/comb_runs_box_r.png)](demos/comb_runs_box_r.png "Rosenbrock test of robustness and efficiency")
+[Back to top](#mads-demos)
 
-[Back to top](#demos:top)
-
-</div>
-
-<div width="50%" style="float:left">[![](demos/rosen3d-close.png)](demos/rosen3d-close.png "Rosenbrock function")</div>
-
-</div>
-
-<div width="100%" style="float:left">
+<img src="CrPlots_plot.png" width="500">
 
 ## **Griewank** function
 
-<div width="50%" style="float:left">[![](demos/comb_runs_box_g.png)](demos/comb_runs_box_g.png "Griewank test of robustness and efficiency")
-
-[Back to top](#demos:top)
-
-</div>
-
-<div width="50%" style="float:left">[![](demos/griew3d-close.png)](demos/griew3d-close.png "Griewank function")</div>
-
-</div>
-
-</div>
+[Back to top](#mads-demos)
 
 <script type="text/javascript"><!-- hide from old browsers // if( window.top.location.href == window.self.location.href ) // location.replace("http://mads.lanl.gov/index.html?download"); // end hide --></script>
