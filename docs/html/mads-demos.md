@@ -35,9 +35,9 @@ The **robustness** of the strategies is defined as the percentage of successful 
 
 The **efficiency** of the strategies is defined by the number of functional evaluations required to achieve the global minimum.
 
-**Squads** is as robust or more robust than the other tested strategies (**LM**, [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m)) in all cases.
+**Squads** is as robust or more robust than the other tested strategies (**LM**, [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m)) in all cases.
 
-**Squads** is more efficient than [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) in all cases.
+**Squads** is more efficient than [PSO](http://clerc.maurice.free.fr/pso/), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf), and [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) in all cases.
 
 For the 2D, 5D, and 10D **Rosenbrock** test functions, **Squads** has comparable efficiency to **LM**.  
 However, in these cases, the robustness of **Squads** (**100%**) is considerably better than the robustness of **LM** (less than **36%**).
