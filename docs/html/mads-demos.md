@@ -50,14 +50,16 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 [Back to top](#mads-demos)
 
 ## **Rosenbrock** function
-<img src="CrPlots_plot.png" width="500">
+<img src="demos/comb_runs_box_r.png" width="500">
 
 [Back to top](#mads-demos)
 
-<img src="CrPlots_plot.png" width="500">
+<img src="demos/rosen3d-close.png" width="500">
 
 ## **Griewank** function
 
+demos/comb_runs_box_g.png
+
 [Back to top](#mads-demos)
 
-<script type="text/javascript"><!-- hide from old browsers // if( window.top.location.href == window.self.location.href ) // location.replace("http://mads.lanl.gov/index.html?download"); // end hide --></script>
+demos/griew3d-close.png
