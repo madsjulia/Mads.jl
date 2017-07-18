@@ -217,7 +217,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 				push!(wellkeys, string(wellkey, "_", t))
 			end
 			wellt[w] = obst
-			wellc[w][!wellp[w]] .= 0
+			wellc[w][map(!, wellp[w])] .= 0
 			end
 	end
 	# indexall = indexin(anasolallparametersall, paramkeys)
