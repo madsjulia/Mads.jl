@@ -23,7 +23,7 @@ The movie above shows an animation of the hierarchical еxploration of 2D parame
 
 The results demonstrate that **ABAGUS** outperforms the Monte Carlo analysis using Improved Distributed Latin Hypercube Sampling (**IDLHS**).
 
-[Back to top](#demos:top)
+[Back to top](#mads-demos)
 
 ## <a name="demos:Squads" id="Squads"></a>**Squads**: Global Optimization technique coupling Particle Swarm and Levenberg-Marquardt optimization techniques
 
@@ -47,7 +47,7 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 **Squads** is observed to have the best performance when both robustness and efficiency are taken into consideration than the other strategies.
 
-[Back to top](#demos:top)
+[Back to top](#mads-demos)
 
 <div width="100%" style="float:left">
 
@@ -55,7 +55,7 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 <div width="50%" style="float:left">[![](demos/comb_runs_box_r.png)](demos/comb_runs_box_r.png "Rosenbrock test of robustness and efficiency")
 
-[Back to top](#demos:top)
+[Back to top](#mads-demos)
 
 </div>
 
@@ -69,7 +69,7 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 <div width="50%" style="float:left">[![](demos/comb_runs_box_g.png)](demos/comb_runs_box_g.png "Griewank test of robustness and efficiency")
 
-[Back to top](#demos:top)
+[Back to top](#mads-demos)
 
 </div>
 
