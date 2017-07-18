@@ -354,6 +354,15 @@ function setseed(seed::Integer=-1, quiet::Bool=true)
 end
 
 """
+Get and return current random seed.
+
+$(DocumentFunction.documentfunction(getseed))
+"""
+function getseed()
+	return Int(Base.Random.GLOBAL_RNG.seed[1])
+end
+
+"""
 Get package version
 
 $(DocumentFunction.documentfunction(pkgversion))
