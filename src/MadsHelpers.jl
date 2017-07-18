@@ -337,14 +337,14 @@ function meshgrid(x::Vector, y::Vector)
 end
 
 """
-Set / get current random seed
+Set / get current random seed. seed < 0 gets seed, anything else sets it.
 
 $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
             "quiet"=>"[default=`true`]")))
 """
 function setseed(seed::Integer=-1, quiet::Bool=true)
-	if seed != -1
+	if seed >= 0
 		srand(seed)
 		!quiet && info("New seed: $seed")
 	else
