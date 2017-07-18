@@ -7,19 +7,19 @@
 
 ## <a name="demos:ABAGUS" id="ABAGUS"></a>**ABAGUS**: Agent-based Global Uncertainty and Sensitivity analysis
 
-[![](animations/abagus-opt.gif)[click to enlarge]](animations/abagus-opt.gif "ABAGUS animation")
+<img src="animations/abagus-opt.gif" width="500">
 
 The movie above shows an animation of the hierarchical еxploration of 2D parameter space by **ABAGUS** for the case of a simple parabola test model (keyword '**test=1**'). The acceptable parameter space solution is in the area with radius of about 14 from the global minimum at (0,0) with objective function (OF) cutoff value below 160 (keyword '**cutoff=160**'). The parameter space domain is [-100,100] (keyword '**pardomain=200**') for both model parameters. Only, [-20,20] range is shown in the figure below.
 
 **ABAGUS** performs a series of analyses with different discretization sizes: 10, 5, 2.5, 1.25, etc. The location of the agents is shown by cyan stars (the agents explore the parameter space outside of the shown domain as well.
 
-[Response surface of the parabola test function:  
-![](demos/parabola3d.png)[click to enlarge]](demos/parabola3d.png "Parabola test function")
+Response surface of the parabola test function:  
+<img src="demos/parabola3d.png" width="500">
 
 **ABAGUS** performance is compared to **MADS** Monte Carlo analysis using Improved Distributed Latin Hypercube Sampling (**IDLHS**).
 
-[Comparison of both methods based on the number of functional evaluations:  
-![](demos/convergence_00.png)[click to enlarge]](demos/convergence_00.png "ABAGUS & Montel Carlo convergence")
+Comparison of both methods based on the number of functional evaluations:  
+<img src="demos/convergence_00.png" width="500">
 
 The results demonstrate that **ABAGUS** outperforms the Monte Carlo analysis using Improved Distributed Latin Hypercube Sampling (**IDLHS**).
 
