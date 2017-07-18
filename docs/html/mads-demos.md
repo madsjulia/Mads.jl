@@ -2,8 +2,8 @@
 
 # **MADS** Demos
 
-*   [ABAGUS](#demos:ABAGUS)
-*   [Squads](#demos:Squads)
+*   [ABAGUS](#abagus-agent-based-global-uncertainty-and-sensitivity-analysis)
+*   [Squads](#squads-global-optimization-technique-coupling-particle-swarm-and-levenberg-marquardt-optimization-techniques)
 
 ## <a name="demos:ABAGUS" id="ABAGUS"></a>**ABAGUS**: Agent-based Global Uncertainty and Sensitivity analysis
 
