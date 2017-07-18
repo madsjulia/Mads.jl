@@ -58,16 +58,6 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 ## **Griewank** function
 
-<div width="50%" style="float:left">[![](demos/comb_runs_box_g.png)](demos/comb_runs_box_g.png "Griewank test of robustness and efficiency")
-
 [Back to top](#mads-demos)
-
-</div>
-
-<div width="50%" style="float:left">[![](demos/griew3d-close.png)](demos/griew3d-close.png "Griewank function")</div>
-
-</div>
-
-</div>
 
 <script type="text/javascript"><!-- hide from old browsers // if( window.top.location.href == window.self.location.href ) // location.replace("http://mads.lanl.gov/index.html?download"); // end hide --></script>
