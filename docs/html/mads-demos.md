@@ -58,8 +58,8 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 ## **Griewank** function
 
-demos/comb_runs_box_g.png
+<img src="demos/comb_runs_box_g.png" width="500">
 
 [Back to top](#mads-demos)
 
-demos/griew3d-close.png
+<img src="demos/griew3d-close.png" width="500">
