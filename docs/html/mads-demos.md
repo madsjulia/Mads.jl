@@ -52,14 +52,13 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 <div width="100%" style="float:left">
 
 ## **Rosenbrock** function
-
-<div width="50%" style="float:left">[![](demos/comb_runs_box_r.png)](demos/comb_runs_box_r.png "Rosenbrock test of robustness and efficiency")
+<img src="CrPlots_plot.png" width="500">
 
 [Back to top](#mads-demos)
 
 </div>
 
-<div width="50%" style="float:left">[![](demos/rosen3d-close.png)](demos/rosen3d-close.png "Rosenbrock function")</div>
+<img src="CrPlots_plot.png" width="500">
 
 </div>
 
