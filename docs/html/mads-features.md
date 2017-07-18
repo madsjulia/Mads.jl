@@ -6,7 +6,7 @@
 
 *   Provides an integrated computational framework for a wide range of model-based analyses, and supports model-based decision making.
 *   By design, works in an adaptive mode with minimum input from the user.  
-    For example, ‘**mads s01**’ is sufficient to perform calibration of problem ‘**s01**’ and ‘**mads montecarlo s01**’ is sufficient to perform uncertainty analysis of problem ‘**s01**’ ([MADS manual](#manual)). All the parameters controlling the performance of these analyses are estimated internally by **MADS**. Nevertheless, if needed, the user has the flexibility to specify a wide range of options (as demonstrated in **MADS** [manual](#manual) and [execution examples](#examples)).
+    For example, ‘**mads s01**’ is sufficient to perform calibration of problem ‘**s01**’ and ‘**mads montecarlo s01**’ is sufficient to perform uncertainty analysis of problem ‘**s01**’ ([MADS manual](mads-manual.md)). All the parameters controlling the performance of these analyses are estimated internally by **MADS**. Nevertheless, if needed, the user has the flexibility to specify a wide range of options (as demonstrated in **MADS** [manual](#manual) and [execution examples](#examples)).
 *   The same problem input file(in the previous case, ‘**s01.mads**’)is sufficient and can be applied to perform all the possible model analyses supported by **MADS**.  
     Different analyses can be invoked using different command-line keywords and options.  
     If preferred, the keywords can be provided on the first line of the problem input file as well.
