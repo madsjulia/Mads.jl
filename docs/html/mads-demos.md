@@ -56,13 +56,7 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 [Back to top](#mads-demos)
 
-</div>
-
 <img src="CrPlots_plot.png" width="500">
-
-</div>
-
-<div width="100%" style="float:left">
 
 ## **Griewank** function
 
