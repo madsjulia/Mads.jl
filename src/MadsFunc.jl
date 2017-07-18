@@ -57,13 +57,12 @@ Returns:
 
 - Mads function to execute a forward model simulation
 """
-function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
+function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
-	obskeys = getobskeys(madsdata_in) # keep just the keys of the obs
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)
-			if k != "Observations"
+			if k != "Observations" || k != "Wells"
 				madsdata[k] = madsdata_in[k]
 			end
 		end

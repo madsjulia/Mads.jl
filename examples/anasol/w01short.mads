@@ -78,7 +78,8 @@ Wells:
  47: { t: 47, c: 1.73582, weight: 1, log: no, min: 0, max: 1e+06 },
  48: { t: 48, c: 1.50218, weight: 1, log: no, min: 0, max: 1e+06 },
  49: { t: 49, c: 1.30118, weight: 1, log: no, min: 0, max: 1e+06 },
- 50: { t: 50, c: 1.12804, weight: 1, log: no, min: 0, max: 1e+06 } ] }
+ 50: { t: 49.5, c: 1.30118, weight: 0, log: no, min: 0, max: 1e+06 },
+ 51: { t: 50, c: 1.12804, weight: 1, log: no, min: 0, max: 1e+06 } ] }
 Grid: { time: 50,
 xcount: 2, ycount: 2, zcount: 1,
 xmin: 700, ymin: 1000, zmin: 0,

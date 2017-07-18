@@ -42,10 +42,10 @@ function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX
 	paramsoptdict = paramdict
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	if all
-		allresults = Any[]
+		local allresults
 	end
-	bestparameters = Any[]
-	bestresult = Array{Any}(2)
+	local bestparameters
+	local bestresult
 	bestphi = Inf
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
@@ -186,7 +186,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys,x_best_real)), "\n"))
+			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
 		jacobiancallback = (x::Vector, J::Matrix)->begin

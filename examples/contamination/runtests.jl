@@ -3,6 +3,8 @@ import Base.Test
 import JLD
 
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "examples", "contamination") : Mads.getmadsdir()
+testdir = joinpath(workdir, "test_results")
+Mads.mkdir(testdir)
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 rootname = Mads.getmadsrootname(md)
@@ -28,11 +30,11 @@ Mads.calibraterandom_parallel(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
 if Mads.create_tests
-	d = joinpath(workdir, "test_results")
-	Mads.mkdir(d)
-
-	JLD.save(joinpath(d, "welldata_time.jld"), "welldata_time", welldata_time)
-	JLD.save(joinpath(d, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
+	JLD.save(joinpath(testdir, "welldata_time.jld"), "welldata_time", welldata_time)
+	JLD.save(joinpath(testdir, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
+	JLD.save(joinpath(testdir, "samples.jld"), "samples", samples)
+	JLD.save(joinpath(testdir, "llhoods.jld"), "llhoods", llhoods)
+	JLD.save(joinpath(testdir, "newllhoods.jld"), "newllhoods", newllhoods)
 end
 
 # Use only two wells - w13a and w20a
@@ -74,19 +76,17 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w20a-saltelli-5.svg"))
 end
 
+good_samples = JLD.load(joinpath(testdir, "samples.jld"), "samples")
+good_llhoods = JLD.load(joinpath(testdir, "llhoods.jld"), "llhoods")
+good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
+
 @Base.Test.testset "Contamination" begin
 	# Test param_values
 	@Base.Test.test isapprox(mean([abs(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
 
-	# Arrays to test samples and llhoods against
-	good_samples = [40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0 40.0; 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0 4.0; 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0 15.0]
-	good_llhoods = [9.60999,10.2521,9.26273,10.3345,10.222,9.79228,9.86957,9.73196,8.14828,9.90393]
-
 	@Base.Test.test isapprox(mean([abs(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 
-
-	good_newllhoods = [-421.756,-168.511,0.0,-258.981,-312.968,-397.366,-385.802,-405.832,-555.08,-380.357]
 	@Base.Test.test isapprox(mean([abs(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 
 	@Base.Test.test all(Mads.getwellsdata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])

@@ -41,11 +41,7 @@ Returns:
 - keys for all observations in the MADS problem dictionary
 """
 function getobskeys(madsdata::Associative)
-	if haskey(madsdata, "Sources")
-		return gettargetkeys(madsdata)
-	else
-		return collect(keys(madsdata["Observations"]))
-	end
+	return convert(Array{String}, collect(keys(madsdata["Observations"])))
 end
 
 """
@@ -61,8 +57,8 @@ Returns:
 function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
-	k = collect(keys(madsdata["Observations"]))
-	return k[w.>0 .| isnan.(t)]
+	k = getobskeys(madsdata)
+	return convert(Array{String}, k[w.>0 .| isnan.(t)])
 end
 
 """

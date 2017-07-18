@@ -40,7 +40,7 @@ function functions(m::Union{Symbol, Module}, re::Regex; stdout::Bool=false, quie
 	n = 0
 	try
 		f = names(eval(m), true)
-		functions = Any[]
+		functions = Array{String}(0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"
 			if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "__") || functionname == "$m"
@@ -73,7 +73,7 @@ function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=fal
 	end
 	try
 		f = names(eval(m), true)
-		functions = Any[]
+		functions = Array{String}(0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"
 			if contains(functionname, "eval") || contains(functionname, "#") || contains(functionname, "__") || functionname == "$m"

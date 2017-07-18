@@ -38,27 +38,25 @@ cd(workdir)
 	md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
 	Mads.madsinfo("... no restart ...")
 	no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
-	# @show ReusableFunctions.restarts
 	@Base.Test.test ReusableFunctions.restarts == 0
 
 	md["Restart"] = true
 	Mads.madsinfo("... create restart ...")
 	create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
-	# @show ReusableFunctions.restarts
-	@Base.Test.test ReusableFunctions.restarts == 7
+	@Base.Test.test ReusableFunctions.restarts == 12
 
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
-	@Base.Test.test ReusableFunctions.restarts == 15
+	@Base.Test.test ReusableFunctions.restarts == 25
 	@Base.Test.test no_restart_results[1] == create_restart_results[1]
 	@Base.Test.test create_restart_results[1] == use_restart_results[1]
 
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	@Base.Test.test ReusableFunctions.restarts == 16
+	@Base.Test.test ReusableFunctions.restarts == 27
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	@Base.Test.test ReusableFunctions.restarts == 17
+	@Base.Test.test ReusableFunctions.restarts == 29
 	Mads.savemadsfile(md)
 
 	Mads.rmdir(joinpath(workdir, "w01_restart"))

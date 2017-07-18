@@ -270,9 +270,9 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
 		obs = Array{Float64}(0)
-		tobs = Any[]
+		tobs = Array{Float64}(0)
 		ress = Array{Float64}(0)
-		tress = Any[]
+		tress = Array{Float64}(0)
 		time_missing = false
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
@@ -301,8 +301,6 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=linewidth)),
 					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
-		didplot = true
-		vsize += 4Gadfly.inch
 	end
 	if !separate_files
 		if filename == ""
@@ -709,7 +707,7 @@ end
 function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
-	func = makemadscommandfunction(madsdata)
+	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)

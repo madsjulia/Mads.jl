@@ -184,7 +184,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	wellscreen = Array{Bool}(nW)
 	wellnO = Array{Int}(nW)
 	wellt = Array{Array{Float64}}(nW)
-	wellp = Array{Array{Int}}(nW)
+	wellp = Array{Array{Bool}}(nW)
 	wellc = Array{Array{Float64}}(nW)
 	wellkeys = Array{String}(0)
 	w = 0
@@ -203,20 +203,22 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			end
 			obst = Array{Float64}(0)
 			obsp = Array{Int}(0)
-			co = 1
-			for o in 1:length(madsdata["Wells"][wellkey]["obs"])
+			nO = length(madsdata["Wells"][wellkey]["obs"])
+			wellc[w] = Array{Float64}(nO)
+			wellp[w] = Array{Bool}(nO)
+			for o in 1:nO
 				t = madsdata["Wells"][wellkey]["obs"][o]["t"]
 				if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 					push!(obst, t)
-					push!(obsp, co)
-					push!(wellkeys, string(wellkey, "_", t))
+					wellp[w][o] = true
+				else
+					wellp[w][o] = false
 				end
-				co += 1
+				push!(wellkeys, string(wellkey, "_", t))
 			end
 			wellt[w] = obst
-			wellp[w] = obsp
-			wellc[w] = Array{Float64}(length(wellt[w]))
-		end
+			wellc[w][!wellp[w]] .= 0
+			end
 	end
 	# indexall = indexin(anasolallparametersall, paramkeys)
 	function computeconcentrations()
@@ -289,10 +291,10 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			t1 = parameters[string("source", i, "_", "t1")]
 			for w in 1:nW
 				if wellscreen[w]
-					wellc[w] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
+					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
 					             contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
 				else
-					wellc[w] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
+					wellc[w][wellp[w]] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
 				end
 			end
 		end
