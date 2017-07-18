@@ -49,8 +49,6 @@ However, in these cases, the robustness of **Squads** (grater than **80%**) is c
 
 [Back to top](#mads-demos)
 
-<div width="100%" style="float:left">
-
 ## **Rosenbrock** function
 <img src="CrPlots_plot.png" width="500">
 
