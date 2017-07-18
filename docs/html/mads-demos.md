@@ -27,7 +27,7 @@ The results demonstrate that **ABAGUS** outperforms the Monte Carlo analysis usi
 
 ## <a name="demos:Squads" id="Squads"></a>**Squads**: Global Optimization technique coupling Particle Swarm and Levenberg-Marquardt optimization techniques
 
-Comparisons are performed between **LM** (Levenberg-Marquardt), [PSO](http://clerc.maurice.free.fr/pso/) (Particle Swarm Optimization), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf) , [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) and **Squads** to solve **Rosenbrock** and **Griewank** test problem with different dimensionality (i.e. number of adjustable parameters).
+Comparisons are performed between **LM** (Levenberg-Marquardt), [PSO](http://clerc.maurice.free.fr/pso/) (Particle Swarm Optimization), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf) , [hPSO](http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m) and **Squads** to solve **Rosenbrock** and **Griewank** test problem with different dimensionality (i.e. number of adjustable parameters).
 
 Figures below present boxplots for the number of function evaluations for successful runs for 2D, 5D, and 10D **Rosenbrock** and **Griewank** test functions, respectively. In the figures, the boxes represent the 25th to 75th percentile ranges, the bars inside of the boxes represent the median values, and the whiskers represent the minimum and maximum values. The fraction of successful runs out of the attempted runs are presented above the boxes.
 
