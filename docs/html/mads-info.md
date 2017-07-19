@@ -25,7 +25,7 @@
 
 **MADS** can internally coupled with any other simulators using object-oriented programming.
 
-**MADS** includes a series of [test functions](#methods:functions) built in the code for performance (robustness and efficiency) analysis of existing model-analyses techniques.
+**MADS** includes a series of [test functions](#mads-methods#test-functions) built in the code for performance (robustness and efficiency) analysis of existing model-analyses techniques.
 
 **MADS** automatically detects and utilizes the available parallel resources; for the user, there is no difference between serial (using single processor) and parallel mode of execution. The automatic parallelization is performed using external system calls, MPI or POSIX threading.
 
