@@ -39,6 +39,8 @@ cd(workdir)
 	Mads.madsinfo("... no restart ...")
 	no_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
 	@Base.Test.test ReusableFunctions.restarts == 0
+	# @show ReusableFunctions.restarts
+	# @show ReusableFunctions.computes
 
 	md["Restart"] = true
 	Mads.madsinfo("... create restart ...")
