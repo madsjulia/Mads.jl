@@ -19,7 +19,7 @@ Both codes are applied to solve a source identification optimization problem usi
 
 $> _mads s02 ldebug_  
 MADS: Model Analyses & Decision Support (v1.1) 2011  
----------------------------------------------------  
+\---------------------------------------------------  
 Velimir Vesselinov (monty) vvv@lanl.gov  
 http://www.ees.lanl.gov/staff/monty/mads.html
 
@@ -274,7 +274,7 @@ For this example, the code **WELLS** is needed; **WELLS** can be obtained at [we
 
 $> _mads w01pest.pst ldebug_  
 MADS: Model Analyses & Decision Support (v1.1) 2011  
----------------------------------------------------  
+\---------------------------------------------------  
 Velimir Vesselinov (monty) vvv@lanl.gov  
 http://www.ees.lanl.gov/staff/monty/mads.html
 
