@@ -21,7 +21,7 @@
 
 **MADS** analyses can be performed directly using existing control (*.pst), template (*.tpl) and instruction (*.ins) files developed for the code [PEST](http://www.pesthomepage.org) without any modifications or adjustments ([example](mads-comparisons.md)).
 
-**MADS** provides internal coupling with a series of [analytical simulators of contaminant transport in aquifers](mads-methods) built in the code.
+**MADS** provides internal coupling with a series of [analytical simulators of contaminant transport in aquifers](mads-methods.md) built in the code.
 
 **MADS** can internally coupled with any other simulators using object-oriented programming.
 
