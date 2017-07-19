@@ -39,12 +39,12 @@
 *   advanced [Latin-Hypercube sampling techniques](mads-methods.md#model-analyses), including [Improved Distributed Hypercube Sampling (IDHS)](http://people.sc.fsu.edu/~jburkardt/datasets/ihs/ihs.html)
 *   alternative implementations of the Levenberg-Marquardt optimization technique including [GSL](http://www.gnu.org/s/gsl/), [IMSL](http://www.roguewave.com/products/imsl-numerical-libraries.aspx), [LevMar](http://www.ics.forth.gr/~lourakis/levmar/) libraries and the acceleration and delayed gratification approaches proposed by [Transtrum et al 2011](http://link.aps.org/doi/10.1103/PhysRevE.83.036701) ([presentation](presentations/Leif_LM_presentation_m.pdf))
 *   highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called [SVD-assist](http://www.pesthomepage.org/Highly-parameterized_inversion.php) in [PEST](http://www.pesthomepage.org)
-*   advanced local, global, and hybrid single- and multi-objective optimization techniques, including Multi-Start Levenberg-Marquardt (**MSLM**), Particle Swarm Optimization ([PSO](http://clerc.maurice.free.fr/pso/)), [TRIBES](www.particleswarm.info/Tribes_2006_Cooren.pdf), [SQUADS](papers/squads_v04.pdf)
+*   advanced local, global, and hybrid single- and multi-objective optimization techniques, including Multi-Start Levenberg-Marquardt (**MSLM**), Particle Swarm Optimization ([PSO](http://clerc.maurice.free.fr/pso/)), [TRIBES](http://www.particleswarm.info/Tribes_2006_Cooren.pdf), [SQUADS](papers/squads_v04.pdf)
 *   Bayesian and non-Bayesian uncertainty analyses related to decision support, including [DREAM](http://www.biometris.wur.nl/UK/Staff/Cajo+ter+Braak/Software+and+Data/DE-MC+and+DREAM+software+page/), [info-gap](papers/Harp & Vesselinov infogap source 2011.pdf) analyses
 
 **MADS** is build using a well-designed object-oriented programing style that allows for easy integration of new techniques for model-based analyses; code changes and developments are welcome, and after testing, they will be integrated in future **MADS** releases.
 
-**MADS** is a unix-style code with command-line interface. All the analyses are performed by a single executable code; model analyses and their options are selected by command-line keywords ([MADS execution examples](#examples:top)).
+**MADS** is a unix-style code with command-line interface. All the analyses are performed by a single executable code; model analyses and their options are selected by command-line keywords ([MADS execution examples](mads-examples.md)).
 
 **MADS** is an open-source object-oriented code written in C/C++ and tested on various platforms (Unix, [Linux](https://www.linux.com/), [Mac OS X](http://www.apple.com/macosx/), [Microsoft Windows](http://windows.microsoft.com/en-US/windows/home) using [Cygwin](http://www.cygwin.com/)).
 
