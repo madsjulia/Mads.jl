@@ -20,7 +20,7 @@
 *   Implements a series of alternative objective functions (OF).
 *   By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process.
 *   Provides an option to perform a series of optimizations with random initial guesses for optimization parameters.
-*   Provides an option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword ‘**retry’**; [MADS manual](mads-manual.md)).
+*   Provides an option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword ‘**retry’**; [MADS manual](mads-manual.md#calibration-method-keywords)).
 *   Automatically detects and utilizes the available multi-processor resources for parallelization of m.
 *   Analyzes the runtime performance of the available parallel hosts (processors); hosts not capable of performing the requested parallel jobs are dynamically ignored.
 *   Tracks the multiple model files during parallel execution automatically; for the user, there is no difference between serial (using single processor) and parallel modes of execution.
