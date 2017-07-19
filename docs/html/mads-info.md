@@ -50,11 +50,11 @@
 
 **MADS** supports scientifically defensible decision making and risk management based on model predictions.
 
-**MADS** has been successfully applied to perform various model analyses related to environmental management of contamination sites. Examples include solutions of source identification problems, quantification of uncertainty, model calibration, and optimization of monitoring networks (see the lists of [publications](#research:top), [presentations](#research:presentations), [reports](#research:reports), and [projects](#research:projects)).
+**MADS** has been successfully applied to perform various model analyses related to environmental management of contamination sites. Examples include solutions of source identification problems, quantification of uncertainty, model calibration, and optimization of monitoring networks (see the lists of [publications](mads-research.md), [presentations](mads-research.md), [reports](mads-research.md), and [projects](mads-research.md)).
 
 **MADS** release includes a series of verification and test example problems.
 
-**MADS** current stable version (v 1.1) has been released in January 2013 ([download](#download)).
+**MADS** current stable version (v 1.1) has been released in January 2013 ([download](mads-download.md)).
 
 Professional software & codes with somewhat similar but not equivalent capabilities:
 
