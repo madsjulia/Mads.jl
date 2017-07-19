@@ -14,9 +14,9 @@
 *   Highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called [SVD assist](http://www.pesthomepage.org/Highly-paraameterized_inversion.php) in [PEST](http://www.pesthomepage.org) ([svdassist](http://www.pesthomepage.org/Highly-paraameterized_inversion.php)).
 *   Permits the use of 'acceptable' calibration ranges for each optimization target.  
     In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.  
-    This feature is implemented using the keyword ‘**<u>obsrange</u>**’ ([MADS manual](mads-manual.md)).
+    This feature is implemented using the keyword ‘**<u>obsrange</u>**’ ([MADS manual](mads-manual.md#calibration-termination-criteria)).
 *   Allows the use of an acceptable calibration range for the objective function.  
-    In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword ‘**<u>cutoff</u>**’ ([MADS manual](mads-manual.md)).
+    In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword ‘**<u>cutoff</u>**’ ([MADS manual](mads-manual.md#calibration-termination-criteria)).
 *   Implements a series of alternative objective functions (OF).
 *   By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process.
 *   Provides an option to perform a series of optimizations with random initial guesses for optimization parameters.
