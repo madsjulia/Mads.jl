@@ -1,4 +1,5 @@
 @Mads.tryimport PkgDev
+import Documenter
 import DocumentFunction
 
 """
