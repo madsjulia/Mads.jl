@@ -29,6 +29,13 @@ inverse_parameters, inverse_results = Mads.calibraterandom(md, 2; maxEval=1, np_
 Mads.calibraterandom_parallel(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
 
+# Use only two wells - w13a and w20a
+Mads.allwellsoff!(md) # turn off all wells
+Mads.wellon!(md, "w13a") # use well w13a
+Mads.wellon!(md, "w20a") # use well w20a
+
+welldata_time = Mads.getwellsdata(md; time=true)
+
 if Mads.create_tests
 	JLD.save(joinpath(testdir, "welldata_time.jld"), "welldata_time", welldata_time)
 	JLD.save(joinpath(testdir, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
@@ -36,13 +43,6 @@ if Mads.create_tests
 	JLD.save(joinpath(testdir, "llhoods.jld"), "llhoods", llhoods)
 	JLD.save(joinpath(testdir, "newllhoods.jld"), "newllhoods", newllhoods)
 end
-
-# Use only two wells - w13a and w20a
-Mads.allwellsoff!(md) # turn off all wells
-Mads.wellon!(md, "w13a") # use well w13a
-Mads.wellon!(md, "w20a") # use well w20a
-
-welldata_time = Mads.getwellsdata(md; time=true)
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 paramvalues = Mads.getparamrandom(md, 10)
