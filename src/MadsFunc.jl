@@ -144,12 +144,18 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
 				while (trying = !checknodedir(tempstring))
-					execattempt += 1; sleep(10)
+					execattempt += 1; sleep(1 * execattempt)
 					if execattempt > 3
-						attempt +=1
+						attempt +=1; sleep(1 * attempt)
 						if attempt > 3
 							cd(currentdir)
-							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							if nrpocs() > 1 && myid() != 1
+								Mads.madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								Mads.madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								return nothing
+							else
+								Mads.madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							end
 						end
 						break
 					end
@@ -172,14 +178,21 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						trying = false
 					catch errmsg
 						if VERSION >= v"0.6.0" && !latest
-							latest = true
+							latest = true; attempt = 0
 						else
-							sleep(attempt * 0.5)
 							if attempt > 3
 								cd(currentdir)
 								printerrormsg(errmsg)
-								Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								if nrpocs() > 1 && myid() != 1
+									Mads.madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									Mads.madswarn("Process $(myid()) will be removed!")
+									remotecall(rmprocs, 1, myid())
+									return nothing
+								else
+									Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								end
 							end
+							sleep(attempt * 0.5)
 						end
 					end
 				end
@@ -193,12 +206,18 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						runcmd(madsdata["Command"])
 						trying = false
 					catch errmsg
-						sleep(attempt * 0.5)
 						if attempt > 3
 							cd(currentdir)
 							printerrormsg(errmsg)
-							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							if nrpocs() > 1 && myid() != 1
+								Mads.madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+								Mads.madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								return nothing
+							else
+								Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							end
 						end
+						sleep(attempt * 0.5)
 					end
 				end
 				results = readmodeloutput(madsdata, obskeys=obskeys)
@@ -213,12 +232,12 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch errmsg
-					sleep(attempt * 0.5)
 					if attempt > 3
 						printerrormsg(errmsg)
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
+					sleep(attempt * 0.5)
 				end
 			end
 			global modelruns += 1
