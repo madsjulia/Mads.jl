@@ -255,10 +255,8 @@ Returns:
 function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
-	uo = u
-	dd = d
-	vo = v
-	gooddirections = []
+	vo = copy(v)
+	local gooddirections
 	local dist
 	numdirections = length(d)
 	numgooddirections = numdirections

@@ -87,8 +87,6 @@ good_llhoods = JLD.load(joinpath(testdir, "llhoods.jld"), "llhoods")
 good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 
 @Base.Test.testset "Contamination" begin
-	# Test param_values
-
 	@Base.Test.test isapprox(sum(abs(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
 	@Base.Test.test isapprox(sum(abs(jacobian .- good_jacobian)), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
@@ -102,7 +100,6 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 
 	@Base.Test.test isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
 	@Base.Test.test isapprox(mean([abs(Mads.computemass(md)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
-
 
 	good_welldata_time = JLD.load(joinpath(workdir, "test_results", "welldata_time.jld"), "welldata_time")
 	good_inverse_preds = JLD.load(joinpath(workdir, "test_results", "inverse_predictions.jld"), "inverse_predictions")
@@ -122,7 +119,6 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 		ssr += (inverse_predictions[obskey] - good_inverse_preds[obskey])^2
 	end
 	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
-
 end
 
 @Mads.stdouterrcapture Mads.addsource!(md)
