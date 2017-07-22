@@ -256,6 +256,7 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		info("Git status $(madsmodule) ...")
 		cd(Pkg.dir(madsmodule))
 		run(`git status -s`)
+		runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
 		if gitmore
 			info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)
