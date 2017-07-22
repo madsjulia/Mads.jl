@@ -19,7 +19,7 @@ touch(jpath("a-v03.mads"))
 @Base.Test.testset "Filename" begin
 	# Verify that getnextmadsfilename returns the most recently modified file
 	@Base.Test.test Mads.getnextmadsfilename(jpath("a-v01.mads")) == jpath("a-v03.mads")
-	sleep(0.1)
+	sleep(1)
 	touch(jpath("a-v02.mads"))
 	@Base.Test.test Mads.getnextmadsfilename(jpath("a-v01.mads")) == jpath("a-v02.mads")
 
