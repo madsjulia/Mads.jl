@@ -1,6 +1,16 @@
 import DataStructures
 
 """
+Change the current directory to the Mads source dictionary
+
+$(DocumentFunction.documentfunction(md))
+"""
+function md()
+	Base.cd(madsdir)
+	pwd()
+end
+
+"""
 Load MADS input file defining a MADS problem dictionary
 
 $(DocumentFunction.documentfunction(loadmadsfile;

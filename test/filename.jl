@@ -1,5 +1,3 @@
-# Test for the Mads IO system
-
 import Mads
 import Base.Test
 
@@ -9,6 +7,8 @@ workdir = "filename_testing"
 end
 
 curdir = pwd()
+Mads.md()
+cd(curdir)
 Mads.rmdir(workdir)
 Mads.mkdir(workdir)
 
@@ -19,7 +19,7 @@ touch(jpath("a-v03.mads"))
 @Base.Test.testset "Filename" begin
 	# Verify that getnextmadsfilename returns the most recently modified file
 	@Base.Test.test Mads.getnextmadsfilename(jpath("a-v01.mads")) == jpath("a-v03.mads")
-	sleep(1)
+	sleep(0.1)
 	touch(jpath("a-v02.mads"))
 	@Base.Test.test Mads.getnextmadsfilename(jpath("a-v01.mads")) == jpath("a-v02.mads")
 
