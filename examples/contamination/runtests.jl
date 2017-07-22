@@ -16,8 +16,10 @@ inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, np_lambda=1,
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
 forward_predictions = Mads.forward(md, inverse_parameters)
+forward_predictions_vector = collect(values(forward_predictions))
 localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collect(values(inverse_parameters)), obs=collect(values(forward_predictions)))
-samples, llhoods = Mads.sampling(param_values, localsa_results["jacobian"], 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
+jacobian = localsa_results["jacobian"]
+samples, llhoods = Mads.sampling(param_values, jacobian, 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
 
 obs_samples = Mads.forward(md, samples)
 newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance sampling to the 95% of the solutions, keeping the most likely solutions
@@ -37,6 +39,8 @@ Mads.wellon!(md, "w20a") # use well w20a
 welldata_time = Mads.getwellsdata(md; time=true)
 
 if Mads.create_tests
+	JLD.save(joinpath(testdir, "forward_predictions.jld"), "forward_predictions", forward_predictions_vector)
+	JLD.save(joinpath(testdir, "jacobian.jld"), "jacobian", jacobian)
 	JLD.save(joinpath(testdir, "welldata_time.jld"), "welldata_time", welldata_time)
 	JLD.save(joinpath(testdir, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
 	JLD.save(joinpath(testdir, "samples.jld"), "samples", samples)
@@ -76,12 +80,17 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w20a-saltelli-5.svg"))
 end
 
+good_forward_predictions = JLD.load(joinpath(testdir, "forward_predictions.jld"), "forward_predictions")
+good_jacobian = JLD.load(joinpath(testdir, "jacobian.jld"), "jacobian")
 good_samples = JLD.load(joinpath(testdir, "samples.jld"), "samples")
 good_llhoods = JLD.load(joinpath(testdir, "llhoods.jld"), "llhoods")
 good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 
 @Base.Test.testset "Contamination" begin
 	# Test param_values
+
+	@Base.Test.test isapprox(sum(abs(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
+	@Base.Test.test isapprox(sum(abs(jacobian .- good_jacobian)), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
 
 	@Base.Test.test isapprox(mean([abs(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
