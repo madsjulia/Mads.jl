@@ -129,19 +129,22 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		rootname = string(rootname, "-", keyword)
 	end
 	paramkeys = getoptparamkeys(madsdata)
+	nPall = length(getparamkeys(madsdata))
 	obskeys = getobskeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	nPi = sizeof(par)
+	nPi = length(par)
 	if nPi == 0
 		param = getparamsinit(madsdata, paramkeys)
-	elseif nPi != nP
-		param = getoptparams(madsdata, par, paramkeys)
-	else
+	elseif nPi == nP
 		param = par
+	elseif nPi == nPall
+		param = Mads.getoptparams(madsdata, par)
+	else
+		param = getoptparams(madsdata, par, paramkeys)
 	end
 	nO = length(obskeys)
 	if sizeof(J) == 0

@@ -8,6 +8,7 @@ Mads.mkdir(testdir)
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 mdinitparams = Mads.getparamdict(md)
+init_parameters_vector = collect(values(mdinitparams))
 rootname = Mads.getmadsrootname(md)
 
 forward_predictions = Mads.forward(md) # Execute forward model simulation based on initial parameter guesses
@@ -15,11 +16,10 @@ forward_predictions_vector = collect(values(forward_predictions))
 param_values = Mads.getoptparams(md) # Initial parameter values
 of = Mads.partialof(md, forward_predictions, r".*")
 inverse_parameters, inverse_results = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
-inverse_parameters_vector = collect(values(inverse_parameters))
 @Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
-localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=inverse_parameters_vector, obs=forward_predictions_vector)
+localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=init_parameters_vector, obs=forward_predictions_vector)
 jacobian = localsa_results["jacobian"]
 samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, scale=0.5) # sampling for local uncertainty analysis
 
