@@ -146,14 +146,26 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 			ssr += (welldata_time[i*j] - good_welldata_time[i*j])^2
 		end
 	end
-	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+
+	t = isapprox(ssr, 0., atol=1e-8)
+	if t
+		@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+	else
+		@show ssr
+	end
 
 	# Testing inverse predictions against itself
 	ssr = 0.
 	for obskey in union(Set(keys(inverse_predictions)), Set(keys(good_inverse_preds)))
 		ssr += (inverse_predictions[obskey] - good_inverse_preds[obskey])^2
 	end
-	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+
+	t = isapprox(ssr, 0., atol=1e-8)
+	if t
+		@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+	else
+		@show ssr
+	end
 end
 
 @Mads.stdouterrcapture Mads.addsource!(md)
