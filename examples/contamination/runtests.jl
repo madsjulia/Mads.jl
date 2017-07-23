@@ -13,6 +13,7 @@ forward_predictions = Mads.forward(md) # Execute forward model simulation based 
 param_values = Mads.getoptparams(md) # Initial parameter values
 of = Mads.partialof(md, forward_predictions, r".*")
 inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
+@Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
 forward_predictions = Mads.forward(md, inverse_parameters)
@@ -30,6 +31,8 @@ goodoprime = Mads.getimportantsamples(obs_samples, newllhoods)
 inverse_parameters, inverse_results = Mads.calibraterandom(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 Mads.calibraterandom_parallel(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
+
+@Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 
 # Use only two wells - w13a and w20a
 Mads.allwellsoff!(md) # turn off all wells
@@ -58,7 +61,6 @@ Mads.dumpwelldata(md, "wells.dat")
 Mads.rmfile("wells.dat")
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-
 	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 

@@ -10,12 +10,17 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
+	if l == nothing
+		Mads.warn("Local sensitivity analysis fails!")
+		return
+	end
 	ofval = Mads.of(madsdata, f)
 	np = length(Mads.getoptparamkeys(madsdata))
-	no = length(Mads.gettargetkeys(madsdata))
-	dof = (no > np) ? no - np : 1
 	w = Mads.getobsweight(madsdata)
-	det_w = prod(w)
+	w = w[w.>0]
+	no = length(w)
+	dof = (no > np) ? no - np : 1
+	det_w = prod(w[w.>0])
 	ln_det_w = log(det_w)
 	gf = ofval / dof
 	println("Objective function value                               : $(ofval)")
@@ -25,7 +30,7 @@ function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Arr
 	copt = abs(l["eigenvalues"][end])/abs(l["eigenvalues"][1])
 	eopt = abs(l["eigenvalues"][end])
 	dopt = prod(l["eigenvalues"])
-	println("Optimality criteria based on covariance matrix of observation errors:")
+	println("Optimality criteria based on the covariance matrix of observation errors:")
 	println("A-optimality (matrix trace)                            : $(aopt)")
 	println("C-optimality (matrix conditioning number)              : $(copt)")
 	println("E-optimality (matrix maximum eigenvalue)               : $(eopt)")
@@ -39,10 +44,10 @@ function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Arr
 	bic = sml + np * log(no)
 	aicc = sml + 2 * np * log(log(no))
 	kic = sml + np * log(no * 0.159154943) - log(dopt)
-	println("Log likelihood function                            : $(-sml/2)")
-	println("Maximum likelihood                                 : $(sml)")
-	println("AIC  (Akaike   Information Criterion)              : $(aic)")
-	println("AICc (Akaike   Information Criterion + correction) : $(aicc)")
-	println("BIC  (Bayesian Information Criterion)              : $(bic)")
-	println("KIC  (Kashyap  Information Criterion)              : $(kic)")
+	println("Log likelihood function                                : $(-sml/2)")
+	println("Maximum likelihood                                     : $(sml)")
+	println("AIC  (Akaike   Information Criterion)                  : $(aic)")
+	println("AICc (Akaike   Information Criterion + correction)     : $(aicc)")
+	println("BIC  (Bayesian Information Criterion)                  : $(bic)")
+	println("KIC  (Kashyap  Information Criterion)                  : $(kic)")
 end

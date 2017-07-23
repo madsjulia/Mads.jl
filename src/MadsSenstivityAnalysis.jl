@@ -192,11 +192,14 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	try
 		u, s, v = svd(JpJ)
 		covar = v * inv(diagm(s)) * u'
-	catch "LAPACKException(12)"
+	catch errmsg1
 		try
 			covar = inv(JpJ)
-		catch "SingularException(4)"
-			Mads.madscritical("Singular covariance matrix! Local sensitivity analysis fails.")
+		catch errmsg2
+			printerrormsg(errmsg1)
+			printerrormsg(errmsg2)
+			Mads.warn("JpJ inversion fails")
+			return nothing
 		end
 	end
 	stddev = sqrt.(abs.(diag(covar)))
