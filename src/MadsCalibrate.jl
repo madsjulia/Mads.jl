@@ -37,9 +37,8 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 """
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
-	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
-	paramsoptdict = paramdict
+    paramdict = Mads.getparamdict(madsdata)
+    paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	if all
 		local allresults
@@ -107,9 +106,8 @@ Returns:
 """
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
-	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
-	paramsoptdict = paramdict
+	paramdict = Mads.getparamdict(madsdata)
+	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	allphi = SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArray{Bool}(numberofsamples)

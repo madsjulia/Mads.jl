@@ -7,20 +7,21 @@ testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
+mdinitparams = Mads.getparamdict(md)
 rootname = Mads.getmadsrootname(md)
 
 forward_predictions = Mads.forward(md) # Execute forward model simulation based on initial parameter guesses
+forward_predictions_vector = collect(values(forward_predictions))
 param_values = Mads.getoptparams(md) # Initial parameter values
 of = Mads.partialof(md, forward_predictions, r".*")
-inverse_parameters, inverse_results = Mads.calibrate(md, maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
+inverse_parameters, inverse_results = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
+inverse_parameters_vector = collect(values(inverse_parameters))
 @Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
-forward_predictions = Mads.forward(md, inverse_parameters)
-forward_predictions_vector = collect(values(forward_predictions))
-localsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=collect(values(inverse_parameters)), obs=collect(values(forward_predictions)))
+localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=inverse_parameters_vector, obs=forward_predictions_vector)
 jacobian = localsa_results["jacobian"]
-samples, llhoods = Mads.sampling(param_values, jacobian, 10, seed=2016, scale=0.5) # sampling for local uncertainty analysis
+samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, scale=0.5) # sampling for local uncertainty analysis
 
 obs_samples = Mads.forward(md, samples)
 newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance sampling to the 95% of the solutions, keeping the most likely solutions
@@ -31,8 +32,6 @@ goodoprime = Mads.getimportantsamples(obs_samples, newllhoods)
 inverse_parameters, inverse_results = Mads.calibraterandom(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 Mads.calibraterandom_parallel(md, 2; maxEval=1, np_lambda=1, maxJacobians=1)
 inverse_predictions = Mads.forward(md, inverse_parameters) # execute forward model simulation based on calibrated values
-
-@Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 
 # Use only two wells - w13a and w20a
 Mads.allwellsoff!(md) # turn off all wells
@@ -122,16 +121,16 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 		@show newllhoods
 	end
 
-	t = isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
+	t = isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Base.Test.test isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
+		@Base.Test.test isapprox(mean([abs(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md; time=50.0)
 	end
 
-	t = isapprox(mean([abs(Mads.computemass(md)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
+	t = isapprox(mean([abs(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Base.Test.test isapprox(mean([abs(Mads.computemass(md)[i] - (760.3462420637113,0)[i]) for i=1:2]), 0, atol=1e-5)
+		@Base.Test.test isapprox(mean([abs(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md)
 	end
