@@ -265,11 +265,11 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 				catch errmsg
 					printerrormsg(errmsg)
-					Mads.madserror("0.6 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
 				end
 			else
 				printerrormsg(errmsg)
-				Mads.madserror("0.5 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.5)!")
 			end
 		end
 		return out

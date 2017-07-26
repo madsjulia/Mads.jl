@@ -1,6 +1,25 @@
 import DataStructures
 import DocumentFunction
 
+"""
+Load a predefined Mads problem
+
+$(DocumentFunction.documentfunction(loadmadsproblem;
+argtext=Dict("name"=>"predefined MADS problem name")))
+
+Returns:
+
+- MADS problem dictionary
+"""
+function loadmadsproblem(name::String)
+	if name =="polynomial"
+		madsdata = Mads.loadmadsfile(joinpath(madsdir, "..", "examples", "internal-polynomial-model", "internal-polynomial.mads"))
+	else
+		madsdata = nothing
+	end
+	return madsdata
+end
+
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
@@ -63,7 +82,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- new madsdata
+- new MADS problem dictionary
 """ createmadsproblem
 
 """

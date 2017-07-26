@@ -102,7 +102,7 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 			if s[2] == np
 				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
 				for i = 1:nr
-					rv[i] = collect(values(f(vec(paramarray[:, i]))))
+					rv[i] = collect(values(f(vec(paramarray[i, :]))))
 				end
 			else
 				# r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)

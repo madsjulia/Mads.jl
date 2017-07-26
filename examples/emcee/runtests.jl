@@ -22,7 +22,6 @@ burnin = 100
 			end
 			return retval
 		end
-
 		x0 = rand(numdims, numwalkers) * 10 - 5
 		chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, x0, burnin, 1)
 		chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
