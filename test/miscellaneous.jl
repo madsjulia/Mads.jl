@@ -26,10 +26,12 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-
 Mads.functions(quiet=true)
 
 Mads.stdouterrcaptureon();
+
+Mads.loadmadsproblem("unknown");
+Mads.loadmadsproblem("polynomial");
 
 Mads.printerrormsg("a")
 
