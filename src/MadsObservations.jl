@@ -601,6 +601,21 @@ function welloff!(madsdata::Associative, wellname::String)
 end
 
 """
+Delete all wells marked as being off in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(welloff!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "wellname"=>"name of the well to be turned off")))
+"""
+function deleteoffwells!(madsdata::Associative)
+    for wellkey in keys(madsdata["Wells"])
+        if madsdata["Wells"][wellkey]["on"] == false
+            delete!(madsdata["Wells"], wellkey)
+        end
+    end
+end
+
+"""
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(wells2observations!;
