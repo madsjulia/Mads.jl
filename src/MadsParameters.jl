@@ -546,7 +546,7 @@ function showparameters(madsdata::Associative)
 		else
 			s = ""
 		end
-		s *= @sprintf "%-10s = %15g " parkey pardict[parkey]["init"]
+		s *= @sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
 		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
 			s *= @sprintf "log-transformed "
 		end
@@ -582,7 +582,7 @@ function showallparameters(madsdata::Associative)
 		else
 			s = ""
 		end
-		s *= @sprintf "%-10s = %15g " parkey pardict[parkey]["init"]
+		s *= @sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
 		if haskey(pardict[parkey], "type")
 			if pardict[parkey]["type"] != nothing
 				s *= "<- optimizable "

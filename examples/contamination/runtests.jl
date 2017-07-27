@@ -6,6 +6,8 @@ workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "examples", 
 testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
+md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a-sourceparams.mads"))
+forward_predictions_source = Mads.forward(md)
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 mdinitparams = Mads.getparamdict(md)
 init_parameters_vector = collect(values(mdinitparams))
@@ -88,6 +90,7 @@ good_llhoods = JLD.load(joinpath(testdir, "llhoods.jld"), "llhoods")
 good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 
 @Base.Test.testset "Contamination" begin
+	@Base.Test.test	forward_predictions_source == forward_predictions
 	@Base.Test.test isapprox(sum(abs(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
 	@Base.Test.test isapprox(sum(abs(jacobian .- good_jacobian)), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)

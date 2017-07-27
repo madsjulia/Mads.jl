@@ -67,6 +67,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
+		if !haskey(madsdata, "Parameters")
+			madsdata["Parameters"] = Dict()
+		end
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
@@ -153,12 +156,13 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	end
 	numberofsources = length(madsdata["Sources"])
 	anasolfunctions = Array{Function}(numberofsources)
-	local anasolallparametersrequired, anasolallparametersall
+	anasolallparametersrequired = anasolparametersrequired
+	anasolallparametersall = anasolparametersall
 	for i = 1:numberofsources
 		for p in anasolsourcerequired
 			pn = string("source", i, "_", p)
-			anasolallparametersrequired = [anasolparametersrequired; pn]
-			anasolallparametersall = [anasolparametersall; pn]
+			anasolallparametersrequired = [anasolallparametersrequired; pn]
+			anasolallparametersall = [anasolallparametersall; pn]
 		end
 		if haskey(madsdata["Sources"][i], "box")
 			anasolfunction = anasolfunctionroot * "bbb_iir_c"
@@ -168,8 +172,22 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		anasolfunctions[i] = eval(parse("Anasol.$anasolfunction"))
 	end
 	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
-		Mads.madswarn("Missing: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]))")
-		Mads.madscritical("There are missing Anasol parameters!")
+		missingparameters = anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]
+		anasolallparametersrequired = Array{String}(0)
+		anasolallparametersall = Array{String}(0)
+		for i = 1:numberofsources
+			for p in [anasolparametersrequired; anasolsourcerequired]
+				pn = string("source", i, "_", p)
+				anasolallparametersrequired = [anasolallparametersrequired; pn]
+				anasolallparametersall = [anasolallparametersall; pn]
+			end
+		end
+		if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+			Mads.madwarn("There are missing Anasol parameters!")
+			Mads.madswarn("Missing parameters: $(missingparameters)")
+			Mads.madswarn("Missing source parameters: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0])")
+			Mads.madscritical("Mads quits!")
+		end
 	end
 	nW = 0
 	for wellkey in Mads.getwellkeys(madsdata)
@@ -220,6 +238,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			wellc[w][map(!, wellp[w])] .= 0
 			end
 	end
+	classical = haskey(madsdata["Parameters"], "vx")
 	# indexall = indexin(anasolallparametersall, paramkeys)
 	function computeconcentrations()
 		paramdict = Mads.getparamdict(madsdata)
@@ -252,43 +271,72 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 	end
 	function computeconcentrations(parametersnoexpressions::Associative)
 		parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
-		porosity = parameters["n"]
-		lambda = parameters["lambda"]
-		theta = parameters["theta"]
-		vx = parameters["vx"]
-		vy = parameters["vy"]
-		vz = parameters["vz"]
-		ax = parameters["ax"]
-		if disp_tied
-			ay = ax / parameters["ay"]
-			az = ay / parameters["az"]
-		else
-			ay = parameters["ay"]
-			az = parameters["az"]
-		end
-		if haskey(parameters, "rf")
-			rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
-		end
-		if haskey(parameters, "H")
-			H = parameters["H"]
-		elseif haskey(parameters, "ts_dsp")
-			H = 0.5 * parameters["ts_dsp"]
-		else
-			H = 0.5
+		if classical
+			porosity = parameters["n"]
+			lambda = parameters["lambda"]
+			theta = parameters["theta"]
+			vx = parameters["vx"]
+			vy = parameters["vy"]
+			vz = parameters["vz"]
+			ax = parameters["ax"]
+			if disp_tied
+				ay = ax / parameters["ay"]
+				az = ay / parameters["az"]
+			else
+				ay = parameters["ay"]
+				az = parameters["az"]
+			end
+			if haskey(parameters, "rf")
+				rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
+			end
+			if haskey(parameters, "H")
+				H = parameters["H"]
+			elseif haskey(parameters, "ts_dsp")
+				H = 0.5 * parameters["ts_dsp"]
+			else
+				H = 0.5
+			end
 		end
 		for w in 1:nW
 			wellc[w] .= background
 		end
 		for i=1:numberofsources
-			x = parameters[string("source", i, "_", "x")]
-			y = parameters[string("source", i, "_", "y")]
-			z = parameters[string("source", i, "_", "z")]
-			dx = parameters[string("source", i, "_", "dx")]
-			dy = parameters[string("source", i, "_", "dy")]
-			dz = parameters[string("source", i, "_", "dz")]
-			f = parameters[string("source", i, "_", "f")]
-			t0 = parameters[string("source", i, "_", "t0")]
-			t1 = parameters[string("source", i, "_", "t1")]
+			ss = string("source", i, "_")
+			x = parameters[string(ss, "x")]
+			y = parameters[string(ss, "y")]
+			z = parameters[string(ss, "z")]
+			dx = parameters[string(ss, "dx")]
+			dy = parameters[string(ss, "dy")]
+			dz = parameters[string(ss, "dz")]
+			f = parameters[string(ss, "f")]
+			t0 = parameters[string(ss, "t0")]
+			t1 = parameters[string(ss, "t1")]
+			if !classical
+				porosity = parameters[string(ss, "n")]
+				lambda = parameters[string(ss, "lambda")]
+				theta = parameters[string(ss, "theta")]
+				vx = parameters[string(ss, "vx")]
+				vy = parameters[string(ss, "vy")]
+				vz = parameters[string(ss, "vz")]
+				ax = parameters[string(ss, "ax")]
+				if disp_tied
+					ay = ax / parameters[string(ss, "ay")]
+					az = ay / parameters[string(ss, "az")]
+				else
+					ay = parameters[string(ss, "ay")]
+					az = parameters[string(ss, "az")]
+				end
+				if haskey(parameters, string(ss, "rf"))
+					rf = parameters[string(ss, "rf")]; vx /= rf; vy /= rf; vz /= rf
+				end
+				if haskey(parameters, string(ss, "H"))
+					H = parameters[string(ss, "H")]
+				elseif haskey(parameters, string(ss, "ts_dsp"))
+					H = 0.5 * parameters[string(ss, "ts_dsp")]
+				else
+					H = 0.5
+				end
+			end
 			for w in 1:nW
 				if wellscreen[w]
 					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
