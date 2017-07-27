@@ -616,6 +616,25 @@ function deleteoffwells!(madsdata::Associative)
 end
 
 """
+Delete all times in the MADS problem dictionary in a given list.
+
+$(DocumentFunction.documentfunction(welloff!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "wellname"=>"name of the well to be turned off")))
+"""
+function deletetimes!(madsdata::Associative, deletetimes)
+    for wellkey in keys(madsdata["Wells"])
+        delete_pos = [] # position of times to be deleted.
+        for obs_num in 1:length(madsdata["Wells"][wellkey]["obs"])
+            if madsdata["Wells"][wellkey]["obs"][obs_num]["t"] in deletetimes
+                delete_pos = append!(delete_pos, obs_num)
+            end
+        end
+        deleteat!( madsdata["Wells"][wellkey]["obs"], delete_pos)
+    end
+end
+
+"""
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(wells2observations!;
