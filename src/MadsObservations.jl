@@ -553,7 +553,7 @@ function wellon!(madsdata::Associative, rx::Regex)
 	error = true
 	for wellkey in keys(madsdata["Wells"])
 		m = match(rx, wellkey)
-		if typeof(m) == Void || length(m.captures) != 1
+		if typeof(m) != Void
 			madsdata["Wells"][wellkey]["on"] = true
 			error = false
 		end
