@@ -322,7 +322,7 @@ end
 function setparamsinit!(madsdata::Associative, paramdictarray::Associative, idx::Int)
 	paramkeys = getparamkeys(madsdata)
 	for k in paramkeys
-		if haskey(paramdict, k)
+		if haskey(paramdictarray, k)
 			madsdata["Parameters"][k]["init"] = paramdictarray[k][idx]
 		end
 	end
