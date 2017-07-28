@@ -482,8 +482,8 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistnormal!(madsdata::Associative, mean::Vector, stddev::Vector)
 	paramkeys = getparamkeys(madsdata)
-	for k in paramkeys
-		madsdata["Parameters"][k]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
+	for i = 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
 	end
 end
 
@@ -497,8 +497,8 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistuniform!(madsdata::Associative, min::Vector, max::Vector)
 	paramkeys = getparamkeys(madsdata)
-	for k in paramkeys
-		madsdata["Parameters"][k]["dist"] = "Uniform($(min[i]),$(max[i]))"
+	for i = 1:length(paramkeys)
+		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
 	end
 end
 
