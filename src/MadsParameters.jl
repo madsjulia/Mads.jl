@@ -307,33 +307,36 @@ Returns:
 - the parameter values
 """ getparamsinit_max
 
-"""
-Set initial parameter guesses in the MADS problem dictionary
-
-$(DocumentFunction.documentfunction(setparamsinit!;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "paramdict"=>"dictionary with initial model parameter values")))
-"""
 function setparamsinit!(madsdata::Associative, paramdict::Associative)
 	paramkeys = getparamkeys(madsdata)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]]
+	for k in paramkeys
+		if haskey(paramdict, k)
+			if typeof(paramdict[k]) <: Number
+				madsdata["Parameters"][k]["init"] = paramdict[k]
+			else
+				madsdata["Parameters"][k]["init"] = paramdict[k][1]
+			end
+		end
+	end
+end
+function setparamsinit!(madsdata::Associative, paramdictarray::Associative, idx::Int)
+	paramkeys = getparamkeys(madsdata)
+	for k in paramkeys
+		if haskey(paramdict, k)
+			madsdata["Parameters"][k]["init"] = paramdictarray[k][idx]
+		end
 	end
 end
 
-"""
+@doc """
 Set initial optimized parameter guesses in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(setparamsinit!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "paramdict"=>"dictionary with initial model parameter values")))
-"""
-function setoptparamsinit!(madsdata::Associative, paramdict::Associative, idx::Int=1)
-	paramkeys = getoptparamkeys(madsdata)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["init"] = paramdict[paramkeys[i]][idx]
-	end
-end
+             "paramdict"=>"dictionary with initial model parameter values",
+            "paramdictarray"=>"dictionary of arrays with initial model parameter values",
+            "idx"=>"index of the dictionary of arrays with initial model parameter values")))
+""" setparamsinit!
 
 function getoptparams(madsdata::Associative)
 	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
@@ -428,8 +431,8 @@ keytext=Dict("filter"=>"parameter filter")))
 """
 function setallparamson!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["type"] = "opt"
+	for k in paramkeys
+		madsdata["Parameters"][k]["type"] = "opt"
 	end
 end
 
@@ -442,8 +445,8 @@ keytext=Dict("filter"=>"parameter filter")))
 """
 function setallparamsoff!(madsdata::Associative; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["type"] = nothing
+	for k in paramkeys
+		madsdata["Parameters"][k]["type"] = nothing
 	end
 end
 
@@ -479,8 +482,8 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistnormal!(madsdata::Associative, mean::Vector, stddev::Vector)
 	paramkeys = getparamkeys(madsdata)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
+	for k in paramkeys
+		madsdata["Parameters"][k]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
 	end
 end
 
@@ -494,8 +497,8 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistuniform!(madsdata::Associative, min::Vector, max::Vector)
 	paramkeys = getparamkeys(madsdata)
-	for i in 1:length(paramkeys)
-		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
+	for k in paramkeys
+		madsdata["Parameters"][k]["dist"] = "Uniform($(min[i]),$(max[i]))"
 	end
 end
 

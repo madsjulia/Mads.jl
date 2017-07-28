@@ -104,7 +104,7 @@ function copyaquifer2sourceparameters!(madsdata::Associative)
 			for k in keys(madsdata["Sources"][i])
 				for pkey in keys(madsdata["Parameters"])
 					if !contains(pkey, "source")
-						madsdata["Sources"][i][k][pkey] = madsdata["Parameters"][pkey]
+						madsdata["Sources"][i][k][pkey] = deepcopy(madsdata["Parameters"][pkey])
 					end
 				end
 			end
