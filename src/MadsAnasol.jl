@@ -68,14 +68,14 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
 		if !haskey(madsdata, "Parameters")
-			madsdata["Parameters"] = Dict()
+			madsdata["Parameters"] = DataStructures.OrderedDict()
 		end
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
 			if length(findin(anasolsourcerequired, sourceparams)) < length(anasolsourcerequired)
 				Mads.madswarn("Missing: $(anasolsourcerequired[indexin(anasolsourcerequired, sourceparams).==0]))")
-				Mads.madscritical("There are missing Anasol parameters!")
+				Mads.madscritical("There are missing Anasol source parameters!")
 			end
 			extraparams = sourceparams[indexin(sourceparams, anasolsourcerequired).==0]
 			for sourceparam in [anasolsourcerequired; extraparams]
@@ -89,6 +89,27 @@ function addsourceparameters!(madsdata::Associative)
 				end
 			end
 		end
+	end
+end
+
+"""
+Copy aquifer parameters to become contaminant source parameters
+
+$(DocumentFunction.documentfunction(copyaquifer2sourceparameters!;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+"""
+function copyaquifer2sourceparameters!(madsdata::Associative)
+	if haskey(madsdata, "Sources") && haskey(madsdata, "Parameters")
+		for i = 1:length(madsdata["Sources"])
+			for k in keys(madsdata["Sources"][i])
+				for pkey in keys(madsdata["Parameters"])
+					if !contains(pkey, "source")
+						madsdata["Sources"][i][k][pkey] = madsdata["Parameters"][pkey]
+					end
+				end
+			end
+		end
+		delete!(madsdata, "Parameters")
 	end
 end
 
