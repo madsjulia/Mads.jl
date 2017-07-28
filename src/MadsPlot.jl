@@ -94,7 +94,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 			Compose.stroke(parse(Colors.Colorant, "orange"))))
 	end
 	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
@@ -138,8 +138,9 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	filename, format = setplotfileformat(filename, format)
 	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot
-		p
+		Mads.display(p)
 	end
+	return nothing
 end
 
 function plotmatches(madsdata::Associative, rx::Regex=r""; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
@@ -313,11 +314,12 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
 		end
 		if typeof(pl) == Gadfly.Plot
-			pl
+			Mads.display(pl)
 		else
 			display && Mads.display(filename)
 		end
 	end
+	return nothing
 end
 
 @doc """
@@ -403,12 +405,13 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
 		if typeof(pl) == Gadfly.Plot #|| typeof(pl) == Compose.Context
-			pl
+			Mads.display(pl)
 		end
 	catch e
 		printerrormsg(e)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
 	end
+	return nothing
 end
 
 function plotwellSAresults(madsdata::Associative, result::Associative; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
@@ -503,9 +506,9 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
 	if typeof(p) == Gadfly.Plot
-		p
+		Mads.display(p)
 	end
-
+	return nothing
 end
 
 @doc """
@@ -686,7 +689,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize ), p)
 		if typeof(p) == Gadfly.Plot
-			p
+			Mads.display(p)
 		end
 	else
 		filename_root = Mads.getrootname(filename)
@@ -698,6 +701,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		filename, format = setplotfileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), pmes)
 	end
+	return nothing
 end
 
 function spaghettiplots(madsdata::Associative, number_of_samples::Integer; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
@@ -802,11 +806,15 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		filename, format = setplotfileformat(filename, format)
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
+			if typeof(pl) == Gadfly.Plot
+				Mads.display(pl)
+			end
 		catch e
 			printerrormsg(e)
 			Mads.madswarn("Spaghettiplots: Gadfly fails!")
 		end
 	end
+	return nothing
 end
 
 @doc """
@@ -986,8 +994,9 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot
-		pl
+		Mads.display(pl)
 	end
+	return nothing
 end
 
 @doc """
@@ -1088,12 +1097,13 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 			end
 		end
 		if typeof(pS) == Gadfly.Plot
-			pS
+			Mads.display(pS)
 		end
 	catch e
 		printerrormsg(e)
 		Mads.madswarn("Plotseries: Gadfly fails!")
 	end
+	return nothing
 end
 
 """
@@ -1196,4 +1206,5 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 			end
 		end
 	end
+	return nothing
 end
