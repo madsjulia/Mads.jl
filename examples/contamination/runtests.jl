@@ -6,7 +6,9 @@ workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "examples", 
 testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
-md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a-sourceparams.mads"))
+md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
+Mads.copyaquifer2sourceparameters!(md)
+Mads.addsourceparameters!(md)
 forward_predictions_source = Mads.forward(md)
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 mdinitparams = Mads.getparamdict(md)

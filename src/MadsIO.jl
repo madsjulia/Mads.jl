@@ -48,7 +48,7 @@ function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml"
 			end
 		end
 	end
-	return madsdata
+	return convert(Dict{String,Any}, madsdata)
 end
 
 """
@@ -59,16 +59,22 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
-		parameters = DataStructures.OrderedDict()
+		parameters = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 		for dict in madsdata["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
-					parameters[key] = dict[key]
+					parameters[key] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(dict[key])
+						parameters[key][pf] = dict[key][pf]
+					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = DataStructures.OrderedDict()
+						madsdata["Expressions"] = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 					end
-					madsdata["Expressions"][key] = dict[key]
+					madsdata["Expressions"][key] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(dict[key])
+						madsdata["Expressions"][key][pf] = dict[key][pf]
+					end
 				end
 			end
 		end
@@ -105,7 +111,7 @@ function parsemadsdata!(madsdata::Associative)
 	end
 	checkparameterranges(madsdata)
 	if haskey(madsdata, "Wells")
-		wells = DataStructures.OrderedDict()
+		wells = DataStructures.OrderedDict{String,Any}()
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
@@ -120,10 +126,13 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Wells"] = wells
 		Mads.wells2observations!(madsdata)
 	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
-		observations = DataStructures.OrderedDict()
+		observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 		for dict in madsdata["Observations"]
 			for key in keys(dict)
-				observations[key] = dict[key]
+				observations[key] = DataStructures.OrderedDict{String,Any}()
+				for of in keys(dict[key])
+					observations[key][of] = dict[key][of]
+				end
 			end
 		end
 		madsdata["Observations"] = observations
@@ -597,9 +606,9 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
 		obsid=[convert(String,k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
-		results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
+		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
-	return convert(DataStructures.OrderedDict{Any,Float64}, results)
+	return convert(DataStructures.OrderedDict{String,Float64}, results)
 end
 
 searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))

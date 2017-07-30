@@ -80,12 +80,18 @@ function addsourceparameters!(madsdata::Associative)
 			extraparams = sourceparams[indexin(sourceparams, anasolsourcerequired).==0]
 			for sourceparam in [anasolsourcerequired; extraparams]
 				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
-					madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+					madsdata["Parameters"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
+						madsdata["Parameters"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
+					end
 				else
 					if !haskey(madsdata, "Expressions")
 						madsdata["Expressions"] = DataStructures.OrderedDict()
 					end
-					madsdata["Expressions"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+					madsdata["Expressions"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
+						madsdata["Expressions"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
+					end
 				end
 			end
 		end
