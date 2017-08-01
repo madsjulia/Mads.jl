@@ -125,7 +125,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Gadfly.Geom.point, Gadfly.Geom.label,
 		Gadfly.Guide.XLabel("x [m]"), Gadfly.Guide.YLabel("y [m]"), Gadfly.Guide.yticks(orientation=:vertical),
 		gadfly_source,
-		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax),
+		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
 		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
 		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
@@ -136,7 +136,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setplotfileformat(filename, format)
-	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
+	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot
 		Mads.display(p)
 	end
