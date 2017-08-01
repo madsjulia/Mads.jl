@@ -1,7 +1,6 @@
 import Distributions
 import DataStructures
 import DocumentFunction
-using Compat
 
 """
 Is a dictionary containing all the observations
