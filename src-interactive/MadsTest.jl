@@ -49,6 +49,7 @@ argtext=Dict("testname"=>"name of the test to execute \(module or example\)"),
 keytext=Dict("madstest"=>"test Mads [default=`true`]")))
 """
 function test(testname::String=""; madstest::Bool=true)
+	graphoff()
 	orig_dir = pwd()
 	if testname == ""
 		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
@@ -90,4 +91,5 @@ function test(testname::String=""; madstest::Bool=true)
 		end
 	end
 	cd(orig_dir)
+	graphon()
 end

@@ -6,7 +6,7 @@ problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "..", "examples", "bigdt")
 
 md = Dict()
-if isdefined(Mads, :yaml)
+if isdefined(Mads, :YAML) || isdefined(Mads, :yaml)
 	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
 else
 	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
