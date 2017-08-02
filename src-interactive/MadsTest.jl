@@ -92,4 +92,5 @@ function test(testname::String=""; madstest::Bool=true)
 	end
 	cd(orig_dir)
 	graphon()
+	nothing
 end
