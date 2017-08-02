@@ -7,6 +7,8 @@ if workdir == "."
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")
+mdb = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"); bigfile=true)
+bfor = Mads.forward(mdb)
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 ifor = Mads.forward(md)
 Mads.forward(md, Dict())
@@ -54,6 +56,7 @@ Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "externa
 pfor = Mads.forward(md)
 
 @Base.Test.testset "Internal" begin
+	@Base.Test.test ifor == bfor
 	@Base.Test.test ifor == tifor
 	@Base.Test.test ifor == mfor
 	@Base.Test.test ifor == tefor

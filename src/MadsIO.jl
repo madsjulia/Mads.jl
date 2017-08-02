@@ -28,11 +28,15 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
-	if format == "yaml"
-		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
-	elseif format == "json"
-		madsdata = loadjsonfile(filename)
+function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, format::String="yaml")
+	if bigfile
+		madsdata = loadbigyamlfile(filename)
+	else
+		if format == "yaml"
+			madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
+		elseif format == "json"
+			madsdata = loadjsonfile(filename)
+		end
 	end
 	parsemadsdata!(madsdata)
 	madsdata["Filename"] = filename
@@ -49,6 +53,74 @@ function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml"
 		end
 	end
 	return convert(Dict{String,Any}, madsdata)
+end
+
+"""
+Load BIG YAML input file
+
+$(DocumentFunction.documentfunction(loadmadsfile;
+argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
+
+Returns:
+
+- MADS problem dictionary
+"""
+
+function loadbigyamlfile(filename::String)
+	lines = readlines(filename)
+	nlines = length(lines)
+	keyln = findin(map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines), true)
+	obsi = indexin(["Observations:\n"], lines[keyln])[1]
+	obsln = keyln[indexin(["Observations:\n"], lines[keyln])][1]
+	readflag = true
+	if obsln != 1 && obsln != nlines && obsi < length(keyln)
+		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
+		readindeces = obsln+1:keyln[obsi+1]-1
+	elseif obsln == 1 && obsi < length(keyln)
+		parseindeces = keyln[obsi+1]:nlines
+		readindeces = 2:keyln[obsi+1]-1
+	elseif obsln == nlines
+		parseindeces = 1:obsln-1
+		readindeces = obsln+1:nlines
+	else
+		parseindeces = 1:nlines
+		readflag = false
+	end
+	io = IOBuffer(join(lines[parseindeces]))
+	madsdata = YAML.load(io)
+	if readflag
+		obsdict = DataStructures.OrderedDict{String,Any}()
+		t = []
+		badlines = Array{Int}(0)
+		for i in readindeces
+			mc = match(r"^- (\S*):.*", lines[i])
+			if mc != nothing
+				kw = mc.captures[1]
+			else
+				push!(badlines, i)
+				continue
+			end
+			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
+			mc = match(r"^.*target: ([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["target"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*weight: ([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["weight"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*min: ([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["min"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*max: ([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["max"] = float(mc.captures[1])
+			end
+		end
+		madsdata["Observations"] = obsdict
+	end
+	return madsdata
 end
 
 """
@@ -125,7 +197,7 @@ function parsemadsdata!(madsdata::Associative)
 		end
 		madsdata["Wells"] = wells
 		Mads.wells2observations!(madsdata)
-	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
+	elseif haskey(madsdata, "Observations") && typeof(madsdata["Observations"]) <: Array # TODO drop zero weight observations
 		observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 		for dict in madsdata["Observations"]
 			for key in keys(dict)
