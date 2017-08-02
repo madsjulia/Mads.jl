@@ -136,7 +136,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	filename, format = setplotfileformat(filename, format)
-	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), p)
+	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot
 		Mads.display(p)
 	end
