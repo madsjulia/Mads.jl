@@ -65,13 +65,12 @@ Returns:
 
 - MADS problem dictionary
 """
-
 function loadbigyamlfile(filename::String)
 	lines = readlines(filename)
 	nlines = length(lines)
 	keyln = findin(map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines), true)
-	obsi = indexin(["Observations:\n"], lines[keyln])[1]
-	obsln = keyln[indexin(["Observations:\n"], lines[keyln])][1]
+	obsi = indexin(["Observations:"], strip.(lines[keyln]))[1]
+	obsln = keyln[obsi][1]
 	readflag = true
 	if obsln != 1 && obsln != nlines && obsi < length(keyln)
 		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
@@ -86,7 +85,7 @@ function loadbigyamlfile(filename::String)
 		parseindeces = 1:nlines
 		readflag = false
 	end
-	io = IOBuffer(join(lines[parseindeces]))
+	io = IOBuffer(join(lines[parseindeces], '\n'))
 	madsdata = YAML.load(io)
 	if readflag
 		obsdict = DataStructures.OrderedDict{String,Any}()
