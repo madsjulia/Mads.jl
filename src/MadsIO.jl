@@ -31,9 +31,10 @@ md = Mads.loadmadsfile("input_file_name.mads")
 function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, format::String="yaml")
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
-	else
+	end
+	if !bigfile || madsdata == nothing
 		if format == "yaml"
-			madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
+			madsdata = loadyamlfile(filename; julia=julia)
 		elseif format == "json"
 			madsdata = loadjsonfile(filename)
 		end
@@ -69,8 +70,16 @@ function loadbigyamlfile(filename::String)
 	lines = readlines(filename)
 	nlines = length(lines)
 	keyln = findin(map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines), true)
-	obsi = indexin(["Observations:"], strip.(lines[keyln]))[1]
-	obsln = keyln[obsi][1]
+	if length(keyln) == 0
+		return nothing
+	end
+	obsia = indexin(["Observations:"], strip.(lines[keyln]))
+	if length(obsia) == 0
+		return nothing
+	else
+		obsi = obsia[1]
+		obsln = keyln[obsi]
+	end
 	readflag = true
 	if obsln != 1 && obsln != nlines && obsi < length(keyln)
 		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
