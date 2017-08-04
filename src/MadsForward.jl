@@ -50,7 +50,11 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		p = merge(paraminitdict, paramdict)
 		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
 	else
-		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)'
+		optkeys = Mads.getoptparamkeys(madsdata)
+		if length(optkeys) == length(kk)
+			paramarray = hcat(map(i->collect(paramdict[i]), optkeys)...)'
+		else
+		end
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
@@ -65,16 +69,23 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	if length(s) > 2
 		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
 	elseif length(s) == 2
-		mx = max(s...)
-		mn = min(s...)
+		nrow, ncol = s
+		if nrow != np && ncol != np
+			warn("Incorrect array size: size(paramarray) = $(size(paramarray))")
+		elseif nrow == np
+			np = nrow
+			nr = ncol
+			if ncol == np
+				warn("Matrix columns assumed to represent the parameters!")
+			end
+		elseif nrcol == np
+			np = ncol
+			nr = nrow
+		end
 	else
-		mx = s[1]
-		mn = 1
+		np = s[1]
+		nr = 1
 	end
-	if mn != np && mx != np
-		warn("Incorrect array size: size(paramarray) = $(size(paramarray))")
-	end
-	nr = (mn == np) ? mx : mn
 	if all
 		madsdata_c = deepcopy(madsdata)
 		if haskey(madsdata_c, "Wells")

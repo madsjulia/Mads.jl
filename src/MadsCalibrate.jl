@@ -40,9 +40,7 @@ function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX
     paramdict = Mads.getparamdict(madsdata)
     paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	if all
-		local allresults
-	end
+    allresults = Array{Float64}(0)
 	local bestparameters
 	local bestresult
 	bestphi = Inf
