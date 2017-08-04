@@ -7,23 +7,6 @@ function forward(madsdata::Associative; all::Bool=false)
 	paramdict = Mads.getparamdict(madsdata)
 	forward(madsdata, paramdict; all=all)
 end
-function forward(madsdata::Associative, paramvector::Vector; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
-	if length(paramvector) == 0
-		return forward(madsdata; all=all)
-	end
-	if all
-		madsdata_c = deepcopy(madsdata)
-		if haskey(madsdata_c, "Wells")
-			setwellweights!(madsdata_c, 1)
-		elseif haskey(madsdata_c, "Observations")
-			setobsweights!(madsdata_c, 1)
-		end
-		f = makemadscommandfunction(madsdata_c)
-	else
-		f = makemadscommandfunction(madsdata)
-	end
-	f(paramvector)
-end
 function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	if length(paramdict) == 0
 		return forward(madsdata; all=all)
@@ -68,17 +51,18 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	s = size(paramarray)
 	if length(s) > 2
 		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
+		return
 	elseif length(s) == 2
 		nrow, ncol = s
 		if nrow != np && ncol != np
 			warn("Incorrect array size: size(paramarray) = $(size(paramarray))")
+			return
 		elseif nrow == np
-			np = nrow
 			nr = ncol
 			if ncol == np
 				warn("Matrix columns assumed to represent the parameters!")
 			end
-		elseif nrcol == np
+		elseif ncol == np
 			np = ncol
 			nr = nrow
 		end

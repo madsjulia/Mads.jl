@@ -177,7 +177,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 		interationcallback = (x_best::Vector, of::Number, lambda::Number)->begin
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			if localsa || restart_flag
-				# Mads.localsa(madsdata; par=x_best_real, keyword="best")
+				Mads.localsa(madsdata; par=x_best_real, keyword="best")
 			end
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
@@ -188,7 +188,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 		jacobiancallback = (x::Vector, J::Matrix)->begin
 			if localsa || restart_flag
 				x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
-				# Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
+				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
 			end
 		end
 	else

@@ -2,12 +2,14 @@ import MetaProgTools
 import DataStructures
 import DocumentFunction
 
+#=
 function makearrayfunction_vector(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	function arrayfunction(arrayparameters::Vector)
 		return f(arrayparameters)
 	end
 	return arrayfunction
 end
+=#
 
 function makearrayfunction_dictionary(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
@@ -26,7 +28,8 @@ function makearrayfunction_dictionary(madsdata::Associative, f::Function=makemad
 end
 
 function makearrayfunction(madsdata::Associative, f::Function=makemadscommandfunction(madsdata))
-	arrayfunction = vectorflag ? makearrayfunction_vector(madsdata, f) : makearrayfunction_dictionary(madsdata, f)
+	# arrayfunction = vectorflag ? makearrayfunction_vector(madsdata, f) : makearrayfunction_dictionary(madsdata, f)
+	makearrayfunction_dictionary(madsdata, f)
 end
 
 @doc """
@@ -169,13 +172,15 @@ Returns:
 function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 	if haskey(madsdata, "Expressions")
 		expressions = Dict()
-		for exprname in keys(madsdata["Expressions"])
+		expkeys = keys(madsdata["Expressions"])
+		for exprname in expkeys
 			expressions[exprname] = evaluatemadsexpression(madsdata["Expressions"][exprname]["exp"], parameters)
 		end
-		return merge(parameters, expressions)
-	else
-		return parameters
+		for exprname in expkeys
+			parameters[exprname] = expressions[exprname]
+		end
 	end
+	return parameters
 end
 
 "Convert `@sprintf` macro into `sprintf` function"
