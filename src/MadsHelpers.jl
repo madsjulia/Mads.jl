@@ -385,3 +385,24 @@ function pkgversion(modulestr::String)
 		return v"0.0.0"
 	end
 end
+
+"""
+Checks if package is available
+
+$(DocumentFunction.documentfunction(ispkgavailable;
+argtext=Dict("modulename"=>"module name")))
+
+Returns:
+
+- `true` or `false`
+"""
+function ispkgavailable(modulename::String; quiet::Bool=false)
+	flag=false
+	try
+		Pkg.available(modulename)
+		flag=true
+	catch
+		!quiet && info("Module $modulename is not available")
+	end
+	return flag
+end

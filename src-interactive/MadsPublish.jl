@@ -3,27 +3,6 @@ import Documenter
 import DocumentFunction
 
 """
-Checks if package is available
-
-$(DocumentFunction.documentfunction(ispkgavailable;
-argtext=Dict("modulename"=>"module name")))
-
-Returns:
-
-- `true` or `false`
-"""
-function ispkgavailable(modulename::String)
-	flag=false
-	try
-		Pkg.available(modulename)
-		flag=true
-	catch
-		warn("Module $modulename is not available")
-	end
-	return flag
-end
-
-"""
 Lists modules required by a module (Mads by default)
 
 $(DocumentFunction.documentfunction(required;
