@@ -400,7 +400,12 @@ function ispkgavailable(modulename::String; quiet::Bool=false)
 	flag=false
 	try
 		Pkg.available(modulename)
-		flag=true
+		if typeof(Pkg.installed(modulename)) == Void
+			flag=false
+			!quiet && info("Module $modulename is not available")
+		else
+			flag=true
+		end
 	catch
 		!quiet && info("Module $modulename is not available")
 	end
