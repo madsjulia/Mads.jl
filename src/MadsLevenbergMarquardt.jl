@@ -176,7 +176,13 @@ function makelmfunctions(madsdata::Associative)
 		else
 			center_computed = true
 		end
-		fevals = RobustPmap.rpmap(f_lm, p)
+		local fevals
+		try
+			fevals = RobustPmap.rpmap(f_lm, p)
+		catch errmsg
+			printerrormg(errmsg)
+			Mads.madscritical("RobustPmap executions fails!")
+		end
 		if !center_computed
 			center = fevals[nP+1]
 			if restartdir != ""
@@ -458,7 +464,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			return predicted_residual, delta_x
 		end
 
-		phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+		local phisanddelta_xs
+		try
+			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+		catch errmsg
+			printerrormg(errmsg)
+			Mads.madscritical("RobustPmap execution of LM lambdas fails!")
+		end
+
 		phi = []
 		delta_xs = []
 		for i=1:length(phisanddelta_xs)
@@ -472,7 +485,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madscritical("Mads quits!")
 		end
 
-		trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+		local trial_fs
+		try
+			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+		catch errmsg
+			printerrormg(errmsg)
+			Mads.madscritical("RobustPmap execution of LM lambdas fails!")
+		end
+
 		f_calls += np_lambda
 		objfuncevals = map(o, trial_fs)
 

@@ -307,13 +307,13 @@ end
 Print error message
 
 $(DocumentFunction.documentfunction(printerrormsg;
-argtext=Dict("e"=>"error message")))
+argtext=Dict("errmsg"=>"error message")))
 """
-function printerrormsg(e::Any)
-	if in(:msg, fieldnames(e))
-		println(strip(e.msg))
+function printerrormsg(errmsg::Any)
+	if in(:msg, fieldnames(errmsg))
+		warn(strip(errmsg.msg))
 	else
-		println(e)
+		warn(errmsg)
 	end
 end
 
