@@ -28,7 +28,7 @@ end
 function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
 	nt = nt < 1 ? 1 : nt
-	n = np - nprocs()
+	n = np - nworkers()
 	if n > 0
 		addprocs(n)
 	elseif n < 0
