@@ -475,3 +475,27 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 	end
 	return madsloglikelihood
 end
+
+function getrestarts()
+	if nworkers() > 1
+		r = ReusableFunctions.restarts
+		for w in workers()
+			r += remotecall_fetch(()->ReusableFunctions.restarts, w)
+		end
+		return r
+	else
+		return ReusableFunctions.restarts
+	end
+end
+
+function getcomputes()
+	if nworkers() > 1
+		r = ReusableFunctions.computes
+		for w in workers()
+			r += remotecall_fetch(()->ReusableFunctions.computes, w)
+		end
+		return r
+	else
+		return ReusableFunctions.computes
+	end
+end
