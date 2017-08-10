@@ -32,6 +32,18 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Mads.getparamdict(madsdata)
+	function forward_func(dictparameters::Associative)
+		parameters = copy(initparams)
+		for k in optparamkeys
+			parameters[k] = dictparameters[k]
+		end
+		resultdict = f(parameters)
+		results = Array{Float64}(0)
+		for obskey in obskeys
+			push!(results, resultdict[obskey]) # preserve the expected order
+		end
+		return results .* weights
+	end
 	function forward_func(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
@@ -154,7 +166,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	end
 	nO = length(obskeys)
 	if sizeof(J) == 0
-		g = makelocalsafunction(madsdata)
+		g = Mads.makelocalsafunction(madsdata)
 		if sinspace
 			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
