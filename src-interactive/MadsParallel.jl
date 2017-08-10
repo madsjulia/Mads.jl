@@ -86,7 +86,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		warn("Unknown parallel environment!")
 	end
 	if length(h) > 0
-		if nprocs() > 1
+		if nworkers() > 1
 			rmprocs(workers())
 		end
 		sleep(0.1)
