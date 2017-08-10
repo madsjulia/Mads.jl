@@ -70,7 +70,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		else
 			center_computed = true
 		end
-		fevals = map(func, p)
+		fevals = RobustPmap.rpmap(func, p)
 		if !center_computed
 			center = fevals[nP+1]
 			if restartdir != ""
