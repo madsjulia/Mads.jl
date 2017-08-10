@@ -70,6 +70,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		else
 			center_computed = true
 		end
+		local fevals
 		try
 			fevals = RobustPmap.rpmap(forward_func, p)
 		catch errmsg
