@@ -76,6 +76,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madswarn("RobustPmap executions for localsa fails!")
+			return nothing
 		end
 		if !center_computed
 			center = fevals[nP+1]
@@ -169,6 +170,10 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		else
 			J = g(param, center=obs)
 		end
+	end
+	if J == nothing
+		warn("Jacobian computation failed")
+		return
 	end
 	if any(isnan, J)
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
