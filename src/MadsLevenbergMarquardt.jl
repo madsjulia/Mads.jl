@@ -181,7 +181,7 @@ function makelmfunctions(madsdata::Associative)
 			fevals = RobustPmap.rpmap(f_lm, p)
 		catch errmsg
 			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap executions fails!")
+			Mads.madscritical("RobustPmap executions for LM fails!")
 		end
 		if !center_computed
 			center = fevals[nP+1]

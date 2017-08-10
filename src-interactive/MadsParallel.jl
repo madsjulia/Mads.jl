@@ -120,8 +120,12 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			addprocsfailed = false
 			try
 				addprocs(h; arguments...)
-			catch e
-				print(e.msg)
+			catch errmsg
+				if in(:errmsg, fieldnames(errmsg))
+					warn(strip(errmsg.errmsg))
+				else
+					warn(errmsg)
+				end
 				addprocsfailed = true
 				warn("Connection to $(h) failed!")
 			end

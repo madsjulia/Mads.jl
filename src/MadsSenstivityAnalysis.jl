@@ -32,7 +32,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Mads.getparamdict(madsdata)
-	function func(arrayparameters::Vector)
+	function forward_func(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
@@ -70,7 +70,12 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		else
 			center_computed = true
 		end
-		fevals = RobustPmap.rpmap(func, p)
+		try
+			fevals = RobustPmap.rpmap(forward_func, p)
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("RobustPmap executions for localsa fails!")
+		end
 		if !center_computed
 			center = fevals[nP+1]
 			if restartdir != ""
