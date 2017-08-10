@@ -688,6 +688,17 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		@assert length(obskeys) == length(predictions)
 		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
+	missingkeys = Array{String}(0)
+	validtargets = (Mads.getobsweight(madsdata) .> 0) & (!isnan.(Mads.getobstarget(madsdata)))
+	for (k, v) in zip(obskeys, validtargets)
+		if !haskey(results, k) && v
+			push!(missingkeys, k)
+		end
+	end
+	if length(missingkeys) > 0
+		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
+		madscritical("Missing observation keys: $(missingkeys)")
+	end
 	return convert(DataStructures.OrderedDict{String,Float64}, results)
 end
 
@@ -979,20 +990,21 @@ function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(mads
 			observations[k] = obscount[k] > 1 ? observations[k] + obs[k] : obs[k]
 		end
 	end
-	missing = 0
+	missingkeys = Array{String}(0)
 	c = 0
 	for k in obskeys
 		c += 1
 		if obscount[k] == 0
-			missing += 1
-			madsinfo("Observation $k is missing!", 1)
+			push!(missingkeys, k)
+			delete!(observations, k)
 		elseif obscount[k] > 1
 			observations[k] /= obscount[k]
 			madsinfo("Observation $k detected $(obscount[k]) times; an average is computed")
 		end
 	end
-	if missing > 0
-		madswarn("Observations (total count = $(missing)) are missing!")
+	if length(missingkeys) > 0
+		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
+		madswarn("Missing observation keys: $(missingkeys)")
 	end
 	return observations
 end
