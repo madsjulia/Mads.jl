@@ -990,21 +990,15 @@ function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(mads
 			observations[k] = obscount[k] > 1 ? observations[k] + obs[k] : obs[k]
 		end
 	end
-	missingkeys = Array{String}(0)
 	c = 0
 	for k in obskeys
 		c += 1
 		if obscount[k] == 0
-			push!(missingkeys, k)
 			delete!(observations, k)
 		elseif obscount[k] > 1
 			observations[k] /= obscount[k]
 			madsinfo("Observation $k detected $(obscount[k]) times; an average is computed")
 		end
-	end
-	if length(missingkeys) > 0
-		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
-		madswarn("Missing observation keys: $(missingkeys)")
 	end
 	return observations
 end
