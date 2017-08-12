@@ -370,7 +370,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 Example:
 
 ```julia
-madsdata = Mads.loadmadsproblem("../../a.mads")
+madsdata = Mads.loadmadsfile("../../a.mads")
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 

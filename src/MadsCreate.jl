@@ -12,8 +12,10 @@ Returns:
 - MADS problem dictionary
 """
 function loadmadsproblem(name::String)
-	if name =="polynomial"
+	if name == "polynomial"
 		madsdata = Mads.loadmadsfile(joinpath(madsdir, "..", "examples", "internal-polynomial-model", "internal-polynomial.mads"))
+	elseif name == "external"
+		madsdata = Mads.loadmadsfile(joinpath(madsdir, "..", "examples", "external-linear-model", "external-jld.mads"))
 	else
 		madsdata = nothing
 	end
