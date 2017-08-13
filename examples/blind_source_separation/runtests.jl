@@ -25,7 +25,7 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=R, quiet=true)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
@@ -46,7 +46,7 @@ else
 
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=R, quiet=true)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
 
 		WHipopt = (Wipopt*Hipopt)
 
@@ -73,7 +73,7 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=1, quiet=true)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
 		WHipopt = (Wipopt*Hipopt)
 
@@ -102,7 +102,7 @@ else
 		H = [[1,1,1] [0,2,1] [0,2,1] [1,0,2] [2,0,1] [1,2,0] [2,1,0]]
 		X = S * H
 
-		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk; retries=1, quiet=true)
+		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
 		WHipopt = (Wipopt*Hipopt)
 

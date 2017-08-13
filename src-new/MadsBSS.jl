@@ -42,9 +42,9 @@ Non-negative Matrix Factorization using JuMP/Ipopt
 
 $(DocumentFunction.documentfunction(NMFipopt;
 argtext=Dict("X"=>"matrix to factorize",
-            "nk"=>"number of features to extract"),
-keytext=Dict("retries"=>"number of solution retries [default=`1`]",
-            "tol"=>"solution tolerance [default=`1.0e-9`]",
+            "nk"=>"number of features to extract",
+            "retries"=>"number of solution retries [default=`1`]"),
+keytext=Dict("tol"=>"solution tolerance [default=`1.0e-9`]",
             "random"=>"random initial guesses [default=`false`]",
             "maxiter"=>"maximum number of iterations [default=`100000`]",
             "maxguess"=>"guess about the maximum for the H (feature) matrix [default=`1`]",
@@ -57,7 +57,7 @@ Returns:
 
 - NMF results
 """
-function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
+function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan.(Xc)
@@ -70,6 +70,7 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 	phi_best = Inf
 	for r = 1:retries
 		m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
+		#IMPORTANT the order at which parameters are defined is very important
 		if r == 1 && sizeof(initW) != 0
 			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
 		elseif r > 1 || random
@@ -84,7 +85,7 @@ function NMFipopt(X::Matrix, nk::Integer; retries::Integer=1, tol::Number=1.0e-9
 		else
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
-		@JuMP.constraint(m, W .<= 1)
+		@JuMP.constraint(m, W .<= 1) # this is very important constraint to make optimization faster
 		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
 		JuMP.solve(m)
 		phi = JuMP.getobjectivevalue(m)
