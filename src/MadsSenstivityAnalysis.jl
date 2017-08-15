@@ -154,8 +154,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		param = getoptparams(madsdata, par, paramkeys)
 	end
 	nO = length(obskeys)
+	forward_func, g = Mads.makelocalsafunction(madsdata)
 	if sizeof(J) == 0
-		forward_func, g = Mads.makelocalsafunction(madsdata)
 		if sinspace
 			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
