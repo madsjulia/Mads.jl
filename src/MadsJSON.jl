@@ -36,6 +36,6 @@ Dumps:
 """
 function dumpjsonfile(filename::String, data::Any) # dump JSON text file
 	f = open(filename, "w")
-	JSON.print(f, data)
+	JSON.print(f, data, 1)
 	close(f)
 end
