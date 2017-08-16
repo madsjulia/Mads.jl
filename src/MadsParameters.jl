@@ -675,6 +675,9 @@ $(DocumentFunction.documentfunction(checkparameterranges;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function checkparameterranges(madsdata::Associative)
+	if !haskey(madsdata, "Parameters")
+		return
+	end
 	paramkeys = Mads.getparamkeys(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	init = Mads.getparamsinit(madsdata)

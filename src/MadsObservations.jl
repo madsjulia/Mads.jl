@@ -408,6 +408,37 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
+function printobservations(madsdata::Associative, io::IO=Base.STDOUT; json::Bool=false)
+	obskeys = getobskeys(madsdata)
+	println(io, "Observations:")
+	if json
+		for k in obskeys
+			print(io, "- $(k): ")
+			JSON.print(io, madsdata["Observations"][k])
+			print(io, "\n")
+		end
+	else
+		obstarget = getobstarget(madsdata)
+		obsweight = getobsweight(madsdata)
+		obsmin = getobsmin(madsdata)
+		obsmax = getobsmax(madsdata)
+		for i in 1:length(obskeys)
+			println(io, "- $(obskeys[i]): {target: $(obstarget[i]), weight: $(obstarget[i]), min: $(obsmin[i]), max: $(obsmax[i])}")
+		end
+	end
+end
+function printobservations(madsdata::Associative, filename::String; json::Bool=false)
+	f = open(filename, "w")
+	printobservations(madsdata, f; json=json)
+	close(f)
+end
+@doc """
+Print (emit) observations in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(printobservations;
+argtext=Dict("madsdata"=>"MADS problem dictionary", "io"=>"output stream", "filename"=>"output file name")))
+""" printobservations
+
 function createobservations!(madsdata::Associative, time::Vector, observation::Vector=zeros(length(time)); logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	nT = length(time)
 	@assert nT == length(observation)

@@ -39,8 +39,8 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 			madsdata = loadjsonfile(filename)
 		end
 	end
-	parsemadsdata!(madsdata)
 	madsdata["Filename"] = filename
+	parsemadsdata!(madsdata)
 	if haskey(madsdata, "Observations")
 		t = getobstarget(madsdata)
 		isn = isnan.(t)
@@ -205,17 +205,24 @@ function parsemadsdata!(madsdata::Associative)
 		end
 		madsdata["Wells"] = wells
 		Mads.wells2observations!(madsdata)
-	elseif haskey(madsdata, "Observations") && typeof(madsdata["Observations"]) <: Array # TODO drop zero weight observations
-		observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
-		for dict in madsdata["Observations"]
-			for key in keys(dict)
-				observations[key] = DataStructures.OrderedDict{String,Any}()
-				for of in keys(dict[key])
-					observations[key][of] = dict[key][of]
+	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
+		if typeof(madsdata["Observations"]) <: Array
+			observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+			for dict in madsdata["Observations"]
+				if collect(keys(dict))[1] == "filename"
+					dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Observations"]
+				else
+					dictnew = dict
+				end
+				for key in keys(dictnew)
+					observations[key] = DataStructures.OrderedDict{String,Any}()
+					for of in keys(dictnew[key])
+						observations[key][of] = dictnew[key][of]
+					end
 				end
 			end
+			madsdata["Observations"] = observations
 		end
-		madsdata["Observations"] = observations
 	end
 	if haskey(madsdata, "Templates")
 		templates = Array{Associative}(length(madsdata["Templates"]))
@@ -241,13 +248,21 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false, json::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
-	dumpyamlmadsfile(madsdata, filename, julia=julia)
+	if observations_separate
+		madsdata2 = deepcopy(madsdata)
+		filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+		printobservations(madsdata, filenameobs; json=json)
+		madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+	else
+		madsdata2 = madsdata
+	end
+	dumpyamlmadsfile(madsdata2, filename, julia=julia)
 end
-function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false, json::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -263,10 +278,20 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 				newinit = realparam["init"]
 			end
 		end
+		if observations_separate
+			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			printobservations(madsdata, filenameobs; json=json)
+			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+		end
 		dumpyamlfile(filename, madsdata2, julia=julia)
 	else
 		madsdata2 = deepcopy(madsdata)
 		setparamsinit!(madsdata2, parameters)
+		if observations_separate
+			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			printobservations(madsdata, filenameobs; json=json)
+			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+		end
 		dumpyamlmadsfile(madsdata2, filename, julia=julia)
 	end
 end
