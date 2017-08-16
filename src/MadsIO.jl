@@ -248,21 +248,25 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false, json::Bool=false)
+function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
 	if observations_separate
 		madsdata2 = deepcopy(madsdata)
 		filenameobs = getrootname(filename; version=true) * "-observations.yaml"
-		printobservations(madsdata, filenameobs; json=json)
+		if !isfile(filenameobs)
+			printobservations(madsdata, filenameobs)
+		else
+			warn("External observation file already exist ($(filenameobs)); delete if needed!")
+		end
 		madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 	else
 		madsdata2 = madsdata
 	end
 	dumpyamlmadsfile(madsdata2, filename, julia=julia)
 end
-function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false, json::Bool=false)
+function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -280,7 +284,7 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 		end
 		if observations_separate
 			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
-			printobservations(madsdata, filenameobs; json=json)
+			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end
 		dumpyamlfile(filename, madsdata2, julia=julia)
@@ -289,7 +293,7 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 		setparamsinit!(madsdata2, parameters)
 		if observations_separate
 			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
-			printobservations(madsdata, filenameobs; json=json)
+			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end
 		dumpyamlmadsfile(madsdata2, filename, julia=julia)

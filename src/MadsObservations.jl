@@ -1,6 +1,7 @@
 import Distributions
 import DataStructures
 import DocumentFunction
+import JSON
 using Compat
 
 """
@@ -408,23 +409,13 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
-function printobservations(madsdata::Associative, io::IO=Base.STDOUT; json::Bool=false)
+function printobservations(madsdata::Associative, io::IO=Base.STDOUT)
 	obskeys = getobskeys(madsdata)
 	println(io, "Observations:")
-	if json
-		for k in obskeys
-			print(io, "- $(k): ")
-			JSON.print(io, madsdata["Observations"][k])
-			print(io, "\n")
-		end
-	else
-		obstarget = getobstarget(madsdata)
-		obsweight = getobsweight(madsdata)
-		obsmin = getobsmin(madsdata)
-		obsmax = getobsmax(madsdata)
-		for i in 1:length(obskeys)
-			println(io, "- $(obskeys[i]): {target: $(obstarget[i]), weight: $(obstarget[i]), min: $(obsmin[i]), max: $(obsmax[i])}")
-		end
+	for k in obskeys
+		print(io, "- $(k): ")
+		JSON.print(io, madsdata["Observations"][k])
+		print(io, "\n")
 	end
 end
 function printobservations(madsdata::Associative, filename::String; json::Bool=false)
