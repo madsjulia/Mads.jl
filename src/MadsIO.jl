@@ -81,6 +81,7 @@ function loadbigyamlfile(filename::String)
 		obsln = keyln[obsi]
 	end
 	readflag = true
+	yamlflag = true
 	if obsln != 1 && obsln != nlines && obsi < length(keyln)
 		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
 		readindeces = obsln+1:keyln[obsi+1]-1
@@ -90,12 +91,21 @@ function loadbigyamlfile(filename::String)
 	elseif obsln == nlines
 		parseindeces = 1:obsln-1
 		readindeces = obsln+1:nlines
+	elseif length(keyln) == 1
+		parseindeces = 0:0
+		yamlflag = false
+		readindeces = 1:nlines
 	else
 		parseindeces = 1:nlines
+		readindeces = 0:0
 		readflag = false
 	end
-	io = IOBuffer(join(lines[parseindeces], '\n'))
-	madsdata = YAML.load(io)
+	if yamlflag
+		io = IOBuffer(join(lines[parseindeces], '\n'))
+		madsdata = YAML.load(io)
+	else
+		madsdata = DataStructures.OrderedDict{String,Any}()
+	end
 	if readflag
 		obsdict = DataStructures.OrderedDict{String,Any}()
 		t = []
