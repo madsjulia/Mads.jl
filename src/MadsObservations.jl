@@ -420,7 +420,7 @@ function printobservations(madsdata::Associative, io::IO=Base.STDOUT)
 end
 function printobservations(madsdata::Associative, filename::String; json::Bool=false)
 	f = open(filename, "w")
-	printobservations(madsdata, f; json=json)
+	printobservations(madsdata, f)
 	close(f)
 end
 @doc """
