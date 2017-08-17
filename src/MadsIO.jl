@@ -119,19 +119,19 @@ function loadbigyamlfile(filename::String)
 				continue
 			end
 			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
-			mc = match(r"^.*target:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
 				obsdict[kw]["target"] = float(mc.captures[1])
 			end
-			mc = match(r"^.*weight:[\s]*?]([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			mc = match(r"^.*weight[\"]?:[\s]*?]([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
 				obsdict[kw]["weight"] = float(mc.captures[1])
 			end
-			mc = match(r"^.*min:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			mc = match(r"^.*min[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
 				obsdict[kw]["min"] = float(mc.captures[1])
 			end
-			mc = match(r"^.*max:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			mc = match(r"^.*max[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
 				obsdict[kw]["max"] = float(mc.captures[1])
 			end
