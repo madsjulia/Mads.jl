@@ -62,7 +62,6 @@ Make MADS quiet
 $(DocumentFunction.documentfunction(quieton))
 """
 function quieton()
-	ReusableFunctions.quieton()
 	global quiet = true;
 end
 
@@ -72,7 +71,6 @@ Make MADS not quiet
 $(DocumentFunction.documentfunction(quietoff))
 """
 function quietoff()
-	ReusableFunctions.quietoff()
 	global quiet = false;
 end
 
