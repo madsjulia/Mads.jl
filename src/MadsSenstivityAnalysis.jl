@@ -32,19 +32,19 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Mads.getparamdict(madsdata)
-	function forward_func(arrayparameters::Vector)
-		parameters = copy(initparams)
-		for i = 1:length(arrayparameters)
-			parameters[optparamkeys[i]] = arrayparameters[i]
-		end
-		resultdict = f(parameters)
-		results = Array{Float64}(0)
-		for obskey in obskeys
-			push!(results, resultdict[obskey]) # preserve the expected order
-		end
-		return results .* weights
-	end
 	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
+		function forward_func(arrayparameters::Vector)
+			parameters = copy(initparams)
+			for i = 1:length(arrayparameters)
+				parameters[optparamkeys[i]] = arrayparameters[i]
+			end
+			resultdict = f(parameters)
+			results = Array{Float64}(0)
+			for obskey in obskeys
+				push!(results, resultdict[obskey]) # preserve the expected order
+			end
+			return results .* weights
+		end
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
 		center = arrayparameters_dx_center_tuple[3]
@@ -99,7 +99,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
-	return forward_func, grad
+	return grad
 end
 
 """
@@ -154,8 +154,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		param = getoptparams(madsdata, par, paramkeys)
 	end
 	nO = length(obskeys)
-	forward_func, g = Mads.makelocalsafunction(madsdata)
 	if sizeof(J) == 0
+		g = Mads.makelocalsafunction(madsdata)
 		if sinspace
 			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
