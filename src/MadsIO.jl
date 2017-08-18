@@ -123,7 +123,7 @@ function loadbigyamlfile(filename::String)
 			if mc != nothing
 				obsdict[kw]["target"] = float(mc.captures[1])
 			end
-			mc = match(r"^.*weight[\"]?:[\s]*?]([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			mc = match(r"^.*weight[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
 				obsdict[kw]["weight"] = float(mc.captures[1])
 			end
