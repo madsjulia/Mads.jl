@@ -174,7 +174,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results
-		interationcallback = (x_best::Vector, of::Number, lambda::Number)->begin
+		function interationcallback(x_best::Vector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			if localsa || restart_flag
 				Mads.localsa(madsdata; par=x_best_real, keyword="best")
@@ -185,7 +185,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
-		jacobiancallback = (x::Vector, J::Matrix)->begin
+		function jacobiancallback(x::Vector, J::Matrix)
 			if localsa || restart_flag
 				x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
 				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
