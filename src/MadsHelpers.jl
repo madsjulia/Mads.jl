@@ -308,6 +308,7 @@ $(DocumentFunction.documentfunction(printerrormsg;
 argtext=Dict("errmsg"=>"error message")))
 """
 function printerrormsg(errmsg::Any)
+	Base.showerror(Base.STDERR, errmsg)
 	if in(:msg, fieldnames(errmsg))
 		madswarn(strip(errmsg.msg))
 	else
