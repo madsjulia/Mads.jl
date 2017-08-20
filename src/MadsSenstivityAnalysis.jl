@@ -96,7 +96,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function f_sa(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+	function g_sa(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return f_sa, g_sa
