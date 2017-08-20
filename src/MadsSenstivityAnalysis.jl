@@ -32,19 +32,19 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Mads.getparamdict(madsdata)
-	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
-		function forward_func(arrayparameters::Vector)
-			parameters = copy(initparams)
-			for i = 1:length(arrayparameters)
-				parameters[optparamkeys[i]] = arrayparameters[i]
-			end
-			resultdict = f(parameters)
-			results = Array{Float64}(0)
-			for obskey in obskeys
-				push!(results, resultdict[obskey]) # preserve the expected order
-			end
-			return results .* weights
+	function f_sa(arrayparameters::Vector)
+		parameters = copy(initparams)
+		for i = 1:length(arrayparameters)
+			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
+		resultdict = f(parameters)
+		results = Array{Float64}(0)
+		for obskey in obskeys
+			push!(results, resultdict[obskey]) # preserve the expected order
+		end
+		return results .* weights
+	end
+	function inner_grad(arrayparameters_dx_center_tuple::Tuple)
 		arrayparameters = arrayparameters_dx_center_tuple[1]
 		dx = arrayparameters_dx_center_tuple[2]
 		center = arrayparameters_dx_center_tuple[3]
@@ -72,7 +72,7 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		end
 		local fevals
 		try
-			fevals = RobustPmap.rpmap(forward_func, p)
+			fevals = RobustPmap.rpmap(f_sa, p)
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madswarn("RobustPmap executions for localsa fails!")
@@ -96,10 +96,10 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+	function f_sa(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
-	return grad
+	return f_sa, g_sa
 end
 
 """
@@ -122,6 +122,7 @@ Dumps:
 - `filename` : output plot file
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
+	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(:Gadfly)
 		imagefiles = false
 	end
@@ -155,7 +156,6 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	end
 	nO = length(obskeys)
 	if sizeof(J) == 0
-		g = Mads.makelocalsafunction(madsdata)
 		if sinspace
 			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
@@ -165,10 +165,10 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 			upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
-			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-			J = g_sin(sinparam, center=obs)
+			g_sa_sin = Mads.sinetransformgradient(g_sa, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+			J = g_sa_sin(sinparam, center=obs)
 		else
-			J = g(param, center=obs)
+			J = g_sa(param, center=obs)
 		end
 	end
 	if J == nothing

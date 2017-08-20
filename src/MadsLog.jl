@@ -9,7 +9,7 @@ argtext=Dict("message"=>"output message",
 """
 function madsoutput(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
-		print(message)
+		print(Base.STDERR, message)
 		flush(Base.STDOUT)
 		flush(Base.STDERR)
 	end
@@ -24,7 +24,7 @@ argtext=Dict("message"=>"debug message",
 """
 function madsdebug(message::String, level::Int=0)
 	if !quiet && level < debuglevel
-		print_with_color(:green,  "DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n")
+		print_with_color(:green, Base.STDERR, "DEBUG: " * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message * "\n")
 		flush(Base.STDOUT)
 		flush(Base.STDERR)
 	end
@@ -39,7 +39,7 @@ argtext=Dict("message"=>"information/status message",
 """
 function madsinfo(message::String, level::Int=0)
 	if !quiet && level < verbositylevel
-		info(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message);
+		info(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(Base.STDOUT); flush(Base.STDERR)
 	end
 end
 
@@ -50,7 +50,7 @@ $(DocumentFunction.documentfunction(madswarn;
 argtext=Dict("message"=>"warning message")))
 """
 function madswarn(message::String)
-	warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message  * "\n");
+	warn(Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message  * "\n"); flush(Base.STDOUT); flush(Base.STDERR)
 end
 
 """
