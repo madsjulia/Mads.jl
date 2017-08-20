@@ -150,11 +150,11 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						if attempt > 3
 							cd(currentdir)
 							if nrpocs() > 1 && myid() != 1
-								Mads.madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
-								Mads.madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
 								return nothing
 							else
-								Mads.madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
 							end
 						end
 						break
@@ -181,15 +181,16 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 							latest = true; attempt = 0
 						else
 							if attempt > 3
+								warn(Base.stacktrace())
 								cd(currentdir)
 								printerrormsg(errmsg)
 								if nrpocs() > 1 && myid() != 1
-									Mads.madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
-									Mads.madswarn("Process $(myid()) will be removed!")
+									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									madswarn("Process $(myid()) will be removed!")
 									remotecall(rmprocs, 1, myid())
 									return nothing
 								else
-									Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
 								end
 							end
 							sleep(attempt * 0.5)
@@ -207,14 +208,15 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						trying = false
 					catch errmsg
 						if attempt > 3
+							warn(Base.stacktrace())
 							cd(currentdir)
 							printerrormsg(errmsg)
 							if nrpocs() > 1 && myid() != 1
-								Mads.madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
-								Mads.madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
 								return nothing
 							else
-								Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+								madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 							end
 						end
 						sleep(attempt * 0.5)
@@ -229,11 +231,12 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 				try
 					attempt += 1
 					Mads.rmdir(tempdirname)
-					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
+					madsinfo("Deleted temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch errmsg
 					if attempt > 3
 						printerrormsg(errmsg)
+						warn(Base.stacktrace())
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
@@ -265,12 +268,12 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 				catch errmsg
 					printerrormsg(errmsg)
-					Mads.madswarn("Dir: $(pwd())")
+					warn("Failed Dir: $(pwd())")
 					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
 				end
 			else
 				printerrormsg(errmsg)
-				Mads.madswarn("Dir: $(pwd())")
+				warn("Failed Dir: $(pwd())")
 				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.5)!")
 			end
 		end

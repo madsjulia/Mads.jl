@@ -309,9 +309,9 @@ argtext=Dict("errmsg"=>"error message")))
 """
 function printerrormsg(errmsg::Any)
 	if in(:msg, fieldnames(errmsg))
-		warn(strip(errmsg.msg))
+		madswarn(strip(errmsg.msg))
 	else
-		warn(errmsg)
+		madswarn(errmsg)
 	end
 end
 

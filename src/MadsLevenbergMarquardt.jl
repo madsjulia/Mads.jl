@@ -180,8 +180,9 @@ function makelmfunctions(madsdata::Associative)
 		try
 			fevals = RobustPmap.rpmap(f_lm, p)
 		catch errmsg
+			warn(Base.stacktrace())
 			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap executions for LM fails!")
+			Mads.madscritical("RobustPmap LM execution of forward runs fails!")
 		end
 		if !center_computed
 			center = fevals[nP+1]
@@ -468,8 +469,9 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		try
 			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
 		catch errmsg
+			warn(Base.stacktrace())
 			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap execution of LM lambdas fails!")
+			Mads.madscritical("RobustPmap LM execution to get OF and lambdas fails!")
 		end
 
 		phi = []
@@ -489,8 +491,9 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		try
 			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
 		catch errmsg
+			warn(Base.stacktrace())
 			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap execution of LM lambdas fails!")
+			Mads.madscritical("RobustPmap LM execution of the forward models fails!")
 		end
 
 		f_calls += np_lambda
