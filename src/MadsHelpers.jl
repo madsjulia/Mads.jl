@@ -311,7 +311,7 @@ function printerrormsg(errmsg::Any)
 	Base.showerror(Base.STDERR, errmsg)
 	if in(:msg, fieldnames(errmsg))
 		madswarn(strip(errmsg.msg))
-	else
+	elseif typeof(errmsg) <: AbstractString
 		madswarn(errmsg)
 	end
 end
