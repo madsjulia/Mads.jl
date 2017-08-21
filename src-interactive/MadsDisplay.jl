@@ -58,8 +58,10 @@ end
 
 if isdefined(:Gadfly)
 	function display(p::Gadfly.Plot)
-		Base.display(p)
-		println()
+		if graphoutput
+			Base.display(p)
+			println()
+		end
 	end
 end
 

@@ -39,14 +39,20 @@ include("MadsHelpers.jl")
 
 "Try to import a module"
 macro tryimport(s::Symbol)
+	mname = string(s)
 	importq = string(:(import $s))
-	warnstring = string("Module ", s, " is not available")
+	infostring = string("Module ", s, " is not available")
+	warnstring = string("Module ", s, " cannot be imported")
 	q = quote
-		try
-			eval(parse($importq))
-		catch errmsg
-			Mads.printerrormsg(errmsg)
-			warn($warnstring)
+		if Mads.ispkgavailable($mname; quiet=true)
+			try
+				eval(parse($importq))
+			catch errmsg
+				Mads.printerrormsg(errmsg)
+				warn($warnstring)
+			end
+		else
+			info($infostring)
 		end
 	end
 	return :($(esc(q)))
@@ -59,7 +65,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 			eval(:(@PyCall.pyimport yaml))
 		catch
 			ENV["PYTHON"] = ""
-			warn("PyYAML is not available")
+			warn("PyYAML is not available (in the available python installation)")
 		end
 		if !isdefined(Mads, :yaml)
 			if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
@@ -70,15 +76,18 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 				eval(:(@PyCall.pyimport yaml))
 				pyyamlok = true
 			catch
-				warn("PyYAML is not available (under Conda)")
+				warn("PyYAML is not available (in Conda)")
 			end
 			if pyyamlok
 				eval(:(@PyCall.pyimport yaml))
 			end
 		end
+	else
+		ENV["MADS_NO_PYTHON"] = ""
 	end
 end
 
+vectorflag = false
 quiet = true
 restart = false
 graphoutput = true
@@ -125,7 +134,6 @@ include("MadsExecute.jl")
 include("MadsCalibrate.jl")
 include("MadsLevenbergMarquardt.jl")
 include("MadsMonteCarlo.jl")
-# include("MadsEmcee.jl")
 include("MadsKriging.jl")
 include("MadsBayesInfoGap.jl")
 include("MadsModelSelection.jl")
@@ -171,9 +179,12 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
-	include(joinpath("..", "src-new", "MadsInfoGap.jl"))
-	include(joinpath("..", "src-new", "MadsBSS.jl"))
-	include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
+	@Mads.tryimport JuMP
+	if isdefined(:JuMP)
+		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
+		include(joinpath("..", "src-new", "MadsBSS.jl"))
+		include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
+	end
 end
 
 include("MadsSenstivityAnalysis.jl")

@@ -1,5 +1,3 @@
-# Test for the Mads IO system
-
 import Mads
 import Base.Test
 
@@ -9,6 +7,8 @@ workdir = "filename_testing"
 end
 
 curdir = pwd()
+Mads.md()
+cd(curdir)
 Mads.rmdir(workdir)
 Mads.mkdir(workdir)
 

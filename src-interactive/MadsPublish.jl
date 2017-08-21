@@ -1,26 +1,6 @@
 @Mads.tryimport PkgDev
+import Documenter
 import DocumentFunction
-
-"""
-Checks if package is available
-
-$(DocumentFunction.documentfunction(ispkgavailable;
-argtext=Dict("modulename"=>"module name")))
-
-Returns:
-
-- `true` or `false`
-"""
-function ispkgavailable(modulename::String)
-	flag=false
-	try
-		Pkg.available(modulename)
-		flag=true
-	catch
-		warn("Module $modulename is not available")
-	end
-	return flag
-end
 
 """
 Lists modules required by a module (Mads by default)
@@ -255,6 +235,7 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		info("Git status $(madsmodule) ...")
 		cd(Pkg.dir(madsmodule))
 		run(`git status -s`)
+		runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
 		if gitmore
 			info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)

@@ -44,7 +44,7 @@ function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAM
 	julia = isdefined(Mads, :yaml) ? julia : true
 	f = open(filename, "w")
 	if julia
-		JSON.print(f, data)
+		JSON.print(f, data, 1)
 	else
 		write(f, yaml.dump(data, width=255)) # we use the python library because the YAML julia library cannot dump
 	end

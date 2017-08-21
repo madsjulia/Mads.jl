@@ -94,7 +94,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 			Compose.stroke(parse(Colors.Colorant, "orange"))))
 	end
 	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
@@ -125,7 +125,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Gadfly.Geom.point, Gadfly.Geom.label,
 		Gadfly.Guide.XLabel("x [m]"), Gadfly.Guide.YLabel("y [m]"), Gadfly.Guide.yticks(orientation=:vertical),
 		gadfly_source,
-		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax),
+		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
 		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
 		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
 	if filename == ""
@@ -138,8 +138,9 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	filename, format = setplotfileformat(filename, format)
 	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot
-		p
+		Mads.display(p)
 	end
+	return nothing
 end
 
 function plotmatches(madsdata::Associative, rx::Regex=r""; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false)
@@ -270,9 +271,9 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
 		obs = Array{Float64}(0)
-		tobs = Any[]
+		tobs = Array{Float64}(0)
 		ress = Array{Float64}(0)
-		tress = Any[]
+		tress = Array{Float64}(0)
 		time_missing = false
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
@@ -301,8 +302,6 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=linewidth)),
 					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
-		didplot = true
-		vsize += 4Gadfly.inch
 	end
 	if !separate_files
 		if filename == ""
@@ -315,11 +314,12 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
 		end
 		if typeof(pl) == Gadfly.Plot
-			pl
+			Mads.display(pl)
 		else
 			display && Mads.display(filename)
 		end
 	end
+	return nothing
 end
 
 @doc """
@@ -405,12 +405,13 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
 		if typeof(pl) == Gadfly.Plot #|| typeof(pl) == Compose.Context
-			pl
+			Mads.display(pl)
 		end
 	catch e
 		printerrormsg(e)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
 	end
+	return nothing
 end
 
 function plotwellSAresults(madsdata::Associative, result::Associative; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
@@ -505,9 +506,9 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
 	if typeof(p) == Gadfly.Plot
-		p
+		Mads.display(p)
 	end
-
+	return nothing
 end
 
 @doc """
@@ -688,7 +689,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize ), p)
 		if typeof(p) == Gadfly.Plot
-			p
+			Mads.display(p)
 		end
 	else
 		filename_root = Mads.getrootname(filename)
@@ -700,6 +701,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		filename, format = setplotfileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), pmes)
 	end
+	return nothing
 end
 
 function spaghettiplots(madsdata::Associative, number_of_samples::Integer; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
@@ -709,7 +711,7 @@ end
 function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
-	func = makemadscommandfunction(madsdata)
+	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
@@ -804,11 +806,15 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		filename, format = setplotfileformat(filename, format)
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
+			if typeof(pl) == Gadfly.Plot
+				Mads.display(pl)
+			end
 		catch e
 			printerrormsg(e)
 			Mads.madswarn("Spaghettiplots: Gadfly fails!")
 		end
 	end
+	return nothing
 end
 
 @doc """
@@ -988,8 +994,9 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot
-		pl
+		Mads.display(pl)
 	end
+	return nothing
 end
 
 @doc """
@@ -1090,12 +1097,13 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 			end
 		end
 		if typeof(pS) == Gadfly.Plot
-			pS
+			Mads.display(pS)
 		end
 	catch e
 		printerrormsg(e)
 		Mads.madswarn("Plotseries: Gadfly fails!")
 	end
+	return nothing
 end
 
 """
@@ -1122,51 +1130,81 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 	if keyword != ""
 		rootname = string(rootname, "-", keyword)
 	end
-	Jin = readdlm("$(filenameroot)-jacobian.dat")
-	paramkeys = Jin[1, 2:end]
-	plotlabels = paramkeys
-	nP = length(paramkeys)
-	obskeys = Jin[2:end, 1]
-	nO = length(obskeys)
-	J = Jin[2:end, 2:end]
-	mscale = max(abs(minimum(J)), abs(maximum(J)))
-	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
-					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
-		filename = "$(rootname)-jacobian" * ext
-		filename, format = setplotfileformat(filename, format)
-		try
-			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
-		catch
-			madswarn("Gadfly could not plot!")
+	filename = "$(filenameroot)-jacobian.dat"
+	Jin = Array{Float64}(0, 0)
+	if isfile(filename)
+		Jin = readdlm(filename)
+	end
+	if sizeof(Jin) > 0
+		paramkeys = Jin[1, 2:end]
+		plotlabels = paramkeys
+		nP = length(paramkeys)
+		obskeys = Jin[2:end, 1]
+		nO = length(obskeys)
+		J = Jin[2:end, 2:end]
+		mscale = max(abs(minimum(J)), abs(maximum(J)))
+		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+			jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
+						Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
+						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
+			filename = "$(rootname)-jacobian" * ext
+			filename, format = setplotfileformat(filename, format)
+			try
+				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
+			catch
+				madswarn("Gadfly could not plot!")
+			end
+			Mads.madsinfo("Jacobian matrix plot saved in $filename")
 		end
-		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
-	Cin = readdlm("$(filenameroot)-covariance.dat")
-	covar = Cin[2:end, 2:end]
-	correl = covar ./ diag(covar)
-	Ein = readdlm("$(filenameroot)-eigenmatrix.dat")
-	sortedeigenm = Ein[1:end, 2:end]
-	sortedeigenv = readdlm("$(filenameroot)-eigenvalues.dat")
-	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
-					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
-		# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-		filename = "$(rootname)-eigenmatrix" * ext
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP), eigenmat)
-		Mads.madsinfo("Eigen matrix plot saved in $filename")
-		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
-					Gadfly.Geom.bar,
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
-		filename = "$(rootname)-eigenvalues" * ext
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
-		Mads.madsinfo("Eigen values plot saved in $filename")
+	filename = "$(filenameroot)-covariance.dat"
+	Cin = Array{Float64}(0, 0)
+	if isfile(filename)
+		Cin = readdlm(filename)
 	end
+	if sizeof(Cin) > 0
+		covar = Cin[2:end, 2:end]
+		paramkeys = Cin[1, 2:end]
+		plotlabels = paramkeys
+		nP = length(paramkeys)
+	end
+	filename = "$(filenameroot)-eigenmatrix.dat"
+	Ein = Array{Float64}(0, 0)
+	if isfile(filename)
+		Ein = readdlm(filename)
+	end
+	if sizeof(Ein) > 0
+		paramkeys = Ein[1:end, 1]
+		plotlabels = paramkeys
+		nP = length(paramkeys)
+		sortedeigenm = Ein[1:end, 2:end]
+		filename = "$(filenameroot)-eigenvalues.dat"
+		sortedeigenv = Array{Float64}(0)
+		if isfile(filename)
+			sortedeigenv = readdlm(filename)
+		end
+		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+			eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
+						Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
+						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
+			# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+			filename = "$(rootname)-eigenmatrix" * ext
+			filename, format = setplotfileformat(filename, format)
+			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP), eigenmat)
+			Mads.madsinfo("Eigen matrix plot saved in $filename")
+			if sizeof(sortedeigenv) > 0
+				eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
+							Gadfly.Geom.bar,
+							Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+							Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
+				filename = "$(rootname)-eigenvalues" * ext
+				filename, format = setplotfileformat(filename, format)
+				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
+				Mads.madsinfo("Eigen values plot saved in $filename")
+			end
+		end
+	end
+	return nothing
 end

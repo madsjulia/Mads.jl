@@ -37,15 +37,12 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 """
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
-	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
-	paramsoptdict = paramdict
+    paramdict = Mads.getparamdict(madsdata)
+    paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	if all
-		allresults = Any[]
-	end
-	bestparameters = Any[]
-	bestresult = Array{Any}(2)
+    allresults = Array{Float64}(0)
+	local bestparameters
+	local bestresult
 	bestphi = Inf
 	for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
@@ -107,9 +104,8 @@ Returns:
 """
 function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
-	paramkeys = Mads.getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, Mads.getparamsinit(madsdata)))
-	paramsoptdict = paramdict
+	paramdict = Mads.getparamdict(madsdata)
+	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
 	allphi = SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArray{Bool}(numberofsamples)
@@ -178,7 +174,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results
-		interationcallback = (x_best::Vector, of::Number, lambda::Number)->begin
+		function interationcallback(x_best::Vector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			if localsa || restart_flag
 				Mads.localsa(madsdata; par=x_best_real, keyword="best")
@@ -186,10 +182,10 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys,x_best_real)), "\n"))
+			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
-		jacobiancallback = (x::Vector, J::Matrix)->begin
+		function jacobiancallback(x::Vector, J::Matrix)
 			if localsa || restart_flag
 				x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
 				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")

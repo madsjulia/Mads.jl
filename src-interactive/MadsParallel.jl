@@ -28,7 +28,7 @@ end
 function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
 	nt = nt < 1 ? 1 : nt
-	n = np - nprocs()
+	n = np - nworkers()
 	if n > 0
 		addprocs(n)
 	elseif n < 0
@@ -86,7 +86,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		warn("Unknown parallel environment!")
 	end
 	if length(h) > 0
-		if nprocs() > 1
+		if nworkers() > 1
 			rmprocs(workers())
 		end
 		sleep(0.1)
@@ -120,8 +120,12 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			addprocsfailed = false
 			try
 				addprocs(h; arguments...)
-			catch e
-				print(e.msg)
+			catch errmsg
+				if in(:errmsg, fieldnames(errmsg))
+					warn(strip(errmsg.errmsg))
+				else
+					warn(errmsg)
+				end
 				addprocsfailed = true
 				warn("Connection to $(h) failed!")
 			end

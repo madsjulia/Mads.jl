@@ -3,6 +3,11 @@ import DataStructures
 import ProgressMeter
 import DocumentFunction
 
+anasolarguments = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az", "H"]
+anasolparametersrequired = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az"]
+anasolparametersall = [anasolparametersrequired; ["H", "rf", "ts_dsp", "ts_adv", "ts_rct", "alpha", "beta", "nlc0", "nlc1"]]
+anasolsourcerequired = ["x", "y", "z", "dx", "dy", "dz", "f", "t0", "t1"]
+
 """
 Add an additional contamination source
 
@@ -62,21 +67,55 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function addsourceparameters!(madsdata::Associative)
 	if haskey(madsdata, "Sources")
+		if !haskey(madsdata, "Parameters")
+			madsdata["Parameters"] = DataStructures.OrderedDict()
+		end
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
-			sourceparams = keys(madsdata["Sources"][i][sourcetype])
-			for sourceparam in sourceparams
+			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
+			if length(findin(anasolsourcerequired, sourceparams)) < length(anasolsourcerequired)
+				Mads.madswarn("Missing: $(anasolsourcerequired[indexin(anasolsourcerequired, sourceparams).==0]))")
+				Mads.madscritical("There are missing Anasol source parameters!")
+			end
+			extraparams = sourceparams[indexin(sourceparams, anasolsourcerequired).==0]
+			for sourceparam in [anasolsourcerequired; extraparams]
 				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
-					madsdata["Parameters"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+					madsdata["Parameters"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
+						madsdata["Parameters"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
+					end
 				else
 					if !haskey(madsdata, "Expressions")
 						madsdata["Expressions"] = DataStructures.OrderedDict()
 					end
-					madsdata["Expressions"][string("source", i, "_", sourceparam)] = madsdata["Sources"][i][sourcetype][sourceparam]
+					madsdata["Expressions"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
+						madsdata["Expressions"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
+					end
 				end
-
 			end
 		end
+	end
+end
+
+"""
+Copy aquifer parameters to become contaminant source parameters
+
+$(DocumentFunction.documentfunction(copyaquifer2sourceparameters!;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+"""
+function copyaquifer2sourceparameters!(madsdata::Associative)
+	if haskey(madsdata, "Sources") && haskey(madsdata, "Parameters")
+		for i = 1:length(madsdata["Sources"])
+			for k in keys(madsdata["Sources"][i])
+				for pkey in keys(madsdata["Parameters"])
+					if !contains(pkey, "source")
+						madsdata["Sources"][i][k][pkey] = deepcopy(madsdata["Parameters"][pkey])
+					end
+				end
+			end
+		end
+		delete!(madsdata, "Parameters")
 	end
 end
 
@@ -103,7 +142,6 @@ function removesourceparameters!(madsdata::Associative)
 						end
 					end
 				end
-
 			end
 		end
 	end
@@ -132,89 +170,211 @@ forward_preds = computeconcentrations(paramdict)
 """
 function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
-	background = 0
-	if haskeyword(madsdata, "background")
-		background = madsdata["Problem"]["background"]
+	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.
+	parametersnoexpressions = Mads.getparamdict(madsdata)
+	parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
+	paramkeys = collect(keys(parameters))
+	ts_dsp = haskey(parameters, "ts_dsp") ? parameters["ts_dsp"] : 1.
+	H = haskey(parameters, "H") ? parameters["H"] : 0.5
+	if (ts_dsp == 1. && !Mads.isopt(madsdata, "ts_dsp")) && (H == 0.5 && !Mads.isopt(madsdata, "H"))
+		anasolfunctionroot = "long_bbb_"
+	else
+		anasolfunctionroot = "long_fff_"
 	end
+	numberofsources = length(madsdata["Sources"])
+	anasolfunctions = Array{Function}(numberofsources)
+	anasolallparametersrequired = anasolparametersrequired
+	anasolallparametersall = anasolparametersall
+	for i = 1:numberofsources
+		for p in anasolsourcerequired
+			pn = string("source", i, "_", p)
+			anasolallparametersrequired = [anasolallparametersrequired; pn]
+			anasolallparametersall = [anasolallparametersall; pn]
+		end
+		if haskey(madsdata["Sources"][i], "box")
+			anasolfunction = anasolfunctionroot * "bbb_iir_c"
+		elseif haskey(madsdata["Sources"][i], "gauss" )
+			anasolfunction = anasolfunctionroot * "ddd_iir_c"
+		end
+		anasolfunctions[i] = eval(parse("Anasol.$anasolfunction"))
+	end
+	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+		missingparameters = anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]
+		anasolallparametersrequired = Array{String}(0)
+		anasolallparametersall = Array{String}(0)
+		for i = 1:numberofsources
+			for p in [anasolparametersrequired; anasolsourcerequired]
+				pn = string("source", i, "_", p)
+				anasolallparametersrequired = [anasolallparametersrequired; pn]
+				anasolallparametersall = [anasolallparametersall; pn]
+			end
+		end
+		if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+			Mads.madwarn("There are missing Anasol parameters!")
+			Mads.madswarn("Missing parameters: $(missingparameters)")
+			Mads.madswarn("Missing source parameters: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0])")
+			Mads.madscritical("Mads quits!")
+		end
+	end
+	nW = 0
+	for wellkey in Mads.getwellkeys(madsdata)
+		if madsdata["Wells"][wellkey]["on"]
+			nW += 1
+		end
+	end
+	wellx = Array{Float64}(nW)
+	welly = Array{Float64}(nW)
+	wellz0 = Array{Float64}(nW)
+	wellz1 = Array{Float64}(nW)
+	wellscreen = Array{Bool}(nW)
+	wellnO = Array{Int}(nW)
+	wellt = Array{Array{Float64}}(nW)
+	wellp = Array{Array{Bool}}(nW)
+	wellc = Array{Array{Float64}}(nW)
+	wellkeys = Array{String}(0)
+	w = 0
+	for wellkey in Mads.getwellkeys(madsdata)
+		if madsdata["Wells"][wellkey]["on"]
+			w += 1
+			wellx[w] = madsdata["Wells"][wellkey]["x"]
+			welly[w] = madsdata["Wells"][wellkey]["y"]
+			wellz0[w] = madsdata["Wells"][wellkey]["z0"]
+			wellz1[w] = madsdata["Wells"][wellkey]["z1"]
+			if abs(wellz1[w]  - wellz0[w] ) > 0.1
+				wellscreen[w] = true
+			else
+				wellz0[w]  = (wellz1[w]  + wellz0[w] ) / 2
+				wellscreen[w] = false
+			end
+			obst = Array{Float64}(0)
+			obsp = Array{Int}(0)
+			nO = length(madsdata["Wells"][wellkey]["obs"])
+			wellc[w] = Array{Float64}(nO)
+			wellp[w] = Array{Bool}(nO)
+			for o in 1:nO
+				t = madsdata["Wells"][wellkey]["obs"][o]["t"]
+				if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
+					push!(obst, t)
+					wellp[w][o] = true
+				else
+					wellp[w][o] = false
+				end
+				push!(wellkeys, string(wellkey, "_", t))
+			end
+			wellt[w] = obst
+			wellc[w][map(!, wellp[w])] .= 0
+			end
+	end
+	classical = haskey(madsdata["Parameters"], "vx")
+	# indexall = indexin(anasolallparametersall, paramkeys)
 	function computeconcentrations()
-		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
-		expressions = evaluatemadsexpressions(madsdata, paramdict)
-		parameterswithexpressions = merge(paramdict, expressions)
+		paramdict = Mads.getparamdict(madsdata)
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
+		computeconcentrations(parameterswithexpressions)
+	end
+	function computeconcentrations(parameters::Vector)
+		paramdict = Mads.getparamdict(madsdata)
+		nP = length(paramdict)
+		if length(parameters) == nP
+			i = 1
+			for k in keys(paramdict)
+				paramdict[k] = parameters[i]
+				i += 1
+			end
+		else
+			optkeys = Mads.getoptparamkeys(madsdata)
+			if length(parameters) == length(optkeys)
+				i = 1
+				for k in optkeys
+					paramdict[k] = parameters[i]
+					i += 1
+				end
+			else
+				Mads.madscritical("Parameter vector length does not match!")
+			end
+		end
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
 		computeconcentrations(parameterswithexpressions)
 	end
 	function computeconcentrations(parametersnoexpressions::Associative)
-		expressions = evaluatemadsexpressions(madsdata, parametersnoexpressions)
-		parameters = merge(parametersnoexpressions, expressions)
-		porosity = parameters["n"]
-		lambda = parameters["lambda"]
-		theta = parameters["theta"]
-		vx = parameters["vx"]
-		vy = parameters["vy"]
-		vz = parameters["vz"]
-		ax = parameters["ax"]
-		if disp_tied
-			ay = ax / parameters["ay"]
-			az = ay / parameters["az"]
-		else
-			ay = parameters["ay"]
-			az = parameters["az"]
+		parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
+		if classical
+			porosity = parameters["n"]
+			lambda = parameters["lambda"]
+			theta = parameters["theta"]
+			vx = parameters["vx"]
+			vy = parameters["vy"]
+			vz = parameters["vz"]
+			ax = parameters["ax"]
+			if disp_tied
+				ay = ax / parameters["ay"]
+				az = ay / parameters["az"]
+			else
+				ay = parameters["ay"]
+				az = parameters["az"]
+			end
+			if haskey(parameters, "rf")
+				rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
+			end
+			if haskey(parameters, "H")
+				H = parameters["H"]
+			elseif haskey(parameters, "ts_dsp")
+				H = 0.5 * parameters["ts_dsp"]
+			else
+				H = 0.5
+			end
 		end
-		if haskey(parameters, "ts_dsp") && parameters["ts_dsp"] != 1.
-			H = 0.5 * parameters["ts_dsp"]
-			anasolfunctionroot = "long_fff_"
-		else
-			H = 0.5
-			anasolfunctionroot = "long_bbb_"
+		for w in 1:nW
+			wellc[w] .= background
 		end
-		c = DataStructures.OrderedDict()
-		for wellkey in Mads.getwellkeys(madsdata)
-			if madsdata["Wells"][wellkey]["on"]
-				wellx = madsdata["Wells"][wellkey]["x"]
-				welly = madsdata["Wells"][wellkey]["y"]
-				wellz0 = madsdata["Wells"][wellkey]["z0"]
-				wellz1 = madsdata["Wells"][wellkey]["z1"]
-				if abs(wellz1 - wellz0) > 0.1
-					screen = true
+		for i=1:numberofsources
+			ss = string("source", i, "_")
+			x = parameters[string(ss, "x")]
+			y = parameters[string(ss, "y")]
+			z = parameters[string(ss, "z")]
+			dx = parameters[string(ss, "dx")]
+			dy = parameters[string(ss, "dy")]
+			dz = parameters[string(ss, "dz")]
+			f = parameters[string(ss, "f")]
+			t0 = parameters[string(ss, "t0")]
+			t1 = parameters[string(ss, "t1")]
+			if !classical
+				porosity = parameters[string(ss, "n")]
+				lambda = parameters[string(ss, "lambda")]
+				theta = parameters[string(ss, "theta")]
+				vx = parameters[string(ss, "vx")]
+				vy = parameters[string(ss, "vy")]
+				vz = parameters[string(ss, "vz")]
+				ax = parameters[string(ss, "ax")]
+				if disp_tied
+					ay = ax / parameters[string(ss, "ay")]
+					az = ay / parameters[string(ss, "az")]
 				else
-					wellz = (wellz1 + wellz0) / 2
-					screen = false
+					ay = parameters[string(ss, "ay")]
+					az = parameters[string(ss, "az")]
 				end
-				for o in 1:length(madsdata["Wells"][wellkey]["obs"])
-					t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-					if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
-						conc = background
-						for i = 1:length(madsdata["Sources"]) # TODO check what is the source type (box, point, etc) and implement different soluion depending on the source type
-							if haskey( madsdata["Sources"][i], "box" )
-								anasolfunction = anasolfunctionroot * "bbb_iir_c"
-							elseif haskey( madsdata["Sources"][i], "gauss" )
-								anasolfunction = anasolfunctionroot * "ddd_iir_c"
-							end
-							x = parameters[string("source", i, "_", "x")]
-							y = parameters[string("source", i, "_", "y")]
-							z = parameters[string("source", i, "_", "z")]
-							dx = parameters[string("source", i, "_", "dx")]
-							dy = parameters[string("source", i, "_", "dy")]
-							dz = parameters[string("source", i, "_", "dz")]
-							f = parameters[string("source", i, "_", "f")]
-							t0 = parameters[string("source", i, "_", "t0")]
-							t1 = parameters[string("source", i, "_", "t1")]
-							if screen
-								conc += .5 * (contamination(wellx, welly, wellz0, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction) +
-											  contamination(wellx, welly, wellz1, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction))
-							else
-								conc += contamination(wellx, welly, wellz, porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, t; anasolfunction=anasolfunction)
-							end
-						end
-						c[string(wellkey, "_", t)] = conc
-					else
-						c[string(wellkey, "_", t)] = 0
-					end
+				if haskey(parameters, string(ss, "rf"))
+					rf = parameters[string(ss, "rf")]; vx /= rf; vy /= rf; vz /= rf
+				end
+				if haskey(parameters, string(ss, "H"))
+					H = parameters[string(ss, "H")]
+				elseif haskey(parameters, string(ss, "ts_dsp"))
+					H = 0.5 * parameters[string(ss, "ts_dsp")]
+				else
+					H = 0.5
+				end
+			end
+			for w in 1:nW
+				if wellscreen[w]
+					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
+					             contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
+				else
+					wellc[w][wellp[w]] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
 				end
 			end
 		end
 		global modelruns += 1
-		return c
+		return DataStructures.OrderedDict{String,Float64}(zip(wellkeys, vcat(wellc...)))
 	end
 	return computeconcentrations
 end
@@ -245,21 +405,21 @@ argtext=Dict("wellx"=>"observation point (well) X coordinate",
             "f"=>"source mass flux",
             "t0"=>"source starting time",
             "t1"=>"source termination time",
-            "t"=>"time to compute concentration at the observation point"),
+            "t"=>"vector of times to compute concentration at the observation point"),
 keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module) [default=`\"long_bbb_ddd_iir_c\"`]")))
 
 Returns:
 
-- predicted concentration at (wellx, welly, wellz, t)
+- a vector of predicted concentration at (wellx, welly, wellz, t)
 """
-function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Number; anasolfunction::Union{String,Function}="long_bbb_ddd_iir_c")
-	anasolfunction = eval(parse("Anasol.$anasolfunction"))
+
+function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Vector, anasolfunction::Function)
 	d = -theta * pi / 180
 	xshift = wellx - x
 	yshift = welly - y
 	ztrans = wellz - z
-	xtrans = xshift * cos(d) - yshift * sin.(d)
-	ytrans = xshift * sin.(d) + yshift * cos(d)
+	xtrans = xshift * cos(d) - yshift * sin(d)
+	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
 	#sigma01 = sigma02 = sigma03 = 0. #point source
 	sigma01 = dx
@@ -268,14 +428,19 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	v1 = vx
 	v2 = vy
 	v3 = vz
-	speed = sqrt(vx * vx + vy * vy + vz * vz)
-	sigma1 = sqrt(ax * speed * 2)
-	sigma2 = sqrt(ay * speed * 2)
-	sigma3 = sqrt(az * speed * 2)
+	twospeed = 2 * sqrt(vx * vx + vy * vy + vz * vz)
+	sigma1 = sqrt(ax * twospeed)
+	sigma2 = sqrt(ay * twospeed)
+	sigma3 = sqrt(az * twospeed)
 	H1 = H2 = H3 = H
 	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
-	anasolresult = anasolfunction([xtrans, ytrans, ztrans], t, x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
-	return 1e6 * f * anasolresult / n
+	nt = length(t)
+	xtransvec = [xtrans, ytrans, ztrans]
+	anasolresult = Vector{Float64}(nt)
+	for i = 1:nt
+		anasolresult[i] = 1e6 * f / n * anasolfunction(xtransvec, t[i], x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
+	end
+	return anasolresult
 end
 
 function computemass(madsdata::Associative; time::Number=0)
@@ -293,24 +458,12 @@ function computemass(madsdata::Associative; time::Number=0)
 		f = parameters[string("source", i, "_", "f")]["init"]
 		t0 = parameters[string("source", i, "_", "t0")]["init"]
 		t1 = parameters[string("source", i, "_", "t1")]["init"]
-		#=
-		if i == 1
-			f = 10
-			t0 = 1960
-			t1 = 1963
-		else
-			f = 10
-			t0 = 2010
-			t1 = 2100
-		end
-		=#
 		if time > t0
 			tmin = min(time, t1)
 			mi = f * (tmin - t0)
 			if compute_reduction
 				mr = mi - (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
 			end
-			# @show t0, t1, tmin, mi, mr
 			mass_injected += mi
 			mass_reduced += mr
 		end

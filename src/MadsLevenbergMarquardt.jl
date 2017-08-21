@@ -6,16 +6,16 @@ import DocumentFunction
 function residuals(madsdata::Associative, resultvec::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	targets = Mads.getobstarget(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
+	targets = Mads.getobstarget(madsdata, obskeys)
 	isn = isnan.(targets)
 	index = find(isn)
 	weights[index] = 0
 	targets[index] = 0
 	residuals = (resultvec .- targets) .* weights
 	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
+		mins = Mads.getobsmin(madsdata, obskeys)
+		maxs = Mads.getobsmax(madsdata, obskeys)
 		mins[index] = -Inf
 		maxs[index] = Inf
 		rmax = (resultvec .- maxs) .* weights
@@ -114,14 +114,14 @@ function makelmfunctions(madsdata::Associative)
 	sar = Mads.haskeyword(madsdata, "sar")
 	o_lm(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	targets = Mads.getobstarget(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
+	targets = Mads.getobstarget(madsdata, obskeys)
 	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
+		mins = Mads.getobsmin(madsdata, obskeys)
+		maxs = Mads.getobsmax(madsdata, obskeys)
 		mins[index] = -Inf
 		maxs[index] = Inf
 	end
@@ -129,7 +129,7 @@ function makelmfunctions(madsdata::Associative)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 	"""
 	Forward model function for Levenberg-Marquardt optimization
 	"""
@@ -176,7 +176,14 @@ function makelmfunctions(madsdata::Associative)
 		else
 			center_computed = true
 		end
-		fevals = RobustPmap.rpmap(f_lm, p)
+		local fevals
+		try
+			fevals = RobustPmap.rpmap(f_lm, p)
+		catch errmsg
+			warn(Base.stacktrace())
+			printerrormsg(errmsg)
+			Mads.madscritical("RobustPmap LM execution of forward runs fails!")
+		end
 		if !center_computed
 			center = fevals[nP+1]
 			if restartdir != ""
@@ -458,7 +465,15 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			return predicted_residual, delta_x
 		end
 
-		phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+		local phisanddelta_xs
+		try
+			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+		catch errmsg
+			warn(Base.stacktrace())
+			printerrormsg(errmsg)
+			Mads.madscritical("RobustPmap LM execution to get OF and lambdas fails!")
+		end
+
 		phi = []
 		delta_xs = []
 		for i=1:length(phisanddelta_xs)
@@ -472,7 +487,15 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madscritical("Mads quits!")
 		end
 
-		trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+		local trial_fs
+		try
+			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+		catch errmsg
+			warn(Base.stacktrace())
+			printerrormsg(errmsg)
+			Mads.madscritical("RobustPmap LM execution of the forward models fails!")
+		end
+
 		f_calls += np_lambda
 		objfuncevals = map(o, trial_fs)
 

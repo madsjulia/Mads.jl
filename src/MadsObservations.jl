@@ -1,6 +1,7 @@
 import Distributions
 import DataStructures
 import DocumentFunction
+import JSON
 using Compat
 
 """
@@ -41,7 +42,7 @@ Returns:
 - keys for all observations in the MADS problem dictionary
 """
 function getobskeys(madsdata::Associative)
-	return collect(keys(madsdata["Observations"]))
+	return convert(Array{String}, collect(keys(madsdata["Observations"])))
 end
 
 """
@@ -58,7 +59,7 @@ function gettargetkeys(madsdata::Associative)
 	w = getobsweight(madsdata)
 	t = getobstarget(madsdata)
 	k = getobskeys(madsdata)
-	return k[w.>0 .| isnan.(t)]
+	return convert(Array{String}, k[w.>0 .| isnan.(t)])
 end
 
 """
@@ -120,7 +121,7 @@ for i = 1:length(getobsnames)
 		end
 		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
 		function $(Symbol(string("getobs", obsname)))(madsdata::Associative)
-			obskeys = getobskeys(madsdata)
+			obskeys = collect(keys(madsdata["Observations"]))
 			return $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
 	end
@@ -408,6 +409,27 @@ function showobservations(madsdata::Associative)
 	println("Number of observations is $(length(p))")
 end
 
+function printobservations(madsdata::Associative, io::IO=Base.STDOUT)
+	obskeys = getobskeys(madsdata)
+	println(io, "Observations:")
+	for k in obskeys
+		print(io, "- $(k): ")
+		JSON.print(io, madsdata["Observations"][k])
+		print(io, "\n")
+	end
+end
+function printobservations(madsdata::Associative, filename::String; json::Bool=false)
+	f = open(filename, "w")
+	printobservations(madsdata, f)
+	close(f)
+end
+@doc """
+Print (emit) observations in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(printobservations;
+argtext=Dict("madsdata"=>"MADS problem dictionary", "io"=>"output stream", "filename"=>"output file name")))
+""" printobservations
+
 function createobservations!(madsdata::Associative, time::Vector, observation::Vector=zeros(length(time)); logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
 	nT = length(time)
 	@assert nT == length(observation)
@@ -514,7 +536,7 @@ $(DocumentFunction.documentfunction(allwellson!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function allwellson!(madsdata::Associative)
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		madsdata["Wells"][wellkey]["on"] = true
 	end
 	wells2observations!(madsdata)
@@ -529,7 +551,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function wellon!(madsdata::Associative, wellname::String)
 	error = true
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if wellname == wellkey
 			madsdata["Wells"][wellkey]["on"] = true
 			error = false
@@ -543,13 +565,36 @@ function wellon!(madsdata::Associative, wellname::String)
 end
 
 """
+Turn on a specific well in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(wellon!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "wellname"=>"name of the well to be turned on")))
+"""
+function wellon!(madsdata::Associative, rx::Regex)
+	error = true
+	for wellkey in keys(madsdata["Wells"])
+		m = match(rx, wellkey)
+		if typeof(m) != Void
+			madsdata["Wells"][wellkey]["on"] = true
+			error = false
+		end
+	end
+	if error
+		Mads.madswarn("""Well name $rx does not match existing well names!""")
+	else
+		wells2observations!(madsdata)
+	end
+end
+
+"""
 Turn off all the wells in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(allwellsoff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function allwellsoff!(madsdata::Associative)
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		madsdata["Wells"][wellkey]["on"] = false
 	end
 	wells2observations!(madsdata)
@@ -564,7 +609,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function welloff!(madsdata::Associative, wellname::String)
 	error = true
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if wellname == wellkey
 			madsdata["Wells"][wellkey]["on"] = false
 			error = false
@@ -578,6 +623,40 @@ function welloff!(madsdata::Associative, wellname::String)
 end
 
 """
+Delete all wells marked as being off in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(welloff!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "wellname"=>"name of the well to be turned off")))
+"""
+function deleteoffwells!(madsdata::Associative)
+    for wellkey in keys(madsdata["Wells"])
+        if madsdata["Wells"][wellkey]["on"] == false
+            delete!(madsdata["Wells"], wellkey)
+        end
+    end
+end
+
+"""
+Delete all times in the MADS problem dictionary in a given list.
+
+$(DocumentFunction.documentfunction(welloff!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "wellname"=>"name of the well to be turned off")))
+"""
+function deletetimes!(madsdata::Associative, deletetimes)
+    for wellkey in keys(madsdata["Wells"])
+        delete_pos = [] # position of times to be deleted.
+        for obs_num in 1:length(madsdata["Wells"][wellkey]["obs"])
+            if madsdata["Wells"][wellkey]["obs"][obs_num]["t"] in deletetimes
+                delete_pos = append!(delete_pos, obs_num)
+            end
+        end
+        deleteat!( madsdata["Wells"][wellkey]["obs"], delete_pos)
+    end
+end
+
+"""
 Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(wells2observations!;
@@ -585,7 +664,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 				t = gettime(madsdata["Wells"][wellkey]["obs"][i])
@@ -627,7 +706,7 @@ function getwellsdata(madsdata::Associative; time::Bool=false)
 	else
 		a = Array{Float64}(3, 0)
 	end
-	for wellkey in collect(keys(madsdata["Wells"]))
+	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]

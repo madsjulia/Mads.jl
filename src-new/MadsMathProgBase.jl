@@ -21,14 +21,14 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	restartdir = getrestartdir(madsdata)
 	o_function(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
-	targets = Mads.getobstarget(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
+	targets = Mads.getobstarget(madsdata, obskeys)
 	index = find(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
-		mins = Mads.getobsmin(madsdata)
-		maxs = Mads.getobsmax(madsdata)
+		mins = Mads.getobsmin(madsdata, obskeys)
+		maxs = Mads.getobsmax(madsdata, obskeys)
 		mins[index] = -Inf
 		maxs[index] = Inf
 	end
@@ -36,7 +36,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = Mads.getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	initparams = Mads.getparamdict(madsdata)
 
 	o_mpb, grad_o_mpb, f_mpb, g_mpb = makempbfunctions(madsdata)
 

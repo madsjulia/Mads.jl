@@ -1,6 +1,24 @@
 import DocumentFunction
 
 """
+MADS vector calls on
+
+$(DocumentFunction.documentfunction(vectoron))
+"""
+function vectoron()
+	global vectorflag = true;
+end
+
+"""
+MADS vector calls off
+
+$(DocumentFunction.documentfunction(vectoroff))
+"""
+function vectoroff()
+	global vectorflag = false;
+end
+
+"""
 Set number of processors needed for each parallel task at each node
 
 $(DocumentFunction.documentfunction(set_nprocs_per_task))
@@ -27,6 +45,7 @@ function restartoff()
 	global restart = false;
 end
 
+
 """
 Get MADS restart status
 
@@ -43,7 +62,6 @@ Make MADS quiet
 $(DocumentFunction.documentfunction(quieton))
 """
 function quieton()
-	ReusableFunctions.quieton()
 	global quiet = true;
 end
 
@@ -53,7 +71,6 @@ Make MADS not quiet
 $(DocumentFunction.documentfunction(quietoff))
 """
 function quietoff()
-	ReusableFunctions.quietoff()
 	global quiet = false;
 end
 
@@ -288,13 +305,14 @@ end
 Print error message
 
 $(DocumentFunction.documentfunction(printerrormsg;
-argtext=Dict("e"=>"error message")))
+argtext=Dict("errmsg"=>"error message")))
 """
-function printerrormsg(e::Any)
-	if in(:msg, fieldnames(e))
-		println(strip(e.msg))
-	else
-		println(e)
+function printerrormsg(errmsg::Any)
+	Base.showerror(Base.STDERR, errmsg)
+	if in(:msg, fieldnames(errmsg))
+		madswarn(strip(errmsg.msg))
+	elseif typeof(errmsg) <: AbstractString
+		madswarn(errmsg)
 	end
 end
 
@@ -318,20 +336,29 @@ function meshgrid(x::Vector, y::Vector)
 end
 
 """
-Set / get current random seed
+Set / get current random seed. seed < 0 gets seed, anything else sets it.
 
 $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
             "quiet"=>"[default=`true`]")))
 """
 function setseed(seed::Integer=-1, quiet::Bool=true)
-	if seed != -1
+	if seed >= 0
 		srand(seed)
 		!quiet && info("New seed: $seed")
 	else
 		s = Int(Base.Random.GLOBAL_RNG.seed[1])
 		!quiet && info("Current seed: $s")
 	end
+end
+
+"""
+Get and return current random seed.
+
+$(DocumentFunction.documentfunction(getseed))
+"""
+function getseed()
+	return Int(Base.Random.GLOBAL_RNG.seed[1])
 end
 
 """
@@ -356,4 +383,30 @@ function pkgversion(modulestr::String)
 		warn("Module $(modulestr) is not available")
 		return v"0.0.0"
 	end
+end
+
+"""
+Checks if package is available
+
+$(DocumentFunction.documentfunction(ispkgavailable;
+argtext=Dict("modulename"=>"module name")))
+
+Returns:
+
+- `true` or `false`
+"""
+function ispkgavailable(modulename::String; quiet::Bool=false)
+	flag=false
+	try
+		Pkg.available(modulename)
+		if typeof(Pkg.installed(modulename)) == Void
+			flag=false
+			!quiet && info("Module $modulename is not available")
+		else
+			flag=true
+		end
+	catch
+		!quiet && info("Module $modulename is not available")
+	end
+	return flag
 end

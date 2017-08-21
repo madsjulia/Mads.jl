@@ -5,7 +5,7 @@ BIGUQ
 AffineInvariantMCMC
 GeostatInversion
 MetaProgTools
-ReusableFunctions
+ReusableFunctions 0.2.6
 RobustPmap
 SVR 0.2.3
 DocumentFunction

@@ -26,13 +26,13 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
-	weights = Mads.getobsweight(madsdata)
+	weights = Mads.getobsweight(madsdata, obskeys)
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
-	initparams = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
-	function func(arrayparameters::Vector)
+	initparams = Mads.getparamdict(madsdata)
+	function f_sa(arrayparameters::Vector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
@@ -70,7 +70,14 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 		else
 			center_computed = true
 		end
-		fevals = RobustPmap.rpmap(func, p)
+		local fevals
+		try
+			fevals = RobustPmap.rpmap(f_sa, p)
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("RobustPmap executions for localsa fails!")
+			return nothing
+		end
 		if !center_computed
 			center = fevals[nP+1]
 			if restartdir != ""
@@ -89,10 +96,10 @@ function makelocalsafunction(madsdata::Associative; multiplycenterbyweights::Boo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function grad(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+	function g_sa(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
-	return grad
+	return f_sa, g_sa
 end
 
 """
@@ -115,6 +122,7 @@ Dumps:
 - `filename` : output plot file
 """
 function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(0), obs::Array{Float64,1}=Array{Float64}(0), J::Array{Float64,2}=Array{Float64}((0,0)))
+	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(:Gadfly)
 		imagefiles = false
 	end
@@ -129,23 +137,25 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		rootname = string(rootname, "-", keyword)
 	end
 	paramkeys = getoptparamkeys(madsdata)
+	nPall = length(getparamkeys(madsdata))
 	obskeys = getobskeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
 	nP = length(paramkeys)
-	nPi = sizeof(par)
+	nPi = length(par)
 	if nPi == 0
 		param = getparamsinit(madsdata, paramkeys)
-	elseif nPi != nP
-		param = getoptparams(madsdata, par, paramkeys)
-	else
+	elseif nPi == nP
 		param = par
+	elseif nPi == nPall
+		param = Mads.getoptparams(madsdata, par)
+	else
+		param = getoptparams(madsdata, par, paramkeys)
 	end
 	nO = length(obskeys)
 	if sizeof(J) == 0
-		g = makelocalsafunction(madsdata)
 		if sinspace
 			lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 			upperbounds = Mads.getparamsmax(madsdata, paramkeys)
@@ -155,11 +165,15 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 			upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
-			g_sin = Mads.sinetransformgradient(g, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-			J = g_sin(sinparam, center=obs)
+			g_sa_sin = Mads.sinetransformgradient(g_sa, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+			J = g_sa_sin(sinparam, center=obs)
 		else
-			J = g(param, center=obs)
+			J = g_sa(param, center=obs)
 		end
+	end
+	if J == nothing
+		warn("Jacobian computation failed")
+		return
 	end
 	if any(isnan, J)
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
@@ -169,6 +183,8 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
 		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
 	end
+	f = Mads.forward(madsdata, param)
+	ofval = Mads.of(madsdata, f)
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimum(J)), abs(maximum(J)))
 	if imagefiles
@@ -190,11 +206,14 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 	try
 		u, s, v = svd(JpJ)
 		covar = v * inv(diagm(s)) * u'
-	catch "LAPACKException(12)"
+	catch errmsg1
 		try
 			covar = inv(JpJ)
-		catch "SingularException(4)"
-			Mads.madscritical("Singular covariance matrix! Local sensitivity analysis fails.")
+		catch errmsg2
+			printerrormsg(errmsg1)
+			printerrormsg(errmsg2)
+			Mads.warn("JpJ inversion fails")
+			return nothing
 		end
 	end
 	stddev = sqrt.(abs.(diag(covar)))
@@ -234,7 +253,7 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("of"=>of, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("of"=>ofval, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 """
@@ -253,10 +272,8 @@ Returns:
 function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
-	uo = u
-	dd = d
-	vo = v
-	gooddirections = []
+	vo = copy(v)
+	local gooddirections
 	local dist
 	numdirections = length(d)
 	numgooddirections = numdirections
@@ -311,7 +328,7 @@ function reweighsamples(madsdata::Associative, predictions::Array, oldllhoods::V
 	j = 1
 	for okey in obskeys
 		if haskey(madsdata["Observations"][okey], "weight")
-			newllhoods -= .5 * weights[j] ^ 2 * (predictions[:, j] - targets[j]) .^ 2
+			newllhoods -= .5 * (weights[j] * (predictions[j, :] - targets[j])) .^ 2
 		end
 		j += 1
 	end
@@ -373,7 +390,11 @@ function getparamrandom(madsdata::Associative, numsamples::Integer=1, parameterk
 		paramkeys = getoptparamkeys(madsdata)
 		paramdist = getparamdistributions(madsdata; init_dist=init_dist)
 		for k in paramkeys
-			sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+			if numsamples == 1 # if only one sample, don't write a 1-element array to each dictionary key. write a scalar.
+				sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)[1]
+			else
+				sample[k] = getparamrandom(madsdata, k; numsamples=numsamples, paramdist=paramdist)
+			end
 		end
 		return sample
 	end
@@ -435,7 +456,7 @@ function saltellibrute(madsdata::Associative; N::Integer=1000, seed::Integer=-1,
 	f = makemadscommandfunction(madsdata)
 	distributions = getparamdistributions(madsdata)
 	results = Array{DataStructures.OrderedDict}(numsamples)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
+	paramdict = Mads.getparamdict(madsdata)
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample

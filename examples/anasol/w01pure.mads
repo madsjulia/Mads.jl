@@ -1,0 +1,26 @@
+Sources:
+- box: {
+  x  : { longname: "Source x coordinate [L]", init: 1000, type: opt, log: no, step: 25, min: 210, max: 1460 },
+  y  : { longname: "Source y coordinate [L]", init: 1450, type: opt, log: no, step: 25, min: 1230, max: 1930 },
+  z  : { longname: "Source z coordinate [L]", init: 0, type: opt, log: no, step: 1, min: 0, max: 100 },
+  dx : { longname: "Source x dimension [L]", init: 250, type: opt, log: no, step: 1, min: 1, max: 500 },
+  dy : { longname: "Source y dimension [L]", init: 250, type: opt, log: no, step: 1, min: 1, max: 500 },
+  dz : { longname: "Source z dimension [L]", init: 1, type: opt, log: no, step: 1, min: 1, max: 10 },
+  f  : { longname: "Contaminant flux [M/T]", init: 50, type: opt, log: yes, step: 1, min: 0.01, max: 100 },
+  t0 : { longname: "Start Time [T]", init: 4, plotname: "t<sub>0</sub>", type: opt, log: no, step: 1, min: 0, max: 10 },
+  t1 : { longname: "End Time [T]", init: 15, plotname: "t<sub>1</sub>", type: opt, log: no, step: 1, min: 5, max: 40 } }
+Parameters:
+- n       : { longname: "Porosity [L3/L3]", init: 0.1, type: opt, log: no, step: 0.1, min: 0, max: 1 }
+- lambda  : { longname: "Half-life decay [1/T]", init: 1e-4, type: opt, log: yes, step: 1, min: 1e-6, max: 1e-1 }
+- theta   : { longname: "Flow Angle [degrees]", init: 0, type: opt, log: no, step: 5, min: -30, max: 30 }
+- vx      : { longname: "Pore x velocity [L/T]", plotname: "v", init: 40, type: opt, log: yes, step: 10, min: 0.01, max: 200 }
+- vy      : { longname: "Pore y velocity [L/T]", init: 0, type: opt, log: no, step: 1, min: 0, max: 1 }
+- vz      : { longname: "Pore z velocity [L/T]", init: 0, type: opt, log: no, step: 1, min: 0, max: 1 }
+- ax      : { longname: "Dispersivity x [L]", init: 70, type: opt, log: yes, step: 10, min: 10, max: 140 }
+- ay      : { longname: "Dispersivity y [L]", init: 15, type: opt, log: yes, step: 10, min: 1, max: 30 }
+- az      : { longname: "Dispersivity z [L]", init: 0.3, type: opt, log: yes, step: 1.25893, min: 0.1, max: 1 }
+- H       : { longname: "Hurst exponent [-]", init: 0.5, type: opt, log: no, step: 0.1, min: 0.25, max: 0.75 }
+Wells:
+- w1a   : { x: 823, y: 1499, z0: 3, z1: 3, obs: [
+ 15: { t: 15, c: 294.383, weight: 1, log: no, min: 0, max: 1e+06 } ] }
+

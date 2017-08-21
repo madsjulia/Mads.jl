@@ -17,7 +17,7 @@ MetaProgTools.jl module functions:
 Get symbols
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/eed8fd57a6fce3a0698c0539c849be8c50423227/src/MetaProgTools.jl#L34' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/917cd20799fa87a6818303396fba7e6e4204538c/src/MetaProgTools.jl#L42' class='documenter-source'>source</a><br>
 
 <a id='MetaProgTools.in-Tuple{Any,Expr}' href='#MetaProgTools.in-Tuple{Any,Expr}'>#</a>
 **`MetaProgTools.in`** &mdash; *Method*.
@@ -27,7 +27,7 @@ Get symbols
 Find a needle in a haystack
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/eed8fd57a6fce3a0698c0539c849be8c50423227/src/MetaProgTools.jl#L127' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/917cd20799fa87a6818303396fba7e6e4204538c/src/MetaProgTools.jl#L135' class='documenter-source'>source</a><br>
 
 <a id='MetaProgTools.populateexpression-Tuple{Symbol,Associative}' href='#MetaProgTools.populateexpression-Tuple{Symbol,Associative}'>#</a>
 **`MetaProgTools.populateexpression`** &mdash; *Method*.
@@ -37,7 +37,7 @@ Find a needle in a haystack
 Populate Expression
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/eed8fd57a6fce3a0698c0539c849be8c50423227/src/MetaProgTools.jl#L60' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/917cd20799fa87a6818303396fba7e6e4204538c/src/MetaProgTools.jl#L68' class='documenter-source'>source</a><br>
 
 <a id='MetaProgTools.replacesymbol-Tuple{Symbol,Symbol,Any}' href='#MetaProgTools.replacesymbol-Tuple{Symbol,Symbol,Any}'>#</a>
 **`MetaProgTools.replacesymbol`** &mdash; *Method*.
@@ -47,5 +47,5 @@ Populate Expression
 Replace Symbol
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/eed8fd57a6fce3a0698c0539c849be8c50423227/src/MetaProgTools.jl#L92' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/tree/917cd20799fa87a6818303396fba7e6e4204538c/src/MetaProgTools.jl#L100' class='documenter-source'>source</a><br>
 

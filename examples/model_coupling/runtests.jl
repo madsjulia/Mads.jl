@@ -7,10 +7,17 @@ if workdir == "."
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")
+mdbe = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-external-observations.mads"); bigfile=true)
+efor = Mads.forward(mdbe)
+mdb = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"); bigfile=true)
+bfor = Mads.forward(mdb)
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 ifor = Mads.forward(md)
 Mads.forward(md, Dict())
+ip = Mads.getparamdict(md)
 pdict = Mads.getparamrandom(md, 5)
+Mads.setparamsinit!(md, pdict, 1)
+Mads.setparamsinit!(md, ip)
 parray = Mads.paramdict2array(pdict)
 Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
@@ -41,8 +48,11 @@ Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions`
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
 tefor = Mads.forward(md)
 
+cwd = pwd()
 cd(workdir)
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
+Mads.localsa(md, par=[1.,2.])
+# Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
 Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
 
 Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
@@ -50,6 +60,8 @@ Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "externa
 pfor = Mads.forward(md)
 
 @Base.Test.testset "Internal" begin
+	@Base.Test.test ifor == efor
+	@Base.Test.test ifor == bfor
 	@Base.Test.test ifor == tifor
 	@Base.Test.test ifor == mfor
 	@Base.Test.test ifor == tefor
@@ -73,7 +85,7 @@ Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-json-exp.mads"))
 efor = Mads.forward(md)
 
-if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :yaml)
+if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(:PyCall) && isdefined(Mads, :yaml)
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 	yfor = Mads.forward(md)
@@ -85,7 +97,6 @@ md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
 aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 afor = Mads.forward(md)
 
-cwd = pwd()
 cd(workdir)
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
 md["Instructions"] = [Dict("ins"=>"external-linearmodel-matrix.inst", "read"=>"model_coupling_matrix.dat")]
@@ -113,3 +124,6 @@ Mads.rmdir("external-linearmodel+template+instruction_restart")
 Mads.rmdir("internal-linearmodel+template_restart")
 Mads.rmdir("internal-linearmodel-mads_restart")
 Mads.rmdir("internal-linearmodel_restart")
+Mads.rmfiles_ext("svg"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+Mads.rmfiles_ext("dat"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+Mads.rmfiles_ext("iterationresults"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))

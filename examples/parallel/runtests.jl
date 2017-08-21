@@ -46,7 +46,7 @@ end
 end
 
 if !haskey(ENV, "MADS_TRAVIS")
-	addprocs()
+	addprocs(2)
 end
 @Base.Test.testset "Parallel" begin
 	@Base.Test.test parallel_findpi(100000)

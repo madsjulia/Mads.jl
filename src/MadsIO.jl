@@ -1,6 +1,16 @@
 import DataStructures
 
 """
+Change the current directory to the Mads source dictionary
+
+$(DocumentFunction.documentfunction(md))
+"""
+function md()
+	Base.cd(madsdir)
+	pwd()
+end
+
+"""
 Load MADS input file defining a MADS problem dictionary
 
 $(DocumentFunction.documentfunction(loadmadsfile;
@@ -18,14 +28,19 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml")
-	if format == "yaml"
-		madsdata = loadyamlfile(filename; julia=julia) # this is not OrderedDict()
-	elseif format == "json"
-		madsdata = loadjsonfile(filename)
+function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, format::String="yaml")
+	if bigfile
+		madsdata = loadbigyamlfile(filename)
 	end
-	parsemadsdata!(madsdata)
+	if !bigfile || madsdata == nothing
+		if format == "yaml"
+			madsdata = loadyamlfile(filename; julia=julia)
+		elseif format == "json"
+			madsdata = loadjsonfile(filename)
+		end
+	end
 	madsdata["Filename"] = filename
+	parsemadsdata!(madsdata)
 	if haskey(madsdata, "Observations")
 		t = getobstarget(madsdata)
 		isn = isnan.(t)
@@ -38,6 +53,91 @@ function loadmadsfile(filename::String; julia::Bool=false, format::String="yaml"
 			end
 		end
 	end
+	return convert(Dict{String,Any}, madsdata)
+end
+
+"""
+Load BIG YAML input file
+
+$(DocumentFunction.documentfunction(loadmadsfile;
+argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
+
+Returns:
+
+- MADS problem dictionary
+"""
+function loadbigyamlfile(filename::String)
+	lines = readlines(filename)
+	nlines = length(lines)
+	keyln = findin(map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines), true)
+	if length(keyln) == 0
+		return nothing
+	end
+	obsia = indexin(["Observations:"], strip.(lines[keyln]))
+	if length(obsia) == 0
+		return nothing
+	else
+		obsi = obsia[1]
+		obsln = keyln[obsi]
+	end
+	readflag = true
+	yamlflag = true
+	if obsln != 1 && obsln != nlines && obsi < length(keyln)
+		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
+		readindeces = obsln+1:keyln[obsi+1]-1
+	elseif obsln == 1 && obsi < length(keyln)
+		parseindeces = keyln[obsi+1]:nlines
+		readindeces = 2:keyln[obsi+1]-1
+	elseif obsln == nlines
+		parseindeces = 1:obsln-1
+		readindeces = obsln+1:nlines
+	elseif length(keyln) == 1
+		parseindeces = 0:0
+		yamlflag = false
+		readindeces = 1:nlines
+	else
+		parseindeces = 1:nlines
+		readindeces = 0:0
+		readflag = false
+	end
+	if yamlflag
+		io = IOBuffer(join(lines[parseindeces], '\n'))
+		madsdata = YAML.load(io)
+	else
+		madsdata = DataStructures.OrderedDict{String,Any}()
+	end
+	if readflag
+		obsdict = DataStructures.OrderedDict{String,Any}()
+		t = []
+		badlines = Array{Int}(0)
+		for i in readindeces
+			mc = match(r"^- (\S*):.*", lines[i])
+			if mc != nothing
+				kw = mc.captures[1]
+			else
+				push!(badlines, i)
+				continue
+			end
+			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
+			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["target"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*weight[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["weight"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*min[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["min"] = float(mc.captures[1])
+			end
+			mc = match(r"^.*max[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
+			if mc != nothing
+				obsdict[kw]["max"] = float(mc.captures[1])
+			end
+		end
+		madsdata["Observations"] = obsdict
+	end
 	return madsdata
 end
 
@@ -49,16 +149,22 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function parsemadsdata!(madsdata::Associative)
 	if haskey(madsdata, "Parameters")
-		parameters = DataStructures.OrderedDict()
+		parameters = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 		for dict in madsdata["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
-					parameters[key] = dict[key]
+					parameters[key] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(dict[key])
+						parameters[key][pf] = dict[key][pf]
+					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = DataStructures.OrderedDict()
+						madsdata["Expressions"] = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
 					end
-					madsdata["Expressions"][key] = dict[key]
+					madsdata["Expressions"][key] = DataStructures.OrderedDict{String,Any}()
+					for pf in keys(dict[key])
+						madsdata["Expressions"][key][pf] = dict[key][pf]
+					end
 				end
 			end
 		end
@@ -95,7 +201,7 @@ function parsemadsdata!(madsdata::Associative)
 	end
 	checkparameterranges(madsdata)
 	if haskey(madsdata, "Wells")
-		wells = DataStructures.OrderedDict()
+		wells = DataStructures.OrderedDict{String,Any}()
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
@@ -110,16 +216,26 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Wells"] = wells
 		Mads.wells2observations!(madsdata)
 	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
-		observations = DataStructures.OrderedDict()
-		for dict in madsdata["Observations"]
-			for key in keys(dict)
-				observations[key] = dict[key]
+		if typeof(madsdata["Observations"]) <: Array
+			observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+			for dict in madsdata["Observations"]
+				if collect(keys(dict))[1] == "filename"
+					dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Observations"]
+				else
+					dictnew = dict
+				end
+				for key in keys(dictnew)
+					observations[key] = DataStructures.OrderedDict{String,Any}()
+					for of in keys(dictnew[key])
+						observations[key][of] = dictnew[key][of]
+					end
+				end
 			end
+			madsdata["Observations"] = observations
 		end
-		madsdata["Observations"] = observations
 	end
 	if haskey(madsdata, "Templates")
-		templates = Array{Dict}(length(madsdata["Templates"]))
+		templates = Array{Associative}(length(madsdata["Templates"]))
 		i = 1
 		for dict in madsdata["Templates"]
 			for key in keys(dict) # this should only iterate once
@@ -130,7 +246,7 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Templates"] = templates
 	end
 	if haskey(madsdata, "Instructions")
-		instructions = Array{Dict}(length(madsdata["Instructions"]))
+		instructions = Array{Associative}(length(madsdata["Instructions"]))
 		i = 1
 		for dict in madsdata["Instructions"]
 			for key in keys(dict) # this should only iterate once
@@ -142,13 +258,25 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
-	dumpyamlmadsfile(madsdata, filename, julia=julia)
+	if observations_separate
+		madsdata2 = deepcopy(madsdata)
+		filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+		if !isfile(filenameobs)
+			printobservations(madsdata, filenameobs)
+		else
+			warn("External observation file already exist ($(filenameobs)); delete if needed!")
+		end
+		madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+	else
+		madsdata2 = madsdata
+	end
+	dumpyamlmadsfile(madsdata2, filename, julia=julia)
 end
-function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false)
+function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -164,10 +292,20 @@ function savemadsfile(madsdata::Associative, parameters::Associative, filename::
 				newinit = realparam["init"]
 			end
 		end
+		if observations_separate
+			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			printobservations(madsdata, filenameobs)
+			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+		end
 		dumpyamlfile(filename, madsdata2, julia=julia)
 	else
 		madsdata2 = deepcopy(madsdata)
 		setparamsinit!(madsdata2, parameters)
+		if observations_separate
+			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			printobservations(madsdata, filenameobs)
+			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+		end
 		dumpyamlmadsfile(madsdata2, filename, julia=julia)
 	end
 end
@@ -271,7 +409,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 Example:
 
 ```julia
-madsdata = Mads.loadmadsproblem("../../a.mads")
+madsdata = Mads.loadmadsfile("../../a.mads")
 madsproblemdir = Mads.getmadsproblemdir(madsdata)
 ```
 
@@ -587,9 +725,20 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
 		obsid=[convert(String,k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
-		results = merge(results, DataStructures.OrderedDict{String, Float64}(zip(obsid, predictions)))
+		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
-	return convert(DataStructures.OrderedDict{Any,Float64}, results)
+	missingkeys = Array{String}(0)
+	validtargets = (Mads.getobsweight(madsdata) .> 0) & (!isnan.(Mads.getobstarget(madsdata)))
+	for (k, v) in zip(obskeys, validtargets)
+		if !haskey(results, k) && v
+			push!(missingkeys, k)
+		end
+	end
+	if length(missingkeys) > 0
+		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
+		madscritical("Missing observation keys: $(missingkeys)")
+	end
+	return convert(DataStructures.OrderedDict{String,Float64}, results)
 end
 
 searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
@@ -704,8 +853,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
-	expressions = evaluatemadsexpressions(madsdata, parameters)
-	paramsandexps = merge(parameters, expressions)
+	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
 	for template in madsdata["Templates"]
 		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
@@ -885,20 +1033,15 @@ function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(mads
 			observations[k] = obscount[k] > 1 ? observations[k] + obs[k] : obs[k]
 		end
 	end
-	missing = 0
 	c = 0
 	for k in obskeys
 		c += 1
 		if obscount[k] == 0
-			missing += 1
-			madsinfo("Observation $k is missing!", 1)
+			delete!(observations, k)
 		elseif obscount[k] > 1
 			observations[k] /= obscount[k]
 			madsinfo("Observation $k detected $(obscount[k]) times; an average is computed")
 		end
-	end
-	if missing > 0
-		madswarn("Observations (total count = $(missing)) are missing!")
 	end
 	return observations
 end

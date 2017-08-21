@@ -4,7 +4,7 @@ import JLD
 import DocumentFunction
 
 function forward(madsdata::Associative; all::Bool=false)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramdict = Mads.getparamdict(madsdata)
 	forward(madsdata, paramdict; all=all)
 end
 function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
@@ -28,19 +28,47 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		l2 = length(paramdict[k])
 		@assert l == l2
 	end
-	paraminitdict = DataStructures.OrderedDict{String,Float64}(zip(keys(paramdict), getparamsinit(madsdata)))
+	paraminitdict = Mads.getparamdict(madsdata)
 	if l == 1
 		p = merge(paraminitdict, paramdict)
 		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
 	else
-		paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+		optkeys = Mads.getoptparamkeys(madsdata)
+		if length(optkeys) == length(kk)
+			paramarray = hcat(map(i->collect(paramdict[i]), optkeys)...)'
+		else
+		end
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
 function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
+	end
+	pk = Mads.getoptparamkeys(madsdata)
+	np = length(pk)
+	s = size(paramarray)
+	if length(s) > 2
+		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
+		return
+	elseif length(s) == 2
+		nrow, ncol = s
+		if nrow != np && ncol != np
+			warn("Incorrect array size: size(paramarray) = $(size(paramarray))")
+			return
+		elseif nrow == np
+			nr = ncol
+			if ncol == np
+				warn("Matrix columns assumed to represent the parameters!")
+			end
+		elseif ncol == np
+			np = ncol
+			nr = nrow
+		end
+	else
+		np = s[1]
+		nr = 1
 	end
 	if all
 		madsdata_c = deepcopy(madsdata)
@@ -49,48 +77,40 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 		elseif haskey(madsdata_c, "Observations")
 			setobsweights!(madsdata_c, 1)
 		end
-		f = makedoublearrayfunction(madsdata_c)
-		pk = Mads.getoptparamkeys(madsdata_c)
+		f = makearrayfunction(madsdata_c)
 	else
-		f = makedoublearrayfunction(madsdata)
-		pk = Mads.getoptparamkeys(madsdata)
+		f = makearrayfunction(madsdata)
 	end
-	np = length(pk)
-	s = size(paramarray)
-	if length(s) > 2
-		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
-	elseif length(s) == 2
-		mx = max(s...)
-		mn = min(s...)
-	else
-		mx = s[1]
-		mn = 1
-	end
-	if mn != np && mx != np
-		error("Incorrect array size: size(paramarray) = $(size(paramarray))")
-	end
-	nr = (mn == np) ? mx : mn
-	r = []
+	local r
 	if length(s) == 2
+		local rv
 		restartdir = getrestartdir(madsdata)
 		if checkpointfrequency != 0 && restartdir != ""
 			if s[2] == np
-				r = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
+				rv = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			else
-				r = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
+				rv = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			end
+			r = hcat(collect(rv)...)
 		else
+			rv = Array{Array{Float64}}(nr)
 			if s[2] == np
-				r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
+				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
+				for i = 1:nr
+					rv[i] = collect(values(f(vec(paramarray[i, :]))))
+				end
 			else
-				r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
+				# r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
+				for i = 1:nr
+					rv[i] = collect(values(f(vec(paramarray[:, i]))))
+				end
 			end
+			r = hcat(rv...)
 		end
 	else
-		o = f(paramarray)
-		push!(r, o)
+		r = f(paramarray)
 	end
-	return hcat(r[:]...)'
+	return r
 end
 
 @doc """
@@ -110,7 +130,7 @@ Returns:
 """ forward
 
 function forwardgrid(madsdata::Associative)
-	paramvalues = DataStructures.OrderedDict{String,Float64}(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	paramvalues = Mads.getparamdict(madsdata)
 	forwardgrid(madsdata, paramvalues)
 end
 
@@ -120,7 +140,6 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 		return
 	end
 	madsdata = copy(madsdatain)
-	f = Mads.makemadscommandfunction(madsdata)
 	nx = madsdata["Grid"]["xcount"]
 	ny = madsdata["Grid"]["ycount"]
 	nz = madsdata["Grid"]["zcount"]
@@ -163,6 +182,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	end
 	madsdata["Wells"] = dictwells
 	Mads.wells2observations!(madsdata)
+	f = Mads.makemadscommandfunction(madsdata)
 	forward_results = f(paramvalues)
 	s = Array{Float64}(nx, ny, nz)
 	for i in 1:nx

@@ -1,10 +1,31 @@
 import DataStructures
 import DocumentFunction
 
+"""
+Load a predefined Mads problem
+
+$(DocumentFunction.documentfunction(loadmadsproblem;
+argtext=Dict("name"=>"predefined MADS problem name")))
+
+Returns:
+
+- MADS problem dictionary
+"""
+function loadmadsproblem(name::String)
+	if name == "polynomial"
+		madsdata = Mads.loadmadsfile(joinpath(madsdir, "..", "examples", "internal-polynomial-model", "internal-polynomial.mads"))
+	elseif name == "external"
+		madsdata = Mads.loadmadsfile(joinpath(madsdir, "..", "examples", "external-linear-model", "external-jld.mads"))
+	else
+		madsdata = nothing
+	end
+	return madsdata
+end
+
 function createmadsproblem(infilename::String, outfilename::String)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
-	result = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	result = f(Mads.getparamdict(madsdata))
 	outyaml = loadyamlfile(infilename)
 	if haskey(outyaml, "Observations")
 		for fullobs in outyaml["Observations"]
@@ -28,7 +49,7 @@ function createmadsproblem(infilename::String, outfilename::String)
 end
 function createmadsproblem(madsdata::Associative, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
-	predictions = f(DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata))))
+	predictions = f(Mads.getparamdict(madsdata))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
 function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)
@@ -63,7 +84,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- new madsdata
+- new MADS problem dictionary
 """ createmadsproblem
 
 """

@@ -26,10 +26,12 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-
 Mads.functions(quiet=true)
 
 Mads.stdouterrcaptureon();
+
+Mads.loadmadsproblem("unknown");
+Mads.loadmadsproblem("polynomial");
 
 Mads.printerrormsg("a")
 
@@ -68,7 +70,9 @@ include(joinpath("..", "src", "madsjl.jl"))
 rm("madsjl.cmdline_hist")
 Mads.functions(:ModuleThatDoesNotExist)
 Mads.functions("createmadsproblem"; stdout=true)
+Mads.functions(r"is.*par"; stdout=true)
 Mads.functions(Mads, "loadmadsfile"; stdout=true)
+Mads.functions(Mads, r"is.*par"; stdout=true)
 Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
 	if is_windows()

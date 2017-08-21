@@ -57,13 +57,12 @@ Returns:
 
 - Mads function to execute a forward model simulation
 """
-function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
+function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
-	obskeys = getobskeys(madsdata_in)#keep just the keys of the obs
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)
-			if k != "Observations"
+			if k != "Observations" || k != "Wells"
 				madsdata[k] = madsdata_in[k]
 			end
 		end
@@ -145,12 +144,18 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
 				while (trying = !checknodedir(tempstring))
-					execattempt += 1; sleep(10)
+					execattempt += 1; sleep(1 * execattempt)
 					if execattempt > 3
-						attempt +=1
+						attempt +=1; sleep(1 * attempt)
 						if attempt > 3
 							cd(currentdir)
-							Mads.madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							if nrpocs() > 1 && myid() != 1
+								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								return nothing
+							else
+								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+							end
 						end
 						break
 					end
@@ -173,14 +178,22 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						trying = false
 					catch errmsg
 						if VERSION >= v"0.6.0" && !latest
-							latest = true
+							latest = true; attempt = 0
 						else
-							sleep(attempt * 0.5)
 							if attempt > 3
+								warn(Base.stacktrace())
 								cd(currentdir)
 								printerrormsg(errmsg)
-								Mads.madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								if nrpocs() > 1 && myid() != 1
+									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									madswarn("Process $(myid()) will be removed!")
+									remotecall(rmprocs, 1, myid())
+									return nothing
+								else
+									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								end
 							end
+							sleep(attempt * 0.5)
 						end
 					end
 				end
@@ -194,12 +207,19 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 						runcmd(madsdata["Command"])
 						trying = false
 					catch errmsg
-						sleep(attempt * 0.5)
 						if attempt > 3
+							warn(Base.stacktrace())
 							cd(currentdir)
 							printerrormsg(errmsg)
-							Mads.madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							if nrpocs() > 1 && myid() != 1
+								madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								return nothing
+							else
+								madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
+							end
 						end
+						sleep(attempt * 0.5)
 					end
 				end
 				results = readmodeloutput(madsdata, obskeys=obskeys)
@@ -211,15 +231,16 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 				try
 					attempt += 1
 					Mads.rmdir(tempdirname)
-					Mads.madsinfo("Deleted temporary directory: $(tempdirname)", 1)
+					madsinfo("Deleted temporary directory: $(tempdirname)", 1)
 					trying = false
 				catch errmsg
-					sleep(attempt * 0.5)
 					if attempt > 3
 						printerrormsg(errmsg)
+						warn(Base.stacktrace())
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
+					sleep(attempt * 0.5)
 				end
 			end
 			global modelruns += 1
@@ -237,8 +258,7 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 	end
 	"MADS command function with expressions"
 	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
-		expressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
-		parameterswithexpressions = merge(paramsnoexpressions, expressions)
+		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		local out
 		try
 			out = madscommandfunction(parameterswithexpressions)
@@ -248,11 +268,13 @@ function makemadscommandfunction(madsdata_in::Associative; calczeroweightobs::Bo
 					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 				catch errmsg
 					printerrormsg(errmsg)
-					Mads.madserror("0.6 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+					warn("Failed Dir: $(pwd())")
+					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
 				end
 			else
 				printerrormsg(errmsg)
-				Mads.madserror("0.5 madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+				warn("Failed Dir: $(pwd())")
+				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.5)!")
 			end
 		end
 		return out
@@ -455,4 +477,28 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 		end
 	end
 	return madsloglikelihood
+end
+
+function getrestarts()
+	if nworkers() > 1
+		r = ReusableFunctions.restarts
+		for w in workers()
+			r += remotecall_fetch(()->ReusableFunctions.restarts, w)
+		end
+		return r
+	else
+		return ReusableFunctions.restarts
+	end
+end
+
+function getcomputes()
+	if nworkers() > 1
+		r = ReusableFunctions.computes
+		for w in workers()
+			r += remotecall_fetch(()->ReusableFunctions.computes, w)
+		end
+		return r
+	else
+		return ReusableFunctions.computes
+	end
 end

@@ -28,6 +28,7 @@ rootname = Mads.getmadsrootname(md)
 if isdefined(Klara, :BasicContMuvParameter) && VERSION < v"0.6.0"
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
+	mcmcvalues_array = hcat(vcat(map(i->collect(mcmcvalues[i]), keys(mcmcvalues)))...)
 	Mads.forward(md, mcmcchain.value)
 	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 		Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
@@ -51,13 +52,16 @@ if Mads.create_tests
 	JLD.save(joinpath(d, "mcmcvalues.jld"), "mcmcvalues", mcmcvalues)
 end
 
+good_mcmcvalues = JLD.load(joinpath(workdir, "test_results", "mcmcvalues.jld"), "mcmcvalues")
+good_mcmcvalues_array = hcat(vcat(map(i->collect(good_mcmcvalues[i]), keys(good_mcmcvalues)))...)
+
+good_mcmcchains_emcee = JLD.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
+
 @Base.Test.testset "Bayesian" begin
 	@Base.Test.testset "bayes" begin
-		good_mcmcvalues = JLD.load(joinpath(workdir, "test_results", "mcmcvalues.jld"), "mcmcvalues")
-		isdefined(:mcmcvalues) && @Base.Test.test good_mcmcvalues == mcmcvalues
+		isdefined(:mcmcvalues_array) && @Base.Test.test isapprox(good_mcmcvalues_array, mcmcvalues_array, atol=1e-8)
 	end
 	@Base.Test.testset "emcee" begin
-		good_mcmcchains_emcee = JLD.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
 		@Base.Test.test good_mcmcchains_emcee == mcmcchains_emcee
 	end
 
