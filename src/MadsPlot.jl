@@ -887,7 +887,7 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; plotdata::
 	spaghettiplot(madsdata::Associative, Y; plotdata=plotdata, format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, yfit=yfit, obs_plot_dots=obs_plot_dots, seed=seed, linewidth=linewidth, pointsize=pointsize)
 end
 function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
-	madsoutput("Spaghetti plots for all the selected model parameter (type != null) ...\n")
+	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
@@ -979,6 +979,9 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 				push!(pp, p)
 				vsize += 4Gadfly.inch
 				startj = endj + 1
+				if plotdata
+					deleteat!(pa, length(pa))
+				end
 			end
 		end
 		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
