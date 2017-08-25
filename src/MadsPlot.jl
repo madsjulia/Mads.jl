@@ -704,11 +704,12 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	return nothing
 end
 
-function spaghettiplots(madsdata::Associative, number_of_samples::Integer; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
+function spaghettiplots(madsdata::Associative, number_of_samples::Integer; seed::Integer=-1, kw...)
+	Mads.setseed(seed)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
-	spaghettiplots(madsdata::Associative, paramvalues; format=format, keyword=keyword, xtitle=xtitle, ytitle=ytitle, obs_plot_dots=obs_plot_dots, seed=seed, linewidth=linewidth, pointsize=pointsize)
+	spaghettiplots(madsdata::Associative, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
+function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -758,11 +759,19 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			paramdict[paramkey] = original
 		end
 		if !haskey( madsdata, "Wells" )
-			pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
+			if grayscale
+				pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
+					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+					Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
+					for i in 1:numberofsamples]...)
+			else
+				pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 					for i in 1:numberofsamples]...)
+			end
 			vsize = 4Gadfly.inch
 		else
 			pp = Array{Gadfly.Plot}(0)
@@ -789,12 +798,21 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 						end
 					end
 					endj += nTw
-					p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
+					if grayscale
+						p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
+							Gadfly.Guide.title(wellname),
+							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
+							Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
+							for i in 1:numberofsamples]...)
+					else
+						p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 							Gadfly.Guide.title(wellname),
 							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 							for i in 1:numberofsamples]...)
+					end
 					push!(pp, p)
 					vsize += 4Gadfly.inch
 					startj = endj + 1
@@ -845,11 +863,11 @@ Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="
 ```
 """ spaghettiplots
 
-function spaghettiplot(madsdata::Associative, number_of_samples::Integer; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
+function spaghettiplot(madsdata::Associative, number_of_samples::Integer; kw...)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
-	spaghettiplot(madsdata::Associative, paramvalues; plotdata=plotdata, format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, yfit=yfit, obs_plot_dots=obs_plot_dots, seed=seed, linewidth=linewidth, pointsize=pointsize)
+	spaghettiplot(madsdata::Associative, paramvalues; kw...)
 end
-function spaghettiplot(madsdata::Associative, dictarray::Associative; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
+function spaghettiplot(madsdata::Associative, dictarray::Associative; seed::Integer=-1, kw...)
 	Mads.setseed(seed)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
@@ -884,9 +902,9 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; plotdata::
 			return
 		end
 	end
-	spaghettiplot(madsdata::Associative, Y; plotdata=plotdata, format=format, filename=filename, keyword=keyword, xtitle=xtitle, ytitle=ytitle, yfit=yfit, obs_plot_dots=obs_plot_dots, seed=seed, linewidth=linewidth, pointsize=pointsize)
+	spaghettiplot(madsdata::Associative, Y; kw...)
 end
-function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt)
+function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -936,11 +954,19 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 			d = getobstarget(madsdata)
 			push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 		end
-		pl = Gadfly.plot(pa...,
-			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-			[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-			Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
-			for i in 1:numberofsamples]... )
+		if grayscale
+			pl = Gadfly.plot(pa...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+				Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
+				for i in 1:numberofsamples]... )
+		else
+			pl = Gadfly.plot(pa...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
+				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
+				for i in 1:numberofsamples]... )
+		end
 		vsize = 4Gadfly.inch
 	else
 		pp = Array{Gadfly.Plot}(0)
@@ -970,12 +996,21 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 					push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 				end
 				endj += nTw
-				p = Gadfly.plot(pa...,
+				if grayscale
+					p = Gadfly.plot(pa...,
+						Gadfly.Guide.title(wellname),
+						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
+						Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
+						for i in 1:numberofsamples]...)
+				else
+					p = Gadfly.plot(pa...,
 						Gadfly.Guide.title(wellname),
 						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
 						for i in 1:numberofsamples]...)
+				end
 				push!(pp, p)
 				vsize += 4Gadfly.inch
 				startj = endj + 1
