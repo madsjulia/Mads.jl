@@ -2,6 +2,7 @@ import JuMP
 import Ipopt
 
 function testme1(init::Vector, targets::Vector)
+	@assert length(init) == length(targets)
 	global x
 	global function myf1(a...)
 		sum((collect(a).-targets).^2)
@@ -9,7 +10,7 @@ function testme1(init::Vector, targets::Vector)
 
 	global m = JuMP.Model(solver=Ipopt.IpoptSolver())
 
-	global nvar = 12
+	global nvar = length(init)
 
 	JuMP.register(m, :myf1, nvar, myf1, autodiff=true)
 	@JuMP.variable(m, x[i=1:nvar], start=init[i])
@@ -27,6 +28,7 @@ function testme1(init::Vector, targets::Vector)
 end
 
 function testme2(init::Vector, targets::Vector)
+	@assert length(init) == length(targets)
 	nvar = length(init)
 	function myf2(a...)
 		sum((collect(a).-targets).^2)
