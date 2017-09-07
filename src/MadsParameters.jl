@@ -338,6 +338,33 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "idx"=>"index of the dictionary of arrays with initial model parameter values")))
 """ setparamsinit!
 
+"""
+Set initial optimized parameter guesses in the MADS problem dictionary for the Source class
+
+$(DocumentFunction.documentfunction(setparamsinit!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+             "paramdict"=>"dictionary with initial model parameter values",
+            "paramdictarray"=>"dictionary of arrays with initial model parameter values",
+            "idx"=>"index of the dictionary of arrays with initial model parameter values")))
+"""
+function setsourceinit!(madsdata::Associative, paramdictarray::Associative)
+	if haskey(madsdata, "Sources")
+		ns = length(madsdata["Sources"])
+		paramkeys = getparamkeys(madsdata)
+		for k in paramkeys
+			if haskey(paramdictarray, k) && ismatch(r"source[1-9]*_(.*)", k)
+				m = match(r"source([1-9])*_(.*)", k)
+				sn = parse(m.captures[1])
+				pk = m.captures[2]
+				if sn > 0 && sn < ns
+					sk = collect(keys(madsdata["Sources"][sn]))[1]
+					madsdata["Sources"][sn][sk][pk]["init"] = paramdictarray[k]
+				end
+			end
+		end
+	end
+end
+
 function getoptparams(madsdata::Associative)
 	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
 end
