@@ -199,9 +199,7 @@ Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.ge
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotlocalsa("w01shortexp")
 end
-Mads.quietoff()
 @Mads.stdouterrcapture Mads.calibrate(md, localsa=true, show_trace=true)
-Mads.quieton()
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_root("w01shortexp-"; path=pwd())

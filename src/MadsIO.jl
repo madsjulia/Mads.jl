@@ -493,7 +493,6 @@ end
 function setnewmadsfilename(filename::String)
 	dir = getdir(filename)
 	root = splitdir(getrootname(filename))[end]
-	@show root
 	if ismatch(r"-v[0-9]*$", root)
 		rm = match(r"-v([0-9]*)$", root)
 		v = parse(Int, rm.captures[1]) + 1
