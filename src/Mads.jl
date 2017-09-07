@@ -116,7 +116,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
-include("MadsSTDOUT.jl")
+include("MadsCapture.jl")
 include("MadsLog.jl")
 include("MadsHelp.jl")
 include("MadsCreate.jl")
