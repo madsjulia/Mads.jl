@@ -133,7 +133,7 @@ end
 
 
 """
-Calibrate
+Calibrate Mads model using a constrained Levenberg-Marquardt technique
 
 `Mads.calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
 
@@ -210,17 +210,3 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	end
 	return minimumdict, results
 end
-
-function minimize(f::Function, X::Vector; lowerbounds::Array{Float64,1}=(ones(length(X)) * -1e+8), upperbounds::Array{Float64,1}=ones(length(X)) * 1e+8, logtransformed::Array{Bool,1}=collect(falses(length(X))), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1)
-	f_lm, g_lm, o_lm = Mads.makelmfunctions(f)
-	indexlogtransformed = find(logtransformed)
-	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
-	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
-	initparams = Mads.asinetransform(X, lowerbounds, upperbounds, indexlogtransformed)
-	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
-	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
-	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, initparams, o_lm; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
-	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
-	return minimizer, results
-end
-
