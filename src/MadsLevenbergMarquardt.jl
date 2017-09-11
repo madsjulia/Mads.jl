@@ -97,16 +97,27 @@ function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
 	return sum(residuals .^ 2)
 end
 
-"""
-Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
-
-$(DocumentFunction.documentfunction(makelmfunctions;
-argtext=Dict("madsdata"=>"MADS problem dictionary")))
-
-Returns:
-
-- forward model, gradient, objective functions
-"""
+function makelmfunctions(f::Function)
+	f_lm = f
+	function g_lm(x::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+		nO = length(center)
+		if nO == 0
+			center = f_lm(x)
+			nO = length(center)
+		end
+		nP = length(x)
+		jacobian = Array{Float64}((nO, nP))
+		for i in 1:nP
+			xi = x[i]
+			x[i] += dx[i]
+			jacobian[:, i] = (f_lm(x) - center) / dx[i]
+			x[i] = xi
+		end
+		return jacobian
+	end
+	o_lm(x::Vector) = dot(x, x)
+	return f_lm, g_lm, o_lm
+end
 function makelmfunctions(madsdata::Associative)
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
@@ -207,6 +218,17 @@ function makelmfunctions(madsdata::Associative)
 	end
 	return f_lm, g_lm, o_lm
 end
+
+@doc """
+Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
+
+$(DocumentFunction.documentfunction(makelmfunctions;
+argtext=Dict("madsdata"=>"MADS problem dictionary", "f"=>"Function")))
+
+Returns:
+
+- forward model, gradient, objective functions
+""" makelmfunctions
 
 """
 Naive Levenberg-Marquardt optimization: get the LM parameter space step
