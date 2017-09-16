@@ -586,7 +586,7 @@ Returns:
 """
 function checkmodeloutputdirs(madsdata::Associative)
 	directories = Array{String}(0)
-	if haskey(madsdata, "Instructions") # Templates/Instructions
+	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]
 			push!(directories, getdir(filename))
@@ -632,14 +632,23 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
 function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
-	if haskey(madsdata, "Instructions") # Templates/Instructions
+	errorflag = false
+	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
+			filename = instruction["ins"]
+			if !isfile(filename)
+				warn("Instruction file $filename is missing!"); errorflag = true
+			end
 			filename = instruction["read"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
 	end
-	if haskey(madsdata, "Templates") # Templates/Instructions
+	if haskey(madsdata, "Templates") # Templates
 		for template in madsdata["Templates"]
+			filename = template["tpl"]
+			if !isfile(filename)
+				warn("Template file $filename is missing!"); errorflag = true
+			end
 			filename = template["write"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
@@ -690,6 +699,7 @@ function setmodelinputs(madsdata::Associative, parameters::Associative; path::St
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
 	end
+	errorflag && madscritical("There are missing files!")
 end
 
 """
