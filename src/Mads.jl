@@ -196,7 +196,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsPlot.jl")
 end
 
-if !haskey(ENV, "MADS_NO_PYPLOT")
+if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
 
