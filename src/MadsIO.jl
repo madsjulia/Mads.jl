@@ -100,12 +100,6 @@ function loadbigyamlfile(filename::String)
 		readindeces = 0:0
 		readflag = false
 	end
-	if yamlflag
-		io = IOBuffer(join(lines[parseindeces], '\n'))
-		madsdata = YAML.load(io)
-	else
-		madsdata = DataStructures.OrderedDict{String,Any}()
-	end
 	if readflag
 		obsdict = DataStructures.OrderedDict{String,Any}()
 		t = []
@@ -117,6 +111,12 @@ function loadbigyamlfile(filename::String)
 			else
 				push!(badlines, i)
 				continue
+			end
+			if contains(kw, "filename")
+				readflag = false
+				yamlflag = true
+				parseindeces = 1:nlines
+				break
 			end
 			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
@@ -136,6 +136,14 @@ function loadbigyamlfile(filename::String)
 				obsdict[kw]["max"] = float(mc.captures[1])
 			end
 		end
+	end
+	if yamlflag
+		io = IOBuffer(join(lines[parseindeces], '\n'))
+		madsdata = YAML.load(io)
+	else
+		madsdata = DataStructures.OrderedDict{String,Any}()
+	end
+	if readflag
 		madsdata["Observations"] = obsdict
 	end
 	return madsdata
