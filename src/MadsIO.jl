@@ -744,7 +744,7 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
 	missingkeys = Array{String}(0)
-	validtargets = (Mads.getobsweight(madsdata) .> 0) & map(!, isnan.(Mads.getobstarget(madsdata)))
+	validtargets = (Mads.getobsweight(madsdata) .> 0) .& map(!, isnan.(Mads.getobstarget(madsdata)))
 	for (k, v) in zip(obskeys, validtargets)
 		if !haskey(results, k) && v
 			push!(missingkeys, k)
