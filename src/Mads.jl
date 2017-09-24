@@ -101,6 +101,7 @@ executionwaittime = 0.0
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 nprocs_per_task_default = 1
 const madsdir = splitdir(Base.source_path())[1]
 

@@ -10,10 +10,12 @@ end
 quietdefault = true
 nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)]
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
 	nprocs_per_task_default = Mads.nprocs_per_task_default
 	madsservers = Mads.madsservers
+	madsservers2 = Mads.madsservers2
 end
 
 """
@@ -185,7 +187,7 @@ Mads.setprocs(4)
 Mads.setprocs(4, 8)
 Mads.setprocs(ntasks_per_node=4)
 Mads.setprocs(ntasks_per_node=32, mads_servers=true)
-Mads.setprocs(ntasks_per_node=64, nodenames=Mads.madsservers)
+Mads.setprocs(ntasks_per_node=64, nodenames=madsservers)
 Mads.setprocs(ntasks_per_node=64, nodenames=["madsmax", "madszem"])
 Mads.setprocs(ntasks_per_node=64, nodenames="wc[096-157,160,175]")
 Mads.setprocs(ntasks_per_node=64, mads_servers=true, exename="/home/monty/bin/julia", dir="/home/monty")
@@ -273,13 +275,13 @@ Run remote command on a series of servers
 
 $(DocumentFunction.documentfunction(runremote;
 argtext=Dict("cmd"=>"remote command",
-            "nodenames"=>"names of machines/nodes [default=`Mads.madsservers`]")))
+            "nodenames"=>"names of machines/nodes [default=`madsservers`]")))
 
 Returns:
 
 - output of running remote command
 """
-function runremote(cmd::String, nodenames::Array{String,1}=Mads.madsservers)
+function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
 	output = Array{String}(0)
 	for i in nodenames
 		try
@@ -299,9 +301,9 @@ end
 Check the number of processors on a series of servers
 
 $(DocumentFunction.documentfunction(madscores;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madscores(nodenames::Array{String,1}=Mads.madsservers)
+function madscores(nodenames::Array{String,1}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
@@ -309,9 +311,9 @@ end
 Check the uptime of a series of servers
 
 $(DocumentFunction.documentfunction(madsup;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madsup(nodenames::Array{String,1}=Mads.madsservers)
+function madsup(nodenames::Array{String,1}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
 end
 
@@ -319,8 +321,21 @@ end
 Check the load of a series of servers
 
 $(DocumentFunction.documentfunction(madsload;
-argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`Mads.madsservers`]")))
+argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madsload(nodenames::Array{String,1}=Mads.madsservers)
+function madsload(nodenames::Array{String,1}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
+end
+
+"""
+Generate a list of Mads servers
+
+$(DocumentFunction.documentfunction(setmadsservers;
+argtext=Dict("first"=>"first [default=`0`]", "last"=>"last [default=`18`]")))
+
+Returns
+- array string of mads servers
+"""
+function setmadsservers(first::Int=0, last::Int=18)
+	map(i->(@sprintf "mads%02d" i), first:last)
 end
