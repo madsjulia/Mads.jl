@@ -43,7 +43,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String="", exename::String="")
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String=pwd(), exename::String=Base.julia_cmd().exec[1])
 	if isdefined(:set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end
@@ -93,12 +93,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		end
 		sleep(0.1)
 		arguments = Dict()
-		if exename != ""
-			arguments[:exename] = exename
-		end
-		if dir != ""
-			arguments[:dir] = dir
-		end
+		arguments[:exename] = exename
+		arguments[:dir] = dir
 		if test
 			for i = 1:length(h)
 				info("Connecting to $(h[i]) ...")
