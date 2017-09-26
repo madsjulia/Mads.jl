@@ -639,7 +639,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
-function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
+function setmodelinputs(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); path::String=".")
 	errorflag = false
 	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
@@ -868,7 +868,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
-function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
+function writeparameters(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); respect_space=false)
 	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
 	for template in madsdata["Templates"]
