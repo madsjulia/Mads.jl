@@ -871,8 +871,20 @@ keytext=Dict("respect_space"=>"respect provided space in the template file to fi
 function writeparameters(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); respect_space=false)
 	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
-	for template in madsdata["Templates"]
-		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
+	changedir = false
+	if haskey(madsdata, "Templates")
+		for template in madsdata["Templates"]
+			if !isfile(template["tpl"])
+				cwd = pwd()
+				cd(Mads.getmadsproblemdir(madsdata))
+				changedir = true
+			end
+			writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
+			if changedir
+				cd(cwd)
+				changedir = false
+			end
+		end
 	end
 end
 

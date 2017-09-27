@@ -46,6 +46,7 @@ md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruct
 teforl1 = Mads.forward(md)
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
+Mads.writeparameters(md)
 tefor = Mads.forward(md)
 
 cwd = pwd()
