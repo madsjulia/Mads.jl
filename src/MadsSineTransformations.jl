@@ -1,18 +1,15 @@
 import DocumentFunction
 
-"""
-Arcsine transformation of model parameters
-
-$(DocumentFunction.documentfunction(asinetransform;
-argtext=Dict("params"=>"model parameters",
-			"lowerbounds"=>"lower bounds",
-			"upperbounds"=>"upper bounds",
-			"indexlogtransformed"=>"index vector of log-transformed parameters")))
-
-Returns:
-
-- Arcsine transformation of model parameters
-"""
+function asinetransform(madsdata::Associative, params::Vector)
+	paramkeys = getoptparamkeys(madsdata)
+	lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
+	upperbounds = Mads.getparamsmax(madsdata, paramkeys)
+	logtransformed = Mads.getparamslog(madsdata, paramkeys)
+	indexlogtransformed = find(logtransformed)
+	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
+	return Mads.asinetransform(params, lowerbounds, upperbounds, indexlogtransformed)
+end
 function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
 	sineparams = copy(params)
 	sineparams[indexlogtransformed] = log10.(sineparams[indexlogtransformed])
@@ -20,11 +17,43 @@ function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector
 	return sineparams
 end
 
-"""
+@doc """
+Arcsine transformation of model parameters
+
+$(DocumentFunction.documentfunction(asinetransform;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+			"params"=>"model parameters",
+			"lowerbounds"=>"lower bounds",
+			"upperbounds"=>"upper bounds",
+			"indexlogtransformed"=>"index vector of log-transformed parameters")))
+
+Returns:
+
+- Arcsine transformation of model parameters
+""" asinetransform
+
+function sinetransform(madsdata::Associative, params::Vector)
+	paramkeys = getoptparamkeys(madsdata)
+	lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
+	upperbounds = Mads.getparamsmax(madsdata, paramkeys)
+	logtransformed = Mads.getparamslog(madsdata, paramkeys)
+	indexlogtransformed = find(logtransformed)
+	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
+	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
+	return Mads.sinetransform(params, lowerbounds, upperbounds, indexlogtransformed)
+end
+function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
+	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin.(sineparams)) * .5) # untransformed parameters (regular parameter space)
+	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
+	return params
+end
+
+@doc """
 Sine transformation of model parameters
 
 $(DocumentFunction.documentfunction(sinetransform;
-argtext=Dict("sineparams"=>"model parameters",
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+			"sineparams"=>"model parameters",
 			"lowerbounds"=>"lower bounds",
 			"upperbounds"=>"upper bounds",
 			"indexlogtransformed"=>"index vector of log-transformed parameters")))
@@ -32,12 +61,7 @@ argtext=Dict("sineparams"=>"model parameters",
 Returns:
 
 - Sine transformation of model parameters
-"""
-function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
-	params = lowerbounds + (upperbounds - lowerbounds) .* ((1 + sin.(sineparams)) * .5) # untransformed parameters (regular parameter space)
-	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
-	return params
-end
+""" sinetransform
 
 """
 Sine transformation of a function

@@ -18,6 +18,8 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
 fp = Mads.forward(md; all=true)
+sp = Mads.asinetransform(md, Mads.getoptparams(md))
+Mads.sinetransform(md, sp)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotmadsproblem(md, keyword="test")

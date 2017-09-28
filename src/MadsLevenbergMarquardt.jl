@@ -398,7 +398,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	phi = Array{Float64}(np_lambda)
 	first_lambda = true
 	compute_jacobian = true
-	while (~converged && g_calls < maxJacobians && f_calls < maxEval)
+	failed = false
+	while(~failed && ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
 			J = Array{Float64}(0, 0)
 			try
@@ -407,9 +408,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				J = g(x)
 			end
 			if any(isnan, J)
-				Mads.madswarn("Provided Jacobian matrix contains NaN's")
+				Mads.madswarn("Provided Jacobian matrix contains NaN's!")
 				Base.display(J)
-				Mads.madscritical("Mads quits!")
+				Mads.madswarn("Optimization will be terminated!")
+				failed = true
+				continue
 			end
 			f_calls += length(x)
 			g_calls += 1
