@@ -108,10 +108,7 @@ function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Ve
 		if result != nothing
 			lineardx ./= sindx
 			for i = 1:size(result, 1)
-				for j = 1:size(result, 2)
-				# println(result[i, j])
-					result[i, j] *= lineardx[j]
-				end
+				result[i, :] .*= lineardx
 			end
 		end
 		return result
