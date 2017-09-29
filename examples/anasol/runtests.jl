@@ -18,8 +18,9 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
 fp = Mads.forward(md; all=true)
-sp = Mads.asinetransform(md, Mads.getoptparams(md))
-Mads.sinetransform(md, sp)
+rp = Mads.getoptparams(md)
+sp = Mads.asinetransform(md, rp)
+rp2 = Mads.sinetransform(md, sp)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotmadsproblem(md, keyword="test")
@@ -90,6 +91,7 @@ Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
 
 @Base.Test.testset "Observations" begin
+	@Base.Test.test isapprox(rp, rp2)
 	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
 	@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
 

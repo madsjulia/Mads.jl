@@ -100,8 +100,10 @@ Returns:
 function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1)
 	function sinetransformed(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
-		dxparams = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
-		lineardx = dxparams - params
+		dxparams1 = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
+		dxparams2 = sinetransform(sineparams .- sindx, lowerbounds, upperbounds, indexlogtransformed)
+		dxparams = maximum([dxparams1 dxparams2], 2)
+		lineardx = vec(dxparams .- params)
 		result = g(params; dx=lineardx, center=center)
 		if result != nothing
 			lineardx ./= sindx

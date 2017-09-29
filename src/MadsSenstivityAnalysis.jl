@@ -201,8 +201,6 @@ function localsa(madsdata::Associative; sinspace::Bool=true, keyword::String="",
 		end
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
-	@show J
-	Base.display(J)
 	JpJ = J' * J
 	covar = Array{Float64}(0)
 	try
