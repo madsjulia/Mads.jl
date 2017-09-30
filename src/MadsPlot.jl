@@ -138,7 +138,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	filename, format = setplotfileformat(filename, format)
 	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
 	if typeof(p) == Gadfly.Plot
-		Mads.display(p)
+		graphoutput && Mads.display(p)
 	end
 	return nothing
 end
@@ -314,7 +314,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
 		end
 		if typeof(pl) == Gadfly.Plot
-			Mads.display(pl)
+			display && Mads.display(pl)
 		else
 			display && Mads.display(filename)
 		end
@@ -404,9 +404,6 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 	try
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
-		if typeof(pl) == Gadfly.Plot #|| typeof(pl) == Compose.Context
-			Mads.display(pl)
-		end
 	catch e
 		printerrormsg(e)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
@@ -506,7 +503,7 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), p)
 	if typeof(p) == Gadfly.Plot
-		Mads.display(p)
+		graphoutput && Mads.display(p)
 	end
 	return nothing
 end
@@ -689,7 +686,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		p = Gadfly.vstack(pp...)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize ), p)
 		if typeof(p) == Gadfly.Plot
-			Mads.display(p)
+			graphoutput && Mads.display(p)
 		end
 	else
 		filename_root = Mads.getrootname(filename)
@@ -825,7 +822,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, vsize), pl)
 			if typeof(pl) == Gadfly.Plot
-				Mads.display(pl)
+				graphoutput && Mads.display(pl)
 			end
 		catch e
 			printerrormsg(e)
@@ -1032,7 +1029,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot
-		Mads.display(pl)
+		graphoutput && Mads.display(pl)
 	end
 	return nothing
 end
@@ -1135,7 +1132,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 			end
 		end
 		if typeof(pS) == Gadfly.Plot
-			Mads.display(pS)
+			graphoutput && Mads.display(pS)
 		end
 	catch e
 		printerrormsg(e)

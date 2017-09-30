@@ -5,6 +5,9 @@ end
 @Mads.tryimport Images
 
 function display(filename::String)
+	if !graphoutput
+		return
+	end
 	if !isfile(filename)
 		warn("File `$filename` is missing!")
 		return
