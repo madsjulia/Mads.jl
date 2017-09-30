@@ -171,7 +171,9 @@ else
 	warn("Mads plotting is disabled")
 end
 
-if !haskey(ENV, "MADS_TRAVIS")
+if haskey(ENV, "MADS_TRAVIS")
+	graphoutput = false
+else
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))

@@ -121,6 +121,9 @@ Returns:
 - kriging estimates at `x0mat`
 """
 function krige(x0mat::Matrix, X::Matrix, Z::Vector, cov::Function)
+    if size(X, 2) != length(Z)
+        error("number of points and observations don't match")
+    end
 	result = zeros(size(x0mat, 2))
 	covmat = getcovmat(X, cov)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
