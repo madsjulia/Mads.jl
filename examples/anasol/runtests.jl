@@ -42,12 +42,17 @@ end
 Mads.montecarlo(md; N=2)
 Mads.forwardgrid(md)
 if isdefined(Mads, :plotgrid)
-	Mads.plotgrid(md)
-	Mads.plotgrid(md; title="Grid")
-	s = Mads.forwardgrid(md)
-	delete!(md, "Grid")
-	@Mads.stdouterrcapture Mads.plotgrid(md, s)
-	@Mads.stdouterrcapture Mads.plotgrid(md)
+	try
+		Mads.plotgrid(md)
+		Mads.plotgrid(md; title="Grid")
+		s = Mads.forwardgrid(md)
+		delete!(md, "Grid")
+		@Mads.stdouterrcapture Mads.plotgrid(md, s)
+		@Mads.stdouterrcapture Mads.plotgrid(md)
+	catch errmsg
+		Mads.printerrormsg(errmsg)
+		warn("PyPlot problem!")
+	end
 end
 madsOf = Mads.of(md)
 residuals_results = Mads.residuals(md)
