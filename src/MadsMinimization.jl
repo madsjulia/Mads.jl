@@ -5,11 +5,11 @@ Minimize Julia function using a constrained Levenberg-Marquardt technique
 
 $(DocumentFunction.documentfunction(calibrate;
 argtext=Dict("f"=>"Julia function",
-            "x"=>"vector of function arguments containing initial guesses"),
+			"x"=>"vector of function arguments containing initial guesses"),
 keytext=Dict("lowerbounds"=>"vector of lower bounds of the function arguments",
-            "upperbounds"=>"vector of upper bounds of the function arguments",
-            "logtransformed"=>"boolean vector of the log-transformed function arguments",
-            "tolX"=>"parameter space tolerance [default=`1e-4`]",
+			"upperbounds"=>"vector of upper bounds of the function arguments",
+			"logtransformed"=>"boolean vector of the log-transformed function arguments",
+			"tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
 			"tolOF"=>"objective function tolerance [default=`1e-3`]",
 			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
