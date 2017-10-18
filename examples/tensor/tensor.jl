@@ -1,3 +1,4 @@
+import Mads
 md = Mads.loadmadsfile("w01-w13a_w20a-opt.mads")
 pd = Mads.getparamdict(md)
 srand(2017)

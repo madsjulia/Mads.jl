@@ -140,9 +140,6 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 		return
 	end
 	madsdata = copy(madsdatain)
-	nx = madsdata["Grid"]["xcount"]
-	ny = madsdata["Grid"]["ycount"]
-	nz = madsdata["Grid"]["zcount"]
 	xmin = madsdata["Grid"]["xmin"]
 	ymin = madsdata["Grid"]["ymin"]
 	zmin = madsdata["Grid"]["zmin"]
@@ -150,9 +147,28 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	ymax = madsdata["Grid"]["ymax"]
 	zmax = madsdata["Grid"]["zmax"]
 	time = madsdata["Grid"]["time"]
-	dx = nx == 1 ? 0 : dx = ( xmax - xmin ) / ( nx - 1 )
-	dy = ny == 1 ? 0 : dy = ( ymax - ymin ) / ( ny - 1 )
-	dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
+	if haskey(madsdata["Grid"], "dx")
+		dx = madsdata["Grid"]["dx"]
+		nx = convert(Int64, floor((xmax - xmin) / dx)) + 1
+	else
+		nx = madsdata["Grid"]["xcount"]
+		dx = nx == 1 ? 0 : dx = ( xmax - xmin ) / ( nx - 1 )
+	end
+	if haskey(madsdata["Grid"], "dy")
+		dy = madsdata["Grid"]["dy"]
+		ny = convert(Int64, floor((ymax - ymin) / dy)) + 1
+	else
+		ny = madsdata["Grid"]["ycount"]
+		dy = ny == 1 ? 0 : dy = ( ymax - ymin ) / ( ny - 1 )
+	end
+	if haskey(madsdata["Grid"], "dz")
+		dz = madsdata["Grid"]["dz"]
+		nz = convert(Int64, floor((zmax - zmin) / dz)) + 1
+	else
+		nz = madsdata["Grid"]["zcount"]
+		dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
+	end
+
 	x = xmin
 	dictwells = DataStructures.OrderedDict()
 	for i in 1:nx
@@ -180,6 +196,11 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 			end
 		end
 	end
+	resetdict = false
+	if haskey(madsdata, "Wells")
+		dictwells_orig = madsdata["Wells"]
+		resetdict = true
+	end
 	madsdata["Wells"] = dictwells
 	Mads.wells2observations!(madsdata)
 	f = Mads.makemadscommandfunction(madsdata)
@@ -192,6 +213,11 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 				s[i, j, k] = forward_results[obsname]
 			end
 		end
+	end
+	if resetdict
+		madsdata["Wells"] = dictwells_orig
+	else
+		delete!(madsdata, "Wells")
 	end
 	return s
 end
