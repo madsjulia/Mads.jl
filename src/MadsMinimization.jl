@@ -26,10 +26,12 @@ Returns:
 - vector with the optimal parameter values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function minimize(f::Function, x::Vector; lowerbounds::Array{Float64,1}=(ones(length(X)) * -1e+8), upperbounds::Array{Float64,1}=ones(length(X)) * 1e+8, logtransformed::Array{Bool,1}=collect(falses(length(X))), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1)
+function minimize(f::Function, x::Vector; lowerbounds::Array{Float64,1}=(ones(length(x)) * -1e+8), upperbounds::Array{Float64,1}=ones(length(x)) * 1e+8, logtransformed::Array{Bool,1}=collect(falses(length(x))), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(f)
 	lb = copy(lowerbounds)
 	ub = copy(upperbounds)
+	@assert !any(x .< lb)
+	@assert !any(x .> ub)
 	indexlogtransformed = find(logtransformed)
 	lb[indexlogtransformed] = log10.(lb[indexlogtransformed])
 	ub[indexlogtransformed] = log10.(ub[indexlogtransformed])
