@@ -26,7 +26,8 @@ Returns:
 - vector with the optimal parameter values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function minimize(f::Function, x::Vector; lowerbounds::Array{Float64,1}=(ones(length(x)) * -1e+8), upperbounds::Array{Float64,1}=ones(length(x)) * 1e+8, logtransformed::Array{Bool,1}=collect(falses(length(x))), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1)
+function minimize(f::Function, x::Vector; lowerbound::Number=-1e+8, lowerbounds::Array{Float64,1}=fill(float(lowerbound), length(x)), upperbound::Number=1e+8, upperbounds::Array{Float64,1}=fill(float(upperbound), length(x)), logtransform::Bool=false, logtransformed::Array{Bool,1}=fill(false, length(x)), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1, quiet::Bool=true)
+	!quiet && Mads.quietoff()
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(f)
 	lb = copy(lowerbounds)
 	ub = copy(upperbounds)
@@ -43,5 +44,6 @@ function minimize(f::Function, x::Vector; lowerbounds::Array{Float64,1}=(ones(le
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lb, ub, indexlogtransformed, sindx=sindx)
 	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, initparams, o_lm; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 	minimizer = Mads.sinetransform(results.minimizer, lb, ub, indexlogtransformed)
+	!quiet && Mads.quieton()
 	return minimizer, results
 end
