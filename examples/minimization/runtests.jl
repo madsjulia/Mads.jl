@@ -17,7 +17,7 @@ end
 minimizer_a1, results = Mads.minimize(func1, [2.]; upperbounds=[4.], lowerbounds=[0.], logtransformed=[false])
 minimizer_l1, results = Mads.minimize(func1, [2.]; upperbounds=[4.], lowerbounds=[1e-6], logtransformed=[true])
 
-minimizer_a2, results = Mads.minimize(func2, [1.5, 0.5]; upperbounds=[4.,1], lowerbounds=[0.,0.], logtransformed=[false])
+minimizer_a2, results = Mads.minimize(func2, [1.5, 0.5]; upperbounds=[4.,1], lowerbounds=[0.,0.], logtransformed=[false, false])
 minimizer_l2, results = Mads.minimize(func2, [1.5, 1.5]; upperbounds=[4.,2.], lowerbounds=[1e-6,1e-3], logtransformed=[true, true])
 
 @Base.Test.testset "Minimization" begin
