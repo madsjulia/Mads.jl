@@ -1230,7 +1230,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 			# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
 			if issubtype(typeof(InputData[k,2]), Distributions.Distribution)
 				# dist contains all data about distribution so this will apply any necessary distributions to X
-				X[:,k] = quantile(dist[k],X[:,k])
+				X[:,k] = quantile.(dist[k],X[:,k])
 			else
 				madscritical("eFAST error in assigning input data!")
 			end # End if
