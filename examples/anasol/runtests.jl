@@ -18,6 +18,9 @@ computeconcentrations = Mads.makecomputeconcentrations(md)
 paramdict = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 forward_preds = computeconcentrations(paramdict)
 fp = Mads.forward(md; all=true)
+rp = Mads.getoptparams(md)
+sp = Mads.asinetransform(md, rp)
+rp2 = Mads.sinetransform(md, sp)
 
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotmadsproblem(md, keyword="test")
@@ -39,12 +42,17 @@ end
 Mads.montecarlo(md; N=2)
 Mads.forwardgrid(md)
 if isdefined(Mads, :plotgrid)
-	Mads.plotgrid(md)
-	Mads.plotgrid(md; title="Grid")
-	s = Mads.forwardgrid(md)
-	delete!(md, "Grid")
-	@Mads.stdoutcapture Mads.plotgrid(md, s)
-	@Mads.stdoutcapture Mads.plotgrid(md)
+	try
+		Mads.plotgrid(md)
+		Mads.plotgrid(md; title="Grid")
+		s = Mads.forwardgrid(md)
+		delete!(md, "Grid")
+		@Mads.stdouterrcapture Mads.plotgrid(md, s)
+		@Mads.stdouterrcapture Mads.plotgrid(md)
+	catch errmsg
+		Mads.printerrormsg(errmsg)
+		warn("PyPlot problem!")
+	end
 end
 madsOf = Mads.of(md)
 residuals_results = Mads.residuals(md)
@@ -88,6 +96,7 @@ Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
 
 @Base.Test.testset "Observations" begin
+	@Base.Test.test isapprox(rp, rp2)
 	@Base.Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
 	@Base.Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
 
@@ -199,9 +208,7 @@ Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.ge
 if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotlocalsa("w01shortexp")
 end
-Mads.quietoff()
 @Mads.stdouterrcapture Mads.calibrate(md, localsa=true, show_trace=true)
-Mads.quieton()
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_root("w01shortexp-"; path=pwd())

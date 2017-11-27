@@ -100,12 +100,6 @@ function loadbigyamlfile(filename::String)
 		readindeces = 0:0
 		readflag = false
 	end
-	if yamlflag
-		io = IOBuffer(join(lines[parseindeces], '\n'))
-		madsdata = YAML.load(io)
-	else
-		madsdata = DataStructures.OrderedDict{String,Any}()
-	end
 	if readflag
 		obsdict = DataStructures.OrderedDict{String,Any}()
 		t = []
@@ -117,6 +111,12 @@ function loadbigyamlfile(filename::String)
 			else
 				push!(badlines, i)
 				continue
+			end
+			if contains(kw, "filename")
+				readflag = false
+				yamlflag = true
+				parseindeces = 1:nlines
+				break
 			end
 			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
@@ -136,6 +136,14 @@ function loadbigyamlfile(filename::String)
 				obsdict[kw]["max"] = float(mc.captures[1])
 			end
 		end
+	end
+	if yamlflag
+		io = IOBuffer(join(lines[parseindeces], '\n'))
+		madsdata = YAML.load(io)
+	else
+		madsdata = DataStructures.OrderedDict{String,Any}()
+	end
+	if readflag
 		madsdata["Observations"] = obsdict
 	end
 	return madsdata
@@ -493,12 +501,10 @@ end
 function setnewmadsfilename(filename::String)
 	dir = getdir(filename)
 	root = splitdir(getrootname(filename))[end]
-	if ismatch(r"-v[0-9].$", root)
-		rm = match(r"-v([0-9]).$", root)
-		l = rm.captures[1]
-		s = split(rm.match, "v")
-		v = parse(Int, s[2]) + 1
-		l = length(s[2])
+	if ismatch(r"-v[0-9]*$", root)
+		rm = match(r"-v([0-9]*)$", root)
+		v = parse(Int, rm.captures[1]) + 1
+		l = length(rm.captures[1])
 		f = "%0" * string(l) * "d"
 		filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
 	else
@@ -588,7 +594,7 @@ Returns:
 """
 function checkmodeloutputdirs(madsdata::Associative)
 	directories = Array{String}(0)
-	if haskey(madsdata, "Instructions") # Templates/Instructions
+	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]
 			push!(directories, getdir(filename))
@@ -633,15 +639,24 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
-function setmodelinputs(madsdata::Associative, parameters::Associative; path::String=".")
-	if haskey(madsdata, "Instructions") # Templates/Instructions
+function setmodelinputs(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); path::String=".")
+	errorflag = false
+	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
+			filename = instruction["ins"]
+			if !isfile(filename)
+				warn("Instruction file $filename is missing!"); errorflag = true
+			end
 			filename = instruction["read"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
 	end
-	if haskey(madsdata, "Templates") # Templates/Instructions
+	if haskey(madsdata, "Templates") # Templates
 		for template in madsdata["Templates"]
+			filename = template["tpl"]
+			if !isfile(filename)
+				warn("Template file $filename is missing!"); errorflag = true
+			end
 			filename = template["write"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
@@ -692,6 +707,7 @@ function setmodelinputs(madsdata::Associative, parameters::Associative; path::St
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
 	end
+	errorflag && madscritical("There are missing files!")
 end
 
 """
@@ -728,7 +744,7 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
 	missingkeys = Array{String}(0)
-	validtargets = (Mads.getobsweight(madsdata) .> 0) & (!isnan.(Mads.getobstarget(madsdata)))
+	validtargets = (Mads.getobsweight(madsdata) .> 0) .& map(!, isnan.(Mads.getobstarget(madsdata)))
 	for (k, v) in zip(obskeys, validtargets)
 		if !haskey(results, k) && v
 			push!(missingkeys, k)
@@ -852,11 +868,23 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
-function writeparameters(madsdata::Associative, parameters::Associative; respect_space=false)
+function writeparameters(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); respect_space=false)
 	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
-	for template in madsdata["Templates"]
-		writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
+	changedir = false
+	if haskey(madsdata, "Templates")
+		for template in madsdata["Templates"]
+			if !isfile(template["tpl"])
+				cwd = pwd()
+				cd(Mads.getmadsproblemdir(madsdata))
+				changedir = true
+			end
+			writeparametersviatemplate(paramsandexps, template["tpl"], template["write"]; respect_space=respect_space)
+			if changedir
+				cd(cwd)
+				changedir = false
+			end
+		end
 	end
 end
 

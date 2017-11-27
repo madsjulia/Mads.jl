@@ -49,7 +49,7 @@ Arguments:
   * seed : an optional seed to use when doing the randomized matrix factorization
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/GeostatInversion.jl#L37-L54' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/GeostatInversion.jl#L37-L54' class='documenter-source'>source</a><br>
 
 <a id='GeostatInversion.pcgadirect-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}' href='#GeostatInversion.pcgadirect-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}'>#</a>
 **`GeostatInversion.pcgadirect`** &mdash; *Method*.
@@ -76,7 +76,7 @@ Arguments:
   * callback : a function of the form `(params, observations)->...` that is called during each iteration
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/direct.jl#L1-L20' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/direct.jl#L1-L20' class='documenter-source'>source</a><br>
 
 <a id='GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}' href='#GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1}}'>#</a>
 **`GeostatInversion.pcgalsqr`** &mdash; *Method*.
@@ -102,7 +102,7 @@ Arguments:
   * xtol : convergence tolerence for the parameters
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br>
 
 <a id='GeostatInversion.rga-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1},Any}' href='#GeostatInversion.rga-Tuple{Function,Array{T,1},Array{T,1},Array{Array{Float64,1},1},Any,Array{T,1},Any}'>#</a>
 **`GeostatInversion.rga`** &mdash; *Method*.
@@ -132,7 +132,7 @@ Arguments:
   * callback : a function of the form `(params, observations)->...` that is called during each iteration
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/GeostatInversion.jl#L75-L97' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/GeostatInversion.jl#L75-L97' class='documenter-source'>source</a><br>
 
 
 <a id='Module-GeostatInversion.FDDerivatives-1'></a>
@@ -150,7 +150,7 @@ GeostatInversion.FDDerivatives module functions:
 Create Gradient function
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br>
 
 <a id='GeostatInversion.FDDerivatives.makejacobian' href='#GeostatInversion.FDDerivatives.makejacobian'>#</a>
 **`GeostatInversion.FDDerivatives.makejacobian`** &mdash; *Function*.
@@ -160,7 +160,7 @@ Create Gradient function
 Create Jacobian function
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br>
 
 
 <a id='Module-GeostatInversion.RandMatFact-1'></a>
@@ -178,7 +178,7 @@ GeostatInversion.RandMatFact module functions:
 Random SVD based on algorithm 5.1 from Halko et al.
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br>
 
 
 <a id='Module-GeostatInversion.FFTRF-1'></a>
@@ -188,7 +188,7 @@ Random SVD based on algorithm 5.1 from Halko et al.
 
 GeostatInversion.FFTRF module functions:
 
-<a id='GeostatInversion.FFTRF.reducek-Tuple{Any,Any}' href='#GeostatInversion.FFTRF.reducek-Tuple{Any,Any}'>#</a>
+<a id='GeostatInversion.FFTRF.reducek-Tuple{Any,Type{Val{N}}}' href='#GeostatInversion.FFTRF.reducek-Tuple{Any,Type{Val{N}}}'>#</a>
 **`GeostatInversion.FFTRF.reducek`** &mdash; *Method*.
 
 
@@ -196,5 +196,5 @@ GeostatInversion.FFTRF module functions:
 Reduce k
 
 
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/6d7a4fb6cb23b73c71f7a34e9ecd7a7d30292fda/src/FFTRF.jl#L6' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/tree/b059d7988abfc525c8733dd511ac92a0c8e45b2f/src/FFTRF.jl#L6' class='documenter-source'>source</a><br>
 

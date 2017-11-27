@@ -25,7 +25,7 @@ Arguments
   * `pmodel::SVR.svmmodel` : svm model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L296-L300' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L296-L300' class='documenter-source'>source</a><br>
 
 <a id='SVR.liboutput-Tuple{Ptr{UInt8}}' href='#SVR.liboutput-Tuple{Ptr{UInt8}}'>#</a>
 **`SVR.liboutput`** &mdash; *Method*.
@@ -43,7 +43,7 @@ Arguments
   * `str::Ptr{UInt8}` : string
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L90-L94' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L90-L94' class='documenter-source'>source</a><br>
 
 <a id='SVR.loadmodel-Tuple{String}' href='#SVR.loadmodel-Tuple{String}'>#</a>
 **`SVR.loadmodel`** &mdash; *Method*.
@@ -65,7 +65,7 @@ Returns:
   * SVM model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L258-L266' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L258-L266' class='documenter-source'>source</a><br>
 
 <a id='SVR.mapnodes-Tuple{Array}' href='#SVR.mapnodes-Tuple{Array}'>#</a>
 **`SVR.mapnodes`** &mdash; *Method*.
@@ -81,7 +81,7 @@ Arguments
   * `x::Array` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L180-L185' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L180-L185' class='documenter-source'>source</a><br>
 
 <a id='SVR.mapparam-Tuple{}' href='#SVR.mapparam-Tuple{}'>#</a>
 **`SVR.mapparam`** &mdash; *Method*.
@@ -118,7 +118,7 @@ Returns:
   * parameter
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L122-L142' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L122-L142' class='documenter-source'>source</a><br>
 
 <a id='SVR.predict-Tuple{SVR.svmmodel,Array}' href='#SVR.predict-Tuple{SVR.svmmodel,Array}'>#</a>
 **`SVR.predict`** &mdash; *Method*.
@@ -141,7 +141,7 @@ Return:
   * predicted dependent variables
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L232-L240' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L232-L240' class='documenter-source'>source</a><br>
 
 <a id='SVR.readlibsvmfile-Tuple{String}' href='#SVR.readlibsvmfile-Tuple{String}'>#</a>
 **`SVR.readlibsvmfile`** &mdash; *Method*.
@@ -164,7 +164,7 @@ Returns:
   * vector of dependent variables
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L310-L319' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L310-L319' class='documenter-source'>source</a><br>
 
 <a id='SVR.savemodel-Tuple{SVR.svmmodel,String}' href='#SVR.savemodel-Tuple{SVR.svmmodel,String}'>#</a>
 **`SVR.savemodel`** &mdash; *Method*.
@@ -187,7 +187,7 @@ Dumps:
   * file with saved model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L278-L286' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L278-L286' class='documenter-source'>source</a><br>
 
 <a id='SVR.train-Tuple{Array{T,1},Array}' href='#SVR.train-Tuple{Array{T,1},Array}'>#</a>
 **`SVR.train`** &mdash; *Method*.
@@ -226,5 +226,5 @@ Returns:
   * SVM model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/b87f141cb55bf70460519796b38927326ab4bf04/src/SVR.jl#L199-L207' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L199-L207' class='documenter-source'>source</a><br>
 

@@ -8,7 +8,7 @@ import Base.Test
 Mads.madsinfo("Optimization of Rosenbrock function ...")
 
 Mads.madsinfo("Nelder-Mead optimization (default) of the Rosenbrock function ...")
-results = Optim.optimize(fr, [0.0, 0.0])
+# results = Optim.optimize(fr, [0.0, 0.0])
 
 # Mads.madsinfo("Levenberg-Marquardt optimization in Optim module of the Rosenbrock function without sine transformation:")
 # results = Optim.LevenbergMarquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], show_trace=false)

@@ -4,6 +4,7 @@ Anasol
 BIGUQ
 AffineInvariantMCMC
 GeostatInversion
+Kriging
 MetaProgTools
 ReusableFunctions 0.2.6
 RobustPmap

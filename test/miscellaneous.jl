@@ -150,6 +150,7 @@ Mads.createmadsobservations(4, 2; filename="a.inst")
 Mads.rmfile("a.inst")
 
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
+Mads.setsindx!(Dict("Problem"=>Dict("sindx"=>0.001)), 0.1)
 
 if !haskey(ENV, "MADS_TRAVIS")
 	Mads.status()

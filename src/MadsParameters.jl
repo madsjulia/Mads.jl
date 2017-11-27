@@ -307,28 +307,7 @@ Returns:
 - the parameter values
 """ getparamsinit_max
 
-function setparamsinit!(madsdata::Associative, paramdict::Associative)
-	paramkeys = getparamkeys(madsdata)
-	for k in paramkeys
-		if haskey(paramdict, k)
-			if typeof(paramdict[k]) <: Number
-				madsdata["Parameters"][k]["init"] = paramdict[k]
-			else
-				madsdata["Parameters"][k]["init"] = paramdict[k][1]
-			end
-		end
-	end
-end
-function setparamsinit!(madsdata::Associative, paramdictarray::Associative, idx::Int)
-	paramkeys = getparamkeys(madsdata)
-	for k in paramkeys
-		if haskey(paramdictarray, k)
-			madsdata["Parameters"][k]["init"] = paramdictarray[k][idx]
-		end
-	end
-end
-
-@doc """
+"""
 Set initial optimized parameter guesses in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(setparamsinit!;
@@ -336,7 +315,51 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
              "paramdict"=>"dictionary with initial model parameter values",
             "paramdictarray"=>"dictionary of arrays with initial model parameter values",
             "idx"=>"index of the dictionary of arrays with initial model parameter values")))
-""" setparamsinit!
+"""
+function setparamsinit!(madsdata::Associative, paramdict::Associative, idx::Int=1)
+	paramkeys = getparamkeys(madsdata)
+	for k in paramkeys
+		if haskey(paramdict, k)
+			if typeof(paramdict[k]) <: Number
+				madsdata["Parameters"][k]["init"] = paramdict[k]
+			else
+				madsdata["Parameters"][k]["init"] = paramdict[k][idx]
+			end
+		end
+	end
+	setsourceinit!(madsdata, paramdict, idx)
+end
+
+"""
+Set initial optimized parameter guesses in the MADS problem dictionary for the Source class
+
+$(DocumentFunction.documentfunction(setparamsinit!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+             "paramdict"=>"dictionary with initial model parameter values",
+            "paramdictarray"=>"dictionary of arrays with initial model parameter values",
+            "idx"=>"index of the dictionary of arrays with initial model parameter values")))
+"""
+function setsourceinit!(madsdata::Associative, paramdict::Associative, idx::Int=1)
+	if haskey(madsdata, "Sources")
+		ns = length(madsdata["Sources"])
+		paramkeys = getparamkeys(madsdata)
+		for k in paramkeys
+			if haskey(paramdict, k) && ismatch(r"source[1-9]*_(.*)", k)
+				m = match(r"source([1-9])*_(.*)", k)
+				sn = parse(m.captures[1])
+				pk = m.captures[2]
+				if sn > 0 && sn < ns
+					sk = collect(keys(madsdata["Sources"][sn]))[1]
+					if typeof(paramdict[k]) <: Number
+						madsdata["Sources"][sn][sk][pk]["init"] = paramdict[k]
+					else
+						madsdata["Sources"][sn][sk][pk]["init"] = paramdict[k][idx]
+					end
+				end
+			end
+		end
+	end
+end
 
 function getoptparams(madsdata::Associative)
 	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))

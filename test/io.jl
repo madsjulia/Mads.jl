@@ -37,8 +37,8 @@ df = DataFrames.DataFrame()
 df[:Values] = rand(10) * realmax(Float64)
 Mads.maxtorealmax!(df)
 
-@Mads.stdoutcapture Mads.gettime(Dict("o1"=>Dict("c"=>1)))
-@Mads.stdoutcapture resultshouldbenan = Mads.getweight(Dict("ww"=>10))
+@Mads.stdouterrcapture Mads.gettime(Dict("o1"=>Dict("c"=>1)))
+@Mads.stdouterrcapture resultshouldbenan = Mads.getweight(Dict("ww"=>10))
 
 # Begin the main test block
 @Base.Test.testset "IO" begin

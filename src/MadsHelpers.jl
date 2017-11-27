@@ -268,10 +268,10 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 Returns:
 
-- sin-space dx
+- sin-space dx value
 """
 function getsindx(madsdata::Associative)
-	sindx = 0.1
+	sindx = sindxdefault
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
 		if typeof(sindx) == String
@@ -279,6 +279,37 @@ function getsindx(madsdata::Associative)
 		end
 	end
 	return sindx
+end
+
+"""
+Set sin-space dx
+
+$(DocumentFunction.documentfunction(setsindx!;
+argtext=Dict("madsdata"=>"MADS problem dictionary", "sindx"=>"sin-space dx value")))
+
+Returns:
+
+- nothing
+"""
+function setsindx!(madsdata::Associative, sindx::Number)
+	setsindx(sindx)
+	if Mads.haskeyword(madsdata, "sindx")
+		madsdata["Problem"]["sindx"] = sindx
+	end
+end
+
+"""
+Set sin-space dx
+
+$(DocumentFunction.documentfunction(setsindx;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+
+Returns:
+
+- nothing
+"""
+function setsindx(sindx::Number)
+	sindxdefault = sindx
 end
 
 """

@@ -29,7 +29,7 @@ end
 """
 Mads Modules: $madsmodules
 """
-madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
 import GeostatInversion
 import SVR
@@ -98,9 +98,11 @@ debuglevel = 1
 modelruns = 0
 madsinputfile = ""
 executionwaittime = 0.0
+sindxdefault = 0.1
 create_tests = false # dangerous if true
 long_tests = false # execute long tests
 madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 nprocs_per_task_default = 1
 const madsdir = splitdir(Base.source_path())[1]
 
@@ -116,7 +118,7 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
-include("MadsSTDOUT.jl")
+include("MadsCapture.jl")
 include("MadsLog.jl")
 include("MadsHelp.jl")
 include("MadsCreate.jl")
@@ -132,6 +134,7 @@ include("MadsForward.jl")
 include("MadsFunc.jl")
 include("MadsExecute.jl")
 include("MadsCalibrate.jl")
+include("MadsMinimization.jl")
 include("MadsLevenbergMarquardt.jl")
 include("MadsMonteCarlo.jl")
 include("MadsKriging.jl")
@@ -169,7 +172,9 @@ else
 	warn("Mads plotting is disabled")
 end
 
-if !haskey(ENV, "MADS_TRAVIS")
+if haskey(ENV, "MADS_TRAVIS")
+	graphoutput = false
+else
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))
@@ -195,7 +200,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsPlot.jl")
 end
 
-if !haskey(ENV, "MADS_NO_PYPLOT")
+if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
 

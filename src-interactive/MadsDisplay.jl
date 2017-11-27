@@ -1,9 +1,13 @@
 if !haskey(ENV, "MADS_NO_GADFLY")
 	@Mads.tryimport Gadfly
+	@Mads.tryimport Compose
 end
 @Mads.tryimport Images
 
 function display(filename::String)
+	if !graphoutput
+		return
+	end
 	if !isfile(filename)
 		warn("File `$filename` is missing!")
 		return
@@ -63,11 +67,16 @@ if isdefined(:Gadfly)
 			println()
 		end
 	end
+	function display(p::Compose.Context)
+		if graphoutput
+			Compose.draw(Compose.PNG(), p)
+		end
+	end
 end
 
 @doc """
 Display image file
 
 $(DocumentFunction.documentfunction(display;
-argtext=Dict("filename"=>"image file name")))
+argtext=Dict("filename"=>"image file name","p"=>"plotting object")))
 """ display

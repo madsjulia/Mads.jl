@@ -68,5 +68,6 @@ svrread()
 svrclean()
 
 Mads.rmdir(joinpath(workdir, "svrmodels"))
+Mads.rmdir("svrmodels")
 
 :passed

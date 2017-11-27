@@ -6,22 +6,22 @@ Calibrate with random initial guesses
 
 $(DocumentFunction.documentfunction(calibraterandom;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "numberofsamples"=>"number of random initial samples [default=`1`]"),
+			"numberofsamples"=>"number of random initial samples [default=`1`]"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
-            "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"objective function tolerance [default=`1e-3`]",
-            "maxEval"=>"maximum number of model evaluations [default=`1000`]",
-            "maxIter"=>"maximum number of optimization iterations [default=`100`]",
-            "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
-            "lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
-            "np_lambda"=>"number of parallel lambda solves [default=`10`]",
-            "show_trace"=>"shows solution trace [default=`false`]",
-            "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
-            "seed"=>"random seed [default=`0`]",
-            "quiet"=>"[default=`true`]",
-            "all"=>"all model results are returned [default=`false`]",
-            "save_results"=>"save intermediate results [default=`true`]")))
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
+			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
+			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
+			"lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
+			"lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
+			"show_trace"=>"shows solution trace [default=`false`]",
+			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
+			"seed"=>"random seed [default=`0`]",
+			"quiet"=>"[default=`true`]",
+			"all"=>"all model results are returned [default=`false`]",
+			"save_results"=>"save intermediate results [default=`true`]")))
 
 Returns:
 
@@ -37,10 +37,10 @@ Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=10
 """
 function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
-    paramdict = Mads.getparamdict(madsdata)
-    paramsoptdict = copy(paramdict)
+	paramdict = Mads.getparamdict(madsdata)
+	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-    allresults = Array{Float64}(0)
+	allresults = Array{Float64}(0)
 	local bestparameters
 	local bestresult
 	bestphi = Inf
@@ -79,22 +79,22 @@ Calibrate with random initial guesses in parallel
 
 $(DocumentFunction.documentfunction(calibraterandom_parallel;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "numberofsamples"=>"number of random initial samples [default=`1`]"),
+			"numberofsamples"=>"number of random initial samples [default=`1`]"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
-            "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"objective function tolerance [default=`1e-3`]",
-            "maxEval"=>"maximum number of model evaluations [default=`1000`]",
-            "maxIter"=>"maximum number of optimization iterations [default=`100`]",
-            "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
-            "lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
-            "np_lambda"=>"number of parallel lambda solves [default=`10`]",
-            "show_trace"=>"shows solution trace [default=`false`]",
-            "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
-            "seed"=>"random seed [default=`0`]",
-            "quiet"=>"suppress output [default=`true`]",
-            "save_results"=>"save intermediate results [default=`true`]",
-            "localsa"=>"perform local sensitivity analysis [default=`false`]")))
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
+			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
+			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
+			"lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
+			"lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
+			"show_trace"=>"shows solution trace [default=`false`]",
+			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
+			"seed"=>"random seed [default=`0`]",
+			"quiet"=>"suppress output [default=`true`]",
+			"save_results"=>"save intermediate results [default=`true`]",
+			"localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
 
@@ -133,25 +133,25 @@ end
 
 
 """
-Calibrate
+Calibrate Mads model using a constrained Levenberg-Marquardt technique
 
 `Mads.calibrate(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)`
 
 $(DocumentFunction.documentfunction(calibrate;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
-            "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"objective function tolerance [default=`1e-3`]",
-            "maxEval"=>"maximum number of model evaluations [default=`1000`]",
-            "maxIter"=>"maximum number of optimization iterations [default=`100`]",
-            "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
-            "lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
-            "np_lambda"=>"number of parallel lambda solves [default=`10`]",
-            "show_trace"=>"shows solution trace [default=`false`]",
-            "usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
-            "save_results"=>"save intermediate results [default=`true`]",
-            "localsa"=>"perform local sensitivity analysis [default=`false`]")))
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
+			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
+			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
+			"lambda"=>"initial Levenberg-Marquardt lambda [default=`100.0`]",
+			"lambda_mu"=>"lambda multiplication factor [default=`10.0`]",
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
+			"show_trace"=>"shows solution trace [default=`false`]",
+			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
+			"save_results"=>"save intermediate results [default=`true`]",
+			"localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
 
@@ -203,11 +203,10 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackiteration=interationcallback, callbackjacobian=jacobiancallback)
 	end
 	global modelruns += results.f_calls
-	minimum = sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
-	nonoptparamkeys = Mads.getnonoptparamkeys(madsdata)
+	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 	minimumdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
-		minimumdict[optparamkeys[i]] = minimum[i]
+		minimumdict[optparamkeys[i]] = minimizer[i]
 	end
 	return minimumdict, results
 end

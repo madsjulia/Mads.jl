@@ -4,16 +4,22 @@ import DocumentFunction
 Capture STDOUT of a block
 """
 macro stdoutcapture(block)
-	quote
-		if ccall(:jl_generating_output, Cint, ()) == 0
-			outputoriginal = STDOUT;
-			(outR, outW) = redirect_stdout();
-			outputreader = @async readstring(outR);
+	if quiet
+		quote
+			if ccall(:jl_generating_output, Cint, ()) == 0
+				outputoriginal = STDOUT;
+				(outR, outW) = redirect_stdout();
+				outputreader = @async readstring(outR);
+				evalvalue = $(esc(block))
+				redirect_stdout(outputoriginal);
+				close(outW);
+				close(outR);
+				return evalvalue
+			end
+		end
+	else
+		quote
 			evalvalue = $(esc(block))
-			redirect_stdout(outputoriginal);
-			close(outW);
-			close(outR);
-			return evalvalue
 		end
 	end
 end
@@ -22,16 +28,22 @@ end
 Capture STDERR of a block
 """
 macro stderrcapture(block)
-	quote
-		if ccall(:jl_generating_output, Cint, ()) == 0
-			errororiginal = STDERR;
-			(errR, errW) = redirect_stderr();
-			errorreader = @async readstring(errR);
+	if quiet
+		quote
+			if ccall(:jl_generating_output, Cint, ()) == 0
+				errororiginal = STDERR;
+				(errR, errW) = redirect_stderr();
+				errorreader = @async readstring(errR);
+				evalvalue = $(esc(block))
+				redirect_stderr(errororiginal);
+				close(errW);
+				close(errR);
+				return evalvalue
+			end
+		end
+	else
+		quote
 			evalvalue = $(esc(block))
-			redirect_stderr(errororiginal);
-			close(errW);
-			close(errR);
-			return evalvalue
 		end
 	end
 end
@@ -40,22 +52,28 @@ end
 Capture STDERR & STDERR of a block
 """
 macro stdouterrcapture(block)
-	quote
-		if ccall(:jl_generating_output, Cint, ()) == 0
-			outputoriginal = STDOUT;
-			(outR, outW) = redirect_stdout();
-			outputreader = @async readstring(outR);
-			errororiginal = STDERR;
-			(errR, errW) = redirect_stderr();
-			errorreader = @async readstring(errR);
+	if quiet
+		quote
+			if ccall(:jl_generating_output, Cint, ()) == 0
+				outputoriginal = STDOUT;
+				(outR, outW) = redirect_stdout();
+				outputreader = @async readstring(outR);
+				errororiginal = STDERR;
+				(errR, errW) = redirect_stderr();
+				errorreader = @async readstring(errR);
+				evalvalue = $(esc(block))
+				redirect_stdout(outputoriginal);
+				close(outW);
+				close(outR);
+				redirect_stderr(errororiginal);
+				close(errW);
+				close(errR);
+				return evalvalue
+			end
+		end
+	else
+		quote
 			evalvalue = $(esc(block))
-			redirect_stdout(outputoriginal);
-			close(outW);
-			close(outR);
-			redirect_stderr(errororiginal);
-			close(errW);
-			close(errR);
-			return evalvalue
 		end
 	end
 end
