@@ -266,13 +266,12 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false)
+function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
 	if observations_separate
 		madsdata2 = deepcopy(madsdata)
-		filenameobs = getrootname(filename; version=true) * "-observations.yaml"
 		if !isfile(filenameobs)
 			printobservations(madsdata, filenameobs)
 		else
@@ -886,6 +885,10 @@ function writeparameters(madsdata::Associative, parameters::Associative=Mads.get
 			end
 		end
 	end
+end
+
+function writeparameters(madsdata::Associative; respect_space=false)
+	writeparameters(madsdata, Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata))); respect_space=respect_space)
 end
 
 """
