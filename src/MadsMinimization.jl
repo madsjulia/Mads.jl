@@ -41,7 +41,7 @@ function minimize(f::Function, x::Vector; lowerbound::Number=-1e+8, lowerbounds:
 	ub[indexlogtransformed] = log10.(ub[indexlogtransformed])
 	initparams = Mads.asinetransform(x, lb, ub, indexlogtransformed)
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lb, ub, indexlogtransformed)
-	g_lm_sin = Mads.sinetransformgradient(g_lm, lb, ub, indexlogtransformed, sindx=sindx)
+	g_lm_sin = Mads.sinetransformgradient(g_lm, lb, ub, indexlogtransformed; sindx=sindx)
 	results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, initparams, o_lm; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 	minimizer = Mads.sinetransform(results.minimizer, lb, ub, indexlogtransformed)
 	!quiet && Mads.quieton()

@@ -118,7 +118,7 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0))
+function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{Float64}(nP, nk)
@@ -173,7 +173,7 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 		return vec(E)
 	end
 
-	function mf_g_lm(x::Vector)
+	function mf_g_lm(x::Vector; dx=nothing, center=nothing)
 		W, H = mf_reshape(x)
 		Wb = zeros(nP, nk)
 		Hb = zeros(nk, nC)
@@ -198,7 +198,7 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 	end
 
 	mf_lm_sin = Mads.sinetransformfunction(mf_lm, lowerbounds, upperbounds, indexlogtransformed)
-	mf_g_lm_sin = Mads.sinetransformfunction(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
+	mf_g_lm_sin = Mads.sinetransformgradient(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	phi_best = Inf
 	for i = 1:retries
 		if retries > 1
@@ -207,9 +207,9 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 			x = [W_init; H_init]
 		end
 		if mads
-			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxEval=maxiter, maxIter=maxiter, maxJacobians=maxiter, tolX=tol, tolG=1e-16)
+			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 		else
-			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxiter)
+			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxIter)
 		end
 		phi = r.minimum
 		# Base.display(r)
