@@ -10,8 +10,8 @@ end
 quietdefault = true
 nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madszem", "madskil", "madsart", "madsend"] # madsdam is out
-madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)]
-madsserversall = ["madsmax", "madsmen", "madszem", "madskil", "madsart", "madsend", "madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)] # madsdam is out
+madsservers2 = vec(["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)])
+madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)]) # madsdam is out
 if isdefined(:Mads)
 	quietdefault = Mads.quiet
 	nprocs_per_task_default = Mads.nprocs_per_task_default
