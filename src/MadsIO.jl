@@ -1130,7 +1130,6 @@ argtext=Dict("filename"=>"file name",
             "dirtarget"=>"target directory")))
 """
 function symlinkdir(filename::String, dirtarget::String, dirsource::String)
-	@show dirsource
 	filenametarget = joinpath(dirtarget, filename)
 	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
 		symlink(joinpath(dirsource, filename), filenametarget)
