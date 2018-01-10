@@ -31,9 +31,9 @@ Mads Modules: $madsmodules
 """
 madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
+import DocumentFunction
 import GeostatInversion
 import SVR
-import DocumentFunction
 
 include("MadsHelpers.jl")
 

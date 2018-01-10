@@ -1114,7 +1114,7 @@ argtext=Dict("dirsource"=>"source directory",
 function symlinkdirfiles(dirsource::String, dirtarget::String)
 	for f in readdir(dirsource)
 		if !isdir(f)
-			symlinkdir(f, dirtarget)
+			symlinkdir(f, dirtarget, dirsource)
 		else
 			Base.mkdir(joinpath(dirtarget, f))
 			symlinkdirfiles(f, joinpath(dirtarget, f))
@@ -1129,10 +1129,11 @@ $(DocumentFunction.documentfunction(symlinkdir;
 argtext=Dict("filename"=>"file name",
             "dirtarget"=>"target directory")))
 """
-function symlinkdir(filename::String, dirtarget::String)
+function symlinkdir(filename::String, dirtarget::String, dirsource::String)
+	@show dirsource
 	filenametarget = joinpath(dirtarget, filename)
 	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
-		symlink(abspath(filename), filenametarget)
+		symlink(joinpath(dirsource, filename), filenametarget)
 	end
 end
 
