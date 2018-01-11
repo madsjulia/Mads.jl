@@ -1114,7 +1114,7 @@ argtext=Dict("dirsource"=>"source directory",
 function symlinkdirfiles(dirsource::String, dirtarget::String)
 	for f in readdir(dirsource)
 		if !isdir(f)
-			symlinkdir(f, dirtarget, dirsource)
+			symlinkdir(f, dirtarget, abspath(dirsource))
 		else
 			Base.mkdir(joinpath(dirtarget, f))
 			symlinkdirfiles(f, joinpath(dirtarget, f))
