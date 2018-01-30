@@ -887,10 +887,6 @@ function writeparameters(madsdata::Associative, parameters::Associative=Mads.get
 	end
 end
 
-function writeparameters(madsdata::Associative; respect_space=false)
-	writeparameters(madsdata, Dict(zip(Mads.getparamkeys(madsdata), Mads.getparamsinit(madsdata))); respect_space=respect_space)
-end
-
 """
 Convert an instruction line in the Mads instruction file into regular expressions
 
