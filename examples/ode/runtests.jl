@@ -10,7 +10,7 @@ import Base.Test
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
-	function func(f, y, p, t) # function needed by the ODE solver
+	function func(t, y, f) # function needed by the ODE solver
 		# ODE: x''[t] == -\omega^2 * x[t] - k * x'[t]
 		f[1] = y[2] # u' = v
 		f[2] = -omega * omega * y[1] - k * y[2] # v' = -omega^2*u - k*v
