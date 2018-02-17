@@ -1105,7 +1105,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 				color = ["$name $i" for j in 1:nT])
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.colorkey(title))
+				Gadfly.Guide.ColorKey(title=title))
 		else
 			pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
 				Gadfly.Geom.line,
