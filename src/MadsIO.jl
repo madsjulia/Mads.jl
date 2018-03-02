@@ -743,7 +743,7 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
 	missingkeys = Array{String}(0)
-	validtargets = (Mads.getobsweight(madsdata) .> 0) .& map(!, isnan.(Mads.getobstarget(madsdata)))
+	validtargets = (Mads.getobsweight(madsdata) .> 0) .& .!isnan.(Mads.getobstarget(madsdata))
 	for (k, v) in zip(obskeys, validtargets)
 		if !haskey(results, k) && v
 			push!(missingkeys, k)
@@ -852,9 +852,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 			madsinfo("Replacing " * varname * " -> " * s, 1)
 		end
 		write(outfile, splitline[end]) # write the rest of the line after the last separator
-		if VERSION >= v"0.6.0-dev.2283" # julia PR #20203
-			write(outfile, "\n")
-		end
+		write(outfile, "\n")
 	end
 	close(outfile)
 end
