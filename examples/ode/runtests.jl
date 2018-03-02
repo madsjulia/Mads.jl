@@ -18,7 +18,7 @@ import Base.Test
 	return func
 end
 
-if isdefined(:OrdinaryDiffEq)
+if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 	# load parameter data from MADS YAML file
 	Mads.madsinfo("Loading data ...")
 	workdir = Mads.getmadsdir() # get the directory where the problem is executed

@@ -947,6 +947,9 @@ Returns:
 - true or false
 """
 function obslineismatch(obsline::String, regexs::Array{Regex, 1})
+	if length(regexs) == 0
+		return false
+	end
 	bigregex = Regex(string(map(x->x.pattern, regexs)...))
 	return ismatch(bigregex, obsline)
 end
@@ -1015,6 +1018,9 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 			continue
 		end
 		regexs, obsnames, getparamhere = instline2regexs(instline)
+		if length(regexs) == 0
+			continue
+		end
 		gotmatch = false
 		while !gotmatch && !done(obslineitr, state)
 			obsline, state = next(obslineitr, state)
