@@ -4,7 +4,7 @@ import DataStructures
 
 workdir = joinpath(Mads.madsdir, "..", "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
-goodresultsfile = VERSION >= v"0.6.0" ? "sasvr.jld" : "sasvr-old.jld"
+goodresultsfile = "sasvr.jld"
 
 srand(2017)
 

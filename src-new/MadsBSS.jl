@@ -1,7 +1,7 @@
 import DocumentFunction
 import NMF
 import JuMP
-import Optim
+import LsqFit
 @Mads.tryimport Ipopt
 
 """
@@ -209,7 +209,7 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 		if mads
 			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 		else
-			r = Optim.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxIter)
+			r = LsqFit.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxIter)
 		end
 		phi = r.minimum
 		# Base.display(r)

@@ -82,18 +82,13 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 		try
 			madscommandfunction = madsdatacommandfunction(madsdata_in)
 		catch errmsg
-			if VERSION >= v"0.6.0"
-				try
-					madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
-				catch errmsg
-					printerrormsg(errmsg)
-					Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
-				end
+			try
 				madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
-			else
+			catch errmsg
 				printerrormsg(errmsg)
 				Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
 			end
+			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
 		end
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
@@ -177,7 +172,7 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						results = convert(DataStructures.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
-						if VERSION >= v"0.6.0" && !latest
+						if !latest
 							latest = true; attempt = 0
 						else
 							if attempt > 3
@@ -263,18 +258,12 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 		try
 			out = madscommandfunction(parameterswithexpressions)
 		catch errmsg
-			if VERSION >= v"0.6.0"
-				try
-					out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
-				catch errmsg
-					printerrormsg(errmsg)
-					warn("Failed Dir: $(pwd())")
-					Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
-				end
-			else
+			try
+				out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
+			catch errmsg
 				printerrormsg(errmsg)
 				warn("Failed Dir: $(pwd())")
-				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.5)!")
+				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
 			end
 		end
 		return out

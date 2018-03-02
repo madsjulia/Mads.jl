@@ -1,6 +1,6 @@
 import RobustPmap
 import DataStructures
-import Optim
+import LsqFit
 import DocumentFunction
 
 function residuals(madsdata::Associative, resultvec::Vector)
@@ -24,7 +24,7 @@ function residuals(madsdata::Associative, resultvec::Vector)
 		rmin[rmin .> 0] = 0
 		residuals .+= (rmax .+ rmin)
 	end
-	return residuals[map(!, isn)]
+	return residuals[.!isn]
 end
 function residuals(madsdata::Associative, resultdict::Associative)
 	residuals(madsdata, collect(values(resultdict)))
@@ -306,7 +306,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}
 			break
 		end
 	end
-	return Optim.MultivariateOptimizationResults("Naive Levenberg-Marquardt", x0, currentx, currentsse, maxIter, false, false, 0.0, false, 0.0, false, 0.0, true, Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}(), nEval, maxIter, 0)
+	return LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, currentx, currentsse, maxIter, false, false, 0.0, 0.0, false, 0.0, 0.0, true, 0.0, 0.0, true, LsqFit.OptimizationTrace{typeof(LsqFit.LevenbergMarquardt())}(), nEval, maxIter, 0)
 end
 
 """
@@ -384,10 +384,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	Mads.madsoutput("Initial OF: $residual\n");
 
 	# Maintain a trace of the system.
-	tr = Optim.OptimizationTrace{typeof(Optim.LevenbergMarquardt())}()
+	tr = LsqFit.OptimizationTrace{typeof(LsqFit.LevenbergMarquardt())}()
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
-		os = Optim.OptimizationState{typeof(Optim.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
+		os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 		push!(tr, os)
 		println(os)
 	end
@@ -563,7 +563,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		if !Mads.quiet && show_trace
 			gradnorm = norm(J'*fcur, Inf)
 			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
-			os = Optim.OptimizationState{typeof(Optim.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
+			os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 			push!(tr, os)
 			println(os)
 		end
@@ -586,5 +586,5 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 		converged = g_converged | x_converged | of_converged
 	end
-	Optim.MultivariateOptimizationResults("MADS Levenberg-Marquardt", x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, of_converged, tolOF, g_converged, tolG, true, tr, f_calls, g_calls, 0)
+	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, 0.0, of_converged, tolOF, 0.0, g_converged, tolG, 0.0, false, tr, f_calls, g_calls, 0)
 end
