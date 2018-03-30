@@ -36,6 +36,7 @@ import GeostatInversion
 import SVR
 
 include("MadsHelpers.jl")
+include("MadsCapture.jl")
 
 "Try to import a module"
 macro tryimport(s::Symbol)
@@ -118,7 +119,34 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	quiet = false
 end
 
-include("MadsCapture.jl")
+if !haskey(ENV, "MADS_NO_PLOT")
+	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
+		@Mads.tryimport PyCall
+		@Mads.tryimport PyPlot
+		if !isdefined(:PyPlot)
+			ENV["MADS_NO_PYPLOT"] = ""
+		end
+	end
+	if !haskey(ENV, "MADS_NO_GADFLY")
+		@Mads.tryimport Gadfly
+		if !isdefined(:Gadfly)
+			ENV["MADS_NO_GADFLY"] = ""
+		end
+	end
+else
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
+	ENV["MADS_NO_DISPLAY"] = ""
+	graphoutput = false
+	warn("Mads plotting is disabled")
+end
+
+if Mads.pkgversion("Gadfly") == v"0.6.1"
+	ENV["MADS_NO_GADFLY"] = ""
+	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
+	warn("Gadfly plotting is disabled!")
+end
+
 include("MadsLog.jl")
 include("MadsHelp.jl")
 include("MadsCreate.jl")
@@ -144,34 +172,6 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 
-if Mads.pkgversion("Gadfly") == v"0.6.1"
-	ENV["MADS_NO_GADFLY"] = ""
-	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
-	warn("Gadfly plotting is disabled!")
-end
-
-if !haskey(ENV, "MADS_NO_PLOT")
-	if !haskey(ENV, "MADS_NO_GADFLY")
-		@Mads.tryimport Gadfly
-		if !isdefined(:Gadfly)
-			ENV["MADS_NO_GADFLY"] = ""
-		end
-	end
-	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-		@Mads.tryimport PyCall
-		@Mads.tryimport PyPlot
-		if !isdefined(:PyPlot)
-			ENV["MADS_NO_PYPLOT"] = ""
-		end
-	end
-else
-	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
-	ENV["MADS_NO_DISPLAY"] = ""
-	graphoutput = false
-	warn("Mads plotting is disabled")
-end
-
 if haskey(ENV, "MADS_TRAVIS")
 	graphoutput = false
 else
@@ -192,8 +192,6 @@ else
 	end
 end
 
-include("MadsSenstivityAnalysis.jl")
-
 if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
@@ -203,5 +201,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsBayesInfoGapPlot.jl")
 	include("MadsPlot.jl")
 end
+
+include("MadsSenstivityAnalysis.jl")
 
 end
