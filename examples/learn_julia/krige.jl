@@ -1,6 +1,6 @@
 import GeoStats
-import Gadfly
 import PyPlot
+import Gadfly
 import QuantEcon
 
 PyPlot.svg(true)
