@@ -18,14 +18,14 @@ Free a libSVM model
 
 Methods
 
-  * `SVR.freemodel(pmodel::SVR.svmmodel)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:303
+  * `SVR.freemodel(pmodel::SVR.svmmodel) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:303
 
 Arguments
 
   * `pmodel::SVR.svmmodel` : svm model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L296-L300' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L296-L300' class='documenter-source'>source</a><br>
 
 <a id='SVR.liboutput-Tuple{Ptr{UInt8}}' href='#SVR.liboutput-Tuple{Ptr{UInt8}}'>#</a>
 **`SVR.liboutput`** &mdash; *Method*.
@@ -36,14 +36,14 @@ catch lib output
 
 Methods
 
-  * `SVR.liboutput(str::Ptr{UInt8})` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:97
+  * `SVR.liboutput(str::Ptr{UInt8}) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:97
 
 Arguments
 
   * `str::Ptr{UInt8}` : string
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L90-L94' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L90-L94' class='documenter-source'>source</a><br>
 
 <a id='SVR.loadmodel-Tuple{String}' href='#SVR.loadmodel-Tuple{String}'>#</a>
 **`SVR.loadmodel`** &mdash; *Method*.
@@ -54,7 +54,7 @@ Load a libSVM model
 
 Methods
 
-  * `SVR.loadmodel(filename::String)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:269
+  * `SVR.loadmodel(filename::String) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:269
 
 Arguments
 
@@ -65,7 +65,7 @@ Returns:
   * SVM model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L258-L266' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L258-L266' class='documenter-source'>source</a><br>
 
 <a id='SVR.mapnodes-Tuple{Array}' href='#SVR.mapnodes-Tuple{Array}'>#</a>
 **`SVR.mapnodes`** &mdash; *Method*.
@@ -74,14 +74,14 @@ Returns:
 
 Methods
 
-  * `SVR.mapnodes(x::Array)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:185
+  * `SVR.mapnodes(x::Array) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:185
 
 Arguments
 
   * `x::Array` :
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L180-L185' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L180-L185' class='documenter-source'>source</a><br>
 
 <a id='SVR.mapparam-Tuple{}' href='#SVR.mapparam-Tuple{}'>#</a>
 **`SVR.mapparam`** &mdash; *Method*.
@@ -90,7 +90,7 @@ Arguments
 
 Methods
 
-  * `SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:162
+  * `SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:162
 
 Keywords
 
@@ -118,7 +118,7 @@ Returns:
   * parameter
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L122-L142' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L122-L142' class='documenter-source'>source</a><br>
 
 <a id='SVR.predict-Tuple{SVR.svmmodel,Array}' href='#SVR.predict-Tuple{SVR.svmmodel,Array}'>#</a>
 **`SVR.predict`** &mdash; *Method*.
@@ -129,7 +129,7 @@ Predict based on a libSVM model
 
 Methods
 
-  * `SVR.predict(pmodel::SVR.svmmodel, x::Array)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:244
+  * `SVR.predict(pmodel::SVR.svmmodel, x::Array) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:244
 
 Arguments
 
@@ -141,7 +141,7 @@ Return:
   * predicted dependent variables
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L232-L240' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L232-L240' class='documenter-source'>source</a><br>
 
 <a id='SVR.readlibsvmfile-Tuple{String}' href='#SVR.readlibsvmfile-Tuple{String}'>#</a>
 **`SVR.readlibsvmfile`** &mdash; *Method*.
@@ -152,7 +152,7 @@ Read a libSVM file
 
 Methods
 
-  * `SVR.readlibsvmfile(file::String)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:322
+  * `SVR.readlibsvmfile(file::String) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:322
 
 Arguments
 
@@ -164,7 +164,7 @@ Returns:
   * vector of dependent variables
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L310-L319' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L310-L319' class='documenter-source'>source</a><br>
 
 <a id='SVR.savemodel-Tuple{SVR.svmmodel,String}' href='#SVR.savemodel-Tuple{SVR.svmmodel,String}'>#</a>
 **`SVR.savemodel`** &mdash; *Method*.
@@ -175,7 +175,7 @@ Save a libSVM model
 
 Methods
 
-  * `SVR.savemodel(pmodel::SVR.svmmodel, filename::String)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:290
+  * `SVR.savemodel(pmodel::SVR.svmmodel, filename::String) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:290
 
 Arguments
 
@@ -187,9 +187,9 @@ Dumps:
   * file with saved model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L278-L286' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L278-L286' class='documenter-source'>source</a><br>
 
-<a id='SVR.train-Tuple{Array{T,1},Array}' href='#SVR.train-Tuple{Array{T,1},Array}'>#</a>
+<a id='SVR.train-Tuple{Array{T,1} where T,Array}' href='#SVR.train-Tuple{Array{T,1} where T,Array}'>#</a>
 **`SVR.train`** &mdash; *Method*.
 
 
@@ -198,12 +198,12 @@ Train based on a libSVM model
 
 Methods
 
-  * `SVR.train(y::Array{T<:Any,1}, x::Array; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose)` : /Users/monty/.julia/v0.5/SVR/src/SVR.jl:224
+  * `SVR.train(y::Array{T,1} where T, x::Array; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose) in SVR` : /Users/monty/.julia/v0.6/SVR/src/SVR.jl:224
 
 Arguments
 
   * `x::Array` : array of independent variables
-  * `y::Array{T<:Any,1}` : vector of dependent variables
+  * `y::Array{T,1} where T` : vector of dependent variables
 
 Keywords
 
@@ -226,5 +226,5 @@ Returns:
   * SVM model
 
 
-<a target='_blank' href='https://github.com/madsjulia/SVR.jl/tree/75733703f2af3d043a2bf199565cb5fddb7de55f/src/SVR.jl#L199-L207' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/SVR.jl/blob/a72c3a48865194b09942305add64aa7fa2a92c8c/src/SVR.jl#L199-L207' class='documenter-source'>source</a><br>
 
