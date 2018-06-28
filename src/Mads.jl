@@ -10,6 +10,21 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
+import JLD
+import YAML
+import JSON
+
+import Anasol
+import BIGUQ
+import AffineInvariantMCMC
+import GeostatInversion
+import Kriging
+import MetaProgTools
+import ReusableFunctions
+import RobustPmap
+import SVR
+import DocumentFunction
+
 global madsgit = true
 try
 	run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
@@ -18,7 +33,7 @@ catch
 end
 
 global madsbash = true
-if !Sys.is_windows()
+if !Sys.iswindows()
 	try
 		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
 	catch
@@ -30,10 +45,6 @@ end
 Mads Modules: $madsmodules
 """
 global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
-
-import DocumentFunction
-import GeostatInversion
-import SVR
 
 include("MadsHelpers.jl")
 
