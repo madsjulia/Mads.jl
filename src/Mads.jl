@@ -33,7 +33,7 @@ catch
 end
 
 global madsbash = true
-if !Sys.iswindows()
+if !Sys.is_windows()
 	try
 		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
 	catch
