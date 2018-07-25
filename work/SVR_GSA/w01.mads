@@ -1,0 +1,41 @@
+Parameters:              
+- k1     : { init: 0.00, type: null, log: no, step: 10, min: 0, max: 305.00, dist: "Uniform(290, 305)" }
+- k2     : { init: 3.401, type: opt, log: no, step: 0.01, min: 3.178, max: 3.584, dist: "Uniform(3.178, 3.584)" }
+- k3     : { init: 4.248, type: opt, log: no, step: 0.01, min: 3.892, max: 4.511, dist: "Uniform(3.892, 4.511)" }
+- k4     : { init: 0.00, type: opt, log: no, step: 0.01, min: -0.357, max: 0.2623, dist: "Uniform(-0.357, 0.2623)" }
+- k5     : { init: 3.912, type: opt, log: no, step: 0.01, min: 3.807, max: 4.007, dist: "Uniform(3.807, 4.007)" }
+- k6     : { init: 1.609, type: opt, log: no, step: 0.01, min: 1.099, max: 1.609, dist: "Uniform(1.099, 1.609)" }
+- k7     : { init: 6.907, type: opt, log: no, step: 0.01, min: 6.215, max: 7.3122, dist: "Uniform(6.215, 7.3122)" }
+- k8     : { init: 2.708, type: opt, log: no, step: 0.01, min: 2.602, max: 2.803, dist: "Uniform(2.602, 2.803)" }
+- k9     : { init: 1.0, type: null, log: no, step: 1, min: 1.00, max: 50.0, dist: "Uniform(1, 50)" }
+Observations:
+ - o1: { target: 0.0 }
+ - o3: { target: 0.0 }
+ - o5: { target: 51.4606303076 }
+ - o7: { target: 145.0544248124 }
+ - o9: { target: 235.1324628953 }
+ - o11: { target: 323.3456660576 }
+ - o13: { target: 408.2189130326 } 
+ - o15: { target: 441.1574295277 }
+ - o17: { target: 420.5320445567 }
+ - o19: { target: 396.4613723476 }
+ - o21: { target: 366.7453436148 }
+ - o23: { target: 332.9350600702 }
+ - o25: { target: 297.2425311921 } 
+ - o27: { target: 261.6331613733 }
+ - o29: { target: 227.5689490447 }
+ - o31: { target: 195.9984429491 }
+ - o33: { target: 167.439728395 } 
+ - o35: { target: 142.0871761644 }
+ - o37: { target: 119.9113027924 }
+ - o39: { target: 100.7404197591 }
+ - o41: { target: 84.3221564857 }
+ - o43: { target: 70.3670386165 }
+ - o45: { target: 58.5776540507 }
+ - o47: { target: 48.6669804131 }
+ - o49: { target: 40.3689520246 }
+Command: bash -c 'rm w01_input; ./w01_exec.out w01_input_cut.csv w01_model w01_output.out w01_input_libsvm_cut'
+Templates:          
+- tmp1: { tpl: w01_50.tpl, write: w01_input_cut.csv }      
+Instructions:          
+- ins1: { ins: w01_out_cut.inst, read: w01_output.out }      
