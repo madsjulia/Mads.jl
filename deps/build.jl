@@ -45,7 +45,7 @@ else
 		warn("Python pip YAML (pyyaml) installation has failed!")
 		info("Using Conda instead ...")
 		import Conda
-		Conda.add("yaml")
+		Conda.add("pyyaml")
 	end
 
 	try
