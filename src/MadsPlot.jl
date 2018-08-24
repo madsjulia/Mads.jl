@@ -6,6 +6,9 @@ import DataStructures
 import Gadfly
 import Measures
 
+colors = ["red", "blue", "green", "orange", "magenta", "cyan", "brown", "pink", "lime", "navy", "maroon", "yellow", "olive", "springgreen", "teal", "coral", "lavender", "beige"]
+ncolors = length(colors)
+
 """
 Set the default plot format (`SVG` is the default format)
 
@@ -151,7 +154,7 @@ function plotmatches(madsdata::Associative, rx::Regex=r""; kw...)
 		plotmatches(madsdata, r; kw...)
 	end
 end
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=colors, display::Bool=false, notitle::Bool=false)
 	newobs = similar(madsdata["Observations"])
 	newresult = similar(result)
 	for k in keys(madsdata["Observations"])
@@ -175,7 +178,7 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plot
 	end
 	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, ymin=ymin, ymax=ymax, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=colors, display=display)
 end
-function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Array{String}(0), display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=colors, display::Bool=false, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -1091,7 +1094,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Array{String}(0), xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT)
+function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=colors, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT)
 	nT = size(X)[1]
 	nS = size(X)[2]
 	recursivemkdir(filename)
