@@ -1091,35 +1091,38 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Array{String}(0))
+function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Array{String}(0), xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT)
 	nT = size(X)[1]
 	nS = size(X)[2]
+	recursivemkdir(filename)
 	if combined
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
 		if ncolors == 0 || ncolors != nS
-			pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
+			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
 				Gadfly.Geom.line,
 				Gadfly.Theme(line_width=linewidth),
-				color = ["$name $i" for j in 1:nT])
+				color = ["$(names[i])" for j in 1:nT])
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.ColorKey(title=title))
+				Gadfly.Guide.ColorKey(title=title),
+				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		else
-			pS = Gadfly.plot([Gadfly.layer(x=1:nT, y=X[:,i],
+			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
 				Gadfly.Geom.line,
 				Gadfly.Theme(line_width=linewidth, default_color=parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.manual_color_key(title, ["$name $i" for i in 1:nS], [colors[(i-1)%ncolors+1] for i in 1:nS]))
+				Gadfly.Guide.manual_color_key(title, names, [colors[(i-1)%ncolors+1] for i in 1:nS]),
+				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
 	else
 		hsize_plot = hsize
 		vsize_plot = vsize / 2 * nS
 		pp = Array{Gadfly.Plot}(nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(x=1:nT, y=X[:,i], Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$name $i"))
+			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), xm..., ym...)
 		end
 		pS = Gadfly.vstack(pp...)
 	end
