@@ -1099,7 +1099,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
-		if ncolors == 0 || ncolors != nS
+		if ncolors == 0 || ncolors < nS
 			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
 				Gadfly.Geom.line,
 				Gadfly.Theme(line_width=linewidth),
