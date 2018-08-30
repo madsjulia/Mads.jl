@@ -1094,7 +1094,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="Sources", name::String="Source", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=colors, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT)
+function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "X", ytitle::String = "Y", title::String="", keytitle::String="Sources", name::String="Source", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=6Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=colors, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT)
 	nT = size(X)[1]
 	nS = size(X)[2]
 	recursivemkdir(filename)
@@ -1109,7 +1109,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 				color = ["$(names[i])" for j in 1:nT])
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.ColorKey(title=title),
+				Gadfly.Guide.ColorKey(title=keytitle),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		else
 			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
@@ -1117,7 +1117,8 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 				Gadfly.Theme(line_width=linewidth, default_color=parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.manual_color_key(title, names, [colors[(i-1)%ncolors+1] for i in 1:nS]),
+				Gadfly.Guide.title(title),
+				Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS]),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
 	else
@@ -1125,7 +1126,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		vsize_plot = vsize / 2 * nS
 		pp = Array{Gadfly.Plot}(nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), xm..., ym...)
+			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
 		pS = Gadfly.vstack(pp...)
 	end
