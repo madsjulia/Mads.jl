@@ -99,6 +99,17 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	return Wbest, Hbest, phi_best
 end
 
+function MFlm(X::Matrix{T}, range::Range{Int}; kw...) where {T}
+	maxsources = maximum(collect(range))
+	W = Array{Array{T, 2}}(maxsources)
+	H = Array{Array{T, 2}}(maxsources)
+	fitquality = Array{T}(maxsources)
+	for numsources in range
+		W[numsources], H[numsources], fitquality[numsources] = Mads.MFlm(X, numsources; kw...)
+	end
+	return W, H, fitquality
+end
+
 """
 Matrix Factorization using Levenberg Marquardt
 
@@ -118,11 +129,11 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true)
+function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(0, 0), initH::Matrix=Array{T}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array{Float64}(nP, nk)
-	Hbest = Array{Float64}(nk, nC)
+	Wbest = Array{T}(nP, nk)
+	Hbest = Array{T}(nk, nC)
 	W_size = nP * nk
 	if log_W
 		W_logtransformed = trues(W_size)
@@ -145,7 +156,8 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 		H_logtransformed = falses(H_size)
 		H_lowerbounds = zeros(H_size)
 	end
-	H_upperbounds = ones(H_size) * maximum(X) * 100
+	nanmask = isnan.(X)
+	H_upperbounds = ones(H_size) * maximum(X[.!nanmask]) * 100
 	if sizeof(initH) > 0
 		H_init = initH
 	else
@@ -170,6 +182,7 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 	function mf_lm(x::Vector)
 		W, H = mf_reshape(x)
 		E = X - W * H
+		E[nanmask] .= 0
 		return vec(E)
 	end
 
@@ -220,5 +233,6 @@ function MFlm(X::Matrix, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H:
 			Wbest, Hbest = mf_reshape(x_best)
 		end
 	end
+	println("Signals: $(@sprintf("%2d", nk)) Fit: $(@sprintf("%12.7g", phi_best))")
 	return Wbest, Hbest, phi_best
 end
