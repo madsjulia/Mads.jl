@@ -339,8 +339,10 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function setwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
+			end
 		end
 	end
 	setobsweights!(madsdata, value)
@@ -356,8 +358,10 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function modwellweights!(madsdata::Associative, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
+			end
 		end
 	end
 	modobsweights!(madsdata, value)
@@ -373,10 +377,12 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function invwellweights!(madsdata::Associative, multiplier::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
-			t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
-			if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
-				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * multiplier)
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+				t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
+				if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
+					setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * multiplier)
+				end
 			end
 		end
 	end
@@ -666,23 +672,25 @@ function wells2observations!(madsdata::Associative)
 	observations = DataStructures.OrderedDict()
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
-			for i in 1:length(madsdata["Wells"][wellkey]["obs"])
-				t = gettime(madsdata["Wells"][wellkey]["obs"][i])
-				obskey = wellkey * "_" * string(t)
-				data = DataStructures.OrderedDict()
-				data["well"] = wellkey
-				data["time"] = t
-				data["index"] = i
-				target = gettarget(madsdata["Wells"][wellkey]["obs"][i])
-				if target != NaN
-					data["target"] = target
-				end
-				for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])
-					if datakey != "c" && datakey != "t"
-						data[datakey] = madsdata["Wells"][wellkey]["obs"][i][datakey]
+			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] != nothing
+				for i in 1:length(madsdata["Wells"][wellkey]["obs"])
+					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
+					obskey = wellkey * "_" * string(t)
+					data = DataStructures.OrderedDict()
+					data["well"] = wellkey
+					data["time"] = t
+					data["index"] = i
+					target = gettarget(madsdata["Wells"][wellkey]["obs"][i])
+					if target != NaN
+						data["target"] = target
 					end
+					for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])
+						if datakey != "c" && datakey != "t"
+							data[datakey] = madsdata["Wells"][wellkey]["obs"][i][datakey]
+						end
+					end
+					observations[obskey] = data
 				end
-				observations[obskey] = data
 			end
 		end
 	end

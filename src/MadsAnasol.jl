@@ -248,7 +248,11 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			end
 			obst = Array{Float64}(0)
 			obsp = Array{Int}(0)
-			nO = length(madsdata["Wells"][wellkey]["obs"])
+			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] != nothing
+				nO = length(madsdata["Wells"][wellkey]["obs"])
+			else
+				nO = 0
+			end
 			wellc[w] = Array{Float64}(nO)
 			wellp[w] = Array{Bool}(nO)
 			for o in 1:nO
