@@ -192,7 +192,7 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		end
 	end
 	rootname = getmadsrootname(madsdata)
-	pl = Any
+	pl = nothing
 	if haskey(madsdata, "Wells")
 		pp = Array{Gadfly.Plot}(0)
 		p = Gadfly.Plot
@@ -207,30 +207,36 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		for iw = 1:nW
 			wellname = wk[iw]
 			if madsdata["Wells"][wellname]["on"]
-				o = madsdata["Wells"][wellname]["obs"]
-				nT = length(o)
 				c = Array{Float64}(0)
 				tc = Array{Float64}(0)
 				d = Array{Float64}(0)
 				td = Array{Float64}(0)
-				for i in 1:nT
-					time = gettime(o[i])
-					t = gettarget(o[i])
-					w = getweight(o[i])
-					if w == NaN || w > 0
-						push!(td, time)
-						push!(d, t)
-					end
-					obskey = wellname * "_" * string(time)
-					if haskey(result, obskey)
-						push!(tc, time)
-						push!(c, result[obskey])
+				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] != nothing
+					o = madsdata["Wells"][wellname]["obs"]
+					nT = length(o)
+					for i in 1:nT
+						time = gettime(o[i])
+						t = gettarget(o[i])
+						w = getweight(o[i])
+						if w == NaN || w > 0
+							push!(td, time)
+							push!(d, t)
+						end
+						obskey = wellname * "_" * string(time)
+						if haskey(result, obskey)
+							push!(tc, time)
+							push!(c, result[obskey])
+						end
 					end
 				end
 				if noise != 0
 					c = c .+ (rand(nT) .* noise)
 				end
 				npp = length(c)
+				if npp == 0
+					warn("Well $wellname: no observations to plot!")
+					continue
+				end
 				plot_args = Any[]
 				!notitle && push!(plot_args, Gadfly.Guide.title(wellname))
 				if plotdata
@@ -306,6 +312,10 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=linewidth)),
 					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
+	end
+	if pl == nothing
+		warn("There is nothing to plot!")
+		return nothing
 	end
 	if !separate_files
 		if filename == ""
