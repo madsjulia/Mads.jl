@@ -1,5 +1,5 @@
 import Mads
-md = Mads.loadmadsfile("w01-w13a_w20a-opt-tensor.mads")
+md = Mads.loadmadsfile("w01-tensor.mads")
 s = size(Mads.forwardgrid(md)[:,:,1])
 nstep = 10
 T = Array{Float64}(s[2],s[1],nstep)
