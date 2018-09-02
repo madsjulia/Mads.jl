@@ -15,14 +15,21 @@ $(DocumentFunction.documentfunction(addsource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "sourceid"=>"source id [default=`0`]")))
 """
-function addsource!(madsdata::Associative, sourceid::Int=0)
+function addsource!(madsdata::Associative, sourceid::Int=0; dict::Associative=Dict())
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		if sourceid <= 0
 			sourceid = ns
 		end
 		if sourceid <= ns
-			push!(madsdata["Sources"], madsdata["Sources"][sourceid])
+			s = deepcopy(madsdata["Sources"][sourceid])
+			push!(madsdata["Sources"], s)
+			for k = keys(dict)
+				d = madsdata["Sources"][ns+1][keys(madsdata["Sources"][1])...]
+				if haskey(d, k)
+					d[k]["init"] = dict[k]
+				end
+			end
 			addsourceparameters!(madsdata)
 		else
 			madserror("There are only $(ns) sources in the Mads dictionary!")
