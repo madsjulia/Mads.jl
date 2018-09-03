@@ -1,4 +1,5 @@
 syntax: glob
+*.log
 .DS_Store
 .project
 *.cov

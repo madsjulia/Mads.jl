@@ -1,4 +1,8 @@
 import Mads
+import NTFk
+c = pwd()
+import rMF
+cd(c)
 
 md = Mads.loadmadsfile("w01-tensor2.mads")
 s = size(Mads.forwardgrid(md)[:,:,1])
@@ -67,8 +71,8 @@ Mads.plotseries(T[:,2,:]')
 Mads.plotseries(T[:,3,:]')
 Mads.plotseries(T[:,4,:]')
 
-We, He, of = NMFk.execute(T, 2:5, 10; maxouteriters=1000, tol=1e-7, tolX=1e-7)
-for i=2:5
+We, He, of, rob, aic = NMFk.execute(T, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
+for i=3:5
 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
 	info("Norm($i): $(vecnorm(Xe .- T))")
 end
