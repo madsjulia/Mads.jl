@@ -73,7 +73,7 @@ Mads.plotseries(T[:,4,:]')
 
 We, He, of, rob, aic = NMFk.execute(T, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
 for i=3:5
-	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
+	Xe = NMFk.mixmatchcompute(T, We[i], He[i])
 	info("Norm($i): $(vecnorm(Xe .- T))")
 end
 
