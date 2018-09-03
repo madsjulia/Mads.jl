@@ -42,7 +42,8 @@ Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
 
-welldata_time = Mads.getwellsdata(md; time=true)
+welldata_time = Mads.getwelldata(md; time=true)
+wt = Mads.getwelltargets(md)
 
 if Mads.create_tests
 	JLD.save(joinpath(testdir, "forward_predictions.jld"), "forward_predictions", forward_predictions_vector)
@@ -96,7 +97,7 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 	@Base.Test.test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
 	@Base.Test.test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
 	@Base.Test.test isapprox(mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
-	@Base.Test.test all(Mads.getwellsdata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
+	@Base.Test.test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
 
 	t = isapprox(mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	if t

@@ -700,7 +700,7 @@ end
 """
 Get spatial and temporal data in the `Wells` class
 
-$(DocumentFunction.documentfunction(getwellsdata;
+$(DocumentFunction.documentfunction(getwelldata;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("time"=>"get observation times [default=`false`]")))
 
@@ -708,7 +708,7 @@ Returns:
 
 - array with spatial and temporal data in the `Wells` class
 """
-function getwellsdata(madsdata::Associative; time::Bool=false)
+function getwelldata(madsdata::Associative; time::Bool=false)
 	if time
 		a = Array{Float64}(4, 0)
 	else
@@ -729,6 +729,31 @@ function getwellsdata(madsdata::Associative; time::Bool=false)
 					a = [a [x, y, z, t]]
 				end
 			end
+		end
+	end
+	return a
+end
+
+"""
+$(DocumentFunction.documentfunction(getwelltargets;
+argtext=Dict("madsdata"=>"Mads problem dictionary")))
+
+Returns:
+
+- array with targets in the `Wells` class
+"""
+function getwelltargets(madsdata::Associative)
+	a = Vector{Vector{Float64}}(0)
+	for wellkey in keys(madsdata["Wells"])
+		if madsdata["Wells"][wellkey]["on"] && haskey(madsdata["Wells"][wellkey], "obs")
+			o = madsdata["Wells"][wellkey]["obs"]
+			nT = length(o)
+			t = Vector{Float64}(0)
+			for i in 1:nT
+				v = gettarget(o[i])
+				push!(t, v)
+			end
+			push!(a, t)
 		end
 	end
 	return a
