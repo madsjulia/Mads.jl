@@ -81,10 +81,13 @@ Mads.plotseries(X[:,4,:]')
 
 Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 3; quiet=false, mixture=:mixmatch)
 
-# We, He, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
-# for i=3:5
-# 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
-# 	info("Norm($i): $(vecnorm(Xe .- X))")
-# end
+We, He, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
+for i=3:5
+	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
+	info("Norm($i): $(vecnorm(Xe .- X))")
+end
 
-# NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)))
+Xe = NMFk.mixmatchcompute(X, We[4], He[4])
+NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)); xmax=100, ymax=1.)
+
+NTFk.plot2d(permutedims(Wt, (1,3,2)), permutedims(We[4], (1,3,2)); xmax=100, ymax=1.)
