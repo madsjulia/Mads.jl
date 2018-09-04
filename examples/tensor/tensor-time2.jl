@@ -5,9 +5,10 @@ import rMF
 cd(c)
 
 md = Mads.loadmadsfile("w01-tensor2.mads")
-s = size(Mads.forwardgrid(md)[:,:,1])
 Mads.addsource!(md; dict=Dict("t0"=>200., "x"=>1100., "y"=>1450.))
 Mads.addsource!(md; dict=Dict("t0"=>400., "x"=>1200., "y"=>1550.))
+Mads.plotmadsproblem(md)
+s = size(Mads.forwardgrid(md)[:,:,1])
 nstep = 10
 T = Array{Float64}(s[2],s[1],nstep)
 srand(2017)
@@ -49,32 +50,41 @@ for i = 1:3
 	push!(V, M)
 end
 
-C = reshape(hcat(V...), (101,9,3))
-W = C ./ maximum(sum(C, 3)) .* 0.5
+nt, nw = size(V[1])
+C = reshape(hcat(V...), (nt,nw,3));
+W = C ./ maximum(sum(C, 3)) .* 0.9;
 
-rMF.loaddata("test", ns=3, nc=4, nw=9, nt=101, seed=5)
-Ht = deepcopy(rMF.truebucket)
-B = minimum(Ht,1) .- 4
+# rMF.loaddata("test", ns=3, nc=4, nw=9, nt=101, seed=5)
+# Ht = deepcopy(rMF.truebucket)
+Hw=[[0,0,1000] [0,1000,0] [1000,0,0] [500,1000,0]]
+# B = minimum(Ht,1) .- 4
+Hb = [1,1,1,1]
+Ht = [Hw' Hb]'
 
-T = zeros(Float32, 9,4,101);
-for t = 1:101
-	for w = 1:9
+X = zeros(Float32, nw,4,nt);
+Wt = zeros(Float32, nw,4,nt);
+for t = 1:nt
+	for w = 1:nw
+		Wt[w,1:3,t] = W[t,w,:]
+		Wt[w,4,t] = 1-sum(W[t,w,:])
 		for s = 1:3
-			T[w,:,t] += W[t,w,s] * Ht[s,:]
+			X[w,:,t] += W[t,w,s] * Ht[s,:]
 		end
-		# T[w,:,t] += (1-sum(W[t,w,:])) .* B'
+		X[w,:,t] += (1-sum(W[t,w,:])) .* Hb
 	end
 end
 
-Mads.plotseries(T[:,1,:]')
-Mads.plotseries(T[:,2,:]')
-Mads.plotseries(T[:,3,:]')
-Mads.plotseries(T[:,4,:]')
+Mads.plotseries(X[:,1,:]')
+Mads.plotseries(X[:,2,:]')
+Mads.plotseries(X[:,3,:]')
+Mads.plotseries(X[:,4,:]')
 
-We, He, of, rob, aic = NMFk.execute(T, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
-for i=3:5
-	Xe = NMFk.mixmatchcompute(T, We[i], He[i])
-	info("Norm($i): $(vecnorm(Xe .- T))")
-end
+Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 3; quiet=false, mixture=:mixmatch)
 
-NTFk.plot2d(permutedims(T, (1,3,2)), permutedims(Xe, (1,3,2)))
+# We, He, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
+# for i=3:5
+# 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
+# 	info("Norm($i): $(vecnorm(Xe .- X))")
+# end
+
+# NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)))
