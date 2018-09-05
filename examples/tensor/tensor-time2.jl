@@ -10,7 +10,7 @@ Mads.addsource!(md; dict=Dict("t0"=>400., "x"=>1200., "y"=>1550.))
 Mads.plotmadsproblem(md)
 s = size(Mads.forwardgrid(md)[:,:,1])
 nstep = 10
-T = Array{Float64}(s[2],s[1],nstep)
+T = Array{Float64}(s[2],s[1],nstep);
 srand(2017)
 for i = 1:nstep
 	md["Grid"]["time"] = i * 100
@@ -59,7 +59,7 @@ W = C ./ maximum(sum(C, 3)) .* 0.9;
 Hw=[[0,0,1000] [0,1000,0] [1000,0,0] [500,1000,0]]
 # B = minimum(Ht,1) .- 4
 Hb = [1,1,1,1]
-Ht = [Hw' Hb]'
+Ht = convert(Array{Float32,2}, [Hw' Hb])'
 
 X = zeros(Float32, nw,4,nt);
 Wt = zeros(Float32, nw,4,nt);
@@ -79,15 +79,28 @@ Mads.plotseries(X[:,2,:]')
 Mads.plotseries(X[:,3,:]')
 Mads.plotseries(X[:,4,:]')
 
-Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 3; quiet=false, mixture=:mixmatch)
+if isfile("ntfk-contamination.jld")
+	Wem, Hem = JLD.load("nmfk-contamination.jld", "Wem", "Hem")
+else
+	Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 3; quiet=false, mixture=:mixmatch)
+	@JLD.save "nmfk-contamination.jld" Wem Hem
+end
+display(X[:,:,end])
+display(Wem[4] * Hem[4])
 
-We, He, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=10, tol=1e-3, tolX=1e-3, quiet=false)
+if isfile("ntfk-contamination.jld")
+	We, He = JLD.load("ntfk-contamination.jld", "We", "He")
+else
+	We, He, of, rob, aic = NMFk.execute(X, 3:5, 1; maxouteriters=100, tol=1e-3, tolX=1e-3, tolOF=1., quiet=false)
+	@JLD.save "ntfk-contamination.jld" We He
+end
 for i=3:5
 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
 	info("Norm($i): $(vecnorm(Xe .- X))")
 end
+NTFk.plot2d(permutedims(Wt, (1,3,2))[:,:,:], permutedims(We[4], (1,3,2))[:,:,[1,3,4,2]]; xmax=100, ymax=1.)
+display(Ht)
+display(He[4][[1,3,4,2],:])
 
 Xe = NMFk.mixmatchcompute(X, We[4], He[4])
-NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)); xmax=100, ymax=1.)
-
-NTFk.plot2d(permutedims(Wt, (1,3,2)), permutedims(We[4], (1,3,2)); xmax=100, ymax=1.)
+NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)); xmax=100, ymin=0, ymax=1000)
