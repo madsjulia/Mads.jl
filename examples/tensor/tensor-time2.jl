@@ -51,6 +51,7 @@ for i = 1:3
 end
 
 nt, nw = size(V[1])
+wellnames = ntuple(i->"W$i", nw)
 C = reshape(hcat(V...), (nt,nw,3));
 W = C ./ maximum(sum(C, 3)) .* 0.9;
 
@@ -82,25 +83,27 @@ Mads.plotseries(X[:,4,:]')
 if isfile("ntfk-contamination.jld")
 	Wem, Hem = JLD.load("nmfk-contamination.jld", "Wem", "Hem")
 else
-	Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 3; quiet=false, mixture=:mixmatch)
-	@JLD.save "nmfk-contamination.jld" Wem Hem
+	Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 10; quiet=false, mixture=:mixmatch)
+	JLD.save("ntfk-contamination.jld", "We", Wem, "He", Hem)
 end
 display(X[:,:,end])
 display(Wem[4] * Hem[4])
 
 if isfile("ntfk-contamination.jld")
-	We, He = JLD.load("ntfk-contamination.jld", "We", "He")
+	Wet, Het = JLD.load("ntfk-contamination.jld", "Wet", "Het")
 else
-	We, He, of, rob, aic = NMFk.execute(X, 3:5, 1; maxouteriters=100, tol=1e-3, tolX=1e-3, tolOF=1., quiet=false)
-	@JLD.save "ntfk-contamination.jld" We He
+	Wet, Het, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=1000, tol=1e-3, tolX=1e-3, tolOF=1., quiet=false)
+	JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
 end
+Wet, Het, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=1000, tol=1e-6, tolX=1e-6, tolOF=1., quiet=false)
+JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
 for i=3:5
 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
 	info("Norm($i): $(vecnorm(Xe .- X))")
 end
-NTFk.plot2d(permutedims(Wt, (1,3,2))[:,:,:], permutedims(We[4], (1,3,2))[:,:,[1,3,4,2]]; xmax=100, ymax=1.)
+NTFk.plot2d(permutedims(Wt, (1,3,2))[:,:,:], permutedims(Wet[4], (1,3,2))[:,:,[2,4,1,3]]; xtitle="", ytitle="", wellnames=wellnames, keyword="singals", xmax=100, ymax=1., gm=[Gadfly.Guide.manual_color_key("Sources", ["S1", "S2", "S3", "Background"], NTFk.colors[1:4]), Gadfly.Theme(major_label_font_size=16Gadfly.pt, key_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt)])
 display(Ht)
-display(He[4][[1,3,4,2],:])
+display(Het[4][[2,4,1,3],:])
 
-Xe = NMFk.mixmatchcompute(X, We[4], He[4])
-NTFk.plot2d(permutedims(X, (1,3,2)), permutedims(Xe, (1,3,2)); xmax=100, ymin=0, ymax=1000)
+Xe = NMFk.mixmatchcompute(X, Wet[4], Het[4])
+NTFk.plot2d(permutedims(X, (1,3,2))/1000, permutedims(Xe, (1,3,2))/1000; xtitle="", ytitle="", wellnames=wellnames, keyword="species", xmax=100, ymin=0, ymax=1., gm=[Gadfly.Guide.manual_color_key("Species", ["A", "B", "C", "D"], NTFk.colors[1:4]), Gadfly.Theme(major_label_font_size=16Gadfly.pt, key_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt)])
