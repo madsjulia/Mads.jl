@@ -67,36 +67,38 @@ $(DocumentFunction.documentfunction(plotmadsproblem;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "filename"=>"output file name",
-            "keyword"=>"to be added in the filename",
-            "imagefile"=>"dump image file [default=`false`]")))
+            "keyword"=>"to be added in the filename")))
 
 Dumps:
 
 - plot of contaminant sources and wells
 """
-function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", imagefile::Bool=false)
+function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, gm=[])
 	rectangles = Array{Float64}(0, 4)
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
+	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			if sourcetype == "box" || sourcetype == "gauss"
 				rectangle = Array{Float64}(4)
-				rectangle[1] = madsdata["Sources"][i][sourcetype]["x"]["init"] - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
-				rectangle[2] = madsdata["Sources"][i][sourcetype]["y"]["init"] - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
+				x = madsdata["Sources"][i][sourcetype]["x"]["init"]
+				y = madsdata["Sources"][i][sourcetype]["y"]["init"]
+				rectangle[1] = x - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
+				rectangle[2] = y - madsdata["Sources"][i][sourcetype]["dy"]["init"] / 2
 				rectangle[3] = madsdata["Sources"][i][sourcetype]["dx"]["init"]
 				rectangle[4] = madsdata["Sources"][i][sourcetype]["dy"]["init"]
 				rectangles = vcat(rectangles, rectangle')
 			end
+			push!(dfw, (x, y, "  S$i", "Sources"))
 		end
 	end
 	if sizeof(rectangles) > 0
 		gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-			Compose.fill(parse(Colors.Colorant, "orange")),
+			Compose.fill(parse(Colors.Colorant, "red")),
 			Compose.fillopacity(0.2),
-			Compose.stroke(parse(Colors.Colorant, "orange"))))
+			Compose.stroke(parse(Colors.Colorant, "red"))))
 	end
-	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			match = false
@@ -109,7 +111,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 				end
 			end
 			if !match
-				push!(dfw, (x, y, wellkey, "Wells"))
+				push!(dfw, (x, y, "  $wellkey", "Wells"))
 			end
 		end
 	end
@@ -125,12 +127,15 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	xmax = xmax + dx / 6
 	ymin = ymin - dy / 6
 	ymax = ymax + dy / 6
-	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category", Gadfly.Geom.point, Gadfly.Geom.label,
+	p = Gadfly.plot(dfw, x="x", y="y", label="label", color="category",
+		Gadfly.Geom.point, Gadfly.Geom.label(position=:right, hide_overlaps=false),
 		Gadfly.Guide.XLabel("x [m]"), Gadfly.Guide.YLabel("y [m]"), Gadfly.Guide.yticks(orientation=:vertical),
 		gadfly_source,
+		Gadfly.Scale.color_discrete_manual("red", "blue"),
 		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
 		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)))
+		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)), gm...,
+		Gadfly.Theme(highlight_width = 0Gadfly.pt, key_position = :none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
@@ -138,8 +143,10 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	if keyword != ""
 		filename = "$rootname-$keyword-problemsetup"
 	end
-	filename, format = setplotfileformat(filename, format)
-	imagefile && Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 6Gadfly.inch, 4Gadfly.inch), p)
+	if filename != ""
+		filename, format = setplotfileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), p)
+	end
 	if typeof(p) == Gadfly.Plot
 		graphoutput && Mads.display(p)
 	end

@@ -7,7 +7,7 @@ cd(c)
 md = Mads.loadmadsfile("w01-tensor2.mads")
 Mads.addsource!(md; dict=Dict("t0"=>200., "x"=>1100., "y"=>1450.))
 Mads.addsource!(md; dict=Dict("t0"=>400., "x"=>1200., "y"=>1550.))
-Mads.plotmadsproblem(md)
+Mads.plotmadsproblem(md; filename="map.png")
 s = size(Mads.forwardgrid(md)[:,:,1])
 nstep = 10
 T = Array{Float64}(s[2],s[1],nstep);
