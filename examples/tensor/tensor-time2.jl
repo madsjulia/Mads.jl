@@ -84,7 +84,7 @@ if isfile("ntfk-contamination.jld")
 	Wem, Hem = JLD.load("nmfk-contamination.jld", "We", "He")
 else
 	Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 10; quiet=false, mixture=:mixmatch)
-	JLD.save("ntfk-contamination.jld", "We", Wem, "He", Hem)
+	JLD.save("nmfk-contamination.jld", "We", Wem, "He", Hem)
 end
 display(X[:,:,end])
 display(Wem[4] * Hem[4])
@@ -95,8 +95,6 @@ else
 	Wet, Het, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=1000, tol=1e-3, tolX=1e-3, tolOF=1., quiet=false)
 	JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
 end
-Wet, Het, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=1000, tol=1e-6, tolX=1e-6, tolOF=1., quiet=false)
-JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
 for i=3:5
 	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
 	info("Norm($i): $(vecnorm(Xe .- X))")
