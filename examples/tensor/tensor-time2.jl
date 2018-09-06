@@ -1,8 +1,8 @@
 import Mads
 import NTFk
-c = pwd()
-import rMF
-cd(c)
+# c = pwd()
+# import rMF
+# cd(c)
 
 md = Mads.loadmadsfile("w01-tensor2.mads")
 Mads.addsource!(md; dict=Dict("t0"=>200., "x"=>1100., "y"=>1450.))
@@ -81,7 +81,7 @@ Mads.plotseries(X[:,3,:]')
 Mads.plotseries(X[:,4,:]')
 
 if isfile("ntfk-contamination.jld")
-	Wem, Hem = JLD.load("nmfk-contamination.jld", "Wem", "Hem")
+	Wem, Hem = JLD.load("nmfk-contamination.jld", "We", "He")
 else
 	Wem, Hem, of, rob, aic = NMFk.execute(X[:,:,end], 2:5, 10; quiet=false, mixture=:mixmatch)
 	JLD.save("ntfk-contamination.jld", "We", Wem, "He", Hem)
@@ -90,7 +90,7 @@ display(X[:,:,end])
 display(Wem[4] * Hem[4])
 
 if isfile("ntfk-contamination.jld")
-	Wet, Het = JLD.load("ntfk-contamination.jld", "Wet", "Het")
+	Wet, Het = JLD.load("ntfk-contamination.jld", "We", "He")
 else
 	Wet, Het, of, rob, aic = NMFk.execute(X, 3:5, 10; maxouteriters=1000, tol=1e-3, tolX=1e-3, tolOF=1., quiet=false)
 	JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
