@@ -74,6 +74,7 @@ for t = 1:nt
 		X[w,:,t] += (1-sum(W[t,w,:])) .* Hb
 	end
 end
+NTFk.plot2d(permutedims(Wt, (1,3,2)), permutedims(Wt, (1,3,2)); xtitle="", ytitle="", wellnames=wellnames, keyword="input", xmax=100, ymax=1., gm=[Gadfly.Guide.manual_color_key("Sources", ["S1", "S2", "S3", "Background"], NTFk.colors[1:4]), Gadfly.Theme(major_label_font_size=16Gadfly.pt, key_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt)])
 
 Mads.plotseries(X[:,1,:]')
 Mads.plotseries(X[:,2,:]')
@@ -96,10 +97,10 @@ else
 	JLD.save("ntfk-contamination.jld", "We", Wet, "He", Het)
 end
 for i=3:5
-	Xe = NMFk.mixmatchcompute(X, We[i], He[i])
+	Xe = NMFk.mixmatchcompute(X, Wet[i], Het[i])
 	info("Norm($i): $(vecnorm(Xe .- X))")
 end
-NTFk.plot2d(permutedims(Wt, (1,3,2))[:,:,:], permutedims(Wet[4], (1,3,2))[:,:,[2,4,1,3]]; xtitle="", ytitle="", wellnames=wellnames, keyword="singals", xmax=100, ymax=1., gm=[Gadfly.Guide.manual_color_key("Sources", ["S1", "S2", "S3", "Background"], NTFk.colors[1:4]), Gadfly.Theme(major_label_font_size=16Gadfly.pt, key_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt)])
+NTFk.plot2d(permutedims(Wt, (1,3,2))[:,:,:], permutedims(Wet[4], (1,3,2))[:,:,[2,4,1,3]]; xtitle="", ytitle="", wellnames=wellnames, keyword="signals", xmax=100, ymax=1., gm=[Gadfly.Guide.manual_color_key("Sources", ["S1", "S2", "S3", "Background"], NTFk.colors[1:4]), Gadfly.Theme(major_label_font_size=16Gadfly.pt, key_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt)])
 display(Ht)
 display(Het[4][[2,4,1,3],:])
 
