@@ -60,7 +60,7 @@ W = C ./ maximum(sum(C, 3)) .* 0.9;
 # Ht = deepcopy(rMF.truebucket)
 Hw=[[0,0,1000] [0,1000,0] [1000,0,0] [500,1000,0]]
 # B = minimum(Ht,1) .- 4
-Hb = [1,1,1,1]
+Hb = [0,0,0,0]
 Ht = convert(Array{Float32,2}, [Hw' Hb])'
 
 X = zeros(Float32, nw,4,nt);
