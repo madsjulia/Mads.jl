@@ -1,6 +1,8 @@
 import Mads
 import Base.Test
 
+Mads.quietoff()
+
 info("Running MADS tests:")
 
 print_with_color(:cyan, "* miscellaneous ...\n")
