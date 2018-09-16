@@ -28,7 +28,7 @@ Mads.resetmodelruns()
 
 Mads.functions(quiet=true)
 
-Mads.stdouterrcaptureon();
+# Mads.stdouterrcaptureon();
 
 Mads.loadmadsproblem("unknown");
 Mads.loadmadsproblem("polynomial");
@@ -116,7 +116,7 @@ Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr"=>true)), "Problem", "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>["ssdr","paranoid"]), "Problem", "ssdr")
 
-Mads.stdouterrcaptureoff();
+# Mads.stdouterrcaptureoff();
 
 Mads.pkgversion("ModuleThatDoesNotExist") # this captures output
 
