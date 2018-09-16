@@ -45,7 +45,6 @@ function restartoff()
 	global restart = false;
 end
 
-
 """
 Get MADS restart status
 
@@ -72,6 +71,24 @@ $(DocumentFunction.documentfunction(quietoff))
 """
 function quietoff()
 	global quiet = false;
+end
+
+"""
+Make MADS capture
+
+$(DocumentFunction.documentfunction(captureon))
+"""
+function captureon()
+	global capture = true;
+end
+
+"""
+Make MADS not capture
+
+$(DocumentFunction.documentfunction(captureoff))
+"""
+function captureoff()
+	global capture = false;
 end
 
 """

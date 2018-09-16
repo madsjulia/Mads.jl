@@ -84,11 +84,13 @@ Redirect STDOUT to a reader
 $(DocumentFunction.documentfunction(stdoutcaptureon))
 """
 function stdoutcaptureon()
-	global outputoriginal = STDOUT;
-	(outR, outW) = redirect_stdout();
-	global outputread = outR;
-	global outputwrite = outW;
-	global outputreader = @async readstring(outputread);
+	if capture
+		global outputoriginal = STDOUT;
+		(outR, outW) = redirect_stdout();
+		global outputread = outR;
+		global outputwrite = outW;
+		global outputreader = @async readstring(outputread);
+	end
 end
 
 """
@@ -101,11 +103,13 @@ Returns:
 - standered output
 """
 function stdoutcaptureoff()
-	redirect_stdout(outputoriginal);
-	close(outputwrite);
-	output = wait(outputreader);
-	close(outputread);
-	return output
+	if capture
+		redirect_stdout(outputoriginal);
+		close(outputwrite);
+		output = wait(outputreader);
+		close(outputread);
+		return output
+	end
 end
 
 """
@@ -114,11 +118,13 @@ Redirect STDERR to a reader
 $(DocumentFunction.documentfunction(stderrcaptureon))
 """
 function stderrcaptureon()
-	global errororiginal = STDERR;
-	(errR, errW) = redirect_stderr();
-	global errorread = errR;
-	global errorwrite = errW;
-	global errorreader = @async readstring(errorread);
+	if capture
+		global errororiginal = STDERR;
+		(errR, errW) = redirect_stderr();
+		global errorread = errR;
+		global errorwrite = errW;
+		global errorreader = @async readstring(errorread);
+	end
 end
 
 """
@@ -131,11 +137,13 @@ Returns:
 - standered error
 """
 function stderrcaptureoff()
-	redirect_stderr(errororiginal);
-	close(errorwrite);
-	erroro = wait(errorreader)
-	close(errorread);
-	return erroro
+	if capture
+		redirect_stderr(errororiginal);
+		close(errorwrite);
+		erroro = wait(errorreader)
+		close(errorread);
+		return erroro
+	end
 end
 
 """
@@ -144,8 +152,10 @@ Redirect STDOUT & STDERR to readers
 $(DocumentFunction.documentfunction(stdouterrcaptureon))
 """
 function stdouterrcaptureon()
-	stdoutcaptureon()
-	stderrcaptureon()
+	if capture
+		stdoutcaptureon()
+		stderrcaptureon()
+	end
 end
 
 """
@@ -158,5 +168,7 @@ Returns:
 - standered output amd standered error
 """
 function stdouterrcaptureoff()
-	return stdoutcaptureoff(), stderrcaptureoff()
+	if capture
+		return stdoutcaptureoff(), stderrcaptureoff()
+	end
 end

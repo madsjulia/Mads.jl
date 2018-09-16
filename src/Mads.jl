@@ -100,6 +100,7 @@ end
 
 global vectorflag = false
 global quiet = true
+global capture = true
 global restart = false
 global graphoutput = true
 global graphbackend = "SVG"

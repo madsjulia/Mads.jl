@@ -3,10 +3,13 @@ import Base.Test
 
 info("Running MADS tests:")
 
-# print_with_color(:cyan, "* miscellaneous ...\n")
-# tic()
-# include("miscellaneous.jl")
-# toc()
+Mads.quietoff()
+Mads.captureoff()
+
+print_with_color(:cyan, "* miscellaneous ...\n")
+tic()
+include("miscellaneous.jl")
+toc()
 
 print_with_color(:cyan,"* io ...\n")
 tic()
