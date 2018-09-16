@@ -66,8 +66,8 @@ if length(ARGS) < 1
 else
 	ARGS[1] = "testing"
 end
-include(joinpath("..", "src", "madsjl.jl"))
-rm("madsjl.cmdline_hist")
+# include(joinpath("..", "src", "madsjl.jl"))
+# rm("madsjl.cmdline_hist")
 Mads.functions(:ModuleThatDoesNotExist)
 Mads.functions("createmadsproblem"; stdout=true)
 Mads.functions(r"is.*par"; stdout=true)
