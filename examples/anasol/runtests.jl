@@ -184,7 +184,7 @@ good_targetkeys = JLD.load(joinpath(workdir, "test_results", "targetkeys.jld"), 
 	@Base.Test.test isapprox(ssr, 0., atol=1e-8)
 
 	# Test Mads.of(md)
-	@Base.Test.test isapprox(madsOf, 628789.775106828, atol=1e-8) #test
+	@Base.Test.test isapprox(madsOf, 628963.6972820368, atol=1e-8) #test
 
 	# Test Mads.residuals(md)
 	@Base.Test.test isapprox(good_residuals, residuals_results, atol=1e-8)
