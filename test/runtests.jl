@@ -3,9 +3,6 @@ import Base.Test
 
 info("Running MADS tests:")
 
-Mads.quietoff()
-Mads.captureoff()
-
 print_with_color(:cyan, "* miscellaneous ...\n")
 tic()
 include("miscellaneous.jl")
