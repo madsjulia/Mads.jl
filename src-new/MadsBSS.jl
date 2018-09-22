@@ -25,7 +25,7 @@ function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, max
 	Hbest = Array{Float64}(nk, nC)
 	phi_best = Inf
 	for i = 1:retries
-		nmf_result = NMF.nnmf(X, nk; alg=:multmse, maxiter=maxiter, tol=tol)
+		nmf_result = NMF.nnmf(X, nk; maxiter=maxiter, tol=tol)
 		phi = nmf_result.objvalue
 		println("OF = $(phi)")
 		if phi_best > phi
@@ -220,9 +220,9 @@ function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log
 			x = [W_init; H_init]
 		end
 		if mads
-			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
+			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
 		else
-			r = LsqFit.LevenbergMarquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed), maxIter=maxIter)
+			r = LsqFit.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter)
 		end
 		phi = r.minimum
 		# Base.display(r)

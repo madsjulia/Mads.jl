@@ -584,6 +584,12 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madsinfo("Small objective function: $best_residual < $tolOF (tolOF)")
 			of_converged = true
 		end
+		if g_calls >= maxJacobians
+			Mads.madsinfo("Maximum number of Jacobian evaluations have been reached: $g_calls < $maxJacobians")
+		end
+		if f_calls >= maxEval
+			Mads.madsinfo("Maximum number of Forward evaluations have been reached: $f_calls < $maxEval")
+		end
 		converged = g_converged | x_converged | of_converged
 	end
 	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, 0.0, of_converged, tolOF, 0.0, g_converged, tolG, 0.0, false, tr, f_calls, g_calls, 0)
