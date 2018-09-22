@@ -129,7 +129,7 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(0, 0), initH::Matrix=Array{T}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
+function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(0, 0), initH::Matrix=Array{T}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{T}(nP, nk)
@@ -142,12 +142,12 @@ function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log
 		W_logtransformed = falses(W_size)
 		W_lowerbounds = zeros(W_size)
 	end
-	W_upperbounds = ones(W_size)
 	if sizeof(initW) > 0
-		W_init = initW
+		W_init = vec(initW)
 	else
 		W_init = ones(W_size) * 0.5
 	end
+	W_upperbounds = ones(W_size) * max(1, maximum(W_init))
 	H_size = nC * nk
 	if log_H
 		H_logtransformed = trues(H_size)
@@ -157,12 +157,12 @@ function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log
 		H_lowerbounds = zeros(H_size)
 	end
 	nanmask = isnan.(X)
-	H_upperbounds = ones(H_size) * maximum(X[.!nanmask]) * 100
 	if sizeof(initH) > 0
-		H_init = initH
+		H_init = vec(initH)
 	else
 		H_init = ones(H_size)
 	end
+	H_upperbounds = ones(H_size) * max(maximum(X[.!nanmask]), maximum(H_init))
 	x = [W_init; H_init]
 	nParam = W_size + H_size
 	nObs = nP * nC
@@ -214,15 +214,20 @@ function MFlm(X::Matrix{T}, nk::Integer; mads::Bool=true, log_W::Bool=false, log
 	mf_g_lm_sin = Mads.sinetransformgradient(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
 	phi_best = Inf
 	for i = 1:retries
-		if retries > 1
+		if i > 1
 			W_init = rand(W_size)
 			H_init = ones(H_size)
 			x = [W_init; H_init]
 		end
-		if mads
+		if method == :mads
 			r = Mads.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
-		else
+		elseif method == :madsmin
+			_, r = Mads.minimize(mf_lm, x; upperbounds=upperbounds, lowerbounds=lowerbounds, logtransformed=logtransformed, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace)
+		elseif method == :lsqfit
 			r = LsqFit.levenberg_marquardt(mf_lm_sin, mf_g_lm_sin, Mads.asinetransform(x, lowerbounds, upperbounds, indexlogtransformed); maxIter=maxIter)
+		else
+			Mads.madserror("Unknown method!")
+			return;
 		end
 		phi = r.minimum
 		# Base.display(r)
