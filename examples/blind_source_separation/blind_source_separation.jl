@@ -99,9 +99,7 @@ Mads.plotseries(Wnmf * Hnmf, "sig_reproduced_observations_nmf.svg", title="Repro
 info("Reconstruction of sin/rand disturbance signal using JuMP/ipopt ...")
 Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1)
 Mads.plotseries(Wipopt[:,[2,1,3]], "disturbance_unmixed_signals_ipopt.svg", xtitle="Time", title="Unmixed signals", name="Signal", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch, colors=["red", "blue", "green"])
-Mads.plotseries(Wipopt[:,[2,1,3]], "disturbance_unmixed_signals_ipopt.png", xtitle="Time", title="", name="", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch, colors=["red", "blue", "green"])
 Mads.plotseries(Wipopt * Hipopt, "disturbance_reproduced_observations_ipopt.svg", xtitle="Time", title="Reproduced observations", name="Observation", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch)
-Mads.plotseries(Wipopt * Hipopt, "disturbance_reproduced_observations_ipopt.png", xtitle="Time", title="", name="", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch)
 
 info("Reconstruction of sin/rand disturbance signal using Mads LM ...")
 Wlm, Hlm, plm = Mads.MFlm(X, nk)
