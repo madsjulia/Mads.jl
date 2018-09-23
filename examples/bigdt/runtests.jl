@@ -1,9 +1,12 @@
 import Mads
+import JLD2
+import FileIO
 import JLD
+
 using Base.Test
 
 problemdir = Mads.getmadsdir()
-workdir = joinpath(Mads.madsdir, "..", "examples", "bigdt")
+workdir = joinpath(Mads.madsdir, "examples", "bigdt")
 
 md = Dict()
 if isdefined(Mads, :YAML) || isdefined(Mads, :yaml)
@@ -27,10 +30,10 @@ end
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-	JLD.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
+	FileIO.save(joinpath(d, "bigdt_results.jld"), "bigdt_results", bigdt_results)
 end
 
-good_bigdt_results = JLD.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
+good_bigdt_results = FileIO.load(joinpath(workdir, "test_results", "bigdt_results.jld"), "bigdt_results")
 
 # Testing for bigdt
 @testset "Bigdt" begin

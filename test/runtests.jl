@@ -33,10 +33,10 @@ tic()
 include("observations.jl")
 toc()
 
-examples = readdir(joinpath(Pkg.dir("Mads"), "examples"))
+examples = readdir(joinpath(Mads.madsdir, "examples"))
 
 for madstest in examples
-	file = joinpath(Pkg.dir("Mads"), "examples", madstest, "runtests.jl")
+	file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
 	if isfile(file)
 		print_with_color(:cyan, "* $(madstest) ...\n")
         tic()

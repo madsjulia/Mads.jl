@@ -1,7 +1,7 @@
 import Mads
 
 srand(2016)
-workdir = joinpath(Mads.madsdir, "..", "examples", "anasol")
+workdir = joinpath(Mads.madsdir, "examples", "anasol")
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01short3.mads"))
 Mads.createobservations!(md, collect(0:0.1:50))

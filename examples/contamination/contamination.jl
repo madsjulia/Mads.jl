@@ -4,7 +4,7 @@ currentdir = pwd()
 
 madsdirname = Mads.getmadsdir()
 if madsdirname == ""
-	madsdirname = joinpath(Pkg.dir("Mads"), "examples", "contamination")
+	madsdirname = joinpath(Mads.madsdir, "examples", "contamination")
 end
 
 cd(madsdirname)

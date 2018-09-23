@@ -102,8 +102,11 @@ PyPlot.savefig(mypath * "/deleteme.pdf")
 PyPlot.savefig("deletemetoo.eps")
 
 ## saving data
+import JLD2
+import FileIO
 import JLD
+
 mypath = pwd()
-JLD.save(mypath * "/deletedata.jld","randA",A,"randB",B)
-A = JLD.load(mypath * "deletedata.jld","randA")
-newnameB = JLD.load("deletedata.jld","randB")
+FileIO.save(mypath * "/deletedata.jld","randA",A,"randB",B)
+A = FileIO.load(mypath * "deletedata.jld","randA")
+newnameB = FileIO.load("deletedata.jld","randB")

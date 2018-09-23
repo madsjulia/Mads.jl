@@ -1,5 +1,5 @@
 info("Load Mads.setprocs ...")
-include(joinpath(Pkg.dir("Mads"), "src", "MadsParallel.jl"))
+include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
 
 info("Set SLURM processors ...")
 setprocs()
@@ -20,11 +20,11 @@ Mads.madsinfo("Load Mads problem ...")
 
 Mads.madsinfo("eFast sensitivity analysis ...")
 efast_results = Mads.efast(md, N=30, seed=2015)
-JLD.save("efast_results.jld", "efast_results", efast_results)
+FileIO.save("efast_results.jld", "efast_results", efast_results)
 
 Mads.madsinfo("Saltelli sensitivity analysis ...")
 saltelli_results = Mads.saltelliparallel(md, length(workers()), N=50, seed=2016)
-JLD.save("saltelli_results.jld", "saltelli_results", saltelli_results)
+FileIO.save("saltelli_results.jld", "saltelli_results", saltelli_results)
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	Mads.madsinfo("Local sensitivity analysis ...")
