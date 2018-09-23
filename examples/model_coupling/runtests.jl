@@ -3,7 +3,7 @@ import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "..", "examples", "model_coupling")
+	workdir = joinpath(Mads.madsdir, "examples", "model_coupling")
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")

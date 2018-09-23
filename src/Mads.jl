@@ -10,7 +10,10 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
+import JLD2
+import FileIO
 import JLD
+
 import YAML
 import JSON
 
@@ -116,7 +119,7 @@ global long_tests = false # execute long tests
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 global nprocs_per_task_default = 1
-const madsdir = splitdir(Base.source_path())[1]
+const madsdir = splitdir(splitdir(Base.source_path())[1])[1]
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	global long_tests = true

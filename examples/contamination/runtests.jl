@@ -1,8 +1,11 @@
 import Mads
 import Base.Test
+import JLD2
+import FileIO
 import JLD
 
-workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "examples", "contamination") : Mads.getmadsdir()
+
+workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "examples", "contamination") : Mads.getmadsdir()
 testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
@@ -46,13 +49,13 @@ welldata_time = Mads.getwelldata(md; time=true)
 wt = Mads.getwelltargets(md)
 
 if Mads.create_tests
-	JLD.save(joinpath(testdir, "forward_predictions.jld"), "forward_predictions", forward_predictions_vector)
-	JLD.save(joinpath(testdir, "jacobian.jld"), "jacobian", jacobian)
-	JLD.save(joinpath(testdir, "welldata_time.jld"), "welldata_time", welldata_time)
-	JLD.save(joinpath(testdir, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
-	JLD.save(joinpath(testdir, "samples.jld"), "samples", samples)
-	JLD.save(joinpath(testdir, "llhoods.jld"), "llhoods", llhoods)
-	JLD.save(joinpath(testdir, "newllhoods.jld"), "newllhoods", newllhoods)
+	FileIO.save(joinpath(testdir, "forward_predictions.jld"), "forward_predictions", forward_predictions_vector)
+	FileIO.save(joinpath(testdir, "jacobian.jld"), "jacobian", jacobian)
+	FileIO.save(joinpath(testdir, "welldata_time.jld"), "welldata_time", welldata_time)
+	FileIO.save(joinpath(testdir, "inverse_predictions.jld"), "inverse_predictions", inverse_predictions)
+	FileIO.save(joinpath(testdir, "samples.jld"), "samples", samples)
+	FileIO.save(joinpath(testdir, "llhoods.jld"), "llhoods", llhoods)
+	FileIO.save(joinpath(testdir, "newllhoods.jld"), "newllhoods", newllhoods)
 end
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
@@ -86,11 +89,11 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w20a-saltelli-5.svg"))
 end
 
-good_forward_predictions = JLD.load(joinpath(testdir, "forward_predictions.jld"), "forward_predictions")
-good_jacobian = JLD.load(joinpath(testdir, "jacobian.jld"), "jacobian")
-good_samples = JLD.load(joinpath(testdir, "samples.jld"), "samples")
-good_llhoods = JLD.load(joinpath(testdir, "llhoods.jld"), "llhoods")
-good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
+good_forward_predictions = FileIO.load(joinpath(testdir, "forward_predictions.jld"), "forward_predictions")
+good_jacobian = FileIO.load(joinpath(testdir, "jacobian.jld"), "jacobian")
+good_samples = FileIO.load(joinpath(testdir, "samples.jld"), "samples")
+good_llhoods = FileIO.load(joinpath(testdir, "llhoods.jld"), "llhoods")
+good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 
 @Base.Test.testset "Contamination" begin
 	@Base.Test.test	forward_predictions_source == forward_predictions
@@ -141,8 +144,8 @@ good_newllhoods = JLD.load(joinpath(testdir, "newllhoods.jld"), "newllhoods")
 		@show Mads.computemass(md)
 	end
 
-	good_welldata_time = JLD.load(joinpath(workdir, "test_results", "welldata_time.jld"), "welldata_time")
-	good_inverse_preds = JLD.load(joinpath(workdir, "test_results", "inverse_predictions.jld"), "inverse_predictions")
+	good_welldata_time = FileIO.load(joinpath(workdir, "test_results", "welldata_time.jld"), "welldata_time")
+	good_inverse_preds = FileIO.load(joinpath(workdir, "test_results", "inverse_predictions.jld"), "inverse_predictions")
 
 	# Testing time-based well data against itself
 	ssr = 0.

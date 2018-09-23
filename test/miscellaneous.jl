@@ -46,7 +46,7 @@ end
 
 try
 	Mads.rmfile("test-create-symbolic-link")
-	symlink(Pkg.dir("Mads"), "test-create-symbolic-link")
+	symlink(Mads.madsdir, "test-create-symbolic-link")
 	rm("test-create-symbolic-link")
 catch
 	if is_windows()
@@ -76,13 +76,13 @@ Mads.functions(Mads, r"is.*par"; stdout=true)
 Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
 	if is_windows()
-		Mads.runcmd("dir $(Pkg.dir("Mads"))")
-		Mads.runcmd("dir $(Pkg.dir("Mads"))"; pipe=true)
-		Mads.runcmd("dir $(Pkg.dir("Mads"))"; waittime=10.)
+		Mads.runcmd("dir $(Mads.madsdir)")
+		Mads.runcmd("dir $(Mads.madsdir)"; pipe=true)
+		Mads.runcmd("dir $(Mads.madsdir)"; waittime=10.)
 	else
-		Mads.runcmd("ls $(Pkg.dir("Mads"))")
-		Mads.runcmd("ls $(Pkg.dir("Mads"))"; pipe=true)
-		Mads.runcmd("ls $(Pkg.dir("Mads"))"; waittime=10.)
+		Mads.runcmd("ls $(Mads.madsdir)")
+		Mads.runcmd("ls $(Mads.madsdir)"; pipe=true)
+		Mads.runcmd("ls $(Mads.madsdir)"; waittime=10.)
 	end
 end
 Mads.transposevector(["a";"b"])

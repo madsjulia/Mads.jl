@@ -47,7 +47,7 @@ info("Variance of weighted posterior predictions using importance sampling")
 display(s_var)
 
 # display(var(goodoprime[selected_index,:], 2)')
-# JLD.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
+# FileIO.save("uncertainty_results/variance-important-sampling.jld", "goodoprime", goodoprime)
 
 info("Spaghetti plot of posterior predictions")
 Mads.spaghettiplot(md, o, filename="uncertainty_results/spaghetti-$(problem).png")

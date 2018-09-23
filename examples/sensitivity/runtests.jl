@@ -6,7 +6,7 @@ import Base.Test
 cwd = pwd()
 workdir = Mads.getmadsdir()
 if workdir == "."
-	@everywhere workdir = joinpath(Mads.madsdir, "..", "examples", "sensitivity")
+	@everywhere workdir = joinpath(Mads.madsdir, "examples", "sensitivity")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))

@@ -3,7 +3,7 @@ import Base.Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "..", "examples", "optimization")
+	workdir = joinpath(Mads.madsdir, "examples", "optimization")
 end
 
 @Mads.stderrcapture function clean_directory()

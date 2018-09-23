@@ -1,11 +1,14 @@
 import Mads
+import JLD2
+import FileIO
 import JLD
+
 import Base.Test
 
 Mads.madsinfo("Monte Carlo analysis ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "..", "examples", "montecarlo")
+	workdir = joinpath(Mads.madsdir, "examples", "montecarlo")
 end
 
 @Mads.stderrcapture function run_monte_carlo()
@@ -15,7 +18,7 @@ end
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		JLD.save(joinpath(d, "montecarlo.jld"), "results", results)
+		FileIO.save(joinpath(d, "montecarlo.jld"), "results", results)
 	end
 	return results
 end
@@ -23,7 +26,7 @@ end
 # Test Mads.montecarlo(md; N=10) against saved results
 @Base.Test.testset "Monte Carlo" begin
 	results = run_monte_carlo()
-	good_results = JLD.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
+	good_results = FileIO.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
 	@Base.Test.test results == good_results
 end
 

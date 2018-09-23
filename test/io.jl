@@ -2,7 +2,7 @@ import Mads
 import Base.Test
 
 # If madsdir = '.' then joinpath, else madsdir
-workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "..", "test") : Mads.getmadsdir()
+workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "test") : Mads.getmadsdir()
 @Mads.stderrcapture function jpath(file::String)
 	joinpath(workdir, file)
 end

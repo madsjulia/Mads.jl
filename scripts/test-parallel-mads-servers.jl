@@ -1,4 +1,4 @@
-include(joinpath(Pkg.dir("Mads"), "src", "MadsParallel.jl"))
+include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
 info("Set processors ...")
 setprocs(mads_servers=true, ntasks_per_node=2)
 @everywhere display(ENV["PATH"])
