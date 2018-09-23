@@ -1,6 +1,5 @@
 import Mads
 import Base.Test
-import DataStructures
 
 workdir = joinpath(Mads.madsdir, "..", "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "..", "examples", "svr")

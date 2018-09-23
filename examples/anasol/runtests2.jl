@@ -1,5 +1,4 @@
 import Mads
-import JLD
 import Base.Test
 
 srand(2017)

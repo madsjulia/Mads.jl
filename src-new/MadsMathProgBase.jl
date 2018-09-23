@@ -1,6 +1,5 @@
 import DocumentFunction
 import MathProgBase
-import DataStructures
 
 """
 MadsModel type applied for MathProgBase analyses
