@@ -1,8 +1,6 @@
 import Mads
 import JLD2
 import FileIO
-import JLD
-
 import Base.Test
 
 srand(2017)
@@ -129,30 +127,30 @@ if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
 
-	FileIO.save(joinpath(d, "goodresults.jld"), "forward_preds", forward_preds)
-	FileIO.save(joinpath(d, "forward_results.jld"), "forward_results", forward_results)
-	FileIO.save(joinpath(d, "paramrandom_true.jld"), "paramrandom_true", paramrandom_true)
-	FileIO.save(joinpath(d, "paramrandom_false.jld"), "paramrandom_false", paramrandom_false)
-	FileIO.save(joinpath(d, "residuals.jld"), "residuals_results", residuals_results)
-	FileIO.save(joinpath(d, "paramdict.jld"), "pd", pd)
-	FileIO.save(joinpath(d, "params_min.jld"), "m1", m1)
-	FileIO.save(joinpath(d, "params_max.jld"), "m2", m2)
-	FileIO.save(joinpath(d, "params_init_min.jld"), "m3", m3)
-	FileIO.save(joinpath(d, "params_init_max.jld"), "m4", m4)
-	FileIO.save(joinpath(d, "targetkeys.jld"), "tk", tk)
+	FileIO.save(joinpath(d, "goodresults.jld2"), "forward_preds", forward_preds)
+	FileIO.save(joinpath(d, "forward_results.jld2"), "forward_results", forward_results)
+	FileIO.save(joinpath(d, "paramrandom_true.jld2"), "paramrandom_true", paramrandom_true)
+	FileIO.save(joinpath(d, "paramrandom_false.jld2"), "paramrandom_false", paramrandom_false)
+	FileIO.save(joinpath(d, "residuals.jld2"), "residuals_results", residuals_results)
+	FileIO.save(joinpath(d, "paramdict.jld2"), "pd", pd)
+	FileIO.save(joinpath(d, "params_min.jld2"), "m1", m1)
+	FileIO.save(joinpath(d, "params_max.jld2"), "m2", m2)
+	FileIO.save(joinpath(d, "params_init_min.jld2"), "m3", m3)
+	FileIO.save(joinpath(d, "params_init_max.jld2"), "m4", m4)
+	FileIO.save(joinpath(d, "targetkeys.jld2"), "tk", tk)
 end
 
-good_forward_preds = FileIO.load(joinpath(workdir, "test_results", "goodresults.jld"), "forward_preds")
-good_forward_results = FileIO.load(joinpath(workdir, "test_results", "forward_results.jld"), "forward_results")
-good_paramrandom_true = FileIO.load(joinpath(workdir, "test_results", "paramrandom_true.jld"), "paramrandom_true")
-good_paramrandom_false = FileIO.load(joinpath(workdir, "test_results", "paramrandom_false.jld"), "paramrandom_false")
-good_residuals = FileIO.load(joinpath(workdir, "test_results", "residuals.jld"), "residuals_results")
-good_pd = FileIO.load(joinpath(workdir, "test_results", "paramdict.jld"), "pd")
-good_params_min = FileIO.load(joinpath(workdir, "test_results", "params_min.jld"), "m1")
-good_params_max = FileIO.load(joinpath(workdir, "test_results", "params_max.jld"), "m2")
-good_params_init_min = FileIO.load(joinpath(workdir, "test_results", "params_init_min.jld"), "m3")
-good_params_init_max = FileIO.load(joinpath(workdir, "test_results", "params_init_max.jld"), "m4")
-good_targetkeys = FileIO.load(joinpath(workdir, "test_results", "targetkeys.jld"), "tk")
+good_forward_preds = FileIO.load(joinpath(workdir, "test_results", "goodresults.jld2"), "forward_preds")
+good_forward_results = FileIO.load(joinpath(workdir, "test_results", "forward_results.jld2"), "forward_results")
+good_paramrandom_true = FileIO.load(joinpath(workdir, "test_results", "paramrandom_true.jld2"), "paramrandom_true")
+good_paramrandom_false = FileIO.load(joinpath(workdir, "test_results", "paramrandom_false.jld2"), "paramrandom_false")
+good_residuals = FileIO.load(joinpath(workdir, "test_results", "residuals.jld2"), "residuals_results")
+good_pd = FileIO.load(joinpath(workdir, "test_results", "paramdict.jld2"), "pd")
+good_params_min = FileIO.load(joinpath(workdir, "test_results", "params_min.jld2"), "m1")
+good_params_max = FileIO.load(joinpath(workdir, "test_results", "params_max.jld2"), "m2")
+good_params_init_min = FileIO.load(joinpath(workdir, "test_results", "params_init_min.jld2"), "m3")
+good_params_init_max = FileIO.load(joinpath(workdir, "test_results", "params_init_max.jld2"), "m4")
+good_targetkeys = FileIO.load(joinpath(workdir, "test_results", "targetkeys.jld2"), "tk")
 
 @Base.Test.testset "Anasol" begin
 	# Test Mads.forward(md, all=true)

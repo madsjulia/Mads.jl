@@ -1,8 +1,6 @@
 import Mads
 import JLD2
 import FileIO
-import JLD
-
 import Base.Test
 
 Mads.madsinfo("Bayesian sampling ...")
@@ -50,15 +48,14 @@ end
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-
-	FileIO.save(joinpath(d, "mcmcchains_emcee.jld"), "mcmcchains_emcee", mcmcchains_emcee)
-	FileIO.save(joinpath(d, "mcmcvalues.jld"), "mcmcvalues", mcmcvalues)
+	FileIO.save(joinpath(d, "mcmcchains_emcee.jld2"), "mcmcchains_emcee", mcmcchains_emcee)
+	FileIO.save(joinpath(d, "mcmcvalues.jld2"), "mcmcvalues", mcmcvalues)
 end
 
-good_mcmcvalues = FileIO.load(joinpath(workdir, "test_results", "mcmcvalues.jld"), "mcmcvalues")
+good_mcmcvalues = FileIO.load(joinpath(workdir, "test_results", "mcmcvalues.jld2"), "mcmcvalues")
 good_mcmcvalues_array = hcat(vcat(map(i->collect(good_mcmcvalues[i]), keys(good_mcmcvalues)))...)
 
-good_mcmcchains_emcee = FileIO.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld"), "mcmcchains_emcee")
+good_mcmcchains_emcee = FileIO.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld2"), "mcmcchains_emcee")
 
 @Base.Test.testset "Bayesian" begin
 	@Base.Test.testset "bayes" begin
