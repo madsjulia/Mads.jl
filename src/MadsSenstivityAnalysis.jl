@@ -7,7 +7,6 @@ import StatsBase
 import JSON
 import JLD2
 import FileIO
-import JLD
 
 if !haskey(ENV, "MADS_NO_GADFLY")
 	@tryimport Gadfly
@@ -619,7 +618,7 @@ argtext=Dict("evalmat"=>"saved array",
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
-		FileIO.save(joinpath(restartdir, string(matname, "_", myid(), ".jld")), "mat", evalmat)
+		FileIO.save(joinpath(restartdir, string(matname, "_", myid(), ".jld2")), "mat", evalmat)
 	end
 	return nothing
 end

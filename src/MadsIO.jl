@@ -1,8 +1,6 @@
 import DataStructures
 import JLD2
 import FileIO
-import JLD
-
 
 """
 Change the current directory to the Mads source dictionary

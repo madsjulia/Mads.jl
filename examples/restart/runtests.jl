@@ -93,7 +93,7 @@ cd(workdir)
 	@Base.Test.test Mads.getcomputes() == 20
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.saltelli(md, N=5, seed=2016)
-	@Base.Test.test Mads.getrestarts() == 0
+	@Base.Test.test Mads.getrestarts() == 20
 	@Base.Test.test Mads.getcomputes() == 20
 
 	@Base.Test.test no_restart_results == create_restart_results

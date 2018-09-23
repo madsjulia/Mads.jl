@@ -21,7 +21,6 @@ Images
 QuartzImageIO
 YAML
 JSON
-JLD
 JLD2
 FileIO
 ProgressMeter
