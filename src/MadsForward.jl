@@ -1,6 +1,5 @@
 import ProgressMeter
 import DataStructures
-import JLD
 import DocumentFunction
 
 function forward(madsdata::Associative; all::Bool=false)
