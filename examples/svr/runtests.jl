@@ -23,10 +23,10 @@ svrpredictions = svrexec(paramarray)
 if Mads.create_tests
 	d = joinpath(savedir, "test_results")
 	Mads.mkdir(d)
-	FileIO.save(joinpath(d, "svrpredictions.jld"), "svrpredictions", svrpredictions)
+	FileIO.save(joinpath(d, "svrpredictions.jld2"), "svrpredictions", svrpredictions)
 end
 
-good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
+good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld2"), "svrpredictions")
 
 srand(2017)
 

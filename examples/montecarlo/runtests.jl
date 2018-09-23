@@ -1,8 +1,6 @@
 import Mads
 import JLD2
 import FileIO
-import JLD
-
 import Base.Test
 
 Mads.madsinfo("Monte Carlo analysis ...")
@@ -18,7 +16,7 @@ end
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		FileIO.save(joinpath(d, "montecarlo.jld"), "results", results)
+		FileIO.save(joinpath(d, "montecarlo.jld2"), "results", results)
 	end
 	return results
 end
@@ -26,7 +24,7 @@ end
 # Test Mads.montecarlo(md; N=10) against saved results
 @Base.Test.testset "Monte Carlo" begin
 	results = run_monte_carlo()
-	good_results = FileIO.load(joinpath(workdir, "test_results", "montecarlo.jld"), "results")
+	good_results = FileIO.load(joinpath(workdir, "test_results", "montecarlo.jld2"), "results")
 	@Base.Test.test results == good_results
 end
 

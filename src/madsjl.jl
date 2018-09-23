@@ -42,7 +42,7 @@ elseif isfile(string(madscommand, ".jl"))
 end
 
 @everywhere import Mads
-@everywhere import JLD
+@everywhere import JLD2
 
 madsfile = ARGS[1]
 if isfile(madsfile)
@@ -73,7 +73,7 @@ for i = 2:length(ARGS)
 	else
 		info("Executing Mads command $madscommand (Mads.$madscommand) ...")
 		result = eval(parse("Mads.$(madscommand)(md)"))
-		FileIO.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
+		FileIO.save("$(dir)/$(root)-$(madscommand)-results.jld2", result)
 		Base.display(result)
 		println("")
 		info("Results are saved in $(dir)/$(root)-$(madscommand)-results.jld!")

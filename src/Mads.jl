@@ -12,8 +12,6 @@ module Mads
 
 import JLD2
 import FileIO
-import JLD
-
 import YAML
 import JSON
 
