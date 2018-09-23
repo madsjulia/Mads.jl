@@ -1,5 +1,5 @@
 info("start")
-include(joinpath(Pkg.dir("Mads"), "src-interactive", "MadsParallel.jl"))
+include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
 info("setprocs")
 setprocs(ntasks_per_node=2)
 

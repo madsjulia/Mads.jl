@@ -1,6 +1,9 @@
 import Mads
 import DataStructures
+import JLD2
+import FileIO
 import JLD
+
 import Base.Test
 
 @Mads.tryimport OrdinaryDiffEq
@@ -23,7 +26,7 @@ if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 	Mads.madsinfo("Loading data ...")
 	workdir = Mads.getmadsdir() # get the directory where the problem is executed
 	if workdir == "."
-		workdir = joinpath(Mads.madsdir, "..", "examples", "ode")
+		workdir = joinpath(Mads.madsdir, "examples", "ode")
 	end
 
 	md = Mads.loadmadsfile(joinpath(workdir, "ode.mads"))
@@ -51,12 +54,12 @@ if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 			d = joinpath(workdir, "test_results")
 			Mads.mkdir(d)
 
-			JLD.save(joinpath(d, "ode_solver_t.jld"), "t", t)
-			JLD.save(joinpath(d, "ode_solver_y.jld"), "ys", ys)
+			FileIO.save(joinpath(d, "ode_solver_t.jld"), "t", t)
+			FileIO.save(joinpath(d, "ode_solver_y.jld"), "ys", ys)
 		end
 
-		good_ode_t = JLD.load(joinpath(workdir, "test_results", "ode_solver_t.jld"), "t")
-		good_ode_ys = JLD.load(joinpath(workdir, "test_results", "ode_solver_y.jld"), "ys")
+		good_ode_t = FileIO.load(joinpath(workdir, "test_results", "ode_solver_t.jld"), "t")
+		good_ode_ys = FileIO.load(joinpath(workdir, "test_results", "ode_solver_y.jld"), "ys")
 
 		@Base.Test.test isapprox(t, good_ode_t, atol=1e-6)
 		@Base.Test.test isapprox(ys, good_ode_ys, atol=1e-6)

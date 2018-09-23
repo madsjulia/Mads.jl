@@ -1,5 +1,8 @@
 import DataStructures
+import JLD2
+import FileIO
 import JLD
+
 
 """
 Change the current directory to the Mads source dictionary
@@ -669,7 +672,7 @@ function setmodelinputs(madsdata::Associative, parameters::Associative=Mads.getp
 		for filename in vcat(madsdata["JLDParameters"])
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
-		JLD.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
+		FileIO.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
@@ -726,7 +729,7 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
-			results = merge(results, JLD.load(filename))
+			results = merge(results, FileIO.load(filename))
 		end
 	end
 	if haskey(madsdata, "JSONPredictions") # JSON

@@ -100,7 +100,13 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 		if git
 			info("Checking out $(i) ...")
 			cwd = pwd()
-			cd(Pkg.dir(i))
+			d = Pkg.dir(i)
+			if isdir(d)
+				cd(d)
+			else
+				warn("Package $i is not installed")
+				return
+			end
 			if master
 				if force
 					run(`git checkout -f master`)
@@ -137,7 +143,13 @@ function push(modulename::String="")
 	for i in modulenames
 		info("Pushing $(i) ...")
 		cwd = pwd()
-		cd(Pkg.dir(i))
+		d = Pkg.dir(i)
+		if isdir(d)
+			cd(d)
+		else
+			warn("Package $i is not installed")
+			return
+		end
 		try
 			run(`git push`)
 		catch e
@@ -162,7 +174,13 @@ function diff(modulename::String="")
 	end
 	for i in modulenames
 		cwd = pwd()
-		cd(Pkg.dir(i))
+		d = Pkg.dir(i)
+		if isdir(d)
+			cd(d)
+		else
+			warn("Package $i is not installed")
+			return
+		end
 		try
 			run(`git diff --word-diff "*.jl"`)
 		catch e
@@ -214,7 +232,13 @@ function commit(commitmsg::String, modulename::String="")
 	for i in modulenames
 		info("Commiting changes in $(i) ...")
 		cwd = pwd()
-		cd(Pkg.dir(i))
+		d = Pkg.dir(i)
+		if isdir(d)
+			cd(d)
+		else
+			warn("Package $i is not installed")
+			return
+		end
 		try
 			run(`git commit -a -m $(commitmsg)`)
 		catch
@@ -233,7 +257,13 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	if git
 		cwd = pwd()
 		info("Git status $(madsmodule) ...")
-		cd(Pkg.dir(madsmodule))
+		d = Pkg.dir(madsmodule)
+		if isdir(d)
+			cd(d)
+		else
+			warn("Package $madsmodule is not installed")
+			return
+		end
 		run(`git status -s`)
 		runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
 		if gitmore
@@ -326,7 +356,13 @@ argtext=Dict("madsmodule"=>"mads module name",
 function untag(madsmodule::String, version::String)
 	cwd = pwd()
 	info("Git untag $(madsmodule) ...")
-	cd(Pkg.dir(madsmodule))
+	d = Pkg.dir(madsmodule)
+	if isdir(d)
+		cd(Pkg.dir(madsmodule))
+	else
+		warn("Package $madsmodule is not installed")
+		return
+	end
 	try
 		run(`git tag -d $version`)
 		run(`git push origin :refs/tags/$version`)
@@ -346,7 +382,7 @@ function create_documentation()
 	Documenter.makedocs(root = Pkg.dir("Mads", "docs"), doctest=false, clean=true)
 
 	d = pwd()
-	cd(Pkg.dir("Mads"))
+	cd(Mads.madsdir)
 	# run(`git pull gh gh-pages`)
 	info("mkdocs build & deploy ...")
 	run(`mkdocs gh-deploy --clean`)

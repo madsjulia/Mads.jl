@@ -1,8 +1,8 @@
 import Mads
 import Base.Test
 
-workdir = joinpath(Mads.madsdir, "..", "examples", "model_analysis")
-savedir = joinpath(Mads.madsdir, "..", "examples", "svr")
+workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
+savedir = joinpath(Mads.madsdir, "examples", "svr")
 goodresultsfile = "sasvr.jld"
 
 srand(2017)
@@ -23,10 +23,10 @@ svrpredictions = svrexec(paramarray)
 if Mads.create_tests
 	d = joinpath(savedir, "test_results")
 	Mads.mkdir(d)
-	JLD.save(joinpath(d, "svrpredictions.jld"), "svrpredictions", svrpredictions)
+	FileIO.save(joinpath(d, "svrpredictions.jld"), "svrpredictions", svrpredictions)
 end
 
-good_svrpredictions = JLD.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
+good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld"), "svrpredictions")
 
 srand(2017)
 
@@ -41,10 +41,10 @@ sasvr_var = hcat(map(i->collect(i), values.(collect(values(sasvr["var"]))))...)
 if Mads.create_tests
 	d = joinpath(savedir, "test_results")
 	Mads.mkdir(d)
-	JLD.save(joinpath(d, goodresultsfile), "sasvr", sasvr)
+	FileIO.save(joinpath(d, goodresultsfile), "sasvr", sasvr)
 end
 
-good_sasvr = JLD.load(joinpath(savedir, "test_results", goodresultsfile), "sasvr")
+good_sasvr = FileIO.load(joinpath(savedir, "test_results", goodresultsfile), "sasvr")
 
 good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"]))))...)
 good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)

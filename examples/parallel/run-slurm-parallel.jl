@@ -1,1 +1,1 @@
-include(joinpath(Pkg.dir("Mads"), "examples", "parallel", "slurm-parallel.jl"))
+include(joinpath(Mads.madsdir, "examples", "parallel", "slurm-parallel.jl"))

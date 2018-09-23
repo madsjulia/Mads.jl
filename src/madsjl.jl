@@ -20,12 +20,12 @@ if length(ARGS) < 1
 end
 
 if haskey(ENV, "SLURM_NODELIST")
-	include(joinpath(Pkg.dir("Mads"), "src-interactive", "MadsParallel.jl"))
+	include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
 	setprocs()
 end
 
 madscommand = ARGS[1]
-madsscript = joinpath(Pkg.dir("Mads"), "scripts", string(madscommand, ".jl"))
+madsscript = joinpath(Mads.madsdir, "scripts", string(madscommand, ".jl"))
 if isfile(madsscript)
 	info("Executing Mads script $(madsscript) ...")
 	include(madsscript)
@@ -62,7 +62,7 @@ else
 end
 for i = 2:length(ARGS)
 	madscommand = ARGS[i]
-	madsscript = joinpath(Pkg.dir("Mads"), "scripts", string(madscommand, ".jl"))
+	madsscript = joinpath(Mads.madsdir, "scripts", string(madscommand, ".jl"))
 	if isfile(madsscript)
 		info("Executing Mads script $(madsscript) ...")
 		include(madsscript)
@@ -73,7 +73,7 @@ for i = 2:length(ARGS)
 	else
 		info("Executing Mads command $madscommand (Mads.$madscommand) ...")
 		result = eval(parse("Mads.$(madscommand)(md)"))
-		JLD.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
+		FileIO.save("$(dir)/$(root)-$(madscommand)-results.jld", result)
 		Base.display(result)
 		println("")
 		info("Results are saved in $(dir)/$(root)-$(madscommand)-results.jld!")

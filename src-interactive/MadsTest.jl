@@ -51,8 +51,15 @@ keytext=Dict("madstest"=>"test Mads [default=`true`]")))
 function test(testname::String=""; madstest::Bool=true)
 	graphoff()
 	orig_dir = pwd()
+	d = Mads.madsdir
+	if isdir(d)
+		info("Testing Mads in $d")
+	else
+		d = Mads.madsdir
+		info("Testing Mads in $d")
+	end
 	if testname == ""
-		madstest && include(joinpath(Pkg.dir("Mads"), "test", "runtests.jl"))
+		madstest && include(joinpath(d, "test", "runtests.jl"))
 		info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			print_with_color(:cyan, "* $i testing ...\n")
@@ -61,14 +68,14 @@ function test(testname::String=""; madstest::Bool=true)
 			toc()
 		end
 	else
-		file = joinpath(Pkg.dir("Mads"), "examples", testname, "runtests.jl")
+		file = joinpath(d, "examples", testname, "runtests.jl")
 		if isfile(file)
 			print_with_color(:cyan, "* $testname testing ...\n")
 			tic()
 			include(file)
 			toc()
 		else
-			file = joinpath(Pkg.dir("Mads"), "test", "$testname.jl")
+			file = joinpath(d, "test", "$testname.jl")
 			if isfile(file)
 				print_with_color(:cyan, "* $testname testing ...\n")
 				tic()

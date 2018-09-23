@@ -1,5 +1,5 @@
 info("start")
-include(joinpath(Pkg.dir("Mads"), "src-interactive/MadsParallel.jl"))
+include(joinpath(Mads.madsdir, "src-interactive/MadsParallel.jl"))
 info("setprocs")
 setprocs(ntasks_per_node=16)
 
@@ -21,7 +21,7 @@ Mads.forward(md)
 info("local SA")
 lsa_results = Mads.localsa(md, datafiles=true, imagefiles=true)
 @show ReusableFunctions.restarts
-JLD.save("lsa_results.jld", "lsa_results", lsa_results)
+FileIO.save("lsa_results.jld", "lsa_results", lsa_results)
 info("calibrate")
 inverse_parameters, inverse_results = Mads.calibrate(md; np_lambda=36, lambda_mu=1.5, tolX=1e-16)
 @show ReusableFunctions.restarts
