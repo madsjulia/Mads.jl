@@ -1,5 +1,4 @@
 import RobustPmap
-import DataStructures
 import LsqFit
 import DocumentFunction
 

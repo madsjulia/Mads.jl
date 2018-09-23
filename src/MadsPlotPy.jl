@@ -1,5 +1,4 @@
-import PyPlot
-import DataStructures
+import PyPlots
 import DocumentFunction
 
 function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
