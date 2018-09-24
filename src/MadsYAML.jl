@@ -23,10 +23,20 @@ function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 		catch e
 			printerrormsg(e)
 			warn("Python YAML fails!")
-			yamldata = yaml.load(f)
+			try
+				yamldata = yaml.load(f)
+			catch e
+				printerrormsg(e)
+				warn("Julia YAML fails!")
+			end
 		end
 	else
-		yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
+		try
+			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
+		catch e
+			printerrormsg(e)
+			warn("Julia YAML fails!")
+		end
 	end
 	close(f)
 	return yamldata # this is not OrderedDict()
