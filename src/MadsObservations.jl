@@ -89,9 +89,11 @@ for i = 1:length(getobsnames)
 	obstype = getobstypes[i]
 	obsdefault = getobsdefault[i]
 	obslogdefault = getobslogdefault[i]
-	index = i
+	global index = i
 	q = quote
-		@doc "Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`" ->
+		"""
+		Get an array with `$(getobsnames[index])` values for observations in the MADS problem dictionary defined by `obskeys`
+		"""
 		function $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 			obsvalue = Array{$(obstype)}(length(obskeys))
 			for i in 1:length(obskeys)
@@ -119,7 +121,9 @@ for i = 1:length(getobsnames)
 			end
 			return obsvalue
 		end
-		@doc "Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary"  ->
+		"""
+		Get an array with `$(getobsnames[index])` values for all observations in the MADS problem dictionary
+		"""
 		function $(Symbol(string("getobs", obsname)))(madsdata::Associative)
 			obskeys = collect(keys(madsdata["Observations"]))
 			return $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)

@@ -355,11 +355,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	#   J - estimate of the Jacobian of f at x
 
 	# other constants
-	const MAX_LAMBDA = 1e16 # minimum trust region radius
-	const MIN_LAMBDA = 1e-16 # maximum trust region radius
-	const MIN_STEP_QUALITY = 1e-3
-	const GOOD_STEP_QUALITY = 0.75
-	const MIN_DIAGONAL = 1e-6 # lower bound on values of diagonal matrix used to regularize the trust region step
+	MAX_LAMBDA = 1e16 # minimum trust region radius
+	MIN_LAMBDA = 1e-16 # maximum trust region radius
+	MIN_STEP_QUALITY = 1e-3
+	GOOD_STEP_QUALITY = 0.75
+	MIN_DIAGONAL = 1e-6 # lower bound on values of diagonal matrix used to regularize the trust region step
 
 	converged = false
 	x_converged = false
