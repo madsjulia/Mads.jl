@@ -335,7 +335,8 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 				H = 0.5
 			end
 		end
-		for w in 1:nW
+		for w_ in 1:nW
+			global w = w_
 			wellc[w] .= background
 		end
 		for i=1:numberofsources
@@ -375,7 +376,8 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 					H = 0.5
 				end
 			end
-			for w in 1:nW
+			for w_ in 1:nW
+				global w = w_
 				if wellscreen[w]
 					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
 					             contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
@@ -423,7 +425,6 @@ Returns:
 
 - a vector of predicted concentration at (wellx, welly, wellz, t)
 """
-
 function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Vector, anasolfunction::Function)
 	d = -theta * pi / 180
 	xshift = wellx - x

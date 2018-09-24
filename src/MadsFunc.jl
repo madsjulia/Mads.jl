@@ -459,7 +459,7 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		"MADS log-likelihood functions"
-		function madsloglikelihood{T1<:Associative, T2<:Associative, T3<:Associative}(params::T1, predictions::T2, observations::T3)
+		function madsloglikelihood(params::T1, predictions::T2, observations::T3) where {T1<:Associative, T2<:Associative, T3<:Associative}
 			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
 	end

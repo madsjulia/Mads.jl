@@ -87,7 +87,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 			pyyamlok = false
 			try
 				eval(:(@PyCall.pyimport yaml))
-				pyyamlok = true
+				global pyyamlok = true
 			catch
 				warn("PyYAML is not available (in Conda)")
 			end
