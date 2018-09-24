@@ -12,8 +12,8 @@ addons:
       - hdf5-tools
       - python-numpy
       - python3-numpy
-      - python-matplolib
-      - python3-matplolib
+      - python-matplotlib
+      - python3-matplotlib
 env:
   global:
     - PYCALL_DEBUG_BUILD="yes"
