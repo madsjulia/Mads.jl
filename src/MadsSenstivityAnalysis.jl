@@ -1183,7 +1183,8 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	function eFAST_optimalSearch(Ns_total, M, gamma)
 		# Iterate through different integer values of Nr (# of resamples)
 		# If loop finishes, script will adjust Ns upwards to obtain an optimal
-		for Nr = 1:50
+		for Nr_ = 1:50
+			global Nr = Nr_
 			Wi = (Ns_total / Nr - 1) / (gamma * M)        # Based on Nyquist Freq
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
@@ -1201,8 +1202,10 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 		# If script reaches this point, this loop adjusts Ns (upwards) to obtain
 		# optimal Nr/Wi pairing.
 		Ns0 = Ns_total # Freezing original Ns value given
-		for Nr = 1:100
-			for Ns_total = Ns0 + 1:1:Ns0 + 5000
+		for Nr_ = 1:100
+			global Nr = Nr_
+			for Ns_total_ = Ns0 + 1:1:Ns0 + 5000
+				Ns_total = Ns_total_
 				Wi = (Ns_total / Nr - 1) / ( gamma * M)
 				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
 					Wi = round(Int, Wi)

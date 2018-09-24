@@ -75,7 +75,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 	if isdefined(:PyCall)
 		try
 			eval(:(@PyCall.pyimport yaml))
-			info("PyYAML is available (in Conda)")
+			# info("PyYAML is available (in Conda)")
 		catch
 			ENV["PYTHON"] = ""
 			warn("PyYAML is not available (in the available python installation)")
@@ -93,7 +93,7 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 			end
 			if pyyamlok
 				eval(:(@PyCall.pyimport yaml))
-				info("PyYAML is available (in Conda)")
+				# info("PyYAML is available (in Conda)")
 			end
 		end
 	else
@@ -179,7 +179,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 			ENV["MADS_NO_PYPLOT"] = ""
 			warn("PyPlot is not available")
 		else
-			info("PyPlot is available")
+			# info("PyPlot is available")
 		end
 	end
 else
