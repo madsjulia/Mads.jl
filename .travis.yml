@@ -29,7 +29,7 @@ before_script:
   - test "x$TRAVIS_OS_NAME" = xosx -o "x$PYTHON" = xConda || (sudo apt-get -qq update && sudo apt-get install -y $PYTHON)
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; brew link --overwrite gcc; brew install hdf5; fi
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then pip install matplotlib pyyaml; fi
-  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo apt-get install matplotlib pyyaml; fi
+  - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo pip install matplotlib pyyaml; fi
 # script:
 #   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 #   - julia -e 'Pkg.clone(pwd());'

@@ -777,7 +777,9 @@ Returns:
 Examples:
 
 ```julia
-
+- `Mads.searchdir("a")`
+- `Mads.searchdir(r"[A-B]"; path = ".")`
+- `Mads.searchdir(r".*.cov"; path = ".")`
 ```
 """ searchdir
 
