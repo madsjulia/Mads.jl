@@ -410,10 +410,10 @@ function getparamrandom(madsdata::Associative, parameterkey::String; numsamples:
 			if typeof(dist) <: Distributions.Uniform
 				a = log10(dist.a)
 				b = log10(dist.b)
-				return 10.^(a + (b - a) * Distributions.rand(numsamples))
+				return 10. .^(a + (b - a) * Distributions.rand(numsamples))
 			elseif typeof(dist) <: Distributions.Normal
 				μ = log10(dist.μ)
-				return 10.^(μ + dist.σ * Distributions.randn(numsamples))
+				return 10. .^(μ + dist.σ * Distributions.randn(numsamples))
 			end
 		end
 		return Distributions.rand(paramdist[parameterkey], numsamples)
@@ -868,9 +868,11 @@ end
 saltelli_functions = ["saltelli", "saltellibrute"]
 index = 0
 for mi = 1:length(saltelli_functions)
-	index = mi
+	global index = mi
 	q = quote
-		@doc "Parallel version of $(saltelli_functions[index])" ->
+		"""
+		Parallel version of $(saltelli_functions[index])
+		"""
 		function $(Symbol(string(saltelli_functions[mi], "parallel")))(madsdata::Associative, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::String="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
