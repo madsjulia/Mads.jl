@@ -47,85 +47,87 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
-@doc """
-Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
+if isdefined(Klara, :BasicContMuvParameter)
+	@doc """
+	Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
-$(DocumentFunction.documentfunction(emceesampling;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
-keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors; in general, the higher the number of walkers, the better the results and computational time [default=`10`]",
-            "nsteps"=>"number of final realizations in the chain [default=`100`]",
-            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
-            "thinning"=>"removal of any `thinning` realization [default=`1`]",
-            "sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
-            "seed"=>"random seed [default=`0`]",
-            "weightfactor"=>"weight factor [default=`1.0`]")))
+	$(DocumentFunction.documentfunction(emceesampling;
+	argtext=Dict("madsdata"=>"MADS problem dictionary",
+	            "p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
+	keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors; in general, the higher the number of walkers, the better the results and computational time [default=`10`]",
+	            "nsteps"=>"number of final realizations in the chain [default=`100`]",
+	            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
+	            "thinning"=>"removal of any `thinning` realization [default=`1`]",
+	            "sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
+	            "seed"=>"random seed [default=`0`]",
+	            "weightfactor"=>"weight factor [default=`1.0`]")))
 
-Returns:
+	Returns:
 
-- MCMC chain
-- log likelihoods of the final samples in the chain
+	- MCMC chain
+	- log likelihoods of the final samples in the chain
 
-Examples:
+	Examples:
 
-```julia
-Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
-Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
-```
-""" emceesampling
+	```julia
+	Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+	Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+	```
+	""" emceesampling
 
-function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
-	Mads.setseed(seed)
-	madsloglikelihood = makemadsloglikelihood(madsdata)
-	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-	optparamkeys = getoptparamkeys(madsdata)
-	initvals = Array{Float64}(length(optparamkeys))
-	for i = 1:length(optparamkeys)
-		initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
+	function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
+		Mads.setseed(seed)
+		madsloglikelihood = makemadsloglikelihood(madsdata)
+		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
+		optparamkeys = getoptparamkeys(madsdata)
+		initvals = Array{Float64}(length(optparamkeys))
+		for i = 1:length(optparamkeys)
+			initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
+		end
+		mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
+		model = Klara.likelihood_model(mcparams, false)
+		# sampler = Klara.MH(fill(1e-1, length(initvals)))
+		sampler = Klara.RAM(fill(1e-1, length(initvals)))
+		mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
+		mcparams0 = Dict(:p=>initvals)
+		outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
+		job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
+		Klara.run(job)
+		chain = Klara.output(job)
+		return chain
 	end
-	mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
-	model = Klara.likelihood_model(mcparams, false)
-	# sampler = Klara.MH(fill(1e-1, length(initvals)))
-	sampler = Klara.RAM(fill(1e-1, length(initvals)))
-	mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
-	mcparams0 = Dict(:p=>initvals)
-	outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
-	job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
-	Klara.run(job)
-	chain = Klara.output(job)
-	return chain
-end
-function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
-	if seed != 0
-		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
-	else
-		mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+	function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
+		if seed != 0
+			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
+		else
+			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+		end
+		return mcmcchains
 	end
-	return mcmcchains
+
+	@doc """
+	Bayesian Sampling
+
+	$(DocumentFunction.documentfunction(bayessampling;
+	argtext=Dict("madsdata"=>"MADS problem dictionary",
+	            "numsequences"=>"number of sequences executed in parallel"),
+	keytext=Dict("nsteps"=>"number of final realizations in the chain [default=`1000`]",
+	            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`100`]",
+	            "thinning"=>"removal of any `thinning` realization [default=`1`]",
+	            "seed"=>"random seed [default=`0`]")))
+
+	Returns:
+
+	- MCMC chain
+
+	Examples:
+
+	```julia
+	Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
+	Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
+	```
+	""" bayessampling
 end
-
-@doc """
-Bayesian Sampling
-
-$(DocumentFunction.documentfunction(bayessampling;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "numsequences"=>"number of sequences executed in parallel"),
-keytext=Dict("nsteps"=>"number of final realizations in the chain [default=`1000`]",
-            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`100`]",
-            "thinning"=>"removal of any `thinning` realization [default=`1`]",
-            "seed"=>"random seed [default=`0`]")))
-
-Returns:
-
-- MCMC chain
-
-Examples:
-
-```julia
-Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
-Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
-```
-""" bayessampling
 
 """
 Save MCMC chain in a file
