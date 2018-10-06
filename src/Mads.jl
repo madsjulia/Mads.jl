@@ -26,6 +26,18 @@ import RobustPmap
 import SVR
 import DocumentFunction
 
+function pin()
+	Pkg.pin("RobustPmap", v"0.3.0")
+	Pkg.pin("DocumentFunction", v"0.2.0")
+	Pkg.pin("SVR", v"0.3.0")
+	Pkg.pin("MetaProgTools", v"0.3.0")
+	Pkg.pin("Kriging", v"0.2.0")
+	Pkg.pin("Anasol", v"0.3.1")
+	Pkg.pin("AffineInvariantMCMC", v"0.3.0")
+	Pkg.pin("GeostatInversion", v"0.3.0")
+	Pkg.pin("ReusableFunctions", v"0.3.0")
+end
+
 global madsgit = true
 try
 	run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
