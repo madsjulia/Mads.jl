@@ -1129,6 +1129,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 				color = ["$(names[i])" for j in 1:nT])
 				for i in 1:nS]...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.title(title),
 				Gadfly.Guide.ColorKey(title=keytitle),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		else
