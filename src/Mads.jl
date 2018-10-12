@@ -1,4 +1,4 @@
-# __precompile__()
+__precompile__()
 
 """
 MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
@@ -173,12 +173,6 @@ include("MadsModelSelection.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
-
-if Mads.pkgversion("Gadfly") == v"0.6.1"
-	ENV["MADS_NO_GADFLY"] = ""
-	warn("Gadfly v0.6.1 has bugs; update or downgrade to another version!")
-	warn("Gadfly plotting is disabled!")
-end
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
