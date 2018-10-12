@@ -3,8 +3,7 @@ import RobustPmap
 import JSON
 import AffineInvariantMCMC
 import DocumentFunction
-@tryimport BlackBoxOptim
-@tryimport Klara
+import BlackBoxOptim
 
 function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0)
 	if numwalkers <= 1
@@ -47,7 +46,7 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
-if isdefined(Klara, :BasicContMuvParameter)
+if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 	@doc """
 	Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 

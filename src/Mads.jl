@@ -16,7 +16,6 @@ import YAML
 import JSON
 
 import Anasol
-import BIGUQ
 import AffineInvariantMCMC
 import GeostatInversion
 import Kriging
@@ -166,13 +165,31 @@ include("MadsExecute.jl")
 include("MadsCalibrate.jl")
 include("MadsMinimization.jl")
 include("MadsLevenbergMarquardt.jl")
-include("MadsMonteCarlo.jl")
 include("MadsKriging.jl")
-include("MadsBayesInfoGap.jl")
 include("MadsModelSelection.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
+
+if VERSION < v"0.7"
+	ENV["MADS_NO_BIGUQ"] = ""
+	ENV["MADS_NO_KLARA"] = ""
+end
+
+if !haskey(ENV, "MADS_NO_BIGUQ")
+	@tryimport BIGUQ
+	include("MadsBayesInfoGap.jl")
+else
+	ENV["MADS_NO_BIGUQ"] = ""
+end
+
+if !haskey(ENV, "MADS_NO_KLARA")
+	@tryimport Klara
+else
+	ENV["MADS_NO_KLARA"] = ""
+end
+
+include("MadsMonteCarlo.jl")
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
