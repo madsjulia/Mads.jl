@@ -15,7 +15,7 @@ Returns:
 - data in the yaml input file
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
-	julia = (isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()) ? julia : true
+	julia = (isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()) ? julia : true
 	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	if julia
@@ -52,7 +52,7 @@ argtext=Dict("filename"=>"output file name",
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 """
 function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
-	julia = (isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()) ? julia : true
+	julia = (isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()) ? julia : true
 	f = open(filename, "w")
 	if julia
 		JSON.print(f, data, 1)
