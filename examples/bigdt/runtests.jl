@@ -7,7 +7,7 @@ problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "examples", "bigdt")
 
 md = Dict()
-if isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()
+if isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()
 	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
 else
 	@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
