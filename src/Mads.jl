@@ -56,7 +56,8 @@ end
 """
 Mads Modules: $madsmodules
 """
-global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+# global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
 include("MadsHelpers.jl")
 
