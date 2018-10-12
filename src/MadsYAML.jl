@@ -1,6 +1,7 @@
 import JSON
 import YAML
 import DataStructures
+import PyCall
 
 """
 Load YAML file
@@ -14,7 +15,7 @@ Returns:
 - data in the yaml input file
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
-	julia = isdefined(Mads, :yaml) ? julia : true
+	julia = (isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()) ? julia : true
 	yamldata = DataStructures.OrderedDict()
 	f = open(filename)
 	if julia
@@ -22,17 +23,17 @@ function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 			yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
 		catch e
 			printerrormsg(e)
-			warn("Python YAML fails!")
+			warn("Julia YAML fails!")
 			try
-				yamldata = yaml.load(f)
+				yamldata = pyyaml[:load](f)
 			catch e
 				printerrormsg(e)
-				warn("Julia YAML fails!")
+				warn("Python YAML fails!")
 			end
 		end
 	else
 		try
-			yamldata = yaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
+			yamldata = pyyaml[:load](f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		catch e
 			printerrormsg(e)
 			warn("Julia YAML fails!")
@@ -51,12 +52,12 @@ argtext=Dict("filename"=>"output file name",
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 """
 function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
-	julia = isdefined(Mads, :yaml) ? julia : true
+	julia = (isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()) ? julia : true
 	f = open(filename, "w")
 	if julia
 		JSON.print(f, data, 1)
 	else
-		write(f, yaml.dump(data, width=255)) # we use the python library because the YAML julia library cannot dump
+		write(f, pyyaml[:dump](data, width=255)) # we use the python library because the YAML julia library cannot dump
 	end
 	close(f)
 end
