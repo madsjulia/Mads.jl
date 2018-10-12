@@ -3,6 +3,10 @@ import JLD2
 import FileIO
 using Base.Test
 
+if haskey(ENV, "MADS_NO_BIGUQ")
+	return
+end
+
 problemdir = Mads.getmadsdir()
 workdir = joinpath(Mads.madsdir, "examples", "bigdt")
 
