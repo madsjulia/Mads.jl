@@ -38,7 +38,7 @@ end
 		md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
 		jparam, jresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 
-		if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :yaml)
+		if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()
 			md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 			yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 			@Base.Test.test yparam == jparam

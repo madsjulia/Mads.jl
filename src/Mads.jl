@@ -85,27 +85,30 @@ end
 if !haskey(ENV, "MADS_NO_PYTHON")
 	@tryimport PyCall
 	if isdefined(:PyCall)
-		try
-			eval(:(@PyCall.pyimport yaml))
-			# info("PyYAML is available (in Conda)")
-		catch
-			ENV["PYTHON"] = ""
-			warn("PyYAML is not available (in the available python installation)")
-		end
-		if !isdefined(Mads, :yaml)
-			if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
-				@tryimport Conda
-			end
-			pyyamlok = false
+		const pyyaml = PyCall.PyNULL()
+		function __init__()
 			try
-				eval(:(@PyCall.pyimport yaml))
-				global pyyamlok = true
-			catch
-				warn("PyYAML is not available (in Conda)")
-			end
-			if pyyamlok
-				eval(:(@PyCall.pyimport yaml))
+				copy!(pyyaml, PyCall.pyimport("yaml"))
 				# info("PyYAML is available (in Conda)")
+			catch
+				ENV["PYTHON"] = ""
+				warn("PyYAML is not available (in the available python installation)")
+			end
+			if pyyaml == PyCall.PyNULL()
+				if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
+					@tryimport Conda
+				end
+				pyyamlok = false
+				try
+					copy!(pyyaml, PyCall.pyimport("yaml"))
+					pyyamlok = true
+				catch
+					warn("PyYAML is not available (in Conda)")
+				end
+				if pyyamlok
+					copy!(pyyaml, PyCall.pyimport("yaml"))
+					# info("PyYAML is available (in Conda)")
+				end
 			end
 		end
 	else

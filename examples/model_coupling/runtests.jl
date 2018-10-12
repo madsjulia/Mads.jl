@@ -86,7 +86,7 @@ Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-json-exp.mads"))
 efor = Mads.forward(md)
 
-if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(:PyCall) && isdefined(Mads, :yaml)
+if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && pyyaml != PyCall.PyNULL()
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 	yfor = Mads.forward(md)
