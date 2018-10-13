@@ -172,22 +172,27 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 
-if VERSION < v"0.7"
+if VERSION >= v"0.7"
 	ENV["MADS_NO_BIGUQ"] = ""
 	ENV["MADS_NO_KLARA"] = ""
 end
 
 if !haskey(ENV, "MADS_NO_BIGUQ")
 	@tryimport BIGUQ
-	include("MadsBayesInfoGap.jl")
+	if isdefined(:BIGUQ)
+		include("MadsBayesInfoGap.jl")
+	else
+		ENV["MADS_NO_BIGUQ"] = ""
+	end
 else
 	ENV["MADS_NO_BIGUQ"] = ""
 end
 
 if !haskey(ENV, "MADS_NO_KLARA")
 	@tryimport Klara
-else
-	ENV["MADS_NO_KLARA"] = ""
+	if !isdefined(:Klara)
+		ENV["MADS_NO_KLARA"] = ""
+	end
 end
 
 include("MadsMonteCarlo.jl")
@@ -229,7 +234,7 @@ else
 	include(joinpath("..", "src-external", "MadsSimulators.jl"))
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
-	@Mads.tryimport JuMP
+	@tryimport JuMP
 	if isdefined(:JuMP)
 		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 		include(joinpath("..", "src-new", "MadsBSS.jl"))
