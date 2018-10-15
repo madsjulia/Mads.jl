@@ -15,7 +15,7 @@ rootname = Mads.getmadsrootname(md)
 
 mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=2, seed=2016)
 
-if isdefined(Klara, :BasicContMuvParameter)
+if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 	Mads.bayessampling(md, 1; nsteps=1, burnin=1, thinning=1)
 	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
@@ -26,7 +26,7 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
-if isdefined(Klara, :BasicContMuvParameter)
+if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
 	mcmcvalues_array = hcat(vcat(map(i->collect(mcmcvalues[i]), keys(mcmcvalues)))...)
