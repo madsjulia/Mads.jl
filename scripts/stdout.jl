@@ -2,8 +2,8 @@ originalSTDOUT = STDOUT;
 originalSTDERR = STDERR;
 (outRead, outWrite) = redirect_stdout();
 (errRead, errWrite) = redirect_stderr();
-outreader = @async readstring(outRead);
-errreader = @async readstring(errRead);
+outreader = @async read(outRead, String);
+errreader = @async read(errRead, String);
 println("test")
 println(STDERR, "Goodbye, World!")
 redirect_stdout(originalSTDOUT);

@@ -112,8 +112,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 				originalSTDERR = STDERR;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
-				outreader = @async readstring(outRead);
-				errreader = @async readstring(errRead);
+				outreader = @async read(outRead, String);
+				errreader = @async read(errRead, String);
 			end
 			errmsg = ""
 			addprocsfailed = false
