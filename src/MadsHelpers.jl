@@ -433,16 +433,14 @@ function pkgversion(modulestr::String)
 	end
 end
 
-"""
-Checks if package is available
+if VERSION >= v"0.7"
 
-$(DocumentFunction.documentfunction(ispkgavailable;
-argtext=Dict("modulename"=>"module name")))
+function ispkgavailable(modulename::String; quiet::Bool=false)
+	true
+end
 
-Returns:
+else
 
-- `true` or `false`
-"""
 function ispkgavailable(modulename::String; quiet::Bool=false)
 	flag=false
 	try
@@ -458,3 +456,16 @@ function ispkgavailable(modulename::String; quiet::Bool=false)
 	end
 	return flag
 end
+
+end
+
+@doc """
+Checks if package is available
+
+$(DocumentFunction.documentfunction(ispkgavailable;
+argtext=Dict("modulename"=>"module name")))
+
+Returns:
+
+- `true` or `false`
+""" ispkgavailable

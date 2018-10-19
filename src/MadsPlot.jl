@@ -536,8 +536,8 @@ $(DocumentFunction.documentfunction(plotwellSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "result"=>"sensitivity analysis results",
             "wellname"=>"well name"),
-keytext=Dict("xtitle"=>"x-axis title [default=`\"Time \[years\]\"`]",
-            "ytitle"=>"y-axis title [default=`\"Concentration \[ppb\]\"`]",
+keytext=Dict("xtitle"=>"x-axis title",
+            "ytitle"=>"y-axis title",
             "filename"=>"output file name",
             "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]")))
 
@@ -558,8 +558,8 @@ keytext=Dict("filter"=>"string or regex to plot only observations containing `fi
             "format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
             "debug"=>"[default=`false`]",
             "separate_files"=>"plot data for multiple wells separately [default=`false`]",
-            "xtitle"=>"x-axis title [default=`\"Time \[years\]\"`]",
-            "ytitle"=>"y-axis title [default=`\"Concentration \[ppb\]\"`]",
+            "xtitle"=>"x-axis title",
+            "ytitle"=>"y-axis title",
             "linewidth"=>"line width [default=`2Gadfly.pt`]",
             "pointsize"=>"point size [default=`2Gadfly.pt`]")))
 

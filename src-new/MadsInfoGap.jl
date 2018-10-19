@@ -11,7 +11,7 @@ Information Gap Decision Analysis using JuMP
 
 $(DocumentFunction.documentfunction(infogap_jump;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
             "random"=>"random initial guesses [default=`false`]",
             "maxiter"=>"maximum number of iterations [default=`3000`]",
@@ -108,7 +108,7 @@ Information Gap Decision Analysis using JuMP
 
 $(DocumentFunction.documentfunction(infogap_jump_polinomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
             "random"=>"random initial guesses [default=`false`]",
             "maxiter"=>"maximum number of iterations [default=`3000`]",
@@ -262,7 +262,7 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 	return hmin, hmax
 end
 
-type MadsModelPoly <: MathProgBase.AbstractNLPEvaluator
+mutable struct MadsModelPoly <: MathProgBase.AbstractNLPEvaluator
 end
 
 """
@@ -270,7 +270,7 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_polinomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
             "random"=>"random initial guesses [default=`false`]",
             "maxiter"=>"maximum number of iterations [default=`3000`]",
@@ -292,37 +292,37 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	t = [1.,2.,3.,4.,5.]
 	no = 4
 
-	function MathProgBase.initialize(d::MadsModelPoly, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModelPoly, requested_features::Vector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	MathProgBase.features_available(d::MadsModelPoly) = [:Grad, :Jac]
-	function MathProgBase.eval_f(d::MadsModelPoly, p::Vector)
+	@eval MathProgBase.features_available(d::MadsModelPoly) = [:Grad, :Jac]
+	@eval function MathProgBase.eval_f(d::MadsModelPoly, p::Vector)
 		of = p[1] * (t[5]^p[4]) + p[2] * t[5] + p[3]
 		return of
 	end
-	function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::Vector, p::Vector)
 		grad_f[1] = t[5]^p[4]
 		grad_f[2] = t[5]
 		grad_f[3] = 1
 		grad_f[4] = p[1] * (t[5]^p[4]) * log(t[5])
 	end
-	function MathProgBase.eval_g(d::MadsModelPoly, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModelPoly, o::Vector, p::Vector)
 		for i = 1:no
 			o[i] = p[1] * (t[i]^p[4]) + p[2] * t[i] + p[3]
 		end
 	end
-	MathProgBase.hesslag_structure(d::MadsModelPoly) = Int[],Int[]
-	MathProgBase.eval_hesslag(d::MadsModelPoly, H, p, σ, μ) = nothing
+	@eval MathProgBase.hesslag_structure(d::MadsModelPoly) = Int[],Int[]
+	@eval MathProgBase.eval_hesslag(d::MadsModelPoly, H, p, σ, μ) = nothing
 	#=
 	MathProgBase.jac_structure(d::MadsModelPoly) = Int[],Int[]
 	MathProgBase.eval_jac_g(d::MadsModelPoly, J, p) = nothing
 	=#
-	MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-	function MathProgBase.eval_jac_g(d::MadsModelPoly, J::Vector, p::Vector)
+	@eval MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
+	@eval function MathProgBase.eval_jac_g(d::MadsModelPoly, J::Vector, p::Vector)
 		ji = 0
 		for i = 1:no
 			J[ji + 1] = t[i]^p[4]
@@ -403,7 +403,7 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	end
 end
 
-type MadsModelLin <: MathProgBase.AbstractNLPEvaluator
+mutable struct MadsModelLin <: MathProgBase.AbstractNLPEvaluator
 end
 
 """
@@ -411,7 +411,7 @@ Information Gap Decision Analysis using MathProgBase
 
 $(DocumentFunction.documentfunction(infogap_mpb_lin;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
-keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`\[0.05, 0.1, 0.2, 0.5\]`]",
+keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
             "random"=>"random initial guesses [default=`false`]",
             "maxiter"=>"maximum number of iterations [default=`3000`]",
@@ -432,29 +432,29 @@ function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0
 
 	t = [1.,2.,3.,4.,5.]
 	no = 4
-	function MathProgBase.initialize(d::MadsModelLin, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModelLin, requested_features::Vector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	MathProgBase.features_available(d::MadsModelLin) = [:Grad, :Jac]
-	function MathProgBase.eval_f(d::MadsModelLin, p::Vector)
+	@eval MathProgBase.features_available(d::MadsModelLin) = [:Grad, :Jac]
+	@eval function MathProgBase.eval_f(d::MadsModelLin, p::Vector)
 		return p[1] * t[5] + p[2]
 	end
-	function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f::Vector, p::Vector)
 		grad_f[1] = t[5]
 		grad_f[2] = 1
 	end
-	function MathProgBase.eval_g(d::MadsModelLin, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModelLin, o::Vector, p::Vector)
 		for i = 1:no
 			o[i] = p[1] * t[i] + p[2]
 		end
 	end
-	MathProgBase.jac_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
-	MathProgBase.hesslag_structure(d::MadsModelLin) = Int[],Int[]
-	function MathProgBase.eval_jac_g(d::MadsModelLin, J::Vector, p::Vector)
+	@eval MathProgBase.jac_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
+	@eval MathProgBase.hesslag_structure(d::MadsModelLin) = Int[],Int[]
+	@eval function MathProgBase.eval_jac_g(d::MadsModelLin, J::Vector, p::Vector)
 		ji = 1
 		for i = 1:no
 			J[ji + 0] = t[i]

@@ -10,6 +10,12 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
+if VERSION >= v"0.7"
+	import Pkg
+	using Distributed
+	using Printf
+end
+
 import JLD2
 import FileIO
 import YAML
