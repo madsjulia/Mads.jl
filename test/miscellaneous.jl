@@ -39,7 +39,7 @@ quiet_status = Mads.quiet
 Mads.quietoff()
 
 try
-	run(pipeline(`julia -h`, stdout=DevNull, stderr=DevNull))
+	# run(`julia -h`)
 catch
 	Mads.madscritical("Julia executable needs to be in the executable search path!")
 end

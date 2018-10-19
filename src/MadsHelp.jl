@@ -21,7 +21,7 @@ end
 function functions(re::Regex; stdout::Bool=false, quiet::Bool=false)
 	n = 0
 	for i in madsmodules
-		eval(Mads, :(@tryimport $(Symbol(i))))
+		Core.eval(Mads, :(@tryimport $(Symbol(i))))
 		n += functions(Symbol(i), re; stdout=stdout, quiet=quiet)
 	end
 	n > 0 && string == "" && info("Total number of functions: $n")
@@ -30,7 +30,7 @@ end
 function functions(string::String=""; stdout::Bool=false, quiet::Bool=false)
 	n = 0
 	for i in madsmodules
-		eval(Mads, :(@tryimport $(Symbol(i))))
+		Core.eval(Mads, :(@tryimport $(Symbol(i))))
 		n += functions(Symbol(i), string; stdout=stdout, quiet=quiet)
 	end
 	n > 0 && string == "" && info("Total number of functions: $n")
@@ -39,7 +39,7 @@ end
 function functions(m::Union{Symbol, Module}, re::Regex; stdout::Bool=false, quiet::Bool=false)
 	n = 0
 	try
-		f = names(eval(m), true)
+		f = names(Core.eval(Mads, m), true)
 		functions = Array{String}(0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"
@@ -72,7 +72,7 @@ function functions(m::Union{Symbol, Module}, string::String=""; stdout::Bool=fal
 		quiet=false
 	end
 	try
-		f = names(eval(m), true)
+		f = names(Core.eval(Mads, m), true)
 		functions = Array{String}(0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"

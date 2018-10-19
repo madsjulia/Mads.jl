@@ -103,7 +103,7 @@ for i = 1:length(getparamsnames)
 	global index = i
 	q = quote
 		"""
-		Get an array with `$(getparamsnames[index])` values for parameters defined by `paramkeys`
+		Get an array with $(getparamsnames[index]) values for parameters defined by `paramkeys`
 		"""
 		function $(Symbol(string("getparams", paramname)))(madsdata::Associative, paramkeys::Vector) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array{$(paramtype)}(length(paramkeys))
@@ -121,14 +121,14 @@ for i = 1:length(getparamsnames)
 			return paramvalue # returns the parameter values
 		end
 		"""
-		Get an array with `$(getparamsnames[index])` values for all the MADS model parameters
+		Get an array with $(getparamsnames[index]) values for all the MADS model parameters
 		"""
 		function $(Symbol(string("getparams", paramname)))(madsdata::Associative) # create a function to get each parameter name with 1 argument
 			paramkeys = Mads.getparamkeys(madsdata) # get parameter keys
 			return $(Symbol(string("getparams", paramname)))(madsdata::Associative, paramkeys) # call the function with 2 arguments
 		end
 	end
-	eval(q)
+	Core.eval(Mads, q)
 end
 
 function getparamsmin(madsdata::Associative, paramkeys::Vector)
@@ -561,7 +561,7 @@ for i = 1:length(getfunction)
 			return $(Symbol(string("getnon", keywordname[i], "paramkeys")))(madsdata, paramkeys)
 		end
 	end
-	eval(q)
+	Core.eval(Mads, q)
 end
 
 """

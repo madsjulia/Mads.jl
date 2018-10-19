@@ -154,7 +154,7 @@ function evaluatemadsexpression(expressionstring::String, parameters::Associativ
 	expression = parse(expressionstring)
 	expression = MetaProgTools.populateexpression(expression, parameters)
 	local retval::Float64
-	retval = eval(expression) # populate the expression with the parameter values, then evaluate it
+	retval = Core.eval(expression) # populate the expression with the parameter values, then evaluate it
 	return retval
 end
 
@@ -184,7 +184,7 @@ function evaluatemadsexpressions(madsdata::Associative, parameters::Associative)
 end
 
 "Convert `@sprintf` macro into `sprintf` function"
-sprintf(args...) = eval(:@sprintf($(args...)))
+sprintf(args...) = Core.eval(:@sprintf($(args...)))
 
 """
 Parse parameter distribution from a string
@@ -204,7 +204,7 @@ function getdistribution(dist::String, i::String, inputtype::String)
 		distribution = Distributions.eval(parse(dist))
 	catch e
 		printerrormsg(e)
-		madserror("Something is wrong with $(inputtype) '$(inputname)' distribution (dist: '$(dist)')")
+		madserror("Something is wrong with $(inputtype) distribution (dist: '$(dist)')")
 	end
 	return distribution
 end
