@@ -18,7 +18,7 @@ function display(filename::String)
 		if ext == "svg"
 			if isdefined(Main, :IJulia) && Main.IJulia.inited
 				open(filename) do f
-					display("image/svg+xml", readstring(f))
+					display("image/svg+xml", read(f, String))
 				end
 			else
 				root = Mads.getrootname(filename)
