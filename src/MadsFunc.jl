@@ -375,10 +375,10 @@ function importeverywhere(filename::String)
 	extracode = quiet ? "" : "else warn(\"$functionname already defined\")"
 	fullcode = "@everywhere begin if !isdefined(:$functionname) $code $extracode end end"
 	q = parse(fullcode)
-	eval(Main, q)
+	Core.eval(Main, q)
 	functionsymbol = Symbol(functionname)
 	q = Expr(:., :Main, Meta.quot(functionsymbol))
-	commandfunction = eval(q)
+	commandfunction = Core.eval(Mads, q)
 	return commandfunction
 end
 

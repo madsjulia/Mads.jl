@@ -82,7 +82,7 @@ function test(testname::String=""; madstest::Bool=true)
 				include(file)
 				toc()
 			else
-				eval(Mads, :(@tryimport $(Symbol(testname))))
+				Core.eval(Mads, :(@tryimport $(Symbol(testname))))
 				if isdefined(Symbol(testname))
 					print_with_color(:cyan, "* $testname testing ...\n")
 					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")

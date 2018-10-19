@@ -9,7 +9,7 @@ else
 
 	try
 		info("Checking for python pip using PyCall ...")
-		eval(:(@PyCall.pyimport pip))
+		Core.eval(Mads, :(@PyCall.pyimport pip))
 	catch e
 		println(e)
 		warn("Python pip is not installed!")
@@ -22,7 +22,7 @@ else
 
 	try
 		info("Installing Python YAML & MatPlotLib using pip ...")
-		eval(:(@PyCall.pyimport pip))
+		Core.eval(Mads, :(@PyCall.pyimport pip))
 		args = String[]
 		if haskey(ENV, "http_proxy")
 			push!(args, "--proxy")
@@ -38,7 +38,7 @@ else
 	end
 
 	try
-		eval(:(@PyCall.pyimport yaml))
+		Core.eval(Mads, :(@PyCall.pyimport yaml))
 		info("Python pip YAML (pyyaml) is installed!")
 	catch e
 		println(e)
@@ -49,7 +49,7 @@ else
 	end
 
 	try
-		eval(:(@PyCall.pyimport matplotlib))
+		Core.eval(Mads, :(@PyCall.pyimport matplotlib))
 		info("Python pip MatPlotLib is installed!")
 	catch e
 		println(e)

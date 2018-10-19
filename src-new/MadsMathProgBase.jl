@@ -4,7 +4,7 @@ import MathProgBase
 """
 MadsModel type applied for MathProgBase analyses
 """
-type MadsModel <: MathProgBase.AbstractNLPEvaluator
+mutable struct MadsModel <: MathProgBase.AbstractNLPEvaluator
 end
 
 """

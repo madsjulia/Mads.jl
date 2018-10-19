@@ -76,7 +76,7 @@ macro tryimport(s::Symbol)
 	q = quote
 		if Mads.ispkgavailable($mname; quiet=true)
 			try
-				eval(parse($importq))
+				Core.eval(Mads, parse($importq))
 			catch errmsg
 				Mads.printerrormsg(errmsg)
 				warn($warnstring)

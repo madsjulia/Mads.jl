@@ -129,7 +129,7 @@ for i = 1:length(getobsnames)
 			return $(Symbol(string("getobs", obsname)))(madsdata::Associative, obskeys)
 		end
 	end
-	eval(q)
+	Core.eval(Mads, q)
 end
 
 """

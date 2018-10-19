@@ -72,7 +72,7 @@ for i = 2:length(ARGS)
 		include(madsscript)
 	else
 		info("Executing Mads command $madscommand (Mads.$madscommand) ...")
-		result = eval(parse("Mads.$(madscommand)(md)"))
+		result = Core.eval(Mads, parse("Mads.$(madscommand)(md)"))
 		FileIO.save("$(dir)/$(root)-$(madscommand)-results.jld2", result)
 		Base.display(result)
 		println("")
