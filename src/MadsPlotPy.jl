@@ -7,8 +7,8 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 		return
 	end
 	if isdefined(:PyCall)
-		eval(:(@PyCall.pyimport matplotlib.ticker as mt))
-		# eval(:(@PyCall.pyimport matplotlib.colors as mcc))
+		Core.eval(Mads, :(@PyCall.pyimport matplotlib.ticker as mt))
+		# Core.eval(Mads, :(@PyCall.pyimport matplotlib.colors as mcc))
 	end
 	probname = Mads.getmadsrootname(madsdata; first=false)
 	xmin = madsdata["Grid"]["xmin"]

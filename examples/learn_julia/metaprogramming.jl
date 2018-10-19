@@ -7,6 +7,6 @@ for function_name1 in functions_to_apply
 			end
 		end
 		# dump(q)
-		eval(q)
+		Core.eval(Base, q)
 	end
 end

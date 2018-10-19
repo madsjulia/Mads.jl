@@ -203,7 +203,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		elseif haskey(madsdata["Sources"][i], "gauss" )
 			anasolfunction = anasolfunctionroot * "ddd_iir_c"
 		end
-		anasolfunctions[i] = eval(parse("Anasol.$anasolfunction"))
+		anasolfunctions[i] = Core.eval(Mads, parse("Anasol.$anasolfunction"))
 	end
 	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
 		missingparameters = anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]

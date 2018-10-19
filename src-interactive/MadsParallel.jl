@@ -4,7 +4,7 @@ end
 
 if !isdefined(:sprintf)
 	"Convert `@sprintf` macro into `sprintf` function"
-	sprintf(args...) = eval(:@sprintf($(args...)))
+	sprintf(args...) = Core.eval(:@sprintf($(args...)))
 end
 
 quietdefault = true

@@ -907,7 +907,7 @@ for mi = 1:length(saltelli_functions)
 			Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[mi])*"_parallel")
 		end # end function
 	end # end quote
-	eval(q)
+	Core.eval(Mads, q)
 end
 
 """
@@ -1541,7 +1541,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	function sendto(p; args...)
 		for i in p
 			for (nm, val) in args
-				@spawnat(i, eval(Main, Expr(:(=), nm, val)))
+				@spawnat(i, Core.eval(Main, Expr(:(=), nm, val)))
 			end
 		end
 	end
