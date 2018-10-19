@@ -370,7 +370,7 @@ Returns:
 - Julia function to execute the model
 """
 function importeverywhere(filename::String)
-	code = readstring(filename)
+	code = read(filename, String)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	extracode = quiet ? "" : "else warn(\"$functionname already defined\")"
 	fullcode = "@everywhere begin if !isdefined(:$functionname) $code $extracode end end"

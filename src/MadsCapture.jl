@@ -9,7 +9,7 @@ macro stdoutcapture(block)
 			if ccall(:jl_generating_output, Cint, ()) == 0
 				outputoriginal = STDOUT;
 				(outR, outW) = redirect_stdout();
-				outputreader = @async readstring(outR);
+				outputreader = @async read(outR, String);
 				evalvalue = $(esc(block))
 				redirect_stdout(outputoriginal);
 				close(outW);
@@ -33,7 +33,7 @@ macro stderrcapture(block)
 			if ccall(:jl_generating_output, Cint, ()) == 0
 				errororiginal = STDERR;
 				(errR, errW) = redirect_stderr();
-				errorreader = @async readstring(errR);
+				errorreader = @async read(errR, String);
 				evalvalue = $(esc(block))
 				redirect_stderr(errororiginal);
 				close(errW);
@@ -57,10 +57,10 @@ macro stdouterrcapture(block)
 			if ccall(:jl_generating_output, Cint, ()) == 0
 				outputoriginal = STDOUT;
 				(outR, outW) = redirect_stdout();
-				outputreader = @async readstring(outR);
+				outputreader = @async read(outR, String);
 				errororiginal = STDERR;
 				(errR, errW) = redirect_stderr();
-				errorreader = @async readstring(errR);
+				errorreader = @async read(errR, String);
 				evalvalue = $(esc(block))
 				redirect_stdout(outputoriginal);
 				close(outW);
@@ -89,7 +89,7 @@ function stdoutcaptureon()
 		(outR, outW) = redirect_stdout();
 		global outputread = outR;
 		global outputwrite = outW;
-		global outputreader = @async readstring(outputread);
+		global outputreader = @async read(outputread, String);
 	end
 end
 
@@ -123,7 +123,7 @@ function stderrcaptureon()
 		(errR, errW) = redirect_stderr();
 		global errorread = errR;
 		global errorwrite = errW;
-		global errorreader = @async readstring(errorread);
+		global errorreader = @async read(errorread, String);
 	end
 end
 
