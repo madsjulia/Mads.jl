@@ -39,21 +39,21 @@ function madsmathprogbase(madsdata::Associative=Dict())
 
 	o_mpb, grad_o_mpb, f_mpb, g_mpb = makempbfunctions(madsdata)
 
-	function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
-	function MathProgBase.eval_f(d::MadsModel, p::Vector)
+	@eval MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
+	@eval function MathProgBase.eval_f(d::MadsModel, p::Vector)
 		return o_mpb(p)
 	end
-	function MathProgBase.eval_grad_f(d::MadsModel, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModel, grad_f::Vector, p::Vector)
 		grad_f = grad_o_mpb(p, dx=lineardx)
 	end
-	function MathProgBase.eval_g(d::MadsModel, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModel, o::Vector, p::Vector)
 		o = f_mpb(p)
 	end
 	#=
@@ -61,8 +61,8 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	MathProgBase.eval_jac_g(d::MadsModel, J, p) = nothing
 	MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
 	=#
-	MathProgBase.jac_structure(d::MadsModel) = [repeat(collect(1:nP); inner=nO)],[repeat(collect(1:nP); outer=nO)]
-	function MathProgBase.eval_jac_g(d::MadsModel, J::Vector, p::Vector)
+	@eval MathProgBase.jac_structure(d::MadsModel) = [repeat(collect(1:nP); inner=nO)],[repeat(collect(1:nP); outer=nO)]
+	@eval function MathProgBase.eval_jac_g(d::MadsModel, J::Vector, p::Vector)
 		center = f_mpb(p)
 		fevals = g_mpb(p, dx=lineardx)
 		ji = 0
@@ -73,8 +73,8 @@ function madsmathprogbase(madsdata::Associative=Dict())
 			ji += nP
 		end
 	end
-	MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
-	MathProgBase.eval_hesslag(d::MadsModel, H, p, σ, μ) = nothing
+	@eval MathProgBase.hesslag_structure(d::MadsModel) = Int[],Int[]
+	@eval MathProgBase.eval_hesslag(d::MadsModel, H, p, σ, μ) = nothing
 end
 
 """
