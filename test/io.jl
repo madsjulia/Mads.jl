@@ -71,8 +71,8 @@ Mads.maxtorealmax!(df)
 	@Base.Test.test Mads.getparamrandom(Dict("Parameters"=>Dict("a"=>1)), "k") == nothing
 	@Base.Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k") == false
 	@Base.Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>"opt"))), "k") == true
-	Mads.setparamon!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
-	Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k")
+	@Base.Test.test Mads.setparamon!(Dict("Parameters"=>Dict("k"=>Dict{String,Any}("init"=>1,"type"=>false))), "k") == "opt"
+	@Base.Test.test Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict{String,Any}("init"=>1,"type"=>false))), "k") == nothing
 	Mads.getparamdistributions(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"init_dist"=>"Normal(0,1)"))); init_dist=true)
 
 	@Base.Test.test Mads.settime!(Dict("t"=>1),2) == 2

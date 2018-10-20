@@ -1,9 +1,18 @@
 import Mads
+import FileIO
+import JLD2
 import Base.Test
+
+if VERSION >= v"0.7"
+	using Distributed
+	import OrderedCollections
+else
+	import DataStructures
+end
 
 workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "examples", "svr")
-goodresultsfile = "sasvr.jld"
+goodresultsfile = "sasvr.jld2"
 
 srand(2017)
 

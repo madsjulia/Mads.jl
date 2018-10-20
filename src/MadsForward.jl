@@ -34,7 +34,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 	else
 		optkeys = Mads.getoptparamkeys(madsdata)
 		if length(optkeys) == length(kk)
-			paramarray = hcat(map(i->collect(paramdict[i]), optkeys)...)'
+			paramarray = permutedims(hcat(map(i->collect(paramdict[i]), optkeys)...))
 		else
 		end
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)

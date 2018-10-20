@@ -1,6 +1,10 @@
 import Mads
 import Base.Test
 
+if VERSION >= v"0.7"
+	using Distributed
+end
+
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
 	workdir = joinpath(Mads.madsdir, "examples", "optimization")

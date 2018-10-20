@@ -3,6 +3,10 @@ import JSON
 import DataStructures
 import Base.Test
 
+if VERSION >= v"0.7"
+	using Distributed
+end
+
 cwd = pwd()
 workdir = Mads.getmadsdir()
 if workdir == "."

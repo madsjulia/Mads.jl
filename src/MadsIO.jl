@@ -5,9 +5,9 @@ import FileIO
 """
 Change the current directory to the Mads source dictionary
 
-$(DocumentFunction.documentfunction(md))
+$(DocumentFunction.documentfunction(mdir))
 """
-function md()
+function mdir()
 	Base.cd(madsdir)
 	pwd()
 end
