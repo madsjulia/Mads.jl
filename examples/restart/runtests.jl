@@ -1,5 +1,10 @@
 import Mads
 import Base.Test
+import ReusableFunctions
+
+if VERSION >= v"0.7"
+	using Distributed
+end
 
 Mads.madsinfo("Restarting ...")
 cwd = pwd()
@@ -18,7 +23,7 @@ cd(workdir)
 		Mads.rmdir(joinpath(workdir, "external-jld_restart_test"))
 
 		Mads.madsinfo("Restarting external calibration problem ...")
-		md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
+		global md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
 		md["Restart"] = true
 		md["RestartDir"] = joinpath(workdir, "external-jld_restart_test")
 		Mads.madsinfo("... create restart ...")

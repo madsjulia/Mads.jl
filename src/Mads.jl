@@ -12,8 +12,13 @@ module Mads
 
 if VERSION >= v"0.7"
 	import Pkg
+	import OrderedCollections
 	using Distributed
 	using Printf
+	using DelimitedFiles
+	using LinearAlgebra
+	using Statistics
+	using Random
 end
 
 import JLD2

@@ -39,7 +39,7 @@ if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 		Mads.spaghettiplots(md, 3; keyword="test", grayscale=true)
 		Mads.spaghettiplot(md, 3; keyword="test", grayscale=true)
 		s = splitdir(rootname)
-		for filesinadir in Mads.searchdir(Regex(string(s[2], "-", "\.*", "spaghetti.svg")), path=s[1])
+		for filesinadir in Mads.searchdir(Regex(string(s[2], "-", "[.]*", "spaghetti.svg")), path=s[1])
 			Mads.rmfile(filesinadir, path=s[1])
 		end
 	end

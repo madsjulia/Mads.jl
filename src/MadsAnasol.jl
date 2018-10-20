@@ -217,7 +217,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			end
 		end
 		if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
-			Mads.madwarn("There are missing Anasol parameters!")
+			Mads.madswarn("There are missing Anasol parameters!")
 			Mads.madswarn("Missing parameters: $(missingparameters)")
 			Mads.madswarn("Missing source parameters: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0])")
 			Mads.madscritical("Mads quits!")
