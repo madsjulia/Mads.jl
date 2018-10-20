@@ -1,8 +1,12 @@
 import Mads
 import Base.Test
 
+if VERSION >= v"0.7"
+	using Distributed
+end
+
 callbacksucceeded = false
-@Mads.stderrcapture @everywhere function callback(x_best::Vector, of::Number, lambda::Number)
+@Mads.stderrcapture function callback(x_best::Vector, of::Number, lambda::Number)
 	global callbacksucceeded
 	callbacksucceeded = true
 	# println("The callback function was called: $x_best, $of, $lambda")

@@ -242,7 +242,7 @@ Returns:
 
 - the LM parameter space step
 """
-function naive_get_deltax(JpJ::Matrix{Float64}, Jp::Matrix{Float64}, f0::Vector{Float64}, lambda::Number)
+function naive_get_deltax(JpJ::AbstractMatrix{Float64}, Jp::AbstractMatrix{Float64}, f0::Vector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
 	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
 	return deltax

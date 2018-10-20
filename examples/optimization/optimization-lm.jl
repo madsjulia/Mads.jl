@@ -1,8 +1,12 @@
 import Mads
 import Base.Test
 
-@Mads.stderrcapture @everywhere fopt(x) = [x[1], 2.0 - x[2]]
-@Mads.stderrcapture @everywhere gopt(x) = [1.0 0.0; 0.0 -1.0]
+if VERSION >= v"0.7"
+	using Distributed
+end
+
+@Mads.stderrcapture fopt(x) = [x[1], 2.0 - x[2]]
+@Mads.stderrcapture gopt(x) = [1.0 0.0; 0.0 -1.0]
 
 results = Mads.naive_levenberg_marquardt(fopt, gopt, [100.0, 100.0])
 @Base.Test.test norm(results.minimizer - [0.0, 2.0]) < 0.01

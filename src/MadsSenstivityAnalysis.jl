@@ -1234,7 +1234,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 			# If parameter is one we are analyzing then we will assign numbers according to its probability dist
 			# Otherwise, we will simply set it at a constant (i.e. its initial value)
 			# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
-			if issubtype(typeof(InputData[k,2]), Distributions.Distribution)
+			if typeof(InputData[k,2]) <: Distributions.Distribution
 				# dist contains all data about distribution so this will apply any necessary distributions to X
 				X[:,k] = quantile.(dist[k], X[:,k])
 			else
@@ -1288,12 +1288,12 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 		Wcmax = maximum(W_comp)				# Maximum frequency in complementary set
 
 		# Adding on the random phase shift
-		alpha = W_vec' * S_vec' + phi_mat    # W*S + phi
+		alpha = W_vec' .* S_vec' .+ phi_mat    # W*S + phi
 		# If we want a simpler system this removes the phase shift
 		if phase == 0
-			alpha = W_vec' * S_vec'
+			alpha = W_vec' .* S_vec'
 		end
-		X = .5 + asin.(sin.(alpha'))/pi # Transformation function Saltelli suggests
+		X = .5 .+ asin.(sin.(alpha'))/pi # Transformation function Saltelli suggests
 
 		# In this function we assign probability distributions to parameters we are analyzing
 		# and set parameters that we aren't analyzing to constants.
@@ -1383,7 +1383,7 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 			# Looping over each point in time
 			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
-				Y[:,i] = (Y[:,i] - mean(Y[:,i]))'
+				Y[:,i] = (Y[:,i] .- mean(Y[:,i]))'
 				## Calculating Fourier coefficients associated with MAIN INDICES
 				# p corresponds to the harmonics of Wi
 				for p = 1:M
@@ -1561,17 +1561,17 @@ function efast(md::Associative; N::Integer=100, M::Integer=6, gamma::Number=4, s
 	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime
 		# Sum of variances across all resamples
-		resultvec = sum(allresults[(1:Nr) + Nr * ( k - 1 )])
+		resultvec = sum(allresults[(1:Nr) .+ Nr * ( k - 1 )])
 
 		## Calculating Sensitivity indices (main and total)
-		V        = resultvec[:,1] / Nr
-		Vi       = 2 * resultvec[:,2] / Nr
-		Vci      = 2 * resultvec[:,3] / Nr
+		V        = resultvec[:,1] ./ Nr
+		Vi       = 2 * resultvec[:,2] ./ Nr
+		Vci      = 2 * resultvec[:,3] ./ Nr
 		# Main effect indices (i.e. decomposed variance, before normalization)
 		Var[:,k] = Vi
 		# Normalizing vs mean over loops
 		Si[:,k]  = Vi ./ V
-		Sti[:,k] = 1 - Vci ./ V
+		Sti[:,k] = 1 .- Vci ./ V
 	end
 
 	# Save results as dictionary

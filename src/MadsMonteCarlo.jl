@@ -258,5 +258,5 @@ Returns:
 - a parameter array
 """
 function paramdict2array(dict::Associative)
-	return hcat(map(i->collect(dict[i]), keys(dict))...)'
+	return permutedims(hcat(map(i->collect(dict[i]), keys(dict))...))
 end

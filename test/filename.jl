@@ -7,7 +7,7 @@ workdir = "filename_testing"
 end
 
 curdir = pwd()
-Mads.md()
+Mads.mdir()
 cd(curdir)
 Mads.rmdir(workdir)
 Mads.mkdir(workdir)

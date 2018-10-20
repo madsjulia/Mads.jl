@@ -8,8 +8,8 @@ testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
-Mads.copyaquifer2sourceparameters!(md)
-Mads.addsourceparameters!(md)
+# Mads.copyaquifer2sourceparameters!(md)
+# Mads.addsourceparameters!(md)
 forward_predictions_source = Mads.forward(md)
 md = Mads.loadmadsfile(joinpath(workdir, "w01-w13a_w20a.mads"))
 mdinitparams = Mads.getparamdict(md)
@@ -19,7 +19,7 @@ rootname = Mads.getmadsrootname(md)
 forward_predictions = Mads.forward(md) # Execute forward model simulation based on initial parameter guesses
 forward_predictions_vector = collect(values(forward_predictions))
 param_values = Mads.getoptparams(md) # Initial parameter values
-of = Mads.partialof(md, forward_predictions, r".*")
+objfunc = Mads.partialof(md, forward_predictions, r".*")
 inverse_parameters, inverse_results = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
 @Mads.stdouterrcapture Mads.modelinformationcriteria(md)
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
@@ -72,7 +72,7 @@ if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
 	Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a")
 	s = splitdir(rootname)
-	for filesinadir in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "\.*", "spaghetti.svg")), path=s[1])
+	for filesinadir in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "[.]*", "spaghetti.svg")), path=s[1])
 		Mads.rmfile(filesinadir, path=s[1])
 	end
 
