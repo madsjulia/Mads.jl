@@ -3,7 +3,7 @@ import JLD2
 import FileIO
 using Base.Test
 
-if haskey(ENV, "MADS_NO_BIGUQ")
+if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :dobigdt)
 	return
 end
 

@@ -195,8 +195,6 @@ if !haskey(ENV, "MADS_NO_BIGUQ")
 	else
 		ENV["MADS_NO_BIGUQ"] = ""
 	end
-else
-	ENV["MADS_NO_BIGUQ"] = ""
 end
 
 if !haskey(ENV, "MADS_NO_KLARA")
