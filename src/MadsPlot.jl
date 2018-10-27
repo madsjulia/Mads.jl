@@ -1116,9 +1116,32 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
+		if xmin == nothing
+			xmin = log10(findfirst(.!isnan.(sum(X, 2))))
+		end
+		if xmax == nothing
+			xmax = log10(findlast(isnan.(sum(X, 2))))
+			if xmin != nothing
+				dx = (xmax - xmin)/20
+				xmin -= dx
+				xmax += dx
+			end
+		end
 	end
 	if logy
 		push!(glog, Gadfly.Scale.y_log10)
+		X[X.<=0] = NaN
+		if ymin == nothing
+			ymin = log10(minimumnan(X))
+		end
+		if ymax == nothing
+			ymax = log10(maximumnan(X))
+			if ymin != nothing
+				dy = (ymax - ymin)/20
+				ymin -= dy
+				ymax += dy
+			end
+		end
 	end
 
 	nT = size(X)[1]
