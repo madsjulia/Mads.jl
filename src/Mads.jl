@@ -232,7 +232,12 @@ else
 end
 
 if haskey(ENV, "MADS_TRAVIS")
+	info("Travis testing environment")
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
+	ENV["MADS_NO_DISPLAY"] = ""
 	global graphoutput = false
+	warn("Mads plotting is disabled")
 else
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
