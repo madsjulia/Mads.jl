@@ -5,8 +5,6 @@ import DataFrames
 import DataStructures
 import Gadfly
 import Measures
-import Cairo
-import Fontconfig
 
 colors = ["red", "blue", "green", "orange", "magenta", "cyan", "brown", "pink", "lime", "navy", "maroon", "yellow", "olive", "springgreen", "teal", "coral", "lavender", "beige"]
 ncolors = length(colors)
