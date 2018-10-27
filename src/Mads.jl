@@ -206,6 +206,11 @@ end
 
 include("MadsMonteCarlo.jl")
 
+if haskey(ENV, "MADS_TRAVIS")
+	info("Travis testing environment")
+	ENV["MADS_NO_PYPLOT"] = ""
+end
+
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		@Mads.tryimport Gadfly
@@ -231,14 +236,7 @@ else
 	warn("Mads plotting is disabled")
 end
 
-if haskey(ENV, "MADS_TRAVIS")
-	info("Travis testing environment")
-	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
-	ENV["MADS_NO_DISPLAY"] = ""
-	global graphoutput = false
-	warn("Mads plotting is disabled")
-else
+if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
 	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
 	include(joinpath("..", "src-interactive", "MadsTest.jl"))
