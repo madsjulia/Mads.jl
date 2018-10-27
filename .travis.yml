@@ -16,16 +16,16 @@ addons:
       - python3-matplotlib
 env:
   global:
-    - MADS_TRAVIS
+    - MADS_TRAVIS=""
     - PYCALL_DEBUG_BUILD="yes"
   matrix:
     - PYTHON=python  # python 2.7
     # - PYTHON=python3 # python 3.6
-    - PYTHON=Conda # not actually a python version, here to test Conda.jl's python
-matrix:
-  exclude:
-    - os: osx
-      env: PYTHON=python # I'm not sure how to install Python 3 on Travis OSX
+    # - PYTHON=Conda # not actually a python version, here to test Conda.jl's python
+# matrix:
+#   exclude:
+#     - os: osx
+#       env: PYTHON=python # I'm not sure how to install Python 3 on Travis OSX
 before_script:
   - test "x$TRAVIS_OS_NAME" = xosx -o "x$PYTHON" = xConda || (sudo apt-get -qq update && sudo apt-get install -y $PYTHON)
   - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; brew link --overwrite gcc; brew install hdf5; fi
