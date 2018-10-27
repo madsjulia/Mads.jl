@@ -16,7 +16,7 @@ addons:
       - python3-matplotlib
 env:
   global:
-    # - MADS_TRAVIS
+    - MADS_TRAVIS
     - PYCALL_DEBUG_BUILD="yes"
   matrix:
     - PYTHON=python  # python 2.7
