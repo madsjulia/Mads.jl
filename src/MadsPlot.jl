@@ -5,6 +5,8 @@ import DataFrames
 import DataStructures
 import Gadfly
 import Measures
+import Cairo
+import Fontconfig
 
 colors = ["red", "blue", "green", "orange", "magenta", "cyan", "brown", "pink", "lime", "navy", "maroon", "yellow", "olive", "springgreen", "teal", "coral", "lavender", "beige"]
 ncolors = length(colors)
@@ -1117,27 +1119,27 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
 		if xmin == nothing
-			xmin = log10(findfirst(.!isnan.(sum(X, 2))))
+			xmin = log10(findfirst(.!isnan.(vec(sumnan(X, 2)))))
 		end
 		if xmax == nothing
-			xmax = log10(findlast(isnan.(sum(X, 2))))
-			if xmin != nothing
-				dx = (xmax - xmin)/20
-				xmin -= dx
-				xmax += dx
-			end
+			xmax = log10(findlast(.!isnan.(vec(sumnan(X, 2)))))
+			# if xmin != nothing
+			# 	dx = (xmax - xmin)/10
+			# 	xmin -= dx
+			# 	xmax += dx
+			# end
 		end
 	end
 	if logy
 		push!(glog, Gadfly.Scale.y_log10)
-		X[X.<=0] = NaN
+		X[X.<=0] .= NaN
 		if ymin == nothing
 			ymin = log10(minimumnan(X))
 		end
 		if ymax == nothing
 			ymax = log10(maximumnan(X))
 			if ymin != nothing
-				dy = (ymax - ymin)/20
+				dy = (ymax - ymin)/10
 				ymin -= dy
 				ymax += dy
 			end
