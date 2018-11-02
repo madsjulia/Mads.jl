@@ -1281,32 +1281,64 @@ function mkdir(dirname::String)
 	end
 end
 
-function recursivemkdir(s::String)
+"""
+Create directories recursively (if does not already exist)
+
+$(DocumentFunction.documentfunction(recursivemkdir;
+argtext=Dict("dirname"=>"directory")))
+"""
+function recursivemkdir(s::String; filename=true)
 	d = Vector{String}()
 	sc = deepcopy(s)
-	while splitdir(sc)[1] != ""
-		push!(d, splitdir(sc)[1])
-		sc = splitdir(sc)[1]
+	if !filename && sc!= ""
+		push!(d, sc)
+	end
+	while true
+		sd = splitdir(sc)
+		sc = sd[1]
+		if sc == ""
+			break;
+		end
+		push!(d, sc)
 	end
 	for i = length(d):-1:1
-		if isfile(d[i])
-			warn("File $d[i] exists!")
-		elseif !isdir(d[i])
-			mkdir(d[i])
+		sc = d[i]
+		if isfile(sc)
+			warn("File $(sc) exists!")
+			return
+		elseif !isdir(sc)
+			mkdir(sc)
+			info("Make dir $(sc)")
+		else
+			warn("Dir $(sc) exists!")
 		end
 	end
 end
 
-function recursivermdir(s::String)
+"""
+Remove directories recursively
+
+$(DocumentFunction.documentfunction(recursivermdir;
+argtext=Dict("dirname"=>"directory")))
+"""
+function recursivermdir(s::String; filename=true)
 	d = Vector{String}()
 	sc = deepcopy(s)
-	while splitdir(sc)[1] != ""
-		push!(d, splitdir(sc)[1])
-		sc = splitdir(sc)[1]
+	if !filename && sc!= ""
+		push!(d, sc)
+	end
+	while true
+		sd = splitdir(sc)
+		sc = sd[1]
+		if sc == ""
+			break;
+		end
+		push!(d, sc)
 	end
 	for i = 1:length(d)
-		if isdir(d[i])
-			rm(d[i]; force=true, recursive=true)
+		sc = d[i]
+		if isdir(sc)
+			rm(sc; force=true)
 		end
 	end
 end
