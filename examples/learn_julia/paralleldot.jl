@@ -1,3 +1,6 @@
+import Printf
+using Distributed
+
 n = 1000; p = 2500
 
 # make normal Arrays
@@ -6,12 +9,12 @@ y = ones(p)
 z = zeros(n)
 
 # make SharedArrays
-X = convert(SharedArray, x)  
-Y = convert(SharedArray, y)  
+X = convert(SharedArray, x)
+Y = convert(SharedArray, y)
 Z = convert(SharedArray, z)
 
-@printf( "Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
-@printf( "Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
+@Printf.printf( "Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
+@Printf.printf( "Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
 
 Xt = X'
 
@@ -32,7 +35,7 @@ function run1!(Z, Y, Xt)
 end
 
 function runp!(Z, Y, Xt)
-	@sync @parallel for j = 1:size(Xt, 2)
+	@sync @distributed for j = 1:size(Xt, 2)
 		Z[j] = dotcol(Y, Xt, j)
 	end
 	Z

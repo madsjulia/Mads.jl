@@ -1,7 +1,7 @@
 # JULIATUTORIAL Crash course in Julia
 
 ## Column major indexing:
-srand(1)
+Random.seed!(1)
 C = randn(5,5)
 C[:]
 reshape(C[:], 5, 5)
@@ -59,7 +59,7 @@ g(4)
 g("Ho ")
 
 ## Linear Algebra fun(ctions)!
-srand(2015)
+Random.seed!(2015)
 A = rand(5, 5)
 B = A * A'
 @assert issym(B)

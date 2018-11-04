@@ -1,4 +1,4 @@
-import DataStructures
+import OrderedCollections
 import DocumentFunction
 
 """
@@ -47,16 +47,16 @@ function createmadsproblem(infilename::String, outfilename::String)
 	Mads.dumpyamlfile(outfilename, outyaml)
 	return
 end
-function createmadsproblem(madsdata::Associative, outfilename::String)
+function createmadsproblem(madsdata::AbstractDict, outfilename::String)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(Mads.getparamdict(madsdata))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
-function createmadsproblem(madsdata::Associative, predictions::Associative, outfilename::String)
+function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::String)
 	newmadsdata = createmadsproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end
-function createmadsproblem(madsdata::Associative, predictions::Associative)
+function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict)
 	newmadsdata = deepcopy(madsdata)
 	observationsdict = newmadsdata["Observations"]
 	if haskey(newmadsdata, "Wells")
@@ -109,7 +109,7 @@ function createmadsobservations(nrow::Int, ncol::Int=1; obstring::String="", pre
 	dump && (f = open(filename, "w"))
 	dump && write(f, pretext)
 	uniquecolumns = map(i->string(Char(65 + (i-1)%26))^Int(ceil(i/26)), 1:ncol)
-	observationdict = DataStructures.OrderedDict{String,Dict}()
+	observationdict = OrderedCollections.OrderedDict{String,Dict}()
 	for i = 1:nrow
 		dump && write(f, prestring)
 		for j in uniquecolumns

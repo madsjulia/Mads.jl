@@ -1,3 +1,7 @@
+if VERSION >= v"0.7"
+	using DelimitedFiles
+end
+
 i = open("matrix.dat", "r")
 param = readdlm(i)
 close(i)

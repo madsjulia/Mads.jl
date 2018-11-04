@@ -2,7 +2,7 @@ import Mads
 import OrdinaryDiffEq
 import JSON
 import Gadfly
-import DataStructures
+import OrderedCollections
 
 include("ode-driver.jl")
 
@@ -21,10 +21,10 @@ paramkeys = Mads.getparamkeys(md)
 Mads.showparameters(md)
 
 # create parameter dictionary
-paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # function to create a function for the ODE solver
-function makefunc(parameterdict::DataStructures.OrderedDict)
+function makefunc(parameterdict::OrderedCollections.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
@@ -46,8 +46,8 @@ sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
 ys = convert(Array,sol)
 
 # draw initial solution
-p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "orange"))),
-				Gadfly.layer(x=t, y=ys[:,2], Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"))),
+p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "orange"))),
+				Gadfly.layer(x=t, y=ys[:,2], Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "blue"))),
 				Gadfly.Guide.manual_color_key("ODE", ["x(t)", "x'(t)"], ["orange", "blue"]))
 Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"), 6Gadfly.inch, 4Gadfly.inch), p)
 

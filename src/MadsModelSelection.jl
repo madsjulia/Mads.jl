@@ -7,11 +7,11 @@ $(DocumentFunction.documentfunction(modelinformationcriteria;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "par"=>"parameter array")))
 """
-function modelinformationcriteria(madsdata::Associative, par::Array{Float64}=Array{Float64}(0))
+function modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64}=Array{Float64}(undef, 0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
 	if l == nothing
-		Mads.warn("Local sensitivity analysis fails!")
+		Mads.madswarn("Local sensitivity analysis fails!")
 		return
 	end
 	ofval = Mads.of(madsdata, f)

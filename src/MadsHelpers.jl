@@ -1,4 +1,5 @@
 import DocumentFunction
+import Random
 
 function maximumnan(X, c...; kw...)
 	maximum(X[.!isnan.(X)], c...; kw...)
@@ -74,7 +75,7 @@ Get MADS restart status
 $(DocumentFunction.documentfunction(getrestart;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function getrestart(madsdata::Associative)
+function getrestart(madsdata::AbstractDict)
 	haskey(madsdata, "Restart") ? madsdata["Restart"] : restart # note madsdata["Restart"] can be a string
 end
 
@@ -94,6 +95,24 @@ $(DocumentFunction.documentfunction(quietoff))
 """
 function quietoff()
 	global quiet = false;
+end
+
+"""
+Make MADS very quiet
+
+$(DocumentFunction.documentfunction(veryquieton))
+"""
+function veryquieton()
+	global veryquiet = true;
+end
+
+"""
+Make MADS not very quiet
+
+$(DocumentFunction.documentfunction(veryquietoff))
+"""
+function veryquietoff()
+	global veryquiet = false;
 end
 
 """
@@ -207,11 +226,11 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
-function haskeyword(madsdata::Associative, keyword::String)
+function haskeyword(madsdata::AbstractDict, keyword::String)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
-function haskeyword(madsdata::Associative, class::String, keyword::String)
-	if typeof(madsdata[class]) <: Associative
+function haskeyword(madsdata::AbstractDict, class::String, keyword::String)
+	if typeof(madsdata[class]) <: AbstractDict
 		return haskey(madsdata[class], keyword) ? true : false
 	elseif typeof(madsdata[class]) <: String
 		return madsdata[class] == keyword
@@ -245,16 +264,16 @@ Examples:
 ```
 """ haskeyword
 
-function addkeyword!(madsdata::Associative, keyword::String)
+function addkeyword!(madsdata::AbstractDict, keyword::String)
 	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
 	return
 end
-function addkeyword!(madsdata::Associative, class::String, keyword::String)
+function addkeyword!(madsdata::AbstractDict, class::String, keyword::String)
 	if haskeyword(madsdata, class, keyword)
 		madswarn("Keyword `$keyword` already exists")
 		return
 	end
-	if typeof(madsdata[class]) <: Associative
+	if typeof(madsdata[class]) <: AbstractDict
 		push!(madsdata[class], keyword=>true)
 	elseif typeof(madsdata[class]) <: String
 		madsdata[class] = [keyword, madsdata[class]]
@@ -272,15 +291,15 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ addkeyword!
 
-function deletekeyword!(madsdata::Associative, keyword::String)
+function deletekeyword!(madsdata::AbstractDict, keyword::String)
 	if haskeyword(madsdata, keyword)
 		deletekeyword!(madsdata, "Problem", keyword)
 	end
 	return
 end
-function deletekeyword!(madsdata::Associative, class::String, keyword::String)
+function deletekeyword!(madsdata::AbstractDict, class::String, keyword::String)
 	if haskeyword(madsdata, class, keyword)
-		if typeof(madsdata[class]) <: Associative && haskey(madsdata[class], keyword)
+		if typeof(madsdata[class]) <: AbstractDict && haskey(madsdata[class], keyword)
 			delete!(madsdata[class], keyword)
 		elseif typeof(madsdata[class]) <: String
 			madsdata[class] = ""
@@ -310,12 +329,12 @@ Returns:
 
 - sin-space dx value
 """
-function getsindx(madsdata::Associative)
+function getsindx(madsdata::AbstractDict)
 	sindx = sindxdefault
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
 		if typeof(sindx) == String
-			sindx = float(sindx)
+			sindx = parse(Float64, sindx)
 		end
 	end
 	return sindx
@@ -331,7 +350,7 @@ Returns:
 
 - nothing
 """
-function setsindx!(madsdata::Associative, sindx::Number)
+function setsindx!(madsdata::AbstractDict, sindx::Number)
 	setsindx(sindx)
 	if Mads.haskeyword(madsdata, "sindx")
 		madsdata["Problem"]["sindx"] = sindx
@@ -379,8 +398,8 @@ $(DocumentFunction.documentfunction(printerrormsg;
 argtext=Dict("errmsg"=>"error message")))
 """
 function printerrormsg(errmsg::Any)
-	Base.showerror(Base.STDERR, errmsg)
-	if in(:msg, fieldnames(errmsg))
+	Base.showerror(stderr, errmsg)
+	if in(:msg, fieldnames(typeof(errmsg)))
 		madswarn(strip(errmsg.msg))
 	elseif typeof(errmsg) <: AbstractString
 		madswarn(errmsg)
@@ -403,7 +422,7 @@ function meshgrid(x::Vector, y::Vector)
 	n = length(y)
 	xx = reshape(x, 1, m)
 	yy = reshape(y, n, 1)
-	(repmat(xx, n, 1), repmat(yy, 1, m))
+	(repeat(xx, n, 1), repeat(yy, 1, m))
 end
 
 """
@@ -415,10 +434,10 @@ argtext=Dict("seed"=>"random seed",
 """
 function setseed(seed::Integer=-1, quiet::Bool=true)
 	if seed >= 0
-		srand(seed)
+		Random.seed!(seed)
 		!quiet && info("New seed: $seed")
 	else
-		s = Int(Base.Random.GLOBAL_RNG.seed[1])
+		s = Int(Random.GLOBAL_RNG.seed[1])
 		!quiet && info("Current seed: $s")
 	end
 end
@@ -444,14 +463,13 @@ Returns:
 function pkgversion(modulestr::String)
 	try
 		stdoutcaptureon()
-		Pkg.status(modulestr)
-		o = stdoutcaptureoff()
-		a = ascii(String(o))
-		m = match(r"\s+-\s+(\S+)\s+([0-9](\.[0-9])+)", a)
-		return convert(VersionNumber, m[2])
+		Pkg.status()
+		a = stdoutcaptureoff()
+		m = match(Regex(string(modulestr, ".*v([0-9](.[0-9])+)")), a)
+		return convert(VersionNumber, m[1])
 	catch
 		o = stdoutcaptureoff()
-		warn("Module $(modulestr) is not available")
+		Mads.madswarn("Module $(modulestr) is not available")
 		return v"0.0.0"
 	end
 end
@@ -468,7 +486,7 @@ function ispkgavailable(modulename::String; quiet::Bool=false)
 	flag=false
 	try
 		Pkg.available(modulename)
-		if typeof(Pkg.installed(modulename)) == Void
+		if typeof(Pkg.installed(modulename)) == Nothing
 			flag=false
 			!quiet && info("Module $modulename is not available")
 		else

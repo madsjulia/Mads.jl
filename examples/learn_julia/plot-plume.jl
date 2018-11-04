@@ -1,6 +1,6 @@
 import Mads
 
-srand(2016)
+Random.seed!(2016)
 workdir = joinpath(Mads.madsdir, "examples", "anasol")
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01short3.mads"))

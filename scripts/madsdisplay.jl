@@ -26,10 +26,10 @@ end
 
 function madsdisplay(filename::String)
 	if !isfile(filename)
-		warn("File `$filename` is missing!")
+		@warn("File `$filename` is missing!")
 		return
 	end
-	if isdefined(:TerminalExtensions)
+	if isdefined(Mads, :TerminalExtensions)
 		trytoopen = false
 		ext = lowercase(madsgetextension(filename))
 		if ext == "svg"
@@ -59,7 +59,7 @@ function madsdisplay(filename::String)
 			try
 				run(`xdg-open $filename`)
 			catch
-				warn("Do not know how to open $filename")
+				@warn("Do not know how to open $filename")
 			end
 		end
 	end

@@ -1,10 +1,10 @@
 import Mads
 import JLD2
 import FileIO
-using Base.Test
+import Test
 
 if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :dobigdt)
-	warn("BIGUQ cannot be tested!")
+	@info("BIGUQ cannot be tested!")
 else
 	problemdir = Mads.getmadsdir()
 	workdir = joinpath(Mads.madsdir, "examples", "bigdt")
@@ -19,7 +19,7 @@ else
 	nsample = 10
 	bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
 
-	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 		filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
 		Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
 		Mads.rmfile(joinpath(problemdir, "source_termination-robustness-10.svg"))
@@ -37,8 +37,8 @@ else
 	good_bigdt_results = FileIO.load(joinpath(workdir, "test_results", "bigdt_results.jld2"), "bigdt_results")
 
 	# Testing for bigdt
-	@testset "Bigdt" begin
-		@test isapprox(bigdt_results["maxfailureprobs"], good_bigdt_results["maxfailureprobs"], atol=1e-6)
-		@test isapprox(bigdt_results["horizons"], good_bigdt_results["horizons"], atol=1e-6)
+	@Test.testset "Bigdt" begin
+		@Test.test isapprox(bigdt_results["maxfailureprobs"], good_bigdt_results["maxfailureprobs"], atol=1e-6)
+		@Test.test isapprox(bigdt_results["horizons"], good_bigdt_results["horizons"], atol=1e-6)
 	end
 end

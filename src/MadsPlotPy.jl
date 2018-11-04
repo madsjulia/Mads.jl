@@ -1,12 +1,12 @@
 import PyPlot
 import DocumentFunction
 
-function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	if !haskey(madsdata, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return
 	end
-	if isdefined(:PyCall)
+	if isdefined(Mads, :PyCall)
 		Core.eval(Mads, :(@PyCall.pyimport matplotlib.ticker as mt))
 		# Core.eval(Mads, :(@PyCall.pyimport matplotlib.colors as mcc))
 	end
@@ -16,10 +16,10 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	xmax = madsdata["Grid"]["xmax"]
 	ymax = madsdata["Grid"]["ymax"]
 	t = madsdata["Grid"]["time"]
-	x = Array{Float64}(0)
-	y = Array{Float64}(0)
-	c = Array{Float64}(0)
-	l = Array{String}(0)
+	x = Array{Float64}(undef, 0)
+	y = Array{Float64}(undef, 0)
+	c = Array{Float64}(undef, 0)
+	l = Array{String}(undef, 0)
 	for w in keys(madsdata["Wells"])
 		push!(x, madsdata["Wells"][w]["x"])
 		push!(y, madsdata["Wells"][w]["y"])
@@ -31,7 +31,7 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	PyPlot.subplot(111, aspect=1)
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
 	levels = [10,30,100,300,1000,3000,10000,30000,100000]
-	PyPlot.contourf(s[:,:,1]', cmap="jet", levels=levels, set_aspect="equal", locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax], set_under="w" )
+	PyPlot.contourf(permutedims(s[:,:,1]), cmap="jet", levels=levels, locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax]) # set_under="w",   set_aspect="equal",  removed
 	PyPlot.colorbar(shrink=0.5, cmap="jet")
 	if addtitle
 		if title == ""
@@ -52,14 +52,14 @@ function plotgrid(madsdata::Associative, s::Array{Float64}; addtitle::Bool=true,
 	PyPlot.close()
 end
 
-function plotgrid(madsdata::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	paramvalues = Mads.getparamdict(madsdata)
 	plotgrid(madsdata, paramvalues; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-function plotgrid(madsdata::Associative, parameters::Associative; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle::Bool=true, title::String="", filename::String="", format::String="")
 	s = forwardgrid(madsdata, parameters)
-	if typeof(s) != Void
+	if typeof(s) != Nothing
 		plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 	end
 end

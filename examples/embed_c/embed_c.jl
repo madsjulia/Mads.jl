@@ -1,4 +1,4 @@
-import Base.Test
+import Test
 
 rmprocs(workers())
 
@@ -28,43 +28,43 @@ fcmxv(n_x, x, M, n_o, o) = ccall( (:my_c_mxv, "libmy.dylib"), Int32, (Int64, Ptr
 fjmxv(M, x) = M * x
 
 # sqrt comparison
-info("sqrt ...")
+@info("sqrt ...")
 println("c ...")
 @time fcsqrt(2)
 println("julia ...")
 @time sqrt(2)
-@Base.Test.test_approx_eq fcsqrt(2) sqrt(2)
+@Test.test_approx_eq fcsqrt(2) sqrt(2)
 
 # function example #1
-info("func #1 ...")
+@info("func #1 ...")
 println("c ...")
 @time fcfunc_ex1(100, 6.4)
 println("julia ...")
 @time fjfunc_ex1(100, 6.4)
-@Base.Test.test_approx_eq fcfunc_ex1(100, 6.4) fjfunc_ex1(100, 6.4)
+@Test.test_approx_eq fcfunc_ex1(100, 6.4) fjfunc_ex1(100, 6.4)
 
 nP = 100
 nO = 1000000
 x = rand(nP)
-o_c = Array{Float64}(nO)
-o_j = Array{Float64}(nO)
+o_c = Array{Float64}(undef, nO)
+o_j = Array{Float64}(undef, nO)
 
 # function example #2
-info("func #2 ...")
+@info("func #2 ...")
 println("c ...")
 @time fcfunc_ex2(nP, x, nO, o_c)
 println("julia ...")
 @time fjfunc_ex2(x, o_j)
-@Base.Test.test_approx_eq maximum(abs(o_c - o_j)) 0
+@Test.test_approx_eq maximum(abs(o_c - o_j)) 0
 
 M = ones(nO, nP)
 M[:,end] = 100000
 
-info("Matrix vector multiplication ...")
+@info("Matrix vector multiplication ...")
 println("c (bad) ...")
 @time fcmxv_bad(nP, x, M, nO, o_c);
 println("c ...")
 @time fcmxv(nP, x, M, nO, o_c)
 println("julia ...")
 @time o_julia = fjmxv(M, x)
-@Base.Test.test_approx_eq maximum( o_c - o_julia ) 0
+@Test.test_approx_eq maximum( o_c - o_julia ) 0

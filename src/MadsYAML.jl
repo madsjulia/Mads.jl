@@ -1,6 +1,6 @@
 import JSON
 import YAML
-import DataStructures
+import OrderedCollections
 import PyCall
 
 """
@@ -16,27 +16,27 @@ Returns:
 """
 function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 	julia = (isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()) ? julia : true
-	yamldata = DataStructures.OrderedDict()
+	yamldata = OrderedCollections.OrderedDict()
 	f = open(filename)
 	if julia
 		try
 			yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
-		catch e
-			printerrormsg(e)
-			warn("Julia YAML fails!")
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("Julia YAML fails!")
 			try
 				yamldata = pyyaml[:load](f)
-			catch e
-				printerrormsg(e)
-				warn("Python YAML fails!")
+			catch errmsg
+				printerrormsg(errmsg)
+				Mads.madswarn("Python YAML fails!")
 			end
 		end
 	else
 		try
 			yamldata = pyyaml[:load](f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
-		catch e
-			printerrormsg(e)
-			warn("Julia YAML fails!")
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("Julia YAML fails!")
 		end
 	end
 	close(f)
@@ -70,11 +70,11 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"output file name"),
 keytext=Dict("julia"=>"use julia YAML [default=`false`]")))
 """
-function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=false) # load MADS input file in YAML forma
+function dumpyamlmadsfile(madsdata::AbstractDict, filename::String; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Julia model", "Filename"]
-	restore = Array{Bool}(length(deletekeys))
-	restorevals = Array{Any}(length(deletekeys))
+	restore = Array{Bool}(undef, length(deletekeys))
+	restorevals = Array{Any}(undef, length(deletekeys))
 	i = 1
 	for deletekey in deletekeys
 		if haskey(yamldata, deletekey)
@@ -91,17 +91,17 @@ function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=f
 		for well in keys(yamldata["Wells"])
 			delete!(yamldata["Wells"][well], "on" )
 			for i = 1:length(yamldata["Wells"][well]["obs"])
-				dict = DataStructures.OrderedDict(i=>yamldata["Wells"][well]["obs"][i])
+				dict = OrderedCollections.OrderedDict(i=>yamldata["Wells"][well]["obs"][i])
 				yamldata["Wells"][well]["obs"][i] = dict
 			end
 		end
 	end
 	for obsorparam in ["Observations", "Parameters", "Wells"]
 		if haskey(yamldata, obsorparam)
-			a = Array{Any}(0)
+			a = Array{Any}(undef, 0)
 			for key in keys(yamldata[obsorparam])
-				if !ismatch(r"source[1-9]*_", key)
-					push!(a, DataStructures.OrderedDict(key=>yamldata[obsorparam][key]))
+				if !occursin(r"source[1-9]*_", key)
+					push!(a, OrderedCollections.OrderedDict(key=>yamldata[obsorparam][key]))
 				end
 			end
 			yamldata[obsorparam] = a
@@ -109,11 +109,11 @@ function dumpyamlmadsfile(madsdata::Associative, filename::String; julia::Bool=f
 	end
 	for tplorins in ["Templates", "Instructions"]
 		if haskey(yamldata, tplorins)
-			a = Array{Any}(length(yamldata[tplorins]))
+			a = Array{Any}(undef, length(yamldata[tplorins]))
 			i = 1
 			keys = map(string, 1:length(yamldata[tplorins]))
 			for key in keys
-				a[i] = DataStructures.OrderedDict(key=>yamldata[tplorins][i])
+				a[i] = OrderedCollections.OrderedDict(key=>yamldata[tplorins][i])
 				i += 1
 			end
 			yamldata[tplorins] = a

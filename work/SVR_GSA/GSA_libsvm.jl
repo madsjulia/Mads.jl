@@ -1,3 +1,5 @@
+using Distributed
+
 addprocs()
 reload("Mads")
 @everywhere Mads.setdir()

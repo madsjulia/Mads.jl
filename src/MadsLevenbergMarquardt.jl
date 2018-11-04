@@ -2,33 +2,33 @@ import RobustPmap
 import LsqFit
 import DocumentFunction
 
-function residuals(madsdata::Associative, resultvec::Vector)
+function residuals(madsdata::AbstractDict, resultvec::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
 	isn = isnan.(targets)
-	index = find(isn)
-	weights[index] = 0
-	targets[index] = 0
+	index = findall(isn)
+	weights[index] .= 0
+	targets[index] .= 0
 	residuals = (resultvec .- targets) .* weights
 	if ssdr
 		mins = Mads.getobsmin(madsdata, obskeys)
 		maxs = Mads.getobsmax(madsdata, obskeys)
-		mins[index] = -Inf
-		maxs[index] = Inf
+		mins[index] .= -Inf
+		maxs[index] .= Inf
 		rmax = (resultvec .- maxs) .* weights
 		rmin = (resultvec .- mins) .* weights
-		rmax[rmax .< 0] = 0
-		rmin[rmin .> 0] = 0
+		rmax[rmax .< 0] .= 0
+		rmin[rmin .> 0] .= 0
 		residuals .+= (rmax .+ rmin)
 	end
 	return residuals[.!isn]
 end
-function residuals(madsdata::Associative, resultdict::Associative)
+function residuals(madsdata::AbstractDict, resultdict::AbstractDict)
 	residuals(madsdata, collect(values(resultdict)))
 end
-function residuals(madsdata::Associative)
+function residuals(madsdata::AbstractDict)
 	resultdict = Mads.forward(madsdata)
 	residuals(madsdata, collect(values(resultdict)))
 end
@@ -47,14 +47,14 @@ Returns:
 """ residuals
 
 
-function of(madsdata::Associative, resultvec::Vector)
+function of(madsdata::AbstractDict, resultvec::Vector)
 	r = residuals(madsdata, resultvec)
 	sum(r .^ 2)
 end
-function of(madsdata::Associative, resultdict::Associative)
+function of(madsdata::AbstractDict, resultdict::AbstractDict)
 	of(madsdata, collect(values(resultdict)))
 end
-function of(madsdata::Associative)
+function of(madsdata::AbstractDict)
 	resultdict = Mads.forward(madsdata)
 	of(madsdata, collect(values(resultdict)))
 end
@@ -80,13 +80,13 @@ Returns:
 
 - the sum of squared residuals for observations that match the regular expression
 """
-function partialof(madsdata::Associative, resultdict::Associative, regex::Regex)
+function partialof(madsdata::AbstractDict, resultdict::AbstractDict, regex::Regex)
 	obskeys = getobskeys(madsdata)
-	results = Array{Float64}(0)
-	weights = Array{Float64}(0)
-	targets = Array{Float64}(0)
+	results = Array{Float64}(undef, 0)
+	weights = Array{Float64}(undef, 0)
+	targets = Array{Float64}(undef, 0)
 	for obskey in obskeys
-		if ismatch(regex, obskey)
+		if occursin(regex, obskey)
 			push!(results, resultdict[obskey]) # preserve the expected order
 			push!(weights, madsdata["Observations"][obskey]["weight"])
 			push!(targets, madsdata["Observations"][obskey]["target"])
@@ -98,14 +98,14 @@ end
 
 function makelmfunctions(f::Function)
 	f_lm = f
-	function g_lm(x::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0))
+	function g_lm(x::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0))
 		nO = length(center)
 		if nO == 0
 			center = f_lm(x)
 			nO = length(center)
 		end
 		nP = length(x)
-		jacobian = Array{Float64}((nO, nP))
+		jacobian = Array{Float64}(undef, (nO, nP))
 		for i in 1:nP
 			xi = x[i]
 			x[i] += dx[i]
@@ -117,7 +117,7 @@ function makelmfunctions(f::Function)
 	o_lm(x::Vector) = dot(x, x)
 	return f_lm, g_lm, o_lm
 end
-function makelmfunctions(madsdata::Associative)
+function makelmfunctions(madsdata::AbstractDict)
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -126,14 +126,14 @@ function makelmfunctions(madsdata::Associative)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
-	index = find(isnan.(targets))
-	weights[index] = 0
-	targets[index] = 0
+	index = findall(isnan.(targets))
+	weights[index] .= 0
+	targets[index] .= 0
 	if ssdr
 		mins = Mads.getobsmin(madsdata, obskeys)
 		maxs = Mads.getobsmax(madsdata, obskeys)
-		mins[index] = -Inf
-		maxs[index] = Inf
+		mins[index] .= -Inf
+		maxs[index] .= Inf
 	end
 	nO = length(obskeys)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -149,7 +149,7 @@ function makelmfunctions(madsdata::Associative)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array{Float64}(0)
+		results = Array{Float64}(undef, 0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end
@@ -157,8 +157,8 @@ function makelmfunctions(madsdata::Associative)
 		if ssdr
 			rmax = (results .- maxs) .* weights
 			rmin = (results .- mins) .* weights
-			rmax[rmax .< 0] = 0
-			rmin[rmin .> 0] = 0
+			rmax[rmax .< 0] .= 0
+			rmin[rmin .> 0] .= 0
 			residuals .+= (rmax .+ rmin)
 		end
 		return residuals
@@ -190,7 +190,7 @@ function makelmfunctions(madsdata::Associative)
 		try
 			fevals = RobustPmap.rpmap(f_lm, p)
 		catch errmsg
-			warn(Base.stacktrace())
+			Mads.madswarn(Base.stacktrace())
 			printerrormsg(errmsg)
 			Mads.madscritical("RobustPmap LM execution of forward runs fails!")
 		end
@@ -200,7 +200,7 @@ function makelmfunctions(madsdata::Associative)
 				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 			end
 		end
-		jacobian = Array{Float64}((nO, nP))
+		jacobian = Array{Float64}(undef, (nO, nP))
 		for j in 1:nO
 			for i in 1:nP
 				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
@@ -212,7 +212,7 @@ function makelmfunctions(madsdata::Associative)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(0)) #TODO we need the center; this is not working
+	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
 		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
@@ -243,8 +243,8 @@ Returns:
 - the LM parameter space step
 """
 function naive_get_deltax(JpJ::AbstractMatrix{Float64}, Jp::AbstractMatrix{Float64}, f0::Vector{Float64}, lambda::Number)
-	u, s, v = svd(JpJ + lambda * speye(Float64, size(JpJ, 1)))
-	deltax = (v * spdiagm(1 ./ s) * u') * -Jp * f0
+	u, s, v = svd(JpJ + lambda * SparseArrays.SparseMatrixCSC(Float64(1)LinearAlgebra.I, size(JpJ, 1), size(JpJ, 1)))
+	deltax = (v * sparse(Diagonal(1 ./ s)) * u') * -Jp * f0
 	return deltax
 end
 
@@ -270,7 +270,7 @@ function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Fl
 	deltaxs = RobustPmap.rpmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
 	fs = RobustPmap.rpmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
 	sses = RobustPmap.rpmap(o, fs) # get the sum of squared residuals for each forward run
-	bestindex = indmin(sses) # find the best forward run
+	bestindex = argmin(sses) # find the best forward run
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
 
@@ -293,7 +293,7 @@ Returns:
 -
 """
 function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
-	lambdas = logspace(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), np_lambda)
+	lambdas = 10. .^ range(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), stop=log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), length=np_lambda)
 	currentx = x0
 	currentf = f(x0)
 	currentsse = Inf
@@ -368,7 +368,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	x = x0
 	best_x = x0
 	nP = length(x)
-	DtDidentity = eye(nP)
+	DtDidentity = Matrix{Float64}(LinearAlgebra.I, nP, nP)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
@@ -391,16 +391,16 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		println(os)
 	end
 
-	delta_xp = Array{Float64}((np_lambda, length(x)))
-	trial_fp = Array{Float64}((np_lambda, length(fcur)))
-	lambda_p = Array{Float64}(np_lambda)
-	phi = Array{Float64}(np_lambda)
+	delta_xp = Array{Float64}(undef, (np_lambda, length(x)))
+	trial_fp = Array{Float64}(undef, (np_lambda, length(fcur)))
+	lambda_p = Array{Float64}(undef, np_lambda)
+	phi = Array{Float64}(undef, np_lambda)
 	first_lambda = true
 	compute_jacobian = true
 	failed = false
 	while(~failed && ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = Array{Float64}(0, 0)
+			J = Array{Float64}(undef, 0, 0)
 			try
 				J = g(x, center=fcur)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
@@ -437,7 +437,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		Mads.madsinfo(@sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
+		Mads.madsinfo(@Printf.sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
@@ -455,7 +455,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			predicted_residual = []
 			delta_x = []
 			try
-				Mads.madsinfo(@sprintf "#%02d lambda: %e" npl lambda);
+				Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda);
 				u, s, v = svd(JpJ + lambda * DtDidentity)
 				is = similar(s)
 				for i=1:length(s)
@@ -470,11 +470,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 					end
 				end
 				# s = map(i->max(eps(Float32), i), s)
-				delta_x = (v * spdiagm(is) * u') * -J' * fcur
+				delta_x = (v * sparse(Diagonal(is)) * u') * -J' * fcur
 				# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 				predicted_residual = o(J * delta_x + fcur)
 				# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-				Mads.madsoutput("$(@sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
+				Mads.madsoutput("$(@Printf.sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
 				if predicted_residual > residual + 2max(eps(predicted_residual), eps(residual))
 					Mads.madsoutput(" -> not good", 1);
 					if npl == 1
@@ -484,7 +484,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 					Mads.madsoutput(" -> ok", 1);
 				end
 			catch
-				Mads.madswarn(@sprintf "#%02d lambda: %e cannot be computed" npl lambda);
+				Mads.madswarn(@Printf.sprintf "#%02d lambda: %e cannot be computed" npl lambda);
 			end
 			return predicted_residual, delta_x
 		end
@@ -493,7 +493,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		try
 			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
 		catch errmsg
-			warn(Base.stacktrace())
+			Mads.madswarn(Base.stacktrace())
 			printerrormsg(errmsg)
 			Mads.madscritical("RobustPmap LM execution to get OF and lambdas fails!")
 		end
@@ -515,7 +515,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		try
 			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
 		catch errmsg
-			warn(Base.stacktrace())
+			Mads.madswarn(Base.stacktrace())
 			printerrormsg(errmsg)
 			Mads.madscritical("RobustPmap LM execution of the forward models fails!")
 		end
@@ -523,10 +523,10 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		f_calls += np_lambda
 		objfuncevals = map(o, trial_fs)
 
-		npl_best = indmin(objfuncevals)
-		npl_worst = indmax(objfuncevals)
-		Mads.madsoutput(@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]);
-		Mads.madsoutput(@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
+		npl_best = argmin(objfuncevals)
+		npl_worst = argmax(objfuncevals)
+		Mads.madsoutput(@Printf.sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]);
+		Mads.madsoutput(@Printf.sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_fs[npl_best])

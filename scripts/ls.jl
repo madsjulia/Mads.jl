@@ -1,3 +1,3 @@
 a = readdir()
-info("ls")
+@info("ls")
 display(a)

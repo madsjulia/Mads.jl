@@ -1,13 +1,13 @@
-originalSTDOUT = STDOUT;
-originalSTDERR = STDERR;
+originalstdout = stdout;
+originalstderr = stderr;
 (outRead, outWrite) = redirect_stdout();
 (errRead, errWrite) = redirect_stderr();
 outreader = @async read(outRead, String);
 errreader = @async read(errRead, String);
 println("test")
-println(STDERR, "Goodbye, World!")
-redirect_stdout(originalSTDOUT);
-redirect_stderr(originalSTDERR);
+println(stderr, "Goodbye, World!")
+redirect_stdout(originalstdout);
+redirect_stderr(originalstderr);
 close(outWrite);
 output = wait(reader);
 close(outRead);

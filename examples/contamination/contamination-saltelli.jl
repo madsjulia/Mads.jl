@@ -1,4 +1,4 @@
-if !isdefined(:Mads)
+if !isdefined(Base, :Mads)
 	reload("Mads")
 end
 
@@ -10,7 +10,7 @@ Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a
 Mads.wellon!(md, "w20a") # use well w20a
 
-if !isdefined(:saltelliresult)
+if !isdefined(Mads, :saltelliresult)
 	saltelliresult = Mads.saltelli(md, N=10000, seed=2016)
 end
 Mads.plotobsSAresults(md, saltelliresult, filter=r"w13a", filename="w13a-saltelli.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]", separate_files=true)

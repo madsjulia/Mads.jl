@@ -1,12 +1,14 @@
 import ProgressMeter
-import DataStructures
+import OrderedCollections
 import DocumentFunction
+using DelimitedFiles
+using Distributed
 
-function forward(madsdata::Associative; all::Bool=false)
+function forward(madsdata::AbstractDict; all::Bool=false)
 	paramdict = Mads.getparamdict(madsdata)
 	forward(madsdata, paramdict; all=all)
 end
-function forward(madsdata::Associative, paramdict::Associative; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
+function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	if length(paramdict) == 0
 		return forward(madsdata; all=all)
 	end
@@ -30,7 +32,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 	paraminitdict = Mads.getparamdict(madsdata)
 	if l == 1
 		p = merge(paraminitdict, paramdict)
-		return convert(DataStructures.OrderedDict{Any,Float64}, f(p))
+		return convert(OrderedCollections.OrderedDict{Any,Float64}, f(p))
 	else
 		optkeys = Mads.getoptparamkeys(madsdata)
 		if length(optkeys) == length(kk)
@@ -40,7 +42,7 @@ function forward(madsdata::Associative, paramdict::Associative; all::Bool=false,
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
-function forward(madsdata::Associative, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
+function forward(madsdata::AbstractDict, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::String="checkpoint_forward")
 	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
@@ -54,12 +56,12 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 	elseif length(s) == 2
 		nrow, ncol = s
 		if nrow != np && ncol != np
-			warn("Incorrect array size: size(paramarray) = $(size(paramarray))")
+			Mads.madswarn("Incorrect array size: size(paramarray) = $(size(paramarray))")
 			return
 		elseif nrow == np
 			nr = ncol
 			if ncol == np
-				warn("Matrix columns assumed to represent the parameters!")
+				Mads.madswarn("Matrix columns assumed to represent the parameters!")
 			end
 		elseif ncol == np
 			np = ncol
@@ -92,7 +94,7 @@ function forward(madsdata::Associative, paramarray::Array; all::Bool=false, chec
 			end
 			r = hcat(collect(rv)...)
 		else
-			rv = Array{Array{Float64}}(nr)
+			rv = Array{Array{Float64}}(undef, nr)
 			if s[2] == np
 				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
 				for i = 1:nr
@@ -128,12 +130,12 @@ Returns:
 - dictionary of model predictions
 """ forward
 
-function forwardgrid(madsdata::Associative)
+function forwardgrid(madsdata::AbstractDict)
 	paramvalues = Mads.getparamdict(madsdata)
 	forwardgrid(madsdata, paramvalues)
 end
 
-function forwardgrid(madsdatain::Associative, paramvalues::Associative)
+function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 	if !haskey(madsdatain, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return
@@ -169,7 +171,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	end
 
 	x = xmin
-	dictwells = DataStructures.OrderedDict()
+	dictwells = OrderedCollections.OrderedDict()
 	for i in 1:nx
 		x += dx
 		y = ymin
@@ -179,14 +181,14 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 			for k in 1:nz
 				z += dz
 				wellname = "w_$(i)_$(j)_$(k)"
-				dictwells[wellname] = DataStructures.OrderedDict()
+				dictwells[wellname] = OrderedCollections.OrderedDict()
 				dictwells[wellname]["x"] = x
 				dictwells[wellname]["y"] = y
 				dictwells[wellname]["z0"] = z
 				dictwells[wellname]["z1"] = z
 				dictwells[wellname]["on"] = true
-				arrayobs = Array{DataStructures.OrderedDict}(0)
-				dictobs = DataStructures.OrderedDict()
+				arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
+				dictobs = OrderedCollections.OrderedDict()
 				dictobs["t"] = time
 				dictobs["c"] = 0
 				dictobs["weight"] = 1
@@ -204,7 +206,7 @@ function forwardgrid(madsdatain::Associative, paramvalues::Associative)
 	Mads.wells2observations!(madsdata)
 	f = Mads.makemadscommandfunction(madsdata)
 	forward_results = f(paramvalues)
-	s = Array{Float64}(nx, ny, nz)
+	s = Array{Float64}(undef, nx, ny, nz)
 	for i in 1:nx
 		for j in 1:ny
 			for k in 1:nz

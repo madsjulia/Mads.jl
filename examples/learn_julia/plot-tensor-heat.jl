@@ -1,6 +1,6 @@
 import Gadfly
 
-srand(2016)
+Random.seed!(2016)
 
 t = collect(0:0.0025:5)
 tf = t * 20
@@ -12,7 +12,7 @@ xg, yg = Mads.meshgrid(xm, ym)
 s1 = (1.5, 2.1)
 s2 = (2.3, 1.8)
 
-pg = Array{Gadfly.Plot}(length(xm), length(ym))
+pg = Array{Gadfly.Plot}(undef, length(xm), length(ym))
 
 function shift(d::Number, t::Vector, scale::Number)
 	ss = d * 1
@@ -34,7 +34,7 @@ for i = 1:length(xm)
 		d1 = sqrt((x-s1[1])^2 + (y-s1[2])^2)
 		d2 = sqrt((x-s2[1])^2 + (y-s2[2])^2)
 		s = shift(d1, t, 20) + shift(d2, t, 10)
-		pg[i, j] = Gadfly.plot(x=tf, y=s, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=parse(Colors.Colorant, "red"), background_color=parse(Colors.Colorant, "white")))
+		pg[i, j] = Gadfly.plot(x=tf, y=s, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Meta.parse(Colors.Colorant, "red"), background_color=Meta.parse(Colors.Colorant, "white")))
 	end
 end
 

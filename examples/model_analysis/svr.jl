@@ -1,8 +1,8 @@
 import Mads
 
-info("Support Vector Regression (SVR) analysis")
+@info("Support Vector Regression (SVR) analysis")
 
-srand(2017)
+Random.seed!(2017)
 
 md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
 rootname = Mads.getmadsrootname(md)
@@ -18,7 +18,7 @@ Mads.spaghettiplot(md, predictions, keyword="w13a-model", format="PNG")
 Mads.display("$rootname-w13a-model-$numberofsamples-spaghetti.png")
 
 @time svrpredictions = svrexec(paramarray)
-info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
+@info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
 
 Mads.madsinfo("SVR predictions ...")
 Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")

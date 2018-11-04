@@ -1,7 +1,8 @@
 import Mads
 import JSON
-import DataStructures
+import OrderedCollections
 import ProgressMeter
+using Distributed
 
 # load MADS problem
 madsdirname = Mads.getmadsdir()
@@ -41,7 +42,7 @@ paramkeys = Mads.getparamkeys(md)
 optparamkeys = Mads.getoptparamkeys(md)
 
 # get all the parameter initial values
-paramdict_init = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict_init = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
 # create a function to compute concentrations
 computeconcentrations = Mads.makecomputeconcentrations(md)
@@ -88,7 +89,7 @@ Mads.plotwellSAresults(md,result,"w1a")
 Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
 paramvalues=Mads.getparamrandom(md, numberofsamples)
-Y = Array{Float64}(length(md["Observations"]),numberofsamples * length(paramvalues))
+Y = Array{Float64}(undef, length(md["Observations"]),numberofsamples * length(paramvalues))
 k = 0
 for paramkey in keys(paramvalues)
 	for i in 1:numberofsamples

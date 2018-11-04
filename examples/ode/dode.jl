@@ -1,4 +1,4 @@
-import Base.Test
+import Test
 import Mads
 md = Mads.loadmadsfile("ode.mads")
 prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
@@ -11,4 +11,4 @@ end
 result1 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 result2 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 rm("odecheckpoints"; recursive=true)
-@Base.Test.test isequal(result1, result2)
+@Test.test isequal(result1, result2)

@@ -1,4 +1,8 @@
-import DataStructures
+if VERSION >= v"0.7"
+	using OrderedCollections
+else
+	using DataStructures
+end
 import PyCall
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 
@@ -10,7 +14,7 @@ close(o)
 
 f(t) = parameters["a"] * t - parameters["b"] # a * t - b; linear model
 times = 1:4
-predictions = DataStructures.OrderedDict(zip(map(i -> string("o", i), times), map(f, times)))
+predictions = OrderedDict(zip(map(i -> string("o", i), times), map(f, times)))
 
 # Mads.dumpyamlfile("predictions.yaml", predictions) # YAML file created to write current model predictions
 

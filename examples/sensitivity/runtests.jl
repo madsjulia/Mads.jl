@@ -1,7 +1,7 @@
 import Mads
 import JSON
-import DataStructures
-import Base.Test
+import OrderedCollections
+import Test
 
 if VERSION >= v"0.7"
 	using Distributed
@@ -19,16 +19,16 @@ Mads.computeparametersensitities(md, sa_results)
 
 filename_correct = joinpath(workdir, "sobol-efast-results_correct.json")
 if Mads.create_tests
-	warn("Generating test file $filename_correct ... ")
+	@warn("Generating test file $filename_correct ... ")
 	file = open(filename_correct, "w")
 	JSON.print(file, sa_results)
 	close(file)
 end
 
-sa_results_correct = JSON.parsefile(filename_correct; dicttype=DataStructures.OrderedDict, use_mmap=true)
-@Base.Test.testset "Sensitivity" begin
-	@Base.Test.test !in(Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false)
-	@Base.Test.test !in(Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false)
+sa_results_correct = JSON.parsefile(filename_correct; dicttype=OrderedCollections.OrderedDict, use_mmap=true)
+@Test.testset "Sensitivity" begin
+	@Test.test !in(Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false)
+	@Test.test !in(Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false)
 end
 
 sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true)

@@ -1,6 +1,6 @@
 import Gadfly
 
-srand(100)
+Random.seed!(100)
 x = 1:10
 y = rand(10)
 
