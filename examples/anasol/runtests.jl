@@ -52,7 +52,7 @@ if isdefined(Mads, :plotgrid)
 	try
 		Mads.plotgrid(md)
 		Mads.plotgrid(md; title="Grid")
-		s = Mads.forwardgrid(md)
+		global s = Mads.forwardgrid(md)
 		delete!(md, "Grid")
 		@Mads.stdouterrcapture Mads.plotgrid(md, s)
 		@Mads.stdouterrcapture Mads.plotgrid(md)

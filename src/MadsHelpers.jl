@@ -466,7 +466,7 @@ function pkgversion(modulestr::String)
 		Pkg.status()
 		a = stdoutcaptureoff()
 		m = match(Regex(string(modulestr, ".*v([0-9](.[0-9])+)")), a)
-		return convert(VersionNumber, m[1])
+		return VersionNumber(m[1])
 	catch
 		o = stdoutcaptureoff()
 		Mads.madswarn("Module $(modulestr) is not available")
