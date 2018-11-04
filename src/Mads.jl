@@ -76,17 +76,12 @@ macro tryimport(s::Symbol)
 	mname = string(s)
 	importq = string(:(import $s))
 	infostring = string("Module ", s, " is not available")
-	warnstring = string("Module ", s, " cannot be imported")
 	q = quote
-		if Mads.ispkgavailable($mname; quiet=true)
-			try
-				Core.eval(Mads, Meta.parse($importq))
-			catch errmsg
-				Mads.printerrormsg(errmsg)
-				@warn($warnstring)
-			end
-		else
-			@info($infostring)
+		try
+			Core.eval(Mads, Meta.parse($importq))
+		catch errmsg
+			Mads.printerrormsg(errmsg)
+			@warn($infostring)
 		end
 	end
 	return :($(esc(q)))

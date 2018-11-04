@@ -251,8 +251,8 @@ Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(haskeyword;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "keyword"=>"dictionary key",
-            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
+			"keyword"=>"dictionary key",
+			"class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 
 Returns: `true` or `false`
 
@@ -287,8 +287,8 @@ Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(addkeyword!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "keyword"=>"dictionary key",
-            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
+			"keyword"=>"dictionary key",
+			"class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ addkeyword!
 
 function deletekeyword!(madsdata::AbstractDict, keyword::String)
@@ -315,8 +315,8 @@ Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 $(DocumentFunction.documentfunction(deletekeyword!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "keyword"=>"dictionary key",
-            "class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
+			"keyword"=>"dictionary key",
+			"class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ deletekeyword!
 
 """
@@ -411,7 +411,7 @@ Create mesh grid
 
 $(DocumentFunction.documentfunction(meshgrid;
 argtext=Dict("x"=>"vector of grid x coordinates",
-            "y"=>"vector of grid y coordinates")))
+			"y"=>"vector of grid y coordinates")))
 
 Returns:
 
@@ -430,7 +430,7 @@ Set / get current random seed. seed < 0 gets seed, anything else sets it.
 
 $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
-            "quiet"=>"[default=`true`]")))
+			"quiet"=>"[default=`true`]")))
 """
 function setseed(seed::Integer=-1, quiet::Bool=true)
 	if seed >= 0
@@ -465,7 +465,7 @@ function pkgversion(modulestr::String)
 		stdoutcaptureon()
 		Pkg.status()
 		a = stdoutcaptureoff()
-		m = match(Regex(string(modulestr, ".*v([0-9](.[0-9])+)")), a)
+		m = match(Regex(string("[ \t]*", modulestr, "[ \t]*v([0-9](.[0-9])+)")), a)
 		return VersionNumber(m[1])
 	catch
 		o = stdoutcaptureoff()
@@ -474,33 +474,7 @@ function pkgversion(modulestr::String)
 	end
 end
 
-if VERSION >= v"0.7"
-
-function ispkgavailable(modulename::String; quiet::Bool=false)
-	true
-end
-
-else
-
-function ispkgavailable(modulename::String; quiet::Bool=false)
-	flag=false
-	try
-		Pkg.available(modulename)
-		if typeof(Pkg.installed(modulename)) == Nothing
-			flag=false
-			!quiet && info("Module $modulename is not available")
-		else
-			flag=true
-		end
-	catch
-		!quiet && info("Module $modulename is not available")
-	end
-	return flag
-end
-
-end
-
-@doc """
+"""
 Checks if package is available
 
 $(DocumentFunction.documentfunction(ispkgavailable;
@@ -509,4 +483,15 @@ argtext=Dict("modulename"=>"module name")))
 Returns:
 
 - `true` or `false`
-""" ispkgavailable
+"""
+function ispkgavailable(modulename::String; quiet::Bool=false)
+	try
+		stdoutcaptureon()
+		Pkg.status()
+		a = stdoutcaptureoff()
+		m = match(Regex(string("[ \t]*(", modulename, ")[ \t]*v([0-9](.[0-9])+)")), a)
+		return m[1] == modulename
+	catch
+		return false
+	end
+end

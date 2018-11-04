@@ -2,6 +2,7 @@ import Mads
 import Test
 
 Mads.veryquieton()
+Mads.graphon()
 
 @info("Running MADS tests:")
 
@@ -34,5 +35,6 @@ for madstest in examples
 end
 
 Mads.veryquietoff()
+Mads.graphoff()
 
 :passed

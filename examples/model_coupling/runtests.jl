@@ -25,11 +25,13 @@ Mads.setobstime!(md, "o")
 forwardpredresults = Mads.forward(md, pdict)
 
 if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.graphoff()
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, forwardpredresults)
 	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
 	Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
 	Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
+	Mads.graphon()
 end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
