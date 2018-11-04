@@ -1,4 +1,6 @@
 import DocumentFunction
+import LinearAlgebra
+import Statistics
 
 """
 Gaussian spatial covariance function
@@ -155,13 +157,13 @@ Returns:
 
 - spatial covariance matrix
 """
-function getcovmat(X::AbstractMatrix, cov::Function)
-	covmat = Array{Float64}(undef, (size(X, 2), size(X, 2)))
-	cov0 = cov(0)
+function getcovmat(X::AbstractMatrix, covfunction::Function)
+	covmat = Array{Float64}(undef, size(X, 2), size(X, 2))
+	cov0 = covfunction(0)
 	for i = 1:size(X, 2)
 		covmat[i, i] = cov0
 		for j = i + 1:size(X, 2)
-			covmat[i, j] = cov(norm(X[:, i] - X[:, j]))
+			covmat[i, j] = covfunction(LinearAlgebra.norm(X[:, i] .- X[:, j]))
 			covmat[j, i] = covmat[i, j]
 		end
 	end

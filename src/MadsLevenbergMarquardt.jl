@@ -1,6 +1,7 @@
 import RobustPmap
 import LsqFit
 import DocumentFunction
+import LinearAlgebra
 
 function residuals(madsdata::AbstractDict, resultvec::Vector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -429,7 +430,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
-		if norm(JpJ) < eps(Float64)
+		if LinearAlgebra.norm(JpJ) < eps(Float64)
 			Mads.madswarn("Jacobian norm is too low! Parameters do not change observations.")
 		end
 		if first_lambda
@@ -560,7 +561,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 
 		if !Mads.quiet && show_trace
-			gradnorm = norm(J'*fcur, Inf)
+			gradnorm = LinearAlgebra.norm(J'*fcur, Inf)
 			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
 			os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 			push!(tr, os)
@@ -569,14 +570,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		callbackiteration(best_x, best_residual, lambda)
 
 		# check convergence criteria:
-		nx = norm(delta_x)
-		if nx < tolX * ( tolX + norm(x) )
+		nx = LinearAlgebra.norm(delta_x)
+		if nx < tolX * (tolX + LinearAlgebra.norm(x))
 			Mads.madsinfo("Small parameter step size: $nx < $tolX (tolX)")
 			x_converged = true
 		end
-		ng = norm(J' * fcur, Inf)
+		ng = LinearAlgebra.norm(J' * fcur, Inf)
 		if ng < tolG
-			Mads.madsinfo("Small gradient: $ng < $tolG (norm(J^T * fcur) < tolG)")
+			Mads.madsinfo("Small gradient: $ng < $tolG (LinearAlgebra.norm(J^T * fcur) < tolG)")
 			g_converged = true
 		end
 		if best_residual < tolOF
