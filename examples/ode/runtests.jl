@@ -3,7 +3,7 @@ import OrderedCollections
 import JLD2
 import FileIO
 import Test
-@Mads.tryimport OrdinaryDiffEq
+import OrdinaryDiffEq
 
 # function to create a function for the ODE solver
 @Mads.stderrcapture function makefunc(parameterdict::OrderedCollections.OrderedDict)

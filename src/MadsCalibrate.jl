@@ -1,5 +1,7 @@
 import OrderedCollections
 import DocumentFunction
+using SharedArrays
+using Statistics
 
 """
 Calibrate with random initial guesses
