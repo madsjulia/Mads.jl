@@ -27,7 +27,7 @@ import JSON
 
 import Anasol
 import AffineInvariantMCMC
-import GeostatInversion
+# import GeostatInversion
 import Kriging
 import MetaProgTools
 import ReusableFunctions
@@ -66,7 +66,7 @@ end
 """
 Mads Modules: $madsmodules
 """
-global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "Kriging", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 # global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
 include("MadsHelpers.jl")
