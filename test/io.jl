@@ -3,6 +3,7 @@ import Test
 import Printf
 import Suppressor
 import DataFrames
+import Random
 
 # If madsdir = '.' then joinpath, else madsdir
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "test") : Mads.getmadsdir()

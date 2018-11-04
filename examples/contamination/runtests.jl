@@ -3,6 +3,7 @@ import Test
 import JLD2
 import FileIO
 using SharedArrays
+using Statistics
 
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO
