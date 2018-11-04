@@ -1,6 +1,6 @@
-import DataStructures
+import OrderedCollections
 
-function madsmodelrun(parameters::Associative) # Sobol Test
+function madsmodelrun(parameters::AbstractDict) # Sobol Test
 	f = 1
 	i = 1
 	for d in sort(collect(keys(parameters))) # TODO fix parameter order; sort use here is funny
@@ -9,6 +9,6 @@ function madsmodelrun(parameters::Associative) # Sobol Test
 		f = f * b
 		i = i + 1
 	end
-	predictions = DataStructures.OrderedDict(zip(["of"], [f]))
+	predictions = OrderedCollections.OrderedDict(zip(["of"], [f]))
 	return predictions
 end

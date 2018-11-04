@@ -16,7 +16,7 @@ paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
 predictions = Mads.forward(md, paramdict)'
 wd = Mads.getwelldata(md, time=true)'
 
-# data = Array{Float64}(0, size(paramarray, 2) + size(wd, 2) + 1)
+# data = Array{Float64}(undef, 0, size(paramarray, 2) + size(wd, 2) + 1)
 # for i = 1:numberofsamples
 #	data = [data; repmat(paramarray[i,:], 100) wd predictions[:,i]]
 # end

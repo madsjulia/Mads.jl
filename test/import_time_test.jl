@@ -21,7 +21,7 @@
 @time import JLD
 @time import ProgressMeter
 @time import Distributions
-@time import DataStructures
+@time import OrderedCollections
 @time import DataFrames
 @time import OrdinaryDiffEq
 @time import NMF

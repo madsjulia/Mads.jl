@@ -1,4 +1,3 @@
-@Mads.tryimport PkgDev
 import Documenter
 import DocumentFunction
 
@@ -14,7 +13,7 @@ Returns:
 - filtered modules
 """
 function required(modulename::String="Mads", filtermodule::String="")
-	filename = joinpath(Pkg.dir(modulename), "REQUIRE")
+	filename = joinpath(dirname(pathof(madsmodule)), "..", "REQUIRE")
 	if isfile(filename)
 		modules = readdlm(filename)
 		if filtermodule != ""
@@ -41,7 +40,7 @@ Returns:
 """
 function dependents(modulename::String="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
-	modules = Array{Any}((0, 2))
+	modules = Array{Any}(undef, (0, 2))
 	for i in depmodules
 		modules = [modules; [i Mads.required(i, modulename)[:,2]]]
 	end
@@ -98,13 +97,13 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 	end
 	for i in modulenames
 		if git
-			info("Checking out $(i) ...")
+			@info("Checking out $(i) ...")
 			cwd = pwd()
-			d = Pkg.dir(i)
+			d = joinpath(dirname(pathof(i)), "..")
 			if isdir(d)
 				cd(d)
 			else
-				warn("Package $i is not installed")
+				@warn("Package $i is not installed")
 				return
 			end
 			if master
@@ -122,7 +121,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 			try
 				Pkg.checkout(i)
 			catch
-				warn("$i cannot be checked out; most probably it is dirty!")
+				@warn("$i cannot be checked out; most probably it is dirty!")
 			end
 		end
 	end
@@ -141,20 +140,20 @@ function push(modulename::String="")
 		modulenames = madsmodules
 	end
 	for i in modulenames
-		info("Pushing $(i) ...")
+		@info("Pushing $(i) ...")
 		cwd = pwd()
-		d = Pkg.dir(i)
+		d = joinpath(dirname(pathof(i)), "..")
 		if isdir(d)
 			cd(d)
 		else
-			warn("Package $i is not installed")
+			@warn("Package $i is not installed")
 			return
 		end
 		try
 			run(`git push`)
-		catch e
-			printerrormsg(e)
-			warn("$i cannot be pushed!")
+		catch errmsg
+			printerrormsg(errmsg)
+			@warn("$i cannot be pushed!")
 		end
 		cd(cwd)
 	end
@@ -174,18 +173,18 @@ function diff(modulename::String="")
 	end
 	for i in modulenames
 		cwd = pwd()
-		d = Pkg.dir(i)
+		d = joinpath(dirname(pathof(i)), "..")
 		if isdir(d)
 			cd(d)
 		else
-			warn("Package $i is not installed")
+			@warn("Package $i is not installed")
 			return
 		end
 		try
 			run(`git diff --word-diff "*.jl"`)
-		catch e
-			printerrormsg(e)
-			warn("$i cannot be diffed!")
+		catch errmsg
+			printerrormsg(errmsg)
+			@warn("$i cannot be diffed!")
 		end
 		cd(cwd)
 	end
@@ -230,19 +229,19 @@ function commit(commitmsg::String, modulename::String="")
 		modulenames = madsmodules
 	end
 	for i in modulenames
-		info("Commiting changes in $(i) ...")
+		@info("Commiting changes in $(i) ...")
 		cwd = pwd()
-		d = Pkg.dir(i)
+		d = joinpath(dirname(pathof(i)), "..")
 		if isdir(d)
 			cd(d)
 		else
-			warn("Package $i is not installed")
+			@warn("Package $i is not installed")
 			return
 		end
 		try
 			run(`git commit -a -m $(commitmsg)`)
 		catch
-			warn("Nothing to commit in $(i).")
+			@warn("Nothing to commit in $(i).")
 		end
 		cd(cwd)
 	end
@@ -256,20 +255,24 @@ end
 function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 	if git
 		cwd = pwd()
-		info("Git status $(madsmodule) ...")
-		d = Pkg.dir(madsmodule)
+		@info("Git status $(madsmodule) ...")
+		d = joinpath(dirname(pathof(Core.eval(Mads, Symbol(madsmodule)))), "..")
 		if isdir(d)
 			cd(d)
 		else
-			warn("Package $madsmodule is not installed")
+			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		run(`git status -s`)
-		runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
+		try
+			Mads.runcmd(`git status -s`; quiet=false, pipe=true);
+			Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
+		catch
+			@warn("Module is not under development; execute `dev $(madsmodule)`")
+		end
 		if gitmore
-			info("Git ID HEAD   $(madsmodule) ...")
+			@info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)
-			info("Git ID master $(madsmodule) ...")
+			@info("Git ID master $(madsmodule) ...")
 			run(`git rev-parse --verify master`)
 		end
 		cd(cwd)
@@ -282,18 +285,18 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 			o = stdoutcaptureoff()
 		catch
 			o = stdoutcaptureoff()
-			warn("Module $(modulestr) is not available")
+			@warn("Module $(modulestr) is not available")
 		end
 		a = ascii(String(o))
 		print(a)
-		if ismatch(r"(dirty)", a)
-			warn("$madsmodule latest changes are not committed!")
+		if occursin(r"(dirty)", a)
+			@warn("$madsmodule latest changes are not committed!")
 			tag_flag = false
-		elseif ismatch(r"[0-9]\+", a)
-			warn("$madsmodule latest changes are not tagged!")
+		elseif occursin(r"[0-9]\+", a)
+			@warn("$madsmodule latest changes are not tagged!")
 			tag_flag = true
-		elseif ismatch(r"master", a)
-			info("$madsmodule latest changes are already tagged!")
+		elseif occursin(r"master", a)
+			@info("$madsmodule latest changes are already tagged!")
 			tag_flag = false
 		end
 		return tag_flag
@@ -321,20 +324,20 @@ end
 function tag(madsmodule::String, versionsym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
-		if isdefined(:PkgDev)
+		if isdefined(Mads, :PkgDev)
 			try
 				PkgDev.tag(madsmodule, versionsym)
-			catch e
-				printerrormsg(e)
-				warn("$madsmodule cannot be tagged!")
+			catch errmsg
+				printerrormsg(errmsg)
+				@warn("$madsmodule cannot be tagged!")
 				return
 			end
 		else
-			warn("PkgDev is missing!")
+			@warn("PkgDev is missing!")
 		end
-		info("$madsmodule is now tagged!")
+		@info("$madsmodule is now tagged!")
 	else
-		warn("$madsmodule cannot be tagged!")
+		@warn("$madsmodule cannot be tagged!")
 	end
 end
 
@@ -355,20 +358,20 @@ argtext=Dict("madsmodule"=>"mads module name",
 """
 function untag(madsmodule::String, version::String)
 	cwd = pwd()
-	info("Git untag $(madsmodule) ...")
-	d = Pkg.dir(madsmodule)
+	@info("Git untag $(madsmodule) ...")
+	d = joinpath(dirname(pathof(madsmodule)), "..")
 	if isdir(d)
-		cd(Pkg.dir(madsmodule))
+		cd(d)
 	else
-		warn("Package $madsmodule is not installed")
+		@warn("Package $madsmodule is not installed")
 		return
 	end
 	try
 		run(`git tag -d $version`)
 		run(`git push origin :refs/tags/$version`)
-	catch e
-		printerrormsg(e)
-		warn("Untag of $madsmodule failed!")
+	catch errmsg
+		printerrormsg(errmsg)
+		@warn("Untag of $madsmodule failed!")
 	end
 	cd(cwd)
 end
@@ -379,14 +382,14 @@ Create web documentation files for Mads functions
 $(DocumentFunction.documentfunction(create_documentation))
 """
 function create_documentation()
-	Documenter.makedocs(root = Pkg.dir("Mads", "docs"), doctest=false, clean=true)
+	Documenter.makedocs(root = joinpath(dirname(pathof(Mads)), "..", "docs"), doctest=false, clean=true)
 
 	d = pwd()
 	cd(Mads.madsdir)
 	# run(`git pull gh gh-pages`)
-	info("mkdocs build & deploy ...")
+	@info("mkdocs build & deploy ...")
 	run(`mkdocs gh-deploy --clean`)
-	info("mkdocs done.")
+	@info("mkdocs done.")
 	cd(d)
 	return
 end

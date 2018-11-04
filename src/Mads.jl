@@ -10,16 +10,15 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 """
 module Mads
 
-if VERSION >= v"0.7"
-	import Pkg
-	import OrderedCollections
-	using Distributed
-	using Printf
-	using DelimitedFiles
-	using LinearAlgebra
-	using Statistics
-	using Random
-end
+import Pkg
+import OrderedCollections
+import Printf
+using Distributed
+using DelimitedFiles
+using LinearAlgebra
+using Statistics
+using SparseArrays
+using Random
 
 import JLD2
 import FileIO
@@ -50,15 +49,15 @@ end
 
 global madsgit = true
 try
-	run(pipeline(`git help`, stdout=DevNull, stderr=DevNull))
+	run(pipeline(`git help`; stdout=devnull, stderr=devnull))
 catch
 	global madsgit = false
 end
 
 global madsbash = true
-if !Sys.is_windows()
+if !Sys.Sys.iswindows()
 	try
-		run(pipeline(`bash --help`, stdout=DevNull, stderr=DevNull))
+		run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
 	catch
 		global madsbash = false
 	end
@@ -81,13 +80,33 @@ macro tryimport(s::Symbol)
 	q = quote
 		if Mads.ispkgavailable($mname; quiet=true)
 			try
-				Core.eval(Mads, parse($importq))
+				Core.eval(Mads, Meta.parse($importq))
 			catch errmsg
 				Mads.printerrormsg(errmsg)
-				warn($warnstring)
+				@warn($warnstring)
 			end
 		else
-			info($infostring)
+			@info($infostring)
+		end
+	end
+	return :($(esc(q)))
+end
+
+macro tryimportmain(s::Symbol)
+	mname = string(s)
+	importq = string(:(import $s))
+	infostring = string("Module ", s, " is not available")
+	warnstring = string("Module ", s, " cannot be imported")
+	q = quote
+		if Mads.ispkgavailable($mname; quiet=true)
+			try
+				Core.eval(Main, Meta.parse($importq))
+			catch errmsg
+				Mads.printerrormsg(errmsg)
+				@warn($warnstring)
+			end
+		else
+			@info($infostring)
 		end
 	end
 	return :($(esc(q)))
@@ -95,7 +114,7 @@ end
 
 if !haskey(ENV, "MADS_NO_PYTHON")
 	@tryimport PyCall
-	if isdefined(:PyCall)
+	if isdefined(Mads, :PyCall)
 		const pyyaml = PyCall.PyNULL()
 		function __init__()
 			try
@@ -103,18 +122,18 @@ if !haskey(ENV, "MADS_NO_PYTHON")
 				# info("PyYAML is available (in Conda)")
 			catch
 				ENV["PYTHON"] = ""
-				warn("PyYAML is not available (in the available python installation)")
+				@warn("PyYAML is not available (in the available python installation)")
 			end
 			if pyyaml == PyCall.PyNULL()
 				if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
 					@tryimport Conda
 				end
-				pyyamlok = false
+				global pyyamlok = false
 				try
 					copy!(pyyaml, PyCall.pyimport("yaml"))
-					pyyamlok = true
+					global pyyamlok = true
 				catch
-					warn("PyYAML is not available (in Conda)")
+					@warn("PyYAML is not available (in Conda)")
 				end
 				if pyyamlok
 					copy!(pyyaml, PyCall.pyimport("yaml"))
@@ -129,6 +148,7 @@ end
 
 global vectorflag = false
 global quiet = true
+global veryquiet = false
 global capture = true
 global restart = false
 global graphoutput = true
@@ -143,7 +163,7 @@ global sindxdefault = 0.1
 global create_tests = false # dangerous if true
 global long_tests = false # execute long tests
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
-global madsservers2 = ["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18); "es05"; "es06"]
+global madsservers2 = ["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 global nprocs_per_task_default = 1
 const madsdir = splitdir(splitdir(Base.source_path())[1])[1]
 
@@ -190,7 +210,7 @@ end
 
 if !haskey(ENV, "MADS_NO_BIGUQ")
 	@tryimport BIGUQ
-	if isdefined(:BIGUQ)
+	if isdefined(Mads, :BIGUQ)
 		include("MadsBayesInfoGap.jl")
 	else
 		ENV["MADS_NO_BIGUQ"] = ""
@@ -199,7 +219,7 @@ end
 
 if !haskey(ENV, "MADS_NO_KLARA")
 	@tryimport Klara
-	if !isdefined(:Klara)
+	if !isdefined(Mads, :Klara)
 		ENV["MADS_NO_KLARA"] = ""
 	end
 end
@@ -207,23 +227,23 @@ end
 include("MadsMonteCarlo.jl")
 
 if haskey(ENV, "MADS_TRAVIS")
-	info("Travis testing environment")
+	@info("Travis testing environment")
 	ENV["MADS_NO_PYPLOT"] = ""
 end
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		@Mads.tryimport Gadfly
-		if !isdefined(:Gadfly)
+		if !isdefined(Mads, :Gadfly)
 			ENV["MADS_NO_GADFLY"] = ""
 		end
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 		@Mads.tryimport PyCall
 		@Mads.tryimport PyPlot
-		if !isdefined(:PyPlot)
+		if !isdefined(Mads, :PyPlot)
 			ENV["MADS_NO_PYPLOT"] = ""
-			warn("PyPlot is not available")
+			@warn("PyPlot is not available")
 		else
 			# info("PyPlot is available")
 		end
@@ -233,7 +253,7 @@ else
 	ENV["MADS_NO_PYPLOT"] = ""
 	ENV["MADS_NO_DISPLAY"] = ""
 	global graphoutput = false
-	warn("Mads plotting is disabled")
+	@warn("Mads plotting is disabled")
 end
 
 if !haskey(ENV, "MADS_TRAVIS")
@@ -247,7 +267,7 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
 	@tryimport JuMP
-	if isdefined(:JuMP)
+	if isdefined(Mads, :JuMP)
 		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 		include(joinpath("..", "src-new", "MadsBSS.jl"))
 		include(joinpath("..", "src-new", "MadsMathProgBase.jl"))

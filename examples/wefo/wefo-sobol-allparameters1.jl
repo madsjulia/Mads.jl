@@ -1,7 +1,7 @@
-import DataStructures
+import OrderedCollections
 import WEFO
 
-function madsmodelrun(parameters::Associative) # MADS/WEFO run
+function madsmodelrun(parameters::AbstractDict) # MADS/WEFO run
 	ESC = [parameters["ESC1c"] parameters["ESC2c"] parameters["ESC3c"]; parameters["ESC1g"] parameters["ESC2g"] parameters["ESC3g"]] # get the values
 	PC = [parameters["PC1c"] parameters["PC2c"] parameters["PC3c"]; parameters["PC1g"] parameters["PC2g"] parameters["PC3g"]] # get the values
 	# @show ESC
@@ -41,6 +41,6 @@ function madsmodelrun(parameters::Associative) # MADS/WEFO run
 	WEFO.set() # setup WEFO
 	WEFO.solve() # solve WEFO
 	of = WEFO.getobjective() # get OF
-	predictions = DataStructures.OrderedDict(zip(["of"], [of])) # put OF into a dictionary
+	predictions = OrderedCollections.OrderedDict(zip(["of"], [of])) # put OF into a dictionary
 	return predictions # pass the OF back to MADS
 end

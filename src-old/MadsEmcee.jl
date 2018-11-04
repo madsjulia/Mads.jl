@@ -26,9 +26,9 @@ Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
 function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalker::Int, thinning::Int, a=2.)
 	@assert length(size(x0)) == 2
 	x = copy(x0)
-	chain = Array{Float64}(size(x0, 1), numwalkers, div(numsamples_perwalker, thinning))
+	chain = Array{Float64}(undef, size(x0, 1), numwalkers, div(numsamples_perwalker, thinning))
 	lastllhoodvals = RobustPmap.rpmap(llhood, map(i->x[:, i], 1:size(x, 2)))
-	llhoodvals = Array{Float64}(numwalkers, div(numsamples_perwalker, thinning))
+	llhoodvals = Array{Float64}(undef, numwalkers, div(numsamples_perwalker, thinning))
 	llhoodvals[:, 1] = lastllhoodvals
 	chain[:, :, 1] = x0
 	batch1 = 1:div(numwalkers, 2)
@@ -73,7 +73,7 @@ Returns:
 """
 function flattenmcmcarray(chain::Array, llhoodvals::Array)
 	numdims, numwalkers, numsteps = size(chain)
-	newchain = Array{Float64}(numdims, numwalkers * numsteps)
+	newchain = Array{Float64}(undef, numdims, numwalkers * numsteps)
 	for j = 1:numsteps
 		for i = 1:numwalkers
 			newchain[:, i + (j - 1) * numwalkers] = chain[:, i, j]

@@ -1,3 +1,5 @@
+using Distributed
+
 addprocs(4)
 
 @everywhere function fp()

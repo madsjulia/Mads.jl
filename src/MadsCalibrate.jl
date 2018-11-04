@@ -1,4 +1,4 @@
-import DataStructures
+import OrderedCollections
 import DocumentFunction
 
 """
@@ -35,12 +35,12 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, all::Bool=false, save_results::Bool=true)
 	Mads.setseed(seed)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	allresults = Array{Float64}(0)
+	allresults = Array{Float64}(undef, 0)
 	local bestparameters
 	local bestresult
 	bestphi = Inf
@@ -102,7 +102,7 @@ Returns:
 - boolean vector (converged/not converged)
 - array with estimate model parameters
 """
-function calibraterandom_parallel(madsdata::Associative, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
+function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
@@ -110,7 +110,7 @@ function calibraterandom_parallel(madsdata::Associative, numberofsamples::Intege
 	allphi = SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
-	@sync @parallel for i in 1:numberofsamples
+	@sync @distributed for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
@@ -158,7 +158,7 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -166,7 +166,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	lowerbounds = Mads.getparamsmin(madsdata, optparamkeys)
 	upperbounds = Mads.getparamsmax(madsdata, optparamkeys)
 	logtransformed = Mads.getparamslog(madsdata, optparamkeys)
-	indexlogtransformed = find(logtransformed)
+	indexlogtransformed = findall(logtransformed)
 	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 	sindx = Mads.getsindx(madsdata)
@@ -182,7 +182,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(DataStructures.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
+			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
 		function jacobiancallback(x::Vector, J::Matrix)
@@ -204,7 +204,7 @@ function calibrate(madsdata::Associative; tolX::Number=1e-4, tolG::Number=1e-6, 
 	end
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
-	minimumdict = DataStructures.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	minimumdict = OrderedCollections.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
 	for i = 1:length(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimizer[i]
 	end

@@ -18,7 +18,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "verbosity"=>"verbosity output level [default=`0`]",
             "seed"=>"random seed [default=`0`]")))
 """
-function infogap_jump(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1)
+function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	np = 4
@@ -122,13 +122,13 @@ Returns:
 
 - hmin, hmax
 """
-function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
+function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	time = [1.,2.,3.,4.]
 	ti = [1.,2.,3.,4.,5.]
 	obs = [1.,2.,3.,4.]
-	if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
+	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
 		ldat = Gadfly.layer(x=time, y=obs, ymin=obs-1, ymax=obs+1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 		f = Gadfly.plot(ldat, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: model setup"))
 		Gadfly.draw(Gadfly.PNG(joinpath(Mads.madsdir, "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
@@ -172,13 +172,13 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 		fo = fo4
 	end
 	plotrange = 1:0.1:5
-	ymin = Array{Float64}(length(plotrange))
-	ymax = Array{Float64}(length(plotrange))
+	ymin = Array{Float64}(undef, length(plotrange))
+	ymax = Array{Float64}(undef, length(plotrange))
 	pi = similar(pinit)
-	par_best = Array{Float64}(0)
-	obs_best = Array{Float64}(0)
-	hmin = Array{Float64}(0)
-	hmax = Array{Float64}(0)
+	par_best = Array{Float64}(undef, 0)
+	obs_best = Array{Float64}(undef, 0)
+	hmin = Array{Float64}(undef, 0)
+	hmax = Array{Float64}(undef, 0)
 	for h in horizons
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
@@ -251,10 +251,10 @@ function infogap_jump_polinomial(madsdata::Associative=Dict(); horizons::Vector=
 				ymax = map(t->fo(t, par_best), plotrange)
 			end
 		end
-		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
+		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
 			ldat = Gadfly.layer(x=time, y=obs, ymin=obs-h, ymax=obs+h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
-			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue")))
-			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red")))
+			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "blue")))
+			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "red")))
 			f = Gadfly.plot(ldat, lmin, lmax, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: h=$(h) Model: $(models[model])"))
 			Gadfly.draw(Gadfly.PNG(joinpath(Mads.madsdir, "examples", "model_analysis", "infogap_results", "model_$(model)_h_$(h).png"), 6Gadfly.inch, 4Gadfly.inch), f)
 		end
@@ -278,7 +278,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
+function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -349,10 +349,10 @@ function infogap_mpb_polinomial(madsdata::Associative=Dict(); horizons::Vector=[
 	# ti = Mads.getobstime(madsdata)
 	# no = length(ok)
 
-	par_best = Array{Float64}(np)
-	omin = Array{Float64}(no)
-	omax = Array{Float64}(no)
-	g = Array{Float64}(no)
+	par_best = Array{Float64}(undef, np)
+	omin = Array{Float64}(undef, no)
+	omax = Array{Float64}(undef, no)
+	g = Array{Float64}(undef, no)
 	for h in horizons
 		par_best = pinit
 		phi_best = MathProgBase.eval_f(MadsModelPoly(), par_best)
@@ -419,7 +419,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
+function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
 	setseed(seed, quiet)
 
 	p = [1.,0.]
@@ -464,10 +464,10 @@ function infogap_mpb_lin(madsdata::Associative=Dict(); horizons::Vector=[0.05, 0
 	end
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
 
-	par_best = Array{Float64}(np)
-	omin = Array{Float64}(no)
-	omax = Array{Float64}(no)
-	g = Array{Float64}(no)
+	par_best = Array{Float64}(undef, np)
+	omin = Array{Float64}(undef, no)
+	omax = Array{Float64}(undef, no)
+	g = Array{Float64}(undef, no)
 	for h in horizons
 		par_best = pinit
 		phi_best = MathProgBase.eval_f(MadsModelLin(), par_best)

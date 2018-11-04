@@ -1,3 +1,5 @@
+using Distributed
+
 @everywhere fjmxv(M, x) = M' .* x
 
 @everywhere nP = 100

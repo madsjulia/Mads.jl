@@ -1,17 +1,19 @@
-info("Load Mads.setprocs ...")
+using Distributed
+
+@info("Load Mads.setprocs ...")
 include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
 
-info("Set SLURM processors ...")
+@info("Set SLURM processors ...")
 setprocs()
 # setprocs(ntasks_per_node=2)
 
-info("Number of processors = $(length(workers()))")
+@info("Number of processors = $(length(workers()))")
 
-info("Import mads ...")
+@info("Import mads ...")
 reload("Mads")
 Mads.quietoff()
 
-info("Set the correct working directory on all the processors ...")
+@info("Set the correct working directory on all the processors ...")
 @everywhere Mads.setdir()
 @everywhere @show pwd()
 

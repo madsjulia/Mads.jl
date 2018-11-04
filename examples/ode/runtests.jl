@@ -1,12 +1,12 @@
 import Mads
-import DataStructures
+import OrderedCollections
 import JLD2
 import FileIO
-import Base.Test
+import Test
 @Mads.tryimport OrdinaryDiffEq
 
 # function to create a function for the ODE solver
-@Mads.stderrcapture function makefunc(parameterdict::DataStructures.OrderedDict)
+@Mads.stderrcapture function makefunc(parameterdict::OrderedCollections.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
@@ -18,7 +18,7 @@ import Base.Test
 	return func
 end
 
-if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
+if isdefined(Mads, :OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 	# load parameter data from MADS YAML file
 	Mads.madsinfo("Loading data ...")
 	workdir = Mads.getmadsdir() # get the directory where the problem is executed
@@ -34,9 +34,9 @@ if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 	# Mads.showparameters(md)
 
 	# create parameter dictionary
-	paramdict = DataStructures.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+	paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
-	@Base.Test.testset "ODE Solver" begin
+	@Test.testset "ODE Solver" begin
 		# create a function for the ODE solver
 		funcosc = makefunc(paramdict)
 		Mads.madsinfo("Solve ODE ...")
@@ -48,18 +48,18 @@ if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 
 		# Write good test results to directory
 		if Mads.create_tests
-			d = joinpath(workdir, "test_results")
-			Mads.mkdir(d)
+			dirt = joinpath(workdir, "test_results")
+			Mads.mkdir(dirt)
 
-			FileIO.save(joinpath(d, "ode_solver_t.jld2"), "t", t)
-			FileIO.save(joinpath(d, "ode_solver_y.jld2"), "ys", ys)
+			FileIO.save(joinpath(dirt, "ode_solver_t.jld2"), "t", t)
+			FileIO.save(joinpath(dirt, "ode_solver_y.jld2"), "ys", ys)
 		end
 
 		good_ode_t = FileIO.load(joinpath(workdir, "test_results", "ode_solver_t.jld2"), "t")
 		good_ode_ys = FileIO.load(joinpath(workdir, "test_results", "ode_solver_y.jld2"), "ys")
 
-		@Base.Test.test isapprox(t, good_ode_t, atol=1e-6)
-		@Base.Test.test isapprox(ys, good_ode_ys, atol=1e-6)
+		@Test.test isapprox(t, good_ode_t, atol=1e-6)
+		@Test.test isapprox(ys, good_ode_ys, atol=1e-6)
 
 		# create an observation dictionary in the MADS problem dictionary
 		Mads.madsinfo("Create MADS Observations ...")
@@ -72,5 +72,5 @@ if isdefined(:OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.1.0"
 		# Mads.showobservations(md)
 	end
 else
-	warn("OrdinaryDiffEq.jl is missing")
+	@warn("OrdinaryDiffEq.jl is missing")
 end

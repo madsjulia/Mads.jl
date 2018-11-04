@@ -23,7 +23,7 @@ $(DocumentFunction.documentfunction(cleancoverage))
 function cleancoverage()
 	orig_dir = pwd()
 	for i in madsmodules
-		cd(joinpath(Pkg.dir(i), "src"))
+		cd(dirname(pathof(Mads)))
 		Mads.rmfiles_ext("cov")
 	end
 	cd(orig_dir)
@@ -53,45 +53,37 @@ function test(testname::String=""; madstest::Bool=true)
 	orig_dir = pwd()
 	d = Mads.madsdir
 	if isdir(d)
-		info("Testing Mads in $d")
+		@info("Testing Mads in $d")
 	else
 		d = Mads.madsdir
-		info("Testing Mads in $d")
+		@info("Testing Mads in $d")
 	end
 	if testname == ""
 		madstest && include(joinpath(d, "test", "runtests.jl"))
-		info("Mads modules testing:")
+		@info("Mads modules testing:")
 		for i in madsmodules[2:end]
-			print_with_color(:cyan, "* $i testing ...\n")
-			tic()
-			include(joinpath(Pkg.dir(i), "test", "runtests.jl"))
-			toc()
+			printstyled("* $i testing ...\n", color=:cyan)
+			@elapsed include(joinpath(Pkg.dir(i), "test", "runtests.jl"))
 		end
 	else
 		file = joinpath(d, "examples", testname, "runtests.jl")
 		if isfile(file)
-			print_with_color(:cyan, "* $testname testing ...\n")
-			tic()
-			include(file)
-			toc()
+			printstyled("* $testname testing ...\n", color=:cyan)
+			@elapsed include(file)
 		else
 			file = joinpath(d, "test", "$testname.jl")
 			if isfile(file)
-				print_with_color(:cyan, "* $testname testing ...\n")
-				tic()
-				include(file)
-				toc()
+				printstyled(:cyan, "* $testname testing ...\n", color=:cyan)
+				@elapsed include(file)
 			else
 				Core.eval(Mads, :(@tryimport $(Symbol(testname))))
 				if isdefined(Symbol(testname))
-					print_with_color(:cyan, "* $testname testing ...\n")
+					printstyled("* $testname testing ...\n", color=:cyan)
 					file = joinpath(Pkg.dir(testname), "test", "runtests.jl")
 					if isfile(file)
-						tic()
-						include(file)
-						toc()
+						@elapsed include(file)
 					else
-						warn("Test $file for module $testname is missing!")
+						@warn("Test $file for module $testname is missing!")
 					end
 				end
 			end

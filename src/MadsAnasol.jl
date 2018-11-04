@@ -1,5 +1,5 @@
 import Anasol
-import DataStructures
+import OrderedCollections
 import ProgressMeter
 import DocumentFunction
 
@@ -15,7 +15,7 @@ $(DocumentFunction.documentfunction(addsource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "sourceid"=>"source id [default=`0`]")))
 """
-function addsource!(madsdata::Associative, sourceid::Int=0; dict::Associative=Dict())
+function addsource!(madsdata::AbstractDict, sourceid::Int=0; dict::AbstractDict=Dict())
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		if sourceid <= 0
@@ -37,7 +37,7 @@ function addsource!(madsdata::Associative, sourceid::Int=0; dict::Associative=Di
 	else
 		madserror("There are no sources in the Mads dictionary!")
 	end
-	info("There are $(length(madsdata["Sources"])) sources now!")
+	Mads.madswarn("There are $(length(madsdata["Sources"])) sources now!")
 end
 
 """
@@ -47,7 +47,7 @@ $(DocumentFunction.documentfunction(removesource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "sourceid"=>"source id [default=`0`]")))
 """
-function removesource!(madsdata::Associative, sourceid::Int=0)
+function removesource!(madsdata::AbstractDict, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		if sourceid <= 0
@@ -63,7 +63,7 @@ function removesource!(madsdata::Associative, sourceid::Int=0)
 	else
 		madserror("There are no sources in the Mads dictionary!")
 	end
-	info("There are $(length(madsdata["Sources"])) sources now!")
+	Mads.madswarn("There are $(length(madsdata["Sources"])) sources now!")
 end
 
 """
@@ -72,30 +72,30 @@ Add contaminant source parameters
 $(DocumentFunction.documentfunction(addsourceparameters!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function addsourceparameters!(madsdata::Associative)
+function addsourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources")
 		if !haskey(madsdata, "Parameters")
-			madsdata["Parameters"] = DataStructures.OrderedDict()
+			madsdata["Parameters"] = OrderedCollections.OrderedDict()
 		end
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
-			if length(findin(anasolsourcerequired, sourceparams)) < length(anasolsourcerequired)
+			if length(findall((in)(sourceparams), anasolsourcerequired)) < length(anasolsourcerequired)
 				Mads.madswarn("Missing: $(anasolsourcerequired[indexin(anasolsourcerequired, sourceparams).==0]))")
 				Mads.madscritical("There are missing Anasol source parameters!")
 			end
 			extraparams = sourceparams[indexin(sourceparams, anasolsourcerequired).==0]
 			for sourceparam in [anasolsourcerequired; extraparams]
 				if !haskey(madsdata["Sources"][i][sourcetype][sourceparam], "exp")
-					madsdata["Parameters"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					madsdata["Parameters"][string("source", i, "_", sourceparam)] = OrderedCollections.OrderedDict{String,Any}()
 					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
 						madsdata["Parameters"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
 					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = DataStructures.OrderedDict()
+						madsdata["Expressions"] = OrderedCollections.OrderedDict()
 					end
-					madsdata["Expressions"][string("source", i, "_", sourceparam)] = DataStructures.OrderedDict{String,Any}()
+					madsdata["Expressions"][string("source", i, "_", sourceparam)] = OrderedCollections.OrderedDict{String,Any}()
 					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])
 						madsdata["Expressions"][string("source", i, "_", sourceparam)][pf] = madsdata["Sources"][i][sourcetype][sourceparam][pf]
 					end
@@ -111,12 +111,12 @@ Copy aquifer parameters to become contaminant source parameters
 $(DocumentFunction.documentfunction(copyaquifer2sourceparameters!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function copyaquifer2sourceparameters!(madsdata::Associative)
+function copyaquifer2sourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources") && haskey(madsdata, "Parameters")
 		for i = 1:length(madsdata["Sources"])
 			for k in keys(madsdata["Sources"][i])
 				for pkey in keys(madsdata["Parameters"])
-					if !contains(pkey, "source")
+					if !occursin("source", pkey)
 						madsdata["Sources"][i][k][pkey] = deepcopy(madsdata["Parameters"][pkey])
 					end
 				end
@@ -132,7 +132,7 @@ Remove contaminant source parameters
 $(DocumentFunction.documentfunction(removesourceparameters!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function removesourceparameters!(madsdata::Associative)
+function removesourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
@@ -175,7 +175,7 @@ paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["ini
 forward_preds = computeconcentrations(paramdict)
 ```
 """
-function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
+function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.
 	parametersnoexpressions = Mads.getparamdict(madsdata)
@@ -189,7 +189,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		anasolfunctionroot = "long_fff_"
 	end
 	numberofsources = length(madsdata["Sources"])
-	anasolfunctions = Array{Function}(numberofsources)
+	anasolfunctions = Array{Function}(undef, numberofsources)
 	anasolallparametersrequired = anasolparametersrequired
 	anasolallparametersall = anasolparametersall
 	for i = 1:numberofsources
@@ -203,12 +203,12 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		elseif haskey(madsdata["Sources"][i], "gauss" )
 			anasolfunction = anasolfunctionroot * "ddd_iir_c"
 		end
-		anasolfunctions[i] = Core.eval(Mads, parse("Anasol.$anasolfunction"))
+		anasolfunctions[i] = Core.eval(Mads, Meta.parse("Anasol.$anasolfunction"))
 	end
-	if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+	if length(findall((in)(paramkeys), anasolallparametersrequired)) < length(anasolallparametersrequired)
 		missingparameters = anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0]
-		anasolallparametersrequired = Array{String}(0)
-		anasolallparametersall = Array{String}(0)
+		anasolallparametersrequired = Array{String}(undef, 0)
+		anasolallparametersall = Array{String}(undef, 0)
 		for i = 1:numberofsources
 			for p in [anasolparametersrequired; anasolsourcerequired]
 				pn = string("source", i, "_", p)
@@ -216,7 +216,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 				anasolallparametersall = [anasolallparametersall; pn]
 			end
 		end
-		if length(findin(anasolallparametersrequired, paramkeys)) < length(anasolallparametersrequired)
+		if length(findall((in)(paramkeys), anasolallparametersrequired)) < length(anasolallparametersrequired)
 			Mads.madswarn("There are missing Anasol parameters!")
 			Mads.madswarn("Missing parameters: $(missingparameters)")
 			Mads.madswarn("Missing source parameters: $(anasolallparametersrequired[indexin(anasolallparametersrequired, paramkeys).==0])")
@@ -229,16 +229,16 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			nW += 1
 		end
 	end
-	wellx = Array{Float64}(nW)
-	welly = Array{Float64}(nW)
-	wellz0 = Array{Float64}(nW)
-	wellz1 = Array{Float64}(nW)
-	wellscreen = Array{Bool}(nW)
-	wellnO = Array{Int}(nW)
-	wellt = Array{Array{Float64}}(nW)
-	wellp = Array{Array{Bool}}(nW)
-	wellc = Array{Array{Float64}}(nW)
-	wellkeys = Array{String}(0)
+	wellx = Array{Float64}(undef, nW)
+	welly = Array{Float64}(undef, nW)
+	wellz0 = Array{Float64}(undef, nW)
+	wellz1 = Array{Float64}(undef, nW)
+	wellscreen = Array{Bool}(undef, nW)
+	wellnO = Array{Int}(undef, nW)
+	wellt = Array{Array{Float64}}(undef, nW)
+	wellp = Array{Array{Bool}}(undef, nW)
+	wellc = Array{Array{Float64}}(undef, nW)
+	wellkeys = Array{String}(undef, 0)
 	w = 0
 	for wellkey in Mads.getwellkeys(madsdata)
 		if madsdata["Wells"][wellkey]["on"]
@@ -253,15 +253,15 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 				wellz0[w]  = (wellz1[w]  + wellz0[w] ) / 2
 				wellscreen[w] = false
 			end
-			obst = Array{Float64}(0)
-			obsp = Array{Int}(0)
+			obst = Array{Float64}(undef, 0)
+			obsp = Array{Int}(undef, 0)
 			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] != nothing
 				nO = length(madsdata["Wells"][wellkey]["obs"])
 			else
 				nO = 0
 			end
-			wellc[w] = Array{Float64}(nO)
-			wellp[w] = Array{Bool}(nO)
+			wellc[w] = Array{Float64}(undef, nO)
+			wellp[w] = Array{Bool}(undef, nO)
 			for o in 1:nO
 				t = madsdata["Wells"][wellkey]["obs"][o]["t"]
 				if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
@@ -307,7 +307,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
 		computeconcentrations(parameterswithexpressions)
 	end
-	function computeconcentrations(parametersnoexpressions::Associative)
+	function computeconcentrations(parametersnoexpressions::AbstractDict)
 		parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 		if classical
 			porosity = parameters["n"]
@@ -387,7 +387,7 @@ function makecomputeconcentrations(madsdata::Associative; calczeroweightobs::Boo
 			end
 		end
 		global modelruns += 1
-		return DataStructures.OrderedDict{String,Float64}(zip(wellkeys, vcat(wellc...)))
+		return OrderedCollections.OrderedDict{String,Float64}(zip(wellkeys, vcat(wellc...)))
 	end
 	return computeconcentrations
 end
@@ -448,14 +448,14 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
 	nt = length(t)
 	xtransvec = [xtrans, ytrans, ztrans]
-	anasolresult = Vector{Float64}(nt)
+	anasolresult = Vector{Float64}(undef, nt)
 	for i = 1:nt
 		anasolresult[i] = 1e6 * f / n * anasolfunction(xtransvec, t[i], x01, sigma01, v1, sigma1, H1, xb1, x02, sigma02, v2, sigma2, H2, xb2, x03, sigma03, v3, sigma3, H3, xb3, lambda, t0, t1)
 	end
 	return anasolresult
 end
 
-function computemass(madsdata::Associative; time::Number=0)
+function computemass(madsdata::AbstractDict; time::Number=0)
 	if time == 0
 		grid_time = (haskey(madsdata, "Grid") && haskey(madsdata["Grid"], "time")) ? madsdata["Grid"]["time"] : 0
 		time = grid_time > 0 ? grid_time : 0
@@ -486,9 +486,9 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Strin
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
 	Mads.madsinfo("Number of files = $nf")
-	lambda = Array{Float64}(nf)
-	mass_injected = Array{Float64}(nf)
-	mass_reduced = Array{Float64}(nf)
+	lambda = Array{Float64}(undef, nf)
+	mass_injected = Array{Float64}(undef, nf)
+	mass_reduced = Array{Float64}(undef, nf)
 	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(joinpath(path, mf[i]))
 		l = md["Parameters"]["lambda"]["init"]

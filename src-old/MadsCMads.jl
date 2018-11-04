@@ -1,4 +1,4 @@
-import DataStructures
+import OrderedCollections
 import DocumentFunction
 
 """
@@ -11,9 +11,9 @@ Returns:
 
 - observations
 """
-function readobservations_cmads(madsdata::Associative)
+function readobservations_cmads(madsdata::AbstractDict)
 	obsids=getobskeys(madsdata)
-	observations = DataStructures.OrderedDict{String,Float64}(zip(obsids, zeros(length(obsids))))
+	observations = OrderedCollections.OrderedDict{String,Float64}(zip(obsids, zeros(length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
 		#this loop assumes that cmadsins_obs gives a zero value if the obs is not found, and that each obs will appear only once

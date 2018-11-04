@@ -1,17 +1,17 @@
-import DataStructures
+import OrderedCollections
 import RobustPmap
 import JSON
 import AffineInvariantMCMC
 import DocumentFunction
 import BlackBoxOptim
 
-function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0)
+function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
 	Mads.setseed(seed)
 	optparamkeys = getoptparamkeys(madsdata)
-	p0 = Array{Float64}(length(optparamkeys), numwalkers)
+	p0 = Array{Float64}(undef, length(optparamkeys), numwalkers)
 	pinit = getparamsinit(madsdata, optparamkeys)
 	pmin = getparamsmin(madsdata, optparamkeys)
 	pmax = getparamsmax(madsdata, optparamkeys)
@@ -28,7 +28,7 @@ function emceesampling(madsdata::Associative; numwalkers::Integer=10, nsteps::In
 	end
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor)
 end
-function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0)
+function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
@@ -46,7 +46,7 @@ function emceesampling(madsdata::Associative, p0::Array; numwalkers::Integer=10,
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
-if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
+if isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
 	@doc """
 	Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
@@ -74,12 +74,12 @@ if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 	```
 	""" emceesampling
 
-	function bayessampling(madsdata::Associative; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
+	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 		Mads.setseed(seed)
 		madsloglikelihood = makemadsloglikelihood(madsdata)
 		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 		optparamkeys = getoptparamkeys(madsdata)
-		initvals = Array{Float64}(length(optparamkeys))
+		initvals = Array{Float64}(undef, length(optparamkeys))
 		for i = 1:length(optparamkeys)
 			initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 		end
@@ -95,7 +95,7 @@ if isdefined(:Klara) && isdefined(Klara, :BasicContMuvParameter)
 		chain = Klara.output(job)
 		return chain
 	end
-	function bayessampling(madsdata::Associative, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
+	function bayessampling(madsdata::AbstractDict, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 		if seed != 0
 			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
 		else
@@ -184,7 +184,7 @@ Example:
 Mads.montecarlo(madsdata; N=100)
 ```
 """
-function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
+function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::String="")
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -197,7 +197,7 @@ function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 	nonlogoptparamsmax = getparamsmax(madsdata, nonlogoptparamkeys)
 	logoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(logoptparamsmin, logoptparamsmax, N)
 	nonlogoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(nonlogoptparamsmin, nonlogoptparamsmax, N)
-	paramdicts = Array{DataStructures.OrderedDict}(N)
+	paramdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 	params = getparamsinit(madsdata)
 	for i = 1:N
 		klog = 1
@@ -213,13 +213,13 @@ function montecarlo(madsdata::Associative; N::Integer=100, filename::String="")
 				end
 			end
 		end
-		paramdicts[i] = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, params))
+		paramdicts[i] = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, params))
 	end
 	f = makemadscommandfunction(madsdata)
 	results = RobustPmap.rpmap(f, paramdicts)
-	outputdicts = Array{DataStructures.OrderedDict}(N)
+	outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 	for i = 1:N
-		outputdicts[i] = DataStructures.OrderedDict()
+		outputdicts[i] = OrderedCollections.OrderedDict()
 		outputdicts[i]["Parameters"] = paramdicts[i]
 		outputdicts[i]["Results"] = results[i]
 	end
@@ -238,9 +238,9 @@ Returns:
 
 - a parameter dictionary of arrays
 """
-function paramarray2dict(madsdata::Associative, array::Array)
+function paramarray2dict(madsdata::AbstractDict, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
-	dict = DataStructures.OrderedDict()
+	dict = OrderedCollections.OrderedDict()
 	for i in 1:length(paramkeys)
 		dict[paramkeys[i]] = array[:,i]
 	end
@@ -257,6 +257,6 @@ Returns:
 
 - a parameter array
 """
-function paramdict2array(dict::Associative)
-	return permutedims(hcat(map(i->collect(dict[i]), keys(dict))...))
+function paramdict2array(dict::AbstractDict)
+	return permutedims(hcat(map(i->collect(dict[i], collect(keys(dict))))...))
 end

@@ -1,7 +1,13 @@
 import Mads
-import Base.Test
+import Test
 import JLD2
 import FileIO
+using SharedArrays
+
+@Mads.tryimportmain JLD2
+@Mads.tryimportmain FileIO
+@Mads.tryimportmain OrderedCollections
+@Mads.tryimportmain DataStructures
 
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "examples", "contamination") : Mads.getmadsdir()
 testdir = joinpath(workdir, "test_results")
@@ -65,7 +71,7 @@ Mads.setobstime!(md)
 Mads.dumpwelldata(md, "wells.dat")
 Mads.rmfile("wells.dat")
 
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 
@@ -93,51 +99,51 @@ good_samples = FileIO.load(joinpath(testdir, "samples.jld2"), "samples")
 good_llhoods = FileIO.load(joinpath(testdir, "llhoods.jld2"), "llhoods")
 good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
-@Base.Test.testset "Contamination" begin
-	@Base.Test.test	forward_predictions_source == forward_predictions
-	@Base.Test.test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
-	@Base.Test.test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
-	@Base.Test.test isapprox(mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
-	@Base.Test.test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
+@Test.testset "Contamination" begin
+	@Test.test	forward_predictions_source == forward_predictions
+	@Test.test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
+	@Test.test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
+	@Test.test isapprox(mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
+	@Test.test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
 
 	t = isapprox(mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	if t
-		@Base.Test.test isapprox(mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
+		@Test.test isapprox(mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	else
 		@show samples
 	end
 
 	t = isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	if t
-		@Base.Test.test isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
+		@Test.test isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	else
 		@show llhoods
 	end
 
 	t = isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	if t
-		@Base.Test.test isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
+		@Test.test isapprox(mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	else
 		@show llhoods
 	end
 
 	t = isapprox(mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	if t
-		@Base.Test.test isapprox(mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
+		@Test.test isapprox(mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	else
 		@show newllhoods
 	end
 
 	t = isapprox(mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Base.Test.test isapprox(mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		@Test.test isapprox(mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md; time=50.0)
 	end
 
 	t = isapprox(mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Base.Test.test isapprox(mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		@Test.test isapprox(mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md)
 	end
@@ -155,7 +161,7 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 
 	t = isapprox(ssr, 0., atol=1e-8)
 	if t
-		@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+		@Test.test isapprox(ssr, 0., atol=1e-8)
 	else
 		@show ssr
 	end
@@ -168,7 +174,7 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 
 	t = isapprox(ssr, 0., atol=1e-8)
 	if t
-		@Base.Test.test isapprox(ssr, 0., atol=1e-8)
+		@Test.test isapprox(ssr, 0., atol=1e-8)
 	else
 		@show ssr
 	end

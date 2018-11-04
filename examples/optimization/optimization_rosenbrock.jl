@@ -1,7 +1,7 @@
 import Mads
 import Optim
 import LsqFit
-import Base.Test
+import Test
 
 @everywhere fr = Mads.rosenbrock
 @everywhere g! = Mads.rosenbrock_gradient!

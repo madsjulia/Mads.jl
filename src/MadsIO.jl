@@ -1,4 +1,4 @@
-import DataStructures
+import OrderedCollections
 import JLD2
 import FileIO
 
@@ -49,9 +49,9 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 		if any(isn)
 			l = length(isn[isn.==true])
 			if l == 1
-				warn("There is 1 observation with a missing target!")
+				Mads.madswarn("There is 1 observation with a missing target!")
 			else
-				warn("There are $(l) observations with missing targets!")
+				Mads.madswarn("There are $(l) observations with missing targets!")
 			end
 		end
 	end
@@ -71,7 +71,7 @@ Returns:
 function loadbigyamlfile(filename::String)
 	lines = readlines(filename)
 	nlines = length(lines)
-	keyln = findin(map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines), true)
+	keyln = findall((in)(true), map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines))
 	if length(keyln) == 0
 		return nothing
 	end
@@ -103,9 +103,9 @@ function loadbigyamlfile(filename::String)
 		readflag = false
 	end
 	if readflag
-		obsdict = DataStructures.OrderedDict{String,Any}()
+		obsdict = OrderedCollections.OrderedDict{String,Any}()
 		t = []
-		badlines = Array{Int}(0)
+		badlines = Array{Int}(undef, 0)
 		for i in readindeces
 			mc = match(r"^- (\S*):.*", lines[i])
 			if mc != nothing
@@ -114,28 +114,28 @@ function loadbigyamlfile(filename::String)
 				push!(badlines, i)
 				continue
 			end
-			if contains(kw, "filename")
+			if occursin("filename", kw)
 				readflag = false
 				yamlflag = true
 				parseindeces = 1:nlines
 				break
 			end
-			obsdict[kw] = DataStructures.OrderedDict{String,Any}()
+			obsdict[kw] = OrderedCollections.OrderedDict{String,Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
-				obsdict[kw]["target"] = float(mc.captures[1])
+				obsdict[kw]["target"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*weight[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
-				obsdict[kw]["weight"] = float(mc.captures[1])
+				obsdict[kw]["weight"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*min[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
-				obsdict[kw]["min"] = float(mc.captures[1])
+				obsdict[kw]["min"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*max[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if mc != nothing
-				obsdict[kw]["max"] = float(mc.captures[1])
+				obsdict[kw]["max"] = parse(Float64, mc.captures[1])
 			end
 		end
 	end
@@ -143,7 +143,7 @@ function loadbigyamlfile(filename::String)
 		io = IOBuffer(join(lines[parseindeces], '\n'))
 		madsdata = YAML.load(io)
 	else
-		madsdata = DataStructures.OrderedDict{String,Any}()
+		madsdata = OrderedCollections.OrderedDict{String,Any}()
 	end
 	if readflag
 		madsdata["Observations"] = obsdict
@@ -157,21 +157,21 @@ Parse loaded MADS problem dictionary
 $(DocumentFunction.documentfunction(parsemadsdata!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function parsemadsdata!(madsdata::Associative)
+function parsemadsdata!(madsdata::AbstractDict)
 	if haskey(madsdata, "Parameters")
-		parameters = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+		parameters = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 		for dict in madsdata["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
-					parameters[key] = DataStructures.OrderedDict{String,Any}()
+					parameters[key] = OrderedCollections.OrderedDict{String,Any}()
 					for pf in keys(dict[key])
 						parameters[key][pf] = dict[key][pf]
 					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+						madsdata["Expressions"] = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 					end
-					madsdata["Expressions"][key] = DataStructures.OrderedDict{String,Any}()
+					madsdata["Expressions"][key] = OrderedCollections.OrderedDict{String,Any}()
 					for pf in keys(dict[key])
 						madsdata["Expressions"][key][pf] = dict[key][pf]
 					end
@@ -189,7 +189,11 @@ function parsemadsdata!(madsdata::Associative)
 			end
 			for v in ["init", "init_max", "init_min", "max", "min", "step"]
 				if haskey(parameters[key], v)
-					parameters[key][v] = float(parameters[key][v])
+					if typeof(parameters[key][v]) <: AbstractString
+						parameters[key][v] = parse(Float64, parameters[key][v])
+					elseif typeof(parameters[key][v]) <: Number
+						parameters[key][v] = float(parameters[key][v])
+					end
 				end
 			end
 			if haskey(parameters[key], "log")
@@ -211,7 +215,7 @@ function parsemadsdata!(madsdata::Associative)
 	end
 	checkparameterranges(madsdata)
 	if haskey(madsdata, "Wells")
-		wells = DataStructures.OrderedDict{String,Any}()
+		wells = OrderedCollections.OrderedDict{String,Any}()
 		for dict in madsdata["Wells"]
 			for key in keys(dict)
 				wells[key] = dict[key]
@@ -229,7 +233,7 @@ function parsemadsdata!(madsdata::Associative)
 		Mads.wells2observations!(madsdata)
 	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
 		if typeof(madsdata["Observations"]) <: Array
-			observations = DataStructures.OrderedDict{String,DataStructures.OrderedDict}()
+			observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 			for dict in madsdata["Observations"]
 				if collect(keys(dict))[1] == "filename"
 					dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Observations"]
@@ -237,7 +241,7 @@ function parsemadsdata!(madsdata::Associative)
 					dictnew = dict
 				end
 				for key in keys(dictnew)
-					observations[key] = DataStructures.OrderedDict{String,Any}()
+					observations[key] = OrderedCollections.OrderedDict{String,Any}()
 					for of in keys(dictnew[key])
 						observations[key][of] = dictnew[key][of]
 					end
@@ -247,7 +251,7 @@ function parsemadsdata!(madsdata::Associative)
 		end
 	end
 	if haskey(madsdata, "Templates")
-		templates = Array{Associative}(length(madsdata["Templates"]))
+		templates = Array{AbstractDict}(undef, length(madsdata["Templates"]))
 		i = 1
 		for dict in madsdata["Templates"]
 			for key in keys(dict) # this should only iterate once
@@ -258,7 +262,7 @@ function parsemadsdata!(madsdata::Associative)
 		madsdata["Templates"] = templates
 	end
 	if haskey(madsdata, "Instructions")
-		instructions = Array{Associative}(length(madsdata["Instructions"]))
+		instructions = Array{AbstractDict}(undef, length(madsdata["Instructions"]))
 		i = 1
 		for dict in madsdata["Instructions"]
 			for key in keys(dict) # this should only iterate once
@@ -270,7 +274,7 @@ function parsemadsdata!(madsdata::Associative)
 	end
 end
 
-function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
+function savemadsfile(madsdata::AbstractDict, filename::String=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -279,7 +283,7 @@ function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=fa
 		if !isfile(filenameobs)
 			printobservations(madsdata, filenameobs)
 		else
-			warn("External observation file already exist ($(filenameobs)); delete if needed!")
+			Mads.madswarn("External observation file already exist ($(filenameobs)); delete if needed!")
 		end
 		madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 	else
@@ -287,7 +291,7 @@ function savemadsfile(madsdata::Associative, filename::String=""; julia::Bool=fa
 	end
 	dumpyamlmadsfile(madsdata2, filename, julia=julia)
 end
-function savemadsfile(madsdata::Associative, parameters::Associative, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
+function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -382,7 +386,7 @@ Returns:
 
 - root of file name
 """
-function getmadsrootname(madsdata::Associative; first=true, version=false)
+function getmadsrootname(madsdata::AbstractDict; first=true, version=false)
 	return getrootname(madsdata["Filename"]; first=first, version=version)
 end
 
@@ -426,7 +430,7 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 
 where `madsproblemdir` = `"../../"`
 """
-function getmadsproblemdir(madsdata::Associative)
+function getmadsproblemdir(madsdata::AbstractDict)
 	getdir(madsdata["Filename"])
 end
 
@@ -447,7 +451,7 @@ Returns:
 """
 function getmadsdir()
 	source_path = Base.source_path()
-	if typeof(source_path) == Void
+	if typeof(source_path) == Nothing
 		problemdir = "."
 	else
 		problemdir = getdir(source_path)
@@ -484,10 +488,10 @@ function getrootname(filename::String; first::Bool=true, version::Bool=false)
 		r = s[1]
 	end
 	if version
-		if ismatch(r"-v[0-9].$", r)
+		if occursin(r"-v[0-9].$", r)
 			rm = match(r"-v[0-9].$", r)
 			r = r[1:rm.offset-1]
-		elseif ismatch(r"-rerun$", r)
+		elseif occursin(r"-rerun$", r)
 			rm = match(r"-rerun$", r)
 			r = r[1:rm.offset-1]
 		end
@@ -498,15 +502,15 @@ function getrootname(filename::String; first::Bool=true, version::Bool=false)
 	return r
 end
 
-function setnewmadsfilename(madsdata::Associative)
+function setnewmadsfilename(madsdata::AbstractDict)
 	setnewmadsfilename(madsdata["Filename"])
 end
 function setnewmadsfilename(filename::String)
 	dir = getdir(filename)
 	root = splitdir(getrootname(filename))[end]
-	if ismatch(r"-v[0-9]*$", root)
+	if occursin(r"-v[0-9]*$", root)
 		rm = match(r"-v([0-9]*)$", root)
-		v = parse(Int, rm.captures[1]) + 1
+		v = Base.parse(Int, rm.captures[1]) + 1
 		l = length(rm.captures[1])
 		f = "%0" * string(l) * "d"
 		filename = "$(root[1:rm.offset-1])-v$(sprintf(f, v)).mads"
@@ -595,8 +599,8 @@ Returns:
 
 - true or false
 """
-function checkmodeloutputdirs(madsdata::Associative)
-	directories = Array{String}(0)
+function checkmodeloutputdirs(madsdata::AbstractDict)
+	directories = Array{String}(undef, 0)
 	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]
@@ -642,13 +646,13 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
-function setmodelinputs(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); path::String=".")
+function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::String=".")
 	errorflag = false
 	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["ins"]
 			if !isfile(filename)
-				warn("Instruction file $filename is missing!"); errorflag = true
+				Mads.madswarn("Instruction file $filename is missing!"); errorflag = true
 			end
 			filename = instruction["read"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
@@ -658,7 +662,7 @@ function setmodelinputs(madsdata::Associative, parameters::Associative=Mads.getp
 		for template in madsdata["Templates"]
 			filename = template["tpl"]
 			if !isfile(filename)
-				warn("Template file $filename is missing!"); errorflag = true
+				Mads.madswarn("Template file $filename is missing!"); errorflag = true
 			end
 			filename = template["write"]
 			Mads.rmfile(filename, path=path) # delete the parameter file links
@@ -720,8 +724,8 @@ $(DocumentFunction.documentfunction(readmodeloutput;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
-function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsdata))
-	results = DataStructures.OrderedDict()
+function readmodeloutput(madsdata::AbstractDict; obskeys::Vector=getobskeys(madsdata))
+	results = OrderedCollections.OrderedDict()
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		results = readobservations(madsdata, obskeys)
 	end
@@ -744,9 +748,9 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
 		obsid=[convert(String,k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
-		results = merge(results, DataStructures.OrderedDict{String,Float64}(zip(obsid, predictions)))
+		results = merge(results, OrderedCollections.OrderedDict{String,Float64}(zip(obsid, predictions)))
 	end
-	missingkeys = Array{String}(0)
+	missingkeys = Array{String}(undef, 0)
 	validtargets = (Mads.getobsweight(madsdata) .> 0) .& .!isnan.(Mads.getobstarget(madsdata))
 	for (k, v) in zip(obskeys, validtargets)
 		if !haskey(results, k) && v
@@ -757,11 +761,11 @@ function readmodeloutput(madsdata::Associative; obskeys::Vector=getobskeys(madsd
 		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
 		madscritical("Missing observation keys: $(missingkeys)")
 	end
-	return convert(DataStructures.OrderedDict{String,Float64}, results)
+	return convert(OrderedCollections.OrderedDict{String,Float64}, results)
 end
 
-searchdir(key::Regex; path::String = ".") = filter(x->ismatch(key, x), readdir(path))
-searchdir(key::String; path::String = ".") = filter(x->contains(x, key), readdir(path))
+searchdir(key::Regex; path::String = ".") = filter(x->occursin(key, x), readdir(path))
+searchdir(key::String; path::String = ".") = filter(x->occursin(key, x), readdir(path))
 
 @doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
@@ -783,8 +787,8 @@ Examples:
 ```
 """ searchdir
 
-filterkeys(dict::Associative, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->ismatch(key, x), collect(keys(dict)))
-filterkeys(dict::Associative, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->contains(x, key), collect(keys(dict)))
+filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
+filterkeys(dict::AbstractDict, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
 
 @doc """
 Filter dictionary keys based on a string or regular expression
@@ -794,8 +798,8 @@ argtext=Dict("dict"=>"dictionary",
             "key"=>"the regular expression or string used to filter dictionary keys")))
 """ filterkeys
 
-indexkeys(dict::Associative, key::Regex) = key == r"" ? find(collect(keys(dict))) : find(x->ismatch(key, x), collect(keys(dict)))
-indexkeys(dict::Associative, key::String = "") = key == "" ? find(collect(keys(dict))) : find(x->contains(x, key), collect(keys(dict)))
+indexkeys(dict::AbstractDict, key::Regex) = key == r"" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
+indexkeys(dict::AbstractDict, key::String = "") = key == "" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
 
 @doc """
 Find indexes for dictionary keys based on a string or regular expression
@@ -805,8 +809,8 @@ argtext=Dict("dict"=>"dictionary",
             "key"=>"the key to find index for")))
 """ indexkeys
 
-getdictvalues(dict::Associative, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
-getdictvalues(dict::Associative, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::AbstractDict, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::AbstractDict, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
 @doc """
 Get dictionary values for keys based on a string or regular expression
@@ -869,7 +873,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
-function writeparameters(madsdata::Associative, parameters::Associative=Mads.getparamdict(madsdata); respect_space=false)
+function writeparameters(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); respect_space=false)
 	paramsandexps = evaluatemadsexpressions(madsdata, parameters)
 	respect_space = Mads.haskeyword(madsdata, "respect_space")
 	changedir = false
@@ -908,7 +912,7 @@ function instline2regexs(instline::String)
 	regexs = Regex[]
 	obsnames = String[]
 	getparamhere = Bool[]
-	while offset <= length(instline) && ismatch(regex, instline, offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
+	while offset <= length(instline) && occursin(regex, instline; offset=offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
 		if m == nothing
 			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
@@ -942,7 +946,7 @@ end
 """
 Match an instruction line in the Mads instruction file with model input file
 
-$(DocumentFunction.documentfunction(obslineismatch;
+$(DocumentFunction.documentfunction(obslineoccursin;
 argtext=Dict("obsline"=>"instruction line",
             "regexs"=>"regular expressions")))
 
@@ -950,12 +954,12 @@ Returns:
 
 - true or false
 """
-function obslineismatch(obsline::String, regexs::Array{Regex, 1})
+function obslineoccursin(obsline::String, regexs::Array{Regex, 1})
 	if length(regexs) == 0
 		return false
 	end
 	bigregex = Regex(string(map(x->x.pattern, regexs)...))
-	return ismatch(bigregex, obsline)
+	return occursin(bigregex, obsline)
 end
 
 """
@@ -981,7 +985,7 @@ function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{St
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
 		else
 			if getparamhere[i]
-				obsdict[obsnames[obsnameindex]] = parse(Float64, m.match)
+				obsdict[obsnames[obsnameindex]] = Base.parse(Float64, m.match)
 				obsnameindex += 1
 			end
 		end
@@ -1005,19 +1009,23 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 	instfile = open(instructionfilename, "r")
 	obsfile = open(modeloutputfilename, "r")
 	obslineitr = eachline(obsfile)
-	state = start(obslineitr)
-	obsdict = DataStructures.OrderedDict{String, Float64}()
+	iter_result = iterate(obslineitr)
+	obsline, state = iter_result
+	obsdict = OrderedCollections.OrderedDict{String, Float64}()
 	for instline in eachline(instfile)
 		if length(instline) == 0
-			obsline, state = next(obslineitr, state)
+			iter_result = iterate(obslineitr, state)
+			obsline, state = iter_result
 			continue
 		elseif instline[1] == 'l'
 			l = 1
 			try
-				l = parse(Int, instline[2:end])
+				l = Base.parse(Int, instline[2:end])
+			catch
 			end
 			for i = 1:l
-				obsline, state = next(obslineitr, state)
+				iter_result = iterate(obslineitr, state)
+				obsline, state = iter_result
 			end
 			continue
 		end
@@ -1026,11 +1034,13 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 			continue
 		end
 		gotmatch = false
-		while !gotmatch && !done(obslineitr, state)
-			obsline, state = next(obslineitr, state)
-			if obslineismatch(obsline, regexs)
+		while !gotmatch && iter_result !== nothing
+			obsline, state = iter_result
+			if obslineoccursin(obsline, regexs)
 				merge!(obsdict, regexs2obs(obsline, regexs, obsnames, getparamhere))
 				gotmatch = true
+			else
+				iter_result = iterate(obslineitr, state)
 			end
 		end
 		if !gotmatch
@@ -1053,12 +1063,15 @@ Returns:
 
 - dictionary with Mads observations
 """
-function readobservations(madsdata::Associative, obskeys::Vector=getobskeys(madsdata))
+function readobservations(madsdata::AbstractDict, obskeys::Vector=getobskeys(madsdata))
 	dictelements = zip(obskeys, zeros(Int, length(obskeys)))
-	observations = DataStructures.OrderedDict{String,Float64}(dictelements)
-	obscount = DataStructures.DefaultDict{String,Int}(0)
+	observations = OrderedCollections.OrderedDict{String,Float64}(dictelements)
+	obscount = OrderedCollections.OrderedDict{String,Int}()
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])
+		for k in keys(obs)
+			obscount[k] = 0
+		end
 		for k in keys(obs)
 			obscount[k] += 1
 			observations[k] = obscount[k] > 1 ? observations[k] + obs[k] : obs[k]
@@ -1088,7 +1101,7 @@ Dumps:
 
 - `filename` : a ASCII file
 """
-function dumpwelldata(madsdata::Associative, filename::String)
+function dumpwelldata(madsdata::AbstractDict, filename::String)
 	if haskey(madsdata, "Wells")
 		outfile = open(filename, "w")
 		write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")
@@ -1235,7 +1248,7 @@ function createtempdir(tempdirname::String)
 			sleep(attempt * 0.5)
 			if attempt > 3
 				printerrormsg(errmsg)
-				madscritical("$(e)\nTemporary directory $(tempdirname) cannot be created!")
+				madscritical("$(errmsg)\nTemporary directory $(tempdirname) cannot be created!")
 			end
 		end
 	end
@@ -1263,7 +1276,7 @@ function linktempdir(madsproblemdir::String, tempdirname::String)
 			Mads.createtempdir(tempdirname)
 			if attempt > 4
 				printerrormsg(errmsg)
-				madscritical("$(e)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
+				madscritical("$(errmsg)\nLinks cannot be created in temporary directory $(tempdirname) cannot be created!")
 			end
 		end
 	end
@@ -1288,7 +1301,7 @@ $(DocumentFunction.documentfunction(recursivemkdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function recursivemkdir(s::String; filename=true)
-	d = Vector{String}()
+	d = Vector{String}(undef, 0)
 	sc = deepcopy(s)
 	if !filename && sc!= ""
 		push!(d, sc)
@@ -1304,13 +1317,13 @@ function recursivemkdir(s::String; filename=true)
 	for i = length(d):-1:1
 		sc = d[i]
 		if isfile(sc)
-			warn("File $(sc) exists!")
+			Mads.madswarn("File $(sc) exists!")
 			return
 		elseif !isdir(sc)
 			mkdir(sc)
-			info("Make dir $(sc)")
+			@info("Make dir $(sc)")
 		else
-			warn("Dir $(sc) exists!")
+			Mads.madswarn("Dir $(sc) exists!")
 		end
 	end
 end
@@ -1322,7 +1335,7 @@ $(DocumentFunction.documentfunction(recursivermdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function recursivermdir(s::String; filename=true)
-	d = Vector{String}()
+	d = Vector{String}(undef, )
 	sc = deepcopy(s)
 	if !filename && sc!= ""
 		push!(d, sc)

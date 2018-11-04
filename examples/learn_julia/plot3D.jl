@@ -7,7 +7,7 @@ n = 50
 x = collect(linspace(-3, 3, n))
 y = x
 
-zcos = Array{Float64}(n, n)
+zcos = Array{Float64}(undef, n, n)
 fcos(x, y) = cos(x^2 + y^2) / (1 + x^2 + y^2)
 # zcos computed using for loops
 for i in 1:n

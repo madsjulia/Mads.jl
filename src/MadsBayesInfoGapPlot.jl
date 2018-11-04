@@ -16,7 +16,7 @@ Dumps:
 
 - image file with name `filename` and in specified `format`
 """
-function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filename::String="", format::String="", maxprob::Number=1.0, maxhoriz::Number=Inf)
+function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filename::String="", format::String="", maxprob::Number=1.0, maxhoriz::Number=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]
 	horizons = bigdtresults["horizons"]
 	if filename == ""
@@ -24,7 +24,7 @@ function plotrobustnesscurves(madsdata::Associative, bigdtresults::Dict; filenam
 		filename =  rootname * "-robustness"
 	end
 	filename, format = setplotfileformat(filename, format)
-	#layers = Array{Any}(size(maxfailureprobs, 2))
+	#layers = Array{Any}(undef, size(maxfailureprobs, 2))
 	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))
 	for i = 1:size(maxfailureprobs, 2)

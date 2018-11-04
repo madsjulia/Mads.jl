@@ -1,4 +1,5 @@
-import Base.Test
+import Test
+using Distributed
 
 addprocs(4)
 
@@ -9,13 +10,13 @@ addprocs(4)
 @everywhere nP = 100
 @everywhere nO = 1000000
 @everywhere x = rand(nP)
-@everywhere o_c = Array{Float64}(nO)
-@everywhere o_j = Array{Float64}(nO)
+@everywhere o_c = Array{Float64}(undef, nO)
+@everywhere o_j = Array{Float64}(undef, nO)
 
 @everywhere M = ones(nO, nP)
 @everywhere M[:,end] = 100000
 
-info("Matrix vector multiplication in parallel ...")
+@info("Matrix vector multiplication in parallel ...")
 println("C (bad) ...")
 @time fcmxv_bad(nP, x, M, nO, o_c);
 @time map(i->fcmxv_bad(nP, x, M, nO, o_c), 1:10);

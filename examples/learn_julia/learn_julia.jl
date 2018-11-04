@@ -1,3 +1,5 @@
+import Printf
+
 # Single line comments start with a hash (pound) symbol.
 #= Multiline comments can be written
    by putting '#=' before the text  and '=#'
@@ -80,7 +82,7 @@ false
 # You can put any Julia expression inside the parentheses.
 
 # Another way to format strings is the printf macro.
-@printf "%d is less than %f" 4.5 5.3 # 5 is less than 5.300000
+@Printf.printf "%d is less than %f" 4.5 5.3 # 5 is less than 5.300000
 
 # Printing is easy
 println("I'm Julia. Nice to meet you!")
@@ -387,7 +389,7 @@ varargs(1,2,3) # => (1,2,3)
 # We just used it in a function definition.
 # It can also be used in a fuction call,
 # where it will splat an Array or Tuple's contents into the argument list.
-Set([1,2,3])    # => Set{Array{Int64,1}}([1,2,3]) # produces a Set of Arrays
+Set([1,2,3])    # => Set{Array{Int64,1}}(undef, [1,2,3]) # produces a Set of Arrays
 Set([1,2,3]...) # => Set{Int64}(1,2,3) # this is equivalent to Set(1,2,3)
 
 x = (1,2,3)     # => (1,2,3)

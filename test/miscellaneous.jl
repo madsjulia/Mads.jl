@@ -1,6 +1,7 @@
 import Mads
-import Base.Test
+import Test
 import Compat
+import Printf
 
 if isdefined(Mads, :runcmd)
 end
@@ -31,6 +32,12 @@ Mads.functions(quiet=true)
 Mads.loadmadsproblem("unknown");
 Mads.loadmadsproblem("polynomial");
 
+Mads.functions(:ModuleThatDoesNotExist)
+Mads.functions("createmadsproblem");
+Mads.functions(r"parame")
+Mads.functions(Mads, "loadmadsfile");
+Mads.functions(Mads, r"is.*par");
+
 Mads.stdouterrcaptureon();
 
 Mads.printerrormsg("a")
@@ -49,7 +56,7 @@ try
 	symlink(Mads.madsdir, "test-create-symbolic-link")
 	rm("test-create-symbolic-link")
 catch
-	if is_windows()
+	if Sys.iswindows()
 		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
 	else
 		Mads.madscritical("Symbolic links cannot be created!")
@@ -68,14 +75,10 @@ else
 end
 # include(joinpath("..", "src", "madsjl.jl"))
 # rm("madsjl.cmdline_hist")
-Mads.functions(:ModuleThatDoesNotExist)
-Mads.functions("createmadsproblem"; stdout=true)
-Mads.functions(r"is.*par"; stdout=true)
-Mads.functions(Mads, "loadmadsfile"; stdout=true)
-Mads.functions(Mads, r"is.*par"; stdout=true)
+
 Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
-	if is_windows()
+	if Sys.iswindows()
 		Mads.runcmd("dir $(Mads.madsdir)")
 		Mads.runcmd("dir $(Mads.madsdir)"; pipe=true)
 		Mads.runcmd("dir $(Mads.madsdir)"; waittime=10.)
@@ -138,13 +141,13 @@ else
 	Mads.graphoff()
 end
 
-@Base.Test.test Mads.haskeyword(Dict("Problem"=>"ssdr"),"ssdr") == true
-@Base.Test.test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
-@Base.Test.test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
-@Base.Test.test Mads.haskeyword(Dict("Problem"=>0.1), "Problem", "ssdr") == false
+@Test.test Mads.haskeyword(Dict("Problem"=>"ssdr"),"ssdr") == true
+@Test.test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
+@Test.test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
+@Test.test Mads.haskeyword(Dict("Problem"=>0.1), "Problem", "ssdr") == false
 
-@Base.Test.test Mads.getdir("a.mads") == "."
-@Base.Test.test Mads.getdir("test/a.mads") == "test"
+@Test.test Mads.getdir("a.mads") == "."
+@Test.test Mads.getdir("test/a.mads") == "test"
 
 Mads.createmadsobservations(4, 2; filename="a.inst")
 Mads.rmfile("a.inst")
@@ -156,12 +159,12 @@ if !haskey(ENV, "MADS_TRAVIS")
 	Mads.status()
 	Mads.set_nprocs_per_task(1)
 	Mads.setdir()
-	Mads.setprocs()
+	Mads.setprocs(; veryquiet=true)
 	Mads.setprocs(1)
 	Mads.parsenodenames("wc[096-157,160,175]");
 end
 
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotseries(rand(4,5), "test.png", combined=false)
 	Mads.plotseries(rand(4,5), "test.png")
 	if isdefined(Mads, :display)
