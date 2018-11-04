@@ -92,7 +92,7 @@ function functions(m::Union{Symbol, Module}, string::String=""; shortoutput::Boo
 			if shortoutput
 				!quiet && Base.display(TextDisplay(stdout), functions)
 			else
-				!quiet && Base.display(functions)
+				!quiet && (Base.display(functions); println())
 			end
 		end
 	catch

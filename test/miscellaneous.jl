@@ -92,6 +92,7 @@ Mads.transposevector(["a";"b"])
 Mads.transposematrix(["a" "b"])
 
 if !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.graphoff()
 	Mads.plotwellSAresults(Dict(), Dict())
 	Mads.plotwellSAresults(Dict("W"=>Dict()), Dict(), "w1")
 	Mads.plotwellSAresults(Dict("Wells"=>Dict()), Dict(), "w1")
@@ -103,6 +104,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.setdefaultplotformat("EPS")
 	Mads.setdefaultplotformat("SVG")
 	Mads.display("mads.png")
+	Mads.graphon()
 end
 
 Mads.addkeyword!(Dict(), "ssdr")
@@ -165,12 +167,14 @@ if !haskey(ENV, "MADS_TRAVIS")
 end
 
 if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	Mads.graphoff()
 	Mads.plotseries(rand(4,5), "test.png", combined=false)
 	Mads.plotseries(rand(4,5), "test.png")
 	if isdefined(Mads, :display)
 		Mads.display("test.png")
 	end
 	Mads.rmfile("test.png")
+	Mads.graphon()
 end
 
 :passed
