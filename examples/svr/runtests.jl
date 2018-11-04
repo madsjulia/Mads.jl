@@ -1,26 +1,26 @@
 import Mads
 import FileIO
 import JLD2
-import Base.Test
+import Test
 
 if VERSION >= v"0.7"
 	using Distributed
 	import OrderedCollections
 else
-	import DataStructures
+	import OrderedCollections
 end
 
 workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "examples", "svr")
 goodresultsfile = "sasvr.jld2"
 
-srand(2017)
+Random.seed!(2017)
 
 numberofsamples = 1000 # Set the number
 
 @Mads.stdouterrcapture md = Mads.loadmadsfile(joinpath(workdir, "models", "internal-polynomial.mads"))
 paramdict = Mads.getparamrandom(md, numberofsamples, init_dist=true)
-paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 paramdict1 = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 
 svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 100)
@@ -37,7 +37,7 @@ end
 
 good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld2"), "svrpredictions")
 
-srand(2017)
+Random.seed!(2017)
 
 mdsvr = deepcopy(md)
 mdsvr["Julia model"] = svrexec
@@ -59,13 +59,13 @@ good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"
 good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)
 good_sasvr_var = hcat(map(i->collect(i), values.(collect(values(good_sasvr["var"]))))...)
 
-@Base.Test.testset "SVR" begin
-	@Base.Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
-	@Base.Test.test sum((svrpredictionsdict .- good_svrpredictions).^2) < 0.1
+@Test.testset "SVR" begin
+	@Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
+	@Test.test sum((svrpredictionsdict .- good_svrpredictions).^2) < 0.1
 
-	@Base.Test.test sum((sasvr_mes .- good_sasvr_mes).^2) < 0.1
-	@Base.Test.test sum((sasvr_tes .- good_sasvr_tes).^2) < 0.1
-	@Base.Test.test sum((sasvr_var .- good_sasvr_var).^2) < 0.1
+	@Test.test sum((sasvr_mes .- good_sasvr_mes).^2) < 0.1
+	@Test.test sum((sasvr_tes .- good_sasvr_tes).^2) < 0.1
+	@Test.test sum((sasvr_var .- good_sasvr_var).^2) < 0.1
 end
 
 Mads.makesvrmodel(md, 100, loadsvr=true)

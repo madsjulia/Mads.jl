@@ -1,4 +1,4 @@
-import DataStructures
+import OrderedCollections
 import DocumentFunction
 
 # NLopt is too much of a pain to install at this point
@@ -13,7 +13,7 @@ Returns:
 
 - optimization results
 """
-function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
+function calibratenlopt(madsdata::AbstractDict; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
 	paraminits = getparamsinit(madsdata, paramkeys)
@@ -23,9 +23,9 @@ function calibratenlopt(madsdata::Associative; algorithm=:LD_LBFGS) # TODO switc
 	targets = Mads.getobstarget(madsdata, obskeys)
 	fg = makemadscommandfunctionandgradient(madsdata)
 	function fg_nlopt(arrayparameters::Vector, grad::Vector)
-		parameters = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, arrayparameters))
+		parameters = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, arrayparameters))
 		resultdict, gradientdict = fg(parameters)
-		residuals = Array{Float64}(length(madsdata["Observations"]))
+		residuals = Array{Float64}(undef, length(madsdata["Observations"]))
 		ssr = 0
 		i = 1
 		for obskey in obskeys

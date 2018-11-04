@@ -1,5 +1,5 @@
 import Mads
-import Base.Test
+import Test
 
 if VERSION >= v"0.7"
 	using Distributed
@@ -14,4 +14,4 @@ end
 
 Mads.madsinfo("Levenberg-Marquardt optimization of the Rosenbrock function with callback")
 results = Mads.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0]; show_trace=false, callbackiteration=callback)
-@Base.Test.test callbacksucceeded
+@Test.test callbacksucceeded

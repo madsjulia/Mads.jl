@@ -21,8 +21,8 @@ Returns:
 function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array{Float64}(nP, nk)
-	Hbest = Array{Float64}(nk, nC)
+	Wbest = Array{Float64}(undef, nP, nk)
+	Hbest = Array{Float64}(undef, nk, nC)
 	phi_best = Inf
 	for i = 1:retries
 		nmf_result = NMF.nnmf(X, nk; maxiter=maxiter, tol=tol)
@@ -57,16 +57,16 @@ Returns:
 
 - NMF results
 """
-function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(0, 0), initH::Matrix=Array{Float64}(0, 0), verbosity::Integer=0, quiet::Bool=false)
+function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(undef, 0, 0), initH::Matrix=Array{Float64}(undef, 0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan.(Xc)
-	Xc[nans] = 0
-	weights[nans] = 0
+	Xc[nans] .= 0
+	weights[nans] .= 0
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array{Float64}(nP, nk)
-	Hbest = Array{Float64}(nk, nC)
+	Wbest = Array{Float64}(undef, nP, nk)
+	Hbest = Array{Float64}(undef, nk, nC)
 	phi_best = Inf
 	for r = 1:retries
 		m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
@@ -99,11 +99,11 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	return Wbest, Hbest, phi_best
 end
 
-function MFlm(X::Matrix{T}, range::Range{Int}; kw...) where {T}
+function MFlm(X::Matrix{T}, range::AbstractRange{Int}; kw...) where {T}
 	maxsources = maximum(collect(range))
-	W = Array{Array{T, 2}}(maxsources)
-	H = Array{Array{T, 2}}(maxsources)
-	fitquality = Array{T}(maxsources)
+	W = Array{Array{T, 2}}(undef, maxsources)
+	H = Array{Array{T, 2}}(undef, maxsources)
+	fitquality = Array{T}(undef, maxsources)
 	for numsources in range
 		W[numsources], H[numsources], fitquality[numsources] = Mads.MFlm(X, numsources; kw...)
 	end
@@ -129,11 +129,11 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(0, 0), initH::Matrix=Array{T}(0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
+function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(undef, 0, 0), initH::Matrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
-	Wbest = Array{T}(nP, nk)
-	Hbest = Array{T}(nk, nC)
+	Wbest = Array{T}(undef, nP, nk)
+	Hbest = Array{T}(undef, nk, nC)
 	W_size = nP * nk
 	if log_W
 		W_logtransformed = trues(W_size)
@@ -169,7 +169,7 @@ function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false
 	logtransformed = [W_logtransformed; H_logtransformed]
 	lowerbounds = [W_lowerbounds; H_lowerbounds]
 	upperbounds = [W_upperbounds; H_upperbounds]
-	indexlogtransformed = find(logtransformed)
+	indexlogtransformed = findall(logtransformed)
 	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 
@@ -190,7 +190,7 @@ function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false
 		W, H = mf_reshape(x)
 		Wb = zeros(nP, nk)
 		Hb = zeros(nk, nC)
-		J = Array{Float64}(nObs, 0)
+		J = Array{Float64}(undef, nObs, 0)
 		for j = 1:nk
 			for i = 1:nP
 				Wb[i,j] = 1
@@ -238,6 +238,6 @@ function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false
 			Wbest, Hbest = mf_reshape(x_best)
 		end
 	end
-	println("Signals: $(@sprintf("%2d", nk)) Fit: $(@sprintf("%12.7g", phi_best))")
+	println("Signals: $(@Printf.sprintf("%2d", nk)) Fit: $(@Printf.sprintf("%12.7g", phi_best))")
 	return Wbest, Hbest, phi_best
 end

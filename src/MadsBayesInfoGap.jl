@@ -1,6 +1,6 @@
 import BIGUQ
 import ProgressMeter
-import DataStructures
+import OrderedCollections
 import DataFrames
 import BlackBoxOptim
 import DocumentFunction
@@ -16,7 +16,7 @@ Returns:
 
 - BIG-DT problem type
 """
-function makebigdt(madsdata::Associative, choice::Associative)
+function makebigdt(madsdata::AbstractDict, choice::AbstractDict)
 	return makebigdt!(deepcopy(madsdata), choice)
 end
 
@@ -31,7 +31,7 @@ Returns:
 
 - BIG-DT problem type
 """
-function makebigdt!(madsdata::Associative, choice::Associative)
+function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 	Mads.madsinfo("Decision parameters:")
 	for paramname in keys(choice["Parameters"])
 		if Mads.isopt(madsdata, paramname)
@@ -53,7 +53,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 	end
 	function performancegoalsatisfied(arrayparams::Vector, horizon::Real)
 		paramdict = Mads.getparamdict(madsdata)
-		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
+		optparams = OrderedCollections.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)
@@ -78,7 +78,7 @@ function makebigdt!(madsdata::Associative, choice::Associative)
 	end
 	function gethorizonoffailure(arrayparams::Vector)
 		paramdict = Mads.getparamdict(madsdata)
-		optparams = DataStructures.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
+		optparams = OrderedCollections.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
 		predictions = f(paramdict)
 		paramsandpredictionsdict = merge(paramdict, predictions)
@@ -119,17 +119,17 @@ Returns:
 
 - dictionary with BIG-DT results
 """
-function dobigdt(madsdata::Associative, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
+function dobigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
-	modelparams = Array{Float64}(length(parametersamples), nummodelruns)
+	modelparams = Array{Float64}(undef, length(parametersamples), nummodelruns)
 	for i = 1:nummodelruns
 		for j = 1:length(optparamkeys)
 			modelparams[j, i] = parametersamples[optparamkeys[j]][i]
 		end
 	end
 	getfailureprobs = BIGUQ.makegetfailureprobabilities_mc(modelparams)
-	maxfailureprobs = Array{Float64}(numhorizons, length(madsdata["Choices"]))
+	maxfailureprobs = Array{Float64}(undef, numhorizons, length(madsdata["Choices"]))
 	local horizons::Array{Float64, 1}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
@@ -156,7 +156,7 @@ Returns:
 
 - array of conditional log-likelihoods
 """
-function makearrayconditionalloglikelihood(madsdata::Associative)
+function makearrayconditionalloglikelihood(madsdata::AbstractDict)
 	function makeloglikelihood(likelihoodparams::Vector)
 		log10weightfactor = likelihoodparams[1]
 		return makearrayconditionalloglikelihood(madsdata, makemadsconditionalloglikelihood(madsdata; weightfactor=10 ^ log10weightfactor))

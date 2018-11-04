@@ -1,47 +1,38 @@
 import Mads
-import Base.Test
+import Test
 
-info("Running MADS tests:")
+Mads.veryquieton()
 
-print_with_color(:cyan, "* miscellaneous ...\n")
-tic()
-include("miscellaneous.jl")
-toc()
+@info("Running MADS tests:")
 
-print_with_color(:cyan,"* io ...\n")
-tic()
-include("io.jl")
-toc()
+printstyled("* miscellaneous ...\n", color=:cyan)
+@elapsed include("miscellaneous.jl")
 
-print_with_color(:cyan, "* file naming ...\n")
-tic()
-include("filename.jl")
-toc()
+printstyled("* io ...\n", color=:cyan)
+@elapsed include("io.jl")
 
-print_with_color(:cyan, "* test functions ...\n")
-tic()
-include("test_functions.jl")
-toc()
+printstyled("* file naming ...\n", color=:cyan)
+@elapsed include("filename.jl")
 
-print_with_color(:cyan, "* parameters ...\n")
-tic()
-include("parameters.jl")
-toc()
+printstyled("* test functions ...\n", color=:cyan)
+@elapsed include("test_functions.jl")
 
-print_with_color(:cyan, "* observations ...\n")
-tic()
-include("observations.jl")
-toc()
+printstyled("* parameters ...\n", color=:cyan)
+@elapsed include("parameters.jl")
+
+printstyled("* observations ...\n", color=:cyan)
+@elapsed include("observations.jl")
 
 examples = readdir(joinpath(Mads.madsdir, "examples"))
 
 for madstest in examples
 	file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
 	if isfile(file)
-		print_with_color(:cyan, "* $(madstest) ...\n")
-        tic()
-		include(file)
-        toc()
+		printstyled("* $(madstest) ...\n", color=:cyan)
+		@elapsed include(file)
 	end
 end
+
+Mads.veryquietoff()
+
 :passed

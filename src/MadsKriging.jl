@@ -120,23 +120,23 @@ Returns:
 
 - kriging estimates at `x0mat`
 """
-function krige(x0mat::Matrix, X::Matrix, Z::Vector, cov::Function)
+function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::Vector, cov::Function)
     if size(X, 2) != length(Z)
         error("number of points and observations don't match")
     end
 	result = zeros(size(x0mat, 2))
 	covmat = getcovmat(X, cov)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
-	ws = Array{Float64}(size(x0mat, 2))
-	bigvec = Array{Float64}(size(X, 2) + 1)
+	ws = Array{Float64}(undef, size(x0mat, 2))
+	bigvec = Array{Float64}(undef, size(X, 2) + 1)
 	bigvec[end] = 1
 	bigmatpinv = pinv(bigmat)
-	covvec = Array{Float64}(size(X, 2))
-	x = Array{Float64}(size(X, 2) + 1)
+	covvec = Array{Float64}(undef, size(X, 2))
+	x = Array{Float64}(undef, size(X, 2) + 1)
 	for i = 1:size(x0mat, 2)
 		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, cov)
 		bigvec[end] = 1
-		A_mul_B!(x, bigmatpinv, bigvec)
+		mul!(x, bigmatpinv, bigvec)
 		for j = 1:size(X, 2)
 			result[i] += Z[j] * x[j]
 		end
@@ -155,8 +155,8 @@ Returns:
 
 - spatial covariance matrix
 """
-function getcovmat(X::Matrix, cov::Function)
-	covmat = Array{Float64}((size(X, 2), size(X, 2)))
+function getcovmat(X::AbstractMatrix, cov::Function)
+	covmat = Array{Float64}(undef, (size(X, 2), size(X, 2)))
 	cov0 = cov(0)
 	for i = 1:size(X, 2)
 		covmat[i, i] = cov0
@@ -181,7 +181,7 @@ Returns:
 
 - spatial covariance vector
 """
-function getcovvec!(covvec::Vector, x0::Vector, X::Matrix, cov::Function)
+function getcovvec!(covvec::Vector, x0::Vector, X::AbstractMatrix, cov::Function)
 	for i = 1:size(X, 2)
 		d = 0.
 		for j = 1:size(X, 1)
@@ -193,14 +193,14 @@ function getcovvec!(covvec::Vector, x0::Vector, X::Matrix, cov::Function)
 	return covvec
 end
 
-function estimationerror(w::Vector, x0::Vector, X::Matrix, cov::Function)
+function estimationerror(w::Vector, x0::Vector, X::AbstractMatrix, cov::Function)
 	covmat = getcovmat(X, cov)
-	covvec = Array{Float64}(size(X, 2))
+	covvec = Array{Float64}(undef, size(X, 2))
 	covvec = getcovvec!(covvec, x0, X, cov)
 	cov0 = cov(0.)
 	return estimationerror(w, covmat, covvec, cov0)
 end
-function estimationerror(w::Vector, covmat::Matrix, covvec::Vector, cov0::Number)
+function estimationerror(w::Vector, covmat::AbstractMatrix, covvec::Vector, cov0::Number)
 	return cov0 + dot(w, covmat * w) - 2 * dot(w, covvec)
 end
 

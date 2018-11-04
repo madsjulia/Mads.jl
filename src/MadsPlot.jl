@@ -1,10 +1,12 @@
 import Colors
-import Compose
 import ProgressMeter
 import DataFrames
-import DataStructures
+import OrderedCollections
 import Gadfly
 import Measures
+import Cairo
+import Compose
+import Fontconfig
 
 colors = ["red", "blue", "green", "orange", "magenta", "cyan", "brown", "pink", "lime", "navy", "maroon", "yellow", "olive", "springgreen", "teal", "coral", "lavender", "beige"]
 ncolors = length(colors)
@@ -16,7 +18,7 @@ $(DocumentFunction.documentfunction(setdefaultplotformat;
 argtext=Dict("format"=>"plot format")))
 """
 function setdefaultplotformat(format::String)
-	if ismatch(r"^PNG|PDF|PS|SVG", uppercase(format))
+	if occursin(r"^PNG|PDF|PS|SVG", uppercase(format))
 		global graphbackend = uppercase(format);
 	else
 		madswarn("Requested format ($format) is not acceptable! (PNG|PDF|PS|SVG)")
@@ -42,12 +44,12 @@ function setplotfileformat(filename::String, format::String)
 	if format == ""
 		format = extension
 	end
-	if ismatch(r"^PNG|^PDF|^PS|^SVG", format)
+	if occursin(r"^PNG|^PDF|^PS|^SVG", format)
 		if format != extension
 			filename = root * "." * lowercase(format)
 		end
 	elseif format == "EPS"
-		if !ismatch(r"^EPS|^PS", extension)
+		if !occursin(r"^EPS|^PS", extension)
 			filename = root * ".eps"
 		end
 		format = "PS"
@@ -73,15 +75,15 @@ Dumps:
 
 - plot of contaminant sources and wells
 """
-function plotmadsproblem(madsdata::Associative; format::String="", filename::String="", keyword::String="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, gm=[])
-	rectangles = Array{Float64}(0, 4)
+function plotmadsproblem(madsdata::AbstractDict; format::String="", filename::String="", keyword::String="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, gm=[])
+	rectangles = Array{Float64}(undef, 0, 4)
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
 	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			if sourcetype == "box" || sourcetype == "gauss"
-				rectangle = Array{Float64}(4)
+				rectangle = Array{Float64}(undef, 4)
 				x = madsdata["Sources"][i][sourcetype]["x"]["init"]
 				y = madsdata["Sources"][i][sourcetype]["y"]["init"]
 				rectangle[1] = x - madsdata["Sources"][i][sourcetype]["dx"]["init"] / 2
@@ -95,9 +97,9 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	end
 	if sizeof(rectangles) > 0
 		gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context(), Compose.rectangle(rectangles[:,1],rectangles[:,2],rectangles[:,3],rectangles[:,4]),
-			Compose.fill(parse(Colors.Colorant, "red")),
+			Compose.fill(Base.parse(Colors.Colorant, "red")),
 			Compose.fillopacity(0.2),
-			Compose.stroke(parse(Colors.Colorant, "red"))))
+			Compose.stroke(Base.parse(Colors.Colorant, "red"))))
 	end
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
@@ -133,8 +135,8 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 		gadfly_source,
 		Gadfly.Scale.color_discrete_manual("red", "blue"),
 		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
-		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @sprintf("%.0f", x)),
-		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @sprintf("%.0f", y)), gm...,
+		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @Printf.sprintf("%.0f", x)),
+		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @Printf.sprintf("%.0f", y)), gm...,
 		Gadfly.Theme(highlight_width = 0Gadfly.pt, key_position = :none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
@@ -153,7 +155,7 @@ function plotmadsproblem(madsdata::Associative; format::String="", filename::Str
 	return nothing
 end
 
-function plotmatches(madsdata::Associative, rx::Regex=r""; kw...)
+function plotmatches(madsdata::AbstractDict, rx::Regex=r""; kw...)
 	r = forward(madsdata; all=true)
 	if rx != r""
 		plotmatches(madsdata, r, rx; kw...)
@@ -161,17 +163,17 @@ function plotmatches(madsdata::Associative, rx::Regex=r""; kw...)
 		plotmatches(madsdata, r; kw...)
 	end
 end
-function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
-	newobs = similar(madsdata["Observations"])
-	newresult = similar(result)
+function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
+	newobs = empty(madsdata["Observations"])
+	newresult = empty(result)
 	for k in keys(madsdata["Observations"])
-		if ismatch(rx, k)
+		if occursin(rx, k)
 			newobs[k] = copy(madsdata["Observations"][k])
 			if !haskey(newobs[k], "time")
 				newobs[k]["time"] = key2time(k)
 			end
 			if !haskey(result, k)
-				warn("Observation `$k` is missing!")
+				Mads.madswarn("Observation `$k` is missing!")
 			else
 				newresult[k] = result[k]
 			end
@@ -185,7 +187,7 @@ function plotmatches(madsdata::Associative, result::Associative, rx::Regex; plot
 	end
 	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, ymin=ymin, ymax=ymax, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=Mads.colors, display=display)
 end
-function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.dpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -201,12 +203,12 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 	rootname = getmadsrootname(madsdata)
 	pl = nothing
 	if haskey(madsdata, "Wells")
-		pp = Array{Gadfly.Plot}(0)
+		pp = Array{Gadfly.Plot}(undef, 0)
 		p = Gadfly.Plot
 		wk = collect(keys(madsdata["Wells"]))
 		nW = length(wk)
 		if length(colors) == 0 || length(colors) != nW
-			colors = Array{String}(nW)
+			colors = Array{String}(undef, nW)
 			for iw = 1:nW
 				colors[iw] = "blue"
 			end
@@ -214,10 +216,10 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 		for iw = 1:nW
 			wellname = wk[iw]
 			if madsdata["Wells"][wellname]["on"]
-				c = Array{Float64}(0)
-				tc = Array{Float64}(0)
-				d = Array{Float64}(0)
-				td = Array{Float64}(0)
+				c = Array{Float64}(undef, 0)
+				tc = Array{Float64}(undef, 0)
+				d = Array{Float64}(undef, 0)
+				td = Array{Float64}(undef, 0)
 				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] != nothing
 					o = madsdata["Wells"][wellname]["obs"]
 					nT = length(o)
@@ -241,22 +243,22 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 				end
 				npp = length(c)
 				if npp == 0
-					warn("Well $wellname: no observations to plot!")
+					Mads.madswarn("Well $wellname: no observations to plot!")
 					continue
 				end
 				plot_args = Any[]
 				!notitle && push!(plot_args, Gadfly.Guide.title(wellname))
 				if plotdata
 					if obs_plot_dots
-						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize)))
+						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize)))
 					else
-						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), line_width=linewidth)))
+						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), line_width=linewidth)))
 					end
 				end
 				if npp > 1
-					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[iw]), line_width=linewidth)))
+					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), line_width=linewidth)))
 				else npp = 1
-					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
+					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				ymax > 0 && push!(plot_args, Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax))
 				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), plot_args...)
@@ -287,10 +289,10 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 	elseif haskey(madsdata, "Observations")
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
-		obs = Array{Float64}(0)
-		tobs = Array{Float64}(0)
-		ress = Array{Float64}(0)
-		tress = Array{Float64}(0)
+		obs = Array{Float64}(undef, 0)
+		tobs = Array{Float64}(undef, 0)
+		ress = Array{Float64}(undef, 0)
+		tress = Array{Float64}(undef, 0)
 		time_missing = false
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
@@ -317,11 +319,11 @@ function plotmatches(madsdata::Associative, dict_in::Associative; plotdata::Bool
 			madswarn("No data to plot")
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=parse(Colors.Colorant, "blue"), line_width=linewidth)),
-					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
+					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
+					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
 	end
 	if pl == nothing
-		warn("There is nothing to plot!")
+		Mads.madswarn("There is nothing to plot!")
 		return nothing
 	end
 	if !separate_files
@@ -397,13 +399,13 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::String; format::String="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::String; format::String="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
 		plotlabels = paramkeys
 	end
-	cs = Array{Compose.Context}(size(samples, 2), size(samples, 2))
+	cs = Array{Compose.Context}(undef, size(samples, 2), size(samples, 2))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
 			if i == j
@@ -425,14 +427,14 @@ function scatterplotsamples(madsdata::Associative, samples::Matrix, filename::St
 	try
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
-	catch e
-		printerrormsg(e)
+	catch errmsg
+		printerrormsg(errmsg)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
 	end
 	return nothing
 end
 
-function plotwellSAresults(madsdata::Associative, result::Associative; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 	else
@@ -443,7 +445,7 @@ function plotwellSAresults(madsdata::Associative, result::Associative; xtitle::S
 		end
 	end
 end
-function plotwellSAresults(madsdata::Associative, result::Associative, wellname::String; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::String; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="")
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
 		return
@@ -457,10 +459,10 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 	paramkeys = getoptparamkeys(madsdata)
 	nP = length(paramkeys)
 	nT = length(o)
-	d = Array{Float64}(2, nT)
-	mes = Array{Float64}(nP, nT)
-	tes = Array{Float64}(nP, nT)
-	var = Array{Float64}(nP, nT)
+	d = Array{Float64}(undef, 2, nT)
+	mes = Array{Float64}(undef, nP, nT)
+	tes = Array{Float64}(undef, nP, nT)
+	var = Array{Float64}(undef, nP, nT)
 	for i in 1:nT
 		t = d[1,i] = o[i]["t"]
 		d[2,i] = o[i]["c"]
@@ -474,11 +476,11 @@ function plotwellSAresults(madsdata::Associative, result::Associative, wellname:
 		end
 	end
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
-	pp = Array{Any}(0)
+	pp = Array{Any}(undef, 0)
 	pc = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.point, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle))
 	push!(pp, pc)
 	vsize = 4Gadfly.inch
-	df = Array{Any}(nP)
+	df = Array{Any}(undef, nP)
 	j = 1
 	for paramkey in paramkeys
 		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
@@ -567,7 +569,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::Associative, result::Associative; filter::Union{String,Regex}="", keyword::String="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::String="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -582,10 +584,10 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	nP = length(paramkeys)
 	obskeys = Mads.filterkeys(obsdict, filter)
 	nT = length(obskeys)
-	d = Array{Float64}(2, nT)
-	mes = Array{Float64}(nP, nT)
-	tes = Array{Float64}(nP, nT)
-	var = Array{Float64}(nP, nT)
+	d = Array{Float64}(undef, 2, nT)
+	mes = Array{Float64}(undef, nP, nT)
+	tes = Array{Float64}(undef, nP, nT)
+	var = Array{Float64}(undef, nP, nT)
 	i = 1
 	for obskey in obskeys
 		d[1,i] = obsdict[obskey]["time"]
@@ -610,7 +612,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	end
 	###################################################### DATA
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
-	pp = Array{Any}(0)
+	pp = Array{Any}(undef, 0)
 	pd = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle) )
 	push!(pp, pd)
 	if debug
@@ -621,7 +623,7 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	# vsize = 4Gadfly.inch
 	vsize = 0Gadfly.inch
 	###################################################### TES
-	df = Array{Any}(nP)
+	df = Array{Any}(undef, nP)
 	for j in 1:length(plotlabels)
 		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
 		deleteNaN!(df[j])
@@ -633,9 +635,9 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		writetable("tes.dat", vdf)
 	end
 	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("TES values larger than $(realmax(Float32))")
-			maxtorealmax!(vdf)
+		if max(vdf[2]...) > floatmax(Float32)
+			Mads.madswarn("TES values larger than $(floatmax(Float32))")
+			maxtofloatmax!(vdf)
 			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -659,9 +661,9 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		# writetable("mes.dat", vdf)
 	end
 	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("MES values larger than $(realmax(Float32))")
-			maxtorealmax!(vdf)
+		if max(vdf[2]...) > floatmax(Float32)
+			Mads.madswarn("MES values larger than $(floatmax(Float32))")
+			maxtofloatmax!(vdf)
 			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -685,9 +687,9 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 		# writetable("var.dat", vdf)
 	end
 	if length(vdf[1]) > 0
-		if max(vdf[2]...) > realmax(Float32)
-			Mads.madswarn("Variance values larger than $(realmax(Float32))")
-			maxtorealmax!(vdf)
+		if max(vdf[2]...) > floatmax(Float32)
+			Mads.madswarn("Variance values larger than $(floatmax(Float32))")
+			maxtofloatmax!(vdf)
 			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
@@ -722,32 +724,32 @@ function plotobsSAresults(madsdata::Associative, result::Associative; filter::Un
 	return nothing
 end
 
-function spaghettiplots(madsdata::Associative, number_of_samples::Integer; seed::Integer=-1, kw...)
+function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed::Integer=-1, kw...)
 	Mads.setseed(seed)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
-	spaghettiplots(madsdata::Associative, paramvalues; kw...)
+	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
 	paramkeys = getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
+	paramdict = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
 	numberofsamples = length(paramdictarray[paramoptkeys[1]])
 	obskeys = Mads.getobskeys(madsdata)
 	obs_plot = Any[]
 	if obs_plot_dots
-		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize))
+		push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize))
 		push!(obs_plot, Gadfly.Geom.point)
 	else
-		push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))
+		push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "black"), line_width=linewidth))
 		push!(obs_plot, Gadfly.Geom.line)
 	end
 	nT = length(obskeys)
 	if !haskey( madsdata, "Wells" )
-		t = Array{Float64}(nT)
-		d = Array{Float64}(nT)
+		t = Array{Float64}(undef, nT)
+		d = Array{Float64}(undef, nT)
 		for i in 1:nT
 			if haskey( madsdata["Observations"][obskeys[i]], "time")
 				t[i] = madsdata["Observations"][obskeys[i]]["time"]
@@ -766,7 +768,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 	Mads.madsoutput("Spaghetti plots for each selected model parameter (type != null) ...\n")
 	for paramkey in paramoptkeys
 		Mads.madsoutput("Parameter: $paramkey ...\n")
-		Y = Array{Float64}(nT, numberofsamples)
+		Y = Array{Float64}(undef, nT, numberofsamples)
 		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
@@ -787,12 +789,12 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 				pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-					Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
+					Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 					for i in 1:numberofsamples]...)
 			end
 			vsize = 4Gadfly.inch
 		else
-			pp = Array{Gadfly.Plot}(0)
+			pp = Array{Gadfly.Plot}(undef, 0)
 			p = Gadfly.Plot
 			vsize = 0Gadfly.inch
 			startj = 1
@@ -801,8 +803,8 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 				if madsdata["Wells"][wellname]["on"]
 					o = madsdata["Wells"][wellname]["obs"]
 					nTw = length(o)
-					t = Array{Float64}(nTw)
-					d = Array{Float64}(nTw)
+					t = Array{Float64}(undef, nTw)
+					d = Array{Float64}(undef, nTw)
 					for i in 1:nTw
 						t[i] = o[i]["t"]
 						if haskey(o[i], "c")
@@ -828,7 +830,7 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 							Gadfly.Guide.title(wellname),
 							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-							Gadfly.Theme(default_color=parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
+							Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 							for i in 1:numberofsamples]...)
 					end
 					push!(pp, p)
@@ -845,8 +847,8 @@ function spaghettiplots(madsdata::Associative, paramdictarray::DataStructures.Or
 			if typeof(pl) == Gadfly.Plot
 				graphoutput && Mads.display(pl)
 			end
-		catch e
-			printerrormsg(e)
+		catch errmsg
+			printerrormsg(errmsg)
 			Mads.madswarn("Spaghettiplots: Gadfly fails!")
 		end
 	end
@@ -881,15 +883,15 @@ Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="
 ```
 """ spaghettiplots
 
-function spaghettiplot(madsdata::Associative, number_of_samples::Integer; kw...)
+function spaghettiplot(madsdata::AbstractDict, number_of_samples::Integer; kw...)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
-	spaghettiplot(madsdata::Associative, paramvalues; kw...)
+	spaghettiplot(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplot(madsdata::Associative, dictarray::Associative; seed::Integer=-1, kw...)
+function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::Integer=-1, kw...)
 	Mads.setseed(seed)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
-	paramdict = DataStructures.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
+	paramdict = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
@@ -902,7 +904,7 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; seed::Inte
 	end
 	if flag_params
 		numberofsamples = length(dictarray[paramoptkeys[1]])
-		Y = Array{Float64}(nT, numberofsamples)
+		Y = Array{Float64}(undef, nT, numberofsamples)
 		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
 			for paramkey in paramoptkeys
 				paramdict[paramkey] = dictarray[paramkey][i]
@@ -920,9 +922,9 @@ function spaghettiplot(madsdata::Associative, dictarray::Associative; seed::Inte
 			return
 		end
 	end
-	spaghettiplot(madsdata::Associative, Y; kw...)
+	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
+function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -953,10 +955,10 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 	obs_plot = Any[]
 	if plotdata
 		if obs_plot_dots
-			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "red"), point_size=pointsize))
+			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize))
 			push!(obs_plot, Gadfly.Geom.point)
 		else
-			push!(obs_plot, Gadfly.Theme(default_color=parse(Colors.Colorant, "black"), line_width=linewidth))
+			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "black"), line_width=linewidth))
 			push!(obs_plot, Gadfly.Geom.line)
 		end
 	end
@@ -982,12 +984,12 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 			pl = Gadfly.plot(pa...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-				Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
+				Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
 				for i in 1:numberofsamples]... )
 		end
 		vsize = 4Gadfly.inch
 	else
-		pp = Array{Gadfly.Plot}(0)
+		pp = Array{Gadfly.Plot}(undef, 0)
 		p = Gadfly.Plot
 		vsize = 0Gadfly.inch
 		startj = 1
@@ -997,8 +999,8 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 				o = madsdata["Wells"][wellname]["obs"]
 				nTw = length(o)
 				if plotdata
-					t = Array{Float64}(nTw)
-					d = Array{Float64}(nTw)
+					t = Array{Float64}(undef, nTw)
+					d = Array{Float64}(undef, nTw)
 					for i in 1:nTw
 						t[i] = o[i]["t"]
 						if haskey(o[i], "c")
@@ -1026,7 +1028,7 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 						Gadfly.Guide.title(wellname),
 						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-						Gadfly.Theme(default_color=parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
+						Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
 						for i in 1:numberofsamples]...)
 				end
 				push!(pp, p)
@@ -1045,8 +1047,8 @@ function spaghettiplot(madsdata::Associative, array::Array; plotdata::Bool=true,
 	filename, format = setplotfileformat(filename, format)
 	try
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 8Gadfly.inch, vsize), pl)
-	catch e
-		printerrormsg(e)
+	catch errmsg
+		printerrormsg(errmsg)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
 	if typeof(pl) == Gadfly.Plot
@@ -1167,7 +1169,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		else
 			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
 				Gadfly.Geom.line,
-				Gadfly.Theme(line_width=linewidth, default_color=parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
+				Gadfly.Theme(line_width=linewidth, default_color=Base.parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
 				for i in 1:nS]..., glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
@@ -1177,7 +1179,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 	else
 		hsize_plot = hsize
 		vsize_plot = vsize / 2 * nS
-		pp = Array{Gadfly.Plot}(nS)
+		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
 			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], glog..., Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
@@ -1195,8 +1197,8 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		if typeof(pS) == Gadfly.Plot
 			graphoutput && Mads.display(pS)
 		end
-	catch e
-		printerrormsg(e)
+	catch errmsg
+		printerrormsg(errmsg)
 		Mads.madswarn("Plotseries: Gadfly fails!")
 	end
 	return nothing
@@ -1227,7 +1229,7 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 		rootname = string(rootname, "-", keyword)
 	end
 	filename = "$(filenameroot)-jacobian.dat"
-	Jin = Array{Float64}(0, 0)
+	Jin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Jin = readdlm(filename)
 	end
@@ -1239,11 +1241,11 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 		nO = length(obskeys)
 		J = Jin[2:end, 2:end]
 		mscale = max(abs(minimum(J)), abs(maximum(J)))
-		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 			jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 						Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
+						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 			filename = "$(rootname)-jacobian" * ext
 			filename, format = setplotfileformat(filename, format)
 			try
@@ -1255,7 +1257,7 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 		end
 	end
 	filename = "$(filenameroot)-covariance.dat"
-	Cin = Array{Float64}(0, 0)
+	Cin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Cin = readdlm(filename)
 	end
@@ -1266,7 +1268,7 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 		nP = length(paramkeys)
 	end
 	filename = "$(filenameroot)-eigenmatrix.dat"
-	Ein = Array{Float64}(0, 0)
+	Ein = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Ein = readdlm(filename)
 	end
@@ -1276,15 +1278,15 @@ function plotlocalsa(filenameroot::String; keyword::String="", filename::String=
 		nP = length(paramkeys)
 		sortedeigenm = Ein[1:end, 2:end]
 		filename = "$(filenameroot)-eigenvalues.dat"
-		sortedeigenv = Array{Float64}(0)
+		sortedeigenv = Array{Float64}(undef, 0)
 		if isfile(filename)
 			sortedeigenv = readdlm(filename)
 		end
-		if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 			eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 						Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(parse(Colors.Colorant, "green"), parse(Colors.Colorant, "yellow"), parse(Colors.Colorant, "red"))))
+						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
 			# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 			filename = "$(rootname)-eigenmatrix" * ext
 			filename, format = setplotfileformat(filename, format)

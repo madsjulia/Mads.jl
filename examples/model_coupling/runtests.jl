@@ -1,5 +1,6 @@
 import Mads
-import Base.Test
+import Test
+import PyCall
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
@@ -23,7 +24,7 @@ Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 forwardpredresults = Mads.forward(md, pdict)
 
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, forwardpredresults)
 	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
@@ -34,16 +35,22 @@ end
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
 md = Mads.loadmadsfile(joinpath(workdir,  "internal-linearmodel+template.mads"))
 tifor = Mads.forward(md)
+
 Mads.madsinfo("Internal coupling using `Julia command`, `Templates` and respecting template space...")
 Mads.addkeyword!(md, "respect_space")
 tifor = Mads.forward(md)
 Mads.deletekeyword!(md, "respect_space")
-Mads.madsinfo("Internal coupling using `MADS model` ...")
+
+Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-mads.mads"))
 mfor = Mads.forward(md)
+
+if VERSION < v"1.0.0"
+
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction+l1.mads"))
 teforl1 = Mads.forward(md)
+
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction.mads"))
 Mads.writeparameters(md)
@@ -51,6 +58,7 @@ tefor = Mads.forward(md)
 
 cwd = pwd()
 cd(workdir)
+
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
 Mads.localsa(md, par=[1.,2.])
 # Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
@@ -60,14 +68,14 @@ Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path"
 Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
 pfor = Mads.forward(md)
 
-@Base.Test.testset "Internal" begin
-	@Base.Test.test ifor == efor
-	@Base.Test.test ifor == bfor
-	@Base.Test.test ifor == tifor
-	@Base.Test.test ifor == mfor
-	@Base.Test.test ifor == tefor
-	@Base.Test.test ifor == teforl1
-	@Base.Test.test ifor == pfor
+@Test.testset "Internal" begin
+	@Test.test ifor == efor
+	@Test.test ifor == bfor
+	@Test.test ifor == tifor
+	@Test.test ifor == mfor
+	@Test.test ifor == tefor
+	@Test.test ifor == teforl1
+	@Test.test ifor == pfor
 end
 
 Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-mads.mads"); julia=true)
@@ -79,9 +87,11 @@ jfor = Mads.forward(md)
 Mads.set_nprocs_per_task(2)
 @Mads.stdouterrcapture Mads.forward(md)
 Mads.set_nprocs_per_task(1)
+
 Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-json.mads"))
 sfor = Mads.forward(md)
+
 Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-json-exp.mads"))
 efor = Mads.forward(md)
@@ -90,8 +100,9 @@ if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && Mads.pyyaml != 
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 	yfor = Mads.forward(md)
-	@Base.Test.test yfor == jfor
+	@Test.test yfor == jfor
 end
+
 # TODO ASCII does NOT work; `parameters` are not required to be Ordered Dictionary
 Mads.madsinfo("External coupling using ASCII ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
@@ -108,11 +119,13 @@ ro2 = Mads.readobservations(md)
 Mads.rmfile("external-linearmodel-matrix.inst")
 cd(cwd)
 
-@Base.Test.testset "External" begin
-	@Base.Test.test jfor == sfor
-	@Base.Test.test efor == sfor
-	@Base.Test.test jfor == ifor
-	@Base.Test.test ro1 == ro2
+@Test.testset "External" begin
+	@Test.test jfor == sfor
+	@Test.test efor == sfor
+	@Test.test jfor == ifor
+	@Test.test ro1 == ro2
+end
+
 end
 
 Mads.rmdir(joinpath(workdir, "external-jld_restart"))

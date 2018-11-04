@@ -19,7 +19,7 @@ Mads.spaghettiplot(md, predictions, keyword="w13a-model", format="PNG")
 Mads.display("$rootname-w13a-model-$numberofsamples-spaghetti.png")
 
 @time svrpredictions = svrexec(paramarray)
-info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
+@info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
 
 Mads.madsinfo("SVR predictions ...")
 Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")

@@ -1,10 +1,10 @@
 import ODE
-import DataStructures
+import OrderedCollections
 
-function madsmodelrun(parameters::Associative)
+function madsmodelrun(parameters::AbstractDict)
 	omega = parameters["omega"]
 	k = parameters["k"]
-	function makefunc(parameters::Associative)
+	function makefunc(parameters::AbstractDict)
 		function func(t, y)
 			# x''[t] == -\omega^2 * x[t] - k * x'[t]
 			f = similar(y)
@@ -20,6 +20,6 @@ function madsmodelrun(parameters::Associative)
 	initialconditions = [1.,0.]
 	t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
 	ys = hcat(y...).' # vecorize the output and transpose with '
-	predictions = DataStructures.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
+	predictions = OrderedCollections.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
 	return predictions
 end

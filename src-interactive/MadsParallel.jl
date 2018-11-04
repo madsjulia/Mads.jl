@@ -1,18 +1,20 @@
-if !isdefined(:DocumentFunction)
+using Distributed
+
+if !isdefined(Mads, :DocumentFunction)
 	import DocumentFunction
 end
 
-if !isdefined(:sprintf)
-	"Convert `@sprintf` macro into `sprintf` function"
-	sprintf(args...) = Core.eval(:@sprintf($(args...)))
+if !isdefined(Mads, :sprintf)
+	"Convert `@Printf.sprintf` macro into `sprintf` function"
+	sprintf(args...) = Core.eval(:@Printf.sprintf($(args...)))
 end
 
 quietdefault = true
 nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madszem", "madskil", "madsart", "madsend"] # madsdam is out
-madsservers2 = vec(["madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)])
-madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(@sprintf "mads%02d" i), 1:18)]) # madsdam is out
-if isdefined(:Mads)
+madsservers2 = vec(["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)])
+madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)]) # madsdam is out
+if isdefined(Base, :Mads)
 	quietdefault = Mads.quiet
 	nprocs_per_task_default = Mads.nprocs_per_task_default
 	madsservers = Mads.madsservers
@@ -25,7 +27,7 @@ Get the number of processors
 $(DocumentFunction.documentfunction(getprocs))
 """
 function getprocs()
-	info("Number of processors: $(nworkers()) $(workers())\n")
+	@info("Number of processors: $(nworkers()) $(workers())\n")
 end
 
 function setprocs(np::Integer, nt::Integer)
@@ -44,11 +46,11 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, dir::String=pwd(), exename::String=Base.julia_cmd().exec[1])
-	if isdefined(:set_nprocs_per_task)
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::String=pwd(), exename::String=Base.julia_cmd().exec[1])
+	if isdefined(Mads, :set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end
-	h = Array{String}(0)
+	h = Array{String}(undef, 0)
 	if length(nodenames) > 0 || mads_servers
 		if length(nodenames) == 0
 			nodenames = madsservers
@@ -77,16 +79,16 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			c = ntasks_per_node
 		else
 			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
-				c = parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
+				c = Meta.parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
 			elseif haskey(ENV, "SLURM_TASKS_PER_NODE")
-				c = parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
+				c = Meta.parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
 			else
 				c = 1
 			end
 		end
 		h = parsenodenames(s, c)
 	else
-		warn("Unknown parallel environment!")
+		!veryquiet && @warn("Unknown parallel environment!")
 	end
 	if length(h) > 0
 		if nworkers() > 1
@@ -98,18 +100,18 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		arguments[:dir] = dir
 		if test
 			for i = 1:length(h)
-				info("Connecting to $(h[i]) ...")
+				@info("Connecting to $(h[i]) ...")
 				try
 					addprocs([h[i]]; arguments...)
-				catch e
-					print(e.msg)
-					warn("Connection to $(h[i]) failed!")
+				catch errmsg
+					println(strip(errmsg.msg))
+					@warn("Connection to $(h[i]) failed!")
 				end
 			end
 		else
 			if quiet
-				originalSTDOUT = STDOUT;
-				originalSTDERR = STDERR;
+				originalstdout = stdout;
+				originalstderr = stderr;
 				(outRead, outWrite) = redirect_stdout();
 				(errRead, errWrite) = redirect_stderr();
 				outreader = @async read(outRead, String);
@@ -121,16 +123,16 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 				addprocs(h; arguments...)
 			catch errmsg
 				if in(:errmsg, fieldnames(errmsg))
-					warn(strip(errmsg.errmsg))
+					@warn(strip(errmsg.errmsg))
 				else
-					warn(errmsg)
+					@warn(errmsg)
 				end
 				addprocsfailed = true
-				warn("Connection to $(h) failed!")
+				@warn("Connection to $(h) failed!")
 			end
 			if quiet
-				redirect_stdout(originalSTDOUT);
-				redirect_stderr(originalSTDERR);
+				redirect_stdout(originalstdout);
+				redirect_stderr(originalstderr);
 				close(outWrite);
 				# output = wait(outreader); # output is not needed
 				close(outRead);
@@ -139,20 +141,20 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 				close(errRead);
 			end
 			if addprocsfailed
-				warn("Connection to $(h) failed!")
+				@warn("Connection to $(h) failed!")
 				error(errmsg)
 			end
 		end
 		sleep(0.1)
 		if nprocs() > 1
-			info("Number of processors: $(nworkers())")
-			info("Workers: $(join(h, " "))")
+			@info("Number of processors: $(nworkers())")
+			@info("Workers: $(join(h, " "))")
 		else
-			warn("No workers found to add!")
-			info("Number of processors: $(nworkers())")
+			@warn("No workers found to add!")
+			@info("Number of processors: $(nworkers())")
 		end
 	else
-		warn("No processors found to add!")
+		!veryquiet && @warn("No processors found to add!")
 	end
 	return h
 end
@@ -203,7 +205,7 @@ Returns:
 - vector with names of compute nodes (hosts)
 """
 function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
-	h = Array{String}(0)
+	h = Array{String}(undef, 0)
 	ss = split(nodenames, "[")
 	name = ss[1]
 	if length(ss) == 1
@@ -217,7 +219,7 @@ function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
 			e = length(d) == 1 ? d[1] : d[2]
 			l = length(d[1])
 			f = "%0" * string(l) * "d"
-			for i in collect(parse(Int, d[1]):1:parse(Int, e))
+			for i in collect(Base.parse(Int, d[1]):1:Base.parse(Int, e))
 				nn = name * sprintf(f, i)
 				for j = 1:ntasks_per_node
 					push!(h, nn)
@@ -279,16 +281,16 @@ Returns:
 - output of running remote command
 """
 function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
-	output = Array{String}(0)
+	output = Array{String}(undef, 0)
 	for i in nodenames
 		try
 			o = readstring(`ssh -t $i $cmd`)
 			push!(output, strip(o))
 			println("$i: $o")
-		catch e
-			println(strip(e.msg))
+		catch errmsg
+			println(strip(errmsg.msg))
 			push!(output, "")
-			warn("$i is not accessible or command failed")
+			@warn("$i is not accessible or command failed")
 		end
 	end
 	return output;
@@ -334,5 +336,5 @@ Returns
 - array string of mads servers
 """
 function setmadsservers(first::Int=0, last::Int=18)
-	map(i->(@sprintf "mads%02d" i), first:last)
+	map(i->(@Printf.sprintf "mads%02d" i), first:last)
 end

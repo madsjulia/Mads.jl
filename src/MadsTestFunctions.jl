@@ -21,7 +21,7 @@ Returns:
 - parameter gradients
 """
 function rosenbrock2_gradient_lm(x::Vector)
-	j = Array{Float64}(2,2)
+	j = Array{Float64}(undef, 2,2)
 	j[1, 1] = -20.0 * x[1]
 	j[1, 2] =  10.0
 	j[2, 1] =  -1.0
@@ -75,14 +75,14 @@ Parameter gradients of the Rosenbrock test function for LM optimization (returns
 $(DocumentFunction.documentfunction(rosenbrock_gradient_lm;
 argtext=Dict("x"=>"parameter vector"),
 keytext=Dict("dx"=>"apply parameter step to compute numerical derivatives [default=`false`]",
-            "center"=>"array with parameter observations at the center applied to compute numerical derivatives [default=`Array{Float64}(0)`]")))
+            "center"=>"array with parameter observations at the center applied to compute numerical derivatives [default=`Array{Float64}(undef, 0)`]")))
 
 Returns:
 
 - parameter gradients
 """
-function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(0))
-	grad = Array{Float64}(2,2)
+function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(undef, 0))
+	grad = Array{Float64}(undef, 2,2)
 	grad[1,1] = -2.0 * (1.0 - x[1])
 	grad[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]
 	grad[1,2] = 0.
@@ -116,7 +116,7 @@ Returns:
 """
 function makerosenbrock(n::Integer)
 	function rosenbrock_lm(x::Vector)
-		result = Array{eltype(x)}(2 * (n - 1))
+		result = Array{eltype(x)}(undef, 2 * (n - 1))
 		for i = 1:n - 1
 			result[2 * i - 1] = 1 - x[i]
 			result[2 * i] = 10 * (x[i + 1] - x[i] * x[i])
@@ -137,7 +137,7 @@ Returns:
 - parameter gradients of the Rosenbrock test function for LM optimization
 """
 function makerosenbrock_gradient(n::Integer)
-	function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(0))
+	function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(undef, 0))
 		result = zeros(eltype(x), (2 * (n - 1), n))
 		for i = 1:n - 1
 			result[2 * i - 1, i] = -1
@@ -161,7 +161,7 @@ Returns:
 """
 function makepowell(n::Integer)
 	function powell(x::Vector)
-		result = Array{Float64}(n)
+		result = Array{Float64}(undef, n)
 		for i = 1:floor(Int64, 10.0/4)
 			result[4*i-3] = x[4*i-3] + 10*x[4*i-2]
 			result[4*i-2] = sqrt(5) * (x[4*i-1] - x[4*i])
@@ -216,7 +216,7 @@ Returns:
 """
 function makesphere(n::Integer)
 	function sphere(x::Vector)
-		result = Array{eltype(x)}(n)
+		result = Array{eltype(x)}(undef, n)
 		for i = 1:n
 			result[i] = x[i]
 		end
@@ -258,7 +258,7 @@ Returns:
 """
 function makedixonprice(n::Integer)
 	function dixonprice(x::Vector)
-		result = Array{Float64}(n)
+		result = Array{Float64}(undef, n)
 		result[1] = x[1] - 1
 		for i=2:n
 			result[i] = sqrt(i)*(2*x[i]^2 - x[i-1])
@@ -299,7 +299,7 @@ Returns:
 """
 function makesumsquares(n::Integer)
 	function sumsquares(x::Vector)
-		result = Array{Float64}(n)
+		result = Array{Float64}(undef, n)
 		for i=1:n
 			result[i] = sqrt(i)*x[i]
 		end
@@ -337,7 +337,7 @@ Returns:
 """
 function makerotatedhyperellipsoid(n::Integer)
 	function rotatedhyperellipsoid(x::Vector)
-		result = Array{Float64}(n)
+		result = Array{Float64}(undef, n)
 		result[1] = x[1]
 		for i =2:n
 			sum = 0

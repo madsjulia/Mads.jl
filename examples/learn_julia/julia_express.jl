@@ -76,8 +76,8 @@ x[1] = 1 # error - tuple is not mutable
 a, b = x # tuple unpacking a=1, b=2
 
 # arrays
-Array{Char}(2, 3, 4) # 2x3x4 array of Chars
-Array{Int64}(0, 0) # degenerate 0x0 array of Int64
+Array{Char}(undef, 2, 3, 4) # 2x3x4 array of Chars
+Array{Int64}(undef, 0, 0) # degenerate 0x0 array of Int64
 cell(2, 3) # 2x3 array of Any
 zeros(5) # vector of Float64 zeros
 ones(Int64, 2, 1) # 2x1 array of Int64 ones
@@ -175,7 +175,7 @@ names(p) # get names of instance fields
 names(Point) # get names of type fields
 
 # Dictionaries
-# Associative collections (key-value dictionaries):
+# AbstractDict collections (key-value dictionaries):
 x = Dict{Float64, Int64}() # empty dictionary mapping floats to integers
 x = (Int64=>Int64)[1=>1, 2=>2] # literal syntax creation, optional type information
 y = {"a"=>1, (2,3)=>true} # dictionary with type Dict(Any, Any)
@@ -195,7 +195,7 @@ get(y,"c","default") # return y["c"] or "default" if not haskey(y,"c")
 "Ho " ^ 3 # repeat string
 string("a= ", 123.3) # create using print function
 repr(123.3) # fetch value of show function to a string
-contains("ABCD", "CD") # check if first string contains second
+occursin("CD", "ABCD") # check if first string contains second
 "\"\n\t\$" # C-like escaping in strings, new \$ escape
 x = 123
 "$x + 3 = $(x+3)" # unescaped $ is used for interpolation
@@ -203,7 +203,7 @@ x = 123
 
 # PCRE regular expressions handling:
 r = r"A|B" # create new regexp
-ismatch(r, "CD") # false, no match found
+occursin(r, "CD") # false, no match found
 m = match(r, "ACBD") # find first regexp match, see documentation for details
 # There is a vast number of string functions — please refer to documentation.
 
@@ -416,11 +416,11 @@ isequal(1, 1.0) # false
 isfinite(Inf) # false, similarly provided: isinf, isnan
 fld(-5, 3), mod(-5, 3) # (-2, 1), division towards minus infinity
 div(-5, 3), rem(-5, 3) # (-1, -2), division towards zero
-find(x -> mod(x, 2) == 0, 1:8) # find indices for which function returns true
+findall(x -> mod(x, 2) == 0, 1:8) # find indices for which function returns true
 identity([1 2 3]) # identity returned
-info("Info") # print information, similarly warn and error (raises error)
+@info("Info") # print information, similarly warn and error (raises error)
 ntuple(3, x->2x) # create tuple by calling x->2x with values 1, 2 and 3
-isdefined(:x) # if variable x is defined (:x is a symbol)
+isdefined(Mads, :x) # if variable x is defined (:x is a symbol)
 fieldtype(1:2,:len) # get type of the field in composite type (passed as symbol)
 1:5 |> exp |> sum # function application chaining
 zip(1:5, 1:3) |> collect # convert iterables to iterable tuple and pass it to collect
@@ -428,11 +428,11 @@ enumerate("abc") # create iterator of tuples (index, collection element)
 isempty("abc") # check if collection is empty
 'b' in "abc" # check if element is in a collection
 indexin(collect("abc"), collect("abrakadabra")) # [11, 9, 0] ('c' not found), needs arrays
-findin("abc", "abrakadabra") # [1, 2] ('c' was not found)
+findall((in)("abrakadabra"), "abc") # [1, 2] ('c' was not found)
 unique("abrakadabra") # return unique elements
 issubset("abc", "abcd") # check if every element in fist collection is in the second
-indmax("abrakadabra") # index of maximal element (3 - 'r' in this case)
-findmax("abrakadabra") # tuple: maximal element and its index
+argmax("abrakadabra") # index of maximal element (3 - 'r' in this case)
+fargmax("abrakadabra") # tuple: maximal element and its index
 filter(x->mod(x,2)==0, 1:10) # retain elements of collection that meet predicate
 dump(1:2:5) # show all user-visible structure of an object
 sort(rand(10)) # sort 10 uniform random variables
@@ -446,7 +446,7 @@ sort(rand(10)) # sort 10 uniform random variables
 
 # Random numbers
 # Basic random numbers:
-srand(1) # set random number generator seed to 1
+Random.seed!(1) # set random number generator seed to 1
 rand() # generate random number from U[0,1)
 rand(3, 4) # generate 3x4 matrix of random numbers from U[0,1]
 rand(2:5, 10) # generate vector of 10 random integer numbers in range form 2 to 5
@@ -492,7 +492,7 @@ y = sin.(4 * pi * x) .* exp(-5 * x)
 fill(x, y) # you can access any matplotlib.pyplot function
 grid(true)
 using Distributions # second example
-srand(1)
+Random.seed!(1)
 x = randn(1000)
 # hist conflicts with Julia hist so prepend plt.
 n, bins, patches = plt.hist(x, 20, normed = 1, facecolor="y")
@@ -505,10 +505,10 @@ plot(points, pdf(Normal(), points), "r") # add normal density plot
 
 # Assertions:
 @assert 1 == 2 "ERROR" # 2 macro arguments; error raised
-import Base.Test # load Base.Test module
-@Base.Test.test 1 == 2 # similar to assert; error
-@Base.Test.test_approx_eq 1 1.1 # error
-@Base.Test.test_approx_eq_eps 1 1.1 0.2 # no error
+import Test # load Base.Test module
+@Test.test 1 == 2 # similar to assert; error
+@Test.test_approx_eq 1 1.1 # error
+@Test.test_approx_eq_eps 1 1.1 0.2 # no error
 
 # Function vectorization:
 t(x::Float64, y::Float64 = 1.0) = x * y
@@ -527,17 +527,13 @@ t([1.0 2.0], [1.0 2.0]) # OK
 @timed [x for x in 1:10^6] # return value, time and memory
 @elapsed [x for x in 1:10^6] # return time
 @allocated [x for x in 1:10^6] # return memory
-tic() # start timer
-[x for x in 1:10^6]
-toc() # stop timer and print time
-toq() # stop timer and return time
 
 # Taking it all together example
 # Simple bootstraping exercise
 using Distributions
 using PyPlot
 using KernelDensity
-srand(1)
+Random.seed!(1)
 # generate 100 observations from correlated normal variates
 n = 100
 dist = MvNormal([0.0; 0.0], [1.0 0.5; 0.5 1.0])

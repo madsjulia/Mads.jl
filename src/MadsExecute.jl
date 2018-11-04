@@ -1,7 +1,7 @@
 import DocumentFunction
 
 function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 seconds
-	proc = spawn(`ssh -t $node ls $dir`)
+	proc = run(`ssh -t $node ls $dir`; wait=false)
 	timedwait(() -> process_exited(proc), waittime)
 	if process_running(proc)
 		kill(proc)
@@ -10,12 +10,12 @@ function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 sec
 	return true
 end
 function checknodedir(dir::String, waittime::Float64=10.) # 10 seconds
-	if is_windows()
-		proc = spawn(`cmd /C dir $dir`)
+	if Sys.iswindows()
+		proc = run(`cmd /C dir $dir`; wait=false)
 	elseif Mads.madsbash
-		proc = spawn(`bash -c "ls $dir; julia -p 2 -e '@show pwd()' > julia-test.out"`)
+		proc = run(`bash -c "ls $dir; julia -p 2 -e '@show pwd()' > julia-test.out"`; wait=false)
 	else
-		proc = spawn(`sh -c "ls $dir"`)
+		proc = run(`sh -c "ls $dir"`; wait=false)
 	end
 	timedwait(() -> process_exited(proc), waittime)
 	if process_running(proc)
@@ -43,9 +43,9 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		cmdin = Pipe()
 		cmdout = Pipe()
 		cmderr = Pipe()
-		cmdproc = spawn(cmd, (cmdin, cmdout, cmderr))
+		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=false)
 	else
-		cmdproc = spawn(cmd)
+		cmdproc = run(cmd; wait=false)
 	end
 	if waittime > 0
 		timedwait(() -> process_exited(cmdproc), waittime)
@@ -66,7 +66,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 			erroutput = readlines(cmderr)
 			if length(erroutput) > 0
 				for i in erroutput
-					warn("$(strip(i))")
+					Mads.madswarn("$(strip(i))")
 				end
 			end
 		end
@@ -77,7 +77,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 				s = (l < 100) ? 1 : l - 100
 				for i in output[s:end]
 					println("$(strip(i))")
-					if ismatch(r"error"i, i)
+					if occursin(r"error"i, i)
 						madswarn("$(strip(i))")
 					end
 				end
@@ -85,7 +85,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		end
 	end
 	if cmdproc.exitcode != 0
-		warn("Execution of command `$(string(cmd))` produced an error ($(cmdproc.exitcode))!")
+		Mads.madswarn("Execution of command `$(string(cmd))` produced an error ($(cmdproc.exitcode))!")
 	end
 	if pipe
 		return cmdout, cmderr
@@ -94,7 +94,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 	end
 end
 function runcmd(cmdstring::String; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
-	if is_windows()
+	if Sys.iswindows()
 		r = runcmd(`cmd /C $(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
 	elseif Mads.madsbash
 		r = runcmd(`bash -c "$(cmdstring)"`; quiet=quiet, pipe=pipe, waittime=waittime)

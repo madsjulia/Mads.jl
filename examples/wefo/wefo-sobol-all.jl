@@ -1,7 +1,7 @@
-import DataStructures
+import OrderedCollections
 import WEFO
 
-function madsmodelrun(parameters::Associative) # MADS/WEFO run
+function madsmodelrun(parameters::AbstractDict) # MADS/WEFO run
 
 	# get mads parameter values
 	ESC = [parameters["ESC1c"] parameters["ESC2c"] parameters["ESC3c"];
@@ -26,8 +26,8 @@ function madsmodelrun(parameters::Associative) # MADS/WEFO run
 	Dt = [parameters["Dt1e"] parameters["Dt2e"] parameters["Dt3e"];
 		parameters["Dt1f"] parameters["Dt2f"] parameters["Dt3f"]]
 	TMCC = parameters["TMCC"]
-	Water = [parameters["Water1g"] parameters["Water2g"] parameters["Water3g"]; 
-			parameters["Water1s"] parameters["Water2s"] parameters["Water3s"]; 
+	Water = [parameters["Water1g"] parameters["Water2g"] parameters["Water3g"];
+			parameters["Water1s"] parameters["Water2s"] parameters["Water3s"];
 			parameters["Water1r"] parameters["Water2r"] parameters["Water3r"]]
 	a = [parameters["a1"] parameters["a2"]]
 
@@ -54,6 +54,6 @@ function madsmodelrun(parameters::Associative) # MADS/WEFO run
 	of = WEFO.getobjective() # get OF
 	# WEFO.print()
 	# WEFO.results()
-	predictions = DataStructures.OrderedDict(zip(["of"], [of])) # put OF into a dictionary
+	predictions = OrderedCollections.OrderedDict(zip(["of"], [of])) # put OF into a dictionary
 	return predictions # pass the OF back to MADS
 end

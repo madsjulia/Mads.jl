@@ -1,5 +1,5 @@
 import Mads
-import Base.Test
+import Test
 
 if VERSION >= v"0.7"
 	using Distributed
@@ -33,19 +33,19 @@ end
 	include(joinpath(workdir, "optimization_linear_problem+template.jl")) # fix
 end
 
-@Base.Test.testset "Optimization" begin
+@Test.testset "Optimization" begin
 	run_optimization_tests()
 
 	if Mads.long_tests
 		Mads.madsinfo("External optimization ...")
 
-		md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
+		global md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
 		jparam, jresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
 
 		if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()
-			md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
+			global md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 			yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
-			@Base.Test.test yparam == jparam
+			@Test.test yparam == jparam
 		end
 	end
 
@@ -55,7 +55,7 @@ Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
-if isdefined(:Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
+if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.setobstime!(md, "o")
 	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
 	Mads.rmfile("internal-linearmodel+template-match.svg")

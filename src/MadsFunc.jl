@@ -1,7 +1,9 @@
 import ReusableFunctions
-import DataStructures
+import OrderedCollections
 import Distributions
 import DocumentFunction
+import Sockets
+using Distributed
 
 """
 Make MADS function to execute the model defined in the input MADS problem dictionary
@@ -55,7 +57,7 @@ Returns:
 
 - Mads function to execute a forward model simulation
 """
-function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
+function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
 	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
@@ -94,19 +96,25 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
+			if VERSION >= v"1.0.0"
+				Mads.madswarn("Calling julia from julia is not allowed!")
+			end
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
-			npt = m != nothing ? parse(Int, m.captures[1]) : 1
+			npt = m != nothing ? Meta.parse(Int, m.captures[1]) : 1
 			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
 				if m != nothing
-					madsdata["Command"] = replace(madsdata["Command"], r"(julia.*-p)[\s[0-9]*|[0-9]*]", Base.SubstitutionString("\\g<1> $nprocs_per_task_default "))
-					warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
+					madsdata["Command"] = replace(madsdata["Command"], r"(julia)(.*-p)[\s[0-9]*|[0-9]*]" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) \\g<2> $nprocs_per_task_default"))
+					Mads.madswarn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m != nothing
-						madsdata["Command"] = replace(madsdata["Command"], r"(julia)", Base.SubstitutionString("\\g<1> -p $nprocs_per_task_default "))
-						warn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)")
+						madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) -p $nprocs_per_task_default "))
+						Mads.madswarn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 					end
 				end
+			else
+				madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1])"))
+				Mads.madswarn("Mads Command has been updated to account for the location of julia: $(madsdata["Command"])")
 			end
 			Mads.madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
 		end
@@ -117,7 +125,7 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 		end
 		currentdir = pwd()
 		"MADS command function"
-		function madscommandfunction(parameters::Associative) # MADS command function
+		function madscommandfunction(parameters::AbstractDict) # MADS command function
 			if simpleproblem && currentdir != abspath(madsproblemdir)
 				cd(madsproblemdir)
 				cwd = pwd()
@@ -143,11 +151,11 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						if attempt > 3
 							cd(currentdir)
 							if nrpocs() > 1 && myid() != 1
-								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
 								return nothing
 							else
-								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 							end
 						end
 						break
@@ -167,23 +175,23 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						else
 							out = madsdatacommandfunction(madsdata)
 						end
-						results = convert(DataStructures.OrderedDict{Any,Float64}, out)
+						results = convert(OrderedCollections.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
 						if !latest
 							latest = true; attempt = 0
 						else
 							if attempt > 3
-								warn(Base.stacktrace())
+								Mads.madswarn(Base.stacktrace())
 								cd(currentdir)
 								printerrormsg(errmsg)
 								if nrpocs() > 1 && myid() != 1
-									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 									madswarn("Process $(myid()) will be removed!")
 									remotecall(rmprocs, 1, myid())
 									return nothing
 								else
-									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(getipaddr()) * ")")!")
+									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 								end
 							end
 							sleep(attempt * 0.5)
@@ -196,12 +204,13 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 				trying = true
 				while trying
 					try
-						attempt += 1
 						runcmd(madsdata["Command"])
+						# runcmd(`ls -altr`; quiet=false, pipe=true)
 						trying = false
 					catch errmsg
+						runcmd(madsdata["Command"]; quiet=false, pipe=true)
 						if attempt > 3
-							warn(Base.stacktrace())
+							Mads.madswarn(Base.stacktrace())
 							cd(currentdir)
 							printerrormsg(errmsg)
 							if nrpocs() > 1 && myid() != 1
@@ -215,7 +224,9 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 						sleep(attempt * 0.5)
 					end
 				end
-				results = readmodeloutput(madsdata, obskeys=obskeys)
+				@show "DONE"
+				results = readmodeloutput(madsdata; obskeys=obskeys)
+				@show results
 			end
 			cd(cwd)
 			attempt = 0
@@ -229,7 +240,7 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 				catch errmsg
 					if attempt > 3
 						printerrormsg(errmsg)
-						warn(Base.stacktrace())
+						Mads.madswarn(Base.stacktrace())
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
@@ -250,7 +261,7 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")
 	end
 	"MADS command function with expressions"
-	function madscommandfunctionwithexpressions(paramsnoexpressions::Associative)
+	function madscommandfunctionwithexpressions(paramsnoexpressions::AbstractDict)
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		local out
 		try
@@ -260,8 +271,8 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 				out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 			catch errmsg
 				printerrormsg(errmsg)
-				warn("Failed Dir: $(pwd())")
-				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed (0.6)!")
+				Mads.madswarn("Failed Dir: $(pwd())")
+				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
 			end
 		end
 		return out
@@ -269,7 +280,7 @@ function makemadscommandfunction(madsdata_in::Associative; obskeys::Array{String
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata::Associative, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
+function makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), getrestart(madsdata), madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
 function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart::Union{String,Bool}, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
@@ -317,7 +328,7 @@ Returns:
 
 - restart directory where reusable model results will be stored
 """
-function getrestartdir(madsdata::Associative, suffix::String="")
+function getrestartdir(madsdata::AbstractDict, suffix::String="")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
@@ -372,9 +383,9 @@ Returns:
 function importeverywhere(filename::String)
 	code = read(filename, String)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
-	extracode = quiet ? "" : "else warn(\"$functionname already defined\")"
-	fullcode = "@everywhere begin if !isdefined(:$functionname) $code $extracode end end"
-	q = parse(fullcode)
+	extracode = quiet ? "" : "else Mads.madswarn(\"$functionname already defined\")"
+	fullcode = "using Distributed; @everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
+	q = Meta.parse(fullcode)
 	Core.eval(Main, q)
 	functionsymbol = Symbol(functionname)
 	q = Expr(:., :Main, Meta.quot(functionsymbol))
@@ -392,9 +403,9 @@ Return:
 
 - the prior log-likelihood of the model parameters listed in the MADS problem dictionary `madsdata`
 """
-function makelogprior(madsdata::Associative)
-	distributions = getparamdistributions(madsdata::Associative)
-	function logprior(params::Associative)
+function makelogprior(madsdata::AbstractDict)
+	distributions = getparamdistributions(madsdata::AbstractDict)
+	function logprior(params::AbstractDict)
 		loglhood = 0.
 		for paramname in getoptparamkeys(madsdata)
 			loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
@@ -415,9 +426,9 @@ Return:
 
 - the conditional log-likelihood
 """
-function makemadsconditionalloglikelihood(madsdata::Associative; weightfactor::Number=1.)
+function makemadsconditionalloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 	"MADS conditional log-likelihood functions"
-	function conditionalloglikelihood(predictions::Associative, observations::Associative)
+	function conditionalloglikelihood(predictions::AbstractDict, observations::AbstractDict)
 		loglhood = 0.
 		#TODO replace this sum of squared residuals approach with the distribution from the "dist" observation keyword if it is there
 		for obsname in keys(observations)
@@ -450,7 +461,7 @@ Returns:
 
 - the log-likelihood for a given set of model parameters
 """
-function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
+function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 	if haskey(madsdata, "LogLikelihood")
 		Mads.madsinfo("Log-likelihood function provided externally ...")
 		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
@@ -459,7 +470,7 @@ function makemadsloglikelihood(madsdata::Associative; weightfactor::Number=1.)
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		"MADS log-likelihood functions"
-		function madsloglikelihood(params::T1, predictions::T2, observations::T3) where {T1<:Associative, T2<:Associative, T3<:Associative}
+		function madsloglikelihood(params::T1, predictions::T2, observations::T3) where {T1<:AbstractDict, T2<:AbstractDict, T3<:AbstractDict}
 			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
 	end

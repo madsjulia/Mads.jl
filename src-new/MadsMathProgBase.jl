@@ -13,7 +13,7 @@ Define `MadsModel` type applied for Mads execution using `MathProgBase`
 $(DocumentFunction.documentfunction(madsmathprogbase;
 argtext=Dict("madsdata"=>"MADS problem dictionary [default=`Dict()`]")))
 """
-function madsmathprogbase(madsdata::Associative=Dict())
+function madsmathprogbase(madsdata::AbstractDict=Dict())
 	f = makemadscommandfunction(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
@@ -22,7 +22,7 @@ function madsmathprogbase(madsdata::Associative=Dict())
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
-	index = find(isnan.(targets))
+	index = findall(isnan.(targets))
 	weights[index] = 0
 	targets[index] = 0
 	if ssdr
@@ -87,7 +87,7 @@ Returns:
 
 - forward model, gradient, objective functions
 """
-function makempbfunctions(madsdata::Associative)
+function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Objective function for MathProgBase optimization
 	"""
@@ -98,13 +98,13 @@ function makempbfunctions(madsdata::Associative)
 	"""
 	Objective function gradient for MathProgBase optimization
 	"""
-	function grad_o_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0))
+	function grad_o_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(undef, 0))
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
 		of = o_mpb(arrayparameters)
 		fevals = g_mpb(arrayparameters, dx=dx)
-		grad_o = Array{Float64}(nP)
+		grad_o = Array{Float64}(undef, nP)
 		for i in 1:nP
 			of_i = o_function(fevals[i])
 			grad_o = (of_j - o) / dx[i]
@@ -120,7 +120,7 @@ function makempbfunctions(madsdata::Associative)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array{Float64}(0)
+		results = Array{Float64}(undef, 0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end

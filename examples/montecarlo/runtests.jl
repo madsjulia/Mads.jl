@@ -1,7 +1,7 @@
 import Mads
 import JLD2
 import FileIO
-import Base.Test
+import Test
 
 Mads.madsinfo("Monte Carlo analysis ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
@@ -11,7 +11,7 @@ end
 
 @Mads.stderrcapture function run_monte_carlo()
 	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
-	srand(2015)
+	Random.seed!(2015)
 	results = Mads.montecarlo(md; N=10)
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
@@ -22,10 +22,10 @@ end
 end
 
 # Test Mads.montecarlo(md; N=10) against saved results
-@Base.Test.testset "Monte Carlo" begin
-	results = run_monte_carlo()
+@Test.testset "Monte Carlo" begin
+	resultsmcmc = run_monte_carlo()
 	good_results = FileIO.load(joinpath(workdir, "test_results", "montecarlo.jld2"), "results")
-	@Base.Test.test results == good_results
+	@Test.test resultsmcmc == good_results
 end
 
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))
