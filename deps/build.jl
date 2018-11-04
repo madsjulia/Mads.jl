@@ -14,7 +14,7 @@ else
 		println(errmsg)
 		@warn("Python pip is not installed!")
 		@info("Downloading & installing python pip ...")
-		get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
+		global get_pip = joinpath(dirname(@__FILE__), "get-pip.py")
 		download("https://bootstrap.pypa.io/get-pip.py", get_pip)
 		run(`$(PyCall.python) $get_pip --user`)
 		rm("$get_pip")
@@ -23,7 +23,7 @@ else
 	try
 		@info("Installing Python YAML & MatPlotLib using pip ...")
 		Core.eval(Mads, :(@PyCall.pyimport pip))
-		args = String[]
+		global args = String[]
 		if haskey(ENV, "http_proxy")
 			push!(args, "--proxy")
 			push!(args, ENV["http_proxy"])
