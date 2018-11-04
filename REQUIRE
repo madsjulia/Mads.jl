@@ -16,6 +16,7 @@ Gadfly 0.6.5
 Compose 0.5.2
 Cairo
 Fontconfig
+Colors
 Measures
 Images
 QuartzImageIO
