@@ -45,7 +45,7 @@ Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions`
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-mads.mads"))
 mfor = Mads.forward(md)
 
-if VERSION < v"1.0.0"
+if VERSION < v"0.7.0"
 
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction+l1.mads"))
