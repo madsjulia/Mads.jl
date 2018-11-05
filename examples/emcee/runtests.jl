@@ -2,8 +2,12 @@ import Mads
 import AffineInvariantMCMC
 import Test
 import ProgressMeter
+import Random
 
 Random.seed!(2017)
+
+Mads.veryquieton()
+Mads.graphoff()
 
 numdims = 5
 numwalkers = 100
@@ -32,4 +36,8 @@ burnin = 100
 		end
 	end
 end
+
+Mads.veryquietoff()
+Mads.graphon()
+
 :passed

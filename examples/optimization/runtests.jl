@@ -1,6 +1,9 @@
 import Mads
 import Test
 
+Mads.veryquieton()
+Mads.graphoff()
+
 if VERSION >= v"0.7"
 	using Distributed
 end
@@ -62,3 +65,8 @@ if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "M
 end
 
 clean_directory()
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed

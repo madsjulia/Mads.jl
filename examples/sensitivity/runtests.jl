@@ -47,5 +47,7 @@ Mads.stdoutcaptureoff();
 A=[[1,2] [2,3]]
 Mads.savesaltellirestart(A, "A", workdir)
 Mads.loadsaltellirestart!(A, "A", workdir)
-Mads.rmfile(joinpath(workdir, "A_1.jld"))
+Mads.rmfile(joinpath(workdir, "A_1.jld2"))
 Mads.rmdir(joinpath(cwd, "sobol_restart"))
+
+:passed

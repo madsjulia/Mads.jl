@@ -28,4 +28,5 @@ minimizer_l2, results = Mads.minimize(func2, [1.5, 1.5]; upperbounds=[4.,2.], lo
 	@Test.test isapprox(minimizer_l2[1], 2.016; atol=1e-2)
 	@Test.test isapprox(minimizer_l2[2], 0.972; atol=1e-2)
 end
+
 :passed

@@ -3,6 +3,9 @@ import JLD2
 import FileIO
 import Test
 
+Mads.veryquieton()
+Mads.graphoff()
+
 Mads.madsinfo("Monte Carlo analysis ...")
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
@@ -29,3 +32,8 @@ end
 end
 
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed

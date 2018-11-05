@@ -19,4 +19,5 @@ obsdict = Mads.ins_obs(instructionfilename, inputfilename)
 	   i += 1
 	end
 end
+
 :passed

@@ -5,6 +5,9 @@ import FileIO
 import Test
 import Suppressor
 
+Mads.veryquieton()
+Mads.graphoff()
+
 @Mads.tryimport Ipopt
 
 if !isdefined(Mads, :Ipopt)
@@ -122,3 +125,8 @@ else
 		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 	end
 end
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed
