@@ -5,6 +5,9 @@ import FileIO
 using SharedArrays
 using Statistics
 
+Mads.veryquieton()
+Mads.graphoff()
+
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO
 @Mads.tryimportmain OrderedCollections
@@ -185,3 +188,8 @@ end
 @Mads.stdouterrcapture Mads.removesource!(md)
 
 Mads.rmdir("w01-w13a_w20a_restart")
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed
