@@ -122,4 +122,5 @@ svrmodels
 examples/anasol/test.mads
 examples/model_coupling_*
 examples/contamination/w01-w13a_w20a-w13a_w20a*.svg
+examples/sensitivity/*.jld2
 */.ipynb_checkpoints/*
