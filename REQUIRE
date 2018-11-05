@@ -32,6 +32,7 @@ DataFrames
 OrdinaryDiffEq
 NMF
 BlackBoxOptim
+Optim
 LsqFit 0.3.0
 StatsBase 0.15
 JuMP 0.17

@@ -3,12 +3,20 @@ import FileIO
 import JLD2
 import Test
 
+Mads.veryquieton()
+Mads.graphoff()
+
 if VERSION >= v"0.7"
 	using Distributed
 	import OrderedCollections
 else
-	import OrderedCollections
+	import DataStructures
 end
+
+@Mads.tryimportmain JLD2
+@Mads.tryimportmain FileIO
+@Mads.tryimportmain OrderedCollections
+@Mads.tryimportmain DataStructures
 
 workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "examples", "svr")
@@ -77,5 +85,8 @@ svrclean()
 
 Mads.rmdir(joinpath(workdir, "svrmodels"))
 Mads.rmdir("svrmodels")
+
+Mads.veryquietoff()
+Mads.graphon()
 
 :passed

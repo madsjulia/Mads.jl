@@ -4,6 +4,9 @@ import FileIO
 import Test
 using Distributed
 
+Mads.veryquieton()
+Mads.graphoff()
+
 Mads.madsinfo("Bayesian sampling ...")
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
@@ -72,3 +75,8 @@ good_mcmcchains_emcee = FileIO.load(joinpath(workdir, "test_results", "mcmcchain
 end
 
 Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed

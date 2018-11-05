@@ -5,6 +5,9 @@ import FileIO
 import Test
 import OrdinaryDiffEq
 
+Mads.veryquieton()
+Mads.graphoff()
+
 # function to create a function for the ODE solver
 @Mads.stderrcapture function makefunc(parameterdict::OrderedCollections.OrderedDict)
 	# ODE parameters
@@ -74,3 +77,8 @@ if isdefined(Mads, :OrdinaryDiffEq) && Mads.pkgversion("OrdinaryDiffEq") >= v"3.
 else
 	@warn("OrdinaryDiffEq.jl is missing")
 end
+
+Mads.veryquietoff()
+Mads.graphon()
+
+:passed
