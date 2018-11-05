@@ -1,6 +1,7 @@
 import Mads
 import Test
 import Random
+using Distributed
 
 @Mads.stderrcapture function parallel_findpi(n)
 	# Simple Monte Carlo to estimate pi
@@ -46,17 +47,19 @@ end
 	isapprox(psi, 0.0, atol=1e-6)
 end
 
-if !haskey(ENV, "MADS_TRAVIS")
-	addprocs(2)
-end
+# if !haskey(ENV, "MADS_TRAVIS")
+# 	addprocs(2)
+# end
 
 @Test.testset "Parallel" begin
-	# @Test.test parallel_findpi(100000)
+	@Test.test parallel_findpi(100000)
 	@Test.test time_dilation()
 	@Test.test eulers_equation()
 	@Test.test schrodinger()
 end
 
-if !haskey(ENV, "MADS_TRAVIS")
-	rmprocs(workers())
-end
+:passed
+
+# if !haskey(ENV, "MADS_TRAVIS")
+# 	rmprocs(workers())
+# end
