@@ -25,9 +25,10 @@ JSON
 JLD2
 FileIO
 ProgressMeter
+Suppressor
 Distributions
 OrderedCollections
-Suppressor
+DataStructures
 DataFrames
 OrdinaryDiffEq
 NMF
