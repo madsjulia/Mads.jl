@@ -6,7 +6,7 @@ cd(workdir)
 
 @Mads.stderrcapture if Sys.isapple()
 	const embed_c_mylib = joinpath(workdir, "libmy.dylib")
-elseif is_linux()
+elseif Sys.islinux()
 	const embed_c_mylib = joinpath(workdir, "libmy.so")
 else
 	const embed_c_mylib = ""
