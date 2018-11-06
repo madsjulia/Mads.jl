@@ -77,7 +77,7 @@ function test(testname::String=""; madstest::Bool=true)
 				@elapsed include(file)
 			else
 				Core.eval(Mads, :(@tryimport $(Symbol(testname))))
-				if isdefined(Symbol(testname))
+				if isdefined(Mads, Symbol(testname))
 					printstyled("* $testname testing ...\n", color=:cyan)
 					file = joinpath(dirname(pathof(eval(Symbol(testname)))), "..", "test", "runtests.jl")
 					if isfile(file)

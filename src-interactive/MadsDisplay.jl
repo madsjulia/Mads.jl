@@ -12,7 +12,7 @@ function display(filename::String)
 		@warn("File `$filename` is missing!")
 		return
 	end
-	if isdefined(Mads, :TerminalExtensions) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
+	if isdefined(Main, :TerminalExtensions) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
 		trytoopen = false
 		ext = lowercase(Mads.getextension(filename))
 		if ext == "svg"

@@ -29,7 +29,7 @@ function madsdisplay(filename::String)
 		@warn("File `$filename` is missing!")
 		return
 	end
-	if isdefined(Mads, :TerminalExtensions)
+	if isdefined(Main, :TerminalExtensions)
 		trytoopen = false
 		ext = lowercase(madsgetextension(filename))
 		if ext == "svg"
