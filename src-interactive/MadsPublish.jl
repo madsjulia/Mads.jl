@@ -13,7 +13,7 @@ Returns:
 - filtered modules
 """
 function required(modulename::String="Mads", filtermodule::String="")
-	filename = joinpath(dirname(pathof(madsmodule)), "..", "REQUIRE")
+	filename = joinpath(dirname(pathof(eval(Symbol(madsmodule))))), "..", "REQUIRE")
 	if isfile(filename)
 		modules = readdlm(filename)
 		if filtermodule != ""
@@ -99,7 +99,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 		if git
 			@info("Checking out $(i) ...")
 			cwd = pwd()
-			d = joinpath(dirname(pathof(i)), "..")
+			d = joinpath(dirname(pathof(eval(Symbol(i))))), "..")
 			if isdir(d)
 				cd(d)
 			else
@@ -142,7 +142,7 @@ function push(modulename::String="")
 	for i in modulenames
 		@info("Pushing $(i) ...")
 		cwd = pwd()
-		d = joinpath(dirname(pathof(i)), "..")
+		d = joinpath(dirname(pathof(eval(Symbol(i))))), "..")
 		if isdir(d)
 			cd(d)
 		else
@@ -173,7 +173,7 @@ function diff(modulename::String="")
 	end
 	for i in modulenames
 		cwd = pwd()
-		d = joinpath(dirname(pathof(i)), "..")
+		d = joinpath(dirname(pathof(eval(Symbol(i))))), "..")
 		if isdir(d)
 			cd(d)
 		else
@@ -231,7 +231,7 @@ function commit(commitmsg::String, modulename::String="")
 	for i in modulenames
 		@info("Commiting changes in $(i) ...")
 		cwd = pwd()
-		d = joinpath(dirname(pathof(i)), "..")
+		d = joinpath(dirname(pathof(eval(Symbol(i))))), "..")
 		if isdir(d)
 			cd(d)
 		else
@@ -359,7 +359,7 @@ argtext=Dict("madsmodule"=>"mads module name",
 function untag(madsmodule::String, version::String)
 	cwd = pwd()
 	@info("Git untag $(madsmodule) ...")
-	d = joinpath(dirname(pathof(madsmodule)), "..")
+	d = joinpath(dirname(pathof(eval(Symbol(madsmodule))))), "..")
 	if isdir(d)
 		cd(d)
 	else
