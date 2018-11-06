@@ -63,7 +63,7 @@ function test(testname::String=""; madstest::Bool=true)
 		@info("Mads modules testing:")
 		for i in madsmodules[2:end]
 			printstyled("* $i testing ...\n", color=:cyan)
-			@elapsed include(joinpath(dirname(pathof(eval(Symbol(i)))), "test", "runtests.jl"))
+			@elapsed include(joinpath(dirname(pathof(eval(Symbol(i)))), "..", "test", "runtests.jl"))
 		end
 	else
 		file = joinpath(d, "examples", testname, "runtests.jl")
@@ -79,7 +79,7 @@ function test(testname::String=""; madstest::Bool=true)
 				Core.eval(Mads, :(@tryimport $(Symbol(testname))))
 				if isdefined(Symbol(testname))
 					printstyled("* $testname testing ...\n", color=:cyan)
-					file = joinpath(dirname(pathof(eval(Symbol(testname)))), "test", "runtests.jl")
+					file = joinpath(dirname(pathof(eval(Symbol(testname)))), "..", "test", "runtests.jl")
 					if isfile(file)
 						@elapsed include(file)
 					else
