@@ -10,7 +10,7 @@ Mads.graphoff()
 
 @Mads.tryimport Ipopt
 
-if !isdefined(Mads, :Ipopt)
+if !isdefined(Mads, :Ipopt) && !isdefined(Mads, :NMFipopt)
 	@warn("Ipopt not available; blind source separation test (BSS) skipped!")
 else
 	workdir = joinpath(Mads.madsdir, "examples", "blind_source_separation")
