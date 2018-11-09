@@ -1,8 +1,8 @@
 import DocumentFunction
 import NMF
-import JuMP
 import LsqFit
-@Mads.tryimport Ipopt
+import JuMP
+import Ipopt
 
 """
 Non-negative Matrix Factorization using NMF
