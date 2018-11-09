@@ -2,7 +2,12 @@ import Mads
 import Test
 
 Mads.veryquieton()
-Mads.graphon()
+Mads.graphoff()
+
+ENV["MADS_NO_GADFLY"] = ""
+ENV["MADS_NO_PYPLOT"] = ""
+ENV["MADS_NO_DISPLAY"] = ""
+@warn("Mads plotting is disabled")
 
 @info("Running MADS tests:")
 
@@ -35,6 +40,6 @@ for madstest in examples
 end
 
 Mads.veryquietoff()
-Mads.graphoff()
+Mads.graphon()
 
 :passed
