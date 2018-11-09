@@ -262,7 +262,8 @@ if !haskey(ENV, "MADS_TRAVIS")
 	include(joinpath("..", "src-external", "MadsParsers.jl"))
 	include(joinpath("..", "src-old", "MadsCMads.jl"))
 	@tryimport JuMP
-	if isdefined(Mads, :JuMP)
+	@tryimport Ipopt
+	if isdefined(Mads, :JuMP) && isdefined(Mads, :Ipopt)
 		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
 		include(joinpath("..", "src-new", "MadsBSS.jl"))
 		include(joinpath("..", "src-new", "MadsMathProgBase.jl"))

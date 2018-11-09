@@ -4,10 +4,15 @@ import Test
 Mads.veryquieton()
 Mads.graphoff()
 
-ENV["MADS_NO_GADFLY"] = ""
-ENV["MADS_NO_PYPLOT"] = ""
-ENV["MADS_NO_DISPLAY"] = ""
-@warn("Mads plotting is disabled")
+try
+	Gadfly.draw(Gadfly.PNG("test.png", 2Gadfly.inch, 1Gadfly.inch, dpi=100), Gadfly.plot(x=rand(10), Gadfly.Geom.histogram()))
+	Mads.rmfile("test.png")
+catch
+	ENV["MADS_NO_GADFLY"] = ""
+	ENV["MADS_NO_PYPLOT"] = ""
+	ENV["MADS_NO_DISPLAY"] = ""
+	@warn("Mads plotting is disabled; Gadfly fails!")
+end
 
 @info("Running MADS tests:")
 
