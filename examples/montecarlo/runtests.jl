@@ -2,6 +2,12 @@ import Mads
 import JLD2
 import FileIO
 import Test
+import DataStructures
+
+@Mads.tryimportmain JLD2
+@Mads.tryimportmain FileIO
+@Mads.tryimportmain OrderedCollections
+@Mads.tryimportmain DataStructures
 
 Mads.veryquieton()
 Mads.graphoff()
