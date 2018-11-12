@@ -101,17 +101,17 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
 				if m != nothing
 					madsdata["Command"] = replace(madsdata["Command"], r"(julia)(.*-p)[\s[0-9]*|[0-9]*]" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) \\g<2> $nprocs_per_task_default"))
-					Mads.madswarn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
+					Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m != nothing
 						madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) -p $nprocs_per_task_default "))
-						Mads.madswarn("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
+						Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 					end
 				end
 			else
 				madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1])"))
-				Mads.madswarn("Mads Command has been updated to account for the location of julia: $(madsdata["Command"])")
+				Mads.madsinfo("Mads Command has been updated to account for the location of julia: $(madsdata["Command"])")
 			end
 			Mads.madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
 		end
