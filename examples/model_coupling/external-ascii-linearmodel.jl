@@ -1,6 +1,6 @@
 #TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 paramfile = open("parameters.dat")
-parameters = map(float, readlines(paramfile))
+parameters = Meta.parse.(readlines(paramfile))
 close(paramfile)
 
 f(t) = parameters[1] * t - parameters[2] # a * t - b; linear model

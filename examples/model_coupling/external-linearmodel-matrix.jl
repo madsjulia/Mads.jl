@@ -1,6 +1,4 @@
-if VERSION >= v"0.7"
-	using DelimitedFiles
-end
+using DelimitedFiles
 
 i = open("matrix.dat", "r")
 param = readdlm(i)
@@ -14,4 +12,4 @@ f2(t) = a2 * t - b2 # a * t - b
 times = collect(1:14)
 p1 = f1.(times)
 p2 = f2.(times)
-writedlm("model_output.dat", [times times p1 p2])
+DelimitedFiles.writedlm("model_output.dat", [times times p1 p2])

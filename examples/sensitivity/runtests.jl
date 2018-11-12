@@ -3,9 +3,7 @@ import JSON
 import OrderedCollections
 import Test
 
-if VERSION >= v"0.7"
-	using Distributed
-end
+using Distributed
 
 cwd = pwd()
 workdir = Mads.getmadsdir()

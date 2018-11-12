@@ -1,9 +1,7 @@
 import Mads
 import Test
 
-if VERSION >= v"0.7"
-	using Distributed
-end
+using Distributed
 
 callbacksucceeded = false
 @Mads.stderrcapture function callback(x_best::Vector, of::Number, lambda::Number)
