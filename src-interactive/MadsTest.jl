@@ -30,18 +30,6 @@ function cleancoverage()
 end
 
 """
-Reload Mads modules
-
-$(DocumentFunction.documentfunction(reload))
-"""
-function reload()
-	for i in madsmodules[end:-1:1]
-		println("* $i reloading ...")
-		Base.reload(i)
-	end
-end
-
-"""
 Perform Mads tests (the tests will be in parallel if processors are defined; tests use the current Mads version in the workspace; `reload("Mads.jl")` if needed)
 
 $(DocumentFunction.documentfunction(test;
