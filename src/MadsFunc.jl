@@ -96,9 +96,6 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
-			if VERSION >= v"1.0.0"
-				Mads.madswarn("Calling julia from julia is not allowed!")
-			end
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
 			npt = m != nothing ? Meta.parse(Int, m.captures[1]) : 1
 			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
@@ -224,9 +221,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 						sleep(attempt * 0.5)
 					end
 				end
-				@show "DONE"
 				results = readmodeloutput(madsdata; obskeys=obskeys)
-				@show results
 			end
 			cd(cwd)
 			attempt = 0

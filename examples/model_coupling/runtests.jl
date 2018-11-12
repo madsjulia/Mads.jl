@@ -47,8 +47,6 @@ Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions`
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-mads.mads"))
 mfor = Mads.forward(md)
 
-if VERSION < v"0.7.0"
-
 Mads.madsinfo("External coupling using `Command`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel+template+instruction+l1.mads"))
 teforl1 = Mads.forward(md)
@@ -62,6 +60,7 @@ cwd = pwd()
 cd(workdir)
 
 md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
+Mads.forward(md)
 Mads.localsa(md, par=[1.,2.])
 # Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
 Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
@@ -105,11 +104,10 @@ if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && Mads.pyyaml != 
 	@Test.test yfor == jfor
 end
 
-# TODO ASCII does NOT work; `parameters` are not required to be Ordered Dictionary
 Mads.madsinfo("External coupling using ASCII ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-ascii.mads"))
-aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 afor = Mads.forward(md)
+# aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
 cd(workdir)
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
@@ -122,12 +120,11 @@ Mads.rmfile("external-linearmodel-matrix.inst")
 cd(cwd)
 
 @Test.testset "External" begin
+	@Test.test afor == sfor
 	@Test.test jfor == sfor
 	@Test.test efor == sfor
 	@Test.test jfor == ifor
 	@Test.test ro1 == ro2
-end
-
 end
 
 Mads.rmdir(joinpath(workdir, "external-jld_restart"))

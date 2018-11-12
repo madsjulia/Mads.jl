@@ -6,12 +6,8 @@ import Test
 Mads.veryquieton()
 Mads.graphoff()
 
-if VERSION >= v"0.7"
-	using Distributed
-	import OrderedCollections
-else
-	import DataStructures
-end
+using Distributed
+import DataStructures
 
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO

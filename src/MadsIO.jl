@@ -1007,6 +1007,10 @@ Returns:
 """
 function ins_obs(instructionfilename::String, modeloutputfilename::String)
 	instfile = open(instructionfilename, "r")
+	if !isfile(modeloutputfilename)
+		throw("File $modeloutputfilename is missing!")
+		return nothing
+	end
 	obsfile = open(modeloutputfilename, "r")
 	obslineitr = eachline(obsfile)
 	iter_result = iterate(obslineitr)
@@ -1039,9 +1043,8 @@ function ins_obs(instructionfilename::String, modeloutputfilename::String)
 			if obslineoccursin(obsline, regexs)
 				merge!(obsdict, regexs2obs(obsline, regexs, obsnames, getparamhere))
 				gotmatch = true
-			else
-				iter_result = iterate(obslineitr, state)
 			end
+			iter_result = iterate(obslineitr, state)
 		end
 		if !gotmatch
 			Mads.madserror("Did not get a match for instruction file ($instructionfilename) line:\n$instline")
