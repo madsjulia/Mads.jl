@@ -92,7 +92,7 @@ MADS examples
 In Julia REPL, do the following commands:
 
 ```julia
-reload("Mads")
+import Mads
 ```
 
 To explore getting-started instructions, execute:
