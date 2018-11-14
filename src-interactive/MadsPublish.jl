@@ -382,6 +382,10 @@ Create web documentation files for Mads functions
 $(DocumentFunction.documentfunction(create_documentation))
 """
 function create_documentation()
+	for i in madsmodules
+		Core.eval(Main, :(@Mads.tryimportmain $(Symbol(i))))
+	end
+
 	Documenter.makedocs(root = joinpath(dirname(pathof(Mads)), "..", "docs"), doctest=false, clean=true)
 
 	d = pwd()
