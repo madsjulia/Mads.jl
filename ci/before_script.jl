@@ -27,8 +27,8 @@ catch
 	ENV["MADS_NO_PYPLOT"] = ""
 end
 
-@info "Pkg.add(Pkg.PackageSpec(url=pwd()))"
-Pkg.add(Pkg.PackageSpec(url=pwd()))
+@info "Pkg.add(Pkg.PackageSpec(url=joinpath(pwd(), "..")))"
+Pkg.add(Pkg.PackageSpec(url=joinpath(pwd(), "..")))
 
 @info "Pkg.build(Mads)"
 Pkg.build("Mads")
