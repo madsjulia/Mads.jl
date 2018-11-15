@@ -1,3 +1,15 @@
+if lowercase(get(ENV, "CI", "false")) == "true"
+	let
+		setup_code = Base.load_path_setup_code()
+		path = joinpath(@__DIR__, "..", "ci", "before_script.jl")
+		code = """
+		$setup_code
+		include("$(escape_string(path))")
+		"""
+		run(`$(Base.julia_cmd()) -e $code`)
+	end
+end
+
 import Mads
 import Test
 
@@ -9,9 +21,7 @@ try
 	Mads.rmfile("test.png")
 catch
 	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
-	ENV["MADS_NO_DISPLAY"] = ""
-	@warn("Mads plotting is disabled; Gadfly fails!")
+	@warn("Gadfly plotting is disabled; Gadfly fails!")
 end
 
 @info("Running MADS tests:")
