@@ -4,24 +4,25 @@ os:
   - linux
 julia:
   - 0.7
+  - 1.0
 notifications:
   email: false
-addons:
-  apt:
-    packages:
-      - hdf5-tools
-      - python-numpy
-      - python3-numpy
-      - python-matplotlib
-      - python3-matplotlib
-env:
-  global:
-    - MADS_TRAVIS=""
-    - PYCALL_DEBUG_BUILD="yes"
-  matrix:
-    - PYTHON=python  # python 2.7
-    # - PYTHON=python3 # python 3.6
-    # - PYTHON=Conda # not actually a python version, here to test Conda.jl's python
+# addons:
+#   apt:
+#     packages:
+#       - hdf5-tools
+#       - python-numpy
+#       - python3-numpy
+#       - python-matplotlib
+#       - python3-matplotlib
+# env:
+#   global:
+#     - MADS_TRAVIS=""
+#     - PYCALL_DEBUG_BUILD="yes"
+#   matrix:
+#     - PYTHON=python  # python 2.7
+#     # - PYTHON=python3 # python 3.6
+#     # - PYTHON=Conda # not actually a python version, here to test Conda.jl's python
 # matrix:
 #   exclude:
 #     - os: osx
