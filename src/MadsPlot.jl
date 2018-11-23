@@ -1113,7 +1113,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Mads.colors, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1))
+function plotseries(X::Array, filename::String=""; format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, dpi::Integer=Mads.dpi, colors::Array{String,1}=Mads.colors, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, colorkey::Bool=true)
 
 	glog = []
 	if logx
@@ -1123,11 +1123,6 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		end
 		if xmax == nothing
 			xmax = log10(findlast(.!isnan.(vec(sumnan(X, 2)))))
-			# if xmin != nothing
-			# 	dx = (xmax - xmin)/10
-			# 	xmin -= dx
-			# 	xmax += dx
-			# end
 		end
 	end
 	if logy
@@ -1146,8 +1141,9 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		end
 	end
 
-	nT = size(X)[1]
-	nS = size(X)[2]
+	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
+	nT = size(X, 1)
+	nS = size(X, 2)
 	if nT == 0 || nS == 0
 		return
 	end
@@ -1157,23 +1153,24 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		vsize_plot = vsize
 		ncolors = length(colors)
 		if ncolors == 0 || ncolors < nS
+			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : [Gadfly.Theme(key_position = :none)]
 			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
-				Gadfly.Geom.line,
-				Gadfly.Theme(line_width=linewidth),
+				geometry...,
 				color = ["$(names[i])" for j in 1:nT])
 				for i in 1:nS]..., glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
-				Gadfly.Guide.ColorKey(title=keytitle),
+				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		else
+			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])] : [Gadfly.Theme(key_position = :none)]
 			pS = Gadfly.plot([Gadfly.layer(x=xaxis, y=X[:,i],
-				Gadfly.Geom.line,
-				Gadfly.Theme(line_width=linewidth, default_color=Base.parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
+				geometry...,
+				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=parse(Colors.Colorant, colors[(i-1)%ncolors+1])))
 				for i in 1:nS]..., glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
-				Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS]),
+				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
 	else
@@ -1181,7 +1178,7 @@ function plotseries(X::Matrix, filename::String=""; format::String="", xtitle::S
 		vsize_plot = vsize / 2 * nS
 		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], glog..., Gadfly.Geom.line, Gadfly.Theme(line_width=linewidth), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
+			pp[i] = Gadfly.plot(x=xaxis, y=X[:,i], glog..., geometry..., Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 		end
 		pS = Gadfly.vstack(pp...)
 	end
