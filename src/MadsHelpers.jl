@@ -152,6 +152,15 @@ function graphoff()
 end
 
 """
+Set image dpi
+
+$(DocumentFunction.documentfunction(setdpi))
+"""
+function setdpi(dpi::Integer)
+	global dpi = dpi;
+end
+
+"""
 Turn on the generation of MADS tests (dangerous)
 
 $(DocumentFunction.documentfunction(create_tests_on))
