@@ -156,8 +156,8 @@ Set image dpi
 
 $(DocumentFunction.documentfunction(setdpi))
 """
-function setdpi(n::Integer)
-	global dpi = n;
+function setdpi(dpi::Integer)
+	global imagedpi = dpi;
 end
 
 """
