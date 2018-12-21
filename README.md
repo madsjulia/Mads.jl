@@ -119,16 +119,9 @@ include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")
 
 to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
 
-Developers
-==========
-
-* [Velimir (monty) Vesselinov](http://www.lanl.gov/orgs/ees/staff/monty) [(publications)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ)
-* [Daniel O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(publications)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
-* [see also](https://github.com/madsjulia/Mads.jl/graphs/contributors)
-
 Publications, Presentations, Projects
 =====================================
 
-* [mads.lanl.gov/](http://mads.lanl.gov/)
-* [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
+* [mads.gitlab.io/](mads.gitlab.io)
+* [monty.gitlab.io](monty.gitlab.io)
 
