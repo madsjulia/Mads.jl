@@ -401,11 +401,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	failed = false
 	while(~failed && ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			J = Array{Float64}(undef, 0, 0)
+			global J
 			try
-				J = g(x, center=fcur)
+				global J = g(x, center=fcur)
 			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
-				J = g(x)
+				global J = g(x)
 			end
 			if any(isnan, J)
 				Mads.madswarn("Provided Jacobian matrix contains NaN's!")
