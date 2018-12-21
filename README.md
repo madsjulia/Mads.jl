@@ -1,6 +1,8 @@
 MADS (Model Analysis & Decision Support)
 =======================================
 
+![logo](logo/mads_black_swan_logo_big_text_new_3inch.png)
+
 [![julialang](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
 [![julialang](http://pkg.julialang.org/badges/Mads_0.6.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.6)
 [![julialang](http://pkg.julialang.org/badges/Mads_0.7.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.7)
