@@ -63,13 +63,14 @@ end
 if isdefined(Mads, :Gadfly)
 	function display(p::Gadfly.Plot)
 		if graphoutput
-			Base.display(p)
-			println()
+			Gadfly.draw(Gadfly.PNG(), p)
+			print("\r")
 		end
 	end
 	function display(p::Compose.Context)
 		if graphoutput
 			Compose.draw(Compose.PNG(), p)
+			print("\r")
 		end
 	end
 end
