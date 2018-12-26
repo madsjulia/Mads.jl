@@ -54,7 +54,7 @@ LA-CC-15-080
 Publications, Presentations, Projects
 -------------------------------------
 
-* [mads.gitlab.io/](http://mads.gitlab.io)
+* [mads.gitlab.io](http://mads.gitlab.io)
 * [mads.lanl.gov](http://mads.lanl.gov)
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
