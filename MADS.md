@@ -51,15 +51,10 @@ Builds & Tests
 
 LA-CC-15-080
 
-Developers
-----------
-
-* [Velimir (monty) Vesselinov](http://ees.lanl.gov/monty) [(publications)](http://scholar.google.com/citations?user=sIFHVvwAAAAJ) [(git)](https://montyv.github.io)[(hub)](https://montyvesselinov.github.io)
-* [Daniel O'Malley](http://www.lanl.gov/expertise/profiles/view/daniel-o'malley) [(publications)](http://scholar.google.com/citations?user=rPzCVjEAAAAJ)
-* [see also](https://github.com/madsjulia/Mads.jl/graphs/contributors)
-
 Publications, Presentations, Projects
 -------------------------------------
 
-* [mads.lanl.gov/](http://mads.lanl.gov/)
+* [mads.gitlab.io/](http://mads.gitlab.io)
+* [mads.lanl.gov](http://mads.lanl.gov)
+* [monty.gitlab.io](monty.gitlab.io)
 * [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
