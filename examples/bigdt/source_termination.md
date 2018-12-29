@@ -61,7 +61,7 @@ Bayesian Information Gap Decision Theory (BIG-DT).
 * [Grasinger, Matthew, et al. "Decision analysis for robust CO 2 injection: Application of Bayesian-Information-Gap Decision Theory." International Journal of Greenhouse Gas Control 49 (2016): 73-80.](http://www.sciencedirect.com/science/article/pii/S1750583616300664?np=y)
 * [O'Malley, D., and V. V. Vesselinov. "A combined probabilistic/nonprobabilistic decision analysis for contaminant remediation." SIAM/ASA Journal on Uncertainty Quantification 2.1 (2014): 607-621.](http://epubs.siam.org/doi/abs/10.1137/140965132)
 * [O'Malley, D., and V. V. Vesselinov. "Groundwater remediation using the information gap decision theory." Water Resources Research 50.1 (2014): 246-256.](http://onlinelibrary.wiley.com/doi/10.1002/2013WR014718/full)
- 
+
 
 ### Horizon (level) of uncertainty
 
@@ -75,7 +75,7 @@ The set of variances is
 
 $$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$
 
-where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22) and $h$ is the horizon of uncertainty.
+where $$σ^2_0$$ is the nominal variance (500; the nominal standard deviation $$σ_0$$ is ~22) and $$h$$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ### Robustness
