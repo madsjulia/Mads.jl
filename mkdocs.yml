@@ -21,6 +21,8 @@ pages:
   - Decision Analysis: Examples/bigdt/source_termination/index.md
   - Information Gap Analysis: Examples/infogap/index.md
   - Bayesian Sampling: Examples/bayesian_sampling/index.md
+  - Machine Learning: Examples/machine_learning/index.md
+  - Contaminant Source Identification: Examples/contaminant_source_identification/index.md
   - Blind Source Separation: Examples/blind_source_separation/index.md
   - Contaminant Transport: Examples/contamination/index.md
   - ODE Analysis: Examples/ode/index.md
@@ -55,9 +57,10 @@ markdown_extensions:
 #      enable_dollar_delimiter: True #for use of inline $..$
 
 extra_javascript:
-  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
-#  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-#  - assets/mathjaxhelper.js
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML
+  # - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
+  # - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  # - assets/mathjaxhelper.js
 
 extra:
   palette:
