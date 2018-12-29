@@ -1,6 +1,6 @@
-## Blind Source Separation
+## Blind Source Separation using Unsupervised Machine Learning
 
-Frequently there are several different physical phenomena or mechanisms (sources/signals) than may can cause transients in the observed data.
+Frequently, there are several different physical phenomena or mechanisms (sources/signals) than may can cause transients in the observed data.
 
 For example, in the case of water-level (hydraulic pressure) data, these might be barometric pressure fluctuations, tidal effects, pumping effects, etc.
 In the case of geochemical concentrations, these may represent a mixture of different groundwater types (groundwater sources) with different initial geochemical compositions.
