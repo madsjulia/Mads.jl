@@ -10,7 +10,7 @@ MADS can execute a wide range of data- and model-based analyses:
 * Uncertainty Quantification
 * Model Selection and Model Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning and Blind Source Separation
+* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, etc.)
 * Decision Analysis and Support
 
 MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel environments (Moab, Slurm, etc.).

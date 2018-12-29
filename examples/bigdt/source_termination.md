@@ -75,7 +75,7 @@ The set of variances is
 
 $$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$
 
-where $$σ^2_0$$ is the nominal variance (500; the nominal standard deviation $$σ_0$$ is ~22) and $$h$$ is the horizon of uncertainty.
+where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22) and $h$ is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ### Robustness

@@ -13,7 +13,7 @@
         <meta name="description" content="Model Analysis and Decision Support">
       
       
-        <link rel="canonical" href="http://madsjulia.github.io/Mads.jl/src/ReusableFunctions/">
+        <link rel="canonical" href="http://madsjulia.github.io/Mads.jl/Examples/machine_learning/">
       
       
         <meta name="author" content="Velimir monty Vesselinov">
@@ -42,7 +42,7 @@
     
     
       
-        <title>ReusableFunctions.jl - MADS</title>
+        <title>Machine Learning - MADS</title>
       
     
     
@@ -99,7 +99,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#reusablefunctionsjl" tabindex="1" class="md-skip">
+      <a href="#machine-learning" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -125,7 +125,7 @@
                 MADS
               </span>
               <span class="md-header-nav__topic">
-                ReusableFunctions.jl
+                Machine Learning
               </span>
             
           
@@ -276,10 +276,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
     <label class="md-nav__link" for="nav-4">
       Examples
@@ -297,7 +299,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/setup/" title="Setup" class="md-nav__link">
+    <a href="../setup/" title="Setup" class="md-nav__link">
       Setup
     </a>
   </li>
@@ -309,7 +311,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/bigdt/source_termination/" title="Decision Analysis" class="md-nav__link">
+    <a href="../bigdt/source_termination/" title="Decision Analysis" class="md-nav__link">
       Decision Analysis
     </a>
   </li>
@@ -321,7 +323,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/infogap/" title="Information Gap Analysis" class="md-nav__link">
+    <a href="../infogap/" title="Information Gap Analysis" class="md-nav__link">
       Information Gap Analysis
     </a>
   </li>
@@ -333,7 +335,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/bayesian_sampling/" title="Bayesian Sampling" class="md-nav__link">
+    <a href="../bayesian_sampling/" title="Bayesian Sampling" class="md-nav__link">
       Bayesian Sampling
     </a>
   </li>
@@ -343,11 +345,65 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../Examples/machine_learning/" title="Machine Learning" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Machine Learning
+      </label>
+    
+    <a href="./" title="Machine Learning" class="md-nav__link md-nav__link--active">
       Machine Learning
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning" title="Machine Learning" class="md-nav__link">
+    Machine Learning
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tensor-factorization" title="Tensor Factorization" class="md-nav__link">
+    Tensor Factorization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -357,7 +413,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/contaminant_source_identification/" title="Contaminant Source Identification" class="md-nav__link">
+    <a href="../contaminant_source_identification/" title="Contaminant Source Identification" class="md-nav__link">
       Contaminant Source Identification
     </a>
   </li>
@@ -369,7 +425,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/blind_source_separation/" title="Blind Source Separation" class="md-nav__link">
+    <a href="../blind_source_separation/" title="Blind Source Separation" class="md-nav__link">
       Blind Source Separation
     </a>
   </li>
@@ -381,7 +437,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/contamination/" title="Contaminant Transport" class="md-nav__link">
+    <a href="../contamination/" title="Contaminant Transport" class="md-nav__link">
       Contaminant Transport
     </a>
   </li>
@@ -393,7 +449,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/ode/" title="ODE Analysis" class="md-nav__link">
+    <a href="../ode/" title="ODE Analysis" class="md-nav__link">
       ODE Analysis
     </a>
   </li>
@@ -422,7 +478,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../Examples/" title="Examples Links" class="md-nav__link">
+    <a href="../" title="Examples Links" class="md-nav__link">
       Examples Links
     </a>
   </li>
@@ -646,8 +702,42 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#machine-learning" title="Machine Learning" class="md-nav__link">
+    Machine Learning
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tensor-factorization" title="Tensor Factorization" class="md-nav__link">
+    Tensor Factorization
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
   
 </nav>
                   </div>
@@ -659,15 +749,36 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/madsjulia/Mads.jl/edit/master/docs/src/ReusableFunctions.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/madsjulia/Mads.jl/edit/master/docs/Examples/machine_learning/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="reusablefunctionsjl">ReusableFunctions.jl</h1>
-<p>Module ReusableFunctions provides automated storage and retrieval of results for Julia function calls.</p>
-<p>ReusableFunctions.jl module functions:</p>
-<p><code>@autodocs
-Modules = [ReusableFunctions]
-Order   = [:function, :macro, :type]</code></p>
+                  <h1>Machine Learning</h1>
+                
+                <h2 id="machine-learning">Machine Learning</h2>
+<p>Unsupervised Machine Learning methods are powerful data-analytics tools capable of extracting important features hidden (latent) in large datasets without any prior information.
+The physical interpretation of the extracted features is done <em>a posteriori</em> by subject-matter experts.</p>
+<p>In contrast, supervised ML methods are trained based on large labeled datasets; the labeling is performed <em>a priori</em> by subject-matter experts.
+The process of deep ML commonly includes both unsupervised and supervised techniques <a href="https://www.nature.com/articles/nature14539">LeCun, Bengio, and Hinton 2015</a> where unsupervised ML are applied to facilitate the process of data labeling.</p>
+<p>The integration of large datasets, powerful computational capabilities, and affordable data storage has resulted in the widespread use of Machine Learning in science, technology, and industry.</p>
+<p>Recently we have developed a novel unsupervised Machine Learning methods.
+The methods are based on Matrix/Tensor Factorization coupled with sparsity and nonnegativity constraints.
+The method reveals the temporal and spatial footprints of the extracted features.</p>
+<h3 id="examples">Examples</h3>
+<ul>
+<li><a href="../../Examples/blind_source_separation/index.html">Blind Source Separation (i.e. Feature Extraction)</a></li>
+<li><a href="../Examples/contaminant_source_identification/index.html">Contaminant Source Identification</a></li>
+</ul>
+<h3 id="tensor-factorization">Tensor Factorization</h3>
+<p>A novel unsupervised ML based on Tensor Factorization (TF) coupled with sparsity and nonnegativity constraints has been applied to extract the temporal and spatial footprints of the features in multi-dimensional datasets in the form of multi-way arrays or tensors.
+The factorization of a given tensor $X$ is typically performed by minimization of the Frobenius norm:</p>
+<p>$$ { \frac{1}{2} ||X-G \otimes_1 A_1 \otimes_2 A_2 \dots \otimes_n A_n ||_F^2 } $$</p>
+<p>where:</p>
+<ul>
+<li>$N$ is the dimensionality of the tensor X, G is a mixing “core” tensor</li>
+<li>$A_1,A_2,\dots,A_N$ are “feature” factors (in the form of vectors or matrices)</li>
+<li>$\otimes$ is a tensor product applied to fold-in factors $A_1,A_2,\dots,A_N$  in each of the tensor dimensions</li>
+</ul>
+<p>The product $G \otimes_1 A_1 \otimes_2 A_2 \dots \otimes_n A_n$ is an estimate of $X$ ($X_est$).</p>
                 
                   
                 
@@ -684,6 +795,41 @@ Order   = [:function, :macro, :type]</code></p>
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../bayesian_sampling/" title="Bayesian Sampling" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Bayesian Sampling
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../contaminant_source_identification/" title="Contaminant Source Identification" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Contaminant Source Identification
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
