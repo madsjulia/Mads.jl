@@ -5,7 +5,7 @@ After starting Julia, execute:
 
 
 ```julia
-Pkg.add("Mads")
+import Pkg; Pkg.add("Mads")
 ```
 
 
