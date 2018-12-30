@@ -28,7 +28,7 @@ where:
 * \\(\otimes\\) is a tensor product applied to fold-in factors \\(A_1,A_2,\dots,A_n\\)  in each of the tensor dimensions
 
 <div style="text-align: center">
-    <img src="../../images/tucker-paper.png" alt="tucker" height="320"/>
+    <img src="../../figures/tucker-paper.png" alt="tucker" height="320"/>
 </div>
 
 The product \\(G \otimes_1 A_1 \otimes_2 A_2 \dots \otimes_n A_n\\) is an estimate of \\(X\\) (\\(X_{est}\\)).
@@ -54,7 +54,7 @@ Nonnegativity enforces parts-based representation of the original data which als
 
 Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decomposition) coupled with sparsity and nonnegativity constraints custom k-means clustering has been developed in [Julia](http://julialang.org)
 
-**NMFk** and **NTFk** codes will be available soon as open-source code on [GitHub](https://github.com/orgs/TensorDecompositions).
+**NMFk** and **NTFk** codes will be available soon as open-source on [GitHub](https://github.com/orgs/TensorDecompositions).
 
 <div style="text-align: left">
     <img src="../../logos/nmfk-logo.png" alt="nmfk logo" height="120"/>
