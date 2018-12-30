@@ -5,7 +5,6 @@ theme: material
 repo_url: https://github.com/madsjulia/Mads.jl
 site_description: "Model Analysis and Decision Support"
 site_author: "Velimir monty Vesselinov"
-site_favicon: mads-favicon.ico
 
 google_analytics: ['UA-25717430-1', 'mads.lanl.gov']
 
@@ -19,8 +18,8 @@ pages:
 - Examples:
   - Setup: Examples/setup.md
   - Decision Analysis: Examples/bigdt/source_termination/index.md
-  - Information Gap Analysis: Examples/infogap/index.md
-  - Bayesian Sampling: Examples/bayesian_sampling/index.md
+  - Information Gap Decision Analysis: Examples/infogap/index.md
+  - Uncertainty Quantification: Examples/bayesian_sampling/index.md
   - Machine Learning: Examples/machine_learning/index.md
   - Contaminant Source Identification: Examples/contaminant_source_identification/index.md
   - Blind Source Separation: Examples/blind_source_separation/index.md
@@ -58,14 +57,14 @@ markdown_extensions:
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML
-  # - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML
-  # - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
-  # - assets/mathjaxhelper.js
+  - assets/mathjaxhelper.js
 
-extra:
+theme:
+  name: 'material'
   palette:
     primary: 'orange'
     accent: 'teal'
-  logo: 'logo/mads_black_swan_logo_big_text_new_3inch.png'
+  logo: 'logo/mads_black_swan_logo.png'
+  favicon: mads-favicon.ico
   author:
     github: madsjulia

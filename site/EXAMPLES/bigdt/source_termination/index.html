@@ -37,7 +37,7 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../../../assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../../mads-favicon.ico">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.1.0">
     
     
@@ -48,6 +48,12 @@
     
       <link rel="stylesheet" href="../../../assets/stylesheets/application.11e41852.css">
       
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.22915126.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#fb8c00">
       
     
     
@@ -68,7 +74,9 @@
     
   </head>
   
-    <body dir="ltr">
+    
+    
+    <body dir="ltr" data-md-color-primary="orange" data-md-color-accent="teal">
   
     <svg class="md-svg">
       <defs>
@@ -110,7 +118,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="http://madsjulia.github.io/Mads.jl" title="MADS" class="md-header-nav__button md-logo">
           
-            <i class="md-icon"></i>
+            <img src="../../../logo/mads_black_swan_logo.png" width="24" height="24">
           
         </a>
       </div>
@@ -206,7 +214,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="http://madsjulia.github.io/Mads.jl" title="MADS" class="md-nav__button md-logo">
       
-        <i class="md-icon"></i>
+        <img src="../../../logo/mads_black_swan_logo.png" width="48" height="48">
       
     </a>
     MADS
@@ -460,8 +468,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../infogap/" title="Information Gap Analysis" class="md-nav__link">
-      Information Gap Analysis
+    <a href="../../infogap/" title="Information Gap Decision Analysis" class="md-nav__link">
+      Information Gap Decision Analysis
     </a>
   </li>
 
@@ -472,8 +480,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../bayesian_sampling/" title="Bayesian Sampling" class="md-nav__link">
-      Bayesian Sampling
+    <a href="../../bayesian_sampling/" title="Uncertainty Quantification" class="md-nav__link">
+      Uncertainty Quantification
     </a>
   </li>
 
@@ -995,7 +1003,7 @@ Because of these uncertainties, we perform a decision analysis.</p>
 The set of possible concentrations at w2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
 The set of variances is</p>
 <p>$$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$</p>
-<p>where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ_0$ is ~22) and $h$ is the horizon of uncertainty.
+<p>where \(σ^2_0\) is the nominal variance (500; the nominal standard deviation \(σ_0\) is ~22) and \(h\) is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.</p>
 <h3 id="robustness">Robustness</h3>
 <p>The horizon (level) of uncertainty at which the maximum acceptable probability of failure is reached</p>
@@ -1022,7 +1030,7 @@ Their decision can also rely on
 (2) financial constraints (e.g., costs associated with the source termination over different time frames).</p>
 <h3 id="model">Model</h3>
 <p>Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
-The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.</p>
+The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the \(x\) and \(y\) axes; the contaminant is released in 1985.</p>
 <p>The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using the Julia version of Mads.
 The runs are independent and can be computed efficiently in parallel.</p>
@@ -1061,13 +1069,13 @@ The runs are independent and can be computed efficiently in parallel.</p>
           </a>
         
         
-          <a href="../../infogap/" title="Information Gap Analysis" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../infogap/" title="Information Gap Decision Analysis" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Information Gap Analysis
+                Information Gap Decision Analysis
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -1102,6 +1110,8 @@ The runs are independent and can be computed efficiently in parallel.</p>
       <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+      
+        <script src="../../../assets/mathjaxhelper.js"></script>
       
     
     
