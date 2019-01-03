@@ -55,6 +55,7 @@ Nonnegativity enforces parts-based representation of the original data which als
 Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decomposition) coupled with sparsity and nonnegativity constraints custom k-means clustering has been developed in [Julia](http://julialang.org)
 
 **NMFk** and **NTFk** codes will be available soon as open-source on [GitHub](https://github.com/orgs/TensorDecompositions).
+**NMFk** and **NTFk** use [TensorFlow](https://www.tensorflow.org), [PyTorch](https://pytorch.org) and [MXNet](https://mxnet.apache.org).
 
 <div style="text-align: left">
     <img src="../../logos/nmfk-logo.png" alt="nmfk logo" height="120"/>
