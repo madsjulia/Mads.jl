@@ -56,7 +56,7 @@ Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decompo
 
 **NMFk** and **NTFk** codes will be available soon as open-source on [GitHub](https://github.com/orgs/TensorDecompositions).
 
-**NMFk** and **NTFk** use [TensorFlow](https://www.tensorflow.org), [PyTorch](https://pytorch.org) and [MXNet](https://mxnet.apache.org).
+**NMFk** and **NTFk** use [TensorFlow](https://www.tensorflow.org), [PyTorch](https://pytorch.org), [MXNet](https://mxnet.apache.org), and [MatLab](https://www.mathworks.com).
 
 <div style="text-align: left">
     <img src="../../logos/nmfk-logo.png" alt="nmfk logo" height="120"/>
@@ -74,7 +74,7 @@ Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decompo
 - Iliev, F.L., Stanev, V.G., Vesselinov, V.V., Alexandrov, B.S., Nonnegative Matrix Factorization for identification of unknown number of sources emitting delayed signals PLoS ONE, 10.1371/journal.pone.0193974. 2018. [PDF](http://monty.gitlab.io/papers/Iliev et al 2018 Nonnegative Matrix Factorization for identification of unknown number of sources emitting delayed signals.pdf)
 - Stanev, V.G., Iliev, F.L., Hansen, S.K., Vesselinov, V.V., Alexandrov, B.S., Identification of the release sources in advection-diffusion system by machine learning combined with Green function inverse method, Applied Mathematical Modelling, 10.1016/j.apm.2018.03.006, 2018. [PDF](http://monty.gitlab.io/papers/Stanev et al 2018 Identification of release sources in advection-diffusion system by machine learning combined with Green's function inverse method.pdf)
 - Vesselinov, V.V., O'Malley, D., Alexandrov, B.S., Contaminant source identification using semi-supervised machine learning, Journal of Contaminant Hydrology, 10.1016/j.jconhyd.2017.11.002, 2017. [PDF](http://monty.gitlab.io/papers/Vesselinov 2017 Contaminant source identification using semi-supervised machine learning.pdf)
-- Alexandrov, B., Vesselinov, V.V., Blind source separation for groundwater level analysis based on non-negative matrix factorization, Water Resources Research, doi: 10.1002/2013WR015037, 2014. [PDF](http://monty.gitlab.io/papers/Alexandrov & Vesselinov 2014 Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization.pdf)
+- Alexandrov, B., Vesselinov, V.V., Blind source separation for groundwater level analysis based on non-negative matrix factorization, Water Resources Research, 10.1002/2013WR015037, 2014. [PDF](http://monty.gitlab.io/papers/Alexandrov & Vesselinov 2014 Blind source separation for groundwater pressure analysis based on nonnegative matrix factorization.pdf)
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
@@ -83,7 +83,7 @@ For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 - Vesselinov, V.V., Novel Machine Learning Methods for Extraction of Features Characterizing Datasets and Models, AGU Fall meeting, Washington D.C., 2018. [PDF](http://monty.gitlab.io/presentations/Vesselinov 2018 Novel Machine Learning Methods for Extraction of Features Characterizing Datasets and Models LA-UR-18-31366.pdf)
 - Vesselinov, V.V., Novel Machine Learning Methods for Extraction of Features Characterizing Complex Datasets and Models, Recent Advances in Machine Learning and Computational Methods for Geoscience, Institute for Mathematics and its Applications, University of Minnesota, 2018. [PDF](http://monty.gitlab.io/presentations/Vesselinov 2018 Novel Machine Learning Methods for Extraction of Features Characterizing Complex Datasets and Models LA-UR-18-30987.pdf)
 - O'Malley, D., Vesselinov, V.V., Alexandrov, B.S., Alexandrov, L.B., Nonnegative/binary matrix factorization with a D-Wave quantum annealer [PDF](http://monty.gitlab.io/presentations/OMalley et al 2017 Nonnegative binary matrix factorization with a D-Wave quantum annealer.pdf)
-- Vesselinov, V.V., Alexandrov, B.A, Model-free Source Identification, AGU Fall Meeting, San Francisco, CA, 2014. [PDF](http://monty.gitlab.io/presentations/vesselinov bss-agu2014-LA-UR-14-29163.pdf)>
+- Vesselinov, V.V., Alexandrov, B.A, Model-free Source Identification, AGU Fall Meeting, San Francisco, CA, 2014. [PDF](http://monty.gitlab.io/presentations/vesselinov bss-agu2014-LA-UR-14-29163.pdf)
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
