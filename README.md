@@ -25,7 +25,7 @@ MADS can execute a wide range of data- and model-based analyses:
 * Decision Analysis and Support
 
 MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel environments (Moab, Slurm, etc.).
-MADS utilizes adaptive rules and techniques which allows the analyses to be performed with a minimum user input.
+MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input.
 The code provides a series of alternative algorithms to execute each type of data- and model-based analyses.
 
 Example
