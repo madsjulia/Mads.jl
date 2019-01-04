@@ -11,6 +11,8 @@ mkdir Examples
 mkdir Examples/bayesian_sampling
 mkdir Examples/bigdt
 mkdir Examples/blind_source_separation
+mkdir Examples/machine_learning
+mkdir Examples/contaminant_source_identification
 mkdir Examples/contamination
 mkdir Examples/ode
 mkdir Modules
@@ -20,6 +22,9 @@ mkdir Modules/Mads
 mkdir Modules/MetaProgTools
 mkdir Modules/ReusableFunctions
 mkdir Modules/RobustPmap
+mkdir Modules/SVR
+mkdir Modules/GeostatInversion
+mkdir Modules/AffineInvariantMCMC
 mkdir TEST
 mkdir css
 mkdir fonts
