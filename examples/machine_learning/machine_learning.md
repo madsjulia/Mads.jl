@@ -95,6 +95,8 @@ Presentations are also available at [slideshare.net](https://www.slideshare.net/
 
 - [Vesselinov, V.V., Novel Machine Learning Methods for Extraction of Features Characterizing Complex Datasets and Models, Recent Advances in Machine Learning and Computational Methods for Geoscience, Institute for Mathematics and its Applications, University of Minnesota, 2018.](https://youtu.be/xPOkeLMJywE)
 
+Videos are also available on [YouTube](href=https://www.youtube.com/watch?v=xPOkeLMJywE&list=PLpVcrIWNlP22LfyIu5MSZ7WHp7q0MNjsj)
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/xPOkeLMJywE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Examples
