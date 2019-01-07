@@ -99,6 +99,10 @@ Videos are also available on [YouTube](href=https://www.youtube.com/watch?v=xPOk
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/xPOkeLMJywE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+### Patent
+
+Alexandrov, B.S., Vesselinov, V.V., Alexandrov, L.B., Stanev, V., Iliev, F.L., Source identification by non-negative matrix factorization combined with semi-supervised clustering, [US20180060758A1](https://patents.google.com/patent/US20180060758A1/en)
+
 ### Examples
 
 * [Blind Source Separation (i.e. Feature Extraction)](../../Examples/blind_source_separation/index.html)
