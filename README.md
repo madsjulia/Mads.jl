@@ -122,6 +122,6 @@ to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
 Publications, Presentations, Projects
 =====================================
 
-* [mads.gitlab.io](mads.gitlab.io)
-* [monty.gitlab.io](monty.gitlab.io)
+* [mads.gitlab.io](http://mads.gitlab.io)
+* [monty.gitlab.io](http://monty.gitlab.io)
 
