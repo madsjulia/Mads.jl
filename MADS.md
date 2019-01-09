@@ -10,7 +10,7 @@ MADS can execute a wide range of data- and model-based analyses:
 * Uncertainty Quantification
 * Model Selection and Model Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, etc.)
+* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
 
 MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel environments (Moab, Slurm, etc.).
@@ -39,7 +39,9 @@ Builds & Tests
 
 **Mads Build & Test Status @ JuliaLang.org**
 
-[![Mads](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
+[![julialang](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
+[![julialang](http://pkg.julialang.org/badges/Mads_0.6.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.6)
+[![julialang](http://pkg.julialang.org/badges/Mads_0.7.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.7)
 
 **Mads Build & Test Status @ Travis Continuous Integration (CI) service (OS X & linux)**
 
