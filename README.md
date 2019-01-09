@@ -21,26 +21,19 @@ MADS can execute a wide range of data- and model-based analyses:
 * Uncertainty Quantification
 * Model Selection and Model Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, etc.)
+* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
 
 MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel environments (Moab, Slurm, etc.).
 MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input.
 The code provides a series of alternative algorithms to execute each type of data- and model-based analyses.
 
-Example
-------
-```julia
-import Mads
-
-include(Mads.madsdir * "/../examples/contamination/contamination.jl")
-include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")
-```
-
 Documentation
 =============
 
-All the available MADS modules and functions are described at [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
+
+See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
 Installation
 ============
@@ -50,6 +43,44 @@ After starting Julia, execute:
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
+
+Testing
+============
+
+```julia
+Pkg.test("Mads")
+```
+
+Examples
+=============
+
+In Julia REPL, do the following commands:
+
+```julia
+import Mads
+```
+
+To explore getting-started instructions, execute:
+
+```julia
+Mads.help()
+```
+
+There are various examples located in the `examples` directory of the `Mads` repository.
+
+For example, execute
+
+```julia
+include(Mads.madsdir * "/../examples/contamination/contamination.jl")
+```
+
+to perform various example analyses related to groundwater contaminant transport, or execute
+
+```julia
+include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")
+```
+
+to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
 
 Installation of MADS behind a firewall
 ------------------------------
@@ -88,40 +119,10 @@ export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
 ```
 
-MADS examples
-=============
-
-In Julia REPL, do the following commands:
-
-```julia
-import Mads
-```
-
-To explore getting-started instructions, execute:
-
-```julia
-Mads.help()
-```
-
-There are various examples located in the `examples` directory of the `Mads` repository.
-
-For example, execute
-
-```julia
-include(Mads.madsdir * "/../examples/contamination/contamination.jl")
-```
-
-to perform various example analyses related to groundwater contaminant transport, or execute
-
-```julia
-include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")
-```
-
-to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
-
 Publications, Presentations, Projects
 =====================================
 
 * [mads.gitlab.io](http://mads.gitlab.io)
 * [monty.gitlab.io](http://monty.gitlab.io)
+* [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
 
