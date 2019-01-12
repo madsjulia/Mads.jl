@@ -237,6 +237,8 @@ function parsemadsdata!(madsdata::AbstractDict)
 			for dict in madsdata["Observations"]
 				if collect(keys(dict))[1] == "filename"
 					dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Observations"]
+				elseif collect(keys(dict))[1] == "script"
+					dictnew = include(collect(values(dict))[1])
 				else
 					dictnew = dict
 				end

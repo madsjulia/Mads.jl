@@ -58,7 +58,7 @@ Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
 if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.setobstime!(md, "o")
-	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg")
+	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg"; display=false)
 	Mads.rmfile("internal-linearmodel+template-match.svg")
 end
 
