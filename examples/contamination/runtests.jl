@@ -76,7 +76,7 @@ Mads.dumpwelldata(md, "wells.dat")
 Mads.rmfile("wells.dat")
 
 if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.plotmatches(md, inverse_predictions) # plot calibrated matches
+	Mads.plotmatches(md, inverse_predictions; display=false) # plot calibrated matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 
 	Mads.spaghettiplots(md, paramvalues, keyword="w13a_w20a")
