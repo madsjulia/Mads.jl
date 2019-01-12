@@ -1,6 +1,6 @@
 import OrderedCollections
 
-function mamkemadsmodelrun_internal_linearmodel(madsdata::AbstractDict)
+function makemadsmodelrun_internal_linearmodel(madsdata::AbstractDict)
 	function madsmodelrun(parameters::AbstractDict) # model run
 		f(t) = parameters["a"] * t - parameters["b"] # a * t - b
 		times = 1:4
