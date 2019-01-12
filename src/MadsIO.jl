@@ -281,6 +281,9 @@ function parsemadsdata!(madsdata::AbstractDict)
 		end
 		madsdata["Instructions"] = instructions
 	end
+	if haskey(madsdata, "Setup")
+		include(values(madsdata["Setup"]))
+	end
 end
 
 function savemadsfile(madsdata::AbstractDict, filename::String=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")

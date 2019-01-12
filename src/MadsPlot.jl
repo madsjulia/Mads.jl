@@ -19,10 +19,19 @@ argtext=Dict("format"=>"plot format")))
 """
 function setdefaultplotformat(format::String)
 	if occursin(r"^PNG|PDF|PS|SVG", uppercase(format))
-		global graphbackend = uppercase(format);
+		global graphbackend = uppercase(format)
 	else
 		madswarn("Requested format ($format) is not acceptable! (PNG|PDF|PS|SVG)")
 	end
+end
+
+"""
+Set the default plot format (`SVG` is the default format)
+
+$(DocumentFunction.documentfunction(getdefaultplotformat;))
+"""
+function getdefaultplotformat()
+	println("Default plot format: $graphbackend")
 end
 
 """
