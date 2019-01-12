@@ -217,7 +217,14 @@ function parsemadsdata!(madsdata::AbstractDict)
 	if haskey(madsdata, "Wells")
 		wells = OrderedCollections.OrderedDict{String,Any}()
 		for dict in madsdata["Wells"]
-			for key in keys(dict)
+			if collect(keys(dict))[1] == "filename"
+				dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Wells"]
+			elseif collect(keys(dict))[1] == "script"
+				dictnew = include(collect(values(dict))[1])
+			else
+				dictnew = dict
+			end
+			for key in keys(dictnew)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
 				if haskey(wells[key], "obs") && wells[key]["obs"] != nothing
