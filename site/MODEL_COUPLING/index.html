@@ -469,6 +469,26 @@
     Model Coupling
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options-for-writing-model-inputs" title="Options for writing model inputs:" class="md-nav__link">
+    Options for writing model inputs:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-for-reading-model-outputs" title="Options for reading model outputs:" class="md-nav__link">
+    Options for reading model outputs:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -697,6 +717,26 @@
     Model Coupling
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options-for-writing-model-inputs" title="Options for writing model inputs:" class="md-nav__link">
+    Options for writing model inputs:
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-for-reading-model-outputs" title="Options for reading model outputs:" class="md-nav__link">
+    Options for reading model outputs:
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -721,52 +761,44 @@
                   <h1>Model Coupling</h1>
                 
                 <h2 id="model-coupling">Model Coupling</h2>
-<p>MADS can be coupled with any internal or external model.
-The model coupling is defined in the MADS problem dictionary.
+<p>MADS can be coupled with any internal or external model. The model coupling is defined in the MADS problem dictionary.
 The expectations is that for a given set of model inputs, the model will produce a model output that will be provided to MADS.
 The fields in the MADS problem dictionary that can be used to define the model coupling are:</p>
 <ul>
 <li>
-<p><code>Model</code> : Julia model defined in an external Julia file.</p>
+<p><code>Model</code> : execute a Julia function defined in an input Julia file. The function that should accept a <code>parameter</code> dictionary with all the model parameters as an input argument and should return an <code>observation</code> dictionary with all the model predicted observations. MADS will execute the first function defined in the file.</p>
 </li>
 <li>
-<p><code>MADS model</code> : Julia model defined in an external Julia file using information from the MADS problem dictionary.</p>
+<p><code>MADS model</code> : create a Julia function based on an input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary. MADS will execute the first function defined in the file. This function should a create a Julia function that will accept a <code>parameter</code> dictionary with all the model parameters as an input argument and will return an <code>observation</code> dictionary with all the model predicted observations.</p>
 </li>
 <li>
-<p><code>Julia model</code> : Julia model defined internally (already in the Julia workspace).</p>
+<p><code>Julia model</code> : execute an internal Julia function that accepts a <code>parameter</code> dictionary with all the model parameters as an input argument and will return an <code>observation</code> dictionary with all the model predicted observations.</p>
 </li>
 <li>
-<p><code>Command</code> : external model executed by an UNIX command or script.</p>
+<p><code>Command</code> : execute an external UNIX command or script that will execute an external model.</p>
 </li>
 <li>
-<p><code>Julia command</code> : external model executed by a Julia script. The Julia script is defined in an external Julia file.</p>
+<p><code>Julia command</code> : execute a Julia script that will execute an external model. The Julia script is defined in an input Julia file. The input file should contain a function that accepts a <code>parameter</code> dictionary with all the model parameters as an input argument; MADS will execute the first function defined in the file. The Julia script should be capable to (1) execute the model (making a system call of an external model), (2) parse the model outputs, (3) return an <code>observation</code> dictionary with model predictions.</p>
 </li>
 </ul>
-<p>Both <code>Command</code> and <code>Julia command</code> can use different approaches to pass model parameters to the external model.
-Only <code>Command</code> uses different approaches to get back the model outputs.
-The script defined under <code>Julia command</code> parses the model outputs using Julia.
-The available options for writing model inputs and reading model outputs are as follows.</p>
+<p>Both <code>Command</code> and <code>Julia command</code> can use different approaches to pass model parameters to the external model.</p>
+<p>Only <code>Command</code> uses different approaches to get back the model outputs. The script defined under <code>Julia command</code> parses the model outputs using Julia.</p>
+<p>The available options for writing model inputs and reading model outputs are as follows.</p>
+<h3 id="options-for-writing-model-inputs">Options for writing model inputs:</h3>
 <ul>
-<li>
-<p>Options for writing model inputs:</p>
-<ul>
-<li><code>Templates</code> : template files for writing model input files as defined at <a href="http://mads.lanl.gov">mads.lanl.gov</a></li>
+<li><code>Templates</code> : template files for writing model input files as defined at http://mads.lanl.gov</li>
 <li><code>ASCIIParameters</code> : model parameters written in a ASCII file</li>
 <li><code>JLDParameters</code> : model parameters written in a JLD file</li>
 <li><code>YAMLParameters</code> : model parameters written in a YAML file</li>
 <li><code>JSONParameters</code> : model parameters written in a JSON file</li>
 </ul>
-</li>
-<li>
-<p>Options for reading model outputs:</p>
+<h3 id="options-for-reading-model-outputs">Options for reading model outputs:</h3>
 <ul>
-<li><code>Instructions</code> : instruction files for reading model output files as defined at mads.lanl.gov](http://mads.lanl.gov)</li>
+<li><code>Instructions</code> : instruction files for reading model output files as defined at http://mads.lanl.gov</li>
 <li><code>ASCIIPredictions</code> : model predictions read from a ASCII file</li>
 <li><code>JLDPredictions</code> : model predictions read from a JLD file</li>
 <li><code>YAMLPredictions</code> : model predictions read from a YAML file</li>
 <li><code>JSONPredictions</code> : model predictions read from a JSON file</li>
-</ul>
-</li>
 </ul>
                 
                   
