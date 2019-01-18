@@ -40,7 +40,7 @@ end
 function functions(m::Union{Symbol, Module}, re::Regex; shortoutput::Bool=false, quiet::Bool=false)
 	n = 0
 	try
-		f = names(Core.eval(Mads, m), all=true)
+		f = names(Core.eval(Mads, m); all=true)
 		functions = Array{String}(undef, 0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"
@@ -74,7 +74,7 @@ function functions(m::Union{Symbol, Module}, string::String=""; shortoutput::Boo
 		suffix = " matching the search criteria"
 	end
 	try
-		f = names(Core.eval(Mads, m), all=true)
+		f = names(Core.eval(Mads, m); all=true)
 		functions = Array{String}(undef, 0)
 		for i in 1:length(f)
 			functionname = "$(f[i])"
