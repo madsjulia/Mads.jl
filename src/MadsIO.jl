@@ -660,6 +660,7 @@ keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
 function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::String=".")
 	errorflag = false
+	boundparameters!(madsdata, parameters)
 	if haskey(madsdata, "Instructions") # Instructions
 		for instruction in madsdata["Instructions"]
 			filename = instruction["ins"]
