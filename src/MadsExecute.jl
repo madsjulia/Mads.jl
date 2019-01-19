@@ -45,7 +45,11 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		cmderr = Pipe()
 		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=false)
 	else
-		cmdproc = run(cmd; wait=false)
+		if quiet
+			cmdproc = run(pipeline(cmd, stdout=devnull, stderr=devnull); wait=false)
+		else
+			cmdproc = run(cmd; wait=false)
+		end
 	end
 	if waittime > 0
 		timedwait(() -> process_exited(cmdproc), waittime)
