@@ -131,7 +131,7 @@ for i = 1:length(getparamsnames)
 	Core.eval(Mads, q)
 end
 
-function getparamsmin(madsdata::AbstractDict, paramkeys::Vector)
+function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector)
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -766,3 +766,39 @@ function checkparameterranges(madsdata::AbstractDict)
 		madserror("Parameter ranges are incorrect!")
 	end
 end
+
+function boundparameters!(madsdata::AbstractDict, parvec::Vector=Mads.getparamsinit(madsdata))
+	if !haskey(madsdata, "Parameters")
+		return
+	end
+	parmin = Mads.getparamsmin(madsdata)
+	parmax = Mads.getparamsmax(madsdata)
+	i = par .> parmax
+	par[i] .= parmax[i]
+	i = par .< parmin
+	par[i] .= parmin[i]
+	return nothing
+end
+function boundparameters!(madsdata::AbstractDict, pardict::AbstractDict=Mads.getparamdict(madsdata))
+	if !haskey(madsdata, "Parameters")
+		return
+	end
+	parkeys = keys(pardict)
+	parmin = Mads.getparamsmin(madsdata, collect(parkeys))
+	parmax = Mads.getparamsmax(madsdata, collect(parkeys))
+	for (i, k) in enumerate(parkeys)
+		if pardict[k] > parmax[i]
+			pardict[k] = parmax[i]
+		elseif pardict[k] < parmin[i]
+			pardict[k] = parmin[i]
+		end
+	end
+	return nothing
+end
+
+@doc """
+Bound model parameters based on their ranges
+
+$(DocumentFunction.documentfunction(boundparameters!;
+argtext=Dict("madsdata"=>"MADS problem dictionary","parvec"=>"Parameter vector","pardict"=>"Parameter dictionary")))
+""" boundparameters!
