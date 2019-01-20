@@ -698,7 +698,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for filename in vcat(madsdata["JSONParameters"])
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
-		dumpjsonfile(madsdata["JSONParameters"], parameters) # create parameter files
+		dumpjsonfile(madsdata["JSONParameters"], parameters) # create parameter file
 	end
 	if haskey(madsdata, "JSONPredictions") # JSON
 		for filename in vcat(madsdata["JSONPredictions"])

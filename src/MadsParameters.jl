@@ -767,7 +767,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	end
 end
 
-function boundparameters!(madsdata::AbstractDict, parvec::Vector=Mads.getparamsinit(madsdata))
+function boundparameters!(madsdata::AbstractDict, parvec::Vector)
 	if !haskey(madsdata, "Parameters")
 		return
 	end
@@ -779,13 +779,13 @@ function boundparameters!(madsdata::AbstractDict, parvec::Vector=Mads.getparamsi
 	par[i] .= parmin[i]
 	return nothing
 end
-function boundparameters!(madsdata::AbstractDict, pardict::AbstractDict=Mads.getparamdict(madsdata))
+function boundparameters!(madsdata::AbstractDict, pardict::AbstractDict)
 	if !haskey(madsdata, "Parameters")
 		return
 	end
-	parkeys = keys(pardict)
-	parmin = Mads.getparamsmin(madsdata, collect(parkeys))
-	parmax = Mads.getparamsmax(madsdata, collect(parkeys))
+	parkeys = getparamkeys(madsdata)
+	parmin = Mads.getparamsmin(madsdata, parkeys)
+	parmax = Mads.getparamsmax(madsdata, parkeys)
 	for (i, k) in enumerate(parkeys)
 		if pardict[k] > parmax[i]
 			pardict[k] = parmax[i]
