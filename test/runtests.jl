@@ -47,10 +47,12 @@ printstyled("* observations ...\n", color=:cyan)
 examples = readdir(joinpath(Mads.madsdir, "examples"))
 
 for madstest in examples
-	file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
-	if isfile(file)
-		printstyled("* $(madstest) ...\n", color=:cyan)
-		@elapsed include(file)
+	if !occursin(r"_[1-9]", madstest) # skip restarts
+		file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
+		if isfile(file)
+			printstyled("* $(madstest) ...\n", color=:cyan)
+			@elapsed include(file)
+		end
 	end
 end
 
