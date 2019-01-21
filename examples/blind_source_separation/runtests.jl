@@ -67,7 +67,7 @@ else
 		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "sin_2.jld2"), "WHipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-0)
-		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-0)
+		@Test.test isapprox(WHipopt, good_WHipopt, Wipopt=1e-0)
 
 	# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
 		Random.seed!(2015)
