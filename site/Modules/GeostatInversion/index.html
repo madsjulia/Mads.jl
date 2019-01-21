@@ -586,22 +586,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#module-geostatinversionfdderivatives" title="Module GeostatInversion.FDDerivatives" class="md-nav__link">
-    Module GeostatInversion.FDDerivatives
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#module-geostatinversionrandmatfact" title="Module GeostatInversion.RandMatFact" class="md-nav__link">
     Module GeostatInversion.RandMatFact
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#module-geostatinversionfftrf" title="Module GeostatInversion.FFTRF" class="md-nav__link">
-    Module GeostatInversion.FFTRF
   </a>
   
 </li>
@@ -715,22 +701,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#module-geostatinversionfdderivatives" title="Module GeostatInversion.FDDerivatives" class="md-nav__link">
-    Module GeostatInversion.FDDerivatives
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#module-geostatinversionrandmatfact" title="Module GeostatInversion.RandMatFact" class="md-nav__link">
     Module GeostatInversion.RandMatFact
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#module-geostatinversionfftrf" title="Module GeostatInversion.FFTRF" class="md-nav__link">
-    Module GeostatInversion.FFTRF
   </a>
   
 </li>
@@ -769,114 +741,41 @@
 </ul>
 <p>The RGA method, <code>rga</code>, can use either of these approaches using the keyword argument. That is, by doing <code>rga(...; pcgafunc=GeostatInversion.pcgadirect)</code> or <code>rga(...; pcgafunc=GeostatInversion.pcgalsqr)</code>.</p>
 <p>GeostatInversion.jl module functions:</p>
-<p><a id='GeostatInversion.getxis' href='#GeostatInversion.getxis'>#</a>
-<strong><code>GeostatInversion.getxis</code></strong> &mdash; <em>Function</em>.</p>
-<p>Get the parameter subspace that will be explored during the inverse analysis</p>
-<div class="codehilite"><pre><span></span>getxis(samplefield::Function, numfields::Int, numxis::Int, p::Int, q::Int=3, seed=nothing)
-getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
+<p>```@autodocs
+Modules = [GeostatInversion]
+Order   = [:function, :macro, :type]</p>
+<div class="codehilite"><pre><span></span><span class="na">&lt;a id=&#39;Module-GeostatInversion.FDDerivatives-1&#39;&gt;</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+
+<span class="p">##</span> <span class="k">Module</span> <span class="nn">GeostatInversion.FDDerivatives</span>
+
+
+<span class="n">GeostatInversion</span><span class="p">.</span><span class="n">FDDerivatives</span> <span class="k">module</span> <span class="nn">functions</span><span class="p">:</span>
+
+
+<span class="err">```@</span><span class="n">autodocs</span>
+<span class="n">Modules</span> <span class="o">=</span> <span class="o">[</span><span class="n">GeostatInversion</span><span class="p">.</span><span class="n">FDDerivatives</span><span class="o">]</span>
+<span class="n">Order</span>   <span class="o">=</span> <span class="o">[</span><span class="p">:</span><span class="n">function</span><span class="p">,</span> <span class="p">:</span><span class="n">macro</span><span class="p">,</span> <span class="p">:</span><span class="n">type</span><span class="o">]</span>
 </pre></div>
 
 
-<p>Arguments:</p>
-<ul>
-<li>samplefield : a function that takes no arguments and returns a sample of the field</li>
-<li>Q : the covariance matrix of the parameter field</li>
-<li>numfields : the number of fields that will be used to find the subspace</li>
-<li>numxis : the dimension of the subspace</li>
-<li>p : oversampling parameter when estimating the range of the covariance matrix (see Halko et al, SIAM Rev., 2011)</li>
-<li>q : number of power iterations when estimating the range of the covariance matrix (see Halko et al, SIAM Rev., 2011)</li>
-<li>seed : an optional seed to use when doing the randomized matrix factorization</li>
-</ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/GeostatInversion.jl#L37-L54' class='documenter-source'>source</a><br></p>
-<p><a id='GeostatInversion.pcgadirect-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}' href='#GeostatInversion.pcgadirect-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}'>#</a>
-<strong><code>GeostatInversion.pcgadirect</code></strong> &mdash; <em>Method</em>.</p>
-<p>Direct principal component geostatistical approach</p>
-<div class="codehilite"><pre><span></span><span class="nt">pcgadirect</span><span class="o">(</span><span class="nt">forwardmodel</span><span class="p">::</span><span class="nd">Function</span><span class="o">,</span> <span class="nt">s0</span><span class="p">::</span><span class="nd">Vector</span><span class="o">,</span> <span class="nt">X</span><span class="p">::</span><span class="nd">Vector</span><span class="o">,</span> <span class="nt">xis</span><span class="p">::</span><span class="nd">Array</span><span class="p">{</span><span class="err">Array{Float64,</span> <span class="err">1</span><span class="p">}</span><span class="o">,</span> <span class="nt">1</span><span class="err">}</span><span class="o">,</span> <span class="nt">R</span><span class="o">,</span> <span class="nt">y</span><span class="p">::</span><span class="nd">Vector</span><span class="o">;</span> <span class="nt">maxiters</span><span class="p">::</span><span class="nd">Int</span><span class="o">=</span><span class="nt">5</span><span class="o">,</span> <span class="nt">delta</span><span class="p">::</span><span class="nd">Float64</span><span class="o">=</span><span class="nt">sqrt</span><span class="o">(</span><span class="nt">eps</span><span class="o">(</span><span class="nt">Float64</span><span class="o">)),</span> <span class="nt">xtol</span><span class="p">::</span><span class="nd">Float64</span><span class="o">=</span><span class="nt">1e-6</span><span class="o">,</span> <span class="nt">callback</span><span class="o">=(</span><span class="nt">s</span><span class="o">,</span> <span class="nt">obs_cal</span><span class="o">)</span><span class="nt">-</span><span class="o">&gt;</span><span class="nt">nothing</span><span class="o">)</span>
-</pre></div>
-
-
-<p>Arguments:</p>
-<ul>
-<li>forwardmodel : param to obs map h(s)</li>
-<li>s0 : initial guess</li>
-<li>X : mean of parameter prior (replace with B*X drift matrix later for p&gt;1)</li>
-<li>xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix</li>
-<li>R : covariance of measurement error (data misfit term)</li>
-<li>y : data vector</li>
-<li>maxiters : maximum # of PCGA iterations</li>
-<li>delta : the finite difference step size</li>
-<li>xtol : convergence tolerence for the parameters</li>
-<li>callback : a function of the form <code>(params, observations)-&gt;...</code> that is called during each iteration</li>
-</ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/direct.jl#L1-L20' class='documenter-source'>source</a><br></p>
-<p><a id='GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}' href='#GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}'>#</a>
-<strong><code>GeostatInversion.pcgalsqr</code></strong> &mdash; <em>Method</em>.</p>
-<p>Iterative principal component geostatistical approach</p>
-<div class="codehilite"><pre><span></span><span class="nt">pcgalsqr</span><span class="o">(</span><span class="nt">forwardmodel</span><span class="p">::</span><span class="nd">Function</span><span class="o">,</span> <span class="nt">s0</span><span class="p">::</span><span class="nd">Vector</span><span class="o">,</span> <span class="nt">X</span><span class="p">::</span><span class="nd">Vector</span><span class="o">,</span> <span class="nt">xis</span><span class="p">::</span><span class="nd">Array</span><span class="p">{</span><span class="err">Array{Float64,</span> <span class="err">1</span><span class="p">}</span><span class="o">,</span> <span class="nt">1</span><span class="err">}</span><span class="o">,</span> <span class="nt">R</span><span class="o">,</span> <span class="nt">y</span><span class="p">::</span><span class="nd">Vector</span><span class="o">;</span> <span class="nt">maxiters</span><span class="p">::</span><span class="nd">Int</span><span class="o">=</span><span class="nt">5</span><span class="o">,</span> <span class="nt">delta</span><span class="p">::</span><span class="nd">Float64</span><span class="o">=</span><span class="nt">sqrt</span><span class="o">(</span><span class="nt">eps</span><span class="o">(</span><span class="nt">Float64</span><span class="o">)),</span> <span class="nt">xtol</span><span class="p">::</span><span class="nd">Float64</span><span class="o">=</span><span class="nt">1e-6</span><span class="o">)</span>
-</pre></div>
-
-
-<p>Arguments:</p>
-<ul>
-<li>forwardmodel : param to obs map h(s)</li>
-<li>s0 : initial guess</li>
-<li>X : mean of parameter prior (replace with B*X drift matrix later for p&gt;1)</li>
-<li>xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix</li>
-<li>R : covariance of measurement error (data misfit term)</li>
-<li>y : data vector</li>
-<li>maxiters : maximum # of PCGA iterations</li>
-<li>delta : the finite difference step size</li>
-<li>xtol : convergence tolerence for the parameters</li>
-</ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br></p>
-<p><a id='GeostatInversion.rga-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T,Any}' href='#GeostatInversion.rga-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T,Any}'>#</a>
-<strong><code>GeostatInversion.rga</code></strong> &mdash; <em>Method</em>.</p>
-<p>Randomized (principal component) geostatistical approach</p>
-<p>Example:</p>
-<div class="codehilite"><pre><span></span><span class="kd">function</span> <span class="nx">rga</span><span class="p">(</span><span class="nx">forwardmodel</span><span class="o">::</span><span class="nb">Function</span><span class="p">,</span> <span class="nx">s0</span><span class="o">::</span><span class="nx">Vector</span><span class="p">,</span> <span class="nx">X</span><span class="o">::</span><span class="nx">Vector</span><span class="p">,</span> <span class="nx">xis</span><span class="o">::</span><span class="nb">Array</span><span class="p">{</span><span class="nb">Array</span><span class="p">{</span><span class="nx">Float64</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="mi">1</span><span class="p">},</span> <span class="nx">R</span><span class="p">,</span> <span class="nx">y</span><span class="o">::</span><span class="nx">Vector</span><span class="p">,</span> <span class="nx">S</span><span class="p">;</span> <span class="nx">maxiters</span><span class="o">::</span><span class="nx">Int</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nx">delta</span><span class="o">::</span><span class="nx">Float64</span><span class="o">=</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">eps</span><span class="p">(</span><span class="nx">Float64</span><span class="p">)),</span> <span class="nx">xtol</span><span class="o">::</span><span class="nx">Float64</span><span class="o">=</span><span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="nx">pcgafunc</span><span class="o">=</span><span class="nx">pcgadirect</span><span class="p">,</span> <span class="nx">callback</span><span class="o">=</span><span class="p">(</span><span class="nx">s</span><span class="p">,</span> <span class="nx">obs_cal</span><span class="p">)</span><span class="o">-&gt;</span><span class="nx">nothing</span><span class="p">)</span>
-</pre></div>
-
-
-<p>Arguments:</p>
-<ul>
-<li>forwardmodel : param to obs map h(s)</li>
-<li>s0 : initial guess</li>
-<li>X : mean of parameter prior (replace with B*X drift matrix later for p&gt;1)</li>
-<li>xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix</li>
-<li>R : covariance of measurement error (data misfit term)</li>
-<li>y : data vector</li>
-<li>S : sketching matrix</li>
-<li>maxiters : maximum # of PCGA iterations</li>
-<li>delta : the finite difference step size</li>
-<li>xtol : convergence tolerance for the parameters</li>
-<li>callback : a function of the form <code>(params, observations)-&gt;...</code> that is called during each iteration</li>
-</ul>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/GeostatInversion.jl#L75-L97' class='documenter-source'>source</a><br></p>
-<p><a id='Module-GeostatInversion.FDDerivatives-1'></a></p>
-<h2 id="module-geostatinversionfdderivatives">Module GeostatInversion.FDDerivatives</h2>
-<p>GeostatInversion.FDDerivatives module functions:</p>
-<p><a id='GeostatInversion.FDDerivatives.makegradient' href='#GeostatInversion.FDDerivatives.makegradient'>#</a>
-<strong><code>GeostatInversion.FDDerivatives.makegradient</code></strong> &mdash; <em>Function</em>.</p>
-<p>Create Gradient function</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br></p>
-<p><a id='GeostatInversion.FDDerivatives.makejacobian' href='#GeostatInversion.FDDerivatives.makejacobian'>#</a>
-<strong><code>GeostatInversion.FDDerivatives.makejacobian</code></strong> &mdash; <em>Function</em>.</p>
-<p>Create Jacobian function</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br></p>
 <p><a id='Module-GeostatInversion.RandMatFact-1'></a></p>
 <h2 id="module-geostatinversionrandmatfact">Module GeostatInversion.RandMatFact</h2>
 <p>GeostatInversion.RandMatFact module functions:</p>
-<p><a id='GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}' href='#GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}'>#</a>
-<strong><code>GeostatInversion.RandMatFact.randsvd</code></strong> &mdash; <em>Method</em>.</p>
-<p>Random SVD based on algorithm 5.1 from Halko et al.</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br></p>
-<p><a id='Module-GeostatInversion.FFTRF-1'></a></p>
-<h2 id="module-geostatinversionfftrf">Module GeostatInversion.FFTRF</h2>
-<p>GeostatInversion.FFTRF module functions:</p>
-<p><a id='GeostatInversion.FFTRF.reducek-Union{Tuple{Any,Type{Val{N}}}, Tuple{N}} where N' href='#GeostatInversion.FFTRF.reducek-Union{Tuple{Any,Type{Val{N}}}, Tuple{N}} where N'>#</a>
-<strong><code>GeostatInversion.FFTRF.reducek</code></strong> &mdash; <em>Method</em>.</p>
-<p>Reduce k</p>
-<p><a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FFTRF.jl#L6' class='documenter-source'>source</a><br></p>
+<p>```@autodocs
+Modules = [GeostatInversion.RandMatFact]
+Order   = [:function, :macro, :type]</p>
+<div class="codehilite"><pre><span></span><span class="na">&lt;a id=&#39;Module-GeostatInversion.FFTRF-1&#39;&gt;</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+
+<span class="p">##</span> <span class="k">Module</span> <span class="nn">GeostatInversion.FFTRF</span>
+
+
+<span class="n">GeostatInversion</span><span class="p">.</span><span class="n">FFTRF</span> <span class="k">module</span> <span class="nn">functions</span><span class="p">:</span>
+
+
+<span class="err">```@</span><span class="n">autodocs</span>
+<span class="n">Modules</span> <span class="o">=</span> <span class="o">[</span><span class="n">GeostatInversion</span><span class="p">.</span><span class="n">FFTRF</span><span class="o">]</span>
+<span class="n">Order</span>   <span class="o">=</span> <span class="o">[</span><span class="p">:</span><span class="n">function</span><span class="p">,</span> <span class="p">:</span><span class="n">macro</span><span class="p">,</span> <span class="p">:</span><span class="n">type</span><span class="o">]</span>
+</pre></div>
                 
                   
                 
