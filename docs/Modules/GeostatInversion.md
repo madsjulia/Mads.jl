@@ -1,1 +1,0 @@
-../build/GeostatInversion.md

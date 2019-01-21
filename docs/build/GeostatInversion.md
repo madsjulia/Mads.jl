@@ -26,113 +26,11 @@ The RGA method, `rga`, can use either of these approaches using the keyword argu
 
 GeostatInversion.jl module functions:
 
-<a id='GeostatInversion.getxis' href='#GeostatInversion.getxis'>#</a>
-**`GeostatInversion.getxis`** &mdash; *Function*.
 
-
-
-Get the parameter subspace that will be explored during the inverse analysis
-
+```@autodocs
+Modules = [GeostatInversion]
+Order   = [:function, :macro, :type]
 ```
-getxis(samplefield::Function, numfields::Int, numxis::Int, p::Int, q::Int=3, seed=nothing)
-getxis(Q::Matrix, numxis::Int, p::Int, q::Int=3, seed=nothing)
-```
-
-Arguments:
-
-  * samplefield : a function that takes no arguments and returns a sample of the field
-  * Q : the covariance matrix of the parameter field
-  * numfields : the number of fields that will be used to find the subspace
-  * numxis : the dimension of the subspace
-  * p : oversampling parameter when estimating the range of the covariance matrix (see Halko et al, SIAM Rev., 2011)
-  * q : number of power iterations when estimating the range of the covariance matrix (see Halko et al, SIAM Rev., 2011)
-  * seed : an optional seed to use when doing the randomized matrix factorization
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/GeostatInversion.jl#L37-L54' class='documenter-source'>source</a><br>
-
-<a id='GeostatInversion.pcgadirect-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}' href='#GeostatInversion.pcgadirect-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}'>#</a>
-**`GeostatInversion.pcgadirect`** &mdash; *Method*.
-
-
-
-Direct principal component geostatistical approach
-
-```
-pcgadirect(forwardmodel::Function, s0::Vector, X::Vector, xis::Array{Array{Float64, 1}, 1}, R, y::Vector; maxiters::Int=5, delta::Float64=sqrt(eps(Float64)), xtol::Float64=1e-6, callback=(s, obs_cal)->nothing)
-```
-
-Arguments:
-
-  * forwardmodel : param to obs map h(s)
-  * s0 : initial guess
-  * X : mean of parameter prior (replace with B*X drift matrix later for p>1)
-  * xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix
-  * R : covariance of measurement error (data misfit term)
-  * y : data vector
-  * maxiters : maximum # of PCGA iterations
-  * delta : the finite difference step size
-  * xtol : convergence tolerence for the parameters
-  * callback : a function of the form `(params, observations)->...` that is called during each iteration
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/direct.jl#L1-L20' class='documenter-source'>source</a><br>
-
-<a id='GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}' href='#GeostatInversion.pcgalsqr-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T}'>#</a>
-**`GeostatInversion.pcgalsqr`** &mdash; *Method*.
-
-
-
-Iterative principal component geostatistical approach
-
-```
-pcgalsqr(forwardmodel::Function, s0::Vector, X::Vector, xis::Array{Array{Float64, 1}, 1}, R, y::Vector; maxiters::Int=5, delta::Float64=sqrt(eps(Float64)), xtol::Float64=1e-6)
-```
-
-Arguments:
-
-  * forwardmodel : param to obs map h(s)
-  * s0 : initial guess
-  * X : mean of parameter prior (replace with B*X drift matrix later for p>1)
-  * xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix
-  * R : covariance of measurement error (data misfit term)
-  * y : data vector
-  * maxiters : maximum # of PCGA iterations
-  * delta : the finite difference step size
-  * xtol : convergence tolerence for the parameters
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/lsqr.jl#L1-L19' class='documenter-source'>source</a><br>
-
-<a id='GeostatInversion.rga-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T,Any}' href='#GeostatInversion.rga-Tuple{Function,Array{T,1} where T,Array{T,1} where T,Array{Array{Float64,1},1},Any,Array{T,1} where T,Any}'>#</a>
-**`GeostatInversion.rga`** &mdash; *Method*.
-
-
-
-Randomized (principal component) geostatistical approach
-
-Example:
-
-```
-function rga(forwardmodel::Function, s0::Vector, X::Vector, xis::Array{Array{Float64, 1}, 1}, R, y::Vector, S; maxiters::Int=5, delta::Float64=sqrt(eps(Float64)), xtol::Float64=1e-6, pcgafunc=pcgadirect, callback=(s, obs_cal)->nothing)
-```
-
-Arguments:
-
-  * forwardmodel : param to obs map h(s)
-  * s0 : initial guess
-  * X : mean of parameter prior (replace with B*X drift matrix later for p>1)
-  * xis : K columns of Z = randSVDzetas(Q,K,p,q) where Q is the parameter covariance matrix
-  * R : covariance of measurement error (data misfit term)
-  * y : data vector
-  * S : sketching matrix
-  * maxiters : maximum # of PCGA iterations
-  * delta : the finite difference step size
-  * xtol : convergence tolerance for the parameters
-  * callback : a function of the form `(params, observations)->...` that is called during each iteration
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/GeostatInversion.jl#L75-L97' class='documenter-source'>source</a><br>
 
 
 <a id='Module-GeostatInversion.FDDerivatives-1'></a>
@@ -142,25 +40,11 @@ Arguments:
 
 GeostatInversion.FDDerivatives module functions:
 
-<a id='GeostatInversion.FDDerivatives.makegradient' href='#GeostatInversion.FDDerivatives.makegradient'>#</a>
-**`GeostatInversion.FDDerivatives.makegradient`** &mdash; *Function*.
 
-
-
-Create Gradient function
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FDDerivatives.jl#L22' class='documenter-source'>source</a><br>
-
-<a id='GeostatInversion.FDDerivatives.makejacobian' href='#GeostatInversion.FDDerivatives.makejacobian'>#</a>
-**`GeostatInversion.FDDerivatives.makejacobian`** &mdash; *Function*.
-
-
-
-Create Jacobian function
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FDDerivatives.jl#L3' class='documenter-source'>source</a><br>
+```@autodocs
+Modules = [GeostatInversion.FDDerivatives]
+Order   = [:function, :macro, :type]
+```
 
 
 <a id='Module-GeostatInversion.RandMatFact-1'></a>
@@ -170,15 +54,11 @@ Create Jacobian function
 
 GeostatInversion.RandMatFact module functions:
 
-<a id='GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}' href='#GeostatInversion.RandMatFact.randsvd-Tuple{Any,Int64,Int64,Int64}'>#</a>
-**`GeostatInversion.RandMatFact.randsvd`** &mdash; *Method*.
 
-
-
-Random SVD based on algorithm 5.1 from Halko et al.
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/RandMatFact.jl#L75' class='documenter-source'>source</a><br>
+```@autodocs
+Modules = [GeostatInversion.RandMatFact]
+Order   = [:function, :macro, :type]
+```
 
 
 <a id='Module-GeostatInversion.FFTRF-1'></a>
@@ -188,13 +68,9 @@ Random SVD based on algorithm 5.1 from Halko et al.
 
 GeostatInversion.FFTRF module functions:
 
-<a id='GeostatInversion.FFTRF.reducek-Union{Tuple{Any,Type{Val{N}}}, Tuple{N}} where N' href='#GeostatInversion.FFTRF.reducek-Union{Tuple{Any,Type{Val{N}}}, Tuple{N}} where N'>#</a>
-**`GeostatInversion.FFTRF.reducek`** &mdash; *Method*.
 
-
-
-Reduce k
-
-
-<a target='_blank' href='https://github.com/madsjulia/GeostatInversion.jl/blob/bd6082be4393cfd5b6c6f59ee55524b1dbd74e8e/src/FFTRF.jl#L6' class='documenter-source'>source</a><br>
+```@autodocs
+Modules = [GeostatInversion.FFTRF]
+Order   = [:function, :macro, :type]
+```
 

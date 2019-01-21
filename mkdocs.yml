@@ -11,7 +11,7 @@ google_analytics: ['UA-25717430-1', 'mads.lanl.gov']
 extra_css:
 - assets/Documenter.css
 
-pages:
+nav:
 - Home: index.md
 - Installation: installation.md
 - Getting started: getting_started.md
