@@ -172,7 +172,7 @@ function plotmatches(madsdata::AbstractDict, rx::Regex=r""; kw...)
 		plotmatches(madsdata, r; kw...)
 	end
 end
-function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
 	newobs = empty(madsdata["Observations"])
 	newresult = empty(result)
 	for k in keys(madsdata["Observations"])
@@ -196,7 +196,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; pl
 	end
 	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, ymin=ymin, ymax=ymax, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=Mads.colors, display=display)
 end
-function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin::Number=0, ymax::Number=0, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -329,7 +329,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
-					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=4Gadfly.pt, highlight_width=0Gadfly.pt)))
+					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=2Gadfly.pt, highlight_width=0Gadfly.pt)))
 	end
 	if pl == nothing
 		Mads.madswarn("There is nothing to plot!")
@@ -373,7 +373,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are ploted onl
             "hsize"=>"graph horizontal size [default=`8Gadfly.inch`]",
             "vsize"=>"graph vertical size [default=`4Gadfly.inch`]",
             "linewidth"=>"line width [default=`2Gadfly.pt`]",
-            "pointsize"=>"data dot size [default=`4Gadfly.pt`]",
+            "pointsize"=>"data dot size [default=`2Gadfly.pt`]",
             "obs_plot_dots"=>"plot data as dots or line [default=`true`]",
             "noise"=>"random noise magnitude [default=`0`; no noise]",
             "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
@@ -738,7 +738,7 @@ function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -878,7 +878,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.g
             "obs_plot_dots"=>"plot observation as dots (`true` (default) or `false`)",
             "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines on the plot [default=`2Gadfly.pt`]",
-            "pointsize"=>"size of the markers on the plot [default=`4Gadfly.pt`]")))
+            "pointsize"=>"size of the markers on the plot [default=`2Gadfly.pt`]")))
 
 Dumps:
 
@@ -933,7 +933,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false)
+function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -964,7 +964,7 @@ function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true
 	obs_plot = Any[]
 	if plotdata
 		if obs_plot_dots
-			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize))
+			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt))
 			push!(obs_plot, Gadfly.Geom.point)
 		else
 			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "black"), line_width=linewidth))
@@ -975,8 +975,8 @@ function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true
 	if yfit
 		ymin = minimum(Y, 2)
 		ymax = maximum(Y, 2)
-		push!(pa, Gadfly.Coord.Cartesian(xmin=ymin, xmax=ymax))
 	end
+	push!(pa, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 	if !haskey(madsdata, "Wells")
 		if plotdata
 			t = getobstime(madsdata)
@@ -1084,7 +1084,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are plotted on
             "obs_plot_dots"=>"plot observation as dots (`true` [default] or `false`)",
             "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines in plot [default=`2Gadfly.pt`]",
-            "pointsize"=>"size of the markers in plot [default=`4Gadfly.pt`]")))
+            "pointsize"=>"size of the markers in plot [default=`2Gadfly.pt`]")))
 
 Dumps:
 
