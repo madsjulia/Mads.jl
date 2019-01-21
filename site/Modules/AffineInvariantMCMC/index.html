@@ -685,9 +685,33 @@
 <h1 id="affineinvariantmcmcjl">AffineInvariantMCMC.jl</h1>
 <p>Module AffineInvariantMCMC.jl provides functions for Bayesian sampling using Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee) based on a paper by Goodman &amp; Weare, "Ensemble samplers with affine invariance" Communications in Applied Mathematics and Computational Science, DOI: <a href="http://dx.doi.org/10.2140/camcos.2010.5.65">10.2140/camcos.2010.5.65</a>, 2010.</p>
 <p>AffineInvariantMCMC.jl module functions:</p>
-<p><code>@autodocs
-Modules = [AffineInvariantMCMC]
-Order   = [:function, :macro, :type]</code></p>
+<p><a id='AffineInvariantMCMC.flattenmcmcarray-Tuple{Array,Array}' href='#AffineInvariantMCMC.flattenmcmcarray-Tuple{Array,Array}'>#</a>
+<strong><code>AffineInvariantMCMC.flattenmcmcarray</code></strong> &mdash; <em>Method</em>.</p>
+<p>Flatten MCMC arrays</p>
+<p><a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/b37792178e128b1930b8ef058ea6809bbf5b3e34/src/AffineInvariantMCMC.jl#L96' class='documenter-source'>source</a><br></p>
+<p><a id='AffineInvariantMCMC.sample' href='#AffineInvariantMCMC.sample'>#</a>
+<strong><code>AffineInvariantMCMC.sample</code></strong> &mdash; <em>Function</em>.</p>
+<p>Bayesian sampling using Goodman &amp; Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)</p>
+<div class="codehilite"><pre><span></span>AffineInvariantMCMC.sample(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
+</pre></div>
+
+
+<p>Arguments:</p>
+<ul>
+<li><code>llhood</code> : function estimating loglikelihood (for example, generated using Mads.makearrayloglikelihood())</li>
+<li><code>numwalkers</code> : number of walkers</li>
+<li><code>x0</code> : normalized initial parameters (matrix of size (length(params), numwalkers))</li>
+<li><code>thinning</code> : removal of any <code>thinning</code> realization</li>
+<li><code>a</code> :</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li><code>mcmcchain</code> : final MCMC chain</li>
+<li><code>llhoodvals</code> : log likelihoods of the final samples in the chain</li>
+</ul>
+<p>Reference:</p>
+<p>Goodman &amp; Weare, "Ensemble samplers with affine invariance", Communications in Applied Mathematics and Computational Science, DOI: 10.2140/camcos.2010.5.65, 2010.</p>
+<p><a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/b37792178e128b1930b8ef058ea6809bbf5b3e34/src/AffineInvariantMCMC.jl#L36-L59' class='documenter-source'>source</a><br></p>
                 
                   
                 
