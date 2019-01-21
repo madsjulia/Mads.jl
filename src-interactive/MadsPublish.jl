@@ -1,4 +1,5 @@
 import Documenter
+import DocumenterMarkdown
 import DocumentFunction
 
 """
@@ -386,7 +387,7 @@ function create_documentation()
 		Core.eval(Main, :(@Mads.tryimportmain $(Symbol(i))))
 	end
 
-	Documenter.makedocs(root = joinpath(dirname(pathof(Mads)), "..", "docs"), doctest=false, clean=true)
+	Documenter.makedocs(root=joinpath(dirname(pathof(Mads)), "..", "docs"), sitename="Mads documentation", format = DocumenterMarkdown.Markdown(), doctest=false, modules=madsmodulesdoc, clean=true)
 
 	d = pwd()
 	cd(Mads.madsdir)
