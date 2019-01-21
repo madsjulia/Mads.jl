@@ -9,9 +9,33 @@ Module RobustPmap provides robust pmap calls for efficient parallelization and h
 
 RobustPmap.jl module functions:
 
+<a id='RobustPmap.checkexceptions' href='#RobustPmap.checkexceptions'>#</a>
+**`RobustPmap.checkexceptions`** &mdash; *Function*.
 
-```@autodocs
-Modules = [RobustPmap]
-Order   = [:function, :macro, :type]
-```
+
+
+Check for type exceptions
+
+
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/blob/ab573f302880f023b31c40bd77cde18a682f24dc/src/RobustPmap.jl#L40' class='documenter-source'>source</a><br>
+
+<a id='RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N} where N}' href='#RobustPmap.crpmap-Tuple{Function,Int64,String,Vararg{Any,N} where N}'>#</a>
+**`RobustPmap.crpmap`** &mdash; *Method*.
+
+
+
+Robust pmap call with checkpoints
+
+
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/blob/ab573f302880f023b31c40bd77cde18a682f24dc/src/RobustPmap.jl#L59' class='documenter-source'>source</a><br>
+
+<a id='RobustPmap.rpmap-Tuple{Function,Vararg{Any,N} where N}' href='#RobustPmap.rpmap-Tuple{Function,Vararg{Any,N} where N}'>#</a>
+**`RobustPmap.rpmap`** &mdash; *Method*.
+
+
+
+Robust pmap call
+
+
+<a target='_blank' href='https://github.com/madsjulia/RobustPmap.jl/blob/ab573f302880f023b31c40bd77cde18a682f24dc/src/RobustPmap.jl#L52' class='documenter-source'>source</a><br>
 
