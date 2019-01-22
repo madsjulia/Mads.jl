@@ -21,8 +21,8 @@ Matrix Factorization using Levenberg Marquardt
 
 Methods
 
-  * `Mads.MFlm(X::Array{T,2}, range::AbstractRange{Int64}; kw...) where T in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsBSS.jl:103
-  * `Mads.MFlm(X::Array{T,2}, nk::Integer; method, log_W, log_H, retries, initW, initH, tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, quiet) where T in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsBSS.jl:133
+  * `Mads.MFlm(X::Array{T,2}, range::AbstractRange{Int64}; kw...) where T in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsBSS.jl#L103
+  * `Mads.MFlm(X::Array{T,2}, nk::Integer; method, log_W, log_H, retries, initW, initH, tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, quiet) where T in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsBSS.jl#L133
 
 Arguments
 
@@ -66,8 +66,8 @@ Non-negative Matrix Factorization using JuMP/Ipopt
 
 Methods
 
-  * `Mads.NMFipopt(X::Array{T,2} where T, nk::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsBSS.jl:61
-  * `Mads.NMFipopt(X::Array{T,2} where T, nk::Integer, retries::Integer; random, maxiter, maxguess, initW, initH, verbosity, quiet) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsBSS.jl:61
+  * `Mads.NMFipopt(X::Array{T,2} where T, nk::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsBSS.jl#L61
+  * `Mads.NMFipopt(X::Array{T,2} where T, nk::Integer, retries::Integer; random, maxiter, maxguess, initW, initH, verbosity, quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsBSS.jl#L61
 
 Arguments
 
@@ -101,7 +101,7 @@ Non-negative Matrix Factorization using NMF
 
 Methods
 
-  * `Mads.NMFm(X::Array, nk::Integer; retries, tol, maxiter) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsBSS.jl:22
+  * `Mads.NMFm(X::Array, nk::Integer; retries, tol, maxiter) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsBSS.jl#L22
 
 Arguments
 
@@ -130,8 +130,8 @@ Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 Methods
 
-  * `Mads.addkeyword!(madsdata::AbstractDict, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:277
-  * `Mads.addkeyword!(madsdata::AbstractDict, class::String, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:281
+  * `Mads.addkeyword!(madsdata::AbstractDict, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L277
+  * `Mads.addkeyword!(madsdata::AbstractDict, class::String, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L281
 
 Arguments
 
@@ -151,8 +151,8 @@ Add an additional contamination source
 
 Methods
 
-  * `Mads.addsource!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:19
-  * `Mads.addsource!(madsdata::AbstractDict, sourceid::Int64; dict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:19
+  * `Mads.addsource!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L19
+  * `Mads.addsource!(madsdata::AbstractDict, sourceid::Int64; dict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L19
 
 Arguments
 
@@ -175,7 +175,7 @@ Add contaminant source parameters
 
 Methods
 
-  * `Mads.addsourceparameters!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:76
+  * `Mads.addsourceparameters!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L76
 
 Arguments
 
@@ -193,7 +193,7 @@ Turn off all the wells in the MADS problem dictionary
 
 Methods
 
-  * `Mads.allwellsoff!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:607
+  * `Mads.allwellsoff!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L607
 
 Arguments
 
@@ -211,7 +211,7 @@ Turn on all the wells in the MADS problem dictionary
 
 Methods
 
-  * `Mads.allwellson!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:549
+  * `Mads.allwellson!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L549
 
 Arguments
 
@@ -229,11 +229,11 @@ Execute Amanzi external groundwater flow and transport simulator
 
 Methods
 
-  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool, observation_filename::String, setup::String; amanzi_exe) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsSimulators.jl:15
-  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool, observation_filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsSimulators.jl:15
-  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsSimulators.jl:15
-  * `Mads.amanzi(filename::String, nproc::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsSimulators.jl:15
-  * `Mads.amanzi(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsSimulators.jl:15
+  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool, observation_filename::String, setup::String; amanzi_exe) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsSimulators.jl#L15
+  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool, observation_filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsSimulators.jl#L15
+  * `Mads.amanzi(filename::String, nproc::Int64, quiet::Bool) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsSimulators.jl#L15
+  * `Mads.amanzi(filename::String, nproc::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsSimulators.jl#L15
+  * `Mads.amanzi(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsSimulators.jl#L15
 
 Arguments
 
@@ -259,8 +259,8 @@ Parse Amanzi output provided in an external file (`filename`)
 
 Methods
 
-  * `Mads.amanzi_output_parser(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsParsers.jl:22
-  * `Mads.amanzi_output_parser() in Mads` : /Users/monty/.julia/dev/Mads/src-external/MadsParsers.jl:22
+  * `Mads.amanzi_output_parser(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsParsers.jl#L22
+  * `Mads.amanzi_output_parser() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-external/MadsParsers.jl#L22
 
 Arguments
 
@@ -289,8 +289,8 @@ Arcsine transformation of model parameters
 
 Methods
 
-  * `Mads.asinetransform(madsdata::AbstractDict, params::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:4
-  * `Mads.asinetransform(params::Array{T,1} where T, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:14
+  * `Mads.asinetransform(madsdata::AbstractDict, params::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L4
+  * `Mads.asinetransform(params::Array{T,1} where T, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L14
 
 Arguments
 
@@ -316,8 +316,8 @@ Bound model parameters based on their ranges
 
 Methods
 
-  * `Mads.boundparameters!(madsdata::AbstractDict, parvec::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:771
-  * `Mads.boundparameters!(madsdata::AbstractDict, pardict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:783
+  * `Mads.boundparameters!(madsdata::AbstractDict, parvec::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L771
+  * `Mads.boundparameters!(madsdata::AbstractDict, pardict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L783
 
 Arguments
 
@@ -339,7 +339,7 @@ Calibrate Mads model using a constrained Levenberg-Marquardt technique
 
 Methods
 
-  * `Mads.calibrate(madsdata::AbstractDict; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, save_results, localsa) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:164
+  * `Mads.calibrate(madsdata::AbstractDict; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, save_results, localsa) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L164
 
 Arguments
 
@@ -378,8 +378,8 @@ Calibrate with random initial guesses
 
 Methods
 
-  * `Mads.calibraterandom(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:41
-  * `Mads.calibraterandom(madsdata::AbstractDict, numberofsamples::Integer; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, seed, quiet, all, save_results) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:41
+  * `Mads.calibraterandom(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L41
+  * `Mads.calibraterandom(madsdata::AbstractDict, numberofsamples::Integer; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, seed, quiet, all, save_results) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L41
 
 Arguments
 
@@ -428,8 +428,8 @@ Calibrate with random initial guesses in parallel
 
 Methods
 
-  * `Mads.calibraterandom_parallel(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:108
-  * `Mads.calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, seed, quiet, save_results, localsa) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:108
+  * `Mads.calibraterandom_parallel(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L108
+  * `Mads.calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, seed, quiet, save_results, localsa) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L108
 
 Arguments
 
@@ -472,7 +472,7 @@ Make MADS not capture
 
 Methods
 
-  * `Mads.captureoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:133
+  * `Mads.captureoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L133
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L127-L131' class='documenter-source'>source</a><br>
@@ -486,7 +486,7 @@ Make MADS capture
 
 Methods
 
-  * `Mads.captureon() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:124
+  * `Mads.captureon() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L124
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L118-L122' class='documenter-source'>source</a><br>
@@ -500,7 +500,7 @@ Check the directories where model outputs should be saved for MADS
 
 Methods
 
-  * `Mads.checkmodeloutputdirs(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:615
+  * `Mads.checkmodeloutputdirs(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L615
 
 Arguments
 
@@ -522,10 +522,10 @@ Check if a directory is readable
 
 Methods
 
-  * `Mads.checknodedir(dir::String, waittime::Float64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:13
-  * `Mads.checknodedir(dir::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:13
-  * `Mads.checknodedir(node::String, dir::String, waittime::Float64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:4
-  * `Mads.checknodedir(node::String, dir::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:4
+  * `Mads.checknodedir(dir::String, waittime::Float64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L13
+  * `Mads.checknodedir(dir::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L13
+  * `Mads.checknodedir(node::String, dir::String, waittime::Float64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L4
+  * `Mads.checknodedir(node::String, dir::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L4
 
 Arguments
 
@@ -549,8 +549,8 @@ Checkout (pull) the latest version of Mads modules
 
 Methods
 
-  * `Mads.checkout(modulename::String; git, master, force, pull, required, all) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:79
-  * `Mads.checkout() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:79
+  * `Mads.checkout(modulename::String; git, master, force, pull, required, all) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L79
+  * `Mads.checkout() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L79
 
 Arguments
 
@@ -577,7 +577,7 @@ Check parameter ranges for model parameters
 
 Methods
 
-  * `Mads.checkparameterranges(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:709
+  * `Mads.checkparameterranges(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L709
 
 Arguments
 
@@ -595,7 +595,7 @@ Remove Mads coverage files
 
 Methods
 
-  * `Mads.cleancoverage() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsTest.jl:24
+  * `Mads.cleancoverage() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsTest.jl#L24
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src-interactive/MadsTest.jl#L18-L22' class='documenter-source'>source</a><br>
@@ -609,7 +609,7 @@ Call C MADS ins_obs() function from MADS dynamic library
 
 Methods
 
-  * `Mads.cmadsins_obs(obsid::Array{T,1} where T, instructionfilename::String, inputfilename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-old/MadsCMads.jl:40
+  * `Mads.cmadsins_obs(obsid::Array{T,1} where T, instructionfilename::String, inputfilename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-old/MadsCMads.jl#L40
 
 Arguments
 
@@ -633,8 +633,8 @@ Commit the latest version of Mads modules in the repository
 
 Methods
 
-  * `Mads.commit(commitmsg::String, modulename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:227
-  * `Mads.commit(commitmsg::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:227
+  * `Mads.commit(commitmsg::String, modulename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L227
+  * `Mads.commit(commitmsg::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L227
 
 Arguments
 
@@ -653,8 +653,8 @@ Compute injected/reduced contaminant mass (for a given set of mads input files w
 
 Methods
 
-  * `Mads.computemass(madsdata::AbstractDict; time) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:459
-  * `Mads.computemass(madsfiles::Union{Regex, String}; time, path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:486
+  * `Mads.computemass(madsdata::AbstractDict; time) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L459
+  * `Mads.computemass(madsfiles::Union{Regex, String}; time, path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L486
 
 Arguments
 
@@ -691,7 +691,7 @@ Compute sensitivities for each model parameter; averaging the sensitivity indice
 
 Methods
 
-  * `Mads.computeparametersensitities(madsdata::AbstractDict, saresults::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:846
+  * `Mads.computeparametersensitities(madsdata::AbstractDict, saresults::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L846
 
 Arguments
 
@@ -710,7 +710,7 @@ Compute concentration for a point in space and time (x,y,z,t)
 
 Methods
 
-  * `Mads.contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Array{T,1} where T, anasolfunction::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:429
+  * `Mads.contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Array{T,1} where T, anasolfunction::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L429
 
 Arguments
 
@@ -755,7 +755,7 @@ Copy aquifer parameters to become contaminant source parameters
 
 Methods
 
-  * `Mads.copyaquifer2sourceparameters!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:115
+  * `Mads.copyaquifer2sourceparameters!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L115
 
 Arguments
 
@@ -773,7 +773,7 @@ Produce MADS copyright information
 
 Methods
 
-  * `Mads.copyright() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:19
+  * `Mads.copyright() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L19
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelp.jl#L13-L17' class='documenter-source'>source</a><br>
@@ -787,7 +787,7 @@ Create web documentation files for Mads functions
 
 Methods
 
-  * `Mads.create_documentation() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:386
+  * `Mads.create_documentation() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L386
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src-interactive/MadsPublish.jl#L380-L384' class='documenter-source'>source</a><br>
@@ -801,7 +801,7 @@ Turn off the generation of MADS tests (default)
 
 Methods
 
-  * `Mads.create_tests_off() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:178
+  * `Mads.create_tests_off() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L178
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L172-L176' class='documenter-source'>source</a><br>
@@ -815,7 +815,7 @@ Turn on the generation of MADS tests (dangerous)
 
 Methods
 
-  * `Mads.create_tests_on() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:169
+  * `Mads.create_tests_on() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L169
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L163-L167' class='documenter-source'>source</a><br>
@@ -829,8 +829,8 @@ Create Mads dictionary of observations and instruction file
 
 Methods
 
-  * `Mads.createmadsobservations(nrow::Int64, ncol::Int64; obstring, pretext, prestring, poststring, filename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:108
-  * `Mads.createmadsobservations(nrow::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:108
+  * `Mads.createmadsobservations(nrow::Int64, ncol::Int64; obstring, pretext, prestring, poststring, filename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L108
+  * `Mads.createmadsobservations(nrow::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L108
 
 Arguments
 
@@ -863,10 +863,10 @@ Create a new Mads problem where the observation targets are computed based on th
 
 Methods
 
-  * `Mads.createmadsproblem(infilename::String, outfilename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:26
-  * `Mads.createmadsproblem(madsdata::AbstractDict, outfilename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:51
-  * `Mads.createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:60
-  * `Mads.createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:56
+  * `Mads.createmadsproblem(infilename::String, outfilename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L26
+  * `Mads.createmadsproblem(madsdata::AbstractDict, outfilename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L51
+  * `Mads.createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L60
+  * `Mads.createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L56
 
 Arguments
 
@@ -891,9 +891,9 @@ Create observations in the MADS problem dictionary based on `time` and `observat
 
 Methods
 
-  * `Mads.createobservations!(madsdata::AbstractDict, time::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:444
-  * `Mads.createobservations!(madsdata::AbstractDict, time::Array{T,1} where T, observation::Array{T,1} where T; logtransform, weight_type, weight) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:444
-  * `Mads.createobservations!(madsdata::AbstractDict, observation::AbstractDict; logtransform, weight_type, weight) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:488
+  * `Mads.createobservations!(madsdata::AbstractDict, time::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L444
+  * `Mads.createobservations!(madsdata::AbstractDict, time::Array{T,1} where T, observation::Array{T,1} where T; logtransform, weight_type, weight) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L444
+  * `Mads.createobservations!(madsdata::AbstractDict, observation::AbstractDict; logtransform, weight_type, weight) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L488
 
 Arguments
 
@@ -920,7 +920,7 @@ Create temporary directory
 
 Methods
 
-  * `Mads.createtempdir(tempdirname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1255
+  * `Mads.createtempdir(tempdirname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1255
 
 Arguments
 
@@ -938,7 +938,7 @@ Delete rows with NaN in a dataframe `df`
 
 Methods
 
-  * `Mads.deleteNaN!(df::DataFrames.DataFrame) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:1072
+  * `Mads.deleteNaN!(df::DataFrames.DataFrame) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L1072
 
 Arguments
 
@@ -956,8 +956,8 @@ Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 Methods
 
-  * `Mads.deletekeyword!(madsdata::AbstractDict, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:304
-  * `Mads.deletekeyword!(madsdata::AbstractDict, class::String, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:310
+  * `Mads.deletekeyword!(madsdata::AbstractDict, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L304
+  * `Mads.deletekeyword!(madsdata::AbstractDict, class::String, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L310
 
 Arguments
 
@@ -977,7 +977,7 @@ Delete all wells marked as being off in the MADS problem dictionary
 
 Methods
 
-  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:621
+  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L621
 
 Arguments
 
@@ -996,7 +996,7 @@ Delete all times in the MADS problem dictionary in a given list.
 
 Methods
 
-  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:621
+  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L621
 
 Arguments
 
@@ -1015,9 +1015,9 @@ Lists module dependents on a module (Mads by default)
 
 Methods
 
-  * `Mads.dependents(modulename::String, filter::Bool) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:43
-  * `Mads.dependents(modulename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:43
-  * `Mads.dependents() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:43
+  * `Mads.dependents(modulename::String, filter::Bool) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L43
+  * `Mads.dependents(modulename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L43
+  * `Mads.dependents() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L43
 
 Arguments
 
@@ -1040,8 +1040,8 @@ Diff the latest version of Mads modules in the repository
 
 Methods
 
-  * `Mads.diff(modulename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:170
-  * `Mads.diff() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:170
+  * `Mads.diff(modulename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L170
+  * `Mads.diff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L170
 
 Arguments
 
@@ -1059,9 +1059,9 @@ Display image file
 
 Methods
 
-  * `Mads.display(p::Compose.Context) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsDisplay.jl:71
-  * `Mads.display(p::Gadfly.Plot) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsDisplay.jl:65
-  * `Mads.display(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsDisplay.jl:8
+  * `Mads.display(p::Compose.Context) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsDisplay.jl#L71
+  * `Mads.display(p::Gadfly.Plot) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsDisplay.jl#L65
+  * `Mads.display(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsDisplay.jl#L8
 
 Arguments
 
@@ -1081,7 +1081,7 @@ Dump ASCII file
 
 Methods
 
-  * `Mads.dumpasciifile(filename::String, data) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsASCII.jl:31
+  * `Mads.dumpasciifile(filename::String, data) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsASCII.jl#L31
 
 Arguments
 
@@ -1104,7 +1104,7 @@ Dump a JSON file
 
 Methods
 
-  * `Mads.dumpjsonfile(filename::String, data) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsJSON.jl:39
+  * `Mads.dumpjsonfile(filename::String, data) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsJSON.jl#L39
 
 Arguments
 
@@ -1127,7 +1127,7 @@ Dump well data from MADS problem dictionary into a ASCII file
 
 Methods
 
-  * `Mads.dumpwelldata(madsdata::AbstractDict, filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1121
+  * `Mads.dumpwelldata(madsdata::AbstractDict, filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1121
 
 Arguments
 
@@ -1150,7 +1150,7 @@ Dump YAML file
 
 Methods
 
-  * `Mads.dumpyamlfile(filename::String, data; julia) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsYAML.jl:55
+  * `Mads.dumpyamlfile(filename::String, data; julia) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsYAML.jl#L55
 
 Arguments
 
@@ -1173,7 +1173,7 @@ Dump YAML Mads file
 
 Methods
 
-  * `Mads.dumpyamlmadsfile(madsdata::AbstractDict, filename::String; julia) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsYAML.jl:74
+  * `Mads.dumpyamlmadsfile(madsdata::AbstractDict, filename::String; julia) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsYAML.jl#L74
 
 Arguments
 
@@ -1196,7 +1196,7 @@ Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Tes
 
 Methods
 
-  * `Mads.efast(md::AbstractDict; N, M, gamma, seed, checkpointfrequency, restartdir, restart) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:1115
+  * `Mads.efast(md::AbstractDict; N, M, gamma, seed, checkpointfrequency, restartdir, restart) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L1115
 
 Arguments
 
@@ -1224,8 +1224,8 @@ Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Car
 
 Methods
 
-  * `Mads.emceesampling(madsdata::AbstractDict; numwalkers, nsteps, burnin, thinning, sigma, seed, weightfactor) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:9
-  * `Mads.emceesampling(madsdata::AbstractDict, p0::Array; numwalkers, nsteps, burnin, thinning, seed, weightfactor) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:32
+  * `Mads.emceesampling(madsdata::AbstractDict; numwalkers, nsteps, burnin, thinning, sigma, seed, weightfactor) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L9
+  * `Mads.emceesampling(madsdata::AbstractDict, p0::Array; numwalkers, nsteps, burnin, thinning, seed, weightfactor) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L32
 
 Arguments
 
@@ -1266,8 +1266,8 @@ Estimate kriging error
 
 Methods
 
-  * `Mads.estimationerror(w::Array{T,1} where T, x0::Array{T,1} where T, X::AbstractArray{T,2} where T, cov::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:199
-  * `Mads.estimationerror(w::Array{T,1} where T, covmat::AbstractArray{T,2} where T, covvec::Array{T,1} where T, cov0::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:206
+  * `Mads.estimationerror(w::Array{T,1} where T, x0::Array{T,1} where T, X::AbstractArray{T,2} where T, cov::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L199
+  * `Mads.estimationerror(w::Array{T,1} where T, covmat::AbstractArray{T,2} where T, covvec::Array{T,1} where T, cov0::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L206
 
 Arguments
 
@@ -1295,7 +1295,7 @@ Evaluate an expression string based on a parameter dictionary
 
 Methods
 
-  * `Mads.evaluatemadsexpression(expressionstring::String, parameters::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:155
+  * `Mads.evaluatemadsexpression(expressionstring::String, parameters::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L155
 
 Arguments
 
@@ -1318,7 +1318,7 @@ Evaluate all the expressions in the Mads problem dictiorany based on a parameter
 
 Methods
 
-  * `Mads.evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:174
+  * `Mads.evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L174
 
 Arguments
 
@@ -1341,7 +1341,7 @@ Exponential spatial covariance function
 
 Methods
 
-  * `Mads.expcov(h::Number, maxcov::Number, scale::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:31
+  * `Mads.expcov(h::Number, maxcov::Number, scale::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L31
 
 Arguments
 
@@ -1365,7 +1365,7 @@ Exponential variogram
 
 Methods
 
-  * `Mads.exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:84
+  * `Mads.exponentialvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L84
 
 Arguments
 
@@ -1390,9 +1390,9 @@ Filter dictionary keys based on a string or regular expression
 
 Methods
 
-  * `Mads.filterkeys(dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:804
-  * `Mads.filterkeys(dict::AbstractDict, key::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:803
-  * `Mads.filterkeys(dict::AbstractDict, key::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:804
+  * `Mads.filterkeys(dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L804
+  * `Mads.filterkeys(dict::AbstractDict, key::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L803
+  * `Mads.filterkeys(dict::AbstractDict, key::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L804
 
 Arguments
 
@@ -1412,9 +1412,9 @@ Perform a forward run using the initial or provided values for the model paramet
 
 Methods
 
-  * `Mads.forward(madsdata::AbstractDict; all) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsForward.jl:8
-  * `Mads.forward(madsdata::AbstractDict, paramdict::AbstractDict; all, checkpointfrequency, checkpointfilename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsForward.jl:12
-  * `Mads.forward(madsdata::AbstractDict, paramarray::Array; all, checkpointfrequency, checkpointfilename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsForward.jl:46
+  * `Mads.forward(madsdata::AbstractDict; all) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsForward.jl#L8
+  * `Mads.forward(madsdata::AbstractDict, paramdict::AbstractDict; all, checkpointfrequency, checkpointfilename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsForward.jl#L12
+  * `Mads.forward(madsdata::AbstractDict, paramarray::Array; all, checkpointfrequency, checkpointfilename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsForward.jl#L46
 
 Arguments
 
@@ -1444,8 +1444,8 @@ Perform a forward run over a 3D grid defined in `madsdata` using the initial or 
 
 Methods
 
-  * `Mads.forwardgrid(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsForward.jl:134
-  * `Mads.forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsForward.jl:139
+  * `Mads.forwardgrid(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsForward.jl#L134
+  * `Mads.forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsForward.jl#L139
 
 Arguments
 
@@ -1469,8 +1469,8 @@ Free Mads modules
 
 Methods
 
-  * `Mads.free(modulename::String; required, all) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:203
-  * `Mads.free() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:203
+  * `Mads.free(modulename::String; required, all) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L203
+  * `Mads.free() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L203
 
 Arguments
 
@@ -1493,12 +1493,12 @@ List available functions in the MADS modules:
 
 Methods
 
-  * `Mads.functions(string::String; shortoutput, quiet) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:32
-  * `Mads.functions() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:32
-  * `Mads.functions(re::Regex; shortoutput, quiet) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:23
-  * `Mads.functions(m::Union{Module, Symbol}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:71
-  * `Mads.functions(m::Union{Module, Symbol}, re::Regex; shortoutput, quiet) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:41
-  * `Mads.functions(m::Union{Module, Symbol}, string::String; shortoutput, quiet) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:71
+  * `Mads.functions(string::String; shortoutput, quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L32
+  * `Mads.functions() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L32
+  * `Mads.functions(re::Regex; shortoutput, quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L23
+  * `Mads.functions(m::Union{Module, Symbol}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L71
+  * `Mads.functions(m::Union{Module, Symbol}, re::Regex; shortoutput, quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L41
+  * `Mads.functions(m::Union{Module, Symbol}, string::String; shortoutput, quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L71
 
 Arguments
 
@@ -1533,7 +1533,7 @@ Gaussian spatial covariance function
 
 Methods
 
-  * `Mads.gaussiancov(h::Number, maxcov::Number, scale::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:17
+  * `Mads.gaussiancov(h::Number, maxcov::Number, scale::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L17
 
 Arguments
 
@@ -1557,7 +1557,7 @@ Gaussian variogram
 
 Methods
 
-  * `Mads.gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:105
+  * `Mads.gaussianvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L105
 
 Arguments
 
@@ -1582,7 +1582,7 @@ Get spatial covariance matrix
 
 Methods
 
-  * `Mads.getcovmat(X::AbstractArray{T,2} where T, covfunction::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:161
+  * `Mads.getcovmat(X::AbstractArray{T,2} where T, covfunction::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L161
 
 Arguments
 
@@ -1605,7 +1605,7 @@ Get spatial covariance vector
 
 Methods
 
-  * `Mads.getcovvec!(covvec::Array{T,1} where T, x0::Array{T,1} where T, X::AbstractArray{T,2} where T, cov::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:187
+  * `Mads.getcovvec!(covvec::Array{T,1} where T, x0::Array{T,1} where T, X::AbstractArray{T,2} where T, cov::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L187
 
 Arguments
 
@@ -1630,7 +1630,7 @@ Set the default plot format (`SVG` is the default format)
 
 Methods
 
-  * `Mads.getdefaultplotformat() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:34
+  * `Mads.getdefaultplotformat() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L34
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsPlot.jl#L28-L32' class='documenter-source'>source</a><br>
@@ -1644,9 +1644,9 @@ Get dictionary values for keys based on a string or regular expression
 
 Methods
 
-  * `Mads.getdictvalues(dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:826
-  * `Mads.getdictvalues(dict::AbstractDict, key::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:825
-  * `Mads.getdictvalues(dict::AbstractDict, key::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:826
+  * `Mads.getdictvalues(dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L826
+  * `Mads.getdictvalues(dict::AbstractDict, key::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L825
+  * `Mads.getdictvalues(dict::AbstractDict, key::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L826
 
 Arguments
 
@@ -1666,7 +1666,7 @@ Get directory
 
 Methods
 
-  * `Mads.getdir(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:423
+  * `Mads.getdir(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L423
 
 Arguments
 
@@ -1695,7 +1695,7 @@ Parse parameter distribution from a string
 
 Methods
 
-  * `Mads.getdistribution(dist::String, i::String, inputtype::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:203
+  * `Mads.getdistribution(dist::String, i::String, inputtype::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L203
 
 Arguments
 
@@ -1719,7 +1719,7 @@ Get file name extension
 
 Methods
 
-  * `Mads.getextension(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:595
+  * `Mads.getextension(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L595
 
 Arguments
 
@@ -1747,7 +1747,7 @@ Get important samples
 
 Methods
 
-  * `Mads.getimportantsamples(samples::Array, llhoods::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:355
+  * `Mads.getimportantsamples(samples::Array, llhoods::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L355
 
 Arguments
 
@@ -1780,7 +1780,7 @@ Get the directory where currently Mads is running
 
 Methods
 
-  * `Mads.getmadsdir() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:465
+  * `Mads.getmadsdir() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L465
 
 Example:
 
@@ -1804,7 +1804,7 @@ Get the default MADS input file set as a MADS global variable using `setmadsinpu
 
 Methods
 
-  * `Mads.getmadsinputfile() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:380
+  * `Mads.getmadsinputfile() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L380
 
 Returns:
 
@@ -1822,7 +1822,7 @@ Get the directory where the Mads data file is located
 
 Methods
 
-  * `Mads.getmadsproblemdir(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:446
+  * `Mads.getmadsproblemdir(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L446
 
 Arguments
 
@@ -1849,7 +1849,7 @@ Get the MADS problem root name
 
 Methods
 
-  * `Mads.getmadsrootname(madsdata::AbstractDict; first, version) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:402
+  * `Mads.getmadsrootname(madsdata::AbstractDict; first, version) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L402
 
 Arguments
 
@@ -1882,7 +1882,7 @@ Get next mads file name
 
 Methods
 
-  * `Mads.getnextmadsfilename(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:558
+  * `Mads.getnextmadsfilename(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L558
 
 Arguments
 
@@ -1944,7 +1944,7 @@ Get keys for all observations in the MADS problem dictionary
 
 Methods
 
-  * `Mads.getobskeys(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:45
+  * `Mads.getobskeys(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L45
 
 Arguments
 
@@ -2096,9 +2096,9 @@ Get optimizable parameters
 
 Methods
 
-  * `Mads.getoptparams(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:369
-  * `Mads.getoptparams(madsdata::AbstractDict, parameterarray::Array) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:372
-  * `Mads.getoptparams(madsdata::AbstractDict, parameterarray::Array, optparameterkey::Array) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:372
+  * `Mads.getoptparams(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L369
+  * `Mads.getoptparams(madsdata::AbstractDict, parameterarray::Array) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L372
+  * `Mads.getoptparams(madsdata::AbstractDict, parameterarray::Array, optparameterkey::Array) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L372
 
 Arguments
 
@@ -2122,7 +2122,7 @@ Get dictionary with all parameters and their respective initial values
 
 Methods
 
-  * `Mads.getparamdict(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:60
+  * `Mads.getparamdict(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L60
 
 Arguments
 
@@ -2148,7 +2148,7 @@ Probabilistic distribution of parameters can be defined only if `dist` or `min`/
 
 Methods
 
-  * `Mads.getparamdistributions(madsdata::AbstractDict; init_dist) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:664
+  * `Mads.getparamdistributions(madsdata::AbstractDict; init_dist) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L664
 
 Arguments
 
@@ -2174,7 +2174,7 @@ Get keys of all parameters in the MADS problem dictionary
 
 Methods
 
-  * `Mads.getparamkeys(madsdata::AbstractDict; filter) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:44
+  * `Mads.getparamkeys(madsdata::AbstractDict; filter) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L44
 
 Arguments
 
@@ -2200,10 +2200,10 @@ Get independent sampling of model parameters defined in the MADS problem diction
 
 Methods
 
-  * `Mads.getparamrandom(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:391
-  * `Mads.getparamrandom(madsdata::AbstractDict, numsamples::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:391
-  * `Mads.getparamrandom(madsdata::AbstractDict, numsamples::Integer, parameterkey::String; init_dist) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:391
-  * `Mads.getparamrandom(madsdata::AbstractDict, parameterkey::String; numsamples, paramdist, init_dist) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:408
+  * `Mads.getparamrandom(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L391
+  * `Mads.getparamrandom(madsdata::AbstractDict, numsamples::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L391
+  * `Mads.getparamrandom(madsdata::AbstractDict, numsamples::Integer, parameterkey::String; init_dist) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L391
+  * `Mads.getparamrandom(madsdata::AbstractDict, parameterkey::String; numsamples, paramdist, init_dist) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L408
 
 Arguments
 
@@ -2253,8 +2253,8 @@ Get an array with `init_max` values for parameters defined by `paramkeys`
 
 Methods
 
-  * `Mads.getparamsinit_max(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:298
-  * `Mads.getparamsinit_max(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:264
+  * `Mads.getparamsinit_max(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L298
+  * `Mads.getparamsinit_max(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L264
 
 Arguments
 
@@ -2277,8 +2277,8 @@ Get an array with `init_min` values for parameters
 
 Methods
 
-  * `Mads.getparamsinit_min(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:247
-  * `Mads.getparamsinit_min(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:213
+  * `Mads.getparamsinit_min(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L247
+  * `Mads.getparamsinit_min(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L213
 
 Arguments
 
@@ -2341,8 +2341,8 @@ Get an array with `max` values for parameters defined by `paramkeys`
 
 Methods
 
-  * `Mads.getparamsmax(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:196
-  * `Mads.getparamsmax(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:174
+  * `Mads.getparamsmax(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L196
+  * `Mads.getparamsmax(madsdata::AbstractDict, paramkeys::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L174
 
 Arguments
 
@@ -2365,8 +2365,8 @@ Get an array with `min` values for parameters defined by `paramkeys`
 
 Methods
 
-  * `Mads.getparamsmin(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:157
-  * `Mads.getparamsmin(madsdata::AbstractDict, paramkeys::AbstractArray{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:135
+  * `Mads.getparamsmin(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L157
+  * `Mads.getparamsmin(madsdata::AbstractDict, paramkeys::AbstractArray{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L135
 
 Arguments
 
@@ -2449,7 +2449,7 @@ Get the number of processors
 
 Methods
 
-  * `Mads.getprocs() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:30
+  * `Mads.getprocs() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L30
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src-interactive/MadsParallel.jl#L24-L28' class='documenter-source'>source</a><br>
@@ -2463,7 +2463,7 @@ Get MADS restart status
 
 Methods
 
-  * `Mads.getrestart(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:79
+  * `Mads.getrestart(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L79
 
 Arguments
 
@@ -2481,8 +2481,8 @@ Get the directory where Mads restarts will be stored
 
 Methods
 
-  * `Mads.getrestartdir(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:327
-  * `Mads.getrestartdir(madsdata::AbstractDict, suffix::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:327
+  * `Mads.getrestartdir(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L327
+  * `Mads.getrestartdir(madsdata::AbstractDict, suffix::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L327
 
 Arguments
 
@@ -2505,7 +2505,7 @@ Get file name root
 
 Methods
 
-  * `Mads.getrootname(filename::String; first, version) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:495
+  * `Mads.getrootname(filename::String; first, version) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L495
 
 Arguments
 
@@ -2539,7 +2539,7 @@ Get and return current random seed.
 
 Methods
 
-  * `Mads.getseed() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:460
+  * `Mads.getseed() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L460
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L454-L458' class='documenter-source'>source</a><br>
@@ -2553,7 +2553,7 @@ Get sin-space dx
 
 Methods
 
-  * `Mads.getsindx(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:342
+  * `Mads.getsindx(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L342
 
 Arguments
 
@@ -2575,7 +2575,7 @@ Get keys of all source parameters in the MADS problem dictionary
 
 Methods
 
-  * `Mads.getsourcekeys(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:78
+  * `Mads.getsourcekeys(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L78
 
 Arguments
 
@@ -2597,7 +2597,7 @@ Get observation target
 
 Methods
 
-  * `Mads.gettarget(o::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:224
+  * `Mads.gettarget(o::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L224
 
 Arguments
 
@@ -2619,7 +2619,7 @@ Get keys for all targets (observations with weights greater than zero) in the MA
 
 Methods
 
-  * `Mads.gettargetkeys(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:59
+  * `Mads.gettargetkeys(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L59
 
 Arguments
 
@@ -2641,7 +2641,7 @@ Get observation time
 
 Methods
 
-  * `Mads.gettime(o::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:146
+  * `Mads.gettime(o::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L146
 
 Arguments
 
@@ -2663,7 +2663,7 @@ Get observation weight
 
 Methods
 
-  * `Mads.getweight(o::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:185
+  * `Mads.getweight(o::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L185
 
 Arguments
 
@@ -2685,7 +2685,7 @@ Get spatial and temporal data in the `Wells` class
 
 Methods
 
-  * `Mads.getwelldata(madsdata::AbstractDict; time) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:716
+  * `Mads.getwelldata(madsdata::AbstractDict; time) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L716
 
 Arguments
 
@@ -2711,7 +2711,7 @@ Get keys for all wells in the MADS problem dictionary
 
 Methods
 
-  * `Mads.getwellkeys(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:76
+  * `Mads.getwellkeys(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L76
 
 Arguments
 
@@ -2731,7 +2731,7 @@ Returns:
 
 Methods
 
-  * `Mads.getwelltargets(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:750
+  * `Mads.getwelltargets(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L750
 
 Arguments
 
@@ -2753,7 +2753,7 @@ MADS graph output off
 
 Methods
 
-  * `Mads.graphoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:151
+  * `Mads.graphoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L151
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L145-L149' class='documenter-source'>source</a><br>
@@ -2767,7 +2767,7 @@ MADS graph output on
 
 Methods
 
-  * `Mads.graphon() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:142
+  * `Mads.graphon() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L142
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L136-L140' class='documenter-source'>source</a><br>
@@ -2781,8 +2781,8 @@ Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
 Methods
 
-  * `Mads.haskeyword(madsdata::AbstractDict, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:239
-  * `Mads.haskeyword(madsdata::AbstractDict, class::String, keyword::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:242
+  * `Mads.haskeyword(madsdata::AbstractDict, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L239
+  * `Mads.haskeyword(madsdata::AbstractDict, class::String, keyword::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L242
 
 Arguments
 
@@ -2811,7 +2811,7 @@ Produce MADS help information
 
 Methods
 
-  * `Mads.help() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelp.jl:10
+  * `Mads.help() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelp.jl#L10
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelp.jl#L4-L8' class='documenter-source'>source</a><br>
@@ -2825,7 +2825,7 @@ Import Julia function everywhere from a file. The first function in the Julia in
 
 Methods
 
-  * `Mads.importeverywhere(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:379
+  * `Mads.importeverywhere(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L379
 
 Arguments
 
@@ -2847,9 +2847,9 @@ Find indexes for dictionary keys based on a string or regular expression
 
 Methods
 
-  * `Mads.indexkeys(dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:815
-  * `Mads.indexkeys(dict::AbstractDict, key::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:814
-  * `Mads.indexkeys(dict::AbstractDict, key::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:815
+  * `Mads.indexkeys(dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L815
+  * `Mads.indexkeys(dict::AbstractDict, key::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L814
+  * `Mads.indexkeys(dict::AbstractDict, key::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L815
 
 Arguments
 
@@ -2869,8 +2869,8 @@ Information Gap Decision Analysis using JuMP
 
 Methods
 
-  * `Mads.infogap_jump() in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:22
-  * `Mads.infogap_jump(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:22
+  * `Mads.infogap_jump() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L22
+  * `Mads.infogap_jump(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L22
 
 Arguments
 
@@ -2897,8 +2897,8 @@ Information Gap Decision Analysis using JuMP
 
 Methods
 
-  * `Mads.infogap_jump_polinomial() in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:126
-  * `Mads.infogap_jump_polinomial(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, quiet, plot, model, seed) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:126
+  * `Mads.infogap_jump_polinomial() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L126
+  * `Mads.infogap_jump_polinomial(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, quiet, plot, model, seed) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L126
 
 Arguments
 
@@ -2932,8 +2932,8 @@ Information Gap Decision Analysis using MathProgBase
 
 Methods
 
-  * `Mads.infogap_mpb_lin() in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:423
-  * `Mads.infogap_mpb_lin(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed, pinit) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:423
+  * `Mads.infogap_mpb_lin() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L423
+  * `Mads.infogap_mpb_lin(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed, pinit) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L423
 
 Arguments
 
@@ -2961,8 +2961,8 @@ Information Gap Decision Analysis using MathProgBase
 
 Methods
 
-  * `Mads.infogap_mpb_polinomial() in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:282
-  * `Mads.infogap_mpb_polinomial(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed, pinit) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsInfoGap.jl:282
+  * `Mads.infogap_mpb_polinomial() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L282
+  * `Mads.infogap_mpb_polinomial(madsdata::AbstractDict; horizons, retries, random, maxiter, verbosity, seed, pinit) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsInfoGap.jl#L282
 
 Arguments
 
@@ -2990,7 +2990,7 @@ Apply Mads instruction file `instructionfilename` to read model output file `mod
 
 Methods
 
-  * `Mads.ins_obs(instructionfilename::String, modeloutputfilename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1022
+  * `Mads.ins_obs(instructionfilename::String, modeloutputfilename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1022
 
 Arguments
 
@@ -3013,7 +3013,7 @@ Convert an instruction line in the Mads instruction file into regular expression
 
 Methods
 
-  * `Mads.instline2regexs(instline::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:922
+  * `Mads.instline2regexs(instline::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L922
 
 Arguments
 
@@ -3037,7 +3037,7 @@ Set inversely proportional observation weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.invobsweights!(madsdata::AbstractDict, multiplier::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:327
+  * `Mads.invobsweights!(madsdata::AbstractDict, multiplier::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L327
 
 Arguments
 
@@ -3056,7 +3056,7 @@ Set inversely proportional well weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.invwellweights!(madsdata::AbstractDict, multiplier::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:382
+  * `Mads.invwellweights!(madsdata::AbstractDict, multiplier::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L382
 
 Arguments
 
@@ -3075,7 +3075,7 @@ Is parameter with key `parameterkey` log-transformed?
 
 Methods
 
-  * `Mads.islog(madsdata::AbstractDict, parameterkey::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:445
+  * `Mads.islog(madsdata::AbstractDict, parameterkey::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L445
 
 Arguments
 
@@ -3098,7 +3098,7 @@ Is a dictionary containing all the observations
 
 Methods
 
-  * `Mads.isobs(madsdata::AbstractDict, dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:19
+  * `Mads.isobs(madsdata::AbstractDict, dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L19
 
 Arguments
 
@@ -3121,7 +3121,7 @@ Is parameter with key `parameterkey` optimizable?
 
 Methods
 
-  * `Mads.isopt(madsdata::AbstractDict, parameterkey::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:425
+  * `Mads.isopt(madsdata::AbstractDict, parameterkey::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L425
 
 Arguments
 
@@ -3144,7 +3144,7 @@ Check if a dictionary containing all the Mads model parameters
 
 Methods
 
-  * `Mads.isparam(madsdata::AbstractDict, dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:17
+  * `Mads.isparam(madsdata::AbstractDict, dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L17
 
 Arguments
 
@@ -3167,7 +3167,7 @@ Checks if package is available
 
 Methods
 
-  * `Mads.ispkgavailable(modulename::String; quiet) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:497
+  * `Mads.ispkgavailable(modulename::String; quiet) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L497
 
 Arguments
 
@@ -3193,7 +3193,7 @@ Kriging
 
 Methods
 
-  * `Mads.krige(x0mat::AbstractArray{T,2} where T, X::AbstractArray{T,2} where T, Z::Array{T,1} where T, cov::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:126
+  * `Mads.krige(x0mat::AbstractArray{T,2} where T, X::AbstractArray{T,2} where T, Z::Array{T,1} where T, cov::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L126
 
 Arguments
 
@@ -3218,8 +3218,8 @@ Levenberg-Marquardt optimization
 
 Methods
 
-  * `Mads.levenberg_marquardt(f::Function, g::Function, x0) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:359
-  * `Mads.levenberg_marquardt(f::Function, g::Function, x0, o::Function; root, tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_scale, lambda_mu, lambda_nu, np_lambda, show_trace, alwaysDoJacobian, callbackiteration, callbackjacobian) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:359
+  * `Mads.levenberg_marquardt(f::Function, g::Function, x0) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L359
+  * `Mads.levenberg_marquardt(f::Function, g::Function, x0, o::Function; root, tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_scale, lambda_mu, lambda_nu, np_lambda, show_trace, alwaysDoJacobian, callbackiteration, callbackjacobian) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L359
 
 Arguments
 
@@ -3259,7 +3259,7 @@ Link files in a temporary directory
 
 Methods
 
-  * `Mads.linktempdir(madsproblemdir::String, tempdirname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1281
+  * `Mads.linktempdir(madsproblemdir::String, tempdirname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1281
 
 Arguments
 
@@ -3278,7 +3278,7 @@ Load ASCII file
 
 Methods
 
-  * `Mads.loadasciifile(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsASCII.jl:15
+  * `Mads.loadasciifile(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsASCII.jl#L15
 
 Arguments
 
@@ -3300,7 +3300,7 @@ Load BIG YAML input file
 
 Methods
 
-  * `Mads.loadmadsfile(filename::String; bigfile, julia, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:34
+  * `Mads.loadmadsfile(filename::String; bigfile, julia, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L34
 
 Arguments
 
@@ -3328,7 +3328,7 @@ Load a JSON file
 
 Methods
 
-  * `Mads.loadjsonfile(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsJSON.jl:17
+  * `Mads.loadjsonfile(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsJSON.jl#L17
 
 Arguments
 
@@ -3350,7 +3350,7 @@ Load MADS input file defining a MADS problem dictionary
 
 Methods
 
-  * `Mads.loadmadsfile(filename::String; bigfile, julia, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:34
+  * `Mads.loadmadsfile(filename::String; bigfile, julia, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L34
 
 Arguments
 
@@ -3384,7 +3384,7 @@ Load a predefined Mads problem
 
 Methods
 
-  * `Mads.loadmadsproblem(name::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCreate.jl:15
+  * `Mads.loadmadsproblem(name::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCreate.jl#L15
 
 Arguments
 
@@ -3406,7 +3406,7 @@ Load Saltelli sensitivity analysis results for fast simulation restarts
 
 Methods
 
-  * `Mads.loadsaltellirestart!(evalmat::Array, matname::String, restartdir::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:602
+  * `Mads.loadsaltellirestart!(evalmat::Array, matname::String, restartdir::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L602
 
 Arguments
 
@@ -3430,7 +3430,7 @@ Load YAML file
 
 Methods
 
-  * `Mads.loadyamlfile(filename::String; julia) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsYAML.jl:18
+  * `Mads.loadyamlfile(filename::String; julia) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsYAML.jl#L18
 
 Arguments
 
@@ -3456,7 +3456,7 @@ Local sensitivity analysis based on eigen analysis of the parameter covariance m
 
 Methods
 
-  * `Mads.localsa(madsdata::AbstractDict; sinspace, keyword, filename, format, datafiles, imagefiles, par, obs, J) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:128
+  * `Mads.localsa(madsdata::AbstractDict; sinspace, keyword, filename, format, datafiles, imagefiles, par, obs, J) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L128
 
 Arguments
 
@@ -3490,7 +3490,7 @@ Turn off execution of long MADS tests (default)
 
 Methods
 
-  * `Mads.long_tests_off() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:196
+  * `Mads.long_tests_off() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L196
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L190-L194' class='documenter-source'>source</a><br>
@@ -3504,7 +3504,7 @@ Turn on execution of long MADS tests
 
 Methods
 
-  * `Mads.long_tests_on() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:187
+  * `Mads.long_tests_on() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L187
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L181-L185' class='documenter-source'>source</a><br>
@@ -3518,8 +3518,8 @@ Check the number of processors on a series of servers
 
 Methods
 
-  * `Mads.madscores(nodenames::Array{String,1}) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:306
-  * `Mads.madscores() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:306
+  * `Mads.madscores(nodenames::Array{String,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L306
+  * `Mads.madscores() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L306
 
 Arguments
 
@@ -3537,7 +3537,7 @@ MADS critical error messages
 
 Methods
 
-  * `Mads.madscritical(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:73
+  * `Mads.madscritical(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L73
 
 Arguments
 
@@ -3555,8 +3555,8 @@ MADS debug messages (controlled by `quiet` and `debuglevel`)
 
 Methods
 
-  * `Mads.madsdebug(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:26
-  * `Mads.madsdebug(message::AbstractString, level::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:26
+  * `Mads.madsdebug(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L26
+  * `Mads.madsdebug(message::AbstractString, level::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L26
 
 Arguments
 
@@ -3575,7 +3575,7 @@ MADS error messages
 
 Methods
 
-  * `Mads.madserror(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:63
+  * `Mads.madserror(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L63
 
 Arguments
 
@@ -3593,8 +3593,8 @@ MADS information/status messages (controlled by quiet`and`verbositylevel`)
 
 Methods
 
-  * `Mads.madsinfo(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:41
-  * `Mads.madsinfo(message::AbstractString, level::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:41
+  * `Mads.madsinfo(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L41
+  * `Mads.madsinfo(message::AbstractString, level::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L41
 
 Arguments
 
@@ -3613,8 +3613,8 @@ Check the load of a series of servers
 
 Methods
 
-  * `Mads.madsload(nodenames::Array{String,1}) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:326
-  * `Mads.madsload() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:326
+  * `Mads.madsload(nodenames::Array{String,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L326
+  * `Mads.madsload() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L326
 
 Arguments
 
@@ -3632,8 +3632,8 @@ Define `MadsModel` type applied for Mads execution using `MathProgBase`
 
 Methods
 
-  * `Mads.madsmathprogbase() in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsMathProgBase.jl:17
-  * `Mads.madsmathprogbase(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsMathProgBase.jl:17
+  * `Mads.madsmathprogbase() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsMathProgBase.jl#L17
+  * `Mads.madsmathprogbase(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsMathProgBase.jl#L17
 
 Arguments
 
@@ -3651,8 +3651,8 @@ MADS output (controlled by `quiet` and `verbositylevel`)
 
 Methods
 
-  * `Mads.madsoutput(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:11
-  * `Mads.madsoutput(message::AbstractString, level::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:11
+  * `Mads.madsoutput(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L11
+  * `Mads.madsoutput(message::AbstractString, level::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L11
 
 Arguments
 
@@ -3671,8 +3671,8 @@ Check the uptime of a series of servers
 
 Methods
 
-  * `Mads.madsup(nodenames::Array{String,1}) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:316
-  * `Mads.madsup() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:316
+  * `Mads.madsup(nodenames::Array{String,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L316
+  * `Mads.madsup() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L316
 
 Arguments
 
@@ -3690,7 +3690,7 @@ MADS warning messages
 
 Methods
 
-  * `Mads.madswarn(message::AbstractString) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLog.jl:53
+  * `Mads.madswarn(message::AbstractString) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLog.jl#L53
 
 Arguments
 
@@ -3708,7 +3708,7 @@ Make a conditional log likelihood function that accepts an array containing the 
 
 Methods
 
-  * `Mads.makearrayconditionalloglikelihood(madsdata::AbstractDict, conditionalloglikelihood) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:105
+  * `Mads.makearrayconditionalloglikelihood(madsdata::AbstractDict, conditionalloglikelihood) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L105
 
 Arguments
 
@@ -3731,8 +3731,8 @@ Make a version of the function `f` that accepts an array containing the optimal 
 
 Methods
 
-  * `Mads.makearrayfunction(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:33
-  * `Mads.makearrayfunction(madsdata::AbstractDict, f::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:33
+  * `Mads.makearrayfunction(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L33
+  * `Mads.makearrayfunction(madsdata::AbstractDict, f::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L33
 
 Arguments
 
@@ -3755,7 +3755,7 @@ Make a log likelihood function that accepts an array containing the optimal para
 
 Methods
 
-  * `Mads.makearrayloglikelihood(madsdata::AbstractDict, loglikelihood) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:128
+  * `Mads.makearrayloglikelihood(madsdata::AbstractDict, loglikelihood) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L128
 
 Arguments
 
@@ -3778,7 +3778,7 @@ Create a function to compute concentrations for all the observation points using
 
 Methods
 
-  * `Mads.makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs, calcpredictions) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:179
+  * `Mads.makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs, calcpredictions) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L179
 
 Arguments
 
@@ -3814,7 +3814,7 @@ Make dixon price
 
 Methods
 
-  * `Mads.makedixonprice(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:260
+  * `Mads.makedixonprice(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L260
 
 Arguments
 
@@ -3834,7 +3834,7 @@ Returns:
 
 Methods
 
-  * `Mads.makedixonprice(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:260
+  * `Mads.makedixonprice(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L260
 
 Arguments
 
@@ -3856,8 +3856,8 @@ Make a version of the function `f` that accepts an array containing the optimal 
 
 Methods
 
-  * `Mads.makedoublearrayfunction(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:78
-  * `Mads.makedoublearrayfunction(madsdata::AbstractDict, f::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMisc.jl:78
+  * `Mads.makedoublearrayfunction(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L78
+  * `Mads.makedoublearrayfunction(madsdata::AbstractDict, f::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMisc.jl#L78
 
 Arguments
 
@@ -3880,8 +3880,8 @@ Make forward model, gradient, objective functions needed for Levenberg-Marquardt
 
 Methods
 
-  * `Mads.makelmfunctions(f::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:101
-  * `Mads.makelmfunctions(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:122
+  * `Mads.makelmfunctions(f::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L101
+  * `Mads.makelmfunctions(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L122
 
 Arguments
 
@@ -3904,7 +3904,7 @@ Make gradient function needed for local sensitivity analysis
 
 Methods
 
-  * `Mads.makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:29
+  * `Mads.makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L29
 
 Arguments
 
@@ -3930,7 +3930,7 @@ Make a function to compute the prior log-likelihood of the model parameters list
 
 Methods
 
-  * `Mads.makelogprior(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:402
+  * `Mads.makelogprior(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L402
 
 Arguments
 
@@ -3952,7 +3952,7 @@ Make MADS function to execute the model defined in the input MADS problem dictio
 
 Methods
 
-  * `Mads.makemadscommandfunction(madsdata_in::AbstractDict; obskeys, calczeroweightobs, calcpredictions) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:62
+  * `Mads.makemadscommandfunction(madsdata_in::AbstractDict; obskeys, calczeroweightobs, calcpredictions) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L62
 
 Arguments
 
@@ -4016,7 +4016,7 @@ Make a function to compute the conditional log-likelihood of the model parameter
 
 Methods
 
-  * `Mads.makemadsconditionalloglikelihood(madsdata::AbstractDict; weightfactor) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:425
+  * `Mads.makemadsconditionalloglikelihood(madsdata::AbstractDict; weightfactor) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L425
 
 Arguments
 
@@ -4042,7 +4042,7 @@ Make a function to compute the log-likelihood for a given set of model parameter
 
 Methods
 
-  * `Mads.makemadsloglikelihood(madsdata::AbstractDict; weightfactor) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:460
+  * `Mads.makemadsloglikelihood(madsdata::AbstractDict; weightfactor) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L460
 
 Arguments
 
@@ -4068,9 +4068,9 @@ Make Reusable Mads function to execute a forward model simulation (automatically
 
 Methods
 
-  * `Mads.makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:279
-  * `Mads.makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::String; usedict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:279
-  * `Mads.makemadsreusablefunction(paramkeys::Array{T,1} where T, obskeys::Array{T,1} where T, madsdatarestart::Union{Bool, String}, madscommandfunction::Function, restartdir::String; usedict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsFunc.jl:282
+  * `Mads.makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L279
+  * `Mads.makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::String; usedict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L279
+  * `Mads.makemadsreusablefunction(paramkeys::Array{T,1} where T, obskeys::Array{T,1} where T, madsdatarestart::Union{Bool, String}, madscommandfunction::Function, restartdir::String; usedict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsFunc.jl#L282
 
 Arguments
 
@@ -4103,7 +4103,7 @@ Make forward model, gradient, objective functions needed for MathProgBase optimi
 
 Methods
 
-  * `Mads.makempbfunctions(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src-new/MadsMathProgBase.jl:91
+  * `Mads.makempbfunctions(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-new/MadsMathProgBase.jl#L91
 
 Arguments
 
@@ -4125,7 +4125,7 @@ Make Powell test function for LM optimization
 
 Methods
 
-  * `Mads.makepowell(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:163
+  * `Mads.makepowell(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L163
 
 Arguments
 
@@ -4147,7 +4147,7 @@ ake parameter gradients of the Powell test function for LM optimization
 
 Methods
 
-  * `Mads.makepowell_gradient(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:187
+  * `Mads.makepowell_gradient(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L187
 
 Arguments
 
@@ -4169,7 +4169,7 @@ Make Rosenbrock test function for LM optimization
 
 Methods
 
-  * `Mads.makerosenbrock(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:118
+  * `Mads.makerosenbrock(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L118
 
 Arguments
 
@@ -4191,7 +4191,7 @@ Make parameter gradients of the Rosenbrock test function for LM optimization
 
 Methods
 
-  * `Mads.makerosenbrock_gradient(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:140
+  * `Mads.makerosenbrock_gradient(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L140
 
 Arguments
 
@@ -4211,7 +4211,7 @@ Returns:
 
 Methods
 
-  * `Mads.makerotatedhyperellipsoid(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:339
+  * `Mads.makerotatedhyperellipsoid(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L339
 
 Arguments
 
@@ -4231,7 +4231,7 @@ Returns:
 
 Methods
 
-  * `Mads.makerotatedhyperellipsoid_gradient(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:363
+  * `Mads.makerotatedhyperellipsoid_gradient(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L363
 
 Arguments
 
@@ -4253,7 +4253,7 @@ Make sphere
 
 Methods
 
-  * `Mads.makesphere(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:218
+  * `Mads.makesphere(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L218
 
 Arguments
 
@@ -4275,7 +4275,7 @@ Make sphere gradient
 
 Methods
 
-  * `Mads.makesphere_gradient(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:239
+  * `Mads.makesphere_gradient(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L239
 
 Arguments
 
@@ -4295,7 +4295,7 @@ Returns:
 
 Methods
 
-  * `Mads.makesumsquares(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:301
+  * `Mads.makesumsquares(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L301
 
 Arguments
 
@@ -4315,7 +4315,7 @@ Returns:
 
 Methods
 
-  * `Mads.makesumsquares_gradient(n::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:320
+  * `Mads.makesumsquares_gradient(n::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L320
 
 Arguments
 
@@ -4337,8 +4337,8 @@ Make SVR model functions (executor and cleaner)
 
 Methods
 
-  * `Mads.makesvrmodel(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:210
-  * `Mads.makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer; check, addminmax, loadsvr, savesvr, svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose, seed) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:210
+  * `Mads.makesvrmodel(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L210
+  * `Mads.makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer; check, addminmax, loadsvr, savesvr, svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose, seed) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L210
 
 Arguments
 
@@ -4388,7 +4388,7 @@ Scale down values larger than max(Float32) in a dataframe `df` so that Gadfly ca
 
 Methods
 
-  * `Mads.maxtofloatmax!(df::DataFrames.DataFrame) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:1089
+  * `Mads.maxtofloatmax!(df::DataFrames.DataFrame) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L1089
 
 Arguments
 
@@ -4406,7 +4406,7 @@ Change the current directory to the Mads source dictionary
 
 Methods
 
-  * `Mads.mdir() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:11
+  * `Mads.mdir() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L11
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsIO.jl#L5-L9' class='documenter-source'>source</a><br>
@@ -4420,7 +4420,7 @@ Create mesh grid
 
 Methods
 
-  * `Mads.meshgrid(x::Array{T,1} where T, y::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:430
+  * `Mads.meshgrid(x::Array{T,1} where T, y::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L430
 
 Arguments
 
@@ -4445,7 +4445,7 @@ Minimize Julia function using a constrained Levenberg-Marquardt technique
 
 Methods
 
-  * `Mads.calibrate(madsdata::AbstractDict; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, save_results, localsa) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCalibrate.jl:164
+  * `Mads.calibrate(madsdata::AbstractDict; tolX, tolG, tolOF, maxEval, maxIter, maxJacobians, lambda, lambda_mu, np_lambda, show_trace, usenaive, save_results, localsa) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCalibrate.jl#L164
 
 Arguments
 
@@ -4484,7 +4484,7 @@ Create a directory (if does not already exist)
 
 Methods
 
-  * `Mads.mkdir(dirname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1308
+  * `Mads.mkdir(dirname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1308
 
 Arguments
 
@@ -4502,8 +4502,8 @@ Model section information criteria
 
 Methods
 
-  * `Mads.modelinformationcriteria(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsModelSelection.jl:11
-  * `Mads.modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64,N} where N) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsModelSelection.jl:11
+  * `Mads.modelinformationcriteria(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsModelSelection.jl#L11
+  * `Mads.modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64,N} where N) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsModelSelection.jl#L11
 
 Arguments
 
@@ -4522,7 +4522,7 @@ Modify (multiply) observation weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.modobsweights!(madsdata::AbstractDict, value::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:313
+  * `Mads.modobsweights!(madsdata::AbstractDict, value::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L313
 
 Arguments
 
@@ -4541,7 +4541,7 @@ Modify (multiply) well weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.modwellweights!(madsdata::AbstractDict, value::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:363
+  * `Mads.modwellweights!(madsdata::AbstractDict, value::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L363
 
 Arguments
 
@@ -4560,7 +4560,7 @@ Monte Carlo analysis
 
 Methods
 
-  * `Mads.montecarlo(madsdata::AbstractDict; N, filename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:188
+  * `Mads.montecarlo(madsdata::AbstractDict; N, filename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L188
 
 Arguments
 
@@ -4597,7 +4597,7 @@ Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 Methods
 
-  * `Mads.naive_get_deltax(JpJ::AbstractArray{Float64,2}, Jp::AbstractArray{Float64,2}, f0::Array{Float64,1}, lambda::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:247
+  * `Mads.naive_get_deltax(JpJ::AbstractArray{Float64,2}, Jp::AbstractArray{Float64,2}, f0::Array{Float64,1}, lambda::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L247
 
 Arguments
 
@@ -4622,8 +4622,8 @@ Naive Levenberg-Marquardt optimization
 
 Methods
 
-  * `Mads.naive_levenberg_marquardt(f::Function, g::Function, x0::Array{Float64,1}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:297
-  * `Mads.naive_levenberg_marquardt(f::Function, g::Function, x0::Array{Float64,1}, o::Function; maxIter, maxEval, lambda, lambda_mu, np_lambda) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:297
+  * `Mads.naive_levenberg_marquardt(f::Function, g::Function, x0::Array{Float64,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L297
+  * `Mads.naive_levenberg_marquardt(f::Function, g::Function, x0::Array{Float64,1}, o::Function; maxIter, maxEval, lambda, lambda_mu, np_lambda) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L297
 
 Arguments
 
@@ -4656,7 +4656,7 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 
 Methods
 
-  * `Mads.naive_lm_iteration(f::Function, g::Function, o::Function, x0::Array{Float64,1}, f0::Array{Float64,1}, lambdas::Array{Float64,1}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:268
+  * `Mads.naive_lm_iteration(f::Function, g::Function, o::Function, x0::Array{Float64,1}, f0::Array{Float64,1}, lambdas::Array{Float64,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L268
 
 Arguments
 
@@ -4683,7 +4683,7 @@ Disable MADS plotting
 
 Methods
 
-  * `Mads.noplot() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:239
+  * `Mads.noplot() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L239
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src-interactive/MadsParallel.jl#L233-L237' class='documenter-source'>source</a><br>
@@ -4697,7 +4697,7 @@ Match an instruction line in the Mads instruction file with model input file
 
 Methods
 
-  * `Mads.obslineoccursin(obsline::String, regexs::Array{Regex,1}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:971
+  * `Mads.obslineoccursin(obsline::String, regexs::Array{Regex,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L971
 
 Arguments
 
@@ -4720,9 +4720,9 @@ Compute objective function
 
 Methods
 
-  * `Mads.of(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:59
-  * `Mads.of(madsdata::AbstractDict, resultvec::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:52
-  * `Mads.of(madsdata::AbstractDict, resultdict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:56
+  * `Mads.of(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L59
+  * `Mads.of(madsdata::AbstractDict, resultvec::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L52
+  * `Mads.of(madsdata::AbstractDict, resultdict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L56
 
 Arguments
 
@@ -4742,7 +4742,7 @@ Convert a parameter array to a parameter dictionary of arrays
 
 Methods
 
-  * `Mads.paramarray2dict(madsdata::AbstractDict, array::Array) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:242
+  * `Mads.paramarray2dict(madsdata::AbstractDict, array::Array) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L242
 
 Arguments
 
@@ -4765,7 +4765,7 @@ Convert a parameter dictionary of arrays to a parameter array
 
 Methods
 
-  * `Mads.paramdict2array(dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:261
+  * `Mads.paramdict2array(dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L261
 
 Arguments
 
@@ -4787,7 +4787,7 @@ Parse loaded MADS problem dictionary
 
 Methods
 
-  * `Mads.parsemadsdata!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:161
+  * `Mads.parsemadsdata!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L161
 
 Arguments
 
@@ -4805,8 +4805,8 @@ Parse string with node names defined in SLURM
 
 Methods
 
-  * `Mads.parsenodenames(nodenames::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:208
-  * `Mads.parsenodenames(nodenames::String, ntasks_per_node::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:208
+  * `Mads.parsenodenames(nodenames::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L208
+  * `Mads.parsenodenames(nodenames::String, ntasks_per_node::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L208
 
 Arguments
 
@@ -4829,7 +4829,7 @@ Compute the sum of squared residuals for observations that match a regular expre
 
 Methods
 
-  * `Mads.partialof(madsdata::AbstractDict, resultdict::AbstractDict, regex::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:85
+  * `Mads.partialof(madsdata::AbstractDict, resultdict::AbstractDict, regex::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L85
 
 Arguments
 
@@ -4853,7 +4853,7 @@ Get package version
 
 Methods
 
-  * `Mads.pkgversion(modulestr::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:473
+  * `Mads.pkgversion(modulestr::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L473
 
 Arguments
 
@@ -4875,9 +4875,9 @@ Plot a 3D grid solution based on model predictions in array `s`, initial paramet
 
 Methods
 
-  * `Mads.plotgrid(madsdata::AbstractDict; addtitle, title, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlotPy.jl:56
-  * `Mads.plotgrid(madsdata::AbstractDict, s::Array{Float64,N} where N; addtitle, title, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlotPy.jl:5
-  * `Mads.plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle, title, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlotPy.jl:61
+  * `Mads.plotgrid(madsdata::AbstractDict; addtitle, title, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlotPy.jl#L56
+  * `Mads.plotgrid(madsdata::AbstractDict, s::Array{Float64,N} where N; addtitle, title, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlotPy.jl#L5
+  * `Mads.plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle, title, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlotPy.jl#L61
 
 Arguments
 
@@ -4912,7 +4912,7 @@ Plot local sensitivity analysis results
 
 Methods
 
-  * `Mads.plotlocalsa(filenameroot::String; keyword, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:1246
+  * `Mads.plotlocalsa(filenameroot::String; keyword, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L1246
 
 Arguments
 
@@ -4940,7 +4940,7 @@ Plot contaminant sources and wells defined in MADS problem dictionary
 
 Methods
 
-  * `Mads.plotmadsproblem(madsdata::AbstractDict; format, filename, keyword, hsize, vsize, gm) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:88
+  * `Mads.plotmadsproblem(madsdata::AbstractDict; format, filename, keyword, hsize, vsize, gm) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L88
 
 Arguments
 
@@ -4971,7 +4971,7 @@ Plot injected/reduced contaminant mass
 
 Methods
 
-  * `Mads.plotmass(lambda::Array{Float64,1}, mass_injected::Array{Float64,1}, mass_reduced::Array{Float64,1}, filename::String; format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasolPlot.jl:19
+  * `Mads.plotmass(lambda::Array{Float64,1}, mass_injected::Array{Float64,1}, mass_reduced::Array{Float64,1}, filename::String; format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasolPlot.jl#L19
 
 Arguments
 
@@ -5000,10 +5000,10 @@ Plot the matches between model predictions and observations
 
 Methods
 
-  * `Mads.plotmatches(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:168
-  * `Mads.plotmatches(madsdata::AbstractDict, rx::Regex; kw...) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:168
-  * `Mads.plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata, filename, format, title, xtitle, ytitle, ymin, ymax, separate_files, hsize, vsize, linewidth, pointsize, obs_plot_dots, noise, dpi, colors, display, notitle) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:200
-  * `Mads.plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata, filename, format, key2time, title, xtitle, ytitle, ymin, ymax, separate_files, hsize, vsize, linewidth, pointsize, obs_plot_dots, noise, dpi, colors, display, notitle) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:176
+  * `Mads.plotmatches(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L168
+  * `Mads.plotmatches(madsdata::AbstractDict, rx::Regex; kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L168
+  * `Mads.plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata, filename, format, title, xtitle, ytitle, ymin, ymax, separate_files, hsize, vsize, linewidth, pointsize, obs_plot_dots, noise, dpi, colors, display, notitle) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L200
+  * `Mads.plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata, filename, format, key2time, title, xtitle, ytitle, ymin, ymax, separate_files, hsize, vsize, linewidth, pointsize, obs_plot_dots, noise, dpi, colors, display, notitle) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L176
 
 Arguments
 
@@ -5060,7 +5060,7 @@ Plot the sensitivity analysis results for the observations
 
 Methods
 
-  * `Mads.plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter, keyword, filename, format, debug, separate_files, xtitle, ytitle, linewidth, pointsize) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:582
+  * `Mads.plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter, keyword, filename, format, debug, separate_files, xtitle, ytitle, linewidth, pointsize) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L582
 
 Arguments
 
@@ -5096,7 +5096,7 @@ Plot BIG-DT robustness curves
 
 Methods
 
-  * `Mads.plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filename, format, maxprob, maxhoriz) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsBayesInfoGapPlot.jl:20
+  * `Mads.plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filename, format, maxprob, maxhoriz) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsBayesInfoGapPlot.jl#L20
 
 Arguments
 
@@ -5126,8 +5126,8 @@ Create plots of data series
 
 Methods
 
-  * `Mads.plotseries(X::AbstractArray) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:1127
-  * `Mads.plotseries(X::AbstractArray, filename::String; format, xtitle, ytitle, title, logx, logy, keytitle, name, names, combined, hsize, vsize, linewidth, pointsize, dpi, colors, opacity, xmin, xmax, ymin, ymax, xaxis, plotline, code, colorkey) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:1127
+  * `Mads.plotseries(X::AbstractArray) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L1127
+  * `Mads.plotseries(X::AbstractArray, filename::String; format, xtitle, ytitle, title, logx, logy, keytitle, name, names, combined, hsize, vsize, linewidth, pointsize, dpi, colors, opacity, xmin, xmax, ymin, ymax, xaxis, plotline, code, colorkey) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L1127
 
 Arguments
 
@@ -5178,8 +5178,8 @@ Plot the sensitivity analysis results for all the wells in the MADS problem dict
 
 Methods
 
-  * `Mads.plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle, ytitle, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:447
-  * `Mads.plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::String; xtitle, ytitle, filename, format) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:458
+  * `Mads.plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle, ytitle, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L447
+  * `Mads.plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::String; xtitle, ytitle, filename, format) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L458
 
 Arguments
 
@@ -5210,7 +5210,7 @@ Print sensitivity analysis results
 
 Methods
 
-  * `Mads.printSAresults(madsdata::AbstractDict, results::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:925
+  * `Mads.printSAresults(madsdata::AbstractDict, results::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L925
 
 Arguments
 
@@ -5229,7 +5229,7 @@ Print sensitivity analysis results (method 2)
 
 Methods
 
-  * `Mads.printSAresults2(madsdata::AbstractDict, results::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:1007
+  * `Mads.printSAresults2(madsdata::AbstractDict, results::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L1007
 
 Arguments
 
@@ -5248,7 +5248,7 @@ Print error message
 
 Methods
 
-  * `Mads.printerrormsg(errmsg) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:410
+  * `Mads.printerrormsg(errmsg) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L410
 
 Arguments
 
@@ -5266,9 +5266,9 @@ Print (emit) observations in the MADS problem dictionary
 
 Methods
 
-  * `Mads.printobservations(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:423
-  * `Mads.printobservations(madsdata::AbstractDict, io::IO) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:423
-  * `Mads.printobservations(madsdata::AbstractDict, filename::String; json) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:432
+  * `Mads.printobservations(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L423
+  * `Mads.printobservations(madsdata::AbstractDict, io::IO) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L423
+  * `Mads.printobservations(madsdata::AbstractDict, filename::String; json) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L432
 
 Arguments
 
@@ -5292,8 +5292,8 @@ Pull (checkout) the latest version of Mads modules
 
 Methods
 
-  * `Mads.pull(modulename::String; kw...) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:63
-  * `Mads.pull() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:63
+  * `Mads.pull(modulename::String; kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L63
+  * `Mads.pull() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L63
 
 Arguments
 
@@ -5311,8 +5311,8 @@ Push the latest version of Mads modules in the default remote repository
 
 Methods
 
-  * `Mads.push(modulename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:138
-  * `Mads.push() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:138
+  * `Mads.push(modulename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L138
+  * `Mads.push() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L138
 
 Arguments
 
@@ -5330,7 +5330,7 @@ Make MADS not quiet
 
 Methods
 
-  * `Mads.quietoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:97
+  * `Mads.quietoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L97
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L91-L95' class='documenter-source'>source</a><br>
@@ -5344,7 +5344,7 @@ Make MADS quiet
 
 Methods
 
-  * `Mads.quieton() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:88
+  * `Mads.quieton() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L88
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L82-L86' class='documenter-source'>source</a><br>
@@ -5358,7 +5358,7 @@ Read MADS predictions from an ASCII file
 
 Methods
 
-  * `Mads.readasciipredictions(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsASCII.jl:45
+  * `Mads.readasciipredictions(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsASCII.jl#L45
 
 Arguments
 
@@ -5380,7 +5380,7 @@ Read model outputs saved for MADS
 
 Methods
 
-  * `Mads.readmodeloutput(madsdata::AbstractDict; obskeys) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:741
+  * `Mads.readmodeloutput(madsdata::AbstractDict; obskeys) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L741
 
 Arguments
 
@@ -5402,8 +5402,8 @@ Read observations
 
 Methods
 
-  * `Mads.readobservations(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1083
-  * `Mads.readobservations(madsdata::AbstractDict, obskeys::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1083
+  * `Mads.readobservations(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1083
+  * `Mads.readobservations(madsdata::AbstractDict, obskeys::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1083
 
 Arguments
 
@@ -5426,7 +5426,7 @@ Read observations using C MADS dynamic library
 
 Methods
 
-  * `Mads.readobservations_cmads(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src-old/MadsCMads.jl:15
+  * `Mads.readobservations_cmads(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-old/MadsCMads.jl#L15
 
 Arguments
 
@@ -5448,7 +5448,7 @@ Read MADS model predictions from a YAML file `filename`
 
 Methods
 
-  * `Mads.readyamlpredictions(filename::String; julia) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsYAML.jl:137
+  * `Mads.readyamlpredictions(filename::String; julia) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsYAML.jl#L137
 
 Arguments
 
@@ -5474,7 +5474,7 @@ Create directories recursively (if does not already exist)
 
 Methods
 
-  * `Mads.recursivemkdir(s::String; filename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1320
+  * `Mads.recursivemkdir(s::String; filename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1320
 
 Arguments
 
@@ -5496,7 +5496,7 @@ Remove directories recursively
 
 Methods
 
-  * `Mads.recursivermdir(s::String; filename) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1354
+  * `Mads.recursivermdir(s::String; filename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1354
 
 Arguments
 
@@ -5518,7 +5518,7 @@ Get observations for a set of regular expressions
 
 Methods
 
-  * `Mads.regexs2obs(obsline::String, regexs::Array{Regex,1}, obsnames::Array{String,1}, getparamhere::Array{Bool,1}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:992
+  * `Mads.regexs2obs(obsline::String, regexs::Array{Regex,1}, obsnames::Array{String,1}, getparamhere::Array{Bool,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L992
 
 Arguments
 
@@ -5543,8 +5543,8 @@ Remove a contamination source
 
 Methods
 
-  * `Mads.removesource!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:51
-  * `Mads.removesource!(madsdata::AbstractDict, sourceid::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:51
+  * `Mads.removesource!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L51
+  * `Mads.removesource!(madsdata::AbstractDict, sourceid::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L51
 
 Arguments
 
@@ -5563,7 +5563,7 @@ Remove contaminant source parameters
 
 Methods
 
-  * `Mads.removesourceparameters!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsAnasol.jl:136
+  * `Mads.removesourceparameters!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsAnasol.jl#L136
 
 Arguments
 
@@ -5581,9 +5581,9 @@ Lists modules required by a module (Mads by default)
 
 Methods
 
-  * `Mads.required(modulename::String, filtermodule::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:17
-  * `Mads.required(modulename::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:17
-  * `Mads.required() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:17
+  * `Mads.required(modulename::String, filtermodule::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L17
+  * `Mads.required(modulename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L17
+  * `Mads.required() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L17
 
 Arguments
 
@@ -5606,7 +5606,7 @@ Reset the model runs count to be equal to zero
 
 Methods
 
-  * `Mads.resetmodelruns() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:235
+  * `Mads.resetmodelruns() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L235
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L229-L233' class='documenter-source'>source</a><br>
@@ -5620,9 +5620,9 @@ Compute residuals
 
 Methods
 
-  * `Mads.residuals(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:33
-  * `Mads.residuals(madsdata::AbstractDict, resultvec::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:7
-  * `Mads.residuals(madsdata::AbstractDict, resultdict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsLevenbergMarquardt.jl:30
+  * `Mads.residuals(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L33
+  * `Mads.residuals(madsdata::AbstractDict, resultvec::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L7
+  * `Mads.residuals(madsdata::AbstractDict, resultdict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsLevenbergMarquardt.jl#L30
 
 Arguments
 
@@ -5646,7 +5646,7 @@ MADS restart off
 
 Methods
 
-  * `Mads.restartoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:69
+  * `Mads.restartoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L69
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L63-L67' class='documenter-source'>source</a><br>
@@ -5660,7 +5660,7 @@ MADS restart on
 
 Methods
 
-  * `Mads.restarton() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:60
+  * `Mads.restarton() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L60
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L54-L58' class='documenter-source'>source</a><br>
@@ -5674,7 +5674,7 @@ Reweigh samples using importance sampling – returns a vector of log-likelihood
 
 Methods
 
-  * `Mads.reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:329
+  * `Mads.reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L329
 
 Arguments
 
@@ -5698,7 +5698,7 @@ Remove directory
 
 Methods
 
-  * `Mads.rmdir(dir::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1180
+  * `Mads.rmdir(dir::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1180
 
 Arguments
 
@@ -5720,7 +5720,7 @@ Remove file
 
 Methods
 
-  * `Mads.rmfile(filename::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1196
+  * `Mads.rmfile(filename::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1196
 
 Arguments
 
@@ -5742,7 +5742,7 @@ Remove files
 
 Methods
 
-  * `Mads.rmfile(filename::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1196
+  * `Mads.rmfile(filename::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1196
 
 Arguments
 
@@ -5764,7 +5764,7 @@ Remove files with extension `ext`
 
 Methods
 
-  * `Mads.rmfiles_ext(ext::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1225
+  * `Mads.rmfiles_ext(ext::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1225
 
 Arguments
 
@@ -5786,7 +5786,7 @@ Remove files with root `root`
 
 Methods
 
-  * `Mads.rmfiles_root(root::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1238
+  * `Mads.rmfiles_root(root::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1238
 
 Arguments
 
@@ -5808,7 +5808,7 @@ Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock(x::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:43
+  * `Mads.rosenbrock(x::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L43
 
 Arguments
 
@@ -5830,7 +5830,7 @@ Parameter gradients of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock2_gradient_lm(x::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:24
+  * `Mads.rosenbrock2_gradient_lm(x::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L24
 
 Arguments
 
@@ -5852,7 +5852,7 @@ Rosenbrock test function (more difficult to solve)
 
 Methods
 
-  * `Mads.rosenbrock2_lm(x::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:10
+  * `Mads.rosenbrock2_lm(x::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L10
 
 Arguments
 
@@ -5870,7 +5870,7 @@ Parameter gradients of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock_gradient!(x::Array{T,1} where T, grad::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:68
+  * `Mads.rosenbrock_gradient!(x::Array{T,1} where T, grad::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L68
 
 Arguments
 
@@ -5889,7 +5889,7 @@ Parameter gradients of the Rosenbrock test function for LM optimization (returns
 
 Methods
 
-  * `Mads.rosenbrock_gradient_lm(x::Array{T,1} where T; dx, center) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:85
+  * `Mads.rosenbrock_gradient_lm(x::Array{T,1} where T; dx, center) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L85
 
 Arguments
 
@@ -5916,7 +5916,7 @@ Parameter Hessian of the Rosenbrock test function
 
 Methods
 
-  * `Mads.rosenbrock_hessian!(x::Array{T,1} where T, hess::Array{T,2} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:101
+  * `Mads.rosenbrock_hessian!(x::Array{T,1} where T, hess::Array{T,2} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L101
 
 Arguments
 
@@ -5935,7 +5935,7 @@ Rosenbrock test function for LM optimization (returns the 2 components separatel
 
 Methods
 
-  * `Mads.rosenbrock_lm(x::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsTestFunctions.jl:57
+  * `Mads.rosenbrock_lm(x::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsTestFunctions.jl#L57
 
 Arguments
 
@@ -5957,8 +5957,8 @@ Run external command and pipe stdout and stderr
 
 Methods
 
-  * `Mads.runcmd(cmdstring::String; quiet, pipe, waittime) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:101
-  * `Mads.runcmd(cmd::Cmd; quiet, pipe, waittime) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsExecute.jl:42
+  * `Mads.runcmd(cmdstring::String; quiet, pipe, waittime) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L101
+  * `Mads.runcmd(cmd::Cmd; quiet, pipe, waittime) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsExecute.jl#L42
 
 Arguments
 
@@ -5988,8 +5988,8 @@ Run remote command on a series of servers
 
 Methods
 
-  * `Mads.runremote(cmd::String, nodenames::Array{String,1}) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:284
-  * `Mads.runremote(cmd::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:284
+  * `Mads.runremote(cmd::String, nodenames::Array{String,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L284
+  * `Mads.runremote(cmd::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L284
 
 Arguments
 
@@ -6012,7 +6012,7 @@ Saltelli sensitivity analysis
 
 Methods
 
-  * `Mads.saltelli(madsdata::AbstractDict; N, seed, restartdir, parallel, checkpointfrequency) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:642
+  * `Mads.saltelli(madsdata::AbstractDict; N, seed, restartdir, parallel, checkpointfrequency) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L642
 
 Arguments
 
@@ -6038,7 +6038,7 @@ Saltelli sensitivity analysis (brute force)
 
 Methods
 
-  * `Mads.saltellibrute(madsdata::AbstractDict; N, seed, restartdir) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:454
+  * `Mads.saltellibrute(madsdata::AbstractDict; N, seed, restartdir) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L454
 
 Arguments
 
@@ -6080,7 +6080,7 @@ Parallel version of saltelli
 
 Methods
 
-  * `Mads.sampling(param::Array{T,1} where T, J::Array, numsamples::Number; seed, scale) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:278
+  * `Mads.sampling(param::Array{T,1} where T, J::Array, numsamples::Number; seed, scale) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L278
 
 Arguments
 
@@ -6110,10 +6110,10 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 Methods
 
-  * `Mads.savemadsfile(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:290
-  * `Mads.savemadsfile(madsdata::AbstractDict, filename::String; julia, observations_separate, filenameobs) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:290
-  * `Mads.savemadsfile(madsdata::AbstractDict, parameters::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:307
-  * `Mads.savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::String; julia, explicit, observations_separate) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:307
+  * `Mads.savemadsfile(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L290
+  * `Mads.savemadsfile(madsdata::AbstractDict, filename::String; julia, observations_separate, filenameobs) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L290
+  * `Mads.savemadsfile(madsdata::AbstractDict, parameters::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L307
+  * `Mads.savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::String; julia, explicit, observations_separate) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L307
 
 Arguments
 
@@ -6149,7 +6149,7 @@ Save MCMC chain in a file
 
 Methods
 
-  * `Mads.savemcmcresults(chain::Array, filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsMonteCarlo.jl:143
+  * `Mads.savemcmcresults(chain::Array, filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsMonteCarlo.jl#L143
 
 Arguments
 
@@ -6172,7 +6172,7 @@ Save Saltelli sensitivity analysis results for fast simulation restarts
 
 Methods
 
-  * `Mads.savesaltellirestart(evalmat::Array, matname::String, restartdir::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:623
+  * `Mads.savesaltellirestart(evalmat::Array, matname::String, restartdir::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L623
 
 Arguments
 
@@ -6192,7 +6192,7 @@ Create histogram/scatter plots of model parameter samples
 
 Methods
 
-  * `Mads.scatterplotsamples(madsdata::AbstractDict, samples::Array{T,2} where T, filename::String; format, pointsize) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:412
+  * `Mads.scatterplotsamples(madsdata::AbstractDict, samples::Array{T,2} where T, filename::String; format, pointsize) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L412
 
 Arguments
 
@@ -6221,8 +6221,8 @@ Get files in the current directory or in a directory defined by `path` matching 
 
 Methods
 
-  * `Mads.searchdir(key::String; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:781
-  * `Mads.searchdir(key::Regex; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:780
+  * `Mads.searchdir(key::String; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L781
+  * `Mads.searchdir(key::Regex; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L780
 
 Arguments
 
@@ -6257,8 +6257,8 @@ Set number of processors needed for each parallel task at each node
 
 Methods
 
-  * `Mads.set_nprocs_per_task() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:51
-  * `Mads.set_nprocs_per_task(local_nprocs_per_task::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:51
+  * `Mads.set_nprocs_per_task() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L51
+  * `Mads.set_nprocs_per_task(local_nprocs_per_task::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L51
 
 Arguments
 
@@ -6276,7 +6276,7 @@ Set all parameters OFF
 
 Methods
 
-  * `Mads.setallparamsoff!(madsdata::AbstractDict; filter) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:474
+  * `Mads.setallparamsoff!(madsdata::AbstractDict; filter) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L474
 
 Arguments
 
@@ -6298,7 +6298,7 @@ Set all parameters ON
 
 Methods
 
-  * `Mads.setallparamson!(madsdata::AbstractDict; filter) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:460
+  * `Mads.setallparamson!(madsdata::AbstractDict; filter) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L460
 
 Arguments
 
@@ -6320,7 +6320,7 @@ Set MADS debug level
 
 Methods
 
-  * `Mads.setdebuglevel(level::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:206
+  * `Mads.setdebuglevel(level::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L206
 
 Arguments
 
@@ -6338,7 +6338,7 @@ Set the default plot format (`SVG` is the default format)
 
 Methods
 
-  * `Mads.setdefaultplotformat(format::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:21
+  * `Mads.setdefaultplotformat(format::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L21
 
 Arguments
 
@@ -6356,8 +6356,8 @@ Set the working directory (for parallel environments)
 
 Methods
 
-  * `Mads.setdir() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:254
-  * `Mads.setdir(dir) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:249
+  * `Mads.setdir() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L254
+  * `Mads.setdir(dir) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L249
 
 Arguments
 
@@ -6382,7 +6382,7 @@ Set image dpi
 
 Methods
 
-  * `Mads.setdpi(dpi::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:160
+  * `Mads.setdpi(dpi::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L160
 
 Arguments
 
@@ -6400,7 +6400,7 @@ Set maximum execution wait time for forward model runs in seconds
 
 Methods
 
-  * `Mads.setexecutionwaittime(waitime::Float64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:226
+  * `Mads.setexecutionwaittime(waitime::Float64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L226
 
 Arguments
 
@@ -6418,7 +6418,7 @@ Set a default MADS input file
 
 Methods
 
-  * `Mads.setmadsinputfile(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:367
+  * `Mads.setmadsinputfile(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L367
 
 Arguments
 
@@ -6436,9 +6436,9 @@ Generate a list of Mads servers
 
 Methods
 
-  * `Mads.setmadsservers(first::Int64, last::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:339
-  * `Mads.setmadsservers(first::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:339
-  * `Mads.setmadsservers() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:339
+  * `Mads.setmadsservers(first::Int64, last::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L339
+  * `Mads.setmadsservers(first::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L339
+  * `Mads.setmadsservers() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L339
 
 Arguments
 
@@ -6461,8 +6461,8 @@ Set model input files; delete files where model output should be saved for MADS
 
 Methods
 
-  * `Mads.setmodelinputs(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:662
-  * `Mads.setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict; path) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:662
+  * `Mads.setmodelinputs(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L662
+  * `Mads.setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict; path) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L662
 
 Arguments
 
@@ -6485,8 +6485,8 @@ Set new mads file name
 
 Methods
 
-  * `Mads.setnewmadsfilename(filename::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:521
-  * `Mads.setnewmadsfilename(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:518
+  * `Mads.setnewmadsfilename(filename::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L521
+  * `Mads.setnewmadsfilename(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L518
 
 Arguments
 
@@ -6509,7 +6509,7 @@ Set observations (calibration targets) in the MADS problem dictionary based on a
 
 Methods
 
-  * `Mads.setobservationtargets!(madsdata::AbstractDict, predictions::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:528
+  * `Mads.setobservationtargets!(madsdata::AbstractDict, predictions::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L528
 
 Arguments
 
@@ -6528,9 +6528,9 @@ Set observation time based on the observation name in the MADS problem dictionar
 
 Methods
 
-  * `Mads.setobstime!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:253
-  * `Mads.setobstime!(madsdata::AbstractDict, separator::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:253
-  * `Mads.setobstime!(madsdata::AbstractDict, rx::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:264
+  * `Mads.setobstime!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L253
+  * `Mads.setobstime!(madsdata::AbstractDict, separator::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L253
+  * `Mads.setobstime!(madsdata::AbstractDict, rx::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L264
 
 Arguments
 
@@ -6557,7 +6557,7 @@ Set observation weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.setobsweights!(madsdata::AbstractDict, value::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:299
+  * `Mads.setobsweights!(madsdata::AbstractDict, value::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L299
 
 Arguments
 
@@ -6576,7 +6576,7 @@ Set a specific parameter with a key `parameterkey` OFF
 
 Methods
 
-  * `Mads.setparamoff!(madsdata::AbstractDict, parameterkey::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:499
+  * `Mads.setparamoff!(madsdata::AbstractDict, parameterkey::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L499
 
 Arguments
 
@@ -6595,7 +6595,7 @@ Set a specific parameter with a key `parameterkey` ON
 
 Methods
 
-  * `Mads.setparamon!(madsdata::AbstractDict, parameterkey::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:488
+  * `Mads.setparamon!(madsdata::AbstractDict, parameterkey::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L488
 
 Arguments
 
@@ -6614,7 +6614,7 @@ Set normal parameter distributions for all the model parameters in the MADS prob
 
 Methods
 
-  * `Mads.setparamsdistnormal!(madsdata::AbstractDict, mean::Array{T,1} where T, stddev::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:511
+  * `Mads.setparamsdistnormal!(madsdata::AbstractDict, mean::Array{T,1} where T, stddev::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L511
 
 Arguments
 
@@ -6634,7 +6634,7 @@ Set uniform parameter distributions for all the model parameters in the MADS pro
 
 Methods
 
-  * `Mads.setparamsdistuniform!(madsdata::AbstractDict, min::Array{T,1} where T, max::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:526
+  * `Mads.setparamsdistuniform!(madsdata::AbstractDict, min::Array{T,1} where T, max::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L526
 
 Arguments
 
@@ -6654,8 +6654,8 @@ Set initial optimized parameter guesses in the MADS problem dictionary
 
 Methods
 
-  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:324
-  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:324
+  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L324
+  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L324
 
 Arguments
 
@@ -6675,7 +6675,7 @@ Set image file `format` based on the `filename` extension, or sets the `filename
 
 Methods
 
-  * `Mads.setplotfileformat(filename::String, format::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:50
+  * `Mads.setplotfileformat(filename::String, format::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L50
 
 Arguments
 
@@ -6699,9 +6699,9 @@ Set the available processors based on environmental variables (supports SLURM on
 
 Methods
 
-  * `Mads.setprocs(; ntasks_per_node, nprocs_per_task, nodenames, mads_servers, test, quiet, veryquiet, dir, exename) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:50
-  * `Mads.setprocs(np::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:47
-  * `Mads.setprocs(np::Integer, nt::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsParallel.jl:34
+  * `Mads.setprocs(; ntasks_per_node, nprocs_per_task, nodenames, mads_servers, test, quiet, veryquiet, dir, exename) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L50
+  * `Mads.setprocs(np::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L47
+  * `Mads.setprocs(np::Integer, nt::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsParallel.jl#L34
 
 Arguments
 
@@ -6750,9 +6750,9 @@ Set / get current random seed. seed < 0 gets seed, anything else sets it.
 
 Methods
 
-  * `Mads.setseed() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:445
-  * `Mads.setseed(seed::Integer) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:445
-  * `Mads.setseed(seed::Integer, quiet::Bool) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:445
+  * `Mads.setseed() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L445
+  * `Mads.setseed(seed::Integer) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L445
+  * `Mads.setseed(seed::Integer, quiet::Bool) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L445
 
 Arguments
 
@@ -6771,7 +6771,7 @@ Set sin-space dx
 
 Methods
 
-  * `Mads.setsindx!(madsdata::AbstractDict, sindx::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:363
+  * `Mads.setsindx!(madsdata::AbstractDict, sindx::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L363
 
 Arguments
 
@@ -6794,7 +6794,7 @@ Set sin-space dx
 
 Methods
 
-  * `Mads.setsindx(sindx::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:380
+  * `Mads.setsindx(sindx::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L380
 
 Arguments
 
@@ -6816,8 +6816,8 @@ Set initial optimized parameter guesses in the MADS problem dictionary for the S
 
 Methods
 
-  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:324
-  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:324
+  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L324
+  * `Mads.setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L324
 
 Arguments
 
@@ -6837,7 +6837,7 @@ Set observation target
 
 Methods
 
-  * `Mads.settarget!(o::AbstractDict, target::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:243
+  * `Mads.settarget!(o::AbstractDict, target::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L243
 
 Arguments
 
@@ -6856,7 +6856,7 @@ Set observation time
 
 Methods
 
-  * `Mads.settime!(o::AbstractDict, time::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:165
+  * `Mads.settime!(o::AbstractDict, time::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L165
 
 Arguments
 
@@ -6875,7 +6875,7 @@ Set MADS verbosity level
 
 Methods
 
-  * `Mads.setverbositylevel(level::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:216
+  * `Mads.setverbositylevel(level::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L216
 
 Arguments
 
@@ -6893,7 +6893,7 @@ Set observation weight
 
 Methods
 
-  * `Mads.setweight!(o::AbstractDict, weight::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:204
+  * `Mads.setweight!(o::AbstractDict, weight::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L204
 
 Arguments
 
@@ -6912,7 +6912,7 @@ Set well weights in the MADS problem dictionary
 
 Methods
 
-  * `Mads.setwellweights!(madsdata::AbstractDict, value::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:344
+  * `Mads.setwellweights!(madsdata::AbstractDict, value::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L344
 
 Arguments
 
@@ -6931,7 +6931,7 @@ Show all parameters in the MADS problem dictionary
 
 Methods
 
-  * `Mads.showallparameters(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:610
+  * `Mads.showallparameters(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L610
 
 Arguments
 
@@ -6949,7 +6949,7 @@ Show observations in the MADS problem dictionary
 
 Methods
 
-  * `Mads.showobservations(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:403
+  * `Mads.showobservations(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L403
 
 Arguments
 
@@ -6967,7 +6967,7 @@ Show parameters in the MADS problem dictionary
 
 Methods
 
-  * `Mads.showparameters(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsParameters.jl:574
+  * `Mads.showparameters(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsParameters.jl#L574
 
 Arguments
 
@@ -6985,8 +6985,8 @@ Sine transformation of model parameters
 
 Methods
 
-  * `Mads.sinetransform(madsdata::AbstractDict, params::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:36
-  * `Mads.sinetransform(sineparams::Array{T,1} where T, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:46
+  * `Mads.sinetransform(madsdata::AbstractDict, params::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L36
+  * `Mads.sinetransform(sineparams::Array{T,1} where T, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L46
 
 Arguments
 
@@ -7013,7 +7013,7 @@ Sine transformation of a function
 
 Methods
 
-  * `Mads.sinetransformfunction(f::Function, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:80
+  * `Mads.sinetransformfunction(f::Function, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L80
 
 Arguments
 
@@ -7038,7 +7038,7 @@ Sine transformation of a gradient function
 
 Methods
 
-  * `Mads.sinetransformgradient(g::Function, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T; sindx) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSineTransformations.jl:101
+  * `Mads.sinetransformgradient(g::Function, lowerbounds::Array{T,1} where T, upperbounds::Array{T,1} where T, indexlogtransformed::Array{T,1} where T; sindx) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSineTransformations.jl#L101
 
 Arguments
 
@@ -7067,9 +7067,9 @@ Generate a combined spaghetti plot for the `selected` (`type != null`) model par
 
 Methods
 
-  * `Mads.spaghettiplot(madsdata::AbstractDict, number_of_samples::Integer; kw...) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:896
-  * `Mads.spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed, kw...) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:900
-  * `Mads.spaghettiplot(madsdata::AbstractDict, array::Array; plotdata, filename, keyword, format, xtitle, ytitle, yfit, obs_plot_dots, linewidth, pointsize, grayscale) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:937
+  * `Mads.spaghettiplot(madsdata::AbstractDict, number_of_samples::Integer; kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L896
+  * `Mads.spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed, kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L900
+  * `Mads.spaghettiplot(madsdata::AbstractDict, array::Array; plotdata, filename, keyword, format, xtitle, ytitle, yfit, obs_plot_dots, linewidth, pointsize, grayscale) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L937
 
 Arguments
 
@@ -7117,8 +7117,8 @@ Generate separate spaghetti plots for each `selected` (`type != null`) model par
 
 Methods
 
-  * `Mads.spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed, kw...) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:737
-  * `Mads.spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format, keyword, xtitle, ytitle, obs_plot_dots, seed, linewidth, pointsize, grayscale) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsPlot.jl:742
+  * `Mads.spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed, kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L737
+  * `Mads.spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format, keyword, xtitle, ytitle, obs_plot_dots, seed, linewidth, pointsize, grayscale) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsPlot.jl#L742
 
 Arguments
 
@@ -7161,7 +7161,7 @@ Spherical spatial covariance function
 
 Methods
 
-  * `Mads.sphericalcov(h::Number, maxcov::Number, scale::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:45
+  * `Mads.sphericalcov(h::Number, maxcov::Number, scale::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L45
 
 Arguments
 
@@ -7185,7 +7185,7 @@ Spherical variogram
 
 Methods
 
-  * `Mads.sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsKriging.jl:61
+  * `Mads.sphericalvariogram(h::Number, sill::Number, range::Number, nugget::Number) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsKriging.jl#L61
 
 Arguments
 
@@ -7220,8 +7220,8 @@ Status of Mads modules
 
 Methods
 
-  * `Mads.status(madsmodule::String; git, gitmore) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:257
-  * `Mads.status(; git, gitmore) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:252
+  * `Mads.status(madsmodule::String; git, gitmore) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L257
+  * `Mads.status(; git, gitmore) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L252
 
 Arguments
 
@@ -7248,7 +7248,7 @@ Restore stderr
 
 Methods
 
-  * `Mads.stderrcaptureoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:140
+  * `Mads.stderrcaptureoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L140
 
 Returns:
 
@@ -7266,7 +7266,7 @@ Redirect stderr to a reader
 
 Methods
 
-  * `Mads.stderrcaptureon() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:121
+  * `Mads.stderrcaptureon() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L121
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsCapture.jl#L115-L119' class='documenter-source'>source</a><br>
@@ -7280,7 +7280,7 @@ Restore stdout
 
 Methods
 
-  * `Mads.stdoutcaptureoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:106
+  * `Mads.stdoutcaptureoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L106
 
 Returns:
 
@@ -7298,7 +7298,7 @@ Redirect stdout to a reader
 
 Methods
 
-  * `Mads.stdoutcaptureon() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:87
+  * `Mads.stdoutcaptureon() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L87
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsCapture.jl#L81-L85' class='documenter-source'>source</a><br>
@@ -7312,7 +7312,7 @@ Restore stdout & stderr
 
 Methods
 
-  * `Mads.stdouterrcaptureoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:171
+  * `Mads.stdouterrcaptureoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L171
 
 Returns:
 
@@ -7330,7 +7330,7 @@ Redirect stdout & stderr to readers
 
 Methods
 
-  * `Mads.stdouterrcaptureon() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsCapture.jl:155
+  * `Mads.stdouterrcaptureon() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsCapture.jl#L155
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsCapture.jl#L149-L153' class='documenter-source'>source</a><br>
@@ -7344,7 +7344,7 @@ Dump SVR models in files
 
 Methods
 
-  * `Mads.svrdump(svrmodel::Array{SVR.svmmodel,1}, rootname::String, numberofsamples::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:141
+  * `Mads.svrdump(svrmodel::Array{SVR.svmmodel,1}, rootname::String, numberofsamples::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L141
 
 Arguments
 
@@ -7364,7 +7364,7 @@ Free SVR
 
 Methods
 
-  * `Mads.svrfree(svrmodel::Array{SVR.svmmodel,1}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:123
+  * `Mads.svrfree(svrmodel::Array{SVR.svmmodel,1}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L123
 
 Arguments
 
@@ -7382,7 +7382,7 @@ Load SVR models from files
 
 Methods
 
-  * `Mads.svrload(npred::Int64, rootname::String, numberofsamples::Int64) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:164
+  * `Mads.svrload(npred::Int64, rootname::String, numberofsamples::Int64) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L164
 
 Arguments
 
@@ -7406,7 +7406,7 @@ Predict SVR
 
 Methods
 
-  * `Mads.svrpredict(svrmodel::Array{SVR.svmmodel,1}, paramarray::Array{Float64,2}) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:96
+  * `Mads.svrpredict(svrmodel::Array{SVR.svmmodel,1}, paramarray::Array{Float64,2}) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L96
 
 Arguments
 
@@ -7429,9 +7429,9 @@ Train SVR
 
 Methods
 
-  * `Mads.svrtrain(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:39
-  * `Mads.svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check, savesvr, addminmax, svm_type, kernel_type, degree, gamma, coef0, C, nu, cache_size, eps, shrinking, probability, verbose, tol) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:6
-  * `Mads.svrtrain(madsdata::AbstractDict, numberofsamples::Integer; addminmax, kw...) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSVR.jl:39
+  * `Mads.svrtrain(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L39
+  * `Mads.svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check, savesvr, addminmax, svm_type, kernel_type, degree, gamma, coef0, C, nu, cache_size, eps, shrinking, probability, verbose, tol) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L6
+  * `Mads.svrtrain(madsdata::AbstractDict, numberofsamples::Integer; addminmax, kw...) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSVR.jl#L39
 
 Arguments
 
@@ -7477,7 +7477,7 @@ Create a symbolic link of a file `filename` in a directory `dirtarget`
 
 Methods
 
-  * `Mads.symlinkdir(filename::String, dirtarget::String, dirsource::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1166
+  * `Mads.symlinkdir(filename::String, dirtarget::String, dirsource::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1166
 
 Arguments
 
@@ -7497,7 +7497,7 @@ Create a symbolic link of all the files in a directory `dirsource` in a director
 
 Methods
 
-  * `Mads.symlinkdirfiles(dirsource::String, dirtarget::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:1148
+  * `Mads.symlinkdirfiles(dirsource::String, dirtarget::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L1148
 
 Arguments
 
@@ -7516,10 +7516,10 @@ Tag Mads modules with a default argument `:patch`
 
 Methods
 
-  * `Mads.tag(madsmodule::String, versionsym::Symbol) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:326
-  * `Mads.tag(madsmodule::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:326
-  * `Mads.tag(versionsym::Symbol) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:321
-  * `Mads.tag() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:321
+  * `Mads.tag(madsmodule::String, versionsym::Symbol) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L326
+  * `Mads.tag(madsmodule::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L326
+  * `Mads.tag(versionsym::Symbol) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L321
+  * `Mads.tag() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L321
 
 Arguments
 
@@ -7538,8 +7538,8 @@ Perform Mads tests (the tests will be in parallel if processors are defined; tes
 
 Methods
 
-  * `Mads.test(testname::String; madstest) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsTest.jl:40
-  * `Mads.test() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsTest.jl:40
+  * `Mads.test(testname::String; madstest) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsTest.jl#L40
+  * `Mads.test() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsTest.jl#L40
 
 Arguments
 
@@ -7561,8 +7561,8 @@ Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is execut
 
 Methods
 
-  * `Mads.testj(coverage::Bool) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsTest.jl:11
-  * `Mads.testj() in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsTest.jl:11
+  * `Mads.testj(coverage::Bool) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsTest.jl#L11
+  * `Mads.testj() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsTest.jl#L11
 
 Arguments
 
@@ -7580,7 +7580,7 @@ Transpose non-numeric matrix
 
 Methods
 
-  * `Mads.transposematrix(a::Array{T,2} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:400
+  * `Mads.transposematrix(a::Array{T,2} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L400
 
 Arguments
 
@@ -7598,7 +7598,7 @@ Transpose non-numeric vector
 
 Methods
 
-  * `Mads.transposevector(a::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:390
+  * `Mads.transposevector(a::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L390
 
 Arguments
 
@@ -7616,7 +7616,7 @@ Untag specific version
 
 Methods
 
-  * `Mads.untag(madsmodule::String, version::String) in Mads` : /Users/monty/.julia/dev/Mads/src-interactive/MadsPublish.jl:361
+  * `Mads.untag(madsmodule::String, version::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src-interactive/MadsPublish.jl#L361
 
 Arguments
 
@@ -7635,7 +7635,7 @@ MADS vector calls off
 
 Methods
 
-  * `Mads.vectoroff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:42
+  * `Mads.vectoroff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L42
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L36-L40' class='documenter-source'>source</a><br>
@@ -7649,7 +7649,7 @@ MADS vector calls on
 
 Methods
 
-  * `Mads.vectoron() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:33
+  * `Mads.vectoron() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L33
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L27-L31' class='documenter-source'>source</a><br>
@@ -7663,7 +7663,7 @@ Make MADS not very quiet
 
 Methods
 
-  * `Mads.veryquietoff() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:115
+  * `Mads.veryquietoff() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L115
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L109-L113' class='documenter-source'>source</a><br>
@@ -7677,7 +7677,7 @@ Make MADS very quiet
 
 Methods
 
-  * `Mads.veryquieton() in Mads` : /Users/monty/.julia/dev/Mads/src/MadsHelpers.jl:106
+  * `Mads.veryquieton() in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsHelpers.jl#L106
 
 
 <a target='_blank' href='https://github.com/madsjulia/Mads.jl/blob/8b18290f40a43aa29aabd1b1cf357f47d1ae6dee/src/MadsHelpers.jl#L100-L104' class='documenter-source'>source</a><br>
@@ -7691,7 +7691,7 @@ Convert Nothing's into NaN's in a dictionary
 
 Methods
 
-  * `Mads.void2nan!(dict::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:1047
+  * `Mads.void2nan!(dict::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L1047
 
 Arguments
 
@@ -7709,7 +7709,7 @@ Get weighted mean and variance samples
 
 Methods
 
-  * `Mads.weightedstats(samples::Array, llhoods::Array{T,1} where T) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsSenstivityAnalysis.jl:386
+  * `Mads.weightedstats(samples::Array, llhoods::Array{T,1} where T) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsSenstivityAnalysis.jl#L386
 
 Arguments
 
@@ -7733,7 +7733,7 @@ Turn off a specific well in the MADS problem dictionary
 
 Methods
 
-  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:621
+  * `Mads.welloff!(madsdata::AbstractDict, wellname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L621
 
 Arguments
 
@@ -7752,8 +7752,8 @@ Turn on a specific well in the MADS problem dictionary
 
 Methods
 
-  * `Mads.wellon!(madsdata::AbstractDict, wellname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:563
-  * `Mads.wellon!(madsdata::AbstractDict, rx::Regex) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:585
+  * `Mads.wellon!(madsdata::AbstractDict, wellname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L563
+  * `Mads.wellon!(madsdata::AbstractDict, rx::Regex) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L585
 
 Arguments
 
@@ -7773,7 +7773,7 @@ Turn on a specific well in the MADS problem dictionary
 
 Methods
 
-  * `Mads.wellon!(madsdata::AbstractDict, wellname::String) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:563
+  * `Mads.wellon!(madsdata::AbstractDict, wellname::String) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L563
 
 Arguments
 
@@ -7792,7 +7792,7 @@ Convert `Wells` class to `Observations` class in the MADS problem dictionary
 
 Methods
 
-  * `Mads.wells2observations!(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsObservations.jl:676
+  * `Mads.wells2observations!(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsObservations.jl#L676
 
 Arguments
 
@@ -7810,8 +7810,8 @@ Write model `parameters`
 
 Methods
 
-  * `Mads.writeparameters(madsdata::AbstractDict) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:890
-  * `Mads.writeparameters(madsdata::AbstractDict, parameters::AbstractDict; respect_space) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:890
+  * `Mads.writeparameters(madsdata::AbstractDict) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L890
+  * `Mads.writeparameters(madsdata::AbstractDict, parameters::AbstractDict; respect_space) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L890
 
 Arguments
 
@@ -7834,7 +7834,7 @@ Write `parameters` via MADS template (`templatefilename`) to an output file (`ou
 
 Methods
 
-  * `Mads.writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space) in Mads` : /Users/monty/.julia/dev/Mads/src/MadsIO.jl:846
+  * `Mads.writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space) in Mads` : https://github.com/madsjulia/Mads.jl/blob/master/src/MadsIO.jl#L846
 
 Arguments
 
