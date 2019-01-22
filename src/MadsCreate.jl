@@ -13,9 +13,9 @@ Returns:
 """
 function loadmadsproblem(name::String)
 	if name == "polynomial"
-		madsdata = Mads.loadmadsfile(joinpath(Mads.madsdir, "examples", "internal-polynomial-model", "internal-polynomial.mads"))
+		madsdata = Mads.loadmadsfile(joinpath(Mads.madsdir, "examples", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 	elseif name == "external"
-		madsdata = Mads.loadmadsfile(joinpath(Mads.madsdir, "examples", "external-linear-model", "external-jld.mads"))
+		madsdata = Mads.loadmadsfile(joinpath(Mads.madsdir, "examples", "models", "external-linear-model", "external-jld.mads"))
 	else
 		madsdata = nothing
 	end

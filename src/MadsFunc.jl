@@ -80,16 +80,12 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		madsdatacommandfunction = importeverywhere(filename)
 		local madscommandfunction
 		try
-			madscommandfunction = madsdatacommandfunction(madsdata_in)
-		catch errmsg
-			try
-				madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
-			catch errmsg
-				printerrormsg(errmsg)
-				Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
-			end
 			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
 		end
+		madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
@@ -366,7 +362,7 @@ end
 
 """
 Import Julia function everywhere from a file.
-The first function in the Julia input file is the one that will be called by Mads to perform the model simulations.
+The first function in the Julia input file is the one that will be targeted by Mads for execution.
 
 $(DocumentFunction.documentfunction(importeverywhere;
 argtext=Dict("filename"=>"file name")))
@@ -403,7 +399,7 @@ function makelogprior(madsdata::AbstractDict)
 	function logprior(params::AbstractDict)
 		loglhood = 0.
 		for paramname in getoptparamkeys(madsdata)
-			loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1] # for some reason, loglikelihood accepts and returns arrays, not floats
+			loglhood += Distributions.loglikelihood(distributions[paramname], [params[paramname]])[1]
 		end
 		return loglhood
 	end
@@ -431,9 +427,10 @@ function makemadsconditionalloglikelihood(madsdata::AbstractDict; weightfactor::
 			if haskey(observations[obsname], "target")
 				obs = observations[obsname]["target"]
 				diff = obs - pred
-				weight = 1.
 				if haskey(observations[obsname], "weight")
 					weight = observations[obsname]["weight"]
+				else
+					weight = 1.
 				end
 				weight *= weightfactor
 				loglhood -= weight * diff * diff # divide by variance (weight = 1/var)
@@ -446,7 +443,17 @@ end
 
 """
 Make a function to compute the log-likelihood for a given set of model parameters, associated model predictions and existing observations.
-The function can be provided as an external function in the MADS problem dictionary under `LogLikelihood` or computed internally.
+By default, the Log-likelihood function computed internally.
+The Log-likelihood can be constructed from an external Julia function defined the MADS problem dictionary under `LogLikelihood` or `ConditionalLogLikelihood`.
+
+In the case of a `LogLikelihood` external Julia function, the first function in the file provided should be a function that takes as arguments:
+- dictionary of model parameters
+- dictionary of model predictions
+- dictionary of respective observations
+
+In the case of a `ConditionalLogLikelihood` external Julia function, the first function in the file provided should be a function that takes as arguments:
+- dictionary of model predictions
+- dictionary of respective observations
 
 $(DocumentFunction.documentfunction(makemadsloglikelihood;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
@@ -458,14 +465,23 @@ Returns:
 """
 function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 	if haskey(madsdata, "LogLikelihood")
-		Mads.madsinfo("Log-likelihood function provided externally ...")
-		madsloglikelihood = evalfile(madsdata["LogLikelihood"]) # madsloglikelihood should be a function that takes a dict of MADS parameters, a dict of model predictions, and a dict of MADS observations
+		filename = joinpath(madsproblemdir, madsdata["LogLikelihood"])
+		Mads.madsinfo("Log-likelihood function provided externally from a file: '$(filename)'")
+		madsloglikelihood = importeverywhere(filename)
+	elseif haskey(madsdata, "ConditionalLogLikelihood")
+		filename = joinpath(madsproblemdir, madsdata["ConditionalLogLikelihood"])
+		Mads.madsinfo("Conditional Log-likelihood function provided externally from a file: '$(filename)'")
+		conditionalloglikelihood = importeverywhere(filename)
+		"MADS log-likelihood functions"
+		function madsloglikelihood(params::T, predictions::T, observations::T) where {T<:AbstractDict}
+			return logprior(params) + weightfactor * conditionalloglikelihood(predictions, observations)
+		end
 	else
 		Mads.madsinfo("Log-likelihood function computed internally ...")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		"MADS log-likelihood functions"
-		function madsloglikelihood(params::T1, predictions::T2, observations::T3) where {T1<:AbstractDict, T2<:AbstractDict, T3<:AbstractDict}
+		function madsloglikelihood(params::T, predictions::T, observations::T) where {T<:AbstractDict}
 			return logprior(params) + conditionalloglikelihood(predictions, observations)
 		end
 	end
