@@ -1,1 +1,1 @@
-../external-linear-model/external-yaml-linearmodel.jl
+../models/external-linear-model/external-yaml-linearmodel.jl
