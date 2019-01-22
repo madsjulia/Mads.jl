@@ -21,7 +21,7 @@ else
 	nk = 3
 
 	@Test.testset "BSS" begin
-	# @Mads.stderrcapture function reconstruct_rand(R, nk)
+		# @Mads.stderrcapture function reconstruct_rand(R, nk)
 		Random.seed!(2015)
 
 		s1 = rand(100)
@@ -42,7 +42,7 @@ else
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "rand.jld2"), "Wipopt")
 		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 
-	# @Mads.stderrcapture function reconstruct_sin.(R, nk)
+		# @Mads.stderrcapture function reconstruct_sin.(R, nk)
 		Random.seed!(2015)
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
 		s2 = (sin.(0.3:0.3:30) .+ 1) ./ 2
@@ -69,7 +69,7 @@ else
 		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 		# @Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 
-	# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
+		# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
 		Random.seed!(2015)
 
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
