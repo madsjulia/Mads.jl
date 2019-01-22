@@ -72,7 +72,7 @@ Do not make documentation
 
 Methods
 
-  * `Anasol.documentationoff() in Anasol` : /Users/monty/.julia/dev/Anasol/src/Anasol.jl:237
+  * `Anasol.documentationoff() in Anasol` : https://github.com/madsjulia/Anasol.jl/blob/master/src/Anasol.jl#L237
 
 
 <a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/22703cda64d529b2bbb5b38bb3c7243c33c5ebca/src/Anasol.jl#L231-L235' class='documenter-source'>source</a><br>
@@ -86,7 +86,7 @@ Make documentation
 
 Methods
 
-  * `Anasol.documentationon() in Anasol` : /Users/monty/.julia/dev/Anasol/src/Anasol.jl:228
+  * `Anasol.documentationon() in Anasol` : https://github.com/madsjulia/Anasol.jl/blob/master/src/Anasol.jl#L228
 
 
 <a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/22703cda64d529b2bbb5b38bb3c7243c33c5ebca/src/Anasol.jl#L222-L226' class='documenter-source'>source</a><br>

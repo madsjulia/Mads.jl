@@ -18,7 +18,7 @@ Predict based on a libSVM model
 
 Methods
 
-  * `SVR.apredict(y::Array{T,1} where T, x::Array; kw...) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:272
+  * `SVR.apredict(y::Array{T,1} where T, x::Array; kw...) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L272
 
 Arguments
 
@@ -38,7 +38,7 @@ Free a libSVM model
 
 Methods
 
-  * `SVR.freemodel(pmodel::SVR.svmmodel) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:322
+  * `SVR.freemodel(pmodel::SVR.svmmodel) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L322
 
 Arguments
 
@@ -53,7 +53,7 @@ catch lib output
 
 Methods
 
-  * `SVR.liboutput(str::Ptr{UInt8}) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:86
+  * `SVR.liboutput(str::Ptr{UInt8}) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L86
 
 Arguments
 
@@ -68,7 +68,7 @@ Load a libSVM model
 
 Methods
 
-  * `SVR.loadmodel(filename::String) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:288
+  * `SVR.loadmodel(filename::String) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L288
 
 Arguments
 
@@ -85,7 +85,7 @@ Returns:
 
 Methods
 
-  * `SVR.mapnodes(x::Array) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:187
+  * `SVR.mapnodes(x::Array) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L187
 
 Arguments
 
@@ -98,7 +98,7 @@ Arguments
 
 Methods
 
-  * `SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:164
+  * `SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L164
 
 Keywords
 
@@ -131,7 +131,7 @@ Predict based on a libSVM model
 
 Methods
 
-  * `SVR.predict(pmodel::SVR.svmmodel, x::Array) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:246
+  * `SVR.predict(pmodel::SVR.svmmodel, x::Array) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L246
 
 Arguments
 
@@ -151,7 +151,7 @@ Compute the coefficient of determination (r2)
 
 Methods
 
-  * `SVR.r2(x, y) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:367
+  * `SVR.r2(x, y) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L367
 
 Arguments
 
@@ -171,7 +171,7 @@ Read a libSVM file
 
 Methods
 
-  * `SVR.readlibsvmfile(file::String) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:341
+  * `SVR.readlibsvmfile(file::String) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L341
 
 Arguments
 
@@ -191,7 +191,7 @@ Save a libSVM model
 
 Methods
 
-  * `SVR.savemodel(pmodel::SVR.svmmodel, filename::String) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:309
+  * `SVR.savemodel(pmodel::SVR.svmmodel, filename::String) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L309
 
 Arguments
 
@@ -211,7 +211,7 @@ Train based on a libSVM model
 
 Methods
 
-  * `SVR.train(y::Array{T,1} where T, x::Array; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose) in SVR` : /Users/monty/.julia/packages/SVR/OpJky/src/SVR.jl:226
+  * `SVR.train(y::Array{T,1} where T, x::Array; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose) in SVR` : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L226
 
 Arguments
 
