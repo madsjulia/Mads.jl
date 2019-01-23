@@ -1,1 +1,1 @@
-../internal-linear-model/internal-linearmodel.jl
+../models/internal-linear-model/internal-linearmodel.jl
