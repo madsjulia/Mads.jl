@@ -175,7 +175,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 							latest = true; attempt = 0
 						else
 							if attempt > 3
-								Mads.madswarn(Base.stacktrace())
+								@show Base.stacktrace()
 								cd(currentdir)
 								printerrormsg(errmsg)
 								if nrpocs() > 1 && myid() != 1
@@ -203,7 +203,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 					catch errmsg
 						runcmd(madsdata["Command"]; quiet=false, pipe=true)
 						if attempt > 3
-							Mads.madswarn(Base.stacktrace())
+							@show Base.stacktrace()
 							cd(currentdir)
 							printerrormsg(errmsg)
 							if nrpocs() > 1 && myid() != 1
@@ -231,7 +231,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 				catch errmsg
 					if attempt > 3
 						printerrormsg(errmsg)
-						Mads.madswarn(Base.stacktrace())
+						@show Base.stacktrace()
 						madswarn("$(errmsg)\nTemporary directory $tempdirname cannot be deleted!")
 						trying = false
 					end
@@ -468,22 +468,21 @@ function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 		filename = joinpath(madsproblemdir, madsdata["LogLikelihood"])
 		Mads.madsinfo("Log-likelihood function provided externally from a file: '$(filename)'")
 		madsloglikelihood = importeverywhere(filename)
+		return madsloglikelihood
 	elseif haskey(madsdata, "ConditionalLogLikelihood")
 		filename = joinpath(madsproblemdir, madsdata["ConditionalLogLikelihood"])
 		Mads.madsinfo("Conditional Log-likelihood function provided externally from a file: '$(filename)'")
 		conditionalloglikelihood = importeverywhere(filename)
-		"MADS log-likelihood functions"
-		function madsloglikelihood(params::T, predictions::T, observations::T) where {T<:AbstractDict}
-			return logprior(params) + weightfactor * conditionalloglikelihood(predictions, observations)
-		end
+		internalweightfactor = weightfactor
 	else
 		Mads.madsinfo("Log-likelihood function computed internally ...")
 		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
-		"MADS log-likelihood functions"
-		function madsloglikelihood(params::T, predictions::T, observations::T) where {T<:AbstractDict}
-			return logprior(params) + conditionalloglikelihood(predictions, observations)
-		end
+		internalweightfactor = 1
+	end
+	"MADS log-likelihood function"
+	function madsloglikelihood(params::AbstractDict, predictions::AbstractDict, observations::AbstractDict)
+		return logprior(params) + internalweightfactor * conditionalloglikelihood(predictions, observations)
 	end
 	return madsloglikelihood
 end

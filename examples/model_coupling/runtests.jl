@@ -8,11 +8,11 @@ if workdir == "."
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")
-mdbe = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-external-observations.mads"); bigfile=true)
+mdbe = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-external-observations", "internal-linearmodel-external-observations.mads"); bigfile=true)
 efor = Mads.forward(mdbe)
-mdb = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"); bigfile=true)
+mdb = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel.mads"); bigfile=true)
 bfor = Mads.forward(mdb)
-md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel.mads"))
 ifor = Mads.forward(md)
 Mads.forward(md, Dict())
 ip = Mads.getparamdict(md)
@@ -28,9 +28,9 @@ if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, forwardpredresults)
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-a-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-b-5-spaghetti.svg"))
 	Mads.graphon()
 end
 
