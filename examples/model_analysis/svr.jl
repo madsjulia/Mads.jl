@@ -4,7 +4,7 @@ import Mads
 
 Random.seed!(2017)
 
-md = Mads.loadmadsfile(joinpath("models", "internal-polynomial.mads"))
+md = Mads.loadmadsfile(joinpath("..", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 rootname = Mads.getmadsrootname(md)
 svrexec, svrread, svrsave, svrclean  = Mads.makesvrmodel(md, 100)
 

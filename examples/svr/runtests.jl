@@ -22,7 +22,7 @@ Random.seed!(2017)
 
 numberofsamples = 1000 # Set the number
 
-@Mads.stdouterrcapture md = Mads.loadmadsfile(joinpath(workdir, "models", "internal-polynomial.mads"))
+@Mads.stdouterrcapture md = Mads.loadmadsfile(joinpath(workdir, "..", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 paramdict = Mads.getparamrandom(md, numberofsamples, init_dist=true)
 paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 paramdict1 = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
