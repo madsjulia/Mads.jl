@@ -72,8 +72,8 @@ Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "externa
 pfor = Mads.forward(md)
 
 @Test.testset "Internal" begin
-	@Test.test ifor == mdof
-	@Test.test ifor == mdos
+	@Test.test ifor == ffor
+	@Test.test ifor == sfor
 	@Test.test ifor == bfor
 	@Test.test ifor == tifor
 	@Test.test ifor == mfor
@@ -82,12 +82,16 @@ pfor = Mads.forward(md)
 	@Test.test ifor == pfor
 end
 
-Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-mads.mads"); julia=true)
+Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"); julia=true)
 Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
 Mads.madsinfo("External coupling using `Command` and JLD ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
 jfor = Mads.forward(md)
+
+Mads.madsinfo("External coupling using `Command` and JLD2 ...")
+md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld2.mads"))
+j2for = Mads.forward(md)
 Mads.set_nprocs_per_task(2)
 @Mads.stdouterrcapture Mads.forward(md)
 Mads.set_nprocs_per_task(1)
@@ -125,6 +129,7 @@ cd(cwd)
 @Test.testset "External" begin
 	@Test.test afor == sfor
 	@Test.test jfor == sfor
+	@Test.test jfor == j2for
 	@Test.test efor == sfor
 	@Test.test jfor == ifor
 	@Test.test ro1 == ro2
