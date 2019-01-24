@@ -1,0 +1,6 @@
+Parameters:
+- a : { longname: "a", init:  1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+- b : { longname: "b", init: -1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+Observations:
+- script: internal-linearmodel-observations-script.jl
+Model: internal-linearmodel.jl

@@ -2,5 +2,5 @@ Parameters:
 - a : { longname: "a", init:  1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
 - b : { longname: "b", init: -1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
 Observations:
-- filename: "internal-linearmodel-external-observations.yaml"
+- filename: "internal-linearmodel-observations-filename.yaml"
 Model: internal-linearmodel.jl
