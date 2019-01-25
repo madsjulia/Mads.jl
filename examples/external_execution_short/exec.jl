@@ -4,13 +4,13 @@ using Distributed
 include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
 
 @info("Set SLURM processors ...")
-setprocs()
+addprocs()
 # setprocs(ntasks_per_node=2)
 
 @info("Number of processors = $(length(workers()))")
 
 @info("Import mads ...")
-reload("Mads")
+import Mads
 Mads.quietoff()
 
 @info("Set the correct working directory on all the processors ...")

@@ -464,6 +464,7 @@ Returns:
 - the log-likelihood for a given set of model parameters
 """
 function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
+	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "LogLikelihood")
 		filename = joinpath(madsproblemdir, madsdata["LogLikelihood"])
 		Mads.madsinfo("Log-likelihood function provided externally from a file: '$(filename)'")
@@ -473,6 +474,7 @@ function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 		filename = joinpath(madsproblemdir, madsdata["ConditionalLogLikelihood"])
 		Mads.madsinfo("Conditional Log-likelihood function provided externally from a file: '$(filename)'")
 		conditionalloglikelihood = importeverywhere(filename)
+		logprior = makelogprior(madsdata)
 		internalweightfactor = weightfactor
 	else
 		Mads.madsinfo("Log-likelihood function computed internally ...")

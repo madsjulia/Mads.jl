@@ -5,10 +5,9 @@ include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
 @info("setprocs")
 Distributed.addprocs()
 
-# import Mads
-# Mads.setprocs()
-# reload("Mads")
-# @everywhere @show isdefined(Base, :Mads)
+import Mads
+Mads.setprocs()
+@everywhere import Mads
 
 @everywhere nt = 10000
 @everywhere np = nworkers()
