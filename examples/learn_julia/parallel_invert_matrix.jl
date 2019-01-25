@@ -12,7 +12,7 @@ sleep(1)
 @Printf.printf( "Number of processors %d\n", nworkers())
 @time A = X * X';
 @time x = A \ h;
-addprocs(8)
+Distributed.addprocs(8)
 blas_set_num_threads(8)
 @Printf.printf( "Number of processors %d\n", nworkers())
 @time A = X * X';
