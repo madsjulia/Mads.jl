@@ -48,7 +48,7 @@ end
 end
 
 # if !haskey(ENV, "MADS_TRAVIS")
-# 	addprocs(2)
+# 	Distributed.addprocs(2)
 # end
 
 @Test.testset "Parallel" begin
