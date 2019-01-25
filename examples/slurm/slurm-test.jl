@@ -1,12 +1,13 @@
 using Distributed
+import Mads
 
 @info("start")
 include(joinpath(Mads.madsdir, "src-interactive/MadsParallel.jl"))
 @info("setprocs")
-setprocs(ntasks_per_node=16)
+Mads.setprocs(ntasks_per_node=16)
 
 @info("import")
-reload("Mads")
+@everywhere import Mads
 @everywhere Mads.quietoff()
 @info("set")
 
