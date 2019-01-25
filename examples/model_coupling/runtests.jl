@@ -30,9 +30,9 @@ if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, forwardpredresults)
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-5-spaghetti.svg"))
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-a-5-spaghetti.svg"))
-	Mads.rmfile(joinpath(workdir, "internal-linearmodel", "internal-linearmodel-b-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
 	Mads.graphon()
 end
 
@@ -44,6 +44,14 @@ Mads.madsinfo("Internal coupling using `Julia command`, `Templates` and respecti
 Mads.addkeyword!(md, "respect_space")
 tifor = Mads.forward(md)
 Mads.deletekeyword!(md, "respect_space")
+
+Mads.madsinfo("Internal coupling with `LogLikelihood` ...")
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-loglikelihood.mads"))
+chain, llhoods = Mads.emceesampling(md; numwalkers=1, nsteps=1, burnin=1, thinning=1, seed=2018, sigma=0.01)
+
+Mads.madsinfo("Internal coupling with `ConditionalLogLikelihood` ...")
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-loglikelihood-conditional.mads"))
+chain, llhoods = Mads.emceesampling(md; numwalkers=1, nsteps=1, burnin=1, thinning=1, seed=2018, sigma=0.01)
 
 Mads.madsinfo("External coupling using `MADS model`, `Templates` and `Instructions` ...")
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-madsmodel.mads"))

@@ -1,6 +1,4 @@
-if !isdefined(Base, :Mads)
-	reload("Mads")
-end
+import Mads
 
 md = Mads.loadmadsfile("w01.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
