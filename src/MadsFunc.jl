@@ -143,7 +143,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 						attempt +=1; sleep(1 * attempt)
 						if attempt > 3
 							cd(currentdir)
-							if nrpocs() > 1 && myid() != 1
+							if nprocs() > 1 && myid() != 1
 								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
 								return nothing
@@ -178,7 +178,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 								@show Base.stacktrace()
 								cd(currentdir)
 								printerrormsg(errmsg)
-								if nrpocs() > 1 && myid() != 1
+								if nprocs() > 1 && myid() != 1
 									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 									madswarn("Process $(myid()) will be removed!")
 									remotecall(rmprocs, 1, myid())
@@ -206,7 +206,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 							@show Base.stacktrace()
 							cd(currentdir)
 							printerrormsg(errmsg)
-							if nrpocs() > 1 && myid() != 1
+							if nprocs() > 1 && myid() != 1
 								madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
 								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
 								return nothing
