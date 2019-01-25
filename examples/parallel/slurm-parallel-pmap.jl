@@ -3,7 +3,7 @@ using Distributed
 @info("start")
 include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
 @info("setprocs")
-setprocs()
+Distributed.addprocs()
 
 # import Mads
 # Mads.setprocs()
@@ -19,6 +19,6 @@ setprocs()
 	return i * j
 end
 
-@time A=reshape(pmap((i,j)->(println("$i, $j"); fp(i,j)), repeat(1:np; inner=1, outer=nt), repeat(1:nt; inner=np, outer=1)), np, nt)
+@time A=reshape(Distributed.pmap((i,j)->(println("$i, $j"); fp(i,j)), repeat(1:np; inner=1, outer=nt), repeat(1:nt; inner=np, outer=1)), np, nt)
 display(A)
 println("done")

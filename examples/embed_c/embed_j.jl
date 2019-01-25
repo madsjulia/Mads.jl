@@ -12,4 +12,4 @@ using Distributed
 println("Julia ...")
 @time fjmxv(M, x);
 @time map(i->fjmxv(M, x), 1:10);
-@time pmap(i->fjmxv(M, x), 1:10);
+@time Distributed.pmap(i->fjmxv(M, x), 1:10);

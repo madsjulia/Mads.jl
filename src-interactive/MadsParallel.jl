@@ -35,7 +35,7 @@ function setprocs(np::Integer, nt::Integer)
 	nt = nt < 1 ? 1 : nt
 	n = np - nworkers()
 	if n > 0
-		addprocs(n)
+		Distributed.addprocs(n)
 	elseif n < 0
 		rmprocs(workers()[end+n+1:end])
 	end
@@ -102,7 +102,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			for i = 1:length(h)
 				@info("Connecting to $(h[i]) ...")
 				try
-					addprocs([h[i]]; arguments...)
+					Distributed.addprocs([h[i]]; arguments...)
 				catch errmsg
 					println(strip(errmsg.msg))
 					@warn("Connection to $(h[i]) failed!")
@@ -120,7 +120,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			errmsg = ""
 			addprocsfailed = false
 			try
-				addprocs(h; arguments...)
+				Distributed.addprocs(h; arguments...)
 			catch errmsg
 				if in(:errmsg, fieldnames(errmsg))
 					@warn(strip(errmsg.errmsg))
@@ -146,7 +146,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			end
 		end
 		sleep(0.1)
-		if nprocs() > 1
+		if Distributed.nprocs() > 1
 			@info("Number of processors: $(nworkers())")
 			@info("Workers: $(join(h, " "))")
 		else

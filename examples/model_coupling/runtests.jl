@@ -1,6 +1,6 @@
 import Mads
-import Test
 import PyCall
+import Test
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
@@ -85,9 +85,10 @@ end
 Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"); julia=true)
 Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
-Mads.madsinfo("External coupling using `Command` and JLD ...")
-md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
-jfor = Mads.forward(md)
+# JLD fails on Windows and other systems; HDF% is hard to build
+# Mads.madsinfo("External coupling using `Command` and JLD ...")
+# md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
+# jfor = Mads.forward(md)
 
 Mads.madsinfo("External coupling using `Command` and JLD2 ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld2.mads"))
@@ -108,7 +109,7 @@ if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && Mads.pyyaml != 
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-yaml.mads"))
 	yfor = Mads.forward(md)
-	@Test.test yfor == jfor
+	@Test.test yfor == j2for
 end
 
 Mads.madsinfo("External coupling using ASCII ...")
@@ -128,10 +129,10 @@ cd(cwd)
 
 @Test.testset "External" begin
 	@Test.test afor == sfor
-	@Test.test jfor == sfor
-	@Test.test jfor == j2for
+	@Test.test j2for == sfor
+	# @Test.test j2for == jfor
 	@Test.test efor == sfor
-	@Test.test jfor == ifor
+	@Test.test j2for == ifor
 	@Test.test ro1 == ro2
 end
 
