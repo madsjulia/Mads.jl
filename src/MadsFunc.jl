@@ -429,14 +429,13 @@ function makemadsconditionalloglikelihood(madsdata::AbstractDict; weightfactor::
 				diff = obs - pred
 				if haskey(observations[obsname], "weight")
 					weight = observations[obsname]["weight"]
+					loglhood -= weight * diff * diff # divide by variance (weight = 1/var)
 				else
-					weight = 1.
+					loglhood -= diff * diff # weight = 1
 				end
-				weight *= weightfactor
-				loglhood -= weight * diff * diff # divide by variance (weight = 1/var)
 			end
 		end
-		return loglhood
+		return weightfactor * loglhood
 	end
   return conditionalloglikelihood
 end
@@ -474,14 +473,13 @@ function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 		filename = joinpath(madsproblemdir, madsdata["ConditionalLogLikelihood"])
 		Mads.madsinfo("Conditional Log-likelihood function provided externally from a file: '$(filename)'")
 		conditionalloglikelihood = importeverywhere(filename)
-		logprior = makelogprior(madsdata)
 		internalweightfactor = weightfactor
 	else
 		Mads.madsinfo("Log-likelihood function computed internally ...")
-		logprior = makelogprior(madsdata)
 		conditionalloglikelihood = makemadsconditionalloglikelihood(madsdata; weightfactor=weightfactor)
 		internalweightfactor = 1
 	end
+	logprior = makelogprior(madsdata)
 	"MADS log-likelihood function"
 	function madsloglikelihood(params::AbstractDict, predictions::AbstractDict, observations::AbstractDict)
 		return logprior(params) + internalweightfactor * conditionalloglikelihood(predictions, observations)
