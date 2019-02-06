@@ -203,10 +203,8 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 
-if VERSION >= v"0.7"
-	ENV["MADS_NO_BIGUQ"] = ""
-	ENV["MADS_NO_KLARA"] = ""
-end
+ENV["MADS_NO_BIGUQ"] = ""
+ENV["MADS_NO_KLARA"] = ""
 
 if !haskey(ENV, "MADS_NO_BIGUQ")
 	@tryimport BIGUQ
