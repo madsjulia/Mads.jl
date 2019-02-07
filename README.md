@@ -46,22 +46,16 @@ Testing
 -------------
 
 ```julia
-Pkg.test("Mads")
+import Mads; Mads.test()
 ```
 
 Examples
 -------------
 
-In Julia REPL, do the following commands:
-
-```julia
-import Mads
-```
-
 To explore getting-started instructions, execute:
 
 ```julia
-Mads.help()
+import Mads; Mads.help()
 ```
 
 There are various examples located in the `examples` directory of the `Mads` repository.
@@ -117,10 +111,16 @@ export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
 ```
 
+Projects using AffineInvariantMCMC
+-----------------
+
+* [TensorDecompositions](https://github.com/TensorDecompositions)
+
 Publications, Presentations, Projects
-=====================================
+--------------------------
 
 * [mads.gitlab.io](http://mads.gitlab.io)
+* [TensorDecompositions](https://tensordecompositions.github.io)
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
 
