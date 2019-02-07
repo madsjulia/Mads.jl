@@ -36,23 +36,21 @@ Detailed documentation including description of all MADS modules and functions i
 See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
 Installation
-============
-
-After starting Julia, execute:
+-------------
 
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
 
 Testing
-============
+-------------
 
 ```julia
 Pkg.test("Mads")
 ```
 
 Examples
-=============
+-------------
 
 In Julia REPL, do the following commands:
 
