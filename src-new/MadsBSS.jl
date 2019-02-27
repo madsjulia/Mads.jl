@@ -87,13 +87,13 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 		end
 		@JuMP.constraint(m, W .<= 1) # this is very important constraint to make optimization faster
 		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
-		JuMP.solve(m)
+		JuMP.optimize!(m)
 		phi = JuMP.getobjectivevalue(m)
 		!quiet && println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
-			Wbest = JuMP.getvalue(W)
-			Hbest = JuMP.getvalue(H)
+			Wbest = JuMP.value.(W)
+			Hbest = JuMP.value.(H)
 		end
 	end
 	return Wbest, Hbest, phi_best
