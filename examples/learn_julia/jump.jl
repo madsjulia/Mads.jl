@@ -20,8 +20,8 @@ function testme1(init::Vector, targets::Vector)
 	# @JuMP.NLobjective(m, Min, myf1(x[1:3]...)) # does not work
 	@eval @JuMP.NLobjective(m, Min, $(Expr(:call, :myf1, [Expr(:ref, :x, i) for i=1:nvar]...))) # works
 
-	JuMP.solve(m)
-	result = JuMP.getvalue(x)
+	JuMP.optimize!(m)
+	result = JuMP.value.(x)
 	@show result
 	@show targets
 	return result
@@ -47,8 +47,8 @@ end
 		JuMP.register(m, :myf2, nvar, myf2, autodiff=true)
 		@JuMP.variable(m, x[i=1:nvar], start=init[i])
 		@JuMP.NLobjective(m, Min, $myfcall)
-		JuMP.solve(m)
-		return JuMP.getvalue(x)
+		JuMP.optimize!(m)
+		return JuMP.value.(x)
 	end
 	return q
 end
