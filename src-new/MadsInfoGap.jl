@@ -54,13 +54,13 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 			@JuMP.constraint(m, o[i=1:no] .<= t[i=1:no]+h)
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
-			JuMP.solve(m)
+			JuMP.optimize!(m)
 			phi = JuMP.getobjectivevalue(m)
 			println("OF = $(phi)")
 			if phi_best < phi
 				phi_best = phi
-				par_best = JuMP.getvalue(p)
-				obs_best = JuMP.getvalue(o)
+				par_best = JuMP.value.(p)
+				obs_best = JuMP.value.(o)
 			end
 		end
 		println("Max h = $h OF = $(phi_best) par = $par_best")
@@ -89,13 +89,13 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 			@JuMP.constraint(m, o[i=1:no] .<= t[i=1:no]+h)
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Min, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
-			JuMP.solve(m)
+			JuMP.optimize!(m)
 			phi = JuMP.getobjectivevalue(m)
 			println("OF = $(phi)")
 			if phi_best > phi
 				phi_best = phi
-				par_best = JuMP.getvalue(p)
-				obs_best = JuMP.getvalue(o)
+				par_best = JuMP.value.(p)
+				obs_best = JuMP.value.(o)
 			end
 		end
 		println("Min h = $h OF = $(phi_best) par = $par_best")
@@ -225,20 +225,20 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 					@JuMP.NLconstraint(m, o[3] == p[1] * exp(ti[3] * p[4]) + p[2] * ti[3] + p[3])
 					@JuMP.NLconstraint(m, o[4] == p[1] * exp(ti[4] * p[4]) + p[2] * ti[4] + p[3])
 				end
-				JuMP.solve(m)
+				JuMP.optimize!(m)
 				phi = JuMP.getobjectivevalue(m)
 				# !quiet && println("OF = $(phi)")
 				if mm == "Max"
 					if phi_best < phi
 						phi_best = phi
-						par_best = JuMP.getvalue(p)
-						obs_best = JuMP.getvalue(o)
+						par_best = JuMP.value.(p)
+						obs_best = JuMP.value.(o)
 					end
 				else
 					if phi_best > phi
 						phi_best = phi
-						par_best = JuMP.getvalue(p)
-						obs_best = JuMP.getvalue(o)
+						par_best = JuMP.value.(p)
+						obs_best = JuMP.value.(o)
 					end
 				end
 			end
