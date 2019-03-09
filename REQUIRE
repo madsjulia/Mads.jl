@@ -40,4 +40,3 @@ StatsBase 0.15
 JuMP 0.19
 MathProgBase 0.7
 Ipopt 0.5
-Test
