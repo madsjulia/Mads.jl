@@ -25,7 +25,7 @@ function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 			printerrormsg(errmsg)
 			Mads.madswarn("Julia YAML fails!")
 			try
-				yamldata = pyyaml[:load](f)
+				yamldata = pyyaml.load(f)
 			catch errmsg
 				printerrormsg(errmsg)
 				Mads.madswarn("Python YAML fails!")
@@ -33,7 +33,7 @@ function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
 		end
 	else
 		try
-			yamldata = pyyaml[:load](f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
+			yamldata = pyyaml.load(f) # WARNING do not use python yaml! delimiters are not working well; "1e6" interpreted as a string
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madswarn("Julia YAML fails!")
@@ -57,7 +57,7 @@ function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAM
 	if julia
 		JSON.print(f, data, 1)
 	else
-		write(f, pyyaml[:dump](data, width=255)) # we use the python library because the YAML julia library cannot dump
+		write(f, pyyaml.dump(data, width=255)) # we use the python library because the YAML julia library cannot dump
 	end
 	close(f)
 end

@@ -100,9 +100,11 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotobsSAresults(Dict(), Dict())
 	Mads.setplotfileformat("a.ps", "")
 	Mads.setplotfileformat("a", "EPS")
+	defaultplotformat = Mads.graphbackend
 	Mads.setdefaultplotformat("TIFF")
 	Mads.setdefaultplotformat("EPS")
 	Mads.setdefaultplotformat("SVG")
+	Mads.setdefaultplotformat(defaultplotformat)
 	Mads.display("mads.png")
 	Mads.graphon()
 end

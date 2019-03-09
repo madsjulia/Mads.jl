@@ -5,10 +5,6 @@ import OrderedCollections
 import Random
 import Test
 
-@Mads.tryimportmain JLD2
-@Mads.tryimportmain FileIO
-@Mads.tryimportmain OrderedCollections
-
 Random.seed!(2017)
 
 workdir = joinpath(Mads.madsdir, "examples", "anasol")
