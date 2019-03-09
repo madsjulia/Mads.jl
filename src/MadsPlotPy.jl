@@ -26,7 +26,7 @@ function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true
 		push!(c, madsdata["Wells"][w]["obs"][end]["c"])
 		push!(l, w)
 	end
-	w, h = PyPlot.plt[:figaspect](0.5)
+	w, h = PyPlot.plt.figaspect(0.5)
 	PyPlot.figure(figsize=(w, h))
 	PyPlot.subplot(111, aspect=1)
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
