@@ -1200,7 +1200,7 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 		vsize_plot = vsize / 2 * nS
 		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...), gl...)
+			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
 		end
 		pS = Gadfly.vstack(pp...)
 		c = nothing

@@ -34,7 +34,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 	for h in horizons
 		phi_best = 0
 		for r = 1:retries
-			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
+			m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
 			if r > 1 || random
 				for i = 1:np
 					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
@@ -55,7 +55,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.optimize!(m)
-			phi = JuMP.getobjectivevalue(m)
+			phi = JuMP.objective_value(m)
 			println("OF = $(phi)")
 			if phi_best < phi
 				phi_best = phi
@@ -90,7 +90,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Min, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.optimize!(m)
-			phi = JuMP.getobjectivevalue(m)
+			phi = JuMP.objective_value(m)
 			println("OF = $(phi)")
 			if phi_best > phi
 				phi_best = phi
@@ -183,7 +183,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
-				m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
+				m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
 				if r == 1 && !random
 					for i = 1:np
 						pi[i] = pinit[i]
@@ -226,7 +226,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 					@JuMP.NLconstraint(m, o[4] == p[1] * exp(ti[4] * p[4]) + p[2] * ti[4] + p[3])
 				end
 				JuMP.optimize!(m)
-				phi = JuMP.getobjectivevalue(m)
+				phi = JuMP.objective_value(m)
 				# !quiet && println("OF = $(phi)")
 				if mm == "Max"
 					if phi_best < phi

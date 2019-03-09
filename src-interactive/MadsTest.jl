@@ -1,5 +1,4 @@
 import DocumentFunction
-import Base
 
 """
 Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
@@ -36,7 +35,11 @@ $(DocumentFunction.documentfunction(test;
 argtext=Dict("testname"=>"name of the test to execute; module or example"),
 keytext=Dict("madstest"=>"test Mads [default=`true`]")))
 """
-function test(testname::String=""; madstest::Bool=true)
+function test(testname::String=""; madstest::Bool=true, plotting::Bool=true)
+	if !plotting
+		ENV["MADS_NO_GADFLY"] = ""
+		ENV["MADS_NO_PLOT"] = ""
+	end
 	graphoff()
 	orig_dir = pwd()
 	d = Mads.madsdir

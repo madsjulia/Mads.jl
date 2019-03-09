@@ -69,7 +69,7 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	Hbest = Array{Float64}(undef, nk, nC)
 	phi_best = Inf
 	for r = 1:retries
-		m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
+		m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
 		#IMPORTANT the order at which parameters are defined is very important
 		if r == 1 && sizeof(initW) != 0
 			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
@@ -88,7 +88,7 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 		@JuMP.constraint(m, W .<= 1) # this is very important constraint to make optimization faster
 		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
 		JuMP.optimize!(m)
-		phi = JuMP.getobjectivevalue(m)
+		phi = JuMP.objective_value(m)
 		!quiet && println("OF = $(phi)")
 		if phi_best > phi
 			phi_best = phi
