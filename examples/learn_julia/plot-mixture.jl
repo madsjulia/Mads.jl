@@ -24,7 +24,7 @@ p = Gadfly.plot(observations, xgroup="Well", x="Species", y="Concentration", col
 Mads.display(p)
 Gadfly.draw(Gadfly.PNG("observations.png", 10Gadfly.inch, 4Gadfly.inch, dpi=300), p)
 
-p = Gadfly.spy(rMF.datamatrix, Gadfly.Scale.x_discrete(labels = i->rMF.uniquespecies[i]), Gadfly.Scale.y_discrete(labels = i->rMF.uniquewells[i]), Gadfly.Guide.YLabel("Wells"), Gadfly.Guide.XLabel("Species"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Meta.parse(Colors.Colorant, "green"), Meta.parse(Colors.Colorant, "yellow"), Meta.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
+p = Gadfly.spy(rMF.datamatrix, Gadfly.Scale.x_discrete(labels = i->rMF.uniquespecies[i]), Gadfly.Scale.y_discrete(labels = i->rMF.uniquewells[i]), Gadfly.Guide.YLabel("Wells"), Gadfly.Guide.XLabel("Species"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
 Mads.display(p)
 Gadfly.draw(Gadfly.PNG("observations-matrix.png", 1.5Gadfly.inch + 0.1Gadfly.inch * ncomponent, 1.5Gadfly.inch + 0.1Gadfly.inch * nwell, dpi=300), p)
 
@@ -38,7 +38,7 @@ p = Gadfly.plot(mixer, xgroup="Well", x="Sources", y="Ratio", color="Sources", G
 display(p)
 Gadfly.draw(Gadfly.PNG("mixer.png", 7Gadfly.inch, 4Gadfly.inch, dpi=300), p)
 
-p = Gadfly.spy(rMF.mixers[nsource], Gadfly.Scale.x_discrete(labels = i->i), Gadfly.Scale.y_discrete(labels = i->rMF.uniquewells[i]), Gadfly.Guide.YLabel("Wells"), Gadfly.Guide.XLabel("Sources"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Meta.parse(Colors.Colorant, "green"), Meta.parse(Colors.Colorant, "yellow"), Meta.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
+p = Gadfly.spy(rMF.mixers[nsource], Gadfly.Scale.x_discrete(labels = i->i), Gadfly.Scale.y_discrete(labels = i->rMF.uniquewells[i]), Gadfly.Guide.YLabel("Wells"), Gadfly.Guide.XLabel("Sources"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
 Mads.display(p)
 Gadfly.draw(Gadfly.PNG("mixer-matrix.png", 1.5Gadfly.inch + 0.1Gadfly.inch * nsource, 1.5Gadfly.inch + 0.1Gadfly.inch * nwell, dpi=300), p)
 
@@ -54,6 +54,6 @@ Gadfly.draw(Gadfly.PNG("source.png", 5Gadfly.inch, 4Gadfly.inch, dpi=300), p)
 
 bm = rMF.buckets[nsource]
 bm[bm.>1] = 1
-p = Gadfly.spy(bm, Gadfly.Scale.x_discrete(labels = i->rMF.uniquespecies[i]), Gadfly.Scale.y_discrete(labels = i->i), Gadfly.Guide.YLabel("Sources"), Gadfly.Guide.XLabel("Species"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Meta.parse(Colors.Colorant, "green"), Meta.parse(Colors.Colorant, "yellow"), Meta.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
+p = Gadfly.spy(bm, Gadfly.Scale.x_discrete(labels = i->rMF.uniquespecies[i]), Gadfly.Scale.y_discrete(labels = i->i), Gadfly.Guide.YLabel("Sources"), Gadfly.Guide.XLabel("Species"), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = 0, maxvalue = 1), Gadfly.Theme(key_position = :none))
 Mads.display(p)
 Gadfly.draw(Gadfly.PNG("source-matrix.png", 1.5Gadfly.inch + 0.1Gadfly.inch * ncomponent, 1.5Gadfly.inch + 0.1Gadfly.inch * nsource, dpi=300), p)
