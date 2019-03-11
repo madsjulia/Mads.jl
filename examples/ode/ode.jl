@@ -46,8 +46,8 @@ sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
 ys = convert(Array,sol)
 
 # draw initial solution
-p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "orange"))),
-				Gadfly.layer(x=t, y=ys[:,2], Gadfly.Geom.line, Gadfly.Theme(default_color=Meta.parse(Colors.Colorant, "blue"))),
+p = Gadfly.plot(Gadfly.layer(x=t, y=ys[:,1], Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "orange"))),
+				Gadfly.layer(x=t, y=ys[:,2], Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"))),
 				Gadfly.Guide.manual_color_key("ODE", ["x(t)", "x'(t)"], ["orange", "blue"]))
 Gadfly.draw(Gadfly.SVG(string("$rootname-solution.svg"), 6Gadfly.inch, 4Gadfly.inch), p)
 
