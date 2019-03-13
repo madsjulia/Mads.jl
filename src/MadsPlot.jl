@@ -1122,7 +1122,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::String=""; format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, code::Bool=false, colorkey::Bool=true, gm::Any=[], gl::Any=[])
+function plotseries(X::AbstractArray, filename::String=""; format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, code::Bool=false, colorkey::Bool=true, gm::Any=[], gl::Any=[])
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
@@ -1156,12 +1156,15 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 		return
 	end
 	recursivemkdir(filename)
+	if !colorkey
+		key_position=:none
+	end
 	if combined
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
 		if ncolors == 1
-			cs = [Gadfly.Theme(key_position = :none)]
+			key_position=:none
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)))
@@ -1170,9 +1173,10 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
+				Gadfly.Theme(key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
 		elseif ncolors == 0 || ncolors < nS
-			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : [Gadfly.Theme(key_position = :none)]
+			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)), color=["$(names[i])" for j in 1:nT])
@@ -1181,9 +1185,10 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
+				Gadfly.Theme(key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
 		else
-			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])] : [Gadfly.Theme(key_position = :none)]
+			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[(i-1)%ncolors+1]), opacity)))
@@ -1192,6 +1197,7 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
+				Gadfly.Theme(key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
 		end
 		pS = Gadfly.plot(c...)
