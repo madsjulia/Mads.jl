@@ -42,6 +42,13 @@ Installation
 import Pkg; Pkg.add("Mads")
 ```
 
+Dockers
+-------
+
+```bash
+docker run --interactive --tty montyvesselinov/madsjulia
+```
+
 Testing
 -------------
 
