@@ -1,6 +1,13 @@
 Installation
 ============
 
+Docker
+------
+
+```bash
+docker run --interactive --tty montyvesselinov/madsjulia
+```
+
 After starting Julia, execute:
 
 
