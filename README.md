@@ -42,7 +42,7 @@ Installation
 import Pkg; Pkg.add("Mads")
 ```
 
-Dockers
+Docker
 -------
 
 ```bash
