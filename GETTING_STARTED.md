@@ -5,6 +5,12 @@ Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mad
 If you are not familiar with Julia, checkout [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/), [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/), [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)).
 You can also explore Julia examples provided in Mads: `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
 
+MADS is also available on Docker
+
+```bash
+docker run --interactive --tty montyvesselinov/madsjulia
+```
+
 To start using MADS, initiate the Julia REPL and execute `import Mads` to load MADS modules.
 
 All the MADS analyses are based on a MADS problem dictionary that defines the problem.
