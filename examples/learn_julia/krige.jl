@@ -28,10 +28,10 @@ end
 Gadfly.plot(Gadfly.layer(z=k, x=x, y=y, Gadfly.Geom.contour(levels=linspace(minimum(k),maximum(k),51))), Gadfly.layer(x=X[1,:], y=X[2,:], Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), Gadfly.point_size=4pt)))
 
 fig = PyPlot.figure(figsize=(8, 6))
-ax = fig[:gca](projection="3d")
-ax[:set_zlim](minimum(k), maximum(k))
+ax = fig.gca(projection="3d")
+ax.set_zlim(minimum(k), maximum(k))
 xgrid, ygrid = QuantEcon.meshgrid(x, y)
-ax[:plot_surface](xgrid, ygrid, k, rstride=2, cstride=2, cmap=PyPlot.ColorMap("jet"), alpha=0.7, linewidth=0.25)
+ax.plot_surface(xgrid, ygrid, k, rstride=2, cstride=2, cmap=PyPlot.ColorMap("jet"), alpha=0.7, linewidth=0.25)
 PyPlot.gcf()
 
 PyPlot.clf()
