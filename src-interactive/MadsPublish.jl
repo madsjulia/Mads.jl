@@ -303,7 +303,6 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		return tag_flag
 	end
 end
-
 @doc """
 Status of Mads modules
 
