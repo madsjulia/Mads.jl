@@ -1,18 +1,19 @@
 import Mads
+import Test
 import FileIO
 import JLD2
-import Test
-
-Mads.veryquieton()
-Mads.graphoff()
-
-using Distributed
+import Random
 import DataStructures
+import OrderedCollections
+using Distributed
 
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO
 @Mads.tryimportmain OrderedCollections
 @Mads.tryimportmain DataStructures
+
+Mads.veryquieton()
+Mads.graphoff()
 
 workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
 savedir = joinpath(Mads.madsdir, "examples", "svr")
@@ -62,6 +63,9 @@ good_sasvr = FileIO.load(joinpath(savedir, "test_results", goodresultsfile), "sa
 good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"]))))...)
 good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)
 good_sasvr_var = hcat(map(i->collect(i), values.(collect(values(good_sasvr["var"]))))...)
+
+# @show good_svrpredictions[1,1]
+# @show svrpredictions[1,1]
 
 @Test.testset "SVR" begin
 	@Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1

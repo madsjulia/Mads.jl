@@ -1,7 +1,7 @@
 import Mads
+import Test
 import JLD2
 import FileIO
-import Test
 import DataStructures
 
 @Mads.tryimportmain JLD2

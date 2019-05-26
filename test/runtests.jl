@@ -13,6 +13,11 @@ end
 import Mads
 import Test
 
+# madstest = "svr"
+# file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
+# include(file)
+# poop
+
 Mads.veryquieton()
 Mads.graphoff()
 
