@@ -5,11 +5,11 @@ import Mads
 m3d = PyCall.pyimport("mpl_toolkits.mplot3d")
 PyPlot.matplotlib.rc("font", size=15)
 
-COLOR = "gray"
-PyPlot.matplotlib.rc("text"; color=COLOR)
-PyPlot.matplotlib.rc("axes"; labelcolor=COLOR)
-PyPlot.matplotlib.rc("xtick"; color=COLOR)
-PyPlot.matplotlib.rc("ytick"; color=COLOR)
+color = "gray"
+PyPlot.matplotlib.rc("text"; color=color)
+PyPlot.matplotlib.rc("axes"; labelcolor=color)
+PyPlot.matplotlib.rc("xtick"; color=color)
+PyPlot.matplotlib.rc("ytick"; color=color)
 
 PyPlot.svg(true)
 
