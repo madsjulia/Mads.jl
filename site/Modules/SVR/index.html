@@ -685,17 +685,96 @@
 <h1 id="svrjl">SVR.jl</h1>
 <p>Module SVR provides Support Vector Regression (SVR) using <a href="https://www.csie.ntu.edu.tw/~cjlin/libsvm/">libSVM</a> library.</p>
 <p>SVR.jl module functions:</p>
-<p><a id='SVR.apredict-Tuple{Array{T,1} where T,Array}' href='#SVR.apredict-Tuple{Array{T,1} where T,Array}'>#</a>
+<p><a id='SVR.loadmodel-Tuple{String}' href='#SVR.loadmodel-Tuple{String}'>#</a>
+<strong><code>SVR.loadmodel</code></strong> &mdash; <em>Method</em>.</p>
+<p>Load a libSVM model</p>
+<p>Methods:</p>
+<ul>
+<li><code>SVR.loadmodel(filename::String) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:289</li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>filename::String</code> : input file name</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>SVM model</li>
+</ul>
+<p><a id='SVR.predict-Tuple{SVR.svmmodel,AbstractArray}' href='#SVR.predict-Tuple{SVR.svmmodel,AbstractArray}'>#</a>
+<strong><code>SVR.predict</code></strong> &mdash; <em>Method</em>.</p>
+<p>Predict based on a libSVM model</p>
+<p>Methods:</p>
+<ul>
+<li><code>SVR.predict(pmodel::SVR.svmmodel, x::AbstractArray) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:246</li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>pmodel::SVR.svmmodel</code> : the model that prediction is based on</li>
+<li><code>x::AbstractArray</code> : array of independent variables</li>
+</ul>
+<p>Return:</p>
+<ul>
+<li>predicted dependent variables</li>
+</ul>
+<p><a id='SVR.savemodel-Tuple{SVR.svmmodel,String}' href='#SVR.savemodel-Tuple{SVR.svmmodel,String}'>#</a>
+<strong><code>SVR.savemodel</code></strong> &mdash; <em>Method</em>.</p>
+<p>Save a libSVM model</p>
+<p>Methods:</p>
+<ul>
+<li><code>SVR.savemodel(pmodel::SVR.svmmodel, filename::String) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:311</li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>filename::String</code> : output file name</li>
+<li><code>pmodel::SVR.svmmodel</code> : svm model</li>
+</ul>
+<p>Dumps:</p>
+<ul>
+<li>file with saved model</li>
+</ul>
+<p><a id='SVR.train-Tuple{AbstractArray{T,1} where T,AbstractArray}' href='#SVR.train-Tuple{AbstractArray{T,1} where T,AbstractArray}'>#</a>
+<strong><code>SVR.train</code></strong> &mdash; <em>Method</em>.</p>
+<p>Train based on a libSVM model</p>
+<p>Methods:</p>
+<ul>
+<li><code>SVR.train(y::AbstractArray{T,1} where T, x::AbstractArray; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:225</li>
+</ul>
+<p>Arguments:</p>
+<ul>
+<li><code>x::AbstractArray</code> : array of independent variables</li>
+<li><code>y::AbstractArray{T,1} where T</code> : vector of dependent variables</li>
+</ul>
+<p>Keywords:</p>
+<ul>
+<li><code>C</code> : cost; penalty parameter of the error term [default=<code>1.0</code>]</li>
+<li><code>cache_size</code> : size of the kernel cache [default=<code>100.0</code>]</li>
+<li><code>coef0</code> : independent term in kernel function; important only in POLY and  SIGMOND kernel types [default=<code>0.0</code>]</li>
+<li><code>degree</code> : degree of the polynomial kernel [default=<code>3</code>]</li>
+<li><code>eps</code> : epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=<code>0.1</code>]</li>
+<li><code>gamma</code> : coefficient for RBF, POLY and SIGMOND kernel types [default=<code>1/size(x, 1)</code>]</li>
+<li><code>kernel_type</code> : kernel type [default=<code>RBF</code>]</li>
+<li><code>nu</code> : upper bound on the fraction of training errors / lower bound of the fraction of support vectors; acceptable range (0, 1]; applied if NU_SVR model [default=<code>0.5</code>]</li>
+<li><code>probability</code> : train to estimate probabilities [default=<code>false</code>]</li>
+<li><code>shrinking</code> : apply shrinking heuristic [default=<code>true</code>]</li>
+<li><code>svm_type</code> : SVM type [default=<code>EPSILON_SVR</code>]</li>
+<li><code>tol</code> : tolerance of termination criterion [default=<code>0.001</code>]</li>
+<li><code>verbose</code> : verbose output [default=<code>false</code>]</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>SVM model</li>
+</ul>
+<p><a id='SVR.apredict-Tuple{AbstractArray{T,1} where T,AbstractArray}' href='#SVR.apredict-Tuple{AbstractArray{T,1} where T,AbstractArray}'>#</a>
 <strong><code>SVR.apredict</code></strong> &mdash; <em>Method</em>.</p>
 <p>Predict based on a libSVM model</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.apredict(y::Array{T,1} where T, x::Array; kw...) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L272</li>
+<li><code>SVR.apredict(y::AbstractArray{T,1} where T, x::AbstractArray; kw...) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:273</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
-<li><code>x::Array</code> : array of independent variables</li>
-<li><code>y::Array{T,1} where T</code> : vector of dependent variables</li>
+<li><code>x::AbstractArray</code> : array of independent variables</li>
+<li><code>y::AbstractArray{T,1} where T</code> : vector of dependent variables</li>
 </ul>
 <p>Return:</p>
 <ul>
@@ -704,57 +783,42 @@
 <p><a id='SVR.freemodel-Tuple{SVR.svmmodel}' href='#SVR.freemodel-Tuple{SVR.svmmodel}'>#</a>
 <strong><code>SVR.freemodel</code></strong> &mdash; <em>Method</em>.</p>
 <p>Free a libSVM model</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.freemodel(pmodel::SVR.svmmodel) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L322</li>
+<li><code>SVR.freemodel(pmodel::SVR.svmmodel) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:324</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
 <li><code>pmodel::SVR.svmmodel</code> : svm model</li>
 </ul>
 <p><a id='SVR.liboutput-Tuple{Ptr{UInt8}}' href='#SVR.liboutput-Tuple{Ptr{UInt8}}'>#</a>
 <strong><code>SVR.liboutput</code></strong> &mdash; <em>Method</em>.</p>
 <p>catch lib output</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.liboutput(str::Ptr{UInt8}) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L86</li>
+<li><code>SVR.liboutput(str::Ptr{UInt8}) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:85</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
 <li><code>str::Ptr{UInt8}</code> : string</li>
 </ul>
-<p><a id='SVR.loadmodel-Tuple{String}' href='#SVR.loadmodel-Tuple{String}'>#</a>
-<strong><code>SVR.loadmodel</code></strong> &mdash; <em>Method</em>.</p>
-<p>Load a libSVM model</p>
-<p>Methods</p>
-<ul>
-<li><code>SVR.loadmodel(filename::String) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L288</li>
-</ul>
-<p>Arguments</p>
-<ul>
-<li><code>filename::String</code> : input file name</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>SVM model</li>
-</ul>
-<p><a id='SVR.mapnodes-Tuple{Array}' href='#SVR.mapnodes-Tuple{Array}'>#</a>
+<p><a id='SVR.mapnodes-Tuple{AbstractArray}' href='#SVR.mapnodes-Tuple{AbstractArray}'>#</a>
 <strong><code>SVR.mapnodes</code></strong> &mdash; <em>Method</em>.</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.mapnodes(x::Array) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L187</li>
+<li><code>SVR.mapnodes(x::AbstractArray) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:186</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
-<li><code>x::Array</code> :</li>
+<li><code>x::AbstractArray</code> :</li>
 </ul>
 <p><a id='SVR.mapparam-Tuple{}' href='#SVR.mapparam-Tuple{}'>#</a>
 <strong><code>SVR.mapparam</code></strong> &mdash; <em>Method</em>.</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L164</li>
+<li><code>SVR.mapparam(; svm_type, kernel_type, degree, gamma, coef0, C, nu, p, cache_size, eps, shrinking, probability, nr_weight, weight_label, weight) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:163</li>
 </ul>
-<p>Keywords</p>
+<p>Keywords:</p>
 <ul>
 <li><code>C</code> : cost; penalty parameter of the error term [default=<code>1.0</code>]</li>
 <li><code>cache_size</code> : size of the kernel cache [default=<code>100.0</code>]</li>
@@ -776,30 +840,14 @@
 <ul>
 <li>parameter</li>
 </ul>
-<p><a id='SVR.predict-Tuple{SVR.svmmodel,Array}' href='#SVR.predict-Tuple{SVR.svmmodel,Array}'>#</a>
-<strong><code>SVR.predict</code></strong> &mdash; <em>Method</em>.</p>
-<p>Predict based on a libSVM model</p>
-<p>Methods</p>
-<ul>
-<li><code>SVR.predict(pmodel::SVR.svmmodel, x::Array) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L246</li>
-</ul>
-<p>Arguments</p>
-<ul>
-<li><code>pmodel::SVR.svmmodel</code> : the model that prediction is based on</li>
-<li><code>x::Array</code> : array of independent variables</li>
-</ul>
-<p>Return:</p>
-<ul>
-<li>predicted dependent variables</li>
-</ul>
 <p><a id='SVR.r2-Tuple{Any,Any}' href='#SVR.r2-Tuple{Any,Any}'>#</a>
 <strong><code>SVR.r2</code></strong> &mdash; <em>Method</em>.</p>
 <p>Compute the coefficient of determination (r2)</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.r2(x, y) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L367</li>
+<li><code>SVR.r2(x, y) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:370</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
 <li><code>x</code> : observed data</li>
 <li><code>y</code> : predicted data</li>
@@ -811,11 +859,11 @@
 <p><a id='SVR.readlibsvmfile-Tuple{String}' href='#SVR.readlibsvmfile-Tuple{String}'>#</a>
 <strong><code>SVR.readlibsvmfile</code></strong> &mdash; <em>Method</em>.</p>
 <p>Read a libSVM file</p>
-<p>Methods</p>
+<p>Methods:</p>
 <ul>
-<li><code>SVR.readlibsvmfile(file::String) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L341</li>
+<li><code>SVR.readlibsvmfile(file::String) in SVR</code> : /Users/monty/.julia/packages/SVR/UlRCO/src/SVR.jl:344</li>
 </ul>
-<p>Arguments</p>
+<p>Arguments:</p>
 <ul>
 <li><code>file::String</code> : file name</li>
 </ul>
@@ -823,54 +871,6 @@
 <ul>
 <li>array of independent variables</li>
 <li>vector of dependent variables</li>
-</ul>
-<p><a id='SVR.savemodel-Tuple{SVR.svmmodel,String}' href='#SVR.savemodel-Tuple{SVR.svmmodel,String}'>#</a>
-<strong><code>SVR.savemodel</code></strong> &mdash; <em>Method</em>.</p>
-<p>Save a libSVM model</p>
-<p>Methods</p>
-<ul>
-<li><code>SVR.savemodel(pmodel::SVR.svmmodel, filename::String) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L309</li>
-</ul>
-<p>Arguments</p>
-<ul>
-<li><code>filename::String</code> : output file name</li>
-<li><code>pmodel::SVR.svmmodel</code> : svm model</li>
-</ul>
-<p>Dumps:</p>
-<ul>
-<li>file with saved model</li>
-</ul>
-<p><a id='SVR.train-Tuple{Array{T,1} where T,Array}' href='#SVR.train-Tuple{Array{T,1} where T,Array}'>#</a>
-<strong><code>SVR.train</code></strong> &mdash; <em>Method</em>.</p>
-<p>Train based on a libSVM model</p>
-<p>Methods</p>
-<ul>
-<li><code>SVR.train(y::Array{T,1} where T, x::Array; svm_type, kernel_type, degree, gamma, coef0, C, nu, eps, cache_size, tol, shrinking, probability, verbose) in SVR</code> : https://github.com/madsjulia/SVR.jl/blob/master/src/SVR.jl#L226</li>
-</ul>
-<p>Arguments</p>
-<ul>
-<li><code>x::Array</code> : array of independent variables</li>
-<li><code>y::Array{T,1} where T</code> : vector of dependent variables</li>
-</ul>
-<p>Keywords</p>
-<ul>
-<li><code>C</code> : cost; penalty parameter of the error term [default=<code>1.0</code>]</li>
-<li><code>cache_size</code> : size of the kernel cache [default=<code>100.0</code>]</li>
-<li><code>coef0</code> : independent term in kernel function; important only in POLY and  SIGMOND kernel types [default=<code>0.0</code>]</li>
-<li><code>degree</code> : degree of the polynomial kernel [default=<code>3</code>]</li>
-<li><code>eps</code> : epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=<code>0.1</code>]</li>
-<li><code>gamma</code> : coefficient for RBF, POLY and SIGMOND kernel types [default=<code>1/size(x, 1)</code>]</li>
-<li><code>kernel_type</code> : kernel type [default=<code>RBF</code>]</li>
-<li><code>nu</code> : upper bound on the fraction of training errors / lower bound of the fraction of support vectors; acceptable range (0, 1]; applied if NU_SVR model [default=<code>0.5</code>]</li>
-<li><code>probability</code> : train to estimate probabilities [default=<code>false</code>]</li>
-<li><code>shrinking</code> : apply shrinking heuristic [default=<code>true</code>]</li>
-<li><code>svm_type</code> : SVM type [default=<code>EPSILON_SVR</code>]</li>
-<li><code>tol</code> : tolerance of termination criterion [default=<code>0.001</code>]</li>
-<li><code>verbose</code> : verbose output [default=<code>false</code>]</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>SVM model</li>
 </ul>
                 
                   

@@ -28,7 +28,7 @@ Keywords:
   * `location`: show/hide function location on the disk
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L112-L125' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L113-L126' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionarguments' href='#DocumentFunction.getfunctionarguments'>#</a>
 **`DocumentFunction.getfunctionarguments`** &mdash; *Function*.
@@ -43,7 +43,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L150-L157' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L152-L159' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionkeywords' href='#DocumentFunction.getfunctionkeywords'>#</a>
 **`DocumentFunction.getfunctionkeywords`** &mdash; *Function*.
@@ -58,7 +58,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L180-L187' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L183-L190' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionmethods-Tuple{Function}' href='#DocumentFunction.getfunctionmethods-Tuple{Function}'>#</a>
 **`DocumentFunction.getfunctionmethods`** &mdash; *Method*.
@@ -76,7 +76,7 @@ Return:
   * array with function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L37-L47' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L39-L49' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.stdoutcaptureoff-Tuple{}' href='#DocumentFunction.stdoutcaptureoff-Tuple{}'>#</a>
 **`DocumentFunction.stdoutcaptureoff`** &mdash; *Method*.
@@ -86,7 +86,7 @@ Return:
 Restore STDOUT
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L26-L28' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L28-L30' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.stdoutcaptureon-Tuple{}' href='#DocumentFunction.stdoutcaptureon-Tuple{}'>#</a>
 **`DocumentFunction.stdoutcaptureon`** &mdash; *Method*.
@@ -96,5 +96,5 @@ Restore STDOUT
 Redirect STDOUT to a reader
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/c1a002291142bf1dcc874a5fa6e6cd029fc6a353/src/DocumentFunction.jl#L15-L17' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L17-L19' class='documenter-source'>source</a><br>
 
