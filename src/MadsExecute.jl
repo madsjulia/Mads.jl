@@ -66,7 +66,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		close(cmdin)
 		close(cmdout.in)
 		close(cmderr.in)
-		if !quiet || cmdproc.exitcode != 0
+		if !quiet && cmdproc.exitcode != 0
 			erroutput = readlines(cmderr)
 			if length(erroutput) > 0
 				for i in erroutput
@@ -74,7 +74,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 				end
 			end
 		end
-		if !quiet || cmdproc.exitcode != 0
+		if !quiet && cmdproc.exitcode != 0
 			output = readlines(cmdout)
 			l = length(output)
 			if l > 0
@@ -88,11 +88,11 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 			end
 		end
 	end
-	if cmdproc.exitcode != 0
+	if !quiet && cmdproc.exitcode != 0
 		Mads.madswarn("Execution of command `$(string(cmd))` produced an error ($(cmdproc.exitcode))!")
 	end
 	if pipe
-		return cmdout, cmderr
+		return cmdproc, cmdout, cmderr
 	else
 		return nothing
 	end
