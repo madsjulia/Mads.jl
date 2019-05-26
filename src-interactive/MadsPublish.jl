@@ -258,19 +258,18 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		cwd = pwd()
 		@info("Git status $(madsmodule) ...")
 		d = joinpath(dirname(pathof(Core.eval(Mads, Symbol(madsmodule)))), "..")
+		d = "/Users/monty/.julia/packages/SVR/UlRCO/src/.."
 		if isdir(d)
 			cd(d)
 		else
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		try
-			Mads.runcmd(`git status -s`; quiet=false, pipe=true);
-			Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=false, pipe=true);
-		catch
+		cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true);
+		cmdproc, cmdout, cmderr = Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=true, pipe=true);
+		if cmdproc.exitcode != 0
 			@warn("Module is not under development; execute `dev $(madsmodule)`")
-		end
-		if gitmore
+		elseif gitmore
 			@info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)
 			@info("Git ID master $(madsmodule) ...")
