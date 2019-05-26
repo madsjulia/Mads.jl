@@ -258,7 +258,6 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		cwd = pwd()
 		@info("Git status $(madsmodule) ...")
 		d = joinpath(dirname(pathof(Core.eval(Mads, Symbol(madsmodule)))), "..")
-		d = "/Users/monty/.julia/packages/SVR/UlRCO/src/.."
 		if isdir(d)
 			cd(d)
 		else
