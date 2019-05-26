@@ -415,7 +415,21 @@ function printerrormsg(errmsg::Any)
 	end
 end
 
-"""
+function meshgrid(x::Vector, y::Vector)
+	nx = length(x)
+	ny = length(y)
+	xx = reshape(x, 1, nx)
+	yy = reshape(y, ny, 1)
+	(permutedims(repeat(xx, ny, 1)), permutedims(repeat(yy, 1, nx)))
+end
+function meshgrid(nx::Number, ny::Number)
+	x = collect(range(1, nx; length=nx))
+	y = collect(range(1, ny; length=ny))
+	xx = reshape(x, 1, nx)
+	yy = reshape(y, ny, 1)
+	(permutedims(repeat(xx, ny, 1)), permutedims(repeat(yy, 1, nx)))
+end
+@doc """
 Create mesh grid
 
 $(DocumentFunction.documentfunction(meshgrid;
@@ -425,14 +439,7 @@ argtext=Dict("x"=>"vector of grid x coordinates",
 Returns:
 
 - 2D grid coordinates based on the coordinates contained in vectors `x` and `y`
-"""
-function meshgrid(x::Vector, y::Vector)
-	m = length(x)
-	n = length(y)
-	xx = reshape(x, 1, m)
-	yy = reshape(y, n, 1)
-	(repeat(xx, n, 1), repeat(yy, 1, m))
-end
+""" meshgrid
 
 """
 Set / get current random seed. seed < 0 gets seed, anything else sets it.
