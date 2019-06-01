@@ -1122,7 +1122,11 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::String=""; format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, code::Bool=false, colorkey::Bool=true, background_color=nothing, gm::Any=[], gl::Any=[])
+function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=size(X, 2), format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[])
+	if nT == 0 || nS == 0
+		@warn "Input is not a matrix!"
+		return
+	end
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
@@ -1150,11 +1154,6 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 	end
 
 	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
-	nT = size(X, 1)
-	nS = size(X, 2)
-	if nT == 0 || nS == 0
-		return
-	end
 	recursivemkdir(filename)
 	if !colorkey
 		key_position=:none
@@ -1175,7 +1174,7 @@ function plotseries(X::AbstractArray, filename::String=""; format::String="", xt
 				cs...,
 				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
-		elseif ncolors == 0 || ncolors < nS
+		elseif ncolors == 0 || ncolors > nS
 			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
