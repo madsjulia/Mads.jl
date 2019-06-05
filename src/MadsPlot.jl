@@ -1167,19 +1167,21 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)))
-				for i in 1:nS]..., gl...,
+				for i in 1:nS]...,
+				gl...,
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
 				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
-		elseif ncolors == 0 || ncolors > nS
-			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
+		elseif nS < ncolors
+			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
-				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)), color=["$(names[i])" for j in 1:nT])
-				for i in 1:nS]..., gl...,
+				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
+				for i in 1:nS]...,
+				gl...,
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
@@ -1187,11 +1189,14 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
 		else
-			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])] : []
-			c = [Gadfly.layer(x=xaxis, y=X[:,i],
+			# Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])
+			#
+			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
+			c = [Gadfly.layer(x=xaxis, y=X[:,i], color=["$(names[i])" for j in 1:nT],
 				geometry...,
-				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[(i-1)%ncolors+1]), opacity)))
-				for i in 1:nS]..., gl...,
+				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt))
+				for i in 1:nS]...,
+				gl...,
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
