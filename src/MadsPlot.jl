@@ -1175,7 +1175,7 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 				cs...,
 				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gm...
-		elseif nS < ncolors
+		elseif nS <= ncolors
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
