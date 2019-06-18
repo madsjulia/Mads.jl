@@ -1,12 +1,11 @@
 using Distributed
+using LinearAlgebra
+import Printf
+import DocumentFunction
 
-if !isdefined(Mads, :DocumentFunction)
-	import DocumentFunction
-end
-
-if !isdefined(Mads, :sprintf)
+if isdefined(Core, :Mads) && !isdefined(Mads, :sprintf)
 	"Convert `@Printf.sprintf` macro into `sprintf` function"
-	sprintf(args...) = Core.eval(:@Printf.sprintf($(args...)))
+	sprintf(args...) = Base.eval(:@Printf.sprintf($(args...)))
 end
 
 quietdefault = true
@@ -37,7 +36,7 @@ function setprocs(np::Integer, nt::Integer)
 	if n > 0
 		Distributed.addprocs(n)
 	elseif n < 0
-		rmprocs(workers()[end+n+1:end])
+		Distributed.rmprocs(workers()[end+n+1:end])
 	end
 	BLAS.set_num_threads(nt)
 	sleep(0.1)
@@ -47,7 +46,7 @@ function setprocs(np::Integer)
 	setprocs(np, np)
 end
 function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::String=pwd(), exename::String=Base.julia_cmd().exec[1])
-	if isdefined(Mads, :set_nprocs_per_task)
+	if isdefined(Core, :Mads) && isdefined(Mads, :set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end
 	h = Array{String}(undef, 0)
@@ -79,9 +78,9 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			c = ntasks_per_node
 		else
 			if haskey(ENV, "SLURM_NTASKS_PER_NODE")
-				c = Meta.parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
+				c = Base.parse(Int, ENV["SLURM_NTASKS_PER_NODE"])
 			elseif haskey(ENV, "SLURM_TASKS_PER_NODE")
-				c = Meta.parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
+				c = Base.parse(Int, split(ENV["SLURM_TASKS_PER_NODE"], "(")[1])
 			else
 				c = 1
 			end
@@ -90,6 +89,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 	else
 		!veryquiet && @warn("Unknown parallel environment!")
 	end
+	display(h)
 	if length(h) > 0
 		if nworkers() > 1
 			rmprocs(workers())
@@ -119,12 +119,18 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			end
 			errmsg = ""
 			addprocsfailed = false
+			display(h)
+			display(arguments)
 			try
 				Distributed.addprocs(h; arguments...)
 			catch errmsg
-				if in(:errmsg, fieldnames(errmsg))
-					@warn(strip(errmsg.errmsg))
-				else
+				try
+					if in(:errmsg, fieldnames(errmsg))
+						@warn(strip(errmsg.errmsg))
+					else
+						@warn(errmsg)
+					end
+				catch
 					@warn(errmsg)
 				end
 				addprocsfailed = true
@@ -158,7 +164,6 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 	end
 	return h
 end
-
 @doc """
 Set the available processors based on environmental variables (supports SLURM only at the moment)
 
@@ -338,3 +343,5 @@ Returns
 function setmadsservers(first::Int=0, last::Int=18)
 	map(i->(@Printf.sprintf "mads%02d" i), first:last)
 end
+
+:loaded
