@@ -89,10 +89,9 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 	else
 		!veryquiet && @warn("Unknown parallel environment!")
 	end
-	display(h)
 	if length(h) > 0
 		if nworkers() > 1
-			rmprocs(workers())
+			Distributed.rmprocs(workers())
 		end
 		sleep(0.1)
 		arguments = Dict()
@@ -119,8 +118,6 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			end
 			errmsg = ""
 			addprocsfailed = false
-			display(h)
-			display(arguments)
 			try
 				Distributed.addprocs(h; arguments...)
 			catch errmsg
