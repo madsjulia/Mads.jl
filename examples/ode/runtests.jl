@@ -1,5 +1,5 @@
 import Mads
-import OrderedCollections
+@Mads.tryimportmain OrderedCollections
 import JLD2
 import FileIO
 import Test

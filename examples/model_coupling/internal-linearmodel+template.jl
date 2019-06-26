@@ -1,9 +1,8 @@
 import Pkg
 !haskey(Pkg.installed(), "OrderedCollections") && Pkg.add("OrderedCollections")
 import OrderedCollections
-
 !haskey(Pkg.installed(), "DelimitedFiles") && Pkg.add("DelimitedFiles")
-using DelimitedFiles
+import DelimitedFiles
 
 function madsmodelrun_internal_linearmodel_template(madsdata::AbstractDict) # mads data dictionary is as an argument if needed
 	# Replace with:
