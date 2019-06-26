@@ -1,4 +1,7 @@
+import Pkg
+!haskey(Pkg.installed(), "JLD2") && Pkg.add("JLD2")
 import JLD2
+!haskey(Pkg.installed(), "FileIO") && Pkg.add("FileIO")
 import FileIO
 
 using OrderedCollections
