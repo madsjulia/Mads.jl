@@ -159,7 +159,6 @@ good_params_init_min = FileIO.load(joinpath(d, "params_init_min.jld2"), "m3")
 good_params_init_max = FileIO.load(joinpath(d, "params_init_max.jld2"), "m4")
 good_targetkeys = FileIO.load(joinpath(d, "targetkeys.jld2"), "tk")
 
-
 @Test.testset "Anasol" begin
 	# Test Mads.forward(md, all=true)
 	ssr = 0.

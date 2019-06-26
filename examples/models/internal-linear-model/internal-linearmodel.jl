@@ -1,3 +1,5 @@
+import Pkg
+!haskey(Pkg.installed(), "OrderedCollections") && Pkg.add("OrderedCollections")
 import OrderedCollections
 
 function madsmodelrun_internal_linearmodel(parameters::AbstractDict) # model run

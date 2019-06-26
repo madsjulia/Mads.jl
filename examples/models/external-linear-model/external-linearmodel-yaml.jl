@@ -1,5 +1,8 @@
-using OrderedCollections
+import Pkg
+!haskey(Pkg.installed(), "OrderedCollections") && Pkg.add("OrderedCollections")
+import OrderedCollections
 
+!haskey(Pkg.installed(), "PyCall") && Pkg.add("PyCall")
 import PyCall
 @PyCall.pyimport yaml # PyYAML installation is problematic on some machines
 
