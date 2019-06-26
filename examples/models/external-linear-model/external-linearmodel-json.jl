@@ -1,4 +1,7 @@
+import Pkg
+!haskey(Pkg.installed(), "JSON") && Pkg.add("JSON")
 import JSON
+!haskey(Pkg.installed(), "OrderedCollections") && Pkg.add("OrderedCollections")
 import OrderedCollections
 
 parameters = JSON.parsefile("parameters.json"; dicttype=OrderedCollections.OrderedDict)
