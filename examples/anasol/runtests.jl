@@ -1,7 +1,7 @@
 import Mads
+@Mads.tryimportmain OrderedCollections
 import JLD2
 import FileIO
-import OrderedCollections
 import Random
 import Test
 
