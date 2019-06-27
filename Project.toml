@@ -45,3 +45,6 @@ SVR = "22bb73d7-edb2-5785-ba1e-7d60d6824784"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
+
+[compat]
+julia = "1"
