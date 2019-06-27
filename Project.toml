@@ -1,6 +1,6 @@
 name = "Mads"
-authors = ["Velimir V Vesselinov <velimir.vesselinov@gmail.com>", "Daniel O'Malley <omalled@lanl.gov>"]
 uuid = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
+authors = ["Velimir V Vesselinov <velimir.vesselinov@gmail.com>", "Daniel O'Malley <omalled@lanl.gov>"]
 version = "0.7.4"
 
 [deps]
