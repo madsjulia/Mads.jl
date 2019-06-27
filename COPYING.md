@@ -3,7 +3,7 @@ MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
 
 Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 
-© (or copyright) 2016. Triad National Security, LLC. All rights reserved.
+© (or copyright) 2019. Triad National Security, LLC. All rights reserved.
 
 This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos National Laboratory (LANL), which is operated by Triad National Security, LLC for the U.S. Department of Energy/National Nuclear Security Administration.
 
