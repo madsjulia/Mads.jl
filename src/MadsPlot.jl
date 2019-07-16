@@ -1155,15 +1155,15 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 
 	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
 	recursivemkdir(filename)
-	if !colorkey
-		key_position=:none
+	if !colorkey || nS == 1
+		key_position = :none
 	end
 	if combined
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
 		if ncolors == 1
-			key_position=:none
+			key_position = :none
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)))
