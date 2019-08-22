@@ -27,7 +27,7 @@ catch
 	ENV["MADS_NO_PYPLOT"] = ""
 end
 
-if ENV["MADS_NO_PYPLOT"] != "" && ENV["MADS_NO_PYTHON"] != ""
+if !haskey(ENV, "MADS_NO_PYPLOT") && !haskey(ENV, "MADS_NO_PYTHON")
 	try
 		@info "Pkg.build(PyPlot)"
 		Pkg.build("PyPlot")
