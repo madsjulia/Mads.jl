@@ -15,16 +15,31 @@ catch
 end
 
 try
-	@info "Pkg.build(PyPlot)"
-	Pkg.build("PyPlot")
+	@info "Pkg.build(Cairo)"
+	Pkg.build("Cairo")
 
-	import PyPlot
+	import Cairo
 
-	@info "PyPlot/deps/build.log:"
-	print(read(joinpath(dirname(dirname(pathof(PyPlot))), "deps", "build.log"), String))
+	@info "Cairo/deps/build.log:"
+	print(read(joinpath(dirname(dirname(pathof(Cairo))), "deps", "build.log"), String))
 catch
-	@warn "PyPlot does not work"
+	@warn "Cairo does not work"
 	ENV["MADS_NO_PYPLOT"] = ""
+end
+
+if ENV["MADS_NO_PYPLOT"] != "" && ENV["MADS_NO_PYTHON"] != ""
+	try
+		@info "Pkg.build(PyPlot)"
+		Pkg.build("PyPlot")
+
+		import PyPlot
+
+		@info "PyPlot/deps/build.log:"
+		print(read(joinpath(dirname(dirname(pathof(PyPlot))), "deps", "build.log"), String))
+	catch
+		@warn "PyPlot does not work"
+		ENV["MADS_NO_PYPLOT"] = ""
+	end
 end
 
 # @info "Pkg.add(Pkg.PackageSpec(url=joinpath(pwd(), "..")))"
