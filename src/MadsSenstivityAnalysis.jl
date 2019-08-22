@@ -1088,10 +1088,10 @@ argtext=Dict("df"=>"dataframe")))
 function maxtofloatmax!(df::DataFrames.DataFrame)
 	limit = floatmax(Float32)
 	for i in 1:size(df, 2)
-		if typeof(df[i][1]) <: Number
-			for j in 1:length(df[i])
-				if df[i][j] > limit
-					df[i][j] = limit
+		if typeof(df[!, i][1]) <: Number
+			for j in 1:length(df[!, i])
+				if df[!, i][j] > limit
+					df[!, i][j] = limit
 				end
 			end
 		end

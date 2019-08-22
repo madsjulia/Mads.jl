@@ -116,7 +116,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::String="", filename::St
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
 			for i = 1:size(dfw)[1]
-				if dfw[1][i] == x && dfw[2][i] == y
+				if dfw[!, 1][i] == x && dfw[!, 2][i] == y
 					match = true
 					break
 				end
@@ -128,10 +128,10 @@ function plotmadsproblem(madsdata::AbstractDict; format::String="", filename::St
 	end
 	xo = rectangles[:,1] + rectangles[:,3]
 	yo = rectangles[:,2] + rectangles[:,4]
-	xmin = min(dfw[1]..., rectangles[:,1]...)
-	ymin = min(dfw[2]..., rectangles[:,2]...)
-	xmax = max(dfw[1]..., xo...)
-	ymax = max(dfw[2]..., yo...)
+	xmin = min(dfw[!, 1]..., rectangles[:,1]...)
+	ymin = min(dfw[!, 2]..., rectangles[:,2]...)
+	xmax = max(dfw[!, 1]..., xo...)
+	ymax = max(dfw[!, 2]..., yo...)
 	dx = xmax - xmin
 	dy = ymax - ymin
 	xmin = xmin - dx / 6
