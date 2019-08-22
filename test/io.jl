@@ -38,7 +38,7 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 end
 
 df = DataFrames.DataFrame()
-df[:Values] = rand(10) * floatmax(Float64)
+df[!, :Values] = rand(10) * floatmax(Float64)
 Mads.maxtofloatmax!(df)
 
 @Suppressor.suppress Mads.gettime(Dict("o1"=>Dict("c"=>1)))
