@@ -124,7 +124,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=graphoutput, par::Array{Float64,1}=Array{Float64}(undef, 0), obs::Array{Float64,1}=Array{Float64}(undef, 0), J::Array{Float64,2}=Array{Float64}(undef, 0, 0))
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::Array{Float64,1}=Array{Float64}(undef, 0), obs::Array{Float64,1}=Array{Float64}(undef, 0), J::Array{Float64,2}=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
