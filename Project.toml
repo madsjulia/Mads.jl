@@ -1,6 +1,6 @@
 name = "Mads"
 uuid = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
-version = "0.7.2"
+version = "0.7.3"
 
 [deps]
 AffineInvariantMCMC = "a0f608ac-68d0-5108-ad9a-0cdca73324f3"
