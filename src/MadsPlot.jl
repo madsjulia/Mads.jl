@@ -144,8 +144,8 @@ function plotmadsproblem(madsdata::AbstractDict; format::String="", filename::St
 		gadfly_source,
 		Gadfly.Scale.color_discrete_manual("red", "blue"),
 		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
-		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x -> @Printf.sprintf("%.0f", x)),
-		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y -> @Printf.sprintf("%.0f", y)), gm...,
+		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x->@Printf.sprintf("%.0f", x)),
+		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y->@Printf.sprintf("%.0f", y)), gm...,
 		Gadfly.Theme(highlight_width = 0Gadfly.pt, key_position = :none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
