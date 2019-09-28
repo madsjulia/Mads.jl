@@ -8,8 +8,8 @@ else
 	const PACKAGES = ["pyyaml", "matplotlib"]
 
 	try
-		Core.eval(Main, :(@PyCall.pyimport yaml))
-		Core.eval(Main, :(@PyCall.pyimport matplotlib))
+		Core.eval(Main, :(PyCall.pyimport("yaml")))
+		Core.eval(Main, :(PyCall.pyimport("matplotlib")))
 		@info("Python YAML (pyyaml) and MatPlotLib are already installed!")
 	catch errmsg
 		println(errmsg)
@@ -17,7 +17,7 @@ else
 
 		try
 			@info("Checking for python pip using PyCall ...")
-			Core.eval(Main, :(@PyCall.pyimport pip))
+			Core.eval(Main, :(PyCall.pyimport("pip")))
 		catch errmsg
 			println(errmsg)
 			@warn("Python pip is not installed!")
@@ -30,7 +30,7 @@ else
 
 		try
 			@info("Installing Python YAML & MatPlotLib using pip ...")
-			Core.eval(Main, :(@PyCall.pyimport pip))
+			Core.eval(Main, :(PyCall.pyimport("pip")))
 			global proxy_args = String[]
 			if haskey(ENV, "http_proxy")
 				push!(proxy_args, "--proxy")
@@ -45,7 +45,7 @@ else
 		end
 
 		try
-			Core.eval(Main, :(@PyCall.pyimport yaml))
+			Core.eval(Main, :(PyCall.pyimport("yaml")))
 			@info("Python YAML (pyyaml) is installed using pip!")
 		catch errmsg
 			println(errmsg)
@@ -56,7 +56,7 @@ else
 		end
 
 		try
-			Core.eval(Main, :(@PyCall.pyimport matplotlib))
+			Core.eval(Main, :(PyCall.pyimport("matplotlib")))
 			@info("Python MatPlotLib is installed using pip!")
 		catch errmsg
 			println(errmsg)

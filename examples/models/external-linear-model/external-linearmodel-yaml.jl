@@ -3,7 +3,7 @@ import Pkg
 import OrderedCollections
 !haskey(Pkg.installed(), "PyCall") && Pkg.add("PyCall")
 import PyCall
-@PyCall.pyimport yaml # PyYAML installation is problematic on some machines
+yaml = PyCall.pyimport("yaml") # PyYAML installation is problematic on some machines
 
 # parameters = Mads.loadyamlfile("parameters.yaml") # YAML file created to write current model parameters
 
