@@ -1,7 +1,7 @@
 __precompile__()
 
 """
-MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2016
+MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2019
 
 http://mads.lanl.gov
 https://github.com/madsjulia
@@ -284,5 +284,7 @@ end
 if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
+
+Mads.welcome()
 
 end
