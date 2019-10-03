@@ -9,16 +9,16 @@ function minimumnan(X, c...; kw...)
 	minimum(X[.!isnan.(X)], c...; kw...)
 end
 
-function sumnan(X, c=nothing; kw...)
-	if c == nothing
+function sumnan(X; dims=nothing, kw...)
+	if dims == nothing
 		return sum(X[.!isnan.(X)]; kw...)
 	else
-		count = .*(size(X)[vec(collect(c))]...)
+		count = .*(size(X)[vec(collect(dims))]...)
 		I = isnan.(X)
 		X[I] .= 0
-		sX = sum(X, c; kw...)
+		sX = sum(X; dims=dims, kw...)
 		X[I] .= NaN
-		sI = sum(I, c; kw...)
+		sI = sum(I; dims=dims, kw...)
 		sX[sI.==count] .= NaN
 		return sX
 	end

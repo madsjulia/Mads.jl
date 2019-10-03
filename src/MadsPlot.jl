@@ -1134,10 +1134,10 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
 		if xmin == nothing
-			xmin = log10(findfirst(.!isnan.(vec(sumnan(X, 2)))))
+			xmin = log10(findfirst(.!isnan.(vec(sumnan(X; dims=2)))))
 		end
 		if xmax == nothing
-			xmax = log10(findlast(.!isnan.(vec(sumnan(X, 2)))))
+			xmax = log10(findlast(.!isnan.(vec(sumnan(X; dims=2)))))
 		end
 	end
 	if logy
