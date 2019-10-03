@@ -1,6 +1,6 @@
 name = "Mads"
 uuid = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
-version = "0.7.4"
+version = "0.7.5"
 
 [deps]
 AffineInvariantMCMC = "a0f608ac-68d0-5108-ad9a-0cdca73324f3"
@@ -74,7 +74,7 @@ PyPlot = "≥ 2.2.0"
 ReusableFunctions = "≥ 0.2.6"
 SVR = "≥ 0.2.3"
 StatsBase = "≥ 0.15.0"
-julia = "≥ 1.0.0"
+julia = "≥ 1.2.0"
 
 [extras]
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
