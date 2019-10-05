@@ -1158,7 +1158,7 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 
 	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
 	recursivemkdir(filename)
-	if !colorkey || nS == 1
+	if !colorkey || nS == 1 || firstred
 		key_position = :none
 	end
 	if combined
@@ -1170,20 +1170,6 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
 				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)))
-				for i in 1:nS]...,
-				gl...,
-				glog...,
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.title(title),
-				cs...,
-				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
-				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-				gm...
-		elseif nS <= ncolors
-			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
-			c = [Gadfly.layer(x=xaxis, y=X[:,i],
-				geometry...,
-				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
 				for i in 1:nS]...,
 				gl...,
 				glog...,
@@ -1221,6 +1207,20 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 					Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 					gm...
 			end
+		elseif nS <= ncolors
+			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
+			c = [Gadfly.layer(x=xaxis, y=X[:,i],
+				geometry...,
+				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
+				for i in 1:nS]...,
+				gl...,
+				glog...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.title(title),
+				cs...,
+				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+				gm...
 		else
 			# Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])
 			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
