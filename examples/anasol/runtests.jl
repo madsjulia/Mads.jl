@@ -1,9 +1,10 @@
 import Mads
-@Mads.tryimportmain OrderedCollections
 import JLD2
 import FileIO
 import Random
 import Test
+
+@Mads.tryimportmain OrderedCollections
 
 Random.seed!(2017)
 
