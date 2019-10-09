@@ -67,8 +67,8 @@ Mads.maxtofloatmax!(df)
 	Mads.rmfiles_root(String(Mads.getrootname(file)); path=workdir)
 	@Test.test isfile(jpath(file)) == false
 
-	@Test.test Mads.getrestartdir(Dict("Restart"=>"dummy_restart_directory")) == "dummy_restart_directory/"
-	@Test.test Mads.getrestartdir(Dict("RestartDir"=>"dummy_restart_directory")) == "dummy_restart_directory/"
+	@Test.test Mads.getrestartdir(Dict("Restart"=>"dummy_restart_directory")) == joinpath("dummy_restart_directory", "")
+	@Test.test Mads.getrestartdir(Dict("RestartDir"=>"dummy_restart_directory")) == joinpath("dummy_restart_directory", "")
 	Mads.rmdir("dummy_restart_directory")
 
 	@Test.test Mads.getparamrandom(Dict(), "k") == nothing
