@@ -41,6 +41,14 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 			madsdata = loadjsonfile(filename)
 		end
 	end
+	if typeof(madsdata) <: AbstractString # Windows links fix
+		filename = madsdata
+		if format == "yaml"
+			madsdata = loadyamlfile(filename; julia=julia)
+		elseif format == "json"
+			madsdata = loadjsonfile(filename)
+		end
+	end
 	madsdata["Filename"] = filename
 	parsemadsdata!(madsdata)
 	if haskey(madsdata, "Observations")
