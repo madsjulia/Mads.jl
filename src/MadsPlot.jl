@@ -497,7 +497,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 		j += 1
 	end
 	vdf = vcat(df...)
-	if length(vdf[1]) > 0
+	if length(vdf[!, 1]) > 0
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position = :top) )
 		push!(pp, ptes)
 		vsize += 4Gadfly.inch
@@ -509,7 +509,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 		j += 1
 	end
 	vdf = vcat(df...)
-	if length(vdf[1]) > 0
+	if length(vdf[!, 1]) > 0
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position = :none))
 		push!(pp, pmes)
 		vsize += 4Gadfly.inch
@@ -521,7 +521,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 		j += 1
 	end
 	vdf = vcat(df...)
-	if length(vdf[1]) > 0
+	if length(vdf[!, 1]) > 0
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position = :none) )
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
@@ -640,14 +640,14 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	vdf = vcat(df...)
 	if debug
 		# println(vdf)
-		println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		println("TES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		writetable("tes.dat", vdf)
 	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > floatmax(Float32)
+	if length(vdf[!, 1]) > 0
+		if max(vdf[!, 2]...) > floatmax(Float32)
 			Mads.madswarn("TES values larger than $(floatmax(Float32))")
 			maxtofloatmax!(vdf)
-			println("TES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+			println("TES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		end
 		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
 				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -666,14 +666,14 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	vdf = vcat(df...)
 	if debug
 		# println(vdf)
-		println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		println("MES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		# writetable("mes.dat", vdf)
 	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > floatmax(Float32)
+	if length(vdf[!, 1]) > 0
+		if max(vdf[!, 2]...) > floatmax(Float32)
 			Mads.madswarn("MES values larger than $(floatmax(Float32))")
 			maxtofloatmax!(vdf)
-			println("MES xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+			println("MES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		end
 		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
 				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -692,14 +692,14 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	vdf = vcat(df...)
 	if debug
 		# println(vdf)
-		println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+		println("VAR xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		# writetable("var.dat", vdf)
 	end
-	if length(vdf[1]) > 0
-		if max(vdf[2]...) > floatmax(Float32)
+	if length(vdf[!, 1]) > 0
+		if max(vdf[!, 2]...) > floatmax(Float32)
 			Mads.madswarn("Variance values larger than $(floatmax(Float32))")
 			maxtofloatmax!(vdf)
-			println("VAR xmax $(max(vdf[1]...)) xmin $(min(vdf[1]...)) ymax $(max(vdf[2]...)) ymin $(min(vdf[2]...))")
+			println("VAR xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
 			Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
