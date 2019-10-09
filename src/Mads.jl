@@ -79,6 +79,7 @@ include("MadsHelpers.jl")
 "Try to import a module"
 macro tryimport(s::Symbol)
 	mname = string(s)
+	!haskey(Pkg.installed(), mname) && Pkg.add(mname)
 	importq = string(:(import $s))
 	infostring = string("Module ", s, " is not available")
 	q = quote
@@ -94,6 +95,7 @@ end
 
 macro tryimportmain(s::Symbol)
 	mname = string(s)
+	!haskey(Pkg.installed(), mname) && Pkg.add(mname)
 	importq = string(:(import $s))
 	infostring = string("Module ", s, " is not available")
 	warnstring = string("Module ", s, " cannot be imported")
