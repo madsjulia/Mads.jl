@@ -475,8 +475,8 @@ df = DataFrame(A=1:4,B="a") # create data frame with two columns; scalars are ex
 df[:C] = [true, false] # error, new columns must have the same length
 df[:C] = repmat([true, false], 2) # OK, new column added
 head(df) # data frame head, similar: tail
-df[1:2, ["A", "C"]] # select 2 first rows and A and C columns
-df[2] # select 2nd column
+df[!, 1:2, ["A", "C"]] # select 2 first rows and A and C columns
+df[!, 2] # select 2nd column
 names(df) # data frame column names
 describe(df) # summary of df contents; not really good
 colwise(sum, df[[1,3]]) # calculate sum of column 1 and 3 - not really nice output
