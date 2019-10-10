@@ -217,13 +217,6 @@ if !haskey(ENV, "MADS_NO_BIGUQ")
 	end
 end
 
-if !haskey(ENV, "MADS_NO_KLARA")
-	@tryimport Klara
-	if !isdefined(Mads, :Klara)
-		ENV["MADS_NO_KLARA"] = ""
-	end
-end
-
 include("MadsMonteCarlo.jl")
 
 if haskey(ENV, "MADS_TRAVIS")
