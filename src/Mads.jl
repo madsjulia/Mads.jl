@@ -181,9 +181,10 @@ if haskey(ENV, "MADS_NOT_QUIET")
 	global quiet = false
 end
 
+include("MadsHelp.jl")
+Mads.welcome()
 include("MadsCapture.jl")
 include("MadsLog.jl")
-include("MadsHelp.jl")
 include("MadsCreate.jl")
 include("MadsIO.jl")
 include("MadsYAML.jl")
@@ -279,7 +280,5 @@ end
 if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
-
-Mads.welcome()
 
 end
