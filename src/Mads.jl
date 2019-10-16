@@ -81,13 +81,13 @@ macro tryimport(s::Symbol)
 	mname = string(s)
 	!haskey(Pkg.installed(), mname) && Pkg.add(mname)
 	importq = string(:(import $s))
-	infostring = string("Module ", s, " is not available")
+	warnstring = string("Module ", s, " is not available")
 	q = quote
 		try
 			Core.eval(Mads, Meta.parse($importq))
 		catch errmsg
 			Mads.printerrormsg(errmsg)
-			@warn($infostring)
+			@warn($warnstring)
 		end
 	end
 	return :($(esc(q)))
