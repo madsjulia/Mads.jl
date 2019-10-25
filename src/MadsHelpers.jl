@@ -470,13 +470,13 @@ end
 """
 Get package version
 
-$(DocumentFunction.documentfunction(pkgversion))
+$(DocumentFunction.documentfunction(pkgversion_old))
 
 Returns:
 
 - package version
 """
-function pkgversion(modulestr::String)
+function pkgversion_old(modulestr::String)
 	try
 		stdoutcaptureon()
 		Pkg.status()
@@ -493,14 +493,14 @@ end
 """
 Checks if package is available
 
-$(DocumentFunction.documentfunction(ispkgavailable;
+$(DocumentFunction.documentfunction(ispkgavailable_old;
 argtext=Dict("modulename"=>"module name")))
 
 Returns:
 
 - `true` or `false`
 """
-function ispkgavailable(modulename::String; quiet::Bool=false)
+function ispkgavailable_old(modulename::String; quiet::Bool=false)
 	try
 		stdoutcaptureon()
 		Pkg.status()
@@ -510,4 +510,18 @@ function ispkgavailable(modulename::String; quiet::Bool=false)
 	catch
 		return false
 	end
+end
+
+"""
+Checks if package is available
+
+$(DocumentFunction.documentfunction(ispkgavailable;
+argtext=Dict("modulename"=>"module name")))
+
+Returns:
+
+- `true` or `false`
+"""
+function ispkgavailable(modulename::String)
+	haskey(Pkg.installed(), modulename)
 end
