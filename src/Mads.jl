@@ -76,43 +76,38 @@ global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, ReusableFun
 
 include("MadsHelpers.jl")
 
-"Try to import a module"
-macro tryimport(s::Symbol)
+"Try to import a module in Mads"
+macro tryimport(s::Symbol, domains::Symbol=:Mads)
 	mname = string(s)
-	@show haskey(Pkg.installed(), mname)
-	!haskey(Pkg.installed(), mname) && Pkg.add(mname)
-	importq = string(:(import $s))
-	warnstring = string("Module ", s, " is not available")
-	q = quote
+	domain = eval(domains)
+	if !ispkgavailable(mname)
 		try
-			Core.eval(Mads, Meta.parse($importq))
-		catch errmsg
-			Mads.printerrormsg(errmsg)
-			@warn($warnstring)
+			Pkg.add(mname)
+		catch
+			@info string("Module ", s, " is not available")
+			return nothing
 		end
 	end
-	return :($(esc(q)))
-end
-
-macro tryimportmain(s::Symbol)
-	mname = string(s)
-	!haskey(Pkg.installed(), mname) && Pkg.add(mname)
-	importq = string(:(import $s))
-	infostring = string("Module ", s, " is not available")
-	warnstring = string("Module ", s, " cannot be imported")
-	q = quote
-		if Mads.ispkgavailable($mname; quiet=true)
+	if !isdefined(domain, s)
+		importq = string(:(import $s))
+		warnstring = string("Module ", s, " cannot be imported")
+		q = quote
 			try
-				Core.eval(Main, Meta.parse($importq))
+				Core.eval($domain, Meta.parse($importq))
 			catch errmsg
-				Mads.printerrormsg(errmsg)
+				printerrormsg(errmsg)
 				@warn($warnstring)
 			end
-		else
-			@info($infostring)
 		end
+		return :($(esc(q)))
 	end
-	return :($(esc(q)))
+end
+
+"Try to import a module in Main"
+macro tryimportmain(s::Symbol)
+	quote
+		@Mads.tryimport $s Main
+	end
 end
 
 if !haskey(ENV, "MADS_NO_PYTHON")
@@ -239,8 +234,6 @@ if !haskey(ENV, "MADS_NO_PLOT")
 		if !isdefined(Mads, :PyPlot)
 			ENV["MADS_NO_PYPLOT"] = ""
 			@warn("PyPlot is not available")
-		else
-			# info("PyPlot is available")
 		end
 	end
 else
