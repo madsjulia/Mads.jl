@@ -1,6 +1,3 @@
-@tryimport Gadfly
-import DocumentFunction
-
 """
 Plot injected/reduced contaminant mass
 

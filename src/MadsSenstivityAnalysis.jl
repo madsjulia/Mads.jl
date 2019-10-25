@@ -7,12 +7,8 @@ import StatsBase
 import JSON
 import JLD2
 import FileIO
-using Distributed
 import Random
-
-if !haskey(ENV, "MADS_NO_GADFLY")
-	@tryimport Gadfly
-end
+using Distributed
 
 """
 Make gradient function needed for local sensitivity analysis
