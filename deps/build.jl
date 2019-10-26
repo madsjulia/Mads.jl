@@ -1,7 +1,6 @@
 if haskey(ENV, "MADS_NO_PYTHON")
 	@info("No Python will be used ...")
 else
-	import Compat
 	import PyCall
 
 	@info("Checking for Python YAML & MatPlotLib ...")

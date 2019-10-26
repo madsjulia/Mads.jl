@@ -2,7 +2,6 @@ import Distributions
 import OrderedCollections
 import DocumentFunction
 import JSON
-using Compat
 
 """
 Is a dictionary containing all the observations
