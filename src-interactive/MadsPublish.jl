@@ -267,7 +267,7 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 		cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true);
 		cmdproc, cmdout, cmderr = Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=true, pipe=true);
 		if cmdproc.exitcode != 0
-			@warn("Module is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
+			@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
 		elseif gitmore
 			@info("Git ID HEAD   $(madsmodule) ...")
 			run(`git rev-parse --verify HEAD`)
