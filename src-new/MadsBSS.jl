@@ -69,7 +69,7 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	Hbest = Array{Float64}(undef, nk, nC)
 	phi_best = Inf
 	for r = 1:retries
-		m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
+		m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer; max_iter=maxiter, print_level=verbosity))
 		#IMPORTANT the order at which parameters are defined is very important
 		if r == 1 && sizeof(initW) != 0
 			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
