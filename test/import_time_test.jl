@@ -1,4 +1,3 @@
-@time import Compat
 @time import Anasol
 @time import BIGUQ
 @time import AffineInvariantMCMC
