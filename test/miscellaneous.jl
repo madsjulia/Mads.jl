@@ -1,6 +1,5 @@
 import Mads
 import Test
-import Compat
 import Printf
 
 if isdefined(Mads, :runcmd)
