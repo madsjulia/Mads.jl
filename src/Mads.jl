@@ -84,13 +84,13 @@ macro tryimport(s::Symbol, domains::Symbol=:Mads)
 		try
 			Pkg.add(mname)
 		catch
-			@info string("Module ", s, " is not available")
+			@info string("Module ", s, " is not available!")
 			return nothing
 		end
 	end
 	if !isdefined(domain, s)
 		importq = string(:(import $s))
-		warnstring = string("Module ", s, " cannot be imported")
+		warnstring = string("Module ", s, " cannot be imported!")
 		q = quote
 			try
 				Core.eval($domain, Meta.parse($importq))
