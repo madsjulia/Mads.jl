@@ -37,12 +37,6 @@ For additional information:
 Builds & Tests
 --------------
 
-**Mads Build & Test Status @ JuliaLang.org**
-
-[![julialang](http://pkg.julialang.org/badges/Mads_0.5.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.5)
-[![julialang](http://pkg.julialang.org/badges/Mads_0.6.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.6)
-[![julialang](http://pkg.julialang.org/badges/Mads_0.7.svg)](http://pkg.julialang.org/?pkg=Mads&ver=0.7)
-
 **Mads Build & Test Status @ Travis Continuous Integration (CI) service (OS X & linux)**
 
 [![Travis Status](https://travis-ci.org/madsjulia/Mads.jl.svg?branch=master)](https://travis-ci.org/madsjulia/Mads.jl)
