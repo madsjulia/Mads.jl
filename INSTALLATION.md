@@ -1,13 +1,6 @@
 Installation
 ============
 
-Docker
-------
-
-```bash
-docker run --interactive --tty montyvesselinov/madsjulia
-```
-
 After starting Julia, execute:
 
 
@@ -79,13 +72,13 @@ Add in the `.gitconfig` file in your home directory to support git behind a fire
 
 or execute:
 
-```
+```bash
 git config --global url."https://".insteadOf git://
 ```
 
 Set proxies executing the following lines in the bash command-line environment:
 
-```
+```bash
 export ftp_proxy=http://proxyout.<your_site>:8080
 export rsync_proxy=http://proxyout.<your_site>:8080
 export http_proxy=http://proxyout.<your_site>:8080
@@ -95,10 +88,28 @@ export no_proxy=.<your_site>
 
 For example, at LANL, you will need to execute the following lines in the bash command-line environment:
 
-```
+```bash
 export ftp_proxy=http://proxyout.lanl.gov:8080
 export rsync_proxy=http://proxyout.lanl.gov:8080
 export http_proxy=http://proxyout.lanl.gov:8080
 export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
+```
+Proxies can be also set up directly in the Julia REPL as well:
+
+```julia
+ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
+ENV["rsync_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["http_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["no_proxy"] = ".lanl.gov"
+```
+
+Docker
+------
+
+Mads is also available @ Docker:
+
+```bash
+docker run --interactive --tty montyvesselinov/madsjulia
 ```
