@@ -49,7 +49,7 @@ end
 
 global madsgit = true
 try
-	run(pipeline(`git help`; stdout=devnull, stderr=devnull))
+	run(pipeline(`bash -l -c 'git help'`; stdout=devnull, stderr=devnull))
 catch
 	global madsgit = false
 end

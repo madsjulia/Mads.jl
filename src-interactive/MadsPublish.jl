@@ -109,13 +109,13 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 			end
 			if master
 				if force
-					run(`git checkout -f master`)
+					run(`bash -l -c 'git checkout -f master'`)
 				else
-					run(`git checkout master`)
+					run(`bash -l -c 'git checkout master'`)
 				end
 			end
 			if pull
-				run(`git pull`)
+				run(`bash -l -c 'git pull'`)
 			end
 			cd(cwd)
 		else
@@ -151,7 +151,7 @@ function push(modulename::String="")
 			return
 		end
 		try
-			run(`git push`)
+			run(`bash -l -c 'git push'`)
 		catch errmsg
 			printerrormsg(errmsg)
 			@warn("$i cannot be pushed!")
@@ -182,7 +182,7 @@ function diff(modulename::String="")
 			return
 		end
 		try
-			run(`git diff --word-diff "*.jl"`)
+			run(`bash -l -c 'git diff --word-diff "*.jl"'`)
 		catch errmsg
 			printerrormsg(errmsg)
 			@warn("$i cannot be diffed!")
@@ -240,7 +240,7 @@ function commit(commitmsg::String, modulename::String="")
 			return
 		end
 		try
-			run(`git commit -a -m $(commitmsg)`)
+			run(`bash -l -c 'git commit -a -m $(commitmsg)'`)
 		catch
 			@warn("Nothing to commit in $(i).")
 		end
@@ -264,15 +264,15 @@ function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true);
-		cmdproc, cmdout, cmderr = Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=true, pipe=true);
+		cmdproc, cmdout, cmderr = Mads.runcmd(`bash -l -c 'git status -s'`; quiet=true, pipe=true);
+		cmdproc, cmdout, cmderr = Mads.runcmd("git log `bash -l -c 'git describe --tags --abbrev=0'`..HEAD --oneline"; quiet=true, pipe=true);
 		if cmdproc.exitcode != 0
 			@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
 		elseif gitmore
 			@info("Git ID HEAD   $(madsmodule) ...")
-			run(`git rev-parse --verify HEAD`)
+			run(`bash -l -c 'git rev-parse --verify HEAD'`)
 			@info("Git ID master $(madsmodule) ...")
-			run(`git rev-parse --verify master`)
+			run(`bash -l -c 'git rev-parse --verify master'`)
 		end
 		cd(cwd)
 	else
@@ -365,8 +365,8 @@ function untag(madsmodule::String, version::String)
 		return
 	end
 	try
-		run(`git tag -d $version`)
-		run(`git push origin :refs/tags/$version`)
+		run(`bash -l -c 'git tag -d $version'`)
+		run(`bash -l -c 'git push origin :refs/tags/$version'`)
 	catch errmsg
 		printerrormsg(errmsg)
 		@warn("Untag of $madsmodule failed!")
@@ -383,14 +383,12 @@ function create_documentation()
 	for i in madsmodules
 		Core.eval(Main, :(@Mads.tryimportmain $(Symbol(i))))
 	end
-
 	Documenter.makedocs(root=joinpath(dirname(pathof(Mads)), "..", "docs"), sitename="Mads documentation", format = DocumenterMarkdown.Markdown(), doctest=false, modules=madsmodulesdoc, clean=true)
-
 	d = pwd()
 	cd(Mads.madsdir)
-	# run(`git pull gh gh-pages`)
+	# run(`bash -l -c 'git pull gh gh-pages'`)
 	@info("mkdocs build & deploy ...")
-	run(`mkdocs gh-deploy --clean`)
+	run(`bash -l -c 'mkdocs gh-deploy --clean'`)
 	@info("mkdocs done.")
 	cd(d)
 	return
