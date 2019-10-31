@@ -56,7 +56,8 @@ Publications, Presentations, Projects
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
 
-Related Julia Packages:
+Related Julia Packages
+----------------------
 
 * [TensorDecompositions:
 Unsupervised Machine Learning based on Matrix/Tensor Factorization](https://github.com/TensorDecompositions)
