@@ -1120,7 +1120,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=size(X, 2), format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, firstred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
+function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=size(X, 2), format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
 	if name == ""
 		names = ["" for i in 1:size(X,2)]
 	end
@@ -1155,6 +1155,7 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 	end
 
 	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
+	geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point(), Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt)] : geometry
 	recursivemkdir(filename)
 	if !colorkey || nS == 1 || firstred
 		key_position = :none
