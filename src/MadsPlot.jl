@@ -1164,51 +1164,7 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
-		if ncolors == 1
-			key_position = :none
-			c = [Gadfly.layer(x=xaxis, y=X[:,i],
-				geometry...,
-				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)))
-				for i in 1:nS]...,
-				gl...,
-				glog...,
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Guide.title(title),
-				cs...,
-				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
-				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-				gm...
-			pS = Gadfly.plot(c...)
-		elseif firstred
-			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
-			if nextgray
-				c = Gadfly.layer(x=xaxis, y=X[:,1], geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color="red")),
-					[Gadfly.layer(x=xaxis, y=X[:,i], geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color="gray")) for i in 2:nS]...,
-					gl...,
-					glog...,
-					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-					Gadfly.Guide.title(title),
-					cs...,
-					Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
-					Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-					gm...
-			else
-				c = Gadfly.layer(x=xaxis, y=X[:,1], geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color="red")),
-					[Gadfly.layer(x=xaxis, y=X[:,i], color=["$(names[i])" for j in 1:nT],
-					geometry...,
-					Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt))
-					for i in 2:nS]...,
-					gl...,
-					glog...,
-					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-					Gadfly.Guide.title(title),
-					cs...,
-					Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
-					Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-					gm...
-			end
-			pS = Gadfly.plot(c...)
-		elseif nS <= ncolors
+		if nS <= ncolors
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
@@ -1238,10 +1194,37 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 			# 	Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 			# 	Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 			# 	gm...
-			palette = Gadfly.parse_colorant(colors)
-			colorep(nc) = palette[rem.((1:nc) .- 1, length(palette)) .+ 1]
-			nS1 = nS + 1
-			pS = Gadfly.plot([xaxis X], x=Gadfly.Col.value(1), y=Gadfly.Col.value(2:nS1...), color=Gadfly.Col.index(2:nS1...), group=Gadfly.Col.index(2:nS1...), Gadfly.Scale.color_discrete(colorep), geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt),
+			if firstred
+				if nextgray
+					palette = Gadfly.parse_colorant(["gray"])
+				else
+					if length(colors) > 1
+						palette = Gadfly.parse_colorant(colors[2:end])
+					else
+						palette = Gadfly.parse_colorant(colors)
+					end
+				end
+			else
+				palette = Gadfly.parse_colorant(colors)
+			end
+			colormap =
+				if firstred
+					if nextgray
+						function(nc)
+							[Gadfly.parse_colorant(["red"]); repeat(palette, inner=nc-1)]
+						end
+					else
+						function(nc)
+							[Gadfly.parse_colorant(["red"]); palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]]
+						end
+					end
+				else
+					function(nc)
+						palette[rem.((1:nc) .- 1, length(palette)) .+ 1]
+					end
+				end
+			colindex = Gadfly.Col.index(1:nS...)
+			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...), color=colindex, group=colindex, Gadfly.Scale.color_discrete(colormap), geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt),
 				gl...,
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
