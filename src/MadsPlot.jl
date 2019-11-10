@@ -1224,8 +1224,9 @@ function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=siz
 					end
 				end
 			colindex = Gadfly.Col.index(1:nS...)
-			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...), color=colindex, group=colindex, Gadfly.Scale.color_discrete(colormap), geometry..., Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...), color=colindex, group=colindex, Gadfly.Scale.color_discrete(colormap), geometry...,
 				gl...,
+			    Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
