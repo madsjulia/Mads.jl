@@ -453,7 +453,7 @@ function setseed(seed::Integer=-1, quiet::Bool=true)
 		Random.seed!(seed)
 		!quiet && info("New seed: $seed")
 	else
-		s = Int(Random.GLOBAL_RNG.seed[1])
+		s = Int(Random.default_rng().seed[1])
 		!quiet && info("Current seed: $s")
 	end
 end
