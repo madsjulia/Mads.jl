@@ -93,14 +93,23 @@ Julia uses git for package management.
 Add in the `.gitconfig` file in your home directory to support git behind a firewall:
 
 ```
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@gitlab.com:"]
+    insteadOf = https://gitlab.com/
 [url "https://"]
-        insteadOf = git://
+    insteadOf = git://
+[url "http://"]
+    insteadOf = git://
 ```
 
 or execute:
 
 ```bash
 git config --global url."https://".insteadOf git://
+git config --global url."http://".insteadOf git://
+git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
+git config --global url."git@github.com:".insteadOf https://github.com/
 ```
 
 Set proxies executing the following lines in the bash command-line environment:
