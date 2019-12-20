@@ -15,7 +15,7 @@ Set the default plot format (`SVG` is the default format)
 $(DocumentFunction.documentfunction(setdefaultplotformat;
 argtext=Dict("format"=>"plot format")))
 """
-function setdefaultplotformat(format::String)
+function setdefaultplotformat(format::AbstractString)
 	if occursin(r"^PNG|PDF|PS|SVG", uppercase(format))
 		global graphbackend = uppercase(format)
 	else
@@ -44,7 +44,7 @@ Returns:
 - output file name
 - output plot format (`png`, `pdf`, etc.)
 """
-function setplotfileformat(filename::String, format::String)
+function setplotfileformat(filename::AbstractString, format::AbstractString)
 	format = uppercase(format)
 	extension = uppercase(getextension(filename))
 	root = Mads.getrootname(filename)
@@ -82,10 +82,10 @@ Dumps:
 
 - plot of contaminant sources and wells
 """
-function plotmadsproblem(madsdata::AbstractDict; format::String="", filename::String="", keyword::String="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, quiet::Bool=!Mads.graphoutput, gm=[])
+function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", filename::AbstractString="", keyword::AbstractString="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, quiet::Bool=!Mads.graphoutput, gm=[])
 	rectangles = Array{Float64}(undef, 0, 4)
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
-	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = String[], category = String[])
+	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	if haskey(madsdata, "Sources")
 		for i = 1:length(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
@@ -170,7 +170,7 @@ function plotmatches(madsdata::AbstractDict, rx::Regex=r""; kw...)
 		plotmatches(madsdata, r; kw...)
 	end
 end
-function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::String="", format::String="", key2time::Function=k->0., title::String="", xtitle::String="time", ytitle::String="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", key2time::Function=k->0., title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
 	newobs = empty(madsdata["Observations"])
 	newresult = empty(result)
 	for k in keys(madsdata["Observations"])
@@ -194,7 +194,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; pl
 	end
 	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, ymin=ymin, ymax=ymax, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=Mads.colors, display=display)
 end
-function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::String="", format::String="", title::String="", xtitle::String="time", ytitle::String="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -406,7 +406,7 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::String; format::String="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -441,7 +441,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::S
 	return nothing
 end
 
-function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="", quiet::Bool=!Mads.graphoutput)
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 	else
@@ -452,7 +452,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle:
 		end
 	end
 end
-function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::String; xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", filename::String="", format::String="", quiet::Bool=!Mads.graphoutput)
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::AbstractString; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
 		return
@@ -576,7 +576,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::String="", filename::String="", format::String="", debug::Bool=false, separate_files::Bool=false, xtitle::String="Time [years]", ytitle::String="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", debug::Bool=false, separate_files::Bool=false, xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -736,7 +736,7 @@ function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::String="", keyword::String="", xtitle::String="X", ytitle::String="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -931,7 +931,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::String="", keyword::String="", format::String="", xtitle::String="X", ytitle::String="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -1120,7 +1120,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::String=""; nT=size(X, 1), nS=size(X, 2), format::String="", xtitle::String = "", ytitle::String = "", title::String="", logx::Bool=false, logy::Bool=false, keytitle::String="", name::String="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
 	if name == ""
 		names = ["" for i in 1:size(X,2)]
 	end
@@ -1282,7 +1282,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function plotlocalsa(filenameroot::String; keyword::String="", filename::String="", format::String="")
+function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	if filename == ""
 		rootname = filenameroot
 		ext = ""
