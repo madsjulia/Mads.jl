@@ -60,7 +60,7 @@ function display(filename::String)
 	end
 end
 
-if isdefined(Mads, :Gadfly)
+if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 	function display(p::Gadfly.Plot)
 		if graphoutput
 			Gadfly.draw(Gadfly.PNG(), p)
@@ -72,6 +72,10 @@ if isdefined(Mads, :Gadfly)
 			Compose.draw(Compose.PNG(), p)
 			print("\r")
 		end
+	end
+else
+	function display(o)
+		Base.display(o)
 	end
 end
 
