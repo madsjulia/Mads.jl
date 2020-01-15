@@ -73,7 +73,8 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 ```
 """ emceesampling
 
-if isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
+if isdefined(Mads, :Klara)
+	# && isdefined(Klara, :BasicContMuvParameter)
 	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 		Mads.setseed(seed)
 		madsloglikelihood = makemadsloglikelihood(madsdata)
@@ -83,17 +84,17 @@ if isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
 		for i = 1:length(optparamkeys)
 			initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 		end
-		mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
-		model = Klara.likelihood_model(mcparams, false)
-		# sampler = Klara.MH(fill(1e-1, length(initvals)))
-		sampler = Klara.RAM(fill(1e-1, length(initvals)))
-		mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
-		mcparams0 = Dict(:p=>initvals)
-		outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
-		job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
-		Klara.run(job)
-		chain = Klara.output(job)
-		return chain
+		# mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
+		# model = Klara.likelihood_model(mcparams, false)
+		# # sampler = Klara.MH(fill(1e-1, length(initvals)))
+		# sampler = Klara.RAM(fill(1e-1, length(initvals)))
+		# mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
+		# mcparams0 = Dict(:p=>initvals)
+		# outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
+		# job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
+		# Klara.run(job)
+		# chain = Klara.output(job)
+		# return chain
 	end
 	function bayessampling(madsdata::AbstractDict, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 		if seed != 0
