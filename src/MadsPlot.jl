@@ -1164,7 +1164,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		hsize_plot = hsize
 		vsize_plot = vsize
 		ncolors = length(colors)
-		if nS <= ncolors
+		if nS <= ncolors && !nextgray
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
