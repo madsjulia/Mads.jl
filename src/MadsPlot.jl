@@ -1120,7 +1120,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
 	if name == ""
 		names = ["" for i in 1:size(X,2)]
 	end
@@ -1194,7 +1194,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 			# 	Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 			# 	Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 			# 	gm...
-			if firstred
+			if firstred || lastred
 				if nextgray
 					palette = Gadfly.parse_colorant(["gray"])
 				else
@@ -1216,6 +1216,16 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 					else
 						function(nc)
 							[Gadfly.parse_colorant(["red"]); palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]]
+						end
+					end
+				elseif lastred
+					if nextgray
+						function(nc)
+							[repeat(palette, inner=nc-1); Gadfly.parse_colorant(["red"])]
+						end
+					else
+						function(nc)
+							[palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]; Gadfly.parse_colorant(["red"])]
 						end
 					end
 				else
