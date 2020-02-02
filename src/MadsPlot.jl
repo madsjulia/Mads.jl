@@ -1157,7 +1157,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
 	geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point(), Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt)] : geometry
 	recursivemkdir(filename)
-	if !colorkey || nS == 1 || firstred
+	if !colorkey || nS == 1 || nextgray
 		key_position = :none
 	end
 	if combined
