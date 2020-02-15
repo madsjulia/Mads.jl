@@ -1154,8 +1154,9 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		end
 	end
 
-	geometry = (plotline) ? [Gadfly.Geom.line(), Gadfly.Theme(line_width=linewidth)] : [Gadfly.Theme(point_size=pointsize, highlight_width=0Gadfly.pt)]
-	geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point(), Gadfly.Theme(line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt)] : geometry
+	geometry = (plotline) ? [Gadfly.Geom.line()] : [Gadfly.Geom.point()]
+	geometry = (plotdots) ? [Gadfly.Geom.point()] : [Gadfly.Geom.line()]
+	geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point()] : geometry
 	recursivemkdir(filename)
 	if !colorkey || nS == 1 || nextgray
 		key_position = :none
@@ -1168,14 +1169,14 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
-				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
+				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
 				for i in 1:nS]...,
 				gl...,
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
-				Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+				Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, highlight_width=0Gadfly.pt, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 				gm...
 			pS = Gadfly.plot(c...)
@@ -1236,7 +1237,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 			colindex = Gadfly.Col.index(1:nS...)
 			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...), color=colindex, group=colindex, Gadfly.Scale.color_discrete(colormap), geometry...,
 				gl...,
-			    Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+			    Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
@@ -1250,7 +1251,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		vsize_plot = vsize / 2 * nS
 		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Theme(background_color=background_color), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
+			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
 		end
 		pS = Gadfly.vstack(pp...)
 		c = nothing
