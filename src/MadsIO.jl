@@ -3,6 +3,15 @@ import JLD2
 import FileIO
 
 """
+Get file names by expanding wildcards
+
+$(DocumentFunction.documentfunction(getfilenames))
+"""
+function getfilenames(cmdstring::String)
+	readlines(runcmd("ls " * cmdstring; quiet=true, pipe=true)[2])
+end
+
+"""
 Change the current directory to the Mads source dictionary
 
 $(DocumentFunction.documentfunction(mdir))
