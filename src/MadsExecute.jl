@@ -74,7 +74,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 				end
 			end
 		end
-		if !quiet && cmdproc.exitcode != 0
+		if !quiet && cmdproc.exitcode == 0
 			output = readlines(cmdout)
 			l = length(output)
 			if l > 0
