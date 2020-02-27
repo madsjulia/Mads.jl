@@ -7,6 +7,7 @@ MADS (Model Analysis & Decision Support)
 [![appveyor](https://ci.appveyor.com/api/projects/status/github/madsjulia/Example.jl?branch=master&svg=true)](https://ci.appveyor.com/project/montyvesselinov/mads-jl/branch/master)
 [![coveralls.io](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 [![codecov.io](http://codecov.io/github/madsjulia/Mads.jl/coverage.svg?branch=master)](http://codecov.io/github/madsjulia/Mads.jl?branch=master)
+
 [MADS](http://madsjulia.github.io/Mads.jl) is an integrated open-source high-performance computational (HPC) framework for data/model/decision analyses.
 
 [MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
