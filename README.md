@@ -161,7 +161,7 @@ Publications, Presentations, Projects
 * [mads.gitlab.io](http://mads.gitlab.io)
 * [madsjulia.github.io](http://madsjulia.github.io)
 * [TensorDecompositions](https://tensordecompositions.github.io)
-* [TensorDecompositions](https://tensors.lanl.gov)
+* [Tensors](https://tensors.lanl.gov)
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
 
