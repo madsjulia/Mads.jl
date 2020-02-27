@@ -7,9 +7,9 @@ MADS (Model Analysis & Decision Support)
 [![appveyor](https://ci.appveyor.com/api/projects/status/github/madsjulia/Example.jl?branch=master&svg=true)](https://ci.appveyor.com/project/montyvesselinov/mads-jl/branch/master)
 [![coveralls.io](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 [![codecov.io](http://codecov.io/github/madsjulia/Mads.jl/coverage.svg?branch=master)](http://codecov.io/github/madsjulia/Mads.jl?branch=master)
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated open-source high-performance computational (HPC) framework for data/model/decision analyses.
 
-[MADS](http://madsjulia.github.io/Mads.jl) is an integrated open-source high-performance computational (HPC) framework in [Julia](http://julialang.org).
-MADS can execute a wide range of data- and model-based analyses:
+[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
 
 * Sensitivity Analysis
 * Parameter Estimation
@@ -17,12 +17,16 @@ MADS can execute a wide range of data- and model-based analyses:
 * Uncertainty Quantification
 * Model Selection and Model Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g. Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
+* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
 
-MADS has been tested to perform HPC simulations on a wide-range multi-processor clusters and parallel environments (Moab, Slurm, etc.).
-MADS utilizes adaptive rules and techniques which allows the analyses to be performed with minimum user input.
-The code provides a series of alternative algorithms to execute each type of data- and model-based analyses.
+[MADS](http://madsjulia.github.io/Mads.jl) has been extensively tested and verified.
+
+[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
+
+[MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
+
+[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute each type of data- and model-based analyses.
 
 Documentation
 =============
