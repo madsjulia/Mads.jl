@@ -1334,6 +1334,15 @@ $(DocumentFunction.documentfunction(recursivemkdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function recursivemkdir(s::String; filename=true)
+	if filename
+		if isfile(s)
+			return
+		end
+	else
+		if isdir(s)
+			return
+		end
+	end
 	d = Vector{String}(undef, 0)
 	sc = deepcopy(s)
 	if !filename && sc!= ""
