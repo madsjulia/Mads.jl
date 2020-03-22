@@ -82,7 +82,7 @@ function checkout(modulename::String=""; git::Bool=true, master::Bool=false, for
 		if required
 			modulenames = Mads.required()[:,1]
 		elseif all
-			modulenames = keys(Pkg.installed())
+			modulenames = keys(Mads.pkginstalled())
 		else
 			modulenames = madsmodules
 		end
@@ -206,7 +206,7 @@ function free(modulename::String=""; required::Bool=false, all::Bool=false)
 		if required
 			modulenames = Mads.required()
 		elseif all
-			modulenames = keys(Pkg.installed())
+			modulenames = keys(Mads.pkginstalled())
 		else
 			modulenames = madsmodules
 		end

@@ -1,7 +1,4 @@
-import Pkg
-!haskey(Pkg.installed(), "OrderedCollections") && Pkg.add("OrderedCollections")
 import OrderedCollections
-!haskey(Pkg.installed(), "DelimitedFiles") && Pkg.add("DelimitedFiles")
 import DelimitedFiles
 
 i = open(joinpath("external-linearmodel+template+instruction+path", "parameters.dat"), "r")
