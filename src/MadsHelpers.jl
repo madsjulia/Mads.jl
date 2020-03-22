@@ -523,5 +523,30 @@ Returns:
 - `true` or `false`
 """
 function ispkgavailable(modulename::String)
-	haskey(Pkg.installed(), modulename)
+	pkginstalled(modulename)
+end
+
+function pkginstalled(modulename::String)
+	found = falses
+	deps = Pkg.dependencies()
+	for (uuid, dep) in deps
+		dep.is_direct_dep || continue
+		dep.version === nothing && continue
+		if dep.name == modulename
+			found = true
+			break
+		end
+	end
+	return found
+end
+
+function pkginstalled()
+	deps = Pkg.dependencies()
+	installs = Dict{String, VersionNumber}()
+	for (uuid, dep) in deps
+		dep.is_direct_dep || continue
+		dep.version === nothing && continue
+		installs[dep.name] = dep.version
+	end
+	return installs
 end

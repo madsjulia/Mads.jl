@@ -54,5 +54,5 @@ import Mads
 print(read(joinpath(dirname(dirname(pathof(Mads))), "deps", "build.log"), String))
 
 @info "Package versions"
-show(stdout, "text/plain", Pkg.installed())
+show(stdout, "text/plain", Pkg.dependencies())
 println()
