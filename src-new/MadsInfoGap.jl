@@ -34,7 +34,8 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 	for h in horizons
 		phi_best = 0
 		for r = 1:retries
-			m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
+			m = JuMP.Model(Ipopt.Optimizer)
+			JuMP.set_optimizer_attributes(m, "max_iter" => maxiter, "print_level" => verbosity)
 			if r > 1 || random
 				for i = 1:np
 					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
@@ -46,12 +47,12 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1
 			@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
 			@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^p[4]) + p[2] * ti[3] + p[3])
 			@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^p[4]) + p[2] * ti[4] + p[3])
-			@JuMP.constraint(m, p[i=1:np] .>= pmin[i=1:np])
-			@JuMP.constraint(m, p[i=1:np] .<= pmax[i=1:np])
-			#@JuMP.constraint(m, o[i=1:no] .>= omin[i=1:no])
-			#@JuMP.constraint(m, o[i=1:no] .<= omax[i=1:no])
-			@JuMP.constraint(m, o[i=1:no] .>= t[i=1:no]-h)
-			@JuMP.constraint(m, o[i=1:no] .<= t[i=1:no]+h)
+			@JuMP.constraint(m, p[1:np] .>= pmin[1:np])
+			@JuMP.constraint(m, p[1:np] .<= pmax[1:np])
+			#@JuMP.constraint(m, o[1:no] .>= omin[1:no])
+			#@JuMP.constraint(m, o[1:no] .<= omax[1:no])
+			@JuMP.constraint(m, o[1:no] .>= t[1:no]-h)
+			@JuMP.constraint(m, o[1:no] .<= t[1:no]+h)
 			#@JuMP.NLobjective(m, Min, sum(w[i] * ((p[1] * (ti[i]^p[2]) + p[3] * ti[i] + p[4]) - t[i])^2 for i=1:no))
 			@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
 			JuMP.optimize!(m)
@@ -183,7 +184,8 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
-				m = JuMP.Model(JuMP.with_optimizer(Ipopt.Optimizer, max_iter=maxiter, print_level=verbosity))
+				m = JuMP.Model(Ipopt.Optimizer)
+				JuMP.set_optimizer_attributes(m, "max_iter" => maxiter, "print_level" => verbosity)
 				if r == 1 && !random
 					for i = 1:np
 						pi[i] = pinit[i]
@@ -196,10 +198,10 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 				# @show pi
 				@JuMP.variable(m, p[i = 1:np], start = pi[i])
 				@JuMP.variable(m, o[1:no])
-				@JuMP.constraint(m, p[i = 1:np] .>= pmin[i = 1:np])
-				@JuMP.constraint(m, p[i = 1:np] .<= pmax[i = 1:np])
-				@JuMP.constraint(m, o[i = 1:no] .>= time[i = 1:no] - h)
-				@JuMP.constraint(m, o[i = 1:no] .<= time[i = 1:no] + h)
+				@JuMP.constraint(m, p[1:np] .>= pmin[1:np])
+				@JuMP.constraint(m, p[1:np] .<= pmax[1:np])
+				@JuMP.constraint(m, o[1:no] .>= time[1:no] .- h)
+				@JuMP.constraint(m, o[1:no] .<= time[1:no] .+ h)
 				if model == 1
 					@JuMP.NLobjective(m, Symbol(mm), p[1] * ti[5] + p[2])
 					@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
