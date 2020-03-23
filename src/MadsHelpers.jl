@@ -9,6 +9,13 @@ function minimumnan(X, c...; kw...)
 	minimum(X[.!isnan.(X)], c...; kw...)
 end
 
+function rmsenan(t::Vector, o::Vector)
+	it = .!isnan.(t)
+	ot = .!isnan.(o)
+	ii = it .& ot
+	return sqrt( sum( (t[ii] .- o[ii]) .^ 2.) ./ sum(ii) )
+end
+
 function sumnan(X; dims=nothing, kw...)
 	if dims == nothing
 		return sum(X[.!isnan.(X)]; kw...)
