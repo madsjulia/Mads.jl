@@ -36,7 +36,7 @@ foo(0.1+0.5im)
 
 foo(x, y) = foo(x + y*im)
 
-foo_grid(n) = broadcast(foo, linspace(-0.5, 1, n)', linspace(-1, 0.5, n))
+foo_grid(n) = broadcast(foo, permutedims(collect(range(-0.5; stop=1, length=n))), collect(range(-1; stop=0.5, length=n)))
 
 # Can you see the pattern?
 

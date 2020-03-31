@@ -23,7 +23,7 @@ PyPlot.clf()
 PyPlot.close()
 
 PyPlot.figure()
-x = linspace(0, 25, 100)
+x = collect(range(0; stop=25, length=100))
 PyPlot.plot(x, sin.(x))
 PyPlot.plot(x, cos(x))
 PyPlot.plot(x, sqrt(x))

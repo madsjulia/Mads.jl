@@ -83,7 +83,7 @@ zeros(5) # vector of Float64 zeros
 ones(Int64, 2, 1) # 2x1 array of Int64 ones
 trues(3), falses(3) # tuple of vector of trues and of falses
 eye(3) # 3x3 Float64 identity matrix
-linspace(1, 2, 5) # 5 element equally spaced vector
+range(1; stop=2, length=5) # 5 element equally spaced vector
 1:10 # iterable from 1 to 10
 1:2:10 # iterable from 1 to 9 with 2 skip
 reshape(1:12, 3, 4) # 3x4 array filled with 1:12 values
@@ -119,7 +119,7 @@ sum(a, 3) # calculate sums for 3rd dimensions, similarly: mean, std,
 count(x -> x > 0, a) # count number of times a predicate is true, similar: all, any
 
 # Array access:
-a = linspace(0, 1) # Float64 vector of length 100
+a = collect(range(0; stop=1, length=100))# Float64 vector of length 100
 a[1] # get scalar 0.0
 a[end] # get scalar 1.0 (last position)
 a[1:2:end] # every second element from range
@@ -487,7 +487,7 @@ writetable("filename", df) # write to disk; see documentation for options for re
 # There are several plotting packages for Julia: Winston, Gadfly and PyPlot. Here we show how to use on PyPlot as it is natural for Python users:
 
 using PyPlot # load PyPlot, example taken from Matplotlib documentation
-x = linspace(0, 1)
+x = collect(range(0; stop=1, length=100))
 y = sin.(4 * pi * x) .* exp(-5 * x)
 fill(x, y) # you can access any matplotlib.pyplot function
 grid(true)
@@ -496,7 +496,7 @@ Random.seed!(1)
 x = randn(1000)
 # hist conflicts with Julia hist so prepend plt.
 n, bins, patches = plt.hist(x, 20, normed = 1, facecolor="y")
-points = linspace(bins[1], bins[end])
+points = collect(range(bins[1]; stop=bins[end], length=100))
 plot(points, pdf(Normal(), points), "r") # add normal density plot
 
 # Macros
