@@ -87,7 +87,7 @@ PyPlot.plot(S, label = "sv's of B", color="magenta", linestyle="dashed", marker=
 PyPlot.legend()
 
 PyPlot.figure()
-x = linspace(0, 25, 100)
+x = collect(range(0; stop=25, length=100))
 PyPlot.plot(x, sin.(x))
 PyPlot.plot(y, cos(x))
 PyPlot.legend(["sin","cos"],loc="lower left")
