@@ -37,8 +37,8 @@ foo(x, y) = foo(x + y*im)
 # this function uses the global function foo
 function foo_grid(n)
 	zcos = Array{Float64}(undef, n, n)
-	x = collect(linspace(-0.5, 1, n))
-	y = collect(linspace(-0.5, 1, n))
+	x = collect(range(-0.5; stop=1, length=n))
+	y = collect(range(-0.5; stop=1, length=n))
 	for i in 1:n
 			for j in 1:n
 					zcos[j, i] = foo(x[i], y[j])
@@ -48,7 +48,7 @@ function foo_grid(n)
 end
 
 # alternative way to define foo_grid
-foo_grid(n) = broadcast(foo, linspace(-0.5, 1, n)', linspace(-1, 0.5, n))
+foo_grid(n) = broadcast(foo, permutedims(collect(range(-0.5; stop=1, length=n))), collect(range(-1; stop=0.5, length=n)))
 
 foo_grid(500)
 
