@@ -88,20 +88,20 @@ function forward(madsdata::AbstractDict, paramarray::Array; all::Bool=false, che
 		restartdir = getrestartdir(madsdata)
 		if checkpointfrequency != 0 && restartdir != ""
 			if s[2] == np
-				rv = RobustPmap.crDistributed.pmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
+				rv = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			else
-				rv = RobustPmap.crDistributed.pmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
+				rv = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			end
 			r = hcat(collect(rv)...)
 		else
 			rv = Array{Array{Float64}}(undef, nr)
 			if s[2] == np
-				# r = RobustPmap.rDistributed.pmap(i->f(vec(paramarray[i, :])), 1:nr)
+				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
 				for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[i, :]))))
 				end
 			else
-				# r = RobustPmap.rDistributed.pmap(i->f(vec(paramarray[:, i])), 1:nr)
+				# r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
 				for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[:, i]))))
 				end

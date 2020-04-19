@@ -238,7 +238,7 @@ Disable MADS plotting
 $(DocumentFunction.documentfunction(noplot))
 """
 function noplot()
-	if myid() == 1
+	if Distributed.myid() == 1
 		for i in Distributed.workers()
 			@Distributed.spawnat i ENV["MADS_NO_PLOT"]=""
 			@Distributed.spawnat i ENV["MADS_NO_PYPLOT"]=""
@@ -253,7 +253,7 @@ function setdir(dir)
 	end
 end
 function setdir()
-	dir = remotecall_fetch(()->pwd(), 1)
+	dir = Distributed.remotecall_fetch(()->pwd(), 1)
 	setdir(dir)
 end
 

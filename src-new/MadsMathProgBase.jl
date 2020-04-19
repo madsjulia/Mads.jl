@@ -154,7 +154,7 @@ function makempbfunctions(madsdata::AbstractDict)
 		if !center_computed
 			push!(p, arrayparameters)
 		end
-		fevals = RobustPmap.rDistributed.pmap(f_mpb, p)
+		fevals = RobustPmap.rpmap(f_mpb, p)
 		if !center_computed
 			if restartdir != ""
 				ReusableFunctions.saveresultfile(restartdir, fevals[nP+1], arrayparameters)
