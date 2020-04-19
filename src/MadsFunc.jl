@@ -3,7 +3,7 @@ import OrderedCollections
 import Distributions
 import DocumentFunction
 import Sockets
-using Distributed
+import Distributed
 
 """
 Make MADS function to execute the model defined in the input MADS problem dictionary
@@ -58,7 +58,7 @@ Returns:
 - Mads function to execute a forward model simulation
 """
 function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
-	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing pmaps -- they aren't used here are they can require a lot of communication
+	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing Distributed.pmaps -- they aren't used here are they can require a lot of communication
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)
@@ -145,7 +145,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 							cd(currentdir)
 							if Distributed.nprocs() > 1 && myid() != 1
 								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
-								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								madswarn("Process $(myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, myid())
 								return nothing
 							else
 								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
@@ -181,7 +181,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 								if Distributed.nprocs() > 1 && myid() != 1
 									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 									madswarn("Process $(myid()) will be removed!")
-									remotecall(rmprocs, 1, myid())
+									remotecall(Distributed.rmprocs(), 1, myid())
 									return nothing
 								else
 									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
@@ -208,7 +208,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 							printerrormsg(errmsg)
 							if Distributed.nprocs() > 1 && myid() != 1
 								madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
-								madswarn("Process $(myid()) will be removed!"); remotecall(rmprocs, 1, myid())
+								madswarn("Process $(myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, myid())
 								return nothing
 							else
 								madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
@@ -375,7 +375,7 @@ function importeverywhere(filename::String)
 	code = read(filename, String)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	extracode = quiet ? "" : "else Mads.madswarn(\"$functionname already defined\")"
-	fullcode = "using Distributed; @everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
+	fullcode = "import Distributed; @Distributed.everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
 	q = Meta.parse(fullcode)
 	Core.eval(Main, q)
 	functionsymbol = Symbol(functionname)
@@ -488,9 +488,9 @@ function makemadsloglikelihood(madsdata::AbstractDict; weightfactor::Number=1.)
 end
 
 function getrestarts()
-	if nworkers() > 1
+	if Distributed.nworkers() > 1
 		r = ReusableFunctions.restarts
-		for w in workers()
+		for w in Distributed.workers()
 			r += remotecall_fetch(()->ReusableFunctions.restarts, w)
 		end
 		return r
@@ -500,9 +500,9 @@ function getrestarts()
 end
 
 function getcomputes()
-	if nworkers() > 1
+	if Distributed.nworkers() > 1
 		r = ReusableFunctions.computes
-		for w in workers()
+		for w in Distributed.workers()
 			r += remotecall_fetch(()->ReusableFunctions.computes, w)
 		end
 		return r

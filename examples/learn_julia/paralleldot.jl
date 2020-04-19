@@ -1,5 +1,5 @@
 import Printf
-using Distributed
+import Distributed
 
 n = 1000; p = 2500
 
@@ -18,7 +18,7 @@ Z = convert(SharedArray, z)
 
 Xt = X'
 
-@everywhere function dotcol(a, B, j)
+@Distributed.everywhere function dotcol(a, B, j)
 	length(a) == size(B,1) || throw(DimensionMismatch("a and B must have the same number of rows"))
 	s = 0.0
 	@inbounds @simd for i = 1:length(a)
@@ -35,7 +35,7 @@ function run1!(Z, Y, Xt)
 end
 
 function runp!(Z, Y, Xt)
-	@sync @distributed for j = 1:size(Xt, 2)
+	@sync @Distributed.distributed for j = 1:size(Xt, 2)
 		Z[j] = dotcol(Y, Xt, j)
 	end
 	Z

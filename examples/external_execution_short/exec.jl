@@ -1,31 +1,31 @@
-using Distributed
+import Distributed
 
 @info("Load Mads.setprocs ...")
 include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
 
 @info("Set SLURM processors ...")
-addprocs()
+Distributed.addprocs()
 # setprocs(ntasks_per_node=2)
 
-@info("Number of processors = $(length(workers()))")
+@info("Number of processors = $(length(Distributed.workers()))")
 
 @info("Import mads ...")
 import Mads
 Mads.quietoff()
 
 @info("Set the correct working directory on all the processors ...")
-@everywhere Mads.setdir()
-@everywhere @show pwd()
+@Distributed.everywhere Mads.setdir()
+@Distributed.everywhere @show pwd()
 
 Mads.madsinfo("Load Mads problem ...")
-@everywhere md = Mads.loadmadsfile("exec.mads")
+@Distributed.everywhere md = Mads.loadmadsfile("exec.mads")
 
 Mads.madsinfo("eFast sensitivity analysis ...")
 efast_results = Mads.efast(md, N=30, seed=2015)
 FileIO.save("efast_results.jld2", "efast_results", efast_results)
 
 Mads.madsinfo("Saltelli sensitivity analysis ...")
-saltelli_results = Mads.saltelliparallel(md, length(workers()), N=50, seed=2016)
+saltelli_results = Mads.saltelliparallel(md, length(Distributed.workers()), N=50, seed=2016)
 FileIO.save("saltelli_results.jld2", "saltelli_results", saltelli_results)
 
 if !haskey(ENV, "MADS_NO_PLOT")

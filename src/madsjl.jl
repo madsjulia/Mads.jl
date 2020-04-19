@@ -1,4 +1,4 @@
-using Distributed
+import Distributed
 
 #!/usr/bin/env julia -q --color=yes
 
@@ -43,15 +43,15 @@ elseif isfile(string(madscommand, ".jl"))
 	quit()
 end
 
-@everywhere import Mads
-@everywhere import JLD2
+@Distributed.everywhere import Mads
+@Distributed.everywhere import JLD2
 
 madsfile = ARGS[1]
 if isfile(madsfile)
 	@info("Reading $madsfile ...")
-	@everywhere md = Mads.loadmadsfile(madsfile)
-	@everywhere dir = Mads.getmadsproblemdir(md)
-	@everywhere root = Mads.getmadsrootname(md)
+	@Distributed.everywhere md = Mads.loadmadsfile(madsfile)
+	@Distributed.everywhere dir = Mads.getmadsproblemdir(md)
+	@Distributed.everywhere root = Mads.getmadsrootname(md)
 elseif ARGS[1] == "help"
 	madsjl_help()
 	quit()

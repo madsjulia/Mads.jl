@@ -2,7 +2,7 @@ import Mads
 import JLD2
 import FileIO
 import Test
-using Distributed
+import Distributed
 
 Mads.veryquieton()
 Mads.graphoff()

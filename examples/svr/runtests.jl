@@ -5,7 +5,7 @@ import JLD2
 import Random
 import DataStructures
 import OrderedCollections
-using Distributed
+import Distributed
 
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO

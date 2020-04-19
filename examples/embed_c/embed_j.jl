@@ -1,13 +1,13 @@
-using Distributed
+import Distributed
 
-@everywhere fjmxv(M, x) = M' .* x
+@Distributed.everywhere fjmxv(M, x) = M' .* x
 
-@everywhere nP = 100
-@everywhere nO = 10000
+@Distributed.everywhere nP = 100
+@Distributed.everywhere nO = 10000
 
-@everywhere x = rand(nP)
-@everywhere M = ones(nO, nP)
-@everywhere M[:,end] = 100000
+@Distributed.everywhere x = rand(nP)
+@Distributed.everywhere M = ones(nO, nP)
+@Distributed.everywhere M[:,end] = 100000
 
 println("Julia ...")
 @time fjmxv(M, x);

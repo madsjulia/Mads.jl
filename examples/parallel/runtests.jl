@@ -1,12 +1,12 @@
 import Mads
 import Test
 import Random
-using Distributed
+import Distributed
 
 @Mads.stderrcapture function parallel_findpi(n)
 	# Simple Monte Carlo to estimate pi
 	Random.seed!(2017)
-	inside = @distributed (+) for i = 1:n
+	inside = @Distributed.distributed (+) for i = 1:n
 		x, y = rand(2)
 		x^2 + y^2 <= 1 ? 1 : 0
 	end
@@ -61,5 +61,5 @@ end
 :passed
 
 # if !haskey(ENV, "MADS_TRAVIS")
-# 	rmprocs(workers())
+# 	Distributed.rmprocs()(Distributed.workers())
 # end

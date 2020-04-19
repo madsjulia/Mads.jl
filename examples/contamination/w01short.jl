@@ -2,7 +2,7 @@ import Mads
 import JSON
 import OrderedCollections
 import ProgressMeter
-using Distributed
+import Distributed
 
 # load MADS problem
 madsdirname = Mads.getmadsdir()

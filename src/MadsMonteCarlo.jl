@@ -98,9 +98,9 @@ if isdefined(Mads, :Klara)
 	end
 	function bayessampling(madsdata::AbstractDict, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
 		if seed != 0
-			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
+			mcmcchains = RobustPmap.rDistributed.pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
 		else
-			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
+			mcmcchains = RobustPmap.rDistributed.pmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
 		end
 		return mcmcchains
 	end
@@ -217,7 +217,7 @@ function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::String="")
 		paramdicts[i] = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, params))
 	end
 	f = makemadscommandfunction(madsdata)
-	results = RobustPmap.rpmap(f, paramdicts)
+	results = RobustPmap.rDistributed.pmap(f, paramdicts)
 	outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 	for i = 1:N
 		outputdicts[i] = OrderedCollections.OrderedDict()

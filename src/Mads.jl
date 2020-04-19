@@ -13,7 +13,7 @@ module Mads
 import Pkg
 import OrderedCollections
 import Printf
-using Distributed
+import Distributed
 using DelimitedFiles
 using LinearAlgebra
 using Statistics
