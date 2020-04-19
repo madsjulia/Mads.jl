@@ -27,7 +27,7 @@ function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalke
 	@assert length(size(x0)) == 2
 	x = copy(x0)
 	chain = Array{Float64}(undef, size(x0, 1), numwalkers, div(numsamples_perwalker, thinning))
-	lastllhoodvals = RobustPmap.rDistributed.pmap(llhood, map(i->x[:, i], 1:size(x, 2)))
+	lastllhoodvals = RobustPmap.rpmap(llhood, map(i->x[:, i], 1:size(x, 2)))
 	llhoodvals = Array{Float64}(undef, numwalkers, div(numsamples_perwalker, thinning))
 	llhoodvals[:, 1] = lastllhoodvals
 	chain[:, :, 1] = x0
@@ -39,7 +39,7 @@ function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalke
 			active, inactive = ensembles
 			zs = map(u->((a - 1) * u + 1)^2 / a, rand(length(active)))
 			proposals = map(i->zs[i] * x[:, active[i]] + (1 - zs[i]) * x[:, rand(inactive)], 1:length(active))
-			newllhoods = RobustPmap.rDistributed.pmap(llhood, proposals)
+			newllhoods = RobustPmap.rpmap(llhood, proposals)
 			for (j, walkernum) in enumerate(active)
 				z = zs[j]
 				newllhood = newllhoods[j]
