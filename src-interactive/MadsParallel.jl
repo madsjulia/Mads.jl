@@ -36,7 +36,7 @@ function setprocs(np::Integer, nt::Integer)
 	if n > 0
 		Distributed.addprocs(n)
 	elseif n < 0
-		Distributed.rmprocs()(Distributed.workers()[end+n+1:end])
+		Distributed.rmprocs(Distributed.workers()[end+n+1:end])
 	end
 	BLAS.set_num_threads(nt)
 	sleep(0.1)
