@@ -189,7 +189,7 @@ function makelmfunctions(madsdata::AbstractDict)
 		end
 		local fevals
 		try
-			fevals = RobustPmap.rpmap(f_lm, p)
+			fevals = RobustPmap.rDistributed.pmap(f_lm, p)
 		catch errmsg
 			@show Base.stacktrace()
 			printerrormsg(errmsg)
@@ -268,9 +268,9 @@ function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Fl
 	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
-	deltaxs = RobustPmap.rpmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
-	fs = RobustPmap.rpmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
-	sses = RobustPmap.rpmap(o, fs) # get the sum of squared residuals for each forward run
+	deltaxs = RobustPmap.rDistributed.pmap(lambda->naive_get_deltax(JpJ, Jp, f0, lambda), lambdas) # get the deltax for each lambda
+	fs = RobustPmap.rDistributed.pmap(deltax->f(x0 + deltax), deltaxs) # get the residuals for each deltax
+	sses = RobustPmap.rDistributed.pmap(o, fs) # get the sum of squared residuals for each forward run
 	bestindex = argmin(sses) # find the best forward run
 	return x0 + deltaxs[bestindex], sses[bestindex], fs[bestindex]
 end
@@ -492,7 +492,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		local phisanddelta_xs
 		try
-			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+			phisanddelta_xs = RobustPmap.rDistributed.pmap(getphianddelta_x, collect(1:np_lambda))
 		catch errmsg
 			@show Base.stacktrace()
 			printerrormsg(errmsg)
@@ -514,7 +514,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		local trial_fs
 		try
-			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+			trial_fs = RobustPmap.rDistributed.pmap(f, map(dx->x + dx, delta_xs))
 		catch errmsg
 			@show Base.stacktrace()
 			printerrormsg(errmsg)

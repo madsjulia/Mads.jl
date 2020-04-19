@@ -1,4 +1,4 @@
-using Distributed
+import Distributed
 
 @info("start")
 include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
@@ -7,12 +7,12 @@ Distributed.addprocs()
 
 import Mads
 Mads.setprocs()
-@everywhere import Mads
+@Distributed.everywhere import Mads
 
-@everywhere nt = 2
-@everywhere np = nprocs()
+@Distributed.everywhere nt = 2
+@Distributed.everywhere np = Distributed.nprocs()
 
-@everywhere function fp(i::Integer, j::Integer)
+@Distributed.everywhere function fp(i::Integer, j::Integer)
 	sleep(j)
 	println("fp $i $j done")
 	return i * j

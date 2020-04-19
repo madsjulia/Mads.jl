@@ -3,12 +3,12 @@ import JSON
 import OrderedCollections
 import Test
 
-using Distributed
+import Distributed
 
 cwd = pwd()
 workdir = Mads.getmadsdir()
 if workdir == "."
-	@everywhere workdir = joinpath(Mads.madsdir, "examples", "sensitivity")
+	@Distributed.everywhere workdir = joinpath(Mads.madsdir, "examples", "sensitivity")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))

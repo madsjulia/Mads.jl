@@ -1,12 +1,12 @@
 import Mads
-using Distributed
+import Distributed
 
-@everywhere workdir = Mads.getmadsdir()
+@Distributed.everywhere workdir = Mads.getmadsdir()
 if workdir == "."
-	@everywhere workdir = joinpath(Mads.madsdir, "examples", "wells")
+	@Distributed.everywhere workdir = joinpath(Mads.madsdir, "examples", "wells")
 end
-@everywhere cdir = pwd()
-@everywhere cd(workdir)
+@Distributed.everywhere cdir = pwd()
+@Distributed.everywhere cd(workdir)
 
 @info("Levenberg-Marquardt optimization of an external call problem using the code WELLS ...")
 
@@ -20,4 +20,4 @@ display(params)
 params, results = Mads.calibrate(md)
 display(params)
 
-@everywhere cd(cdir)
+@Distributed.everywhere cd(cdir)

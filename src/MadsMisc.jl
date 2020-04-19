@@ -1,7 +1,7 @@
 import MetaProgTools
 import OrderedCollections
 import DocumentFunction
-using Printf
+import Printf
 
 #=
 function makearrayfunction_vector(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))

@@ -6,7 +6,7 @@ X = rand(n, n)
 h = rand(n)
 # @assert isposdef(A)
 @Printf.printf( "Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
-@Printf.printf( "Number of processors %d\n", nworkers())
+@Printf.printf( "Number of processors %d\n", Distributed.nworkers())
 blas_set_num_threads(4)
 @time A = X * X';
 @time x = A \ h;

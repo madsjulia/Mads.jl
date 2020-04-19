@@ -1,4 +1,4 @@
-using Distributed
+import Distributed
 using LinearAlgebra
 import Printf
 import DocumentFunction
@@ -26,17 +26,17 @@ Get the number of processors
 $(DocumentFunction.documentfunction(getprocs))
 """
 function getprocs()
-	@info("Number of processors: $(nworkers()) $(workers())\n")
+	@info("Number of processors: $(Distributed.nworkers()) $(Distributed.workers())\n")
 end
 
 function setprocs(np::Integer, nt::Integer)
 	np = np < 1 ? 1 : np
 	nt = nt < 1 ? 1 : nt
-	n = np - nworkers()
+	n = np - Distributed.nworkers()
 	if n > 0
 		Distributed.addprocs(n)
 	elseif n < 0
-		Distributed.rmprocs(workers()[end+n+1:end])
+		Distributed.rmprocs()(Distributed.workers()[end+n+1:end])
 	end
 	BLAS.set_num_threads(nt)
 	sleep(0.1)
@@ -90,8 +90,8 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		!veryquiet && @warn("Unknown parallel environment!")
 	end
 	if length(h) > 0
-		if nworkers() > 1
-			Distributed.rmprocs(workers())
+		if Distributed.nworkers() > 1
+			Distributed.rmprocs()(Distributed.workers())
 		end
 		sleep(0.1)
 		arguments = Dict()
@@ -150,11 +150,11 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		end
 		sleep(0.1)
 		if Distributed.nprocs() > 1
-			@info("Number of processors: $(nworkers())")
+			@info("Number of processors: $(Distributed.nworkers())")
 			@info("Workers: $(join(h, " "))")
 		else
 			@warn("No workers found to add!")
-			@info("Number of processors: $(nworkers())")
+			@info("Number of processors: $(Distributed.nworkers())")
 		end
 	else
 		!veryquiet && @warn("No processors found to add!")
@@ -239,10 +239,10 @@ $(DocumentFunction.documentfunction(noplot))
 """
 function noplot()
 	if myid() == 1
-		for i in workers()
-			@spawnat i ENV["MADS_NO_PLOT"]=""
-			@spawnat i ENV["MADS_NO_PYPLOT"]=""
-			@spawnat i ENV["MADS_NO_GADFLY"]=""
+		for i in Distributed.workers()
+			@Distributed.spawnat i ENV["MADS_NO_PLOT"]=""
+			@Distributed.spawnat i ENV["MADS_NO_PYPLOT"]=""
+			@Distributed.spawnat i ENV["MADS_NO_GADFLY"]=""
 		end
 	end
 end
@@ -266,8 +266,8 @@ argtext=Dict("dir"=>"directory")))
 Example:
 
 ```julia
-@everywhere Mads.setdir()
-@everywhere Mads.setdir("/home/monty")
+@Distributed.everywhere Mads.setdir()
+@Distributed.everywhere Mads.setdir("/home/monty")
 ```
 """ setdir
 
