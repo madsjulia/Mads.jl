@@ -143,9 +143,9 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 						attempt +=1; sleep(1 * attempt)
 						if attempt > 3
 							cd(currentdir)
-							if Distributed.nprocs() > 1 && myid() != 1
+							if Distributed.nprocs() > 1 && Distributed.myid() != 1
 								madswarn("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
-								madswarn("Process $(myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, myid())
+								madswarn("Process $(Distributed.myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, Distributed.myid())
 								return nothing
 							else
 								madscritical("Mads cannot create directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
@@ -178,10 +178,10 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 								@show Base.stacktrace()
 								cd(currentdir)
 								printerrormsg(errmsg)
-								if Distributed.nprocs() > 1 && myid() != 1
+								if Distributed.nprocs() > 1 && Distributed.myid() != 1
 									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
-									madswarn("Process $(myid()) will be removed!")
-									remotecall(Distributed.rmprocs(), 1, myid())
+									madswarn("Process $(Distributed.myid()) will be removed!")
+									remotecall(Distributed.rmprocs(), 1, Distributed.myid())
 									return nothing
 								else
 									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
@@ -206,9 +206,9 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 							@show Base.stacktrace()
 							cd(currentdir)
 							printerrormsg(errmsg)
-							if Distributed.nprocs() > 1 && myid() != 1
+							if Distributed.nprocs() > 1 && Distributed.myid() != 1
 								madswarn("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")
-								madswarn("Process $(myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, myid())
+								madswarn("Process $(Distributed.myid()) will be removed!"); remotecall(Distributed.rmprocs(), 1, Distributed.myid())
 								return nothing
 							else
 								madscritical("Command '$(madsdata["Command"])' cannot be executed or failed in directory $(tempdirname)!")

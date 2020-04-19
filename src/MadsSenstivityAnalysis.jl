@@ -71,7 +71,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 		end
 		local fevals
 		try
-			fevals = RobustPmap.rDistributed.pmap(f_sa, p)
+			fevals = RobustPmap.rpmap(f_sa, p)
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madswarn("RobustPmap executions for localsa fails!")
@@ -598,7 +598,7 @@ function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::Strin
 	if restartdir == ""
 		return false
 	end
-	filename = joinpath(restartdir, string(matname, "_", myid(), ".jld"))
+	filename = joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld"))
 	if !isfile(filename)
 		return false
 	end
@@ -618,7 +618,7 @@ argtext=Dict("evalmat"=>"saved array",
 function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
-		FileIO.save(joinpath(restartdir, string(matname, "_", myid(), ".jld2")), "mat", evalmat)
+		FileIO.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
 	end
 	return nothing
 end
@@ -687,19 +687,19 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rest
 			Avecs[i] = vec(A[i, :])
 		end
 		if flagrestart
-			Distributed.pmapresult = RobustPmap.crDistributed.pmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
 		else
-			Distributed.pmapresult = RobustPmap.rDistributed.pmap(farray, Avecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.rpmap(farray, Avecs; t=Array{Float64, 1})
 		end
 		for i = 1:N
 			for j = 1:length(obskeys)
-				yA[i, j] = Distributed.pmapresult[i][j]
+				yA[i, j] = pmapresult[i][j]
 			end
 		end
 	else
 		if !loadsaltellirestart!(yA, "yA", restartdir)
 			for i = 1:N
-				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String,Float64}(zip(paramoptkeys, A[i, :]))))
+				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramoptkeys, A[i, :]))))
 				for j = 1:length(obskeys)
 					yA[i, j] = feval[obskeys[j]]
 				end
@@ -715,13 +715,13 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rest
 			Bvecs[i] = vec(B[i, :])
 		end
 		if flagrestart
-			Distributed.pmapresult = RobustPmap.crDistributed.pmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
 		else
-			Distributed.pmapresult = RobustPmap.rDistributed.pmap(farray, Bvecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.rpmap(farray, Bvecs; t=Array{Float64, 1})
 		end
 		for i = 1:N
 			for j = 1:length(obskeys)
-				yB[i, j] = Distributed.pmapresult[i][j]
+				yB[i, j] = pmapresult[i][j]
 			end
 		end
 	else
@@ -753,13 +753,13 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rest
 				Cvecs[j] = vec(C[j, :])
 			end
 			if flagrestart
-				Distributed.pmapresult = RobustPmap.crDistributed.pmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
+				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
 			else
-				Distributed.pmapresult = RobustPmap.rDistributed.pmap(farray, Cvecs; t=Array{Float64, 1})
+				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Array{Float64, 1})
 			end
 			for j = 1:N
 				for k = 1:length(obskeys)
-					yC[j, k] = Distributed.pmapresult[j][k]
+					yC[j, k] = pmapresult[j][k]
 				end
 			end
 		else
@@ -879,7 +879,7 @@ for mi = 1:length(saltelli_functions)
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = RobustPmap.rDistributed.pmap(i->$(Symbol(saltelli_functions[index]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
+			results = RobustPmap.rpmap(i->$(Symbol(saltelli_functions[index]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
@@ -1334,9 +1334,9 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			Mads.madsoutput("Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n")
 			Mads.madsoutput("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n")
 			if restart
-				Y = hcat(RobustPmap.crDistributed.pmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
+				Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
 			else
-				Y = hcat(RobustPmap.rDistributed.pmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
 			end
 		#end #End if (processors)
 
@@ -1549,10 +1549,10 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
-		sendto(Distributed.workers(), constCell = constCell)
+		Distributed.sendto(Distributed.workers(), constCell = constCell)
 	elseif P > 1
 		# If there are less workers than resamplings * parameters, we send to all workers available
-		sendto(Distributed.workers(), constCell = constCell)
+		Distributed.sendto(Distributed.workers(), constCell = constCell)
 	end
 
 	### Calculating decomposed variances in parallel ###
