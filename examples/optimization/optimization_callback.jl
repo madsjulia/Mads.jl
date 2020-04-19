@@ -1,7 +1,7 @@
 import Mads
 import Test
 
-using Distributed
+import Distributed
 
 callbacksucceeded = false
 @Mads.stderrcapture function callback(x_best::Vector, of::Number, lambda::Number)

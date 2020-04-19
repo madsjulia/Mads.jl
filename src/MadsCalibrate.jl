@@ -1,5 +1,6 @@
 import OrderedCollections
 import DocumentFunction
+import Distributed
 using SharedArrays
 using Statistics
 
@@ -112,7 +113,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allphi = SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
-	@sync @distributed for i in 1:numberofsamples
+	@sync @Distributed.distributed for i in 1:numberofsamples
 		for paramkey in keys(paramoptvalues)
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end

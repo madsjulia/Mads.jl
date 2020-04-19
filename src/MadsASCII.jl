@@ -1,5 +1,5 @@
 import DocumentFunction
-using Distributed
+import Distributed
 
 """
 Load ASCII file

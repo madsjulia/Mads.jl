@@ -4,7 +4,7 @@ import Test
 Mads.veryquieton()
 Mads.graphoff()
 
-using Distributed
+import Distributed
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
