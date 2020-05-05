@@ -1,7 +1,6 @@
 import GeoStats
 import PyPlot
 import Gadfly
-import QuantEcon
 
 PyPlot.svg(true)
 
@@ -30,7 +29,7 @@ Gadfly.plot(Gadfly.layer(z=k, x=x, y=y, Gadfly.Geom.contour(levels=collect(range
 fig = PyPlot.figure(figsize=(8, 6))
 ax = fig.gca(projection="3d")
 ax.set_zlim(minimum(k), maximum(k))
-xgrid, ygrid = QuantEcon.meshgrid(x, y)
+xgrid, ygrid = Mads.meshgrid(x, y)
 ax.plot_surface(xgrid, ygrid, k, rstride=2, cstride=2, cmap=PyPlot.ColorMap("jet"), alpha=0.7, linewidth=0.25)
 PyPlot.gcf()
 
