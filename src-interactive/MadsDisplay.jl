@@ -61,16 +61,36 @@ function display(filename::String)
 end
 
 if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
-	function display(p::Gadfly.Plot)
+	function display(p::Gadfly.Plot; gw=nothing, gh=nothing)
 		if graphoutput
+			if gw != nothing && gh != nothing
+				gwo = Compose.default_graphic_width
+				gho = Compose.default_graphic_height
+				r = gw / gh
+				(rw, rh) = (r > 1) ? (r, 1) : (1,  r)
+				Compose.set_default_graphic_size(gwo * rw, gho * rh)
+			end
 			Gadfly.draw(Gadfly.PNG(), p)
 			print("\r")
+			if gw != nothing && gh != nothing
+				Compose.set_default_graphic_size(gwo, gho)
+			end
 		end
 	end
-	function display(p::Compose.Context)
+	function display(p::Compose.Context; gw=nothing, gh=nothing)
 		if graphoutput
+			if gw != nothing && gh != nothing
+				gwo = Compose.default_graphic_width
+				gho = Compose.default_graphic_height
+				r = gw / gh
+				(rw, rh) = (r > 1) ? (r, 1) : (1,  r)
+				Compose.set_default_graphic_size(gwo * rw, gho * rh)
+			end
 			Compose.draw(Compose.PNG(), p)
 			print("\r")
+			if gw != nothing && gh != nothing
+				Compose.set_default_graphic_size(gwo, gho)
+			end
 		end
 	end
 else
