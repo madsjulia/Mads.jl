@@ -1266,7 +1266,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 			end
 		end
 		if typeof(pS) == Gadfly.Plot
-			!quiet && Mads.display(pS)
+			!quiet && Mads.display(pS; gw=hsize, gh=vsize)
 		end
 	catch errmsg
 		printerrormsg(errmsg)
