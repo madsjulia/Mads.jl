@@ -94,8 +94,11 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 		end
 	end
 else
-	function display(o)
-		Base.display(o)
+	function display(o; gw=nothing, gh=nothing)
+		if graphoutput
+			Base.display(o)
+			print("\r")
+		end
 	end
 end
 
