@@ -67,11 +67,19 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 				gwo = Compose.default_graphic_width
 				gho = Compose.default_graphic_height
 				r = gw / gh
-				(rw, rh) = (r > 1) ? (r, 1) : (1,  r)
+				(rw, rh) = (r > 1) ? (r, 1) : (1, r)
 				Compose.set_default_graphic_size(gwo * rw, gho * rh)
 			end
-			Gadfly.draw(Gadfly.PNG(), p)
-			print("\r")
+			try
+				Gadfly.draw(Gadfly.PNG(), p)
+				print("\r")
+			catch errmsg
+				if gw != nothing && gh != nothing
+					Compose.set_default_graphic_size(gwo, gho)
+				end
+				printerrormsg(errmsg)
+				@warn("Gadfly failed!")
+			end
 			if gw != nothing && gh != nothing
 				Compose.set_default_graphic_size(gwo, gho)
 			end
@@ -83,11 +91,19 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 				gwo = Compose.default_graphic_width
 				gho = Compose.default_graphic_height
 				r = gw / gh
-				(rw, rh) = (r > 1) ? (r, 1) : (1,  r)
+				(rw, rh) = (r > 1) ? (r, 1) : (1, r)
 				Compose.set_default_graphic_size(gwo * rw, gho * rh)
 			end
-			Compose.draw(Compose.PNG(), p)
-			print("\r")
+			try
+				Compose.draw(Compose.PNG(), p)
+				print("\r")
+			catch errmsg
+				if gw != nothing && gh != nothing
+					Compose.set_default_graphic_size(gwo, gho)
+				end
+				printerrormsg(errmsg)
+				@warn("Compose failed!")
+			end
 			if gw != nothing && gh != nothing
 				Compose.set_default_graphic_size(gwo, gho)
 			end
