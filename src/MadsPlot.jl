@@ -69,6 +69,19 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 	return filename, format
 end
 
+function plotfileformat(p, filename::String, hsize, vsize; dpi=imagedpi)
+	filename, format = setplotfileformat(filename)
+	if format == :SVG
+		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
+	elseif isdefined(Main, :Cairo)
+		if format == :PNG
+			Gadfly.draw(Gadfly.PNG(filename, hsize, vsize; dpi=dpi), p)
+		else
+			Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
+		end
+	end
+end
+
 """
 Plot contaminant sources and wells defined in MADS problem dictionary
 
