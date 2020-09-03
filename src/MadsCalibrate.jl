@@ -55,7 +55,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
+		!quiet && @info("Random initial guess #$i: OF = $phi (converged=$converged)")
 		if phi < bestphi
 			bestparameters = parameters
 			bestresult = results
@@ -121,7 +121,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		!quiet && info("Random initial guess #$i: OF = $phi (converged=$converged)")
+		!quiet && @info("Random initial guess #$i: OF = $phi (converged=$converged)")
 		allphi[i] = phi
 		allconverged[i] = converged
 		j = 1
