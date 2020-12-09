@@ -61,51 +61,67 @@ function display(filename::String)
 end
 
 if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
-	function display(p::Gadfly.Plot; gw=nothing, gh=nothing)
+	function display(p::Gadfly.Plot; gw=nothing, gh=nothing, gwo=nothing, gho=nothing)
 		if graphoutput
 			if gw != nothing && gh != nothing
-				gwo = Compose.default_graphic_width
-				gho = Compose.default_graphic_height
+				gwod = Compose.default_graphic_width
+				ghod = Compose.default_graphic_height
+				gwo = gwo == nothing ? gwod : gwo
+				gho = gho == nothing ? ghod : gho
 				r = gw / gh
-				(rw, rh) = (r > 1) ? (r, 1) : (1, r)
-				Compose.set_default_graphic_size(gwo * rw, gho * rh)
+				if r > 1
+					gwon = gho * r
+					ghon = gho
+				else
+					ghon = gwo
+					gwon = gwo * r
+				end
+				Compose.set_default_graphic_size(gwon, ghon)
 			end
 			try
 				Gadfly.draw(Gadfly.PNG(), p)
 				print("\r")
 			catch errmsg
 				if gw != nothing && gh != nothing
-					Compose.set_default_graphic_size(gwo, gho)
+					Compose.set_default_graphic_size(gwod, ghod)
 				end
 				printerrormsg(errmsg)
 				@warn("Gadfly failed!")
 			end
 			if gw != nothing && gh != nothing
-				Compose.set_default_graphic_size(gwo, gho)
+				Compose.set_default_graphic_size(gwod, ghod)
 			end
 		end
 	end
-	function display(p::Compose.Context; gw=nothing, gh=nothing)
+	function display(p::Compose.Context; gw=nothing, gh=nothing, gwo=nothing, gho=nothing)
 		if graphoutput
 			if gw != nothing && gh != nothing
-				gwo = Compose.default_graphic_width
-				gho = Compose.default_graphic_height
+				gwod = Compose.default_graphic_width
+				ghod = Compose.default_graphic_height
+				gwo = gwo == nothing ? gwod : gwo
+				gho = gho == nothing ? ghod : gho
 				r = gw / gh
-				(rw, rh) = (r > 1) ? (r, 1) : (1, r)
-				Compose.set_default_graphic_size(gwo * rw, gho * rh)
+				if r > 1
+					gwon = gho * r
+					ghon = gho
+				else
+					ghon = gwo
+					gwon = gwo * r
+				end
+				Compose.set_default_graphic_size(gwon, ghon)
 			end
 			try
 				Compose.draw(Compose.PNG(), p)
 				print("\r")
 			catch errmsg
 				if gw != nothing && gh != nothing
-					Compose.set_default_graphic_size(gwo, gho)
+					Compose.set_default_graphic_size(gwod, ghod)
 				end
 				printerrormsg(errmsg)
 				@warn("Compose failed!")
 			end
 			if gw != nothing && gh != nothing
-				Compose.set_default_graphic_size(gwo, gho)
+				Compose.set_default_graphic_size(gwod, ghod)
 			end
 		end
 	end

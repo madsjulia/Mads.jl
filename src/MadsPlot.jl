@@ -169,9 +169,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 		filename, format = setplotfileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), p)
 	end
-	if typeof(p) == Gadfly.Plot
-		!quiet && Mads.display(p)
-	end
+	!quiet && Mads.display(p; gw=hsize, gh=vsize)
 	return nothing
 end
 
@@ -296,7 +294,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					else
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize), p)
 					end
-					display && Mads.display(filename_w)
+					display && Mads.display(p; gw=hsize, gh=vsize)
 				else
 					push!(pp, p)
 				end
@@ -356,8 +354,8 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		else
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
 		end
-		if typeof(pl) == Gadfly.Plot
-			display && Mads.display(pl)
+		if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
+			display && Mads.display(pl; gw=hsize, gh=vsize)
 		else
 			display && Mads.display(filename)
 		end
@@ -545,9 +543,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	filename, format = setplotfileformat(filename, format)
 	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), p)
-	if typeof(p) == Gadfly.Plot
-		!quiet && Mads.display(p)
-	end
+	!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
 
@@ -727,10 +723,8 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	if !separate_files
 		filename, format = setplotfileformat(filename, format)
 		p = Gadfly.vstack(pp...)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize ), p)
-		if typeof(p) == Gadfly.Plot
-			!quiet && Mads.display(p)
-		end
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), p)
+		!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
@@ -864,9 +858,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 		filename, format = setplotfileformat(filename, format)
 		try
 			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), pl)
-			if typeof(pl) == Gadfly.Plot
-				!quiet && Mads.display(pl)
-			end
+			!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madswarn("Spaghettiplots: Gadfly fails!")
@@ -1071,9 +1063,7 @@ function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true
 		printerrormsg(errmsg)
 		Mads.madswarn("Spaghettiplot: Gadfly fails!")
 	end
-	if typeof(pl) == Gadfly.Plot
-		!quiet && Mads.display(pl)
-	end
+	!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
 
@@ -1278,9 +1268,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
 			end
 		end
-		if typeof(pS) == Gadfly.Plot
-			!quiet && Mads.display(pS; gw=hsize, gh=vsize)
-		end
+		!quiet && Mads.display(pS; gw=hsize, gh=vsize)
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
