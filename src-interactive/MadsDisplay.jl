@@ -93,7 +93,7 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 			end
 		end
 	end
-	function display(p::Compose.Context; gw=nothing, gh=nothing, gwo=nothing, gho=nothing)
+	function display(p::Compose.Context; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
 				gwod = Compose.default_graphic_width
