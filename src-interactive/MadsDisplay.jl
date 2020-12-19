@@ -4,7 +4,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 @Mads.tryimport Images
 
-function display(filename::String)
+function display(filename::AbstractString)
 	if !graphoutput
 		return
 	end
@@ -61,7 +61,7 @@ function display(filename::String)
 end
 
 if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
-	function display(p::Gadfly.Plot; gw=nothing, gh=nothing, gwo=nothing, gho=nothing)
+	function display(p::Gadfly.Plot; wo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
 				gwod = Compose.default_graphic_width
@@ -93,6 +93,9 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 			end
 		end
 	end
+end
+
+if isdefined(Mads, :Compose) && isdefined(Main, :Cairo)
 	function display(p::Compose.Context; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
@@ -125,12 +128,11 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 			end
 		end
 	end
-else
-	function display(o; gw=nothing, gh=nothing)
-		if graphoutput
-			Base.display(o)
-			print("\r")
-		end
+end
+function display(o; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
+	if graphoutput
+		Base.display(o)
+		print("\r")
 	end
 end
 
