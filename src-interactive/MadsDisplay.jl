@@ -61,7 +61,7 @@ function display(filename::AbstractString)
 end
 
 if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
-	function display(p::Gadfly.Plot; wo=nothing, gho=nothing, gw=gwo, gh=gho)
+	function display(p::Gadfly.Plot; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
 				gwod = Compose.default_graphic_width
