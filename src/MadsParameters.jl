@@ -109,7 +109,8 @@ for i = 1:length(getparamsnames)
 			paramvalue = Array{$(paramtype)}(undef, length(paramkeys))
 			for i in 1:length(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
-					paramvalue[i] = madsdata["Parameters"][paramkeys[i]][$paramname]
+					v = madsdata["Parameters"][paramkeys[i]][$paramname]
+					paramvalue[i] = ( v == nothing || v == "null"|| v == "false" || v == "fixed" || v == "none" ) ? "nothing" : v
 				else
 					if Mads.islog(madsdata, paramkeys[i])
 						paramvalue[i] = $(paramlogdefault)
@@ -473,7 +474,7 @@ keytext=Dict("filter"=>"parameter filter")))
 function setallparamsoff!(madsdata::AbstractDict; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for k in paramkeys
-		madsdata["Parameters"][k]["type"] = nothing
+		madsdata["Parameters"][k]["type"] = "nothing"
 	end
 end
 
@@ -496,7 +497,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
 function setparamoff!(madsdata::AbstractDict, parameterkey::String)
-	madsdata["Parameters"][parameterkey]["type"] = nothing
+	madsdata["Parameters"][parameterkey]["type"] = "nothing"
 end
 
 """
@@ -533,7 +534,7 @@ end
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
 funcname = ["optimized", "log-transformed"]
-keywordvalsNOT = [nothing, false]
+keywordvalsNOT = ["nothing", false]
 global index = 0
 for i = 1:length(getfunction)
 	global index = i
@@ -618,7 +619,7 @@ function showallparameters(madsdata::AbstractDict)
 		end
 		s *= @Printf.sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
 		if haskey(pardict[parkey], "type")
-			if pardict[parkey]["type"] != nothing
+			if pardict[parkey]["type"] != "nothing"
 				s *= "<- optimizable "
 			else
 				s *= "<- fixed "
