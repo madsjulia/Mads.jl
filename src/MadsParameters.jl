@@ -110,7 +110,9 @@ for i = 1:length(getparamsnames)
 			for i in 1:length(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
 					v = madsdata["Parameters"][paramkeys[i]][$paramname]
-					paramvalue[i] = ( v == nothing || v == "null"|| v == "false" || v == "fixed" || v == "none" ) ? "nothing" : v
+					v = ( v == "nothing" || v == "null"|| v == "false" || v == "fixed" || v == "none" ) ? nothing : v
+					paramvalue[i] = v
+					madsdata["Parameters"][paramkeys[i]][$paramname] = v
 				else
 					if Mads.islog(madsdata, paramkeys[i])
 						paramvalue[i] = $(paramlogdefault)
@@ -474,7 +476,7 @@ keytext=Dict("filter"=>"parameter filter")))
 function setallparamsoff!(madsdata::AbstractDict; filter::String="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for k in paramkeys
-		madsdata["Parameters"][k]["type"] = "nothing"
+		madsdata["Parameters"][k]["type"] = nothing
 	end
 end
 
@@ -497,7 +499,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
 function setparamoff!(madsdata::AbstractDict, parameterkey::String)
-	madsdata["Parameters"][parameterkey]["type"] = "nothing"
+	madsdata["Parameters"][parameterkey]["type"] = nothing
 end
 
 """
@@ -533,14 +535,14 @@ end
 # Make functions to get parameter keys for specific MADS parameters (optimized and log-transformed)
 getfunction = [getparamstype, getparamslog]
 keywordname = ["opt", "log"]
-funcname = ["optimized", "log-transformed"]
-keywordvalsNOT = ["nothing", false]
+keywordvalsNOT = [nothing, false]
+functiondescription = ["optimized", "log-transformed"]
 global index = 0
 for i = 1:length(getfunction)
 	global index = i
 	q = quote
 		"""
-		Get the keys in the MADS problem dictionary for parameters that are $(funcname[index]) (`$(keywordname[index])`)
+		Get the keys in the MADS problem dictionary for parameters that are $(functiondescription[index]) (`$(keywordname[index])`)
 		"""
 		function $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::Vector) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[index])(madsdata, paramkeys)
@@ -551,7 +553,7 @@ for i = 1:length(getfunction)
 			return $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata, paramkeys::Vector)
 		end
 		"""
-		Get the keys in the MADS problem dictionary for parameters that are NOT $(funcname[index]) (`$(keywordname[index])`)
+		Get the keys in the MADS problem dictionary for parameters that are NOT $(functiondescription[index]) (`$(keywordname[index])`)
 		"""
 		function $(Symbol(string("getnon", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::Vector) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[index])(madsdata, paramkeys)
@@ -598,7 +600,7 @@ function showparameters(madsdata::AbstractDict)
 		push!(p, s)
 	end
 	print(p...)
-	println("Number of parameters is $(length(p))")
+	println("Number of optimizable parameters: $(length(p))")
 end
 
 """
@@ -619,10 +621,11 @@ function showallparameters(madsdata::AbstractDict)
 		end
 		s *= @Printf.sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
 		if haskey(pardict[parkey], "type")
-			if pardict[parkey]["type"] != "nothing"
-				s *= "<- optimizable "
-			else
+			@show typeof(pardict[parkey]["type"])
+			if pardict[parkey]["type"] == nothing
 				s *= "<- fixed "
+			else
+				s *= "<- optimizable "
 			end
 		else
 			s *= "<- optimizable "
@@ -643,7 +646,11 @@ function showallparameters(madsdata::AbstractDict)
 		push!(p, s)
 	end
 	print(p...)
-	println("Number of parameters is $(length(p))")
+	println("Number of parameters: $(length(p))")
+end
+
+function showparameterestimates(md, p)
+	map(i->(i=>p[i]), Mads.getoptparamkeys(md))
 end
 
 """
