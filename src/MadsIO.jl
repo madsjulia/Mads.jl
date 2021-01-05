@@ -1193,7 +1193,7 @@ $(DocumentFunction.documentfunction(rmdir;
 argtext=Dict("dir"=>"directory to be removed"),
 keytext=Dict("path"=>"path of the directory [default=`current path`]")))
 """
-function rmdir(dir::String; path::String="")
+function rmdir(dir::String; path::String=".")
 	if path != "" && path != "."
 		dir = joinpath(path, dir)
 	end
@@ -1209,7 +1209,7 @@ $(DocumentFunction.documentfunction(rmfile;
 argtext=Dict("filename"=>"file to be removed"),
 keytext=Dict("path"=>"path of the file [default=`current path`]")))
 """
-function rmfile(filename::String; path::String="")
+function rmfile(filename::String; path::String=".")
 	if path != "" && path != "."
 		filename = joinpath(path, filename)
 	end
