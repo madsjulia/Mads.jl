@@ -1067,7 +1067,7 @@ argtext=Dict("df"=>"dataframe")))
 function deleteNaN!(df::DataFrames.DataFrame)
 	for i in 1:size(df, 2)
 		if typeof(df[!, i][1]) <: Number
-			DataFrames.deleterows!(df, findall(isnan.(df[!, i][:])))
+			delete!(df, findall(isnan.(df[!, i][:])))
 			if size(df, 1) == 0
 				return
 			end
