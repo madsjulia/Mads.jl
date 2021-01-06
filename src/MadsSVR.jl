@@ -2,7 +2,7 @@ import SVR
 import OrderedCollections
 import DocumentFunction
 
-function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, eps::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
+function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
 	numberofsamples = size(paramarray, 1)
 	predictions = Mads.forward(madsdata, permutedims(paramarray))
 
@@ -10,7 +10,7 @@ function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::B
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	svrpredictions2 = Array{Float64}(undef, 0, numberofsamples)
 	for i=1:npred
-		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, eps=eps, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size);
+		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, epsilon=epsilon, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size);
 		svrmodel[i] = sm
 		if check
 			y_pr = SVR.predict(sm, paramarray');
@@ -62,7 +62,7 @@ keytext=Dict("check"=>"check SVR performance [default=`false`]",
 			"loadsvr"=>"load SVR models [default=`false`]",
 			"savesvr"=>"save SVR models [default=`false`]",
 			"svm_type"=>"SVM type [default=`SVR.EPSILON_SVR`]",
-			"eps"=>"epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=`0.001`]",
+			"epsilon"=>"epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=`0.001`]",
 			"nu"=>"upper bound on the fraction of training errors / lower bound of the fraction of support vectors; acceptable range (0, 1]; applied if NU_SVR model [default=`0.5`]",
 			"kernel_type"=>"kernel type[default=`SVR.RBF`]",
 			"degree"=>"degree of the polynomial kernel [default=`3`]",
@@ -184,7 +184,7 @@ keytext=Dict("check"=>"check SVR performance [default=`false`]",
 			"loadsvr"=>"load SVR models [default=`false`]",
 			"savesvr"=>"save SVR models [default=`false`]",
 			"svm_type"=>"SVM type [default=`SVR.EPSILON_SVR`]",
-			"eps"=>"epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=`0.001`]",
+			"epsilon"=>"epsilon in the EPSILON_SVR model; defines an epsilon-tube within which no penalty is associated in the training loss function with points predicted within a distance epsilon from the actual value [default=`0.001`]",
 			"nu"=>"upper bound on the fraction of training errors / lower bound of the fraction of support vectors; acceptable range (0, 1]; applied if NU_SVR model [default=`0.5`]",
 			"kernel_type"=>"kernel type[default=`SVR.RBF`]",
 			"degree"=>"degree of the polynomial kernel [default=`3`]",
@@ -206,7 +206,7 @@ Returns:
 - function saving SVR models
 - function removing SVR models from the memory
 """
-function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; check::Bool=false, addminmax::Bool=true, loadsvr::Bool=false, savesvr::Bool=false, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, eps::Float64=0.001, cache_size::Float64=100.0, tol::Float64=0.001, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, seed::Integer=-1)
+function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; check::Bool=false, addminmax::Bool=true, loadsvr::Bool=false, savesvr::Bool=false, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, epsilon::Float64=0.001, cache_size::Float64=100.0, tol::Float64=0.001, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, seed::Integer=-1)
 	rootname = splitdir(Mads.getmadsrootname(madsdata))[end]
 	optnames = Mads.getoptparamkeys(madsdata)
 	obsnames = Mads.getobskeys(madsdata)
@@ -245,7 +245,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	if loadsvr
 		svrread()
 	else
-		svrmodel = svrtrain(madsdata, numberofsamples; check=check, addminmax=addminmax, savesvr=savesvr, svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, eps=eps, nu=nu, cache_size=cache_size, shrinking=shrinking, probability=probability, tol=tol);
+		svrmodel = svrtrain(madsdata, numberofsamples; check=check, addminmax=addminmax, savesvr=savesvr, svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, epsilon=epsilon, nu=nu, cache_size=cache_size, shrinking=shrinking, probability=probability, tol=tol);
 	end
 
 	return svrexec, svrread, svrsave, svrclean
