@@ -60,7 +60,7 @@ function display(filename::AbstractString)
 	end
 end
 
-if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
+if !haskey(ENV, "MADS_NO_GADFLY")
 	function display(p::Gadfly.Plot; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
@@ -93,9 +93,7 @@ if isdefined(Mads, :Gadfly) && isdefined(Main, :Cairo)
 			end
 		end
 	end
-end
 
-if isdefined(Mads, :Compose) && isdefined(Main, :Cairo)
 	function display(p::Compose.Context; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
 			if gw != nothing && gh != nothing
