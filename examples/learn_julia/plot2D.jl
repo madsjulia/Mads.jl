@@ -6,7 +6,7 @@ y = rand(10)
 
 Gadfly.plot(x=x, y=y)
 Gadfly.plot(x=x, y=y, Gadfly.Geom.point, Gadfly.Geom.line)
-Gadfly.plot(x=x, y=2.^y,
+Gadfly.plot(x=x, y=2. ^ y,
 	Gadfly.Scale.y_sqrt, Gadfly.Geom.point, Gadfly.Geom.smooth,
 	Gadfly.Guide.xlabel("Time"), Gadfly.Guide.ylabel("Response"), Gadfly.Guide.title("Training"))
 func_plot(x) = sin.(x) + sqrt(x)

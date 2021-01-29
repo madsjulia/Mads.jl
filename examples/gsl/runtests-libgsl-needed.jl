@@ -15,7 +15,7 @@ end
 const gsl_function_wrap_c = cfunction(gsl_function_wrap, Cdouble, (Cdouble, Ptr{Nothing}))
 
 "GSL function type"
-type GSL_Function
+struct GSL_Function
 	func::Ptr{Nothing}
 	params::Any
 	GSL_Function(f::Function) = new(gsl_function_wrap_c, f)

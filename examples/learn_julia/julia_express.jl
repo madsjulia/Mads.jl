@@ -138,8 +138,8 @@ x = reshape(1:8, 2, 4)
 x[:,2:3] = [1 2] # error; size mismatch
 x[:,2:3] = repmat([1 2], 2) # OK
 x[:,2:3] = 3 # OK
-Arrays are assigned and passed by reference. Therefore copying is provided:
-	x = cell(2)
+# Arrays are assigned and passed by reference. Therefore copying is provided:
+x = cell(2)
 x[1] = ones(2)
 x[2] = trues(3)
 a = x
@@ -161,7 +161,7 @@ cell(2)::Array{Any, 1} # vector of Any
 
 # Composite types are mutable and passed by reference. You can define and access composite types:
 
-type Point
+struct Point
 	x::Int64
 	y::Float64
 	meta
@@ -208,8 +208,8 @@ m = match(r, "ACBD") # find first regexp match, see documentation for details
 # There is a vast number of string functions — please refer to documentation.
 
 # Programming constructs
-The simplest way to create new variable is by assignment:
-	x = 1.0 # x is Float64
+# The simplest way to create new variable is by assignment:
+x = 1.0 # x is Float64
 x = 1 # now x is Int32 on 32 bit machine and Int64 on 64 bit machine
 y::Float64 = 1.0 # y must be Float64, not possible in global scope performs assertion on y type when it exists
 
@@ -333,33 +333,32 @@ function fun() # no warning
 	x = true
 end
 fun() # true, no warning
-Global constants speed up execution.
-The let rebinds the variable:
-		Fs = cell(2)
-	i = 1
-	while i <= 2
-		j = i
-		Fs[i] = () -> j
-		i += 1
-	end
-	Fs[1](), Fs[2]() # (2, 2); the same binding for j
-	Fs = cell(2)
-	i = 1
-	while i <= 2
-		let j = i
-			Fs[i] = () -> j
-		end
-		i += 1
-	end
-	Fs[1](), Fs[2]() # (1, 2); new binding for j
-	Fs = cell(2)
-	i = 1
-	for i in 1:2
-		j = i
-		Fs[i] = () -> j
-	end
-	Fs[1](), Fs[2]() # (1, 2); for loops and comprehensions rebind variables
+# Global constants speed up execution.
+# The let rebinds the variable:
+Fs = cell(2)
+i = 1
+while i <= 2
+	j = i
+	Fs[i] = () -> j
+	i += 1
 end
+Fs[1](), Fs[2]() # (2, 2); the same binding for j
+Fs = cell(2)
+i = 1
+while i <= 2
+	let j = i
+		Fs[i] = () -> j
+	end
+	i += 1
+end
+Fs[1](), Fs[2]() # (1, 2); new binding for j
+Fs = cell(2)
+i = 1
+for i in 1:2
+	j = i
+	Fs[i] = () -> j
+end
+Fs[1](), Fs[2]() # (1, 2); for loops and comprehensions rebind variables
 
 # Modules
 
