@@ -201,7 +201,7 @@ length(a) # => 8
 # Tuples are immutable.
 tup = (1, 2, 3) # => (1,2,3) # an (Int64,Int64,Int64) tuple.
 tup[1] # => 1
-try:
+try
 	tup[1] = 3 # => ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)
 catch e
 	print(e.msg)
@@ -495,7 +495,7 @@ typeof(DataType) # => DataType
 #   field::OptionalType
 #   ...
 # end
-type Tiger
+struct Tiger
   taillength::Float64
   coatcolor # not including a type annotation is the same as `::Any`
 end
@@ -511,8 +511,8 @@ sherekhan = typeof(tigger)(5.6,"fire") # => Tiger(5.6,"fire")
 # They can be instantiated, but cannot have subtypes.
 # The other kind of types is abstract types.
 
-# abstract Name
-abstract Cat # just a name and point in the type hierarchy
+# abstract type Name end
+abstract type Cat end # just a name and point in the type hierarchy
 
 # Abstract types cannot be instantiated, but can have subtypes.
 # For example, Number is an abstract type
@@ -536,7 +536,7 @@ super(Any) # => Any
 # All of these type, except for Int64, are abstract.
 
 # <: is the subtyping operator
-type Lion <: Cat # Lion is a subtype of Cat
+struct Lion <: Cat # Lion is a subtype of Cat
   mane_color
   roar::String
 end
@@ -547,7 +547,7 @@ end
 Lion(roar::String) = Lion("green",roar)
 # This is an outer constructor because it's outside the type definition
 
-type Panther <: Cat # Panther is also a subtype of Cat
+struct Panther <: Cat # Panther is also a subtype of Cat
   eye_color
   Panther() = new("green")
   # Panthers will only have this constructor, and no default constructor.
