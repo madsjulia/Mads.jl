@@ -1,6 +1,6 @@
 name = "Mads"
 uuid = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
-version = "1.0.6"
+version = "1.0.7"
 
 [deps]
 AffineInvariantMCMC = "a0f608ac-68d0-5108-ad9a-0cdca73324f3"
@@ -71,7 +71,7 @@ FileIO = "1"
 Gadfly = "1"
 Images = "0.23, 0.24"
 Ipopt = "0.6, 0.7"
-JLD2 = "0.2, 0.3"
+JLD2 = "0.2, 0.3, 0.4"
 JSON = "0.21, 0.22"
 JuMP = "0.21, 0.22"
 Kriging = "1"
