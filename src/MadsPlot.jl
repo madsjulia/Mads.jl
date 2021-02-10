@@ -70,7 +70,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 end
 
 function plotfileformat(p, filename::String, hsize, vsize; dpi=imagedpi)
-	filename, format = setplotfileformat(filename)
+	filename, format = setplotfileformat(filename, uppercase(getextension(filename)))
 	if format == :SVG
 		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
 	elseif isdefined(Main, :Cairo)
@@ -238,7 +238,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				tc = Array{Float64}(undef, 0)
 				d = Array{Float64}(undef, 0)
 				td = Array{Float64}(undef, 0)
-				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] != nothing
+				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] !== nothing
 					o = madsdata["Wells"][wellname]["obs"]
 					nT = length(o)
 					for i in 1:nT
@@ -340,7 +340,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
 					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=2Gadfly.pt, highlight_width=0Gadfly.pt)))
 	end
-	if pl == nothing
+	if pl === nothing
 		Mads.madswarn("There is nothing to plot!")
 		return nothing
 	end
@@ -1134,22 +1134,22 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
-		if xmin == nothing
+		if xmin === nothing
 			xmin = log10(findfirst(.!isnan.(vec(sumnan(X; dims=2)))))
 		end
-		if xmax == nothing
+		if xmax === nothing
 			xmax = log10(findlast(.!isnan.(vec(sumnan(X; dims=2)))))
 		end
 	end
 	if logy
 		push!(glog, Gadfly.Scale.y_log10)
 		X[X.<=0] .= NaN
-		if ymin == nothing
+		if ymin === nothing
 			ymin = log10(minimumnan(X))
 		end
-		if ymax == nothing
+		if ymax === nothing
 			ymax = log10(maximumnan(X))
-			if ymin != nothing
+			if ymin !== nothing
 				dy = (ymax - ymin)/10
 				ymin -= dy
 				ymax += dy

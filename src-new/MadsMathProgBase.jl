@@ -144,7 +144,7 @@ function makempbfunctions(madsdata::AbstractDict)
 		end
 		filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 		center = ReusableFunctions.loadresultfile(filename)
-		center_computed = (center != nothing) && length(center) == nO
+		center_computed = (center !== nothing) && length(center) == nO
 		p = Vector{Float64}[]
 		for i in 1:nP
 			a = copy(arrayparameters)

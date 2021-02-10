@@ -17,7 +17,7 @@ function rmsenan(t::Vector, o::Vector)
 end
 
 function sumnan(X; dims=nothing, kw...)
-	if dims == nothing
+	if dims === nothing
 		return sum(X[.!isnan.(X)]; kw...)
 	else
 		count = .*(size(X)[vec(collect(dims))]...)

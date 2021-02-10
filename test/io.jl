@@ -71,12 +71,12 @@ Mads.maxtofloatmax!(df)
 	@Test.test Mads.getrestartdir(Dict("RestartDir"=>"dummy_restart_directory")) == joinpath("dummy_restart_directory", "")
 	Mads.rmdir("dummy_restart_directory")
 
-	@Test.test Mads.getparamrandom(Dict(), "k") == nothing
-	@Test.test Mads.getparamrandom(Dict("Parameters"=>Dict("a"=>1)), "k") == nothing
+	@Test.test Mads.getparamrandom(Dict(), "k") === nothing
+	@Test.test Mads.getparamrandom(Dict("Parameters"=>Dict("a"=>1)), "k") === nothing
 	@Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>false))), "k") == false
 	@Test.test Mads.isopt(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"type"=>"opt"))), "k") == true
 	@Test.test Mads.setparamon!(Dict("Parameters"=>Dict("k"=>Dict{String,Any}("init"=>1,"type"=>false))), "k") == "opt"
-	@Test.test Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict{String,Any}("init"=>1,"type"=>false))), "k") == nothing
+	@Test.test Mads.setparamoff!(Dict("Parameters"=>Dict("k"=>Dict{String,Any}("init"=>1,"type"=>false))), "k") === nothing
 	Mads.getparamdistributions(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"init_dist"=>"Normal(0,1)"))); init_dist=true)
 
 	@Test.test Mads.settime!(Dict("t"=>1),2) == 2
