@@ -26,8 +26,8 @@ import Test
 	@Test.test isapprox(Mads.getparamrandom(dist_dict, "a")[1], 14.5, atol=0.5)
 	#dist_dict["Parameters"]["a"]["dist"] = "Normal(14,7)"
 	#println(Mads.getparamrandom(dist_dict, "a"))
-	@Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>nothing))) == nothing
-	@Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>Dict{Any,Any}("a"=>nothing)))) == nothing
+	@Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>nothing))) === nothing
+	@Test.test Mads.void2nan!(Dict("a"=>Dict{Any,Any}("a"=>Dict{Any,Any}("a"=>nothing)))) === nothing
 
 	basic_dict = Dict("a"=>1)
 	@Test.test Mads.filterkeys(basic_dict, "a") == String["a"]

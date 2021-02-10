@@ -622,7 +622,7 @@ function showallparameters(madsdata::AbstractDict)
 		s *= @Printf.sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
 		if haskey(pardict[parkey], "type")
 			@show typeof(pardict[parkey]["type"])
-			if pardict[parkey]["type"] == nothing
+			if pardict[parkey]["type"] === nothing
 				s *= "<- fixed "
 			else
 				s *= "<- optimizable "

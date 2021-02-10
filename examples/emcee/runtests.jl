@@ -3,6 +3,7 @@ import AffineInvariantMCMC
 import Test
 import ProgressMeter
 import Random
+import Statistics
 
 Random.seed!(2017)
 
@@ -31,8 +32,8 @@ burnin = 100
 		chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
 		flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
 		for i = 1:numdims
-			@Test.test isapprox(mean(flatchain[i, :]), means[i], atol=(0.5 * stds[i]))
-			@Test.test isapprox(std(flatchain[i, :]), stds[i], atol=(5 * stds[i]))
+			@Test.test isapprox(Statistics.mean(flatchain[i, :]), means[i], atol=(0.5 * stds[i]))
+			@Test.test isapprox(Statistics.std(flatchain[i, :]), stds[i], atol=(5 * stds[i]))
 		end
 	end
 end

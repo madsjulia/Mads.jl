@@ -107,7 +107,7 @@ collect((1, 2)) # 2-element vector by tuple unpacking
 [[1 2] 3] # append to a row vector (hcat)
 [[1, 2], 3] # append to a column vector (vcat)
 
-a = [x * y for x in 1:2, y in 1, z in 1:3] # 2x1x3 array of Int64
+a = [x * y for x in 1:2, y in 1:1, z in 1:3] # 2x1x3 array of Int64
 ndims(a) # number of dimensions in a
 eltype(a) # type of elements in a
 length(a) # number of elements in a
