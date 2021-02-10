@@ -1,7 +1,8 @@
 import JSON
 import OrderedCollections
 
-parameters = JSON.parsefile("parameters.json"; dicttype=OrderedCollections.OrderedDict)
+parameters = JSON.parsefile("parameters.json")
+@show parameters
 
 f(t) = parameters["a"] * t - parameters["b"] # a * t - b; linear model
 times = 1:4
