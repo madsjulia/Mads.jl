@@ -205,7 +205,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String=""
 	covar = Array{Float64}(undef, 0)
 	try
 		u, s, v = LinearAlgebra.svd(JpJ)
-		covar = v * inv(LinearAlgebra.Matrix(LinearAlgebra.Diagonal(s))) * u'
+		covar = v * inv(LinearAlgebra.Diagonal(s)) * u'
 	catch errmsg1
 		try
 			covar = LinearAlgebra.inv(JpJ)
@@ -281,7 +281,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1,
 	numgooddirections = numdirections
 	while !done
 		try
-			covmat = (v * LinearAlgebra.Matrix(LinearAlgebra.Diagonal(1 ./ d)) * u') .* scale
+			covmat = (v * LinearAlgebra.Diagonal(1 ./ d) * u') .* scale
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
 		catch errmsg
