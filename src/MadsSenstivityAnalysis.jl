@@ -9,6 +9,7 @@ import JLD2
 import FileIO
 import Random
 import Distributed
+import LinearAlgebra
 
 """
 Make gradient function needed for local sensitivity analysis
@@ -62,7 +63,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 		if sizeof(center) == 0
 			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center != nothing) && length(center) == nO
+			center_computed = (center !== nothing) && length(center) == nO
 			if !center_computed
 				push!(p, arrayparameters)
 			end
@@ -170,7 +171,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String=""
 			J = g_sa(param, center=obs)
 		end
 	end
-	if J == nothing
+	if J === nothing
 		Mads.madswarn("Jacobian computation failed")
 		return
 	end
@@ -203,11 +204,11 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String=""
 	JpJ = J' * J
 	covar = Array{Float64}(undef, 0)
 	try
-		u, s, v = svd(JpJ)
-		covar = v * inv(Matrix(Diagonal(s))) * u'
+		u, s, v = LinearAlgebra.svd(JpJ)
+		covar = v * inv(LinearAlgebra.Matrix(LinearAlgebra.Diagonal(s))) * u'
 	catch errmsg1
 		try
-			covar = inv(JpJ)
+			covar = LinearAlgebra.inv(JpJ)
 		catch errmsg2
 			printerrormsg(errmsg1)
 			printerrormsg(errmsg2)
@@ -215,7 +216,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String=""
 			return nothing
 		end
 	end
-	stddev = sqrt.(abs.(diag(covar)))
+	stddev = sqrt.(abs.(LinearAlgebra.diag(covar)))
 	if datafiles
 		writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
@@ -224,7 +225,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String=""
 		end
 		close(f)
 	end
-	correl = covar ./ diag(covar)
+	correl = covar ./ LinearAlgebra.diag(covar)
 	datafiles && writedlm("$(rootname)-correlation.dat", correl)
 	z = eigen(covar)
 	eigenv = z.values
@@ -280,7 +281,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1,
 	numgooddirections = numdirections
 	while !done
 		try
-			covmat = (v * Matrix(Diagonal(1 ./ d)) * u') .* scale
+			covmat = (v * LinearAlgebra.Matrix(LinearAlgebra.Diagonal(1 ./ d)) * u') .* scale
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
 		catch errmsg
@@ -380,7 +381,7 @@ Returns:
 """
 function weightedstats(samples::Array, llhoods::Vector)
 	wv = StatsBase.Weights(exp.(llhoods))
-	return mean(samples, wv, 1), var(samples, wv, 1; corrected=false)
+	return LinearAlgebra.mean(samples, wv, 1), LinearAlgebra.var(samples, wv, 1; corrected=false)
 end
 
 function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)

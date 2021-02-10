@@ -342,7 +342,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function setwellweights!(madsdata::AbstractDict, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
 			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
 			end
@@ -361,7 +361,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function modwellweights!(madsdata::AbstractDict, value::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
 			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
 			end
@@ -380,7 +380,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function invwellweights!(madsdata::AbstractDict, multiplier::Number)
 	wellkeys = getwellkeys(madsdata)
 	for i in 1:length(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] != nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
 			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
 				t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
 				if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
@@ -675,7 +675,7 @@ function wells2observations!(madsdata::AbstractDict)
 	observations = OrderedCollections.OrderedDict()
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
-			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] != nothing
+			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] !== nothing
 				for i in 1:length(madsdata["Wells"][wellkey]["obs"])
 					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
 					obskey = wellkey * "_" * string(t)

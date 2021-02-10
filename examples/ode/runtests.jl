@@ -1,9 +1,10 @@
 import Mads
-@Mads.tryimportmain OrderedCollections
 import JLD2
 import FileIO
 import Test
 import OrdinaryDiffEq
+
+@Mads.tryimportmain OrderedCollections
 
 Mads.veryquieton()
 Mads.graphoff()

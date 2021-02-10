@@ -43,7 +43,7 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
-	if !bigfile || madsdata == nothing
+	if !bigfile || madsdata === nothing
 		if format == "yaml"
 			madsdata = loadyamlfile(filename; julia=julia)
 		elseif format == "json"
@@ -88,7 +88,7 @@ Returns:
 function loadbigyamlfile(filename::String)
 	lines = readlines(filename)
 	nlines = length(lines)
-	keyln = findall((in)(true), map(i->(match(r"^[A-Z]", lines[i])!=nothing), 1:nlines))
+	keyln = findall((in)(true), map(i->(match(r"^[A-Z]", lines[i]) !== nothing), 1:nlines))
 	if length(keyln) == 0
 		return nothing
 	end
@@ -125,7 +125,7 @@ function loadbigyamlfile(filename::String)
 		badlines = Array{Int}(undef, 0)
 		for i in readindeces
 			mc = match(r"^- (\S*):.*", lines[i])
-			if mc != nothing
+			if mc !== nothing
 				kw = mc.captures[1]
 			else
 				push!(badlines, i)
@@ -139,19 +139,19 @@ function loadbigyamlfile(filename::String)
 			end
 			obsdict[kw] = OrderedCollections.OrderedDict{String,Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc != nothing
+			if mc !== nothing
 				obsdict[kw]["target"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*weight[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc != nothing
+			if mc !== nothing
 				obsdict[kw]["weight"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*min[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc != nothing
+			if mc !== nothing
 				obsdict[kw]["min"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*max[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc != nothing
+			if mc !== nothing
 				obsdict[kw]["max"] = parse(Float64, mc.captures[1])
 			end
 		end
@@ -244,7 +244,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 			for key in keys(dictnew)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
-				if haskey(wells[key], "obs") && wells[key]["obs"] != nothing
+				if haskey(wells[key], "obs") && wells[key]["obs"] !== nothing
 					for i = 1:length(wells[key]["obs"])
 						for k in keys(wells[key]["obs"][i])
 							wells[key]["obs"][i] = wells[key]["obs"][i][k]
@@ -944,7 +944,7 @@ function instline2regexs(instline::String)
 	getparamhere = Bool[]
 	while offset <= length(instline) && occursin(regex, instline; offset=offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
-		if m == nothing
+		if m === nothing
 			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
 		end
 		offset = m.offset + length(m.match)
@@ -1011,7 +1011,7 @@ function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{St
 	obsdict = Dict{String, Float64}()
 	for i = 1:length(regexs)
 		m = match(regexs[i], obsline, offset)
-		if m == nothing
+		if m === nothing
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
 		else
 			if getparamhere[i]

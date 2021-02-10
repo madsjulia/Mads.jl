@@ -93,14 +93,14 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
-			npt = m != nothing ? Meta.parse(Int, m.captures[1]) : 1
+			npt = m !== nothing ? Meta.parse(Int, m.captures[1]) : 1
 			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
-				if m != nothing
+				if m !== nothing
 					madsdata["Command"] = replace(madsdata["Command"], r"(julia)(.*-p)[\s[0-9]*|[0-9]*]" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) --startup-file=no \\g<2> $nprocs_per_task_default"))
 					Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 				else
 					m = match(r"julia", madsdata["Command"])
-					if m != nothing
+					if m !== nothing
 						madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) --startup-file=no -p $nprocs_per_task_default "))
 						Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 					end
