@@ -1,6 +1,11 @@
 import Mads
 import PyCall
 import Test
+import OrderedCollections
+import JSON
+
+@Mads.tryimportmain OrderedCollections
+@Mads.tryimportmain JSON
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
