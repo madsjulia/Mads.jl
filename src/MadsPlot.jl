@@ -1143,6 +1143,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	if logy
 		push!(glog, Gadfly.Scale.y_log10)
+		ixzero = X.<=0
 		X[X.<=0] .= NaN
 		if ymin === nothing
 			ymin = log10(minimumnan(X))
@@ -1155,6 +1156,8 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				ymax += dy
 			end
 		end
+	else
+		ixzero = nothing
 	end
 
 	geometry = (plotline) ? [Gadfly.Geom.line()] : [Gadfly.Geom.point()]
@@ -1272,8 +1275,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
+		ixzero !== nothing && (X[ixzero] .= 0)
 		return false
 	end
+	ixzero !== nothing && (X[ixzero] .= 0)
 	if code
 		return c
 	else
