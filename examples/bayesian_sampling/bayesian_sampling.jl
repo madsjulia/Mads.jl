@@ -10,12 +10,12 @@ rootname = Mads.getmadsrootname(md)
 
 @info("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
-Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
-Mads.savemcmcresults(mcmcchain.value', rootname * "-bayes.json")
+Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
+Mads.savemcmcresults(permutedims(mcmcchain.value), rootname * "-bayes.json")
 
 @info("Parallel Bayesian sampling ...")
 mcmcchains = Mads.bayessampling(md, 2; nsteps=5000, burnin=500, thinning=1, seed=2016)
-chain_array = vcat(map(chain->chain.value', mcmcchains)...)
+chain_array = vcat(map(permutedims(chain->chain.value), mcmcchains)...)
 Mads.scatterplotsamples(md, chain_array, rootname * "-parallel-bayes.png")
 Mads.savemcmcresults(chain_array, rootname * "-parallel-bayes.json")
 
@@ -33,13 +33,13 @@ Mads.setparamsinit!(md, param)
 
 @info("Bayesian sampling of a contaminant transport problem (anasol) ...")
 mcmcchain = Mads.bayessampling(md; nsteps=1000, burnin=100, thinning=1, seed=2016)
-Mads.savemcmcresults(mcmcchain.value', rootname * "-bayes.json")
+Mads.savemcmcresults(permutedims(mcmcchain.value), rootname * "-bayes.json")
 
 @info("Bayesian scatter plots ...")
-Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
+Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
 
 # convert the parameters in the chain to a parameter dictionary of arrays
-mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
+mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value))
 
 @info("Posterior (Bayesian) spaghetti plots ...")
 Mads.spaghettiplots(md, mcmcvalues; keyword="posterior", format="PNG", xtitle="Time", ytitle="Concentration [ppb]")
