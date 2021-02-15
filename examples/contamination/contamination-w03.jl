@@ -30,8 +30,8 @@ Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md, seed=20151001)
 
 Mads.madsinfo("Bayesian scatter plots ...")
-Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
+Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
 
-posterior_predictions = Mads.forward(md, mcmcchain.value')
+posterior_predictions = Mads.forward(md, permutedims(mcmcchain.value))
 Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
 Mads.spaghettiplot(md, posterior_predictions, keyword="w13a_w20a-posterior", format="PNG")

@@ -29,7 +29,7 @@ if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, 
 	Mads.bayessampling(md, 1; nsteps=1, burnin=1, thinning=1)
 	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-	Mads.savemcmcresults(mcmcchain.value', rootname * "-test-mcmcchain1.json")
+	Mads.savemcmcresults(permutedims(mcmcchain.value), rootname * "-test-mcmcchain1.json")
 	rm(rootname * "-test-mcmcchain1.json")
 	Mads.forward(md, mcmcchain.value; all=true)
 end
@@ -38,11 +38,11 @@ md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
 if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
 	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-	mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value') # convert the parameters in the chain to a parameter dictionary of arrays
+	mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value)) # convert the parameters in the chain to a parameter dictionary of arrays
 	mcmcvalues_array = hcat(vcat(map(i->collect(mcmcvalues[i]), keys(mcmcvalues)))...)
 	Mads.forward(md, mcmcchain.value)
 	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-		Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-test-bayes-results.svg")
+		Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-test-bayes-results.svg")
 		Mads.rmfile(rootname * "-test-bayes-results.svg")
 		Mads.spaghettiplots(md, mcmcvalues; keyword="", obs_plot_dots=false)
 		Mads.spaghettiplot(md, mcmcvalues; keyword="test")
