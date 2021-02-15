@@ -281,7 +281,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1,
 	numgooddirections = numdirections
 	while !done
 		try
-			covmat = (v * LinearAlgebra.Diagonal(1 ./ d) * u') .* scale
+			covmat = (v * LinearAlgebra.Diagonal(1 ./ d) * permutedims(u)) .* scale
 			dist = Distributions.MvNormal(zeros(numgooddirections), covmat)
 			done = true
 		catch errmsg
@@ -298,7 +298,7 @@ function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1,
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
 	setseed(seed)
 	gooddsamples = Distributions.rand(dist, numsamples)
-	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]''), 1:numsamples)
+	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
 	else
@@ -1384,7 +1384,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# Looping over each point in time
 			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
-				Y[:,i] = (Y[:,i] .- mean(Y[:,i]))'
+				Y[:,i] = permutedims((Y[:,i] .- mean(Y[:,i])))
 				## Calculating Fourier coefficients associated with MAIN INDICES
 				# p corresponds to the harmonics of Wi
 				for p = 1:M

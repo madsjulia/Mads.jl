@@ -83,10 +83,10 @@ Mads.madsinfo("Bayesian sampling ...")
 mcmcchain = Mads.bayessampling(md, seed=20151001)
 
 Mads.madsinfo("Bayesian scatter plots ...")
-Mads.scatterplotsamples(md, mcmcchain.value', rootname * "-bayes.png")
+Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
 
 # convert the parameters in the chain to a parameter dictionary of arrays
-mcmcvalues = Mads.paramarray2dict(md, mcmcchain.value')
+mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value))
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plots ...")
 Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")

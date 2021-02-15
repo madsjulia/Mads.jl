@@ -24,8 +24,8 @@ Mads.madsinfo("Bayesian sampling of contaminant transport problem ...")
 mcmcchains = Mads.bayessampling(md, seed=2016)
 
 Mads.madsinfo("Bayesian scatter plots ...")
-Mads.scatterplotsamples(md, mcmcchains.value', rootname * "-bayes-results.svg")
-mcmcvalues = Mads.paramarray2dict(md, mcmcchains.value') # convert the parameters in the chain to a parameter dictionary of arrays
+Mads.scatterplotsamples(md, permutedims(mcmcchains.value), rootname * "-bayes-results.svg")
+mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchains.value)) # convert the parameters in the chain to a parameter dictionary of arrays
 
 Mads.madsinfo("Bayesian spaghetti plots ...")
 Mads.spaghettiplots(md, mcmcvalues)
