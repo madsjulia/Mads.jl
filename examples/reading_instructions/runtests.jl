@@ -15,8 +15,8 @@ obsdict = Mads.ins_obs(instructionfilename, inputfilename)
 
 	i = 1
 	for obsname in obsnames
-	   @Test.test obsdict[obsname] == obsvalues[i]
-	   i += 1
+		@Test.test obsdict[obsname] == obsvalues[i]
+		i += 1
 	end
 end
 

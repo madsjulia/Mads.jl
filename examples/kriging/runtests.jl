@@ -45,9 +45,9 @@ estimation_error_3 = Mads.estimationerror(ones(size(xs, 2)), zs, xs, mycov3)
 	end
 
 	@Test.testset "Krige" begin
-	   @Test.test isapprox(krige_results_1, [19.8891, 19.8891], atol=0.1)
-	   @Test.test isapprox(krige_results_2, [19.4586, 19.4586], atol=0.1)
-	   @Test.test isapprox(krige_results_3, [19.4586, 19.4586], atol=0.1)
+		@Test.test isapprox(krige_results_1, [19.8891, 19.8891], atol=0.1)
+		@Test.test isapprox(krige_results_2, [19.4586, 19.4586], atol=0.1)
+		@Test.test isapprox(krige_results_3, [19.4586, 19.4586], atol=0.1)
 	 end
 
 	@Test.testset "Estimation Error" begin

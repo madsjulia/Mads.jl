@@ -13,9 +13,9 @@ Mads.vectoron()
 computeconcentrations = Mads.makedoublearrayfunction(md)
 @time rv = computeconcentrations(rsetarrayplus);
 # this is slow because concentration function is created each time
-#rfs = Array{Float64}(undef, ns);
-#@time for i = 1:ns
-#    rfs[i] = Mads.forward(md, rsetarrayplus[:, i])
+# rfs = Array{Float64}(undef, ns);
+# @time for i = 1:ns
+# rfs[i] = Mads.forward(md, rsetarrayplus[:, i])
 #end
 
 Mads.vectoroff()
@@ -27,7 +27,7 @@ include("/Users/monty/Julia/FastMadsAnasol.jl/base.jl")
 @makemadslikeanasol madslike "w01pure.mads"
 ra = Array{Float64}(undef, ns);
 for i = 1:ns
-    ra[i] = madslike(rsetarray[:, i])[1]
+	ra[i] = madslike(rsetarray[:, i])[1]
 end
 @time for i = 1:ns
 	ra[i] = madslike(rsetarray[:, i])[1]
