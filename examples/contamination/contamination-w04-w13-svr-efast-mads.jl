@@ -7,7 +7,7 @@ rootname = Mads.getmadsrootname(md)
 Mads.allwellsoff!(md)
 Mads.wellon!(md, "w13a")
 
-svrexec, svrread, svrsave, svrclean  = Mads.makesvrmodel(md, 100)
+svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)

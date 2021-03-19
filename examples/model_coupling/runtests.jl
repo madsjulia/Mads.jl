@@ -42,7 +42,7 @@ if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 end
 
 Mads.madsinfo("Internal coupling using `Julia command` and `Templates` ...")
-md = Mads.loadmadsfile(joinpath(workdir,  "internal-linearmodel+template.mads"))
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel+template.mads"))
 tifor = Mads.forward(md)
 
 Mads.madsinfo("Internal coupling using `Julia command`, `Templates` and respecting template space...")
@@ -74,14 +74,14 @@ tefor = Mads.forward(md)
 cwd = pwd()
 cd(workdir)
 
-md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"))
+md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"))
 Mads.forward(md)
 Mads.localsa(md, par=[1.,2.])
 # Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
-Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
+Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 
-Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
-Mads.rmfile(joinpath("external-linearmodel+template+instruction+path",  "external-linearmodel+template+instruction+path2.mads"))
+Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
+Mads.rmfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 pfor = Mads.forward(md)
 
 @Test.testset "Internal" begin
