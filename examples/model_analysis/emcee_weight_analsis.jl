@@ -9,7 +9,7 @@ Mads.mkdir("emcee_results")
 @info("AffineInvariantMCMC (EMCEE) Bayesian analysis for the initial parameter guesses:")
 for w = (1000000, 1000, 1)
 	Mads.setobsweights!(md, w)
-	chain, llhoods  = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
+	chain, llhoods = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
 	Mads.scatterplotsamples(md, chain', "emcee_results/emcee_init_w$w.png")
 	o = Mads.forward(md, chain')
 	Mads.spaghettiplot(md, o, filename="emcee_results/emcee_init_w$(w)_spaghetti.png")
@@ -37,12 +37,12 @@ pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 optnames = ["n0", "n1", "n01"]
 v = [in0, in1, in01]
 
-@info("AffineInvariantMCMC (EMCEE)  Bayesian analysis for the 3 different global optima")
+@info("AffineInvariantMCMC (EMCEE) Bayesian analysis for the 3 different global optima")
 for i = 1:3
 	Mads.setparamsinit!(md, r[v[i],3])
 	for w = (1000000, 1000, 1)
 		Mads.setobsweights!(md, w)
-		chain, llhoods  = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
+		chain, llhoods = Mads.emceesampling(md; numwalkers=100, nsteps=1000000, burnin=100000, thinning=100, seed=2016)
 		Mads.scatterplotsamples(md, chain', "emcee_results/emcee_opt_$(optnames[i])_w$w.png")
 		o = Mads.forward(md, chain')
 		Mads.spaghettiplot(md, o, filename="emcee_results/emcee_opt_$(optnames[i])_w$(w)_spaghetti.png")

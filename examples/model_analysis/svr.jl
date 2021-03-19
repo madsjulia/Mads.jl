@@ -6,7 +6,7 @@ Random.seed!(2017)
 
 md = Mads.loadmadsfile(joinpath("..", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 rootname = Mads.getmadsrootname(md)
-svrexec, svrread, svrsave, svrclean  = Mads.makesvrmodel(md, 100)
+svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)

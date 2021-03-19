@@ -250,7 +250,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 			if abs(wellz1[w]  - wellz0[w] ) > 0.1
 				wellscreen[w] = true
 			else
-				wellz0[w]  = (wellz1[w]  + wellz0[w] ) / 2
+				wellz0[w] = (wellz1[w] + wellz0[w] ) / 2
 				wellscreen[w] = false
 			end
 			obst = Array{Float64}(undef, 0)
