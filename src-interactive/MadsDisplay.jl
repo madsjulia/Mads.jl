@@ -12,9 +12,8 @@ function display(filename::AbstractString)
 		@warn("File `$filename` is missing!")
 		return
 	end
+	ext = lowercase(Mads.getextension(filename))
 	if isdefined(Main, :TerminalExtensions) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
-		trytoopen = false
-		ext = lowercase(Mads.getextension(filename))
 		if ext == "svg"
 			if isdefined(Main, :IJulia) && Main.IJulia.inited
 				open(filename) do f
@@ -48,6 +47,10 @@ function display(filename::AbstractString)
 		trytoopen = true
 	end
 	if trytoopen
+		if ext == "txt"
+			a = println.(readlines(filename))
+			return nothing
+		end
 		try
 			run(`open $filename`)
 		catch
