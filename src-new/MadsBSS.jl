@@ -100,7 +100,7 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	return Wbest, Hbest, phi_best
 end
 
-function MFlm(X::Matrix{T}, range::AbstractRange{Int}; kw...) where {T}
+function MFlm(X::Matrix{T}, range::AbstractRange{Int}; kw...) where {T <: Number}
 	maxsources = maximum(collect(range))
 	W = Array{Array{T, 2}}(undef, maxsources)
 	H = Array{Array{T, 2}}(undef, maxsources)
@@ -130,7 +130,7 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(undef, 0, 0), initH::Matrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T}
+function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(undef, 0, 0), initH::Matrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T <: Number}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{T}(undef, nP, nk)
