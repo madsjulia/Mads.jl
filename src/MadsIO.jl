@@ -73,7 +73,7 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 		end
 	end
 	if haskey(madsdata, "Julia function")
-		madsdata["Julia function"] = Core.eval(Main, Symbol(madsdata["Julia function"]))
+		madsdata["Julia function"] = Core.eval(Mads, Symbol(madsdata["Julia function"]))
 	end
 	return convert(Dict{String,Any}, madsdata)
 end
