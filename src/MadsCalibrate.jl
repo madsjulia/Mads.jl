@@ -176,7 +176,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
-	if save_results
+	if save_results && rootname != ""
 		function interationcallback(x_best::Vector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			if localsa || restart_flag
