@@ -3,9 +3,14 @@ import PyCall
 import Test
 import OrderedCollections
 import JSON
+# import JLD
+import JLD2
+import FileIO
 
 @Mads.tryimportmain OrderedCollections
 @Mads.tryimportmain JSON
+@Mads.tryimportmain JLD2
+@Mads.tryimportmain FileIO
 
 workdir = Mads.getmadsdir() # get the directory where the problem is executed
 if workdir == "."
@@ -98,7 +103,7 @@ end
 Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"); julia=true)
 Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
-# JLD fails on Windows and other systems; HDF% is hard to build
+# JLD fails on Windows and other systems; HDF5 is hard to build
 # Mads.madsinfo("External coupling using `Command` and JLD ...")
 # md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
 # jfor = Mads.forward(md)
@@ -178,3 +183,5 @@ include(joinpath(workdir, "internal-linearmodel-juliafunction.jl"))
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-juliafunction.mads"))
 Mads.forward(md)
 Mads.calibrate(md)
+
+:done
