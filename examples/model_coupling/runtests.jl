@@ -162,3 +162,19 @@ Mads.rmdir("internal-linearmodel_restart")
 Mads.rmfiles_ext("svg"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 Mads.rmfiles_ext("dat"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 Mads.rmfiles_ext("iterationresults"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+
+function juliafunction(parameters::AbstractVector)
+	f(t) = parameters[1] * t - parameters[2] # a * t - b
+	times = 1:4
+	predictions = map(f, times)
+	return predictions
+end
+
+md = Mads.createmadsproblem([1,2], [1,2,3,4], juliafunction; parammin=[-10,-10], parammax=[10,10])
+Mads.forward(md)
+Mads.calibrate(md)
+
+include(joinpath(workdir, "internal-linearmodel-juliafunction.jl"))
+md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-juliafunction.mads"))
+Mads.forward(md)
+Mads.calibrate(md)
