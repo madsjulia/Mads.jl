@@ -416,7 +416,12 @@ Returns:
 - root of file name
 """
 function getmadsrootname(madsdata::AbstractDict; first=true, version=false)
-	return getrootname(madsdata["Filename"]; first=first, version=version)
+	if haskey(madsdata, "Filename")
+		madsrootname = getrootname(madsdata["Filename"]; first=first, version=version)
+	else
+		madsrootname = ""
+	end
+	return madsrootname
 end
 
 """
@@ -460,7 +465,11 @@ madsproblemdir = Mads.getmadsproblemdir(madsdata)
 where `madsproblemdir` = `"../../"`
 """
 function getmadsproblemdir(madsdata::AbstractDict)
-	getdir(madsdata["Filename"])
+	if haskey(madsdata, "Filename")
+		getdir(madsdata["Filename"])
+	else
+		return "."
+	end
 end
 
 """
