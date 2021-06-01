@@ -181,7 +181,9 @@ Mads.calibrate(md)
 
 include(joinpath(workdir, "internal-linearmodel-juliafunction.jl"))
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-juliafunction.mads"))
-Mads.forward(md)
-Mads.calibrate(md)
+if typeof(md["Julia function"]) <: Function
+	Mads.forward(md)
+	Mads.calibrate(md)
+end
 
 :done

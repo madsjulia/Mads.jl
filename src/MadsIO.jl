@@ -73,7 +73,14 @@ function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, f
 		end
 	end
 	if haskey(madsdata, "Julia function")
-		madsdata["Julia function"] = Core.eval(Mads, Symbol(madsdata["Julia function"]))
+		fn = Symbol(madsdata["Julia function"])
+		if isdefined(Mads, fn)
+			madsdata["Julia function"] = Core.eval(Mads, fn)
+		elseif isdefined(Base, fn)
+			madsdata["Julia function"] = Core.eval(Base, fn)
+		else
+			madswarn("Julia function $(fn) is not defined!")
+		end
 	end
 	return convert(Dict{String,Any}, madsdata)
 end
