@@ -73,16 +73,15 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	end
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
-	# if haskey(madsdata, "Julia vector model")
-	# 	Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia vector model"])'""")
-	# 	"MADS command function"
-	# 	currentdir = pwd()
-	# 	function madscommandfunction(parameters::AbstractDict)
-	# 		o = madsdata["Julia vector model"](values(parameters))
-	# 		return Dict(zip(Mads.getobskeys(madsdata_in), o))
-	# 	end
-	# else
-	if haskey(madsdata, "Julia model")
+	if haskey(madsdata, "Julia vector model")
+		Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia vector model"])'""")
+		"MADS command function"
+		function madsvectorcommandfunction(parameters::AbstractDict)
+			o = madsdata["Julia vector model"](collect(values(parameters)))
+			return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata_in), o))
+		end
+		madscommandfunction = madsvectorcommandfunction
+	elseif haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]
 	elseif haskey(madsdata, "MADS model")
@@ -255,7 +254,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			end
 			return results
 		end
-	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") # we may still use "Wells" instead of "Observations"
+	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") && !haskey(madsdata, "Julia vector model") # we may still use "Wells" instead of "Observations"
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
