@@ -27,6 +27,8 @@ MADS can be coupled with any internal or external model. The model coupling is d
 
 - `Julia model` : execute an internal Julia function that accepts a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
 
+- `Julia vector model` : execute an internal Julia function that accepts a `parameter` vector with all the model parameters as an input argument and will return an `observation` vector with all the model predicted observations.
+
 - `Command` : execute an external UNIX command or script that will execute an external model.
 
 - `Julia command` : execute a Julia script that will execute an external model. The Julia script is defined in an input Julia file. The input file should contain a function that accepts a `parameter` dictionary with all the model parameters as an input argument; MADS will execute the first function defined in the file. The Julia script should be capable to (1) execute the model (making a system call of an external model), (2) parse the model outputs, (3) return an `observation` dictionary with model predictions.
@@ -58,7 +60,7 @@ Returns:
 - Mads function to execute a forward model simulation
 """
 function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true) # make MADS command function
-	#remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing Distributed.pmaps -- they aren't used here are they can require a lot of communication
+	# remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing Distributed.pmaps -- they aren't used here are they can require a lot of communication
 	madsdata = Dict()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)
@@ -71,6 +73,15 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	end
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
+	# if haskey(madsdata, "Julia vector model")
+	# 	Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia vector model"])'""")
+	# 	"MADS command function"
+	# 	currentdir = pwd()
+	# 	function madscommandfunction(parameters::AbstractDict)
+	# 		o = madsdata["Julia vector model"](values(parameters))
+	# 		return Dict(zip(Mads.getobskeys(madsdata_in), o))
+	# 	end
+	# else
 	if haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]
@@ -244,7 +255,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			end
 			return results
 		end
-	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model")# we may still use "Wells" instead of "Observations"
+	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") # we may still use "Wells" instead of "Observations"
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
