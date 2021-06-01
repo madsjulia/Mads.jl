@@ -27,7 +27,7 @@ MADS can be coupled with any internal or external model. The model coupling is d
 
 - `Julia model` : execute an internal Julia function that accepts a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
 
-- `Julia vector model` : execute an internal Julia function that accepts a `parameter` vector with all the model parameters as an input argument and will return an `observation` vector with all the model predicted observations.
+- `Julia function` : execute an internal Julia function that accepts a `parameter` vector with all the model parameters as an input argument and will return an `observation` vector with all the model predicted observations.
 
 - `Command` : execute an external UNIX command or script that will execute an external model.
 
@@ -73,14 +73,14 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	end
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
-	if haskey(madsdata, "Julia vector model")
-		Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia vector model"])'""")
+	if haskey(madsdata, "Julia function")
+		Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
 		"MADS command function"
-		function madsvectorcommandfunction(parameters::AbstractDict)
-			o = madsdata["Julia vector model"](collect(values(parameters)))
+		function madscommandfunctionvector(parameters::AbstractDict)
+			o = madsdata["Julia function"](collect(values(parameters)))
 			return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata_in), o))
 		end
-		madscommandfunction = madsvectorcommandfunction
+		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]
@@ -128,7 +128,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		end
 		currentdir = pwd()
 		"MADS command function"
-		function madscommandfunction(parameters::AbstractDict) # MADS command function
+		function madscommandfunctionrerun(parameters::AbstractDict) # MADS command function
 			if simpleproblem && currentdir != abspath(madsproblemdir)
 				cd(madsproblemdir)
 				cwd = pwd()
@@ -254,6 +254,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			end
 			return results
 		end
+		madscommandfunction = madscommandfunctionrerun
 	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") && !haskey(madsdata, "Julia vector model") # we may still use "Wells" instead of "Observations"
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)

@@ -32,7 +32,7 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Functi
 	for i = 1:length(param)
 		md["Observations"][obskeys[i]] = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
 	end
-	md["Julia vector model"] = f
+	md["Julia function"] = f
 	makemadscommandfunction(md)
 	return md
 end
