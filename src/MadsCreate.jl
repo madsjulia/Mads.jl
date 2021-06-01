@@ -28,7 +28,6 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Functi
 	for i = 1:length(param)
 		md["Parameters"][paramkeys[i]] = OrderedCollections.OrderedDict("init"=>param[i], "type"=>paramtype[i], "dist"=>paramdist[i], "log"=>paramlog[i])
 	end
-	@show parammax
 	md["Observations"] = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
 		md["Observations"][obskeys[i]] = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
