@@ -74,13 +74,17 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia function")
-		Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
-		"MADS command function"
-		function madscommandfunctionvector(parameters::AbstractDict)
-			o = madsdata["Julia function"](collect(values(parameters)))
-			return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata_in), o))
+		if typeof(madsdata["Julia function"]) <: Function
+			Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
+			"MADS command function"
+			function madscommandfunctionvector(parameters::AbstractDict)
+				o = madsdata["Julia function"](collect(values(parameters)))
+				return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata_in), o))
+			end
+			madscommandfunction = madscommandfunctionvector
+		else
+			madscritical("Julia function $(madsdata["Julia function"]) is not defined!")
 		end
-		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]

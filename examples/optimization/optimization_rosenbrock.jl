@@ -39,4 +39,5 @@ Mads.madsinfo("Parameter transformation in a function: $a = $Mads.rosenbrock_lm(
 
 Mads.madsinfo("MADS Levenberg-Marquardt optimization of the Rosenbrock function without sine transformation:")
 results = Mads.levenberg_marquardt(Mads.rosenbrock_lm, Mads.rosenbrock_gradient_lm, [0.0, 0.0], lambda_mu=2.0, np_lambda=10, show_trace=false)
-return
+
+:done
