@@ -576,24 +576,34 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function showparameters(madsdata::AbstractDict)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getoptparamkeys(madsdata)
+	maxl = 0
+	maxk = 0
+	for parkey in parkeys
+		l = length(pardict[parkey])
+		maxk = (maxk > l) ? maxk : l
+		if haskey(pardict[parkey], "longname")
+			l = length(pardict[parkey]["longname"])
+			maxl = (maxl > l) ? maxl : l
+		end
+	end
 	p = Array{String}(undef, 0)
 	for parkey in parkeys
-		if haskey(pardict[parkey], "longname" )
-			s = @Printf.sprintf "%-30s : " pardict[parkey]["longname"]
+		if haskey(pardict[parkey], "longname")
+			s = Mads.sprintf("%-$(maxl)s : ", pardict[parkey]["longname"])
 		else
 			s = ""
 		end
-		s *= @Printf.sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
-		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
+		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, pardict[parkey]["init"])
+		if haskey(pardict[parkey], "log") && pardict[parkey]["log"] == true
 			s *= @Printf.sprintf "log-transformed "
 		end
-		if haskey(pardict[parkey], "min" )
+		if haskey(pardict[parkey], "min")
 			s *= @Printf.sprintf "min = %s " pardict[parkey]["min"]
 		end
-		if haskey(pardict[parkey], "max" )
+		if haskey(pardict[parkey], "max")
 			s *= @Printf.sprintf "max = %s " pardict[parkey]["max"]
 		end
-		if haskey(pardict[parkey], "dist" )
+		if haskey(pardict[parkey], "dist")
 			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
 		end
 		s *= "\n"
@@ -612,16 +622,25 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function showallparameters(madsdata::AbstractDict)
 	pardict = madsdata["Parameters"]
 	parkeys = Mads.getparamkeys(madsdata)
+	maxl = 0
+	maxk = 0
+	for parkey in parkeys
+		l = length(pardict[parkey])
+		maxk = (maxk > l) ? maxk : l
+		if haskey(pardict[parkey], "longname")
+			l = length(pardict[parkey]["longname"])
+			maxl = (maxl > l) ? maxl : l
+		end
+	end
 	p = Array{String}(undef, 0)
 	for parkey in parkeys
 		if haskey(pardict[parkey], "longname")
-			s = @Printf.sprintf "%-30s : " pardict[parkey]["longname"]
+			s = Mads.sprintf("%-$(maxl)s : ", pardict[parkey]["longname"])
 		else
 			s = ""
 		end
-		s *= @Printf.sprintf "%-20s = %15g " parkey pardict[parkey]["init"]
+		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, pardict[parkey]["init"])
 		if haskey(pardict[parkey], "type")
-			@show typeof(pardict[parkey]["type"])
 			if pardict[parkey]["type"] === nothing
 				s *= "<- fixed "
 			else
