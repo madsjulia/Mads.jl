@@ -10,7 +10,7 @@ function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::B
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	svrpredictions2 = Array{Float64}(undef, 0, numberofsamples)
 	for i=1:npred
-		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, epsilon=epsilon, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size, normalize=false)
+		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, epsilon=epsilon, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size, scale=false, normalize=false)
 		svrmodel[i] = sm
 		if check
 			y_pr = SVR.predict(sm, permutedims(paramarray));
