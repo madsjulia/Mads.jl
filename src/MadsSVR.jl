@@ -10,11 +10,11 @@ function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::B
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	svrpredictions2 = Array{Float64}(undef, 0, numberofsamples)
 	for i=1:npred
-		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, epsilon=epsilon, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size);
+		sm = SVR.train(predictions[i,:], permutedims(paramarray); svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, nu=nu, epsilon=epsilon, shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size, normalize=false)
 		svrmodel[i] = sm
 		if check
-			y_pr = SVR.predict(sm, paramarray');
-			svrpredictions2 = [svrpredictions2; y_pr']
+			y_pr = SVR.predict(sm, permutedims(paramarray));
+			svrpredictions2 = [svrpredictions2; permutedims(y_pr)]
 		end
 		if savesvr
 			Mads.mkdir("svrmodels")
@@ -45,7 +45,7 @@ function svrtrain(madsdata::AbstractDict, numberofsamples::Integer=100; addminma
 		pmax = Mads.getparamsmax(madsdata, k)
 		pinit = Mads.getparamsinit(madsdata, k)
 		gmin, gmax = Mads.meshgrid(pmin, pmax)
-		paramarray = [paramarray; gmin; gmax; pinit']
+		paramarray = [paramarray; gmin; gmax; permutedims(pinit)]
 		numberofsamples += 2 * length(k) + 1
 	end
 	svrtrain(madsdata, paramarray; kw...)
@@ -87,7 +87,7 @@ function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Array{Float64,
 	npred = length(svrmodel)
 	y = Array(Float64, npred)
 	for i=1:npred
-		y[i] = SVR.predict(svrmodel[i], paramarray');
+		y[i] = SVR.predict(svrmodel[i], permutedims(paramarray));
 	end
 	return y
 end
