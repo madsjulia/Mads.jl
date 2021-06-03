@@ -57,7 +57,7 @@ Returns:
 
 - NMF results
 """
-function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::Matrix=Array{Float64}(undef, 0, 0), initH::Matrix=Array{Float64}(undef, 0, 0), verbosity::Integer=0, quiet::Bool=false)
+function NMFipopt(X::AbstractMatrix, nk::Integer, retries::Integer=1; random::Bool=false, maxiter::Integer=100000, maxguess::Number=1, initW::AbstractMatrix=Array{Float64}(undef, 0, 0), initH::AbstractMatrix=Array{Float64}(undef, 0, 0), verbosity::Integer=0, quiet::Bool=false)
 	Xc = copy(X)
 	weights = ones(size(Xc))
 	nans = isnan.(Xc)
@@ -100,7 +100,7 @@ function NMFipopt(X::Matrix, nk::Integer, retries::Integer=1; random::Bool=false
 	return Wbest, Hbest, phi_best
 end
 
-function MFlm(X::Matrix{T}, range::AbstractRange{Int}; kw...) where {T <: Number}
+function MFlm(X::AbstractMatrix{T}, range::AbstractRange{Int}; kw...) where {T <: Number}
 	maxsources = maximum(collect(range))
 	W = Array{Array{T, 2}}(undef, maxsources)
 	H = Array{Array{T, 2}}(undef, maxsources)
@@ -130,7 +130,7 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::Matrix=Array{T}(undef, 0, 0), initH::Matrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T <: Number}
+function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::AbstractMatrix=Array{T}(undef, 0, 0), initH::AbstractMatrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T <: Number}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{T}(undef, nP, nk)
@@ -174,20 +174,20 @@ function MFlm(X::Matrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false
 	lowerbounds[indexlogtransformed] = log10.(lowerbounds[indexlogtransformed])
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 
-	function mf_reshape(x::Vector)
+	function mf_reshape(x::AbstractVector)
 		W = reshape(x[1:W_size], nP, nk)
 		H = reshape(x[W_size+1:end], nk, nC)
 		return W, H
 	end
 
-	function mf_lm(x::Vector)
+	function mf_lm(x::AbstractVector)
 		W, H = mf_reshape(x)
 		E = X - W * H
 		E[nanmask] .= 0
 		return vec(E)
 	end
 
-	function mf_g_lm(x::Vector; dx=nothing, center=nothing)
+	function mf_g_lm(x::AbstractVector; dx=nothing, center=nothing)
 		W, H = mf_reshape(x)
 		Wb = zeros(nP, nk)
 		Hb = zeros(nk, nC)

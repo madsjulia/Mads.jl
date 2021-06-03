@@ -13,7 +13,7 @@ Returns:
 
 - data from the JSON file
 """
-function loadjsonfile(filename::String) # load JSON text file
+function loadjsonfile(filename::AbstractString) # load JSON text file
 	sz = filesize(filename)
 	f = open(filename, "r")
 	a = Mmap.mmap(f, Vector{UInt8}, sz)
@@ -35,7 +35,7 @@ Dumps:
 
 - JSON file with the name in "filename"
 """
-function dumpjsonfile(filename::String, data::Any) # dump JSON text file
+function dumpjsonfile(filename::AbstractString, data::Any) # dump JSON text file
 	f = open(filename, "w")
 	JSON.print(f, data, 1)
 	close(f)

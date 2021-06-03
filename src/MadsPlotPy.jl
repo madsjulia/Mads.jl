@@ -1,7 +1,7 @@
 import PyPlot
 import DocumentFunction
 
-function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	if !haskey(madsdata, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return
@@ -52,12 +52,12 @@ function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true
 	PyPlot.close()
 end
 
-function plotgrid(madsdata::AbstractDict; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	paramvalues = Mads.getparamdict(madsdata)
 	plotgrid(madsdata, paramvalues; addtitle=addtitle, title=title, filename=filename, format=format)
 end
 
-function plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle::Bool=true, title::String="", filename::String="", format::String="")
+function plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	s = forwardgrid(madsdata, parameters)
 	if typeof(s) != Nothing
 		plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)

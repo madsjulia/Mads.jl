@@ -45,7 +45,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::String=pwd(), exename::String=Base.julia_cmd().exec[1])
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::AbstractString=pwd(), exename::AbstractString=Base.julia_cmd().exec[1])
 	if isdefined(Core, :Mads) && isdefined(Mads, :set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end
@@ -206,7 +206,7 @@ Returns:
 
 - vector with names of compute nodes (hosts)
 """
-function parsenodenames(nodenames::String, ntasks_per_node::Integer=1)
+function parsenodenames(nodenames::AbstractString, ntasks_per_node::Integer=1)
 	h = Array{String}(undef, 0)
 	ss = split(nodenames, "[")
 	name = ss[1]
@@ -282,7 +282,7 @@ Returns:
 
 - output of running remote command
 """
-function runremote(cmd::String, nodenames::Array{String,1}=madsservers)
+function runremote(cmd::AbstractString, nodenames::Array{String,1}=madsservers)
 	output = Array{String}(undef, 0)
 	for i in nodenames
 		try

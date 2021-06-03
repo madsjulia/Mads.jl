@@ -36,7 +36,7 @@ Return:
 
 - observations
 """
-function cmadsins_obs(obsid::Vector, instructionfilename::String, inputfilename::String)
+function cmadsins_obs(obsid::AbstractVector, instructionfilename::AbstractString, inputfilename::AbstractString)
 	n = length(obsid)
 	obsval = zeros(n) # initialize to 0
 	obscheck = -1 * ones(n) # initialize to -1

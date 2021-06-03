@@ -122,7 +122,7 @@ Returns:
 
 - kriging estimates at `x0mat`
 """
-function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::Vector, cov::Function)
+function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::AbstractVector, cov::Function)
     if size(X, 2) != length(Z)
         error("number of points and observations don't match")
     end
@@ -183,7 +183,7 @@ Returns:
 
 - spatial covariance vector
 """
-function getcovvec!(covvec::Vector, x0::Vector, X::AbstractMatrix, cov::Function)
+function getcovvec!(covvec::AbstractVector, x0::AbstractVector, X::AbstractMatrix, cov::Function)
 	for i = 1:size(X, 2)
 		d = 0.
 		for j = 1:size(X, 1)
@@ -195,14 +195,14 @@ function getcovvec!(covvec::Vector, x0::Vector, X::AbstractMatrix, cov::Function
 	return covvec
 end
 
-function estimationerror(w::Vector, x0::Vector, X::AbstractMatrix, cov::Function)
+function estimationerror(w::AbstractVector, x0::AbstractVector, X::AbstractMatrix, cov::Function)
 	covmat = getcovmat(X, cov)
 	covvec = Array{Float64}(undef, size(X, 2))
 	covvec = getcovvec!(covvec, x0, X, cov)
 	cov0 = cov(0.)
 	return estimationerror(w, covmat, covvec, cov0)
 end
-function estimationerror(w::Vector, covmat::AbstractMatrix, covvec::Vector, cov0::Number)
+function estimationerror(w::AbstractVector, covmat::AbstractMatrix, covvec::AbstractVector, cov0::Number)
 	return cov0 + dot(w, covmat * w) - 2 * dot(w, covvec)
 end
 

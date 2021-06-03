@@ -1,7 +1,7 @@
 import JuMP
 import Ipopt
 
-function testme1(init::Vector, targets::Vector)
+function testme1(init::AbstractVector, targets::AbstractVector)
 	@assert length(init) == length(targets)
 	global x
 	global function myf1(a...)
@@ -27,7 +27,7 @@ function testme1(init::Vector, targets::Vector)
 	return result
 end
 
-function testme2(init::Vector, targets::Vector)
+function testme2(init::AbstractVector, targets::AbstractVector)
 	@assert length(init) == length(targets)
 	nvar = length(init)
 	function myf2(a...)
@@ -39,7 +39,7 @@ function testme2(init::Vector, targets::Vector)
 	return result
 end
 
-@generated function generatedtestme2{nvar}(::Type{Val{nvar}}, init::Vector, myf2::Function)
+@generated function generatedtestme2{nvar}(::Type{Val{nvar}}, init::AbstractVector, myf2::Function)
 	myfcall = macroexpand(:(@Base.Cartesian.ncall $nvar myf2 i->x[i]))
 	q = quote
 		nvar = length(init)

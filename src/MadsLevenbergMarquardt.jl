@@ -3,7 +3,7 @@ import LsqFit
 import DocumentFunction
 import LinearAlgebra
 
-function residuals(madsdata::AbstractDict, resultvec::Vector)
+function residuals(madsdata::AbstractDict, resultvec::AbstractVector)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
@@ -48,7 +48,7 @@ Returns:
 """ residuals
 
 
-function of(madsdata::AbstractDict, resultvec::Vector)
+function of(madsdata::AbstractDict, resultvec::AbstractVector)
 	r = residuals(madsdata, resultvec)
 	sum(r .^ 2)
 end
@@ -99,7 +99,7 @@ end
 
 function makelmfunctions(f::Function)
 	f_lm = f
-	function g_lm(x::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0))
+	function g_lm(x::AbstractVector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0))
 		nO = length(center)
 		if nO == 0
 			center = f_lm(x)
@@ -115,7 +115,7 @@ function makelmfunctions(f::Function)
 		end
 		return jacobian
 	end
-	o_lm(x::Vector) = dot(x, x)
+	o_lm(x::AbstractVector) = dot(x, x)
 	return f_lm, g_lm, o_lm
 end
 function makelmfunctions(madsdata::AbstractDict)
@@ -123,7 +123,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
-	o_lm(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
+	o_lm(x::AbstractVector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
@@ -144,7 +144,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	"""
 	Forward model function for Levenberg-Marquardt optimization
 	"""
-	function f_lm(arrayparameters::Vector)
+	function f_lm(arrayparameters::AbstractVector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
@@ -213,7 +213,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
+	function g_lm(arrayparameters::AbstractVector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
 		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
@@ -243,7 +243,7 @@ Returns:
 
 - the LM parameter space step
 """
-function naive_get_deltax(JpJ::AbstractMatrix{Float64}, Jp::AbstractMatrix{Float64}, f0::Vector{Float64}, lambda::Number)
+function naive_get_deltax(JpJ::AbstractMatrix{Float64}, Jp::AbstractMatrix{Float64}, f0::AbstractVector{Float64}, lambda::Number)
 	u, s, v = svd(JpJ + lambda * SparseArrays.SparseMatrixCSC(Float64(1)LinearAlgebra.I, size(JpJ, 1), size(JpJ, 1)))
 	deltax = (v * sparse(Diagonal(1 ./ s)) * u') * -Jp * f0
 	return deltax
@@ -264,7 +264,7 @@ Returns:
 
 -
 """
-function naive_lm_iteration(f::Function, g::Function, o::Function, x0::Vector{Float64}, f0::Vector{Float64}, lambdas::Vector{Float64})
+function naive_lm_iteration(f::Function, g::Function, o::Function, x0::AbstractVector{Float64}, f0::AbstractVector{Float64}, lambdas::AbstractVector{Float64})
 	J = g(x0) # get jacobian
 	Jp = J'
 	JpJ = Jp * J
@@ -293,7 +293,7 @@ Returns:
 
 -
 """
-function naive_levenberg_marquardt(f::Function, g::Function, x0::Vector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::AbstractVector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
 	lambdas = 10. .^ range(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), stop=log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), length=np_lambda)
 	currentx = x0
 	currentf = f(x0)
@@ -331,10 +331,10 @@ keytext=Dict("root"=>"Mads problem root name",
             "np_lambda"=>"number of parallel lambda solves [default=`10`]",
             "show_trace"=>"shows solution trace [default=`false`]",
             "alwaysDoJacobian"=>"computer Jacobian each iteration [default=`false`]",
-            "callbackiteration"=>"call back function for each iteration [default=`(best_x::Vector, of::Number, lambda::Number)->nothing`]",
-            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::Vector, J::Matrix)->nothing`]")))
+            "callbackiteration"=>"call back function for each iteration [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]",
+            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::String="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::Vector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::Vector, J::Matrix)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m

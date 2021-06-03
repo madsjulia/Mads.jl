@@ -538,13 +538,13 @@ super(Any) # => Any
 # <: is the subtyping operator
 struct Lion <: Cat # Lion is a subtype of Cat
   mane_color
-  roar::String
+  roar::AbstractString
 end
 
 # You can define more constructors for your type
 # Just define a function of the same name as the type
 # and call an existing constructor to get a value of the correct type
-Lion(roar::String) = Lion("green",roar)
+Lion(roar::AbstractString) = Lion("green",roar)
 # This is an outer constructor because it's outside the type definition
 
 struct Panther <: Cat # Panther is also a subtype of Cat

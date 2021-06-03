@@ -51,7 +51,7 @@ function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 	function likelihoodparamsmin(horizon::Real)
 		return [-horizon]
 	end
-	function performancegoalsatisfied(arrayparams::Vector, horizon::Real)
+	function performancegoalsatisfied(arrayparams::AbstractVector, horizon::Real)
 		paramdict = Mads.getparamdict(madsdata)
 		optparams = OrderedCollections.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
@@ -76,7 +76,7 @@ function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 		end
 		return true
 	end
-	function gethorizonoffailure(arrayparams::Vector)
+	function gethorizonoffailure(arrayparams::AbstractVector)
 		paramdict = Mads.getparamdict(madsdata)
 		optparams = OrderedCollections.OrderedDict{String,Float64}(zip(getoptparamkeys(madsdata), arrayparams))
 		merge!(paramdict, optparams)
@@ -157,7 +157,7 @@ Returns:
 - array of conditional log-likelihoods
 """
 function makearrayconditionalloglikelihood(madsdata::AbstractDict)
-	function makeloglikelihood(likelihoodparams::Vector)
+	function makeloglikelihood(likelihoodparams::AbstractVector)
 		log10weightfactor = likelihoodparams[1]
 		return makearrayconditionalloglikelihood(madsdata, makemadsconditionalloglikelihood(madsdata; weightfactor=10^log10weightfactor))
 	end

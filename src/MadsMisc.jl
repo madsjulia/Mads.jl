@@ -5,7 +5,7 @@ import Printf
 
 #=
 function makearrayfunction_vector(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
-	function arrayfunction(arrayparameters::Vector)
+	function arrayfunction(arrayparameters::AbstractVector)
 		return f(arrayparameters)
 	end
 	return arrayfunction
@@ -15,10 +15,10 @@ end
 function makearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
-	function arrayfunction_merge(arrayparameters::Vector)
+	function arrayfunction_merge(arrayparameters::AbstractVector)
 		return f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 	end
-	function arrayfunction(arrayparameters::Vector)
+	function arrayfunction(arrayparameters::AbstractVector)
 		return f(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)))
 	end
 	if length(initparams) == length(optparamkeys)
@@ -47,7 +47,7 @@ Returns:
 
 function makedoublearrayfunction_vector(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
-	function doublearrayfunction(arrayparameters::Matrix)
+	function doublearrayfunction(arrayparameters::AbstractMatrix)
 		nr = size(arrayparameters, 2)
 		vectorresult = Array{Float64}(undef, nr)
 		for i = 1:nr
@@ -61,7 +61,7 @@ end
 function makedoublearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
 	arrayfunction = makearrayfunction(madsdata, f)
 	obskeys = getobskeys(madsdata)
-	function doublearrayfunction(arrayparameters::Vector)
+	function doublearrayfunction(arrayparameters::AbstractVector)
 		dictresult = arrayfunction(arrayparameters)
 		arrayresult = Array{Float64}(undef, length(obskeys))
 		i = 1
@@ -105,7 +105,7 @@ function makearrayconditionalloglikelihood(madsdata::AbstractDict, conditionallo
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
-	function arrayconditionalloglikelihood(arrayparameters::Vector)
+	function arrayconditionalloglikelihood(arrayparameters::AbstractVector)
 		predictions = f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
@@ -128,7 +128,7 @@ function makearrayloglikelihood(madsdata::AbstractDict, loglikelihood) # make lo
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
-	function arrayloglikelihood(arrayparameters::Vector)
+	function arrayloglikelihood(arrayparameters::AbstractVector)
 		predictions = OrderedCollections.OrderedDict()
 		try
 			predictions = f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
@@ -151,7 +151,7 @@ Returns:
 
 - dictionary containing the expression names as keys, and the values of the expression as values
 """
-function evaluatemadsexpression(expressionstring::String, parameters::AbstractDict)
+function evaluatemadsexpression(expressionstring::AbstractString, parameters::AbstractDict)
 	expression = Meta.parse(expressionstring)
 	expression = MetaProgTools.populateexpression(expression, parameters)
 	local retval::Float64
@@ -199,7 +199,7 @@ Returns:
 
 - distribution
 """
-function getdistribution(dist::String, i::String, inputtype::String)
+function getdistribution(dist::AbstractString, i::AbstractString, inputtype::AbstractString)
 	distribution = nothing
 	try
 		distribution = Distributions.eval(Meta.parse(dist))

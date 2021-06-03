@@ -286,10 +286,10 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
 end
 
-function makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::String=""; usedict::Bool=true)
+function makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::AbstractString=""; usedict::Bool=true)
 	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), getrestart(madsdata), madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
 end
-function makemadsreusablefunction(paramkeys::Vector, obskeys::Vector, madsdatarestart::Union{String,Bool}, madscommandfunction::Function, restartdir::String; usedict::Bool=true)
+function makemadsreusablefunction(paramkeys::AbstractVector, obskeys::AbstractVector, madsdatarestart::Union{String,Bool}, madscommandfunction::Function, restartdir::AbstractString; usedict::Bool=true)
 	if madsdatarestart == "memory" # this is not very cool
 		madscommandfunctionwithreuse = ReusableFunctions.maker3function(madscommandfunction)
 		return madscommandfunctionwithreuse
@@ -334,7 +334,7 @@ Returns:
 
 - restart directory where reusable model results will be stored
 """
-function getrestartdir(madsdata::AbstractDict, suffix::String="")
+function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 	restartdir = ""
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
@@ -386,7 +386,7 @@ Returns:
 
 - Julia function to execute the model
 """
-function importeverywhere(filename::String)
+function importeverywhere(filename::AbstractString)
 	code = read(filename, String)
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	extracode = quiet ? "" : "else Mads.madswarn(\"$functionname already defined\")"

@@ -177,7 +177,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results && rootname != ""
-		function interationcallback(x_best::Vector, of::Number, lambda::Number)
+		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			if localsa || restart_flag
 				Mads.localsa(madsdata; par=x_best_real, keyword="best")
@@ -188,15 +188,15 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
-		function jacobiancallback(x::Vector, J::Matrix)
+		function jacobiancallback(x::AbstractVector, J::AbstractMatrix)
 			if localsa || restart_flag
 				x_real = sinetransform(x, lowerbounds, upperbounds, indexlogtransformed)
 				Mads.localsa(madsdata; par=x_real, J=J, keyword="current")
 			end
 		end
 	else
-		interationcallback = (x_best::Vector, of::Number, lambda::Number)->nothing
-		jacobiancallback = (x::Vector, J::Matrix)->nothing
+		interationcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
+		jacobiancallback = (x::AbstractVector, J::AbstractMatrix)->nothing
 	end
 	if usenaive == true
 		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)

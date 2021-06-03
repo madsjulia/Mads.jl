@@ -31,7 +31,7 @@ s2 = (2.3, 1.8)
 
 pg = Array{Gadfly.Plot}(undef, length(xm), length(ym))
 
-function shift(d::Number, y::Vector)
+function shift(d::Number, y::AbstractVector)
 	i = Int(floor(d * 300))
 	if i > 999
 		i = 999

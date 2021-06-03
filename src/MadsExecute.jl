@@ -1,6 +1,6 @@
 import DocumentFunction
 
-function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 seconds
+function checknodedir(node::AbstractString, dir::AbstractString, waittime::Float64=10.) # 10 seconds
 	proc = run(`ssh -t $node ls $dir`; wait=false)
 	timedwait(() -> process_exited(proc), waittime)
 	if process_running(proc)
@@ -9,7 +9,7 @@ function checknodedir(node::String, dir::String, waittime::Float64=10.) # 10 sec
 	end
 	return true
 end
-function checknodedir(dir::String, waittime::Float64=10.) # 10 seconds
+function checknodedir(dir::AbstractString, waittime::Float64=10.) # 10 seconds
 	if Sys.iswindows()
 		proc = run(`cmd /C dir $dir`; wait=false)
 	elseif Mads.madsbash
@@ -97,7 +97,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		return nothing
 	end
 end
-function runcmd(cmdstring::String; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
+function runcmd(cmdstring::AbstractString; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
 	if Sys.iswindows()
 		r = runcmd(`cmd /C $(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
 	elseif Mads.madsbash
