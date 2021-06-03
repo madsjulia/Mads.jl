@@ -1,6 +1,6 @@
 import DocumentFunction
 
-function asinetransform(madsdata::AbstractDict, params::Vector)
+function asinetransform(madsdata::AbstractDict, params::AbstractVector)
 	paramkeys = getoptparamkeys(madsdata)
 	lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 	upperbounds = Mads.getparamsmax(madsdata, paramkeys)
@@ -10,7 +10,7 @@ function asinetransform(madsdata::AbstractDict, params::Vector)
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 	return Mads.asinetransform(params, lowerbounds, upperbounds, indexlogtransformed)
 end
-function asinetransform(params::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # asine transformation
+function asinetransform(params::AbstractVector, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector) # asine transformation
 	sineparams = copy(params)
 	sineparams[indexlogtransformed] = log10.(sineparams[indexlogtransformed])
 	sineparams = asin.((sineparams .- lowerbounds) ./ (upperbounds .- lowerbounds) .* 2 .- 1)
@@ -32,7 +32,7 @@ Returns:
 - Arcsine transformation of model parameters
 """ asinetransform
 
-function sinetransform(madsdata::AbstractDict, params::Vector)
+function sinetransform(madsdata::AbstractDict, params::AbstractVector)
 	paramkeys = getoptparamkeys(madsdata)
 	lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
 	upperbounds = Mads.getparamsmax(madsdata, paramkeys)
@@ -42,7 +42,7 @@ function sinetransform(madsdata::AbstractDict, params::Vector)
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 	return Mads.sinetransform(params, lowerbounds, upperbounds, indexlogtransformed)
 end
-function sinetransform(sineparams::Vector, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation
+function sinetransform(sineparams::AbstractVector, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector) # sine transformation
 	params = lowerbounds .+ (upperbounds .- lowerbounds) .* ((1 .+ sin.(sineparams)) .* .5) # untransformed parameters (regular parameter space)
 	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
 	return params
@@ -76,8 +76,8 @@ Returns:
 
 - Sine transformation
 """
-function sinetransformfunction(f::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector) # sine transformation a function
-	function sinetransformedf(sineparams::Vector)
+function sinetransformfunction(f::Function, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector) # sine transformation a function
+	function sinetransformedf(sineparams::AbstractVector)
 		return f(sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed))
 	end
 	return sinetransformedf
@@ -97,8 +97,8 @@ Returns:
 
 - Sine transformation of a gradient function
 """
-function sinetransformgradient(g::Function, lowerbounds::Vector, upperbounds::Vector, indexlogtransformed::Vector; sindx::Float64 = 0.1)
-	function sinetransformed(sineparams::Vector; center::Array{Float64,1}=Array{Float64}(undef, 0))
+function sinetransformgradient(g::Function, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector; sindx::Float64 = 0.1)
+	function sinetransformed(sineparams::AbstractVector; center::Array{Float64,1}=Array{Float64}(undef, 0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams1 = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams2 = sinetransform(sineparams .- sindx, lowerbounds, upperbounds, indexlogtransformed)

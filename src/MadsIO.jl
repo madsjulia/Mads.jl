@@ -7,7 +7,7 @@ Get file names by expanding wildcards
 
 $(DocumentFunction.documentfunction(getfilenames))
 """
-function getfilenames(cmdstring::String)
+function getfilenames(cmdstring::AbstractString)
 	readlines(runcmd("ls " * cmdstring; quiet=true, pipe=true)[2])
 end
 
@@ -39,7 +39,7 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::String; bigfile::Bool=false, julia::Bool=true, format::String="yaml")
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, julia::Bool=true, format::AbstractString="yaml")
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
@@ -95,7 +95,7 @@ Returns:
 
 - MADS problem dictionary
 """
-function loadbigyamlfile(filename::String)
+function loadbigyamlfile(filename::AbstractString)
 	lines = readlines(filename)
 	nlines = length(lines)
 	keyln = findall((in)(true), map(i->(match(r"^[A-Z]", lines[i]) !== nothing), 1:nlines))
@@ -313,7 +313,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 	end
 end
 
-function savemadsfile(madsdata::AbstractDict, filename::String=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
+function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -330,7 +330,7 @@ function savemadsfile(madsdata::AbstractDict, filename::String=""; julia::Bool=f
 	end
 	dumpyamlmadsfile(madsdata2, filename, julia=julia)
 end
-function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::String=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
+function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -390,7 +390,7 @@ Set a default MADS input file
 $(DocumentFunction.documentfunction(setmadsinputfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
 """
-function setmadsinputfile(filename::String)
+function setmadsinputfile(filename::AbstractString)
 	global madsinputfile = filename
 end
 
@@ -451,7 +451,7 @@ d = Mads.getdir("a.mads") # d = "."
 d = Mads.getdir("test/a.mads") # d = "test"
 ```
 """
-function getdir(filename::String)
+function getdir(filename::AbstractString)
 	d = dirname(filename)
 	if d == ""
 		d = "."
@@ -527,7 +527,7 @@ r = Mads.getrootname("a.rnd.dat") # r = "a"
 r = Mads.getrootname("a.rnd.dat", first=false) # r = "a.rnd"
 ```
 """
-function getrootname(filename::String; first::Bool=true, version::Bool=false)
+function getrootname(filename::AbstractString; first::Bool=true, version::Bool=false)
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if !first && length(s) > 1
@@ -553,7 +553,7 @@ end
 function setnewmadsfilename(madsdata::AbstractDict)
 	setnewmadsfilename(madsdata["Filename"])
 end
-function setnewmadsfilename(filename::String)
+function setnewmadsfilename(filename::AbstractString)
 	dir = getdir(filename)
 	root = splitdir(getrootname(filename))[end]
 	if occursin(r"-v[0-9]*$", root)
@@ -590,7 +590,7 @@ Returns:
 
 - next mads file name
 """
-function getnextmadsfilename(filename::String)
+function getnextmadsfilename(filename::AbstractString)
 	t0 = 0
 	filename_old = filename
 	while isfile(filename)
@@ -627,7 +627,7 @@ Example:
 ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 """
-function getextension(filename::String)
+function getextension(filename::AbstractString)
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if length(s) > 1
@@ -694,7 +694,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
-function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::String=".")
+function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::AbstractString=".")
 	errorflag = false
 	boundparameters!(madsdata, parameters)
 	if haskey(madsdata, "Instructions") # Instructions
@@ -773,7 +773,7 @@ $(DocumentFunction.documentfunction(readmodeloutput;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
-function readmodeloutput(madsdata::AbstractDict; obskeys::Vector=getobskeys(madsdata))
+function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobskeys(madsdata))
 	results = OrderedCollections.OrderedDict()
 	if haskey(madsdata, "Instructions") # Templates/Instructions
 		results = readobservations(madsdata, obskeys)
@@ -813,8 +813,8 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::Vector=getobskeys(mads
 	return convert(OrderedCollections.OrderedDict{String,Float64}, results)
 end
 
-searchdir(key::Regex; path::String = ".") = filter(x->occursin(key, x), readdir(path))
-searchdir(key::String; path::String = ".") = filter(x->occursin(key, x), readdir(path))
+searchdir(key::Regex; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
+searchdir(key::AbstractString; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
 
 @doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
@@ -837,7 +837,7 @@ Examples:
 """ searchdir
 
 filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
-filterkeys(dict::AbstractDict, key::String = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
+filterkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
 
 @doc """
 Filter dictionary keys based on a string or regular expression
@@ -848,7 +848,7 @@ argtext=Dict("dict"=>"dictionary",
 """ filterkeys
 
 indexkeys(dict::AbstractDict, key::Regex) = key == r"" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
-indexkeys(dict::AbstractDict, key::String = "") = key == "" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
+indexkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
 
 @doc """
 Find indexes for dictionary keys based on a string or regular expression
@@ -859,7 +859,7 @@ argtext=Dict("dict"=>"dictionary",
 """ indexkeys
 
 getdictvalues(dict::AbstractDict, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
-getdictvalues(dict::AbstractDict, key::String = "") = map(y->(y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::AbstractDict, key::AbstractString = "") = map(y->(y, dict[y]), filterkeys(dict, key))
 
 @doc """
 Get dictionary values for keys based on a string or regular expression
@@ -954,7 +954,7 @@ Returns:
 - `obsnames` : observation names
 - `getparamhere` : parameters
 """
-function instline2regexs(instline::String)
+function instline2regexs(instline::AbstractString)
 	floatregex = r"\h*[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
 	regex = r"@[^@]*@|w|![^!]*!"
 	offset = 1
@@ -1003,7 +1003,7 @@ Returns:
 
 - true or false
 """
-function obslineoccursin(obsline::String, regexs::Array{Regex, 1})
+function obslineoccursin(obsline::AbstractString, regexs::Array{Regex, 1})
 	if length(regexs) == 0
 		return false
 	end
@@ -1024,7 +1024,7 @@ Returns:
 
 - `obsdict` : observations
 """
-function regexs2obs(obsline::String, regexs::Array{Regex, 1}, obsnames::Array{String, 1}, getparamhere::Array{Bool, 1})
+function regexs2obs(obsline::AbstractString, regexs::Array{Regex, 1}, obsnames::Array{String, 1}, getparamhere::Array{Bool, 1})
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()
@@ -1054,7 +1054,7 @@ Returns:
 
 - `obsdict` : observation dictionary with the model outputs
 """
-function ins_obs(instructionfilename::String, modeloutputfilename::String)
+function ins_obs(instructionfilename::AbstractString, modeloutputfilename::AbstractString)
 	instfile = open(instructionfilename, "r")
 	if !isfile(modeloutputfilename)
 		throw("File $modeloutputfilename is missing!")
@@ -1115,7 +1115,7 @@ Returns:
 
 - dictionary with Mads observations
 """
-function readobservations(madsdata::AbstractDict, obskeys::Vector=getobskeys(madsdata))
+function readobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata))
 	dictelements = zip(obskeys, zeros(Int, length(obskeys)))
 	observations = OrderedCollections.OrderedDict{String,Float64}(dictelements)
 	obscount = OrderedCollections.OrderedDict{String,Int}()
@@ -1153,7 +1153,7 @@ Dumps:
 
 - `filename` : a ASCII file
 """
-function dumpwelldata(madsdata::AbstractDict, filename::String)
+function dumpwelldata(madsdata::AbstractDict, filename::AbstractString)
 	if haskey(madsdata, "Wells")
 		outfile = open(filename, "w")
 		write(outfile, "well_name, x_coord [m], x_coord [m], z_coord [m], time [years], concentration [ppb]\n")
@@ -1180,7 +1180,7 @@ $(DocumentFunction.documentfunction(symlinkdirfiles;
 argtext=Dict("dirsource"=>"source directory",
             "dirtarget"=>"target directory")))
 """
-function symlinkdirfiles(dirsource::String, dirtarget::String)
+function symlinkdirfiles(dirsource::AbstractString, dirtarget::AbstractString)
 	for f in readdir(dirsource)
 		if !isdir(f)
 			symlinkdir(f, dirtarget, abspath(dirsource))
@@ -1198,7 +1198,7 @@ $(DocumentFunction.documentfunction(symlinkdir;
 argtext=Dict("filename"=>"file name",
             "dirtarget"=>"target directory")))
 """
-function symlinkdir(filename::String, dirtarget::String, dirsource::String)
+function symlinkdir(filename::AbstractString, dirtarget::AbstractString, dirsource::AbstractString)
 	filenametarget = joinpath(dirtarget, filename)
 	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
 		symlink(joinpath(dirsource, filename), filenametarget)
@@ -1212,7 +1212,7 @@ $(DocumentFunction.documentfunction(rmdir;
 argtext=Dict("dir"=>"directory to be removed"),
 keytext=Dict("path"=>"path of the directory [default=`current path`]")))
 """
-function rmdir(dir::String; path::String=".")
+function rmdir(dir::AbstractString; path::AbstractString=".")
 	if path != "" && path != "."
 		dir = joinpath(path, dir)
 	end
@@ -1228,7 +1228,7 @@ $(DocumentFunction.documentfunction(rmfile;
 argtext=Dict("filename"=>"file to be removed"),
 keytext=Dict("path"=>"path of the file [default=`current path`]")))
 """
-function rmfile(filename::String; path::String=".")
+function rmfile(filename::AbstractString; path::AbstractString=".")
 	if path != "" && path != "."
 		filename = joinpath(path, filename)
 	end
@@ -1244,7 +1244,7 @@ $(DocumentFunction.documentfunction(rmfile;
 argtext=Dict("filenamepattern"=>"name pattern for files to be removed"),
 keytext=Dict("path"=>"path of the file [default=`current path`]")))
 """
-function rmfiles(filenamepattern::Regex; path::String=".")
+function rmfiles(filenamepattern::Regex; path::AbstractString=".")
 	for f in searchdir(filenamepattern; path=path)
 		rmfile(f; path=path)
 	end
@@ -1257,7 +1257,7 @@ $(DocumentFunction.documentfunction(rmfiles_ext;
 argtext=Dict("ext"=>"extension"),
 keytext=Dict("path"=>"path of the files to be removed [default=`.`]")))
 """
-function rmfiles_ext(ext::String; path::String=".")
+function rmfiles_ext(ext::AbstractString; path::AbstractString=".")
 	for f in searchdir(Regex(string(".*\\.", ext)); path=path)
 		rmfile(f; path=path)
 	end
@@ -1270,7 +1270,7 @@ $(DocumentFunction.documentfunction(rmfiles_root;
 argtext=Dict("root"=>"root"),
 keytext=Dict("path"=>"path of the files to be removed [default=`.`]")))
 """
-function rmfiles_root(root::String; path::String=".")
+function rmfiles_root(root::AbstractString; path::AbstractString=".")
 	s = splitdir(root)
 	if s[1] != ""
 		path = s[1]
@@ -1287,7 +1287,7 @@ Create temporary directory
 $(DocumentFunction.documentfunction(createtempdir;
 argtext=Dict("tempdirname"=>"temporary directory name")))
 """
-function createtempdir(tempdirname::String)
+function createtempdir(tempdirname::AbstractString)
 	attempt = 0
 	trying = true
 	while trying
@@ -1313,7 +1313,7 @@ $(DocumentFunction.documentfunction(linktempdir;
 argtext=Dict("madsproblemdir"=>"Mads problem directory",
             "tempdirname"=>"temporary directory name")))
 """
-function linktempdir(madsproblemdir::String, tempdirname::String)
+function linktempdir(madsproblemdir::AbstractString, tempdirname::AbstractString)
 	attempt = 0
 	trying = true
 	while trying
@@ -1340,7 +1340,7 @@ Create a directory (if does not already exist)
 $(DocumentFunction.documentfunction(mkdir;
 argtext=Dict("dirname"=>"directory")))
 """
-function mkdir(dirname::String)
+function mkdir(dirname::AbstractString)
 	if !isdir(dirname)
 		Base.mkdir(dirname)
 	end
@@ -1352,7 +1352,7 @@ Create directories recursively (if does not already exist)
 $(DocumentFunction.documentfunction(recursivemkdir;
 argtext=Dict("dirname"=>"directory")))
 """
-function recursivemkdir(s::String; filename=true)
+function recursivemkdir(s::AbstractString; filename=true)
 	if filename
 		if isfile(s)
 			return
@@ -1395,7 +1395,7 @@ Remove directories recursively
 $(DocumentFunction.documentfunction(recursivermdir;
 argtext=Dict("dirname"=>"directory")))
 """
-function recursivermdir(s::String; filename=true)
+function recursivermdir(s::AbstractString; filename=true)
 	d = Vector{String}(undef, )
 	sc = deepcopy(s)
 	if !filename && sc!= ""

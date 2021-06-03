@@ -14,7 +14,7 @@ s2 = (2.3, 1.8)
 
 pg = Array{Gadfly.Plot}(undef, length(xm), length(ym))
 
-function shift(d::Number, t::Vector, scale::Number)
+function shift(d::Number, t::AbstractVector, scale::Number)
 	ss = d * 1
 	s = sin.(scale * t + ss) .+ rand(2001) ./ 10
 	q = Int(floor((4-d)^2 * 100))

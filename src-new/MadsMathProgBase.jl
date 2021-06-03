@@ -18,7 +18,7 @@ function madsmathprogbase(madsdata::AbstractDict=Dict())
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
 	restartdir = getrestartdir(madsdata)
-	o_function(x::Vector) = sar ? sum.(abs.(x)) : dot(x, x)
+	o_function(x::AbstractVector) = sar ? sum.(abs.(x)) : dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
@@ -39,7 +39,7 @@ function madsmathprogbase(madsdata::AbstractDict=Dict())
 
 	o_mpb, grad_o_mpb, f_mpb, g_mpb = makempbfunctions(madsdata)
 
-	@eval function MathProgBase.initialize(d::MadsModel, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModel, requested_features::AbstractVector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
@@ -47,13 +47,13 @@ function madsmathprogbase(madsdata::AbstractDict=Dict())
 		end
 	end
 	@eval MathProgBase.features_available(d::MadsModel) = [:Grad, :Jac]
-	@eval function MathProgBase.eval_f(d::MadsModel, p::Vector)
+	@eval function MathProgBase.eval_f(d::MadsModel, p::AbstractVector)
 		return o_mpb(p)
 	end
-	@eval function MathProgBase.eval_grad_f(d::MadsModel, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModel, grad_f::AbstractVector, p::AbstractVector)
 		grad_f = grad_o_mpb(p, dx=lineardx)
 	end
-	@eval function MathProgBase.eval_g(d::MadsModel, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModel, o::AbstractVector, p::AbstractVector)
 		o = f_mpb(p)
 	end
 	#=
@@ -62,7 +62,7 @@ function madsmathprogbase(madsdata::AbstractDict=Dict())
 	MathProgBase.jac_structure(d::MadsModel) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
 	=#
 	@eval MathProgBase.jac_structure(d::MadsModel) = [repeat(collect(1:nP); inner=nO)],[repeat(collect(1:nP); outer=nO)]
-	@eval function MathProgBase.eval_jac_g(d::MadsModel, J::Vector, p::Vector)
+	@eval function MathProgBase.eval_jac_g(d::MadsModel, J::AbstractVector, p::AbstractVector)
 		center = f_mpb(p)
 		fevals = g_mpb(p, dx=lineardx)
 		ji = 0
@@ -91,14 +91,14 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Objective function for MathProgBase optimization
 	"""
-	function o_mpb(arrayparameters::Vector)
+	function o_mpb(arrayparameters::AbstractVector)
 		residuals = f_mpb(arrayparameters)
 		return o_function(residuals)
 	end
 	"""
 	Objective function gradient for MathProgBase optimization
 	"""
-	function grad_o_mpb(arrayparameters::Vector; dx::Array{Float64,1}=Array{Float64}(undef, 0))
+	function grad_o_mpb(arrayparameters::AbstractVector; dx::Array{Float64,1}=Array{Float64}(undef, 0))
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
@@ -114,7 +114,7 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Forward model function for MathProgBase optimization
 	"""
-	function f_mpb(arrayparameters::Vector)
+	function f_mpb(arrayparameters::AbstractVector)
 		parameters = copy(initparams)
 		for i = 1:nP
 			parameters[optparamkeys[i]] = arrayparameters[i]
@@ -136,7 +136,7 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Inner gradient function for the forward model used for MathProgBase optimization
 	"""
-	function inner_g_mpb(argtuple::Vector)
+	function inner_g_mpb(argtuple::AbstractVector)
 		arrayparameters = argtuple[1]
 		dx = argtuple[2]
 		if sizeof(dx) == 0
@@ -171,7 +171,7 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Gradient function for the forward model used for MathProgBase optimization
 	"""
-	function g_mpb(arrayparameters::Vector; dx::Array{Float64,1}=lineardx)
+	function g_mpb(arrayparameters::AbstractVector; dx::Array{Float64,1}=lineardx)
 		return reusable_inner_g_mpb(arrayparameters, dx)
 	end
 	return o_mpb, grad_o_mpb, f_mpb, g_mpb

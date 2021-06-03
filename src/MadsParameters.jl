@@ -40,7 +40,7 @@ Returns:
 
 - array with the keys of all parameters in the MADS problem dictionary
 """
-function getparamkeys(madsdata::AbstractDict; filter::String="")
+function getparamkeys(madsdata::AbstractDict; filter::AbstractString="")
 	if haskey(madsdata, "Parameters")
 		return collect(filterkeys(madsdata["Parameters"], filter))
 	end
@@ -105,7 +105,7 @@ for i = 1:length(getparamsnames)
 		"""
 		Get an array with $(getparamsnames[index]) values for parameters defined by `paramkeys`
 		"""
-		function $(Symbol(string("getparams", paramname)))(madsdata::AbstractDict, paramkeys::Vector) # create a function to get each parameter name with 2 arguments
+		function $(Symbol(string("getparams", paramname)))(madsdata::AbstractDict, paramkeys::AbstractVector) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array{$(paramtype)}(undef, length(paramkeys))
 			for i in 1:length(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
@@ -173,7 +173,7 @@ Returns:
 - the parameter values
 """ getparamsmin
 
-function getparamsmax(madsdata::AbstractDict, paramkeys::Vector)
+function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector)
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -212,7 +212,7 @@ Returns:
 - returns the parameter values
 """ getparamsmax
 
-function getparamsinit_min(madsdata::AbstractDict, paramkeys::Vector)
+function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector)
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -263,7 +263,7 @@ Returns:
 - the parameter values
 """ getparamsinit_min
 
-function getparamsinit_max(madsdata::AbstractDict, paramkeys::Vector)
+function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector)
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -424,7 +424,7 @@ Returns:
 
 - `true` if optimizable, `false` if not
 """
-function isopt(madsdata::AbstractDict, parameterkey::String)
+function isopt(madsdata::AbstractDict, parameterkey::AbstractString)
 	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey) &&
 		(!haskey(madsdata["Parameters"][parameterkey], "type") || haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt")
 		return true
@@ -444,7 +444,7 @@ Returns:
 
 - `true` if log-transformed, `false` otherwise
 """
-function islog(madsdata::AbstractDict, parameterkey::String)
+function islog(madsdata::AbstractDict, parameterkey::AbstractString)
 	if haskey(madsdata["Parameters"][parameterkey], "log") && madsdata["Parameters"][parameterkey]["log"] == true
 		return true
 	else
@@ -459,7 +459,7 @@ $(DocumentFunction.documentfunction(setallparamson!;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("filter"=>"parameter filter")))
 """
-function setallparamson!(madsdata::AbstractDict; filter::String="")
+function setallparamson!(madsdata::AbstractDict; filter::AbstractString="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for k in paramkeys
 		madsdata["Parameters"][k]["type"] = "opt"
@@ -473,7 +473,7 @@ $(DocumentFunction.documentfunction(setallparamsoff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("filter"=>"parameter filter")))
 """
-function setallparamsoff!(madsdata::AbstractDict; filter::String="")
+function setallparamsoff!(madsdata::AbstractDict; filter::AbstractString="")
 	paramkeys = getparamkeys(madsdata; filter=filter)
 	for k in paramkeys
 		madsdata["Parameters"][k]["type"] = nothing
@@ -487,7 +487,7 @@ $(DocumentFunction.documentfunction(setparamon!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
-function setparamon!(madsdata::AbstractDict, parameterkey::String)
+function setparamon!(madsdata::AbstractDict, parameterkey::AbstractString)
 	madsdata["Parameters"][parameterkey]["type"] = "opt";
 end
 
@@ -498,7 +498,7 @@ $(DocumentFunction.documentfunction(setparamoff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
-function setparamoff!(madsdata::AbstractDict, parameterkey::String)
+function setparamoff!(madsdata::AbstractDict, parameterkey::AbstractString)
 	madsdata["Parameters"][parameterkey]["type"] = nothing
 end
 
@@ -510,7 +510,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "mean"=>"array with the mean values",
             "stddev"=>"array with the standard deviation values")))
 """
-function setparamsdistnormal!(madsdata::AbstractDict, mean::Vector, stddev::Vector)
+function setparamsdistnormal!(madsdata::AbstractDict, mean::AbstractVector, stddev::AbstractVector)
 	paramkeys = getparamkeys(madsdata)
 	for i = 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
@@ -525,7 +525,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "min"=>"array with the minimum values",
             "max"=>"array with the maximum values")))
 """
-function setparamsdistuniform!(madsdata::AbstractDict, min::Vector, max::Vector)
+function setparamsdistuniform!(madsdata::AbstractDict, min::AbstractVector, max::AbstractVector)
 	paramkeys = getparamkeys(madsdata)
 	for i = 1:length(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
@@ -544,18 +544,18 @@ for i = 1:length(getfunction)
 		"""
 		Get the keys in the MADS problem dictionary for parameters that are $(functiondescription[index]) (`$(keywordname[index])`)
 		"""
-		function $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::Vector) # create functions getoptparamkeys / getlogparamkeys
+		function $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::AbstractVector) # create functions getoptparamkeys / getlogparamkeys
 			paramtypes = $(getfunction[index])(madsdata, paramkeys)
 			return paramkeys[paramtypes .!= $(keywordvalsNOT[index])]
 		end
 		function $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata::AbstractDict)
 			paramkeys = getparamkeys(madsdata)
-			return $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata, paramkeys::Vector)
+			return $(Symbol(string("get", keywordname[index], "paramkeys")))(madsdata, paramkeys::AbstractVector)
 		end
 		"""
 		Get the keys in the MADS problem dictionary for parameters that are NOT $(functiondescription[index]) (`$(keywordname[index])`)
 		"""
-		function $(Symbol(string("getnon", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::Vector) # create functions getnonoptparamkeys / getnonlogparamkeys
+		function $(Symbol(string("getnon", keywordname[index], "paramkeys")))(madsdata::AbstractDict, paramkeys::AbstractVector) # create functions getnonoptparamkeys / getnonlogparamkeys
 			paramtypes = $(getfunction[index])(madsdata, paramkeys)
 			return paramkeys[paramtypes .== $(keywordvalsNOT[index])]
 		end
@@ -794,7 +794,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	end
 end
 
-function boundparameters!(madsdata::AbstractDict, parvec::Vector)
+function boundparameters!(madsdata::AbstractDict, parvec::AbstractVector)
 	if !haskey(madsdata, "Parameters")
 		return
 	end

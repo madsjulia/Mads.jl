@@ -9,7 +9,7 @@ function minimumnan(X, c...; kw...)
 	minimum(X[.!isnan.(X)], c...; kw...)
 end
 
-function rmsenan(t::Vector, o::Vector)
+function rmsenan(t::AbstractVector, o::AbstractVector)
 	it = .!isnan.(t)
 	ot = .!isnan.(o)
 	ii = it .& ot
@@ -242,10 +242,10 @@ function resetmodelruns()
 	global modelruns = 0
 end
 
-function haskeyword(madsdata::AbstractDict, keyword::String)
+function haskeyword(madsdata::AbstractDict, keyword::AbstractString)
 	return haskey(madsdata, "Problem") ? haskeyword(madsdata, "Problem", keyword) : false
 end
-function haskeyword(madsdata::AbstractDict, class::String, keyword::String)
+function haskeyword(madsdata::AbstractDict, class::AbstractString, keyword::AbstractString)
 	if typeof(madsdata[class]) <: AbstractDict
 		return haskey(madsdata[class], keyword) ? true : false
 	elseif typeof(madsdata[class]) <: String
@@ -280,11 +280,11 @@ Examples:
 ```
 """ haskeyword
 
-function addkeyword!(madsdata::AbstractDict, keyword::String)
+function addkeyword!(madsdata::AbstractDict, keyword::AbstractString)
 	haskey(madsdata, "Problem") ? addkeyword!(madsdata, "Problem", keyword) : madsdata["Problem"] = keyword
 	return
 end
-function addkeyword!(madsdata::AbstractDict, class::String, keyword::String)
+function addkeyword!(madsdata::AbstractDict, class::AbstractString, keyword::AbstractString)
 	if haskeyword(madsdata, class, keyword)
 		madswarn("Keyword `$keyword` already exists")
 		return
@@ -307,13 +307,13 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"class"=>"dictionary class; if not provided searches for `keyword` in `Problem` class")))
 """ addkeyword!
 
-function deletekeyword!(madsdata::AbstractDict, keyword::String)
+function deletekeyword!(madsdata::AbstractDict, keyword::AbstractString)
 	if haskeyword(madsdata, keyword)
 		deletekeyword!(madsdata, "Problem", keyword)
 	end
 	return
 end
-function deletekeyword!(madsdata::AbstractDict, class::String, keyword::String)
+function deletekeyword!(madsdata::AbstractDict, class::AbstractString, keyword::AbstractString)
 	if haskeyword(madsdata, class, keyword)
 		if typeof(madsdata[class]) <: AbstractDict && haskey(madsdata[class], keyword)
 			delete!(madsdata[class], keyword)
@@ -393,7 +393,7 @@ Transpose non-numeric vector
 $(DocumentFunction.documentfunction(transposevector;
 argtext=Dict("a"=>"vector")))
 """
-function transposevector(a::Vector)
+function transposevector(a::AbstractVector)
 	reshape(a, 1, length(a))
 end
 
@@ -403,7 +403,7 @@ Transpose non-numeric matrix
 $(DocumentFunction.documentfunction(transposematrix;
 argtext=Dict("a"=>"matrix")))
 """
-function transposematrix(a::Matrix)
+function transposematrix(a::AbstractMatrix)
 	permutedims(a, (2, 1))
 end
 
@@ -422,7 +422,7 @@ function printerrormsg(errmsg::Any)
 	end
 end
 
-function meshgrid(x::Vector, y::Vector)
+function meshgrid(x::AbstractVector, y::AbstractVector)
 	nx = length(x)
 	ny = length(y)
 	xx = reshape(x, 1, nx)
@@ -483,7 +483,7 @@ Returns:
 
 - package version
 """
-function pkgversion_old(modulestr::String)
+function pkgversion_old(modulestr::AbstractString)
 	try
 		stdoutcaptureon()
 		Pkg.status()
@@ -507,7 +507,7 @@ Returns:
 
 - `true` or `false`
 """
-function ispkgavailable_old(modulename::String; quiet::Bool=false)
+function ispkgavailable_old(modulename::AbstractString; quiet::Bool=false)
 	try
 		stdoutcaptureon()
 		Pkg.status()
@@ -529,11 +529,11 @@ Returns:
 
 - `true` or `false`
 """
-function ispkgavailable(modulename::String)
+function ispkgavailable(modulename::AbstractString)
 	return pkginstalled(modulename)
 end
 
-function pkginstalled(modulename::String)
+function pkginstalled(modulename::AbstractString)
 	found = false
 	deps = Pkg.dependencies()
 	for (uuid, dep) in deps

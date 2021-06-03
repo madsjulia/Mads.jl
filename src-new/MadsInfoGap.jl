@@ -18,7 +18,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "verbosity"=>"verbosity output level [default=`0`]",
             "seed"=>"random seed [default=`0`]")))
 """
-function infogap_jump(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1)
+function infogap_jump(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Int=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	np = 4
@@ -123,7 +123,7 @@ Returns:
 
 - hmin, hmax
 """
-function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
+function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	time = [1.,2.,3.,4.]
@@ -140,7 +140,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		pinit = [1.,1.]
 		pmin = [-10,-5]
 		pmax = [10,5]
-		function fo1(t::Number, p::Vector)
+		function fo1(t::Number, p::AbstractVector)
 			return p[1] * t + p[2]
 		end
 		fo = fo1
@@ -149,7 +149,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		pinit = [1.,1.,1.]
 		pmin = [-10,-10,-5]
 		pmax = [10,10,5]
-		function fo2(t::Number, p::Vector)
+		function fo2(t::Number, p::AbstractVector)
 			return p[1] * (t ^ 1.1) + p[2] * t + p[3]
 		end
 		fo = fo2
@@ -158,7 +158,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		pinit = [1.,1.,1.,1.]
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
-		function fo3(t::Number, p::Vector)
+		function fo3(t::Number, p::AbstractVector)
 			return p[1] * (t ^ p[4]) + p[2] * t + p[3]
 		end
 		fo = fo3
@@ -167,7 +167,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector
 		pinit = [1.,1.,1.,1.]
 		pmin = [-10,-10,-5,-3]
 		pmax = [10,10,5,3]
-		function fo4(t::Number, p::Vector)
+		function fo4(t::Number, p::AbstractVector)
 			return p[1] * exp(t * p[4]) + p[2] * t + p[3]
 		end
 		fo = fo4
@@ -280,7 +280,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
+function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -294,7 +294,7 @@ function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=
 	t = [1.,2.,3.,4.,5.]
 	no = 4
 
-	@eval function MathProgBase.initialize(d::MadsModelPoly, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModelPoly, requested_features::AbstractVector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
@@ -302,17 +302,17 @@ function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=
 		end
 	end
 	@eval MathProgBase.features_available(d::MadsModelPoly) = [:Grad, :Jac]
-	@eval function MathProgBase.eval_f(d::MadsModelPoly, p::Vector)
+	@eval function MathProgBase.eval_f(d::MadsModelPoly, p::AbstractVector)
 		of = p[1] * (t[5]^p[4]) + p[2] * t[5] + p[3]
 		return of
 	end
-	@eval function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::AbstractVector, p::AbstractVector)
 		grad_f[1] = t[5]^p[4]
 		grad_f[2] = t[5]
 		grad_f[3] = 1
 		grad_f[4] = p[1] * (t[5]^p[4]) * log(t[5])
 	end
-	@eval function MathProgBase.eval_g(d::MadsModelPoly, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModelPoly, o::AbstractVector, p::AbstractVector)
 		for i = 1:no
 			o[i] = p[1] * (t[i]^p[4]) + p[2] * t[i] + p[3]
 		end
@@ -324,7 +324,7 @@ function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::Vector=
 	MathProgBase.eval_jac_g(d::MadsModelPoly, J, p) = nothing
 	=#
 	@eval MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-	@eval function MathProgBase.eval_jac_g(d::MadsModelPoly, J::Vector, p::Vector)
+	@eval function MathProgBase.eval_jac_g(d::MadsModelPoly, J::AbstractVector, p::AbstractVector)
 		ji = 0
 		for i = 1:no
 			J[ji + 1] = t[i]^p[4]
@@ -421,7 +421,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::Vector=[])
+function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [1.,0.]
@@ -434,7 +434,7 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 
 
 	t = [1.,2.,3.,4.,5.]
 	no = 4
-	@eval function MathProgBase.initialize(d::MadsModelLin, requested_features::Vector{Symbol})
+	@eval function MathProgBase.initialize(d::MadsModelLin, requested_features::AbstractVector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
@@ -442,21 +442,21 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::Vector=[0.05, 
 		end
 	end
 	@eval MathProgBase.features_available(d::MadsModelLin) = [:Grad, :Jac]
-	@eval function MathProgBase.eval_f(d::MadsModelLin, p::Vector)
+	@eval function MathProgBase.eval_f(d::MadsModelLin, p::AbstractVector)
 		return p[1] * t[5] + p[2]
 	end
-	@eval function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f::Vector, p::Vector)
+	@eval function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f::AbstractVector, p::AbstractVector)
 		grad_f[1] = t[5]
 		grad_f[2] = 1
 	end
-	@eval function MathProgBase.eval_g(d::MadsModelLin, o::Vector, p::Vector)
+	@eval function MathProgBase.eval_g(d::MadsModelLin, o::AbstractVector, p::AbstractVector)
 		for i = 1:no
 			o[i] = p[1] * t[i] + p[2]
 		end
 	end
 	@eval MathProgBase.jac_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
 	@eval MathProgBase.hesslag_structure(d::MadsModelLin) = Int[],Int[]
-	@eval function MathProgBase.eval_jac_g(d::MadsModelLin, J::Vector, p::Vector)
+	@eval function MathProgBase.eval_jac_g(d::MadsModelLin, J::AbstractVector, p::AbstractVector)
 		ji = 1
 		for i = 1:no
 			J[ji + 0] = t[i]

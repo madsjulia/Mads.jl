@@ -137,7 +137,7 @@ argtext=Dict("svrmodel"=>"array of SVR models",
 			"rootname"=>"root name",
 			"numberofsamples"=>"number of samples")))
 """
-function svrdump(svrmodel::Array{SVR.svmmodel, 1}, rootname::String, numberofsamples::Int)
+function svrdump(svrmodel::Array{SVR.svmmodel, 1}, rootname::AbstractString, numberofsamples::Int)
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
 	for i=1:npred
@@ -160,7 +160,7 @@ Returns:
 
 - Array of SVR models for each model prediction
 """
-function svrload(npred::Int, rootname::String, numberofsamples::Int)
+function svrload(npred::Int, rootname::AbstractString, numberofsamples::Int)
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	for i=1:npred
 		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")

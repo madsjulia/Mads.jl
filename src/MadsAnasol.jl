@@ -283,7 +283,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramdict)
 		computeconcentrations(parameterswithexpressions)
 	end
-	function computeconcentrations(parameters::Vector)
+	function computeconcentrations(parameters::AbstractVector)
 		paramdict = Mads.getparamdict(madsdata)
 		nP = length(paramdict)
 		if length(parameters) == nP
@@ -425,7 +425,7 @@ Returns:
 
 - a vector of predicted concentration at (wellx, welly, wellz, t)
 """
-function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::Vector, anasolfunction::Function)
+function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, lambda::Number, theta::Number, vx::Number, vy::Number, vz::Number, ax::Number, ay::Number, az::Number, H::Number, x::Number, y::Number, z::Number, dx::Number, dy::Number, dz::Number, f::Number, t0::Number, t1::Number, t::AbstractVector, anasolfunction::Function)
 	d = -theta * pi / 180
 	xshift = wellx - x
 	yshift = welly - y
@@ -482,7 +482,7 @@ function computemass(madsdata::AbstractDict; time::Number=0)
 	end
 	return mass_injected, mass_reduced
 end
-function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::String=".")
+function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::AbstractString=".")
 	mf = searchdir(madsfiles, path=path)
 	nf = length(mf)
 	Mads.madsinfo("Number of files = $nf")

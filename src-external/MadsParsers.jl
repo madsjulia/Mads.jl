@@ -18,7 +18,7 @@ Mads.amanzi_output_parser()
 Mads.amanzi_output_parser("observations.out")
 ```
 """
-function amanzi_output_parser(filename::String="observations.out")
+function amanzi_output_parser(filename::AbstractString="observations.out")
 	d = readdlm(filename, ',', skipstart=2)
 	no = size(d)[1]
 	madsinfo("Number of observations $(no)")

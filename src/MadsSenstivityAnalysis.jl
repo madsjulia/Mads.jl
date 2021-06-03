@@ -32,7 +32,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 	lineardx = getparamsstep(madsdata, optparamkeys)
 	nP = length(optparamkeys)
 	initparams = Mads.getparamdict(madsdata)
-	function f_sa(arrayparameters::Vector)
+	function f_sa(arrayparameters::AbstractVector)
 		parameters = copy(initparams)
 		for i = 1:length(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
@@ -96,7 +96,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function g_sa(arrayparameters::Vector{Float64}; dx::Array{Float64,1}=Array{Float64}(undef, 0), center::Array{Float64,1}=Array{Float64}(undef, 0))
+	function g_sa(arrayparameters::AbstractVector{Float64}; dx::Array{Float64,1}=Array{Float64}(undef, 0), center::Array{Float64,1}=Array{Float64}(undef, 0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return f_sa, g_sa
@@ -121,7 +121,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::String="", filename::String="", format::String="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::Array{Float64,1}=Array{Float64}(undef, 0), obs::Array{Float64,1}=Array{Float64}(undef, 0), J::Array{Float64,2}=Array{Float64}(undef, 0, 0))
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::Array{Float64,1}=Array{Float64}(undef, 0), obs::Array{Float64,1}=Array{Float64}(undef, 0), J::Array{Float64,2}=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
@@ -271,7 +271,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::Vector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
+function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
 	u, d, v = svd(J' * J)
 	done = false
 	vo = copy(v)
@@ -322,7 +322,7 @@ Returns:
 
 - vector of log-likelihoods after reweighing
 """
-function reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::Vector)
+function reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::AbstractVector)
 	obskeys = getobskeys(madsdata)
 	weights = getobsweight(madsdata)
 	targets = getobstarget(madsdata)
@@ -348,7 +348,7 @@ Returns:
 
 - array of important samples
 """
-function getimportantsamples(samples::Array, llhoods::Vector)
+function getimportantsamples(samples::Array, llhoods::AbstractVector)
 	sortedlhoods = sort(exp.(llhoods), rev=true)
 	sortedprobs = sortedlhoods / sum(sortedlhoods)
 	cumprob = 0.
@@ -379,12 +379,12 @@ Returns:
 - vector of sample means
 - vector of sample variances
 """
-function weightedstats(samples::Array, llhoods::Vector)
+function weightedstats(samples::Array, llhoods::AbstractVector)
 	wv = StatsBase.Weights(exp.(llhoods))
 	return LinearAlgebra.mean(samples, wv, 1), LinearAlgebra.var(samples, wv, 1; corrected=false)
 end
 
-function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::String=""; init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::AbstractString=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
 	else
@@ -401,7 +401,7 @@ function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameter
 		return sample
 	end
 end
-function getparamrandom(madsdata::AbstractDict, parameterkey::String; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, parameterkey::AbstractString; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
 	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata; init_dist=init_dist)
@@ -447,7 +447,7 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, restartdir::String="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
 	setseed(seed)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -595,7 +595,7 @@ Returns:
 
 - `true` when successfully loaded, `false` when it is not
 """
-function loadsaltellirestart!(evalmat::Array, matname::String, restartdir::String)
+function loadsaltellirestart!(evalmat::Array, matname::AbstractString, restartdir::AbstractString)
 	if restartdir == ""
 		return false
 	end
@@ -616,7 +616,7 @@ argtext=Dict("evalmat"=>"saved array",
 "matname"=>"matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function savesaltellirestart(evalmat::Array, matname::String, restartdir::String)
+function savesaltellirestart(evalmat::Array, matname::AbstractString, restartdir::AbstractString)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
 		FileIO.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
@@ -635,7 +635,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, restartdir::String="", parallel::Bool=false, checkpointfrequency::Integer=N)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N)
 	Mads.setseed(seed)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -874,7 +874,7 @@ for mi = 1:length(saltelli_functions)
 		"""
 		Parallel version of $(saltelli_functions[index])
 		"""
-		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::String="")
+		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::AbstractString="")
 			Mads.setseed(seed)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -1108,7 +1108,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::String="efastcheckpoints", restart::Bool=false)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::AbstractString="efastcheckpoints", restart::Bool=false)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.

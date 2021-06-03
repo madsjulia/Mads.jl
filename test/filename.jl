@@ -3,7 +3,7 @@ import Test
 using Printf
 
 workdir = "filename_testing"
-@Mads.stderrcapture function jpath(file::String)
+@Mads.stderrcapture function jpath(file::AbstractString)
 	joinpath(workdir, file)
 end
 

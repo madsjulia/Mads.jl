@@ -54,7 +54,7 @@ function functions(re::Regex; shortoutput::Bool=false, quiet::Bool=false)
 	n > 0 && string == "" && @info("Total number of functions: $n")
 	return
 end
-function functions(string::String=""; shortoutput::Bool=false, quiet::Bool=false)
+function functions(string::AbstractString=""; shortoutput::Bool=false, quiet::Bool=false)
 	n = 0
 	for i in madsmodules
 		Core.eval(Mads, :(@tryimport $(Symbol(i))))
@@ -93,7 +93,7 @@ function functions(m::Union{Symbol, Module}, re::Regex; shortoutput::Bool=false,
 	n > 0 && string == "" && @info("Number of functions in module $m: $n")
 	return n
 end
-function functions(m::Union{Symbol, Module}, string::String=""; shortoutput::Bool=false, quiet::Bool=false)
+function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortoutput::Bool=false, quiet::Bool=false)
 	n = 0
 	if string != ""
 		quiet = false

@@ -69,7 +69,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 	return filename, format
 end
 
-function plotfileformat(p, filename::String, hsize, vsize; dpi=imagedpi)
+function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
 	filename, format = setplotfileformat(filename, uppercase(getextension(filename)))
 	if format == :SVG
 		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
@@ -417,7 +417,7 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamsplotname(madsdata, paramkeys)
 	if plotlabels[1] == ""
@@ -442,6 +442,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::Matrix, filename::A
 	hsize = (6 * size(samples, 2))Gadfly.inch
 	vsize = (6 * size(samples, 2))Gadfly.inch
 	filename, format = setplotfileformat(filename, format)
+	recursivemkdir(filename)
 	try
 		pl = Compose.gridstack(cs)
 		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
@@ -620,11 +621,11 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	# mes = mes./maximum(mes,2) # normalize 0 to 1
 	mintes = minimum( tes )
 	if mintes < 0
-		tes = tes - mintes # normalize 0 to 1
+		tes = tes .- mintes # normalize 0 to 1
 	end
 	maxtes = maximum( tes )
 	if maxtes > 1
-		tes = tes / maxtes # normalize 0 to 1
+		tes = tes ./ maxtes # normalize 0 to 1
 	end
 	###################################################### DATA
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
@@ -709,7 +710,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 			println("VAR xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
 		end
 		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-			Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+			Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
@@ -719,6 +720,8 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
+	else
+		recursivemkdir(filename)
 	end
 	if !separate_files
 		filename, format = setplotfileformat(filename, format)
