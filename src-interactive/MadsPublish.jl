@@ -13,7 +13,7 @@ Returns:
 
 - filtered modules
 """
-function required(modulename::String="Mads", filtermodule::String="")
+function required(modulename::AbstractString="Mads", filtermodule::AbstractString="")
 	filename = joinpath(dirname(pathof(eval(Symbol(madsmodule)))), "..", "REQUIRE")
 	if isfile(filename)
 		modules = readdlm(filename)
@@ -39,7 +39,7 @@ Returns:
 
 - modules that are dependents of the input module
 """
-function dependents(modulename::String="Mads", filter::Bool=false)
+function dependents(modulename::AbstractString="Mads", filter::Bool=false)
 	depmodules = Pkg.dependents(modulename)
 	modules = Array{Any}(undef, (0, 2))
 	for i in depmodules
@@ -59,7 +59,7 @@ $(DocumentFunction.documentfunction(pull;
 argtext=Dict("modulename"=>"module name"),
 keytext=Dict("kw"=>"keyword arguments for calling function \"checkout\"")))
 """
-function pull(modulename::String=""; kw...)
+function pull(modulename::AbstractString=""; kw...)
 	checkout(modulename; kw...)
 end
 
@@ -75,7 +75,7 @@ keytext=Dict("git"=>"whether to use \"git checkout\" [default=`true`]",
             "required"=>"whether only checkout Mads.required modules [default=`false`]",
             "all"=>"whether to checkout all the modules [default=`false`]")))
 """
-function checkout(modulename::String=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
+function checkout(modulename::AbstractString=""; git::Bool=true, master::Bool=false, force::Bool=false, pull::Bool=true, required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -134,7 +134,7 @@ Push the latest version of Mads modules in the default remote repository
 $(DocumentFunction.documentfunction(push;
 argtext=Dict("modulename"=>"module name")))
 """
-function push(modulename::String="")
+function push(modulename::AbstractString="")
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -166,7 +166,7 @@ Diff the latest version of Mads modules in the repository
 $(DocumentFunction.documentfunction(diff;
 argtext=Dict("modulename"=>"module name")))
 """
-function diff(modulename::String="")
+function diff(modulename::AbstractString="")
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -199,7 +199,7 @@ argtext=Dict("modulename"=>"module name"),
 keytext=Dict("required"=>"only free Mads.required modules [default=`false`]",
             "all"=>"free all the modules [default=`false`]")))
 """
-function free(modulename::String=""; required::Bool=false, all::Bool=false)
+function free(modulename::AbstractString=""; required::Bool=false, all::Bool=false)
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -223,7 +223,7 @@ $(DocumentFunction.documentfunction(commit;
 argtext=Dict("commitmsg"=>"commit message",
             "modulename"=>"module name")))
 """
-function commit(commitmsg::String, modulename::String="")
+function commit(commitmsg::AbstractString, modulename::AbstractString="")
 	if modulename!=""
 		modulenames = [modulename]
 	else
@@ -253,7 +253,7 @@ function status(; git::Bool=true, gitmore::Bool=false)
 		Mads.status(i, git=git, gitmore=gitmore)
 	end
 end
-function status(madsmodule::String; git::Bool=madsgit, gitmore::Bool=false)
+function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=false)
 	if git
 		cwd = pwd()
 		@info("Git status $(madsmodule) ...")
@@ -319,7 +319,7 @@ function tag(versionsym::Symbol=:patch)
 		Mads.tag(i, versionsym)
 	end
 end
-function tag(madsmodule::String, versionsym::Symbol=:patch)
+function tag(madsmodule::AbstractString, versionsym::Symbol=:patch)
 	tag_flag = Mads.status(madsmodule, git=false)
 	if tag_flag
 		if isdefined(Mads, :PkgDev)
@@ -354,7 +354,7 @@ $(DocumentFunction.documentfunction(untag;
 argtext=Dict("madsmodule"=>"mads module name",
             "version"=>"version")))
 """
-function untag(madsmodule::String, version::String)
+function untag(madsmodule::AbstractString, version::AbstractString)
 	cwd = pwd()
 	@info("Git untag $(madsmodule) ...")
 	d = joinpath(dirname(pathof(eval(Symbol(madsmodule)))), "..")

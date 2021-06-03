@@ -140,7 +140,7 @@ Dumps:
 
 - the file containing MCMC chain
 """
-function savemcmcresults(chain::Array, filename::String)
+function savemcmcresults(chain::Array, filename::AbstractString)
 	f = open(filename, "w")
 	print(f, "Min: ")
 	JSON.print(f, minimum(chain, 1)[:])
@@ -185,7 +185,7 @@ Example:
 Mads.montecarlo(madsdata; N=100)
 ```
 """
-function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::String="")
+function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::AbstractString="")
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)

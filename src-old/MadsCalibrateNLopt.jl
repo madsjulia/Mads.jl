@@ -22,7 +22,7 @@ function calibratenlopt(madsdata::AbstractDict; algorithm=:LD_LBFGS) # TODO swit
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
 	fg = makemadscommandfunctionandgradient(madsdata)
-	function fg_nlopt(arrayparameters::Vector, grad::Vector)
+	function fg_nlopt(arrayparameters::AbstractVector, grad::AbstractVector)
 		parameters = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, arrayparameters))
 		resultdict, gradientdict = fg(parameters)
 		residuals = Array{Float64}(undef, length(madsdata["Observations"]))

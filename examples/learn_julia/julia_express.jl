@@ -34,7 +34,7 @@ println(es(100)) # print all primes less or equal than 100
 1.0::Float64 # 64-bit float, defines NaN, -Inf, Inf
 true::Bool # boolean, allows "true" and "false"
 'c'::Char # character, allows Unicode
-"s"::String # strings, allows Unicode, see also Strings
+"s"::AbstractString # strings, allows Unicode, see also Strings
 
 int64(1.3) # rounds float to integer
 int64('a') # character to integer
@@ -154,7 +154,7 @@ c # contents to original x
 # Array types syntax examples:
 cell(2)::Array{Any, 1} # vector of Any
 [1 2]::Array{Int64, 2} # 2 dimensional array of Int64
-[true; false]::Vector{Bool} # vector of Bool
+[true; false]::AbstractVector{Bool} # vector of Bool
 [1 2; 3 4]::Matrix{Int64} # matrix of Int64
 
 # Composite types

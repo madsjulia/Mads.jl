@@ -14,7 +14,7 @@ Returns:
 
 - data in the yaml input file
 """
-function loadyamlfile(filename::String; julia::Bool=false) # load YAML file
+function loadyamlfile(filename::AbstractString; julia::Bool=false) # load YAML file
 	julia = (isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()) ? julia : true
 	yamldata = OrderedCollections.OrderedDict()
 	f = open(filename)
@@ -51,7 +51,7 @@ argtext=Dict("filename"=>"output file name",
             "data"=>"YAML data"),
 keytext=Dict("julia"=>"if `true`, use `julia` YAML library (if available); if `false` (default), use `python` YAML library (if available)")))
 """
-function dumpyamlfile(filename::String, data::Any; julia::Bool=false) # dump YAML file
+function dumpyamlfile(filename::AbstractString, data::Any; julia::Bool=false) # dump YAML file
 	julia = (isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()) ? julia : true
 	f = open(filename, "w")
 	if julia
@@ -70,7 +70,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "filename"=>"output file name"),
 keytext=Dict("julia"=>"use julia YAML [default=`false`]")))
 """
-function dumpyamlmadsfile(madsdata::AbstractDict, filename::String; julia::Bool=false) # load MADS input file in YAML forma
+function dumpyamlmadsfile(madsdata::AbstractDict, filename::AbstractString; julia::Bool=false) # load MADS input file in YAML forma
 	yamldata = deepcopy(madsdata)
 	deletekeys = ["Julia model", "Filename"]
 	restore = Array{Bool}(undef, length(deletekeys))
@@ -133,6 +133,6 @@ Returns:
 
 - data in yaml input file
 """
-function readyamlpredictions(filename::String; julia::Bool=false) # read YAML predictions
+function readyamlpredictions(filename::AbstractString; julia::Bool=false) # read YAML predictions
 	return loadyamlfile(filename; julia=julia)
 end

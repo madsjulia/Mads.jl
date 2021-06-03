@@ -248,7 +248,7 @@ function settarget!(o::AbstractDict, target::Number)
 	end
 end
 
-function setobstime!(madsdata::AbstractDict, separator::String="_")
+function setobstime!(madsdata::AbstractDict, separator::AbstractString="_")
 	obskeys = getobskeys(madsdata)
 	for i in 1:length(obskeys)
 		s = split(obskeys[i], separator)
@@ -427,7 +427,7 @@ function printobservations(madsdata::AbstractDict, io::IO=stdout)
 		print(io, "\n")
 	end
 end
-function printobservations(madsdata::AbstractDict, filename::String; json::Bool=false)
+function printobservations(madsdata::AbstractDict, filename::AbstractString; json::Bool=false)
 	f = open(filename, "w")
 	printobservations(madsdata, f)
 	close(f)
@@ -439,7 +439,7 @@ $(DocumentFunction.documentfunction(printobservations;
 argtext=Dict("madsdata"=>"MADS problem dictionary", "io"=>"output stream", "filename"=>"output file name")))
 """ printobservations
 
-function createobservations!(madsdata::AbstractDict, time::Vector, observation::Vector=zeros(length(time)); logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
+function createobservations!(madsdata::AbstractDict, time::AbstractVector, observation::AbstractVector=zeros(length(time)); logtransform::Bool=false, weight_type::AbstractString="constant", weight::Number=1)
 	nT = length(time)
 	@assert nT == length(observation)
 	if !haskey(madsdata, "Wells")
@@ -483,7 +483,7 @@ function createobservations!(madsdata::AbstractDict, time::Vector, observation::
 	end
 	nothing
 end
-function createobservations!(madsdata::AbstractDict, observation::AbstractDict; logtransform::Bool=false, weight_type::String="constant", weight::Number=1)
+function createobservations!(madsdata::AbstractDict, observation::AbstractDict; logtransform::Bool=false, weight_type::AbstractString="constant", weight::Number=1)
 	observationsdict = OrderedCollections.OrderedDict()
 	for k in keys(observation)
 		data = OrderedCollections.OrderedDict()
@@ -558,7 +558,7 @@ $(DocumentFunction.documentfunction(wellon!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "wellname"=>"name of the well to be turned on")))
 """
-function wellon!(madsdata::AbstractDict, wellname::String)
+function wellon!(madsdata::AbstractDict, wellname::AbstractString)
 	error = true
 	for wellkey in keys(madsdata["Wells"])
 		if wellname == wellkey
@@ -616,7 +616,7 @@ $(DocumentFunction.documentfunction(welloff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "wellname"=>"name of the well to be turned off")))
 """
-function welloff!(madsdata::AbstractDict, wellname::String)
+function welloff!(madsdata::AbstractDict, wellname::AbstractString)
 	error = true
 	for wellkey in keys(madsdata["Wells"])
 		if wellname == wellkey

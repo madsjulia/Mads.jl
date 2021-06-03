@@ -27,7 +27,7 @@ function printdiff(prefix, thing1::AbstractDict, thing2::AbstractDict, depth)
 	end
 end
 
-function printdiff(prefix, thing1::Vector, thing2::Vector, depth)
+function printdiff(prefix, thing1::AbstractVector, thing2::AbstractVector, depth)
 	if depth < 0
 		return
 	end

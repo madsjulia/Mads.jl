@@ -10,7 +10,7 @@ function madsgetextension(filename)
 	end
 end
 
-function madsgetrootname(filename::String; first=true)
+function madsgetrootname(filename::AbstractString; first=true)
 	d = split(filename, "/")
 	s = split(d[end], ".")
 	if !first && length(s) > 1
@@ -24,7 +24,7 @@ function madsgetrootname(filename::String; first=true)
 	return r
 end
 
-function madsdisplay(filename::String)
+function madsdisplay(filename::AbstractString)
 	if !isfile(filename)
 		@warn("File `$filename` is missing!")
 		return

@@ -6,7 +6,7 @@ Rosenbrock test function (more difficult to solve)
 $(DocumentFunction.documentfunction(rosenbrock2_lm;
 argtext=Dict("x"=>"parameter vector")))
 """
-function rosenbrock2_lm(x::Vector)
+function rosenbrock2_lm(x::AbstractVector)
 	[10.0 * ( x[2] - x[1]^2 ); 1.0 - x[1]]
 end
 
@@ -20,7 +20,7 @@ Returns:
 
 - parameter gradients
 """
-function rosenbrock2_gradient_lm(x::Vector)
+function rosenbrock2_gradient_lm(x::AbstractVector)
 	j = Array{Float64}(undef, 2,2)
 	j[1, 1] = -20.0 * x[1]
 	j[1, 2] =  10.0
@@ -39,7 +39,7 @@ Returns:
 
 - test result
 """
-function rosenbrock(x::Vector)
+function rosenbrock(x::AbstractVector)
 	return (1.0 - x[1])^2 + 100.0 * (x[2] - x[1]^2)^2
 end
 
@@ -53,7 +53,7 @@ Returns:
 
 - test result
 """
-function rosenbrock_lm(x::Vector)
+function rosenbrock_lm(x::AbstractVector)
 	[(1.0 - x[1])^2;  100.0 * (x[2] - x[1]^2)^2]
 end
 
@@ -64,7 +64,7 @@ $(DocumentFunction.documentfunction(rosenbrock_gradient!;
 argtext=Dict("x"=>"parameter vector",
             "grad"=>"gradient vector")))
 """
-function rosenbrock_gradient!(x::Vector, grad::Vector)
+function rosenbrock_gradient!(x::AbstractVector, grad::AbstractVector)
 	grad[1] = -2.0 * (1.0 - x[1]) - 400.0 * (x[2] - x[1]^2) * x[1]
 	grad[2] = 200.0 * (x[2] - x[1]^2)
 end
@@ -81,7 +81,7 @@ Returns:
 
 - parameter gradients
 """
-function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(undef, 0))
+function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Array{Float64}(undef, 0))
 	grad = Array{Float64}(undef, 2,2)
 	grad[1,1] = -2.0 * (1.0 - x[1])
 	grad[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]
@@ -97,7 +97,7 @@ $(DocumentFunction.documentfunction(rosenbrock_hessian!;
 argtext=Dict("x"=>"parameter vector",
             "hess"=>"Hessian matrix")))
 """
-function rosenbrock_hessian!(x::Vector, hess::Matrix)
+function rosenbrock_hessian!(x::AbstractVector, hess::AbstractMatrix)
 	hess[1, 1] = 2.0 - 400.0 * x[2] + 1200.0 * x[1]^2
 	hess[1, 2] = -400.0 * x[1]
 	hess[2, 1] = -400.0 * x[1]
@@ -115,7 +115,7 @@ Returns:
 - Rosenbrock test function for LM optimization
 """
 function makerosenbrock(n::Integer)
-	function rosenbrock_lm(x::Vector)
+	function rosenbrock_lm(x::AbstractVector)
 		result = Array{eltype(x)}(undef, 2 * (n - 1))
 		for i = 1:n - 1
 			result[2 * i - 1] = 1 - x[i]
@@ -137,7 +137,7 @@ Returns:
 - parameter gradients of the Rosenbrock test function for LM optimization
 """
 function makerosenbrock_gradient(n::Integer)
-	function rosenbrock_gradient_lm(x::Vector; dx::Bool=false, center=Array{Float64}(undef, 0))
+	function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Array{Float64}(undef, 0))
 		result = zeros(eltype(x), (2 * (n - 1), n))
 		for i = 1:n - 1
 			result[2 * i - 1, i] = -1
@@ -160,7 +160,7 @@ Returns:
 - Powell test function for LM optimization
 """
 function makepowell(n::Integer)
-	function powell(x::Vector)
+	function powell(x::AbstractVector)
 		result = Array{Float64}(undef, n)
 		for i = 1:floor(Int64, 10.0/4)
 			result[4*i-3] = x[4*i-3] + 10*x[4*i-2]
@@ -184,7 +184,7 @@ Returns:
 - arameter gradients of the Powell test function for LM optimization
 """
 function makepowell_gradient(n::Integer)
-	function powell_gradient(x::Vector)
+	function powell_gradient(x::AbstractVector)
 		result = zeros(Float64, n, n)
 		for i = 1:floor(Int64, 10.0/4)
 			result[4*i-3, 4*i-3] = 1
@@ -215,7 +215,7 @@ Returns:
 - sphere
 """
 function makesphere(n::Integer)
-	function sphere(x::Vector)
+	function sphere(x::AbstractVector)
 		result = Array{eltype(x)}(undef, n)
 		for i = 1:n
 			result[i] = x[i]
@@ -236,7 +236,7 @@ Returns:
 - sphere gradient
 """
 function makesphere_gradient(n::Integer)
-	function sphere_gradient(x::Vector)
+	function sphere_gradient(x::AbstractVector)
 		result = zeros(eltype(x), n, n)
 		for i=1:n
 			result[i, i] = 1
@@ -257,7 +257,7 @@ Returns:
 - dixon price
 """
 function makedixonprice(n::Integer)
-	function dixonprice(x::Vector)
+	function dixonprice(x::AbstractVector)
 		result = Array{Float64}(undef, n)
 		result[1] = x[1] - 1
 		for i=2:n
@@ -277,7 +277,7 @@ Returns:
 - dixon price gradient
 """
 function makedixonprice_gradient(n::Integer)
-	function dixonprice_gradient(x::Vector)
+	function dixonprice_gradient(x::AbstractVector)
 		result = zeros(Float64, n, n)
 		result[1, 1] = sqrt(2)
 		for i=2:n
@@ -298,7 +298,7 @@ Returns:
 - sumsquares
 """
 function makesumsquares(n::Integer)
-	function sumsquares(x::Vector)
+	function sumsquares(x::AbstractVector)
 		result = Array{Float64}(undef, n)
 		for i=1:n
 			result[i] = sqrt(i)*x[i]
@@ -317,7 +317,7 @@ Returns:
 - sumsquares gradient
 """
 function makesumsquares_gradient(n::Integer)
-	function sumsquares_gradient(x::Vector)
+	function sumsquares_gradient(x::AbstractVector)
 		result = zeros(Float64, n, n)
 		for i=1:n
 			result[i, i] = sqrt(2*i)
@@ -336,7 +336,7 @@ Returns:
 - rotated hyperellipsoid
 """
 function makerotatedhyperellipsoid(n::Integer)
-	function rotatedhyperellipsoid(x::Vector)
+	function rotatedhyperellipsoid(x::AbstractVector)
 		result = Array{Float64}(undef, n)
 		result[1] = x[1]
 		for i =2:n
@@ -360,7 +360,7 @@ Returns:
 - rotated hyperellipsoid gradient
 """
 function makerotatedhyperellipsoid_gradient(n::Integer)
-	function rotatedhyperellipsoid_gradient(x::Vector)
+	function rotatedhyperellipsoid_gradient(x::AbstractVector)
 		result = zeros(Float64, n, n)
 		result[1, 1] = sqrt(2)
 		for i = 2:n

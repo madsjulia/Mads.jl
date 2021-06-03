@@ -11,7 +11,7 @@ Returns:
 
 - data from the file
 """
-function loadasciifile(filename::String) # load ASCII text file
+function loadasciifile(filename::AbstractString) # load ASCII text file
 	data = open(readdlm, filename)
 	return data
 end
@@ -27,7 +27,7 @@ Dumps:
 
 - ASCII file with the name in "filename"
 """
-function dumpasciifile(filename::String, data::Any) # dump ASCII text file
+function dumpasciifile(filename::AbstractString, data::Any) # dump ASCII text file
 	writedlm(filename, data)
 end
 
@@ -41,6 +41,6 @@ Returns:
 
 - MADS predictions
 """
-function readasciipredictions(filename::String) # read ASCII text predictions
+function readasciipredictions(filename::AbstractString) # read ASCII text predictions
 	return loadasciifile(filename)
 end

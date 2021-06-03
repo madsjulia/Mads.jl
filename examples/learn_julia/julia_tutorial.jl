@@ -20,13 +20,13 @@ workspace()
 whos()
 
 ## Function naming convention, timing
-function addones!(x::Vector, z::Vector)
+function addones!(x::AbstractVector, z::AbstractVector)
 	z = x + ones(length(x))
 	x = x - ones(length(x))
 	return x, z
 end
 
-function addones(x::Vector)
+function addones(x::AbstractVector)
 	z = similar(y)
 	z = x + ones(length(x))
 end

@@ -11,7 +11,7 @@ Returns:
 
 - MADS problem dictionary
 """
-function loadmadsproblem(name::String)
+function loadmadsproblem(name::AbstractString)
 	if name == "polynomial"
 		madsdata = Mads.loadmadsfile(joinpath(Mads.madsdir, "examples", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 	elseif name == "external"
@@ -39,7 +39,7 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Functi
 	makemadscommandfunction(md)
 	return md
 end
-function createmadsproblem(infilename::String, outfilename::String)
+function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
 	result = f(Mads.getparamdict(madsdata))
@@ -64,12 +64,12 @@ function createmadsproblem(infilename::String, outfilename::String)
 	Mads.dumpyamlfile(outfilename, outyaml)
 	return
 end
-function createmadsproblem(madsdata::AbstractDict, outfilename::String)
+function createmadsproblem(madsdata::AbstractDict, outfilename::AbstractString)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(Mads.getparamdict(madsdata))
 	createmadsproblem(madsdata, predictions, outfilename)
 end
-function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::String)
+function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::AbstractString)
 	newmadsdata = createmadsproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end
@@ -121,7 +121,7 @@ Returns:
 
 - observation dictionary
 """
-function createmadsobservations(nrow::Int, ncol::Int=1; obstring::String="", pretext::String="", prestring::String="", poststring::String="", filename::String="")
+function createmadsobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
 	dump = filename != "" ? true : false
 	dump && (f = open(filename, "w"))
 	dump && write(f, pretext)

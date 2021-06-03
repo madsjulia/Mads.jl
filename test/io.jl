@@ -7,7 +7,7 @@ import Random
 
 # If madsdir = '.' then joinpath, else madsdir
 workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "test") : Mads.getmadsdir()
-@Mads.stderrcapture function jpath(file::String)
+@Mads.stderrcapture function jpath(file::AbstractString)
 	joinpath(workdir, file)
 end
 
