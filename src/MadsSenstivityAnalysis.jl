@@ -139,10 +139,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	paramkeys = getoptparamkeys(madsdata)
 	nPall = length(getparamkeys(madsdata))
 	obskeys = getobskeys(madsdata)
-	plotlabels = getparamsplotname(madsdata, paramkeys)
-	if plotlabels[1] == ""
-		plotlabels = paramkeys
-	end
+	plotlabels = getparamlabels(madsdata, paramkeys)
 	nP = length(paramkeys)
 	nPi = length(par)
 	if nPi == 0
