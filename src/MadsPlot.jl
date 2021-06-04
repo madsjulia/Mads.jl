@@ -419,10 +419,7 @@ Dumps:
 """
 function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
-	plotlabels = getparamsplotname(madsdata, paramkeys)
-	if plotlabels[1] == ""
-		plotlabels = paramkeys
-	end
+	plotlabels = getparamlabels(madsdata, paramkeys)
 	cs = Array{Compose.Context}(undef, size(samples, 2), size(samples, 2))
 	for i in 1:size(samples, 2)
 		for j in 1:size(samples, 2)
@@ -586,7 +583,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", debug::Bool=false, separate_files::Bool=false, xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", debug::Bool=false, separate_files::Bool=true, xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -594,10 +591,8 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
-	plotlabels = getparamsplotname(madsdata, paramkeys)
-	if plotlabels[1] == ""
-		plotlabels = paramkeys
-	end
+	plotlabels = getparamlabels(madsdata, paramkeys)
+	@show plotlabels
 	nP = length(paramkeys)
 	obskeys = Mads.filterkeys(obsdict, filter)
 	nT = length(obskeys)
@@ -618,104 +613,21 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		end
 		i += 1
 	end
-	# mes = mes./maximum(mes,2) # normalize 0 to 1
-	mintes = minimum( tes )
+	mintes = minimum(tes)
 	if mintes < 0
-		tes = tes .- mintes # normalize 0 to 1
+		tes = tes .- mintes
 	end
-	maxtes = maximum( tes )
-	if maxtes > 1
-		tes = tes ./ maxtes # normalize 0 to 1
-	end
-	###################################################### DATA
-	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="Observations")
+	tes ./=  maximum(tes)
 	pp = Array{Any}(undef, 0)
-	pd = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.line, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle) )
+	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], returnplot=true, colorkey=false)
 	push!(pp, pd)
-	if debug
-		# println(dfc)
-		println("DAT xmax $(max(dfc[1]...)) xmin $(min(dfc[1]...)) ymax $(max(dfc[2]...)) ymin $(min(dfc[2]...))")
-		# writetable("dfc.dat", dfc)
-	end
-	# vsize = 4Gadfly.inch
-	vsize = 0Gadfly.inch
-	###################################################### TES
-	df = Array{Any}(undef, nP)
-	for j in 1:length(plotlabels)
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(plotlabels[j])")
-		deleteNaN!(df[j])
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("TES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		writetable("tes.dat", vdf)
-	end
-	if length(vdf[!, 1]) > 0
-		if max(vdf[!, 2]...) > floatmax(Float32)
-			Mads.madswarn("TES values larger than $(floatmax(Float32))")
-			maxtofloatmax!(vdf)
-			println("TES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		end
-		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-				Gadfly.Coord.Cartesian(ymin=0, ymax=1),
-				# Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-				Gadfly.Guide.XLabel(xtitle),
-				Gadfly.Guide.YLabel("Total Effect") ) # only none and default works
-		push!(pp, ptes)
-		vsize += 4Gadfly.inch
-	end
-	###################################################### MES
-	for j in 1:length(plotlabels)
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$(plotlabels[j])")
-		deleteNaN!(df[j])
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("MES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		# writetable("mes.dat", vdf)
-	end
-	if length(vdf[!, 1]) > 0
-		if max(vdf[!, 2]...) > floatmax(Float32)
-			Mads.madswarn("MES values larger than $(floatmax(Float32))")
-			maxtofloatmax!(vdf)
-			println("MES xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		end
-		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-				Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-				Gadfly.Coord.Cartesian(ymin=0, ymax=1),
-				# Gadfly.Scale.y_continuous(minvalue=0, maxvalue=1),
-				Gadfly.Guide.XLabel(xtitle),
-				Gadfly.Guide.YLabel("Main Effect") ) # only none and default works: , Theme(key_position = :none)
-		push!(pp, pmes)
-		vsize += 4Gadfly.inch
-	end
-	###################################################### VAR
-	for j in 1:length(plotlabels)
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$(plotlabels[j])")
-		deleteNaN!(df[j])
-	end
-	vdf = vcat(df...)
-	if debug
-		# println(vdf)
-		println("VAR xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		# writetable("var.dat", vdf)
-	end
-	if length(vdf[!, 1]) > 0
-		if max(vdf[!, 2]...) > floatmax(Float32)
-			Mads.madswarn("Variance values larger than $(floatmax(Float32))")
-			maxtofloatmax!(vdf)
-			println("VAR xmax $(max(vdf[!, 1]...)) xmin $(min(vdf[!, 1]...)) ymax $(max(vdf[!, 2]...)) ymin $(min(vdf[!, 2]...))")
-		end
-		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter",
-			Gadfly.Theme(line_width=linewidth, point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance") ) # only none and default works: , Theme(key_position = :none)
-		push!(pp, pvar)
-		vsize += 4Gadfly.inch
-	end
-	######################################################
+	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], title="Total Effect", returnplot=true, names=plotlabels)
+	push!(pp, ptes)
+	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], title="Main Effect", returnplot=true, names=plotlabels)
+	push!(pp, pmes)
+	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], title="Variance", returnplot=true, names=plotlabels)
+	push!(pp, pvar)
+
 	if filename == ""
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
@@ -726,8 +638,8 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	if !separate_files
 		filename, format = setplotfileformat(filename, format)
 		p = Gadfly.vstack(pp...)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), p)
-		!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 12Gadfly.inch, 16Gadfly.inch), p)
+		!quiet && Mads.display(p; gw=12Gadfly.inch, gh=vsize)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
@@ -737,6 +649,9 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		filename = filename_root * "-main_effect." * filename_ext
 		filename, format = setplotfileformat(filename, format)
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), pmes)
+		filename = filename_root * "-variance." * filename_ext
+		filename, format = setplotfileformat(filename, format)
+		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), pvar)
 	end
 	return nothing
 end
@@ -1126,7 +1041,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=!code, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
@@ -1282,7 +1197,9 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		return false
 	end
 	ixzero !== nothing && (X[ixzero] .= 0)
-	if code
+	if returnplot
+		return pS
+	elseif code
 		return c
 	else
 		return nothing

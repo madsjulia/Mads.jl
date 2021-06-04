@@ -134,7 +134,18 @@ for i = 1:length(getparamsnames)
 	Core.eval(Mads, q)
 end
 
-function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector)
+function getparamlabels(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
+	plotlabels = getparamsplotname(madsdata, paramkeys)
+	if plotlabels[1] == ""
+		plotlabels = getparamslongname(madsdata, paramkeys)
+		if plotlabels[1] == ""
+			plotlabels = String.(paramkeys)
+		end
+	end
+	return plotlabels
+end
+
+function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
