@@ -22,15 +22,26 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
-function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Function; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), paramnames::AbstractVector=paramkeys, obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::AbstractVector=collect(1:length(obs)))
+function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Function; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
 	md = Dict()
 	md["Parameters"] = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
-		md["Parameters"][paramkeys[i]] = OrderedCollections.OrderedDict("init"=>param[i], "type"=>paramtype[i], "dist"=>paramdist[i], "log"=>paramlog[i], "longname"=>paramnames[i])
+		d = OrderedCollections.OrderedDict("init"=>param[i], "type"=>paramtype[i], "dist"=>paramdist[i], "log"=>paramlog[i])
+		if paramkeys[i] != paramnames[i]
+			push!(d, "longname"=>paramnames[i])
+		end
+		if paramkeys[i] != paramplotnames[i]
+			push!(d, "plotname"=>paramplotnames[i])
+		end
+		md["Parameters"][paramkeys[i]] = d
 	end
 	md["Observations"] = OrderedCollections.OrderedDict()
 	for i = 1:length(obs)
-		md["Observations"][obskeys[i]] = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i], "time"=>obstimes[i])
+		d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
+		if obstimes !== nothing
+			push!(d, "time"=>obstimes[i])
+		end
+		md["Observations"][obskeys[i]] = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
 	end
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
