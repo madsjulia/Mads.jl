@@ -583,7 +583,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -591,8 +591,9 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
-	plotlabels = getparamlabels(madsdata, paramkeys)
-	@show plotlabels
+	if plotlabels === nothing
+		plotlabels = getparamlabels(madsdata, paramkeys)
+	end
 	nP = length(paramkeys)
 	obskeys = Mads.filterkeys(obsdict, filter)
 	nT = length(obskeys)
@@ -602,7 +603,11 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	var = Array{Float64}(undef, nP, nT)
 	i = 1
 	for obskey in obskeys
-		d[1,i] = obsdict[obskey]["time"]
+		if haskey(obsdict[obskey], "time")
+			d[1,i] = obsdict[obskey]["time"]
+		else
+			madserror("Observation dictionary does not have `time` field!")
+		end
 		d[2,i] = haskey(obsdict[obskey], "target") ? obsdict[obskey]["target"] : NaN
 		j = 1
 		for paramkey in paramkeys
@@ -618,14 +623,19 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		tes = tes .- mintes
 	end
 	tes ./=  maximum(tes)
+	minmes = minimum(mes)
+	if minmes < 0
+		mes = mes .- minmes
+	end
+	mes ./=  maximum(mes)
 	pp = Array{Any}(undef, 0)
 	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, linewidth=linewidth, pointsize=pointsize, returnplot=true, colorkey=false)
 	push!(pp, pd)
-	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, title="Total Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, ytitle="Total Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, ptes)
-	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, title="Main Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, ytitle="Main Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, pmes)
-	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], xtitle=xtitle, title="Variance", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], xtitle=xtitle, ytitle="Variance", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, pvar)
 
 	if filename == ""
