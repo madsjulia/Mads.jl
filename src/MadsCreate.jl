@@ -41,7 +41,9 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Functi
 		if obstimes !== nothing
 			push!(d, "time"=>obstimes[i])
 		end
-		md["Observations"][obskeys[i]] = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
+		push!(d, "target"=>obs[i])
+		push!(d, "weight"=>obsweight[i])
+		md["Observations"][obskeys[i]] = d
 	end
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
