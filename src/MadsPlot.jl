@@ -450,7 +450,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 	return nothing
 end
 
-function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle::AbstractString="Time", ytitle::AbstractString="", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 	else
@@ -461,7 +461,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle:
 		end
 	end
 end
-function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::AbstractString; xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
+function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellname::AbstractString; xtitle::AbstractString="Time", ytitle::AbstractString="", filename::AbstractString="", format::AbstractString="", quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Wells")
 		Mads.madswarn("There is no 'Wells' class in the MADS input dataset")
 		return
@@ -583,7 +583,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", debug::Bool=false, separate_files::Bool=true, xtitle::AbstractString="Time [years]", ytitle::AbstractString="Concentration [ppb]", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, quiet::Bool=!Mads.graphoutput)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -619,13 +619,13 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	end
 	tes ./=  maximum(tes)
 	pp = Array{Any}(undef, 0)
-	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], returnplot=true, colorkey=false)
+	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, linewidth=linewidth, pointsize=pointsize, returnplot=true, colorkey=false)
 	push!(pp, pd)
-	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], title="Total Effect", returnplot=true, names=plotlabels)
+	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, title="Total Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, ptes)
-	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], title="Main Effect", returnplot=true, names=plotlabels)
+	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, title="Main Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, pmes)
-	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], title="Variance", returnplot=true, names=plotlabels)
+	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], xtitle=xtitle, title="Variance", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
 	push!(pp, pvar)
 
 	if filename == ""
@@ -661,7 +661,7 @@ function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -854,7 +854,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="X", ytitle::AbstractString="Y", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, array::Array; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
