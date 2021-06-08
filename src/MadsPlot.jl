@@ -583,7 +583,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput, kw...)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -629,13 +629,13 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	end
 	mes ./=  maximum(mes)
 	pp = Array{Any}(undef, 0)
-	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, linewidth=linewidth, pointsize=pointsize, returnplot=true, colorkey=false)
+	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, returnplot=true, colorkey=false, kw...)
 	push!(pp, pd)
-	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, ytitle="Total Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, ytitle="Total Effect", returnplot=true, names=plotlabels, kw...)
 	push!(pp, ptes)
-	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, ytitle="Main Effect", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, ytitle="Main Effect", returnplot=true, names=plotlabels, kw...)
 	push!(pp, pmes)
-	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], xtitle=xtitle, ytitle="Variance", linewidth=linewidth, pointsize=pointsize, returnplot=true, names=plotlabels)
+	pvar = Mads.plotseries(permutedims(var); xaxis=d[1,:], xtitle=xtitle, ytitle="Variance", returnplot=true, names=plotlabels, kw...)
 	push!(pp, pvar)
 
 	if filename == ""
