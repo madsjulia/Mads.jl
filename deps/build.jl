@@ -61,8 +61,13 @@ else
 			println(errmsg)
 			@warn("Python MatPlotLib installation using pip has failed!")
 			@info("Using Conda instead ...")
-			import Conda
-			Conda.add("matplotlib")
+			try
+				import Conda
+				Conda.add("matplotlib")
+			catch errmsg
+				println(errmsg)
+				@warn("Installing Python packages using Conda fails!")
+			end
 		end
 	end
 end
