@@ -285,18 +285,25 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 ```
 """ setobstime!
 
-"""
-Set observation weights in the MADS problem dictionary
-
-$(DocumentFunction.documentfunction(setobsweights!;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "value"=>"value for observation weights")))
-"""
 function setobsweights!(madsdata::AbstractDict, value::Number, obskeys = getobskeys(madsdata))
 	for i in 1:length(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], value)
 	end
 end
+function setobsweights!(madsdata::AbstractDict, v::AbstractVector, obskeys = getobskeys(madsdata))
+	for i in 1:length(obskeys)
+		setweight!(madsdata["Observations"][obskeys[i]], v[i])
+	end
+end
+
+@doc """
+Set observation weights in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(setobsweights!;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "value"=>"value for observation weights",
+			"v"=>"vector of observation weights")))
+""" setobsweights!
 
 """
 Modify (multiply) observation weights in the MADS problem dictionary
