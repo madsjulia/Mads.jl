@@ -93,9 +93,8 @@ function createmadsobservations!(md::AbstractDict, obs::Union{AbstractVector,Abs
 	md["Observations"] = createmadsobservations(obs; obskeys=obskeys, obsweight=obsweight, obstimes=obstimes)
 end
 
-function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
-	md = Dict()
-	md["Parameters"] = OrderedCollections.OrderedDict()
+function createmadsparameters(param::AbstractVector; paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)))
+	mdp = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
 		d = OrderedCollections.OrderedDict("init"=>param[i], "type"=>paramtype[i], "dist"=>paramdist[i], "log"=>paramlog[i])
 		if paramkeys[i] != paramnames[i]
@@ -104,16 +103,30 @@ function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,Abst
 		if paramkeys[i] != paramplotnames[i]
 			push!(d, "plotname"=>paramplotnames[i])
 		end
-		md["Parameters"][paramkeys[i]] = d
+		mdp[paramkeys[i]] = d
 	end
+	return mdp
+end
+
+function createmadsparameters!(md::AbstractDict, param::AbstractVector; paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)))
+	md["Parameters"] = createmadsparameters(param; paramkeys=paramkeys, paramnames=paramnames, paramplotnames=paramplotnames, paramtype=paramtype, parammin=parammin, parammax=parammax, paramdist=paramdist, paramlog=paramlog)
+end
+
+function createmadsexecutable!(md::AbstractDict, f::AbstractString)
+	md["Julia command"] = f
+end
+
+function createmadsexecutable!(md::AbstractDict, f::Function)
+	md["Julia function"] = f
+end
+
+function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
+	md = Dict()
+	createmadsparameters!(md, param; paramkeys=paramkeys, paramnames=paramnames, paramplotnames=paramplotnames, paramtype=paramtype, parammin=parammin, parammax=parammax, paramdist=paramdist, paramlog=paramlog)
 	createmadsobservations!(md, obs; obskeys=obskeys, obsweight=obsweight, obstimes=obstimes)
+	createmadsexecutable!(md, f)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
-	end
-	if typeof(f) <: AbstractString
-		md["Julia command"] = f
-	else
-		md["Julia function"] = f
 	end
 	makemadscommandfunction(md)
 	return md
