@@ -22,7 +22,7 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
-function createmadsproblem(param::AbstractVector, obs::AbstractMatrix, f::Function; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::AbstractVector=collect(1:size(obs, 2)))
+function createmadsproblem(param::AbstractVector, obs::AbstractMatrix, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::AbstractVector=collect(1:size(obs, 2)))
 	md = Dict()
 	md["Parameters"] = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
@@ -50,11 +50,15 @@ function createmadsproblem(param::AbstractVector, obs::AbstractMatrix, f::Functi
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
-	md["Julia function"] = f
+	if typeof(f) === AbstractString
+		md["Julia function"] = f
+	else
+		md["Julia command"] = f
+	end
 	makemadscommandfunction(md)
 	return md
 end
-function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Function; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
+function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
 	md = Dict()
 	md["Parameters"] = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
@@ -80,7 +84,11 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Functi
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
-	md["Julia function"] = f
+	if typeof(f) === AbstractString
+		md["Julia function"] = f
+	else
+		md["Julia command"] = f
+	end
 	makemadscommandfunction(md)
 	return md
 end
