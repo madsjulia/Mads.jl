@@ -22,8 +22,26 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
-function createmadsobservations!(md::AbstractDict, obs::AbstractVector; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=nothing)
-	md["Observations"] = OrderedCollections.OrderedDict()
+function createmadsobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
+	dump = filename != "" ? true : false
+	dump && (f = open(filename, "w"))
+	dump && write(f, pretext)
+	uniquecolumns = map(i->string(Char(65 + (i-1)%26))^Int(ceil(i/26)), 1:ncol)
+	observationdict = OrderedCollections.OrderedDict{String,Dict}()
+	for i = 1:nrow
+		dump && write(f, prestring)
+		for j in uniquecolumns
+			obsname = string(obstring, j, i)
+			dump && write(f, string(" !", obsname, "!"))
+			observationdict[obsname] = Dict("target"=>0)
+		end
+		dump && write(f, string(poststring, "\n"))
+	end
+	dump && close(f)
+	return observationdict
+end
+function createmadsobservations(obs::AbstractVector; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=nothing)
+	mdo = OrderedCollections.OrderedDict()
 	for i = 1:length(obs)
 		d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
 		if obstimes !== nothing
@@ -31,12 +49,13 @@ function createmadsobservations!(md::AbstractDict, obs::AbstractVector; obskeys:
 		end
 		push!(d, "target"=>obs[i])
 		push!(d, "weight"=>obsweight[i])
-		md["Observations"][obskeys[i]] = d
+		mdo[obskeys[i]] = d
 	end
+	return mdo
 end
 
-function createmadsobservations!(md::AbstractDict, obs::AbstractMatrix; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
-	md["Observations"] = OrderedCollections.OrderedDict()
+function createmadsobservations(obs::AbstractMatrix; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+	mdo = OrderedCollections.OrderedDict()
 	for i = 1:size(obs, 1)
 		for j = 1:size(obs, 2)
 			d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
@@ -47,9 +66,31 @@ function createmadsobservations!(md::AbstractDict, obs::AbstractMatrix; obskeys:
 			end
 			push!(d, "target"=>obs[i])
 			push!(d, "weight"=>obsweight[i])
-			md["Observations"][obskeys[i] * "_t$(j)"] = d
+			mdo[obskeys[i] * "_t$(j)"] = d
 		end
 	end
+	return mdo
+end
+@doc """
+Create Mads dictionary of observations and instruction file
+
+$(DocumentFunction.documentfunction(createmadsobservations;
+argtext=Dict("nrow"=>"number of rows",
+             "ncol"=>"number of columns [default 1]"),
+keytext=Dict("obstring"=>"observation string",
+             "pretext"=>"preamble instructions",
+			 "prestring"=>"pre instruction file string",
+			 "poststring"=>"post instruction file string",
+			 "filename"=>"file name")
+)))
+
+Returns:
+
+- observation dictionary
+""" createmadsobservations
+
+function createmadsobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+	md["Observations"] = createmadsobservations(obs; obskeys=obskeys, obsweight=obsweight, obstimes=obstimes)
 end
 
 function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
@@ -69,7 +110,7 @@ function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,Abst
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
-	if typeof(f) === AbstractString
+	if typeof(f) <: AbstractString
 		md["Julia command"] = f
 	else
 		md["Julia function"] = f
@@ -141,39 +182,3 @@ Returns:
 
 - new MADS problem dictionary
 """ createmadsproblem
-
-"""
-Create Mads dictionary of observations and instruction file
-
-$(DocumentFunction.documentfunction(createmadsobservations;
-argtext=Dict("nrow"=>"number of rows",
-             "ncol"=>"number of columns [default 1]"),
-keytext=Dict("obstring"=>"observation string",
-             "pretext"=>"preamble instructions",
-			 "prestring"=>"pre instruction file string",
-			 "poststring"=>"post instruction file string",
-			 "filename"=>"file name")
-)))
-
-Returns:
-
-- observation dictionary
-"""
-function createmadsobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
-	dump = filename != "" ? true : false
-	dump && (f = open(filename, "w"))
-	dump && write(f, pretext)
-	uniquecolumns = map(i->string(Char(65 + (i-1)%26))^Int(ceil(i/26)), 1:ncol)
-	observationdict = OrderedCollections.OrderedDict{String,Dict}()
-	for i = 1:nrow
-		dump && write(f, prestring)
-		for j in uniquecolumns
-			obsname = string(obstring, j, i)
-			dump && write(f, string(" !", obsname, "!"))
-			observationdict[obsname] = Dict("target"=>0)
-		end
-		dump && write(f, string(poststring, "\n"))
-	end
-	dump && close(f)
-	return observationdict
-end
