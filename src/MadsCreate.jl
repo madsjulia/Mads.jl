@@ -22,6 +22,34 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
+function createmadsobservations!(md::AbstractDict, obs::AbstractVector; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::Union{AbstractVector,Nothing}=nothing)
+	md["Observations"] = OrderedCollections.OrderedDict()
+	for i = 1:length(obs)
+		d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
+		if obstimes !== nothing
+			push!(d, "time"=>obstimes[i])
+		end
+		push!(d, "target"=>obs[i])
+		push!(d, "weight"=>obsweight[i])
+		md["Observations"][obskeys[i]] = d
+	end
+end
+
+function createmadsobservations!(md::AbstractDict, obs::AbstractMatrix; obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::AbstractVector=collect(1:size(obs, 2)))
+	md["Observations"] = OrderedCollections.OrderedDict()
+	for i = 1:size(obs, 1)
+		for j = 1:size(obs, 2)
+			d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
+			if obstimes !== nothing
+				push!(d, "time"=>obstimes[j])
+			end
+			push!(d, "target"=>obs[i])
+			push!(d, "weight"=>obsweight[i])
+			md["Observations"][obskeys[i] * "_t$(j)"] = d
+		end
+	end
+end
+
 function createmadsproblem(param::AbstractVector, obs::AbstractMatrix, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:size(obs, 1)], obsweight::AbstractVector=repeat([1.0], size(obs, 1)), obstimes::AbstractVector=collect(1:size(obs, 2)))
 	md = Dict()
 	md["Parameters"] = OrderedCollections.OrderedDict()
@@ -35,25 +63,14 @@ function createmadsproblem(param::AbstractVector, obs::AbstractMatrix, f::Union{
 		end
 		md["Parameters"][paramkeys[i]] = d
 	end
-	md["Observations"] = OrderedCollections.OrderedDict()
-	for i = 1:size(obs, 1)
-		for j = 1:size(obs, 2)
-			d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
-			if obstimes !== nothing
-				push!(d, "time"=>obstimes[j])
-			end
-			push!(d, "target"=>obs[i])
-			push!(d, "weight"=>obsweight[i])
-			md["Observations"][obskeys[i] * "_t$(j)"] = d
-		end
-	end
+	createmadsobservations!(md, obs; obskeys=obskeys, obsweight=obsweight, obstimes=obstimes)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
 	if typeof(f) === AbstractString
-		md["Julia function"] = f
-	else
 		md["Julia command"] = f
+	else
+		md["Julia function"] = f
 	end
 	makemadscommandfunction(md)
 	return md
@@ -71,23 +88,14 @@ function createmadsproblem(param::AbstractVector, obs::AbstractVector, f::Union{
 		end
 		md["Parameters"][paramkeys[i]] = d
 	end
-	md["Observations"] = OrderedCollections.OrderedDict()
-	for i = 1:length(obs)
-		d = OrderedCollections.OrderedDict("target"=>obs[i], "weight"=>obsweight[i])
-		if obstimes !== nothing
-			push!(d, "time"=>obstimes[i])
-		end
-		push!(d, "target"=>obs[i])
-		push!(d, "weight"=>obsweight[i])
-		md["Observations"][obskeys[i]] = d
-	end
+	createmadsobservations!(md, obs; obskeys=obskeys, obsweight=obsweight, obstimes=obstimes)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
 	if typeof(f) === AbstractString
-		md["Julia function"] = f
-	else
 		md["Julia command"] = f
+	else
+		md["Julia function"] = f
 	end
 	makemadscommandfunction(md)
 	return md
