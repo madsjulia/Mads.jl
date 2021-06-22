@@ -112,12 +112,24 @@ function createmadsparameters!(md::AbstractDict, param::AbstractVector; paramkey
 	md["Parameters"] = createmadsparameters(param; paramkeys=paramkeys, paramnames=paramnames, paramplotnames=paramplotnames, paramtype=paramtype, parammin=parammin, parammax=parammax, paramdist=paramdist, paramlog=paramlog)
 end
 
-function createmadsexecutable!(md::AbstractDict, f::AbstractString)
-	md["Julia command"] = f
+function removemadsexecutable!(md::AbstractDict)
+	for k in keys(md)
+		if contains(k, r"Julia|MADS|[Mm]odel|[Ff]unction|[Cc]ommand")
+			delete!(md, k)
+		end
+	end
 end
 
 function createmadsexecutable!(md::AbstractDict, f::Function)
+	removemadsexecutable!(md)
 	md["Julia function"] = f
+	makemadscommandfunction(md)
+end
+
+function createmadsexecutable!(md::AbstractDict, f::AbstractString)
+	removemadsexecutable!(md)
+	md["Julia command"] = f
+	makemadscommandfunction(md)
 end
 
 function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkeys::AbstractVector=["p$i" for i=1:length(param)], paramnames::AbstractVector=paramkeys, paramplotnames::AbstractVector=paramkeys, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskeys::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstimes::Union{AbstractVector,Nothing}=nothing)
@@ -128,7 +140,6 @@ function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,Abst
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
-	makemadscommandfunction(md)
 	return md
 end
 function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
