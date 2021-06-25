@@ -578,51 +578,24 @@ for i = 1:length(getfunction)
 	Core.eval(Mads, q)
 end
 
-"""
+function showparameters(madsdata::AbstractDict, result::AbstractDict)
+	md = copy(madsdata)
+	map(i->(md["Parameters"][i]["init"]=result[i]), Mads.getoptparamkeys(md))
+	showparameters(md)
+end
+function showparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), all::Bool=false)
+	if all
+		parkeys = Mads.getparamkeys(madsdata)
+	end
+	printparameters(madsdata, parkeys, false)
+	println("Number of optimizable parameters: $(length(parkeys))")
+end
+@doc """
 Show parameters in the MADS problem dictionary
 
 $(DocumentFunction.documentfunction(showparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
-"""
-function showparameters(madsdata::AbstractDict)
-	pardict = madsdata["Parameters"]
-	parkeys = Mads.getoptparamkeys(madsdata)
-	maxl = 0
-	maxk = 0
-	for parkey in parkeys
-		l = length(pardict[parkey])
-		maxk = (maxk > l) ? maxk : l
-		if haskey(pardict[parkey], "longname")
-			l = length(pardict[parkey]["longname"])
-			maxl = (maxl > l) ? maxl : l
-		end
-	end
-	p = Array{String}(undef, 0)
-	for parkey in parkeys
-		if haskey(pardict[parkey], "longname")
-			s = Mads.sprintf("%-$(maxl)s : ", pardict[parkey]["longname"])
-		else
-			s = ""
-		end
-		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, pardict[parkey]["init"])
-		if haskey(pardict[parkey], "log") && pardict[parkey]["log"] == true
-			s *= @Printf.sprintf "log-transformed "
-		end
-		if haskey(pardict[parkey], "min")
-			s *= @Printf.sprintf "min = %s " pardict[parkey]["min"]
-		end
-		if haskey(pardict[parkey], "max")
-			s *= @Printf.sprintf "max = %s " pardict[parkey]["max"]
-		end
-		if haskey(pardict[parkey], "dist")
-			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
-		end
-		s *= "\n"
-		push!(p, s)
-	end
-	print(p...)
-	println("Number of optimizable parameters: $(length(p))")
-end
+""" showparameters
 
 """
 Show all parameters in the MADS problem dictionary
@@ -630,13 +603,19 @@ Show all parameters in the MADS problem dictionary
 $(DocumentFunction.documentfunction(showallparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function showallparameters(madsdata::AbstractDict)
+function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getparamkeys(madsdata))
+	printparameters(madsdata, parkeys, true)
+	println("Number of parameters: $(length(parkeys))")
+end
+
+showparameterestimates = showparameters
+
+function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), showtype::Bool=true)
 	pardict = madsdata["Parameters"]
-	parkeys = Mads.getparamkeys(madsdata)
 	maxl = 0
 	maxk = 0
 	for parkey in parkeys
-		l = length(pardict[parkey])
+		l = length(parkey)
 		maxk = (maxk > l) ? maxk : l
 		if haskey(pardict[parkey], "longname")
 			l = length(pardict[parkey]["longname"])
@@ -651,14 +630,16 @@ function showallparameters(madsdata::AbstractDict)
 			s = ""
 		end
 		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, pardict[parkey]["init"])
-		if haskey(pardict[parkey], "type")
-			if pardict[parkey]["type"] === nothing
-				s *= "<- fixed "
+		if showtype
+			if haskey(pardict[parkey], "type")
+				if pardict[parkey]["type"] === nothing
+					s *= "<- fixed       "
+				else
+					s *= "<- optimizable "
+				end
 			else
 				s *= "<- optimizable "
 			end
-		else
-			s *= "<- optimizable "
 		end
 		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
 			s *= @Printf.sprintf "log-transformed "
@@ -676,11 +657,6 @@ function showallparameters(madsdata::AbstractDict)
 		push!(p, s)
 	end
 	print(p...)
-	println("Number of parameters: $(length(p))")
-end
-
-function showparameterestimates(md, p)
-	map(i->(i=>p[i]), Mads.getoptparamkeys(md))
 end
 
 """
