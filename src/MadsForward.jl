@@ -42,7 +42,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
-function forward(madsdata::AbstractDict, paramarray::Array; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
+function forward(madsdata::AbstractDict, paramarray::AbstractArray; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
 	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
