@@ -157,7 +157,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 		Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax, xmin=xmin, xmax=xmax, fixed=true),
 		Gadfly.Scale.x_continuous(minvalue=xmin, maxvalue=xmax, labels=x->@Printf.sprintf("%.0f", x)),
 		Gadfly.Scale.y_continuous(minvalue=ymin, maxvalue=ymax, labels=y->@Printf.sprintf("%.0f", y)), gm...,
-		Gadfly.Theme(highlight_width = 0Gadfly.pt, key_position = :none))
+		Gadfly.Theme(highlight_width=0Gadfly.pt, key_position=:none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
 		filename = "$rootname-problemsetup"
@@ -173,7 +173,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 	return nothing
 end
 
-function plotmatches(madsdata::AbstractDict, rx::Regex=r""; kw...)
+function plotmatches(madsdata::AbstractDict, rx::Union{AbstractString,Regex}=r""; kw...)
 	r = forward(madsdata; all=true)
 	if rx != r""
 		plotmatches(madsdata, r, rx; kw...)
@@ -181,7 +181,7 @@ function plotmatches(madsdata::AbstractDict, rx::Regex=r""; kw...)
 		plotmatches(madsdata, r; kw...)
 	end
 end
-function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", key2time::Function=k->0., title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=false, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{AbstractString,Regex}; title::AbstractString="", notitle::Bool=false, kw...)
 	newobs = empty(madsdata["Observations"])
 	newresult = empty(result)
 	for k in keys(madsdata["Observations"])
@@ -195,7 +195,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; pl
 			else
 				newresult[k] = result[k]
 			end
-			!notitle && (title = rx.pattern)
+			!notitle && (title = typeof(rx) == Regex ? rx.pattern : rx)
 		end
 	end
 	newmadsdata = copy(madsdata)
@@ -203,7 +203,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Regex; pl
 	if haskey(newmadsdata, "Wells")
 		delete!(newmadsdata, "Wells")
 	end
-	plotmatches(newmadsdata, newresult; plotdata=plotdata, filename=filename, format=format, title=title, xtitle=xtitle, ytitle=ytitle, ymin=ymin, ymax=ymax, separate_files=separate_files, hsize=hsize, vsize=vsize, linewidth=linewidth, pointsize=pointsize, obs_plot_dots=obs_plot_dots, noise=noise, dpi=dpi, colors=Mads.colors, display=display)
+	plotmatches(newmadsdata, newresult; title=title, notitle=notitle, kw...)
 end
 function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
@@ -279,7 +279,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				push!(plot_args, Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax))
-				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), plot_args...)
+				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], [colors[i] for i in 1:2]), plot_args...)
 				if separate_files
 					if filename == ""
 						filename_w = "$rootname-match-$wellname"
@@ -335,10 +335,14 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		end
 		if length(tress) + length(tobs) == 0
 			madswarn("No data to plot")
+		else
+			pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax),
+				Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
+				Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=2Gadfly.pt, highlight_width=0Gadfly.pt)),
+				Gadfly.Theme(highlight_width=0Gadfly.pt),
+				Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"], shape=[Gadfly.Shape.circle, Gadfly.Shape.hline]))
 		end
-		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax),
-					Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
-					Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=2Gadfly.pt, highlight_width=0Gadfly.pt)))
 	end
 	if pl === nothing
 		Mads.madswarn("There is nothing to plot!")
@@ -505,7 +509,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position = :top) )
+		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position=:top))
 		push!(pp, ptes)
 		vsize += 4Gadfly.inch
 	end
@@ -517,7 +521,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position = :none))
+		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position=:none))
 		push!(pp, pmes)
 		vsize += 4Gadfly.inch
 	end
@@ -529,7 +533,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position = :none) )
+		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position=:none) )
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
 	end
@@ -1097,7 +1101,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point()] : geometry
 	recursivemkdir(filename)
 	if !colorkey || nS == 1 || nextgray
-		key_position = :none
+		key_position=:none
 	end
 	if combined
 		hsize_plot = hsize
