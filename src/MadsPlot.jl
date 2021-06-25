@@ -349,14 +349,16 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		return nothing
 	end
 	if !separate_files
-		if filename == ""
+		if filename == "" && rootname != ""
 			filename = "$rootname-match"
 		end
-		filename, format = setplotfileformat(filename, format)
-		if format != "SVG" && format != "PDF"
-			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize; dpi=dpi), pl)
-		else
-			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
+		if filename != ""
+			filename, format = setplotfileformat(filename, format)
+			if format != "SVG" && format != "PDF"
+				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize; dpi=dpi), pl)
+			else
+				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
+			end
 		end
 		if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
 			display && Mads.display(pl; gw=hsize, gh=vsize)
