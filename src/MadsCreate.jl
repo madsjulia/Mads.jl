@@ -22,7 +22,7 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
-function createmadsobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
+function createobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
 	dump = filename != "" ? true : false
 	dump && (f = open(filename, "w"))
 	dump && write(f, pretext)
@@ -40,7 +40,7 @@ function createmadsobservations(nrow::Int, ncol::Int=1; obstring::AbstractString
 	dump && close(f)
 	return observationdict
 end
-function createmadsobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=nothing, min::AbstractVector=zeros(length(obs)), max::AbstractVector=ones(length(obs)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(obs)])
+function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=nothing, min::AbstractVector=zeros(length(obs)), max::AbstractVector=ones(length(obs)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(obs)])
 	md = OrderedCollections.OrderedDict()
 	@show dist
 	for i = 1:length(obs)
@@ -56,7 +56,7 @@ function createmadsobservations(obs::AbstractVector; key::AbstractVector=["o$i" 
 	return md
 end
 
-function createmadsobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
 	md = OrderedCollections.OrderedDict()
 	for i = 1:size(obs, 1)
 		for j = 1:size(obs, 2)
@@ -76,7 +76,7 @@ end
 @doc """
 Create Mads dictionary of observations and instruction file
 
-$(DocumentFunction.documentfunction(createmadsobservations;
+$(DocumentFunction.documentfunction(createobservations;
 argtext=Dict("nrow"=>"number of rows",
              "ncol"=>"number of columns [default 1]"),
 keytext=Dict("obstring"=>"observation string",
@@ -89,13 +89,13 @@ keytext=Dict("obstring"=>"observation string",
 Returns:
 
 - observation dictionary
-""" createmadsobservations
+""" createobservations
 
-function createmadsobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
-	md["Observations"] = createmadsobservations(obs; key=key, weight=weight, time=time)
+function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+	md["Observations"] = createobservations(obs; key=key, weight=weight, time=time)
 end
 
-function createmadsparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], log::AbstractVector=falses(length(param)))
+function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], log::AbstractVector=falses(length(param)))
 	mdp = OrderedCollections.OrderedDict()
 	for i = 1:length(param)
 		d = OrderedCollections.OrderedDict{String, Any}("init"=>param[i], "type"=>type[i], "dist"=>dist[i], "log"=>log[i])
@@ -110,11 +110,11 @@ function createmadsparameters(param::AbstractVector; key::AbstractVector=["p$i" 
 	return mdp
 end
 
-function createmadsparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], log::AbstractVector=falses(length(param)))
-	md["Parameters"] = createmadsparameters(param; key=key, name=name, plotname=plotname, type=type, min=min, max=max, dist=dist, log=log)
+function createparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], log::AbstractVector=falses(length(param)))
+	md["Parameters"] = createparameters(param; key=key, name=name, plotname=plotname, type=type, min=min, max=max, dist=dist, log=log)
 end
 
-function removemadsexecutable!(md::AbstractDict)
+function removemodel(md::AbstractDict)
 	for k in keys(md)
 		if contains(k, r"Julia|MADS|[Mm]odel|[Ff]unction|[Cc]ommand")
 			delete!(md, k)
@@ -122,29 +122,45 @@ function removemadsexecutable!(md::AbstractDict)
 	end
 end
 
-function createmadsexecutable!(md::AbstractDict, f::Function)
-	removemadsexecutable!(md)
-	md["Julia function"] = f
+function checkmodelkey(key::AbstractString, madsmodels::AbstractVector)
+	for m in madsmodels
+		if key == m
+			return true
+		end
+	end
+	madswarn("Model of type $key is not acceptable!")
+	return false
+end
+
+function setmodel!(md::AbstractDict, f::Function, key::AbstractString="Julia function")
+	if !checkmodelkey(key, madsmodels_function)
+		return nothing
+	end
+	removemodel(md)
+	md[key] = f
 	makemadscommandfunction(md)
 end
 
-function createmadsexecutable!(md::AbstractDict, f::AbstractString)
-	removemadsexecutable!(md)
-	md["Julia command"] = f
+function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Julia command")
+	if !checkmodelkey(key, madsmodels_string)
+		return nothing
+	end
+	removemodel(md)
+	md[key] = f
 	makemadscommandfunction(md)
 end
 
-function createmadsproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing)
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing)
 	md = Dict()
-	createmadsparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, dist=paramdist, log=paramlog)
-	createmadsobservations!(md, obs; key=obskey, weight=obsweight, time=obstime)
-	createmadsexecutable!(md, f)
+	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, dist=paramdist, log=paramlog)
+	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime)
+	setmodel!(md, f)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
 	end
 	return md
 end
-function createmadsproblem(infilename::AbstractString, outfilename::AbstractString)
+function createproblem(infilename::AbstractString, outfilename::AbstractString)
 	madsdata = Mads.loadmadsfile(infilename)
 	f = Mads.makemadscommandfunction(madsdata)
 	result = f(Mads.getparamdict(madsdata))
@@ -169,16 +185,16 @@ function createmadsproblem(infilename::AbstractString, outfilename::AbstractStri
 	Mads.dumpyamlfile(outfilename, outyaml)
 	return
 end
-function createmadsproblem(madsdata::AbstractDict, outfilename::AbstractString)
+function createproblem(madsdata::AbstractDict, outfilename::AbstractString)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(Mads.getparamdict(madsdata))
-	createmadsproblem(madsdata, predictions, outfilename)
+	createproblem(madsdata, predictions, outfilename)
 end
-function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::AbstractString)
-	newmadsdata = createmadsproblem(madsdata, predictions)
+function createproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::AbstractString)
+	newmadsdata = createproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
 end
-function createmadsproblem(madsdata::AbstractDict, predictions::AbstractDict)
+function createproblem(madsdata::AbstractDict, predictions::AbstractDict)
 	newmadsdata = deepcopy(madsdata)
 	observationsdict = newmadsdata["Observations"]
 	if haskey(newmadsdata, "Wells")
@@ -198,7 +214,7 @@ end
 @doc """
 Create a new Mads problem where the observation targets are computed based on the model predictions
 
-$(DocumentFunction.documentfunction(createmadsproblem;
+$(DocumentFunction.documentfunction(createproblem;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "infilename"=>"input Mads file",
             "outfilename"=>"output Mads file",
@@ -207,4 +223,4 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 Returns:
 
 - new MADS problem dictionary
-""" createmadsproblem
+""" createproblem
