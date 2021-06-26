@@ -579,7 +579,7 @@ for i = 1:length(getfunction)
 end
 
 function showparameters(madsdata::AbstractDict, result::AbstractDict)
-	md = copy(madsdata)
+	md = deepcopy(madsdata)
 	map(i->(md["Parameters"][i]["init"]=result[i]), Mads.getoptparamkeys(md))
 	showparameters(md)
 end

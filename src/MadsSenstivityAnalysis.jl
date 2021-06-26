@@ -121,7 +121,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::Array{Float64,1}=Array{Float64}(undef, 0), obs::Array{Float64,1}=Array{Float64}(undef, 0), J::Array{Float64,2}=Array{Float64}(undef, 0, 0))
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Array{Float64}(undef, 0), obs::AbstractVector=Array{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
@@ -199,7 +199,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	JpJ = J' * J
-	covar = Array{Float64}(undef, 0)
+	local covar
 	try
 		u, s, v = LinearAlgebra.svd(JpJ)
 		covar = v * inv(LinearAlgebra.Diagonal(s)) * u'
@@ -244,8 +244,8 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP), eigenmat)
 		Mads.madsinfo("Eigen matrix plot saved in $filename")
 		eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
-					Gadfly.Geom.bar,
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
+					Gadfly.Geom.line(),
+					Gadfly.Theme(line_width=4Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenvalues" * ext
 		filename, format = setplotfileformat(filename, format)
