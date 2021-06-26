@@ -279,7 +279,8 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				push!(plot_args, Gadfly.Coord.Cartesian(ymin=ymin, ymax=ymax))
-				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], [colors[i] for i in 1:2]), plot_args...)
+				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt),
+				Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"], shape=[Gadfly.Shape.circle, Gadfly.Shape.hline]))
 				if separate_files
 					if filename == ""
 						filename_w = "$rootname-match-$wellname"
@@ -677,7 +678,7 @@ function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -815,7 +816,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.g
             "obs_plot_dots"=>"plot observation as dots (`true` (default) or `false`)",
             "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines on the plot [default=`2Gadfly.pt`]",
-            "pointsize"=>"size of the markers on the plot [default=`2Gadfly.pt`]")))
+            "pointsize"=>"size of the markers on the plot [default=`4Gadfly.pt`]")))
 
 Dumps:
 
@@ -870,7 +871,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, array::AbstractArray; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, array::AbstractArray; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -922,21 +923,25 @@ function spaghettiplot(madsdata::AbstractDict, array::AbstractArray; plotdata::B
 			d[w .== 0] .= NaN
 			push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
 		end
-		if grayscale
-			pl = Gadfly.plot(pa...,
-				Gadfly.Guide.title(title).
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-				Gadfly.Theme(default_color=Colors.RGBA(0.15, 0.15, 0.15, 0.2)))
-				for i in 1:numberofsamples]...)
-		else
-			pl = Gadfly.plot(pa...,
-				Gadfly.Guide.title(title),
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
-				Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
-				for i in 1:numberofsamples]...)
-		end
+		colindex = Gadfly.Col.index(1:numberofsamples...)
+		colormap =
+			if grayscale
+				function(nc)
+					[Gadfly.parse_colorant(["red"]); repeat(Gadfly.parse_colorant(["gray"]), inner=nc-1)]
+				end
+			else
+				palette = Gadfly.parse_colorant(colors)
+				function(nc)
+					palette[rem.((1:nc) .- 1, length(palette)) .+ 1]
+				end
+			end
+		pl = Gadfly.plot(pa..., Gadfly.layer(Y, x=repeat(t; inner=numberofsamples), y=Gadfly.Col.value(1:numberofsamples...),
+			color=colindex, group=colindex, Gadfly.Geom.line()),
+			Gadfly.Scale.color_discrete(colormap),
+			Gadfly.Theme(key_position=:none, line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing),
+			Gadfly.Guide.title(title),
+			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle)
+			)
 		vsize = 4Gadfly.inch
 	else
 		pp = Array{Gadfly.Plot}(undef, 0)
@@ -991,15 +996,17 @@ function spaghettiplot(madsdata::AbstractDict, array::AbstractArray; plotdata::B
 		end
 		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 	end
-	if filename == ""
+	if filename == "" && rootname != ""
 		filename = keyword == "" ?  "$rootname-$numberofsamples-spaghetti" : "$rootname-$keyword-$numberofsamples-spaghetti"
 	end
-	filename, format = setplotfileformat(filename, format)
-	try
-		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 8Gadfly.inch, vsize), pl)
-	catch errmsg
-		printerrormsg(errmsg)
-		Mads.madswarn("Spaghettiplot: Gadfly fails!")
+	if filename != ""
+		filename, format = setplotfileformat(filename, format)
+		try
+			Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 8Gadfly.inch, vsize), pl)
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("Spaghettiplot: Gadfly fails!")
+		end
 	end
 	!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	return nothing
@@ -1023,7 +1030,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are plotted on
             "obs_plot_dots"=>"plot observation as dots (`true` [default] or `false`)",
             "seed"=>"random seed [default=`0`]",
             "linewidth"=>"width of the lines in plot [default=`2Gadfly.pt`]",
-            "pointsize"=>"size of the markers in plot [default=`2Gadfly.pt`]")))
+            "pointsize"=>"size of the markers in plot [default=`4Gadfly.pt`]")))
 
 Dumps:
 
@@ -1179,16 +1186,19 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 					end
 				end
 			colindex = Gadfly.Col.index(1:nS...)
-			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...), color=colindex, group=colindex, Gadfly.Scale.color_discrete(colormap), geometry...,
+			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...),
+				color=colindex, group=colindex,
+				Gadfly.Scale.color_discrete(colormap),
+				geometry...,
 				gl...,
-			    Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				glog...,
 				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 				Gadfly.Guide.title(title),
 				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 				gm...
-			    )
+				)
 		end
 	else
 		hsize_plot = hsize
