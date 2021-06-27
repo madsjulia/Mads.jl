@@ -5,21 +5,27 @@ Mads.mkdir("sensitivity_results")
 
 n = 100
 @info("Calibration using $n random initial guesses for model parameters")
-r = Mads.calibraterandom(md, n, all=true, seed=2016, save_results=false)
+calib_random_results = Mads.calibraterandom(md, n, all=true, seed=2016, save_results=false)
 pnames = collect(keys(r[1,3]))
-p = hcat(map(i->collect(values(r[i,3])), 1:n)...)'
+calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:n)...)
 np = length(pnames)
 
 @info("Identify the 3 different global optima with different model parameter estimates")
-ind_n0 = abs(p[:,4]) .< 0.1
+ind_n0 = abs.(calib_random_estimates[4,:]) .< 0.1
 in0 = findall(ind_n0 .== true)[1]
-ind_n1 = abs(p[:,4]-1) .< 0.1
+ind_n1 = abs.(calib_random_estimates[4,:] .- 1) .< 0.1
 in1 = findall(ind_n1 .== true)[1]
-ind_n01 = !(ind_n0 | ind_n1)
-in01 = findall(ind_n01 .== true)[1]
+ind_n3 = .!(ind_n0 .| ind_n1)
+in3 = findall(ind_n01 .== true)[1]
 pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
-optnames = ["n0", "n1", "n01"]
-v = [in0, in1, in01]
+optnames = ["n=0", "n=1", "n=3"]
+v = [in0, in1, in3]
+
+for i = 1:3
+	println("Solution for $(optnames[i])")
+	Mads.showparameters(md, calib_random_results[v[i],3])
+	Mads.plotmatches(md, calib_random_results[v[i],3]; title=optnames[i])
+end
 
 @info("Local sensitivity analysis for the 3 different global optima")
 for i = 1:3

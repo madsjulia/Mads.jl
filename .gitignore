@@ -1,4 +1,5 @@
 syntax: glob
+Manifest.toml
 *.log
 .DS_Store
 _build/
