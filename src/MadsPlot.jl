@@ -871,32 +871,21 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, array::AbstractArray; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
 	nT = length(obskeys)
-	s = size(array)
-	if length(s) > 2
-		madswarn("Incorrect array size: size(Y) = $(size(Y))")
-		return
-	end
-	Y = []
+	s = size(matrix)
+	local Y
 	if s[1] == nT
-		Y = array
+		Y = matrix
 		numberofsamples = s[2]
-	elseif length(s) == 2 && s[2] == nT
-		Y = array'
+	elseif s[2] == nT
+		Y = permutedims(matrix)
 		numberofsamples = s[1]
-	elseif length(s) == 1
-		numberofsamples = s[1]
-		Y = hcat(map(i->collect(values(array[i])), 1:numberofsamples)...)
-		if size(Y)[1] != nT
-			madswarn("Incorrect array size: size(array) = $(s) => size(Y) = $(size(Y))")
-			return
-		end
 	else
-		madswarn("Incorrect array size: size(array) = $(s)")
+		madswarn("Incorrect matrix size: size(matrix) = $(s)")
 		return
 	end
 	obs_plot = Any[]
