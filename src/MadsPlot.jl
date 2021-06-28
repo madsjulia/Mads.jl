@@ -625,19 +625,20 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		end
 		i += 1
 	end
-	mintes = minimum(tes)
+	mintes = minimumnan(tes)
 	if mintes < 0
 		tes = tes .- mintes
 	end
-	tes ./=  maximum(tes)
-	minmes = minimum(mes)
+	tes ./=  maximumnan(tes)
+	minmes = minimumnan(mes)
 	if minmes < 0
 		mes = mes .- minmes
 	end
-	mes ./=  maximum(mes)
+	mes ./=  maximumnan(mes)
 	pp = Array{Any}(undef, 0)
 	pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, returnplot=true, colorkey=false, kw...)
 	push!(pp, pd)
+	Mads.plotseries(permutedims(tes); xaxis=d[1,:], quiet=false)
 	ptes = Mads.plotseries(permutedims(tes); xaxis=d[1,:], xtitle=xtitle, ytitle="Total Effect", returnplot=true, names=plotlabels, kw...)
 	push!(pp, ptes)
 	pmes = Mads.plotseries(permutedims(mes); xaxis=d[1,:], xtitle=xtitle, ytitle="Main Effect", returnplot=true, names=plotlabels, kw...)
@@ -900,8 +901,8 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 	end
 	pa = Any[]
 	if yfit
-		ymin = minimum(Y, 2)
-		ymax = maximum(Y, 2)
+		ymin = minimumnan(Y, 2)
+		ymax = maximumnan(Y, 2)
 	end
 	push!(pa, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 	if !haskey(madsdata, "Wells")
@@ -1261,7 +1262,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		obskeys = Jin[2:end, 1]
 		nO = length(obskeys)
 		J = Jin[2:end, 2:end]
-		mscale = max(abs(minimum(J)), abs(maximum(J)))
+		mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 			jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 						Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),

@@ -85,7 +85,7 @@ Mads.localsa(md, par=[1.,2.])
 # Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
 Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 
-Mads.createmadsproblem(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
+Mads.createproblem(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 Mads.rmfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 pfor = Mads.forward(md)
 
@@ -138,9 +138,9 @@ afor = Mads.forward(md)
 cd(workdir)
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
 md["Instructions"] = [Dict("ins"=>"external-linearmodel-matrix.inst", "read"=>"model_coupling_matrix.dat")]
-md["Observations"] = Mads.createmadsobservations(10, 2, pretext="l4\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
+md["Observations"] = Mads.createobservations(10, 2, pretext="l4\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
 ro1 = Mads.readobservations(md)
-md["Observations"] = Mads.createmadsobservations(10, 2, pretext="\n\n\n\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
+md["Observations"] = Mads.createobservations(10, 2, pretext="\n\n\n\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
 ro2 = Mads.readobservations(md)
 Mads.rmfile("external-linearmodel-matrix.inst")
 cd(cwd)
@@ -175,7 +175,7 @@ function juliafunction(parameters::AbstractVector)
 	return predictions
 end
 
-md = Mads.createmadsproblem([1,2], [1,2,3,4], juliafunction; parammin=[-10,-10], parammax=[10,10])
+md = Mads.createproblem([1,2], [1,2,3,4], juliafunction; parammin=[-10,-10], parammax=[10,10])
 Mads.forward(md)
 Mads.calibrate(md)
 
