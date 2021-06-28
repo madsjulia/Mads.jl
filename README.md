@@ -30,7 +30,7 @@ MADS (Model Analysis & Decision Support)
 [MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute each type of data- and model-based analyses.
 
 Documentation
-=============
+-------------
 
 Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
 
