@@ -11,6 +11,37 @@ import Revise
 import Mads
 ```
 
+    ┌ Info: Precompiling Mads [d6bdc55b-bd94-5012-933c-1f73fc2ee992]
+    └ @ Base loading.jl:1317
+
+
+    [1mMads: Model Analysis & Decision Support[0m
+    ====
+    
+    [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
+    [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
+    [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
+    [1m[34m  |  |\  \/  /|  | [1m[31m       /      | [1m[32m |      \   [1m[35m     |  |[0m
+    [1m[34m  |  | \    / |  |  [1m[31m     /  /|   | [1m[32m |   |\  \   [1m[35m     \  \______.[0m
+    [1m[34m  |  |  \__/  |  |  [1m[31m    /  / |   | [1m[32m |   | \  \  [1m[35m      \_______  \[0m
+    [1m[34m  |  |        |  | [1m[31m    /  /  |   | [1m[32m |   |  \  \  [1m[35m             \  \[0m
+    [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
+    [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
+    [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
+    
+    [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
+    [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
+
+
+    [32m[1m    Updating[22m[39m registry at `~/.julia/registries/General`
+    [33m[1m┌ [22m[39m[33m[1mWarning: [22m[39mcould not download https://pkg.julialang.org/registries
+    [33m[1m└ [22m[39m[90m@ Pkg.Types /Users/julia/buildbot/worker/package_macos64/build/usr/share/julia/stdlib/v1.6/Pkg/src/Types.jl:980[39m
+    [32m[1m   Resolving[22m[39m package versions...
+    [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mModule BIGUQ is not available!
+    ┌ Info: Installing pyqt package to avoid buggy tkagg backend.
+    └ @ PyPlot /Users/vvv/.julia/packages/PyPlot/XHEG0/src/init.jl:118
+
+
 Setup the working directory:
 
 
@@ -215,9 +246,9 @@ calib_param, calib_result = Mads.calibrate(md)
 
 
 
-    (OrderedCollections.OrderedDict("a" => 0.48652749043975874, "b" => 0.48653799120462793, "c" => -0.001625793681175658, "n" => 1.0209744172380697), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, 0.33983690945412187], [0.04867196375755519, 0.04867301507909251, -0.00032515874196489825, 0.3472623008114141], 420.3001214282925, 5, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
+    (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
     ------   --------------   --------------
-    , 71, 5, 0))
+    , 267, 19, 0))
 
 
 
@@ -255,10 +286,10 @@ Estimated values of the model parameters based on the model calibration (inversi
 Mads.showparameterestimates(md, calib_param)
 ```
 
-    a =        0.486527 distribution = Uniform(-10, 10) 
-    b =        0.486538 distribution = Uniform(-10, 10) 
-    c =     -0.00162579 distribution = Uniform(-5, 5) 
-    n =         1.02097 distribution = Uniform(0, 3) 
+    a =      0.00705046 distribution = Uniform(-10, 10) 
+    b =         0.95069 distribution = Uniform(-10, 10) 
+    c =       0.0385415 distribution = Uniform(-5, 5) 
+    n =         2.93219 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
 
 
@@ -384,20 +415,18 @@ end
     
 
 
+
+    
+![png](model_diagnostics_files/model_diagnostics_45_3.png)
+    
+
+
     Solution for n=1
     a =        -0.28542 distribution = Uniform(-10, 10) 
     b =         1.27948 distribution = Uniform(-10, 10) 
     c =       0.0178456 distribution = Uniform(-5, 5) 
     n =        0.951994 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
-
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_45_4.png)
-    
-
-
     Solution for n=3
     a =      0.00653517 distribution = Uniform(-10, 10) 
     b =        0.950689 distribution = Uniform(-10, 10) 
@@ -419,12 +448,12 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
 
 
     Dict{String, Any} with 6 entries:
-      "of"          => 420.3
-      "jacobian"    => [0.0 0.0 499.175 0.0; 994.721 994.721 499.175 0.0; … ; 409.6…
-      "covar"       => [0.525233 -0.525787 0.000235488 -0.0662933; -0.525787 0.5263…
-      "eigenmatrix" => [0.702251 0.102386 0.0288238 0.703939; 0.688973 0.0768143 0.…
-      "eigenvalues" => [3.38862e-8, 2.743e-6, 3.91435e-5, 1.05994]
-      "stddev"      => [0.72473, 0.725495, 0.00200318, 0.0916738]
+      "of"          => 233.373
+      "jacobian"    => [0.0 0.0 498.96 0.0; 998.299 989.063 498.96 0.0; … ; 5815.86…
+      "covar"       => [9.60666e-7 -1.96149e-6 6.59975e-7 -0.00248792; -1.96149e-6 …
+      "eigenmatrix" => [-0.99148 0.126137 0.0324964 0.000380915; -0.128081 -0.89869…
+      "eigenvalues" => [1.36761e-9, 4.44737e-7, 4.31592e-6, 6.53143]
+      "stddev"      => [0.000980135, 0.00217703, 0.00198921, 2.55567]
 
 
 
@@ -443,10 +472,10 @@ The uncertainties are assumed to be Gaussian with standard deviations defined by
 
 
     4×2 Matrix{Any}:
-     "a"  0.72473
-     "b"  0.725495
-     "c"  0.00200318
-     "n"  0.0916738
+     "a"  0.000980135
+     "b"  0.00217703
+     "c"  0.00198921
+     "n"  2.55567
 
 
 
@@ -464,9 +493,13 @@ A plot of the Jacobian repesenting the relationships between model parameters an
 Mads.display("model_diagnostics-jacobian.png")
 ```
 
+    ┌ Info: Precompiling PNGFiles [f57f5aa1-a3ce-4bc8-8ab9-96f992907883]
+    └ @ Base loading.jl:1317
+
+
 
     
-![png](model_diagnostics_files/model_diagnostics_53_0.png)
+![png](model_diagnostics_files/model_diagnostics_53_1.png)
     
 
 
@@ -524,7 +557,7 @@ chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=100
 
 
 
-    ([-2.9318734488241254 -2.2115004894325656 … 0.59046225841824 -0.1317764013305327; 3.9213382339060123 3.2754768843563364 … 0.4001283063148645 1.0610138945109913; 0.025000166709641274 -0.07072908085654725 … 0.062343770966873546 0.07827331041888207; 0.9914349083311713 1.0146213546858134 … 1.009450999917408 0.20217807527536452], [-13.350385897100534, -13.83572977185207, -14.62374978746418, -13.542296325761239, -13.743265533105149, -13.371356376807029, -15.437727968793991, -13.923819788102527, -14.03616530179732, -17.012966126679196  …  -14.999244279386676, -14.832192904405328, -14.205686001261679, -13.51735973205491, -13.177385309063698, -13.374322254910798, -15.70916729088129, -13.311448472159798, -13.452308243225435, -14.380811745476537])
+    ([0.49024400617534947 0.6254729606781848 … -8.046148738315333 -2.1961730184742825; 0.6481371331360766 0.5032929504742999 … 9.11821705704645 3.2649675439015318; -0.0892523408443533 -0.17549509446712216 … -0.02937423101178159 0.02857674237214133; 0.8301664734123894 0.9506210629622112 … 1.0109232316258625 1.0385261234145131], [-13.932168591704212, -17.348618201269236, -12.63389804512083, -13.91533166749997, -13.580439063638536, -12.966576797494277, -13.683861969420244, -12.759294163171537, -12.514264566232404, -13.004554415413187  …  -14.013608226665623, -13.538985556025008, -13.092064136134097, -14.227146487852597, -17.53945111529656, -13.317831924258758, -16.05995385278711, -12.536985011850854, -15.022418530804252, -13.952189155538974])
 
 
 
@@ -539,12 +572,12 @@ f = Mads.forward(md, chain)
 
 
     6×10000 Matrix{Float64}:
-     0.0250002  -0.0707291  0.0462104  …  0.0135752  0.0623438  0.0782733
-     1.01446     0.993247   0.931065      1.00549    1.05293    1.00751
-     2.03864     2.01217    1.9508        1.99482    2.05129    2.0487
-     3.07577     3.01377    3.00617       2.98318    3.0526     3.09676
-     4.12129     4.00404    4.08221       3.97092    4.05585    4.14792
-     5.17302     4.98586    5.17251    …  4.9582     5.06055    5.20089
+     -0.0892523  -0.175495  0.0521224  …  -0.0309209  -0.0293742  0.0285767
+      1.04913     0.953271  1.02412        1.00445     1.04269    1.09737
+      2.07862     2.03995   2.00473        2.01825     1.99246    2.04729
+      3.07556     3.11172   2.98858        3.02342     2.89541    2.95011
+      4.05291     4.17404   3.97454        4.02286     3.76782    3.82182
+      5.01641     5.22941   4.96206    …   5.01799     4.61745    4.67012
 
 
 
@@ -645,13 +678,13 @@ Mads.plotobsSAresults(md, saltelli_results)
     
 
 
-
-    
-![png](model_diagnostics_files/model_diagnostics_71_2.png)
     
 
 
     
+![png](model_diagnostics_files/model_diagnostics_71_3.png)
+    
+
 
 
     
@@ -759,8 +792,8 @@ lmax = Vector{Any}(undef, 4)
 colors = ["blue", "red", "green", "orange"]
 for i = 1:4
 	min, max = Mads.infogap_jump_polynomial(model=i, plot=true, horizons=h, retries=10, maxiter=1000, verbosity=0, seed=2015)
-	lmin[i] = Gadfly.layer(x=min, y=h, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[i])))
-	lmax[i] = Gadfly.layer(x=max, y=h, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[i])))
+	lmin[i] = Gadfly.layer(x=min, y=h, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:dash], default_color=Base.parse(Colors.Colorant, colors[i])))
+	lmax[i] = Gadfly.layer(x=max, y=h, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:solid], default_color=Base.parse(Colors.Colorant, colors[i])))
 end
 f = Gadfly.plot(lmin..., lmax..., Gadfly.Guide.xlabel("o5"), Gadfly.Guide.ylabel("Horizon of uncertainty"), Gadfly.Guide.title("Opportuneness vs. Robustness"), Gadfly.Theme(highlight_width=0Gadfly.pt), Gadfly.Guide.manual_color_key("Models", models, colors))
 Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 4Gadfly.inch), f)
@@ -770,6 +803,13 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
 
 
+    
+    ******************************************************************************
+    This program contains Ipopt, a library for large-scale nonlinear optimization.
+     Ipopt is released as open source code under the Eclipse Public License (EPL).
+             For more information visit https://github.com/coin-or/Ipopt
+    ******************************************************************************
+    
     Min h = 0.001 OF = 4.998333281688344 par = [0.9993333197989149, 0.0016666826937701167]
     Max h = 0.001 OF = 5.00166671833499 par = [1.0006666802044195, -0.001666682687108125]
     Min h = 0.01 OF = 4.983333280036714 par = [0.9933333177282005, 0.016666691395710947]
@@ -867,3 +907,14 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 
     
 
+
+The figure above compares the model `opportuneness` (dashed lines) vs model `robustness` (solid lines) for different infogap horizons of uncertainty `h` and different models (different colors).
+
+The model `opportuneness` defines that the things might get better than expected (i.e, observation at dimensionless time 5 `o5` can get lower than expected).
+
+The model `robustness` defines that things might get worse than expected (i.e, observation at dimensionless time 5 `o5` can get higher than expected).
+
+Based on both the model `opportuneness` and model `robustness`, the last model is the most complex and can bring the most surprises.
+The first model is the simplest and produces the lower level of surprises.
+
+In terms of model selection, the simplest model is the best. However, the alternative models (if they capture all the conceptual model uncertainties) represent how much things can get worse/better within the horizon of uncertainty.
