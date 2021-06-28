@@ -36,7 +36,7 @@ Detailed documentation including description of all MADS modules and functions i
 
 See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
-Detailed model diagnostics problem is demonstrated [here]((http://madsjulia.github.io/Mads.jl/notebools/model_diagnostics)
+Detailed model diagnostics problem is demonstrated [here]((https://github.com/madsjulia/Mads.jl/notebools/model_diagnostics)
 
 Installation
 -------------
