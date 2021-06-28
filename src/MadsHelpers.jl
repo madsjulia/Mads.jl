@@ -459,10 +459,10 @@ argtext=Dict("seed"=>"random seed",
 function setseed(seed::Integer=-1, quiet::Bool=true)
 	if seed >= 0
 		Random.seed!(seed)
-		!quiet && info("New seed: $seed")
+		!quiet && @info("New seed: $seed")
 	else
 		s = Int(Random.default_rng().seed[1])
-		!quiet && info("Current seed: $s")
+		!quiet && @info("Current seed: $s")
 	end
 end
 
