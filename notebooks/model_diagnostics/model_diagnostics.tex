@@ -379,9 +379,9 @@
     
 
     
-    \hypertarget{mads-notebook-general-model-inversion-problem}{%
-\section{Mads notebook: General model inversion
-problem}\label{mads-notebook-general-model-inversion-problem}}
+    \hypertarget{mads-notebook-model-diagnostics}{%
+\section{Mads notebook: Model
+diagnostics}\label{mads-notebook-model-diagnostics}}
 
     \hypertarget{problem-setup}{%
 \subsection{Problem setup}\label{problem-setup}}
@@ -391,26 +391,32 @@ problem}\label{mads-notebook-general-model-inversion-problem}}
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Pkg}\PY{o}{.}\PY{n}{resolve}\PY{p}{(}\PY{p}{)}
+\PY{k}{import} \PY{n}{Revise}
 \PY{k}{import} \PY{n}{Mads}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-┌ Info: Installing pyqt package to avoid buggy tkagg backend.
-└ @ PyPlot /Users/vvv/.julia/packages/PyPlot/XHEG0/src/init.jl:118
-    \end{Verbatim}
+    Setup the working directory:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{cd}\PY{p}{(}\PY{n}{joinpath}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{madsdir}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{notebooks}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
 
     Create a problem dictionary:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{2}{\boxspacing}
+\prompt{In}{incolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{md} \PY{o}{=} \PY{k+kt}{Dict}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{2}{\boxspacing}
+\prompt{Out}{outcolor}{3}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 Dict\{Any, Any\}()
 \end{Verbatim}
@@ -419,14 +425,14 @@ Dict\{Any, Any\}()
     Setup model parameters:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{3}{\boxspacing}
+\prompt{In}{incolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{md}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Parameters}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{createparameters}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{;} \PY{n}{key}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{a}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{b}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{c}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{dist}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}10, 10)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}10, 10)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}5, 5)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}3, 3)}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{md}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Parameters}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{createparameters}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{;} \PY{n}{key}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{a}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{b}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{c}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{,} \PY{n}{dist}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}10, 10)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}10, 10)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(\PYZhy{}5, 5)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(0, 3)}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{3}{\boxspacing}
+\prompt{Out}{outcolor}{4}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 OrderedCollections.OrderedDict\{Any, Any\} with 4 entries:
   "a" => OrderedCollections.OrderedDict\{String, Any\}("init"=>1, "type"=>"opt", …
@@ -437,11 +443,12 @@ OrderedCollections.OrderedDict\{Any, Any\} with 4 entries:
 \end{tcolorbox}
         
     There are 4 model parameters (\texttt{a}, \texttt{b}, \texttt{c}, and
-\texttt{n}). The initial values and the prior distributions of the
-parameters are defined for each parameter.
+\texttt{n}). The initial values and the prior distributions (based on
+prior knowledge of the parameter uncertainty) are defined for each
+parameter.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{4}{\boxspacing}
+\prompt{In}{incolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{md}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Observations}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{createobservations}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{1.1}\PY{p}{,}\PY{l+m+mf}{1.9}\PY{p}{,}\PY{l+m+mf}{3.1}\PY{p}{,}\PY{l+m+mf}{3.9}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{;} \PY{n}{weight}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{,} \PY{n}{dist}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(0, 1)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(0, 2)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(1, 3)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(2, 4)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(3, 5)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(4, 6)}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
@@ -453,7 +460,7 @@ dist = ["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)",
     \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{4}{\boxspacing}
+\prompt{Out}{outcolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 OrderedCollections.OrderedDict\{Any, Any\} with 6 entries:
   "o1" => OrderedCollections.OrderedDict\{String, Any\}("target"=>0.0, "weight"=>…
@@ -471,10 +478,10 @@ OrderedCollections.OrderedDict\{Any, Any\} with 6 entries:
 ranges are defined for each observation.
 
     A function (called \texttt{polynominal}) is defined to compute the 6
-observations given 4 parameters as an input:
+observations given 4 model parameters as an input:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{5}{\boxspacing}
+\prompt{In}{incolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{k}{function} \PY{n}{polynominal}\PY{p}{(}\PY{n}{parameters}\PY{o}{::}\PY{k+kt}{AbstractVector}\PY{p}{)}
 	\PY{n}{f}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{t} \PY{o}{\PYZca{}} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{n}{t} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]} \PY{c}{\PYZsh{} a * t\PYZca{}n + b * t + c}
@@ -485,32 +492,50 @@ observations given 4 parameters as an input:
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{5}{\boxspacing}
+\prompt{Out}{outcolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 polynominal (generic function with 1 method)
 \end{Verbatim}
 \end{tcolorbox}
         
-    The function is setup now in the \texttt{md} dictionary as a function
-that will be applied to perform model simulation:
+    The \texttt{polynominal} function is setup now in the \texttt{md}
+dictionary as a model that will be applied to perform the simulations:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{6}{\boxspacing}
+\prompt{In}{incolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{setmodel!}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{polynominal}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{6}{\boxspacing}
+\prompt{Out}{outcolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 (::Mads.var"\#madscommandfunctionwithexpressions\#18") (generic function with 1
 method)
 \end{Verbatim}
 \end{tcolorbox}
         
+    Set a default name for MADS input / output files:
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{7}{\boxspacing}
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{md}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Filename}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics.mads}\PY{l+s}{\PYZdq{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+"model\_diagnostics.mads"
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Now, the problem dictionary \texttt{md} is fully defined:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{display}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
@@ -518,30 +543,31 @@ method)
 
     
     \begin{Verbatim}[commandchars=\\\{\}]
-Dict\{Any, Any\} with 3 entries:
+Dict\{Any, Any\} with 4 entries:
   "Julia function" => polynominal
   "Parameters"     => OrderedCollections.OrderedDict\{Any, Any\}("a"=>OrderedColl…
   "Observations"   => OrderedCollections.OrderedDict\{Any, Any\}("o1"=>OrderedCol…
+  "Filename"       => "model\_diagnostics.mads"
     \end{Verbatim}
 
     
-    Now the problem is setup!
+    And the model diagnostic problem is setup!
 
     \hypertarget{forward-model-simulation}{%
 \subsection{Forward model simulation}\label{forward-model-simulation}}
 
-    A single forward model run based on the initial model parameters cane be
-executed as follows:
+    A single forward model run based on the initial model parameter values
+can be executed as follows:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{8}{\boxspacing}
+\prompt{In}{incolor}{10}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{forward}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{8}{\boxspacing}
+\prompt{Out}{outcolor}{10}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
   "o1" => 1.0
@@ -553,18 +579,17 @@ OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
 \end{Verbatim}
 \end{tcolorbox}
         
-    The forward model run can be also executed using the following command
-(not recommended):
+    The forward model run can be also executed using the following command:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{9}{\boxspacing}
+\prompt{In}{incolor}{11}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{polynominal}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{getparamsinit}\PY{p}{(}\PY{n}{md}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{9}{\boxspacing}
+\prompt{Out}{outcolor}{11}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 6-element Vector\{Float64\}:
   1.0
@@ -576,17 +601,23 @@ OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
 \end{Verbatim}
 \end{tcolorbox}
         
-    The initial model predctions can be plotted as well:
+    The runs above produce outputs representing model predictions at the six
+observations in time.
+
+The forward simulations are based on the initial guesses for the model
+parameters.
+
+The initial model predictions can be plotted as shown below:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{10}{\boxspacing}
+\prompt{In}{incolor}{12}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{plotmatches}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_23_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_28_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -605,14 +636,14 @@ reproduced by the model using the initial model parameter guesses.
 following command:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{11}{\boxspacing}
+\prompt{In}{incolor}{13}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{calib\PYZus{}param}\PY{p}{,} \PY{n}{calib\PYZus{}result} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{calibrate}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{11}{\boxspacing}
+\prompt{Out}{outcolor}{13}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 (OrderedCollections.OrderedDict("a" => 0.48652749043975874, "b" =>
 0.48653799120462793, "c" => -0.001625793681175658, "n" => 1.0209744172380697),
@@ -628,14 +659,14 @@ OptimBase.MultivariateOptimizationResults\{LsqFit.LevenbergMarquardt, Float64,
 \end{tcolorbox}
         
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{12}{\boxspacing}
+\prompt{In}{incolor}{14}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{plotmatches}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{calib\PYZus{}param}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_28_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_33_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -646,7 +677,7 @@ OptimBase.MultivariateOptimizationResults\{LsqFit.LevenbergMarquardt, Float64,
     Initial values of the model parameters are:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{13}{\boxspacing}
+\prompt{In}{incolor}{15}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{showparameterestimates}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
@@ -656,7 +687,7 @@ OptimBase.MultivariateOptimizationResults\{LsqFit.LevenbergMarquardt, Float64,
 a =               1 distribution = Uniform(-10, 10)
 b =               1 distribution = Uniform(-10, 10)
 c =               1 distribution = Uniform(-5, 5)
-n =               1 distribution = Uniform(-3, 3)
+n =               1 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
     \end{Verbatim}
 
@@ -664,7 +695,7 @@ Number of optimizable parameters: 4
 (inversion) are:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{14}{\boxspacing}
+\prompt{In}{incolor}{16}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{showparameterestimates}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{calib\PYZus{}param}\PY{p}{)}
 \end{Verbatim}
@@ -674,68 +705,389 @@ Number of optimizable parameters: 4
 a =        0.486527 distribution = Uniform(-10, 10)
 b =        0.486538 distribution = Uniform(-10, 10)
 c =     -0.00162579 distribution = Uniform(-5, 5)
-n =         1.02097 distribution = Uniform(-3, 3)
+n =         1.02097 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
     \end{Verbatim}
 
-    \hypertarget{evaluation-of-posterior-uncertainties}{%
-\subsection{Evaluation of posterior
-uncertainties}\label{evaluation-of-posterior-uncertainties}}
+    The model inversion can be also performed for a set of random initial
+guesses for model parameters.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{15}{\boxspacing}
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{calib\PYZus{}random\PYZus{}results} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{calibraterandom}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{;} \PY{n}{seed}\PY{o}{=}\PY{l+m+mi}{2021}\PY{p}{,} \PY{n}{all}\PY{o}{=}\PY{n+nb}{true}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+100×3 Matrix\{Any\}:
+  232.272  …  OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689,
+"c"=>0.039249, "n"=>3.0)
+  270.314     OrderedCollections.OrderedDict("a"=>-0.28542, "b"=>1.27948,
+"c"=>0.0178456, "n"=>0.951994)
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653398, "b"=>0.950704,
+"c"=>0.0392286, "n"=>3.0)
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653436, "b"=>0.950702,
+"c"=>0.0392321, "n"=>2.99998)
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653522, "b"=>0.950689,
+"c"=>0.039249, "n"=>3.0)
+  270.097  …  OrderedCollections.OrderedDict("a"=>-4.30065, "b"=>5.28695,
+"c"=>0.0214167, "n"=>0.995285)
+ 7643.02      OrderedCollections.OrderedDict("a"=>-9.89624, "b"=>9.82224,
+"c"=>0.622939, "n"=>0.910639)
+  269.91      OrderedCollections.OrderedDict("a"=>-4.41759, "b"=>5.40692,
+"c"=>0.0206894, "n"=>0.9961)
+  270.093     OrderedCollections.OrderedDict("a"=>-4.82082, "b"=>5.80708,
+"c"=>0.0214349, "n"=>0.995788)
+  270.067     OrderedCollections.OrderedDict("a"=>-2.58655, "b"=>3.57364,
+"c"=>0.0211371, "n"=>0.992455)
+  269.929  …  OrderedCollections.OrderedDict("a"=>-3.36971, "b"=>4.3589,
+"c"=>0.0207631, "n"=>0.994848)
+  268.409     OrderedCollections.OrderedDict("a"=>0.0354613, "b"=>0.998702,
+"c"=>1.70238e-5, "n"=>0.000376271)
+  268.41      OrderedCollections.OrderedDict("a"=>0.0354481, "b"=>0.998704,
+"c"=>2.21817e-5, "n"=>0.000448126)
+    ⋮      ⋱
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689,
+"c"=>0.039249, "n"=>3.0)
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653522, "b"=>0.950689,
+"c"=>0.039249, "n"=>3.0)
+  232.272  …  OrderedCollections.OrderedDict("a"=>0.00653436, "b"=>0.950702,
+"c"=>0.0392321, "n"=>2.99998)
+  270.091     OrderedCollections.OrderedDict("a"=>-5.97129, "b"=>6.95745,
+"c"=>0.0214664, "n"=>0.996586)
+  270.122     OrderedCollections.OrderedDict("a"=>-2.481, "b"=>3.46755,
+"c"=>0.0212952, "n"=>0.991901)
+  269.794     OrderedCollections.OrderedDict("a"=>3.95245, "b"=>-2.96176,
+"c"=>0.0197838, "n"=>1.00408)
+  232.272     OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689,
+"c"=>0.039249, "n"=>3.0)
+  232.272  …  OrderedCollections.OrderedDict("a"=>0.00653516, "b"=>0.950689,
+"c"=>0.0392491, "n"=>3.0)
+  270.802     OrderedCollections.OrderedDict("a"=>-0.121823, "b"=>1.11748,
+"c"=>0.0170054, "n"=>0.896066)
+  269.868     OrderedCollections.OrderedDict("a"=>0.962624, "b"=>0.0219806,
+"c"=>0.0223074, "n"=>1.02225)
+  270.09      OrderedCollections.OrderedDict("a"=>-5.46149, "b"=>6.44768,
+"c"=>0.0214512, "n"=>0.996277)
+  270.362     OrderedCollections.OrderedDict("a"=>-0.387051, "b"=>1.37691,
+"c"=>0.0197667, "n"=>0.954846)
+\end{Verbatim}
+\end{tcolorbox}
+        
+    The final parameter estimates from the 100 random-initial-guess inverse
+runs are collected into a matrix below:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{calib\PYZus{}random\PYZus{}estimates} \PY{o}{=} \PY{n}{hcat}\PY{p}{(}\PY{n}{map}\PY{p}{(}\PY{n}{i}\PY{o}{\PYZhy{}\PYZgt{}}\PY{n}{collect}\PY{p}{(}\PY{n}{values}\PY{p}{(}\PY{n}{calib\PYZus{}random\PYZus{}results}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1}\PY{o}{:}\PY{l+m+mi}{100}\PY{p}{)}\PY{o}{...}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+4×100 Matrix\{Float64\}:
+ 0.00653517  -0.28542    0.00653398  …  0.962624   -5.46149    -0.387051
+ 0.950689     1.27948    0.950704       0.0219806   6.44768     1.37691
+ 0.039249     0.0178456  0.0392286      0.0223074   0.0214512   0.0197667
+ 3.0          0.951994   3.0            1.02225     0.996277    0.954846
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Plot the final predictions of the 100 random-initial-guess inverse runs:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{forward\PYZus{}predictions} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{forward}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{calib\PYZus{}random\PYZus{}estimates}\PY{p}{)}
+\PY{n}{Mads}\PY{o}{.}\PY{n}{spaghettiplot}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{forward\PYZus{}predictions}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    The figure above demonstrates that there are several different global
+minima.
+
+There are three important groups of results with different \texttt{n}
+values: * \texttt{n} = 0 * \texttt{n} = 1 * \texttt{n} = 3 (upper prior
+bound)
+
+The code below identifies and plots solutions associated with these 3
+distinct groups:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{ind\PYZus{}n0} \PY{o}{=} \PY{n}{abs}\PY{o}{.}\PY{p}{(}\PY{n}{calib\PYZus{}random\PYZus{}estimates}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,}\PY{o}{:}\PY{p}{]}\PY{p}{)} \PY{o}{.\PYZlt{}} \PY{l+m+mf}{0.1}
+\PY{n}{in0} \PY{o}{=} \PY{n}{findall}\PY{p}{(}\PY{n}{ind\PYZus{}n0} \PY{o}{.==} \PY{n+nb}{true}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{ind\PYZus{}n1} \PY{o}{=} \PY{n}{abs}\PY{o}{.}\PY{p}{(}\PY{n}{calib\PYZus{}random\PYZus{}estimates}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,}\PY{o}{:}\PY{p}{]} \PY{o}{.\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{.\PYZlt{}} \PY{l+m+mf}{0.1}
+\PY{n}{in1} \PY{o}{=} \PY{n}{findall}\PY{p}{(}\PY{n}{ind\PYZus{}n1} \PY{o}{.==} \PY{n+nb}{true}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{ind\PYZus{}n3} \PY{o}{=} \PY{o}{.!}\PY{p}{(}\PY{n}{ind\PYZus{}n0} \PY{o}{.|} \PY{n}{ind\PYZus{}n1}\PY{p}{)}
+\PY{n}{in3} \PY{o}{=} \PY{n}{findall}\PY{p}{(}\PY{n}{ind\PYZus{}n3} \PY{o}{.==} \PY{n+nb}{true}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{pinit} \PY{o}{=} \PY{k+kt}{Dict}\PY{p}{(}\PY{n}{zip}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{getparamkeys}\PY{p}{(}\PY{n}{md}\PY{p}{)}\PY{p}{,} \PY{n}{Mads}\PY{o}{.}\PY{n}{getparamsinit}\PY{p}{(}\PY{n}{md}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{n}{optnames} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{n=0}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n=1}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{n=3}\PY{l+s}{\PYZdq{}}\PY{p}{]}
+\PY{n}{v} \PY{o}{=} \PY{p}{[}\PY{n}{in0}\PY{p}{,} \PY{n}{in1}\PY{p}{,} \PY{n}{in3}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{i} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{:}\PY{l+m+mi}{3}
+	\PY{n}{println}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Solution for }\PY{l+s+si}{\PYZdl{}}\PY{p}{(}\PY{n}{optnames}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+	\PY{n}{Mads}\PY{o}{.}\PY{n}{showparameters}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{calib\PYZus{}random\PYZus{}results}\PY{p}{[}\PY{n}{v}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+	\PY{n}{Mads}\PY{o}{.}\PY{n}{plotmatches}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{calib\PYZus{}random\PYZus{}results}\PY{p}{[}\PY{n}{v}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{;} \PY{n}{title}\PY{o}{=}\PY{n}{optnames}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\PY{k}{end}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Solution for n=0
+a =       0.0354613 distribution = Uniform(-10, 10)
+b =        0.998702 distribution = Uniform(-10, 10)
+c =     1.70238e-05 distribution = Uniform(-5, 5)
+n =     0.000376271 distribution = Uniform(0, 3)
+Number of optimizable parameters: 4
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Solution for n=1
+a =        -0.28542 distribution = Uniform(-10, 10)
+b =         1.27948 distribution = Uniform(-10, 10)
+c =       0.0178456 distribution = Uniform(-5, 5)
+n =        0.951994 distribution = Uniform(0, 3)
+Number of optimizable parameters: 4
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+Solution for n=3
+a =      0.00653517 distribution = Uniform(-10, 10)
+b =        0.950689 distribution = Uniform(-10, 10)
+c =        0.039249 distribution = Uniform(-5, 5)
+n =               3 distribution = Uniform(0, 3)
+Number of optimizable parameters: 4
+    \end{Verbatim}
+
+    \hypertarget{evaluation-of-predictive-sensitivities-and-uncertainties}{%
+\subsection{Evaluation of predictive sensitivities and
+uncertainties}\label{evaluation-of-predictive-sensitivities-and-uncertainties}}
+
+    \hypertarget{local-sensitivity-and-uncertainty-quantification}{%
+\subsubsection{Local sensitivity and uncertainty
+quantification}\label{local-sensitivity-and-uncertainty-quantification}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{localsa} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{localsa}\PY{p}{(}\PY{n}{md}\PY{p}{;} \PY{n}{filename}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics.png}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{par}\PY{o}{=}\PY{n}{collect}\PY{p}{(}\PY{n}{values}\PY{p}{(}\PY{n}{calib\PYZus{}param}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Dict\{String, Any\} with 6 entries:
+  "of"          => 420.3
+  "jacobian"    => [0.0 0.0 499.175 0.0; 994.721 994.721 499.175 0.0; … ; 409.6…
+  "covar"       => [0.525233 -0.525787 0.000235488 -0.0662933; -0.525787 0.5263…
+  "eigenmatrix" => [0.702251 0.102386 0.0288238 0.703939; 0.688973 0.0768143 0.…
+  "eigenvalues" => [3.38862e-8, 2.743e-6, 3.91435e-5, 1.05994]
+  "stddev"      => [0.72473, 0.725495, 0.00200318, 0.0916738]
+\end{Verbatim}
+\end{tcolorbox}
+        
+    
+
+    \texttt{localsa{[}"stddev"{]}} defines the estimated posterior
+uncertainties in the estimated model parameters. This estimate is based
+on the Jacobian / Hessian matrix estimates of the parameter space
+curvature in the area of the estimated (inverted) optimal parameters.
+The uncertainties are assumed to be Gaussian with standard deviations
+defined by \texttt{localsa{[}"stddev"{]}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{p}{[}\PY{n}{Mads}\PY{o}{.}\PY{n}{getparamlabels}\PY{p}{(}\PY{n}{md}\PY{p}{)} \PY{n}{localsa}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{stddev}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+4×2 Matrix\{Any\}:
+ "a"  0.72473
+ "b"  0.725495
+ "c"  0.00200318
+ "n"  0.0916738
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Based on these results, \texttt{c} is well constrained. \texttt{n} is
+also well defined. \texttt{a} and \texttt{b} are the most uncertain.
+
+However, because of the local nature of the estimates these results are
+not very accurate and differ with the global sensitivity and uncertainty
+analyses presented below.
+
+The plots below show a series of graphical representations of the
+\texttt{localsa} results. These plots are generated automatically by the
+code.
+
+A plot of the Jacobian repesenting the relationships between model
+parameters and estimated observations:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics\PYZhy{}jacobian.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_53_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    A plot of the eigen matrix of the Hessian (the Hessian is approximately
+computed based on the Jacobian above):
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics\PYZhy{}eigenmatrix.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_55_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    A plot of the eigen values of the Hessian:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{25}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics\PYZhy{}eigenvalues.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_57_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    The eigen analysis presetned above suggest that \texttt{a} and
+\texttt{b} are correlated (this is expected based on the mathematical
+form of the solved model in the function \texttt{polynominal}). Both
+parameters are represented by the first and last (4th) eigen vectors.
+
+The parameters \texttt{n} and \texttt{c} are uncorrelated and also
+independent of \texttt{a} and \texttt{b}.
+
+    \hypertarget{global-sensitivity-and-uncertainty-quantification}{%
+\subsection{Global sensitivity and uncertainty
+quantification}\label{global-sensitivity-and-uncertainty-quantification}}
+
+    \hypertarget{affine-invariant-mcmc}{%
+\subsubsection{Affine Invariant MCMC}\label{affine-invariant-mcmc}}
+
+Our module \texttt{AffineInvariantMCMC.jl} (aka \texttt{EMCEE}) is
+applied to perform global sensitivity and uncertainty quantification:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{26}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{chain}\PY{p}{,} \PY{n}{llhoods} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{emceesampling}\PY{p}{(}\PY{n}{md}\PY{p}{;} \PY{n}{numwalkers}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{nsteps}\PY{o}{=}\PY{l+m+mi}{100000}\PY{p}{,} \PY{n}{burnin}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{thinning}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{seed}\PY{o}{=}\PY{l+m+mi}{2016}\PY{p}{,} \PY{n}{sigma}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{15}{\boxspacing}
+\prompt{Out}{outcolor}{26}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-([-0.13601651918047325 6.449935308058958 … -1.627391800717899
--4.119922628004796; 1.0941690654040885 -5.395383966755342 … 2.6762188920693237
-5.204364898549472; 0.025560758321624525 0.006156717419079649 …
-0.021233373376607138 -0.09250682198195176; 0.7802369379764128 0.9898140312646484
-… 1.0448023602658587 1.0118196568255122], [-13.51498779106448,
--13.925503638604303, -13.826975926071242, -13.894444579001128,
--14.60816852023264, -13.579594236934511, -14.837837586690735,
--14.240383157619835, -14.939965000345335, -13.311376267487034  …
--15.994667889684084, -14.595653814274797, -15.207147995830884,
--14.278745223592924, -17.31793585314554, -13.304730171203236,
--14.289486110117714, -14.503231489805287, -14.862344300487429,
--14.35637958798673])
+([-2.9318734488241254 -2.2115004894325656 … 0.59046225841824
+-0.1317764013305327; 3.9213382339060123 3.2754768843563364 … 0.4001283063148645
+1.0610138945109913; 0.025000166709641274 -0.07072908085654725 …
+0.062343770966873546 0.07827331041888207; 0.9914349083311713 1.0146213546858134
+… 1.009450999917408 0.20217807527536452], [-13.350385897100534,
+-13.83572977185207, -14.62374978746418, -13.542296325761239,
+-13.743265533105149, -13.371356376807029, -15.437727968793991,
+-13.923819788102527, -14.03616530179732, -17.012966126679196  …
+-14.999244279386676, -14.832192904405328, -14.205686001261679,
+-13.51735973205491, -13.177385309063698, -13.374322254910798,
+-15.70916729088129, -13.311448472159798, -13.452308243225435,
+-14.380811745476537])
 \end{Verbatim}
 \end{tcolorbox}
         
+    The obtained set of 10000 equally likely parameter combinations
+capturing the global sensitivity and uncertainty of the model parameters
+and associated predictions are plotted below.
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{16}{\boxspacing}
+\prompt{In}{incolor}{27}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{f} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{forward}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{chain}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
-\prompt{Out}{outcolor}{16}{\boxspacing}
+\prompt{Out}{outcolor}{27}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 6×10000 Matrix\{Float64\}:
- 0.0255608  0.00615672  0.0482318  …  -0.0541153  0.0212334  -0.0925068
- 0.983713   1.06071     0.992987       1.05046    1.07006     0.991935
- 1.9803     2.0245      1.97412        2.09271    2.01623     2.00859
- 2.98754    2.95449     2.967          3.07744    2.9214      2.99928
- 4.00106    3.86261     3.96712        4.00702    3.79942     3.97301
- 5.01893    4.75453     4.97245    …   4.88306    4.65697     4.93409
+ 0.0250002  -0.0707291  0.0462104  …  0.0135752  0.0623438  0.0782733
+ 1.01446     0.993247   0.931065      1.00549    1.05293    1.00751
+ 2.03864     2.01217    1.9508        1.99482    2.05129    2.0487
+ 3.07577     3.01377    3.00617       2.98318    3.0526     3.09676
+ 4.12129     4.00404    4.08221       3.97092    4.05585    4.14792
+ 5.17302     4.98586    5.17251    …  4.9582     5.06055    5.20089
 \end{Verbatim}
 \end{tcolorbox}
         
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{17}{\boxspacing}
+\prompt{In}{incolor}{28}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{Mads}\PY{o}{.}\PY{n}{spaghettiplot}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{f}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_36_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_64_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -743,27 +1095,113 @@ uncertainties}\label{evaluation-of-posterior-uncertainties}}
 
     \end{Verbatim}
 
+    The figure above compares the 10000 model predictions with the actual
+measurements (red dots).
+
+The figure below shows the histograms of the posterior model
+uncertainties (along the diagonal) and the cross-plots between the
+parameters (off-diagonal plots; the cross-plots above and below the
+diagonal are similar):
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{18}{\boxspacing}
+\prompt{In}{incolor}{29}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{Mads}\PY{o}{.}\PY{n}{scatterplotsamples}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{permutedims}\PY{p}{(}\PY{n}{chain}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{emcee\PYZus{}scatter.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\PY{n}{Mads}\PY{o}{.}\PY{n}{scatterplotsamples}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{permutedims}\PY{p}{(}\PY{n}{chain}\PY{p}{)}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics\PYZhy{}emcee\PYZus{}scatter.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{19}{\boxspacing}
+\prompt{In}{incolor}{30}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{emcee\PYZus{}scatter.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics\PYZhy{}emcee\PYZus{}scatter.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_67_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
     \begin{Verbatim}[commandchars=\\\{\}]
-┌ Info: Precompiling PNGFiles [f57f5aa1-a3ce-4bc8-8ab9-96f992907883]
-└ @ Base loading.jl:1317
+
+    \end{Verbatim}
+
+    The figure above shows that the optimal (most probable) estimates are: *
+\texttt{a} = 0 * \texttt{b} = 1 * \texttt{c} = 0 * \texttt{n} = 0
+
+\texttt{c} i the most constrained (varing between -0.2 and 0.2).
+
+There are plausible solutions for any value of \texttt{a}, \texttt{b}
+and \texttt{n} within the prior uncertainty range.
+
+The parameters \texttt{a} and \texttt{b} strongly inversely correlated
+by their respective cross-plots.
+
+Based on the cross-plots, the plausible values for \texttt{n} can be
+within the entire prior uncertainty range if (1) \texttt{a} is equal to
+0 and (2) \texttt{b} is equal to 1.
+
+The plausible values for \texttt{n} are close to 1 if (1) \texttt{a} is
+very different from 0 and (2) \texttt{b} is very different from 1.
+
+    \hypertarget{saltelli-sobol-amd-efast-global-sensitivity-analyses}{%
+\subsubsection{Saltelli (Sobol) amd EFAST global sensitivity
+analyses}\label{saltelli-sobol-amd-efast-global-sensitivity-analyses}}
+
+Both Saltelli (Sobol) amd EFAST methods are producting similar results.
+Both methods are designed to perform global sensitivity analyses. EFAST
+is computationally more efficient.
+
+The Saltelli (Sobol) results are obtained as follows:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{saltelli\PYZus{}results} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{saltelli}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{N}\PY{o}{=}\PY{l+m+mi}{10000}\PY{p}{,} \PY{n}{seed}\PY{o}{=}\PY{l+m+mi}{2016}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{31}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+Dict\{String, Any\} with 6 entries:
+  "method"     => "saltelli"
+  "samplesize" => 10000
+  "mes"        => OrderedCollections.OrderedDict("o1"=>OrderedCollections.Order…
+  "tes"        => OrderedCollections.OrderedDict("o1"=>OrderedCollections.Order…
+  "seed"       => 2016
+  "var"        => OrderedCollections.OrderedDict("o1"=>OrderedCollections.Order…
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{32}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Mads}\PY{o}{.}\PY{n}{plotobsSAresults}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{saltelli\PYZus{}results}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_38_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -771,26 +1209,297 @@ uncertainties}\label{evaluation-of-posterior-uncertainties}}
 
     \end{Verbatim}
 
-    \begin{Verbatim}[commandchars=\\\{\}, frame=single, framerule=2mm, rulecolor=\color{outerrorbackground}]
-UndefVarError: trytoopen not defined
+    The EFAST results are obtained as follows:
 
-Stacktrace:
- [1] display(filename::String)
-   @ Mads \textasciitilde{}/.julia/dev/Mads/src-interactive/MadsDisplay.jl:49
- [2] top-level scope
-   @ In[23]:1
- [3] eval
-   @ ./boot.jl:360 [inlined]
- [4] include\_string(mapexpr::typeof(REPL.softscope), mod::Module, code::String, filename::String)
-   @ Base ./loading.jl:1094
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{33}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{efastresult} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{efast}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{N}\PY{o}{=}\PY{l+m+mi}{1000}\PY{p}{,} \PY{n}{seed}\PY{o}{=}\PY{l+m+mi}{2016}\PY{p}{)}
+\PY{n}{Mads}\PY{o}{.}\PY{n}{plotobsSAresults}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{efastresult}\PY{p}{,} \PY{n}{filename}\PY{o}{=}\PY{l+s}{\PYZdq{}}\PY{l+s}{sensitivity\PYZus{}efast.png}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{xtitle} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Time [\PYZhy{}]}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{ytitle} \PY{o}{=} \PY{l+s}{\PYZdq{}}\PY{l+s}{Observation [\PYZhy{}]}\PY{l+s}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    The difference in the \texttt{total} and \texttt{main} effect plots
+suggest correlations in the model parameters (which is also demonstrated
+by the \texttt{AffineInvariantMCMC} analyses above).
+
+The figures also demonstrate that the parameter sensitivity to
+observations change over time.
+
+Based on the \texttt{total\ effect}, parameter \texttt{a} and \texttt{n}
+sensitivities genereally increases with time. Parameter \texttt{b} and
+\texttt{b} sensitivities genereally decreases with time.
+
+    \hypertarget{decision-analysis-using-information-gap-decision-theory}{%
+\subsection{Decision Analysis using Information-Gap Decision
+Theory}\label{decision-analysis-using-information-gap-decision-theory}}
+
+Define the Information-Gap Decision Theory horizons of uncertainty
+\texttt{h}:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{h} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.02}\PY{p}{,} \PY{l+m+mf}{0.05}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{34}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+8-element Vector\{Float64\}:
+ 0.001
+ 0.01
+ 0.02
+ 0.05
+ 0.1
+ 0.2
+ 0.5
+ 1.0
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Define the polynominal models to be explored:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{models} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{y = a * t + c}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{y = a * t\PYZca{}(1.1) + b * t + c}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{y = a * t\PYZca{}n + b * t + c}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{y = a * exp(t * n) + b * t + c}\PY{l+s}{\PYZdq{}}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{35}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+4-element Vector\{String\}:
+ "y = a * t + c"
+ "y = a * t\^{}(1.1) + b * t + c"
+ "y = a * t\^{}n + b * t + c"
+ "y = a * exp(t * n) + b * t + c"
+\end{Verbatim}
+\end{tcolorbox}
+        
+    Execute the infogap analyses, collect the obtained results, and produce
+a figure summarizing the results:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{36}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{import} \PY{n}{Gadfly}
+\PY{k}{import} \PY{n}{Colors}
+\PY{n}{lmin} \PY{o}{=} \PY{k+kt}{Vector}\PY{p}{\PYZob{}}\PY{k+kt}{Any}\PY{p}{\PYZcb{}}\PY{p}{(}\PY{n+nb}{undef}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{lmax} \PY{o}{=} \PY{k+kt}{Vector}\PY{p}{\PYZob{}}\PY{k+kt}{Any}\PY{p}{\PYZcb{}}\PY{p}{(}\PY{n+nb}{undef}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+\PY{n}{colors} \PY{o}{=} \PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{blue}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{red}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{green}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{orange}\PY{l+s}{\PYZdq{}}\PY{p}{]}
+\PY{k}{for} \PY{n}{i} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{:}\PY{l+m+mi}{4}
+	\PY{n}{min}\PY{p}{,} \PY{n}{max} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{infogap\PYZus{}jump\PYZus{}polynomial}\PY{p}{(}\PY{n}{model}\PY{o}{=}\PY{n}{i}\PY{p}{,} \PY{n}{plot}\PY{o}{=}\PY{n+nb}{true}\PY{p}{,} \PY{n}{horizons}\PY{o}{=}\PY{n}{h}\PY{p}{,} \PY{n}{retries}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{,} \PY{n}{maxiter}\PY{o}{=}\PY{l+m+mi}{1000}\PY{p}{,} \PY{n}{verbosity}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{seed}\PY{o}{=}\PY{l+m+mi}{2015}\PY{p}{)}
+	\PY{n}{lmin}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{layer}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{min}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{h}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Geom}\PY{o}{.}\PY{n}{line}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Theme}\PY{p}{(}\PY{n}{default\PYZus{}color}\PY{o}{=}\PY{n}{Base}\PY{o}{.}\PY{n}{parse}\PY{p}{(}\PY{n}{Colors}\PY{o}{.}\PY{n}{Colorant}\PY{p}{,} \PY{n}{colors}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+	\PY{n}{lmax}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{layer}\PY{p}{(}\PY{n}{x}\PY{o}{=}\PY{n}{max}\PY{p}{,} \PY{n}{y}\PY{o}{=}\PY{n}{h}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Geom}\PY{o}{.}\PY{n}{line}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Theme}\PY{p}{(}\PY{n}{default\PYZus{}color}\PY{o}{=}\PY{n}{Base}\PY{o}{.}\PY{n}{parse}\PY{p}{(}\PY{n}{Colors}\PY{o}{.}\PY{n}{Colorant}\PY{p}{,} \PY{n}{colors}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\PY{k}{end}
+\PY{n}{f} \PY{o}{=} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{lmin}\PY{o}{...}\PY{p}{,} \PY{n}{lmax}\PY{o}{...}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Guide}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{o5}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Guide}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Horizon of uncertainty}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Guide}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Opportuneness vs. Robustness}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Theme}\PY{p}{(}\PY{n}{highlight\PYZus{}width}\PY{o}{=}\PY{l+m+mi}{0}\PY{n}{Gadfly}\PY{o}{.}\PY{n}{pt}\PY{p}{)}\PY{p}{,} \PY{n}{Gadfly}\PY{o}{.}\PY{n}{Guide}\PY{o}{.}\PY{n}{manual\PYZus{}color\PYZus{}key}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{Models}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{n}{models}\PY{p}{,} \PY{n}{colors}\PY{p}{)}\PY{p}{)}
+\PY{n}{Gadfly}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{n}{Gadfly}\PY{o}{.}\PY{n}{PNG}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{infogap\PYZus{}opportuneness\PYZus{}vs\PYZus{}robustness.png}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+m+mi}{6}\PY{n}{Gadfly}\PY{o}{.}\PY{n}{inch}\PY{p}{,} \PY{l+m+mi}{4}\PY{n}{Gadfly}\PY{o}{.}\PY{n}{inch}\PY{p}{)}\PY{p}{,} \PY{n}{f}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+┌ Info: New seed: 2015
+└ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Min h = 0.001 OF = 4.998333281688344 par = [0.9993333197989149,
+0.0016666826937701167]
+Max h = 0.001 OF = 5.00166671833499 par = [1.0006666802044195,
+-0.001666682687108125]
+Min h = 0.01 OF = 4.983333280036714 par = [0.9933333177282005,
+0.016666691395710947]
+Max h = 0.01 OF = 5.016666718990943 par = [1.0066666807443947,
+-0.016666684731030848]
+Min h = 0.02 OF = 4.966666614342419 par = [0.9866666521256426,
+0.033333353714205226]
+Max h = 0.02 OF = 5.033333387019943 par = [1.0133333489146892,
+-0.03333335755350352]
+Min h = 0.05 OF = 4.916666615311706 par = [0.9666666528982734,
+0.08333335082033852]
+Max h = 0.05 OF = 5.08333338580072 par = [1.0333333472115793,
+-0.08333335025717689]
+Min h = 0.1 OF = 4.833333282661476 par = [0.9333333197717608,
+0.16666668380267258]
+Max h = 0.1 OF = 5.166666719675405 par = [1.0666666805654965,
+-0.16666668315207778]
+Min h = 0.2 OF = 4.666666617013978 par = [0.8666666531305123, 0.333333351361417]
+Max h = 0.2 OF = 5.3333333876552285 par = [1.133333347539164,
+-0.3333333500405913]
+Min h = 0.5 OF = 4.166666620015298 par = [0.666666653134728, 0.8333333543416581]
+Max h = 0.5 OF = 5.8333333916516725 par = [1.3333333485322296,
+-0.8333333510094758]
+Min h = 1.0 OF = 3.333333291678896 par = [0.33333331979902153,
+1.666666692683788]
+Max h = 1.0 OF = 6.66666673165455 par = [1.6666666835343882, -1.666666686017392]
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+┌ Info: New seed: 2015
+└ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Min h = 0.001 OF = 4.9960744454905965 par = [-0.03655198917957378,
+1.0437989392240055, -0.008246956140052745]
+Max h = 0.001 OF = 5.003925554522909 par = [0.036551989057392965,
+0.9562010609257169, 0.008246956122525443]
+Min h = 0.01 OF = 4.960745363330646 par = [-0.36551410869632334,
+1.437982560318741, -0.08246845805988594]
+Max h = 0.01 OF = 5.039254636799261 par = [0.3655141073877924,
+0.5620174412841543, 0.08246845786044212]
+Min h = 0.02 OF = 4.921490828175631 par = [-0.731027566617381,
+1.8759643517308704, -0.16493679213714782]
+Max h = 0.02 OF = 5.078509171873495 par = [0.7310275550438009,
+0.12403566252037508, 0.1649367889027792]
+Min h = 0.05 OF = 4.803727222947509 par = [-1.8275679184585027,
+3.1899096986947266, -0.41234178651963727]
+Max h = 0.05 OF = 5.196272777724391 par = [1.8275679123567241,
+-1.189909691219638, 0.41234178565241686]
+Min h = 0.1 OF = 4.607454547104612 par = [-3.6551351873746936,
+5.379818629776438, -0.8246834485881221]
+Max h = 0.1 OF = 5.392545454245484 par = [3.655135175083979,
+-3.3798186147139266, 0.824683446810193]
+Min h = 0.2 OF = 4.214909194737556 par = [-7.310269737140044, 9.759636506472651,
+-1.64936677598685]
+Max h = 0.2 OF = 5.7850908074455605 par = [7.3102697046759735,
+-7.759636466764177, 1.6493667702921515]
+Min h = 0.5 OF = 3.591684039656965 par = [-7.751158513274632,
+10.000000041783382, -0.8850280664081923]
+Max h = 0.5 OF = 6.49427721194079 par = [9.382981348214942, -10.000000044037646,
+1.3871392608548654]
+Min h = 1.0 OF = 2.6876583975888058 par = [-8.067223019985045,
+10.000000062883482, 0.0672229701222594]
+Max h = 1.0 OF = 7.44592953417183 par = [9.736303636511739, -10.000000065441785,
+0.26369642586347747]
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+┌ Info: New seed: 2015
+└ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Min h = 0.001 OF = 4.993999809993968 par = [-0.0001250040451789784,
+1.0026250655869564, -0.0035000665302511625, 2.999997843315674]
+Max h = 0.001 OF = 5.006000200041004 par = [0.00012500374313672267,
+0.997374931285495, 0.0035000749793720805, 3.000000029507715]
+Min h = 0.01 OF = 4.939999809729828 par = [-0.0012500039848518721,
+1.0262500653481148, -0.03500006635146049, 2.999999811324717]
+Max h = 0.01 OF = 5.060000190420172 par = [0.0012500039827685484,
+0.9737499347289683, 0.035000066376460574, 2.9999998113247166]
+Min h = 0.02 OF = 4.879999809436044 par = [-0.002500003917827296,
+1.0525000650829668, -0.07000006615333457, 2.9999999206621957]
+Max h = 0.02 OF = 5.120000190863952 par = [0.002500003913660588,
+0.9474999350712004, 0.0700000662033339, 2.9999999206621952]
+Min h = 0.05 OF = 4.699999809110879 par = [-0.006250003705588852,
+1.1312500640011731, -0.17500006484468256, 2.9999999863618134]
+Max h = 0.05 OF = 5.300000191636143 par = [0.006250003695269465,
+0.8687499363840293, 0.1750000649694136, 2.99999998635084]
+Min h = 0.1 OF = 4.399999807272094 par = [-0.012500003374736784,
+1.2625000628015948, -0.35000006419023805, 3.000000008232852]
+Max h = 0.1 OF = 5.600000194228184 par = [0.012500003353865882,
+0.7374999379699614, 0.35000006443880427, 3.0000000082339633]
+Min h = 0.2 OF = 3.7999998042537553 par = [-0.025000002708412933,
+1.5250000602396283, -0.700000062415874, 3.000000019082813]
+Max h = 0.2 OF = 6.20000019874704 par = [0.02500000266667985,
+0.47499994130280493, 0.7000000629146885, 3.0000000190840956]
+Min h = 0.5 OF = 1.999999795385952 par = [-0.06250000069969568,
+2.3125000523306776, -1.7500000565793346, 3.000000025626925]
+Max h = 0.5 OF = 8.000000212115324 par = [0.0625000005955181,
+-0.31250004847656593, 1.7500000578296342, 3.0000000256271333]
+Min h = 1.0 OF = -1.0000002193334967 par = [-0.12499999734956149,
+3.625000039098136, -3.5000000467297627, 3.000000027811915]
+Max h = 1.0 OF = 11.000000234333372 par = [0.12499999714118018,
+-1.6250000313891586, 3.5000000492286207, 3.000000027812066]
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+┌ Info: New seed: 2015
+└ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Min h = 0.001 OF = 4.93820509022155 par = [-1.991956463987334e-8,
+1.001080524737567, -0.0020801343866858023, 2.9999999883894968]
+Max h = 0.001 OF = 5.061794919720368 par = [1.991956366528757e-8,
+0.9989194750922847, 0.002080134822476713, 3.000000029984543]
+Min h = 0.01 OF = 4.382067676125225 par = [-1.9919025980225499e-7,
+1.0108050472181263, -0.020801056118970217, 3.0000000258388377]
+Max h = 0.01 OF = 5.617932323094888 par = [1.991902594702715e-7,
+0.9891949528332155, 0.020801056167635203, 3.0000000258388377]
+Min h = 0.02 OF = 3.7641372160181787 par = [-3.9837992109379617e-7,
+1.0216100721965256, -0.0416020802659529, 3.0000000279194157]
+Max h = 0.02 OF = 6.23586278242203 par = [3.983799204298235e-7,
+0.9783899279061579, 0.041602080363282834, 3.0000000279194157]
+Min h = 0.05 OF = 1.9103458356971257 par = [-9.959489049683935e-7,
+1.0540251471317235, -0.10400515270690125, 3.0000000291677655]
+Max h = 0.05 OF = 8.089654160403452 par = [9.959489033084791e-7,
+0.945974853124985, 0.1040051529502259, 3.0000000291677655]
+Min h = 0.1 OF = -1.1793064329087564 par = [-1.9918972144258892e-6,
+1.1080502714651672, -0.20801027206863687, 3.000000028258382]
+Max h = 0.1 OF = 11.179306457039136 par = [1.9918972081062344e-6,
+0.8919497284896971, 0.2080102739284642, 3.0000000295838825]
+Min h = 0.2 OF = -7.358611065908197 par = [-3.983793824341401e-6,
+1.2161005218077126, -0.41602051491164094, 3.000000029791941]
+Max h = 0.2 OF = 17.35861105031053 par = [3.98379381770175e-6,
+0.7838994792191215, 0.41602051588494027, 3.000000029791941]
+Min h = 0.5 OF = -25.896488521674833 par = [-9.959487073347952e-6,
+1.5402506350898875, -1.0400496755102369, 2.999999728223722]
+Max h = 0.5 OF = 35.896523990350396 par = [9.959483725387019e-6,
+0.4597487460979546, 1.040051205638272, 3.000000022944347]
+Min h = 1.0 OF = -56.79304787447036 par = [-1.9918966727663864e-5,
+2.0805025200796528, -2.0801024466702493, 3.0000000299583918]
+Max h = 1.0 OF = 66.79304780650143 par = [1.9918966693524435e-5,
+-0.08050251512076644, 2.080102451967674, 3.0000000299999843]
     \end{Verbatim}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{ }{\boxspacing}
+\prompt{In}{incolor}{37}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-
+\PY{n}{Mads}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{l+s}{\PYZdq{}}\PY{l+s}{infogap\PYZus{}opportuneness\PYZus{}vs\PYZus{}robustness.png}\PY{l+s}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_81_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
 
 
     % Add a bibliography block to the postdoc

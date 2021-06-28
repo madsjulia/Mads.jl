@@ -145,6 +145,17 @@ function getparamlabels(madsdata::AbstractDict, paramkeys::AbstractVector=getpar
 	return plotlabels
 end
 
+"""
+Get an array with `min` values for parameters defined by `paramkeys`
+
+$(DocumentFunction.documentfunction(getparamsmin;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "paramkeys"=>"parameter keys")))
+
+Returns:
+
+- the parameter values
+"""
 function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
@@ -167,24 +178,19 @@ function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 	end
 	return paramvalue # returns the parameter values
 end
-function getparamsmin(madsdata::AbstractDict)
-	paramkeys = getparamkeys(madsdata)
-	return getparamsmin(madsdata, paramkeys)
-end
 
-@doc """
-Get an array with `min` values for parameters defined by `paramkeys`
+"""
+Get an array with `max` values for parameters defined by `paramkeys`
 
-$(DocumentFunction.documentfunction(getparamsmin;
+$(DocumentFunction.documentfunction(getparamsmax;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramkeys"=>"parameter keys")))
 
 Returns:
 
-- the parameter values
-""" getparamsmin
-
-function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector)
+- returns the parameter values
+"""
+function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -206,24 +212,19 @@ function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector)
 	end
 	return paramvalue # returns the parameter values
 end
-function getparamsmax(madsdata::AbstractDict)
-	paramkeys = getparamkeys(madsdata)
-	return getparamsmax(madsdata, paramkeys)
-end
 
-@doc """
-Get an array with `max` values for parameters defined by `paramkeys`
+"""
+Get an array with `init_min` values for parameters
 
-$(DocumentFunction.documentfunction(getparamsmax;
+$(DocumentFunction.documentfunction(getparamsinit_min;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramkeys"=>"parameter keys")))
 
 Returns:
 
-- returns the parameter values
-""" getparamsmax
-
-function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector)
+- the parameter values
+"""
+function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -257,24 +258,19 @@ function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector)
 	end
 	return paramvalue # returns the parameter values
 end
-function getparamsinit_min(madsdata::AbstractDict)
-	paramkeys = getparamkeys(madsdata)
-	return getparamsinit_min(madsdata, paramkeys)
-end
 
-@doc """
-Get an array with `init_min` values for parameters
+"""
+Get an array with `init_max` values for parameters defined by `paramkeys`
 
-$(DocumentFunction.documentfunction(getparamsinit_min;
+$(DocumentFunction.documentfunction(getparamsinit_max;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramkeys"=>"parameter keys")))
 
 Returns:
 
 - the parameter values
-""" getparamsinit_min
-
-function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector)
+"""
+function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i in 1:length(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
@@ -308,22 +304,6 @@ function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector)
 	end
 	return paramvalue # returns the parameter values
 end
-function getparamsinit_max(madsdata::AbstractDict)
-	paramkeys = getparamkeys(madsdata)
-	return getparamsinit_max(madsdata, paramkeys)
-end
-
-@doc """
-Get an array with `init_max` values for parameters defined by `paramkeys`
-
-$(DocumentFunction.documentfunction(getparamsinit_max;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "paramkeys"=>"parameter keys")))
-
-Returns:
-
-- the parameter values
-""" getparamsinit_max
 
 """
 Set initial optimized parameter guesses in the MADS problem dictionary
@@ -379,10 +359,7 @@ function setsourceinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::In
 	end
 end
 
-function getoptparams(madsdata::AbstractDict)
-	getoptparams(madsdata, getparamsinit(madsdata), getoptparamkeys(madsdata))
-end
-function getoptparams(madsdata::AbstractDict, parameterarray::Array, optparameterkey::Array=[])
+function getoptparams(madsdata::AbstractDict, parameterarray::Array=getparamsinit(madsdata), optparameterkey::Array=getoptparamkeys(madsdata))
 	if length(optparameterkey) == 0
 		optparameterkey = getoptparamkeys(madsdata)
 	end
