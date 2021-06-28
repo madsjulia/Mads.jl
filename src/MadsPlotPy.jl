@@ -42,7 +42,7 @@ function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true
 	end
 	plotx = [x[1]; x[1]; x]
 	ploty = [y[1]; y[1]; y]
-	plotc = [minimum(levels); maximum(levels); map(x->min(maximum(levels), max(minimum(levels), x)), c)]
+	plotc = [minimumnan(levels); maximumnan(levels); map(x->min(maximumnan(levels), max(minimumnan(levels), x)), c)]
 	alpha = ones(length(plotx))
 	alpha[1] = alpha[2] = 0
 	PyPlot.scatter(plotx, ploty, marker="o", c=log10.(plotc), s=70, cmap="jet")

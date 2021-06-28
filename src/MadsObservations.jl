@@ -436,7 +436,7 @@ $(DocumentFunction.documentfunction(printobservations;
 argtext=Dict("madsdata"=>"MADS problem dictionary", "io"=>"output stream", "filename"=>"output file name")))
 """ printobservations
 
-function createobservations!(madsdata::AbstractDict, time::AbstractVector, observation::AbstractVector=zeros(length(time)); logtransform::Bool=false, weight_type::AbstractString="constant", weight::Number=1)
+function createobservations!(madsdata::AbstractDict, time::AbstractVector, observation::AbstractVector; logtransform::Bool=false, weight_type::AbstractString="constant", weight::Number=1)
 	nT = length(time)
 	@assert nT == length(observation)
 	if !haskey(madsdata, "Wells")
