@@ -9,16 +9,16 @@ Non-negative Matrix Factorization using NMF
 
 $(DocumentFunction.documentfunction(NMFm;
 argtext=Dict("X"=>"matrix to factorize",
-            "nk"=>"number of features to extract"),
-keytext=Dict("retries"=>"number of solution retries [default=`1`]",
-            "tol"=>"solution tolerance [default=`1.0e-9`]",
+            "nk"=>"number of features to extract",
+			"retries"=>"number of solution retries [default=`1`]")
+keytext=Dict("tol"=>"solution tolerance [default=`1.0e-9`]",
             "maxiter"=>"maximum number of iterations [default=`10000`]")))
 
 Returns:
 
 - NMF results
 """
-function NMFm(X::Array, nk::Integer; retries::Integer=1, tol::Number=1.0e-9, maxiter::Integer=10000)
+function NMFm(X::Array, nk::Integer, retries::Integer=1; tol::Number=1.0e-9, maxiter::Integer=10000)
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{Float64}(undef, nP, nk)
