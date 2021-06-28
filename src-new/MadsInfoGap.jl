@@ -1,6 +1,8 @@
 import DocumentFunction
 import JuMP
 import MathProgBase
+import Colors
+
 @Mads.tryimport Ipopt
 if !haskey(ENV, "MADS_NO_GADFLY")
 	@Mads.tryimport Gadfly
@@ -107,7 +109,7 @@ end
 """
 Information Gap Decision Analysis using JuMP
 
-$(DocumentFunction.documentfunction(infogap_jump_polinomial;
+$(DocumentFunction.documentfunction(infogap_jump_polynomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
@@ -123,14 +125,14 @@ Returns:
 
 - hmin, hmax
 """
-function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
+function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, quiet::Bool=false, plot::Bool=false, model::Integer=1, seed::Integer=-1)
 	setseed(seed, quiet)
 	no = 4
 	time = [1.,2.,3.,4.]
 	ti = [1.,2.,3.,4.,5.]
 	obs = [1.,2.,3.,4.]
 	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
-		ldat = Gadfly.layer(x=time, y=obs, ymin=obs-1, ymax=obs+1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
+		ldat = Gadfly.layer(x=time, y=obs, ymin=obs .- 1, ymax=obs .+ 1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 		f = Gadfly.plot(ldat, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: model setup"))
 		Gadfly.draw(Gadfly.PNG(joinpath(Mads.madsdir, "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
 	end
@@ -181,7 +183,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 	hmin = Array{Float64}(undef, 0)
 	hmax = Array{Float64}(undef, 0)
 	for h in horizons
-		for mm = ("Min", "Max")
+		for mm in ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
 				m = JuMP.Model(Ipopt.Optimizer)
@@ -203,25 +205,41 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 				@JuMP.constraint(m, o[1:no] .>= time[1:no] .- h)
 				@JuMP.constraint(m, o[1:no] .<= time[1:no] .+ h)
 				if model == 1
-					@JuMP.NLobjective(m, Symbol(mm), p[1] * ti[5] + p[2])
+					if mm == "Max"
+						@JuMP.NLobjective(m, Max, p[1] * ti[5] + p[2])
+					else
+						@JuMP.NLobjective(m, Min, p[1] * ti[5] + p[2])
+					end
 					@JuMP.NLconstraint(m, o[1] == p[1] * ti[1] + p[2])
 					@JuMP.NLconstraint(m, o[2] == p[1] * ti[2] + p[2])
 					@JuMP.NLconstraint(m, o[3] == p[1] * ti[3] + p[2])
 					@JuMP.NLconstraint(m, o[4] == p[1] * ti[4] + p[2])
 				elseif model == 2
-					@JuMP.NLobjective(m, Symbol(mm), p[1] * (ti[5]^(1.1)) + p[2] * ti[5] + p[3])
+					if mm == "Max"
+						@JuMP.NLobjective(m, Max, p[1] * (ti[5]^(1.1)) + p[2] * ti[5] + p[3])
+					else
+						@JuMP.NLobjective(m, Min, p[1] * (ti[5]^(1.1)) + p[2] * ti[5] + p[3])
+					end
 					@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^(1.1)) + p[2] * ti[1] + p[3])
 					@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^(1.1)) + p[2] * ti[2] + p[3])
 					@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^(1.1)) + p[2] * ti[3] + p[3])
 					@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^(1.1)) + p[2] * ti[4] + p[3])
 				elseif model == 3
-					@JuMP.NLobjective(m, Symbol(mm), p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
+					if mm == "Max"
+						@JuMP.NLobjective(m, Max, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
+					else
+						@JuMP.NLobjective(m, Min, p[1] * (ti[5]^p[4]) + p[2] * ti[5] + p[3])
+					end
 					@JuMP.NLconstraint(m, o[1] == p[1] * (ti[1]^p[4]) + p[2] * ti[1] + p[3])
 					@JuMP.NLconstraint(m, o[2] == p[1] * (ti[2]^p[4]) + p[2] * ti[2] + p[3])
 					@JuMP.NLconstraint(m, o[3] == p[1] * (ti[3]^p[4]) + p[2] * ti[3] + p[3])
 					@JuMP.NLconstraint(m, o[4] == p[1] * (ti[4]^p[4]) + p[2] * ti[4] + p[3])
 				elseif model == 4
-					@JuMP.NLobjective(m, Symbol(mm), p[1] * exp(ti[5] * p[4]) + p[2] * ti[5] + p[3])
+					if mm == "Max"
+						@JuMP.NLobjective(m, Max, p[1] * exp(ti[5] * p[4]) + p[2] * ti[5] + p[3])
+					else
+						@JuMP.NLobjective(m, Min, p[1] * exp(ti[5] * p[4]) + p[2] * ti[5] + p[3])
+					end
 					@JuMP.NLconstraint(m, o[1] == p[1] * exp(ti[1] * p[4]) + p[2] * ti[1] + p[3])
 					@JuMP.NLconstraint(m, o[2] == p[1] * exp(ti[2] * p[4]) + p[2] * ti[2] + p[3])
 					@JuMP.NLconstraint(m, o[3] == p[1] * exp(ti[3] * p[4]) + p[2] * ti[3] + p[3])
@@ -254,7 +272,7 @@ function infogap_jump_polinomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 			end
 		end
 		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
-			ldat = Gadfly.layer(x=time, y=obs, ymin=obs-h, ymax=obs+h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
+			ldat = Gadfly.layer(x=time, y=obs, ymin=obs .- h, ymax=obs .+ h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue")))
 			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red")))
 			f = Gadfly.plot(ldat, lmin, lmax, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: h=$(h) Model: $(models[model])"))
@@ -270,7 +288,7 @@ end
 """
 Information Gap Decision Analysis using MathProgBase
 
-$(DocumentFunction.documentfunction(infogap_mpb_polinomial;
+$(DocumentFunction.documentfunction(infogap_mpb_polynomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
@@ -280,7 +298,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polinomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
+function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
