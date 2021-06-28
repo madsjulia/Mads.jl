@@ -94,7 +94,7 @@ Hr = H + rand(size(H)) * 0.1
 X = S * H
 Mads.plotseries(X, "disturbance_mixed_observations.svg", xtitle="Time", title="Mixed signals", name="Observation", keytitle="Observations", combined=true, hsize=8Gadfly.inch, vsize=4Gadfly.inch)
 @info("Reconstruction of sin/rand disturbance signal using NMF ...")
-Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk; retries=1)
+Wnmf, Hnmf, pnmf = Mads.NMFm(X, nk, 1)
 Mads.plotseries(Wnmf, "disturbance_unmixed_signals_nmf.svg", title="Unmixed signals", name="Signal", combined=true)
 Mads.plotseries(Wnmf * Hnmf, "sig_reproduced_observations_nmf.svg", title="Reproduced observations", name="Signal", combined=true)
 
