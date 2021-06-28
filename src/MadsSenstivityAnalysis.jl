@@ -183,7 +183,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	f = Mads.forward(madsdata, param)
 	ofval = Mads.of(madsdata, f)
 	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
-	mscale = max(abs(minimum(J)), abs(maximum(J)))
+	mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 	if imagefiles
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
@@ -331,7 +331,7 @@ function reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::
 		end
 		j += 1
 	end
-	return newllhoods .- maximum(newllhoods) # normalize likelihoods so the most likely thing has likelihood 1
+	return newllhoods .- maximumnan(newllhoods) # normalize likelihoods so the most likely thing has likelihood 1
 end
 
 """
@@ -1282,8 +1282,8 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		## Preallocate/Initialize
 		A     = 0
 		B     = 0                          # Fourier coefficients
-		Wi 	  = maximum(W_vec)				# Maximum frequency (i.e. the frequency for our parameter of interest)
-		Wcmax = maximum(W_comp)				# Maximum frequency in complementary set
+		Wi 	  = maximumnan(W_vec)				# Maximum frequency (i.e. the frequency for our parameter of interest)
+		Wcmax = maximumnan(W_comp)				# Maximum frequency in complementary set
 
 		# Adding on the random phase shift
 		alpha = W_vec' .* S_vec' .+ phi_mat    # W*S + phi

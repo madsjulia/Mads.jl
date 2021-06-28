@@ -42,14 +42,11 @@ function createobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="",
 end
 function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=nothing, min::AbstractVector=zeros(length(obs)), max::AbstractVector=ones(length(obs)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(obs)])
 	md = OrderedCollections.OrderedDict()
-	@show dist
 	for i = 1:length(obs)
 		d = OrderedCollections.OrderedDict{String, Any}("target"=>obs[i], "weight"=>weight[i])
 		if time !== nothing
 			push!(d, "time"=>time[i])
 		end
-		push!(d, "target"=>obs[i])
-		push!(d, "weight"=>weight[i])
 		push!(d, "dist"=>dist[i])
 		md[key[i]] = d
 	end
@@ -91,7 +88,7 @@ Returns:
 - observation dictionary
 """ createobservations
 
-function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 1)))
 	md["Observations"] = createobservations(obs; key=key, weight=weight, time=time)
 end
 

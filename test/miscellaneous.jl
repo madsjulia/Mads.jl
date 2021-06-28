@@ -152,8 +152,13 @@ end
 @Test.test Mads.getdir("a.mads") == "."
 @Test.test Mads.getdir("test/a.mads") == "test"
 
-Mads.createmadsobservations(4, 2; filename="a.inst")
+Mads.createobservations(4, 2; filename="a.inst")
 Mads.rmfile("a.inst")
+
+md = Dict()
+md["Parameters"] = Mads.createparameters([1,1,1,1]; key=["a", "b", "c", "n"], dist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"])
+md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,100,100,100,10,0], time=[0,1,2,3,4,5], dist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"])
+Mads.setmodel!(md, exp)
 
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 Mads.setsindx!(Dict("Problem"=>Dict("sindx"=>0.001)), 0.1)
