@@ -14259,17 +14259,23 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Mads-Notebook:-Example-Contamination-Problem">Mads Notebook: Example Contamination Problem<a class="anchor-link" href="#Mads-Notebook:-Example-Contamination-Problem">&#182;</a></h1>
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">&#182;</a></h2>
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Import Mads</p>
+<h1 id="Mads-Notebook:-Contamination-Problem">Mads Notebook: Contamination Problem<a class="anchor-link" href="#Mads-Notebook:-Contamination-Problem">&#182;</a></h1><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> is an integrated high-performance computational framework for data/model/decision analyses.</p>
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to perform:</p>
+<ul>
+<li>Sensitivity Analysis</li>
+<li>Parameter Estimation</li>
+<li>Model Inversion and Calibration</li>
+<li>Uncertainty Quantification</li>
+<li>Model Selection and Model Averaging</li>
+<li>Model Reduction and Surrogate Modeling</li>
+<li>Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)</li>
+<li>Decision Analysis and Support</li>
+</ul>
+<p>Here, it is demonstrated how <a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to solve a general groundwater contamination problem.</p>
+<p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> includes analytical solver called <a href="http://madsjulia.github.io/Anasol.jl">Anasol.jl</a> which is appied to solve the groundwater contamination transport in a aquifer as presetned below.</p>
+<h2 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">&#182;</a></h2><p>Import Mads (if <strong>MADS</strong> is not installed, first execute in the Julia REPL: <code>import Pkg; Pkg.add("Mads")</code>):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14278,7 +14284,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">import</span> <span class="n">Mads</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="k">import</span> <span class="n">Pkg</span><span class="p">;</span> <span class="n">Pkg</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="k">import</span> <span class="n">Revise</span>
+<span class="k">import</span> <span class="n">Mads</span>
 </pre></div>
 
      </div>
@@ -15046,6 +15054,20 @@ Number of optimizable parameters: 3
 
 </div>
 
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-julia"><pre><span></span>
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div>

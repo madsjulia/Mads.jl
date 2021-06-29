@@ -1,8 +1,27 @@
 # Mads notebook: Model diagnostics
 
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
+
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div>
+
+[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
+
+* Sensitivity Analysis
+* Parameter Estimation
+* Model Inversion and Calibration
+* Uncertainty Quantification
+* Model Selection and Model Averaging
+* Model Reduction and Surrogate Modeling
+* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
+* Decision Analysis and Support
+
+Here, it is demonstrated how [MADS](http://madsjulia.github.io/Mads.jl) can be applied to solve a general model diagnostic problem.
+
 ## Problem setup
 
-Import Mads
+Import Mads (if **MADS** is not installed, first execute in the Julia REPL: `import Pkg; Pkg.add("Mads")`):
 
 
 ```julia
@@ -108,11 +127,11 @@ md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,
 There are 6 observations (`o1`, `o2`, `o3`, ... and `o6`).
 The calibration targets, observation weights (i.e., inverse of measurement standard deviations), and acceptable ranges are defined for each observation.
 
-A function (called `polynominal`) is defined to compute the 6 observations given 4 model parameters as an input:
+A function (called `polynomial`) is defined to compute the 6 observations given 4 model parameters as an input:
 
 
 ```julia
-function polynominal(parameters::AbstractVector)
+function polynomial(parameters::AbstractVector)
 	f(t) = parameters[1] * (t ^ parameters[4]) + parameters[2] * t + parameters[3] # a * t^n + b * t + c
 	predictions = map(f, 0:5)
 	return predictions
@@ -126,11 +145,11 @@ end
 
 
 
-The `polynominal` function is setup now in the `md` dictionary as a model that will be applied to perform the simulations:
+The `polynomial` function is setup now in the `md` dictionary as a model that will be applied to perform the simulations:
 
 
 ```julia
-Mads.setmodel!(md, polynominal)
+Mads.setmodel!(md, polynomial)
 ```
 
 
@@ -197,7 +216,7 @@ The forward model run can be also executed using the following command:
 
 
 ```julia
-polynominal(Mads.getparamsinit(md))
+polynomial(Mads.getparamsinit(md))
 ```
 
 
@@ -226,7 +245,7 @@ Mads.plotmatches(md)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_28_0.png)
+![png](model_diagnostics_files/model_diagnostics_26_0.png)
     
 
 
@@ -259,7 +278,7 @@ Mads.plotmatches(md, calib_param)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_33_0.png)
+![png](model_diagnostics_files/model_diagnostics_31_0.png)
     
 
 
@@ -361,7 +380,7 @@ Mads.spaghettiplot(md, forward_predictions)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_43_0.png)
+![png](model_diagnostics_files/model_diagnostics_41_0.png)
     
 
 
@@ -397,7 +416,7 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_0.png)
+![png](model_diagnostics_files/model_diagnostics_43_0.png)
     
 
 
@@ -411,13 +430,13 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_2.png)
+![png](model_diagnostics_files/model_diagnostics_43_2.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_3.png)
+![png](model_diagnostics_files/model_diagnostics_43_3.png)
     
 
 
@@ -460,7 +479,7 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
 
 
 `localsa["stddev"]` defines the estimated posterior uncertainties in the estimated model parameters.
-This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the area of the estimated (inverted) optimal parameters.
+This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity the estimated (inverted) optimal parameters.
 The uncertainties are assumed to be Gaussian with standard deviations defined by `localsa["stddev"]`.
 
 
@@ -481,12 +500,12 @@ The uncertainties are assumed to be Gaussian with standard deviations defined by
 
 Based on these results, `c` is well constrained. `n` is also well defined. `a` and `b` are the most uncertain.
 
-However, because of the local nature of the estimates these results are not very accurate and differ with the global  sensitivity and uncertainty analyses presented below.
+However, because of the local nature of the estimates these results are not very accurate and differ with the global sensitivity and uncertainty analyses presented below.
 
 The plots below show a series of graphical representations of the `localsa` results. 
 These plots are generated automatically by the code.
 
-A plot of the Jacobian repesenting the relationships between model parameters and estimated observations:
+A plot of the Jacobian representing the relationships between model parameters and estimated observations:
 
 
 ```julia
@@ -499,7 +518,7 @@ Mads.display("model_diagnostics-jacobian.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_53_1.png)
+![png](model_diagnostics_files/model_diagnostics_51_1.png)
     
 
 
@@ -515,7 +534,7 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_55_0.png)
+![png](model_diagnostics_files/model_diagnostics_53_0.png)
     
 
 
@@ -531,14 +550,14 @@ Mads.display("model_diagnostics-eigenvalues.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_57_0.png)
+![png](model_diagnostics_files/model_diagnostics_55_0.png)
     
 
 
     
 
 
-The eigen analysis presetned above suggest that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynominal`).
+The eigen analysis presetned above suggest that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
 Both parameters are represented by the first and last (4th) eigen vectors.
 
 The parameters `n` and `c` are uncorrelated and also independent of `a` and `b`.
@@ -588,7 +607,7 @@ Mads.spaghettiplot(md, f)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_64_0.png)
+![png](model_diagnostics_files/model_diagnostics_62_0.png)
     
 
 
@@ -610,7 +629,7 @@ Mads.display("model_diagnostics-emcee_scatter.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_67_0.png)
+![png](model_diagnostics_files/model_diagnostics_65_0.png)
     
 
 
@@ -627,7 +646,7 @@ The figure above shows that the optimal (most probable) estimates are:
 
 There are plausible solutions for any value of `a`, `b` and `n` within the prior uncertainty range.
 
-The parameters `a` and `b` strongly inversely correlated by their respective cross-plots.
+The parameters `a` and `b` are strongly inversely correlated by their respective cross-plots.
 
 Based on the cross-plots, the plausible values for `n` can be within the entire prior uncertainty range if (1) `a` is equal to 0 and (2) `b` is equal to 1.
 
@@ -636,7 +655,7 @@ The plausible values for `n` are close to 1 if (1) `a` is very different from 0 
 
 ### Saltelli (Sobol) amd EFAST global sensitivity analyses
 
-Both Saltelli (Sobol) amd EFAST methods are producting similar results.
+Both Saltelli (Sobol) amd EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses.
 EFAST is computationally more efficient.
 
@@ -668,13 +687,13 @@ Mads.plotobsSAresults(md, saltelli_results)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_0.png)
+![png](model_diagnostics_files/model_diagnostics_69_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_1.png)
+![png](model_diagnostics_files/model_diagnostics_69_1.png)
     
 
 
@@ -682,13 +701,13 @@ Mads.plotobsSAresults(md, saltelli_results)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_3.png)
+![png](model_diagnostics_files/model_diagnostics_69_3.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_4.png)
+![png](model_diagnostics_files/model_diagnostics_69_4.png)
     
 
 
@@ -704,19 +723,19 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_0.png)
+![png](model_diagnostics_files/model_diagnostics_71_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_1.png)
+![png](model_diagnostics_files/model_diagnostics_71_1.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_2.png)
+![png](model_diagnostics_files/model_diagnostics_71_2.png)
     
 
 
@@ -724,7 +743,7 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_4.png)
+![png](model_diagnostics_files/model_diagnostics_71_4.png)
     
 
 
@@ -732,10 +751,10 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 
 The difference in the `total` and `main` effect plots suggest correlations in the model parameters (which is also demonstrated by the `AffineInvariantMCMC` analyses above).
 
-The figures also demonstrate that the parameter sensitivity to observations change over time.
+The figures also demonstrate that the parameter sensitivity to observations changes over time.
 
-Based on the `total effect`, parameter `a` and `n` sensitivities genereally increases with time.
-Parameter `b` and `b` sensitivities genereally decreases with time.
+Based on the `total effect`, parameter `a` and `n` sensitivities generally increase with time.
+Parameter `b` and `b` sensitivities generally decrease with time.
 
 ## Decision Analysis using Information-Gap Decision Theory
 
@@ -763,7 +782,7 @@ h = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]
 
 
 
-Define the polynominal models to be explored:
+Define the polynomial models to be explored:
 
 
 ```julia
@@ -901,7 +920,7 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_81_0.png)
+![png](model_diagnostics_files/model_diagnostics_79_0.png)
     
 
 
@@ -910,9 +929,9 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 
 The figure above compares the model `opportuneness` (dashed lines) vs model `robustness` (solid lines) for different infogap horizons of uncertainty `h` and different models (different colors).
 
-The model `opportuneness` defines that the things might get better than expected (i.e, observation at dimensionless time 5 `o5` can get lower than expected).
+The model `opportuneness` defines that the things might get better than expected (i.e., observation at dimensionless time 5 `o5` can get lower than expected).
 
-The model `robustness` defines that things might get worse than expected (i.e, observation at dimensionless time 5 `o5` can get higher than expected).
+The model `robustness` defines that things might get worse than expected (i.e., observation at dimensionless time 5 `o5` can get higher than expected).
 
 Based on both the model `opportuneness` and model `robustness`, the last model is the most complex and can bring the most surprises.
 The first model is the simplest and produces the lower level of surprises.

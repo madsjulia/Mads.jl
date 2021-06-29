@@ -383,10 +383,48 @@
 \section{Mads notebook: Model
 diagnostics}\label{mads-notebook-model-diagnostics}}
 
-    \hypertarget{problem-setup}{%
+\href{http://madsjulia.github.io/Mads.jl}{MADS} is an integrated
+high-performance computational framework for data/model/decision
+analyses.
+
+\begin{verbatim}
+<img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+\end{verbatim}
+
+\href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to
+perform:
+
+\begin{itemize}
+\tightlist
+\item
+  Sensitivity Analysis
+\item
+  Parameter Estimation
+\item
+  Model Inversion and Calibration
+\item
+  Uncertainty Quantification
+\item
+  Model Selection and Model Averaging
+\item
+  Model Reduction and Surrogate Modeling
+\item
+  Machine Learning (e.g., Blind Source Separation, Source
+  Identification, Feature Extraction, Matrix / Tensor Factorization,
+  etc.)
+\item
+  Decision Analysis and Support
+\end{itemize}
+
+Here, it is demonstrated how
+\href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to solve
+a general model diagnostic problem.
+
+\hypertarget{problem-setup}{%
 \subsection{Problem setup}\label{problem-setup}}
 
-    Import Mads
+Import Mads (if \textbf{MADS} is not installed, first execute in the
+Julia REPL: \texttt{import\ Pkg;\ Pkg.add("Mads")}):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{1}{\boxspacing}
@@ -527,13 +565,13 @@ OrderedCollections.OrderedDict\{Any, Any\} with 6 entries:
 (i.e., inverse of measurement standard deviations), and acceptable
 ranges are defined for each observation.
 
-    A function (called \texttt{polynominal}) is defined to compute the 6
+    A function (called \texttt{polynomial}) is defined to compute the 6
 observations given 4 model parameters as an input:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{k}{function} \PY{n}{polynominal}\PY{p}{(}\PY{n}{parameters}\PY{o}{::}\PY{k+kt}{AbstractVector}\PY{p}{)}
+\PY{k}{function} \PY{n}{polynomial}\PY{p}{(}\PY{n}{parameters}\PY{o}{::}\PY{k+kt}{AbstractVector}\PY{p}{)}
 	\PY{n}{f}\PY{p}{(}\PY{n}{t}\PY{p}{)} \PY{o}{=} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{*} \PY{p}{(}\PY{n}{t} \PY{o}{\PYZca{}} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{4}\PY{p}{]}\PY{p}{)} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{*} \PY{n}{t} \PY{o}{+} \PY{n}{parameters}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]} \PY{c}{\PYZsh{} a * t\PYZca{}n + b * t + c}
 	\PY{n}{predictions} \PY{o}{=} \PY{n}{map}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{l+m+mi}{0}\PY{o}{:}\PY{l+m+mi}{5}\PY{p}{)}
 	\PY{k}{return} \PY{n}{predictions}
@@ -548,13 +586,13 @@ polynominal (generic function with 1 method)
 \end{Verbatim}
 \end{tcolorbox}
         
-    The \texttt{polynominal} function is setup now in the \texttt{md}
+    The \texttt{polynomial} function is setup now in the \texttt{md}
 dictionary as a model that will be applied to perform the simulations:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{7}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{Mads}\PY{o}{.}\PY{n}{setmodel!}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{polynominal}\PY{p}{)}
+\PY{n}{Mads}\PY{o}{.}\PY{n}{setmodel!}\PY{p}{(}\PY{n}{md}\PY{p}{,} \PY{n}{polynomial}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
@@ -634,7 +672,7 @@ OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{11}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{polynominal}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{getparamsinit}\PY{p}{(}\PY{n}{md}\PY{p}{)}\PY{p}{)}
+\PY{n}{polynomial}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{getparamsinit}\PY{p}{(}\PY{n}{md}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
@@ -667,7 +705,7 @@ The initial model predictions can be plotted as shown below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_28_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_26_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -716,7 +754,7 @@ Function value   Gradient norm
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_33_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_31_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -859,7 +897,7 @@ runs are collected into a matrix below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_41_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -899,7 +937,7 @@ distinct groups:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -913,12 +951,12 @@ Number of optimizable parameters: 4
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_3.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_3.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -970,7 +1008,7 @@ Dict\{String, Any\} with 6 entries:
     \texttt{localsa{[}"stddev"{]}} defines the estimated posterior
 uncertainties in the estimated model parameters. This estimate is based
 on the Jacobian / Hessian matrix estimates of the parameter space
-curvature in the area of the estimated (inverted) optimal parameters.
+curvature in the vicinity the estimated (inverted) optimal parameters.
 The uncertainties are assumed to be Gaussian with standard deviations
 defined by \texttt{localsa{[}"stddev"{]}}.
 
@@ -1003,7 +1041,7 @@ The plots below show a series of graphical representations of the
 \texttt{localsa} results. These plots are generated automatically by the
 code.
 
-A plot of the Jacobian repesenting the relationships between model
+A plot of the Jacobian representing the relationships between model
 parameters and estimated observations:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -1019,7 +1057,7 @@ parameters and estimated observations:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_53_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_51_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1038,7 +1076,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_55_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_53_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1056,7 +1094,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_57_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_55_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1066,7 +1104,7 @@ computed based on the Jacobian above):
 
     The eigen analysis presetned above suggest that \texttt{a} and
 \texttt{b} are correlated (this is expected based on the mathematical
-form of the solved model in the function \texttt{polynominal}). Both
+form of the solved model in the function \texttt{polynomial}). Both
 parameters are represented by the first and last (4th) eigen vectors.
 
 The parameters \texttt{n} and \texttt{c} are uncorrelated and also
@@ -1139,7 +1177,7 @@ and associated predictions are plotted below.
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_64_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_62_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1170,7 +1208,7 @@ diagonal are similar):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_67_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_65_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1186,8 +1224,8 @@ diagonal are similar):
 There are plausible solutions for any value of \texttt{a}, \texttt{b}
 and \texttt{n} within the prior uncertainty range.
 
-The parameters \texttt{a} and \texttt{b} strongly inversely correlated
-by their respective cross-plots.
+The parameters \texttt{a} and \texttt{b} are strongly inversely
+correlated by their respective cross-plots.
 
 Based on the cross-plots, the plausible values for \texttt{n} can be
 within the entire prior uncertainty range if (1) \texttt{a} is equal to
@@ -1200,7 +1238,7 @@ very different from 0 and (2) \texttt{b} is very different from 1.
 \subsubsection{Saltelli (Sobol) amd EFAST global sensitivity
 analyses}\label{saltelli-sobol-amd-efast-global-sensitivity-analyses}}
 
-Both Saltelli (Sobol) amd EFAST methods are producting similar results.
+Both Saltelli (Sobol) amd EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses. EFAST
 is computationally more efficient.
 
@@ -1234,12 +1272,12 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1248,12 +1286,12 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_3.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_3.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1272,17 +1310,17 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1291,7 +1329,7 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1304,11 +1342,11 @@ suggest correlations in the model parameters (which is also demonstrated
 by the \texttt{AffineInvariantMCMC} analyses above).
 
 The figures also demonstrate that the parameter sensitivity to
-observations change over time.
+observations changes over time.
 
 Based on the \texttt{total\ effect}, parameter \texttt{a} and \texttt{n}
-sensitivities genereally increases with time. Parameter \texttt{b} and
-\texttt{b} sensitivities genereally decreases with time.
+sensitivities generally increase with time. Parameter \texttt{b} and
+\texttt{b} sensitivities generally decrease with time.
 
     \hypertarget{decision-analysis-using-information-gap-decision-theory}{%
 \subsection{Decision Analysis using Information-Gap Decision
@@ -1339,7 +1377,7 @@ Define the Information-Gap Decision Theory horizons of uncertainty
 \end{Verbatim}
 \end{tcolorbox}
         
-    Define the polynominal models to be explored:
+    Define the polynomial models to be explored:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{35}{\boxspacing}
@@ -1552,7 +1590,7 @@ Max h = 1.0 OF = 66.79304780650143 par = [1.9918966693524435e-5,
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_81_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_79_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1566,11 +1604,11 @@ horizons of uncertainty \texttt{h} and different models (different
 colors).
 
 The model \texttt{opportuneness} defines that the things might get
-better than expected (i.e, observation at dimensionless time 5
+better than expected (i.e., observation at dimensionless time 5
 \texttt{o5} can get lower than expected).
 
 The model \texttt{robustness} defines that things might get worse than
-expected (i.e, observation at dimensionless time 5 \texttt{o5} can get
+expected (i.e., observation at dimensionless time 5 \texttt{o5} can get
 higher than expected).
 
 Based on both the model \texttt{opportuneness} and model

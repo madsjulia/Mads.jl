@@ -1,7 +1,32 @@
-# Blind Source Separation
+# MADS Notebook: Blind Source Separation
+
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
+
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div>
+
+[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
+
+* Sensitivity Analysis
+* Parameter Estimation
+* Model Inversion and Calibration
+* Uncertainty Quantification
+* Model Selection and Model Averaging
+* Model Reduction and Surrogate Modeling
+* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
+* Decision Analysis and Support
+
+Here, it is demonstrated how [MADS](http://madsjulia.github.io/Mads.jl) can be applied to solve a general blind Source Separation contamination problem.
+
+## Problem setup
+
+Import Mads (if **MADS** is not installed, first execute in the Julia REPL: `import Pkg; Pkg.add("Mads")`):
 
 
 ```julia
+Pkg.resolve()
+import Revise
 import Mads
 ```
 
@@ -35,11 +60,6 @@ import Mads
     ┌ Info: Installing pyqt package to avoid buggy tkagg backend.
     └ @ PyPlot /Users/vvv/.julia/packages/PyPlot/XHEG0/src/init.jl:118
 
-
-
-```julia
-import NMF
-```
 
 
 ```julia
