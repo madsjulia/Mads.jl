@@ -10,7 +10,7 @@ Non-negative Matrix Factorization using NMF
 $(DocumentFunction.documentfunction(NMFm;
 argtext=Dict("X"=>"matrix to factorize",
             "nk"=>"number of features to extract",
-			"retries"=>"number of solution retries [default=`1`]")
+			"retries"=>"number of solution retries [default=`1`]"),
 keytext=Dict("tol"=>"solution tolerance [default=`1.0e-9`]",
             "maxiter"=>"maximum number of iterations [default=`10000`]")))
 
