@@ -14259,17 +14259,22 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Mads-notebook:-Model-diagnostics">Mads notebook: Model diagnostics<a class="anchor-link" href="#Mads-notebook:-Model-diagnostics">&#182;</a></h1>
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">&#182;</a></h2>
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Import Mads</p>
+<h1 id="Mads-notebook:-Model-diagnostics">Mads notebook: Model diagnostics<a class="anchor-link" href="#Mads-notebook:-Model-diagnostics">&#182;</a></h1><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> is an integrated high-performance computational framework for data/model/decision analyses.</p>
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to perform:</p>
+<ul>
+<li>Sensitivity Analysis</li>
+<li>Parameter Estimation</li>
+<li>Model Inversion and Calibration</li>
+<li>Uncertainty Quantification</li>
+<li>Model Selection and Model Averaging</li>
+<li>Model Reduction and Surrogate Modeling</li>
+<li>Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)</li>
+<li>Decision Analysis and Support</li>
+</ul>
+<p>Here, it is demonstrated how <a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to solve a general model diagnostic problem.</p>
+<h2 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">&#182;</a></h2><p>Import Mads (if <strong>MADS</strong> is not installed, first execute in the Julia REPL: <code>import Pkg; Pkg.add("Mads")</code>):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14537,7 +14542,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>A function (called <code>polynominal</code>) is defined to compute the 6 observations given 4 model parameters as an input:</p>
+<p>A function (called <code>polynomial</code>) is defined to compute the 6 observations given 4 model parameters as an input:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14546,7 +14551,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">polynominal</span><span class="p">(</span><span class="n">parameters</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">)</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="k">function</span> <span class="n">polynomial</span><span class="p">(</span><span class="n">parameters</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">)</span>
 	<span class="n">f</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span> <span class="o">^</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c"># a * t^n + b * t + c</span>
 	<span class="n">predictions</span> <span class="o">=</span> <span class="n">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">0</span><span class="o">:</span><span class="mi">5</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">predictions</span>
@@ -14584,7 +14589,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The <code>polynominal</code> function is setup now in the <code>md</code> dictionary as a model that will be applied to perform the simulations:</p>
+<p>The <code>polynomial</code> function is setup now in the <code>md</code> dictionary as a model that will be applied to perform the simulations:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14593,7 +14598,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">setmodel!</span><span class="p">(</span><span class="n">md</span><span class="p">,</span> <span class="n">polynominal</span><span class="p">)</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">setmodel!</span><span class="p">(</span><span class="n">md</span><span class="p">,</span> <span class="n">polynomial</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14786,7 +14791,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">polynominal</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">getparamsinit</span><span class="p">(</span><span class="n">md</span><span class="p">))</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">polynomial</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">getparamsinit</span><span class="p">(</span><span class="n">md</span><span class="p">))</span>
 </pre></div>
 
      </div>
@@ -15444,7 +15449,7 @@ Number of optimizable parameters: 4
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><code>localsa["stddev"]</code> defines the estimated posterior uncertainties in the estimated model parameters.
-This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the area of the estimated (inverted) optimal parameters.
+This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity the estimated (inverted) optimal parameters.
 The uncertainties are assumed to be Gaussian with standard deviations defined by <code>localsa["stddev"]</code>.</p>
 
 </div>
@@ -15493,10 +15498,10 @@ The uncertainties are assumed to be Gaussian with standard deviations defined by
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Based on these results, <code>c</code> is well constrained. <code>n</code> is also well defined. <code>a</code> and <code>b</code> are the most uncertain.</p>
-<p>However, because of the local nature of the estimates these results are not very accurate and differ with the global  sensitivity and uncertainty analyses presented below.</p>
+<p>However, because of the local nature of the estimates these results are not very accurate and differ with the global sensitivity and uncertainty analyses presented below.</p>
 <p>The plots below show a series of graphical representations of the <code>localsa</code> results. 
 These plots are generated automatically by the code.</p>
-<p>A plot of the Jacobian repesenting the relationships between model parameters and estimated observations:</p>
+<p>A plot of the Jacobian representing the relationships between model parameters and estimated observations:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15677,7 +15682,7 @@ These plots are generated automatically by the code.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The eigen analysis presetned above suggest that <code>a</code> and <code>b</code> are correlated (this is expected based on the mathematical form of the solved model in the function <code>polynominal</code>).
+<p>The eigen analysis presetned above suggest that <code>a</code> and <code>b</code> are correlated (this is expected based on the mathematical form of the solved model in the function <code>polynomial</code>).
 Both parameters are represented by the first and last (4th) eigen vectors.</p>
 <p>The parameters <code>n</code> and <code>c</code> are uncorrelated and also independent of <code>a</code> and <code>b</code>.</p>
 
@@ -15911,7 +15916,7 @@ Both parameters are represented by the first and last (4th) eigen vectors.</p>
 </ul>
 <p><code>c</code> i the most constrained (varing between -0.2 and 0.2).</p>
 <p>There are plausible solutions for any value of <code>a</code>, <code>b</code> and <code>n</code> within the prior uncertainty range.</p>
-<p>The parameters <code>a</code> and <code>b</code> strongly inversely correlated by their respective cross-plots.</p>
+<p>The parameters <code>a</code> and <code>b</code> are strongly inversely correlated by their respective cross-plots.</p>
 <p>Based on the cross-plots, the plausible values for <code>n</code> can be within the entire prior uncertainty range if (1) <code>a</code> is equal to 0 and (2) <code>b</code> is equal to 1.</p>
 <p>The plausible values for <code>n</code> are close to 1 if (1) <code>a</code> is very different from 0 and (2) <code>b</code> is very different from 1.</p>
 
@@ -15919,7 +15924,7 @@ Both parameters are represented by the first and last (4th) eigen vectors.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">Saltelli (Sobol) amd EFAST global sensitivity analyses<a class="anchor-link" href="#Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">&#182;</a></h3><p>Both Saltelli (Sobol) amd EFAST methods are producting similar results.
+<h3 id="Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">Saltelli (Sobol) amd EFAST global sensitivity analyses<a class="anchor-link" href="#Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">&#182;</a></h3><p>Both Saltelli (Sobol) amd EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses.
 EFAST is computationally more efficient.</p>
 <p>The Saltelli (Sobol) results are obtained as follows:</p>
@@ -16189,9 +16194,9 @@ EFAST is computationally more efficient.</p>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The difference in the <code>total</code> and <code>main</code> effect plots suggest correlations in the model parameters (which is also demonstrated by the <code>AffineInvariantMCMC</code> analyses above).</p>
-<p>The figures also demonstrate that the parameter sensitivity to observations change over time.</p>
-<p>Based on the <code>total effect</code>, parameter <code>a</code> and <code>n</code> sensitivities genereally increases with time.
-Parameter <code>b</code> and <code>b</code> sensitivities genereally decreases with time.</p>
+<p>The figures also demonstrate that the parameter sensitivity to observations changes over time.</p>
+<p>Based on the <code>total effect</code>, parameter <code>a</code> and <code>n</code> sensitivities generally increase with time.
+Parameter <code>b</code> and <code>b</code> sensitivities generally decrease with time.</p>
 
 </div>
 </div>
@@ -16248,7 +16253,7 @@ Parameter <code>b</code> and <code>b</code> sensitivities genereally decreases w
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Define the polynominal models to be explored:</p>
+<p>Define the polynomial models to be explored:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -16553,8 +16558,8 @@ Max h = 1.0 OF = 66.79304780650143 par = [1.9918966693524435e-5, -0.080502515120
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The figure above compares the model <code>opportuneness</code> (dashed lines) vs model <code>robustness</code> (solid lines) for different infogap horizons of uncertainty <code>h</code> and different models (different colors).</p>
-<p>The model <code>opportuneness</code> defines that the things might get better than expected (i.e, observation at dimensionless time 5 <code>o5</code> can get lower than expected).</p>
-<p>The model <code>robustness</code> defines that things might get worse than expected (i.e, observation at dimensionless time 5 <code>o5</code> can get higher than expected).</p>
+<p>The model <code>opportuneness</code> defines that the things might get better than expected (i.e., observation at dimensionless time 5 <code>o5</code> can get lower than expected).</p>
+<p>The model <code>robustness</code> defines that things might get worse than expected (i.e., observation at dimensionless time 5 <code>o5</code> can get higher than expected).</p>
 <p>Based on both the model <code>opportuneness</code> and model <code>robustness</code>, the last model is the most complex and can bring the most surprises.
 The first model is the simplest and produces the lower level of surprises.</p>
 <p>In terms of model selection, the simplest model is the best. However, the alternative models (if they capture all the conceptual model uncertainties) represent how much things can get worse/better within the horizon of uncertainty.</p>

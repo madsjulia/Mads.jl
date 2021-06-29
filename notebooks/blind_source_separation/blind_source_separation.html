@@ -14259,7 +14259,23 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Blind-Source-Separation">Blind Source Separation<a class="anchor-link" href="#Blind-Source-Separation">&#182;</a></h1>
+<h1 id="MADS-Notebook:-Blind-Source-Separation">MADS Notebook: Blind Source Separation<a class="anchor-link" href="#MADS-Notebook:-Blind-Source-Separation">&#182;</a></h1><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> is an integrated high-performance computational framework for data/model/decision analyses.</p>
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div><p><a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to perform:</p>
+<ul>
+<li>Sensitivity Analysis</li>
+<li>Parameter Estimation</li>
+<li>Model Inversion and Calibration</li>
+<li>Uncertainty Quantification</li>
+<li>Model Selection and Model Averaging</li>
+<li>Model Reduction and Surrogate Modeling</li>
+<li>Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)</li>
+<li>Decision Analysis and Support</li>
+</ul>
+<p>Here, it is demonstrated how <a href="http://madsjulia.github.io/Mads.jl">MADS</a> can be applied to solve a general blind Source Separation contamination problem.</p>
+<h2 id="Problem-setup">Problem setup<a class="anchor-link" href="#Problem-setup">&#182;</a></h2><p>Import Mads (if <strong>MADS</strong> is not installed, first execute in the Julia REPL: <code>import Pkg; Pkg.add("Mads")</code>):</p>
+
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
@@ -14267,7 +14283,9 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">import</span> <span class="n">Mads</span>
+<div class=" highlight hl-julia"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+<span class="k">import</span> <span class="n">Revise</span>
+<span class="k">import</span> <span class="n">Mads</span>
 </pre></div>
 
      </div>
@@ -14348,20 +14366,6 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-julia"><pre><span></span><span class="k">import</span> <span class="n">NMF</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="k">import</span> <span class="n">Random</span>
 <span class="n">Random</span><span class="o">.</span><span class="n">seed!</span><span class="p">(</span><span class="mi">2015</span><span class="p">)</span>
 <span class="n">nk</span> <span class="o">=</span> <span class="mi">3</span>
@@ -14383,7 +14387,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="n">s1</span> <span class="n">s2</span> <span class="n">s3</span><span class="p">]</span>
@@ -14402,7 +14406,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 
 
 
@@ -14446,7 +14450,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">plotseries</span><span class="p">(</span><span class="n">S</span><span class="p">;</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Original sources&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Source&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
@@ -14465,7 +14469,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
 
 
 
@@ -17473,7 +17477,7 @@ fig.select("#img-e062a7da-257")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">H</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span>
@@ -17492,7 +17496,7 @@ fig.select("#img-e062a7da-257")
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -17518,7 +17522,7 @@ fig.select("#img-e062a7da-257")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">S</span> <span class="o">*</span> <span class="n">H</span>
@@ -17537,7 +17541,7 @@ fig.select("#img-e062a7da-257")
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
 
 
 
@@ -17581,7 +17585,7 @@ fig.select("#img-e062a7da-257")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">plotseries</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Mixed signals&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Signal&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
@@ -17600,7 +17604,7 @@ fig.select("#img-e062a7da-257")
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[8]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
 
 
 
@@ -21009,7 +21013,7 @@ fig.select("#img-583797c1-311")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">Wipopt</span><span class="p">,</span> <span class="n">Hipopt</span><span class="p">,</span> <span class="n">pipopt</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">NMFipopt</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">nk</span><span class="p">);</span>
@@ -21049,7 +21053,7 @@ fig.select("#img-583797c1-311")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">plotseries</span><span class="p">(</span><span class="n">Wipopt</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Reconstructed sources&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Source&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
@@ -21068,7 +21072,7 @@ fig.select("#img-583797c1-311")
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[9]:</div>
 
 
 
@@ -24188,7 +24192,7 @@ fig.select("#img-3b7fec4c-271")
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-julia"><pre><span></span><span class="n">Mads</span><span class="o">.</span><span class="n">plotseries</span><span class="p">(</span><span class="n">Wipopt</span> <span class="o">*</span> <span class="n">Hipopt</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&quot;Reproduced signals&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Signal&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
@@ -24207,7 +24211,7 @@ fig.select("#img-3b7fec4c-271")
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[11]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[10]:</div>
 
 
 

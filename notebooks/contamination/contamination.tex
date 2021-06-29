@@ -379,18 +379,63 @@
     
 
     
-    \hypertarget{mads-notebook-example-contamination-problem}{%
-\section{Mads Notebook: Example Contamination
-Problem}\label{mads-notebook-example-contamination-problem}}
+    \hypertarget{mads-notebook-contamination-problem}{%
+\section{Mads Notebook: Contamination
+Problem}\label{mads-notebook-contamination-problem}}
 
-    \hypertarget{problem-setup}{%
+\href{http://madsjulia.github.io/Mads.jl}{MADS} is an integrated
+high-performance computational framework for data/model/decision
+analyses.
+
+\begin{verbatim}
+<img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+\end{verbatim}
+
+\href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to
+perform:
+
+\begin{itemize}
+\tightlist
+\item
+  Sensitivity Analysis
+\item
+  Parameter Estimation
+\item
+  Model Inversion and Calibration
+\item
+  Uncertainty Quantification
+\item
+  Model Selection and Model Averaging
+\item
+  Model Reduction and Surrogate Modeling
+\item
+  Machine Learning (e.g., Blind Source Separation, Source
+  Identification, Feature Extraction, Matrix / Tensor Factorization,
+  etc.)
+\item
+  Decision Analysis and Support
+\end{itemize}
+
+Here, it is demonstrated how
+\href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to solve
+a general groundwater contamination problem.
+
+\href{http://madsjulia.github.io/Mads.jl}{MADS} includes analytical
+solver called \href{http://madsjulia.github.io/Anasol.jl}{Anasol.jl}
+which is appied to solve the groundwater contamination transport in a
+aquifer as presetned below.
+
+\hypertarget{problem-setup}{%
 \subsection{Problem setup}\label{problem-setup}}
 
-    Import Mads
+Import Mads (if \textbf{MADS} is not installed, first execute in the
+Julia REPL: \texttt{import\ Pkg;\ Pkg.add("Mads")}):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{import} \PY{n}{Pkg}\PY{p}{;} \PY{n}{Pkg}\PY{o}{.}\PY{n}{resolve}\PY{p}{(}\PY{p}{)}
+\PY{k}{import} \PY{n}{Revise}
 \PY{k}{import} \PY{n}{Mads}
 \end{Verbatim}
 \end{tcolorbox}
@@ -493,7 +538,7 @@ location of the contaminant source:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_9_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_7_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -581,7 +626,7 @@ source:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_15_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_13_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -603,7 +648,7 @@ monitoring wells based on the initial model parameters:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_18_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_16_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -619,7 +664,7 @@ monitoring wells based on the initial model parameters:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_19_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_17_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -711,7 +756,7 @@ performed model calibration:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_26_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_24_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -727,7 +772,7 @@ performed model calibration:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_27_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{contamination_files/contamination_25_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -771,6 +816,13 @@ Number of optimizable parameters: 3
 \end{Verbatim}
 \end{tcolorbox}
         
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
 
     % Add a bibliography block to the postdoc
     

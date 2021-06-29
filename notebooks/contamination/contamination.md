@@ -1,11 +1,34 @@
-# Mads Notebook: Example Contamination Problem
+# Mads Notebook: Contamination Problem
+
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
+
+<div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
+    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+</div>
+
+[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
+
+* Sensitivity Analysis
+* Parameter Estimation
+* Model Inversion and Calibration
+* Uncertainty Quantification
+* Model Selection and Model Averaging
+* Model Reduction and Surrogate Modeling
+* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
+* Decision Analysis and Support
+
+Here, it is demonstrated how [MADS](http://madsjulia.github.io/Mads.jl) can be applied to solve a general groundwater contamination problem.
+
+[MADS](http://madsjulia.github.io/Mads.jl) includes analytical solver called [Anasol.jl](http://madsjulia.github.io/Anasol.jl) which is appied to solve the groundwater contamination transport in a aquifer as presetned below.
 
 ## Problem setup
 
-Import Mads
+Import Mads (if **MADS** is not installed, first execute in the Julia REPL: `import Pkg; Pkg.add("Mads")`):
 
 
 ```julia
+import Pkg; Pkg.resolve()
+import Revise
 import Mads
 ```
 
@@ -80,7 +103,7 @@ Mads.plotmadsproblem(md, keyword="all_wells")
 
 
     
-![png](contamination_files/contamination_9_0.png)
+![png](contamination_files/contamination_7_0.png)
     
 
 
@@ -150,7 +173,7 @@ Mads.plotmadsproblem(md; keyword="w13a_w20a")
 
 
     
-![png](contamination_files/contamination_15_0.png)
+![png](contamination_files/contamination_13_0.png)
     
 
 
@@ -167,7 +190,7 @@ Mads.plotmatches(md, "w13a"; display=true)
 
 
     
-![png](contamination_files/contamination_18_0.png)
+![png](contamination_files/contamination_16_0.png)
     
 
 
@@ -180,7 +203,7 @@ Mads.plotmatches(md, "w20a"; display=true)
 
 
     
-![png](contamination_files/contamination_19_0.png)
+![png](contamination_files/contamination_17_0.png)
     
 
 
@@ -253,7 +276,7 @@ Mads.plotmatches(md, calib_predictions, "w13a")
 
 
     
-![png](contamination_files/contamination_26_0.png)
+![png](contamination_files/contamination_24_0.png)
     
 
 
@@ -266,7 +289,7 @@ Mads.plotmatches(md, calib_predictions, "w20a")
 
 
     
-![png](contamination_files/contamination_27_0.png)
+![png](contamination_files/contamination_25_0.png)
     
 
 
@@ -301,3 +324,8 @@ Mads.showparameterestimates(md, calib_param)
      "source1_t1" => 16.62089724181972
 
 
+
+
+```julia
+
+```
