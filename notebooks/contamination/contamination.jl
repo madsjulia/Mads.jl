@@ -1,29 +1,45 @@
-import Mads
+# Mads Notebook: Example Contamination Problem
 
-cd(joinpath(Mads.madsdir, "examples", "contamination"))
+## Problem setup
 
-md = Mads.loadmadsfile("w01.mads")
+Import Mads
 
-Mads.plotmadsproblem(md, keyword="all_wells")
+Change the working directory
 
-Mads.allwellsoff!(md) # turn off all wells
-Mads.wellon!(md, "w13a") # use well w13a
-Mads.wellon!(md, "w20a") # use well w20a
+Load Mads input file
 
-Mads.plotmadsproblem(md; keyword="w13a_w20a")
+Generate a plot of the loaded problem showing the well locations and the location of the contaminant source:
 
-Mads.plotmatches(md, "w13a"; display=true)
+There are 20 monitoring wells.
+Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
+Contaminant concentrations are observed for 50 years at each well.
+The contaminant transport is solved using the `Anasol` package in Mads.
 
-Mads.plotmatches(md, "w20a"; display=true)
+### Unknown model parameters
 
-calib_param, calib_results = Mads.calibrate(md)
+* Start time of contaminant release $t_0$
+* End time of contaminant release $t_1$
+* Advective pore velocity $v$
 
-calib_predictions = Mads.forward(md, calib_param)
+### Reduced model setup 
 
-Mads.plotmatches(md, calib_predictions, "w13a")
+Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
 
-Mads.plotmatches(md, calib_predictions, "w20a")
+Generate a plot of the updated problem showing the 2 well locations applied in the analyses as well as the location of the contaminant source:
 
-Mads.showparameters(md)
+## Initial estimates
 
-Mads.showparameterestimates(md, calib_param)
+Plot initial estimates of the contamiant concentrations at the 2 monitoring wells based on the initial model parameters: 
+
+## Model calibration
+
+Execute model calibration based on the concentrations observed in the two monitoring wells:
+
+Compute forward model predictions based on the calibrated model parameters:
+
+Plot the predicted estimates of the contamiant concentrations at the 2 monitoring wells based on the estimated model parameters based on the performed model calibration: 
+
+Initial values of the optimized model parameters are:
+
+Estimated values of the optimized model parameters are:
+
