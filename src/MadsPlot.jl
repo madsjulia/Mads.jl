@@ -205,7 +205,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{Abs
 	end
 	plotmatches(newmadsdata, newresult; title=title, notitle=notitle, kw...)
 end
-function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="time", ytitle::AbstractString="y", ymin=nothing, ymax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -424,7 +424,7 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.Length{:mm,Float64}=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.AbsoluteLength=0.9Gadfly.mm)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamlabels(madsdata, paramkeys)
 	cs = Array{Compose.Context}(undef, size(samples, 2), size(samples, 2))
@@ -679,7 +679,7 @@ function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
 	Mads.setseed(seed)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
@@ -872,7 +872,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, pointsize::Measures.Length{:mm,Float64}=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -1058,7 +1058,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.Length{:mm,Float64}=8Gadfly.inch, vsize::Measures.Length{:mm,Float64}=4Gadfly.inch, linewidth::Measures.Length{:mm,Float64}=2Gadfly.pt, linestyle=:solid, pointsize::Measures.Length{:mm,Float64}=1.5Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=!code, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle=:solid, pointsize::Measures.AbsoluteLength=1.5Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
