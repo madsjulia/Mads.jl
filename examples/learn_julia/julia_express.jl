@@ -1,16 +1,14 @@
 # getting around
 
-apropos("help") # search documentation for help
+apropos("monty") # search documentation for monty
 @less(max(1,2)) # show the definition of max function when invoked with arguments 1 and 2
-whos() # list of global variables and their types
+
 cd("/Users/monty/Julia")
-# cd("C:/") # change working directory to C:/ (on Windows)
+
 pwd() # get current working directory
 include("file.jl") # execute source file
-require("file.jl") # execute source file if it was not executed before
-exit(1) # exit with code 1 (exit code 0 by default)
+
 clipboard(collect(1:10)) # copy data to system clipboard
-workspace() # clear worskspace - create new Main module (only to be used interactively)
 
 # Sieve of Eratosthenes, docstrings coming in Julia 0.4
 function es(n::Int64) # accepts one 64 bit integer argument
@@ -36,19 +34,18 @@ true::Bool # boolean, allows "true" and "false"
 'c'::Char # character, allows Unicode
 "s"::AbstractString # strings, allows Unicode, see also Strings
 
-int64(1.3) # rounds float to integer
-int64('a') # character to integer
-int64("a") # error no conversion possible
-int64(2.0^300) # error - loss of precision
-float64(1) # integer to float
-bool(-1) # converts to boolean true
-bool(0) # converts to boolean false
-char(89.7) # cast float to integer to char
+Int64(floor(1.3)) # rounds float to integer
+Int64('a') # character to integer
+
+Float64(1) # integer to float
+Bool(1) # converts to boolean true
+Bool(0) # converts to boolean false
+
 string(true) # cast bool to string (works with other types)
 
 convert(Int64, 1.0) # convert float to integer
 
-typeof("abc") # ASCIIString returned which is a String subtype
+typeof("abc") # Stringreturned which is a String subtype
 isa(1, Float64) # false, integer is not float
 isa(1.0, Float64) # true
 
@@ -59,7 +56,6 @@ BigFloat(10)^1000 # big float, see documentation how to change default precision
 ## Complex literals and types
 
 Any # all objects are of this type
-None # subtype of all types, no object can have this type
 Nothing # type indicating nothing, subtype of Any
 nothing # only instance of Nothing
 
@@ -78,24 +74,22 @@ a, b = x # tuple unpacking a=1, b=2
 # arrays
 Array{Char}(undef, 2, 3, 4) # 2x3x4 array of Chars
 Array{Int64}(undef, 0, 0) # degenerate 0x0 array of Int64
-cell(2, 3) # 2x3 array of Any
 zeros(5) # vector of Float64 zeros
 ones(Int64, 2, 1) # 2x1 array of Int64 ones
 trues(3), falses(3) # tuple of vector of trues and of falses
-eye(3) # 3x3 Float64 identity matrix
 range(1; stop=2, length=5) # 5 element equally spaced vector
 1:10 # iterable from 1 to 10
 1:2:10 # iterable from 1 to 9 with 2 skip
 reshape(1:12, 3, 4) # 3x4 array filled with 1:12 values
 fill("a", 2, 2) # 2x2 array filled with "a"
-repmat(eye(2), 3, 2) # 2x2 identity matrix repeated 3x2 times
+repeat(rand(2, 2), 3, 2) # 2x2 matrix repeated 3x2 times
 x = [1, 2] # two element vector
 resize!(x, 5) # resize x in place to hold 5 values (filled with garbage)
 [1:10] # convert iterator to a vector, also collect(1:10)
 [1] # vector with one element (not a scalar)
 [x * y for x in 1:2, y in 1:3] # comprehension generating 2x3 array
 Float64[x^2 for x in 1:4] # casting comprehension result to Float64
-{i/2 for i = 1:3} # comprehension generating array of type Any
+[i/2 for i = 1:3] # comprehension generating array of type Any
 [1 2] # 1x2 matrix (hcat function)
 [1 2]' # 2x1 matrix (after transposing)
 [1, 2] # vector (vcat function)
@@ -113,9 +107,7 @@ eltype(a) # type of elements in a
 length(a) # number of elements in a
 size(a) # tuple containing dimension sizes of a
 vec(a) # cast array to vetor (single dimension)
-squeeze(a, 2) # remove 2nd dimension as it has size 1
-sum(a, 3) # calculate sums for 3rd dimensions, similarly: mean, std,
-# prod, minimum, maximum, any, all
+sum(a, dims=3) # calculate sums for 3rd dimensions, similarly: mean, std,
 count(x -> x > 0, a) # count number of times a predicate is true, similar: all, any
 
 # Array access:
@@ -123,9 +115,8 @@ a = collect(range(0; stop=1, length=100))# Float64 vector of length 100
 a[1] # get scalar 0.0
 a[end] # get scalar 1.0 (last position)
 a[1:2:end] # every second element from range
-a[repmat([true, false], 50)] # select every second element
+a[repeat([true, false], 50)] # select every second element
 a[[1, 3, 6]] # 1st, 3rd and 6th element of a
-sub(a, 1:2:100) # select virtual submatrix (the same memory)
 
 # Notice the treatment of trailing singleton dimensions:
 a = reshape(1:12, 3, 4)
@@ -134,12 +125,13 @@ a[:, 1] # 3-element vector
 a[1, :] # 1x4 matrix
 
 # Array assignment:
-x = reshape(1:8, 2, 4)
-x[:,2:3] = [1 2] # error; size mismatch
-x[:,2:3] = repmat([1 2], 2) # OK
-x[:,2:3] = 3 # OK
+x = collect(reshape(1:8, 2, 4))
+x[:,2:3] .= [1 2]
+x[:,2:3] .= repeat([1 2], 2)
+x[:,2:3] .= 3
+
 # Arrays are assigned and passed by reference. Therefore copying is provided:
-x = cell(2)
+x = Vector{Any}(undef, 2)
 x[1] = ones(2)
 x[2] = trues(3)
 a = x
@@ -150,12 +142,6 @@ x[2][1] = false
 a # identical as x
 b # only x[2][1] changed from original x
 c # contents to original x
-
-# Array types syntax examples:
-cell(2)::Array{Any, 1} # vector of Any
-[1 2]::Array{Int64, 2} # 2 dimensional array of Int64
-[true; false]::AbstractVector{Bool} # vector of Bool
-[1 2; 3 4]::Matrix{Int64} # matrix of Int64
 
 # Composite types
 
@@ -169,18 +155,15 @@ end
 p = Point(0, 0.0, "Origin")
 p.x # access field
 p.meta = 2 # change field value
-p.x = 1.5 # error, wrong data type
-p.z = 1 # error - no such field
-names(p) # get names of instance fields
-names(Point) # get names of type fields
+p.x = 3
+fieldnames(Point) # get names of type fields
 
 # Dictionaries
 # AbstractDict collections (key-value dictionaries):
 x = Dict{Float64, Int64}() # empty dictionary mapping floats to integers
-x = (Int64=>Int64)[1=>1, 2=>2] # literal syntax creation, optional type information
-y = {"a"=>1, (2,3)=>true} # dictionary with type Dict(Any, Any)
+x = Dict(1=>1, 2=>2) # literal syntax creation
+y = Dict("a"=>1, (2,3)=>true) # dictionary with type Dict(Any, Any)
 y["a"] # element retrieval
-y["b"] # error
 y["b"] = 'b' # added element
 haskey(y, "b") # check if y contains key "b"
 keys(y), values(y) # tuple of iterators returing keys and values in y
@@ -198,7 +181,7 @@ repr(123.3) # fetch value of show function to a string
 occursin("CD", "ABCD") # check if first string contains second
 "\"\n\t\$" # C-like escaping in strings, new \$ escape
 x = 123
-"$x + 3 = $(x+3)" # unescaped $ is used for interpolation
+"$x + 3 = $(x+3)" # unescaped  is used for interpolation
 "\$199" # to get a $ symbol you must escape it
 
 # PCRE regular expressions handling:
@@ -211,7 +194,6 @@ m = match(r, "ACBD") # find first regexp match, see documentation for details
 # The simplest way to create new variable is by assignment:
 x = 1.0 # x is Float64
 x = 1 # now x is Int32 on 32 bit machine and Int64 on 64 bit machine
-y::Float64 = 1.0 # y must be Float64, not possible in global scope performs assertion on y type when it exists
 
 # Expressions can be compound using ; or begin end block:
 x = (a = 1; 2 * a) # after: x = 2; a = 1
@@ -251,11 +233,11 @@ f(3) # 13 returned
 function g(x::Int, y::Int) # type restriction
 	return y, x # explicit return of a tuple
 end
-apply(g, 3, 4) # call with apply
-apply(g, 3, 4.0) # error - wrong argument
+
 g(x::Int, y::Bool) = x * y # add multiple dispatch
 g(2, true) # second definition is invoked
 methods(g) # list all methods defined for g
+
 (x -> x^2)(3) # anonymous function with a call
 () -> 0 # anonymous function with no arguments
 h(x...) = sum(x)/length(x) - mean(x) # vararg function; x is a tuple
@@ -276,7 +258,7 @@ q(10) do x # creation of anonymous function by do construct, useful in IO
 end
 m = reshape(1:12, 3, 4)
 map(x -> x ^ 2, m) # 3x4 array returned with transformed data
-filter(x -> bits(x)[end] == '0', 1:12) # a fancy way to choose even integers from the range
+filter(x -> bitstring(x)[end] == '0', 1:12) # a fancy way to choose even integers from the range
 
 # As a convention functions with name ending with ! change their arguments in-place. See for example resize! in this document.
 
@@ -297,9 +279,10 @@ f6(;y=1,x=y) = x; f6() # 1
 # - const: ensure variable type is constant (global only).
 
 # Special cases:
-t # error, variable does not exist
-f() = global t = 1
-f() # after the call t is defined globally
+ttt # error, variable does not exist
+f() = global ttt = 1
+f() # after the call ttt is defined globally
+
 function f1(n)
 	x = 0
 	for i = 1:n
@@ -308,6 +291,7 @@ function f1(n)
 	x
 end
 f1(10) # 10; inside loop we use outer local variable
+
 function f2(n)
 	x = 0
 	for i = 1:n
@@ -317,6 +301,7 @@ function f2(n)
 	x
 end
 f2(10) # 0; inside loop we use new local variable
+
 function f3(n)
 	for i = 1:n
 		local x # this local can be omitted; for introduces new scope
@@ -325,69 +310,21 @@ function f3(n)
 	x
 end
 f3(10) # error; x not defined in outer scope
-const x = 2
-x = 3 # warning, value changed
-x = 3.0 # error, wrong type
-function fun() # no warning
-	const x = 2
-	x = true
-end
-fun() # true, no warning
-# Global constants speed up execution.
-# The let rebinds the variable:
-Fs = cell(2)
-i = 1
-while i <= 2
-	j = i
-	Fs[i] = () -> j
-	i += 1
-end
-Fs[1](), Fs[2]() # (2, 2); the same binding for j
-Fs = cell(2)
-i = 1
-while i <= 2
-	let j = i
-		Fs[i] = () -> j
-	end
-	i += 1
-end
-Fs[1](), Fs[2]() # (1, 2); new binding for j
-Fs = cell(2)
-i = 1
-for i in 1:2
-	j = i
-	Fs[i] = () -> j
-end
-Fs[1](), Fs[2]() # (1, 2); for loops and comprehensions rebind variables
 
-# Modules
-
-# Modules encapsulate code. Can be reloaded, which is useful to redefine functions and types, as top level functions and types are defined as constants.
-module M # module name
-export x # what module exposes for the world
-x = 1
-y = 2 # hidden variable
-end
-whos(M) # list exported variables
-x # not found in global scope
-M.y # direct variable access possible
-# import all exported variables
-# load standard packages this way
-using M
-#import variable y to global scope (even if not exported)
-import M.y
+const xxx = 2
+xxx = 3 # warning, value changed
+xxx = 3.0 # error, wrong type
 
 # Operators
 
 # Julia follows standard operators with the following quirks:
 true || false # binary or operator (singeltons only), || and && use short-circut evaluation
-[1 2] & [2 1] # bitwise and operator
+[1 2] .& [2 1] # bitwise and operator
 1 < 2 < 3 # chaining conditions is OK (singeltons only)
 [1 2] .< [2 1] # for vectorized operators need to add '.' in front
 x = [1 2 3]
-2x + 2(x+1) # multiplication can be omitted between a literal and a variable or a left parenthesis
+2x .+ 2(x .+ 1) # multiplication can be omitted between a literal and a variable or a left parenthesis
 y = [1, 2, 3]
-x + y # error
 x .+ y # 3x3 matrix, dimension broadcasting
 x + y' # 1x3 matrix
 x * y # array multiplication, 1-element vector (not scalar)
@@ -419,9 +356,8 @@ findall(x -> mod(x, 2) == 0, 1:8) # find indices for which function returns true
 identity([1 2 3]) # identity returned
 @info("Info") # print information, similarly warn and error (raises error)
 ntuple(3, x->2x) # create tuple by calling x->2x with values 1, 2 and 3
-isdefined(Mads, :x) # if variable x is defined (:x is a symbol)
-fieldtype(1:2,:len) # get type of the field in composite type (passed as symbol)
-1:5 |> exp |> sum # function application chaining
+isdefined(Base, :x) # if variable x is defined (:x is a symbol)
+1:5 .|> exp .|> sum # function application chaining
 zip(1:5, 1:3) |> collect # convert iterables to iterable tuple and pass it to collect
 enumerate("abc") # create iterator of tuples (index, collection element)
 isempty("abc") # check if collection is empty
@@ -431,7 +367,6 @@ findall((in)("abrakadabra"), "abc") # [1, 2] ('c' was not found)
 unique("abrakadabra") # return unique elements
 issubset("abc", "abcd") # check if every element in fist collection is in the second
 argmax("abrakadabra") # index of maximal element (3 - 'r' in this case)
-fargmax("abrakadabra") # tuple: maximal element and its index
 filter(x->mod(x,2)==0, 1:10) # retain elements of collection that meet predicate
 dump(1:2:5) # show all user-visible structure of an object
 sort(rand(10)) # sort 10 uniform random variables
@@ -445,6 +380,7 @@ sort(rand(10)) # sort 10 uniform random variables
 
 # Random numbers
 # Basic random numbers:
+import Random
 Random.seed!(1) # set random number generator seed to 1
 rand() # generate random number from U[0,1)
 rand(3, 4) # generate 3x4 matrix of random numbers from U[0,1]
@@ -460,41 +396,43 @@ mean(b) # expected value of distribution b
 # see documentation for other supported statistics
 rand(b, 100) # 100 independent random samples from distribution b
 
-# Data frames
+y = Vector{Any}(undef, 10)
+y .= collect(1:10) # create DataArray that can contain NAs
+y[1] = missing # assign missing to data array
+sum(y) # missing, as it contains missing
+sum(y[.!ismissing.(y)]) # 54, as missing is removed
 
-# Julia can handle R-like NA by introducing new scalar and extending Array to DataArray:
-using DataFrames # load required package
-x = NA # scalar NA value
-y = DataArray([1:10]) # create DataArray that can contain NAs
-y[1] = NA # assign NA to data array
-sum(y) # NA, as it contains NA
-sum(dropna(y)) # 54, as NA is removed
+y = Vector{Float64}(undef, 10)
+y .= collect(1:10) # create DataArray that can contain NAs
+y[1] = NaN # assign NaN to data array
+sum(y) # NaN, as it contains missing
+sum(y[.!isnan.(y)]) # 54, as NaN is removed
+
+# Data Frames
 # Julia can use R-like data frames:
+using DataFrames # load required package
 df = DataFrame(A=1:4,B="a") # create data frame with two columns; scalars are expanded
-df[:C] = [true, false] # error, new columns must have the same length
-df[:C] = repmat([true, false], 2) # OK, new column added
-head(df) # data frame head, similar: tail
-df[!, 1:2, ["A", "C"]] # select 2 first rows and A and C columns
+df[!, :C] = repeat([true, false], 2) # OK, new column added
+first(df) # data frame head
+last(df)
+df[1:2, ["A", "C"]] # select 2 first rows and A and C columns
 df[!, 2] # select 2nd column
 names(df) # data frame column names
 describe(df) # summary of df contents; not really good
-colwise(sum, df[[1,3]]) # calculate sum of column 1 and 3 - not really nice output
-df2 = readtable("filename") # read data from disk; warning on handling spaces at eol
-writetable("filename", df) # write to disk; see documentation for options for read and write
 
 # Plotting
 # There are several plotting packages for Julia: Winston, Gadfly and PyPlot. Here we show how to use on PyPlot as it is natural for Python users:
 
 using PyPlot # load PyPlot, example taken from Matplotlib documentation
 x = collect(range(0; stop=1, length=100))
-y = sin.(4 * pi * x) .* exp(-5 * x)
+y = sin.(4 * pi .* x) .* exp.(-5 .* x)
 fill(x, y) # you can access any matplotlib.pyplot function
 grid(true)
 using Distributions # second example
 Random.seed!(1)
 x = randn(1000)
 # hist conflicts with Julia hist so prepend plt.
-n, bins, patches = plt.hist(x, 20, normed = 1, facecolor="y")
+n, bins, patches = plt.hist(x, 20, facecolor="y")
 points = collect(range(bins[1]; stop=bins[end], length=100))
 plot(points, pdf(Normal(), points), "r") # add normal density plot
 
@@ -506,70 +444,21 @@ plot(points, pdf(Normal(), points), "r") # add normal density plot
 @assert 1 == 2 "ERROR" # 2 macro arguments; error raised
 import Test # load Base.Test module
 @Test.test 1 == 2 # similar to assert; error
-@Test.test_approx_eq 1 1.1 # error
-@Test.test_approx_eq_eps 1 1.1 0.2 # no error
+@Test.test 1 ≈ 1.1 # error
+@Test.test 1 ≈ 1.1 atol=0.2 # no error
 
 # Function vectorization:
 t(x::Float64, y::Float64 = 1.0) = x * y
 t(1.0, 2.0) # OK
 t([1.0 2.0]) # error
-@vectorize_1arg Float64 t # vectorize first argument
-t([1.0 2.0]) # OK
+t.([1.0 2.0]) # OK
 t([1.0 2.0], 2.0) # error
-@vectorize_2arg Float64 t # vectorize two arguments
-t([1.0 2.0], 2.0) # OK
-t(2.0, [1.0 2.0]) # OK
-t([1.0 2.0], [1.0 2.0]) # OK
+t.([1.0 2.0], 2.0) # OK
+t.(2.0, [1.0 2.0]) # OK
+t.([1.0 2.0], [1.0 2.0]) # OK
 
 # Benchmarking:
 @time [x for x in 1:10^6] # print time and memory
 @timed [x for x in 1:10^6] # return value, time and memory
 @elapsed [x for x in 1:10^6] # return time
 @allocated [x for x in 1:10^6] # return memory
-
-# Taking it all together example
-# Simple bootstraping exercise
-using Distributions
-using PyPlot
-using KernelDensity
-Random.seed!(1)
-# generate 100 observations from correlated normal variates
-n = 100
-dist = MvNormal([0.0; 0.0], [1.0 0.5; 0.5 1.0])
-r = rand(dist, n)'
-# create 100 000 bootstrap replications
-# and fetch time and memory used
-@time bootcor = Float64[cor(r[sample(1:n, n),:])[1, 2] for i in 1:10^5]
-# calculate kernel density estimator
-kdeboot = KernelDensity.kde(bootcor)
-# plot results
-plt.hist(bootcor, 50, normed = 1)
-plot(kdeboot.x, kdeboot.density, color = "y", linewidth = 3.0)
-axvline(0.5, color = "r", linewidth = 3.0)
-savefig("corboot.pdf", format = "pdf") # save results to pdf
-
-# Interactive work
-# Define a simple piece of code inside module to be able to change function definition without restarting Julia.
-module MCint
-f(x) = sin.(x * x)
-# vectorize f as x * x does not work on vectors
-@vectorize_1arg Float64 f
-lo = 0.0
-hi = 1.0
-n = 10^8
-# integrate f on [0, 1] via Monte Carlo simulation
-tic()
-int_mc = mean(f(rand(n) * (hi - lo) + lo))
-toc()
-# and using adaptive Gauss-Kronrod method
-int_gk = quadgk(f, lo, hi)
-# example of string interpolation
-println("values: \t$int_mc\t$(int_gk[1])")
-println("deviation:\t$(int_mc - int_gk[1])")
-println("quadgk err:\t$(int_gk[2])")
-end
-# We save it to test.jl and load it with include("test.jl").
-# Now we notice that we could remove line @vectorize_1arg Float64 f and change definition of
-# integrated function to f(x) = sin.(x .* x). We can run include("test.jl").
-# You get a warning about module redefinition, but function was
-# redefined. Surprisingly — at least on my machine — this version of code is a bit slower.
