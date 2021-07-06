@@ -5,6 +5,7 @@ import OrderedCollections
 import Gadfly
 import Measures
 import Compose
+import DelimitedFiles
 
 colors = ["red", "blue", "green", "orange", "magenta", "cyan", "brown", "pink", "lime", "navy", "maroon", "yellow", "olive", "springgreen", "teal", "coral", "#e6beff", "beige", "purple", "#4B6F44", "#9F4576"]
 ncolors = length(colors)
@@ -1253,7 +1254,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 	filename = "$(filenameroot)-jacobian.dat"
 	Jin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
-		Jin = readdlm(filename)
+		Jin = DelimitedFiles.readdlm(filename)
 	end
 	if sizeof(Jin) > 0
 		paramkeys = Jin[1, 2:end]
@@ -1281,7 +1282,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 	filename = "$(filenameroot)-covariance.dat"
 	Cin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
-		Cin = readdlm(filename)
+		Cin = DelimitedFiles.readdlm(filename)
 	end
 	if sizeof(Cin) > 0
 		covar = Cin[2:end, 2:end]
@@ -1292,7 +1293,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 	filename = "$(filenameroot)-eigenmatrix.dat"
 	Ein = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
-		Ein = readdlm(filename)
+		Ein = DelimitedFiles.readdlm(filename)
 	end
 	if sizeof(Ein) > 0
 		paramkeys = Ein[1:end, 1]
@@ -1302,7 +1303,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		filename = "$(filenameroot)-eigenvalues.dat"
 		sortedeigenv = Array{Float64}(undef, 0)
 		if isfile(filename)
-			sortedeigenv = readdlm(filename)
+			sortedeigenv = DelimitedFiles.readdlm(filename)
 		end
 		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 			eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,

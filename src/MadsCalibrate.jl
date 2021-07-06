@@ -1,8 +1,8 @@
 import OrderedCollections
 import DocumentFunction
 import Distributed
-using SharedArrays
-using Statistics
+import SharedArrays
+import Statistics
 
 """
 Calibrate with random initial guesses
