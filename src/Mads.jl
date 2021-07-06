@@ -14,11 +14,11 @@ import Pkg
 import OrderedCollections
 import Printf
 import Distributed
-using DelimitedFiles
-using LinearAlgebra
-using Statistics
-using SparseArrays
-using Random
+import DelimitedFiles
+import Random
+import SparseArrays
+import LinearAlgebra
+import Statistics
 
 import JLD2
 import FileIO
@@ -47,19 +47,22 @@ function pin()
 	Pkg.pin("ReusableFunctions", v"0.3.0")
 end
 
-global madsgit = true
-try
-	run(pipeline(`bash -l -c 'git help'`; stdout=devnull, stderr=devnull))
-catch
-	global madsgit = false
-end
-
 global madsbash = true
 if !Sys.Sys.iswindows()
 	try
 		run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
 	catch
 		global madsbash = false
+	end
+end
+
+global madsgit = false
+if madsbash
+	try
+		run(pipeline(`bash -l -c 'git help'`; stdout=devnull, stderr=devnull))
+		global madsgit = true
+	catch
+		global madsgit = false
 	end
 end
 

@@ -1,4 +1,5 @@
 import DocumentFunction
+import LinearAlgebra
 
 """
 Model section information criteria
@@ -26,7 +27,7 @@ function modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64}=Ar
 	println("Objective function value                               : $(ofval)")
 	println("Posterior measurement variance                         : $(gf)")
 	ln_det_v = ln_det_w + no * log(gf) / 2
-	aopt = sum(diag(l["covar"]))
+	aopt = sum(LinearAlgebra.diag(l["covar"]))
 	copt = abs(l["eigenvalues"][end])/abs(l["eigenvalues"][1])
 	eopt = abs(l["eigenvalues"][end])
 	dopt = prod(l["eigenvalues"])

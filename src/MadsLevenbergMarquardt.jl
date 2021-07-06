@@ -115,7 +115,7 @@ function makelmfunctions(f::Function)
 		end
 		return jacobian
 	end
-	o_lm(x::AbstractVector) = dot(x, x)
+	o_lm(x::AbstractVector) = LinearAlgebra.dot(x, x)
 	return f_lm, g_lm, o_lm
 end
 function makelmfunctions(madsdata::AbstractDict)
@@ -123,7 +123,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
-	o_lm(x::AbstractVector) = sar ? sum.(abs.(x)) : dot(x, x)
+	o_lm(x::AbstractVector) = sar ? sum.(abs.(x)) : LinearAlgebra.dot(x, x)
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	targets = Mads.getobstarget(madsdata, obskeys)
@@ -244,8 +244,8 @@ Returns:
 - the LM parameter space step
 """
 function naive_get_deltax(JpJ::AbstractMatrix{Float64}, Jp::AbstractMatrix{Float64}, f0::AbstractVector{Float64}, lambda::Number)
-	u, s, v = svd(JpJ + lambda * SparseArrays.SparseMatrixCSC(Float64(1)LinearAlgebra.I, size(JpJ, 1), size(JpJ, 1)))
-	deltax = (v * sparse(Diagonal(1 ./ s)) * u') * -Jp * f0
+	u, s, v = LinearAlgebra.svd(JpJ + lambda * SparseArrays.SparseMatrixCSC(Float64(1)LinearAlgebra.I, size(JpJ, 1), size(JpJ, 1)))
+	deltax = (v * SparseArrays.sparse(LinearAlgebra.Diagonal(1 ./ s)) * u') * -Jp * f0
 	return deltax
 end
 
@@ -434,7 +434,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madswarn("Jacobian norm is too low! Parameters do not change observations.")
 		end
 		if first_lambda
-			lambda = min(1e4, max(lambda, diag(JpJ)...)) * lambda_scale;
+			lambda = min(1e4, max(lambda, LinearAlgebra.diag(JpJ)...)) * lambda_scale;
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
@@ -457,7 +457,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			delta_x = []
 			try
 				Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda);
-				u, s, v = svd(JpJ + lambda * DtDidentity)
+				u, s, v = LinearAlgebra.svd(JpJ + lambda * DtDidentity)
 				is = similar(s)
 				for i=1:length(s)
 					if abs(s[i]) > eps(Float64)
@@ -471,7 +471,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 					end
 				end
 				# s = map(i->max(eps(Float32), i), s)
-				delta_x = (v * sparse(Diagonal(is)) * u') * -J' * fcur
+				delta_x = (v * SparseArrays.sparse(LinearAlgebra.Diagonal(is)) * u') * -J' * fcur
 				# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 				predicted_residual = o(J * delta_x + fcur)
 				# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual

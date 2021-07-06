@@ -1,5 +1,6 @@
 import DocumentFunction
 import Distributed
+import DelimitedFiles
 
 """
 Load ASCII file
@@ -12,8 +13,7 @@ Returns:
 - data from the file
 """
 function loadasciifile(filename::AbstractString) # load ASCII text file
-	data = open(readdlm, filename)
-	return data
+	return DelimitedFiles.readdlm(filename)
 end
 
 """
@@ -28,7 +28,7 @@ Dumps:
 - ASCII file with the name in "filename"
 """
 function dumpasciifile(filename::AbstractString, data::Any) # dump ASCII text file
-	writedlm(filename, data)
+	DelimitedFiles.writedlm(filename, data)
 end
 
 """

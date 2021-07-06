@@ -264,15 +264,19 @@ function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=fal
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		cmdproc, cmdout, cmderr = Mads.runcmd(`bash -l -c 'git status -s'`; quiet=true, pipe=true);
-		cmdproc, cmdout, cmderr = Mads.runcmd("git log `bash -l -c 'git describe --tags --abbrev=0'`..HEAD --oneline"; quiet=true, pipe=true);
-		if cmdproc.exitcode != 0
-			@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
-		elseif gitmore
-			@info("Git ID HEAD   $(madsmodule) ...")
-			run(`bash -l -c 'git rev-parse --verify HEAD'`)
-			@info("Git ID master $(madsmodule) ...")
-			run(`bash -l -c 'git rev-parse --verify master'`)
+		if Mads.madsbash
+			cmdproc, cmdout, cmderr = Mads.runcmd(`bash -l -c 'git status -s'`; quiet=true, pipe=true);
+			cmdproc, cmdout, cmderr = Mads.runcmd("git log `bash -l -c 'git describe --tags --abbrev=0'`..HEAD --oneline"; quiet=true, pipe=true);
+			if cmdproc.exitcode != 0
+				@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
+			elseif gitmore
+				@info("Git ID HEAD   $(madsmodule) ...")
+				run(`bash -l -c 'git rev-parse --verify HEAD'`)
+				@info("Git ID master $(madsmodule) ...")
+				run(`bash -l -c 'git rev-parse --verify master'`)
+			end
+		else
+			@info "Modile $madsmodule git status cannot be tested."
 		end
 		cd(cwd)
 	else
