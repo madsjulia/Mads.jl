@@ -1,7 +1,7 @@
 import ProgressMeter
 import OrderedCollections
 import DocumentFunction
-using DelimitedFiles
+import DelimitedFiles
 import Distributed
 
 function forward(madsdata::AbstractDict; all::Bool=false)

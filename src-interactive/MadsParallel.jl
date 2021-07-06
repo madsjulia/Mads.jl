@@ -1,5 +1,5 @@
 import Distributed
-using LinearAlgebra
+import LinearAlgebra
 import Printf
 import DocumentFunction
 
@@ -38,7 +38,7 @@ function setprocs(np::Integer, nt::Integer)
 	elseif n < 0
 		Distributed.rmprocs(Distributed.workers()[end+n+1:end])
 	end
-	BLAS.set_num_threads(nt)
+	LinearAlgebra.BLAS.set_num_threads(nt)
 	sleep(0.1)
 	getprocs()
 end

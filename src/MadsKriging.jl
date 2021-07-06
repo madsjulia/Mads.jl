@@ -116,29 +116,29 @@ $(DocumentFunction.documentfunction(krige;
 argtext=Dict("x0mat"=>"point coordinates at which to obtain kriging estimates",
             "X"=>"coordinates of the observation (conditioning) data",
             "Z"=>"values for the observation (conditioning) data",
-            "cov"=>"spatial covariance function")))
+            "covfn"=>"spatial covariance function")))
 
 Returns:
 
 - kriging estimates at `x0mat`
 """
-function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::AbstractVector, cov::Function)
+function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::AbstractVector, covfn::Function)
     if size(X, 2) != length(Z)
         error("number of points and observations don't match")
     end
 	result = zeros(size(x0mat, 2))
-	covmat = getcovmat(X, cov)
+	covmat = getcovmat(X, covfn)
 	bigmat = [covmat ones(size(X, 2)); ones(size(X, 2))' 0.]
 	ws = Array{Float64}(undef, size(x0mat, 2))
 	bigvec = Array{Float64}(undef, size(X, 2) + 1)
 	bigvec[end] = 1
-	bigmatpinv = pinv(bigmat)
+	bigmatpinv = LinearAlgebra.pinv(bigmat)
 	covvec = Array{Float64}(undef, size(X, 2))
 	x = Array{Float64}(undef, size(X, 2) + 1)
 	for i = 1:size(x0mat, 2)
-		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, cov)
+		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, covfn)
 		bigvec[end] = 1
-		mul!(x, bigmatpinv, bigvec)
+		LinearAlgebra.mul!(x, bigmatpinv, bigvec)
 		for j = 1:size(X, 2)
 			result[i] += Z[j] * x[j]
 		end
@@ -177,33 +177,33 @@ $(DocumentFunction.documentfunction(getcovvec!;
 argtext=Dict("covvec"=>"spatial covariance vector",
             "x0"=>"vector with coordinates of the estimation points (x or y)",
             "X"=>"matrix with coordinates of the data points",
-            "cov"=>"spatial covariance function")))
+            "covfn"=>"spatial covariance function")))
 
 Returns:
 
 - spatial covariance vector
 """
-function getcovvec!(covvec::AbstractVector, x0::AbstractVector, X::AbstractMatrix, cov::Function)
+function getcovvec!(covvec::AbstractVector, x0::AbstractVector, X::AbstractMatrix, covfn::Function)
 	for i = 1:size(X, 2)
 		d = 0.
 		for j = 1:size(X, 1)
 			d += (X[j, i] - x0[j]) ^ 2
 		end
 		d = sqrt.(d)
-		covvec[i] = cov(d)
+		covvec[i] = covfn(d)
 	end
 	return covvec
 end
 
-function estimationerror(w::AbstractVector, x0::AbstractVector, X::AbstractMatrix, cov::Function)
-	covmat = getcovmat(X, cov)
+function estimationerror(w::AbstractVector, x0::AbstractVector, X::AbstractMatrix, covfn::Function)
+	covmat = getcovmat(X, covfn)
 	covvec = Array{Float64}(undef, size(X, 2))
-	covvec = getcovvec!(covvec, x0, X, cov)
-	cov0 = cov(0.)
+	covvec = getcovvec!(covvec, x0, X, covfn)
+	cov0 = covfn(0.)
 	return estimationerror(w, covmat, covvec, cov0)
 end
 function estimationerror(w::AbstractVector, covmat::AbstractMatrix, covvec::AbstractVector, cov0::Number)
-	return cov0 + dot(w, covmat * w) - 2 * dot(w, covvec)
+	return cov0 + LinearAlgebra.dot(w, covmat * w) - 2 * LinearAlgebra.dot(w, covvec)
 end
 
 @doc """

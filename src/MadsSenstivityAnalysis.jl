@@ -182,7 +182,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	end
 	f = Mads.forward(madsdata, param)
 	ofval = Mads.of(madsdata, f)
-	datafiles && writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
+	datafiles && DelimitedFiles.writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 	if imagefiles
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
@@ -215,7 +215,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	end
 	stddev = sqrt.(abs.(LinearAlgebra.diag(covar)))
 	if datafiles
-		writedlm("$(rootname)-covariance.dat", covar)
+		DelimitedFiles.writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
 		for i in 1:nP
 			write(f, "$(paramkeys[i]) $(param[i]) $(stddev[i])\n")
@@ -223,16 +223,16 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		close(f)
 	end
 	correl = covar ./ LinearAlgebra.diag(covar)
-	datafiles && writedlm("$(rootname)-correlation.dat", correl)
-	z = eigen(covar)
+	datafiles && DelimitedFiles.writedlm("$(rootname)-correlation.dat", correl)
+	z = LinearAlgebra.eigen(covar)
 	eigenv = z.values
 	eigenm = z.vectors
 	eigenv = abs.(eigenv)
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])
-	datafiles && writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
-	datafiles && writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
+	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
+	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	if imagefiles
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
@@ -790,20 +790,20 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rest
 			# f0B = Statistics.mean( yB[nonan,j] )
 			# f0C = Statistics.mean( yC[nonan,j] )
 			varT = Statistics.var(yT)
-			# varA = abs( ( dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
+			# varA = abs( ( LinearAlgebra.dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
 			# varA = Statistics.var( yA[nonan,j] ) # this is faster
-			# varB = abs( ( dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
+			# varB = abs( ( LinearAlgebra.dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
 			# varB = Statistics.var( yB[nonan,j] ) # this is faster
 			varC = Statistics.var(yC[nonan,j])
-			# varP = abs( ( dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
-			# varP2 = abs( ( dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
-			varP3 = abs( mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
+			# varP = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
+			# varP2 = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			varP3 = abs( Statistics.mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
 			# varP4 = Statistics.mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
 			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
-			# varPnot = abs( ( dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
-			# varPnot2 = abs( ( dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			# varPnot = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
+			# varPnot2 = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
 			# varPnot3 = Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
-			expPnot =  mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
+			expPnot =  Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
 			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
 			variance[obskeys[j]][paramoptkeys[i]] = varC
 # 			if varA < eps(Float64) && varP < eps(Float64)
@@ -1234,7 +1234,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
 			if typeof(InputData[k,2]) <: Distributions.Distribution
 				# dist contains all data about distribution so this will apply any necessary distributions to X
-				X[:,k] = quantile.(dist[k], X[:,k])
+				X[:,k] = Statistics.quantile.(dist[k], X[:,k])
 			else
 				madscritical("eFAST error in assigning input data!")
 			end # End if
@@ -1350,25 +1350,25 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			Mads.madsoutput("Calculating Fourier coefficients for observations ...\n")
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Subtract the average value from Y
-			Y = permutedims(Y .- mean(Y))
+			Y = permutedims(Y .- Statistics.mean(Y))
 			## Calculating Fourier coefficients associated with MAIN INDICES
 			# p corresponds to the harmonics of Wi
 			for p = 1:M
-				A = dot(Y[:], cos.(Wi*p*S_vec))
-				B = dot(Y[:], sin.(Wi*p*S_vec))
+				A = LinearAlgebra.dot(Y[:], cos.(Wi*p*S_vec))
+				B = LinearAlgebra.dot(Y[:], sin.(Wi*p*S_vec))
 				AVi += A^2 + B^2
 			end
 			# 1/Ns taken out of both A and B for optimization!
 			AVi = AVi / Ns^2
 			## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
 			for j = 1:Wcmax * M
-				A = dot(Y[:], cos.(j * S_vec))
-				B = dot(Y[:], sin.(j * S_vec))
+				A = LinearAlgebra.dot(Y[:], cos.(j * S_vec))
+				B = LinearAlgebra.dot(Y[:], sin.(j * S_vec))
 				AVci = AVci + A^2 + B^2
 			end
 			AVci = AVci / Ns^2
 			## Total Variance By definition of variance: V(Y) = (Y - mean(Y))^2
-			AV = dot(Y[:], Y[:]) / Ns
+			AV = LinearAlgebra.dot(Y[:], Y[:]) / Ns
 			# Storing results in a vector format
 			resultvec = [AV AVi AVci]
 		elseif ny > 1
@@ -1381,25 +1381,25 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# Looping over each point in time
 			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
-				Y[:,i] = permutedims((Y[:,i] .- mean(Y[:,i])))
+				Y[:,i] = permutedims((Y[:,i] .- Statistics.mean(Y[:,i])))
 				## Calculating Fourier coefficients associated with MAIN INDICES
 				# p corresponds to the harmonics of Wi
 				for p = 1:M
-					A = dot(Y[:,i], cos.(Wi * p * S_vec))
-					B = dot(Y[:,i], sin.(Wi * p * S_vec))
+					A = LinearAlgebra.dot(Y[:,i], cos.(Wi * p * S_vec))
+					B = LinearAlgebra.dot(Y[:,i], sin.(Wi * p * S_vec))
 					AVi[i]  = AVi[i] + A^2 + B^2
 				end
 				# 1/Ns taken out of both A and B for optimization!
 				AVi[i] = AVi[i] / Ns^2
 				## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
 				for j = 1:Wcmax * M
-					A = dot(Y[:,i], cos.(j * S_vec))
-					B = dot(Y[:,i], sin.(j * S_vec))
+					A = LinearAlgebra.dot(Y[:,i], cos.(j * S_vec))
+					B = LinearAlgebra.dot(Y[:,i], sin.(j * S_vec))
 					AVci[i] = AVci[i] + A^2 + B^2
 				end
 				AVci[i] = AVci[i] / Ns^2
 				## Total Variance By definition of variance: V(Y) = (Y - mean(Y))^2
-				AV[i] = dot(Y[:,i], Y[:,i]) / Ns
+				AV[i] = LinearAlgebra.dot(Y[:,i], Y[:,i]) / Ns
 			end #END for i = 1:ny
 			# Storing results in matrix format
 			resultvec = hcat(AV, AVi, AVci)
