@@ -40,7 +40,7 @@ else
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "rand.jld2"), "Wipopt")
-		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin.(R, nk)
 		Random.seed!(2015)
@@ -66,8 +66,8 @@ else
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_1.jld2"), "Wipopt")
 		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "sin_2.jld2"), "WHipopt")
 
-		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		# @Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
 		Random.seed!(2015)
@@ -93,8 +93,8 @@ else
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_1.jld2"), "Wipopt")
 		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_2.jld2"), "WHipopt")
 
-		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		# @Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_disturbance(R, nk)
 		Random.seed!(2015)
@@ -122,8 +122,8 @@ else
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_1.jld2"), "Wipopt")
 		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_2.jld2"), "WHipopt")
 
-		# @Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		# @Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 	end
 end
 

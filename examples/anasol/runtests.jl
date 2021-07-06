@@ -220,7 +220,7 @@ if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotlocalsa("w01shortexp")
 	Mads.graphon()
 end
-@Mads.stdouterrcapture Mads.calibrate(md, localsa=true, show_trace=true)
+@Mads.stdouterrcapture Mads.calibrate(md; localsa=true, show_trace=true)
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)
 Mads.rmfiles_root("w01shortexp-"; path=pwd())
