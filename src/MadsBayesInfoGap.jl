@@ -108,7 +108,7 @@ end
 """
 Perform Bayesian Information Gap Decision Theory (BIG-DT) analysis
 
-$(DocumentFunction.documentfunction(dobigdt;
+$(DocumentFunction.documentfunction(bigdt;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "nummodelruns"=>"number of model runs"),
 keytext=Dict("numhorizons"=>"number of info-gap horizons of uncertainty [default=`100`]",
@@ -119,7 +119,7 @@ Returns:
 
 - dictionary with BIG-DT results
 """
-function dobigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
+function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
 	modelparams = Array{Float64}(undef, length(parametersamples), nummodelruns)

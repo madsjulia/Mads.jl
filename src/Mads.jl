@@ -27,7 +27,7 @@ import JSON
 
 import Anasol
 import AffineInvariantMCMC
-# import GeostatInversion
+import BIGUQ
 import Kriging
 import MetaProgTools
 import ReusableFunctions
@@ -66,49 +66,15 @@ end
 """
 Mads Modules: $madsmodules
 """
-global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "Kriging", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
 
 """
 Mads Modules: $madsmodulesdoc
 """
-global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, ReusableFunctions, RobustPmap, MetaProgTools, SVR, DocumentFunction]
-# global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "GeostatInversion", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
+global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, BIGUQ, ReusableFunctions, RobustPmap, MetaProgTools, SVR, DocumentFunction]
 
 include("MadsHelpers.jl")
-
-"Try to import a module in Mads"
-macro tryimport(s::Symbol, domains::Symbol=:Mads)
-	mname = string(s)
-	domain = eval(domains)
-	if !ispkgavailable(mname)
-		try
-			Pkg.add(mname)
-		catch
-			@info string("Module ", s, " is not available!")
-			return nothing
-		end
-	end
-	if !isdefined(domain, s)
-		importq = string(:(import $s))
-		warnstring = string("Module ", s, " cannot be imported!")
-		q = quote
-			try
-				Core.eval($domain, Meta.parse($importq))
-			catch errmsg
-				printerrormsg(errmsg)
-				@warn($warnstring)
-			end
-		end
-		return :($(esc(q)))
-	end
-end
-
-"Try to import a module in Main"
-macro tryimportmain(s::Symbol)
-	quote
-		@Mads.tryimport $s Main
-	end
-end
+include("MadsTryImport.jl")
 
 if !haskey(ENV, "MADS_NO_PYTHON")
 	@tryimport PyCall
@@ -201,18 +167,7 @@ include("MadsModelSelection.jl")
 include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
-
-ENV["MADS_NO_BIGUQ"] = ""
-ENV["MADS_NO_KLARA"] = ""
-
-if !haskey(ENV, "MADS_NO_BIGUQ")
-	@tryimport BIGUQ
-	if isdefined(Mads, :BIGUQ)
-		include("MadsBayesInfoGap.jl")
-	else
-		ENV["MADS_NO_BIGUQ"] = ""
-	end
-end
+include("MadsBayesInfoGap.jl")
 
 include("MadsMonteCarlo.jl")
 
