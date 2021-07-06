@@ -205,7 +205,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		covar = v * inv(LinearAlgebra.Diagonal(s)) * u'
 	catch errmsg1
 		try
-			covar = LinearAlgebra.inv(JpJ)
+			covar = inv(JpJ)
 		catch errmsg2
 			printerrormsg(errmsg1)
 			printerrormsg(errmsg2)
@@ -269,7 +269,7 @@ Returns:
 - vector of log-likelihoods
 """
 function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
-	u, d, v = svd(J' * J)
+	u, d, v = LinearAlgebra.svd(J' * J)
 	done = false
 	vo = copy(v)
 	local gooddirections
@@ -289,7 +289,7 @@ function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Int
 			end
 			gooddirections = vo[:, 1:numgooddirections]
 			newJ = J * gooddirections
-			u, d, v = svd(newJ' * newJ)
+			u, d, v = LinearAlgebra.svd(newJ' * newJ)
 		end
 	end
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
@@ -378,7 +378,7 @@ Returns:
 """
 function weightedstats(samples::Array, llhoods::AbstractVector)
 	wv = StatsBase.Weights(exp.(llhoods))
-	return LinearAlgebra.mean(samples, wv, 1), LinearAlgebra.var(samples, wv, 1; corrected=false)
+	return Statistics.mean(samples, wv, 1), Statistics.var(samples, wv, 1; corrected=false)
 end
 
 function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::AbstractString=""; init_dist::Bool=false)
@@ -522,7 +522,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			for j = 1:numoneparamsamples
 				v[j] = cond_means[j][obskeys[k]]
 			end
-			mes[obskeys[k]][paramkeys[i]] = std(v) ^ 2 / variance[obskeys[k]]
+			mes[obskeys[k]][paramkeys[i]] = Statistics.std(v) ^ 2 / variance[obskeys[k]]
 		end
 	end
 	madsinfo("Compute the total effect sensitivities (indices)") # TODO we should use the same samples for total and main effect
@@ -785,24 +785,24 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rest
 				maxnnans = nnans
 			end
 			nnonnans = N - nnans
-			# f0T = mean(yT)
-			# f0A = mean( yA[nonan,j] )
-			# f0B = mean( yB[nonan,j] )
-			# f0C = mean( yC[nonan,j] )
-			varT = var( yT )
+			# f0T = Statistics.mean(yT)
+			# f0A = Statistics.mean( yA[nonan,j] )
+			# f0B = Statistics.mean( yB[nonan,j] )
+			# f0C = Statistics.mean( yC[nonan,j] )
+			varT = Statistics.var(yT)
 			# varA = abs( ( dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
-			# varA = var( yA[nonan,j] ) # this is faster
+			# varA = Statistics.var( yA[nonan,j] ) # this is faster
 			# varB = abs( ( dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
-			# varB = var( yB[nonan,j] ) # this is faster
-			varC = var( yC[nonan,j] )
+			# varB = Statistics.var( yB[nonan,j] ) # this is faster
+			varC = Statistics.var(yC[nonan,j])
 			# varP = abs( ( dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
 			# varP2 = abs( ( dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
 			varP3 = abs( mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
-			# varP4 = mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
+			# varP4 = Statistics.mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
 			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
 			# varPnot = abs( ( dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
 			# varPnot2 = abs( ( dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
-			# varPnot3 = mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
+			# varPnot3 = Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
 			expPnot =  mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
 			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
 			variance[obskeys[j]][paramoptkeys[i]] = varC

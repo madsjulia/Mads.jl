@@ -2,8 +2,9 @@ import Mads
 import JLD2
 import FileIO
 import Test
+import PyCall
 
-if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :dobigdt)
+if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :bigdt)
 	@info("BIGUQ cannot be tested!")
 else
 	problemdir = Mads.getmadsdir()
@@ -11,13 +12,13 @@ else
 
 	md = Dict()
 	if isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()
-		@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination.mads"))
+		md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"))
 	else
-		@Mads.stderrcapture md = Mads.loadmadsfile(joinpath(problemdir, "source_termination_json.mads"), format="json") # for testing only
+		md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"), format="json") # for testing only
 	end
 
 	nsample = 10
-	bigdt_results = Mads.dobigdt(md, nsample; maxHorizon = 0.8, numlikelihoods = 2)
+	bigdt_results = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
 
 	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
 		filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
