@@ -53,8 +53,7 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 		madstest && include(joinpath(d, "test", "runtests.jl"))
 		@info("Mads modules testing:")
 		for i in madsmodules[2:end]
-			printstyled("* $i testing ...\n", color=:cyan)
-			@elapsed include(joinpath(dirname(pathof(eval(Symbol(i)))), "..", "test", "runtests.jl"))
+			testmodule(i)
 		end
 	else
 		file = joinpath(d, "examples", testname, "runtests.jl")
@@ -67,20 +66,27 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 				printstyled(:cyan, "* $testname testing ...\n", color=:cyan)
 				@elapsed include(file)
 			else
-				Core.eval(Mads, :(@tryimport $(Symbol(testname))))
-				if isdefined(Mads, Symbol(testname))
-					printstyled("* $testname testing ...\n", color=:cyan)
-					file = joinpath(dirname(pathof(eval(Symbol(testname)))), "..", "test", "runtests.jl")
-					if isfile(file)
-						@elapsed include(file)
-					else
-						@warn("Test $file for module $testname is missing!")
-					end
-				end
+				testmodule(testname)
 			end
 		end
 	end
 	cd(orig_dir)
 	graphon()
-	nothing
+	return nothing
+end
+
+function testmodule(testname::AbstractString="")
+	printstyled("* $testname testing ...\n", color=:cyan)
+	if testname != "RobustPmap" && testname != "ReusableFunctions" && isdefined(Mads, Symbol(testname))
+		m = getfield(Mads, Symbol(testname))
+		file = joinpath(dirname(pathof(eval(Symbol(testname)))), "..", "test", "runtests.jl")
+		if isdefined(m, :test)
+			m.test()
+		elseif isfile(file)
+			@elapsed include(file)
+		else
+			@warn("Module $testname is not going to be tested!")
+		end
+	end
+	return nothing
 end
