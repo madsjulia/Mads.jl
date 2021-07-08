@@ -13,8 +13,8 @@ X = convert(SharedArray, x)
 Y = convert(SharedArray, y)
 Z = convert(SharedArray, z)
 
-@Printf.printf( "Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
-@Printf.printf( "Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
+@Printf.printf("Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
+@Printf.printf("Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
 
 Xt = X'
 
