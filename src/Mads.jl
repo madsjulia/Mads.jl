@@ -79,40 +79,6 @@ global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, BIGUQ, Reus
 include("MadsHelpers.jl")
 include("MadsTryImport.jl")
 
-if !haskey(ENV, "MADS_NO_PYTHON")
-	@tryimport PyCall
-	if haskey(ENV, "PYTHON") && ENV["PYTHON"] == ""
-		@tryimport Conda
-	end
-	if isdefined(Mads, :PyCall)
-		const pyyaml = PyCall.PyNULL()
-		function __init__()
-			try
-				copy!(pyyaml, PyCall.pyimport("yaml"))
-				# info("PyYAML is available (in Conda)")
-			catch
-				ENV["PYTHON"] = ""
-				@warn("PyYAML is not available (in the available python installation)")
-			end
-			if pyyaml == PyCall.PyNULL()
-				global pyyamlok = false
-				try
-					copy!(pyyaml, PyCall.pyimport("yaml"))
-					global pyyamlok = true
-				catch
-					@warn("PyYAML is not available (in Conda)")
-				end
-				if pyyamlok
-					copy!(pyyaml, PyCall.pyimport("yaml"))
-					# info("PyYAML is available (in Conda)")
-				end
-			end
-		end
-	else
-		ENV["MADS_NO_PYTHON"] = ""
-	end
-end
-
 global vectorflag = false
 global quiet = true
 global veryquiet = false
