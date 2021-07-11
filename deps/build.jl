@@ -3,16 +3,15 @@ if haskey(ENV, "MADS_NO_PYTHON")
 else
 	import PyCall
 
-	@info("Checking for Python YAML & MatPlotLib ...")
-	const PACKAGES = ["pyyaml", "matplotlib"]
+	@info("Checking for Python MatPlotLib ...")
+	const PACKAGES = ["matplotlib"]
 
 	try
-		Core.eval(Main, :(PyCall.pyimport("yaml")))
 		Core.eval(Main, :(PyCall.pyimport("matplotlib")))
-		@info("Python YAML (pyyaml) and MatPlotLib are already installed!")
+		@info("Python MatPlotLib are already installed!")
 	catch errmsg
 		println(errmsg)
-		@warn("Python YAML (pyyaml) and MatPlotLib are not installed!")
+		@warn("Python MatPlotLib are not installed!")
 
 		try
 			@info("Checking for python pip using PyCall ...")
@@ -28,7 +27,7 @@ else
 		end
 
 		try
-			@info("Installing Python YAML & MatPlotLib using pip ...")
+			@info("Installing Python MatPlotLib using pip ...")
 			Core.eval(Main, :(PyCall.pyimport("pip")))
 			global proxy_args = String[]
 			if haskey(ENV, "http_proxy")
@@ -40,18 +39,7 @@ else
 			run(`$(PyCall.python) $(proxy_args) -m pip install --user $(PACKAGES)`)
 		catch errmsg
 			println(errmsg)
-			@warn("Installing Python YAML & MatPlotLib using pip fails!")
-		end
-
-		try
-			Core.eval(Main, :(PyCall.pyimport("yaml")))
-			@info("Python YAML (pyyaml) is installed using pip!")
-		catch errmsg
-			println(errmsg)
-			@warn("Python YAML (pyyaml) installation using pip has failed!")
-			@info("Using Conda instead ...")
-			import Conda
-			Conda.add("pyyaml")
+			@warn("Installing Python MatPlotLib using pip fails!")
 		end
 
 		try

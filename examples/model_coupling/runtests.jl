@@ -100,7 +100,7 @@ pfor = Mads.forward(md)
 	@Test.test ifor == pfor
 end
 
-Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"); julia=true)
+Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"))
 Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
 # JLD fails on Windows and other systems; HDF5 is hard to build
