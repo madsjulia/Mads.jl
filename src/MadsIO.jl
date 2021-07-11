@@ -39,13 +39,13 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::AbstractString; bigfile::Bool=false, julia::Bool=true, format::AbstractString="yaml")
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml")
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
 	if !bigfile || madsdata === nothing
 		if format == "yaml"
-			madsdata = loadyamlfile(filename; julia=julia)
+			madsdata = loadyamlfile(filename)
 		elseif format == "json"
 			madsdata = loadjsonfile(filename)
 		end
@@ -313,7 +313,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 	end
 end
 
-function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; julia::Bool=false,observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
+function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -328,9 +328,9 @@ function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; julia
 	else
 		madsdata2 = madsdata
 	end
-	dumpyamlmadsfile(madsdata2, filename, julia=julia)
+	dumpyamlmadsfile(madsdata2, filename)
 end
-function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::AbstractString=""; julia::Bool=false, explicit::Bool=false, observations_separate::Bool=false)
+function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::AbstractString=""; explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -351,7 +351,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end
-		dumpyamlfile(filename, madsdata2, julia=julia)
+		dumpyamlfile(filename, madsdata2)
 	else
 		madsdata2 = deepcopy(madsdata)
 		setparamsinit!(madsdata2, parameters)
@@ -360,7 +360,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end
-		dumpyamlmadsfile(madsdata2, filename, julia=julia)
+		dumpyamlmadsfile(madsdata2, filename)
 	end
 end
 

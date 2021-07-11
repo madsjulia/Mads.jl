@@ -14,7 +14,7 @@ end
 arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 
 # Parse extensions and dump/load data accordingly
-@Mads.stderrcapture function test_IO(file, data, julia_flag::Bool=false)
+@Mads.stderrcapture function test_IO(file, data)
 	ext = Mads.getextension(jpath(file))
 
 	if ext == "dat"
@@ -25,7 +25,7 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 		Mads.dumpjsonfile(jpath(file), data)
 		loaded_data = Mads.loadjsonfile(jpath(file))
 	elseif ext == "yaml"
-		Mads.dumpyamlfile(jpath(file), data, julia=julia_flag)
+		Mads.dumpyamlfile(jpath(file), data)
 		loaded_data = Mads.loadyamlfile(jpath(file))
 	else
 		println("Unrecognized filetype")
@@ -49,7 +49,6 @@ Mads.maxtofloatmax!(df)
 	@Test.test test_IO("a.dat", arr)
 	@Test.test test_IO("a.json", arr)
 	@Test.test test_IO("a.yaml", arr)
-	@Test.test test_IO("a.yaml", arr, true)
 
 	# Test removal of files based on root/extension
 	file = "root_testing.extension_testing"
