@@ -10,12 +10,8 @@ else
 	problemdir = Mads.getmadsdir()
 	workdir = joinpath(Mads.madsdir, "examples", "bigdt")
 
-	md = Dict()
-	if isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()
-		md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"))
-	else
-		md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"), format="json") # for testing only
-	end
+	md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"))
+	# md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"); format="json") # for testing only
 
 	nsample = 10
 	bigdt_results = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
@@ -26,6 +22,7 @@ else
 		Mads.rmfile(joinpath(problemdir, "source_termination-robustness-10.svg"))
 		Mads.plotrobustnesscurves(md, bigdt_results)
 		Mads.rmfile(joinpath(problemdir, "source_termination-robustness.svg"))
+		Mads.rmfile(joinpath(problemdir, "source_termination_json-robustness.svg"))
 	end
 
 	# If enabled, save output as test file

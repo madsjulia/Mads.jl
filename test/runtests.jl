@@ -31,22 +31,22 @@ end
 
 @info("Running MADS tests:")
 
-printstyled("* miscellaneous ...\n", color=:cyan)
+printstyled("* miscellaneous ...\n"; color=:cyan)
 @elapsed include("miscellaneous.jl")
 
-printstyled("* io ...\n", color=:cyan)
+printstyled("* io ...\n"; color=:cyan)
 @elapsed include("io.jl")
 
-printstyled("* file naming ...\n", color=:cyan)
+printstyled("* file naming ...\n"; color=:cyan)
 @elapsed include("filename.jl")
 
-printstyled("* test functions ...\n", color=:cyan)
+printstyled("* test functions ...\n"; color=:cyan)
 @elapsed include("test_functions.jl")
 
-printstyled("* parameters ...\n", color=:cyan)
+printstyled("* parameters ...\n"; color=:cyan)
 @elapsed include("parameters.jl")
 
-printstyled("* observations ...\n", color=:cyan)
+printstyled("* observations ...\n"; color=:cyan)
 @elapsed include("observations.jl")
 
 examples = readdir(joinpath(Mads.madsdir, "examples"))
@@ -55,7 +55,7 @@ for madstest in examples
 	if !occursin(r"_[1-9]", madstest) # skip restarts
 		file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
 		if isfile(file)
-			printstyled("* $(madstest) ...\n", color=:cyan)
+			printstyled("* $(madstest) ...\n"; color=:cyan)
 			@elapsed include(file)
 		end
 	end

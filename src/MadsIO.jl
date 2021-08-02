@@ -723,7 +723,8 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for filename in vcat(madsdata["JLDParameters"])
 			Mads.rmfile(filename, path=path) # delete the parameter file links
 		end
-		FileIO.save("$(madsdata["JLDParameters"])", parameters) # create parameter files
+		@show madsdata["JLDParameters"]
+		FileIO.save(madsdata["JLDParameters"], parameters) # create parameter files
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
