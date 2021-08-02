@@ -123,12 +123,10 @@ Mads.madsinfo("External coupling using `Command` and JSON ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-json-exp.mads"))
 efor = Mads.forward(md)
 
-if !haskey(ENV, "MADS_NO_PYTHON") && isdefined(Mads, :pyyaml) && Mads.pyyaml != PyCall.PyNULL()
-	Mads.madsinfo("External coupling using `Command` and YAML ...")
-	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-yaml.mads"))
-	yfor = Mads.forward(md)
-	@Test.test yfor == j2for
-end
+Mads.madsinfo("External coupling using `Command` and YAML ...")
+md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-yaml.mads"))
+yfor = Mads.forward(md)
+@Test.test yfor == j2for
 
 Mads.madsinfo("External coupling using ASCII ...")
 md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-ascii.mads"))
