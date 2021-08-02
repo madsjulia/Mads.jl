@@ -58,12 +58,12 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 	else
 		file = joinpath(d, "examples", testname, "runtests.jl")
 		if isfile(file)
-			printstyled("* $testname testing ...\n", color=:cyan)
+			printstyled("* $testname testing ...\n"; color=:cyan)
 			@elapsed include(file)
 		else
 			file = joinpath(d, "test", "$testname.jl")
 			if isfile(file)
-				printstyled(:cyan, "* $testname testing ...\n", color=:cyan)
+				printstyled(:cyan, "* $testname testing ...\n"; color=:cyan)
 				@elapsed include(file)
 			else
 				testmodule(testname)
@@ -76,7 +76,7 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 end
 
 function testmodule(testname::AbstractString="")
-	printstyled("* $testname testing ...\n", color=:cyan)
+	printstyled("* $testname testing ...\n"; color=:cyan)
 	if testname != "RobustPmap" && testname != "ReusableFunctions" && isdefined(Mads, Symbol(testname))
 		m = getfield(Mads, Symbol(testname))
 		file = joinpath(dirname(pathof(eval(Symbol(testname)))), "..", "test", "runtests.jl")
