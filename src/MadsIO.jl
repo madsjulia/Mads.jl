@@ -39,7 +39,7 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml")
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=false)
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
@@ -63,7 +63,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 	if haskey(madsdata, "Observations")
 		t = getobstarget(madsdata)
 		isn = isnan.(t)
-		if any(isn)
+		if any(isn) && !quiet
 			l = length(isn[isn.==true])
 			if l == 1
 				Mads.madswarn("There is 1 observation with a missing target!")
