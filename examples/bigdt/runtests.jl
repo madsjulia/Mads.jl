@@ -10,8 +10,8 @@ else
 	problemdir = Mads.getmadsdir()
 	workdir = joinpath(Mads.madsdir, "examples", "bigdt")
 
-	md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"))
-	# md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"); format="json") # for testing only
+	md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"); quiet=true)
+	# md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"); format="json", quiet=true) # for testing only
 
 	nsample = 10
 	bigdt_results = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
