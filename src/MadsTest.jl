@@ -42,11 +42,11 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 	end
 	graphoff()
 	orig_dir = pwd()
-	d = Mads.madsdir
+	d = Mads.dir
 	if isdir(d)
 		@info("Testing Mads in $d")
 	else
-		d = Mads.madsdir
+		d = Mads.dir
 		@info("Testing Mads in $d")
 	end
 	if testname == ""

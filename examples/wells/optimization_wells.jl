@@ -1,9 +1,9 @@
 import Mads
 import Distributed
 
-@Distributed.everywhere workdir = Mads.getmadsdir()
+@Distributed.everywhere workdir = Mads.getproblemdir()
 if workdir == "."
-	@Distributed.everywhere workdir = joinpath(Mads.madsdir, "examples", "wells")
+	@Distributed.everywhere workdir = joinpath(Mads.dir, "examples", "wells")
 end
 @Distributed.everywhere cdir = pwd()
 @Distributed.everywhere cd(workdir)

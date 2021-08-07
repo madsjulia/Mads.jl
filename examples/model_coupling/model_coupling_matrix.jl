@@ -1,8 +1,8 @@
 import Mads
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "model_coupling")
+	workdir = joinpath(Mads.dir, "examples", "model_coupling")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-matrix.mads"))

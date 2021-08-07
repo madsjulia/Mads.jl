@@ -12,7 +12,7 @@ Returns:
 - observations
 """
 function readobservations_cmads(madsdata::AbstractDict)
-	obsids=getobskeys(madsdata)
+	obsids = getobskeys(madsdata)
 	observations = OrderedCollections.OrderedDict{String,Float64}(zip(obsids, zeros(length(obsids))))
 	for instruction in madsdata["Instructions"]
 		obs = cmadsins_obs(obsids, instruction["ins"], instruction["read"])
@@ -42,7 +42,7 @@ function cmadsins_obs(obsid::AbstractVector, instructionfilename::AbstractString
 	obscheck = -1 * ones(n) # initialize to -1
 	debug = 0 # setting debug level 0 or 1 works
 	# int ins_obs( int nobs, char **obs_id, double *obs, double *check, char *fn_in_t, char *fn_in_d, int debug );
-	result = ccall( (:ins_obs, "libmads"), Int32,
+	result = ccall((:ins_obs, "libmads"), Int32,
 					(Int32, Ptr{Ptr{UInt8}}, Ptr{Float64}, Ptr{Float64}, Ptr{UInt8}, Ptr{UInt8}, Int32),
 					n, obsid, obsval, obscheck, instructionfilename, inputfilename, debug)
 	observations = Dict{String, Float64}(zip(obsid, obsval))

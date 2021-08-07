@@ -19,7 +19,7 @@ end
 
 function main(window)
 	push!(window.assets, "widgets")
-	problemdir = Mads.getmadsdir()
+	problemdir = Mads.getproblemdir()
 	waiting = Signal(false)
 	status = Signal(1)
 	madslogo = Images.load("../../logo/mads_black_swan_logo_big_text_new_3inch.png")

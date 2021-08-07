@@ -389,7 +389,7 @@ function create_documentation()
 	end
 	Documenter.makedocs(root=joinpath(dirname(pathof(Mads)), "..", "docs"), sitename="Mads documentation", format = DocumenterMarkdown.Markdown(), doctest=false, modules=madsmodulesdoc, clean=true)
 	d = pwd()
-	cd(Mads.madsdir)
+	cd(Mads.dir)
 	# run(`bash -l -c 'git pull gh gh-pages'`)
 	@info("mkdocs build & deploy ...")
 	run(`bash -l -c 'mkdocs gh-deploy --clean'`)

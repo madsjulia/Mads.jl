@@ -2,7 +2,7 @@ import Distributed
 import Mads
 
 @info("start")
-include(joinpath(Mads.madsdir, "src-interactive/MadsParallel.jl"))
+include(joinpath(Mads.dir, "src-interactive/MadsParallel.jl"))
 @info("setprocs")
 Mads.setprocs(ntasks_per_node=16)
 

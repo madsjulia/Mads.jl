@@ -25,27 +25,10 @@ import FileIO
 import YAML
 import JSON
 
-import Anasol
-import AffineInvariantMCMC
-import BIGUQ
-import Kriging
-import MetaProgTools
-import ReusableFunctions
-import RobustPmap
-import SVR
-import DocumentFunction
+import JuMP
+import Ipopt
 
-function pin()
-	Pkg.pin("RobustPmap", v"0.3.0")
-	Pkg.pin("DocumentFunction", v"0.2.0")
-	Pkg.pin("SVR", v"0.3.0")
-	Pkg.pin("MetaProgTools", v"0.3.0")
-	Pkg.pin("Kriging", v"0.2.0")
-	Pkg.pin("Anasol", v"0.3.1")
-	Pkg.pin("AffineInvariantMCMC", v"0.3.0")
-	Pkg.pin("GeostatInversion", v"0.3.0")
-	Pkg.pin("ReusableFunctions", v"0.3.0")
-end
+include("MadsModules.jl")
 
 global madsbash = true
 if !Sys.Sys.iswindows()
@@ -66,15 +49,6 @@ if madsbash
 	end
 end
 
-"""
-Mads Modules: $madsmodules
-"""
-global madsmodules = ["Mads", "Anasol", "AffineInvariantMCMC", "Kriging", "BIGUQ", "ReusableFunctions", "RobustPmap", "MetaProgTools", "SVR", "DocumentFunction"]
-
-"""
-Mads Modules: $madsmodulesdoc
-"""
-global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, BIGUQ, ReusableFunctions, RobustPmap, MetaProgTools, SVR, DocumentFunction]
 
 include("MadsHelpers.jl")
 include("MadsTryImport.jl")
@@ -98,7 +72,7 @@ global long_tests = false # execute long tests
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global madsservers2 = ["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 global nprocs_per_task_default = 1
-const madsdir = splitdir(splitdir(pathof(Mads))[1])[1]
+const dir = splitdir(splitdir(pathof(Mads))[1])[1]
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	global long_tests = true
@@ -168,26 +142,22 @@ else
 	@warn("Mads plotting is disabled")
 end
 
-if !haskey(ENV, "MADS_TRAVIS")
-	include(joinpath("..", "src-interactive", "MadsPublish.jl"))
-	include(joinpath("..", "src-interactive", "MadsParallel.jl"))
-	include(joinpath("..", "src-interactive", "MadsTest.jl"))
-	if !haskey(ENV, "MADS_NO_DISPLAY")
-		include(joinpath("..", "src-interactive", "MadsDisplay.jl"))
-	end
-	include(joinpath("..", "src-external", "MadsSimulators.jl"))
-	include(joinpath("..", "src-external", "MadsParsers.jl"))
-	include(joinpath("..", "src-old", "MadsCMads.jl"))
-	@tryimport JuMP
-	@tryimport Ipopt
-	if isdefined(Mads, :JuMP) && isdefined(Mads, :Ipopt)
-		include(joinpath("..", "src-new", "MadsInfoGap.jl"))
-		include(joinpath("..", "src-new", "MadsBSS.jl"))
-		include(joinpath("..", "src-new", "MadsMathProgBase.jl"))
-	end
+include("MadsPublish.jl")
+include("MadsParallel.jl")
+include("MadsTest.jl")
+if !haskey(ENV, "MADS_NO_DISPLAY")
+	include("MadsDisplay.jl")
 end
+include("MadsSimulators.jl")
+include("MadsParsers.jl")
 
-include("MadsSenstivityAnalysis.jl")
+include("MadsCMads.jl")
+
+include("MadsInfoGap.jl")
+include("MadsBlindSourceSeparation.jl")
+include("MadsMathProgBase.jl")
+
+include("MadsSensitivityAnalysis.jl")
 
 if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")

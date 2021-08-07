@@ -123,7 +123,7 @@ Dumps:
 """
 function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Array{Float64}(undef, 0), obs::AbstractVector=Array{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
-	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY")
+	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
 	end
 	if filename == ""

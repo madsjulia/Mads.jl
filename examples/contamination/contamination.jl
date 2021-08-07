@@ -2,9 +2,9 @@ import Mads
 
 currentdir = pwd()
 
-madsdirname = Mads.getmadsdir()
+madsdirname = Mads.getproblemdir()
 if madsdirname == ""
-	madsdirname = joinpath(Mads.madsdir, "examples", "contamination")
+	madsdirname = joinpath(Mads.dir, "examples", "contamination")
 end
 
 cd(madsdirname)

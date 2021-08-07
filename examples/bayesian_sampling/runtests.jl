@@ -9,9 +9,9 @@ Mads.graphoff()
 
 Mads.madsinfo("Bayesian sampling ...")
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "bayesian_sampling")
+	workdir = joinpath(Mads.dir, "examples", "bayesian_sampling")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
@@ -41,7 +41,7 @@ if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, 
 	mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value)) # convert the parameters in the chain to a parameter dictionary of arrays
 	mcmcvalues_array = hcat(vcat(map(i->collect(mcmcvalues[i]), keys(mcmcvalues)))...)
 	Mads.forward(md, mcmcchain.value)
-	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if !haskey(ENV, "MADS_NO_GADFLY")
 		Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-test-bayes-results.svg")
 		Mads.rmfile(rootname * "-test-bayes-results.svg")
 		Mads.spaghettiplots(md, mcmcvalues; keyword="", obs_plot_dots=false)
