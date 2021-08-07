@@ -1,9 +1,9 @@
 import Mads
 import Test
 
-workdir = Mads.getmadsdir()
+workdir = Mads.getproblemdir()
 if workdir == "."
-	@Distributed.everywhere workdir = joinpath(Mads.madsdir, "examples", "sensitivity")
+	@Distributed.everywhere workdir = joinpath(Mads.dir, "examples", "sensitivity")
 end
 
 @info("Parallel Saltelli sensitivity analysis: Sobol test ...")

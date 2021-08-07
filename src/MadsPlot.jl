@@ -1267,7 +1267,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		nO = length(obskeys)
 		J = Jin[2:end, 2:end]
 		mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
-		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+		if !haskey(ENV, "MADS_NO_GADFLY")
 			jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
 						Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
@@ -1308,7 +1308,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		if isfile(filename)
 			sortedeigenv = DelimitedFiles.readdlm(filename)
 		end
-		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+		if !haskey(ENV, "MADS_NO_GADFLY")
 			eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
 						Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),

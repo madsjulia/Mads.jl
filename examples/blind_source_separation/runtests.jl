@@ -14,7 +14,7 @@ Mads.graphoff()
 if !isdefined(Mads, :Ipopt) || !isdefined(Mads, :NMFipopt)
 	@warn("Ipopt not available; blind source separation test (BSS) skipped!")
 else
-	workdir = joinpath(Mads.madsdir, "examples", "blind_source_separation")
+	workdir = joinpath(Mads.dir, "examples", "blind_source_separation")
 	d = joinpath(workdir, "test_results")
 
 	R = 1

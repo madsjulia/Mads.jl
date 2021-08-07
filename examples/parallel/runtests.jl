@@ -47,9 +47,7 @@ end
 	isapprox(psi, 0.0, atol=1e-6)
 end
 
-# if !haskey(ENV, "MADS_TRAVIS")
-# 	Distributed.addprocs(2)
-# end
+# Distributed.addprocs(2)
 
 @Test.testset "Parallel" begin
 	@Test.test parallel_findpi(100000)
@@ -60,6 +58,4 @@ end
 
 :passed
 
-# if !haskey(ENV, "MADS_TRAVIS")
-# 	Distributed.rmprocs()(Distributed.workers())
-# end
+# Distributed.rmprocs(Distributed.workers())

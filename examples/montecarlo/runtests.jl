@@ -14,9 +14,9 @@ Mads.veryquieton()
 Mads.graphoff()
 
 Mads.madsinfo("Monte Carlo analysis ...")
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "montecarlo")
+	workdir = joinpath(Mads.dir, "examples", "montecarlo")
 end
 
 @Mads.stderrcapture function run_monte_carlo()

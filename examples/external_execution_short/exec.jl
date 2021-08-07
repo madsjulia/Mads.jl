@@ -1,7 +1,7 @@
 import Distributed
 
 @info("Load Mads.setprocs ...")
-include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
+include(joinpath(Mads.dir, "src", "MadsParallel.jl"))
 
 @info("Set SLURM processors ...")
 Distributed.addprocs()

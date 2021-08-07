@@ -52,7 +52,7 @@ end
 
 try
 	Mads.rmfile("test-create-symbolic-link")
-	symlink(Mads.madsdir, "test-create-symbolic-link")
+	symlink(Mads.dir, "test-create-symbolic-link")
 	rm("test-create-symbolic-link")
 catch
 	if Sys.iswindows()
@@ -78,13 +78,13 @@ end
 Mads.setexecutionwaittime(0.)
 if isdefined(Mads, :runcmd)
 	if Sys.iswindows()
-		Mads.runcmd("dir $(Mads.madsdir)")
-		Mads.runcmd("dir $(Mads.madsdir)"; pipe=true)
-		Mads.runcmd("dir $(Mads.madsdir)"; waittime=10.)
+		Mads.runcmd("dir $(Mads.dir)")
+		Mads.runcmd("dir $(Mads.dir)"; pipe=true)
+		Mads.runcmd("dir $(Mads.dir)"; waittime=10.)
 	else
-		Mads.runcmd("ls $(Mads.madsdir)")
-		Mads.runcmd("ls $(Mads.madsdir)"; pipe=true)
-		Mads.runcmd("ls $(Mads.madsdir)"; waittime=10.)
+		Mads.runcmd("ls $(Mads.dir)")
+		Mads.runcmd("ls $(Mads.dir)"; pipe=true)
+		Mads.runcmd("ls $(Mads.dir)"; waittime=10.)
 	end
 end
 Mads.transposevector(["a";"b"])
@@ -163,24 +163,21 @@ Mads.setmodel!(md, exp)
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 Mads.setsindx!(Dict("Problem"=>Dict("sindx"=>0.001)), 0.1)
 
-if !haskey(ENV, "MADS_TRAVIS")
-	Mads.status()
-	Mads.set_nprocs_per_task(1)
-	Mads.setdir()
-	Mads.setprocs(; veryquiet=true)
-	Mads.setprocs(1)
-	Mads.parsenodenames("wc[096-157,160,175]");
-end
 
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.graphoff()
-	Mads.plotseries(rand(4,5), "test.png", combined=false)
-	Mads.plotseries(rand(4,5), "test.png")
-	if isdefined(Mads, :display)
-		Mads.display("test.png")
-	end
-	Mads.rmfile("test.png")
-	Mads.graphon()
+Mads.status()
+Mads.set_nprocs_per_task(1)
+Mads.setdir()
+Mads.setprocs(; veryquiet=true)
+Mads.setprocs(1)
+Mads.parsenodenames("wc[096-157,160,175]")
+
+Mads.graphoff()
+Mads.plotseries(rand(4,5), "test.png", combined=false)
+Mads.plotseries(rand(4,5), "test.png")
+if isdefined(Mads, :display)
+	Mads.display("test.png")
 end
+Mads.rmfile("test.png")
+Mads.graphon()
 
 :passed

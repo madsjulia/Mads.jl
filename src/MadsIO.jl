@@ -14,10 +14,10 @@ end
 """
 Change the current directory to the Mads source dictionary
 
-$(DocumentFunction.documentfunction(mdir))
+$(DocumentFunction.documentfunction(madsdir))
 """
-function mdir()
-	Base.cd(madsdir)
+function madsdir()
+	Base.cd(Mads.dir)
 	pwd()
 end
 
@@ -485,19 +485,19 @@ end
 """
 Get the directory where currently Mads is running
 
-$(DocumentFunction.documentfunction(getmadsdir))
+$(DocumentFunction.documentfunction(getproblemdir))
 
 Example:
 
 ```julia
-problemdir = Mads.getmadsdir()
+problemdir = Mads.getproblemdir()
 ```
 
 Returns:
 
 - Mads problem directory
 """
-function getmadsdir()
+function getproblemdir()
 	source_path = Base.source_path()
 	if typeof(source_path) == Nothing
 		problemdir = "."

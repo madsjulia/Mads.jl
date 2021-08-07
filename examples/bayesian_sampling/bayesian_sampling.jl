@@ -1,8 +1,8 @@
 import Mads
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "bayesian_sampling")
+	workdir = joinpath(Mads.dir, "examples", "bayesian_sampling")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))

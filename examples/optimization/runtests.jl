@@ -6,9 +6,9 @@ Mads.graphoff()
 
 import Distributed
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "optimization")
+	workdir = joinpath(Mads.dir, "examples", "optimization")
 end
 
 @Mads.stderrcapture function clean_directory()
@@ -55,7 +55,7 @@ Mads.addkeyword!(md, "ssdr")
 Mads.residuals(md)
 Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
+if !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_PLOT")
 	Mads.setobstime!(md, "o")
 	Mads.plotmatches(md, filename="internal-linearmodel+template-match.svg"; display=false)
 	Mads.rmfile("internal-linearmodel+template-match.svg")

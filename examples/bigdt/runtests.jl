@@ -7,8 +7,8 @@ import PyCall
 if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :bigdt)
 	@info("BIGUQ cannot be tested!")
 else
-	problemdir = Mads.getmadsdir()
-	workdir = joinpath(Mads.madsdir, "examples", "bigdt")
+	problemdir = Mads.getproblemdir()
+	workdir = joinpath(Mads.dir, "examples", "bigdt")
 
 	md = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"); quiet=true)
 	# md = Mads.loadmadsfile(joinpath(workdir, "source_termination_json.mads"); format="json", quiet=true) # for testing only
@@ -16,7 +16,7 @@ else
 	nsample = 10
 	bigdt_results = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
 
-	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+	if !haskey(ENV, "MADS_NO_GADFLY")
 		filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
 		Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
 		Mads.rmfile(joinpath(problemdir, "source_termination-robustness-10.svg"))

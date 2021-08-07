@@ -9,7 +9,7 @@ import OrderedCollections
 
 Random.seed!(2017)
 
-workdir = joinpath(Mads.madsdir, "examples", "anasol")
+workdir = joinpath(Mads.dir, "examples", "anasol")
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexpplus.mads"))
 computeconcentrations = Mads.makecomputeconcentrations(md)
 computeconcentrations()
@@ -27,7 +27,7 @@ rp = Mads.getoptparams(md)
 sp = Mads.asinetransform(md, rp)
 rp2 = Mads.sinetransform(md, sp)
 
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.plotmadsproblem(md, keyword="test")
 	Mads.plotmatches(md; display=false)
@@ -215,7 +215,7 @@ end
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true
 Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.plotlocalsa("w01shortexp")
 	Mads.graphon()

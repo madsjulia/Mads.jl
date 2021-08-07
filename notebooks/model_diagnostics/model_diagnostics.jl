@@ -2,7 +2,7 @@ Pkg.resolve()
 import Revise
 import Mads
 
-cd(joinpath(Mads.madsdir, "notebooks", "model_diagnostics"))
+cd(joinpath(Mads.dir, "notebooks", "model_diagnostics"))
 
 md = Dict()
 

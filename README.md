@@ -82,13 +82,13 @@ There are various examples located in the `examples` directory of the `Mads` rep
 For example, execute
 
 ```julia
-include(Mads.madsdir * "/../examples/contamination/contamination.jl")
+include(Mads.dir * "/../examples/contamination/contamination.jl")
 ```
 
 to perform various example analyses related to groundwater contaminant transport, or execute
 
 ```julia
-include(Mads.madsdir * "/../examples/bigdt/bigdt.jl")
+include(Mads.dir * "/../examples/bigdt/bigdt.jl")
 ```
 
 to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.

@@ -1,9 +1,9 @@
 import Mads
 import Test
 
-madsdirname = Mads.getmadsdir() # get the directory where the problem is executed
+madsdirname = Mads.getproblemdir() # get the directory where the problem is executed
 if madsdirname == ""
-	madsdirname = joinpath(Mads.madsdir, "examples", "gsl")
+	madsdirname = joinpath(Mads.dir, "examples", "gsl")
 end
 
 # Test callback functionality
