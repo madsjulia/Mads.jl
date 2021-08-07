@@ -6,9 +6,9 @@ import Test
 import Distributed
 
 cwd = pwd()
-workdir = Mads.getmadsdir()
+workdir = Mads.getproblemdir()
 if workdir == "."
-	@Distributed.everywhere workdir = joinpath(Mads.madsdir, "examples", "sensitivity")
+	@Distributed.everywhere workdir = joinpath(Mads.dir, "examples", "sensitivity")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))

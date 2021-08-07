@@ -12,9 +12,9 @@ import FileIO
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO
 
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "model_coupling")
+	workdir = joinpath(Mads.dir, "examples", "model_coupling")
 end
 
 Mads.madsinfo("Internal coupling using `Model` ...")
@@ -36,7 +36,7 @@ Mads.forward(md, parray)
 Mads.setobstime!(md, "o")
 forwardpredresults = Mads.forward(md, pdict)
 
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.spaghettiplots(md, pdict)
 	Mads.spaghettiplot(md, forwardpredresults)

@@ -15,8 +15,8 @@ import Distributed
 Mads.veryquieton()
 Mads.graphoff()
 
-workdir = joinpath(Mads.madsdir, "examples", "model_analysis")
-savedir = joinpath(Mads.madsdir, "examples", "svr")
+workdir = joinpath(Mads.dir, "examples", "model_analysis")
+savedir = joinpath(Mads.dir, "examples", "svr")
 goodresultsfile = "sasvr.jld2"
 
 Random.seed!(2017)

@@ -2,7 +2,7 @@ import Pkg; Pkg.resolve()
 import Revise
 import Mads
 
-cd(joinpath(Mads.madsdir, "examples", "contamination"))
+cd(joinpath(Mads.dir, "examples", "contamination"))
 
 md = Mads.loadmadsfile("w01.mads")
 

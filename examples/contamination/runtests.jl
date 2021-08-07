@@ -14,7 +14,7 @@ Mads.graphoff()
 @Mads.tryimportmain OrderedCollections
 @Mads.tryimportmain DataStructures
 
-workdir = (Mads.getmadsdir() == ".") ? joinpath(Mads.madsdir, "examples", "contamination") : Mads.getmadsdir()
+workdir = (Mads.getproblemdir() == ".") ? joinpath(Mads.dir, "examples", "contamination") : Mads.getproblemdir()
 testdir = joinpath(workdir, "test_results")
 Mads.mkdir(testdir)
 
@@ -76,7 +76,7 @@ Mads.setobstime!(md)
 Mads.dumpwelldata(md, "wells.dat")
 Mads.rmfile("wells.dat")
 
-if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY")
+if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotmatches(md, inverse_predictions; display=false) # plot calibrated matches
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
 

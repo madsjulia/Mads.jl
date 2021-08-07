@@ -8,9 +8,9 @@ include("ode-driver.jl")
 
 # load parameter data from MADS YAML file
 Mads.madsinfo("Loading data ...")
-workdir = Mads.getmadsdir() # get the directory where the problem is executed
+workdir = Mads.getproblemdir() # get the directory where the problem is executed
 if workdir == "."
-	workdir = joinpath(Mads.madsdir, "examples", "ode")
+	workdir = joinpath(Mads.dir, "examples", "ode")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "ode.mads"))

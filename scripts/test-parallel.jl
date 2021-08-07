@@ -1,6 +1,6 @@
 import Distributed
 
-include(joinpath(Mads.madsdir, "src", "MadsParallel.jl"))
+include(joinpath(Mads.dir, "src", "MadsParallel.jl"))
 @info("Set processors ...")
 setprocs(ntasks_per_node=1)
 

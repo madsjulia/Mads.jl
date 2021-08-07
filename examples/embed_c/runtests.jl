@@ -1,7 +1,7 @@
 import Test
 
 cwd = pwd()
-workdir = joinpath(Mads.madsdir, "examples", "embed_c")
+workdir = joinpath(Mads.dir, "examples", "embed_c")
 cd(workdir)
 
 @Mads.stderrcapture if Sys.isapple()

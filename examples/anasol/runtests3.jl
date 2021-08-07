@@ -3,7 +3,7 @@ import Test
 
 Random.seed!(2017)
 
-workdir = joinpath(Mads.madsdir, "examples", "anasol")
+workdir = joinpath(Mads.dir, "examples", "anasol")
 md = Mads.loadmadsfile(joinpath(workdir, "w01purebig.mads"))
 ns = 100
 rsetdict = Mads.getparamrandom(md, ns)

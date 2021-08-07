@@ -25,7 +25,7 @@ madsdata = Mads.loadmadsfile("<input_file_name>.mads")
 For example, you can execute:
 
 ```julia
-madsdata = Mads.loadmadsfile(Mads.madsdir * "/../examples/getting_started/internal-linear.mads")
+madsdata = Mads.loadmadsfile(Mads.dir * "/../examples/getting_started/internal-linear.mads")
 ```
 
 The file `internal-linear.mads` is located in `examples/getting_started` directory of the `Mads.jl` repository.

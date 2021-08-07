@@ -14,7 +14,7 @@ import Mads
 import Test
 
 # madstest = "svr"
-# file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
+# file = joinpath(Mads.dir, "examples", madstest, "runtests.jl")
 # include(file)
 # poop
 
@@ -49,11 +49,11 @@ printstyled("* parameters ...\n"; color=:cyan)
 printstyled("* observations ...\n"; color=:cyan)
 @elapsed include("observations.jl")
 
-examples = readdir(joinpath(Mads.madsdir, "examples"))
+examples = readdir(joinpath(Mads.dir, "examples"))
 
 for madstest in examples
 	if !occursin(r"_[1-9]", madstest) # skip restarts
-		file = joinpath(Mads.madsdir, "examples", madstest, "runtests.jl")
+		file = joinpath(Mads.dir, "examples", madstest, "runtests.jl")
 		if isfile(file)
 			printstyled("* $(madstest) ...\n"; color=:cyan)
 			@elapsed include(file)

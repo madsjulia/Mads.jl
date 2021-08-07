@@ -5,7 +5,7 @@ import ProgressMeter
 import Distributed
 
 # load MADS problem
-madsdirname = Mads.getmadsdir()
+madsdirname = Mads.getproblemdir()
 Mads.madsinfo("""Mads working directory: $(madsdirname)""")
 madsfilename = Mads.getmadsinputfile()
 if madsfilename == ""

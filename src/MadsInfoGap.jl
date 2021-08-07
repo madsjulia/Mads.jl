@@ -131,10 +131,10 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 	time = [1.,2.,3.,4.]
 	ti = [1.,2.,3.,4.,5.]
 	obs = [1.,2.,3.,4.]
-	if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
+	if !haskey(ENV, "MADS_NO_GADFLY") && plot
 		ldat = Gadfly.layer(x=time, y=obs, ymin=obs .- 1, ymax=obs .+ 1, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 		f = Gadfly.plot(ldat, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: model setup"))
-		Gadfly.draw(Gadfly.PNG(joinpath(Mads.madsdir, "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
+		Gadfly.draw(Gadfly.PNG(joinpath(Mads.dir, "examples", "model_analysis", "infogap_results", "model_setup.png"), 6Gadfly.inch, 4Gadfly.inch), f)
 	end
 	models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = a * exp(t * n) + b * t + c"]
 	if model == 1
@@ -271,12 +271,12 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 				ymax = map(t->fo(t, par_best), plotrange)
 			end
 		end
-		if isdefined(Mads, :Gadfly) && !haskey(ENV, "MADS_NO_GADFLY") && plot
+		if !haskey(ENV, "MADS_NO_GADFLY") && plot
 			ldat = Gadfly.layer(x=time, y=obs, ymin=obs .- h, ymax=obs .+ h, Gadfly.Geom.point, Gadfly.Geom.errorbar)
 			lmin = Gadfly.layer(x=plotrange, y=ymin, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue")))
 			lmax = Gadfly.layer(x=plotrange, y=ymax, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red")))
 			f = Gadfly.plot(ldat, lmin, lmax, Gadfly.Guide.xlabel("y"), Gadfly.Guide.ylabel("x"), Gadfly.Guide.title("Infogap analysis: h=$(h) Model: $(models[model])"))
-			Gadfly.draw(Gadfly.PNG(joinpath(Mads.madsdir, "examples", "model_analysis", "infogap_results", "model_$(model)_h_$(h).png"), 6Gadfly.inch, 4Gadfly.inch), f)
+			Gadfly.draw(Gadfly.PNG(joinpath(Mads.dir, "examples", "model_analysis", "infogap_results", "model_$(model)_h_$(h).png"), 6Gadfly.inch, 4Gadfly.inch), f)
 		end
 	end
 	return hmin, hmax

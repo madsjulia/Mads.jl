@@ -38,7 +38,7 @@ import Mads
 
     [1mMads: Model Analysis & Decision Support[0m
     ====
-    
+
     [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
     [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
     [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
@@ -49,14 +49,14 @@ import Mads
     [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
     [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
     [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
-    
+
     [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
     [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
 
 
     WARNING: Method definition getparamsmin(Base.AbstractDict{K, V} where V where K) in module Mads at /Users/vvv/.julia/dev/Mads/src/MadsParameters.jl:148 overwritten at /Users/vvv/.julia/dev/Mads/src/MadsParameters.jl:170.
       ** incremental compilation may be fatally broken for this module **
-    
+
     [32m[1m    Updating[22m[39m registry at `~/.julia/registries/General`
     [33m[1m┌ [22m[39m[33m[1mWarning: [22m[39mcould not download https://pkg.julialang.org/registries
     [33m[1m└ [22m[39m[90m@ Pkg.Types /Users/julia/buildbot/worker/package_macos64/build/usr/share/julia/stdlib/v1.6/Pkg/src/Types.jl:980[39m
@@ -70,7 +70,7 @@ Change the working directory
 
 
 ```julia
-cd(joinpath(Mads.madsdir, "examples", "contamination"))
+cd(joinpath(Mads.dir, "examples", "contamination"))
 ```
 
 Load Mads input file
@@ -102,12 +102,12 @@ Mads.plotmadsproblem(md, keyword="all_wells")
 ```
 
 
-    
+
 ![png](contamination_files/contamination_7_0.png)
-    
 
 
-    
+
+
 
 There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
@@ -120,7 +120,7 @@ The contaminant transport is solved using the `Anasol` package in Mads.
 * End time of contaminant release $t_1$
 * Advective pore velocity $v$
 
-### Reduced model setup 
+### Reduced model setup
 
 Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
 
@@ -172,16 +172,16 @@ Mads.plotmadsproblem(md; keyword="w13a_w20a")
 ```
 
 
-    
+
 ![png](contamination_files/contamination_13_0.png)
-    
 
 
-    
+
+
 
 ## Initial estimates
 
-Plot initial estimates of the contamiant concentrations at the 2 monitoring wells based on the initial model parameters: 
+Plot initial estimates of the contamiant concentrations at the 2 monitoring wells based on the initial model parameters:
 
 
 ```julia
@@ -189,12 +189,12 @@ Mads.plotmatches(md, "w13a"; display=true)
 ```
 
 
-    
+
 ![png](contamination_files/contamination_16_0.png)
-    
 
 
-    
+
+
 
 
 ```julia
@@ -202,12 +202,12 @@ Mads.plotmatches(md, "w20a"; display=true)
 ```
 
 
-    
+
 ![png](contamination_files/contamination_17_0.png)
-    
 
 
-    
+
+
 
 ## Model calibration
 
@@ -221,7 +221,7 @@ calib_param, calib_results = Mads.calibrate(md)
 
 
 
-    (OrderedCollections.OrderedDict("n" => 0.1, "rf" => 1.0, "lambda" => 0.0, "theta" => 0.0, "vx" => 31.059669248076222, "vy" => 0.0, "vz" => 0.0, "ax" => 70.0, "ay" => 15.0, "az" => 0.3…), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.740931532960472, -0.20135792079033074, -0.44291104407363896], [0.6737086338839451, 0.007322888567510982, -0.34261232076929443], 41650.46179056277, 13, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
+    (OrderedCollections.OrderedDict("n" => 0.1, "rf" => 1.0, "lambda" => 0.0, "theta" => 0.0, "vx" => 31.059669248076222, "vy" => 0.0, "vz" => 0.0, "ax" => 70.0, "ay" => 15.0, "az" => 0.3…), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.740931532960472, -0.20135792079033074, -0.44291104407363896], [0.6737086338839451, 0.007322888567510982, -0.34261232076929443], 41650.46179056277, 13, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm
     ------   --------------   --------------
     , 170, 13, 0))
 
@@ -267,7 +267,7 @@ calib_predictions = Mads.forward(md, calib_param)
 
 
 
-Plot the predicted estimates of the contamiant concentrations at the 2 monitoring wells based on the estimated model parameters based on the performed model calibration: 
+Plot the predicted estimates of the contamiant concentrations at the 2 monitoring wells based on the estimated model parameters based on the performed model calibration:
 
 
 ```julia
@@ -275,12 +275,12 @@ Mads.plotmatches(md, calib_predictions, "w13a")
 ```
 
 
-    
+
 ![png](contamination_files/contamination_24_0.png)
-    
 
 
-    
+
+
 
 
 ```julia
@@ -288,12 +288,12 @@ Mads.plotmatches(md, calib_predictions, "w20a")
 ```
 
 
-    
+
 ![png](contamination_files/contamination_25_0.png)
-    
 
 
-    
+
+
 
 Initial values of the optimized model parameters are:
 
@@ -302,9 +302,9 @@ Initial values of the optimized model parameters are:
 Mads.showparameters(md)
 ```
 
-    Pore x velocity [L/T] : vx       =              40 log-transformed min = 0.01 max = 200.0 
-    Start Time [T]        : source1_t0 =               4 min = 0.0 max = 10.0 
-    End Time [T]          : source1_t1 =              15 min = 5.0 max = 40.0 
+    Pore x velocity [L/T] : vx       =              40 log-transformed min = 0.01 max = 200.0
+    Start Time [T]        : source1_t0 =               4 min = 0.0 max = 10.0
+    End Time [T]          : source1_t1 =              15 min = 5.0 max = 40.0
     Number of optimizable parameters: 3
 
 

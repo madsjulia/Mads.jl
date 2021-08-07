@@ -22,12 +22,12 @@ if length(ARGS) < 1
 end
 
 if haskey(ENV, "SLURM_NODELIST")
-	include(joinpath(Mads.madsdir, "src-interactive", "MadsParallel.jl"))
+	include(joinpath(Mads.dir, "src-interactive", "MadsParallel.jl"))
 	setprocs()
 end
 
 madscommand = ARGS[1]
-madsscript = joinpath(Mads.madsdir, "scripts", string(madscommand, ".jl"))
+madsscript = joinpath(Mads.dir, "scripts", string(madscommand, ".jl"))
 if isfile(madsscript)
 	@info("Executing Mads script $(madsscript) ...")
 	include(madsscript)
@@ -64,7 +64,7 @@ else
 end
 for i = 2:length(ARGS)
 	madscommand = ARGS[i]
-	madsscript = joinpath(Mads.madsdir, "scripts", string(madscommand, ".jl"))
+	madsscript = joinpath(Mads.dir, "scripts", string(madscommand, ".jl"))
 	if isfile(madsscript)
 		@info("Executing Mads script $(madsscript) ...")
 		include(madsscript)

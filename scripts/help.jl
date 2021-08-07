@@ -4,7 +4,7 @@ println("          madsjl.jl diff my_mads_yaml_file1.mads my_mads_yaml_file2.mad
 println("          madsjl.jl help")
 println("")
 
-filenames = readdir(joinpath(Mads.madsdir, "scripts"))
+filenames = readdir(joinpath(Mads.dir, "scripts"))
 @info("Some available commands:")
 for filename in filenames
 	if filename[end-2:end] == ".jl"
