@@ -148,6 +148,7 @@ include("MadsTest.jl")
 if !haskey(ENV, "MADS_NO_DISPLAY")
 	include("MadsDisplay.jl")
 end
+include("MadsNotebooks.jl")
 include("MadsSimulators.jl")
 include("MadsParsers.jl")
 

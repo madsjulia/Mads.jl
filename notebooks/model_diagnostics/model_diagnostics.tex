@@ -388,7 +388,7 @@ high-performance computational framework for data/model/decision
 analyses.
 
 \begin{verbatim}
-<img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+<img src="https://raw.githubusercontent.com/madsjulia/Mads.jl/master/logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
 \end{verbatim}
 
 \href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to
@@ -420,6 +420,8 @@ Here, it is demonstrated how
 \href{http://madsjulia.github.io/Mads.jl}{MADS} can be applied to solve
 a general model diagnostic problem.
 
+Most of the tasks listed above are demonstrated below.
+
 \hypertarget{problem-setup}{%
 \subsection{Problem setup}\label{problem-setup}}
 
@@ -429,72 +431,24 @@ Julia REPL: \texttt{import\ Pkg;\ Pkg.add("Mads")}):
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{1}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{Pkg}\PY{o}{.}\PY{n}{resolve}\PY{p}{(}\PY{p}{)}
 \PY{k}{import} \PY{n}{Revise}
 \PY{k}{import} \PY{n}{Mads}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-┌ Info: Precompiling Mads [d6bdc55b-bd94-5012-933c-1f73fc2ee992]
-└ @ Base loading.jl:1317
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-\textbf{Mads: Model Analysis \& Decision Support}
-====
-
-\textcolor{ansi-blue-intense}{\textbf{    \_\_\_      \_\_\_\_    }}\textcolor{ansi-red-intense}{\textbf{        \_\_\_\_   }}\textcolor{ansi-green-intense}{\textbf{ \_\_\_\_
-}}\textcolor{ansi-magenta-intense}{\textbf{     \_\_\_\_\_\_}}
-\textcolor{ansi-blue-intense}{\textbf{   /   \textbackslash{}    /    \textbackslash{}  }}\textcolor{ansi-red-intense}{\textbf{        /    | }}\textcolor{ansi-green-intense}{\textbf{ |    \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{       /  \_\_  \textbackslash{}}}
-\textcolor{ansi-blue-intense}{\textbf{  |     \textbackslash{}  /     |   }}\textcolor{ansi-red-intense}{\textbf{      /     |  }}\textcolor{ansi-green-intense}{\textbf{|     \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{     /  /  \textbackslash{}\_\_\textbackslash{}}}
-\textcolor{ansi-blue-intense}{\textbf{  |  |\textbackslash{}  \textbackslash{}/  /|  | }}\textcolor{ansi-red-intense}{\textbf{       /      | }}\textcolor{ansi-green-intense}{\textbf{ |      \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{     |  |}}
-\textcolor{ansi-blue-intense}{\textbf{  |  | \textbackslash{}    / |  |  }}\textcolor{ansi-red-intense}{\textbf{     /  /|   | }}\textcolor{ansi-green-intense}{\textbf{ |   |\textbackslash{}  \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{     \textbackslash{}  \textbackslash{}\_\_\_\_\_\_.}}
-\textcolor{ansi-blue-intense}{\textbf{  |  |  \textbackslash{}\_\_/  |  |  }}\textcolor{ansi-red-intense}{\textbf{    /  / |   | }}\textcolor{ansi-green-intense}{\textbf{ |   | \textbackslash{}  \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{      \textbackslash{}\_\_\_\_\_\_\_  \textbackslash{}}}
-\textcolor{ansi-blue-intense}{\textbf{  |  |        |  | }}\textcolor{ansi-red-intense}{\textbf{    /  /  |   | }}\textcolor{ansi-green-intense}{\textbf{ |   |  \textbackslash{}  \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{             \textbackslash{}  \textbackslash{}}}
-\textcolor{ansi-blue-intense}{\textbf{  |  |        |  |  }}\textcolor{ansi-red-intense}{\textbf{  /  /===|   | }}\textcolor{ansi-green-intense}{\textbf{ |   |\_\_\_\textbackslash{}  \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{   \_\_.        |  |}}
-\textcolor{ansi-blue-intense}{\textbf{  |  |        |  | }}\textcolor{ansi-red-intense}{\textbf{  /  /    |   | }}\textcolor{ansi-green-intense}{\textbf{ |           \textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{ \textbackslash{}  \textbackslash{}\_\_\_\_\_\_/  /}}
-\textcolor{ansi-blue-intense}{\textbf{  |\_\_|        |\_\_| }}\textcolor{ansi-red-intense}{\textbf{ /\_\_/     |\_\_\_| }}\textcolor{ansi-green-intense}{\textbf{ |\_\_\_\_\_\_\_\_\_\_\_\_\textbackslash{}
-}}\textcolor{ansi-magenta-intense}{\textbf{  \textbackslash{}\_\_\_\_\_\_\_\_\_\_/}}
-
-\textbf{MADS} is an integrated high-performance computational framework for data-
-and model-based analyses.
-\textbf{MADS} can perform: Sensitivity Analysis, Parameter Estimation, Model
-Inversion and Calibration, Uncertainty Quantification, Model Selection and Model
-Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision
-Analysis and Support.
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-\textcolor{ansi-green-intense}{\textbf{    Updating}} registry at `\textasciitilde{}/.julia/registries/General`
-\textcolor{ansi-yellow-intense}{\textbf{┌ }}\textcolor{ansi-yellow-intense}{\textbf{Warning: }}could not download
-https://pkg.julialang.org/registries
-\textcolor{ansi-yellow-intense}{\textbf{└ }}\textcolor{ansi-black-intense}{@ Pkg.Types /Users/julia/buildbot/worker/package\_macos
-64/build/usr/share/julia/stdlib/v1.6/Pkg/src/Types.jl:980}
-\textcolor{ansi-green-intense}{\textbf{   Resolving}} package versions{\ldots}
-\textcolor{ansi-cyan-intense}{\textbf{[ }}\textcolor{ansi-cyan-intense}{\textbf{Info: }}Module BIGUQ is not available!
-┌ Info: Installing pyqt package to avoid buggy tkagg backend.
-└ @ PyPlot /Users/vvv/.julia/packages/PyPlot/XHEG0/src/init.jl:118
-    \end{Verbatim}
-
-    Setup the working directory:
+    Setup the working directory (it this case, the working directory is the
+location where this notebook is located):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{2}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{cd}\PY{p}{(}\PY{n}{joinpath}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{madsdir}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{notebooks}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{cd}\PY{p}{(}\PY{n}{joinpath}\PY{p}{(}\PY{n}{Mads}\PY{o}{.}\PY{n}{dir}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{notebooks}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{model\PYZus{}diagnostics}\PY{l+s}{\PYZdq{}}\PY{p}{)}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    Create a problem dictionary:
+    Create a problem dictionary (the dictionary is applied to store all the
+information about the model applied to deomonstrate the solution of the
+model diagonstic problem):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{3}{\boxspacing}
@@ -510,7 +464,8 @@ Dict\{Any, Any\}()
 \end{Verbatim}
 \end{tcolorbox}
         
-    Setup model parameters:
+    \hypertarget{setup-model-parameters}{%
+\subsubsection{Setup model parameters:}\label{setup-model-parameters}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{4}{\boxspacing}
@@ -535,17 +490,16 @@ OrderedCollections.OrderedDict\{Any, Any\} with 4 entries:
 prior knowledge of the parameter uncertainty) are defined for each
 parameter.
 
+    \hypertarget{setup-model-observations}{%
+\subsubsection{Setup model
+observations:}\label{setup-model-observations}}
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{5}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{md}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Observations}\PY{l+s}{\PYZdq{}}\PY{p}{]} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{createobservations}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{1.1}\PY{p}{,}\PY{l+m+mf}{1.9}\PY{p}{,}\PY{l+m+mf}{3.1}\PY{p}{,}\PY{l+m+mf}{3.9}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{;} \PY{n}{weight}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{time}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{]}\PY{p}{,} \PY{n}{dist}\PY{o}{=}\PY{p}{[}\PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(0, 1)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(0, 2)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(1, 3)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(2, 4)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(3, 5)}\PY{l+s}{\PYZdq{}}\PY{p}{,} \PY{l+s}{\PYZdq{}}\PY{l+s}{Uniform(4, 6)}\PY{l+s}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-dist = ["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)",
-"Uniform(3, 5)", "Uniform(4, 6)"]
-    \end{Verbatim}
 
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{5}{\boxspacing}
@@ -565,8 +519,11 @@ OrderedCollections.OrderedDict\{Any, Any\} with 6 entries:
 (i.e., inverse of measurement standard deviations), and acceptable
 ranges are defined for each observation.
 
-    A function (called \texttt{polynomial}) is defined to compute the 6
-observations given 4 model parameters as an input:
+    \hypertarget{setup-model-function}{%
+\subsubsection{Setup model function:}\label{setup-model-function}}
+
+A function (called \texttt{polynomial}) is defined to compute the 6
+observations given the 4 model parameters as an input:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{6}{\boxspacing}
@@ -582,7 +539,7 @@ observations given 4 model parameters as an input:
             \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
 \prompt{Out}{outcolor}{6}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-polynominal (generic function with 1 method)
+polynomial (generic function with 1 method)
 \end{Verbatim}
 \end{tcolorbox}
         
@@ -604,7 +561,9 @@ method)
 \end{Verbatim}
 \end{tcolorbox}
         
-    Set a default name for MADS input / output files:
+    \hypertarget{set-a-default-name-for-mads-input-output-files}{%
+\subsubsection{Set a default name for MADS input / output
+files:}\label{set-a-default-name-for-mads-input-output-files}}
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{8}{\boxspacing}
@@ -632,7 +591,7 @@ method)
     
     \begin{Verbatim}[commandchars=\\\{\}]
 Dict\{Any, Any\} with 4 entries:
-  "Julia function" => polynominal
+  "Julia function" => polynomial
   "Parameters"     => OrderedCollections.OrderedDict\{Any, Any\}("a"=>OrderedColl…
   "Observations"   => OrderedCollections.OrderedDict\{Any, Any\}("o1"=>OrderedCol…
   "Filename"       => "model\_diagnostics.mads"
@@ -690,12 +649,12 @@ OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
 \end{tcolorbox}
         
     The runs above produce outputs representing model predictions at the six
-observations in time.
+observations over time.
 
 The forward simulations are based on the initial guesses for the model
 parameters.
 
-The initial model predictions can be plotted as shown below:
+The initial model predictions can be plotted:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{12}{\boxspacing}
@@ -705,7 +664,7 @@ The initial model predictions can be plotted as shown below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_26_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_27_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -726,7 +685,7 @@ following command:
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{13}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
-\PY{n}{calib\PYZus{}param}\PY{p}{,} \PY{n}{calib\PYZus{}result} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{calibrate}\PY{p}{(}\PY{n}{md}\PY{p}{)}
+\PY{n}{calib\PYZus{}param}\PY{p}{,} \PY{n}{calib\PYZus{}information} \PY{o}{=} \PY{n}{Mads}\PY{o}{.}\PY{n}{calibrate}\PY{p}{(}\PY{n}{md}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
@@ -746,6 +705,14 @@ Function value   Gradient norm
 \end{Verbatim}
 \end{tcolorbox}
         
+    The code returns 2 objects.
+
+\texttt{calib\_param} is a dictonary of the calibrated model parameters.
+
+\texttt{calib\_information} contains calibration information.
+
+The obtained model predictions can be plotted:
+
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{14}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
@@ -754,7 +721,7 @@ Function value   Gradient norm
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_31_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_33_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -797,7 +764,11 @@ n =         2.93219 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
     \end{Verbatim}
 
-    The model inversion can be also performed for a set of random initial
+    \hypertarget{model-calibration-inversion-for-a-set-of-random-initail-guesses}{%
+\subsection{Model calibration (inversion) for a set of random initail
+guesses}\label{model-calibration-inversion-for-a-set-of-random-initail-guesses}}
+
+The model inversion can be also performed for a set of random initial
 guesses for model parameters.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -897,7 +868,7 @@ runs are collected into a matrix below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_41_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -909,8 +880,8 @@ runs are collected into a matrix below:
 minima.
 
 There are three important groups of results with different \texttt{n}
-values: * \texttt{n} = 0 * \texttt{n} = 1 * \texttt{n} = 3 (upper prior
-bound)
+values: * \texttt{n} = 0 * \texttt{n} = 1 * \texttt{n} = 3 (capturing
+the upper prior bound)
 
 The code below identifies and plots solutions associated with these 3
 distinct groups:
@@ -937,7 +908,7 @@ distinct groups:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -951,12 +922,7 @@ Number of optimizable parameters: 4
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_2.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_3.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -967,6 +933,14 @@ b =         1.27948 distribution = Uniform(-10, 10)
 c =       0.0178456 distribution = Uniform(-5, 5)
 n =        0.951994 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
 Solution for n=3
 a =      0.00653517 distribution = Uniform(-10, 10)
 b =        0.950689 distribution = Uniform(-10, 10)
@@ -975,9 +949,9 @@ n =               3 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
     \end{Verbatim}
 
-    \hypertarget{evaluation-of-predictive-sensitivities-and-uncertainties}{%
-\subsection{Evaluation of predictive sensitivities and
-uncertainties}\label{evaluation-of-predictive-sensitivities-and-uncertainties}}
+    \hypertarget{analysis-of-predictive-sensitivities-and-uncertainties}{%
+\subsection{Analysis of predictive sensitivities and
+uncertainties}\label{analysis-of-predictive-sensitivities-and-uncertainties}}
 
     \hypertarget{local-sensitivity-and-uncertainty-quantification}{%
 \subsubsection{Local sensitivity and uncertainty
@@ -1003,12 +977,13 @@ Dict\{String, Any\} with 6 entries:
 \end{Verbatim}
 \end{tcolorbox}
         
-    
-
     \texttt{localsa{[}"stddev"{]}} defines the estimated posterior
-uncertainties in the estimated model parameters. This estimate is based
-on the Jacobian / Hessian matrix estimates of the parameter space
-curvature in the vicinity the estimated (inverted) optimal parameters.
+uncertainties in the estimated model parameters.
+
+This estimate is based on the Jacobian / Hessian matrix estimates of the
+parameter space curvature in the vicinity the estimated (inverted)
+optimal parameters.
+
 The uncertainties are assumed to be Gaussian with standard deviations
 defined by \texttt{localsa{[}"stddev"{]}}.
 
@@ -1031,9 +1006,10 @@ defined by \texttt{localsa{[}"stddev"{]}}.
 \end{tcolorbox}
         
     Based on these results, \texttt{c} is well constrained. \texttt{n} is
-also well defined. \texttt{a} and \texttt{b} are the most uncertain.
+also well defined. In contrast, \texttt{a} and \texttt{b} are less
+certain.
 
-However, because of the local nature of the estimates these results are
+However, because of the local nature of the estimates, these results are
 not very accurate and differ with the global sensitivity and uncertainty
 analyses presented below.
 
@@ -1051,13 +1027,8 @@ parameters and estimated observations:
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-┌ Info: Precompiling PNGFiles [f57f5aa1-a3ce-4bc8-8ab9-96f992907883]
-└ @ Base loading.jl:1317
-    \end{Verbatim}
-
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_51_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_52_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1076,7 +1047,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_53_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_54_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1094,7 +1065,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_55_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_56_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1145,9 +1116,10 @@ applied to perform global sensitivity and uncertainty quantification:
 \end{Verbatim}
 \end{tcolorbox}
         
-    The obtained set of 10000 equally likely parameter combinations
-capturing the global sensitivity and uncertainty of the model parameters
-and associated predictions are plotted below.
+    The results above capture 10,000 equally likely parameter combinations.
+The parameter cobintations represent the global sensitivity and
+uncertainty of the model parameters and associated predictions. A
+forward run for based on this set (\texttt{chain}) is executed below:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{27}{\boxspacing}
@@ -1177,7 +1149,7 @@ and associated predictions are plotted below.
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_62_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_63_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1185,7 +1157,7 @@ and associated predictions are plotted below.
 
     \end{Verbatim}
 
-    The figure above compares the 10000 model predictions with the actual
+    The figure above compares the 10,000 model predictions with the actual
 measurements (red dots).
 
 The figure below shows the histograms of the posterior model
@@ -1208,7 +1180,7 @@ diagonal are similar):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_65_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_66_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1272,12 +1244,12 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1286,12 +1258,21 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_3.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_3.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_69_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_6.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1310,17 +1291,17 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1329,7 +1310,16 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_6.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1590,7 +1580,7 @@ Max h = 1.0 OF = 66.79304780650143 par = [1.9918966693524435e-5,
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_79_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_80_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
