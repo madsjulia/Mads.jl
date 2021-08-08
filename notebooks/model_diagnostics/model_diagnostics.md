@@ -3,7 +3,7 @@
 [MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
 
 <div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
-    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+    <img src="https://raw.githubusercontent.com/madsjulia/Mads.jl/master/logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
 </div>
 
 [MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
@@ -19,56 +19,26 @@
 
 Here, it is demonstrated how [MADS](http://madsjulia.github.io/Mads.jl) can be applied to solve a general model diagnostic problem.
 
+Most of the tasks listed above are demonstrated below.
+
 ## Problem setup
 
 Import Mads (if **MADS** is not installed, first execute in the Julia REPL: `import Pkg; Pkg.add("Mads")`):
 
 
 ```julia
-Pkg.resolve()
 import Revise
 import Mads
 ```
 
-    ┌ Info: Precompiling Mads [d6bdc55b-bd94-5012-933c-1f73fc2ee992]
-    └ @ Base loading.jl:1317
-
-
-    [1mMads: Model Analysis & Decision Support[0m
-    ====
-
-    [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
-    [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
-    [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
-    [1m[34m  |  |\  \/  /|  | [1m[31m       /      | [1m[32m |      \   [1m[35m     |  |[0m
-    [1m[34m  |  | \    / |  |  [1m[31m     /  /|   | [1m[32m |   |\  \   [1m[35m     \  \______.[0m
-    [1m[34m  |  |  \__/  |  |  [1m[31m    /  / |   | [1m[32m |   | \  \  [1m[35m      \_______  \[0m
-    [1m[34m  |  |        |  | [1m[31m    /  /  |   | [1m[32m |   |  \  \  [1m[35m             \  \[0m
-    [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
-    [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
-    [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
-
-    [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
-    [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
-
-
-    [32m[1m    Updating[22m[39m registry at `~/.julia/registries/General`
-    [33m[1m┌ [22m[39m[33m[1mWarning: [22m[39mcould not download https://pkg.julialang.org/registries
-    [33m[1m└ [22m[39m[90m@ Pkg.Types /Users/julia/buildbot/worker/package_macos64/build/usr/share/julia/stdlib/v1.6/Pkg/src/Types.jl:980[39m
-    [32m[1m   Resolving[22m[39m package versions...
-    [36m[1m[ [22m[39m[36m[1mInfo: [22m[39mModule BIGUQ is not available!
-    ┌ Info: Installing pyqt package to avoid buggy tkagg backend.
-    └ @ PyPlot /Users/vvv/.julia/packages/PyPlot/XHEG0/src/init.jl:118
-
-
-Setup the working directory:
+Setup the working directory (it this case, the working directory is the location where this notebook is located):
 
 
 ```julia
 cd(joinpath(Mads.dir, "notebooks", "model_diagnostics"))
 ```
 
-Create a problem dictionary:
+Create a problem dictionary (the dictionary is applied to store all the information about the model applied to deomonstrate the solution of the model diagonstic problem):
 
 
 ```julia
@@ -82,7 +52,7 @@ md = Dict()
 
 
 
-Setup model parameters:
+### Setup model parameters:
 
 
 ```julia
@@ -103,13 +73,12 @@ md["Parameters"] = Mads.createparameters([1,1,1,1]; key=["a", "b", "c", "n"], di
 There are 4 model parameters (`a`, `b`, `c`, and `n`).
 The initial values and the prior distributions (based on prior knowledge of the parameter uncertainty) are defined for each parameter.
 
+### Setup model observations:
+
 
 ```julia
 md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,100,100,100,10,0], time=[0,1,2,3,4,5], dist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"])
 ```
-
-    dist = ["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"]
-
 
 
 
@@ -127,7 +96,9 @@ md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,
 There are 6 observations (`o1`, `o2`, `o3`, ... and `o6`).
 The calibration targets, observation weights (i.e., inverse of measurement standard deviations), and acceptable ranges are defined for each observation.
 
-A function (called `polynomial`) is defined to compute the 6 observations given 4 model parameters as an input:
+### Setup model function:
+
+A function (called `polynomial`) is defined to compute the 6 observations given the 4 model parameters as an input:
 
 
 ```julia
@@ -141,7 +112,7 @@ end
 
 
 
-    polynominal (generic function with 1 method)
+    polynomial (generic function with 1 method)
 
 
 
@@ -159,7 +130,7 @@ Mads.setmodel!(md, polynomial)
 
 
 
-Set a default name for MADS input / output files:
+### Set a default name for MADS input / output files:
 
 
 ```julia
@@ -182,7 +153,7 @@ display(md)
 
 
     Dict{Any, Any} with 4 entries:
-      "Julia function" => polynominal
+      "Julia function" => polynomial
       "Parameters"     => OrderedCollections.OrderedDict{Any, Any}("a"=>OrderedColl…
       "Observations"   => OrderedCollections.OrderedDict{Any, Any}("o1"=>OrderedCol…
       "Filename"       => "model_diagnostics.mads"
@@ -232,11 +203,11 @@ polynomial(Mads.getparamsinit(md))
 
 
 
-The runs above produce outputs representing model predictions at the six observations in time.
+The runs above produce outputs representing model predictions at the six observations over time.
 
 The forward simulations are based on the initial guesses for the model parameters.
 
-The initial model predictions can be plotted as shown below:
+The initial model predictions can be plotted:
 
 
 ```julia
@@ -244,12 +215,12 @@ Mads.plotmatches(md)
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_27_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_26_0.png)
 
-
-
-
+    
 
 The figure above shows that the `true` observations are not well reproduced by the model using the initial model parameter guesses.
 
@@ -259,17 +230,25 @@ The calibation (inversion) of the developed model is achieved using the followin
 
 
 ```julia
-calib_param, calib_result = Mads.calibrate(md)
+calib_param, calib_information = Mads.calibrate(md)
 ```
 
 
 
 
-    (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm
+    (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
     ------   --------------   --------------
     , 267, 19, 0))
 
 
+
+The code returns 2 objects.
+
+`calib_param` is a dictonary of the calibrated model parameters.
+
+`calib_information` contains calibration information.
+
+The obtained model predictions can be plotted:
 
 
 ```julia
@@ -277,12 +256,12 @@ Mads.plotmatches(md, calib_param)
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_33_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_31_0.png)
 
-
-
-
+    
 
 Initial values of the model parameters are:
 
@@ -291,10 +270,10 @@ Initial values of the model parameters are:
 Mads.showparameterestimates(md)
 ```
 
-    a =               1 distribution = Uniform(-10, 10)
-    b =               1 distribution = Uniform(-10, 10)
-    c =               1 distribution = Uniform(-5, 5)
-    n =               1 distribution = Uniform(0, 3)
+    a =               1 distribution = Uniform(-10, 10) 
+    b =               1 distribution = Uniform(-10, 10) 
+    c =               1 distribution = Uniform(-5, 5) 
+    n =               1 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
 
 
@@ -305,12 +284,14 @@ Estimated values of the model parameters based on the model calibration (inversi
 Mads.showparameterestimates(md, calib_param)
 ```
 
-    a =      0.00705046 distribution = Uniform(-10, 10)
-    b =         0.95069 distribution = Uniform(-10, 10)
-    c =       0.0385415 distribution = Uniform(-5, 5)
-    n =         2.93219 distribution = Uniform(0, 3)
+    a =      0.00705046 distribution = Uniform(-10, 10) 
+    b =         0.95069 distribution = Uniform(-10, 10) 
+    c =       0.0385415 distribution = Uniform(-5, 5) 
+    n =         2.93219 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
 
+
+## Model calibration (inversion) for a set of random initail guesses
 
 The model inversion can be also performed for a set of random initial guesses for model parameters.
 
@@ -336,7 +317,7 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
       269.929  …  OrderedCollections.OrderedDict("a"=>-3.36971, "b"=>4.3589, "c"=>0.0207631, "n"=>0.994848)
       268.409     OrderedCollections.OrderedDict("a"=>0.0354613, "b"=>0.998702, "c"=>1.70238e-5, "n"=>0.000376271)
       268.41      OrderedCollections.OrderedDict("a"=>0.0354481, "b"=>0.998704, "c"=>2.21817e-5, "n"=>0.000448126)
-        ⋮      ⋱
+        ⋮      ⋱  
       232.272     OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689, "c"=>0.039249, "n"=>3.0)
       232.272     OrderedCollections.OrderedDict("a"=>0.00653522, "b"=>0.950689, "c"=>0.039249, "n"=>3.0)
       232.272  …  OrderedCollections.OrderedDict("a"=>0.00653436, "b"=>0.950702, "c"=>0.0392321, "n"=>2.99998)
@@ -379,19 +360,19 @@ Mads.spaghettiplot(md, forward_predictions)
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_43_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_41_0.png)
 
-
-
-
+    
 
 The figure above demonstrates that there are several different global minima.
 
 There are three important groups of results with different `n` values:
 * `n` = 0
 * `n` = 1
-* `n` = 3 (upper prior bound)
+* `n` = 3 (capturing the upper prior bound)
 
 The code below identifies and plots solutions associated with these 3 distinct groups:
 
@@ -415,46 +396,48 @@ end
 ```
 
 
-
-![png](model_diagnostics_files/model_diagnostics_43_0.png)
-
+    
+![png](model_diagnostics_files/model_diagnostics_45_0.png)
+    
 
 
     Solution for n=0
-    a =       0.0354613 distribution = Uniform(-10, 10)
-    b =        0.998702 distribution = Uniform(-10, 10)
-    c =     1.70238e-05 distribution = Uniform(-5, 5)
-    n =     0.000376271 distribution = Uniform(0, 3)
+    a =       0.0354613 distribution = Uniform(-10, 10) 
+    b =        0.998702 distribution = Uniform(-10, 10) 
+    c =     1.70238e-05 distribution = Uniform(-5, 5) 
+    n =     0.000376271 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
 
 
 
-
-![png](model_diagnostics_files/model_diagnostics_43_2.png)
-
-
-
-
-
-![png](model_diagnostics_files/model_diagnostics_43_3.png)
-
+    
+![png](model_diagnostics_files/model_diagnostics_45_2.png)
+    
 
 
     Solution for n=1
-    a =        -0.28542 distribution = Uniform(-10, 10)
-    b =         1.27948 distribution = Uniform(-10, 10)
-    c =       0.0178456 distribution = Uniform(-5, 5)
-    n =        0.951994 distribution = Uniform(0, 3)
+    a =        -0.28542 distribution = Uniform(-10, 10) 
+    b =         1.27948 distribution = Uniform(-10, 10) 
+    c =       0.0178456 distribution = Uniform(-5, 5) 
+    n =        0.951994 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_45_4.png)
+    
+
+
     Solution for n=3
-    a =      0.00653517 distribution = Uniform(-10, 10)
-    b =        0.950689 distribution = Uniform(-10, 10)
-    c =        0.039249 distribution = Uniform(-5, 5)
-    n =               3 distribution = Uniform(0, 3)
+    a =      0.00653517 distribution = Uniform(-10, 10) 
+    b =        0.950689 distribution = Uniform(-10, 10) 
+    c =        0.039249 distribution = Uniform(-5, 5) 
+    n =               3 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
+    
 
-
-## Evaluation of predictive sensitivities and uncertainties
+## Analysis of predictive sensitivities and uncertainties
 
 ### Local sensitivity and uncertainty quantification
 
@@ -476,10 +459,10 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
 
 
 
-
-
 `localsa["stddev"]` defines the estimated posterior uncertainties in the estimated model parameters.
+
 This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity the estimated (inverted) optimal parameters.
+
 The uncertainties are assumed to be Gaussian with standard deviations defined by `localsa["stddev"]`.
 
 
@@ -498,11 +481,11 @@ The uncertainties are assumed to be Gaussian with standard deviations defined by
 
 
 
-Based on these results, `c` is well constrained. `n` is also well defined. `a` and `b` are the most uncertain.
+Based on these results, `c` is well constrained. `n` is also well defined. In contrast, `a` and `b` are less certain.
 
-However, because of the local nature of the estimates these results are not very accurate and differ with the global sensitivity and uncertainty analyses presented below.
+However, because of the local nature of the estimates, these results are not very accurate and differ with the global sensitivity and uncertainty analyses presented below.
 
-The plots below show a series of graphical representations of the `localsa` results.
+The plots below show a series of graphical representations of the `localsa` results. 
 These plots are generated automatically by the code.
 
 A plot of the Jacobian representing the relationships between model parameters and estimated observations:
@@ -512,17 +495,13 @@ A plot of the Jacobian representing the relationships between model parameters a
 Mads.display("model_diagnostics-jacobian.png")
 ```
 
-    ┌ Info: Precompiling PNGFiles [f57f5aa1-a3ce-4bc8-8ab9-96f992907883]
-    └ @ Base loading.jl:1317
+
+    
+![png](model_diagnostics_files/model_diagnostics_52_0.png)
+    
 
 
-
-
-![png](model_diagnostics_files/model_diagnostics_51_1.png)
-
-
-
-
+    
 
 
 A plot of the eigen matrix of the Hessian (the Hessian is approximately computed based on the Jacobian above):
@@ -533,12 +512,12 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_54_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_53_0.png)
 
-
-
-
+    
 
 
 A plot of the eigen values of the Hessian:
@@ -549,12 +528,12 @@ Mads.display("model_diagnostics-eigenvalues.png")
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_56_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_55_0.png)
 
-
-
-
+    
 
 
 The eigen analysis presetned above suggest that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
@@ -580,7 +559,9 @@ chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=100
 
 
 
-The obtained set of 10000 equally likely parameter combinations capturing the global sensitivity and uncertainty of the model parameters and associated predictions are plotted below.
+The results above capture 10,000 equally likely parameter combinations. 
+The parameter cobintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
+A forward run for based on this set (`chain`) is executed below:
 
 
 ```julia
@@ -606,14 +587,14 @@ Mads.spaghettiplot(md, f)
 ```
 
 
-
-![png](model_diagnostics_files/model_diagnostics_62_0.png)
-
-
-
+    
+![png](model_diagnostics_files/model_diagnostics_63_0.png)
+    
 
 
-The figure above compares the 10000 model predictions with the actual measurements (red dots).
+    
+
+The figure above compares the 10,000 model predictions with the actual measurements (red dots).
 
 The figure below shows the histograms of the posterior model uncertainties (along the diagonal) and the cross-plots between the parameters (off-diagonal plots; the cross-plots above and below the diagonal are similar):
 
@@ -628,12 +609,12 @@ Mads.display("model_diagnostics-emcee_scatter.png")
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_66_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_65_0.png)
 
-
-
-
+    
 
 
 The figure above shows that the optimal (most probable) estimates are:
@@ -686,32 +667,40 @@ Mads.plotobsSAresults(md, saltelli_results)
 ```
 
 
-
-![png](model_diagnostics_files/model_diagnostics_69_0.png)
-
-
-
-
-
-![png](model_diagnostics_files/model_diagnostics_69_1.png)
+    
+![png](model_diagnostics_files/model_diagnostics_70_0.png)
+    
 
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_70_1.png)
+    
+
+
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_70_3.png)
+    
 
 
 
-
-![png](model_diagnostics_files/model_diagnostics_69_3.png)
-
-
-
+    
+![png](model_diagnostics_files/model_diagnostics_70_4.png)
+    
 
 
-![png](model_diagnostics_files/model_diagnostics_69_4.png)
+    
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_70_6.png)
+    
 
 
+    
 
 The EFAST results are obtained as follows:
 
@@ -722,32 +711,40 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 ```
 
 
-
-![png](model_diagnostics_files/model_diagnostics_71_0.png)
-
-
-
-
-
-![png](model_diagnostics_files/model_diagnostics_71_1.png)
+    
+![png](model_diagnostics_files/model_diagnostics_72_0.png)
+    
 
 
 
-
-
-![png](model_diagnostics_files/model_diagnostics_71_2.png)
-
-
-
+    
+![png](model_diagnostics_files/model_diagnostics_72_1.png)
+    
 
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_72_2.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_71_4.png)
+
+    
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_72_4.png)
+    
 
 
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_72_6.png)
+    
+
+
+    
 
 The difference in the `total` and `main` effect plots suggest correlations in the model parameters (which is also demonstrated by the `AffineInvariantMCMC` analyses above).
 
@@ -822,13 +819,13 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
 
 
-
+    
     ******************************************************************************
     This program contains Ipopt, a library for large-scale nonlinear optimization.
      Ipopt is released as open source code under the Eclipse Public License (EPL).
              For more information visit https://github.com/coin-or/Ipopt
     ******************************************************************************
-
+    
     Min h = 0.001 OF = 4.998333281688344 par = [0.9993333197989149, 0.0016666826937701167]
     Max h = 0.001 OF = 5.00166671833499 par = [1.0006666802044195, -0.001666682687108125]
     Min h = 0.01 OF = 4.983333280036714 par = [0.9933333177282005, 0.016666691395710947]
@@ -919,12 +916,12 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 ```
 
 
+    
+![png](model_diagnostics_files/model_diagnostics_80_0.png)
+    
 
-![png](model_diagnostics_files/model_diagnostics_79_0.png)
 
-
-
-
+    
 
 
 The figure above compares the model `opportuneness` (dashed lines) vs model `robustness` (solid lines) for different infogap horizons of uncertainty `h` and different models (different colors).
