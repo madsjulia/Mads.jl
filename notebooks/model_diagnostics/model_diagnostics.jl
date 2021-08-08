@@ -1,4 +1,3 @@
-Pkg.resolve()
 import Revise
 import Mads
 
@@ -28,7 +27,7 @@ polynomial(Mads.getparamsinit(md))
 
 Mads.plotmatches(md)
 
-calib_param, calib_result = Mads.calibrate(md)
+calib_param, calib_information = Mads.calibrate(md)
 
 Mads.plotmatches(md, calib_param)
 
