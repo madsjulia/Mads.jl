@@ -31,14 +31,14 @@ import Revise
 import Mads
 ```
 
-Setup the working directory (it this case, the working directory is the location where this notebook is located):
+Setup the working directory (in this case, the working directory is the location where this notebook is located):
 
 
 ```julia
 cd(joinpath(Mads.dir, "notebooks", "model_diagnostics"))
 ```
 
-Create a problem dictionary (the dictionary is applied to store all the information about the model applied to deomonstrate the solution of the model diagonstic problem):
+Create a problem dictionary (the dictionary is applied to store all the information about the model applied to demonstrate the solution of the model diagnostic problem):
 
 
 ```julia
@@ -94,9 +94,9 @@ md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,
 
 
 There are 6 observations (`o1`, `o2`, `o3`, ... and `o6`).
-The calibration targets, observation weights (i.e., inverse of measurement standard deviations), and acceptable ranges are defined for each observation.
+The calibration targets, observation weights (i.e., the inverse of measurement standard deviations), and acceptable ranges are defined for each observation.
 
-### Setup model function:
+### Setup the model:
 
 A function (called `polynomial`) is defined to compute the 6 observations given the 4 model parameters as an input:
 
@@ -116,7 +116,7 @@ end
 
 
 
-The `polynomial` function is setup now in the `md` dictionary as a model that will be applied to perform the simulations:
+The `polynomial` function is set up now in the `md` dictionary as a model that will be applied to perform the simulations:
 
 
 ```julia
@@ -129,6 +129,12 @@ Mads.setmodel!(md, polynomial)
     (::Mads.var"#madscommandfunctionwithexpressions#18") (generic function with 1 method)
 
 
+
+The analyzed model captured in the problem dictionary can be:
+* analytical or numerical
+* internal or external (e.g., PFLOTRAN, FEHM, or any other simulator)
+
+The model can also be a reduced-order model developed using machine learning.
 
 ### Set a default name for MADS input / output files:
 
@@ -159,7 +165,7 @@ display(md)
       "Filename"       => "model_diagnostics.mads"
 
 
-And the model diagnostic problem is setup!
+And the model diagnostic problem is set up!
 
 ## Forward model simulation
 
@@ -183,7 +189,7 @@ Mads.forward(md)
 
 
 
-The forward model run can be also executed using the following command:
+The forward model run can also be executed using the following command:
 
 
 ```julia
@@ -216,7 +222,7 @@ Mads.plotmatches(md)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_27_0.png)
+![png](model_diagnostics_files/model_diagnostics_28_0.png)
     
 
 
@@ -226,7 +232,7 @@ The figure above shows that the `true` observations are not well reproduced by t
 
 ## Model calibration (inversion)
 
-The calibation (inversion) of the developed model is achieved using the following command:
+The calibration (inversion) of the developed model is achieved using the following command:
 
 
 ```julia
@@ -244,7 +250,7 @@ calib_param, calib_information = Mads.calibrate(md)
 
 The code returns 2 objects.
 
-`calib_param` is a dictonary of the calibrated model parameters.
+`calib_param` is a dictionary of the calibrated model parameters.
 
 `calib_information` contains calibration information.
 
@@ -257,7 +263,7 @@ Mads.plotmatches(md, calib_param)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_33_0.png)
+![png](model_diagnostics_files/model_diagnostics_34_0.png)
     
 
 
@@ -291,9 +297,9 @@ Mads.showparameterestimates(md, calib_param)
     Number of optimizable parameters: 4
 
 
-## Model calibration (inversion) for a set of random initail guesses
+## Model calibration (inversion) for a set of random initial guesses
 
-The model inversion can be also performed for a set of random initial guesses for model parameters.
+The model inversion can also be performed for a set of random initial guesses for model parameters.
 
 
 ```julia
@@ -361,7 +367,7 @@ Mads.spaghettiplot(md, forward_predictions)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_43_0.png)
+![png](model_diagnostics_files/model_diagnostics_44_0.png)
     
 
 
@@ -397,7 +403,7 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_0.png)
+![png](model_diagnostics_files/model_diagnostics_46_0.png)
     
 
 
@@ -411,10 +417,11 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_2.png)
+![png](model_diagnostics_files/model_diagnostics_46_2.png)
     
 
 
+    
     Solution for n=1
     a =        -0.28542 distribution = Uniform(-10, 10) 
     b =         1.27948 distribution = Uniform(-10, 10) 
@@ -425,7 +432,7 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_45_4.png)
+![png](model_diagnostics_files/model_diagnostics_46_4.png)
     
 
 
@@ -461,7 +468,7 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
 
 `localsa["stddev"]` defines the estimated posterior uncertainties in the estimated model parameters.
 
-This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity the estimated (inverted) optimal parameters.
+This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity of the estimated (inverted) optimal parameters.
 
 The uncertainties are assumed to be Gaussian with standard deviations defined by `localsa["stddev"]`.
 
@@ -497,7 +504,7 @@ Mads.display("model_diagnostics-jacobian.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_52_0.png)
+![png](model_diagnostics_files/model_diagnostics_53_0.png)
     
 
 
@@ -513,7 +520,7 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_54_0.png)
+![png](model_diagnostics_files/model_diagnostics_55_0.png)
     
 
 
@@ -529,14 +536,14 @@ Mads.display("model_diagnostics-eigenvalues.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_56_0.png)
+![png](model_diagnostics_files/model_diagnostics_57_0.png)
     
 
 
     
 
 
-The eigen analysis presetned above suggest that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
+The eigen analysis presented above suggests that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
 Both parameters are represented by the first and last (4th) eigen vectors.
 
 The parameters `n` and `c` are uncorrelated and also independent of `a` and `b`.
@@ -560,8 +567,8 @@ chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=100
 
 
 The results above capture 10,000 equally likely parameter combinations. 
-The parameter cobintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
-A forward run for based on this set (`chain`) is executed below:
+The parameter combintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
+A forward run based on this set (`chain`) is executed below:
 
 
 ```julia
@@ -588,7 +595,7 @@ Mads.spaghettiplot(md, f)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_63_0.png)
+![png](model_diagnostics_files/model_diagnostics_64_0.png)
     
 
 
@@ -610,7 +617,7 @@ Mads.display("model_diagnostics-emcee_scatter.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_66_0.png)
+![png](model_diagnostics_files/model_diagnostics_67_0.png)
     
 
 
@@ -623,7 +630,7 @@ The figure above shows that the optimal (most probable) estimates are:
 * `c` = 0
 * `n` = 0
 
-`c` i the most constrained (varing between -0.2 and 0.2).
+`c` i the most constrained (varying between -0.2 and 0.2).
 
 There are plausible solutions for any value of `a`, `b` and `n` within the prior uncertainty range.
 
@@ -634,9 +641,9 @@ Based on the cross-plots, the plausible values for `n` can be within the entire 
 The plausible values for `n` are close to 1 if (1) `a` is very different from 0 and (2) `b` is very different from 1.
 
 
-### Saltelli (Sobol) amd EFAST global sensitivity analyses
+### Saltelli (Sobol) and EFAST global sensitivity analyses
 
-Both Saltelli (Sobol) amd EFAST methods are producing similar results.
+Both Saltelli (Sobol) and EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses.
 EFAST is computationally more efficient.
 
@@ -668,35 +675,37 @@ Mads.plotobsSAresults(md, saltelli_results)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_70_0.png)
+![png](model_diagnostics_files/model_diagnostics_71_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_70_1.png)
+![png](model_diagnostics_files/model_diagnostics_71_1.png)
     
 
 
     
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_70_3.png)
-    
-
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_70_4.png)
     
 
 
     
+![png](model_diagnostics_files/model_diagnostics_71_3.png)
+    
+
 
 
     
-![png](model_diagnostics_files/model_diagnostics_70_6.png)
+![png](model_diagnostics_files/model_diagnostics_71_4.png)
+    
+
+
+    
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_71_6.png)
     
 
 
@@ -712,41 +721,43 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_72_0.png)
+![png](model_diagnostics_files/model_diagnostics_73_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_72_1.png)
+![png](model_diagnostics_files/model_diagnostics_73_1.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_72_2.png)
+![png](model_diagnostics_files/model_diagnostics_73_2.png)
+    
+
+
+    
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_73_4.png)
+    
+
+
+    
+    
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_73_6.png)
     
 
 
     
 
-
-    
-![png](model_diagnostics_files/model_diagnostics_72_4.png)
-    
-
-
-    
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_72_6.png)
-    
-
-
-    
-
-The difference in the `total` and `main` effect plots suggest correlations in the model parameters (which is also demonstrated by the `AffineInvariantMCMC` analyses above).
+The differences in the `total` and `main` effect plots suggest correlations in the model parameters (which is also demonstrated by the `AffineInvariantMCMC` analyses above).
 
 The figures also demonstrate that the parameter sensitivity to observations changes over time.
 
@@ -917,7 +928,7 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_80_0.png)
+![png](model_diagnostics_files/model_diagnostics_81_0.png)
     
 
 
