@@ -436,7 +436,7 @@ Julia REPL: \texttt{import\ Pkg;\ Pkg.add("Mads")}):
 \end{Verbatim}
 \end{tcolorbox}
 
-    Setup the working directory (it this case, the working directory is the
+    Setup the working directory (in this case, the working directory is the
 location where this notebook is located):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -447,8 +447,8 @@ location where this notebook is located):
 \end{tcolorbox}
 
     Create a problem dictionary (the dictionary is applied to store all the
-information about the model applied to deomonstrate the solution of the
-model diagonstic problem):
+information about the model applied to demonstrate the solution of the
+model diagnostic problem):
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{3}{\boxspacing}
@@ -516,11 +516,11 @@ OrderedCollections.OrderedDict\{Any, Any\} with 6 entries:
         
     There are 6 observations (\texttt{o1}, \texttt{o2}, \texttt{o3},
 \ldots{} and \texttt{o6}). The calibration targets, observation weights
-(i.e., inverse of measurement standard deviations), and acceptable
+(i.e., the inverse of measurement standard deviations), and acceptable
 ranges are defined for each observation.
 
-    \hypertarget{setup-model-function}{%
-\subsubsection{Setup model function:}\label{setup-model-function}}
+    \hypertarget{setup-the-model}{%
+\subsubsection{Setup the model:}\label{setup-the-model}}
 
 A function (called \texttt{polynomial}) is defined to compute the 6
 observations given the 4 model parameters as an input:
@@ -543,7 +543,7 @@ polynomial (generic function with 1 method)
 \end{Verbatim}
 \end{tcolorbox}
         
-    The \texttt{polynomial} function is setup now in the \texttt{md}
+    The \texttt{polynomial} function is set up now in the \texttt{md}
 dictionary as a model that will be applied to perform the simulations:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -561,6 +561,13 @@ method)
 \end{Verbatim}
 \end{tcolorbox}
         
+    The analyzed model captured in the problem dictionary can be: *
+analytical or numerical * internal or external (e.g., PFLOTRAN, FEHM, or
+any other simulator)
+
+The model can also be a reduced-order model developed using machine
+learning.
+
     \hypertarget{set-a-default-name-for-mads-input-output-files}{%
 \subsubsection{Set a default name for MADS input / output
 files:}\label{set-a-default-name-for-mads-input-output-files}}
@@ -598,7 +605,7 @@ Dict\{Any, Any\} with 4 entries:
     \end{Verbatim}
 
     
-    And the model diagnostic problem is setup!
+    And the model diagnostic problem is set up!
 
     \hypertarget{forward-model-simulation}{%
 \subsection{Forward model simulation}\label{forward-model-simulation}}
@@ -626,7 +633,7 @@ OrderedCollections.OrderedDict\{Any, Float64\} with 6 entries:
 \end{Verbatim}
 \end{tcolorbox}
         
-    The forward model run can be also executed using the following command:
+    The forward model run can also be executed using the following command:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{11}{\boxspacing}
@@ -664,7 +671,7 @@ The initial model predictions can be plotted:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_27_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_28_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -679,7 +686,7 @@ reproduced by the model using the initial model parameter guesses.
 \subsection{Model calibration
 (inversion)}\label{model-calibration-inversion}}
 
-    The calibation (inversion) of the developed model is achieved using the
+    The calibration (inversion) of the developed model is achieved using the
 following command:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -707,7 +714,8 @@ Function value   Gradient norm
         
     The code returns 2 objects.
 
-\texttt{calib\_param} is a dictonary of the calibrated model parameters.
+\texttt{calib\_param} is a dictionary of the calibrated model
+parameters.
 
 \texttt{calib\_information} contains calibration information.
 
@@ -721,7 +729,7 @@ The obtained model predictions can be plotted:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_33_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_34_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -764,11 +772,11 @@ n =         2.93219 distribution = Uniform(0, 3)
 Number of optimizable parameters: 4
     \end{Verbatim}
 
-    \hypertarget{model-calibration-inversion-for-a-set-of-random-initail-guesses}{%
-\subsection{Model calibration (inversion) for a set of random initail
-guesses}\label{model-calibration-inversion-for-a-set-of-random-initail-guesses}}
+    \hypertarget{model-calibration-inversion-for-a-set-of-random-initial-guesses}{%
+\subsection{Model calibration (inversion) for a set of random initial
+guesses}\label{model-calibration-inversion-for-a-set-of-random-initial-guesses}}
 
-The model inversion can be also performed for a set of random initial
+The model inversion can also be performed for a set of random initial
 guesses for model parameters.
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -868,7 +876,7 @@ runs are collected into a matrix below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_43_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_44_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -908,7 +916,7 @@ distinct groups:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_46_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -922,11 +930,12 @@ Number of optimizable parameters: 4
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_46_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{Verbatim}[commandchars=\\\{\}]
+
 Solution for n=1
 a =        -0.28542 distribution = Uniform(-10, 10)
 b =         1.27948 distribution = Uniform(-10, 10)
@@ -936,7 +945,7 @@ Number of optimizable parameters: 4
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_45_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_46_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -981,7 +990,7 @@ Dict\{String, Any\} with 6 entries:
 uncertainties in the estimated model parameters.
 
 This estimate is based on the Jacobian / Hessian matrix estimates of the
-parameter space curvature in the vicinity the estimated (inverted)
+parameter space curvature in the vicinity of the estimated (inverted)
 optimal parameters.
 
 The uncertainties are assumed to be Gaussian with standard deviations
@@ -1028,7 +1037,7 @@ parameters and estimated observations:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_52_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_53_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1047,7 +1056,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_54_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_55_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1065,7 +1074,7 @@ computed based on the Jacobian above):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_56_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_57_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1073,7 +1082,7 @@ computed based on the Jacobian above):
 
     \end{Verbatim}
 
-    The eigen analysis presetned above suggest that \texttt{a} and
+    The eigen analysis presented above suggests that \texttt{a} and
 \texttt{b} are correlated (this is expected based on the mathematical
 form of the solved model in the function \texttt{polynomial}). Both
 parameters are represented by the first and last (4th) eigen vectors.
@@ -1117,9 +1126,9 @@ applied to perform global sensitivity and uncertainty quantification:
 \end{tcolorbox}
         
     The results above capture 10,000 equally likely parameter combinations.
-The parameter cobintations represent the global sensitivity and
+The parameter combintations represent the global sensitivity and
 uncertainty of the model parameters and associated predictions. A
-forward run for based on this set (\texttt{chain}) is executed below:
+forward run based on this set (\texttt{chain}) is executed below:
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
 \prompt{In}{incolor}{27}{\boxspacing}
@@ -1149,7 +1158,7 @@ forward run for based on this set (\texttt{chain}) is executed below:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_63_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_64_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1180,7 +1189,7 @@ diagonal are similar):
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_66_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_67_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1191,7 +1200,7 @@ diagonal are similar):
     The figure above shows that the optimal (most probable) estimates are: *
 \texttt{a} = 0 * \texttt{b} = 1 * \texttt{c} = 0 * \texttt{n} = 0
 
-\texttt{c} i the most constrained (varing between -0.2 and 0.2).
+\texttt{c} i the most constrained (varying between -0.2 and 0.2).
 
 There are plausible solutions for any value of \texttt{a}, \texttt{b}
 and \texttt{n} within the prior uncertainty range.
@@ -1206,11 +1215,11 @@ within the entire prior uncertainty range if (1) \texttt{a} is equal to
 The plausible values for \texttt{n} are close to 1 if (1) \texttt{a} is
 very different from 0 and (2) \texttt{b} is very different from 1.
 
-    \hypertarget{saltelli-sobol-amd-efast-global-sensitivity-analyses}{%
-\subsubsection{Saltelli (Sobol) amd EFAST global sensitivity
-analyses}\label{saltelli-sobol-amd-efast-global-sensitivity-analyses}}
+    \hypertarget{saltelli-sobol-and-efast-global-sensitivity-analyses}{%
+\subsubsection{Saltelli (Sobol) and EFAST global sensitivity
+analyses}\label{saltelli-sobol-and-efast-global-sensitivity-analyses}}
 
-Both Saltelli (Sobol) amd EFAST methods are producing similar results.
+Both Saltelli (Sobol) and EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses. EFAST
 is computationally more efficient.
 
@@ -1244,26 +1253,12 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{Verbatim}[commandchars=\\\{\}]
-
-    \end{Verbatim}
-
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_3.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1272,7 +1267,21 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_70_6.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_71_6.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1291,17 +1300,17 @@ Dict\{String, Any\} with 6 entries:
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1310,7 +1319,7 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_4.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1319,7 +1328,7 @@ Dict\{String, Any\} with 6 entries:
     \end{Verbatim}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_72_6.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_73_6.png}
     \end{center}
     { \hspace*{\fill} \\}
     
@@ -1327,7 +1336,7 @@ Dict\{String, Any\} with 6 entries:
 
     \end{Verbatim}
 
-    The difference in the \texttt{total} and \texttt{main} effect plots
+    The differences in the \texttt{total} and \texttt{main} effect plots
 suggest correlations in the model parameters (which is also demonstrated
 by the \texttt{AffineInvariantMCMC} analyses above).
 
@@ -1580,7 +1589,7 @@ Max h = 1.0 OF = 66.79304780650143 par = [1.9918966693524435e-5,
 \end{tcolorbox}
 
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_80_0.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{model_diagnostics_files/model_diagnostics_81_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     

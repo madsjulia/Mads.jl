@@ -14296,7 +14296,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Setup the working directory (it this case, the working directory is the location where this notebook is located):</p>
+<p>Setup the working directory (in this case, the working directory is the location where this notebook is located):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14316,7 +14316,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Create a problem dictionary (the dictionary is applied to store all the information about the model applied to deomonstrate the solution of the model diagonstic problem):</p>
+<p>Create a problem dictionary (the dictionary is applied to store all the information about the model applied to demonstrate the solution of the model diagnostic problem):</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14461,13 +14461,13 @@ The initial values and the prior distributions (based on prior knowledge of the 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>There are 6 observations (<code>o1</code>, <code>o2</code>, <code>o3</code>, ... and <code>o6</code>).
-The calibration targets, observation weights (i.e., inverse of measurement standard deviations), and acceptable ranges are defined for each observation.</p>
+The calibration targets, observation weights (i.e., the inverse of measurement standard deviations), and acceptable ranges are defined for each observation.</p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Setup-model-function:">Setup model function:<a class="anchor-link" href="#Setup-model-function:">&#182;</a></h3><p>A function (called <code>polynomial</code>) is defined to compute the 6 observations given the 4 model parameters as an input:</p>
+<h3 id="Setup-the-model:">Setup the model:<a class="anchor-link" href="#Setup-the-model:">&#182;</a></h3><p>A function (called <code>polynomial</code>) is defined to compute the 6 observations given the 4 model parameters as an input:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14514,7 +14514,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The <code>polynomial</code> function is setup now in the <code>md</code> dictionary as a model that will be applied to perform the simulations:</p>
+<p>The <code>polynomial</code> function is set up now in the <code>md</code> dictionary as a model that will be applied to perform the simulations:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14554,6 +14554,17 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>The analyzed model captured in the problem dictionary can be:</p>
+<ul>
+<li>analytical or numerical</li>
+<li>internal or external (e.g., PFLOTRAN, FEHM, or any other simulator)</li>
+</ul>
+<p>The model can also be a reduced-order model developed using machine learning.</p>
+
+</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14646,7 +14657,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>And the model diagnostic problem is setup!</p>
+<p>And the model diagnostic problem is set up!</p>
 
 </div>
 </div>
@@ -14706,7 +14717,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The forward model run can be also executed using the following command:</p>
+<p>The forward model run can also be executed using the following command:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14823,7 +14834,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The calibation (inversion) of the developed model is achieved using the following command:</p>
+<p>The calibration (inversion) of the developed model is achieved using the following command:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14869,7 +14880,7 @@ The calibration targets, observation weights (i.e., inverse of measurement stand
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The code returns 2 objects.</p>
-<p><code>calib_param</code> is a dictonary of the calibrated model parameters.</p>
+<p><code>calib_param</code> is a dictionary of the calibrated model parameters.</p>
 <p><code>calib_information</code> contains calibration information.</p>
 <p>The obtained model predictions can be plotted:</p>
 
@@ -15016,7 +15027,7 @@ Number of optimizable parameters: 4
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Model-calibration-(inversion)-for-a-set-of-random-initail-guesses">Model calibration (inversion) for a set of random initail guesses<a class="anchor-link" href="#Model-calibration-(inversion)-for-a-set-of-random-initail-guesses">&#182;</a></h2><p>The model inversion can be also performed for a set of random initial guesses for model parameters.</p>
+<h2 id="Model-calibration-(inversion)-for-a-set-of-random-initial-guesses">Model calibration (inversion) for a set of random initial guesses<a class="anchor-link" href="#Model-calibration-(inversion)-for-a-set-of-random-initial-guesses">&#182;</a></h2><p>The model inversion can also be performed for a set of random initial guesses for model parameters.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15285,7 +15296,8 @@ Number of optimizable parameters: 4
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Solution for n=1
+<pre>
+Solution for n=1
 a =        -0.28542 distribution = Uniform(-10, 10) 
 b =         1.27948 distribution = Uniform(-10, 10) 
 c =       0.0178456 distribution = Uniform(-5, 5) 
@@ -15388,7 +15400,7 @@ Number of optimizable parameters: 4
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><code>localsa["stddev"]</code> defines the estimated posterior uncertainties in the estimated model parameters.</p>
-<p>This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity the estimated (inverted) optimal parameters.</p>
+<p>This estimate is based on the Jacobian / Hessian matrix estimates of the parameter space curvature in the vicinity of the estimated (inverted) optimal parameters.</p>
 <p>The uncertainties are assumed to be Gaussian with standard deviations defined by <code>localsa["stddev"]</code>.</p>
 
 </div>
@@ -15608,7 +15620,7 @@ These plots are generated automatically by the code.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The eigen analysis presetned above suggest that <code>a</code> and <code>b</code> are correlated (this is expected based on the mathematical form of the solved model in the function <code>polynomial</code>).
+<p>The eigen analysis presented above suggests that <code>a</code> and <code>b</code> are correlated (this is expected based on the mathematical form of the solved model in the function <code>polynomial</code>).
 Both parameters are represented by the first and last (4th) eigen vectors.</p>
 <p>The parameters <code>n</code> and <code>c</code> are uncorrelated and also independent of <code>a</code> and <code>b</code>.</p>
 
@@ -15665,8 +15677,8 @@ Both parameters are represented by the first and last (4th) eigen vectors.</p>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>The results above capture 10,000 equally likely parameter combinations. 
-The parameter cobintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
-A forward run for based on this set (<code>chain</code>) is executed below:</p>
+The parameter combintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
+A forward run based on this set (<code>chain</code>) is executed below:</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -15842,7 +15854,7 @@ A forward run for based on this set (<code>chain</code>) is executed below:</p>
 <li><code>c</code> = 0</li>
 <li><code>n</code> = 0</li>
 </ul>
-<p><code>c</code> i the most constrained (varing between -0.2 and 0.2).</p>
+<p><code>c</code> i the most constrained (varying between -0.2 and 0.2).</p>
 <p>There are plausible solutions for any value of <code>a</code>, <code>b</code> and <code>n</code> within the prior uncertainty range.</p>
 <p>The parameters <code>a</code> and <code>b</code> are strongly inversely correlated by their respective cross-plots.</p>
 <p>Based on the cross-plots, the plausible values for <code>n</code> can be within the entire prior uncertainty range if (1) <code>a</code> is equal to 0 and (2) <code>b</code> is equal to 1.</p>
@@ -15852,7 +15864,7 @@ A forward run for based on this set (<code>chain</code>) is executed below:</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">Saltelli (Sobol) amd EFAST global sensitivity analyses<a class="anchor-link" href="#Saltelli-(Sobol)-amd-EFAST-global-sensitivity-analyses">&#182;</a></h3><p>Both Saltelli (Sobol) amd EFAST methods are producing similar results.
+<h3 id="Saltelli-(Sobol)-and-EFAST-global-sensitivity-analyses">Saltelli (Sobol) and EFAST global sensitivity analyses<a class="anchor-link" href="#Saltelli-(Sobol)-and-EFAST-global-sensitivity-analyses">&#182;</a></h3><p>Both Saltelli (Sobol) and EFAST methods are producing similar results.
 Both methods are designed to perform global sensitivity analyses.
 EFAST is computationally more efficient.</p>
 <p>The Saltelli (Sobol) results are obtained as follows:</p>
@@ -15957,7 +15969,8 @@ EFAST is computationally more efficient.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre></pre>
+<pre>
+</pre>
 </div>
 </div>
 
@@ -15998,7 +16011,8 @@ EFAST is computationally more efficient.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre></pre>
+<pre>
+</pre>
 </div>
 </div>
 
@@ -16110,7 +16124,8 @@ EFAST is computationally more efficient.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre></pre>
+<pre>
+</pre>
 </div>
 </div>
 
@@ -16136,7 +16151,8 @@ EFAST is computationally more efficient.</p>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre></pre>
+<pre>
+</pre>
 </div>
 </div>
 
@@ -16173,7 +16189,7 @@ EFAST is computationally more efficient.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>The difference in the <code>total</code> and <code>main</code> effect plots suggest correlations in the model parameters (which is also demonstrated by the <code>AffineInvariantMCMC</code> analyses above).</p>
+<p>The differences in the <code>total</code> and <code>main</code> effect plots suggest correlations in the model parameters (which is also demonstrated by the <code>AffineInvariantMCMC</code> analyses above).</p>
 <p>The figures also demonstrate that the parameter sensitivity to observations changes over time.</p>
 <p>Based on the <code>total effect</code>, parameter <code>a</code> and <code>n</code> sensitivities generally increase with time.
 Parameter <code>b</code> and <code>b</code> sensitivities generally decrease with time.</p>
