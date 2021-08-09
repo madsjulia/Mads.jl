@@ -32,7 +32,7 @@ end
 function notebooks(; dir=Mads.dir)
 	d = joinpath(dir, "notebooks")
 	if isdir(d)
-		notebook("."; check=false, dir=d, script=script)
+		notebook("."; check=false, dir=d, script=false)
 	else
 		madswarn("Directory $d is missing!")
 	end
