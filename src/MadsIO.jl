@@ -21,6 +21,12 @@ function madsdir()
 	pwd()
 end
 
+function splitdirdot(d)
+	r, f = splitdir(d)
+	r = r == "" ? "." : r
+	return r, f
+end
+
 """
 Load MADS input file defining a MADS problem dictionary
 
