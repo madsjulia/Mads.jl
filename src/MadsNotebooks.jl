@@ -34,8 +34,9 @@ function notebook(rootname::AbstractString; script::Bool=script, dir=Mads.dir, c
 		madsinfo("Executing notebook $p in directory $d")
 		c = pwd()
 		cd(d)
-		Mads.runcmd("jupyter-nbconvert --to script $p.ipynb")
-		Base.include(Main, "$(splitext(p)[1]).jl")
+		r = splitext(p)[1]
+		Mads.runcmd("jupyter-nbconvert --to script $(r).ipynb"; pipe=true, quiet=false)
+		Base.include(Main, "$(r).jl")
 		cd(c)
 	else
 		madsinfo("Opening notebook directory $d")
@@ -70,18 +71,19 @@ function process_notebook(rootname::AbstractString; dir=Mads.dir)
 	if f == nothing
 		return
 	end
-	c = pwd()
 	d, p = f
+	r = splitext(p)[1]
+	c = pwd()
 	cd(d)
-	Mads.runcmd("python3 ~/system/notebook-clean.py $p.ipynb")
-	Mads.runcmd("rm -fR $(p)_files")
-	Mads.runcmd("jupyter-nbconvert --to script $p.ipynb")
-	Mads.runcmd("jupyter-nbconvert --to html $p.ipynb")
-	Mads.runcmd("jupyter-nbconvert --to markdown $p.ipynb")
-	Mads.runcmd("jq -j '.cells | map( select(.cell_type != \"code\") | .source + [\"\n\n\"] ) | .[][]' $p.ipynb > $p.txt")
-	Mads.runcmd("jupyter-nbconvert --to latex $p.ipynb")
-	Mads.runcmd("xelatex $p --quiet")
-	Mads.runcmd("rm -f $p.log $p.aux $p.out texput.log")
+	Mads.runcmd("python3 ~/system/notebook-clean.py $(r).ipynb")
+	Mads.runcmd("rm -fR $(r)_files")
+	Mads.runcmd("jupyter-nbconvert --to script $(r).ipynb")
+	Mads.runcmd("jupyter-nbconvert --to html $(r).ipynb")
+	Mads.runcmd("jupyter-nbconvert --to markdown $(r).ipynb")
+	Mads.runcmd("jq -j '.cells | map( select(.cell_type != \"code\") | .source + [\"\n\n\"] ) | .[][]' $(r).ipynb > $(r).txt")
+	Mads.runcmd("jupyter-nbconvert --to latex $(r).ipynb")
+	Mads.runcmd("xelatex $(r) --quiet")
+	Mads.runcmd("rm -f $(r).log $(r).aux $(r).out texput.log")
 	cd(c)
 end
 
