@@ -18,7 +18,7 @@ $(DocumentFunction.documentfunction(notebook;
 argtext=Dict("rootname"=>"notebook root name"),
 keytext=Dict("dir"=>"notebook directory", "check"=>"check of notebook exists", "script"=>"execute as a script")))
 """
-function notebook(rootname::AbstractString; script::Bool=script, dir=Mads.dir, check::Bool=true)
+function notebook(rootname::AbstractString; script::Bool=false, dir=Mads.dir, check::Bool=true)
 	if check
 		f = check_notebook(rootname; dir=dir)
 		if f == nothing
@@ -99,7 +99,6 @@ function check_notebook(rootname::AbstractString; dir=Mads.dir)
 		f = "$rootname.ipynb"
 	elseif isfile(joinpath(dir, "notebooks", "$rootname.ipynb"))
 		f = joinpath(dir, "notebooks", "$rootname.ipynb")
-
 	elseif isfile(joinpath(dir, "notebooks", rootname, "$rootname.ipynb"))
 		f = joinpath(dir, "notebooks", rootname, "$rootname.ipynb")
 	else
