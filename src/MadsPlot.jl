@@ -1112,9 +1112,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		end
 		if nS <= ncolors && !nextgray
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
+			linestylea = typeof(linestyle) == Symbol ? repeat([linestyle], nS) : linestyle
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
 				geometry...,
-				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
+				Gadfly.Theme(line_width=linewidth, line_style=[linestylea[i]], point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
 				for i in 1:nS]...,
 				gl...,
 				glog...,
@@ -1196,10 +1197,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		end
 	else
 		hsize_plot = hsize
-		vsize_plot = vsize / 2 * nS
+		vsize_plot = vsize * nS
 		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
+			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
 		end
 		pS = Gadfly.vstack(pp...)
 		c = nothing
