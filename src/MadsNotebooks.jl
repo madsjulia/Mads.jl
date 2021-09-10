@@ -101,6 +101,8 @@ function check_notebook(rootname::AbstractString; dir=Mads.dir)
 		f = joinpath(dir, "notebooks", "$rootname.ipynb")
 	elseif isfile(joinpath(dir, "notebooks", rootname, "$rootname.ipynb"))
 		f = joinpath(dir, "notebooks", rootname, "$rootname.ipynb")
+	elseif isfile(joinpath(dir, "$rootname.ipynb"))
+		f = joinpath(dir, "$rootname.ipynb")
 	else
 		madswarn("Notebook is missing: $rootname")
 		return nothing
