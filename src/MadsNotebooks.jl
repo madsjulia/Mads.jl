@@ -7,8 +7,8 @@ Execute Jupyter notebook as a script
 $(DocumentFunction.documentfunction(notebookscript;
 keytext=Dict("dir"=>"notebook directory", "script"=>"execute as a script")))
 """
-function notebookscript(a...; script::Bool=true, dir=Mads.dir, k...)
-	notebook(a...; k..., script=script, dir=dir)
+function notebookscript(a...; script::Bool=true, dir=Mads.dir, ndir="notebooks", k...)
+	notebook(a...; k..., script=script, dir=dir, ndir=ndir)
 end
 
 """
@@ -18,9 +18,9 @@ $(DocumentFunction.documentfunction(notebook;
 argtext=Dict("rootname"=>"notebook root name"),
 keytext=Dict("dir"=>"notebook directory", "check"=>"check of notebook exists", "script"=>"execute as a script")))
 """
-function notebook(rootname::AbstractString; script::Bool=false, dir=Mads.dir, check::Bool=true)
+function notebook(rootname::AbstractString; script::Bool=false, dir=Mads.dir, ndir="notebooks", check::Bool=true)
 	if check
-		f = check_notebook(rootname; dir=dir)
+		f = check_notebook(rootname; dir=dir, ndir=ndir)
 		if f == nothing
 			return
 		end
@@ -50,8 +50,8 @@ Execute Jupyter notebook in IJulia or as a script
 $(DocumentFunction.documentfunction(notebooks;
 keytext=Dict("dir"=>"notebook directory")))
 """
-function notebooks(; dir=Mads.dir)
-	d = joinpath(dir, "notebooks")
+function notebooks(; dir=Mads.dir, ndir="notebooks")
+	d = joinpath(dir, ndir)
 	if isdir(d)
 		notebook("."; check=false, dir=d, script=false)
 	else
@@ -66,8 +66,8 @@ $(DocumentFunction.documentfunction(process_notebook;
 argtext=Dict("rootname"=>"notebook root name"),
 keytext=Dict("dir"=>"notebook directory")))
 """
-function process_notebook(rootname::AbstractString; dir=Mads.dir)
-	f = check_notebook(rootname; dir=dir)
+function process_notebook(rootname::AbstractString; dir=Mads.dir, ndir="notebooks")
+	f = check_notebook(rootname; dir=dir, ndir=ndir)
 	if f == nothing
 		return
 	end
@@ -94,17 +94,19 @@ $(DocumentFunction.documentfunction(check_notebook;
 argtext=Dict("rootname"=>"notebook root name"),
 keytext=Dict("dir"=>"notebook directory")))
 """
-function check_notebook(rootname::AbstractString; dir=Mads.dir)
+function check_notebook(rootname::AbstractString; dir=Mads.dir, ndir="notebooks")
 	if isfile("$rootname.ipynb")
 		f = "$rootname.ipynb"
-	elseif isfile(joinpath(dir, "notebooks", "$rootname.ipynb"))
-		f = joinpath(dir, "notebooks", "$rootname.ipynb")
-	elseif isfile(joinpath(dir, "notebooks", rootname, "$rootname.ipynb"))
-		f = joinpath(dir, "notebooks", rootname, "$rootname.ipynb")
+	elseif isfile(joinpath(dir, ndir, "$rootname.ipynb"))
+		f = joinpath(dir, ndir, "$rootname.ipynb")
+	elseif isfile(joinpath(dir, "notebooks", ndir, "$rootname.ipynb"))
+		f = joinpath(dir, "notebooks", ndir, "$rootname.ipynb")
+	elseif isfile(joinpath(dir, ndir, rootname, "$rootname.ipynb"))
+		f = joinpath(dir, ndir, rootname, "$rootname.ipynb")
 	elseif isfile(joinpath(dir, "$rootname.ipynb"))
 		f = joinpath(dir, "$rootname.ipynb")
 	else
-		madswarn("Notebook is missing: $rootname")
+		madswarn("Notebook with rootname $rootname is missing (searched directories: ., $dir, $(joinpath(dir, ndir)), $(joinpath(dir, ndir, rootname)), $(joinpath(dir, "notebooks", ndir))")
 		return nothing
 	end
 	return splitdirdot(f)
