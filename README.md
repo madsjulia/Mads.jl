@@ -162,8 +162,9 @@ Publications, Presentations, Projects
 
 * [mads.gitlab.io](http://mads.gitlab.io)
 * [madsjulia.github.io](http://madsjulia.github.io)
-* [TensorDecompositions](https://tensordecompositions.github.io)
-* [Tensors](https://tensors.lanl.gov)
+* [SmartTensors](https://smarttensors.com)
+* [SmartTensors](https://smarttensors.github.io)
+* [SmartTensors](https://smarttensors.lanl.gov)
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
 
