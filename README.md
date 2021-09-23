@@ -167,4 +167,3 @@ Publications, Presentations, Projects
 * [SmartTensors](https://smarttensors.lanl.gov)
 * [monty.gitlab.io](http://monty.gitlab.io)
 * [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
-
