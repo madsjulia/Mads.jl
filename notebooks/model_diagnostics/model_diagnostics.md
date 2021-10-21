@@ -1,4 +1,4 @@
-# Mads notebook: Model diagnostics
+# MADS: Model diagnostics
 
 [MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
 
@@ -23,78 +23,46 @@ Most of the tasks listed above are demonstrated below.
 
 ## Problem setup
 
-Import Mads (if **MADS** is not installed, first execute in the Julia REPL: `import Pkg; Pkg.add("Mads")`):
+Import Mads (if **MADS** is not installed, first execute in the Julia REPL: 
+
+```julia
+import Pkg
+Pkg.add("Mads")
+Pkg.add("Cairo")
+Pkg.add("Fontconfig")
+```
 
 
 ```julia
-import Revise
 import Mads
+import Cairo
+import Fontconfig
 ```
 
-Setup the working directory (in this case, the working directory is the location where this notebook is located):
+    [1mMads: Model Analysis & Decision Support[0m
+    ====
+    
+    [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
+    [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
+    [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
+    [1m[34m  |  |\  \/  /|  | [1m[31m       /      | [1m[32m |      \   [1m[35m     |  |[0m
+    [1m[34m  |  | \    / |  |  [1m[31m     /  /|   | [1m[32m |   |\  \   [1m[35m     \  \______.[0m
+    [1m[34m  |  |  \__/  |  |  [1m[31m    /  / |   | [1m[32m |   | \  \  [1m[35m      \_______  \[0m
+    [1m[34m  |  |        |  | [1m[31m    /  /  |   | [1m[32m |   |  \  \  [1m[35m             \  \[0m
+    [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
+    [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
+    [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
+    
+    [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
+    [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
+
+
+Setup the working directory (in this case, the working directory is the location of this notebook):
 
 
 ```julia
 cd(joinpath(Mads.dir, "notebooks", "model_diagnostics"))
 ```
-
-Create a problem dictionary (the dictionary is applied to store all the information about the model applied to demonstrate the solution of the model diagnostic problem):
-
-
-```julia
-md = Dict()
-```
-
-
-
-
-    Dict{Any, Any}()
-
-
-
-### Setup model parameters:
-
-
-```julia
-md["Parameters"] = Mads.createparameters([1,1,1,1]; key=["a", "b", "c", "n"], dist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"])
-```
-
-
-
-
-    OrderedCollections.OrderedDict{Any, Any} with 4 entries:
-      "a" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
-      "b" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
-      "c" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
-      "n" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
-
-
-
-There are 4 model parameters (`a`, `b`, `c`, and `n`).
-The initial values and the prior distributions (based on prior knowledge of the parameter uncertainty) are defined for each parameter.
-
-### Setup model observations:
-
-
-```julia
-md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,100,100,100,10,0], time=[0,1,2,3,4,5], dist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"])
-```
-
-
-
-
-    OrderedCollections.OrderedDict{Any, Any} with 6 entries:
-      "o1" => OrderedCollections.OrderedDict{String, Any}("target"=>0.0, "weight"=>…
-      "o2" => OrderedCollections.OrderedDict{String, Any}("target"=>1.1, "weight"=>…
-      "o3" => OrderedCollections.OrderedDict{String, Any}("target"=>1.9, "weight"=>…
-      "o4" => OrderedCollections.OrderedDict{String, Any}("target"=>3.1, "weight"=>…
-      "o5" => OrderedCollections.OrderedDict{String, Any}("target"=>3.9, "weight"=>…
-      "o6" => OrderedCollections.OrderedDict{String, Any}("target"=>5.0, "weight"=>…
-
-
-
-There are 6 observations (`o1`, `o2`, `o3`, ... and `o6`).
-The calibration targets, observation weights (i.e., the inverse of measurement standard deviations), and acceptable ranges are defined for each observation.
 
 ### Setup the model:
 
@@ -110,11 +78,103 @@ end
 ```
 
 
-
-
     polynomial (generic function with 1 method)
 
 
+This function will be applied in the model diagnostics analyses presented here.
+
+### Setup the problem dictionary (method #1)
+
+A problem dictionary is applied to store all the information related to the analyzed model.
+
+This includes:
+* parameter names (`["a", "b", "c", "n"]`)
+* parameter initial guesses (`[1,1,1,1]`)
+* parameter prior distributions
+* true observation values that we want to reproduce (`[0,1.1,1.9,3.1,3.9,5]`)
+* observation distributions (i.e., uncertainty ranges or measurement errors)
+* observation weights (`[100,100,100,100,10,0]`)
+* observation times (`[0,1,2,3,4,5]`) at which observations are made
+
+The problem dictionary is created as follows:
+
+
+```julia
+md = Mads.createproblem([1,1,1,1], [0,1.1,1.9,3.1,3.9,5], polynomial; paramkey=["a", "b", "c", "n"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
+```
+
+
+    Dict{Any, Any} with 4 entries:
+      "Julia function" => polynomial
+      "Parameters"     => OrderedCollections.OrderedDict{Any, Any}("a"=>OrderedColl…
+      "Observations"   => OrderedCollections.OrderedDict{Any, Any}("o1"=>OrderedCol…
+      "Filename"       => "model_diagnostics.mads"
+
+
+### Setup the problem dictionary (method #2)
+
+The same problem dictionary can be created in a step-by-step fashion which is slightly more explicit.
+
+#### Setup empty dictionary:
+
+
+```julia
+md = Dict()
+```
+
+
+    Dict{Any, Any}()
+
+
+#### Setup model parameters:
+
+
+```julia
+md["Parameters"] = Mads.createparameters([1,1,1,1]; key=["a", "b", "c", "n"], dist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"])
+```
+
+
+    OrderedCollections.OrderedDict{Any, Any} with 4 entries:
+      "a" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
+      "b" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
+      "c" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
+      "n" => OrderedCollections.OrderedDict{String, Any}("init"=>1, "type"=>"opt", …
+
+
+There are 4 model parameters (`a`, `b`, `c`, and `n`).
+
+The initial values and the prior distributions (based on prior knowledge of the parameter uncertainty) are defined for each parameter.
+
+#### Setup model observations:
+
+
+```julia
+md["Observations"] = Mads.createobservations([0,1.1,1.9,3.1,3.9,5]; weight=[100,100,100,100,10,0], time=[0,1,2,3,4,5], dist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"])
+```
+
+
+    OrderedCollections.OrderedDict{Any, Any} with 6 entries:
+      "o1" => OrderedCollections.OrderedDict{String, Any}("target"=>0.0, "weight"=>…
+      "o2" => OrderedCollections.OrderedDict{String, Any}("target"=>1.1, "weight"=>…
+      "o3" => OrderedCollections.OrderedDict{String, Any}("target"=>1.9, "weight"=>…
+      "o4" => OrderedCollections.OrderedDict{String, Any}("target"=>3.1, "weight"=>…
+      "o5" => OrderedCollections.OrderedDict{String, Any}("target"=>3.9, "weight"=>…
+      "o6" => OrderedCollections.OrderedDict{String, Any}("target"=>5.0, "weight"=>…
+
+
+There are 6 observations automatically labelled as (`o1`, `o2`, `o3`, ... and `o6`).
+
+The observations are values that we want to reproduce with our model.
+
+They can be also called calibration targets.
+
+For each observation (calibration target), we specify observation weight (i.e., the inverse of measurement standard deviations).
+
+Zero observation weight implies that the last observation is unknown (potentially occuring in the future) and will be estimated (predicted) by the developed model.
+
+Acceptable ranges are defined for each observation representing.
+
+#### Setup the model
 
 The `polynomial` function is set up now in the `md` dictionary as a model that will be applied to perform the simulations:
 
@@ -124,10 +184,7 @@ Mads.setmodel!(md, polynomial)
 ```
 
 
-
-
     (::Mads.var"#madscommandfunctionwithexpressions#18") (generic function with 1 method)
-
 
 
 The analyzed model captured in the problem dictionary can be:
@@ -136,7 +193,7 @@ The analyzed model captured in the problem dictionary can be:
 
 The model can also be a reduced-order model developed using machine learning.
 
-### Set a default name for MADS input / output files:
+#### Set a default name for MADS input / output files:
 
 
 ```julia
@@ -144,10 +201,7 @@ md["Filename"] = "model_diagnostics.mads"
 ```
 
 
-
-
     "model_diagnostics.mads"
-
 
 
 Now, the problem dictionary `md` is fully defined:
@@ -167,6 +221,34 @@ display(md)
 
 And the model diagnostic problem is set up!
 
+We can also double check the problem setup.
+
+
+```julia
+Mads.showparameters(md)
+```
+
+    a =               1 distribution = Uniform(-10, 10) 
+    b =               1 distribution = Uniform(-10, 10) 
+    c =               1 distribution = Uniform(-5, 5) 
+    n =               1 distribution = Uniform(0, 3) 
+    Number of optimizable parameters: 4
+
+
+
+```julia
+Mads.showobservations(md)
+```
+
+    o1         target =               0 weight =             100
+    o2         target =             1.1 weight =             100
+    o3         target =             1.9 weight =             100
+    o4         target =             3.1 weight =             100
+    o5         target =             3.9 weight =              10
+    o6         target =               5 weight =               0
+    Number of observations is 6
+
+
 ## Forward model simulation
 
 A single forward model run based on the initial model parameter values can be executed as follows:
@@ -175,8 +257,6 @@ A single forward model run based on the initial model parameter values can be ex
 ```julia
 Mads.forward(md)
 ```
-
-
 
 
     OrderedCollections.OrderedDict{Any, Float64} with 6 entries:
@@ -188,15 +268,12 @@ Mads.forward(md)
       "o6" => 11.0
 
 
-
 The forward model run can also be executed using the following command:
 
 
 ```julia
 polynomial(Mads.getparamsinit(md))
 ```
-
-
 
 
     6-element Vector{Float64}:
@@ -208,12 +285,11 @@ polynomial(Mads.getparamsinit(md))
      11.0
 
 
-
 The runs above produce outputs representing model predictions at the six observations over time.
 
 The forward simulations are based on the initial guesses for the model parameters.
 
-The initial model predictions can be plotted:
+The initial model predictions look like this:
 
 
 ```julia
@@ -222,7 +298,7 @@ Mads.plotmatches(md)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_28_0.png)
+![png](model_diagnostics_files/model_diagnostics_33_0.png)
     
 
 
@@ -240,12 +316,9 @@ calib_param, calib_information = Mads.calibrate(md)
 ```
 
 
-
-
     (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
     ------   --------------   --------------
     , 267, 19, 0))
-
 
 
 The code returns 2 objects.
@@ -263,7 +336,7 @@ Mads.plotmatches(md, calib_param)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_34_0.png)
+![png](model_diagnostics_files/model_diagnostics_39_0.png)
     
 
 
@@ -307,8 +380,6 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
 ```
 
 
-
-
     100×3 Matrix{Any}:
       232.272  …  OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689, "c"=>0.039249, "n"=>3.0)
       270.314     OrderedCollections.OrderedDict("a"=>-0.28542, "b"=>1.27948, "c"=>0.0178456, "n"=>0.951994)
@@ -320,13 +391,7 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
       269.91      OrderedCollections.OrderedDict("a"=>-4.41759, "b"=>5.40692, "c"=>0.0206894, "n"=>0.9961)
       270.093     OrderedCollections.OrderedDict("a"=>-4.82082, "b"=>5.80708, "c"=>0.0214349, "n"=>0.995788)
       270.067     OrderedCollections.OrderedDict("a"=>-2.58655, "b"=>3.57364, "c"=>0.0211371, "n"=>0.992455)
-      269.929  …  OrderedCollections.OrderedDict("a"=>-3.36971, "b"=>4.3589, "c"=>0.0207631, "n"=>0.994848)
-      268.409     OrderedCollections.OrderedDict("a"=>0.0354613, "b"=>0.998702, "c"=>1.70238e-5, "n"=>0.000376271)
-      268.41      OrderedCollections.OrderedDict("a"=>0.0354481, "b"=>0.998704, "c"=>2.21817e-5, "n"=>0.000448126)
         ⋮      ⋱  
-      232.272     OrderedCollections.OrderedDict("a"=>0.00653517, "b"=>0.950689, "c"=>0.039249, "n"=>3.0)
-      232.272     OrderedCollections.OrderedDict("a"=>0.00653522, "b"=>0.950689, "c"=>0.039249, "n"=>3.0)
-      232.272  …  OrderedCollections.OrderedDict("a"=>0.00653436, "b"=>0.950702, "c"=>0.0392321, "n"=>2.99998)
       270.091     OrderedCollections.OrderedDict("a"=>-5.97129, "b"=>6.95745, "c"=>0.0214664, "n"=>0.996586)
       270.122     OrderedCollections.OrderedDict("a"=>-2.481, "b"=>3.46755, "c"=>0.0212952, "n"=>0.991901)
       269.794     OrderedCollections.OrderedDict("a"=>3.95245, "b"=>-2.96176, "c"=>0.0197838, "n"=>1.00408)
@@ -338,7 +403,6 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
       270.362     OrderedCollections.OrderedDict("a"=>-0.387051, "b"=>1.37691, "c"=>0.0197667, "n"=>0.954846)
 
 
-
 The final parameter estimates from the 100 random-initial-guess inverse runs are collected into a matrix below:
 
 
@@ -347,14 +411,11 @@ calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])),
 ```
 
 
-
-
     4×100 Matrix{Float64}:
      0.00653517  -0.28542    0.00653398  …  0.962624   -5.46149    -0.387051
      0.950689     1.27948    0.950704       0.0219806   6.44768     1.37691
      0.039249     0.0178456  0.0392286      0.0223074   0.0214512   0.0197667
      3.0          0.951994   3.0            1.02225     0.996277    0.954846
-
 
 
 Plot the final predictions of the 100 random-initial-guess inverse runs:
@@ -367,13 +428,13 @@ Mads.spaghettiplot(md, forward_predictions)
 
 
     
-![png](model_diagnostics_files/model_diagnostics_44_0.png)
+![png](model_diagnostics_files/model_diagnostics_49_0.png)
     
 
 
     
 
-The figure above demonstrates that there are several different global minima.
+The results and figure above demonstrate that there are several different "global" minima.
 
 There are three important groups of results with different `n` values:
 * `n` = 0
@@ -403,7 +464,7 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_46_0.png)
+![png](model_diagnostics_files/model_diagnostics_51_0.png)
     
 
 
@@ -417,25 +478,22 @@ end
 
 
     
-![png](model_diagnostics_files/model_diagnostics_46_2.png)
+![png](model_diagnostics_files/model_diagnostics_51_2.png)
     
 
 
+
     
+![png](model_diagnostics_files/model_diagnostics_51_3.png)
+    
+
+
     Solution for n=1
     a =        -0.28542 distribution = Uniform(-10, 10) 
     b =         1.27948 distribution = Uniform(-10, 10) 
     c =       0.0178456 distribution = Uniform(-5, 5) 
     n =        0.951994 distribution = Uniform(0, 3) 
     Number of optimizable parameters: 4
-    
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_46_4.png)
-    
-
-
     Solution for n=3
     a =      0.00653517 distribution = Uniform(-10, 10) 
     b =        0.950689 distribution = Uniform(-10, 10) 
@@ -454,8 +512,6 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
 ```
 
 
-
-
     Dict{String, Any} with 6 entries:
       "of"          => 233.373
       "jacobian"    => [0.0 0.0 498.96 0.0; 998.299 989.063 498.96 0.0; … ; 5815.86…
@@ -463,7 +519,6 @@ localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(
       "eigenmatrix" => [-0.99148 0.126137 0.0324964 0.000380915; -0.128081 -0.89869…
       "eigenvalues" => [1.36761e-9, 4.44737e-7, 4.31592e-6, 6.53143]
       "stddev"      => [0.000980135, 0.00217703, 0.00198921, 2.55567]
-
 
 
 `localsa["stddev"]` defines the estimated posterior uncertainties in the estimated model parameters.
@@ -478,14 +533,11 @@ The uncertainties are assumed to be Gaussian with standard deviations defined by
 ```
 
 
-
-
     4×2 Matrix{Any}:
      "a"  0.000980135
      "b"  0.00217703
      "c"  0.00198921
      "n"  2.55567
-
 
 
 Based on these results, `c` is well constrained. `n` is also well defined. In contrast, `a` and `b` are less certain.
@@ -504,7 +556,7 @@ Mads.display("model_diagnostics-jacobian.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_53_0.png)
+![png](model_diagnostics_files/model_diagnostics_58_0.png)
     
 
 
@@ -520,14 +572,14 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_55_0.png)
+![png](model_diagnostics_files/model_diagnostics_60_0.png)
     
 
 
     
 
 
-A plot of the eigen values of the Hessian:
+A plot of the eigen values of the Hessian matrix:
 
 
 ```julia
@@ -536,7 +588,7 @@ Mads.display("model_diagnostics-eigenvalues.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_57_0.png)
+![png](model_diagnostics_files/model_diagnostics_62_0.png)
     
 
 
@@ -544,6 +596,7 @@ Mads.display("model_diagnostics-eigenvalues.png")
 
 
 The eigen analysis presented above suggests that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
+
 Both parameters are represented by the first and last (4th) eigen vectors.
 
 The parameters `n` and `c` are uncorrelated and also independent of `a` and `b`.
@@ -560,22 +613,19 @@ chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=100
 ```
 
 
-
-
     ([0.49024400617534947 0.6254729606781848 … -8.046148738315333 -2.1961730184742825; 0.6481371331360766 0.5032929504742999 … 9.11821705704645 3.2649675439015318; -0.0892523408443533 -0.17549509446712216 … -0.02937423101178159 0.02857674237214133; 0.8301664734123894 0.9506210629622112 … 1.0109232316258625 1.0385261234145131], [-13.932168591704212, -17.348618201269236, -12.63389804512083, -13.91533166749997, -13.580439063638536, -12.966576797494277, -13.683861969420244, -12.759294163171537, -12.514264566232404, -13.004554415413187  …  -14.013608226665623, -13.538985556025008, -13.092064136134097, -14.227146487852597, -17.53945111529656, -13.317831924258758, -16.05995385278711, -12.536985011850854, -15.022418530804252, -13.952189155538974])
 
 
+The results above capture 10,000 equally likely parameter combinations.
 
-The results above capture 10,000 equally likely parameter combinations. 
 The parameter combintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
+
 A forward run based on this set (`chain`) is executed below:
 
 
 ```julia
 f = Mads.forward(md, chain)
 ```
-
-
 
 
     6×10000 Matrix{Float64}:
@@ -588,14 +638,13 @@ f = Mads.forward(md, chain)
 
 
 
-
 ```julia
 Mads.spaghettiplot(md, f)
 ```
 
 
     
-![png](model_diagnostics_files/model_diagnostics_64_0.png)
+![png](model_diagnostics_files/model_diagnostics_69_0.png)
     
 
 
@@ -617,7 +666,7 @@ Mads.display("model_diagnostics-emcee_scatter.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_67_0.png)
+![png](model_diagnostics_files/model_diagnostics_72_0.png)
     
 
 
@@ -644,7 +693,9 @@ The plausible values for `n` are close to 1 if (1) `a` is very different from 0 
 ### Saltelli (Sobol) and EFAST global sensitivity analyses
 
 Both Saltelli (Sobol) and EFAST methods are producing similar results.
+
 Both methods are designed to perform global sensitivity analyses.
+
 EFAST is computationally more efficient.
 
 The Saltelli (Sobol) results are obtained as follows:
@@ -654,8 +705,6 @@ The Saltelli (Sobol) results are obtained as follows:
 ```julia
 saltelli_results = Mads.saltelli(md, N=10000, seed=2016)
 ```
-
-
 
 
     Dict{String, Any} with 6 entries:
@@ -668,44 +717,41 @@ saltelli_results = Mads.saltelli(md, N=10000, seed=2016)
 
 
 
-
 ```julia
 Mads.plotobsSAresults(md, saltelli_results)
 ```
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_0.png)
+![png](model_diagnostics_files/model_diagnostics_76_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_1.png)
+![png](model_diagnostics_files/model_diagnostics_76_1.png)
     
 
 
     
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_76_3.png)
+    
+
+
+
+    
+![png](model_diagnostics_files/model_diagnostics_76_4.png)
     
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_3.png)
-    
-
 
 
     
-![png](model_diagnostics_files/model_diagnostics_71_4.png)
-    
-
-
-    
-    
-
-
-    
-![png](model_diagnostics_files/model_diagnostics_71_6.png)
+![png](model_diagnostics_files/model_diagnostics_76_6.png)
     
 
 
@@ -721,37 +767,33 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_0.png)
+![png](model_diagnostics_files/model_diagnostics_78_0.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_1.png)
+![png](model_diagnostics_files/model_diagnostics_78_1.png)
     
 
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_2.png)
+![png](model_diagnostics_files/model_diagnostics_78_2.png)
     
 
 
     
-    
 
 
     
-![png](model_diagnostics_files/model_diagnostics_73_4.png)
+![png](model_diagnostics_files/model_diagnostics_78_4.png)
     
 
 
-    
-    
-
 
     
-![png](model_diagnostics_files/model_diagnostics_73_6.png)
+![png](model_diagnostics_files/model_diagnostics_78_5.png)
     
 
 
@@ -776,8 +818,6 @@ h = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]
 ```
 
 
-
-
     8-element Vector{Float64}:
      0.001
      0.01
@@ -789,7 +829,6 @@ h = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]
      1.0
 
 
-
 Define the polynomial models to be explored:
 
 
@@ -798,14 +837,11 @@ models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t +
 ```
 
 
-
-
     4-element Vector{String}:
      "y = a * t + c"
      "y = a * t^(1.1) + b * t + c"
      "y = a * t^n + b * t + c"
      "y = a * exp(t * n) + b * t + c"
-
 
 
 Execute the infogap analyses, collect the obtained results, and produce a figure summarizing the results:
@@ -828,8 +864,6 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
 
     ┌ Info: New seed: 2015
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
-
-
     
     ******************************************************************************
     This program contains Ipopt, a library for large-scale nonlinear optimization.
@@ -853,12 +887,8 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
     Max h = 0.5 OF = 5.8333333916516725 par = [1.3333333485322296, -0.8333333510094758]
     Min h = 1.0 OF = 3.333333291678896 par = [0.33333331979902153, 1.666666692683788]
     Max h = 1.0 OF = 6.66666673165455 par = [1.6666666835343882, -1.666666686017392]
-
-
     ┌ Info: New seed: 2015
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
-
-
     Min h = 0.001 OF = 4.9960744454905965 par = [-0.03655198917957378, 1.0437989392240055, -0.008246956140052745]
     Max h = 0.001 OF = 5.003925554522909 par = [0.036551989057392965, 0.9562010609257169, 0.008246956122525443]
     Min h = 0.01 OF = 4.960745363330646 par = [-0.36551410869632334, 1.437982560318741, -0.08246845805988594]
@@ -875,12 +905,8 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
     Max h = 0.5 OF = 6.49427721194079 par = [9.382981348214942, -10.000000044037646, 1.3871392608548654]
     Min h = 1.0 OF = 2.6876583975888058 par = [-8.067223019985045, 10.000000062883482, 0.0672229701222594]
     Max h = 1.0 OF = 7.44592953417183 par = [9.736303636511739, -10.000000065441785, 0.26369642586347747]
-
-
     ┌ Info: New seed: 2015
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
-
-
     Min h = 0.001 OF = 4.993999809993968 par = [-0.0001250040451789784, 1.0026250655869564, -0.0035000665302511625, 2.999997843315674]
     Max h = 0.001 OF = 5.006000200041004 par = [0.00012500374313672267, 0.997374931285495, 0.0035000749793720805, 3.000000029507715]
     Min h = 0.01 OF = 4.939999809729828 par = [-0.0012500039848518721, 1.0262500653481148, -0.03500006635146049, 2.999999811324717]
@@ -897,12 +923,8 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
     Max h = 0.5 OF = 8.000000212115324 par = [0.0625000005955181, -0.31250004847656593, 1.7500000578296342, 3.0000000256271333]
     Min h = 1.0 OF = -1.0000002193334967 par = [-0.12499999734956149, 3.625000039098136, -3.5000000467297627, 3.000000027811915]
     Max h = 1.0 OF = 11.000000234333372 par = [0.12499999714118018, -1.6250000313891586, 3.5000000492286207, 3.000000027812066]
-
-
     ┌ Info: New seed: 2015
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
-
-
     Min h = 0.001 OF = 4.93820509022155 par = [-1.991956463987334e-8, 1.001080524737567, -0.0020801343866858023, 2.9999999883894968]
     Max h = 0.001 OF = 5.061794919720368 par = [1.991956366528757e-8, 0.9989194750922847, 0.002080134822476713, 3.000000029984543]
     Min h = 0.01 OF = 4.382067676125225 par = [-1.9919025980225499e-7, 1.0108050472181263, -0.020801056118970217, 3.0000000258388377]
@@ -928,7 +950,7 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 
 
     
-![png](model_diagnostics_files/model_diagnostics_81_0.png)
+![png](model_diagnostics_files/model_diagnostics_86_0.png)
     
 
 
