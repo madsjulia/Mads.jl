@@ -88,8 +88,8 @@ Returns:
 - observation dictionary
 """ createobservations
 
-function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 1)))
-	md["Observations"] = createobservations(obs; key=key, weight=weight, time=time)
+function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; kw...)
+	md["Observations"] = createobservations(obs; kw...)
 end
 
 function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], log::AbstractVector=falses(length(param)))
@@ -147,10 +147,13 @@ function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Jul
 	makemadscommandfunction(md)
 end
 
-function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing)
+function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
+	createproblem(rand(in), rand(out), f; kw...)
+end
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing, obsmin::AbstractVector=zeros(length(param)), obsmax::AbstractVector=ones(length(param)), obsdist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)])
 	md = Dict()
 	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, dist=paramdist, log=paramlog)
-	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime)
+	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, dist=obsdist)
 	setmodel!(md, f)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"
