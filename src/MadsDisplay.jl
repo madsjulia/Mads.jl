@@ -4,7 +4,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 end
 @Mads.tryimport Images
 
-function display(filename::AbstractString)
+function display(filename::AbstractString, open::Bool=false)
 	if !graphoutput
 		return
 	end
@@ -12,9 +12,9 @@ function display(filename::AbstractString)
 		@warn("File `$filename` is missing!")
 		return
 	end
-	trytoopen = false
+	trytoopen = open
 	ext = lowercase(Mads.getextension(filename))
-	if isdefined(Main, :TerminalExtensions) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
+	if !open || isdefined(Main, :TerminalExtensions) || isdefined(Main, :VSCodeServer) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
 		if ext == "svg"
 			if isdefined(Main, :IJulia) && Main.IJulia.inited
 				open(filename) do f
