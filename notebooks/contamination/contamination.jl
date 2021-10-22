@@ -1,5 +1,3 @@
-import Pkg; Pkg.resolve()
-import Revise
 import Mads
 
 cd(joinpath(Mads.dir, "examples", "contamination"))
@@ -29,5 +27,3 @@ Mads.plotmatches(md, calib_predictions, "w20a")
 Mads.showparameters(md)
 
 Mads.showparameterestimates(md, calib_param)
-
-
