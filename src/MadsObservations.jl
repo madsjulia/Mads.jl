@@ -769,3 +769,17 @@ function mergetimes(t1::AbstractVector, t2::AbstractVector)
 	i2 = convert.(Int64, ii)
 	return t, i1, i2
 end
+
+function setnewobs(range::AbstractVector, times::AbstractVector, targets::AbstractVector, filtertimes::AbstractVector; first::Number=1)
+	targettimes = times[filtertimes]
+	obstimes = collect(range)
+	obstimes[1] = first
+	newtimes, itarget, iobs = mergetimes(targettimes, obstimes)
+	newtargets = similar(newtimes)
+	newweights = similar(newtimes)
+	newtargets .= 0
+	newweights .= 0
+	newtargets[itarget .!= 0] .= targets[filtertimes]
+	newweights[itarget .!= 0] .= 1
+	return newtimes, newtargets, newweights, itarget
+end
