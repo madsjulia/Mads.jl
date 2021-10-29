@@ -781,5 +781,5 @@ function setnewobs(range::AbstractVector, times::AbstractVector, targets::Abstra
 	newweights .= 0
 	newtargets[itarget .!= 0] .= targets[filtertimes]
 	newweights[itarget .!= 0] .= 1
-	return newtimes, newtargets, newweights, itarget
+	return newtimes, newtargets, newweights, itarget, iobs
 end
