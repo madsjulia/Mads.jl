@@ -574,16 +574,21 @@ $(DocumentFunction.documentfunction(showparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """ showparameters
 
-"""
-Show all parameters in the MADS problem dictionary
-
-$(DocumentFunction.documentfunction(showallparameters;
-argtext=Dict("madsdata"=>"MADS problem dictionary")))
-"""
 function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getparamkeys(madsdata))
 	printparameters(madsdata, parkeys, true)
 	println("Number of parameters: $(length(parkeys))")
 end
+function showallparameters(madsdata::AbstractDict, result::AbstractDict)
+	md = deepcopy(madsdata)
+	map(i->(md["Parameters"][i]["init"]=result[i]), Mads.getoptparamkeys(md))
+	showallparameters(md)
+end
+@doc """
+Show all parameters in the MADS problem dictionary
+
+$(DocumentFunction.documentfunction(showallparameters;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+""" showallparameters
 
 showparameterestimates = showparameters
 
@@ -622,10 +627,10 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 			s *= @Printf.sprintf "log-transformed "
 		end
 		if haskey(pardict[parkey], "min")
-			s *= @Printf.sprintf "min = %s " pardict[parkey]["min"]
+			s *= @Printf.sprintf "min = %15g " pardict[parkey]["min"]
 		end
 		if haskey(pardict[parkey], "max")
-			s *= @Printf.sprintf "max = %s " pardict[parkey]["max"]
+			s *= @Printf.sprintf "max = %15g " pardict[parkey]["max"]
 		end
 		if haskey(pardict[parkey], "dist")
 			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
