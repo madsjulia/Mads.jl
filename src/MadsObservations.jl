@@ -325,7 +325,7 @@ $(DocumentFunction.documentfunction(invobsweights!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "multiplier"=>"weight multiplier")))
 """
-function invobsweights!(madsdata::AbstractDict, multiplier::Number, obskeys::AbstractVector=getobskeys(madsdata))
+function invobsweights!(madsdata::AbstractDict, multiplier::Number=1, obskeys::AbstractVector=getobskeys(madsdata))
 	for i in 1:length(obskeys)
 		t = gettarget(madsdata["Observations"][obskeys[i]])
 		if getweight(madsdata["Observations"][obskeys[i]]) > 0 && t > 0
