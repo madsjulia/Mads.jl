@@ -1126,21 +1126,24 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, highlight_width=0Gadfly.pt, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				gm...
 			pS = Gadfly.plot(c...)
+		elseif code
+			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])] : []
+			linestylea = typeof(linestyle) == Symbol ? repeat([linestyle], nS) : linestyle
+			c = [Gadfly.layer(x=xaxis, y=X[:,i],
+				geometry...,
+				Gadfly.Theme(line_width=linewidth, line_style=[linestylea[i]], point_size=pointsize, highlight_width=0Gadfly.pt, default_color=Colors.RGBA(parse(Colors.Colorant, colors[(i-1)%ncolors+1]), opacity)))
+				for i in 1:nS]...,
+				gl...,
+				glog...,
+				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.title(title),
+				cs...,
+				Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, highlight_width=0Gadfly.pt, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
+				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+				gm...
+			pS = Gadfly.plot(c...)
 		else
-			# Gadfly.Guide.manual_color_key(keytitle, names, [colors[(i-1)%ncolors+1] for i in 1:nS])
 			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
-			# c = [Gadfly.layer(x=xaxis, y=X[:,i], color=["$(names[i])" for j in 1:nT],
-			# 	geometry...,
-			# 	Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt))
-			# 	for i in 1:nS]...,
-			# 	gl...,
-			# 	glog...,
-			# 	Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-			# 	Gadfly.Guide.title(title),
-			# 	cs...,
-			# 	Gadfly.Theme(background_color=background_color, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
-			# 	Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-			# 	gm...
 			if firstred || lastred
 				if nextgray
 					palette = Gadfly.parse_colorant(["gray"])
