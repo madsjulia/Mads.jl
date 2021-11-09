@@ -1194,6 +1194,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 				gm...
 				)
+			c = nothing
 		end
 	else
 		hsize_plot = hsize
