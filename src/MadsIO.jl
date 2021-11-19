@@ -1373,12 +1373,14 @@ function recursivemkdir(s::AbstractString; filename=true)
 	if !filename && sc!= ""
 		push!(d, sc)
 	end
+	scold = ""
 	while true
 		sd = splitdir(sc)
 		sc = sd[1]
-		if sc == "" || sc == "/"
-			break;
+		if sc == scold
+			break
 		end
+		scold = deepcopy(sc)
 		push!(d, sc)
 	end
 	for i = length(d):-1:1
