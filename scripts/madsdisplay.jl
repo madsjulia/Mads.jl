@@ -1,29 +1,5 @@
 import Images
 
-function madsgetextension(filename)
-	d = split(filename, "/")
-	s = split(d[end], ".")
-	if length(s) > 1
-		return s[end]
-	else
-		return ""
-	end
-end
-
-function madsgetrootname(filename::AbstractString; first=true)
-	d = split(filename, "/")
-	s = split(d[end], ".")
-	if !first && length(s) > 1
-		r = join(s[1:end-1], ".")
-	else
-		r = s[1]
-	end
-	if length(d) > 1
-		r = join(d[1:end-1], "/") * "/" * r
-	end
-	return r
-end
-
 function madsdisplay(filename::AbstractString)
 	if !isfile(filename)
 		@warn("File `$filename` is missing!")
@@ -31,9 +7,9 @@ function madsdisplay(filename::AbstractString)
 	end
 	if isdefined(Main, :TerminalExtensions)
 		trytoopen = false
-		ext = lowercase(madsgetextension(filename))
+		root, ext = splitext(filename)
+		ext = lowercase(ext)
 		if ext == "svg"
-			root = madsgetrootname(filename)
 			filename2 = root * ".png"
 			try
 				run(`convert -density 90 -background none $filename $filename2`)
