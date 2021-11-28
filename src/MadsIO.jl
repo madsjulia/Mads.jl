@@ -1347,7 +1347,7 @@ $(DocumentFunction.documentfunction(mkdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function mkdir(dirname::AbstractString)
-	if !isdir(dirname)
+	if !isdir(dirname) && dirname != ""
 		Base.mkdir(dirname)
 	end
 end
@@ -1370,14 +1370,15 @@ function recursivemkdir(s::AbstractString; filename=true)
 	end
 	d = Vector{String}(undef, 0)
 	sc = deepcopy(s)
-	if !filename && sc!= ""
+	if !filename && sc != ""
 		push!(d, sc)
 	end
 	scold = ""
 	while true
 		sd = splitdir(sc)
+		@show sd
 		sc = sd[1]
-		if sc == scold
+		if sc == scold || sc == ""
 			break
 		end
 		scold = deepcopy(sc)
