@@ -47,7 +47,7 @@ paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameter
 	initialconditions = [1., 0.]
 	odeprob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0, 100.0))
 	sol = OrdinaryDiffEq.solve(odeprob, OrdinaryDiffEq.Tsit5(), saveat=t)
-	ys = convert(Array, sol)'
+	ys = permutedims(convert(Array, sol))
 
 	# Write good test results to directory
 	if Mads.create_tests
