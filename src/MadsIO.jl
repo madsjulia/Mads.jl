@@ -296,8 +296,18 @@ function parsemadsdata!(madsdata::AbstractDict)
 		templates = Array{AbstractDict}(undef, length(madsdata["Templates"]))
 		i = 1
 		for dict in madsdata["Templates"]
-			for key in keys(dict) # this should only iterate once
+			for key in keys(dict)
 				templates[i] = dict[key]
+				filename = templates[i]["tpl"]
+				tplfile = open(filename)
+				line = readline(tplfile)
+				if length(line) >= 10 && line[1:9] == "template "
+					separator = line[10]
+					if separator == '$'
+						Mads.madserror("Template file $filename separator cannot be \$!")
+					end
+				end
+				close(tplfile)
 			end
 			i += 1
 		end
@@ -307,7 +317,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 		instructions = Array{AbstractDict}(undef, length(madsdata["Instructions"]))
 		i = 1
 		for dict in madsdata["Instructions"]
-			for key in keys(dict) # this should only iterate once
+			for key in keys(dict)
 				instructions[i] = dict[key]
 			end
 			i += 1
@@ -703,70 +713,82 @@ keytext=Dict("path"=>"path for the files [default=`.`]")))
 function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::AbstractString=".")
 	errorflag = false
 	boundparameters!(madsdata, parameters)
-	if haskey(madsdata, "Instructions") # Instructions
+	if haskey(madsdata, "Instructions")
 		for instruction in madsdata["Instructions"]
 			filename = instruction["ins"]
 			if !isfile(filename)
 				Mads.madswarn("Instruction file $filename is missing!"); errorflag = true
 			end
 			filename = instruction["read"]
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 	end
-	if haskey(madsdata, "Templates") # Templates
+	if haskey(madsdata, "Templates")
 		for template in madsdata["Templates"]
 			filename = template["tpl"]
 			if !isfile(filename)
 				Mads.madswarn("Template file $filename is missing!"); errorflag = true
+			else
+				tplfile = open(filename)
+				line = readline(tplfile)
+				if length(line) >= 10 && line[1:9] == "template "
+					separator = line[10]
+					if separator == '$'
+						Mads.madswarn("Template file $filename separator cannot be \$!"); errorflag = true
+					end
+				else
+					Mads.madswarn("Template file $filename does not have the right format!"); errorflag = true
+				end
+				close(tplfile)
 			end
 			filename = template["write"]
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 		writeparameters(madsdata, parameters)
 	end
 	#TODO move the writing into the "writeparameters" function
 	if haskey(madsdata, "JLDParameters") # JLD
 		for filename in vcat(madsdata["JLDParameters"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 		FileIO.save(madsdata["JLDParameters"], parameters) # create parameter files
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 	end
 	if haskey(madsdata, "JSONParameters") # JSON
 		for filename in vcat(madsdata["JSONParameters"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 		dumpjsonfile(madsdata["JSONParameters"], parameters) # create parameter file
 	end
 	if haskey(madsdata, "JSONPredictions") # JSON
 		for filename in vcat(madsdata["JSONPredictions"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 	end
 	if haskey(madsdata, "YAMLParameters") # YAML
 		for filename in vcat(madsdata["YAMLParameters"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 		dumpyamlfile(joinpath(path, madsdata["YAMLParameters"]), parameters) # create parameter files
 	end
 	if haskey(madsdata, "YAMLPredictions") # YAML
 		for filename in vcat(madsdata["YAMLPredictions"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 	end
 	if haskey(madsdata, "ASCIIParameters") # ASCII
 		filename = madsdata["ASCIIParameters"]
-		Mads.rmfile(filename, path=path) # delete the parameter file links
+		Mads.rmfile(filename, path=path)
 		#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 		dumpasciifile(joinpath(path, madsdata["ASCIIParameters"]), values(parameters)) # create an ASCII parameter file
 	end
 	if haskey(madsdata, "ASCIIPredictions") # ASCII
 		for filename in vcat(madsdata["ASCIIPredictions"])
-			Mads.rmfile(filename, path=path) # delete the parameter file links
+			Mads.rmfile(filename, path=path)
 		end
 	end
 	errorflag && madscritical("There are missing files!")
@@ -885,13 +907,15 @@ argtext=Dict("parameters"=>"parameters",
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
-	tplfile = open(templatefilename) # open template file
-	line = readline(tplfile) # read the first line that says "template $separator\n"
+	tplfile = open(templatefilename)
+	line = readline(tplfile)
 	if length(line) >= 10 && line[1:9] == "template "
-		separator = line[10] # template separator
+		separator = line[10]
+		if separator == '$'
+			madserror("Template separator cannot be \$")
+		end
 		lines = readlines(tplfile)
 	else
-		#it doesn't specify the separator -- assume it is '#'
 		separator = '#'
 		lines = [line; readlines(tplfile)]
 	end
@@ -1376,7 +1400,6 @@ function recursivemkdir(s::AbstractString; filename=true)
 	scold = ""
 	while true
 		sd = splitdir(sc)
-		@show sd
 		sc = sd[1]
 		if sc == scold || sc == ""
 			break
