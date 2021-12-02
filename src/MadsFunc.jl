@@ -137,7 +137,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		currentdir = pwd()
 		"MADS command function"
 		function madscommandfunctionrerun(parameters::AbstractDict) # MADS command function
-			if simpleproblem && currentdir != abspath(madsproblemdir)
+			if simpleproblem && currentdir != abspath(madsproblemdir) && madsproblemdir != "."
 				cd(madsproblemdir)
 				cwd = pwd()
 			else
@@ -148,7 +148,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			trying = true
 			tempdirname = ""
 			while trying
-				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M",time()))_$(Mads.modelruns)_$(Random.randstring(6))"
+				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
 				Mads.linktempdir(cwd, tempdirname)
