@@ -191,6 +191,7 @@ $(DocumentFunction.documentfunction(parsemadsdata!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function parsemadsdata!(madsdata::AbstractDict)
+	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Parameters")
 		parameters = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 		for dict in madsdata["Parameters"]
@@ -251,7 +252,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 		wells = OrderedCollections.OrderedDict{String,Any}()
 		for dict in madsdata["Wells"]
 			if collect(keys(dict))[1] == "filename"
-				dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Wells"]
+				dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]), bigfile=true)["Wells"]
 			elseif collect(keys(dict))[1] == "script"
 				dictnew = include(collect(values(dict))[1])
 			else
@@ -276,7 +277,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 			observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 			for dict in madsdata["Observations"]
 				if collect(keys(dict))[1] == "filename"
-					dictnew = loadmadsfile(joinpath(getmadsproblemdir(madsdata), collect(values(dict))[1]), bigfile=true)["Observations"]
+					dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]), bigfile=true)["Observations"]
 				elseif collect(keys(dict))[1] == "script"
 					dictnew = include(collect(values(dict))[1])
 				else
@@ -298,16 +299,20 @@ function parsemadsdata!(madsdata::AbstractDict)
 		for dict in madsdata["Templates"]
 			for key in keys(dict)
 				templates[i] = dict[key]
-				filename = templates[i]["tpl"]
-				tplfile = open(filename)
-				line = readline(tplfile)
-				if length(line) >= 10 && line[1:9] == "template "
-					separator = line[10]
-					if separator == '$'
-						Mads.madserror("Template file $filename separator cannot be \$!")
+				filename = joinpath(madsproblemdir, templates[i]["tpl"])
+				if isfile(filename)
+					tplfile = open(filename)
+					line = readline(tplfile)
+					if length(line) >= 10 && line[1:9] == "template "
+						separator = line[10]
+						if separator == '$'
+							Mads.madserror("Template file $filename separator cannot be \$!")
+						end
 					end
+					close(tplfile)
+				else
+					Mads.madswarn("Template file $filename is missing!")
 				end
-				close(tplfile)
 			end
 			i += 1
 		end
@@ -737,7 +742,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for filename in vcat(madsdata["JLDParameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		FileIO.save(madsdata["JLDParameters"], parameters)s
+		FileIO.save(madsdata["JLDParameters"], parameters)
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
