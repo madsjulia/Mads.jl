@@ -1,7 +1,7 @@
 import Mads
 import SVR
 
-md = Mads.loadmadsfile("w04.mads") # load Mads input file into Julia Dictionary
+md = Mads.loadmadsfile("w04.mads") # Load Mads input file into a Julia Dictionary
 rootname = Mads.getmadsrootname(md)
 
 Mads.allwellsoff!(md) # turn off all wells
@@ -20,8 +20,8 @@ Mads.display("$rootname-w13a-training-set-$numberofsamples-spaghetti.png")
 
 svrpredictions = Array{Float64}(undef, 0, numberofsamples)
 for i=1:50
-	pmodel = SVR.train(predictions[i,:], paramarray'; eps=0.001, C=10000.);
-	y_pr = SVR.predict(pmodel, paramarray');
+	pmodel = SVR.train(predictions[i,:], paramarray'; eps=0.001, C=10000.)
+	y_pr = SVR.predict(pmodel, paramarray')
 	SVR.freemodel(pmodel)
 	svrpredictions = [svrpredictions; y_pr']
 end
