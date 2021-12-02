@@ -461,7 +461,7 @@ function setseed(seed::Integer=-1, quiet::Bool=true)
 		Random.seed!(seed)
 		!quiet && @info("New seed: $seed")
 	else
-		s = Int(Random.default_rng().seed[1])
+		s = getseed()
 		!quiet && @info("Current seed: $s")
 	end
 end
@@ -472,7 +472,11 @@ Get and return current random seed.
 $(DocumentFunction.documentfunction(getseed))
 """
 function getseed()
-	return Int(Base.Random.GLOBAL_RNG.seed[1])
+	if VERSION < v"1.7"
+		return Int(Random.default_rng().seed[1])
+	else
+		return  Int(Random.GLOBAL_SEED)
+	end
 end
 
 """
