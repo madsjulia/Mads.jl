@@ -464,6 +464,7 @@ function setseed(seed::Integer=-1, quiet::Bool=true)
 		s = getseed()
 		!quiet && @info("Current seed: $s")
 	end
+	return nothing
 end
 
 """
@@ -475,7 +476,7 @@ function getseed()
 	if VERSION < v"1.7"
 		return Int(Random.default_rng().seed[1])
 	else
-		return  Int(Random.GLOBAL_SEED)
+		return Random.GLOBAL_SEED[1]
 	end
 end
 
