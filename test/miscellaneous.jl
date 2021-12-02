@@ -172,7 +172,7 @@ Mads.setprocs(1)
 Mads.parsenodenames("wc[096-157,160,175]")
 
 Mads.graphoff()
-Mads.plotseries(rand(4,5), "test.png", combined=false)
+Mads.plotseries(rand(4,5), "test.png"; combined=false)
 Mads.plotseries(rand(4,5), "test.png")
 if isdefined(Mads, :display)
 	Mads.display("test.png")
