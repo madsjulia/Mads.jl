@@ -15,8 +15,8 @@ computeconcentrations = Mads.makedoublearrayfunction(md)
 # this is slow because concentration function is created each time
 # rfs = Array{Float64}(undef, ns);
 # @time for i = 1:ns
-# rfs[i] = Mads.forward(md, rsetarrayplus[:, i])
-#end
+# 	rfs[i] = Mads.forward(md, rsetarrayplus[:, i])
+# end
 
 Mads.vectoroff()
 @time rf = Mads.forward(md, rsetarray);

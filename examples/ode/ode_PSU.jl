@@ -23,23 +23,22 @@ tstop = 5.0
 times = collect(tstart:0.1:tstop)
 
 function RSAH23sF(t, state)
-    SV = 1.0
-    SQ = sign(state[3]) # keep Q positive
-    LV = log(SV * state[2] / W0)
-    LQ = log(SQ * state[3] / Q0)
+	S3 = abs(state[3])
+	LV = log(state[2] / W0)
+	LQ = log(S3 / Q0)
 
-    D1 = state[2]
-    D2 = K / M * (state[4] - state[1]) -  N / M * (mu0 + a * LV + b * LQ)
-    D3 = 1 - (SV * state[2] * SQ * state[3]) / W0 / Q0
-    D4 = V0
+	D1 = state[2]
+	D2 = K / M * (state[4] - state[1]) -  N / M * (mu0 + a * LV + b * LQ)
+	D3 = 1. - (state[2] * S3) / W0 / Q0
+	D4 = V0
 
-    return [D1, D2, D3, D4]
+	return [D1, D2, D3, D4]
 end
 
 RSAH23sF(0.1, state0)
 
 t, state = ODE.ode23s(RSAH23sF, state0, times; points=:specified)
-output=permutedims(hcat(state...))
+output = permutedims(hcat(state...))
 
 Mads.plotseries(output; xaxis=times, xmax=5, name="State", combined=false, vsize=16Gadfly.inch, hsize=6Gadfly.inch)
 
