@@ -719,8 +719,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 			if !isfile(filename)
 				Mads.madswarn("Instruction file $filename is missing!"); errorflag = true
 			end
-			filename = instruction["read"]
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(instruction["read"], path=path)
 		end
 	end
 	if haskey(madsdata, "Templates")
@@ -728,65 +727,52 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 			filename = template["tpl"]
 			if !isfile(filename)
 				Mads.madswarn("Template file $filename is missing!"); errorflag = true
-			else
-				tplfile = open(filename)
-				line = readline(tplfile)
-				if length(line) >= 10 && line[1:9] == "template "
-					separator = line[10]
-					if separator == '$'
-						Mads.madswarn("Template file $filename separator cannot be \$!"); errorflag = true
-					end
-				else
-					Mads.madswarn("Template file $filename does not have the right format!"); errorflag = true
-				end
-				close(tplfile)
 			end
-			filename = template["write"]
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(template["write"], path=path)
 		end
 		writeparameters(madsdata, parameters)
 	end
 	#TODO move the writing into the "writeparameters" function
-	if haskey(madsdata, "JLDParameters") # JLD
+	if haskey(madsdata, "JLDParameters")
 		for filename in vcat(madsdata["JLDParameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		FileIO.save(madsdata["JLDParameters"], parameters) # create parameter files
+		FileIO.save(madsdata["JLDParameters"], parameters)s
 	end
 	if haskey(madsdata, "JLDPredictions") # JLD
 		for filename in vcat(madsdata["JLDPredictions"])
 			Mads.rmfile(filename, path=path)
 		end
 	end
-	if haskey(madsdata, "JSONParameters") # JSON
+	if haskey(madsdata, "JSONParameters")
 		for filename in vcat(madsdata["JSONParameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		dumpjsonfile(madsdata["JSONParameters"], parameters) # create parameter file
+		dumpjsonfile(madsdata["JSONParameters"], parameters)
 	end
-	if haskey(madsdata, "JSONPredictions") # JSON
+	if haskey(madsdata, "JSONPredictions")
 		for filename in vcat(madsdata["JSONPredictions"])
 			Mads.rmfile(filename, path=path)
 		end
 	end
-	if haskey(madsdata, "YAMLParameters") # YAML
+	if haskey(madsdata, "YAMLParameters")
 		for filename in vcat(madsdata["YAMLParameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		dumpyamlfile(joinpath(path, madsdata["YAMLParameters"]), parameters) # create parameter files
+		dumpyamlfile(joinpath(path, madsdata["YAMLParameters"]), parameters)
 	end
-	if haskey(madsdata, "YAMLPredictions") # YAML
+	if haskey(madsdata, "YAMLPredictions")
 		for filename in vcat(madsdata["YAMLPredictions"])
 			Mads.rmfile(filename, path=path)
 		end
 	end
-	if haskey(madsdata, "ASCIIParameters") # ASCII
+	if haskey(madsdata, "ASCIIParameters")
 		filename = madsdata["ASCIIParameters"]
 		Mads.rmfile(filename, path=path)
 		#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
-		dumpasciifile(joinpath(path, madsdata["ASCIIParameters"]), values(parameters)) # create an ASCII parameter file
+		dumpasciifile(joinpath(path, filename), values(parameters))
 	end
-	if haskey(madsdata, "ASCIIPredictions") # ASCII
+	if haskey(madsdata, "ASCIIPredictions")
 		for filename in vcat(madsdata["ASCIIPredictions"])
 			Mads.rmfile(filename, path=path)
 		end
