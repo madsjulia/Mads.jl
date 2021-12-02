@@ -18,8 +18,8 @@ function madsmodelrun(parameters::AbstractDict)
 	funcosc = makefunc(parameters)
 	times = collect(0:.1:100)
 	initialconditions = [1.,0.]
-	t, y = ODE.ode23s(funcosc, initialconditions, times, points=:specified)
-	ys = hcat(y...).' # vecorize the output and transpose with '
+	t, y = ODE.ode23s(funcosc, initialconditions, times; points=:specified)
+	ys = permutedims(hcat(y...) # vectorize the output and transpose with
 	predictions = OrderedCollections.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), ys[:,1]))
 	return predictions
 end
