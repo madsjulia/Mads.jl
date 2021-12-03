@@ -1,4 +1,6 @@
 
+<a id='MetaProgTools.jl'></a>
+
 <a id='MetaProgTools.jl-1'></a>
 
 # MetaProgTools.jl
@@ -17,9 +19,9 @@ MetaProgTools.jl module functions:
 Get symbols
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/e2b83dfafbba6a50550bbef89a41063269b41a61/src/MetaProgTools.jl#L42' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/c7bfdfb0ba215a2c1dd1516a7c85937f13a44823/src/MetaProgTools.jl#L42' class='documenter-source'>source</a><br>
 
-<a id='MetaProgTools.in-Tuple{Any,Expr}' href='#MetaProgTools.in-Tuple{Any,Expr}'>#</a>
+<a id='MetaProgTools.in-Tuple{Any, Expr}' href='#MetaProgTools.in-Tuple{Any, Expr}'>#</a>
 **`MetaProgTools.in`** &mdash; *Method*.
 
 
@@ -27,9 +29,9 @@ Get symbols
 Find a needle in a haystack
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/e2b83dfafbba6a50550bbef89a41063269b41a61/src/MetaProgTools.jl#L135' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/c7bfdfb0ba215a2c1dd1516a7c85937f13a44823/src/MetaProgTools.jl#L135' class='documenter-source'>source</a><br>
 
-<a id='MetaProgTools.populateexpression-Tuple{Symbol,AbstractDict}' href='#MetaProgTools.populateexpression-Tuple{Symbol,AbstractDict}'>#</a>
+<a id='MetaProgTools.populateexpression-Tuple{Symbol, AbstractDict}' href='#MetaProgTools.populateexpression-Tuple{Symbol, AbstractDict}'>#</a>
 **`MetaProgTools.populateexpression`** &mdash; *Method*.
 
 
@@ -37,9 +39,9 @@ Find a needle in a haystack
 Populate Expression
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/e2b83dfafbba6a50550bbef89a41063269b41a61/src/MetaProgTools.jl#L68' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/c7bfdfb0ba215a2c1dd1516a7c85937f13a44823/src/MetaProgTools.jl#L68' class='documenter-source'>source</a><br>
 
-<a id='MetaProgTools.replacesymbol-Tuple{Symbol,Symbol,Any}' href='#MetaProgTools.replacesymbol-Tuple{Symbol,Symbol,Any}'>#</a>
+<a id='MetaProgTools.replacesymbol-Tuple{Symbol, Symbol, Any}' href='#MetaProgTools.replacesymbol-Tuple{Symbol, Symbol, Any}'>#</a>
 **`MetaProgTools.replacesymbol`** &mdash; *Method*.
 
 
@@ -47,5 +49,5 @@ Populate Expression
 Replace Symbol
 
 
-<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/e2b83dfafbba6a50550bbef89a41063269b41a61/src/MetaProgTools.jl#L100' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/MetaProgTools.jl/blob/c7bfdfb0ba215a2c1dd1516a7c85937f13a44823/src/MetaProgTools.jl#L100' class='documenter-source'>source</a><br>
 

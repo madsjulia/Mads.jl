@@ -1,4 +1,6 @@
 
+<a id='DocumentFunction.jl'></a>
+
 <a id='DocumentFunction.jl-1'></a>
 
 # DocumentFunction.jl
@@ -28,7 +30,7 @@ Keywords:
   * `location`: show/hide function location on the disk
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L113-L126' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L108-L121' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionarguments' href='#DocumentFunction.getfunctionarguments'>#</a>
 **`DocumentFunction.getfunctionarguments`** &mdash; *Function*.
@@ -43,7 +45,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L152-L159' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L147-L154' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionkeywords' href='#DocumentFunction.getfunctionkeywords'>#</a>
 **`DocumentFunction.getfunctionkeywords`** &mdash; *Function*.
@@ -58,7 +60,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L183-L190' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L178-L185' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionmethods-Tuple{Function}' href='#DocumentFunction.getfunctionmethods-Tuple{Function}'>#</a>
 **`DocumentFunction.getfunctionmethods`** &mdash; *Method*.
@@ -76,25 +78,5 @@ Return:
   * array with function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L39-L49' class='documenter-source'>source</a><br>
-
-<a id='DocumentFunction.stdoutcaptureoff-Tuple{}' href='#DocumentFunction.stdoutcaptureoff-Tuple{}'>#</a>
-**`DocumentFunction.stdoutcaptureoff`** &mdash; *Method*.
-
-
-
-Restore STDOUT
-
-
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L28-L30' class='documenter-source'>source</a><br>
-
-<a id='DocumentFunction.stdoutcaptureon-Tuple{}' href='#DocumentFunction.stdoutcaptureon-Tuple{}'>#</a>
-**`DocumentFunction.stdoutcaptureon`** &mdash; *Method*.
-
-
-
-Redirect STDOUT to a reader
-
-
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/25ac3532bcd44c05842005cbf448c77d458573c7/src/DocumentFunction.jl#L17-L19' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L17-L27' class='documenter-source'>source</a><br>
 

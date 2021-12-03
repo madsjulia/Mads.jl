@@ -1,4 +1,6 @@
 
+<a id='Anasol.jl'></a>
+
 <a id='Anasol.jl-1'></a>
 
 # Anasol.jl
@@ -72,10 +74,10 @@ Do not make documentation
 
 Methods:
 
-  * `Anasol.documentationoff() in Anasol` : /Users/monty/.julia/dev/Anasol/src/Anasol.jl:237
+  * `Anasol.documentationoff() in Anasol` : /Users/vvv/.julia/dev/Anasol/src/Anasol.jl:234
 
 
-<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/f1fcebd1bda0c09f26ce406cd4cc6e3b5af1b799/src/Anasol.jl#L231-L235' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/197741257e7a2047cd50cc38507bc07cfad5371d/src/Anasol.jl#L229-L233' class='documenter-source'>source</a><br>
 
 <a id='Anasol.documentationon-Tuple{}' href='#Anasol.documentationon-Tuple{}'>#</a>
 **`Anasol.documentationon`** &mdash; *Method*.
@@ -86,10 +88,10 @@ Make documentation
 
 Methods:
 
-  * `Anasol.documentationon() in Anasol` : /Users/monty/.julia/dev/Anasol/src/Anasol.jl:228
+  * `Anasol.documentationon() in Anasol` : /Users/vvv/.julia/dev/Anasol/src/Anasol.jl:225
 
 
-<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/f1fcebd1bda0c09f26ce406cd4cc6e3b5af1b799/src/Anasol.jl#L222-L226' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/197741257e7a2047cd50cc38507bc07cfad5371d/src/Anasol.jl#L220-L224' class='documenter-source'>source</a><br>
 
 <a id='Anasol.@code-Tuple{Any}' href='#Anasol.@code-Tuple{Any}'>#</a>
 **`Anasol.@code`** &mdash; *Macro*.
@@ -99,7 +101,7 @@ Methods:
 `code` the code macro is used to put a line of code (or a quote) onto the growing gen_code function.
 
 
-<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/f1fcebd1bda0c09f26ce406cd4cc6e3b5af1b799/src/gencode.jl#L28-L31' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/197741257e7a2047cd50cc38507bc07cfad5371d/src/gencode.jl#L28-L31' class='documenter-source'>source</a><br>
 
 <a id='Anasol.@gen_code-Tuple{Any}' href='#Anasol.@gen_code-Tuple{Any}'>#</a>
 **`Anasol.@gen_code`** &mdash; *Macro*.
@@ -109,5 +111,5 @@ Methods:
 `gen_code` rejigs the standard julia `@generate` macro so that it creates a `code` expression variable that can be extended using the `@code` macro. At the end of the function it automatically outputs the result.
 
 
-<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/f1fcebd1bda0c09f26ce406cd4cc6e3b5af1b799/src/gencode.jl#L1-L5' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/Anasol.jl/blob/197741257e7a2047cd50cc38507bc07cfad5371d/src/gencode.jl#L1-L5' class='documenter-source'>source</a><br>
 
