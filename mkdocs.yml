@@ -56,7 +56,7 @@ markdown_extensions:
 #      enable_dollar_delimiter: True #for use of inline $..$
 
 extra_javascript:
-  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML
   - assets/mathjaxhelper.js
 
 theme:
