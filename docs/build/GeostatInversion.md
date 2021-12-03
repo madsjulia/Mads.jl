@@ -1,4 +1,6 @@
 
+<a id='GeostatInversion.jl'></a>
+
 <a id='GeostatInversion.jl-1'></a>
 
 # GeostatInversion.jl
@@ -33,6 +35,8 @@ Order   = [:function, :macro, :type]
 ```
 
 
+<a id='Module-GeostatInversion.FDDerivatives'></a>
+
 <a id='Module-GeostatInversion.FDDerivatives-1'></a>
 
 ## Module GeostatInversion.FDDerivatives
@@ -47,6 +51,8 @@ Order   = [:function, :macro, :type]
 ```
 
 
+<a id='Module-GeostatInversion.RandMatFact'></a>
+
 <a id='Module-GeostatInversion.RandMatFact-1'></a>
 
 ## Module GeostatInversion.RandMatFact
@@ -60,6 +66,8 @@ Modules = [GeostatInversion.RandMatFact]
 Order   = [:function, :macro, :type]
 ```
 
+
+<a id='Module-GeostatInversion.FFTRF'></a>
 
 <a id='Module-GeostatInversion.FFTRF-1'></a>
 

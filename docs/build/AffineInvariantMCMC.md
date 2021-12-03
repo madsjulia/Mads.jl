@@ -1,4 +1,6 @@
 
+<a id='AffineInvariantMCMC.jl'></a>
+
 <a id='AffineInvariantMCMC.jl-1'></a>
 
 # AffineInvariantMCMC.jl
@@ -9,7 +11,7 @@ Module AffineInvariantMCMC.jl provides functions for Bayesian sampling using Aff
 
 AffineInvariantMCMC.jl module functions:
 
-<a id='AffineInvariantMCMC.flattenmcmcarray-Tuple{Array,Array}' href='#AffineInvariantMCMC.flattenmcmcarray-Tuple{Array,Array}'>#</a>
+<a id='AffineInvariantMCMC.flattenmcmcarray-Tuple{Array, Array}' href='#AffineInvariantMCMC.flattenmcmcarray-Tuple{Array, Array}'>#</a>
 **`AffineInvariantMCMC.flattenmcmcarray`** &mdash; *Method*.
 
 
@@ -17,7 +19,7 @@ AffineInvariantMCMC.jl module functions:
 Flatten MCMC arrays
 
 
-<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/40aafaa7f0bcf7c464c8d1329d07823712f34334/src/AffineInvariantMCMC.jl#L96' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L103' class='documenter-source'>source</a><br>
 
 <a id='AffineInvariantMCMC.sample' href='#AffineInvariantMCMC.sample'>#</a>
 **`AffineInvariantMCMC.sample`** &mdash; *Function*.
@@ -48,5 +50,15 @@ Reference:
 Goodman & Weare, "Ensemble samplers with affine invariance", Communications in Applied Mathematics and Computational Science, DOI: 10.2140/camcos.2010.5.65, 2010.
 
 
-<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/40aafaa7f0bcf7c464c8d1329d07823712f34334/src/AffineInvariantMCMC.jl#L36-L59' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L43-L66' class='documenter-source'>source</a><br>
+
+<a id='AffineInvariantMCMC.test-Tuple{}' href='#AffineInvariantMCMC.test-Tuple{}'>#</a>
+**`AffineInvariantMCMC.test`** &mdash; *Method*.
+
+
+
+Test AffineInvariantMCMC
+
+
+<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L38' class='documenter-source'>source</a><br>
 
