@@ -20,6 +20,10 @@ markdown_extensions:
   - tables
   - fenced_code
   - mdx_math
+  - toc
+  - footnotes
+  - admonition
+  - codehilite
 
 docs_dir: 'build'
 

@@ -433,7 +433,7 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	xtrans = xshift * cos(d) - yshift * sin(d)
 	ytrans = xshift * sin(d) + yshift * cos(d)
 	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
-	#sigma01 = sigma02 = sigma03 = 0. #point source
+	# sigma01 = sigma02 = sigma03 = 0. #point source
 	sigma01 = dx
 	sigma02 = dy
 	sigma03 = dz
