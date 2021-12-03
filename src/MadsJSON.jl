@@ -13,11 +13,11 @@ Returns:
 
 - data from the JSON file
 """
-function loadjsonfile(filename::AbstractString) # load JSON text file
+function loadjsonfile(filename::AbstractString)
 	sz = filesize(filename)
 	f = open(filename, "r")
 	a = Mmap.mmap(f, Vector{UInt8}, sz)
-	s = String(a) # ASCIIString is needed; urgh
+	s = String(a) # ASCIIString is needed!
 	data = JSON.parse(s; dicttype=OrderedCollections.OrderedDict)
 	finalize(a)
 	close(f)
@@ -35,7 +35,7 @@ Dumps:
 
 - JSON file with the name in "filename"
 """
-function dumpjsonfile(filename::AbstractString, data::Any) # dump JSON text file
+function dumpjsonfile(filename::AbstractString, data::Any)
 	f = open(filename, "w")
 	JSON.print(f, data, 1)
 	close(f)

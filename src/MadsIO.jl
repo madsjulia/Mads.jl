@@ -670,28 +670,28 @@ Returns:
 """
 function checkmodeloutputdirs(madsdata::AbstractDict)
 	directories = Array{String}(undef, 0)
-	if haskey(madsdata, "Instructions") # Instructions
+	if haskey(madsdata, "Instructions")
 		for instruction in madsdata["Instructions"]
 			filename = instruction["read"]
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "JLDPredictions") # JLD
+	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "JSONPredictions") # JSON
+	if haskey(madsdata, "JSONPredictions")
 		for filename in vcat(madsdata["JSONPredictions"])
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "YAMLPredictions") # YAML
+	if haskey(madsdata, "YAMLPredictions")
 		for filename in vcat(madsdata["YAMLPredictions"])
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "ASCIIPredictions") # ASCII
+	if haskey(madsdata, "ASCIIPredictions")
 		for filename in vcat(madsdata["ASCIIPredictions"])
 			push!(directories, getdir(filename))
 		end
@@ -744,7 +744,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		end
 		FileIO.save(madsdata["JLDParameters"], parameters)
 	end
-	if haskey(madsdata, "JLDPredictions") # JLD
+	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
 			Mads.rmfile(filename, path=path)
 		end
@@ -794,25 +794,25 @@ keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobskeys(madsdata))
 	results = OrderedCollections.OrderedDict()
-	if haskey(madsdata, "Instructions") # Templates/Instructions
+	if haskey(madsdata, "Instructions")
 		results = readobservations(madsdata, obskeys)
 	end
-	if haskey(madsdata, "JLDPredictions") # JLD
+	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
 			results = merge(results, FileIO.load(filename))
 		end
 	end
-	if haskey(madsdata, "JSONPredictions") # JSON
+	if haskey(madsdata, "JSONPredictions")
 		for filename in vcat(madsdata["JSONPredictions"])
 			results = merge(results, loadjsonfile(filename))
 		end
 	end
-	if haskey(madsdata, "YAMLPredictions") # YAML
+	if haskey(madsdata, "YAMLPredictions")
 		for filename in vcat(madsdata["YAMLPredictions"])
 			results = merge(results, loadyamlfile(filename))
 		end
 	end
-	if haskey(madsdata, "ASCIIPredictions") # ASCII
+	if haskey(madsdata, "ASCIIPredictions")
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
 		obsid=[convert(String,k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
