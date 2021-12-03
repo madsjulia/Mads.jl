@@ -12,7 +12,7 @@ Returns:
 
 - data from the file
 """
-function loadasciifile(filename::AbstractString) # load ASCII text file
+function loadasciifile(filename::AbstractString)
 	return DelimitedFiles.readdlm(filename)
 end
 
@@ -27,7 +27,7 @@ Dumps:
 
 - ASCII file with the name in "filename"
 """
-function dumpasciifile(filename::AbstractString, data::Any) # dump ASCII text file
+function dumpasciifile(filename::AbstractString, data::Any)
 	DelimitedFiles.writedlm(filename, data)
 end
 
@@ -41,6 +41,6 @@ Returns:
 
 - MADS predictions
 """
-function readasciipredictions(filename::AbstractString) # read ASCII text predictions
+function readasciipredictions(filename::AbstractString)
 	return loadasciifile(filename)
 end
