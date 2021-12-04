@@ -1,7 +1,9 @@
-# MADS Getting Started
+# Getting Started
 
 Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`import Pkg; Pkg.add("Mads")`) using the installation instruction in the `README.md` ([see also](https://github.com/madsjulia/Mads.jl)).
+
 If you are not familiar with Julia, checkout [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/), [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/), [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)).
+
 You can also explore Julia examples provided in Mads: `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
 
 MADS is also available on Docker
@@ -15,6 +17,7 @@ To start using MADS, initiate the Julia REPL and execute `import Mads` to load M
 All the MADS analyses are based on a MADS problem dictionary that defines the problem.
 
 The MADS problem dictionary is typically loaded from a YAML MADS input file.
+
 The loading of a MADS file can be executed as follows:
 
 ```julia
@@ -24,7 +27,7 @@ madsdata = Mads.loadmadsfile("<input_file_name>.mads")
 For example, you can execute:
 
 ```julia
-madsdata = Mads.loadmadsfile(Mads.dir * "/../examples/getting_started/internal-linear.mads")
+madsdata = Mads.loadmadsfile(joinpath(Mads.dir, "examples", "getting_started", "internal-linear.mads"))
 ```
 
 The file `internal-linear.mads` is located in `examples/getting_started` directory of the `Mads.jl` repository.
@@ -49,9 +52,9 @@ Observations:
 Model: internal-linear.jl
 ```
 
-In this case, there are two parameters, `a` and `b`, defining a linear model, `f(t) = a * t + b`, described in `internal-linearmodel.jl`.
+In this case, there are two parameters, `a` and `b`, defining a linear model, `f(t) = a * t + b`, described in `internal-linear.jl`.
 
-The Julia file `internal-linearmodel.jl` is specified under `Model` in the MADS problem dictionary above.
+The Julia file `internal-linear.jl` is specified under `Model` in the MADS problem dictionary above.
 
 Execute:
 
@@ -64,9 +67,10 @@ MADS can perform various types of analyses:
 - `Mads.forward(madsdata)` will execute forward model simulation based on the initial parameter values.
 - `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.
 - `optparam, iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
-- `Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
+- `Mads.forward(madsdata, optparam)` will perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
 
 More complicated analyses will require additional information to be provided in the MADS problem dictionary.
+
 Examples are given in the `examples` subdirectories of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples)).
 
 # MADS Command-line execution
