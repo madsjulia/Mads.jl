@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#mads-getting-started" class="md-skip">
+        <a href="#getting-started" class="md-skip">
           Skip to content
         </a>
       
@@ -247,60 +247,12 @@
       <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
       
       
+        
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Getting started
-          <span class="md-nav__icon md-icon"></span>
-        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         Getting started
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mads-getting-started" class="md-nav__link">
-    MADS Getting Started
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-command-line-execution" class="md-nav__link">
-    MADS Command-line execution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-documentation" class="md-nav__link">
-    MADS Documentation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-licensing-copyright" class="md-nav__link">
-    MADS Licensing &amp; Copyright
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -762,42 +714,8 @@
   
   
   
+    
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mads-getting-started" class="md-nav__link">
-    MADS Getting Started
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-command-line-execution" class="md-nav__link">
-    MADS Command-line execution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-documentation" class="md-nav__link">
-    MADS Documentation
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mads-licensing-copyright" class="md-nav__link">
-    MADS Licensing &amp; Copyright
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -814,25 +732,23 @@
 </a>
 
 
-  <h1>Getting started</h1>
-
-<h2 id="mads-getting-started">MADS Getting Started</h2>
-<p>Install <a href="http://julialang.org">Julia</a> and <a href="http://github.com/madsjulia/Mads.jl">MADS</a> (<code>import Pkg; Pkg.add("Mads")</code>) using the installation instruction in the <code>README.md</code> (<a href="https://github.com/madsjulia/Mads.jl">see also</a>).
-If you are not familiar with Julia, checkout <a href="http://samuelcolvin.github.io/JuliaByExample/">Julia By Example</a>, <a href="https://learnxinyminutes.com/docs/julia/">learn X in Y minutes</a>, <a href="http://bogumilkaminski.pl/files/julia_express.pdf">Julia Express</a>).
-You can also explore Julia examples provided in Mads: <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia">github</a>).</p>
+<h1 id="getting-started">Getting Started</h1>
+<p>Install <a href="http://julialang.org">Julia</a> and <a href="http://github.com/madsjulia/Mads.jl">MADS</a> (<code>import Pkg; Pkg.add("Mads")</code>) using the installation instruction in the <code>README.md</code> (<a href="https://github.com/madsjulia/Mads.jl">see also</a>).</p>
+<p>If you are not familiar with Julia, checkout <a href="http://samuelcolvin.github.io/JuliaByExample/">Julia By Example</a>, <a href="https://learnxinyminutes.com/docs/julia/">learn X in Y minutes</a>, <a href="http://bogumilkaminski.pl/files/julia_express.pdf">Julia Express</a>).</p>
+<p>You can also explore Julia examples provided in Mads: <code>examples/learn_julia</code> directory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia">github</a>).</p>
 <p>MADS is also available on Docker</p>
 <div class="codehilite"><pre><span></span><code>docker run --interactive --tty montyvesselinov/madsjulia
 </code></pre></div>
 
 <p>To start using MADS, initiate the Julia REPL and execute <code>import Mads</code> to load MADS modules.</p>
 <p>All the MADS analyses are based on a MADS problem dictionary that defines the problem.</p>
-<p>The MADS problem dictionary is typically loaded from a YAML MADS input file.
-The loading of a MADS file can be executed as follows:</p>
+<p>The MADS problem dictionary is typically loaded from a YAML MADS input file.</p>
+<p>The loading of a MADS file can be executed as follows:</p>
 <div class="codehilite"><pre><span></span><code><span class="n">madsdata</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">loadmadsfile</span><span class="p">(</span><span class="s">&quot;&lt;input_file_name&gt;.mads&quot;</span><span class="p">)</span>
 </code></pre></div>
 
 <p>For example, you can execute:</p>
-<div class="codehilite"><pre><span></span><code><span class="n">madsdata</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">loadmadsfile</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">dir</span> <span class="o">*</span> <span class="s">&quot;/../examples/getting_started/internal-linear.mads&quot;</span><span class="p">)</span>
+<div class="codehilite"><pre><span></span><code><span class="n">madsdata</span> <span class="o">=</span> <span class="n">Mads</span><span class="o">.</span><span class="n">loadmadsfile</span><span class="p">(</span><span class="n">joinpath</span><span class="p">(</span><span class="n">Mads</span><span class="o">.</span><span class="n">dir</span><span class="p">,</span> <span class="s">&quot;examples&quot;</span><span class="p">,</span> <span class="s">&quot;getting_started&quot;</span><span class="p">,</span> <span class="s">&quot;internal-linear.mads&quot;</span><span class="p">))</span>
 </code></pre></div>
 
 <p>The file <code>internal-linear.mads</code> is located in <code>examples/getting_started</code> directory of the <code>Mads.jl</code> repository.</p>
@@ -854,8 +770,8 @@ The loading of a MADS file can be executed as follows:</p>
 <span class="nt">Model</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">internal-linear.jl</span>
 </code></pre></div>
 
-<p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linearmodel.jl</code>.</p>
-<p>The Julia file <code>internal-linearmodel.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
+<p>In this case, there are two parameters, <code>a</code> and <code>b</code>, defining a linear model, <code>f(t) = a * t + b</code>, described in <code>internal-linear.jl</code>.</p>
+<p>The Julia file <code>internal-linear.jl</code> is specified under <code>Model</code> in the MADS problem dictionary above.</p>
 <p>Execute:</p>
 <p><code>Mads.showallparameters(madsdata)</code> to show all the parameters.</p>
 <p><code>Mads.showobservations(madsdata)</code> to list all the observations.</p>
@@ -864,11 +780,11 @@ The loading of a MADS file can be executed as follows:</p>
 <li><code>Mads.forward(madsdata)</code> will execute forward model simulation based on the initial parameter values.</li>
 <li><code>saresults = Mads.efast(madsdata)</code> will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.</li>
 <li><code>optparam, iaresults = Mads.calibrate(madsdata)</code> will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.</li>
-<li><code>Mads.forward(madsdata, optparam) will perform forward model simulation based on the parameter values</code>optparam` estimated by the inverse analyses above.</li>
+<li><code>Mads.forward(madsdata, optparam)</code> will perform forward model simulation based on the parameter values <code>optparam</code> estimated by the inverse analyses above.</li>
 </ul>
-<p>More complicated analyses will require additional information to be provided in the MADS problem dictionary.
-Examples are given in the <code>examples</code> subdirectories of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>).</p>
-<h2 id="mads-command-line-execution">MADS Command-line execution</h2>
+<p>More complicated analyses will require additional information to be provided in the MADS problem dictionary.</p>
+<p>Examples are given in the <code>examples</code> subdirectories of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples">github</a>).</p>
+<h1 id="mads-command-line-execution">MADS Command-line execution</h1>
 <p>MADS can be executed at the command line using <code>madsjl.jl</code>. Link this file in a directory in your search <code>PATH</code>.</p>
 <p>For example, using <code>madsjl.jl</code> you can execute:</p>
 <div class="codehilite"><pre><span></span><code>madsjl.jl diff internal-linear.mads internal-parabola.mads
@@ -876,9 +792,9 @@ madsjl.jl internal-parabola.mads forward efast
 </code></pre></div>
 
 <p>in the <code>examples/getting_started</code> subdirectory of the <code>Mads.jl</code> repository (<a href="https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started">github</a>).</p>
-<h2 id="mads-documentation">MADS Documentation</h2>
+<h1 id="mads-documentation">MADS Documentation</h1>
 <p>All the available MADS modules and functions are described at <a href="http://madsjulia.github.io/Mads.jl">github</a> and <a href="http://madsjl.readthedocs.org/en/latest/">readthedocs</a></p>
-<h2 id="mads-licensing-copyright">MADS Licensing &amp; Copyright</h2>
+<h1 id="mads-licensing-copyright">MADS Licensing &amp; Copyright</h1>
 <p>Check the files <code>COPYING</code> and <code>LICENSE</code> to see the licensing &amp; copyright information.</p>
 
               
@@ -950,7 +866,7 @@ madsjl.jl internal-parabola.mads forward efast
     
       <script src="../assets/javascripts/bundle.e0abf5b0.min.js"></script>
       
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
       
         <script src="../assets/mathjaxhelper.js"></script>
       

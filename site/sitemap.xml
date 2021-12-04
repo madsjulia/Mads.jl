@@ -2,287 +2,287 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/acknowledgments/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/copying/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/functions/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/getting_started/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/installation/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/mads/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/model_coupling/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/test/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/setup/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/bayesian_sampling/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/bigdt/source_termination/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/bigdt/source_termination/source_termination/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/blind_source_separation/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/contaminant_source_identification/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/contamination/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/infogap/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/machine_learning/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Examples/ode/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/AffineInvariantMCMC/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/Anasol/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/BIGUQ/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/DocumentFunction/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/GeostatInversion/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/Mads/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/MetaProgTools/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/ReusableFunctions/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/RobustPmap/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Modules/SVR/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/Notebooks/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/AffineInvariantMCMC/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/Anasol/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/BIGUQ/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/DocumentFunction/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/GeostatInversion/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/Mads/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/MetaProgTools/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/ReusableFunctions/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/RobustPmap/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/build/SVR/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-comparisons/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-demos/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-features/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-info/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-manual/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/html/mads-methods/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/AffineInvariantMCMC/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/Anasol/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/BIGUQ/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/DocumentFunction/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/GeostatInversion/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/Mads/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/MetaProgTools/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/ReusableFunctions/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/RobustPmap/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>http://madsjulia.github.io/Mads.jl/src/SVR/</loc>
-         <lastmod>2021-12-03</lastmod>
+         <lastmod>2021-12-04</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
