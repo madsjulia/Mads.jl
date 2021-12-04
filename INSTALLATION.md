@@ -1,5 +1,4 @@
-Installation
-============
+# Installation
 
 After starting Julia, execute:
 
@@ -8,12 +7,10 @@ After starting Julia, execute:
 import Pkg; Pkg.add("Mads")
 ```
 
-
-Installation of MADS without PYTHON
-------------------------------
+## Installation without PYTHON
 
 MADS uses PyYAML and matplotlib.
-To avoid using these libraries set the following environmental variable:
+To avoid using these modules, set the following environmental variable:
 
 (bash)
 ```bash
@@ -34,11 +31,10 @@ or
 ENV["MADS_NO_PYTHON"] = ""
 ```
 
-Installation of MADS without plotting modules
-------------------------------
+## Installation without plotting modules
 
 MADS uses Gadfly and matplotlib for plotting.
-To avoid using these modules set the following environmental variable:
+To avoid using these modules, set the following environmental variable:
 
 (bash)
 ```bash
@@ -59,31 +55,7 @@ or
 ENV["MADS_NO_PLOT"] = ""
 ```
 
-Installation of MADS behind a firewall
-------------------------------
-
-ulia uses git for package management.
-Add in the `.gitconfig` file in your home directory to support git behind a firewall:
-
-```
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "git@gitlab.com:"]
-    insteadOf = https://gitlab.com/
-[url "https://"]
-    insteadOf = git://
-[url "http://"]
-    insteadOf = git://
-```
-
-or execute:
-
-```bash
-git config --global url."https://".insteadOf git://
-git config --global url."http://".insteadOf git://
-git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
-git config --global url."git@github.com:".insteadOf https://github.com/
-```
+## Installation behind a firewall
 
 Set proxies executing the following lines in the bash command-line environment:
 
@@ -114,8 +86,7 @@ ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
 ENV["no_proxy"] = ".lanl.gov"
 ```
 
-Docker
-------
+## Docker
 
 Mads is also available @ Docker:
 

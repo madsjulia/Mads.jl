@@ -1,10 +1,9 @@
-MADS (Model Analysis & Decision Support)
-=======================================
+# MADS (Model Analysis & Decision Support)
 
 ![logo](logo/mads_black_swan_logo_big_text_new_3inch.png)
 
-<!-- [![travis-ci](https://travis-ci.org/madsjulia/Mads.jl.svg?branch=master)](https://travis-ci.org/madsjulia/Mads.jl)
-[![appveyor](https://ci.appveyor.com/api/projects/status/github/madsjulia/Example.jl?branch=master&svg=true)](https://ci.appveyor.com/project/montyvesselinov/mads-jl/branch/master) -->
+[action-img]: https://github.com/madsjulia/Mads.jl/workflows/CI/badge.svg
+[action-url]: https://github.com/madsjulia/Mads.jl/actions
 [![coveralls.io](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 [![codecov.io](http://codecov.io/github/madsjulia/Mads.jl/coverage.svg?branch=master)](http://codecov.io/github/madsjulia/Mads.jl?branch=master)
 
@@ -21,16 +20,15 @@ MADS (Model Analysis & Decision Support)
 * Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) has been extensively tested and verified.
+[MADS](http://madsjulia.github.io/Mads.jl) has been tested and verified extensively.
 
 [MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
 
 [MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
 
-[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute each type of data- and model-based analyses.
+[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data- and model-based analyses.
 
-Documentation
--------------
+## Documentation
 
 Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
 
@@ -38,38 +36,43 @@ See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http:
 
 Detailed model diagnostics problem is demonstrated [here](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
 
-Installation
--------------
+## Installation
 
-After starting Julia, execute:
+After starting Julia, execute in the REPL:
 
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
 
 to access the latest released version.
+
 To utilize the latest updates (commits) use:
 
 ```julia
 import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
 ```
 
-Docker
--------
+## Docker
 
 ```bash
 docker run --interactive --tty montyvesselinov/madsjulia
 ```
 
-Testing
--------------
+## Testing
+
+Execute:
 
 ```julia
 import Mads; Mads.test()
 ```
 
-Examples
--------------
+or
+
+```julia
+import Pkg; Pkg.test("Mads")
+```
+
+## Examples
 
 To explore getting-started instructions, execute:
 
@@ -77,9 +80,9 @@ To explore getting-started instructions, execute:
 import Mads; Mads.help()
 ```
 
-There are various examples located in the `examples` directory of the `Mads` repository.
+Various examples located in the `examples` directory of the `Mads` repository.
 
-For example, execute
+To run some of these example, execute
 
 ```julia
 include(Mads.dir * "/../examples/contamination/contamination.jl")
@@ -93,31 +96,7 @@ include(Mads.dir * "/../examples/bigdt/bigdt.jl")
 
 to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
 
-Installation of MADS behind a firewall
-------------------------------
-
-Julia uses git for package management.
-Add in the `.gitconfig` file in your home directory to support git behind a firewall:
-
-```
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "git@gitlab.com:"]
-    insteadOf = https://gitlab.com/
-[url "https://"]
-    insteadOf = git://
-[url "http://"]
-    insteadOf = git://
-```
-
-or execute:
-
-```bash
-git config --global url."https://".insteadOf git://
-git config --global url."http://".insteadOf git://
-git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
-git config --global url."git@github.com:".insteadOf https://github.com/
-```
+## Installation behind a firewall
 
 Set proxies executing the following lines in the bash command-line environment:
 
@@ -139,7 +118,7 @@ export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
 ```
 
-Proxies can be also set up directly in the Julia REPL as well:
+Proxies can be setup directly in the Julia REPL as well:
 
 ```julia
 ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
@@ -149,16 +128,37 @@ ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
 ENV["no_proxy"] = ".lanl.gov"
 ```
 
-Related Julia Packages
-----------------------
+Julia uses git for package management.
+In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
 
-* [TensorDecompositions:
-Unsupervised Machine Learning based on Matrix/Tensor Factorization](https://github.com/TensorDecompositions)
+```
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@gitlab.com:"]
+    insteadOf = https://gitlab.com/
+[url "https://"]
+    insteadOf = git://
+[url "http://"]
+    insteadOf = git://
+```
+
+or execute:
+
+```bash
+git config --global url."https://".insteadOf git://
+git config --global url."http://".insteadOf git://
+git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
+git config --global url."git@github.com:".insteadOf https://github.com/
+```
+
+## Related Julia Packages
+
+* [SmartTensors:
+Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factorization](https://github.com/SmartTensors)
 * [RegAE: Regularization with a variational autoencoder for inverse analysis](https://github.com/madsjulia/RegAE.jl)
 * [Geostatistical Inversion with randomized + sketching optimization](https://github.com/madsjulia/GeostatInversion.jl)
 
-Publications, Presentations, Projects
---------------------------
+## Publications, Presentations, Projects
 
 * [mads.gitlab.io](http://mads.gitlab.io)
 * [madsjulia.github.io](http://madsjulia.github.io)

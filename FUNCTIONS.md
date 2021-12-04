@@ -1,5 +1,4 @@
-MADS Functions
---------------------
+# MADS Functions
 
 MADS includes several Modules. The modules include numerous functions. To list all the available functions execute:
 
