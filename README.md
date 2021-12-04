@@ -82,7 +82,7 @@ import Mads; Mads.help()
 
 Various examples located in the `examples` directory of the `Mads` repository.
 
-To run some of these example, execute
+To run some of these examples, execute
 
 ```julia
 include(Mads.dir * "/../examples/contamination/contamination.jl")
@@ -160,10 +160,12 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 
 ## Publications, Presentations, Projects
 
-* [mads.gitlab.io](http://mads.gitlab.io)
-* [madsjulia.github.io](http://madsjulia.github.io)
-* [SmartTensors](https://smarttensors.com)
-* [SmartTensors](https://smarttensors.github.io)
-* [SmartTensors](https://smarttensors.lanl.gov)
-* [monty.gitlab.io](http://monty.gitlab.io)
-* [ees.lanl.gov/monty](https://www.lanl.gov/orgs/ees/staff/monty)
+* [mads @ GitLab](http://mads.gitlab.io)
+* [mads @ GitHub](http://madsjulia.github.io)
+* [mads @ LANL](http://mads.lanl.gov)
+* [SmartTensors.com](https://smarttensors.com)
+* [SmartTensors @ GitHub](https://smarttensors.github.io)
+* [SmartTensors @ LANL](https://smarttensors.lanl.gov)
+* [monty @ GitLab](http://monty.gitlab.io)
+* [monty @ GitHub](http://montyvesselinov.github.io)
+* [monty @ LANL](https://www.lanl.gov/orgs/ees/staff/monty)
