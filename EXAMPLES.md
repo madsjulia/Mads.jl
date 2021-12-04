@@ -1,5 +1,5 @@
-MADS examples
--------------
+## MADS examples
+
 
 In Julia REPL, do the following commands:
 
@@ -13,7 +13,7 @@ To explore getting-started instructions, execute:
 Mads.help()
 ```
 
-There are various examples located in the `examples` directory of the `Mads` repository.
+Various examples located in the `examples` directory of the `Mads` repository.
 
 For example, execute
 
