@@ -1,5 +1,4 @@
-MADS Getting Started
---------------------
+# MADS Getting Started
 
 Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`import Pkg; Pkg.add("Mads")`) using the installation instruction in the `README.md` ([see also](https://github.com/madsjulia/Mads.jl)).
 If you are not familiar with Julia, checkout [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/), [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/), [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)).
@@ -70,8 +69,7 @@ MADS can perform various types of analyses:
 More complicated analyses will require additional information to be provided in the MADS problem dictionary.
 Examples are given in the `examples` subdirectories of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples)).
 
-MADS Command-line execution
----------------------------
+# MADS Command-line execution
 
 MADS can be executed at the command line using `madsjl.jl`. Link this file in a directory in your search `PATH`.
 
@@ -84,12 +82,10 @@ madsjl.jl internal-parabola.mads forward efast
 
 in the `examples/getting_started` subdirectory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started)).
 
-MADS Documentation
-------------------
+# MADS Documentation
 
 All the available MADS modules and functions are described at [github](http://madsjulia.github.io/Mads.jl) and [readthedocs](`http://madsjl.readthedocs.org/en/latest/`)
 
-MADS Licensing & Copyright
---------------------------
+# MADS Licensing & Copyright
 
 Check the files `COPYING` and `LICENSE` to see the licensing & copyright information.

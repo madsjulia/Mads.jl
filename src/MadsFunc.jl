@@ -27,7 +27,7 @@ MADS can be coupled with any internal or external model. The model coupling is d
 
 - `Model` : execute a Julia function defined in an external input Julia file. The function that should accept a `parameter` dictionary with all the model parameters as an input argument and should return an `observation` dictionary with all the model predicted observations. MADS will execute the first function defined in the file.
 
-- `MADS model` : create a Julia function based on an external input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary. MADS will execute the first function defined in the file. This function should a create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
+- `MADS model` : create a Julia function based on an external input Julia file. The input file should contain a function that accepts as an argument the MADS problem dictionary. MADS will execute the first function defined in the file. This function should create a Julia function that will accept a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
 
 - `Julia model` : execute an internal Julia function that accepts a `parameter` dictionary with all the model parameters as an input argument and will return an `observation` dictionary with all the model predicted observations.
 
@@ -39,7 +39,9 @@ MADS can be coupled with any internal or external model. The model coupling is d
 
 Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
 
-Only `Command` uses different approaches to get back the model outputs. The script defined under `Julia command` parses the model outputs using Julia.
+Only `Command` uses different approaches to get back the model outputs.
+
+The script defined under `Julia command` parses the model outputs using Julia.
 
 The available options for writing model inputs and reading model outputs are as follows.
 
