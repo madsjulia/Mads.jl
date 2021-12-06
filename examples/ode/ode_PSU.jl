@@ -4,11 +4,11 @@ import Mads
 mu0 = 0.4
 a = 0.005
 b = 0.007 # PSU
-W0 = 3e-5 # 10^(-9) PSU
-K = 32e6 # 32*10^6 PSU
+W0 = 3e-5 # PSU
+K = 32e6 # PSU
 M = 1000
 N = 10^6
-Dc = 0.00005 # 0.00005 PSU
+Dc = 0.00005 # PSU
 Q0 = Dc / W0
 V0 = 0.001
 
