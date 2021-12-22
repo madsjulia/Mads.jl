@@ -1,14 +1,15 @@
 import Mads
+import Random
 
-Random.seed!(1)
+Mads.seed!(1, Random.MersenneTwister)
 d = collect(range(0, stop=3, length=100))
-y1 = exp.(-1.3*d) + 0.05*randn(size(d))
+y1 = exp.(-1.3*d) + 0.05*randn(Mads.rng, size(d))
 
 @Mads.stderrcapture function func1(x)
 	exp.(-d .* x[1]) .- y1
 end
 
-y2 = 2 .* d .+ 1 .+ 0.05 .* randn(size(d))
+y2 = 2 .* d .+ 1 .+ 0.05 .* randn(Mads.rng, size(d))
 
 @Mads.stderrcapture function func2(x)
 	(x[1] .* d .+ x[2]) .- y2

@@ -258,7 +258,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					end
 				end
 				if noise != 0
-					c = c .+ (rand(nT) .* noise)
+					c = c .+ (rand(Mads.rng, nT) .* noise)
 				end
 				npp = length(c)
 				if npp == 0
@@ -675,13 +675,13 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	return nothing
 end
 
-function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed::Integer=-1, kw...)
-	Mads.setseed(seed)
+function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed::Integer=-1, rng=nothing, kw...)
+	Mads.setseed(seed; rng=rng)
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplots(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
-	Mads.setseed(seed)
+function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, rng=nothing, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
+	Mads.setseed(seed; rng=rng)
 	rootname = getmadsrootname(madsdata)
 	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
 	paramkeys = getparamkeys(madsdata)
@@ -836,8 +836,8 @@ function spaghettiplot(madsdata::AbstractDict, number_of_samples::Integer; kw...
 	paramvalues = getparamrandom(madsdata, number_of_samples)
 	spaghettiplot(madsdata::AbstractDict, paramvalues; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::Integer=-1, kw...)
-	Mads.setseed(seed)
+function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::Integer=-1, rng=nothing, kw...)
+	Mads.setseed(seed; rng=rng)
 	func = makemadscommandfunction(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, getparamsinit(madsdata)))

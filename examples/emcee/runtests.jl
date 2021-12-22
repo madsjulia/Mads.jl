@@ -1,11 +1,11 @@
 import Mads
 import AffineInvariantMCMC
 import Test
-import ProgressMeter
 import Random
+import ProgressMeter
 import Statistics
 
-Random.seed!(2017)
+Mads.seed!(2017, Random.MersenneTwister)
 
 Mads.veryquieton()
 Mads.graphoff()
@@ -18,8 +18,8 @@ burnin = 100
 
 @Test.testset "Emcee" begin
 	@ProgressMeter.showprogress 1 "Computing Affine Invariant MCMC ..." for _ in 1:3
-		stds = exp.(5 .* randn(numdims))
-		means = 1 .+ 5 .* rand(numdims)
+		stds = exp.(5 .* randn(Mads.rng, numdims))
+		means = 1 .+ 5 .* rand(Mads.rng, numdims)
 		llhood = x->begin
 			retval = 0.
 			for i in 1:length(x)

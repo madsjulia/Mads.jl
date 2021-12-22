@@ -40,7 +40,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0
 			JuMP.set_optimizer_attributes(m, "max_iter" => maxiter, "print_level" => verbosity)
 			if r > 1 || random
 				for i = 1:np
-					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+					pinit[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 				end
 			end
 			@JuMP.variable(m, p[i=1:np], start=pinit[i])
@@ -74,7 +74,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0
 			m = JuMP.Model(solver=Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity))
 			if r > 1 || random
 				for i = 1:np
-					pinit[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+					pinit[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 				end
 			end
 			@show pinit
@@ -194,7 +194,7 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 					end
 				else
 					for i = 1:np
-						pi[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+						pi[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 					end
 				end
 				# @show pi
@@ -298,7 +298,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
+function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, rng=nothing, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -354,7 +354,7 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 	end
 	# madsdata = Mads.loadmadsfile("models/internal-polynomial.mads")
 	solver = Ipopt.IpoptSolver(max_iter=maxiter, print_level=verbosity)
-	# Mads.setseed(seed)
+	# Mads.setseed(seed; rng=rng)
 	# f = Mads.makemadscommandfunction(madsdata)
 	# pk = Mads.getoptparamkeys(madsdata)
 	# pmin = Mads.getparamsmin(madsdata, pk)
@@ -387,7 +387,7 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelPoly())
 				if r > 1 || random
 					for i = 1:np
-						p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+						p[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 					end
 					MathProgBase.setwarmstart!(m, p)
 				else
@@ -502,7 +502,7 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector
 				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelLin())
 				if r > 1 || random
 					for i = 1:np
-						p[i] = rand() * (pmax[i] - pmin[i]) + pmin[i]
+						p[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 					end
 					MathProgBase.setwarmstart!(m, p)
 				else

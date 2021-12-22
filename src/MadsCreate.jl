@@ -148,7 +148,7 @@ function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Jul
 end
 
 function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
-	createproblem(rand(in), rand(out), f; kw...)
+	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
 end
 function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing, obsmin::AbstractVector=zeros(length(obs)), obsmax::AbstractVector=ones(length(obs)), obsdist::AbstractVector=["Uniform($(obsmin[i]), $(obsmax[i]))" for i=1:length(obs)])
 	md = Dict()

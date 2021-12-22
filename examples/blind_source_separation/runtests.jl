@@ -22,11 +22,11 @@ else
 
 	@Test.testset "BSS" begin
 		# @Mads.stderrcapture function reconstruct_rand(R, nk)
-		Random.seed!(2015)
+		Mads.seed!(2015, Random.MersenneTwister)
 
-		s1 = rand(100)
-		s2 = rand(100)
-		s3 = rand(100)
+		s1 = rand(Mads.rng, 100)
+		s2 = rand(Mads.rng, 100)
+		s3 = rand(Mads.rng, 100)
 		S = [s1 s2 s3]
 
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
@@ -43,7 +43,7 @@ else
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin.(R, nk)
-		Random.seed!(2015)
+		Mads.seed!(2015, Random.MersenneTwister)
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
 		s2 = (sin.(0.3:0.3:30) .+ 1) ./ 2
 		s3 = (sin.(0.2:0.2:20) .+ 1) ./ 2
@@ -70,11 +70,11 @@ else
 		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
-		Random.seed!(2015)
+		Mads.seed!(2015, Random.MersenneTwister)
 
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
 		s2 = (sin.(0.3:0.3:30) .+ 1) ./ 2
-		s3 = rand(100)
+		s3 = rand(Mads.rng, 100)
 		S = [s1 s2 s3]
 
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
@@ -97,11 +97,11 @@ else
 		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_disturbance(R, nk)
-		Random.seed!(2015)
+		Mads.seed!(2015, Random.MersenneTwister)
 
 		s1 = (sin.(0.3:0.3:30) .+ 1) ./ 2
-		s2 = rand(100) .* 0.5
-		s3 = rand(100)
+		s2 = rand(Mads.rng, 100) .* 0.5
+		s3 = rand(Mads.rng, 100)
 		s3[1:50] .= 0
 		s3[70:end] .= 0
 		S = [s1 s2 s3]
