@@ -268,7 +268,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Integer=-1, scale::Number=1)
+function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Integer=-1, rng=nothing, scale::Number=1)
 	u, d, v = LinearAlgebra.svd(J' * J)
 	done = false
 	vo = copy(v)
@@ -293,8 +293,8 @@ function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Int
 		end
 	end
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
-	setseed(seed)
-	gooddsamples = Distributions.rand(dist, numsamples)
+	Mads.setseed(seed; rng=rng)
+	gooddsamples = Distributions.rand(Mads.rng, dist, numsamples)
 	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
@@ -408,13 +408,13 @@ function getparamrandom(madsdata::AbstractDict, parameterkey::AbstractString; nu
 			if typeof(dist) <: Distributions.Uniform
 				a = log10(dist.a)
 				b = log10(dist.b)
-				return 10. .^(a .+ (b .- a) .* Distributions.rand(numsamples))
+				return 10. .^(a .+ (b .- a) .* Distributions.rand(Mads.rng, numsamples))
 			elseif typeof(dist) <: Distributions.Normal
 				μ = log10(dist.μ)
-				return 10. .^(μ .+ dist.σ .* Distributions.randn(numsamples))
+				return 10. .^(μ .+ dist.σ .* Distributions.randn(Mads.rng, numsamples))
 			end
 		end
-		return Distributions.rand(paramdist[parameterkey], numsamples)
+		return Distributions.rand(Mads.rng, paramdist[parameterkey], numsamples)
 	end
 	return nothing
 end
@@ -444,8 +444,8 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
-	setseed(seed)
+function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
+	Mads.setseed(seed; rng=rng)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
 	nummanyparamsamples = numsamples
@@ -458,7 +458,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	paramdict = Mads.getparamdict(madsdata)
 	for i = 1:numsamples
 		for j in 1:length(paramkeys)
-			paramdict[paramkeys[j]] = Distributions.rand(distributions[paramkeys[j]]) # TODO use parametersample
+			paramdict[paramkeys[j]] = Distributions.rand(Mads.rng, distributions[paramkeys[j]]) # TODO use parametersample
 		end
 		results[i] = f(paramdict) # this got to be slow to process
 	end
@@ -501,11 +501,11 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			for k = 1:length(obskeys)
 				cond_means[j][obskeys[k]] = 0.
 			end
-			paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
+			paramdict[paramkeys[i]] = Distributions.rand(Mads.rng, distributions[paramkeys[i]]) # TODO use parametersample
 			for k = 1:nummanyparamsamples
 				for m = 1:length(paramkeys)
 					if m != i
-						paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
+						paramdict[paramkeys[m]] = Distributions.rand(Mads.rng, distributions[paramkeys[m]]) # TODO use parametersample
 					end
 				end
 				results = f(paramdict)
@@ -545,12 +545,12 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			end
 			for m = 1:length(paramkeys)
 				if m != i
-					paramdict[paramkeys[m]] = Distributions.rand(distributions[paramkeys[m]]) # TODO use parametersample
+					paramdict[paramkeys[m]] = Distributions.rand(Mads.rng, distributions[paramkeys[m]]) # TODO use parametersample
 				end
 			end
 			results = Array{OrderedCollections.OrderedDict}(undef, numoneparamsamples)
 			for k = 1:numoneparamsamples
-				paramdict[paramkeys[i]] = Distributions.rand(distributions[paramkeys[i]]) # TODO use parametersample
+				paramdict[paramkeys[i]] = Distributions.rand(Mads.rng, distributions[paramkeys[i]]) # TODO use parametersample
 				results[k] = f(paramdict)
 				for m = 1:length(obskeys)
 					cond_means[j][obskeys[m]] += results[k][obskeys[m]]
@@ -632,8 +632,8 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N)
-	Mads.setseed(seed)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N)
+	Mads.setseed(seed; rng=rng)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
 	paramalldict = OrderedCollections.OrderedDict{String,Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
@@ -871,8 +871,8 @@ for mi = 1:length(saltelli_functions)
 		"""
 		Parallel version of $(saltelli_functions[index])
 		"""
-		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, restartdir::AbstractString="")
-			Mads.setseed(seed)
+		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="")
+			Mads.setseed(seed; rng=rng)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
 				return
@@ -1105,7 +1105,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::AbstractString="efastcheckpoints", restart::Bool=false)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1149,7 +1149,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		restartdir = getrestartdir(md)
 	end
 
-	Mads.setseed(seed)
+	Mads.setseed(seed; rng=rng)
 
 	## Setting pathfiles
 	# efastpath = "/n/srv/jlaughli/Desktop/Julia Code/"
@@ -1250,7 +1250,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 		# If we want to use a seed for our random phis
 		# +kL because we want to have the same string of seeds for any initial seed
-		Random.seed!(seed+kL)
+		Mads.setseed(seed+kL; rng=rng)
 
 		# Determining which parameter we are on
 		k = Int(ceil(kL/Nr))
@@ -1274,7 +1274,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 		# Slight inefficiency as it creates a phi_mat every time (rather than Nr times)
 		# Random Phase Shift
-		phi = rand(1,nprime) * 2 * pi
+		phi = rand(Mads.rng, 1, nprime) * 2 * pi
 		for j = 1:Ns
 			phi_mat[:,j] = phi'
 		end

@@ -75,14 +75,14 @@ function NMFipopt(X::AbstractMatrix, nk::Integer, retries::Integer=1; random::Bo
 		if r == 1 && sizeof(initW) != 0
 			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
 		elseif r > 1 || random
-			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=rand())
+			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=rand(Mads.rng))
 		else
 			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=0.5)
 		end
 		if r == 1 && sizeof(initH) != 0
 			@JuMP.variable(m, H[k=1:nk, j=1:nC] >= 0., start=initH[k, j])
 		elseif r > 1 || random
-			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand())
+			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand(Mads.rng))
 		else
 			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
@@ -216,7 +216,7 @@ function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bo
 	phi_best = Inf
 	for i = 1:retries
 		if i > 1
-			W_init = rand(W_size)
+			W_init = rand(Mads.rng, W_size)
 			H_init = ones(H_size)
 			x = [W_init; H_init]
 		end

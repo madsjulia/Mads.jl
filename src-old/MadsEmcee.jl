@@ -37,15 +37,15 @@ function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalke
 	for i = 1:numsamples_perwalker
 		for ensembles in divisions
 			active, inactive = ensembles
-			zs = map(u->((a - 1) * u + 1)^2 / a, rand(length(active)))
-			proposals = map(i->zs[i] * x[:, active[i]] + (1 - zs[i]) * x[:, rand(inactive)], 1:length(active))
+			zs = map(u->((a - 1) * u + 1)^2 / a, rand(Mads.rng, length(active)))
+			proposals = map(i->zs[i] * x[:, active[i]] + (1 - zs[i]) * x[:, rand(Mads.rng, inactive)], 1:length(active))
 			newllhoods = RobustPmap.rpmap(llhood, proposals)
 			for (j, walkernum) in enumerate(active)
 				z = zs[j]
 				newllhood = newllhoods[j]
 				proposal = proposals[j]
 				logratio = (size(x, 1) - 1) * log(z) + newllhood - lastllhoodvals[walkernum]
-				if log(rand()) < logratio
+				if log(rand(Mads.rng)) < logratio
 					lastllhoodvals[walkernum] = newllhood
 					x[:, walkernum] = proposal
 				end

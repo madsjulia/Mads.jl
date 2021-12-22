@@ -3,6 +3,7 @@ import JLD2
 import FileIO
 import Test
 import Distributed
+import Random
 
 Mads.veryquieton()
 Mads.graphoff()
@@ -17,7 +18,7 @@ end
 md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 rootname = Mads.getmadsrootname(md)
 
-mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=2, seed=2016)
+mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thinning=2, seed=2016, rng=Random.MersenneTwister)
 
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")

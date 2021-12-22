@@ -1,13 +1,13 @@
 import Mads
 import JLD2
 import FileIO
-import Random
 import Test
+import Random
 import OrderedCollections
 
 @Mads.tryimportmain OrderedCollections
 
-Random.seed!(2017)
+Mads.seed!(2017, Random.MersenneTwister)
 
 workdir = joinpath(Mads.dir, "examples", "anasol")
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexpplus.mads"))

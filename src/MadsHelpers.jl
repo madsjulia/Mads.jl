@@ -456,9 +456,9 @@ $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
 			"quiet"=>"[default=`true`]")))
 """
-function setseed(seed::Integer=-1, quiet::Bool=true)
+function setseed(seed::Integer=-1, quiet::Bool=true; rng=nothing)
 	if seed >= 0
-		Random.seed!(seed)
+		Mads.seed!(seed, rng)
 		!quiet && @info("New seed: $seed")
 	else
 		s = getseed()
@@ -473,10 +473,27 @@ Get and return current random seed.
 $(DocumentFunction.documentfunction(getseed))
 """
 function getseed()
-	if VERSION < v"1.7"
-		return Int(Random.default_rng().seed[1])
-	else
+	if isdefined(Random, :GLOBAL_SEED)
 		return Random.GLOBAL_SEED[1]
+	else
+		return Int(Random.default_rng().seed[1])
+	end
+end
+
+function seed!(s, f=nothing)
+	if f === nothing
+		if isdefined(Random, :TaskLocalRNG)
+			f = Random.TaskLocalRNG
+		else
+			f = Random.MersenneTwister
+		end
+	end
+	if isdefined(Random, :TaskLocalRNG) && f == Random.TaskLocalRNG
+		global rng = f()
+		Random.seed!(s)
+	else
+		isdefined(Random, :set_global_seed!) && Random.set_global_seed!(s)
+		global rng = f(s)
 	end
 end
 
