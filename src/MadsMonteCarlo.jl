@@ -4,12 +4,13 @@ import JSON
 import AffineInvariantMCMC
 import DocumentFunction
 import BlackBoxOptim
+import Random
 
-function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0)
+function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
-	Mads.setseed(seed)
+	Mads.setseed(seed; rng=rng)
 	optparamkeys = getoptparamkeys(madsdata)
 	p0 = Array{Float64}(undef, length(optparamkeys), numwalkers)
 	pinit = getparamsinit(madsdata, optparamkeys)
@@ -23,26 +24,26 @@ function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::I
 		d = Distributions.Beta(alpha, beta)
 		p0[i, 1] = pinit[i]
 		for j = 2:numwalkers
-			p0[i, j] = pmin[i] + rand(d) * (pmax[i] - pmin[i])
+			p0[i, j] = pmin[i] + rand(Mads.rng, d) * (pmax[i] - pmin[i])
 		end
 	end
-	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor)
+	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor, rng=rng)
 end
-function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0)
+function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing)
 	@assert length(size(p0)) == 2
-	Mads.setseed(seed)
+	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 	newnsteps = div(burnin, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; rng=Mads.rng)
 	newnsteps = div(nsteps, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; rng=Mads.rng)
 	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 end
 
@@ -75,8 +76,8 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 
 if isdefined(Mads, :Klara)
 	# && isdefined(Klara, :BasicContMuvParameter)
-	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
-		Mads.setseed(seed)
+	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng=nothing)
+		Mads.setseed(seed; rng=rng)
 		madsloglikelihood = makemadsloglikelihood(madsdata)
 		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 		optparamkeys = getoptparamkeys(madsdata)

@@ -37,7 +37,7 @@ param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
 localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=init_parameters_vector, obs=forward_predictions_vector)
 jacobian = localsa_results["jacobian"]
-samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, scale=0.5) # sampling for local uncertainty analysis
+samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, rng=Random.MersenneTwister, scale=0.5) # sampling for local uncertainty analysis
 
 obs_samples = Mads.forward(md, samples)
 newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance sampling to the 95% of the solutions, keeping the most likely solutions

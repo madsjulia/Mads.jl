@@ -36,7 +36,6 @@ function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::B
 	return svrmodel
 end
 function svrtrain(madsdata::AbstractDict, numberofsamples::Integer=100; addminmax::Bool=true, kw...)
-	rootname = splitdir(Mads.getmadsrootname(madsdata))[end]
 	paramdict = Mads.getparamrandom(madsdata, numberofsamples)
 	paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 	if addminmax

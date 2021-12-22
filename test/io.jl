@@ -84,7 +84,7 @@ Mads.maxtofloatmax!(df)
 	@Test.test Mads.settarget!(Dict("c"=>1),2) == 2
 	@Test.test isnan(resultshouldbenan)
 
-	Random.seed!(2017)
+	Mads.seed!(2017, Random.MersenneTwister)
 	@Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 0.107554; atol=1e-5)
 end
 

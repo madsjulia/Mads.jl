@@ -2,10 +2,10 @@ import Mads
 import Test
 import FileIO
 import JLD2
-import Random
 import DataStructures
 import OrderedCollections
 import Distributed
+import Random
 
 @Mads.tryimportmain JLD2
 @Mads.tryimportmain FileIO
@@ -19,9 +19,9 @@ workdir = joinpath(Mads.dir, "examples", "model_analysis")
 savedir = joinpath(Mads.dir, "examples", "svr")
 goodresultsfile = "sasvr.jld2"
 
-Random.seed!(2017)
+Mads.seed!(2017, Random.MersenneTwister)
 
-numberofsamples = 1000 # Set the number
+numberofsamples = 1000
 
 @Mads.stdouterrcapture md = Mads.loadmadsfile(joinpath(workdir, "..", "models", "internal-polynomial-model", "internal-polynomial.mads"))
 paramdict = Mads.getparamrandom(md, numberofsamples, init_dist=true)
@@ -42,11 +42,9 @@ end
 
 good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld2"), "svrpredictions")
 
-Random.seed!(2017)
-
 mdsvr = deepcopy(md)
 mdsvr["Julia model"] = svrexec
-sasvr = Mads.efast(mdsvr)
+sasvr = Mads.efast(mdsvr; N=100, seed=2017, rng=Random.MersenneTwister)
 
 sasvr_mes = hcat(map(i->collect(i), values.(collect(values(sasvr["mes"]))))...)
 sasvr_tes = hcat(map(i->collect(i), values.(collect(values(sasvr["tes"]))))...)
@@ -63,9 +61,6 @@ good_sasvr = FileIO.load(joinpath(savedir, "test_results", goodresultsfile), "sa
 good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"]))))...)
 good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)
 good_sasvr_var = hcat(map(i->collect(i), values.(collect(values(good_sasvr["var"]))))...)
-
-# @show good_svrpredictions[1,1]
-# @show svrpredictions[1,1]
 
 @Test.testset "SVR" begin
 	@Test.test sum((svrpredictions .- good_svrpredictions).^2) < 0.1
