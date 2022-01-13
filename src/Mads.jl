@@ -170,4 +170,6 @@ if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
 	include("MadsPlotPy.jl")
 end
 
+Mads.seedrng()
+
 end
