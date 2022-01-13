@@ -480,6 +480,21 @@ function getseed()
 	end
 end
 
+function seedrng(f=nothing)
+	if f === nothing
+		if isdefined(Random, :TaskLocalRNG)
+			f = Random.TaskLocalRNG
+		else
+			f = Random.MersenneTwister
+		end
+	end
+	if isdefined(Random, :TaskLocalRNG) && f == Random.TaskLocalRNG
+		global rng = f()
+	else
+		global rng = f()
+	end
+end
+
 function seed!(s, f=nothing)
 	if f === nothing
 		if isdefined(Random, :TaskLocalRNG)
