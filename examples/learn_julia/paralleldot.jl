@@ -1,5 +1,6 @@
 import Printf
 import Distributed
+import SharedArrays
 
 n = 1000; p = 2500
 
@@ -9,9 +10,9 @@ y = ones(p)
 z = zeros(n)
 
 # make SharedArrays
-X = convert(SharedArray, x)
-Y = convert(SharedArray, y)
-Z = convert(SharedArray, z)
+X = convert(SharedArrays.SharedArray, x)
+Y = convert(SharedArrays.SharedArray, y)
+Z = convert(SharedArrays.SharedArray, z)
 
 @Printf.printf("Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
 @Printf.printf("Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
