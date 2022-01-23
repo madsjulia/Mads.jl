@@ -54,11 +54,13 @@ function of(madsdata::AbstractDict, resultvec::AbstractVector)
 end
 function of(madsdata::AbstractDict, d::AbstractDict)
 	v = collect(values(d))
-	if length(v) == length(madsdata["Observations"]) && keys(madsdata["Observations"]) == keys(d)
+	if isobs(madsdata, d)
 		of(madsdata, v)
-	else
+	elseif isparam(madsdata, d)
 		resultdict = Mads.forward(madsdata, d)
 		of(madsdata, collect(values(resultdict)))
+	else
+		@warn "Unknown input dictionary!"
 	end
 end
 function of(madsdata::AbstractDict)
