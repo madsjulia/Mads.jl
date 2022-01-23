@@ -52,8 +52,14 @@ function of(madsdata::AbstractDict, resultvec::AbstractVector)
 	r = residuals(madsdata, resultvec)
 	sum(r .^ 2)
 end
-function of(madsdata::AbstractDict, resultdict::AbstractDict)
-	of(madsdata, collect(values(resultdict)))
+function of(madsdata::AbstractDict, d::AbstractDict)
+	v = collect(values(d))
+	if length(v) == length(madsdata["Observations"]) && keys(madsdata["Observations"]) == keys(d)
+		of(madsdata, v)
+	else
+		resultdict = Mads.forward(madsdata, d)
+		of(madsdata, collect(values(resultdict)))
+	end
 end
 function of(madsdata::AbstractDict)
 	resultdict = Mads.forward(madsdata)

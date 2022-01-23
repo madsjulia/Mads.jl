@@ -403,13 +403,16 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 	for obskey in obskeys
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])
+		o = gettime(obsdict[obskey])
+		s = @Printf.sprintf "%-10s target = %15g" obskey t
 		if w != NaN
-			s = @Printf.sprintf "%-10s target = %15g weight = %15g\n" obskey t w
-			push!(p, s)
-		else
-			s = @Printf.sprintf "%-10s target = %15g\n" obskey t
-			push!(p, s)
+			s *= @Printf.sprintf " weight = %15g" w
 		end
+		if o != NaN
+			s *= @Printf.sprintf " time = %15g" o
+		end
+		s *= "\n"
+		push!(p, s)
 	end
 	print(p...)
 	# Base.display(p)
