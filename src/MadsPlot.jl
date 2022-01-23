@@ -206,18 +206,23 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{Abs
 	end
 	plotmatches(newmadsdata, newresult; title=title, notitle=notitle, kw...)
 end
-function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="Time", ytitle::AbstractString="Observation", ymin=nothing, ymax=nothing,  xmin=nothing, xmax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=2Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="Time", ytitle::AbstractString="Observation", ymin=nothing, ymax=nothing,  xmin=nothing, xmax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=4Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
+		r = result
 	else
 		par_flag = isparam(madsdata, dict_in)
 		if par_flag
 			result = forward(madsdata, dict_in; all=true)
+			r = forward(madsdata, dict_in)
 		else
 			madswarn("Provided dictionary does not define either parameters or observations")
 			return
 		end
+	end
+	if title == ""
+		title = "OF = $(round(Mads.of(madsdata, r); sigdigits=3))"
 	end
 	rootname = getmadsrootname(madsdata)
 	pl = nothing
