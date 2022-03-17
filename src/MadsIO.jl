@@ -57,9 +57,9 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 		end
 	end
 	if typeof(madsdata) <: AbstractString # Windows links fix
-		filename = madsdata
+		filename = copy(madsdata)
 		if format == "yaml"
-			madsdata = loadyamlfile(filename; julia=julia)
+			madsdata = loadyamlfile(filename)
 		elseif format == "json"
 			madsdata = loadjsonfile(filename)
 		end
