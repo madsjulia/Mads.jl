@@ -1,4 +1,4 @@
-import Madss
+import Mads
 import JLD2
 import FileIO
 import Test
@@ -54,19 +54,19 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
 
-		WHipopt = (Wipopt*Hipopt)
+		Hipopt = (Wipopt*Hipopt)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			FileIO.save(joinpath(d, "sin_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_2.jld2"), "WHipopt", WHipopt)
+			FileIO.save(joinpath(d, "sin_2.jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_1.jld2"), "Wipopt")
-		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "sin_2.jld2"), "WHipopt")
+		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "sin_2.jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
@@ -81,19 +81,19 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
-		WHipopt = (Wipopt*Hipopt)
+		Hipopt = (Wipopt*Hipopt)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			FileIO.save(joinpath(d, "sin_rand_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_rand_2.jld2"), "WHipopt", WHipopt)
+			FileIO.save(joinpath(d, "sin_rand_2.jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_1.jld2"), "Wipopt")
-		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_2.jld2"), "WHipopt")
+		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_2.jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_disturbance(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
@@ -110,19 +110,19 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
-		WHipopt = (Wipopt*Hipopt)
+		Hipopt = (Wipopt*Hipopt)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			FileIO.save(joinpath(d, "disturb_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "disturb_2.jld2"), "WHipopt", WHipopt)
+			FileIO.save(joinpath(d, "disturb_2.jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_1.jld2"), "Wipopt")
-		good_WHipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_2.jld2"), "WHipopt")
+		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_2.jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(WHipopt, good_WHipopt, atol=1e-5)
+		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 	end
 end
 
