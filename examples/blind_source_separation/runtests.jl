@@ -1,5 +1,4 @@
-import Mads
-import NMF
+import Madss
 import JLD2
 import FileIO
 import Test
