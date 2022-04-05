@@ -878,7 +878,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput)
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"])
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -979,7 +979,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 						Gadfly.Guide.title(wellname),
 						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
-						Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red", "blue", "green", "cyan", "magenta", "yellow"][i%6+1])))
+						Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[i%6+1])))
 						for i in 1:numberofsamples]...)
 				end
 				push!(pp, p)
