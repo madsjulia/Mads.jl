@@ -37,7 +37,7 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "rand.jld2"), "Wipopt", Wipopt)
+			FileIO.save(joinpath(d, "rand$(suffix).jld2"), "Wipopt", Wipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "rand$(suffix).jld2"), "Wipopt")
@@ -60,8 +60,8 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "sin_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_2.jld2"), "Hipopt", Hipopt)
+			FileIO.save(joinpath(d, "sin_1$(suffix).jld2"), "Wipopt", Wipopt)
+			FileIO.save(joinpath(d, "sin_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_1$(suffix).jld2"), "Wipopt")
@@ -87,8 +87,8 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "sin_rand_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_rand_2.jld2"), "Hipopt", Hipopt)
+			FileIO.save(joinpath(d, "sin_rand_1$(suffix).jld2"), "Wipopt", Wipopt)
+			FileIO.save(joinpath(d, "sin_rand_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_1$(suffix).jld2"), "Wipopt")
@@ -116,8 +116,8 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "disturb_1.jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "disturb_2.jld2"), "Hipopt", Hipopt)
+			FileIO.save(joinpath(d, "disturb_1$(suffix).jld2"), "Wipopt", Wipopt)
+			FileIO.save(joinpath(d, "disturb_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
 		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_1$(suffix).jld2"), "Wipopt")

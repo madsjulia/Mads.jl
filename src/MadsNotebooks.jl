@@ -21,7 +21,7 @@ keytext=Dict("dir"=>"notebook directory", "check"=>"check of notebook exists", "
 function notebook(rootname::AbstractString; script::Bool=false, dir=Mads.dir, ndir="notebooks", check::Bool=true)
 	if check
 		f = check_notebook(rootname; dir=dir, ndir=ndir)
-		if f == nothing
+		if f === nothing
 			return
 		end
 		d, p = f
@@ -68,7 +68,7 @@ keytext=Dict("dir"=>"notebook directory")))
 """
 function process_notebook(rootname::AbstractString; dir=Mads.dir, ndir="notebooks")
 	f = check_notebook(rootname; dir=dir, ndir=ndir)
-	if f == nothing
+	if f === nothing
 		return
 	end
 	d, p = f
