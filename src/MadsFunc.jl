@@ -116,17 +116,17 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			npt = m !== nothing ? Meta.parse(Int, m.captures[1]) : 1
 			if nprocs_per_task_default > 1 && npt != nprocs_per_task_default
 				if m !== nothing
-					madsdata["Command"] = replace(madsdata["Command"], r"(julia)(.*-p)[\s[0-9]*|[0-9]*]" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) --startup-file=no \\g<2> $nprocs_per_task_default"))
+					madsdata["Command"] = replace(madsdata["Command"], r"(julia)(.*-p)[\s[0-9]*|[0-9]*]" => Base.SubstitutionString("$(first(Base.julia_cmd().exec)) --startup-file=no \\g<2> $nprocs_per_task_default"))
 					Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 				else
 					m = match(r"julia", madsdata["Command"])
 					if m !== nothing
-						madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) --startup-file=no -p $nprocs_per_task_default "))
+						madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => "$(first(Base.julia_cmd().exec)) --startup-file=no -p $nprocs_per_task_default")
 						Mads.madsinfo("Mads Command has been updated to account for the number of processors per task ($nprocs_per_task_default)\nNew Mads Command: $(madsdata["Command"])")
 					end
 				end
 			else
-				madsdata["Command"] = replace(madsdata["Command"], r"(julia)" => Base.SubstitutionString("$(Base.julia_cmd().exec[1]) --startup-file=no"))
+				madsdata["Command"] = replace(madsdata["Command"], "julia" => "$(first(Base.julia_cmd().exec)) --startup-file=no")
 				Mads.madsinfo("Mads Command has been updated to account for the location of julia: $(madsdata["Command"])")
 			end
 			Mads.madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
@@ -394,6 +394,11 @@ Returns:
 """
 function importeverywhere(filename::AbstractString)
 	code = read(filename, String)
+	if typeof(code) <: AbstractString && isfile(joinpath(splitdir(filename)[1], code))
+		filename = joinpath(splitdir(filename)[1], code)
+		code = read(filename, String)
+		code = replace(code, r"\r\n" => s"\n")
+	end
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	extracode = quiet ? "" : "else Mads.madswarn(\"$functionname already defined\")"
 	fullcode = "import Distributed; @Distributed.everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
