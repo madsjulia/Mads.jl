@@ -1,7 +1,6 @@
 import JSON
 import YAML
 import OrderedCollections
-import PyCall
 
 """
 Load YAML file
