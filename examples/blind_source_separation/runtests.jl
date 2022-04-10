@@ -9,6 +9,7 @@ Mads.veryquieton()
 Mads.graphoff()
 
 suffix = Sys.iswindows() ? "-win" : ""
+suffix = Sys.islinux() ? "-linux" : suffix
 
 @Mads.tryimport Ipopt
 
