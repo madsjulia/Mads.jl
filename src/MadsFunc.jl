@@ -394,7 +394,7 @@ Returns:
 """
 function importeverywhere(filename::AbstractString)
 	code = read(filename, String)
-	if typeof(code) <: AbstractString && isfile(joinpath(splitdir(filename)[1], code))
+	if typeof(code) <: AbstractString && length(code) < 80 && isfile(joinpath(splitdir(filename)[1], code))
 		filename = joinpath(splitdir(filename)[1], code)
 		code = read(filename, String)
 		code = replace(code, r"\r\n" => s"\n")
