@@ -56,7 +56,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 			madsdata = loadjsonfile(filename)
 		end
 	end
-	if typeof(madsdata) <: AbstractString # Windows links fix
+	while typeof(madsdata) <: AbstractString # Windows links fix
 		filename = joinpath(splitdir(filename)[1], madsdata)
 		if format == "yaml"
 			madsdata = loadyamlfile(filename)
@@ -900,6 +900,10 @@ keytext=Dict("respect_space"=>"respect provided space in the template file to fi
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
 	tplfile = open(templatefilename)
 	line = readline(tplfile)
+	if isfile(line)
+		tplfile = open(line)
+		line = readline(tplfile)
+	end
 	if length(line) >= 10 && line[1:9] == "template "
 		separator = line[10]
 		if separator == '$'
@@ -911,11 +915,14 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		lines = [line; readlines(tplfile)]
 	end
 	close(tplfile)
+	emptyline = 0
 	outfile = open(outputfilename, "w")
 	for line in lines
 		splitline = split(line, separator) # two separators are needed for each parameter
 		if rem(length(splitline), 2) != 1
 			error("The number of separators (\"$separator\") is not even in template file $templatefilename on line:\n$line")
+		elseif length(splitline) == 1
+			emptyline += 1
 		end
 		for i = 1:div(length(splitline)-1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
@@ -933,6 +940,9 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		write(outfile, "\n")
 	end
 	close(outfile)
+	if emptyline == length(lines)
+		madswarn("No parameters found in template file $templatefilename")
+	end
 end
 
 """
@@ -1076,10 +1086,18 @@ Returns:
 - `obsdict` : observation dictionary with the model outputs
 """
 function ins_obs(instructionfilename::AbstractString, modeloutputfilename::AbstractString)
-	instfile = open(instructionfilename, "r")
 	if !isfile(modeloutputfilename)
 		throw("File $modeloutputfilename is missing!")
 		return nothing
+	end
+	instfile = open(instructionfilename, "r")
+	line = readline(instfile)
+	if isfile(line)
+		close(instfile)
+		instfile = open(line, "r")
+	else
+		close(instfile)
+		instfile = open(instructionfilename, "r")
 	end
 	obsfile = open(modeloutputfilename, "r")
 	obslineitr = eachline(obsfile)
