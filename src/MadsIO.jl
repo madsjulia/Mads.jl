@@ -1092,7 +1092,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 	end
 	instfile = open(instructionfilename, "r")
 	line = readline(instfile)
-	if isfile(line)
+	if length(line) < 80 && isfile(line)
 		close(instfile)
 		instfile = open(line, "r")
 	else
