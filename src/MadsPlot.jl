@@ -71,6 +71,17 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 end
 
 function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
+	if vsize > 20Compose.inch && hsize > 20Compose.inch
+		m = max(hsize, vsize)
+		hsize = 20Compose.inch / m
+		vsize = 20Compose.inch
+	elseif vsize > 20Compose.inch
+		hsize /= vsize / 20
+		vsize = 20Compose.inch
+	elseif hsize > 20Compose.inch
+		vsize /= hsize / 20
+		hsize = 20Compose.inch
+	end
 	filename, format = setplotfileformat(filename, uppercase(getextension(filename)))
 	if format == :SVG
 		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
