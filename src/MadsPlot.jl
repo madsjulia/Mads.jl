@@ -67,7 +67,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 		end
 		format = graphbackend
 	end
-	return filename, format
+	return filename, Symbol(format)
 end
 
 function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
@@ -83,14 +83,13 @@ function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
 		hsize = 20Compose.inch
 	end
 	filename, format = setplotfileformat(filename, uppercase(getextension(filename)))
-	if format == :SVG
+	if typeof(format) <: AbstractString
+		format = Symbol(format)
+	end
+	if format == :PNG
+		Gadfly.draw(Gadfly.PNG(filename, hsize, vsize; dpi=dpi), p)
+	else
 		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
-	elseif isdefined(Main, :Cairo)
-		if format == :PNG
-			Gadfly.draw(Gadfly.PNG(filename, hsize, vsize; dpi=dpi), p)
-		else
-			Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
-		end
 	end
 end
 
