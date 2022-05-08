@@ -261,7 +261,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 						time = gettime(o[i])
 						t = gettarget(o[i])
 						w = getweight(o[i])
-						if w == NaN || w > 0
+						if !isnan(w) || w > 0
 							push!(td, time)
 							push!(d, t)
 						end
