@@ -148,7 +148,6 @@ function gettime(o::AbstractDict)
 		time = o["t"]
 	else
 		time = NaN
-		madswarn("Time is missing for observation $(o)!")
 	end
 	return time
 end
@@ -404,11 +403,16 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])
 		o = gettime(obsdict[obskey])
+		if haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
+			bmin = obsdict[obskey]["minorig"]
+			bmax = obsdict[obskey]["maxorig"]
+			t = t * (bmax - bmin) + bmin
+		end
 		s = @Printf.sprintf "%-10s target = %15g" obskey t
-		if w != NaN
+		if !isnan(w)
 			s *= @Printf.sprintf " weight = %15g" w
 		end
-		if o != NaN
+		if !isnan(o)
 			s *= @Printf.sprintf " time = %15g" o
 		end
 		s *= "\n"
@@ -684,7 +688,7 @@ function wells2observations!(madsdata::AbstractDict)
 					data["time"] = t
 					data["index"] = i
 					target = gettarget(madsdata["Wells"][wellkey]["obs"][i])
-					if target != NaN
+					if !isnan(target)
 						data["target"] = target
 					end
 					for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])

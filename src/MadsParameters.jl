@@ -611,7 +611,23 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		else
 			s = ""
 		end
-		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, pardict[parkey]["init"])
+		v = pardict[parkey]["init"]
+		vmin = pardict[parkey]["min"]
+		vmax = pardict[parkey]["max"]
+		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
+			bmin = pardict[parkey]["minorig"]
+			bmax = pardict[parkey]["maxorig"]
+			v = v * (bmax - bmin) + bmin
+			if haskey(pardict[parkey], "min")
+				vmin = pardict[parkey]["min"]
+				vmin = vmin * (bmax - bmin) + bmin
+			end
+			if haskey(pardict[parkey], "max")
+				vmax = pardict[parkey]["max"]
+				vmax = vmax * (bmax - bmin) + bmin
+			end
+		end
+		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, v)
 		if showtype
 			if haskey(pardict[parkey], "type")
 				if pardict[parkey]["type"] === nothing
@@ -627,10 +643,10 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 			s *= @Printf.sprintf "log-transformed "
 		end
 		if haskey(pardict[parkey], "min")
-			s *= @Printf.sprintf "min = %15g " pardict[parkey]["min"]
+			s *= @Printf.sprintf "min = %15g " vmin
 		end
 		if haskey(pardict[parkey], "max")
-			s *= @Printf.sprintf "max = %15g " pardict[parkey]["max"]
+			s *= @Printf.sprintf "max = %15g " vmax
 		end
 		if haskey(pardict[parkey], "dist")
 			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
