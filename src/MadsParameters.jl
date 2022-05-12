@@ -43,6 +43,9 @@ Returns:
 function getparamkeys(madsdata::AbstractDict; filter::AbstractString="")
 	if haskey(madsdata, "Parameters")
 		return collect(filterkeys(madsdata["Parameters"], filter))
+	else
+		@warn "No parameters in the MADS problem dictionary!"
+		return nothing
 	end
 end
 
@@ -611,9 +614,13 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		else
 			s = ""
 		end
-		v = pardict[parkey]["init"]
-		vmin = pardict[parkey]["min"]
-		vmax = pardict[parkey]["max"]
+		s *= Mads.sprintf("%-$(maxk)s = ", parkey)
+		if haskey(pardict[parkey], "init")
+			v = pardict[parkey]["init"]
+		else
+			@warn("No initial value or expression for parameter $(parkey)")
+			continue
+		end
 		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
 			bmin = pardict[parkey]["minorig"]
 			bmax = pardict[parkey]["maxorig"]
@@ -626,14 +633,21 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 				vmax = pardict[parkey]["max"]
 				vmax = vmax * (bmax - bmin) + bmin
 			end
+		else
+			if haskey(pardict[parkey], "min")
+				vmin = pardict[parkey]["min"]
+			end
+			if haskey(pardict[parkey], "max")
+				vmax = pardict[parkey]["max"]
+			end
 		end
-		s *= Mads.sprintf("%-$(maxk)s = %15g ", parkey, v)
+		s *= Mads.sprintf("%15g ", v)
 		if showtype
 			if haskey(pardict[parkey], "type")
-				if pardict[parkey]["type"] === nothing
-					s *= "<- fixed       "
-				else
+				if pardict[parkey]["type"] == "opt"
 					s *= "<- optimizable "
+				else
+					s *= "<- fixed       "
 				end
 			else
 				s *= "<- optimizable "
@@ -653,6 +667,14 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		end
 		s *= "\n"
 		push!(p, s)
+	end
+	if haskey(madsdata, "Expressions")
+		expdict = madsdata["Expressions"]
+		params = Mads.evaluatemadsexpressions(madsdata)
+		for expkey in keys(expdict)
+			s = Mads.sprintf("%-$(maxk)s = %s\n", expkey, expdict[expkey]["exp"])
+			push!(p, s)
+		end
 	end
 	print(p...)
 end

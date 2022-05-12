@@ -170,16 +170,21 @@ Returns:
 
 - dictionary containing the parameter and expression names as keys, and the values of the expression as values
 """
-function evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDict)
+function evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata))
 	if haskey(madsdata, "Expressions")
-		expressions = Dict()
 		expkeys = keys(madsdata["Expressions"])
-		for exprname in expkeys
-			expressions[exprname] = evaluatemadsexpression(madsdata["Expressions"][exprname]["exp"], parameters)
+		for k in expkeys
+			e = evaluatemadsexpression(madsdata["Expressions"][k]["exp"], parameters)
+			parameters[k] = e
 		end
-		for exprname in expkeys
-			parameters[exprname] = expressions[exprname]
+	end
+	if haskey(madsdata, "Order")
+		parameters_ordered = OrderedCollections.OrderedDict{String,Float64}()
+		for k in madsdata["Order"]
+			parameters_ordered[k] = parameters[k]
 		end
+		# display(parameters_ordered)
+		parameters = parameters_ordered
 	end
 	return parameters
 end
