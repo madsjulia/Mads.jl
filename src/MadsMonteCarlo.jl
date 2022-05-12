@@ -186,7 +186,7 @@ Example:
 Mads.montecarlo(madsdata; N=100)
 ```
 """
-function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::AbstractString="")
+function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, filename::AbstractString="")
 	paramkeys = getparamkeys(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	logoptparamkeys = getlogparamkeys(madsdata, optparamkeys)
@@ -217,16 +217,20 @@ function montecarlo(madsdata::AbstractDict; N::Integer=100, filename::AbstractSt
 		end
 		paramdicts[i] = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, params))
 	end
-	f = makemadscommandfunction(madsdata)
-	results = RobustPmap.rpmap(f, paramdicts)
-	outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
-	for i = 1:N
-		outputdicts[i] = OrderedCollections.OrderedDict()
-		outputdicts[i]["Parameters"] = paramdicts[i]
-		outputdicts[i]["Results"] = results[i]
+	if compute
+		f = makemadscommandfunction(madsdata)
+		results = RobustPmap.rpmap(f, paramdicts)
+		outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
+		for i = 1:N
+			outputdicts[i] = OrderedCollections.OrderedDict()
+			outputdicts[i]["Parameters"] = paramdicts[i]
+			outputdicts[i]["Results"] = results[i]
+		end
+		filename != "" && dumpyamlfile(filename, outputdicts)
+		return outputdicts
+	else
+		return permutedims(hcat(collect.(values.(paramdicts))...))
 	end
-	filename != "" && dumpyamlfile(filename, outputdicts)
-	return outputdicts
 end
 
 """
