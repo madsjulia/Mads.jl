@@ -306,7 +306,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 						filename_w = "$rootfile-$wellname.$extension"
 					end
 					filename_w, format = setplotfileformat(filename_w, format)
-					if format != "SVG" && format != "PDF"
+					if format != :SVG && format != :PDF
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize; dpi=dpi), p)
 					else
 						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize), p)
@@ -371,7 +371,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		end
 		if filename != ""
 			filename, format = setplotfileformat(filename, format)
-			if format != "SVG" && format != "PDF"
+			if format != :SVG && format != :PDF
 				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize; dpi=dpi), pl)
 			else
 				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
