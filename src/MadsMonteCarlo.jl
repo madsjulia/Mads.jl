@@ -198,7 +198,9 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 	nonlogoptparamsmin = getparamsmin(madsdata, nonlogoptparamkeys)
 	nonlogoptparamsmax = getparamsmax(madsdata, nonlogoptparamkeys)
 	logoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(logoptparamsmin, logoptparamsmax, N)
+	logoptparams = renormalizematrix(logoptparams, logoptparamsmin, logoptparamsmax)
 	nonlogoptparams = BlackBoxOptim.Utils.latin_hypercube_sampling(nonlogoptparamsmin, nonlogoptparamsmax, N)
+	nonlogoptparams = renormalizematrix(nonlogoptparams, nonlogoptparamsmin, nonlogoptparamsmax)
 	paramdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 	params = getparamsinit(madsdata)
 	for i = 1:N
@@ -231,6 +233,16 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 	else
 		return permutedims(hcat(collect.(values.(paramdicts))...))
 	end
+end
+
+function renormalizematrix(m::Matrix{Float64}, bmin::Vector{Float64}, bmax::Vector{Float64})
+	if sizeof(m) == 0
+		return m
+	end
+	imin = minimum(m; dims=2)
+	imax = maximum(m; dims=2)
+	mn = (m .- imin) ./ (imax .- imin)
+	return mn .* (bmax .- bmin) .+ bmin
 end
 
 """
