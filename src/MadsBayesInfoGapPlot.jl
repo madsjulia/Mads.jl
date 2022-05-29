@@ -23,7 +23,6 @@ function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filena
 		rootname = Mads.getmadsrootname(madsdata)
 		filename =  rootname * "-robustness"
 	end
-	filename, format = setplotfileformat(filename, format)
 	#layers = Array{Any}(undef, size(maxfailureprobs, 2))
 	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))
@@ -36,7 +35,7 @@ function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filena
 		Gadfly.Guide.xlabel("Horizon of uncertainty"), Gadfly.Guide.ylabel("Maximum probability of failure"),
 		Gadfly.Scale.x_continuous(maxvalue=maxhoriz), Gadfly.Scale.y_continuous(maxvalue=maxprob),
 		Gadfly.Scale.color_discrete_manual("red", "blue", "green", "cyan", "magenta", "yellow"))
-	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch, 3Gadfly.inch), p)
+	plotfileformat(p, filename, 4Gadfly.inch, 3Gadfly.inch; format=format, dpi=imagedpi)
 	if typeof(p) == Gadfly.Plot
 		p
 	end

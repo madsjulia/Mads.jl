@@ -36,19 +36,21 @@ yf22 = [zeros(301); y; zeros(700)] .+ rand(2002) ./ 10
 yf23 = [zeros(681); y; zeros(320)] .+ rand(2002) ./ 10
 
 p = Gadfly.plot(x=tf, y=yf21, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "blue")))
-Gadfly.draw(Gadfly.PNG("wave2-1.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("wave2-1.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
 
 p = Gadfly.plot(x=tf, y=yf22, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "red")))
-Gadfly.draw(Gadfly.PNG("wave2-2.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("wave2-2.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
 
 p = Gadfly.plot(x=tf, y=yf23, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "green")))
-Gadfly.draw(Gadfly.PNG("wave2-3.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("wave2-3.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
 
 p = Gadfly.plot(x=tf, y=yf11 .+ yf21, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "blue")))
-Gadfly.draw(Gadfly.PNG("waves-1.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("waves-1.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
 
 p = Gadfly.plot(x=tf, y=yf12 .+ yf22, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "red")))
-Gadfly.draw(Gadfly.PNG("waves-2.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("waves-2.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
 
 p = Gadfly.plot(x=tf, y=yf13 .+ yf23, Gadfly.Geom.line, Gadfly.Coord.Cartesian(ymin=-2, ymax=2), Gadfly.Theme(line_width=2Gadfly.pt, default_color=Base.parse(Colors.Colorant, "green")))
-Gadfly.draw(Gadfly.PNG("waves-3.png", 8Gadfly.inch, 4Gadfly.inch, dpi=300), p)
+Gadfly.draw(Gadfly.PNG("waves-3.png", 8Gadfly.inch, 4Gadfly.inch; dpi=300), p)
+
+Gadfly.draw(Gadfly.PNG("a.png", 3Gadfly.inch, 3Gadfly.inch), Gadfly.plot(x=rand(10), y=rand(10), Gadfly.Scale.y_sqrt, Gadfly.Geom.point, Gadfly.Guide.xlabel("Time"), Gadfly.Guide.ylabel("Response"), Gadfly.Guide.title("Test")))
