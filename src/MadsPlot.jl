@@ -1227,10 +1227,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	try
 		if filename != ""
 			filename, format = setplotfileformat(filename, format)
-			if format == "SVG" || format == "PDF"
-				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot), pS)
+			if format == :SVG || format == :PDF
+				Gadfly.draw(Gadfly.eval(format)(filename, hsize_plot, vsize_plot), pS)
 			else
-				Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
+				Gadfly.draw(Gadfly.eval(format)(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
 			end
 		end
 		!quiet && Mads.display(pS; gw=hsize, gh=vsize)
