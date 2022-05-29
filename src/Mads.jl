@@ -25,6 +25,9 @@ import FileIO
 import YAML
 import JSON
 
+import Cairo
+import Fontconfig
+
 import JuMP
 import Ipopt
 
