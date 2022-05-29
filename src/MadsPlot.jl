@@ -70,7 +70,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 	return filename, Symbol(format)
 end
 
-function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
+function plotfileformat(p, filename::AbstractString, hsize, vsize; format=uppercase(getextension(filename)), dpi=imagedpi)
 	if vsize > 20Compose.inch && hsize > 20Compose.inch
 		m = max(hsize, vsize)
 		hsize = 20Compose.inch / m
@@ -82,7 +82,7 @@ function plotfileformat(p, filename::AbstractString, hsize, vsize; dpi=imagedpi)
 		vsize /= hsize / 20
 		hsize = 20Compose.inch
 	end
-	filename, format = setplotfileformat(filename, uppercase(getextension(filename)))
+	filename, format = setplotfileformat(filename, format)
 	if typeof(format) <: AbstractString
 		format = Symbol(format)
 	end
@@ -177,8 +177,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 		filename = "$rootname-$keyword-problemsetup"
 	end
 	if filename != ""
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), p)
+		plotfileformat(p, filename, hsize, vsize; format=format)
 	end
 	!quiet && Mads.display(p; gw=hsize, gh=vsize)
 	return nothing
@@ -305,12 +304,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 						rootfile = getrootname(filename)
 						filename_w = "$rootfile-$wellname.$extension"
 					end
-					filename_w, format = setplotfileformat(filename_w, format)
-					if format != :SVG && format != :PDF
-						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize; dpi=dpi), p)
-					else
-						Gadfly.draw(Gadfly.eval(Symbol(format))(filename_w, hsize, vsize), p)
-					end
+					plotfileformat(p, filename_w, hsize, vsize; format=format, dpi=dpi)
 					display && Mads.display(p; gw=hsize, gh=vsize)
 				else
 					push!(pp, p)
@@ -370,12 +364,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 			filename = "$rootname-match"
 		end
 		if filename != ""
-			filename, format = setplotfileformat(filename, format)
-			if format != :SVG && format != :PDF
-				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize; dpi=dpi), pl)
-			else
-				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, hsize, vsize), pl)
-			end
+			plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
 		end
 		if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
 			display && Mads.display(pl; gw=hsize, gh=vsize)
@@ -461,11 +450,10 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 	end
 	hsize = (6 * size(samples, 2))Gadfly.inch
 	vsize = (6 * size(samples, 2))Gadfly.inch
-	filename, format = setplotfileformat(filename, format)
 	recursivemkdir(filename)
 	try
 		pl = Compose.gridstack(cs)
-		Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, hsize, vsize), pl)
+		plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
@@ -562,8 +550,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	if filename == ""
 		filename = "$rootname-$wellname-$method-$nsample"
 	end
-	filename, format = setplotfileformat(filename, format)
-	Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), p)
+	plotfileformat(p, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
 	!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
@@ -670,22 +657,18 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		recursivemkdir(filename)
 	end
 	if !separate_files
-		filename, format = setplotfileformat(filename, format)
 		p = Gadfly.vstack(pp...)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 12Gadfly.inch, 16Gadfly.inch), p)
+		plotfileformat(p, filename, 12Gadfly.inch, 16Gadfly.inch; format=format, dpi=imagedpi)
 		!quiet && Mads.display(p; gw=12Gadfly.inch, gh=vsize)
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
 		filename = filename_root * "-total_effect." * filename_ext
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), ptes)
+		plotfileformat(ptes, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 		filename = filename_root * "-main_effect." * filename_ext
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), pmes)
+		plotfileformat(pmes, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 		filename = filename_root * "-variance." * filename_ext
-		filename, format = setplotfileformat(filename, format)
-		Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, 4Gadfly.inch), pvar)
+		plotfileformat(pvar, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 	end
 	return nothing
 end
@@ -807,14 +790,8 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 			pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 		end
 		filename = keyword == "" ? string("$rootname-$paramkey-$numberofsamples-spaghetti") : string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
-		filename, format = setplotfileformat(filename, format)
-		try
-			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 8Gadfly.inch, vsize), pl)
-			!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
-		catch errmsg
-			printerrormsg(errmsg)
-			Mads.madswarn("Spaghettiplots: Gadfly fails!")
-		end
+		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
+		!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	end
 	return nothing
 end
@@ -1006,13 +983,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		filename = keyword == "" ?  "$rootname-$numberofsamples-spaghetti" : "$rootname-$keyword-$numberofsamples-spaghetti"
 	end
 	if filename != ""
-		filename, format = setplotfileformat(filename, format)
-		try
-			Gadfly.draw(Gadfly.eval((Symbol(format)))(filename, 8Gadfly.inch, vsize), pl)
-		catch errmsg
-			printerrormsg(errmsg)
-			Mads.madswarn("Spaghettiplot: Gadfly fails!")
-		end
+		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
 	end
 	!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	return nothing
@@ -1226,12 +1197,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	try
 		if filename != ""
-			filename, format = setplotfileformat(filename, format)
-			if format == :SVG || format == :PDF
-				Gadfly.draw(Gadfly.eval(format)(filename, hsize_plot, vsize_plot), pS)
-			else
-				Gadfly.draw(Gadfly.eval(format)(filename, hsize_plot, vsize_plot; dpi=dpi), pS)
-			end
+			plotfileformat(pS, filename, hsize_plot, vsize_plot; format=format, dpi=dpi)
 		end
 		!quiet && Mads.display(pS; gw=hsize, gh=vsize)
 	catch errmsg
@@ -1293,12 +1259,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 			filename = "$(rootname)-jacobian" * ext
-			filename, format = setplotfileformat(filename, format)
-			try
-				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO), jacmat)
-			catch
-				madswarn("Gadfly could not plot!")
-			end
+			plotfileformat(jacmat, filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO; format=format, dpi=imagedpi)
 			Mads.madsinfo("Jacobian matrix plot saved in $filename")
 		end
 	end
@@ -1335,8 +1296,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
 			# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 			filename = "$(rootname)-eigenmatrix" * ext
-			filename, format = setplotfileformat(filename, format)
-			Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP), eigenmat)
+			plotfileformat(eigenmat, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP; format=format, dpi=imagedpi)
 			Mads.madsinfo("Eigen matrix plot saved in $filename")
 			if sizeof(sortedeigenv) > 0
 				eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
@@ -1344,8 +1304,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 							Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 							Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 				filename = "$(rootname)-eigenvalues" * ext
-				filename, format = setplotfileformat(filename, format)
-				Gadfly.draw(Gadfly.eval(Symbol(format))(filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch), eigenval)
+				plotfileformat(eigenval, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch; format=format, dpi=imagedpi)
 				Mads.madsinfo("Eigen values plot saved in $filename")
 			end
 		end
