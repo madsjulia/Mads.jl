@@ -1045,7 +1045,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=1.5Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
@@ -1088,16 +1088,21 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	mck = []
 	ncolors = length(colors)
 	if truth && nS > 1
-		geometry = [Gadfly.Geom.point(); repeat([Gadfly.Geom.line()], nS-1)]
-		linestylea = [:dash; repeat([:solid], nS-1)]
+		geometry = [[Gadfly.Geom.point() Gadfly.Geom.line()]; repeat([Gadfly.Geom.line() Gadfly.Geom.line()], nS-1)]
+		geometry = Vector{Any}(undef, nS)
+		geometry[1] = [Gadfly.Geom.line(), Gadfly.Geom.point()]
+		geometry[2:end] = repeat([[Gadfly.Geom.line()]], nS-1)
+		linestylea = [:solid; repeat([:solid], nS-1)]
+		linewidthea =[linewidth / 2; repeat([linewidth], nS-1)]
 		if nS <= ncolors && !nextgray
-			mck = [Gadfly.Guide.manual_color_key("", names, colors[1:nS]; shape=[Gadfly.Shape.circle; repeat([Gadfly.Shape.hline], nS-1)], size=[pointsize * 2; repeat([linewidth * 3], nS-1)])]
+			mck = [Gadfly.Guide.manual_color_key("", names, colors[1:nS]; shape=[Gadfly.Shape.circle; repeat([Gadfly.Shape.hline], nS-1)], size=[pointsize * 1.5; repeat([linewidth * 3], nS-1)])]
 			key_position = :none
-			pointsize = 2 * linewidth
+			# pointsize = 1.5 * linewidth
 		end
 	else
-		geometry = repeat(geometry, nS)
+		geometry = repeat([geometry], nS)
 		linestylea = typeof(linestyle) == Symbol ? repeat([linestyle], nS) : linestyle
+		linewidthea = repeat([linewidth], nS)
 	end
 	recursivemkdir(filename)
 	if !colorkey || nS == 1 || nextgray
@@ -1112,8 +1117,8 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		if nS <= ncolors && !nextgray
 			cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
 			c = [Gadfly.layer(x=xaxis, y=X[:,i],
-				geometry[i],
-				Gadfly.Theme(line_width=linewidth, line_style=[linestylea[i]], point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
+				geometry[i]...,
+				Gadfly.Theme(line_width=linewidthea[i], line_style=[linestylea[i]], point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, default_color=Colors.RGBA(parse(Colors.Colorant, colors[i]), opacity)))
 				for i in 1:nS]...,
 				mck...,
 				gl...,
