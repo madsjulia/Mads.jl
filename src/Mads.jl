@@ -52,7 +52,6 @@ if madsbash
 	end
 end
 
-
 include("MadsHelpers.jl")
 include("MadsTryImport.jl")
 
