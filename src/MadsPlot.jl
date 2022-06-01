@@ -1093,7 +1093,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		geometry[1] = [Gadfly.Geom.line(), Gadfly.Geom.point()]
 		geometry[2:end] = repeat([[Gadfly.Geom.line()]], nS-1)
 		linestylea = [:solid; repeat([:solid], nS-1)]
-		linewidthea =[linewidth / 2; repeat([linewidth], nS-1)]
+		linewidthea =[linewidth / 2; repeat([linewidth * 2], nS-1)]
 		if nS <= ncolors && !nextgray
 			mck = [Gadfly.Guide.manual_color_key("", names, colors[1:nS]; shape=[Gadfly.Shape.circle; repeat([Gadfly.Shape.hline], nS-1)], size=[pointsize * 1.5; repeat([linewidth * 3], nS-1)])]
 			key_position = :none
