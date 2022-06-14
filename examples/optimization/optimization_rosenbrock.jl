@@ -2,6 +2,7 @@ import Mads
 import Optim
 import LsqFit
 import Test
+import Distributed
 
 @Distributed.everywhere fr = Mads.rosenbrock
 @Distributed.everywhere g! = Mads.rosenbrock_gradient!
