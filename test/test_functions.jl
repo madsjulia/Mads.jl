@@ -20,7 +20,6 @@ Mads.seed!(2017, Random.MersenneTwister)
 																			0.0 0.0 0.0 0.0 0.0 -2.0 4.0 0.0;
 																			0.0 0.0 0.0 0.0 0.0 0.0 0.0 -0.0], atol=1e-2))
 
-
 	@Test.test all(Mads.makesphere(2)([1,1]) .== [1,1])
 	@Test.test all(Mads.makesphere_gradient(2)([1,1]) .== [1 0; 0 1])
 	@Test.test all(isapprox(Mads.makedixonprice(2)([1,1]), [0.0,1.41421], atol=1e-2))
