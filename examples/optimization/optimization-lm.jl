@@ -21,5 +21,3 @@ results = Mads.levenberg_marquardt(Mads.rosenbrock2_lm, Mads.rosenbrock2_gradien
 # needs even smaller tolerance to work
 results = Mads.levenberg_marquardt(Mads.rosenbrock2_lm, Mads.rosenbrock2_gradient_lm, [-1.2, 1.0], tolX=1e-12, tolG=1e-12)
 @Test.test LinearAlgebra.norm(results.minimizer - [1.0, 1.0]) < 0.01
-
-return
