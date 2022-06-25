@@ -1045,7 +1045,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Array{String,1}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Array{String,1}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=!code, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
@@ -1096,7 +1096,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		linewidthea =[linewidth / 2; repeat([linewidth * 2], nS-1)]
 		if nS <= ncolors && !nextgray
 			mck = [Gadfly.Guide.manual_color_key("", names, colors[1:nS]; shape=[Gadfly.Shape.circle; repeat([Gadfly.Shape.hline], nS-1)], size=[pointsize * 1.5; repeat([linewidth * 3], nS-1)])]
-			key_position = :none
+			key_position=:none
 			# pointsize = 1.5 * linewidth
 		end
 	else
@@ -1228,7 +1228,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	ixzero !== nothing && (X[ixzero] .= 0)
 	if returnplot
-		return pS
+		return Mads.display(pS; gw=hsize_plot, gh=vsize_plot)
 	elseif code
 		return c
 	else
