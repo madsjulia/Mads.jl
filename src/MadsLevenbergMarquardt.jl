@@ -47,7 +47,6 @@ Returns:
 -
 """ residuals
 
-
 function of(madsdata::AbstractDict, resultvec::AbstractVector)
 	r = residuals(madsdata, resultvec)
 	sum(r .^ 2)
