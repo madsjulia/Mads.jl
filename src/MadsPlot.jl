@@ -320,8 +320,8 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		nT = length(obskeys)
 		obs = Array{Float64}(undef, 0)
 		tobs = Array{Float64}(undef, 0)
-		ress = Array{Float64}(undef, 0)
-		tress = Array{Float64}(undef, 0)
+		vresults = Array{Float64}(undef, 0)
+		tresults = Array{Float64}(undef, 0)
 		time_missing = false
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
@@ -337,22 +337,25 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				skipnext = !isa(time, Real)#skip plotting the model prediction is "time" is not a number and the weight is zero
 			end
 			if !skipnext
-				push!(tress, time)
-				push!(ress, result[obskeys[i]])
+				push!(tresults, time)
+				push!(vresults, result[obskeys[i]])
 			end
 		end
 		if time_missing
 			madswarn("Some of the observations do not have `time` field specified!")
 		end
-		if length(tress) + length(tobs) == 0
+		if length(tresults) + length(tobs) == 0
 			madswarn("No data to plot")
 		else
-			pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-				Gadfly.layer(x=tress, y=ress, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
-				Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
-				Gadfly.Theme(highlight_width=0Gadfly.pt),
-				Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 2; linewidth * 3]))
+			pl = Gadfly.plot(
+			Gadfly.layer(x=tresults ./ 1000, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
+			Gadfly.layer(x=tobs ./ 1000, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)))
+			# pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				# Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+				# Gadfly.layer(x=tresults, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
+				# Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
+				# Gadfly.Theme(highlight_width=0Gadfly.pt),
+				# Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 1.3; linewidth * 3]))
 		end
 	end
 	if pl === nothing
