@@ -165,7 +165,6 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			tempdirname = ""
 			while trying
 				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
-				@show tempstring
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
 				linkdir && Mads.linktempdir(cwd, tempdirname)
@@ -201,14 +200,12 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 				latest = false
 				while trying
 					try
-						@show attempt
 						attempt += 1
 						if latest
 							out = Base.invokelatest(madsdatacommandfunction, md)
 						else
 							out = madsdatacommandfunction(md)
 						end
-						@show out
 						results = convert(OrderedCollections.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
