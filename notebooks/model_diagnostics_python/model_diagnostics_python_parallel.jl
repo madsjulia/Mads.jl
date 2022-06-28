@@ -1,10 +1,13 @@
+import Distributed
+
+Distributed.addprocs(4)
+
 import Mads
 import Cairo
 import Fontconfig
 import PyCall
-import Distributed
 
-@Distributed.everywhere cd(pwd())
+@Distributed.everywhere cd(@__DIR__)
 
 @Distributed.everywhere PyCall.py"""
 import numpy as np
