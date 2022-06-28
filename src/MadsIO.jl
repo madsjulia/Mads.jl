@@ -696,6 +696,10 @@ function checkmodeloutputdirs(madsdata::AbstractDict)
 			push!(directories, getdir(filename))
 		end
 	end
+	if haskey(madsdata, "Julia external function
+		")
+		push!(directories, ".")
+	end
 	d = unique(directories)
 	nd = length(directories)
 	if nd == 0

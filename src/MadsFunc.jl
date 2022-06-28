@@ -13,7 +13,7 @@ madsmodels_function = ["Julia model", "Julia function"]
 Make MADS function to execute the model defined in the input MADS problem dictionary
 
 $(DocumentFunction.documentfunction(makemadscommandfunction;
-argtext=Dict("madsdata_in"=>"MADS problem dictionary"),
+argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("calczeroweightobs"=>"Calculate zero weight observations [default=`false`]",
              "calcpredictions"=>"Calculate predictions [default=`true`]")))
 
@@ -81,11 +81,11 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia function")
 		if typeof(madsdata["Julia function"]) <: Function
-			Mads.madsinfo("""Model setup: Julia vector model -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
+			Mads.madsinfo("""Model setup: Julia dunction -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
 			"MADS command function"
 			function madscommandfunctionvector(parameters::AbstractDict)
 				o = madsdata["Julia function"](collect(values(parameters)))
-				return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata_in), o))
+				return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
 			end
 			madscommandfunction = madscommandfunctionvector
 		else
@@ -100,17 +100,18 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		madsdatacommandfunction = importeverywhere(filename)
 		local madscommandfunction
 		try
-			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+			madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata)
 		catch errmsg
 			printerrormsg(errmsg)
 			Mads.madserror("MADS model function defined in '$(filename)' cannot be executed")
 		end
-		madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata_in)
+		madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
 		madscommandfunction = importeverywhere(filename)
-	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command")
+	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command") || haskey(madsdata, "Julia external function")
+		linkdir = true
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
 			npt = m !== nothing ? Meta.parse(Int, m.captures[1]) : 1
@@ -135,6 +136,19 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			filename = joinpath(madsproblemdir, madsdata["Julia command"])
 			Mads.madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
 			madsdatacommandfunction = importeverywhere(filename)
+		elseif haskey(madsdata, "Julia external function")
+			if typeof(madsdata["Julia external function"]) <: Function
+				Mads.madsinfo("""Model setup: Julia external function -> Internal model evaluation of Julia function '$(madsdata["Julia external function"])'""")
+				"MADS command function"
+				function madscommandfunctionexternal(parameters::AbstractVector)
+					o = madsdata["Julia external function"](parameters)
+					return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
+				end
+				madsdatacommandfunction = madscommandfunctionexternal
+				linkdir = false
+			else
+				madscritical("Julia function $(madsdata["Julia external function"]) is not defined!")
+			end
 		end
 		currentdir = pwd()
 		"MADS command function"
@@ -151,9 +165,10 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			tempdirname = ""
 			while trying
 				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
+				@show tempstring
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
-				Mads.linktempdir(cwd, tempdirname)
+				linkdir && Mads.linktempdir(cwd, tempdirname)
 				cd(tempdirname)
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
@@ -175,19 +190,25 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 					end
 				end
 			end
-			if haskey(madsdata, "Julia command")
-				Mads.madsinfo("Executing Julia model-evaluation script parsing the model outputs (`Julia command`) in directory $(tempdirname) ...")
+			if haskey(madsdata, "Julia command") || haskey(madsdata, "Julia external function")
+				str = haskey(madsdata, "Julia command") ? "Julia command" : "Julia external function"
+				cmd = haskey(madsdata, "Julia command") ? madsdata["Julia command"] : madsdata["Julia external function"]
+				md = haskey(madsdata, "Julia command") ? madsdata : Mads.getparamsinit(madsdata)
+				display(md)
+				Mads.madsinfo("Executing Julia model evaluation script parsing the model outputs (`$(str)` `$(cmd)`) in directory $(tempdirname) ...")
 				attempt = 0
 				trying = true
 				latest = false
 				while trying
 					try
+						@show attempt
 						attempt += 1
 						if latest
-							out = Base.invokelatest(madsdatacommandfunction, madsdata)
+							out = Base.invokelatest(madsdatacommandfunction, md)
 						else
-							out = madsdatacommandfunction(madsdata)
+							out = madsdatacommandfunction(md)
 						end
+						@show out
 						results = convert(OrderedCollections.OrderedDict{Any,Float64}, out)
 						trying = false
 					catch errmsg
@@ -199,12 +220,12 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 								cd(currentdir)
 								printerrormsg(errmsg)
 								if Distributed.nprocs() > 1 && Distributed.myid() != 1
-									madswarn("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
+									madswarn("$(errmsg)\nJulia command '$(cmd)' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 									madswarn("Process $(Distributed.myid()) will be removed!")
 									remotecall(Distributed.rmprocs(), 1, Distributed.myid())
 									return nothing
 								else
-									madscritical("$(errmsg)\nJulia command '$(madsdata["Julia command"])' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
+									madscritical("$(errmsg)\nJulia command '$(cmd)' cannot be executed or failed in directory $(tempdirname) on $(gethostname() * "(" * string(Sockets.getipaddr()) * ")")!")
 								end
 							end
 							sleep(attempt * 0.5)
@@ -265,7 +286,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			return results
 		end
 		madscommandfunction = madscommandfunctionrerun
-	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") && !haskey(madsdata, "Julia vector model") # we may still use "Wells" instead of "Observations"
+	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") && !haskey(madsdata, "Julia function") # we may still use "Wells" instead of "Observations"
 		Mads.madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
 		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
 	else
