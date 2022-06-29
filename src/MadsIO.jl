@@ -696,8 +696,8 @@ function checkmodeloutputdirs(madsdata::AbstractDict)
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "Julia external function
-		")
+	if haskey(madsdata, "Linked directory
+		") && madsdata["Linked directory"] == true
 		push!(directories, ".")
 	end
 	d = unique(directories)
