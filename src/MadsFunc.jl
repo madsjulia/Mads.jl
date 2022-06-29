@@ -79,7 +79,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	end
 	simpleproblem = Mads.checkmodeloutputdirs(madsdata)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
-	if haskey(madsdata, "Julia function")
+	if haskey(madsdata, "Julia function") && (!haskey(madsdata, "Linked directory") || madsdata["Linked directory"] != true)
 		if typeof(madsdata["Julia function"]) <: Function
 			Mads.madsinfo("""Model setup: Julia dunction -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
 			"MADS command function"
@@ -110,7 +110,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		filename = joinpath(madsproblemdir, madsdata["Model"])
 		Mads.madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
 		madscommandfunction = importeverywhere(filename)
-	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command") || haskey(madsdata, "Julia external function")
+	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command") || ( haskey(madsdata, "Julia function") && haskey(madsdata, "Linked directory") )
 		linkdir = true
 		if haskey(madsdata, "Command")
 			m = match(r"julia.*-p([\s[0-9]*|[0-9]*])", madsdata["Command"])
@@ -136,18 +136,18 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			filename = joinpath(madsproblemdir, madsdata["Julia command"])
 			Mads.madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
 			madsdatacommandfunction = importeverywhere(filename)
-		elseif haskey(madsdata, "Julia external function")
-			if typeof(madsdata["Julia external function"]) <: Function
-				Mads.madsinfo("""Model setup: Julia external function -> Internal model evaluation of Julia function '$(madsdata["Julia external function"])'""")
+		elseif haskey(madsdata, "Julia function") && haskey(madsdata, "Linked directory") && madsdata["Linked directory"] == true
+			if typeof(madsdata["Julia function"]) <: Function
+				Mads.madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])' in dedicated linked directory""")
 				"MADS command function"
 				function madscommandfunctionexternal(parameters::AbstractVector)
-					o = madsdata["Julia external function"](parameters)
+					o = madsdata["Julia function"](parameters)
 					return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
 				end
 				madsdatacommandfunction = madscommandfunctionexternal
 				linkdir = false
 			else
-				madscritical("Julia function $(madsdata["Julia external function"]) is not defined!")
+				madscritical("Julia function $(madsdata["Julia function"]) is not defined!")
 			end
 		end
 		currentdir = pwd()
@@ -165,6 +165,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			tempdirname = ""
 			while trying
 				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
+				@show tempstring
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
 				linkdir && Mads.linktempdir(cwd, tempdirname)
@@ -189,9 +190,9 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 					end
 				end
 			end
-			if haskey(madsdata, "Julia command") || haskey(madsdata, "Julia external function")
-				str = haskey(madsdata, "Julia command") ? "Julia command" : "Julia external function"
-				cmd = haskey(madsdata, "Julia command") ? madsdata["Julia command"] : madsdata["Julia external function"]
+			if haskey(madsdata, "Julia command") || haskey(madsdata, "Julia function")
+				str = haskey(madsdata, "Julia command") ? "Julia command" : "Julia function"
+				cmd = haskey(madsdata, "Julia command") ? madsdata["Julia command"] : madsdata["Julia function"]
 				md = haskey(madsdata, "Julia command") ? madsdata : Mads.getparamsinit(madsdata)
 				display(md)
 				Mads.madsinfo("Executing Julia model evaluation script parsing the model outputs (`$(str)` `$(cmd)`) in directory $(tempdirname) ...")
