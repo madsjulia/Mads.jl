@@ -130,3 +130,4 @@ examples/sensitivity/*.jld2
 *.aux
 *.fls
 *.fdb_latexmk
+*.svg
