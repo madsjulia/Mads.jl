@@ -322,41 +322,34 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		tobs = Array{Float64}(undef, 0)
 		vresults = Array{Float64}(undef, 0)
 		tresults = Array{Float64}(undef, 0)
-		time_missing = false
+		time_missing = 0
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
-				time_missing = true
-				continue
+				time_missing += 1
+				time = NaN
+			else
+				time = madsdata["Observations"][obskeys[i]]["time"]
 			end
-			time = madsdata["Observations"][obskeys[i]]["time"]
-			skipnext = false
-			if !haskey(madsdata["Observations"][obskeys[i]], "weight") || madsdata["Observations"][obskeys[i]]["weight"] > 0
+			if haskey(madsdata["Observations"][obskeys[i]], "weight") && madsdata["Observations"][obskeys[i]]["weight"] > 0
 				push!(tobs, time)
 				push!(obs, madsdata["Observations"][obskeys[i]]["target"])
-			else
-				skipnext = !isa(time, Real)#skip plotting the model prediction is "time" is not a number and the weight is zero
 			end
-			if !skipnext
-				push!(tresults, time)
-				push!(vresults, result[obskeys[i]])
-			end
+			push!(tresults, time)
+			push!(vresults, result[obskeys[i]])
 		end
-		if time_missing
-			madswarn("Some of the observations do not have `time` field specified!")
+		if time_missing == nT
+			madswarn("All observations do not have `time` field specified!")
+			tobs = collect(1:nT)
+			tresults = tobs
+		elseif time_missing > 0
+			madswarn("Some observations do not have `time` field specified!") 
 		end
-		if length(tresults) + length(tobs) == 0
-			madswarn("No data to plot")
-		else
-			pl = Gadfly.plot(
-			Gadfly.layer(x=tresults ./ 1000, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
-			Gadfly.layer(x=tobs ./ 1000, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)))
-			# pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
-				# Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-				# Gadfly.layer(x=tresults, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
-				# Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
-				# Gadfly.Theme(highlight_width=0Gadfly.pt),
-				# Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 1.3; linewidth * 3]))
-		end
+		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+			Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+			Gadfly.layer(x=tresults, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
+			Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
+			Gadfly.Theme(highlight_width=0Gadfly.pt),
+			Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 1.3; linewidth * 3]))
 	end
 	if pl === nothing
 		Mads.madswarn("There is nothing to plot!")
