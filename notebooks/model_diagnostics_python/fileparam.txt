@@ -1,0 +1,4 @@
+name value dist
+cmax1 10 "Uniform(8, 11)"
+cmax2 11 "Uniform(9, 12)"
+cmax3 12 "Uniform(10, 13)"

@@ -1,4 +1,5 @@
 import OrderedCollections
+import DelimitedFiles
 import DocumentFunction
 
 """
@@ -58,7 +59,7 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for 
 		if length(time) > 0
 			push!(d, "time"=>time[i])
 		end
-		if length(dist) == length(obs)
+		if length(dist) == length(obs) && dist[i] != ""
 			push!(d, "dist"=>dist[i])
 		elseif (distribution && length(dist) == 0)
 			push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
@@ -132,7 +133,7 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 			continue
 		else
 			d = OrderedCollections.OrderedDict{String, Any}("init"=>param[i], "type"=>t, "log"=>log[i])
-			if length(dist) == length(param)
+			if length(dist) == length(param) && dist[i] != ""
 				push!(d, "dist"=>dist[i])
 			elseif (distribution && length(dist) == 0)
 				push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
@@ -202,13 +203,23 @@ function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Jul
 	makemadscommandfunction(md)
 end
 
+function createproblem(paramfile::AbstractString, obsfile::AbstractString, f::Union{Function,AbstractString}; kw...)
+	pd, _ = DelimitedFiles.readdlm(paramfile, ' '; header=true, quotes=true)
+	od, _ = DelimitedFiles.readdlm(obsfile, ' '; header=true, quotes=true)
+	paramkey = pd[:, 1]
+	param = float.(pd[:, 2])
+	paramdist = pd[:,3]
+	obs = float.(od[:, 1])
+	obsweight = float.(od[:, 2])
+	obsdist = od[:,3]
+	createproblem(param, obs, f; paramkey=paramkey, paramdist=paramdist, obsweight=obsweight, obsdist=obsdist, kw...)
+end
 function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
 	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
 end
 function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[],obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict()
 	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, distribution=distribution, expressions=expressions, log=paramlog)
-	@show distribution
 	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist, distribution=distribution)
 	setmodel!(md, f)
 	if problemname != ""
