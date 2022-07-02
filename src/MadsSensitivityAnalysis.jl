@@ -143,7 +143,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	nP = length(paramkeys)
 	nPi = length(par)
 	if nPi == 0
-		param = getparamsinit(madsdata, paramkeys)
+		param = Mads.getparamsinit(madsdata, paramkeys)
 	elseif nPi == nP
 		param = par
 	elseif nPi == nPall
@@ -168,6 +168,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 			J = g_sa(param, center=obs)
 		end
 	end
+	display(J)
 	if J === nothing
 		Mads.madswarn("Jacobian computation failed")
 		return
