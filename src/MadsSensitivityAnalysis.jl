@@ -168,7 +168,6 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 			J = g_sa(param, center=obs)
 		end
 	end
-	display(J)
 	if J === nothing
 		Mads.madswarn("Jacobian computation failed")
 		return
