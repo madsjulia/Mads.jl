@@ -397,9 +397,12 @@ $(DocumentFunction.documentfunction(showobservations;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata))
+	min = Mads.getobsmin(madsdata)
+	max = Mads.getobsmax(madsdata)
+	dist = Mads.getobsdist(madsdata)
 	obsdict = madsdata["Observations"]
 	p = Array{String}(undef, 0)
-	for obskey in obskeys
+	for (i, obskey) in enumerate(obskeys)
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])
 		o = gettime(obsdict[obskey])
@@ -414,6 +417,12 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 		end
 		if !isnan(o)
 			s *= @Printf.sprintf " time = %15g" o
+		end
+		if haskey(obsdict[obskey], "dist")
+			s *= @Printf.sprintf " dist = %25s" dist[i]
+		elseif haskey(obsdict[obskey], "min") && haskey(obsdict[obskey], "max")
+			s *= @Printf.sprintf " min = %15g" min[i]
+			s *= @Printf.sprintf " max = %15g" max[i]
 		end
 		s *= "\n"
 		push!(p, s)
