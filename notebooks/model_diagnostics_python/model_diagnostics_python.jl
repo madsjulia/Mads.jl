@@ -11,7 +11,7 @@ import numpy as np
 def polynomial_pycall(a, b, c, n):
 	v = []
 	for t in np.arange(0, 6, 1):
-		x = a * t ** 2 + b * t + c
+		x = a * t ** n + b * t + c
 		v.append(x)
 	return np.array(v)
 
@@ -23,7 +23,7 @@ function polynomial_pycall(parameters::AbstractVector)
 	return predictions
 end
 
-md = Mads.createproblem([1,1,1,1], [0,1.1,1.9,3.1,3.9,5], polynomial_pycall; paramkey=["a", "b", "c", "n"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
+md = Mads.createproblem([1,1,1,2], [0,1.1,1.9,3.1,3.9,5], polynomial_pycall; paramkey=["a", "b", "c", "n"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
 
 Mads.showparameters(md)
 
@@ -38,6 +38,8 @@ Mads.plotmatches(md, calib_param)
 Mads.showparameterestimates(md)
 
 Mads.showparameterestimates(md, calib_param)
+
+Mads.localsa(md; par=collect(values(calib_param)))
 
 calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
 
