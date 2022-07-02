@@ -43,6 +43,8 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
 
 calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:100)...)
 
+md = Mads.createproblem("fileparam.txt", "fileobs.txt", polynomial_pycall; problemname="external_files")
+
 forward_predictions = Mads.forward(md, calib_random_estimates)
 Mads.spaghettiplot(md, forward_predictions)
 
