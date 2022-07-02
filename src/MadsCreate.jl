@@ -40,25 +40,29 @@ function createobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="",
 	dump && close(f)
 	return observationdict
 end
-function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=nothing, min::Union{Number,AbstractVector}=zeros(length(obs)), max::Union{Number,AbstractVector}=ones(length(obs)),  minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(obs)], distribution::Bool=false)
+function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::AbstractVector=[], min::Union{Number,AbstractVector}=[], max::Union{Number,AbstractVector}=[],  minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=[], distribution::Bool=false)
 	md = OrderedCollections.OrderedDict()
 	@assert length(obs) == length(key)
 	@assert length(obs) == length(weight)
-	if time !== nothing
+	if length(time) > 0
 		@assert length(obs) == length(time)
 	end
-	@assert length(obs) == length(min)
-	@assert length(obs) == length(max)
-	@assert length(obs) == length(minorig)
-	@assert length(obs) == length(maxorig)
+	if length(min) > 0 && length(max) > 0
+		@assert length(obs) == length(min)
+		@assert length(obs) == length(max)
+		@assert length(obs) == length(minorig)
+		@assert length(obs) == length(maxorig)
+	end
 	for i = 1:length(obs)
 		d = OrderedCollections.OrderedDict{String, Any}("target"=>obs[i], "weight"=>weight[i])
-		if time !== nothing
+		if length(time) > 0
 			push!(d, "time"=>time[i])
 		end
-		if distribution
+		if length(dist) == length(obs)
 			push!(d, "dist"=>dist[i])
-		else
+		elseif (distribution && length(dist) == 0)
+			push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
+		elseif length(min) > 0 && length(max) > 0
 			push!(d, "min"=>min[i])
 			push!(d, "max"=>max[i])
 		end
@@ -73,12 +77,12 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for 
 	return md
 end
 
-function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::Union{AbstractVector,Nothing}=collect(1:size(obs, 2)))
+function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::AbstractVector=collect(1:size(obs, 2)))
 	md = OrderedCollections.OrderedDict()
 	for i = 1:size(obs, 1)
 		for j = 1:size(obs, 2)
 			d = OrderedCollections.OrderedDict{String, Any}("target"=>obs[i], "weight"=>weight[i])
-			if time !== nothing
+			if length(time) > 0
 				push!(d, "time"=>time[j])
 			else
 				push!(d, "time"=>j)
@@ -112,7 +116,7 @@ function createobservations!(md::AbstractDict, obs::Union{AbstractVector,Abstrac
 	md["Observations"] = createobservations(obs; kw...)
 end
 
-function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
+function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
 	mdp = OrderedCollections.OrderedDict()
 	mde = OrderedCollections.OrderedDict()
 	global mapping_expression = falses(length(param))
@@ -128,8 +132,10 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 			continue
 		else
 			d = OrderedCollections.OrderedDict{String, Any}("init"=>param[i], "type"=>t, "log"=>log[i])
-			if distribution
+			if length(dist) == length(param)
 				push!(d, "dist"=>dist[i])
+			elseif (distribution && length(dist) == 0)
+				push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
 			else
 				push!(d, "min"=>min[i])
 				push!(d, "max"=>max[i])
@@ -152,8 +158,8 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 	return mdp, mde, key
 end
 
-function createparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=["Uniform($(min[i]), $(max[i]))" for i=1:length(param)], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)))
-	md["Parameters"], mde, order = createparameters(param; key=key, name=name, plotname=plotname, type=type, min=min, max=max, minorig=minorig, maxorig=maxorig, dist=dist, expressions=expressions, log=log)
+function createparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)))
+	md["Parameters"], mde, order = createparameters(param; key=key, name=name, plotname=plotname, type=type, min=min, max=max, minorig=minorig, maxorig=maxorig, dist=dist, distribution=distribution, expressions=expressions, log=log)
 	if length(mde) > 0
 		md["Expressions"] = mde
 		md["Order"] = order
@@ -199,10 +205,11 @@ end
 function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
 	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
 end
-function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::Union{AbstractVector,Nothing}=nothing, obsmin::Union{Number,AbstractVector}=zeros(length(obs)), obsmax::Union{Number,AbstractVector}=ones(length(obs)), obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=["Uniform($(obsmin[i]), $(obsmax[i]))" for i=1:length(obs)])
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[],obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict()
-	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, expressions=expressions, log=paramlog)
-	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist)
+	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, distribution=distribution, expressions=expressions, log=paramlog)
+	@show distribution
+	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist, distribution=distribution)
 	setmodel!(md, f)
 	if problemname != ""
 		md["Filename"] = problemname .* ".mads"

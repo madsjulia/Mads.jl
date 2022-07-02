@@ -1,6 +1,4 @@
 import Mads
-import Cairo
-import Fontconfig
 import PyCall
 
 Mads.setdefaultplotformat("PNG")
