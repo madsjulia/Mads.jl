@@ -8,14 +8,14 @@ import Test
 	@Test.test Mads.isparam(test_dict, Dict("a"=>1)) == false
 
 	param_dict = Dict("Parameters"=>Dict("a"=>Dict()))
-	@Test.test Mads.getparamsmin(param_dict) == [-1.0e6]
-	@Test.test Mads.getparamsmax(param_dict) == [+1.0e6]
+	@Test.test Mads.getparamsmin(param_dict) == [-Inf]
+	@Test.test Mads.getparamsmax(param_dict) == [Inf]
 
 	param_dict["Parameters"]["a"] = Dict("log"=>true)
-	@Test.test Mads.getparamsmin(param_dict) == [1.0e-6]
-	@Test.test Mads.getparamsmax(param_dict) == [1.0e+6]
-	@Test.test Mads.getparamsinit_min(param_dict) == [1.0e-6]
-	@Test.test Mads.getparamsinit_max(param_dict) == [1.0e+6]
+	@Test.test Mads.getparamsmin(param_dict) == [eps(Float64)]
+	@Test.test Mads.getparamsmax(param_dict) == [Inf]
+	@Test.test Mads.getparamsinit_min(param_dict) == [eps(Float64)]
+	@Test.test Mads.getparamsinit_max(param_dict) == [Inf]
 
 	param_dict["Parameters"]["a"] = Dict("init_min"=>14)
 	@Test.test Mads.getparamsinit_min(param_dict) == [14]

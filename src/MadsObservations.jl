@@ -79,8 +79,8 @@ end
 getobsnames = ["min", "max", "log", "weight", "target", "time", "dist"]
 getobsaltnames = ["min", "max", "log", "w", "c", "t", "dist"]
 getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, String]
-getobsdefault = [-1e6, 1e6, nothing, 1, NaN, NaN, "Uniform(-1e6, 1e6)"]
-getobslogdefault = [1e-6, 1e6, nothing, 1, NaN, NaN, "Uniform(1e-6, 1e6)"]
+getobsdefault = [-Inf, Inf, nothing, 1, NaN, NaN, "Uniform(-Inf, Inf)"]
+getobslogdefault = [eps(Float64), Inf, nothing, 1, NaN, NaN, "Uniform($(eps(Float64)), Inf)"]
 global index = 0
 for i = 1:length(getobsnames)
 	global index = i
@@ -798,4 +798,50 @@ function setnewobs(range::AbstractVector, times::AbstractVector, targets::Abstra
 	newtargets[itarget .!= 0] .= targets[filtertimes]
 	newweights[itarget .!= 0] .= 1
 	return newtimes, newtargets, newweights, itarget, iobs
+end
+
+"""
+Check parameter ranges for model parameters
+
+$(DocumentFunction.documentfunction(checkobservationranges;
+argtext=Dict("madsdata"=>"MADS problem dictionary")))
+"""
+function checkobservationranges(madsdata::AbstractDict)
+	if !haskey(madsdata, "Observations")
+		madswarn("No observations in the provided dictionary")
+		return
+	end
+	obsweights = Mads.getobsweight(madsdata)
+	oi = obsweights .> 0
+	obskeys = Mads.getobskeys(madsdata)[oi]
+	target = Mads.getobstarget(madsdata)[oi]
+	min = Mads.getobsmin(madsdata)[oi]
+	max = Mads.getobsmax(madsdata)[oi]
+	flag_error = false
+	d = target - min .< 0
+	if any(d)
+		for i in findall(d)
+			madswarn("Observation `$(obskeys[i])` target value is less than the minimum (target = $(target[i]); min = $(min[i]))!")
+		end
+		flag_error = true
+	end
+	d = max - target .< 0
+	if any(d)
+		for i in findall(d)
+			madswarn("Observation `$(obskeys[i])` target value is greater than the maximum (target = $(target[i]); max = $(max[i]))!")
+		end
+		flag_error = true
+	end
+	d = max - min .< 0
+	if any(d)
+		for i in findall(d)
+			madswarn("Observation `$(obskeys[i])` maximum is less than the minimum (max = $(max[i]); min = $(min[i]))!")
+		end
+		flag_error = true
+	end
+	if flag_error
+		madserror("Observation ranges are incorrect!")
+	end
+	
+	return nothing
 end
