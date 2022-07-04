@@ -174,9 +174,9 @@ function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			end
 		end
 		if Mads.islog(madsdata, paramkeys[i])
-			paramvalue[i] = 1e-6
+			paramvalue[i] = eps(Float64)
 		else
-			paramvalue[i] = -1e6
+			paramvalue[i] = -Inf
 		end
 	end
 	return paramvalue # returns the parameter values
@@ -208,9 +208,9 @@ function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			end
 		end
 		if Mads.islog(madsdata, paramkeys[i])
-			paramvalue[i] = 1e+6
+			paramvalue[i] = Inf
 		else
-			paramvalue[i] = 1e6
+			paramvalue[i] = Inf
 		end
 	end
 	return paramvalue # returns the parameter values
@@ -254,9 +254,9 @@ function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			end
 		end
 		if Mads.islog(madsdata, paramkeys[i])
-			paramvalue[i] = 1e-6
+			paramvalue[i] = eps(Float64)
 		else
-			paramvalue[i] = -1e6
+			paramvalue[i] = -Inf16
 		end
 	end
 	return paramvalue # returns the parameter values
@@ -300,9 +300,9 @@ function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			end
 		end
 		if Mads.islog(madsdata, paramkeys[i])
-			paramvalue[i] = 1e+6
+			paramvalue[i] = Inf
 		else
-			paramvalue[i] = 1e6
+			paramvalue[i] = Inf
 		end
 	end
 	return paramvalue # returns the parameter values
@@ -741,6 +741,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function checkparameterranges(madsdata::AbstractDict)
 	if !haskey(madsdata, "Parameters")
+		madswarn("No parameters in the provided dictionary")
 		return
 	end
 	paramkeys = Mads.getparamkeys(madsdata)
@@ -799,6 +800,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	if flag_error
 		madserror("Parameter ranges are incorrect!")
 	end
+	return nothing
 end
 
 function boundparameters!(madsdata::AbstractDict, parvec::AbstractVector)
@@ -807,10 +809,10 @@ function boundparameters!(madsdata::AbstractDict, parvec::AbstractVector)
 	end
 	parmin = Mads.getparamsmin(madsdata)
 	parmax = Mads.getparamsmax(madsdata)
-	i = par .> parmax
-	par[i] .= parmax[i]
-	i = par .< parmin
-	par[i] .= parmin[i]
+	i = parvec .> parmax
+	parvec[i] .= parmax[i]
+	i = parvec .< parmin
+	parvec[i] .= parmin[i]
 	return nothing
 end
 function boundparameters!(madsdata::AbstractDict, pardict::AbstractDict)
