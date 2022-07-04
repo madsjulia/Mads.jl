@@ -115,9 +115,11 @@ Returns:
 
 function createobservations!(md::AbstractDict, obs::Union{AbstractVector,AbstractMatrix}; kw...)
 	md["Observations"] = createobservations(obs; kw...)
+	Mads.checkobservationranges(md)
+	return nothing
 end
 
-function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
+function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=[], max::AbstractVector=[], minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
 	mdp = OrderedCollections.OrderedDict()
 	mde = OrderedCollections.OrderedDict()
 	global mapping_expression = falses(length(param))
@@ -137,7 +139,7 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 				push!(d, "dist"=>dist[i])
 			elseif (distribution && length(dist) == 0)
 				push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
-			else
+			elseif length(min) == length(param) && length(max) == length(param) 
 				push!(d, "min"=>min[i])
 				push!(d, "max"=>max[i])
 			end
@@ -159,8 +161,9 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 	return mdp, mde, key
 end
 
-function createparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=zeros(length(param)), max::AbstractVector=ones(length(param)), minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)))
+function createparameters!(md::AbstractDict, param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=[], max::AbstractVector=[], minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)))
 	md["Parameters"], mde, order = createparameters(param; key=key, name=name, plotname=plotname, type=type, min=min, max=max, minorig=minorig, maxorig=maxorig, dist=dist, distribution=distribution, expressions=expressions, log=log)
+	Mads.checkparameterranges(md)
 	if length(mde) > 0
 		md["Expressions"] = mde
 		md["Order"] = order
@@ -173,6 +176,7 @@ function removemodel(md::AbstractDict)
 			delete!(md, k)
 		end
 	end
+	return nothing
 end
 
 function checkmodelkey(key::AbstractString, madsmodels::AbstractVector)
@@ -192,6 +196,7 @@ function setmodel!(md::AbstractDict, f::Function, key::AbstractString="Julia fun
 	removemodel(md)
 	md[key] = f
 	makemadscommandfunction(md)
+	return nothing
 end
 
 function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Julia command")
@@ -201,6 +206,7 @@ function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Jul
 	removemodel(md)
 	md[key] = f
 	makemadscommandfunction(md)
+	return nothing
 end
 
 function createproblem(paramfile::AbstractString, obsfile::AbstractString, f::Union{Function,AbstractString}; kw...)
@@ -213,11 +219,13 @@ function createproblem(paramfile::AbstractString, obsfile::AbstractString, f::Un
 	obsweight = float.(od[:, 2])
 	obsdist = od[:,3]
 	createproblem(param, obs, f; paramkey=paramkey, paramdist=paramdist, obsweight=obsweight, obsdist=obsdist, kw...)
+	return nothing
 end
 function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
 	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
+	return nothing
 end
-function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=zeros(length(param)), parammax::AbstractVector=ones(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=["Uniform($(parammin[i]), $(parammax[i]))" for i=1:length(param)], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[],obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramkey, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=repeat([1.0], length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict()
 	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, distribution=distribution, expressions=expressions, log=paramlog)
 	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist, distribution=distribution)
@@ -250,16 +258,18 @@ function createproblem(infilename::AbstractString, outfilename::AbstractString)
 		end
 	end
 	Mads.dumpyamlfile(outfilename, outyaml)
-	return
+	return nothing
 end
 function createproblem(madsdata::AbstractDict, outfilename::AbstractString)
 	f = Mads.makemadscommandfunction(madsdata)
 	predictions = f(Mads.getparamdict(madsdata))
 	createproblem(madsdata, predictions, outfilename)
+	return nothing
 end
 function createproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::AbstractString)
 	newmadsdata = createproblem(madsdata, predictions)
 	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
+	return nothing
 end
 function createproblem(madsdata::AbstractDict, predictions::AbstractDict)
 	newmadsdata = deepcopy(madsdata)

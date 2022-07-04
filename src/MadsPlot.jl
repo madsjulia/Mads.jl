@@ -71,6 +71,10 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 end
 
 function plotfileformat(p, filename::AbstractString, hsize, vsize; format=uppercase(getextension(filename)), dpi=imagedpi)
+	if typeof(p) === nothing
+		madswarn("Plotting nothing!")
+		return
+	end
 	if vsize > 20Compose.inch && hsize > 20Compose.inch
 		m = max(hsize, vsize)
 		hsize = 20Compose.inch / m
@@ -91,6 +95,7 @@ function plotfileformat(p, filename::AbstractString, hsize, vsize; format=upperc
 	else
 		Gadfly.draw(Gadfly.eval(format)(filename, hsize, vsize), p)
 	end
+	return nothing
 end
 
 """
@@ -1224,10 +1229,11 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	ixzero !== nothing && (X[ixzero] .= 0)
 	if returnplot
-		return Mads.display(pS; gw=hsize_plot, gh=vsize_plot)
+		return pS
 	elseif code
 		return c
 	else
+		Mads.display(pS; gw=hsize_plot, gh=vsize_plot)
 		return nothing
 	end
 end
