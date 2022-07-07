@@ -19,7 +19,7 @@ import Printf
 2//3 # => 2//3 (Rational{Int64})
 
 # All of the normal infix operators are available.
-1 + 1 # => 2
+2//31 + 1 # => 2
 8 - 1 # => 7
 10 * 2 # => 20
 35 / 5 # => 7.0
@@ -99,11 +99,12 @@ some_var # => 5
 try
 	some_other_var # => ERROR: some_other_var not defined
 catch e
-	print(e.msg)
+	print(e)
 end
 
 # Variable names start with a letter.
 # After that, you can use letters, digits, underscores, and exclamation points.
+
 SomeOtherVar123! = 6 # => 6
 
 # You can also use unicode characters
@@ -170,7 +171,7 @@ try
 	a[0] # => ERROR: BoundsError() in getindex at array.jl:270
 	a[end+1] # => ERROR: BoundsError() in getindex at array.jl:270
 catch e
-	print(e.msg)
+	print(e)
 end
 
 # Errors list the line and file they came from, even if it's in the standard
@@ -204,7 +205,7 @@ tup[1] # => 1
 try
 	tup[1] = 3 # => ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)
 catch e
-	print(e.msg)
+	print(e)
 end
 
 # Many list functions also work on tuples
@@ -230,8 +231,7 @@ e, d = d, e  # => (5,4) # d is now 5 and e is now 4
 empty_dict = Dict() # => Dict{Any,Any}()
 
 # You can create a dictionary using a literal
-filled_dict = ["one"=> 1, "two"=> 2, "three"=> 3]
-# => Dict{String,Int64}
+filled_dict = Dict("one"=> 1, "two"=> 2, "three"=> 3) # => Dict{String,Int64}
 
 # Look up values with []
 filled_dict["one"] # => 1
@@ -247,8 +247,6 @@ values(filled_dict)
 # Note - Same as above regarding key ordering.
 
 # Check for existence of keys in a dictionary with in, haskey
-in(("one", 1), filled_dict) # => true
-in(("two", 3), filled_dict) # => false
 haskey(filled_dict, "one") # => true
 haskey(filled_dict, 1) # => false
 
@@ -313,8 +311,8 @@ end
 #    mouse is a mammal
 
 # You can use 'in' instead of '='.
-for animal in ["dog", "cat", "mouse"]
-	println("$animal is a mammal")
+for (i, animal)=enumerate(["dog", "cat", "mouse"])
+	println("$i $animal is a mammal")
 end
 # prints:
 #    dog is a mammal
@@ -598,7 +596,7 @@ pet_cat(Lion("42")) # => prints "The cat says 42"
 try
 	pet_cat(tigger) # => ERROR: no method pet_cat(Tiger,)
 catch e
-	print(e.msg)
+	print(e)
 end
 
 # In OO languages, single dispatch is common;
@@ -648,7 +646,6 @@ fight(Lion("RAR"),Lion("brown","rarrr")) # => prints The victorious cat says rar
 
 fight(l::Lion,l2::Lion) = println("The lions come to a tie")
 fight(Lion("RAR"),Lion("brown","rarrr")) # => prints The lions come to a tie
-
 
 # Under the hood
 # You can take a look at the llvm  and the assembly code generated.
