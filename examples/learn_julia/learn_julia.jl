@@ -233,6 +233,11 @@ empty_dict = Dict() # => Dict{Any,Any}()
 # You can create a dictionary using a literal
 filled_dict = Dict("one"=> 1, "two"=> 2, "three"=> 3) # => Dict{String,Int64}
 
+for k = keys(filled_dict)
+	@show filled_dict
+	println(filled_dict[k])
+end
+
 # Look up values with []
 filled_dict["one"] # => 1
 
