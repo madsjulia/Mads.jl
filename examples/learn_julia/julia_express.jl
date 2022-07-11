@@ -1,3 +1,7 @@
+# Welcome to Julia, a modern language for technical computing!
+
+# REPL
+
 # getting help
 # ?exp
 
@@ -29,13 +33,14 @@ end
 println(es(100)) # print all primes less or equal than 100
 @time es(10^7) # check function execution time and memory usage
 
+# Julia is a strongly typed language
+# Julia is a dynamically typed language
 # basic types
-
 1::Int64 # 64-bit integer, no overflow warnings, fails on 32 bit Julia, use Int32 assertion instead
 1.0::Float64 # 64-bit float, defines NaN, -Inf, Inf
 true::Bool # boolean, allows "true" and "false"
 'c'::Char # character, allows Unicode
-"s"::AbstractString # strings, allows Unicode, see also Strings
+"s"::AbstractString # strings allow for Unicode
 
 Int64(floor(1.3)) # rounds float to integer
 Int64('a') # character to integer
@@ -58,8 +63,6 @@ BigInt(10)^1000 # big integer
 BigFloat(10)^1000 # big float, see documentation how to change default precision
 123//456 # rational numbers using // operator
 123//456 + 1//2
-
-## Complex literals and types
 
 Any # all objects are of this type
 Nothing # type indicating nothing, subtype of Any
@@ -156,8 +159,7 @@ c # contents to original x
 
 # Composite types
 
-# Composite types are mutable and passed by reference. You can define and access composite types:
-
+# Unmutable by default:
 struct FixedPoint
 	x::Int64
 	y::Float64
@@ -169,6 +171,7 @@ p.meta = 2 # error : cannot assign to field
 p.x = 3
 fieldnames(FixedPoint) # get names of type fields
 
+# Mutable:
 mutable struct Point
 	x::Int64
 	y::Float64
@@ -182,7 +185,6 @@ fieldnames(Point) # get names of type fields
 
 # Dictionaries
 # AbstractDict collections (key-value dictionaries):
-
 x = Dict{Float64, Int64}() # empty dictionary mapping floats to integers
 x = Dict(1=>1, 2=>2) # literal syntax creation
 
@@ -383,7 +385,7 @@ broadcast(+, [1 2], [1; 2])
 # Essential general usage functions
 
 @show([1:100]) # show text representation of an object
-@info("Info") # print information, similarly warn and error (raises error)
+@info("Info") # print information, similarly warn and error (raises an error)
 @warn("Aha!")
 @error("No!")
 
@@ -438,7 +440,7 @@ sort(rand(10)) # sort 10 uniform random variables
 
 # Reading and writing data
 
-# For I/O details refer documentation. Basic operations:
+# For I/O details, refer documentation. Basic operations:
 # - readdlm, readcsv: read from file
 # - writedlm, writecsv: write to a file
 # Warning! Trailing spaces are not discarded if delim=' ' in file reading.
@@ -452,7 +454,7 @@ rand(3, 4) # generate 3x4 matrix of random numbers from U[0,1]
 rand(2:5, 10) # generate vector of 10 random integer numbers in range form 2 to 5
 randn(10) # generate vector of 10 random numbers from standard normal distribution
 
-# Advanced randomness form Distributions package:
+# Advanced randomness from Distributions package:
 import Distributions # load package
 Distributions.sample(1:10, 10) # single bootstrap sample from set 1-10
 b = Distributions.Beta(0.4, 0.8) # Beta distribution with parameters 0.4 and 0.8
@@ -512,6 +514,10 @@ y = sin.(4 * pi .* x) .* exp.(-5 .* x)
 PyPlot.figure()
 PyPlot.plot(x, y)
 PyPlot.gcf()
+
+import Mads
+Mads.plotseries(y; xaxis=x)
+Mads.plotseries(rand(100,10))
 
 import Distributions # second example
 Random.seed!(1)
