@@ -18,7 +18,7 @@ $(DocumentFunction.documentfunction(madsdir))
 """
 function madsdir()
 	Base.cd(Mads.dir)
-	pwd()
+	return pwd()
 end
 
 function splitdirdot(d)
