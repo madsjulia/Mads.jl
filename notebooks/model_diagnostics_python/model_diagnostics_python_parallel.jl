@@ -1,18 +1,17 @@
 import Distributed
-
 Distributed.addprocs(4)
 
-import Mads
-import Cairo
-import Fontconfig
-import PyCall
+@Distributed.everywhere import Mads
+@Distributed.everywhere import PyCall
 
 @Distributed.everywhere cd(@__DIR__)
 
 @Distributed.everywhere PyCall.py"""
 import numpy as np
+import os
 
 def my_model(theta, x):
+	print(os.getcwd())
 	m, c = theta
 	y = m * x + c
 	np.savetxt('output.out', y, delimiter=',')
@@ -27,7 +26,6 @@ PyCall.py"my_model"([1, 2], [1, 2, 3])
 	@show pwd()
 	predictions = PyCall.py"my_model"(args..., [1, 2, 3])
 	@show predictions
-	return predictions
 	return predictions
 end
 
