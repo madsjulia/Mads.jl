@@ -10,10 +10,11 @@ import Test
 	@Test.test Mads.isobs(test_dict, Dict("a"=>1)) == false
 
 	obs_dict = Dict("Observations"=>Dict("a"=>Dict()))
-	@Test.test Mads.getobsdist(obs_dict) == String["Uniform(-1e6, 1e6)"]
+	@Test.test Mads.getobsdist(obs_dict) == String["Uniform(-Inf, Inf)"]
 
 	obs_dict["Observations"]["a"] = Dict("log"=>true)
-	@Test.test Mads.getobsdist(obs_dict) == String["Uniform(1e-6, 1e6)"]
+	@Test.test Mads.getobsmin(obs_dict)[1] ≈ eps(Float64)
+	@Test.test Mads.getobsmax(obs_dict)[1] ≈ Inf
 
 	obs_dict = Dict("Observations"=>Dict("a"=>Dict("dist"=>"Uniform(14,15)")))
 	@Test.test Mads.getobsmin(obs_dict) == [14]
