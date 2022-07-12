@@ -165,7 +165,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			tempdirname = ""
 			while trying
 				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
-				@info("Content of directory $(cwd): $(readdir(cwd))")
+				# @info("Content of directory $(cwd): $(readdir(cwd))")
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
 				if linkdir 
@@ -174,7 +174,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 				end
 				cd(tempdirname)
 				@info("Current working directory: $(tempdirname)")
-				@info("Content of directory $(tempdirname): $(readdir("."))")
+				# @info("Content of directory $(tempdirname): $(readdir("."))")
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
 				while (trying = !checknodedir(tempstring))
@@ -198,8 +198,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			if haskey(madsdata, "Julia command") || haskey(madsdata, "Julia function")
 				str = haskey(madsdata, "Julia command") ? "Julia command" : "Julia function"
 				cmd = haskey(madsdata, "Julia command") ? madsdata["Julia command"] : madsdata["Julia function"]
-				md = haskey(madsdata, "Julia command") ? madsdata : Mads.getparamsinit(madsdata)
-				display(md)
+				md = haskey(madsdata, "Julia command") ? madsdata : collect(values(parameters))
 				Mads.madsinfo("Executing Julia model evaluation script parsing the model outputs (`$(str)` `$(cmd)`) in directory $(tempdirname) ...")
 				attempt = 0
 				trying = true
