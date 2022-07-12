@@ -145,7 +145,6 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 					return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
 				end
 				madsdatacommandfunction = madscommandfunctionexternal
-				linkdir = false
 			else
 				madscritical("Julia function $(madsdata["Julia function"]) is not defined!")
 			end
