@@ -1540,10 +1540,10 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
-		Distributed.sendto(Distributed.workers(), constCell = constCell)
+		sendto(Distributed.workers(), constCell = constCell)
 	elseif P > 1
 		# If there are less workers than resamplings * parameters, we send to all workers available
-		Distributed.sendto(Distributed.workers(), constCell = constCell)
+		sendto(Distributed.workers(), constCell = constCell)
 	end
 
 	### Calculating decomposed variances in parallel ###
