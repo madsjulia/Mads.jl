@@ -6,6 +6,8 @@ Distributed.addprocs(4)
 
 @Distributed.everywhere cd(@__DIR__)
 
+@Distributed.everywhere @show pwd()
+
 @Distributed.everywhere PyCall.py"""
 import numpy as np
 import os
@@ -33,8 +35,8 @@ end
 
 my_model_pycall([3, 2])
 
-@Distributed.everywhere md = Mads.createproblem([3.,2.], [1.,2.,3.], my_model_pycall; paramkey=["a", "b"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)"], obsweight=[1,1,1], obstime=[1,2,3], obsdist=["Uniform(0, 10)", "Uniform(0, 10)", "Uniform(0, 10)"], problemname="py_model")
-@Distributed.everywhere md["Linked directory"] = true
+md = Mads.createproblem([3.,2.], [1.,2.,3.], my_model_pycall; paramkey=["a", "b"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)"], obsweight=[1,1,1], obstime=[1,2,3], obsdist=["Uniform(0, 10)", "Uniform(0, 10)", "Uniform(0, 10)"], problemname="py_model")
+md["Linked directory"] = true
 
 Mads.forward(md)
 
