@@ -75,18 +75,20 @@ function plotfileformat(p, filename::AbstractString, hsize, vsize; format=upperc
 		madswarn("Plotting nothing!")
 		return
 	end
-	if vsize > 20Compose.inch && hsize > 20Compose.inch
+	maxsize = 40Compose.inch
+	if vsize > maxsize && hsize > maxsize
 		m = max(hsize, vsize)
-		hsize = 20Compose.inch / m
-		vsize = 20Compose.inch
-	elseif vsize > 20Compose.inch
-		hsize /= vsize / 20
-		vsize = 20Compose.inch
-	elseif hsize > 20Compose.inch
-		vsize /= hsize / 20
-		hsize = 20Compose.inch
+		hsize *= maxsize.value / m.value
+		vsize *= maxsize.value / m.value
+	elseif vsize > maxsize
+		hsize /= vsize / maxsize.value
+		vsize = maxsize
+	elseif hsize > maxsize
+		vsize /= hsize / maxsize.value
+		hsize = maxsize
 	end
 	filename, format = setplotfileformat(filename, format)
+	recursivemkdir(filename)
 	if typeof(format) <: AbstractString
 		format = Symbol(format)
 	end
@@ -430,28 +432,28 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; format::AbstractString="", pointsize::Measures.AbsoluteLength=0.9Gadfly.mm)
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi)
+	@assert np == size(samples, 2)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamlabels(madsdata, paramkeys)
-	cs = Array{Compose.Context}(undef, size(samples, 2), size(samples, 2))
-	for i in 1:size(samples, 2)
-		for j in 1:size(samples, 2)
+	cs = Array{Compose.Context}(undef, np, np)
+	for i in 1:np
+		for j in 1:np
 			if i == j
 				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
 					Gadfly.Guide.XLabel(plotlabels[i]),
-					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt)
+					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size)
 					))
 			else
 				cs[j, i] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j],
 					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
-					Gadfly.Theme(major_label_font_size=24Gadfly.pt, minor_label_font_size=12Gadfly.pt, point_size=pointsize)
+					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size, point_size=pointsize, highlight_width=highlight_width)
 					))
 			end
 		end
 	end
-	hsize = (6 * size(samples, 2))Gadfly.inch
-	vsize = (6 * size(samples, 2))Gadfly.inch
-	recursivemkdir(filename)
+	hsize = (6 * np)Gadfly.inch
+	vsize = (6 * np)Gadfly.inch
 	try
 		pl = Compose.gridstack(cs)
 		plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
@@ -654,8 +656,6 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
-	else
-		recursivemkdir(filename)
 	end
 	if !separate_files
 		p = Gadfly.vstack(pp...)
@@ -1105,7 +1105,6 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		linestylea = typeof(linestyle) == Symbol ? repeat([linestyle], nS) : linestyle
 		linewidthea = repeat([linewidth], nS)
 	end
-	recursivemkdir(filename)
 	if !colorkey || nS == 1 || nextgray
 		key_position=:none
 	end
