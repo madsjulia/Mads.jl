@@ -42,7 +42,7 @@ Mads.showparameterestimates(md)
 
 Mads.showparameterestimates(md, calib_param)
 
-calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
+calib_random_results = Mads.calibraterandom(md, 100; seed=2023, all=true)
 
 calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:100)...)
 
