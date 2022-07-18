@@ -82,7 +82,7 @@ import Mads; Mads.help()
 
 Various examples located in the `examples` directory of the `Mads` repository.
 
-To run some of these examples, execute
+To run some of these examples, execute:
 
 ```julia
 include(Mads.dir * "/../examples/contamination/contamination.jl")
