@@ -15,7 +15,7 @@
 * Parameter Estimation
 * Model Inversion and Calibration
 * Uncertainty Quantification
-* Model Selection and Model Averaging
+* Model Selection and Averaging
 * Model Reduction and Surrogate Modeling
 * Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
@@ -26,7 +26,7 @@
 
 [MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
 
-[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data- and model-based analyses.
+[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
 
 ## Documentation
 
@@ -82,7 +82,7 @@ import Mads; Mads.help()
 
 Various examples located in the `examples` directory of the `Mads` repository.
 
-To run some of these examples, execute
+To run some of these examples, execute:
 
 ```julia
 include(Mads.dir * "/../examples/contamination/contamination.jl")
