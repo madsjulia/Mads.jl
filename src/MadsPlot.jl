@@ -301,7 +301,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				push!(plot_args, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
-				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt),
+				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt),
 				Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 2; linewidth * 3]))
 				if separate_files
 					if filename == ""
@@ -351,7 +351,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		elseif time_missing > 0
 			madswarn("Some observations do not have `time` field specified!") 
 		end
-		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 			Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 			Gadfly.layer(x=tresults, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
 			Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
@@ -507,7 +507,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	dfc = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(d[2,:]), parameter="concentration")
 	pp = Array{Any}(undef, 0)
-	pc = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.point, Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle))
+	pc = Gadfly.plot(dfc, x="x", y="y", Gadfly.Geom.point, Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical))
 	push!(pp, pc)
 	vsize = 4Gadfly.inch
 	df = Array{Any}(undef, nP)
@@ -519,7 +519,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position=:top))
+		ptes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel("Total Effect"), Gadfly.Theme(key_position=:top))
 		push!(pp, ptes)
 		vsize += 4Gadfly.inch
 	end
@@ -531,7 +531,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position=:none))
+		pmes = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel("Main Effect"), Gadfly.Theme(key_position=:none))
 		push!(pp, pmes)
 		vsize += 4Gadfly.inch
 	end
@@ -543,7 +543,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	vdf = vcat(df...)
 	if length(vdf[!, 1]) > 0
-		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position=:none) )
+		pvar = Gadfly.plot(vdf, x="x", y="y", Gadfly.Geom.line, color="parameter", Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel("Output Variance"), Gadfly.Theme(key_position=:none) )
 		push!(pp, pvar)
 		vsize += 4Gadfly.inch
 	end
@@ -731,13 +731,13 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 		if !haskey( madsdata, "Wells" )
 			if grayscale
 				pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
-					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+					Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
 					for i in 1:numberofsamples]...)
 			else
 				pl = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
-					Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+					Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 					[Gadfly.layer(x=t, y=Y[:,i], Gadfly.Geom.line,
 					Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 					for i in 1:numberofsamples]...)
@@ -771,14 +771,14 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 					if grayscale
 						p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 							Gadfly.Guide.title(wellname),
-							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+							Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 							Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
 							for i in 1:numberofsamples]...)
 					else
 						p = Gadfly.plot(Gadfly.layer(x=t, y=d, obs_plot...),
 							Gadfly.Guide.title(wellname),
-							Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+							Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 							[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 							Gadfly.Theme(default_color=Base.parse(Colors.Colorant, ["red" "blue" "green" "cyan" "magenta" "yellow"][(i-1)%6+1])))
 							for i in 1:numberofsamples]...)
@@ -924,7 +924,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 			Gadfly.Scale.color_discrete(colormap),
 			Gadfly.Theme(key_position=:none, line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing),
 			Gadfly.Guide.title(title),
-			Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle)
+			Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical)
 			)
 		vsize = 4Gadfly.inch
 	else
@@ -958,14 +958,14 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 				if grayscale
 					p = Gadfly.plot(pa...,
 						Gadfly.Guide.title(wellname),
-						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+						Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 						Gadfly.Theme(default_color=Colors.RGBA(0.25, 0.25, 0.25, 0.2)))
 						for i in 1:numberofsamples]...)
 				else
 					p = Gadfly.plot(pa...,
 						Gadfly.Guide.title(wellname),
-						Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+						Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 						[Gadfly.layer(x=t, y=Y[startj:endj,i], Gadfly.Geom.line,
 						Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[i%6+1])))
 						for i in 1:numberofsamples]...)
@@ -1123,7 +1123,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				mck...,
 				gl...,
 				glog...,
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 				Gadfly.Guide.title(title),
 				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
@@ -1138,7 +1138,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				for i in 1:nS]...,
 				gl...,
 				glog...,
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 				Gadfly.Guide.title(title),
 				cs...,
 				Gadfly.Theme(background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, highlight_width=0Gadfly.pt, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
@@ -1197,7 +1197,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 				gl...,
 				Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size),
 				glog...,
-				Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle),
+				Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 				Gadfly.Guide.title(title),
 				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
@@ -1210,7 +1210,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		vsize_plot = vsize * nS
 		pp = Array{Gadfly.Plot}(undef, nS)
 		for i in 1:nS
-			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry[i]..., gm...), Gadfly.Guide.XLabel(xtitle), Gadfly.Guide.YLabel(ytitle), Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
+			pp[i] = Gadfly.plot(Gadfly.layer(x=xaxis, y=X[:,i], glog..., geometry[i]..., gm...), Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), Gadfly.Theme(line_width=linewidth, line_style=[linestyle], point_size=pointsize, highlight_width=0Gadfly.pt, background_color=background_color, discrete_highlight_color=c->nothing, key_position=key_position, major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size), Gadfly.Guide.title("$(names[i])"), Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax), gl...)
 		end
 		pS = Gadfly.vstack(pp...)
 		c = nothing
