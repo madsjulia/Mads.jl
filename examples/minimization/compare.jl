@@ -10,31 +10,30 @@ d = collect(range(0, stop=3, length=100))
 y = exp.(-d * xtrue) + 0.05 * randn(size(d))
 Mads.plotseries(y; xaxis=d)
 
-function func_nlopt(r...)
-	x = collect(r)
-	sum((exp.(-d*x[1])-y).^2)
+function func_jump(x...)
+	sum(((exp.(-d*x[1]) .+ x[2]) .- y) .^ 2)
 end
 
 function func_mads(x)
-	exp.(-d*x[1])-y
+	exp.(-d*x[1])-y + x[2]
 end
 
-nvar = 1
+nvar = 2
 
 @info("NLopt")
 m = JuMP.Model(NLopt.Optimizer)
 JuMP.set_optimizer_attribute(m, "algorithm", :LD_MMA)
-JuMP.register(m, :func_nlopt, nvar, func_nlopt; autodiff=true)
+JuMP.register(m, :func_jump, nvar, func_jump; autodiff=true)
 @JuMP.variable(m, x[1:nvar]; start=2)
-@JuMP.NLobjective(m, Min, func_nlopt(x[1]))
+@JuMP.NLobjective(m, Min, func_jump(x...))
 @time JuMP.optimize!(m)
 @show xtrue, JuMP.value.(x)
 
 @info("Ipopt")
 m = JuMP.Model(Ipopt.Optimizer)
-JuMP.register(m, :func_nlopt, nvar, func_nlopt; autodiff=true)
+JuMP.register(m, :func_jump, nvar, func_jump; autodiff=true)
 @JuMP.variable(m, x[1:nvar]; start=2)
-@JuMP.NLobjective(m, Min, func_nlopt(x[1]))
+@JuMP.NLobjective(m, Min, func_jump(x))
 @time JuMP.optimize!(m)
 @show xtrue, JuMP.value.(x)
 
