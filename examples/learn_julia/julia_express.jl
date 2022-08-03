@@ -17,7 +17,7 @@ include("file.jl") # execute source file
 
 clipboard(collect(1:10)) # copy data to system clipboard
 
-# Sieve of Eratosthenes, docstrings coming in Julia 0.4
+# Sieve of Eratosthenes
 function es(n::Int64) # accepts one 64 bit integer argument
 	isprime = ones(Bool, n) # n-element vector of true-s
 	isprime[1] = false # 1 is not a prime
