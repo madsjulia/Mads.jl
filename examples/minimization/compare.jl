@@ -11,11 +11,11 @@ y = exp.(-d * xtrue) + 0.05 * randn(size(d))
 Mads.plotseries(y; xaxis=d)
 
 function func_jump(x...)
-	sum(((exp.(-d*x[1]) .+ x[2]) .- y) .^ 2)
+	sum(((exp.(-d * x[1]) .+ x[2]) .- y) .^ 2)
 end
 
-function func_mads(x)
-	exp.(-d*x[1])-y + x[2]
+function func_mads2(x)
+	exp.(-d .* x[1]) .+ x[2] .- y
 end
 
 nvar = 2
@@ -33,10 +33,10 @@ JuMP.register(m, :func_jump, nvar, func_jump; autodiff=true)
 m = JuMP.Model(Ipopt.Optimizer)
 JuMP.register(m, :func_jump, nvar, func_jump; autodiff=true)
 @JuMP.variable(m, x[1:nvar]; start=2)
-@JuMP.NLobjective(m, Min, func_jump(x))
+@JuMP.NLobjective(m, Min, func_jump(x...))
 @time JuMP.optimize!(m)
 @show xtrue, JuMP.value.(x)
 
 @info("Mads")
-@time minimizer, results = Mads.minimize(func_mads, [2.]; upperbounds=[4.], lowerbounds=[0.])
+@time minimizer, results = Mads.minimize(func_mads2, [2., 2.]; upperbounds=[4., 4.], lowerbounds=[0., 0.])
 @show xtrue, minimizer
