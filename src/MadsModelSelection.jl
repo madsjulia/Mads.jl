@@ -10,7 +10,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64}=Array{Float64}(undef, 0))
 	f = Mads.forward(madsdata, par)
-	l = Mads.localsa(madsdata, datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
+	l = Mads.localsa(madsdata; datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
 	if l === nothing
 		Mads.madswarn("Local sensitivity analysis fails!")
 		return
