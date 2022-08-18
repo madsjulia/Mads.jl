@@ -1,5 +1,6 @@
 syntax: glob
 .ipynb_checkpoints
+*.finalresults
 Manifest.toml
 *.log
 .DS_Store
