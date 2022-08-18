@@ -339,9 +339,10 @@ keytext=Dict("root"=>"Mads problem root name",
             "show_trace"=>"shows solution trace [default=`false`]",
             "alwaysDoJacobian"=>"computer Jacobian each iteration [default=`false`]",
             "callbackiteration"=>"call back function for each iteration [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]",
-            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]")))
+            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
+			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
 	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
 	#          x
 	# The function f should take an input vector of length n and return an output vector of length m
@@ -599,5 +600,6 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 		converged = g_converged | x_converged | of_converged
 	end
+	callbackfinal(best_x, best_residual, NaN)
 	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, 0.0, of_converged, tolOF, 0.0, g_converged, tolG, 0.0, false, tr, f_calls, g_calls, 0)
 end

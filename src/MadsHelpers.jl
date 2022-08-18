@@ -357,6 +357,17 @@ function getsindx(madsdata::AbstractDict)
 	return sindx
 end
 
+function setsindx!(madsdata::AbstractDict, sindx::Number)
+	setsindx!(sindx)
+	if Mads.haskeyword(madsdata, "sindx")
+		madsdata["Problem"]["sindx"] = sindx
+	end
+end
+
+function setsindx!(sindx::Number)
+	global sindxdefault = sindx
+end
+
 """
 Set sin-space dx
 
@@ -367,26 +378,6 @@ Returns:
 
 - nothing
 """
-function setsindx!(madsdata::AbstractDict, sindx::Number)
-	setsindx(sindx)
-	if Mads.haskeyword(madsdata, "sindx")
-		madsdata["Problem"]["sindx"] = sindx
-	end
-end
-
-"""
-Set sin-space dx
-
-$(DocumentFunction.documentfunction(setsindx;
-argtext=Dict("madsdata"=>"MADS problem dictionary")))
-
-Returns:
-
-- nothing
-"""
-function setsindx(sindx::Number)
-	sindxdefault = sindx
-end
 
 """
 Transpose non-numeric vector
