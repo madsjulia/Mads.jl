@@ -361,6 +361,10 @@ function setsindx!(madsdata::AbstractDict, sindx::Number)
 	setsindx!(sindx)
 	if Mads.haskeyword(madsdata, "sindx")
 		madsdata["Problem"]["sindx"] = sindx
+	elseif haskey(madsdata, "Problem")
+		push!(madsdata["Problem"], Dict("sindx"=>sindx))
+	else
+		madsdata["Problem"] = Dict{Any,Any}("sindx"=>sindx)
 	end
 end
 
