@@ -47,24 +47,24 @@ Returns:
 -
 """ residuals
 
-function of(madsdata::AbstractDict, resultvec::AbstractVector)
+function of(madsdata::AbstractDict, resultvec::AbstractVector; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
 	r = residuals(madsdata, resultvec)
-	sum(r .^ 2)
+	sum(r[filter] .^ 2)
 end
-function of(madsdata::AbstractDict, d::AbstractDict)
+function of(madsdata::AbstractDict, d::AbstractDict; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
 	v = collect(values(d))
 	if isobs(madsdata, d)
-		of(madsdata, v)
+		of(madsdata, v; filter=filter)
 	elseif isparam(madsdata, d)
 		resultdict = Mads.forward(madsdata, d)
-		of(madsdata, collect(values(resultdict)))
+		of(madsdata, collect(values(resultdict)); filter=filter)
 	else
 		@warn "Unknown input dictionary!"
 	end
 end
-function of(madsdata::AbstractDict)
+function of(madsdata::AbstractDict; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
 	resultdict = Mads.forward(madsdata)
-	of(madsdata, collect(values(resultdict)))
+	of(madsdata, collect(values(resultdict)); filter=filter)
 end
 
 @doc """
