@@ -31,6 +31,19 @@ import Fontconfig
 import JuMP
 import Ipopt
 
+function julia_main()::Cint
+	if length(ARGS) > 0
+		filename = ARGS[1]
+	else
+		@warn "Arguments should be provided on the command line!"
+	end
+
+	md = Mads.loadmadsfile(filename)
+	Mads.calibrate(md)
+
+	return 0
+end
+
 include("MadsModules.jl")
 
 global madsbash = true
