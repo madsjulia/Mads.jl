@@ -786,7 +786,7 @@ function mergetimes(t1::AbstractVector, t2::AbstractVector)
 	return t, i1, i2
 end
 
-function setnewobs(range::AbstractVector, times::AbstractVector, targets::AbstractVector, filtertimes::AbstractVector=trues(length(targets)); first::Number=1)
+function setnewobs(range::AbstractVector, times::AbstractVector, targets::AbstractVector, weights=ones(length(targets)); filtertimes::AbstractVector=trues(length(targets)), first::Number=1)
 	targettimes = times[filtertimes]
 	obstimes = collect(range)
 	obstimes[1] = obstimes[1] == 0 ? first : obstimes[1]
@@ -796,7 +796,7 @@ function setnewobs(range::AbstractVector, times::AbstractVector, targets::Abstra
 	newtargets .= 0
 	newweights .= 0
 	newtargets[itarget .!= 0] .= targets[filtertimes]
-	newweights[itarget .!= 0] .= 1
+	newweights[itarget .!= 0] .= weights
 	return newtimes, newtargets, newweights, itarget, iobs
 end
 
