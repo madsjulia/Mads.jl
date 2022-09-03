@@ -795,7 +795,7 @@ function setnewobs(range::AbstractVector, times::AbstractVector, targets::Abstra
 	newweights = similar(newtimes)
 	newtargets .= 0
 	newweights .= 0
-	newtargets[itarget .!= 0] .= targettimes
+	newtargets[itarget .!= 0] .= targets[filtertimes]
 	newweights[itarget .!= 0] .= weights[filtertimes]
 	return newtimes, newtargets, newweights, itarget, iobs
 end
