@@ -174,8 +174,17 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	end
 	if any(isnan, J)
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
-		Base.display(J)
 		Mads.madscritical("Mads quits!")
+	end
+	bad_params = vec(sum(J; dims=1) .<= eps(eltype(J)))
+	if sum(bad_params) > 0
+		Mads.madswarn("Parameters without any impact on the observations:")
+		println.(paramkeys[bad_params])
+	end
+	bad_observations = vec(sum(J; dims=2) .<= eps(eltype(J)))
+	if sum(bad_observations) > 0
+		Mads.madswarn("Observations that are not imppacted by changes in the parameter values:")
+		println.(obskeys[bad_observations])
 	end
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
 		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
@@ -193,7 +202,11 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		plotfileformat(jacmat, filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO; format=format, dpi=imagedpi)
 		Mads.madsinfo("Jacobian matrix plot saved in $filename")
 	end
-	JpJ = J' * J
+	if sum(bad_params) == 0
+		JpJ = J' * J
+	else
+		JpJ = J[:,.!bad_params]' * J[:,.!bad_params]
+	end
 	local covar
 	try
 		u, s, v = LinearAlgebra.svd(JpJ)
@@ -208,12 +221,15 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 			return nothing
 		end
 	end
-	stddev = sqrt.(abs.(LinearAlgebra.diag(covar)))
+	stddev = sqrt.(abs.(vec(LinearAlgebra.diag(covar))))
+	stddev_full = Vector{eltype(stddev)}(undef, nP)
+	stddev_full[.!bad_params] .= stddev
+	stddev_full[bad_params] .= Inf
 	if datafiles
 		DelimitedFiles.writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
 		for i in 1:nP
-			write(f, "$(paramkeys[i]) $(param[i]) $(stddev[i])\n")
+			write(f, "$(paramkeys[i]) $(param[i]) $(stddev_full[i])\n")
 		end
 		close(f)
 	end
@@ -226,10 +242,10 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:,index])
-	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenmatrix.dat", [paramkeys sortedeigenm])
+	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenmatrix.dat", [paramkeys[.!bad_params] sortedeigenm])
 	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	if imagefiles
-		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[i]), Gadfly.Scale.x_discrete,
+		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[.!bad_params][i]), Gadfly.Scale.x_discrete,
 					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
@@ -245,7 +261,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		plotfileformat(eigenval, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch; format=format, dpi=imagedpi)
 		Mads.madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("of"=>ofval, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("of"=>ofval, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev_full, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
 end
 
 """
