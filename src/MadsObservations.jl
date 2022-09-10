@@ -789,7 +789,9 @@ end
 function setnewobs(range::AbstractVector, times::AbstractVector, targets::AbstractVector, weights=ones(length(targets)); filtertimes::AbstractVector=trues(length(targets)), first::Number=1)
 	targettimes = times[filtertimes]
 	obstimes = collect(range)
-	obstimes[1] = obstimes[1] == 0 ? first : obstimes[1]
+	if length(obstimes) > 0
+		obstimes[1] = obstimes[1] == 0 ? first : obstimes[1]
+	end
 	newtimes, itarget, iobs = mergetimes(targettimes, obstimes)
 	newtargets = similar(newtimes)
 	newweights = similar(newtimes)
@@ -842,6 +844,6 @@ function checkobservationranges(madsdata::AbstractDict)
 	if flag_error
 		madserror("Observation ranges are incorrect!")
 	end
-	
+
 	return nothing
 end
