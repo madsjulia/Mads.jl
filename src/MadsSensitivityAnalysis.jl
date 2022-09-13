@@ -176,12 +176,12 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		Mads.madswarn("Local sensitivity analysis cannot be performed; provided Jacobian matrix contains NaN's")
 		Mads.madscritical("Mads quits!")
 	end
-	bad_params = vec(sum(J; dims=1) .<= eps(eltype(J)))
+	bad_params = vec(sum(abs.(J); dims=1) .<= eps(eltype(J)))
 	if sum(bad_params) > 0
 		Mads.madswarn("Parameters without any impact on the observations:")
 		println.(paramkeys[bad_params])
 	end
-	bad_observations = vec(sum(J; dims=2) .<= eps(eltype(J)))
+	bad_observations = vec(sum(abs.(J); dims=2) .<= eps(eltype(J)))
 	if sum(bad_observations) > 0
 		Mads.madswarn("Observations that are not imppacted by changes in the parameter values:")
 		println.(obskeys[bad_observations])
