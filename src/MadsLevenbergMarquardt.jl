@@ -39,8 +39,8 @@ Compute residuals
 
 $(DocumentFunction.documentfunction(residuals;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "resultvec"=>"result vector",
-            "resultdict"=>"result dictionary")))
+			"resultvec"=>"result vector",
+			"resultdict"=>"result dictionary")))
 
 Returns:
 
@@ -72,8 +72,8 @@ Compute objective function
 
 $(DocumentFunction.documentfunction(of;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "resultvec"=>"result vector",
-            "resultdict"=>"result dictionary")))
+			"resultvec"=>"result vector",
+			"resultdict"=>"result dictionary")))
 """ of
 
 """
@@ -81,8 +81,8 @@ Compute the sum of squared residuals for observations that match a regular expre
 
 $(DocumentFunction.documentfunction(partialof;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "resultdict"=>"result dictionary",
-            "regex"=>"regular expression")))
+			"resultdict"=>"result dictionary",
+			"regex"=>"regular expression")))
 
 Returns:
 
@@ -242,9 +242,9 @@ Naive Levenberg-Marquardt optimization: get the LM parameter space step
 
 $(DocumentFunction.documentfunction(naive_get_deltax;
 argtext=Dict("JpJ"=>"Jacobian matrix times model parameters times transposed Jacobian matrix",
-            "Jp"=>"Jacobian matrix times model parameters",
-            "f0"=>"initial model observations",
-            "lambda"=>"Levenberg-Marquardt lambda")))
+			"Jp"=>"Jacobian matrix times model parameters",
+			"f0"=>"initial model observations",
+			"lambda"=>"Levenberg-Marquardt lambda")))
 
 Returns:
 
@@ -261,11 +261,11 @@ Naive Levenberg-Marquardt optimization: perform LM iteration
 
 $(DocumentFunction.documentfunction(naive_lm_iteration;
 argtext=Dict("f"=>"forward model function",
-            "g"=>"gradient function for the forward model",
-            "o"=>"objective function",
-            "x0"=>"initial parameter guess",
-            "f0"=>"initial model observations",
-            "lambdas"=>"Levenberg-Marquardt lambdas")))
+			"g"=>"gradient function for the forward model",
+			"o"=>"objective function",
+			"x0"=>"initial parameter guess",
+			"f0"=>"initial model observations",
+			"lambdas"=>"Levenberg-Marquardt lambdas")))
 
 Returns:
 
@@ -287,14 +287,14 @@ Naive Levenberg-Marquardt optimization
 
 $(DocumentFunction.documentfunction(naive_levenberg_marquardt;
 argtext=Dict("f"=>"forward model function",
-            "g"=>"gradient function for the forward model",
-            "x0"=>"initial parameter guess",
-            "o"=>"objective function [default=x->(x'*x)[1]]"),
+			"g"=>"gradient function for the forward model",
+			"x0"=>"initial parameter guess",
+			"o"=>"objective function [default=x->(x'*x)[1]]"),
 keytext=Dict("maxIter"=>"maximum number of optimization iterations [default=`10`]",
-            "maxEval"=>"maximum number of model evaluations [default=`101`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda [default=`100`]",
-            "lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
-            "np_lambda"=>"number of parallel lambda solves [default=`10`]")))
+			"maxEval"=>"maximum number of model evaluations [default=`101`]",
+			"lambda"=>"initial Levenberg-Marquardt lambda [default=`100`]",
+			"lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]")))
 
 Returns:
 
@@ -321,49 +321,29 @@ Levenberg-Marquardt optimization
 
 $(DocumentFunction.documentfunction(levenberg_marquardt;
 argtext=Dict("f"=>"forward model function",
-            "g"=>"gradient function for the forward model",
-            "x0"=>"initial parameter guess",
-            "o"=>"objective function [default=`x->(x'*x)[1]`]"),
+			"g"=>"gradient function for the forward model",
+			"x0"=>"initial parameter guess",
+			"o"=>"objective function [default=`x->(x'*x)[1]`]"),
 keytext=Dict("root"=>"Mads problem root name",
-            "tolX"=>"parameter space tolerance [default=`1e-4`]",
-            "tolG"=>"parameter space update tolerance [default=`1e-6`]",
-            "tolOF"=>"objective function update tolerance [default=`1e-3`]",
-            "maxEval"=>"maximum number of model evaluations [default=`1001`]",
-            "maxIter"=>"maximum number of optimization iterations [default=`100`]",
-            "maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
-            "lambda"=>"initial Levenberg-Marquardt lambda [default=`eps(Float32)`]",
-            "lambda_scale"=>"lambda scaling factor [default=`1e-3,`]",
-            "lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
-            "lambda_nu"=>"lambda multiplication factor ν [default=`2`]",
-            "np_lambda"=>"number of parallel lambda solves [default=`10`]",
-            "show_trace"=>"shows solution trace [default=`false`]",
-            "alwaysDoJacobian"=>"computer Jacobian each iteration [default=`false`]",
-            "callbackiteration"=>"call back function for each iteration [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]",
-            "callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
+			"tolX"=>"parameter space tolerance [default=`1e-4`]",
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function update tolerance [default=`1e-3`]",
+			"tolOFcount"=>"number of Jacobian runs with small objective function change [default=`5`]",
+			"minOF"=>"objective function update tolerance [default=`1e-3`]",
+			"maxEval"=>"maximum number of model evaluations [default=`1001`]",
+			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
+			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
+			"lambda"=>"initial Levenberg-Marquardt lambda [default=`eps(Float32)`]",
+			"lambda_scale"=>"lambda scaling factor [default=`1e-3,`]",
+			"lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
+			"lambda_nu"=>"lambda multiplication factor ν [default=`2`]",
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
+			"show_trace"=>"shows solution trace [default=`false`]",
+			"callbackiteration"=>"call back function for each iteration [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]",
+			"callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
 			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, alwaysDoJacobian::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
-	# finds argmin sum(f(x).^2) using the Levenberg-Marquardt algorithm
-	#          x
-	# The function f should take an input vector of length n and return an output vector of length m
-	# The function g is the Jacobian of f, and should be an m x n matrix
-	# x0 is an initial guess for the solution
-	# fargs is a tuple of additional arguments to pass to f
-	# available options:
-	#   tolX - search tolerance in x
-	#   tolG - search tolerance in gradient
-	#   tolOF - search tolerance in objective function
-	#   maxIter - maximum number of iterations
-	#   lambda - (inverse of) initial trust region radius
-	#   lambda_mu - lambda decrease factor
-	#   lambda_nu - lambda multiplication factor
-	#   np_lambda - number of parallel lambdas to test
-	#   show_trace - print a status summary on each iteration if true
-	# returns: x, J
-	#   x - least squares solution for x
-	#   J - estimate of the Jacobian of f at x
-
-	# other constants
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
 	MAX_LAMBDA = 1e16 # minimum trust region radius
 	MIN_LAMBDA = 1e-16 # maximum trust region radius
 	MIN_STEP_QUALITY = 1e-3
@@ -408,6 +388,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	compute_jacobian = true
 	failed = false
 	local J
+	residuals = Vector{Float64}(undef, 0)
 	while(~failed && ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
 			try
@@ -541,6 +522,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		trial_residual = objfuncevals[npl_best]
 		predicted_residual = o(J * delta_x + fcur)
 
+		push!(residuals, objfuncevals[npl_best])
 		if objfuncevals[npl_best] < best_residual
 			best_residual = trial_residual
 			best_x = x + delta_x
@@ -568,7 +550,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 
 		if !Mads.quiet && show_trace
-			gradnorm = LinearAlgebra.norm(J'*fcur, Inf)
+			gradnorm = LinearAlgebra.norm(J' * fcur, Inf)
 			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
 			os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 			push!(tr, os)
@@ -587,8 +569,16 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madsinfo("Small gradient: $ng < $tolG (LinearAlgebra.norm(J^T * fcur) < tolG)")
 			g_converged = true
 		end
-		if best_residual < tolOF
-			Mads.madsinfo("Small objective function: $best_residual < $tolOF (tolOF)")
+		if length(residuals) > tolOFcount
+			is = sortperm(residuals)
+			changeOF = residuals[is][tolOFcount] - residuals[is][1]
+			if changeOF < tolOF
+				Mads.madsinfo("Small objective function changes (less than $tolOF tolOF): $changeOF < $tolOF")
+				of_converged = true
+			end
+		end
+		if best_residual < minOF
+			Mads.madsinfo("Objective function less than $minOF (tolOF): $best_residual < $minOF")
 			of_converged = true
 		end
 		if g_calls >= maxJacobians
@@ -600,5 +590,5 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		converged = g_converged | x_converged | of_converged
 	end
 	callbackfinal(best_x, best_residual, NaN)
-	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, tolX, 0.0, of_converged, tolOF, 0.0, g_converged, tolG, 0.0, false, tr, f_calls, g_calls, 0)
+	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, float(tolX), 0.0, of_converged, float(tolOF), 0.0, g_converged, float(tolG), 0.0, false, tr, f_calls, g_calls, 0)
 end
