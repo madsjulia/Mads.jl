@@ -118,6 +118,9 @@ $(DocumentFunction.documentfunction(MFlm;
 argtext=Dict("X"=>"matrix to factorize",
             "nk"=>"number of features to extract"),
 keytext=Dict("mads"=>"use MADS Levenberg-Marquardt algorithm [default=`true`]",
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function update tolerance [default=`1e-3`]",
+			"tolOFcount"=>"number of Jacobian runs with small objective function change [default=`5`]",
             "log_W"=>"log-transform W (weight) matrix [default=`false`]",
             "log_H"=>"log-transform H (feature) matrix[default=`false`]",
             "retries"=>"number of solution retries [default=`1`]",
@@ -130,7 +133,7 @@ Returns:
 
 - NMF results
 """
-function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::AbstractMatrix=Array{T}(undef, 0, 0), initH::AbstractMatrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T <: Number}
+function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bool=false, log_H::Bool=false, retries::Integer=1, initW::AbstractMatrix=Array{T}(undef, 0, 0), initH::AbstractMatrix=Array{T}(undef, 0, 0), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=true) where {T <: Number}
 	nP = size(X, 1) # number of observation points
 	nC = size(X, 2) # number of observed components/transients
 	Wbest = Array{T}(undef, nP, nk)

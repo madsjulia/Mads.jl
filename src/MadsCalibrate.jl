@@ -12,7 +12,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"numberofsamples"=>"number of random initial samples [default=`1`]"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
-			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function update tolerance [default=`1e-3`]",
+			"tolOFcount"=>"number of Jacobian runs with small objective function change [default=`5`]",
 			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
 			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
 			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
@@ -38,7 +40,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, all::Bool=false, save_results::Bool=true, first_init::Bool=false)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, all::Bool=false, save_results::Bool=true, first_init::Bool=false)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -59,7 +61,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		else
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && @info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -92,7 +94,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"numberofsamples"=>"number of random initial samples [default=`1`]"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
-			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
+			"tolOF"=>"objective function update tolerance [default=`1e-3`]",
+			"tolOFcount"=>"number of Jacobian runs with small objective function change [default=`5`]",
 			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
 			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
 			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
@@ -112,7 +116,7 @@ Returns:
 - boolean vector (converged/not converged)
 - array with estimate model parameters
 """
-function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
+function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, save_results::Bool=true, localsa::Bool=false)
 	Mads.setseed(seed; rng=rng)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
@@ -125,7 +129,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		Mads.setparamsinit!(madsdata, paramsoptdict)
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		!quiet && @info("Random initial guess #$i: OF = $phi (converged=$converged)")
@@ -151,7 +155,9 @@ $(DocumentFunction.documentfunction(calibrate;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"tolG"=>"parameter space update tolerance [default=`1e-6`]",
-			"tolOF"=>"objective function tolerance [default=`1e-3`]",
+			"tolOF"=>"objective function update tolerance [default=`1e-3`]",
+			"tolOFcount"=>"number of Jacobian runs with small objective function change [default=`5`]",
+			"minOF"=>"objective function update tolerance [default=`1e-3`]",
 			"maxEval"=>"maximum number of model evaluations [default=`1000`]",
 			"maxIter"=>"maximum number of optimization iterations [default=`100`]",
 			"maxJacobians"=>"maximum number of Jacobian solves [default=`100`]",
@@ -168,7 +174,7 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -219,7 +225,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	elseif usenaive == :lmlin
 		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->interationcallback(best_x, of, lambda))
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback)
 	end
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
