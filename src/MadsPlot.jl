@@ -222,7 +222,7 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{Abs
 	end
 	plotmatches(newmadsdata, newresult; title=title, notitle=notitle, kw...)
 end
-function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="Time", ytitle::AbstractString="Observation", ymin=nothing, ymax=nothing,  xmin=nothing, xmax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=4Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false)
+function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="Time", ytitle::AbstractString="Observation", ymin=nothing, ymax=nothing,  xmin=nothing, xmax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=4Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Array{String,1}=Mads.colors, display::Bool=true, notitle::Bool=false, truthtitle::AbstractString="Truth", predictiontitle::AbstractString="Prediction", gmk=[Gadfly.Guide.manual_color_key("", [truthtitle, predictiontitle], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize; linewidth * 3])])
 	obs_flag = isobs(madsdata, dict_in)
 	if obs_flag
 		result = dict_in
@@ -301,8 +301,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				push!(plot_args, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
-				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt),
-				Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 2; linewidth * 3]))
+				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt), gmk...)
 				if separate_files
 					if filename == ""
 						filename_w = "$rootname-match-$wellname"
@@ -349,14 +348,14 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 			tobs = collect(1:nT)
 			tresults = tobs
 		elseif time_missing > 0
-			madswarn("Some observations do not have `time` field specified!") 
+			madswarn("Some observations do not have `time` field specified!")
 		end
 		pl = Gadfly.plot(Gadfly.Guide.title(title), Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 			Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 			Gadfly.layer(x=tresults, y=vresults, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "blue"), line_width=linewidth)),
 			Gadfly.layer(x=tobs, y=obs, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt)),
 			Gadfly.Theme(highlight_width=0Gadfly.pt),
-			Gadfly.Guide.manual_color_key("", ["Truth", "Prediction"], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 1.3; linewidth * 3]))
+			gmk...)
 	end
 	if pl === nothing
 		Mads.madswarn("There is nothing to plot!")
