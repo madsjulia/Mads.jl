@@ -13,7 +13,7 @@ Add an additional contamination source
 
 $(DocumentFunction.documentfunction(addsource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "sourceid"=>"source id [default=`0`]")))
+			"sourceid"=>"source id [default=`0`]")))
 """
 function addsource!(madsdata::AbstractDict, sourceid::Int=0; dict::AbstractDict=Dict())
 	if haskey(madsdata, "Sources")
@@ -45,7 +45,7 @@ Remove a contamination source
 
 $(DocumentFunction.documentfunction(removesource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "sourceid"=>"source id [default=`0`]")))
+			"sourceid"=>"source id [default=`0`]")))
 """
 function removesource!(madsdata::AbstractDict, sourceid::Int=0)
 	if haskey(madsdata, "Sources")
@@ -160,7 +160,7 @@ Create a function to compute concentrations for all the observation points using
 $(DocumentFunction.documentfunction(makecomputeconcentrations;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("calczeroweightobs"=>"calculate zero weight observations[default=`false`]",
-            "calcpredictions"=>"calculate zero weight predictions [default=`true`]")))
+			"calcpredictions"=>"calculate zero weight predictions [default=`true`]")))
 
 Returns:
 
@@ -177,13 +177,13 @@ forward_preds = computeconcentrations(paramdict)
 """
 function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
-	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.
+	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.0
 	parametersnoexpressions = Mads.getparamdict(madsdata)
 	parameters = evaluatemadsexpressions(madsdata, parametersnoexpressions)
 	paramkeys = collect(keys(parameters))
-	ts_dsp = haskey(parameters, "ts_dsp") ? parameters["ts_dsp"] : 1.
+	ts_dsp = haskey(parameters, "ts_dsp") ? parameters["ts_dsp"] : 1.0
 	H = haskey(parameters, "H") ? parameters["H"] : 0.5
-	if (ts_dsp == 1. && !Mads.isopt(madsdata, "ts_dsp")) && (H == 0.5 && !Mads.isopt(madsdata, "H"))
+	if (ts_dsp == 1.0 && !Mads.isopt(madsdata, "ts_dsp")) && (H == 0.5 && !Mads.isopt(madsdata, "H"))
 		anasolfunctionroot = "long_bbb_"
 	else
 		anasolfunctionroot = "long_fff_"
@@ -200,7 +200,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 		end
 		if haskey(madsdata["Sources"][i], "box")
 			anasolfunction = anasolfunctionroot * "bbb_iir_c"
-		elseif haskey(madsdata["Sources"][i], "gauss" )
+		elseif haskey(madsdata["Sources"][i], "gauss")
 			anasolfunction = anasolfunctionroot * "ddd_iir_c"
 		end
 		anasolfunctions[i] = Core.eval(Mads, Meta.parse("Anasol.$anasolfunction"))
@@ -247,10 +247,10 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 			welly[w] = madsdata["Wells"][wellkey]["y"]
 			wellz0[w] = madsdata["Wells"][wellkey]["z0"]
 			wellz1[w] = madsdata["Wells"][wellkey]["z1"]
-			if abs(wellz1[w]  - wellz0[w] ) > 0.1
+			if abs(wellz1[w] - wellz0[w]) > 0.1
 				wellscreen[w] = true
 			else
-				wellz0[w] = (wellz1[w] + wellz0[w] ) / 2
+				wellz0[w] = (wellz1[w] + wellz0[w]) / 2
 				wellscreen[w] = false
 			end
 			obst = Array{Float64}(undef, 0)
@@ -274,7 +274,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 			end
 			wellt[w] = obst
 			wellc[w][.!wellp[w]] .= 0
-			end
+		end
 	end
 	classical = haskey(madsdata["Parameters"], "vx")
 	# indexall = indexin(anasolallparametersall, paramkeys)
@@ -325,7 +325,10 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 				az = parameters["az"]
 			end
 			if haskey(parameters, "rf")
-				rf = parameters["rf"]; vx /= rf; vy /= rf; vz /= rf
+				rf = parameters["rf"]
+				vx /= rf
+				vy /= rf
+				vz /= rf
 			end
 			if haskey(parameters, "H")
 				H = parameters["H"]
@@ -339,7 +342,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 			global w = w_
 			wellc[w] .= background
 		end
-		for i=1:numberofsources
+		for i = 1:numberofsources
 			ss = string("source", i, "_")
 			x = parameters[string(ss, "x")]
 			y = parameters[string(ss, "y")]
@@ -366,7 +369,10 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 					az = parameters[string(ss, "az")]
 				end
 				if haskey(parameters, string(ss, "rf"))
-					rf = parameters[string(ss, "rf")]; vx /= rf; vy /= rf; vz /= rf
+					rf = parameters[string(ss, "rf")]
+					vx /= rf
+					vy /= rf
+					vz /= rf
 				end
 				if haskey(parameters, string(ss, "H"))
 					H = parameters[string(ss, "H")]
@@ -380,7 +386,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 				global w = w_
 				if wellscreen[w]
 					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
-					             contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
+										   contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
 				else
 					wellc[w][wellp[w]] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
 				end
@@ -397,28 +403,28 @@ Compute concentration for a point in space and time (x,y,z,t)
 
 $(DocumentFunction.documentfunction(contamination;
 argtext=Dict("wellx"=>"observation point (well) X coordinate",
-            "welly"=>"observation point (well) Y coordinate",
-            "wellz"=>"observation point (well) Z coordinate",
-            "n"=>"porosity",
-            "lambda"=>"first-order reaction rate",
-            "theta"=>"groundwater flow direction",
-            "vx"=>"advective transport velocity in X direction",
-            "vy"=>"advective transport velocity in Y direction",
-            "vz"=>"advective transport velocity in Z direction",
-            "ax"=>"dispersivity in X direction (longitudinal)",
-            "ay"=>"dispersivity in Y direction (transverse horizontal)",
-            "az"=>"dispersivity in Y direction (transverse vertical)",
-            "H"=>"Hurst coefficient for Fractional Brownian dispersion",
-            "x"=>"X coordinate of contaminant source location",
-            "y"=>"Y coordinate of contaminant source location",
-            "z"=>"Z coordinate of contaminant source location",
-            "dx"=>"source size (extent) in X direction",
-            "dy"=>"source size (extent) in Y direction",
-            "dz"=>"source size (extent) in Z direction",
-            "f"=>"source mass flux",
-            "t0"=>"source starting time",
-            "t1"=>"source termination time",
-            "t"=>"vector of times to compute concentration at the observation point"),
+			"welly"=>"observation point (well) Y coordinate",
+			"wellz"=>"observation point (well) Z coordinate",
+			"n"=>"porosity",
+			"lambda"=>"first-order reaction rate",
+			"theta"=>"groundwater flow direction",
+			"vx"=>"advective transport velocity in X direction",
+			"vy"=>"advective transport velocity in Y direction",
+			"vz"=>"advective transport velocity in Z direction",
+			"ax"=>"dispersivity in X direction (longitudinal)",
+			"ay"=>"dispersivity in Y direction (transverse horizontal)",
+			"az"=>"dispersivity in Y direction (transverse vertical)",
+			"H"=>"Hurst coefficient for Fractional Brownian dispersion",
+			"x"=>"X coordinate of contaminant source location",
+			"y"=>"Y coordinate of contaminant source location",
+			"z"=>"Z coordinate of contaminant source location",
+			"dx"=>"source size (extent) in X direction",
+			"dy"=>"source size (extent) in Y direction",
+			"dz"=>"source size (extent) in Z direction",
+			"f"=>"source mass flux",
+			"t0"=>"source starting time",
+			"t1"=>"source termination time",
+			"t"=>"vector of times to compute concentration at the observation point"),
 keytext=Dict("anasolfunction"=>"Anasol function to call (check out the Anasol module) [default=`\"long_bbb_ddd_iir_c\"`]")))
 
 Returns:
@@ -432,7 +438,7 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	ztrans = wellz - z
 	xtrans = xshift * cos(d) - yshift * sin(d)
 	ytrans = xshift * sin(d) + yshift * cos(d)
-	x01 = x02 = x03 = 0. # we transformed the coordinates so the source starts at the origin
+	x01 = x02 = x03 = 0.0 # we transformed the coordinates so the source starts at the origin
 	# sigma01 = sigma02 = sigma03 = 0. #point source
 	sigma01 = dx
 	sigma02 = dy
@@ -445,7 +451,7 @@ function contamination(wellx::Number, welly::Number, wellz::Number, n::Number, l
 	sigma2 = sqrt(ay * twospeed)
 	sigma3 = sqrt(az * twospeed)
 	H1 = H2 = H3 = H
-	xb1 = xb2 = xb3 = 0. # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
+	xb1 = xb2 = xb3 = 0.0 # xb1 and xb2 will be ignored, xb3 should be set to 0 (reflecting boundary at z=0)
 	nt = length(t)
 	xtransvec = [xtrans, ytrans, ztrans]
 	anasolresult = Vector{Float64}(undef, nt)
@@ -474,7 +480,7 @@ function computemass(madsdata::AbstractDict; time::Number=0)
 			tmin = min(time, t1)
 			mi = f * (tmin - t0)
 			if compute_reduction
-				mr = mi - (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda)-1))/lambda
+				mr = mi - (f * exp(-(time - t0) * lambda) * (exp((tmin - t0) * lambda) - 1)) / lambda
 			end
 			mass_injected += mi
 			mass_reduced += mr
@@ -489,7 +495,7 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Abstr
 	lambda = Array{Float64}(undef, nf)
 	mass_injected = Array{Float64}(undef, nf)
 	mass_reduced = Array{Float64}(undef, nf)
-	@ProgressMeter.showprogress 1 "Computing reduced mass ..." for i = 1:nf
+	ProgressMeter.@showprogress 1 "Computing reduced mass ..." for i = 1:nf
 		md = Mads.loadmadsfile(joinpath(path, mf[i]))
 		l = md["Parameters"]["lambda"]["init"]
 		lambda[i] = l < eps(Float64) ? 1e-32 : l
@@ -508,9 +514,9 @@ Compute injected/reduced contaminant mass (for a given set of mads input files w
 
 $(DocumentFunction.documentfunction(computemass;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "madsfiles"=>"matching pattern for Mads input files (string or regular expression accepted)"),
+			"madsfiles"=>"matching pattern for Mads input files (string or regular expression accepted)"),
 keytext=Dict("time"=>"computational time [default=`0`]",
-            "path"=>"search directory for the mads input files [default=`\".\"`]")))
+			"path"=>"search directory for the mads input files [default=`\".\"`]")))
 
 Returns:
 
