@@ -5,3 +5,6 @@ always_for_in = false
 conditional_to_if = false
 normalize_line_endings = auto
 separate_kwargs_with_semicolon = true
+whitespace_in_kwargs = false
+trailing_comma = false
+margin = 1000
