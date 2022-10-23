@@ -179,12 +179,12 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	bad_params = vec(sum(abs.(J); dims=1) .<= eps(eltype(J)))
 	if sum(bad_params) > 0
 		Mads.madswarn("Parameters without any impact on the observations:")
-		println.(paramkeys[bad_params])
+		!Mads.quiet && println.(paramkeys[bad_params])
 	end
 	bad_observations = vec(sum(abs.(J); dims=2) .<= eps(eltype(J)))
 	if sum(bad_observations) > 0
 		Mads.madswarn("Observations that are not imppacted by changes in the parameter values:")
-		println.(obskeys[bad_observations])
+		!Mads.quiet && println.(obskeys[bad_observations])
 	end
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
 		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
