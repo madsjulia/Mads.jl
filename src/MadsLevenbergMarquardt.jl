@@ -106,7 +106,7 @@ end
 
 function makelmfunctions(f::Function)
 	f_lm = f
-	function g_lm(x::AbstractVector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0))
+	function g_lm(x::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Array{Float64}(undef, 0))
 		nO = length(center)
 		if nO == 0
 			center = f_lm(x)
@@ -220,7 +220,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::AbstractVector; dx::Array{Float64,1}=Array{Float64}(0), center::Array{Float64,1}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
+	function g_lm(arrayparameters::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
 		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm

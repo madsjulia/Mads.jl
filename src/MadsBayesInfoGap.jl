@@ -130,7 +130,7 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, 
 	end
 	getfailureprobs = BIGUQ.makegetfailureprobabilities_mc(modelparams)
 	maxfailureprobs = Array{Float64}(undef, numhorizons, length(madsdata["Choices"]))
-	local horizons::Array{Float64, 1}
+	local horizons::Vector{Float64}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
 	for i = 1:length(madsdata["Choices"])
