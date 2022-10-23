@@ -82,7 +82,7 @@ Returns:
 """ svrtrain
 
 #=
-function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Array{Float64, 1})
+function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Vector{Float64})
 	npred = length(svrmodel)
 	y = Array(Float64, npred)
 	for i=1:npred
@@ -210,7 +210,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	optnames = Mads.getoptparamkeys(madsdata)
 	obsnames = Mads.getobskeys(madsdata)
 	npreds = length(obsnames)
-	function svrexec(paramarray::Union{Array{Float64, 1}, Array{Float64, 2}})
+	function svrexec(paramarray::Union{Vector{Float64}, Array{Float64, 2}})
 		return svrpredict(svrmodel, paramarray)
 	end
 	function svrexec(paramdict::AbstractDict)

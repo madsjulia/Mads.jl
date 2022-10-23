@@ -45,7 +45,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Array{String,1}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::AbstractString=pwd(), exename::AbstractString=Base.julia_cmd().exec[1])
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Vector{String}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::AbstractString=pwd(), exename::AbstractString=Base.julia_cmd().exec[1])
 	if isdefined(Core, :Mads) && isdefined(Mads, :set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end
@@ -55,7 +55,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 			nodenames = madsservers
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
-		if typeof(nodenames) == Array{String,1}
+		if typeof(nodenames) == Vector{String}
 			for n = 1:length(nodenames)
 				for j = 1:c
 					push!(h, nodenames[n])
@@ -282,7 +282,7 @@ Returns:
 
 - output of running remote command
 """
-function runremote(cmd::AbstractString, nodenames::Array{String,1}=madsservers)
+function runremote(cmd::AbstractString, nodenames::Vector{String}=madsservers)
 	output = Array{String}(undef, 0)
 	for i in nodenames
 		try
@@ -304,7 +304,7 @@ Check the number of processors on a series of servers
 $(DocumentFunction.documentfunction(madscores;
 argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madscores(nodenames::Array{String,1}=madsservers)
+function madscores(nodenames::Vector{String}=madsservers)
 	runremote("grep -c ^processor /proc/cpuinfo", nodenames)
 end
 
@@ -314,7 +314,7 @@ Check the uptime of a series of servers
 $(DocumentFunction.documentfunction(madsup;
 argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madsup(nodenames::Array{String,1}=madsservers)
+function madsup(nodenames::Vector{String}=madsservers)
 	runremote("uptime 2>/dev/null", nodenames)
 end
 
@@ -324,7 +324,7 @@ Check the load of a series of servers
 $(DocumentFunction.documentfunction(madsload;
 argtext=Dict("nodenames"=>"array with names of machines/nodes [default=`madsservers`]")))
 """
-function madsload(nodenames::Array{String,1}=madsservers)
+function madsload(nodenames::Vector{String}=madsservers)
 	runremote("top -n 1 2>/dev/null", nodenames)
 end
 

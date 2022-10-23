@@ -98,7 +98,7 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Objective function gradient for MathProgBase optimization
 	"""
-	function grad_o_mpb(arrayparameters::AbstractVector; dx::Array{Float64,1}=Array{Float64}(undef, 0))
+	function grad_o_mpb(arrayparameters::AbstractVector; dx::Vector{Float64}=Array{Float64}(undef, 0))
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
@@ -171,7 +171,7 @@ function makempbfunctions(madsdata::AbstractDict)
 	"""
 	Gradient function for the forward model used for MathProgBase optimization
 	"""
-	function g_mpb(arrayparameters::AbstractVector; dx::Array{Float64,1}=lineardx)
+	function g_mpb(arrayparameters::AbstractVector; dx::Vector{Float64}=lineardx)
 		return reusable_inner_g_mpb(arrayparameters, dx)
 	end
 	return o_mpb, grad_o_mpb, f_mpb, g_mpb
