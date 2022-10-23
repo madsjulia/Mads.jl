@@ -82,7 +82,7 @@ Returns:
 """ svrtrain
 
 #=
-function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Vector{Float64})
+function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float64})
 	npred = length(svrmodel)
 	y = Array(Float64, npred)
 	for i=1:npred
@@ -91,7 +91,7 @@ function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Vector{Float64
 	return y
 end
 =#
-function svrpredict(svrmodel::Array{SVR.svmmodel, 1}, paramarray::Array{Float64, 2})
+function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Array{Float64, 2})
 	npred = length(svrmodel)
 	y = Array{Float64}(undef, 0, size(paramarray, 1))
 	for i=1:npred
@@ -118,7 +118,7 @@ Free SVR
 $(DocumentFunction.documentfunction(svrfree;
 argtext=Dict("svrmodel"=>"array of SVR models")))
 """
-function svrfree(svrmodel::Array{SVR.svmmodel, 1})
+function svrfree(svrmodel::Vector{SVR.svmmodel})
 	npred = length(svrmodel)
 	for i=1:npred
 		if isassigned(svrmodel, i)
@@ -136,7 +136,7 @@ argtext=Dict("svrmodel"=>"array of SVR models",
 			"rootname"=>"root name",
 			"numberofsamples"=>"number of samples")))
 """
-function svrdump(svrmodel::Array{SVR.svmmodel, 1}, rootname::AbstractString, numberofsamples::Int)
+function svrdump(svrmodel::Vector{SVR.svmmodel}, rootname::AbstractString, numberofsamples::Int)
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
 	for i=1:npred

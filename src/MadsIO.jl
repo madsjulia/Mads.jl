@@ -1038,7 +1038,7 @@ Returns:
 
 - true or false
 """
-function obslineoccursin(obsline::AbstractString, regexs::Array{Regex, 1})
+function obslineoccursin(obsline::AbstractString, regexs::Vector{Regex})
 	if length(regexs) == 0
 		return false
 	end
@@ -1059,7 +1059,7 @@ Returns:
 
 - `obsdict` : observations
 """
-function regexs2obs(obsline::AbstractString, regexs::Array{Regex, 1}, obsnames::Vector{String}, getparamhere::Array{Bool, 1})
+function regexs2obs(obsline::AbstractString, regexs::Vector{Regex}, obsnames::Vector{String}, getparamhere::Vector{Bool})
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()

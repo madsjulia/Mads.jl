@@ -51,7 +51,7 @@ Arguments:
 
 Returns:
 
-- `mcmcchain` : 
+- `mcmcchain` :
 
 
 *source:*
@@ -73,7 +73,7 @@ Arguments:
 - `maxEval` : maximum number of model evaluations
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda` : initial Levenberg-Marquardt lambda
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
@@ -94,7 +94,7 @@ Returns:
 
 <a id="method__calibratenlopt.1" class="lexicon_definition"></a>
 #### calibratenlopt(madsdata::Associative{K, V})
-Do a calibration using NLopt 
+Do a calibration using NLopt
 
 *source:*
 [Mads/src/MadsCalibrate.jl:151](https://github.com/madsjulia/Mads.jl/tree/d66f389f539d6c0e22a206c0026fe1394b441e37/src/MadsCalibrate.jl#L151)
@@ -119,7 +119,7 @@ Arguments:
 - `maxEval` : maximum number of model evaluations
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda` : initial Levenberg-Marquardt lambda
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
@@ -156,7 +156,7 @@ Arguments:
 - `maxEval` : maximum number of model evaluations
 - `maxIter` : maximum number of optimization iterations
 - `maxJacobians` : maximum number of Jacobian solves
-- `lambda` : initial Levenberg-Marquardt lambda 
+- `lambda` : initial Levenberg-Marquardt lambda
 - `lambda_mu` : lambda multiplication factor [10]
 - `np_lambda` : number of parallel lambda solves
 - `show_trace` : shows solution trace [default=false]
@@ -243,7 +243,7 @@ Arguments:
 
 - `madsfiles` : matching pattern for Mads input files (string or regular expression accepted)
 - `time` : computational time
-- `path` : search directory for the mads input files 
+- `path` : search directory for the mads input files
 
 Returns:
 
@@ -293,7 +293,7 @@ Arguments:
 - `ay` - dispersivity in Y direction (transverse horizontal)
 - `az` - dispersivity in Y direction (transverse vertical)
 - `H` - Hurst coefficient for Fractional Brownian dispersion
-- `x` - X coordinate of contaminant source location 
+- `x` - X coordinate of contaminant source location
 - `y` - Y coordinate of contaminant source location
 - `z` - Z coordinate of contaminant source location
 - `dx` - source size (extent) in X direction
@@ -536,7 +536,7 @@ Returns:
 #### forwardgrid(madsdata::Associative{K, V})
 Perform a forward run over a 3D grid defined in `madsdata` using the initial or provided values for the model parameters
 
-- `forwardgrid(madsdata)`  
+- `forwardgrid(madsdata)`
 - `forwardgrid(madsdata, paramvalues))`
 
 Arguments:
@@ -618,7 +618,7 @@ Get file name extension
 Example:
 
 ```
-ext = Mads.getextension("a.mads") # ext = "mads" 
+ext = Mads.getextension("a.mads") # ext = "mads"
 ```
 
 
@@ -1737,7 +1737,7 @@ Disable MADS plotting
 ---
 
 <a id="method__obslineismatch.1" class="lexicon_definition"></a>
-#### obslineismatch(obsline::AbstractString,  regexs::Array{Regex, 1})
+#### obslineismatch(obsline::AbstractString,  regexs::Vector{Regex})
 Match an instruction line in the Mads instruction file with model input file
 
 *source:*
