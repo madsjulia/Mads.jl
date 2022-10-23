@@ -28,7 +28,7 @@ Returns:
 - vector with the optimal parameter values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function minimize(f::Function, x::AbstractVector; lowerbound::Number=-1e+8, lowerbounds::Array{Float64,1}=fill(convert(Float64, lowerbound), length(x)), upperbound::Number=1e+8, upperbounds::Array{Float64,1}=fill(convert(Float64, upperbound), length(x)), logtransform::Bool=false, logtransformed::Union{BitArray{1},Array{Bool,1}}=fill(false, length(x)), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1, quiet::Bool=true)
+function minimize(f::Function, x::AbstractVector; lowerbound::Number=-1e+8, lowerbounds::Vector{Float64}=fill(convert(Float64, lowerbound), length(x)), upperbound::Number=1e+8, upperbounds::Vector{Float64}=fill(convert(Float64, upperbound), length(x)), logtransform::Bool=false, logtransformed::Union{BitArray{1},Array{Bool,1}}=fill(false, length(x)), tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, sindx::Float64=0.1, quiet::Bool=true)
 	!quiet && Mads.quietoff()
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(f)
 	lb = copy(lowerbounds)

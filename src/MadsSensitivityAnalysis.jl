@@ -96,7 +96,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function g_sa(arrayparameters::AbstractVector{Float64}; dx::Array{Float64,1}=Array{Float64}(undef, 0), center::Array{Float64,1}=Array{Float64}(undef, 0))
+	function g_sa(arrayparameters::AbstractVector{Float64}; dx::Vector{Float64}=Array{Float64}(undef, 0), center::Vector{Float64}=Array{Float64}(undef, 0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return f_sa, g_sa
@@ -689,14 +689,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=
 	end
 	flagrestart = restartdir != ""
 	if parallel
-		Avecs = Array{Array{Float64, 1}}(undef, size(A, 1))
+		Avecs = Array{Vector{Float64}}(undef, size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])
 		end
 		if flagrestart
-			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Vector{Float64})
 		else
-			pmapresult = RobustPmap.rpmap(farray, Avecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.rpmap(farray, Avecs; t=Vector{Float64})
 		end
 		for i = 1:N
 			for j = 1:length(obskeys)
@@ -717,14 +717,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=
 	Mads.madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample B ...\n" );
 	yB = Array{Float64}(undef, N, length(obskeys))
 	if parallel
-		Bvecs = Array{Array{Float64, 1}}(undef, size(B, 1))
+		Bvecs = Array{Vector{Float64}}(undef, size(B, 1))
 		for i = 1:N
 			Bvecs[i] = vec(B[i, :])
 		end
 		if flagrestart
-			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Vector{Float64})
 		else
-			pmapresult = RobustPmap.rpmap(farray, Bvecs; t=Array{Float64, 1})
+			pmapresult = RobustPmap.rpmap(farray, Bvecs; t=Vector{Float64})
 		end
 		for i = 1:N
 			for j = 1:length(obskeys)
@@ -755,14 +755,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=
 		Mads.madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n" );
 		yC = Array{Float64}(undef, N, length(obskeys))
 		if parallel
-			Cvecs = Array{Array{Float64, 1}}(undef, size(C, 1))
+			Cvecs = Array{Vector{Float64}}(undef, size(C, 1))
 			for j = 1:N
 				Cvecs[j] = vec(C[j, :])
 			end
 			if flagrestart
-				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Array{Float64, 1})
+				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Vector{Float64})
 			else
-				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Array{Float64, 1})
+				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Vector{Float64})
 			end
 			for j = 1:N
 				for k = 1:length(obskeys)

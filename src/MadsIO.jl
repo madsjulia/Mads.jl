@@ -1059,7 +1059,7 @@ Returns:
 
 - `obsdict` : observations
 """
-function regexs2obs(obsline::AbstractString, regexs::Array{Regex, 1}, obsnames::Array{String, 1}, getparamhere::Array{Bool, 1})
+function regexs2obs(obsline::AbstractString, regexs::Array{Regex, 1}, obsnames::Vector{String}, getparamhere::Array{Bool, 1})
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()
