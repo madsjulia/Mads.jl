@@ -1,4 +1,3 @@
-# import Gadfly
 import JuMP
 import Gurobi
 
@@ -21,8 +20,7 @@ end
 	Manganese, .3Dollars - Mn == 0
 end
 @JuMP.objective(m, Max, .01Pennies + .05Nickels + .1Dimes + .25Quarters + 1Dollars )
-status=JuMP.optimize!(m)
-println("Status = $status")
+JuMP.optimize!(m)
 println("Optimal Objective Function value: ", JuMP.objective_value(m))
 println("Optimal Solutions:")
 println("Pennies = ", JuMP.value.(Pennies))
@@ -41,8 +39,7 @@ m2 = JuMP.Model(solver=Gurobi.GurobiSolver(Threads=4))
 @JuMP.objective(m2, Min, 10x + 26y)
 @JuMP.constraint(m2, const1, 11x + 3y >= 21)
 @JuMP.constraint(m2, const2, 6x + 20y >= 39)
-status = JuMP.optimize!(m2)
-println("Status = $status")
+JuMP.optimize!(m2)
 println("Optimal Objective Function value: ", JuMP.objective_value(m2))
 println("Optimal Solutions:")
 println("x = ", JuMP.value.(x))
