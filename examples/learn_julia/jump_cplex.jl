@@ -2,6 +2,7 @@ import JuMP
 import CPLEX
 
 m = JuMP.Model(CPLEX.Optimizer)
+JuMP.set_optimizer_attribute(m, "CPXPARAM_MIP_Pool_RelGap", 0.1)
 @JuMP.variables m begin
 	Pennies >=0, Int
 	Nickels >=0, Int
