@@ -20,7 +20,7 @@ end
 	Zinc, 2.4Pennies +.5Dollars - Zi == 0
 	Manganese, .3Dollars - Mn == 0
 end
-@JuMP.objective(m, Max, .01Pennies + .05Nickels + .1Dimes + .25Quarters + 1Dollars )
+@JuMP.objective(m, Max, .01Pennies + .05Nickels + .1Dimes + .25Quarters + 1Dollars)
 JuMP.optimize!(m)
 println("Optimal Objective Function value: ", JuMP.objective_value(m))
 println("Optimal Solutions:")
