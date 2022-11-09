@@ -13,7 +13,7 @@ Returns:
 
 - optimization results
 """
-function calibratenlopt(madsdata::AbstractDict; algorithm=:LD_LBFGS) # TODO switch to a mathprogbase approach
+function calibratenlopt(madsdata::AbstractDict; algorithm=:LD_LBFGS) # TODO switch to a MathOptInterface approach
 	const paramkeys = getparamkeys(madsdata)
 	const obskeys = getobskeys(madsdata)
 	paraminits = getparamsinit(madsdata, paramkeys)

@@ -1,6 +1,6 @@
 import DocumentFunction
 import JuMP
-import MathProgBase
+import MathOptInterface
 import Colors
 
 @Mads.tryimport Ipopt
@@ -282,13 +282,13 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 	return hmin, hmax
 end
 
-mutable struct MadsModelPoly <: MathProgBase.AbstractNLPEvaluator
+mutable struct MadsModelPoly <: MathOptInterface.AbstractNLPEvaluator
 end
 
 """
-Information Gap Decision Analysis using MathProgBase
+Information Gap Decision Analysis using MathOptInterface
 
-$(DocumentFunction.documentfunction(infogap_mpb_polynomial;
+$(DocumentFunction.documentfunction(infogap_moi_polynomial;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
@@ -298,7 +298,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, rng=nothing, pinit::AbstractVector=[])
+function infogap_moi_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, rng=nothing, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]
@@ -312,37 +312,37 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 	t = [1.,2.,3.,4.,5.]
 	no = 4
 
-	@eval function MathProgBase.initialize(d::MadsModelPoly, requested_features::AbstractVector{Symbol})
+	@eval function MathOptInterface.initialize(d::MadsModelPoly, requested_features::AbstractVector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	@eval MathProgBase.features_available(d::MadsModelPoly) = [:Grad, :Jac]
-	@eval function MathProgBase.eval_f(d::MadsModelPoly, p::AbstractVector)
+	@eval MathOptInterface.features_available(d::MadsModelPoly) = [:Grad, :Jac]
+	@eval function MathOptInterface.eval_f(d::MadsModelPoly, p::AbstractVector)
 		of = p[1] * (t[5]^p[4]) + p[2] * t[5] + p[3]
 		return of
 	end
-	@eval function MathProgBase.eval_grad_f(d::MadsModelPoly, grad_f::AbstractVector, p::AbstractVector)
+	@eval function MathOptInterface.eval_grad_f(d::MadsModelPoly, grad_f::AbstractVector, p::AbstractVector)
 		grad_f[1] = t[5]^p[4]
 		grad_f[2] = t[5]
 		grad_f[3] = 1
 		grad_f[4] = p[1] * (t[5]^p[4]) * log(t[5])
 	end
-	@eval function MathProgBase.eval_g(d::MadsModelPoly, o::AbstractVector, p::AbstractVector)
+	@eval function MathOptInterface.eval_g(d::MadsModelPoly, o::AbstractVector, p::AbstractVector)
 		for i = 1:no
 			o[i] = p[1] * (t[i]^p[4]) + p[2] * t[i] + p[3]
 		end
 	end
-	@eval MathProgBase.hesslag_structure(d::MadsModelPoly) = Int[],Int[]
-	@eval MathProgBase.eval_hesslag(d::MadsModelPoly, H, p, σ, μ) = nothing
+	@eval MathOptInterface.hessian_lagrangian_structure(d::MadsModelPoly) = Int[],Int[]
+	@eval MathOptInterface.eval_hessian_lagrangian(d::MadsModelPoly, H, p, σ, μ) = nothing
 	#=
-	MathProgBase.jac_structure(d::MadsModelPoly) = Int[],Int[]
-	MathProgBase.eval_jac_g(d::MadsModelPoly, J, p) = nothing
+	MathOptInterface.jacobian_structure(d::MadsModelPoly) = Int[],Int[]
+	MathOptInterface.eval_jac_g(d::MadsModelPoly, J, p) = nothing
 	=#
-	@eval MathProgBase.jac_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-	@eval function MathProgBase.eval_jac_g(d::MadsModelPoly, J::AbstractVector, p::AbstractVector)
+	@eval MathOptInterface.jacobian_structure(d::MadsModelPoly) = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4],[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
+	@eval function MathOptInterface.eval_jac_g(d::MadsModelPoly, J::AbstractVector, p::AbstractVector)
 		ji = 0
 		for i = 1:no
 			J[ji + 1] = t[i]^p[4]
@@ -375,28 +375,28 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 	g = Array{Float64}(undef, no)
 	for h in horizons
 		par_best = pinit
-		phi_best = MathProgBase.eval_f(MadsModelPoly(), par_best)
+		phi_best = MathOptInterface.eval_f(MadsModelPoly(), par_best)
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
-				m = MathProgBase.NonlinearModel(solver)
+				m = MathOptInterface.NonlinearModel(solver)
 				for i = 1:no
 					omin[i] = t[i] - h
 					omax[i] = t[i] + h
 				end
-				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelPoly())
+				MathOptInterface.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelPoly())
 				if r > 1 || random
 					for i = 1:np
 						p[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 					end
-					MathProgBase.setwarmstart!(m, p)
+					MathOptInterface.setwarmstart!(m, p)
 				else
-					MathProgBase.setwarmstart!(m, pinit)
+					MathOptInterface.setwarmstart!(m, pinit)
 				end
-				MathProgBase.optimize!(m)
-				stat = MathProgBase.status(m)
-				phi = MathProgBase.getobjval(m)
-				par = MathProgBase.getsolution(m)
+				MathOptInterface.optimize!(m)
+				stat = MathOptInterface.status(m)
+				phi = MathOptInterface.getobjval(m)
+				par = MathOptInterface.getsolution(m)
 				# println("OF = $(phi) $(stat)")
 				if stat != :Infeasible
 					if mm == "Max"
@@ -411,10 +411,10 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 						end
 					end
 				end
-				# @show MathProgBase.getsolution(m)
+				# @show MathOptInterface.getsolution(m)
 			end
-			# of = MathProgBase.eval_f(MadsModelPoly(), par_best)
-			# MathProgBase.eval_g(MadsModelPoly(), g, par_best)
+			# of = MathOptInterface.eval_f(MadsModelPoly(), par_best)
+			# MathOptInterface.eval_g(MadsModelPoly(), g, par_best)
 			# println("Optimal observations: $g")
 			# f = Mads.forward(madsdata, par_best)
 			# @show f
@@ -423,13 +423,13 @@ function infogap_mpb_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 	end
 end
 
-mutable struct MadsModelLin <: MathProgBase.AbstractNLPEvaluator
+mutable struct MadsModelLin <: MathOptInterface.AbstractNLPEvaluator
 end
 
 """
-Information Gap Decision Analysis using MathProgBase
+Information Gap Decision Analysis using MathOptInterface
 
-$(DocumentFunction.documentfunction(infogap_mpb_lin;
+$(DocumentFunction.documentfunction(infogap_moi_lin;
 argtext=Dict("madsdata"=>"Mads problem dictionary"),
 keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1, 0.2, 0.5]`]",
             "retries"=>"number of solution retries [default=`1`]",
@@ -439,7 +439,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
+function infogap_moi_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [1.,0.]
@@ -452,29 +452,29 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector
 
 	t = [1.,2.,3.,4.,5.]
 	no = 4
-	@eval function MathProgBase.initialize(d::MadsModelLin, requested_features::AbstractVector{Symbol})
+	@eval function MathOptInterface.initialize(d::MadsModelLin, requested_features::AbstractVector{Symbol})
 		for feat in requested_features
 			if !(feat in [:Grad, :Jac, :Hess])
 				error("Unsupported feature $feat")
 			end
 		end
 	end
-	@eval MathProgBase.features_available(d::MadsModelLin) = [:Grad, :Jac]
-	@eval function MathProgBase.eval_f(d::MadsModelLin, p::AbstractVector)
+	@eval MathOptInterface.features_available(d::MadsModelLin) = [:Grad, :Jac]
+	@eval function MathOptInterface.eval_f(d::MadsModelLin, p::AbstractVector)
 		return p[1] * t[5] + p[2]
 	end
-	@eval function MathProgBase.eval_grad_f(d::MadsModelLin, grad_f::AbstractVector, p::AbstractVector)
+	@eval function MathOptInterface.eval_grad_f(d::MadsModelLin, grad_f::AbstractVector, p::AbstractVector)
 		grad_f[1] = t[5]
 		grad_f[2] = 1
 	end
-	@eval function MathProgBase.eval_g(d::MadsModelLin, o::AbstractVector, p::AbstractVector)
+	@eval function MathOptInterface.eval_g(d::MadsModelLin, o::AbstractVector, p::AbstractVector)
 		for i = 1:no
 			o[i] = p[1] * t[i] + p[2]
 		end
 	end
-	@eval MathProgBase.jac_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
-	@eval MathProgBase.hesslag_structure(d::MadsModelLin) = Int[],Int[]
-	@eval function MathProgBase.eval_jac_g(d::MadsModelLin, J::AbstractVector, p::AbstractVector)
+	@eval MathOptInterface.jacobian_structure(d::MadsModelLin) = [1,1,2,2,3,3,4,4],[1,2,1,2,1,2,1,2]
+	@eval MathOptInterface.hessian_lagrangian_structure(d::MadsModelLin) = Int[],Int[]
+	@eval function MathOptInterface.eval_jac_g(d::MadsModelLin, J::AbstractVector, p::AbstractVector)
 		ji = 1
 		for i = 1:no
 			J[ji + 0] = t[i]
@@ -490,28 +490,28 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector
 	g = Array{Float64}(undef, no)
 	for h in horizons
 		par_best = pinit
-		phi_best = MathProgBase.eval_f(MadsModelLin(), par_best)
+		phi_best = MathOptInterface.eval_f(MadsModelLin(), par_best)
 		for mm = ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf
 			for r = 1:retries
-				m = MathProgBase.NonlinearModel(solver)
+				m = MathOptInterface.NonlinearModel(solver)
 				for i = 1:no
 					omin[i] = t[i] - h
 					omax[i] = t[i] + h
 				end
-				MathProgBase.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelLin())
+				MathOptInterface.loadproblem!(m, np, no, pmin, pmax, omin, omax, Symbol(mm), MadsModelLin())
 				if r > 1 || random
 					for i = 1:np
 						p[i] = rand(Mads.rng) * (pmax[i] - pmin[i]) + pmin[i]
 					end
-					MathProgBase.setwarmstart!(m, p)
+					MathOptInterface.setwarmstart!(m, p)
 				else
-					MathProgBase.setwarmstart!(m, pinit)
+					MathOptInterface.setwarmstart!(m, pinit)
 				end
-				MathProgBase.optimize!(m)
-				stat = MathProgBase.status(m)
-				phi = MathProgBase.getobjval(m)
-				par = MathProgBase.getsolution(m)
+				MathOptInterface.optimize!(m)
+				stat = MathOptInterface.status(m)
+				phi = MathOptInterface.getobjval(m)
+				par = MathOptInterface.getsolution(m)
 				# println("OF = $(phi) $(stat)")
 				if stat != :Infeasible
 					if mm == "Max"
@@ -526,10 +526,10 @@ function infogap_mpb_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector
 						end
 					end
 				end
-				#@show MathProgBase.getsolution(m)
+				#@show MathOptInterface.getsolution(m)
 			end
-			# of = MathProgBase.eval_f(MadsModelLin(), par_best)
-			# MathProgBase.eval_g(MadsModelLin(), g, par_best)
+			# of = MathOptInterface.eval_f(MadsModelLin(), par_best)
+			# MathOptInterface.eval_g(MadsModelLin(), g, par_best)
 			# println("Optimal observations: $g")
 			# f = Mads.forward(madsdata, par_best)
 			# @show f

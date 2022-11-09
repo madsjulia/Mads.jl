@@ -28,4 +28,4 @@
 @time import Optim
 @time import StatsBase
 @time import JuMP
-@time import MathProgBase
+@time import MathOptInterface
