@@ -171,7 +171,7 @@ include("MadsCMads.jl")
 
 include("MadsInfoGap.jl")
 include("MadsBlindSourceSeparation.jl")
-include("MadsMathProgBase.jl")
+include("MadsMathOptInterface.jl")
 
 include("MadsSensitivityAnalysis.jl")
 
