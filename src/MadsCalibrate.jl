@@ -57,7 +57,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 			paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 		end
 		if i == 1 && first_init
-			@warn("Using initial values for the first run!")
+			@info("Using initial values for the first run!")
 		else
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
@@ -190,6 +190,11 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results && rootname != ""
+		outfile = open("$rootname.initialresults", "a+")
+		write(outfile, string("OF: ", Mads.of(madsdata), "\n"))
+		write(outfile, string("lambda: ", lambda, "\n"))
+		write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, initparams)), "\n"))
+		close(outfile)
 		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			outfile = open("$rootname.iterationresults", "a+")
