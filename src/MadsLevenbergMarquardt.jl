@@ -343,7 +343,7 @@ keytext=Dict("root"=>"Mads problem root name",
 			"callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
 			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
 	MAX_LAMBDA = 1e16 # minimum trust region radius
 	MIN_LAMBDA = 1e-16 # maximum trust region radius
 	MIN_STEP_QUALITY = 1e-3
@@ -368,8 +368,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
-	callbackiteration(x, residual, NaN)
 	Mads.madsoutput("Initial OF: $residual\n");
+	callbackinitial(x, residual, NaN)
 
 	# Maintain a trace of the system.
 	tr = LsqFit.OptimizationTrace{typeof(LsqFit.LevenbergMarquardt())}()
