@@ -190,11 +190,14 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results && rootname != ""
-		outfile = open("$rootname.initialresults", "a+")
-		write(outfile, string("OF: ", Mads.of(madsdata), "\n"))
-		write(outfile, string("lambda: ", lambda, "\n"))
-		write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, initparams)), "\n"))
-		close(outfile)
+		function initialcallback(x_init::AbstractVector, of::Number, lambda::Number)
+			x_init_real = sinetransform(x_init, lowerbounds, upperbounds, indexlogtransformed)
+			outfile = open("$rootname.initialresults", "a+")
+			write(outfile, string("OF: ", of, "\n"))
+			write(outfile, string("lambda: ", lambda, "\n"))
+			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_init_real)), "\n"))
+			close(outfile)
+		end
 		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			outfile = open("$rootname.iterationresults", "a+")
@@ -230,7 +233,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	elseif usenaive == :lmlin
 		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->interationcallback(best_x, of, lambda))
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackinitial=initialcallback, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback)
 	end
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
