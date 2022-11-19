@@ -10,6 +10,14 @@ function minimumnan(X, c...; kw...)
 	minimum(X[.!isnan.(X)], c...; kw...)
 end
 
+function maximuminf(X, c...; kw...)
+	maximum(X[.!isinf.(X)], c...; kw...)
+end
+
+function minimuminf(X, c...; kw...)
+	minimum(X[.!isinf.(X)], c...; kw...)
+end
+
 function rmsenan(t::AbstractVector, o::AbstractVector)
 	it = .!isnan.(t)
 	ot = .!isnan.(o)
