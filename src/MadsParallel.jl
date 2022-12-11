@@ -56,7 +56,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		end
 		c = ntasks_per_node > 0 ? ntasks_per_node : 1
 		if typeof(nodenames) == Vector{String}
-			for n = 1:length(nodenames)
+			for n = eachindex(nodenames)
 				for j = 1:c
 					push!(h, nodenames[n])
 				end
@@ -98,7 +98,7 @@ function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_
 		arguments[:exename] = exename
 		arguments[:dir] = dir
 		if test
-			for i = 1:length(h)
+			for i = eachindex(h)
 				@info("Connecting to $(h[i]) ...")
 				try
 					Distributed.addprocs([h[i]]; arguments...)
@@ -216,7 +216,7 @@ function parsenodenames(nodenames::AbstractString, ntasks_per_node::Integer=1)
 		end
 	else
 		cm = split(split(ss[2], "]")[1], ",")
-		for n = 1:length(cm)
+		for n = eachindex(cm)
 			d = split(cm[n], "-")
 			e = length(d) == 1 ? d[1] : d[2]
 			l = length(d[1])

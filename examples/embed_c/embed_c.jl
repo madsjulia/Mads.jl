@@ -17,7 +17,7 @@ function fjfunc_ex2( x, o )
 	for j = 1:n_o
 		o[j] = 0
 	end
-	for i = 1:length(x)
+	for i = eachindex(x)
 		for j = 1:n_o
 			o[j] += x[i] * i / j
 		end

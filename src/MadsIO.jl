@@ -262,7 +262,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
 				if haskey(wells[key], "obs") && wells[key]["obs"] !== nothing
-					for i = 1:length(wells[key]["obs"])
+					for i = eachindex(wells[key]["obs"])
 						for k in keys(wells[key]["obs"][i])
 							wells[key]["obs"][i] = wells[key]["obs"][i][k]
 						end
@@ -357,7 +357,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 	end
 	if explicit
 		madsdata2 = loadyamlfile(madsdata["Filename"])
-		for i = 1:length(madsdata2["Parameters"])
+		for i = eachindex(madsdata2["Parameters"])
 			pdict = madsdata2["Parameters"][i]
 			paramname = collect(keys(pdict))[1]
 			realparam = pdict[paramname]
@@ -1063,7 +1063,7 @@ function regexs2obs(obsline::AbstractString, regexs::Vector{Regex}, obsnames::Ve
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()
-	for i = 1:length(regexs)
+	for i = eachindex(regexs)
 		m = match(regexs[i], obsline, offset)
 		if m === nothing
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
@@ -1454,7 +1454,7 @@ function recursivermdir(s::AbstractString; filename=true)
 		end
 		push!(d, sc)
 	end
-	for i = 1:length(d)
+	for i = eachindex(d)
 		sc = d[i]
 		if isdir(sc)
 			rm(sc; force=true)

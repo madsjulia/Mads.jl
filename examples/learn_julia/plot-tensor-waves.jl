@@ -39,8 +39,8 @@ function shift(d::Number, y::AbstractVector)
 	[zeros(1+i); y; zeros(1000-i)] .+ rand(2002) ./ 10
 end
 
-for i = 1:length(xm)
-	for j = 1:length(ym)
+for i = eachindex(xm)
+	for j = eachindex(ym)
 		x = xg[j, i]
 		y = yg[j, i]
 		d1 = sqrt((x-s1[1])^2 + (y-s1[2])^2)
