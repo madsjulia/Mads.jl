@@ -80,7 +80,7 @@ Returns:
 function getsourcekeys(madsdata::AbstractDict)
 	sourcekeys = Array{String}(undef, 0)
 	if haskey(madsdata, "Sources")
-		for i = 1:length(madsdata["Sources"])
+		for i = eachindex(madsdata["Sources"])
 			for k = keys(madsdata["Sources"][1])
 				sk = collect(String, keys(madsdata["Sources"][i][k]))
 				b = fill("Source1_", length(sk))
@@ -98,7 +98,7 @@ getparamstypes = [Float64, Any, Any, Float64, String, String]
 getparamsdefault = [0, "opt", false, sqrt(eps(Float32)), "", ""]
 getparamslogdefault = [1, "opt", true, sqrt(eps(Float32)), "", ""]
 global index = 0
-for i = 1:length(getparamsnames)
+for i = eachindex(getparamsnames)
 	global index = i
 	paramname = getparamsnames[index]
 	paramtype = getparamstypes[index]
@@ -503,7 +503,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistnormal!(madsdata::AbstractDict, mean::AbstractVector, stddev::AbstractVector)
 	paramkeys = getparamkeys(madsdata)
-	for i = 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["dist"] = "Normal($(mean[i]),$(stddev[i]))"
 	end
 end
@@ -518,7 +518,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setparamsdistuniform!(madsdata::AbstractDict, min::AbstractVector, max::AbstractVector)
 	paramkeys = getparamkeys(madsdata)
-	for i = 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		madsdata["Parameters"][paramkeys[i]]["dist"] = "Uniform($(min[i]),$(max[i]))"
 	end
 end
@@ -529,7 +529,7 @@ keywordname = ["opt", "log"]
 keywordvalsNOT = [nothing, false]
 functiondescription = ["optimized", "log-transformed"]
 global index = 0
-for i = 1:length(getfunction)
+for i = eachindex(getfunction)
 	global index = i
 	q = quote
 		"""

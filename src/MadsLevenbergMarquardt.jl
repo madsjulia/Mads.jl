@@ -153,7 +153,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	"""
 	function f_lm(arrayparameters::AbstractVector)
 		parameters = copy(initparams)
-		for i = 1:length(arrayparameters)
+		for i = eachindex(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)

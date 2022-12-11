@@ -54,7 +54,7 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for 
 		@assert length(obs) == length(minorig)
 		@assert length(obs) == length(maxorig)
 	end
-	for i = 1:length(obs)
+	for i = eachindex(obs)
 		d = OrderedCollections.OrderedDict{String, Any}("target"=>obs[i], "weight"=>weight[i])
 		if length(time) > 0
 			push!(d, "time"=>time[i])
@@ -123,7 +123,7 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 	mdp = OrderedCollections.OrderedDict()
 	mde = OrderedCollections.OrderedDict()
 	global mapping_expression = falses(length(param))
-	for i = 1:length(param)
+	for i = eachindex(param)
 		if typeof(type[i]) === Bool
 			t = type[i] == true ? "opt" : "fixed"
 		else
@@ -139,7 +139,7 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 				push!(d, "dist"=>dist[i])
 			elseif (distribution && length(dist) == 0)
 				push!(d, "dist"=>"Uniform($(min[i]), $(max[i]))")
-			elseif length(min) == length(param) && length(max) == length(param) 
+			elseif length(min) == length(param) && length(max) == length(param)
 				push!(d, "min"=>min[i])
 				push!(d, "max"=>max[i])
 			end

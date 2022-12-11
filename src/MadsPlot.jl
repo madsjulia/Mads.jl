@@ -118,7 +118,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
 	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
 	if haskey(madsdata, "Sources")
-		for i = 1:length(madsdata["Sources"])
+		for i = eachindex(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			if sourcetype == "box" || sourcetype == "gauss"
 				rectangle = Array{Float64}(undef, 4)
