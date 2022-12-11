@@ -124,7 +124,7 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, 
 	optparamkeys = getoptparamkeys(madsdata)
 	modelparams = Array{Float64}(undef, length(parametersamples), nummodelruns)
 	for i = 1:nummodelruns
-		for j = 1:length(optparamkeys)
+		for j = eachindex(optparamkeys)
 			modelparams[j, i] = parametersamples[optparamkeys[j]][i]
 		end
 	end
@@ -133,7 +133,7 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, 
 	local horizons::Vector{Float64}
 	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
-	for i = 1:length(madsdata["Choices"])
+	for i = eachindex(madsdata["Choices"])
 		Mads.madsinfo("Choice #$i: $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
 		if length(likelihoodparams) == 0

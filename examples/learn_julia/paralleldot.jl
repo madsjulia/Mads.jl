@@ -22,7 +22,7 @@ Xt = X'
 @Distributed.everywhere function dotcol(a, B, j)
 	length(a) == size(B,1) || throw(DimensionMismatch("a and B must have the same number of rows"))
 	s = 0.0
-	@inbounds @simd for i = 1:length(a)
+	@inbounds @simd for i = eachindex(a)
 		s += a[i]*B[i,j]
 	end
 	s

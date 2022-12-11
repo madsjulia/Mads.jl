@@ -239,7 +239,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
 	minimumdict = OrderedCollections.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
-	for i = 1:length(optparamkeys)
+	for i = eachindex(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimizer[i]
 	end
 	return minimumdict, results

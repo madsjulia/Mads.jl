@@ -77,7 +77,7 @@ function addsourceparameters!(madsdata::AbstractDict)
 		if !haskey(madsdata, "Parameters")
 			madsdata["Parameters"] = OrderedCollections.OrderedDict()
 		end
-		for i = 1:length(madsdata["Sources"])
+		for i = eachindex(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = collect(keys(madsdata["Sources"][i][sourcetype]))
 			if length(findall((in)(sourceparams), anasolsourcerequired)) < length(anasolsourcerequired)
@@ -113,7 +113,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function copyaquifer2sourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources") && haskey(madsdata, "Parameters")
-		for i = 1:length(madsdata["Sources"])
+		for i = eachindex(madsdata["Sources"])
 			for k in keys(madsdata["Sources"][i])
 				for pkey in keys(madsdata["Parameters"])
 					if !occursin("source", pkey)
@@ -134,7 +134,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function removesourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources")
-		for i = 1:length(madsdata["Sources"])
+		for i = eachindex(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
 			sourceparams = keys(madsdata["Sources"][i][sourcetype])
 			for sourceparam in sourceparams
@@ -472,7 +472,7 @@ function computemass(madsdata::AbstractDict; time::Number=0)
 	mr = 0
 	mass_injected = 0
 	mass_reduced = 0
-	for i = 1:length(madsdata["Sources"])
+	for i = eachindex(madsdata["Sources"])
 		f = parameters[string("source", i, "_", "f")]["init"]
 		t0 = parameters[string("source", i, "_", "t0")]["init"]
 		t1 = parameters[string("source", i, "_", "t1")]["init"]

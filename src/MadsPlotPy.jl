@@ -47,7 +47,7 @@ function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true
 	alpha = ones(length(plotx))
 	alpha[1] = alpha[2] = 0
 	PyPlot.scatter(plotx, ploty, marker="o", c=log10.(plotc), s=70, cmap="jet")
-	for i = 1:length(l)
+	for i = eachindex(l)
 		PyPlot.annotate(l[i], xy=(x[i], y[i]), xytext=(-2, 2), fontsize=8, textcoords="offset points", ha="right", va="bottom")
 	end
 	PyPlot.close()

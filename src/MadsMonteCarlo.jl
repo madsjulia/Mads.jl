@@ -16,7 +16,7 @@ function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::I
 	pinit = getparamsinit(madsdata, optparamkeys)
 	pmin = getparamsmin(madsdata, optparamkeys)
 	pmax = getparamsmax(madsdata, optparamkeys)
-	for i = 1:length(optparamkeys)
+	for i = eachindex(optparamkeys)
 		mu = (pinit[i] - pmin[i]) / (pmax[i] - pmin[i])
 		mu = min(1 - 1e-3, max(mu, 1e-3))
 		alpha = (1 - sigma ^ 2 - sigma ^ 2 * ((1 - mu) / mu) - mu) / (sigma ^ 2 + 2 * sigma ^ 2 * ((1 - mu) / mu) + sigma ^ 2 * ((1 - mu) / mu) ^ 2)
@@ -82,7 +82,7 @@ if isdefined(Mads, :Klara)
 		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
 		optparamkeys = getoptparamkeys(madsdata)
 		initvals = Array{Float64}(undef, length(optparamkeys))
-		for i = 1:length(optparamkeys)
+		for i = eachindex(optparamkeys)
 			initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
 		end
 		# mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
@@ -206,7 +206,7 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 	for i = 1:N
 		klog = 1
 		knonlog = 1
-		for j = 1:length(params)
+		for j = eachindex(params)
 			if paramtypes[j] == "opt"
 				if paramlogs[j] == true || paramlogs[j] == "yes"
 					params[j] = 10 ^ logoptparams[klog, i]
