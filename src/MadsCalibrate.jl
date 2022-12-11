@@ -224,8 +224,9 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			close(outfile)
 		end
 	else
+		initialcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
 		interationcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
-		jacobiancallback = (x::AbstractVector, J::AbstractMatrix)->
+		jacobiancallback = (x::AbstractVector, J::AbstractMatrix)->nothing
 		finalcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
 	end
 	if usenaive == true
