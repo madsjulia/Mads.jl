@@ -9,7 +9,7 @@ download(url, nm)
 df = CSV.read(nm, DataFrames.DataFrame)
 rm(nm)
 
-trace = PlotlyJS.scattergeo(;locationmode="USA-states",
+trace = PlotlyJS.scattergeo(; locationmode="USA-states",
 					lat=df[!, :lat],
 					lon=df[!, :lon],
 					hoverinfo="text",
