@@ -16,8 +16,8 @@ import StipplePlotly
 			marker = StipplePlotly.PlotDataMarker(size=10, color="orange")
 		)
 	]
-	layout::R{PlotLayout} = StipplePlotly.PlotLayout(
-		mapbox = PlotLayoutMapbox(style="stamen-terrain", zoom =5,  center = MCenter(-73, 46)),
+	layout::Stipple.R{StipplePlotly.PlotLayout} = StipplePlotly.PlotLayout(
+		mapbox = StipplePlotly.PlotLayoutMapbox(style="stamen-terrain", zoom =5, center = StipplePlotly.MCenter(-73, 46)),
 		showlegend= false,
 		height= 450,
 		width= 600
@@ -35,8 +35,8 @@ function ui(model)
 	)
 end
 
-route("/") do
-	Stipple.init(Model) |> ui |> html
+Stipple.route("/") do
+	Stipple.init(Model) |> ui |> Stipple.html
 end
 
 Stipple.up()

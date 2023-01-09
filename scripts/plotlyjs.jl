@@ -1,3 +1,8 @@
+import Plotly
+import PlotlyJS
+import CSV
+import DataFrames
+
 nm = tempname()
 url = "https://raw.githubusercontent.com/plotly/datasets/master/2014_us_cities.csv"
 download(url, nm)
@@ -21,5 +26,5 @@ geo = PlotlyJS.attr(scope="usa",
 			subunitcolor="rgb(255,255,255)",
 			countrycolor="rgb(255,255,255)")
 
-layout = PlotlyJS.Layout(;title="2014 US City Populations", showlegend=false, geo=geo)
+layout = PlotlyJS.Layout(; title="2014 US City Populations", showlegend=false, geo=geo)
 PlotlyJS.plot(trace, layout)
