@@ -17,7 +17,7 @@ import StipplePlotly
 		)
 	]
 	layout::Stipple.R{StipplePlotly.PlotLayout} = StipplePlotly.PlotLayout(
-		mapbox = StipplePlotly.PlotLayoutMapbox(style="stamen-terrain", zoom=5, center= StipplePlotly.MCenter(-73, 46)),
+		mapbox = StipplePlotly.PlotLayoutMapbox(; style="stamen-terrain", zoom=5, center=StipplePlotly.MCenter(-73, 46)),
 		showlegend= false,
 		height= 450,
 		width= 600
@@ -26,6 +26,8 @@ import StipplePlotly
 end
 
 ui_model_map = UIModelMap |> Stipple.init
+
+ui_model_map = Stipple.init(UIModelMap)
 
 function ui_map(ui_model_map)
 	Stipple.page(
