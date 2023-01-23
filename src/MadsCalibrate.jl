@@ -3,6 +3,7 @@ import DocumentFunction
 import Distributed
 import SharedArrays
 import Statistics
+import Optim
 
 """
 Calibrate with random initial guesses
@@ -116,7 +117,7 @@ Returns:
 - boolean vector (converged/not converged)
 - array with estimate model parameters
 """
-function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, save_results::Bool=true, first_init::Bool=false, localsa::Bool=false)
+function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, save_results::Bool=true, first_init::Bool=true, localsa::Bool=false, all_results::Bool=true)
 	Mads.setseed(seed; rng=rng)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
@@ -136,22 +137,32 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		!quiet
-		if i == 1 && first_init
-			@info("First run using initial values #$(i): OF = $phi (converged=$(converged))")
-		else
-			@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
+		if !quiet
+			if i == 1 && first_init
+				@info("First run using initial values #$(i): OF = $phi (converged=$(converged))")
+			else
+				@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
+			end
 		end
 		allphi[i] = phi
 		allconverged[i] = converged
-		j = 1
-		for paramkey in keys(paramoptvalues)
+		for (j, paramkey) in enumerate(keys(paramoptvalues))
 			allparameters[i,j] = parameters[paramkey]
-			j += 1
 		end
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
-	return allphi, allconverged, allparameters
+	if all(isnan.(allphi))
+		@warn("Something is wrong! All the objective function estimates are NaN!")
+	end
+	if all_results
+		return allphi, allconverged, allparameters
+	else
+		isort = sortperm(allphi)
+		for (j, paramkey) in enumerate(keys(paramoptvalues))
+			paramdict[paramkey] = allparameters[isort[1],j]
+		end
+		return paramdict
+	end
 end
 
 
