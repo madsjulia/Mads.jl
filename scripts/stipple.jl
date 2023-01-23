@@ -1,7 +1,7 @@
 import Stipple
 import StipplePlotly
 
-@Stipple.reactive! mutable struct Model <: Stipple.ReactiveModel
+@Stipple.reactive! mutable struct UIModelMap <: Stipple.ReactiveModel
 	data::Stipple.R{Vector{StipplePlotly.PlotData}} = [
 		StipplePlotly.PlotData(
 			plot = StipplePlotly.Charts.PLOT_TYPE_SCATTERMAPBOX,
@@ -17,7 +17,7 @@ import StipplePlotly
 		)
 	]
 	layout::Stipple.R{StipplePlotly.PlotLayout} = StipplePlotly.PlotLayout(
-		mapbox = StipplePlotly.PlotLayoutMapbox(style="stamen-terrain", zoom =5, center = StipplePlotly.MCenter(-73, 46)),
+		mapbox = StipplePlotly.PlotLayoutMapbox(style="stamen-terrain", zoom=5, center= StipplePlotly.MCenter(-73, 46)),
 		showlegend= false,
 		height= 450,
 		width= 600
@@ -25,18 +25,19 @@ import StipplePlotly
 	config::Stipple.R{StipplePlotly.PlotConfig} = StipplePlotly.PlotConfig()
 end
 
-model = Model |> Stipple.init
+ui_model_map = UIModelMap |> Stipple.init
 
-function ui(model)
+function ui_map(ui_model_map)
 	Stipple.page(
-		model,
+		ui_model_map,
 		class = "container",
-		StipplePlotly.plot(:data, layout = :layout, config = :config)
+		StipplePlotly.plot(:data; layout=:layout, config="{displaylogo:false, scrollzoom:true}")
 	)
 end
 
 Stipple.route("/") do
-	Stipple.init(Model) |> ui |> Stipple.html
+	Stipple.init(UIModelMap) |> ui_map |> Stipple.html
 end
 
-Stipple.up()
+Stipple.down()
+Stipple.up(; async=true)
