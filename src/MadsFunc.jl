@@ -81,16 +81,33 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia function") && (!haskey(madsdata, "Linked directory") || madsdata["Linked directory"] != true)
 		if typeof(madsdata["Julia function"]) <: Function
-			Mads.madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
-			"MADS command function"
-			function madscommandfunctionvector(parameters::AbstractDict)
-				o = madsdata["Julia function"](collect(values(parameters)))
-				return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
-			end
-			madscommandfunction = madscommandfunctionvector
+			fn = :nothing
+			jf = madsdata["Julia function"]
+		elseif typeof(madsdata["Julia function"]) <: Symbol
+			fn = madsdata["Julia function"]
+		elseif typeof(madsdata["Julia function"]) <: String
+			fn = Symbol(madsdata["Julia function"])
 		else
-			madscritical("Julia function $(madsdata["Julia function"]) is not a function!")
+			madscritical("Julia function $(madsdata["Julia function"]) is not properly defined!")
 		end
+		if fn != :nothing
+			if isdefined(Mads, fn)
+				jf = Core.eval(Mads, fn)
+			elseif isdefined(Main, fn)
+				jf = Core.eval(Main, fn)
+			elseif isdefined(Base, fn)
+				jf = Core.eval(Base, fn)
+			else
+				madscritical("Julia function $(fn) is not defined!")
+			end
+		end
+		Mads.madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
+		"MADS command function based on a Julia function '$(madsdata["Julia function"])'"
+		function madscommandfunctionvector(parameters::AbstractDict)
+			o = jf(collect(values(parameters)))
+			return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
+		end
+		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
 		madscommandfunction = madsdata["Julia model"]

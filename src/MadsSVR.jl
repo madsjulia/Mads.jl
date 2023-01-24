@@ -2,7 +2,7 @@ import SVR
 import OrderedCollections
 import DocumentFunction
 
-function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
+function svrtraining(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
 	numberofsamples = size(paramarray, 1)
 	predictions = Mads.forward(madsdata, permutedims(paramarray))
 
@@ -28,14 +28,14 @@ function svrtrain(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::B
 		@info("SVR discrepancy $(maximum(abs.(svrpredictions2 .- predictions)))")
 		Mads.spaghettiplot(madsdata, svrpredictions2, keyword="svr-prediction2", format="SVG")
 		Mads.display("$rootname-svr-prediction2-$numberofsamples-spaghetti.svg")
-		svrpredictions = svrpredict(svrmodel, paramarray)
+		svrpredictions = svrprediction(svrmodel, paramarray)
 		@info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
 		Mads.spaghettiplot(madsdata, svrpredictions, keyword="svr-prediction", format="SVG")
 		Mads.display("$rootname-svr-prediction-$numberofsamples-spaghetti.svg")
 	end
 	return svrmodel
 end
-function svrtrain(madsdata::AbstractDict, numberofsamples::Integer=100; addminmax::Bool=true, kw...)
+function svrtraining(madsdata::AbstractDict, numberofsamples::Integer=100; addminmax::Bool=true, kw...)
 	paramdict = Mads.getparamrandom(madsdata, numberofsamples)
 	paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 	if addminmax
@@ -47,13 +47,13 @@ function svrtrain(madsdata::AbstractDict, numberofsamples::Integer=100; addminma
 		paramarray = [paramarray; gmin; gmax; permutedims(pinit)]
 		numberofsamples += 2 * length(k) + 1
 	end
-	svrtrain(madsdata, paramarray; kw...)
+	svrtraining(madsdata, paramarray; kw...)
 end
 
 @doc """
 Train SVR
 
-$(DocumentFunction.documentfunction(svrtrain;
+$(DocumentFunction.documentfunction(svrtraining;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"numberofsamples"=>"number of random samples in the training set [default=`100`]"),
 keytext=Dict("check"=>"check SVR performance [default=`false`]",
@@ -66,8 +66,7 @@ keytext=Dict("check"=>"check SVR performance [default=`false`]",
 			"kernel_type"=>"kernel type[default=`SVR.RBF`]",
 			"degree"=>"degree of the polynomial kernel [default=`3`]",
 			"gamma"=>"coefficient for RBF, POLY and SIGMOND kernel types [default=`1/numberofsamples`]",
-			"coef0"=>"independent term in kernel function; important only in POLY and  SIGMOND kernel types
-[default=`0`]",
+			"coef0"=>"independent term in kernel function; important only in POLY and SIGMOND kernel types [default=`0`]",
 			"C"=>"cost; penalty parameter of the error term [default=`1000.0`]",
 			"cache_size"=>"size of the kernel cache [default=`100.0`]",
 			"shrinking"=>"apply shrinking heuristic [default=`true`]",
@@ -79,10 +78,10 @@ keytext=Dict("check"=>"check SVR performance [default=`false`]",
 Returns:
 
 - Array of SVR models
-""" svrtrain
+""" svrtraining
 
 #=
-function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float64})
+function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float64})
 	npred = length(svrmodel)
 	y = Array(Float64, npred)
 	for i=1:npred
@@ -91,7 +90,7 @@ function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float64})
 	return y
 end
 =#
-function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Array{Float64, 2})
+function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Array{Float64, 2})
 	npred = length(svrmodel)
 	y = Array{Float64}(undef, 0, size(paramarray, 1))
 	for i=1:npred
@@ -99,18 +98,17 @@ function svrpredict(svrmodel::Vector{SVR.svmmodel}, paramarray::Array{Float64, 2
 	end
 	return y
 end
-
 @doc """
 Predict SVR
 
-$(DocumentFunction.documentfunction(svrpredict;
+$(DocumentFunction.documentfunction(svrprediction;
 argtext=Dict("svrmodel"=>"array of SVR models",
 			"paramarray"=>"parameter array")))
 
 Returns:
 
 - SVR predicted observations (dependent variables) for a given set of parameters (independent variables)
-""" svrpredict
+""" svrprediction
 
 """
 Free SVR
@@ -188,8 +186,7 @@ keytext=Dict("check"=>"check SVR performance [default=`false`]",
 			"kernel_type"=>"kernel type[default=`SVR.RBF`]",
 			"degree"=>"degree of the polynomial kernel [default=`3`]",
 			"gamma"=>"coefficient for RBF, POLY and SIGMOND kernel types [default=`1/numberofsamples`]",
-			"coef0"=>"independent term in kernel function; important only in POLY and  SIGMOND kernel types
-[default=`0`]",
+			"coef0"=>"independent term in kernel function; important only in POLY and SIGMOND kernel types [default=`0`]",
 			"C"=>"cost; penalty parameter of the error term [default=`1000.0`]",
 			"cache_size"=>"size of the kernel cache [default=`100.0`]",
 			"shrinking"=>"apply shrinking heuristic [default=`true`]",
@@ -211,7 +208,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	obsnames = Mads.getobskeys(madsdata)
 	npreds = length(obsnames)
 	function svrexec(paramarray::Union{Vector{Float64}, Array{Float64, 2}})
-		return svrpredict(svrmodel, paramarray)
+		return svrprediction(svrmodel, paramarray)
 	end
 	function svrexec(paramdict::AbstractDict)
 		if length(paramdict[optnames[1]]) == 1
@@ -222,11 +219,11 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 			parvector = collect(values(d))
 			n = length(parvector)
 			parvector = reshape(parvector, 1, n)
-			p = svrpredict(svrmodel, parvector)
+			p = svrprediction(svrmodel, parvector)
 			d = OrderedCollections.OrderedDict{String, Float64}(zip(obsnames, p))
 		else
 			paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
-			d = svrpredict(svrmodel, paramarray)
+			d = svrprediction(svrmodel, paramarray)
 		end
 		return d
 	end
@@ -244,7 +241,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	if loadsvr
 		svrread()
 	else
-		svrmodel = svrtrain(madsdata, numberofsamples; check=check, addminmax=addminmax, savesvr=savesvr, svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, epsilon=epsilon, nu=nu, cache_size=cache_size, shrinking=shrinking, probability=probability, tol=tol);
+		svrmodel = svrtraining(madsdata, numberofsamples; check=check, addminmax=addminmax, savesvr=savesvr, svm_type=svm_type, kernel_type=kernel_type, gamma=gamma, coef0=coef0, C=C, epsilon=epsilon, nu=nu, cache_size=cache_size, shrinking=shrinking, probability=probability, tol=tol);
 	end
 
 	return svrexec, svrread, svrsave, svrclean

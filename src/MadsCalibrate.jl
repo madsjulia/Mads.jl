@@ -125,6 +125,10 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allphi = SharedArrays.SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArrays.SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArrays.SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
+	if haskey(madsdata, "Julia function")
+		function_name = Symbol(split(string(typeof(madsdata["Julia function"]).name.name), '#')[2])
+	end
+	@show function_name
 	@sync @Distributed.distributed for i in 1:numberofsamples
 		if !quiet && i == 1 && first_init
 			@info("Using initial values for the first run!")
@@ -134,35 +138,39 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 			end
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
-		phi = results.minimum
-		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		if !quiet
-			if i == 1 && first_init
-				@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
-			else
-				@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
-			end
+		if haskey(madsdata, "Julia function")
+			madsdata["Julia function"] = function_name
 		end
-		allphi[i] = phi
-		allconverged[i] = converged
-		for (j, paramkey) in enumerate(keys(paramoptvalues))
-			allparameters[i,j] = parameters[paramkey]
-		end
+		@show Mads.forward(madsdata)
+		# parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
+		# phi = results.minimum
+		# converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		# if !quiet
+		# 	if i == 1 && first_init
+		# 		@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
+		# 	else
+		# 		@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
+		# 	end
+		# end
+		# allphi[i] = phi
+		# allconverged[i] = converged
+		# for (j, paramkey) in enumerate(keys(paramoptvalues))
+		# 	allparameters[i,j] = parameters[paramkey]
+		# end
 	end
-	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
-	if all(isnan.(allphi))
-		@warn("Something is wrong! All the objective function estimates are NaN!")
-	end
-	if all_results
-		return allphi, allconverged, allparameters
-	else
-		isort = sortperm(allphi)
-		for (j, paramkey) in enumerate(keys(paramoptvalues))
-			paramdict[paramkey] = allparameters[isort[1],j]
-		end
-		return paramdict
-	end
+	# Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
+	# if all(isnan.(allphi))
+	# 	@warn("Something is wrong! All the objective function estimates are NaN!")
+	# end
+	# if all_results
+	# 	return allphi, allconverged, allparameters
+	# else
+	# 	isort = sortperm(allphi)
+	# 	for (j, paramkey) in enumerate(keys(paramoptvalues))
+	# 		paramdict[paramkey] = allparameters[isort[1],j]
+	# 	end
+	# 	return paramdict
+	# end
 end
 
 """
