@@ -41,7 +41,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, all::Bool=false, save_results::Bool=true, first_init::Bool=false)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng=nothing, quiet::Bool=true, all::Bool=false, save_results::Bool=true, first_init::Bool=true)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -54,7 +54,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	local bestresult
 	bestphi = Inf
 	for i in 1:numberofsamples
-		if i == 1 && first_init
+		if !quiet && i == 1 && first_init
 			@info("Using initial values for the first run!")
 		else
 			for paramkey in keys(paramoptvalues)
@@ -65,7 +65,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		!quiet && @info("Random initial guess #$i: OF = $phi (converged=$converged)")
+		!quiet && @info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
 		if phi < bestphi || i == 1
 			bestparameters = parameters
 			bestresult = results
@@ -126,7 +126,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allconverged = SharedArrays.SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArrays.SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
 	@sync @Distributed.distributed for i in 1:numberofsamples
-		if i == 1 && first_init
+		if !quiet && i == 1 && first_init
 			@info("Using initial values for the first run!")
 		else
 			for paramkey in keys(paramoptvalues)
@@ -139,7 +139,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
 		if !quiet
 			if i == 1 && first_init
-				@info("First run using initial values #$(i): OF = $phi (converged=$(converged))")
+				@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
 			else
 				@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
 			end
@@ -164,7 +164,6 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		return paramdict
 	end
 end
-
 
 """
 Calibrate Mads model using a constrained Levenberg-Marquardt technique
