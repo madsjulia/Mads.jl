@@ -82,6 +82,8 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 		fn = Symbol(madsdata["Julia function"])
 		if isdefined(Mads, fn)
 			madsdata["Julia function"] = Core.eval(Mads, fn)
+		elseif isdefined(Main, fn)
+			madsdata["Julia function"] = Core.eval(Main, fn)
 		elseif isdefined(Base, fn)
 			madsdata["Julia function"] = Core.eval(Base, fn)
 		else

@@ -81,7 +81,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Julia function") && (!haskey(madsdata, "Linked directory") || madsdata["Linked directory"] != true)
 		if typeof(madsdata["Julia function"]) <: Function
-			Mads.madsinfo("""Model setup: Julia dunction -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
+			Mads.madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
 			"MADS command function"
 			function madscommandfunctionvector(parameters::AbstractDict)
 				o = madsdata["Julia function"](collect(values(parameters)))
@@ -89,7 +89,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			end
 			madscommandfunction = madscommandfunctionvector
 		else
-			madscritical("Julia function $(madsdata["Julia function"]) is not defined!")
+			madscritical("Julia function $(madsdata["Julia function"]) is not a function!")
 		end
 	elseif haskey(madsdata, "Julia model")
 		Mads.madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
@@ -168,9 +168,9 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 				# @info("Content of directory $(cwd): $(readdir(cwd))")
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
-				if linkdir 
+				if linkdir
 					@info("Linking directories: $(cwd) -> $(tempdirname)")
-					Mads.linktempdir(cwd, tempdirname) 
+					Mads.linktempdir(cwd, tempdirname)
 				end
 				cd(tempdirname)
 				@info("Current working directory: $(tempdirname)")
