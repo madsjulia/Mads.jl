@@ -125,9 +125,6 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allphi = SharedArrays.SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArrays.SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArrays.SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
-	if haskey(madsdata, "Julia function")
-		function_name = Symbol(split(string(typeof(madsdata["Julia function"]).name.name), '#')[2])
-	end
 	@sync @Distributed.distributed for i in 1:numberofsamples
 		if !quiet && i == 1 && first_init
 			@info("Using initial values for the first run!")
@@ -136,9 +133,6 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 				paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
 			end
 			Mads.setparamsinit!(madsdata, paramsoptdict)
-		end
-		if haskey(madsdata, "Julia function")
-			madsdata["Julia function"] = function_name
 		end
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa, parallel_optimization=false)
 		phi = results.minimum
