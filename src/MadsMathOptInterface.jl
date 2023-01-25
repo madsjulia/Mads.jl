@@ -98,7 +98,7 @@ function makemoifunctions(madsdata::AbstractDict)
 	"""
 	Objective function gradient for MathOptInterface optimization
 	"""
-	function grad_o_moi(arrayparameters::AbstractVector; dx::Vector{Float64}=Array{Float64}(undef, 0))
+	function grad_o_moi(arrayparameters::AbstractVector; dx::Vector{Float64}=Vector{Float64}(undef, 0))
 		if sizeof(dx) == 0
 			dx = lineardx
 		end
@@ -120,7 +120,7 @@ function makemoifunctions(madsdata::AbstractDict)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array{Float64}(undef, 0)
+		results = Vector{Float64}(undef, 0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end

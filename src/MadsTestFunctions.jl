@@ -75,13 +75,13 @@ Parameter gradients of the Rosenbrock test function for LM optimization (returns
 $(DocumentFunction.documentfunction(rosenbrock_gradient_lm;
 argtext=Dict("x"=>"parameter vector"),
 keytext=Dict("dx"=>"apply parameter step to compute numerical derivatives [default=`false`]",
-            "center"=>"array with parameter observations at the center applied to compute numerical derivatives [default=`Array{Float64}(undef, 0)`]")))
+            "center"=>"array with parameter observations at the center applied to compute numerical derivatives [default=`Vector{Float64}(undef, 0)`]")))
 
 Returns:
 
 - parameter gradients
 """
-function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Array{Float64}(undef, 0))
+function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Vector{Float64}(undef, 0))
 	grad = Array{Float64}(undef, 2,2)
 	grad[1,1] = -2.0 * (1.0 - x[1])
 	grad[2,1] = -400.0 * (x[2] - x[1]^2) * x[1]
@@ -137,7 +137,7 @@ Returns:
 - parameter gradients of the Rosenbrock test function for LM optimization
 """
 function makerosenbrock_gradient(n::Integer)
-	function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Array{Float64}(undef, 0))
+	function rosenbrock_gradient_lm(x::AbstractVector; dx::Bool=false, center=Vector{Float64}(undef, 0))
 		result = zeros(eltype(x), (2 * (n - 1), n))
 		for i = 1:n - 1
 			result[2 * i - 1, i] = -1

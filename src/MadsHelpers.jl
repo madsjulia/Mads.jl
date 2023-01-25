@@ -213,6 +213,24 @@ function long_tests_off()
 end
 
 """
+Turn on parallel optimization of jacobians and lambdas
+
+$(DocumentFunction.documentfunction(parallel_optimization_on))
+"""
+function parallel_optimization_on()
+	global parallel_optimization = true;
+end
+
+"""
+Turn off parallel optimization of jacobians and lambdas
+
+$(DocumentFunction.documentfunction(parallel_optimization_off))
+"""
+function parallel_optimization_off()
+	global parallel_optimization = false;
+end
+
+"""
 Set MADS debug level
 
 $(DocumentFunction.documentfunction(setdebuglevel;

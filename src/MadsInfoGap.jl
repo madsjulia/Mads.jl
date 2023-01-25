@@ -178,10 +178,10 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 	ymin = Array{Float64}(undef, length(plotrange))
 	ymax = Array{Float64}(undef, length(plotrange))
 	pi = similar(pinit)
-	par_best = Array{Float64}(undef, 0)
-	obs_best = Array{Float64}(undef, 0)
-	hmin = Array{Float64}(undef, 0)
-	hmax = Array{Float64}(undef, 0)
+	par_best = Vector{Float64}(undef, 0)
+	obs_best = Vector{Float64}(undef, 0)
+	hmin = Vector{Float64}(undef, 0)
+	hmax = Vector{Float64}(undef, 0)
 	for h in horizons
 		for mm in ("Min", "Max")
 			phi_best = (mm == "Max") ? -Inf : Inf

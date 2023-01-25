@@ -38,7 +38,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array{Float64}(undef, 0)
+		results = Vector{Float64}(undef, 0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end
@@ -96,7 +96,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 	"""
 	Gradient function for the forward model used for local sensitivity analysis
 	"""
-	function g_sa(arrayparameters::AbstractVector{Float64}; dx::Vector{Float64}=Array{Float64}(undef, 0), center::Vector{Float64}=Array{Float64}(undef, 0))
+	function g_sa(arrayparameters::AbstractVector{Float64}; dx::Vector{Float64}=Vector{Float64}(undef, 0), center::Vector{Float64}=Vector{Float64}(undef, 0))
 		return reusable_inner_grad(tuple(arrayparameters, dx, center))
 	end
 	return f_sa, g_sa
@@ -121,7 +121,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Array{Float64}(undef, 0), obs::AbstractVector=Array{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Vector{Float64}(undef, 0), obs::AbstractVector=Vector{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
@@ -162,7 +162,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 			upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
-			g_sa_sin = Mads.sinetransformgradient(g_sa, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+			g_sa_sin = Mads.sinetransformgradient(g_sa, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
 			J = g_sa_sin(sinparam, center=obs)
 		else
 			J = g_sa(param, center=obs)

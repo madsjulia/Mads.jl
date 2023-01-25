@@ -85,8 +85,8 @@ global sindxdefault = 0.1
 global create_tests = false # dangerous if true
 global long_tests = false # execute long tests
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
-global madsservers2 = ["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18); "es05"; "es06"]
 global nprocs_per_task_default = 1
+global parallel_optimization = false
 const dir = first(splitdir(first(splitdir(pathof(Mads)))))
 
 if haskey(ENV, "MADS_LONG_TESTS")
