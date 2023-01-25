@@ -126,10 +126,12 @@ function makelmfunctions(f::Function)
 	return f_lm, g_lm, o_lm
 end
 function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parallel_optimization)
-	if parallel_gradients
-		@info("Parallel gradients!")
-	else
-		@info("Serial gradients!")
+	if !veryquiet
+		if parallel_gradients
+			@info("Parallel gradients!")
+		else
+			@info("Serial gradients!")
+		end
 	end
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
