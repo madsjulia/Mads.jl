@@ -256,10 +256,10 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		for iw = 1:nW
 			wellname = wk[iw]
 			if madsdata["Wells"][wellname]["on"]
-				c = Array{Float64}(undef, 0)
-				tc = Array{Float64}(undef, 0)
-				d = Array{Float64}(undef, 0)
-				td = Array{Float64}(undef, 0)
+				c = Vector{Float64}(undef, 0)
+				tc = Vector{Float64}(undef, 0)
+				d = Vector{Float64}(undef, 0)
+				td = Vector{Float64}(undef, 0)
 				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] !== nothing
 					o = madsdata["Wells"][wellname]["obs"]
 					nT = length(o)
@@ -324,10 +324,10 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 	elseif haskey(madsdata, "Observations")
 		obskeys = Mads.getobskeys(madsdata)
 		nT = length(obskeys)
-		obs = Array{Float64}(undef, 0)
-		tobs = Array{Float64}(undef, 0)
-		vresults = Array{Float64}(undef, 0)
-		tresults = Array{Float64}(undef, 0)
+		obs = Vector{Float64}(undef, 0)
+		tobs = Vector{Float64}(undef, 0)
+		vresults = Vector{Float64}(undef, 0)
+		tresults = Vector{Float64}(undef, 0)
 		time_missing = 0
 		for i in 1:nT
 			if !haskey(madsdata["Observations"][obskeys[i]], "time")
@@ -1304,7 +1304,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		nP = length(paramkeys)
 		sortedeigenm = Ein[1:end, 2:end]
 		filename = "$(filenameroot)-eigenvalues.dat"
-		sortedeigenv = Array{Float64}(undef, 0)
+		sortedeigenv = Vector{Float64}(undef, 0)
 		if isfile(filename)
 			sortedeigenv = DelimitedFiles.readdlm(filename)
 		end

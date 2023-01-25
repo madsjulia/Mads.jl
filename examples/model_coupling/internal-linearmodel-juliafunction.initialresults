@@ -8325,3 +8325,24 @@ OrderedCollections.OrderedDict("a" => 7.275419202557284, "b" => 3.86696000722439
 OF: 3488.6979568108654
 lambda: NaN
 OrderedCollections.OrderedDict("a" => 9.326185422168983, "b" => -8.610548531686259)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)
+OF: 46.0
+lambda: NaN
+OrderedCollections.OrderedDict("a" => 1.0, "b" => -1.0)

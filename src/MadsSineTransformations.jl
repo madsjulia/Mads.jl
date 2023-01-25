@@ -97,8 +97,8 @@ Returns:
 
 - Sine transformation of a gradient function
 """
-function sinetransformgradient(g::Function, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector; sindx::Float64 = 0.1)
-	function sinetransformed(sineparams::AbstractVector; center::Vector{Float64}=Array{Float64}(undef, 0))
+function sinetransformgradient(g::Function, lowerbounds::AbstractVector, upperbounds::AbstractVector, indexlogtransformed::AbstractVector; sindx::Float64=0.1)
+	function sinetransformed(sineparams::AbstractVector; center::Vector{Float64}=Vector{Float64}(undef, 0))
 		params = sinetransform(sineparams, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams1 = sinetransform(sineparams .+ sindx, lowerbounds, upperbounds, indexlogtransformed)
 		dxparams2 = sinetransform(sineparams .- sindx, lowerbounds, upperbounds, indexlogtransformed)

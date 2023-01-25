@@ -80,12 +80,15 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 	end
 	if haskey(madsdata, "Julia function")
 		fn = Symbol(madsdata["Julia function"])
-		if isdefined(Mads, fn)
-			madsdata["Julia function"] = Core.eval(Mads, fn)
-		elseif isdefined(Main, fn)
+		if isdefined(Main, fn)
+			@info("Loading Main version of $(fn)")
 			madsdata["Julia function"] = Core.eval(Main, fn)
 		elseif isdefined(Base, fn)
+			@info("Loading Base version of $(fn)")
 			madsdata["Julia function"] = Core.eval(Base, fn)
+		elseif isdefined(Mads, fn)
+			@info("Loading Mads version of $(fn)")
+			madsdata["Julia function"] = Core.eval(Mads, fn)
 		else
 			madswarn("Julia function $(fn) is not defined!")
 		end

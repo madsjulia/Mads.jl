@@ -253,7 +253,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 				wellz0[w] = (wellz1[w] + wellz0[w]) / 2
 				wellscreen[w] = false
 			end
-			obst = Array{Float64}(undef, 0)
+			obst = Vector{Float64}(undef, 0)
 			obsp = Array{Int}(undef, 0)
 			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] !== nothing
 				nO = length(madsdata["Wells"][wellkey]["obs"])

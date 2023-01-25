@@ -90,9 +90,9 @@ Returns:
 """
 function partialof(madsdata::AbstractDict, resultdict::AbstractDict, regex::Regex)
 	obskeys = getobskeys(madsdata)
-	results = Array{Float64}(undef, 0)
-	weights = Array{Float64}(undef, 0)
-	targets = Array{Float64}(undef, 0)
+	results = Vector{Float64}(undef, 0)
+	weights = Vector{Float64}(undef, 0)
+	targets = Vector{Float64}(undef, 0)
 	for obskey in obskeys
 		if occursin(regex, obskey)
 			push!(results, resultdict[obskey]) # preserve the expected order
@@ -106,7 +106,7 @@ end
 
 function makelmfunctions(f::Function)
 	f_lm = f
-	function g_lm(x::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Array{Float64}(undef, 0))
+	function g_lm(x::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Vector{Float64}(undef, 0))
 		nO = length(center)
 		if nO == 0
 			center = f_lm(x)
@@ -125,7 +125,12 @@ function makelmfunctions(f::Function)
 	o_lm(x::AbstractVector) = LinearAlgebra.dot(x, x)
 	return f_lm, g_lm, o_lm
 end
-function makelmfunctions(madsdata::AbstractDict)
+function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parallel_optimization)
+	if parallel_gradients
+		@info("Parallel gradients!")
+	else
+		@info("Serial gradients!")
+	end
 	f = makemadscommandfunction(madsdata)
 	restartdir = getrestartdir(madsdata)
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
@@ -157,7 +162,7 @@ function makelmfunctions(madsdata::AbstractDict)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
-		results = Array{Float64}(undef, 0)
+		results = Vector{Float64}(undef, 0)
 		for obskey in obskeys
 			push!(results, resultdict[obskey]) # preserve the expected order
 		end
@@ -195,12 +200,16 @@ function makelmfunctions(madsdata::AbstractDict)
 			center_computed = true
 		end
 		local fevals
-		try
-			fevals = RobustPmap.rpmap(f_lm, p)
-		catch errmsg
-			@show Base.stacktrace()
-			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap LM execution of forward runs fails!")
+		if parallel_gradients
+			try
+				fevals = RobustPmap.rpmap(f_lm, p)
+			catch errmsg
+				@show Base.stacktrace()
+				printerrormsg(errmsg)
+				Mads.madscritical("RobustPmap LM execution of forward runs fails!")
+			end
+		else
+			fevals = map(f_lm, p)
 		end
 		if !center_computed
 			center = fevals[nP+1]
@@ -220,7 +229,7 @@ function makelmfunctions(madsdata::AbstractDict)
 	"""
 	Gradient function for the forward model used for Levenberg-Marquardt optimization
 	"""
-	function g_lm(arrayparameters::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Array{Float64}(undef, 0)) #TODO we need the center; this is not working
+	function g_lm(arrayparameters::AbstractVector; dx::Vector{Float64}=Array{Float64}(0), center::Vector{Float64}=Vector{Float64}(undef, 0)) # TODO we need the center; this is not working
 		return reusable_inner_g_lm(tuple(arrayparameters, dx, center))
 	end
 	return f_lm, g_lm, o_lm
@@ -343,7 +352,7 @@ keytext=Dict("root"=>"Mads problem root name",
 			"callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
 			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, parallel_execution::Bool=parallel_optimization)
 	MAX_LAMBDA = 1e16 # minimum trust region radius
 	MIN_LAMBDA = 1e-16 # maximum trust region radius
 	MIN_STEP_QUALITY = 1e-3
@@ -365,6 +374,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
+	@show g(x; center=fcur)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
@@ -479,12 +489,16 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		# end
 
 		local phisanddelta_xs
-		try
-			phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
-		catch errmsg
-			@show Base.stacktrace()
-			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap LM execution to compute lambdas fails!")
+		if parallel_execution
+			try
+				phisanddelta_xs = RobustPmap.rpmap(getphianddelta_x, collect(1:np_lambda))
+			catch errmsg
+				@show Base.stacktrace()
+				printerrormsg(errmsg)
+				Mads.madscritical("RobustPmap LM execution to compute lambdas fails!")
+			end
+		else
+			phisanddelta_xs = map(getphianddelta_x, collect(1:np_lambda))
 		end
 
 		phi = []
@@ -500,13 +514,17 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madscritical("Mads quits!")
 		end
 
-		local trial_fs
-		try
-			trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
-		catch errmsg
-			@show Base.stacktrace()
-			printerrormsg(errmsg)
-			Mads.madscritical("RobustPmap LM execution of the forward models fails!")
+		if parallel_execution
+			local trial_fs
+			try
+				trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+			catch errmsg
+				@show Base.stacktrace()
+				printerrormsg(errmsg)
+				Mads.madscritical("RobustPmap LM execution of the forward models fails!")
+			end
+		else
+			trial_fs = map(f, map(dx->x + dx, delta_xs))
 		end
 
 		f_calls += np_lambda
