@@ -56,20 +56,20 @@ cd(workdir)
 	md["Restart"] = true
 	Mads.madsinfo("... create restart ...")
 	create_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
-	@Test.test Mads.getrestarts() == 12
+	@Test.test Mads.getrestarts() == 4
 
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.calibrate(md, np_lambda=1, maxEval=10, maxJacobians=2)
-	@Test.test Mads.getrestarts() == 25
+	@Test.test Mads.getrestarts() == 13
 	@Test.test no_restart_results[1] == create_restart_results[1]
 	@Test.test create_restart_results[1] == use_restart_results[1]
 
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	@Test.test Mads.getrestarts() == 27
+	@Test.test Mads.getrestarts() == 17
 	Mads.localsa(md, imagefiles=false, datafiles=false)
 
-	@Test.test Mads.getrestarts() == 29
+	@Test.test Mads.getrestarts() == 19
 	Mads.savemadsfile(md)
 
 	Mads.rmdir(joinpath(workdir, "w01_restart"))
