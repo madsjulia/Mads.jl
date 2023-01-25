@@ -29,7 +29,7 @@ end
 Check if a directory is readable
 
 $(DocumentFunction.documentfunction(checknodedir;
-argtext=Dict("node"=>"computational node name (e.g. `madsmax.lanl.gov`, `wf03`, or `127.0.0.1`)",
+argtext=Dict("node"=>"computational node name (e.g. `madsmax`, `wf03`, or `127.0.0.1`)",
             "dir"=>"directory",
             "waittime"=>"wait time in seconds [default=`10`]")))
 
