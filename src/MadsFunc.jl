@@ -83,6 +83,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		if typeof(madsdata["Julia function"]) <: Function
 			fn = :nothing
 			jf = madsdata["Julia function"]
+			@info("Using the provided function in the Mads dictionary ...")
 		elseif typeof(madsdata["Julia function"]) <: Symbol
 			fn = madsdata["Julia function"]
 		elseif typeof(madsdata["Julia function"]) <: String
@@ -92,13 +93,13 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 		end
 		if fn != :nothing
 			if isdefined(Main, fn)
-				@info("Loading Main version of $(fn)")
+				@info("Loading Main version of $(fn) ...")
 				jf = Core.eval(Main, fn)
 			elseif isdefined(Base, fn)
-				@info("Loading Base version of $(fn)")
+				@info("Loading Base version of $(fn) ...")
 				jf = Core.eval(Base, fn)
 			elseif isdefined(Mads, fn)
-				@info("Loading Mads version of $(fn)")
+				@info("Loading Mads version of $(fn) ...")
 				jf = Core.eval(Mads, fn)
 			else
 				madscritical("Julia function $(fn) is not defined!")
