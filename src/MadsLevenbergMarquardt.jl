@@ -352,7 +352,7 @@ keytext=Dict("root"=>"Mads problem root name",
 			"callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
 			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, parallel_execution::Bool=parallel_optimization)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, parallel_execution::Bool=parallel_optimization, center_provided::Bool=true)
 	MAX_LAMBDA = 1e16 # minimum trust region radius
 	MIN_LAMBDA = 1e-16 # maximum trust region radius
 	MIN_STEP_QUALITY = 1e-3
@@ -374,14 +374,13 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
-	@show g(x; center=fcur)
 	f_calls += 1
 	best_f = fcur
 	best_residual = residual = o(fcur)
 	Mads.madsoutput("Initial OF: $residual\n");
 	callbackinitial(x, residual, NaN)
 
-	# Maintain a trace of the system.
+	# Maintain a trace of the system
 	tr = LsqFit.OptimizationTrace{typeof(LsqFit.LevenbergMarquardt())}()
 	if !Mads.quiet && show_trace
 		d = Dict("lambda" => lambda)
@@ -401,9 +400,9 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	residuals = Vector{Float64}(undef, 0)
 	while(~failed && ~converged && g_calls < maxJacobians && f_calls < maxEval)
 		if compute_jacobian
-			try
+			if center_provided
 				J = g(x; center=fcur)
-			catch # many functions don't accept a "center", if they don't try it without -- this is super hack-y
+			else
 				J = g(x)
 			end
 			if any(isnan, J)
@@ -423,9 +422,9 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
 		#    (J'*J + lambda*DtD) * delta_x == -J^T * f(x), where DtD = diagm(sum(J.^2,1))
-		# Where we have used the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
+		# Where we use the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
 		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
-		# DtD = diagm( Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )] )
+		# DtD = diagm(Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )])
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J
 		if LinearAlgebra.norm(JpJ) < eps(Float64)
