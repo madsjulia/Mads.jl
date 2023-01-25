@@ -1,6 +1,5 @@
 MADS: Model Analyses & Decision Support (v.1.1.14.b1d4caf) 2013
 ---------------------------------------------------
-http://mads.lanl.gov -:- http://www.ees.lanl.gov/staff/monty/codes/mads
 
 Input file name: testmads/CrPZ-1/CrPZ-1.mads
 Problem root name: testmads/CrPZ-1/CrPZ-1 Extension: mads
@@ -14,7 +13,7 @@ YAML Classes:
  Parameters -> 38 components
  Templates -> 1 components
 Process YAML Classes ...
-Process Problem ... 
+Process Problem ...
 
 Problem type: calibration
 
@@ -67,7 +66,7 @@ Execution date & time stamp: 20180228-132752
 
 SINGLE CALIBRATION: single optimization based on initial guesses provided in the input file:
 Number of Levenberg-Marquardt iterations = 50
-Levenberg-Marquardt Optimization ... 
+Levenberg-Marquardt Optimization ...
 LM using SVD decomposition
 LM without parallel lambda search
 LM without acceleration
