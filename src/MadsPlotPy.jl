@@ -16,9 +16,9 @@ function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true
 	xmax = madsdata["Grid"]["xmax"]
 	ymax = madsdata["Grid"]["ymax"]
 	t = madsdata["Grid"]["time"]
-	x = Array{Float64}(undef, 0)
-	y = Array{Float64}(undef, 0)
-	c = Array{Float64}(undef, 0)
+	x = Vector{Float64}(undef, 0)
+	y = Vector{Float64}(undef, 0)
+	c = Vector{Float64}(undef, 0)
 	l = Array{String}(undef, 0)
 	for w in keys(madsdata["Wells"])
 		push!(x, madsdata["Wells"][w]["x"])

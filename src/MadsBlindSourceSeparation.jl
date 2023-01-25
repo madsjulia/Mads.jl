@@ -215,7 +215,7 @@ function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bo
 	end
 
 	mf_lm_sin = Mads.sinetransformfunction(mf_lm, lowerbounds, upperbounds, indexlogtransformed)
-	mf_g_lm_sin = Mads.sinetransformgradient(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed)
+	mf_g_lm_sin = Mads.sinetransformgradient(mf_g_lm, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
 	phi_best = Inf
 	for i = 1:retries
 		if i > 1

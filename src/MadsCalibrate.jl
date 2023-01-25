@@ -49,7 +49,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	allresults = Array{Float64}(undef, 0)
+	allresults = Vector{Float64}(undef, 0)
 	local bestparameters
 	local bestresult
 	bestphi = Inf
@@ -128,7 +128,9 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	if haskey(madsdata, "Julia function")
 		function_name = Symbol(split(string(typeof(madsdata["Julia function"]).name.name), '#')[2])
 	end
-	@show function_name
+	@show "a"
+	Mads.calibrate(madsdata)
+	poop
 	@sync @Distributed.distributed for i in 1:numberofsamples
 		if !quiet && i == 1 && first_init
 			@info("Using initial values for the first run!")
@@ -141,36 +143,35 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		if haskey(madsdata, "Julia function")
 			madsdata["Julia function"] = function_name
 		end
-		@show Mads.forward(madsdata)
-		# parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa)
-		# phi = results.minimum
-		# converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
-		# if !quiet
-		# 	if i == 1 && first_init
-		# 		@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
-		# 	else
-		# 		@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
-		# 	end
-		# end
-		# allphi[i] = phi
-		# allconverged[i] = converged
-		# for (j, paramkey) in enumerate(keys(paramoptvalues))
-		# 	allparameters[i,j] = parameters[paramkey]
-		# end
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa, parallel_gradients=false)
+		phi = results.minimum
+		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		if !quiet
+			if i == 1 && first_init
+				@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
+			else
+				@info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
+			end
+		end
+		allphi[i] = phi
+		allconverged[i] = converged
+		for (j, paramkey) in enumerate(keys(paramoptvalues))
+			allparameters[i,j] = parameters[paramkey]
+		end
 	end
-	# Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
-	# if all(isnan.(allphi))
-	# 	@warn("Something is wrong! All the objective function estimates are NaN!")
-	# end
-	# if all_results
-	# 	return allphi, allconverged, allparameters
-	# else
-	# 	isort = sortperm(allphi)
-	# 	for (j, paramkey) in enumerate(keys(paramoptvalues))
-	# 		paramdict[paramkey] = allparameters[isort[1],j]
-	# 	end
-	# 	return paramdict
-	# end
+	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
+	if all(isnan.(allphi))
+		@warn("Something is wrong! All the objective function estimates are NaN!")
+	end
+	if all_results
+		return allphi, allconverged, allparameters
+	else
+		isort = sortperm(allphi)
+		for (j, paramkey) in enumerate(keys(paramoptvalues))
+			paramdict[paramkey] = allparameters[isort[1],j]
+		end
+		return paramdict
+	end
 end
 
 """
@@ -201,9 +202,9 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false, parallel_gradients::Bool=parallel_optimization)
 	rootname = Mads.getmadsrootname(madsdata)
-	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata)
+	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata; parallel_gradients=parallel_gradients)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	initparams = Mads.getparamsinit(madsdata, optparamkeys)
 	lowerbounds = Mads.getparamsmin(madsdata, optparamkeys)
@@ -214,7 +215,14 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	upperbounds[indexlogtransformed] = log10.(upperbounds[indexlogtransformed])
 	sindx = Mads.getsindx(madsdata)
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
-	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed, sindx=sindx)
+	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
+	np = length(initparams)
+	fcur = f_lm(rand(np))
+	@show f_lm(rand(np))
+	@show g_lm(rand(np); dx=repeat([0.01], np), center=fcur)
+	fcur = f_lm_sin(rand(np))
+	@show f_lm_sin(rand(np))
+	@show g_lm_sin(rand(np); center=fcur)
 	restart_flag = Mads.getrestart(madsdata)
 	if save_results && rootname != ""
 		function initialcallback(x_init::AbstractVector, of::Number, lambda::Number)

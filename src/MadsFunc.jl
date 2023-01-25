@@ -91,12 +91,15 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			madscritical("Julia function $(madsdata["Julia function"]) is not properly defined!")
 		end
 		if fn != :nothing
-			if isdefined(Mads, fn)
-				jf = Core.eval(Mads, fn)
-			elseif isdefined(Main, fn)
+			if isdefined(Main, fn)
+				@info("Loading Main version of $(fn)")
 				jf = Core.eval(Main, fn)
 			elseif isdefined(Base, fn)
+				@info("Loading Base version of $(fn)")
 				jf = Core.eval(Base, fn)
+			elseif isdefined(Mads, fn)
+				@info("Loading Mads version of $(fn)")
+				jf = Core.eval(Mads, fn)
 			else
 				madscritical("Julia function $(fn) is not defined!")
 			end
