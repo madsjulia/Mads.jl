@@ -2,6 +2,8 @@ import Mads
 import Test
 import ReusableFunctions
 
+Mads.veryquieton()
+
 Mads.madsinfo("Restarting ...")
 cwd = pwd()
 workdir = string((dirname(Base.source_path()))) * "/"
@@ -126,3 +128,4 @@ cd(workdir)
 end
 
 cd(cwd)
+Mads.veryquietoff()
