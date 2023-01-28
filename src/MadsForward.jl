@@ -38,6 +38,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 		if length(optkeys) == length(kk)
 			paramarray = permutedims(hcat(map(i->collect(paramdict[i]), optkeys)...))
 		else
+			@warn("Something is wrong!")
 		end
 		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
