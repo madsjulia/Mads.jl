@@ -45,23 +45,18 @@ end
 
 include("MadsModules.jl")
 
-global madsbash = true
-if !Sys.Sys.iswindows()
-	try
-		run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
-	catch
-		global madsbash = false
-	end
+try
+	run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
+	global madsbash = true
+catch
+	global madsbash = false
 end
 
-global madsgit = false
-if madsbash
-	try
-		run(pipeline(`bash -l -c 'git help'`; stdout=devnull, stderr=devnull))
-		global madsgit = true
-	catch
-		global madsgit = false
-	end
+try
+	run(pipeline(`git help`; stdout=devnull, stderr=devnull))
+	global madsgit = true
+catch
+	global madsgit = false
 end
 
 include("MadsHelpers.jl")
