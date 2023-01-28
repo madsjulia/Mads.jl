@@ -169,3 +169,18 @@ OrderedCollections.OrderedDict("vx" => 0.08016633315398262, "source1_t0" => 7.80
 OF: 1.3981230912211882e7
 lambda: NaN
 OrderedCollections.OrderedDict("vx" => 0.11320574711200795, "source1_t0" => 8.583707842007403, "source1_t1" => 23.79063268328163)
+OF: 2.5475575720286425e6
+lambda: NaN
+OrderedCollections.OrderedDict("vx" => 40.000000000000014, "source1_t0" => 4.0, "source1_t1" => 15.0)
+OF: 1.3981230912211882e7
+lambda: NaN
+OrderedCollections.OrderedDict("vx" => 0.03340970376810212, "source1_t0" => 8.887969254815065, "source1_t1" => 11.51653472885327)
+OF: 1.3981174233287804e7
+lambda: NaN
+OrderedCollections.OrderedDict("vx" => 1.7527081469184558, "source1_t0" => 4.590356584119029, "source1_t1" => 5.474197592184299)
+OF: 1.3981230912211882e7
+lambda: NaN
+OrderedCollections.OrderedDict("vx" => 0.08016633315398262, "source1_t0" => 7.8000998629575635, "source1_t1" => 5.218251039601966)
+OF: 1.3981230912211882e7
+lambda: NaN
+OrderedCollections.OrderedDict("vx" => 0.11320574711200795, "source1_t0" => 8.583707842007403, "source1_t1" => 23.79063268328163)
