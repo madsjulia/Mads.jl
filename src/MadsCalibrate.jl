@@ -208,16 +208,16 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
-	if isfile("$rootname.initialresults")
-		rmfile("$rootname.initialresults")
-	end
-	if isfile("$rootname.iterationresults")
-		rmfile("$rootname.iterationresults")
-	end
-	if isfile("$rootname.finalresults")
-		rmfile("$rootname.finalresults")
-	end
 	if save_results && rootname != ""
+		if isfile("$rootname.initialresults")
+			rmfile("$rootname.initialresults")
+		end
+		if isfile("$rootname.iterationresults")
+			rmfile("$rootname.iterationresults")
+		end
+		if isfile("$rootname.finalresults")
+			rmfile("$rootname.finalresults")
+		end
 		function initialcallback(x_init::AbstractVector, of::Number, lambda::Number)
 			x_init_real = sinetransform(x_init, lowerbounds, upperbounds, indexlogtransformed)
 			outfile = open("$rootname.initialresults", "a+")
