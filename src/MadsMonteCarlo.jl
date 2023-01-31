@@ -6,7 +6,7 @@ import DocumentFunction
 import BlackBoxOptim
 import Random
 
-function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, sigma::Number=0.01, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing)
+function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng=nothing, kw...)
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -27,7 +27,7 @@ function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::I
 			p0[i, j] = pmin[i] + rand(Mads.rng, d) * (pmax[i] - pmin[i])
 		end
 	end
-	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor, rng=rng)
+	return emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, kw...)
 end
 function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing, distributed_function::Bool=false)
 	@assert length(size(p0)) == 2
