@@ -29,11 +29,15 @@ function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, nsteps::I
 	end
 	return emceesampling(madsdata, p0; numwalkers=numwalkers, nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed, weightfactor=weightfactor, rng=rng)
 end
-function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing)
+function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing, distributed_function::Bool=false)
 	@assert length(size(p0)) == 2
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
-	arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
+	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
+	if distributed_function
+		@Distributed.everywhere arrayloglikelihood_distibuted = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
+		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distibuted)(x)
+	end
 	newnsteps = div(burnin, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
