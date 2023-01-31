@@ -35,8 +35,8 @@ function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
 	if distributed_function
-		@Distributed.everywhere arrayloglikelihood_distibuted = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
-		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distibuted)(x)
+		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
+		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)
 	end
 	newnsteps = div(burnin, numwalkers)
 	if newnsteps < 2
