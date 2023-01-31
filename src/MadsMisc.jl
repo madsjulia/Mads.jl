@@ -124,7 +124,7 @@ Returns:
 
 - a log likelihood function that accepts an array
 """
-function makearrayloglikelihood(madsdata::AbstractDict, loglikelihood) # make log likelihood array
+function makearrayloglikelihood(madsdata::AbstractDict, loglikelihood)
 	f = makemadscommandfunction(madsdata)
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
