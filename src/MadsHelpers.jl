@@ -616,3 +616,16 @@ function pkginstalled()
 	end
 	return installs
 end
+
+function merge_dictionaries(a::AbstractDict, b::AbstractDict)
+	m = merge(a, b)
+	for k in keys(m)
+		if haskey(a, k)
+			merge!(m[k], a[k])
+		end
+		if haskey(b, k)
+			merge!(m[k], b[k])
+		end
+	end
+	return m
+end
