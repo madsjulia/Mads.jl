@@ -43,3 +43,24 @@ function havingfun_with_dictionary(d, k, f)
 	v = d[k]
 	return f.(v)
 end
+
+x_v = [1,2,4,5]
+x_a = [6,1,7,3]
+x_z = [9,4,3,8]
+a = ["v", "a", "z"]
+m = Matrix{Float64}(undef, length(a), length(x_v))
+for i in eachindex(a)
+	m[i,:] .= eval(:($(Symbol("x_" * "$(a[i])"))))
+end
+
+a = ["v", "a", "p", "z"]
+r = rand(length(a), 10)
+for i in eachindex(a)
+	eval(:($(Symbol("r_" * "$(a[i])")) = Vector{Float64}(undef, size(r, 2))))
+	eval(:($(Symbol("r_" * "$(a[i])")) .= r[$i,:]))
+end
+
+for i in eachindex(a)
+	@info("$(a[i])")
+	display(eval(:($(Symbol("r_" * "$(a[i])")))))
+end
