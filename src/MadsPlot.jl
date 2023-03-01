@@ -1065,8 +1065,8 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	if logy
 		push!(glog, Gadfly.Scale.y_log10)
-		ixzero = X.<=0
-		X[X.<=0] .= NaN
+		ixzero = X .<= 0
+		X[ixzero] .= NaN
 		if ymin === nothing
 			ymin = log10(minimumnan(X[X .!= 0.]))
 		end
