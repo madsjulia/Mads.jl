@@ -2,6 +2,7 @@ syntax: glob
 .ipynb_checkpoints
 *.finalresults
 Manifest.toml
+config
 *.log
 .DS_Store
 _build/
