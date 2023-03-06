@@ -1,0 +1,39 @@
+calib_mode: GPPAllIgnoringNitrogen
+cmtnum: 1
+opt_run_setup: --pr-yrs 100 --eq-yrs 200 --sp-yrs 0 --tr-yrs 0 --sc-yrs 0
+params:
+- cmax
+- cmax
+- cmax
+- cmax
+pftnums:
+- 0
+- 1
+- 2
+- 3
+site: /data/input-catalog/cru-ts40_ar5_rcp85_mri-cgcm3_MurphyDome_10x10
+work_dir: /data/workflows/STEP1-MD1
+mads_initial_guess:
+- 381.19
+- 113.93
+- 207.08
+- 93.31
+mads_paramdist:
+- Uniform(0.1, 500)
+- Uniform(0.1, 200)
+- Uniform(0.1, 300)
+- Uniform(0.1, 200)
+mads_paramkey:
+- cmax0
+- cmax1
+- cmax2
+- cmax3
+mads_obsweight:
+mads_paramlog:
+# mads_obsrange (ON, OFF) sets ranges for observations
+mads_obsrange: 'OF'
+mads_obs_percent_variance: 1
+# mads_paramrange (ON, OFF) sets ranges for parameters
+mads_paramrange: 'ON'
+mads_param_percent_variance: 50
+mads_problemname: AC3-STEP1-MD1-EJ
