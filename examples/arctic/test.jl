@@ -2,6 +2,8 @@ import Mads
 import YAML
 import PyCall
 
+cd(@__DIR__)
+
 PyCall.py"""
 
 import sys,os
