@@ -629,3 +629,14 @@ function merge_dictionaries(a::AbstractDict, b::AbstractDict)
 	end
 	return m
 end
+
+function nonunique(x::AbstractVector{T}) where T
+    xs = sort(x)
+    duplicatedvector = Vector{T}(undef, 0)
+    for i = 2:length(xs)
+        if(isequal(xs[i], xs[i-1]) && (length(duplicatedvector)==0 || !isequal(duplicatedvector[end], xs[i])))
+            push!(duplicatedvector, xs[i])
+        end
+    end
+    return duplicatedvector
+end
