@@ -6,7 +6,7 @@ repo_url: https://github.com/madsjulia/Mads.jl
 site_description: "Model Analysis and Decision Support"
 site_author: "Velimir monty Vesselinov"
 
-google_analytics: ['UA-25717430-1', 'mads.lanl.gov']
+google_analytics: ['UA-25717430-1', 'madsjulia.github.io']
 
 extra_css:
 - assets/Documenter.css
