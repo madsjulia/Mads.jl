@@ -20,7 +20,7 @@ Create function documentation
 
 Arguments:
 
-  * `f`: function to be documented"
+  * `f`: function to be documented
 
 Keywords:
 
@@ -30,7 +30,7 @@ Keywords:
   * `location`: show/hide function location on the disk
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L108-L121' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/7b40d6574a6b37d32466a6d7e1d3b739e6200454/src/DocumentFunction.jl#L113-L126' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionarguments' href='#DocumentFunction.getfunctionarguments'>#</a>
 **`DocumentFunction.getfunctionarguments`** &mdash; *Function*.
@@ -45,7 +45,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L147-L154' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/7b40d6574a6b37d32466a6d7e1d3b739e6200454/src/DocumentFunction.jl#L152-L159' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionkeywords' href='#DocumentFunction.getfunctionkeywords'>#</a>
 **`DocumentFunction.getfunctionkeywords`** &mdash; *Function*.
@@ -60,7 +60,7 @@ Arguments:
   * `m`: function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L178-L185' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/7b40d6574a6b37d32466a6d7e1d3b739e6200454/src/DocumentFunction.jl#L183-L190' class='documenter-source'>source</a><br>
 
 <a id='DocumentFunction.getfunctionmethods-Tuple{Function}' href='#DocumentFunction.getfunctionmethods-Tuple{Function}'>#</a>
 **`DocumentFunction.getfunctionmethods`** &mdash; *Method*.
@@ -78,5 +78,5 @@ Return:
   * array with function methods
 
 
-<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/a018a2f0cb210f3daa0e7e188f49233838b29466/src/DocumentFunction.jl#L17-L27' class='documenter-source'>source</a><br>
+<a target='_blank' href='https://github.com/madsjulia/DocumentFunction.jl/blob/7b40d6574a6b37d32466a6d7e1d3b739e6200454/src/DocumentFunction.jl#L14-L24' class='documenter-source'>source</a><br>
 

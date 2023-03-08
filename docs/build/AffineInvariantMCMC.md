@@ -18,9 +18,6 @@ AffineInvariantMCMC.jl module functions:
 
 Flatten MCMC arrays
 
-
-<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L103' class='documenter-source'>source</a><br>
-
 <a id='AffineInvariantMCMC.sample' href='#AffineInvariantMCMC.sample'>#</a>
 **`AffineInvariantMCMC.sample`** &mdash; *Function*.
 
@@ -49,16 +46,10 @@ Reference:
 
 Goodman & Weare, "Ensemble samplers with affine invariance", Communications in Applied Mathematics and Computational Science, DOI: 10.2140/camcos.2010.5.65, 2010.
 
-
-<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L43-L66' class='documenter-source'>source</a><br>
-
 <a id='AffineInvariantMCMC.test-Tuple{}' href='#AffineInvariantMCMC.test-Tuple{}'>#</a>
 **`AffineInvariantMCMC.test`** &mdash; *Method*.
 
 
 
 Test AffineInvariantMCMC
-
-
-<a target='_blank' href='https://github.com/madsjulia/AffineInvariantMCMC.jl/blob/e3ad0a609336ea921601e0ab79bdd2f654c150f8/src/AffineInvariantMCMC.jl#L38' class='documenter-source'>source</a><br>
 
