@@ -14,8 +14,10 @@
       
         <link rel="canonical" href="http://madsjulia.github.io/Mads.jl/Examples/bigdt/source_termination/source_termination/">
       
+      
+      
       <link rel="icon" href="../../../../mads-favicon.ico">
-      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.0.3">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.1">
     
     
       
@@ -23,33 +25,32 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.62128196.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.402914a4.min.css">
       
         
-        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.9204c3b2.min.css">
-        
-          
-          
-          <meta name="theme-color" content="#ffa724">
-        
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.a0c5b2b5.min.css">
       
+      
+
     
     
     
       
+        
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
     
       <link rel="stylesheet" href="../../../../assets/Documenter.css">
     
-    <script>function __md_scope(e,t,_){return new URL(_||(t===localStorage?"../../../..":"../../../.."),location).pathname+"."+e}function __md_get(e,t=localStorage,_){return JSON.parse(t.getItem(__md_scope(e,t,_)))}function __md_set(e,t,_=localStorage,o){try{_.setItem(__md_scope(e,_,o),JSON.stringify(t))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
+    
     
     
   </head>
@@ -60,7 +61,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="orange" data-md-color-accent="teal">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="orange" data-md-color-accent="teal">
   
     
     
@@ -68,11 +69,6 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#contaminant-source-termination" class="md-skip">
-          Skip to content
-        </a>
       
     </div>
     <div data-md-component="announce">
@@ -82,7 +78,9 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../../.." title="MADS" class="md-header__button md-logo" aria-label="MADS" data-md-component="logo">
       
@@ -90,7 +88,7 @@
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
@@ -112,7 +110,7 @@
     
     
       <label class="md-header__button md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
       </label>
       <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
@@ -120,13 +118,13 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
         </button>
       </nav>
       
@@ -137,7 +135,7 @@
           <div class="md-search-result__meta">
             Initializing search
           </div>
-          <ol class="md-search-result__list"></ol>
+          <ol class="md-search-result__list" role="presentation"></ol>
         </div>
       </div>
     </div>
@@ -146,10 +144,10 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/madsjulia/Mads.jl/" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/madsjulia/Mads.jl" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -190,10 +188,10 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/madsjulia/Mads.jl/" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/madsjulia/Mads.jl" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
     GitHub
@@ -259,17 +257,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_4">
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
           Examples
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Examples" data-md-level="1">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           Examples
@@ -494,17 +493,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_10" type="checkbox" id="__nav_10" >
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
       
       
       
-      
-        <label class="md-nav__link" for="__nav_10">
+        <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
           Modules
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <nav class="md-nav" aria-label="Modules" data-md-level="1">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_10">
           <span class="md-nav__icon md-icon"></span>
           Modules
@@ -517,7 +517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/Mads/" class="md-nav__link">
+      <a href="../../../../Modules/Mads.md" class="md-nav__link">
         Mads
       </a>
     </li>
@@ -531,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/AffineInvariantMCMC/" class="md-nav__link">
+      <a href="../../../../Modules/AffineInvariantMCMC.md" class="md-nav__link">
         AffineInvariantMCMC
       </a>
     </li>
@@ -545,7 +545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/Anasol/" class="md-nav__link">
+      <a href="../../../../Modules/Anasol.md" class="md-nav__link">
         Anasol
       </a>
     </li>
@@ -559,7 +559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/BIGUQ/" class="md-nav__link">
+      <a href="../../../../Modules/BIGUQ.md" class="md-nav__link">
         BIGUQ
       </a>
     </li>
@@ -573,7 +573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/DocumentFunction/" class="md-nav__link">
+      <a href="../../../../Modules/DocumentFunction.md" class="md-nav__link">
         DocumentFunction
       </a>
     </li>
@@ -587,7 +587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/GeostatInversion/" class="md-nav__link">
+      <a href="../../../../Modules/GeostatInversion.md" class="md-nav__link">
         GeostatInversion
       </a>
     </li>
@@ -601,7 +601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/MetaProgTools/" class="md-nav__link">
+      <a href="../../../../Modules/MetaProgTools.md" class="md-nav__link">
         MetaProgTools
       </a>
     </li>
@@ -615,7 +615,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/ReusableFunctions/" class="md-nav__link">
+      <a href="../../../../Modules/ReusableFunctions.md" class="md-nav__link">
         ReusableFunctions
       </a>
     </li>
@@ -629,7 +629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/RobustPmap/" class="md-nav__link">
+      <a href="../../../../Modules/RobustPmap.md" class="md-nav__link">
         RobustPmap
       </a>
     </li>
@@ -643,7 +643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../Modules/SVR/" class="md-nav__link">
+      <a href="../../../../Modules/SVR.md" class="md-nav__link">
         SVR
       </a>
     </li>
@@ -705,251 +705,35 @@
   
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#contaminant-source-termination" class="md-nav__link">
-    Contaminant Source Termination
-  </a>
-  
-    <nav class="md-nav" aria-label="Contaminant Source Termination">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#model-setup" class="md-nav__link">
-    Model setup
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#uncertainties" class="md-nav__link">
-    Uncertainties
-  </a>
-  
-    <nav class="md-nav" aria-label="Uncertainties">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#probabilistic-uncertainties" class="md-nav__link">
-    Probabilistic uncertainties
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#non-probabilistic-uncertainties" class="md-nav__link">
-    Non-probabilistic uncertainties
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#goal" class="md-nav__link">
-    Goal
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scenarios" class="md-nav__link">
-    Scenarios
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#task" class="md-nav__link">
-    Task
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#method" class="md-nav__link">
-    Method
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#horizon-level-of-uncertainty" class="md-nav__link">
-    Horizon (level) of uncertainty
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#robustness" class="md-nav__link">
-    Robustness
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#results" class="md-nav__link">
-    Results
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#discussion" class="md-nav__link">
-    Discussion
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#model" class="md-nav__link">
-    Model
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
               </div>
             
           
-          <div class="md-content" data-md-component="content">
-            <article class="md-content__inner md-typeset">
-              
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
                 
-<a href="https://github.com/madsjulia/Mads.jl/edit/master/docs/Examples/bigdt/source_termination/source_termination.md" title="Edit this page" class="md-content__button md-icon">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
-</a>
+                  
+
+  
+  
 
 
   <h1>Source termination</h1>
 
-<h2 id="contaminant-source-termination">Contaminant Source Termination</h2>
-<p>All the figures below are generated using <code>examples/bigdt/source_termination.jl</code>.</p>
-<h3 id="model-setup">Model setup</h3>
-<p><img alt="" src="../source_termination-problemsetup.png" /></p>
-<ul>
-<li>
-<p>Contaminant source (orange rectangle)</p>
-</li>
-<li>
-<p>3 monitoring wells</p>
-</li>
-</ul>
-<p>We know some of the properties of the source (location, shape, strength, release start time, etc.).
-We know concentrations observed at the 3 monitoring wells (10 annual measurements per well from 2006-2015).
-We do <strong>NOT</strong> know:</p>
-<ul>
-<li>
-<p>groundwater flow velocity</p>
-</li>
-<li>
-<p>longitudinal dispersion of the plume</p>
-</li>
-</ul>
-<p>Inverse modeling can be used to estimate these parameters.
-However, there are uncertainties with the inverse model estimates.
-Because of these uncertainties, we perform a decision analysis.</p>
-<h3 id="uncertainties">Uncertainties</h3>
-<h4 id="probabilistic-uncertainties">Probabilistic uncertainties</h4>
-<ul>
-<li>
-<p>prior probability distributions of unknown model parameters (groundwater flow velocity and longitudinal plume dispersion)</p>
-</li>
-<li>
-<p>measurement errors of the observed concentrations (assumed to be normally distributed with zero mean and predefined standard deviation; the standard deviation is equal to the reciprocal of observation weights)</p>
-</li>
-<li>
-<p>posterior probabilities distributions of unknown model parameters (informed through Bayes' theorem accounting for the impact of observed concentrations to constrain the prior belief about the model parameter uncertainties represented is prior probability distributions)</p>
-</li>
-</ul>
-<h4 id="non-probabilistic-uncertainties">Non-probabilistic uncertainties</h4>
-<ul>
-<li>
-<p>conceptual uncertainties in the applied model</p>
-</li>
-<li>
-<p>uncertainties in the statistical model characterizing the discrepancies (residuals) between model predictions and concentration observations; typically the discrepancies (residuals) are considered to be normally distributed with some fixed variance (e.g. in the case of Bayesian decision analysis); the Information-gap decision approach allows for (1) deviations from the assumption of normality or (2) deviations from the assumed variance.</p>
-</li>
-</ul>
-<h3 id="goal">Goal</h3>
-<p>Future concentrations at monitoring well w2 (from 2016 till 2025) are less than MCL of 2500 ppb</p>
-<h3 id="scenarios">Scenarios</h3>
-<ul>
-<li>Terminate the source in 2015 (now)</li>
-<li>Terminate the source in 2020 (in 5 years)</li>
-<li>Terminate the source in 2025 (in 10 years)</li>
-<li>Terminate the source in 2030 (in 15 years)</li>
-</ul>
-<h3 id="task">Task</h3>
-<p>Evaluate the robustness of decision scenarios to keep future concentrations at w2 being below 2500 ppb with respect to the uncertainties in the model and the statistical methods.</p>
-<h3 id="method">Method</h3>
-<p>Bayesian Information Gap Decision Theory (BIG-DT).</p>
-<ul>
-<li><a href="http://onlinelibrary.wiley.com/doi/10.1002/2015WR017413/full">O'Malley, D., and V. V. Vesselinov. "Bayesian‐information‐gap decision theory with an application to CO2 sequestration." Water Resources Research 51.9 (2015): 7080-7089.</a></li>
-<li><a href="http://www.sciencedirect.com/science/article/pii/S1750583616300664?np=y">Grasinger, Matthew, et al. "Decision analysis for robust CO 2 injection: Application of Bayesian-Information-Gap Decision Theory." International Journal of Greenhouse Gas Control 49 (2016): 73-80.</a></li>
-<li><a href="http://epubs.siam.org/doi/abs/10.1137/140965132">O'Malley, D., and V. V. Vesselinov. "A combined probabilistic/nonprobabilistic decision analysis for contaminant remediation." SIAM/ASA Journal on Uncertainty Quantification 2.1 (2014): 607-621.</a></li>
-<li><a href="http://onlinelibrary.wiley.com/doi/10.1002/2013WR014718/full">O'Malley, D., and V. V. Vesselinov. "Groundwater remediation using the information gap decision theory." Water Resources Research 50.1 (2014): 246-256.</a></li>
-</ul>
-<h3 id="horizon-level-of-uncertainty">Horizon (level) of uncertainty</h3>
-<p>Horizon (level) of uncertainty is a non-negative index that defines
-(1) a set of possible concentrations at w2 (including possibilities not predicted by the model) and
-(2) a set of likelihood functions for the discrepancy (residual) between the model prediction and the observation.</p>
-<p>The likelihood functions differ in the variance.
-The set of possible concentrations at w2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
-The set of variances is</p>
-<p>$$ { σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 } $$</p>
-<p>where \(σ^2_0\) is the nominal variance (500; the nominal standard deviation \(σ_0\) is ~22) and \(h\) is the horizon of uncertainty.
-As the index increases, these sets become bigger, allowing for more possibilities.</p>
-<h3 id="robustness">Robustness</h3>
-<p>The horizon (level) of uncertainty at which the maximum acceptable probability of failure is reached</p>
-<h3 id="results">Results</h3>
-<p>Figures representing robustness of model predictions:</p>
-<p>(a) Complete robustness curves</p>
-<p><img alt="" src="../source_termination-robustness-1000.png" /></p>
-<p>(b) Zoomed-in robustness curves</p>
-<p><img alt="" src="../source_termination-robustness-zoom-1000.png" /></p>
-<h3 id="discussion">Discussion</h3>
-<p>We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500 ppb.
-This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
-The zero-horizon of uncertainty estimate also corresponds to the result obtained using a Bayesian decision analysis that does not account for non-probabilistic (information gap) uncertainties.</p>
-<p>On the other hand, we are somewhat vulnerable to uncertain outcomes that deviate from our nominal case.
-The sharp rise in the maximum probability of failure for the 2025 and 2030 scenarios when the horizon (level) of uncertainty is approximately 0.25 (25%) indicates that, e.g., if the model is underestimating the actual concentrations at the site by 25%, the probability of failure could be quite high.
-Another possibility is that undesirable outcomes that appear unlikely with the nominal variance appear more likely with some another possible variance within a horizon of uncertainty of 0.25.</p>
-<p>Here we assume that the maximum acceptable probability of failure (vertical axis in the figure above) is equal to 0.05 (5%), and base our decision analysis on where each of the curves reaches 5% maximum probability of failure.
-In this case, the scenarios terminating the source in 2025 and 2030 produce similar robustness; i.e., if we are willing to wait until 2025, then we may as well wait until 2030.
-At this level of risk (5%), terminating the source in 2015 and 2020 provides additional robustness.
-However, it may not be enough to merit action in the short term.</p>
-<p>Based on the robustness of the model predictions the decision makers can decide the course of action.
-Their decision can also rely on
-(1) risk assessment (e.g., differences in the exposure times depending on when the source is terminated) and
-(2) financial constraints (e.g., costs associated with the source termination over different time frames).</p>
-<h3 id="model">Model</h3>
-<p>Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
-The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the \(x\) and \(y\) axes; the contaminant is released in 1985.</p>
-<p>The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
-The analysis took about 5 minutes in a serial mode using the Julia version of Mads.
-The runs are independent and can be computed efficiently in parallel.</p>
+<p>../../../../examples/bigdt/source_termination.md</p>
 
-              
-            </article>
-          </div>
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
         </div>
         
       </main>
@@ -976,10 +760,11 @@ The runs are independent and can be computed efficiently in parallel.</p>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../../assets/javascripts/workers/search.01824240.min.js"}</script>
+    
+    <script id="__config" type="application/json">{"base": "../../../..", "features": [], "search": "../../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.e0abf5b0.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.b78d2936.min.js"></script>
       
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
       
