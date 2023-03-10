@@ -59,6 +59,13 @@ catch
 	global madsgit = false
 end
 
+try
+	run(pipeline(`python --help`; stdout=devnull, stderr=devnull))
+	global madspython = true
+catch
+	global madspython = false
+end
+
 include("MadsHelpers.jl")
 include("MadsTryImport.jl")
 

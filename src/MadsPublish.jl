@@ -104,25 +104,25 @@ function checkout(modulename::AbstractString=""; git::Bool=true, master::Bool=fa
 			if isdir(d)
 				cd(d)
 			else
-				@warn("Package $i is not installed")
+				@warn("Package $(i) is not installed")
 				return
 			end
 			if master
 				if force
-					run(`bash -l -c 'git checkout -f master'`)
+					run(`git checkout -f master`)
 				else
-					run(`bash -l -c 'git checkout master'`)
+					run(`git checkout master`)
 				end
 			end
 			if pull
-				run(`bash -l -c 'git pull'`)
+				run(`git pull`)
 			end
 			cd(cwd)
 		else
 			try
 				Pkg.checkout(i)
 			catch
-				@warn("$i cannot be checked out; most probably it is dirty!")
+				@warn("$(i) cannot be checked out; most probably it is dirty!")
 			end
 		end
 	end
@@ -147,14 +147,14 @@ function push(modulename::AbstractString="")
 		if isdir(d)
 			cd(d)
 		else
-			@warn("Package $i is not installed")
+			@warn("Package $(i) is not installed")
 			return
 		end
 		try
-			run(`bash -l -c 'git push'`)
+			run(`git push`)
 		catch errmsg
 			printerrormsg(errmsg)
-			@warn("$i cannot be pushed!")
+			@warn("$(i) cannot be pushed!")
 		end
 		cd(cwd)
 	end
@@ -178,14 +178,14 @@ function diff(modulename::AbstractString="")
 		if isdir(d)
 			cd(d)
 		else
-			@warn("Package $i is not installed")
+			@warn("Package $(i) is not installed")
 			return
 		end
 		try
-			run(`bash -l -c 'git diff --word-diff "*.jl"'`)
+			run(`git diff --word-diff "*.jl"`)
 		catch errmsg
 			printerrormsg(errmsg)
-			@warn("$i cannot be diffed!")
+			@warn("$(i) cannot be diffed!")
 		end
 		cd(cwd)
 	end
@@ -236,11 +236,11 @@ function commit(commitmsg::AbstractString, modulename::AbstractString="")
 		if isdir(d)
 			cd(d)
 		else
-			@warn("Package $i is not installed")
+			@warn("Package $(i) is not installed")
 			return
 		end
 		try
-			run(`bash -l -c 'git commit -a -m $(commitmsg)'`)
+			run(`git commit -a -m $(commitmsg)`)
 		catch
 			@warn("Nothing to commit in $(i).")
 		end
@@ -264,19 +264,19 @@ function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=fal
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		if Mads.madsbash
-			cmdproc, cmdout, cmderr = Mads.runcmd(`bash -l -c 'git status -s'`; quiet=true, pipe=true);
-			cmdproc, cmdout, cmderr = Mads.runcmd("git log `bash -l -c 'git describe --tags --abbrev=0'`..HEAD --oneline"; quiet=true, pipe=true);
+		if Mads.madsgit
+			cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true);
+			cmdproc, cmdout, cmderr = Mads.runcmd("git log `git describe --tags --abbrev=0`..HEAD --oneline"; quiet=true, pipe=true);
 			if cmdproc.exitcode != 0
 				@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
 			elseif gitmore
 				@info("Git ID HEAD   $(madsmodule) ...")
-				run(`bash -l -c 'git rev-parse --verify HEAD'`)
+				run(`git rev-parse --verify HEAD`)
 				@info("Git ID master $(madsmodule) ...")
-				run(`bash -l -c 'git rev-parse --verify master'`)
+				run(`git rev-parse --verify master`)
 			end
 		else
-			@info "Modile $madsmodule git status cannot be tested."
+			@info "Module $(madsmodule) git status cannot be tested."
 		end
 		cd(cwd)
 	else
@@ -293,13 +293,13 @@ function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=fal
 		a = ascii(String(o))
 		print(a)
 		if occursin(r"(dirty)", a)
-			@warn("$madsmodule latest changes are not committed!")
+			@warn("$(madsmodule) latest changes are not committed!")
 			tag_flag = false
 		elseif occursin(r"[0-9]\+", a)
-			@warn("$madsmodule latest changes are not tagged!")
+			@warn("$(madsmodule) latest changes are not tagged!")
 			tag_flag = true
 		elseif occursin(r"master", a)
-			@info("$madsmodule latest changes are already tagged!")
+			@info("$(madsmodule) latest changes are already tagged!")
 			tag_flag = false
 		end
 		return tag_flag
@@ -331,15 +331,15 @@ function tag(madsmodule::AbstractString, versionsym::Symbol=:patch)
 				PkgDev.tag(madsmodule, versionsym)
 			catch errmsg
 				printerrormsg(errmsg)
-				@warn("$madsmodule cannot be tagged!")
+				@warn("$(madsmodule) cannot be tagged!")
 				return
 			end
 		else
 			@warn("PkgDev is missing!")
 		end
-		@info("$madsmodule is now tagged!")
+		@info("$(madsmodule) is now tagged!")
 	else
-		@warn("$madsmodule cannot be tagged!")
+		@warn("$(madsmodule) cannot be tagged!")
 	end
 end
 
@@ -365,15 +365,15 @@ function untag(madsmodule::AbstractString, version::AbstractString)
 	if isdir(d)
 		cd(d)
 	else
-		@warn("Package $madsmodule is not installed")
+		@warn("Package $(madsmodule) is not installed")
 		return
 	end
 	try
-		run(`bash -l -c 'git tag -d $version'`)
-		run(`bash -l -c 'git push origin :refs/tags/$version'`)
+		run(`git tag -d $version`)
+		run(`git push origin :refs/tags/$version`)
 	catch errmsg
 		printerrormsg(errmsg)
-		@warn("Untag of $madsmodule failed!")
+		@warn("Untag of $(madsmodule) failed!")
 	end
 	cd(cwd)
 end
@@ -391,9 +391,13 @@ function create_documentation()
 	d = pwd()
 	cd(Mads.dir)
 	# run(`git pull gh gh-pages`)
-	@info("mkdocs build & deploy ...")
-	run(`python -m mkdocs gh-deploy --clean`)
-	@info("mkdocs done.")
+	if Mads.madspython
+		@info("python -m mkdocs build & deploy ...")
+		run(`python -m mkdocs gh-deploy --clean`)
+		@info("mkdocs done.")
+	else
+		@info("Python and mkdocs might be not available!")
+	end
 	cd(d)
 	return
 end
