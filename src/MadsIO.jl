@@ -1,6 +1,90 @@
 import OrderedCollections
+import JLD
 import JLD2
 import FileIO
+import XLSX
+import CSV
+import SHA
+import Dates
+import DataFrames
+
+mutable struct DATA
+	filename::String
+	filehash::String
+end
+
+function createhash!(DATA::DATA)
+	println("File: $(DATA.filename)")
+	open(DATA.filename) do f
+		hash = SHA.bytes2hex(SHA.sha2_256(f))
+		@info("Hash: $(hash)")
+		if DATA.filehash == hash
+			@info("Hash did not change!")
+		else
+			@warn("Hash changed!")
+			DATA.filehash = hash
+		end
+	end
+end
+
+function checkhash(DATA::DATA)::Bool
+	local hash
+	open(DATA.filename) do f
+		hash = SHA.bytes2hex(SHA.sha2_256(f))
+	end
+	if hash != DATA.filehash
+		@error "File hash for $(DATA.filename) does not match!"
+		throw("Error")
+		return false
+	else
+		@info "File hash for $(DATA.filename) matches!"
+		return true
+	end
+end
+
+function load_data(filename::AbstractString)::DataFrames.DataFrame
+	if !isfile(filename)
+		@warn("File $(filename) does not exist!")
+		return DataFrames.DataFrame()
+	else
+		@info("Load input data: $(filename)")
+	end
+	e = lowercase(last(splitext(filename)))
+	if e == ".csv"
+		c = CSV.read(filename, DataFrames.DataFrame)
+	elseif e == ".xlsx"
+		c = DataFrames.DataFrame(XLSX.readtable(filename, "Sheet1"; stop_in_empty_row=false, header=true))
+	elseif e == ".jld"
+		c = JLD.load(filename, "data")
+	elseif e == ".jld2"
+		c = JLD2.load(filename, "data")
+	else
+		@error("Unknown file type with extension $(e)!")
+		return DataFrames.DataFrame()
+	end
+	return c
+end
+
+function save_data(df::DataFrames.DataFrame, filename::AbstractString)::Nothing
+	if isfile(filename)
+		@warn("File $(filename) does exist! It will be overwritten!")
+	else
+		@info("Save output data: $(filename)")
+	end
+	e = lowercase(last(splitext(filename)))
+	if e == ".csv"
+		CSV.write(filename, df)
+	elseif e == ".xlsx"
+		XLSX.writetable(filename, collect(eachcol(df)), names(df); overwrite=true)
+	elseif e == ".jld"
+		JLD.save(filename, "data", df)
+	elseif e == ".jld2"
+		JLD2.save(filename, "data", df)
+	else
+		@error("Unknown file type with extension $(e)!")
+	end
+	return nothing
+end
 
 """
 Get file names by expanding wildcards
