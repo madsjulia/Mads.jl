@@ -7,6 +7,7 @@ import CSV
 import SHA
 import Dates
 import DataFrames
+import LightXML
 
 mutable struct DATA
 	filename::String
@@ -1546,4 +1547,119 @@ function recursivermdir(s::AbstractString; filename=true)
 			rm(sc; force=true)
 		end
 	end
+end
+
+import LightXML
+
+function parsexml(filename::AbstractString, args...; elementnode::AbstractString="variables")
+	parsexml(filename, [args...]; elementnode=elementnode)
+end
+
+function parsexml(filename::AbstractString, vars::Vector{Symbol}=Vector{Symbol}(undef, 0); elementnode::AbstractString="variables")
+	variable_names = Vector{String}(undef, 0)
+	variable_values = Vector{Float64}(undef, 0)
+	xdoc = LightXML.parse_file(filename)
+	xroot = LightXML.root(xdoc)
+	for c in LightXML.child_nodes(xroot)  # c is an instance of XMLNode
+		if LightXML.is_elementnode(c)
+			e = LightXML.XMLElement(c)  # this makes an XMLElement instance
+			if LightXML.name(e) == elementnode
+				for v in LightXML.child_elements(e)
+					d = LightXML.attributes_dict(v)
+					push!(variable_names, d["name"])
+					push!(variable_values, parse(Float64, d["value"]))
+				end
+			end
+		end
+	end
+	LightXML.free(xdoc)
+	return parsevars(variable_names, variable_values, vars)
+end
+
+function parsevars(variable_names::Vector{String}, variable_values::Vector{Float64}, vars::Vector{Symbol})
+	scalar_names = Vector{Symbol}(undef, 0)
+	vector_names = Vector{Symbol}(undef, 0)
+	matrix_names = Vector{Symbol}(undef, 0)
+	v_names = Vector{Symbol}(undef, 0)
+	v_ind = Vector{Int64}(undef, 0)
+	v_rows = Vector{Int64}(undef, 0)
+	v_cols = Vector{Int64}(undef, 0)
+	for i in eachindex(variable_names)
+		s = split(variable_names[i], '[')
+		push!(v_names, string(s[1]))
+		if length(s) > 1
+			indices = split(first(split(s[2], ']')), ',')
+			if length(indices) == 1
+				push!(v_ind, 1)
+				push!(v_rows, parse(Int64, indices[1]))
+				push!(v_cols, 0)
+				push!(vector_names, Symbol(s[1]))
+			else
+				push!(v_ind, 2)
+				push!(v_rows, parse(Int64, indices[1]))
+				push!(v_cols, parse(Int64, indices[2]))
+				push!(matrix_names, Symbol(s[1]))
+			end
+		else
+			push!(v_ind, 0)
+			push!(v_rows, 0)
+			push!(v_cols, 0)
+			push!(scalar_names, Symbol(s[1]))
+		end
+	end
+	scalar_names = sort(unique(scalar_names))
+	vector_names = sort(unique(vector_names))
+	matrix_names = sort(unique(matrix_names))
+	@info("Scalars : $(scalar_names)")
+	@info("Vectors : $(vector_names)")
+	@info("Matrices: $(matrix_names)")
+	vector_lengths = zeros(Int64, length(vector_names))
+	matrix_rows = zeros(Int64, length(matrix_names))
+	matrix_cols = zeros(Int64, length(matrix_names))
+	for i in eachindex(v_ind)
+		if v_ind[i] == 1
+			ii = first(indexin([v_names[i]], vector_names))
+			vector_lengths[ii] = max(vector_lengths[ii], v_rows[i])
+		elseif v_ind[i] == 2
+			ii = first(indexin([v_names[i]], matrix_names))
+			matrix_rows[ii] = max(matrix_rows[ii], v_rows[i])
+			matrix_cols[ii] = max(matrix_cols[ii], v_cols[i])
+		end
+	end
+	for i in eachindex(vector_names)
+		eval(:($(vector_names[i]) = Vector{Float64}(undef, $(vector_lengths[i]))))
+	end
+	for i in eachindex(matrix_names)
+		eval(:($(matrix_names[i]) = Matrix{Float64}(undef, $(matrix_rows[i]), $(matrix_cols[i]))))
+	end
+	for i in eachindex(v_ind)
+		if v_ind[i] == 1
+			ii = first(indexin([v_names[i]], vector_names))
+			k = v_rows[i]
+			v = variable_values[i]
+			eval(:($(vector_names[ii])))[k] = v
+		elseif v_ind[i] == 2
+			ii = first(indexin([v_names[i]], matrix_names))
+			r = v_rows[i]
+			c = v_cols[i]
+			v = variable_values[i]
+			eval(:($(matrix_names[ii])))[r, c] = v
+		else
+			eval(:($(v_names[i]) = $(variable_values[i])))
+		end
+	end
+	lvars = length(vars)
+	select = lvars > 0
+	s = Vector{Any}(undef, lvars)
+	for sc in [scalar_names; vector_names; matrix_names]
+		if select
+			ii = first(indexin([sc], vars))
+			if ii !== nothing
+				s[ii] = eval(:($(sc)))
+			end
+		else
+			push!(s, eval(:($(sc))))
+		end
+	end
+	return (s...,)
 end
