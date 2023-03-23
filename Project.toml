@@ -107,7 +107,7 @@ SVR = "1"
 StatsBase = "0.33, 0.34"
 Suppressor = "0.2, 0.3"
 YAML = "0.4.2, 0.5"
-XLSX = "0.7, 0.8"
+XLSX = "0.7, 0.8, 0.9, 1"
 julia = "1.7"
 
 [extras]
