@@ -126,7 +126,7 @@ function makelmfunctions(f::Function)
 	return f_lm, g_lm, o_lm
 end
 function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parallel_optimization)
-	if !veryquiet
+	if !quiet
 		if parallel_gradients
 			@info("Parallel gradients!")
 		else
