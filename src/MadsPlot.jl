@@ -1023,28 +1023,19 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", forma
 """ spaghettiplot
 
 
-"""
-Create plots of data series
-
-$(DocumentFunction.documentfunction(plotseries;
-argtext=Dict("X"=>"matrix with the series data",
-            "filename"=>"output file name"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
-            "xtitle"=>"x-axis title [default=`X`]",
-            "ytitle"=>"y-axis title [default=`Y`]",
-            "title"=>"plot title [default=`Sources`]",
-            "name"=>"series name [default=`Sources`]",
-            "combined"=>"combine plots [default=`true`]",
-            "hsize"=>"horizontal size [default=`8Gadfly.inch`]",
-            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
-            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
-            "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
-            "colors"=>"colors to use in plots")))
-
-Dumps:
-
-- Plots of data series
-"""
+function plotseries(df::DataFrames.DataFrame, args...; separate_files::Bool=false, normalize::Bool=false, kw...)
+	m = Matrix(df)
+	if normalize
+		m ./= maximum(m; dims=1)
+	end
+	if separate_files
+		for i = 1:size(m, 2)
+			plotseries(m[:, i], args...; title=names(df)[i], kw...)
+		end
+	else
+		plotseries(m, args...; names=names(df), kw...)
+	end
+end
 function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
@@ -1216,9 +1207,9 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	try
 		if filename != ""
-			plotfileformat(pS, filename, hsize_plot, vsize_plot; format=format, dpi=dpi)
+			plotfileformat(pS, filename, hsize_plot, hsize_plot; format=format, dpi=dpi)
 		end
-		!quiet && Mads.display(pS; gw=hsize, gh=vsize)
+		!quiet && Mads.display(pS; gw=hsize_plot, gh=hsize_plot)
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
@@ -1234,6 +1225,28 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 		return nothing
 	end
 end
+@doc """
+Create plots of data series
+
+$(DocumentFunction.documentfunction(plotseries;
+argtext=Dict("X"=>"matrix with the series data",
+            "filename"=>"output file name"),
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
+            "xtitle"=>"x-axis title [default=`X`]",
+            "ytitle"=>"y-axis title [default=`Y`]",
+            "title"=>"plot title [default=`Sources`]",
+            "name"=>"series name [default=`Sources`]",
+            "combined"=>"combine plots [default=`true`]",
+            "hsize"=>"horizontal size [default=`8Gadfly.inch`]",
+            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
+            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
+            "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
+            "colors"=>"colors to use in plots")))
+
+Dumps:
+
+- Plots of data series
+""" plotseries
 
 """
 Plot local sensitivity analysis results
