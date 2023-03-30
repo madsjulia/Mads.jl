@@ -1207,9 +1207,9 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1)
 	end
 	try
 		if filename != ""
-			plotfileformat(pS, filename, hsize_plot, hsize_plot; format=format, dpi=dpi)
+			plotfileformat(pS, filename, hsize_plot, vsize_plot; format=format, dpi=dpi)
 		end
-		!quiet && Mads.display(pS; gw=hsize_plot, gh=hsize_plot)
+		!quiet && Mads.display(pS; gw=hsize_plot, gh=vsize_plot)
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
