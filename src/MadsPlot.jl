@@ -1023,17 +1023,22 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", forma
 """ spaghettiplot
 
 
-function plotseries(df::DataFrames.DataFrame, args...; separate_files::Bool=false, normalize::Bool=false, kw...)
+function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; separate_files::Bool=false, normalize::Bool=false, kw...)
 	m = Matrix(df)
 	if normalize
 		m ./= maximum(m; dims=1)
 	end
 	if separate_files
+		if filename != ""
+			f, e = splitext(filename)
+		end
+		n = names(df)
 		for i = 1:size(m, 2)
-			plotseries(m[:, i], args...; title=names(df)[i], kw...)
+			fn = filename == "" ? filename : f * "_" * n[i] * e
+			plotseries(m[:, i], fn; title=n[i], kw...)
 		end
 	else
-		plotseries(m, args...; names=names(df), kw...)
+		plotseries(m, filename; names=n, kw...)
 	end
 end
 function plotseries(X::AbstractArray, filename::AbstractString=""; nT=size(X, 1), nS=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:size(X,2)], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:size(X,1), plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
