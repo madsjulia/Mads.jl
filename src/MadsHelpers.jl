@@ -663,3 +663,7 @@ function nonunique_indices(x::AbstractVector)
 	end
 	return iddi
 end
+
+function unique_indices(x::AbstractVector)
+	return unique(i->x[i], eachindex(x))
+end
