@@ -631,39 +631,28 @@ function merge_dictionaries(a::AbstractDict, b::AbstractDict)
 end
 
 function nonunique(x::AbstractVector{T}) where T
-	xs = sort(x)
-	duplicatedvector = Vector{T}(undef, 0)
-	for i = 2:length(xs)
-		if(isequal(xs[i], xs[i-1]) && (length(duplicatedvector)==0 || !isequal(duplicatedvector[end], xs[i])))
-			push!(duplicatedvector, xs[i])
-		end
-	end
-	return duplicatedvector
+	iu = unique_indices(x::AbstractVector)
+	iunique = trues(length(x))
+
+	return iunique
+end
+
+function nonunique_mask(x::AbstractVector)
+	return .!unique_mask(x)
 end
 
 function nonunique_indices(x::AbstractVector)
-	duplicates = nonunique(x)
-	idd = indexin(x, duplicates)
-	iddi = idd .!== nothing
-	duplicate = false
-	for i = eachindex(iddi)
-		if duplicate
-			if iddi[i] == 1
-				iddi[i] = 0
-			else
-				duplicate = false
-			end
-		else
-			if iddi[i] == 1
-				duplicate = true
-			else
-				duplicate = false
-			end
-		end
-	end
-	return iddi
+	nunique_indices = collect(1:length(x))
+	return nunique_indices[.!unique_mask(x)]
 end
 
 function unique_indices(x::AbstractVector)
 	return unique(i->x[i], eachindex(x))
+end
+
+function unique_mask(x::AbstractVector)
+	iunique = unique_indices(x)
+	nunique_mask = falses(length(x))
+	nunique_mask[iunique] .= true
+	return nunique_mask
 end
