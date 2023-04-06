@@ -1022,6 +1022,27 @@ Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", forma
 ```
 """ spaghettiplot
 
+function plotseries(dict::AbstractDict, filename::AbstractString=""; separate_files::Bool=false, normalize::Bool=false, names=string.(keys(dict)), kw...)
+	if separate_files
+		if filename != ""
+			f, e = splitext(filename)
+		end
+		for (i, k) in enumerate(keys(dict))
+			fn = filename == "" ? filename : f * "_" * "$(names[i])" * e
+			v = normalize ? dict[k] ./ maximum(dict[k]) : dict[k]
+			plotseries(v, fn; title=names[i], kw...)
+		end
+	else
+		m = Matrix{Float64}(undef, length(dict[first(keys(dict))]), length(keys(dict)))
+		for (i, k) in enumerate(keys(dict))
+			m[:,i] = dict[k]
+		end
+		if normalize
+			m ./= maximum(m; dims=1)
+		end
+		plotseries(m, filename; names=names, kw...)
+	end
+end
 
 function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; separate_files::Bool=false, normalize::Bool=false, kw...)
 	m = Matrix(df)
