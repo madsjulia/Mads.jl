@@ -98,6 +98,8 @@ function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortout
 	if string != ""
 		quiet = false
 		suffix = " matching the search criteria"
+	else
+		suffix = ""
 	end
 	try
 		f = names(Core.eval(Mads, m); all=true)
