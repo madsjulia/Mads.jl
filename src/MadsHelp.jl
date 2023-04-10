@@ -96,15 +96,14 @@ end
 function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortoutput::Bool=false, quiet::Bool=false)
 	n = 0
 	if string != ""
-		quiet = false
 		suffix = " matching the search criteria"
 	else
 		suffix = ""
 	end
+	functions = Array{String}(undef, 0)
 	try
 		f = names(Core.eval(Mads, m); all=true)
-		functions = Array{String}(undef, 0)
-		for i in 1:length(f)
+		for i in eachindex(f)
 			functionname = "$(f[i])"
 			if occursin("eval", functionname) || occursin("#", functionname) || occursin("__", functionname) || functionname == "$m"
 				continue
@@ -127,7 +126,7 @@ function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortout
 		Mads.madswarn("Module $m not defined!")
 	end
 	n > 0 && string == "" && @info("Number of functions in module $m: $n")
-	return n
+	return functions
 end
 
 @doc """
