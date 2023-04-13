@@ -87,27 +87,11 @@ function save_data(df::DataFrames.DataFrame, filename::AbstractString)::Nothing
 	return nothing
 end
 function save_data(d::AbstractDict, filename::AbstractString)::Nothing
-	if isfile(filename)
-		@warn("File $(filename) does exist! It will be overwritten!")
-	else
-		@info("Save output data: $(filename)")
-	end
 	df = DataFrames.DataFrame()
 	for k in keys(d)
 		df[!, Symbol(k)] = d[k]
 	end
-	e = lowercase(last(splitext(filename)))
-	if e == ".csv"
-		CSV.write(filename, df)
-	elseif e == ".xlsx"
-		XLSX.writetable(filename, collect(eachcol(df)), names(df); overwrite=true)
-	elseif e == ".jld"
-		JLD.save(filename, "data", df)
-	elseif e == ".jld2"
-		JLD2.save(filename, "data", df)
-	else
-		@error("Unknown file type with extension $(e)!")
-	end
+	save_data(df, filename)
 	return nothing
 end
 
