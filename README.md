@@ -1,6 +1,6 @@
 # MADS (Model Analysis & Decision Support)
 
-![logo](logo/mads_black_swan_logo_big_text_new_3inch.png)
+![logo](logos/mads_black_swan_logo_big_text_new_3inch.png)
 
 [action-img]: https://github.com/madsjulia/Mads.jl/workflows/CI/badge.svg
 [action-url]: https://github.com/madsjulia/Mads.jl/actions

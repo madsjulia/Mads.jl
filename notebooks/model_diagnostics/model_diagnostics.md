@@ -3,7 +3,7 @@
 [MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
 
 <div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
-    <img src="https://raw.githubusercontent.com/madsjulia/Mads.jl/master/logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+    <img src="https://raw.githubusercontent.com/madsjulia/Mads.jl/master/logos/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
 </div>
 
 [MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
@@ -23,7 +23,7 @@ Most of the tasks listed above are demonstrated below.
 
 ## Problem setup
 
-Import Mads (if **MADS** is not installed, first execute in the Julia REPL: 
+Import Mads (if **MADS** is not installed, first execute in the Julia REPL:
 
 ```julia
 import Pkg
@@ -41,7 +41,7 @@ import Fontconfig
 
     [1mMads: Model Analysis & Decision Support[0m
     ====
-    
+
     [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
     [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
     [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
@@ -52,7 +52,7 @@ import Fontconfig
     [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
     [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
     [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
-    
+
     [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
     [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
 
@@ -228,10 +228,10 @@ We can also double check the problem setup.
 Mads.showparameters(md)
 ```
 
-    a =               1 distribution = Uniform(-10, 10) 
-    b =               1 distribution = Uniform(-10, 10) 
-    c =               1 distribution = Uniform(-5, 5) 
-    n =               1 distribution = Uniform(0, 3) 
+    a =               1 distribution = Uniform(-10, 10)
+    b =               1 distribution = Uniform(-10, 10)
+    c =               1 distribution = Uniform(-5, 5)
+    n =               1 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
 
 
@@ -297,12 +297,12 @@ Mads.plotmatches(md)
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_33_0.png)
-    
 
 
-    
+
+
 
 The figure above shows that the `true` observations are not well reproduced by the model using the initial model parameter guesses.
 
@@ -316,7 +316,7 @@ calib_param, calib_information = Mads.calibrate(md)
 ```
 
 
-    (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm 
+    (OrderedCollections.OrderedDict("a" => 0.0070504634932362364, "b" => 0.9506900793467459, "c" => 0.03854153288467277, "n" => 2.9321887287806576), OptimBase.MultivariateOptimizationResults{LsqFit.LevenbergMarquardt, Float64, 1}(LsqFit.LevenbergMarquardt(), [0.10016742116155988, 0.10016742116155988, 0.20135792079033074, -0.339836909454122], [-31.415221489490197, 31.51113933688991, 0.007708382914323126, 33.28855825149693], 233.37348475659584, 19, false, true, 0.0001, 0.0, false, 0.001, 0.0, false, 1.0e-6, 0.0, false, Iter     Function value   Gradient norm
     ------   --------------   --------------
     , 267, 19, 0))
 
@@ -335,12 +335,12 @@ Mads.plotmatches(md, calib_param)
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_39_0.png)
-    
 
 
-    
+
+
 
 Initial values of the model parameters are:
 
@@ -349,10 +349,10 @@ Initial values of the model parameters are:
 Mads.showparameterestimates(md)
 ```
 
-    a =               1 distribution = Uniform(-10, 10) 
-    b =               1 distribution = Uniform(-10, 10) 
-    c =               1 distribution = Uniform(-5, 5) 
-    n =               1 distribution = Uniform(0, 3) 
+    a =               1 distribution = Uniform(-10, 10)
+    b =               1 distribution = Uniform(-10, 10)
+    c =               1 distribution = Uniform(-5, 5)
+    n =               1 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
 
 
@@ -363,10 +363,10 @@ Estimated values of the model parameters based on the model calibration (inversi
 Mads.showparameterestimates(md, calib_param)
 ```
 
-    a =      0.00705046 distribution = Uniform(-10, 10) 
-    b =         0.95069 distribution = Uniform(-10, 10) 
-    c =       0.0385415 distribution = Uniform(-5, 5) 
-    n =         2.93219 distribution = Uniform(0, 3) 
+    a =      0.00705046 distribution = Uniform(-10, 10)
+    b =         0.95069 distribution = Uniform(-10, 10)
+    c =       0.0385415 distribution = Uniform(-5, 5)
+    n =         2.93219 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
 
 
@@ -391,7 +391,7 @@ calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
       269.91      OrderedCollections.OrderedDict("a"=>-4.41759, "b"=>5.40692, "c"=>0.0206894, "n"=>0.9961)
       270.093     OrderedCollections.OrderedDict("a"=>-4.82082, "b"=>5.80708, "c"=>0.0214349, "n"=>0.995788)
       270.067     OrderedCollections.OrderedDict("a"=>-2.58655, "b"=>3.57364, "c"=>0.0211371, "n"=>0.992455)
-        ⋮      ⋱  
+        ⋮      ⋱
       270.091     OrderedCollections.OrderedDict("a"=>-5.97129, "b"=>6.95745, "c"=>0.0214664, "n"=>0.996586)
       270.122     OrderedCollections.OrderedDict("a"=>-2.481, "b"=>3.46755, "c"=>0.0212952, "n"=>0.991901)
       269.794     OrderedCollections.OrderedDict("a"=>3.95245, "b"=>-2.96176, "c"=>0.0197838, "n"=>1.00408)
@@ -427,12 +427,12 @@ Mads.spaghettiplot(md, forward_predictions)
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_49_0.png)
-    
 
 
-    
+
+
 
 The results and figure above demonstrate that there are several different "global" minima.
 
@@ -463,44 +463,44 @@ end
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_51_0.png)
-    
+
 
 
     Solution for n=0
-    a =       0.0354613 distribution = Uniform(-10, 10) 
-    b =        0.998702 distribution = Uniform(-10, 10) 
-    c =     1.70238e-05 distribution = Uniform(-5, 5) 
-    n =     0.000376271 distribution = Uniform(0, 3) 
+    a =       0.0354613 distribution = Uniform(-10, 10)
+    b =        0.998702 distribution = Uniform(-10, 10)
+    c =     1.70238e-05 distribution = Uniform(-5, 5)
+    n =     0.000376271 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
 
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_51_2.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_51_3.png)
-    
+
 
 
     Solution for n=1
-    a =        -0.28542 distribution = Uniform(-10, 10) 
-    b =         1.27948 distribution = Uniform(-10, 10) 
-    c =       0.0178456 distribution = Uniform(-5, 5) 
-    n =        0.951994 distribution = Uniform(0, 3) 
+    a =        -0.28542 distribution = Uniform(-10, 10)
+    b =         1.27948 distribution = Uniform(-10, 10)
+    c =       0.0178456 distribution = Uniform(-5, 5)
+    n =        0.951994 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
     Solution for n=3
-    a =      0.00653517 distribution = Uniform(-10, 10) 
-    b =        0.950689 distribution = Uniform(-10, 10) 
-    c =        0.039249 distribution = Uniform(-5, 5) 
-    n =               3 distribution = Uniform(0, 3) 
+    a =      0.00653517 distribution = Uniform(-10, 10)
+    b =        0.950689 distribution = Uniform(-10, 10)
+    c =        0.039249 distribution = Uniform(-5, 5)
+    n =               3 distribution = Uniform(0, 3)
     Number of optimizable parameters: 4
-    
+
 
 ## Analysis of predictive sensitivities and uncertainties
 
@@ -544,7 +544,7 @@ Based on these results, `c` is well constrained. `n` is also well defined. In co
 
 However, because of the local nature of the estimates, these results are not very accurate and differ with the global sensitivity and uncertainty analyses presented below.
 
-The plots below show a series of graphical representations of the `localsa` results. 
+The plots below show a series of graphical representations of the `localsa` results.
 These plots are generated automatically by the code.
 
 A plot of the Jacobian representing the relationships between model parameters and estimated observations:
@@ -555,12 +555,12 @@ Mads.display("model_diagnostics-jacobian.png")
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_58_0.png)
-    
 
 
-    
+
+
 
 
 A plot of the eigen matrix of the Hessian (the Hessian is approximately computed based on the Jacobian above):
@@ -571,12 +571,12 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_60_0.png)
-    
 
 
-    
+
+
 
 
 A plot of the eigen values of the Hessian matrix:
@@ -587,12 +587,12 @@ Mads.display("model_diagnostics-eigenvalues.png")
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_62_0.png)
-    
 
 
-    
+
+
 
 
 The eigen analysis presented above suggests that `a` and `b` are correlated (this is expected based on the mathematical form of the solved model in the function `polynomial`).
@@ -643,12 +643,12 @@ Mads.spaghettiplot(md, f)
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_69_0.png)
-    
 
 
-    
+
+
 
 The figure above compares the 10,000 model predictions with the actual measurements (red dots).
 
@@ -665,12 +665,12 @@ Mads.display("model_diagnostics-emcee_scatter.png")
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_72_0.png)
-    
 
 
-    
+
+
 
 
 The figure above shows that the optimal (most probable) estimates are:
@@ -722,40 +722,40 @@ Mads.plotobsSAresults(md, saltelli_results)
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_76_0.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_76_1.png)
-    
 
 
-    
 
 
-    
+
+
+
 ![png](model_diagnostics_files/model_diagnostics_76_3.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_76_4.png)
-    
 
 
-    
 
 
-    
+
+
+
 ![png](model_diagnostics_files/model_diagnostics_76_6.png)
-    
 
 
-    
+
+
 
 The EFAST results are obtained as follows:
 
@@ -766,38 +766,38 @@ Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle 
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_78_0.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_78_1.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_78_2.png)
-    
 
 
-    
 
 
-    
+
+
+
 ![png](model_diagnostics_files/model_diagnostics_78_4.png)
-    
 
 
 
-    
+
+
 ![png](model_diagnostics_files/model_diagnostics_78_5.png)
-    
 
 
-    
+
+
 
 The differences in the `total` and `main` effect plots suggest correlations in the model parameters (which is also demonstrated by the `AffineInvariantMCMC` analyses above).
 
@@ -864,13 +864,13 @@ Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 
 
     ┌ Info: New seed: 2015
     └ @ Mads /Users/vvv/.julia/dev/Mads/src/MadsHelpers.jl:462
-    
+
     ******************************************************************************
     This program contains Ipopt, a library for large-scale nonlinear optimization.
      Ipopt is released as open source code under the Eclipse Public License (EPL).
              For more information visit https://github.com/coin-or/Ipopt
     ******************************************************************************
-    
+
     Min h = 0.001 OF = 4.998333281688344 par = [0.9993333197989149, 0.0016666826937701167]
     Max h = 0.001 OF = 5.00166671833499 par = [1.0006666802044195, -0.001666682687108125]
     Min h = 0.01 OF = 4.983333280036714 par = [0.9933333177282005, 0.016666691395710947]
@@ -949,12 +949,12 @@ Mads.display("infogap_opportuneness_vs_robustness.png")
 ```
 
 
-    
+
 ![png](model_diagnostics_files/model_diagnostics_86_0.png)
-    
 
 
-    
+
+
 
 
 The figure above compares the model `opportuneness` (dashed lines) vs model `robustness` (solid lines) for different infogap horizons of uncertainty `h` and different models (different colors).

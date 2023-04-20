@@ -3,7 +3,7 @@
 [MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
 
 <div style="text-align: left; padding-top: 30px; padding-bottom: 30px;">
-    <img src="../../logo/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
+    <img src="../../logos/mads_black_swan_logo_big_text_new_3inch.png" alt="MADS" width=20% max-width=125px;/>
 </div>
 
 [MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
@@ -36,7 +36,7 @@ import Mads
 
     [1mMads: Model Analysis & Decision Support[0m
     ====
-    
+
     [1m[34m    ___      ____    [1m[31m        ____   [1m[32m ____         [1m[35m     ______[0m
     [1m[34m   /   \    /    \  [1m[31m        /    | [1m[32m |    \     [1m[35m       /  __  \[0m
     [1m[34m  |     \  /     |   [1m[31m      /     |  [1m[32m|     \     [1m[35m     /  /  \__\[0m
@@ -47,7 +47,7 @@ import Mads
     [1m[34m  |  |        |  |  [1m[31m  /  /===|   | [1m[32m |   |___\  \ [1m[35m   __.        |  |[0m
     [1m[34m  |  |        |  | [1m[31m  /  /    |   | [1m[32m |           \  [1m[35m \  \______/  /[0m
     [1m[34m  |__|        |__| [1m[31m /__/     |___| [1m[32m |____________\ [1m[35m  \__________/[0m
-    
+
     [1mMADS[0m is an integrated high-performance computational framework for data- and model-based analyses.
     [1mMADS[0m can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.
 
@@ -95,7 +95,7 @@ S = [s1 s2 s3]
      0.761344     0.421127    0.333606
      0.782321     0.27874     0.285782
      0.802593     0.156117    0.889261
-     ⋮                        
+     ⋮
      0.0171135    0.999997    0.577248
      0.0112349    0.978188    0.956294
      0.00657807   0.913664    0.62366
@@ -3150,7 +3150,7 @@ X = S * H
      1.51608   1.17586   1.42856   1.6036
      1.34684   0.843262  1.35389   1.3398
      1.84797   1.20149   2.58111   1.11483
-     ⋮                             
+     ⋮
      1.59436   2.57724   1.17161   2.01711
      1.94572   2.91267   1.92382   1.96761
      1.5439    2.45099   1.2539    1.83391
