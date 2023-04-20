@@ -3,6 +3,9 @@ syntax: glob
 *.finalresults
 Manifest.toml
 config
+docs/build
+site
+public
 *.log
 .DS_Store
 _build/

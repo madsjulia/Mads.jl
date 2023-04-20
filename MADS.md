@@ -52,6 +52,3 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 * docker:
     - `docker run --interactive --tty montyvesselinov/madsjulia`
 * email: [mads@lanl.gov](mailto:mads@lanl.gov)
-
----
-LA-CC-15-080
