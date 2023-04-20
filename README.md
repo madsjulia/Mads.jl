@@ -129,6 +129,13 @@ ENV["no_proxy"] = ".lanl.gov"
 ```
 
 Julia uses git for package management.
+
+On Windows, you may beed to execute:
+
+```bash
+git config --global credential.helper manager
+```
+
 In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
 
 ```
