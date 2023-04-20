@@ -1,20 +1,17 @@
-## Mads Examples
+# Examples
 
-### [Setup](setup/index.html)
+## [Decision Analysis](bigdt/source_termination/index.md)
 
-### [Decision Analysis](bigdt/source_termination/index.html)
+## [Information Gap Decision Analysis](infogap/index.md)
 
-### [Information Gap Decision Analysis](infogap/index.html)
+## [Uncertainty Quantification](bayesian_sampling/index.md)
 
-### [Uncertainty Quantification](bayesian_sampling/index.html)
+## [Machine Learning](machine_learning/index.md)
 
-### [Machine Learning](machine_learning/index.html)
+### [Contaminant Source Identification](contaminant_source_identification/index.md)
 
-#### [Contaminant Source Identification](contaminant_source_identification/index.html)
+### [Blind Source Separation](blind_source_separation/index.md)
 
-#### [Blind Source Separation](blind_source_separation/index.html)
+## [Contaminant Transport](contamination/index.md)
 
-### [Contaminant Transport](contamination/index.html)
-
-### [ODE Analysis](ode/index.html)
-
+## [ODE Analysis](ode/index.md)

@@ -1,5 +1,4 @@
-## MADS examples
-
+# Examples
 
 In Julia REPL, do the following commands:
 

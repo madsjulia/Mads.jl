@@ -1,6 +1,6 @@
 # MADS (Model Analysis & Decision Support)
 
-![logo](logo/mads_black_swan_logo_big_text_new_3inch.png)
+![logo](logos/mads_black_swan_logo_big_text_new_3inch.png)
 
 [action-img]: https://github.com/madsjulia/Mads.jl/workflows/CI/badge.svg
 [action-url]: https://github.com/madsjulia/Mads.jl/actions
@@ -30,9 +30,9 @@
 
 ## Documentation
 
-Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
+Documentation including descriptions of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl).
 
-See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+See also [mads.gitlab.io](http://mads.gitlab.io) and [mads.gitlab.io/Mads.jl](http://mads.gitlab.io/Mads.jl)
 
 Detailed model diagnostics problem is demonstrated [here](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
 
