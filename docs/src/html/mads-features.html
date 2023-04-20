@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MADS Features</title>
+<META NAME="Description" CONTENT="MADS unique features related to code adaptability, performance, and design" />
+<script>
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/jquery-1.7.min.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.fancybox-1.3.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.mousewheel-3.0.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/mads-ajax-links.js'%3E%3C/script%3E"));
+</script>
+<link rel="stylesheet" type="text/css" href="css/mads.css" />
+<style type="text/css">
+.body p { margin-top: 10px; margin-bottom: 0px; }
+.body ul { padding-top:0px; }
+.body ul li { padding-top:15px; }
+</style>
+<script type="text/javascript" src="./js/mads.js"></script>
+</head>
+
+<body class="body">
+<div class="animatescroll" >
+<a name="features:top" id="features:top"></a>
+<h1><strong>MADS</strong> Features</h1>
+<p><strong>MADS</strong> is characterized by several unique features: </p>
+<ul>
+  <li>Provides an integrated computational framework for a wide range of model-based analyses, and supports model-based decision making. </li>
+
+  <li>By design, works in an adaptive mode with minimum input from the user.<br />
+  For example, &lsquo;<strong>mads s01</strong>&rsquo; is sufficient to perform calibration of problem &lsquo;<strong>s01</strong>&rsquo; and &lsquo;<strong>mads montecarlo s01</strong>&rsquo; is sufficient to perform uncertainty analysis of problem &lsquo;<strong>s01</strong>&rsquo; (<a href="#manual" class="ajax-links">MADS manual</a>). All the parameters controlling the performance of these analyses are estimated internally by <strong>MADS</strong>. Nevertheless, if needed, the user has the flexibility to specify a wide range of options (as demonstrated in <strong>MADS</strong> <a href="#manual" class="ajax-links">manual</a> and <a href="#examples" class="ajax-links">execution examples</a>). </li>
+
+  <li>The same problem input file<strong> </strong>(in the previous case, &lsquo;<strong>s01.mads</strong>&rsquo;)<strong> </strong>is sufficient and can be applied to perform all the possible model analyses supported by <strong>MADS</strong>.<br />
+  Different analyses can be invoked using different command-line keywords and options.<br />
+  If preferred, the keywords can be provided on the first line of the problem input file as well.</li>
+
+  <li>Most of the model analysis can be performed using a discretized parameter space (e.g. <strong>PPSD</strong>, <strong>IGPD</strong>, <strong>ABAGUS</strong>). This can substantially reduce the computational effort to perform model analyses of computationally intensive models and complex parameter spaces (<a href="#manual" class="ajax-links">MADS manual</a>).</li>
+  <li>Highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called <a href="http://www.pesthomepage.org/Highly-paraameterized_inversion.php">SVD assist</a> in <a href="http://www.pesthomepage.org" target="_blank">PEST</a> (<a href="http://www.pesthomepage.org/Highly-paraameterized_inversion.php">svdassist</a>).</li>
+
+  <li>Permits the use of 'acceptable' calibration ranges for each optimization target.<br />
+  In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.<br />
+  This feature is implemented using the keyword &lsquo;<strong><u>obsrange</u></strong>&rsquo; (<a href="#manual:termination" class="ajax-links">MADS manual</a>). </li>
+
+  <li>Allows the use of an acceptable calibration range for the objective function.<br />
+  In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword &lsquo;<strong><u>cutoff</u></strong>&rsquo; (<a href="#manual:termination" class="ajax-links">MADS manual</a>).</li>
+  <li>Implements a series of alternative objective functions (OF).</li>
+
+  <li>By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process. </li>
+
+  <li>Provides an option to perform a series of optimizations with random initial guesses for optimization parameters. </li>
+
+  <li>Provides an option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword &lsquo;<strong>retry&rsquo;</strong>; <a href="#manual:caliboptions" class="ajax-links">MADS manual</a>). </li>
+
+  <li>Automatically detects and utilizes the available multi-processor resources for parallelization of m. </li>
+
+  <li>Analyzes the runtime performance of the available parallel hosts (processors); hosts not capable of performing the requested parallel jobs are dynamically ignored. </li>
+
+  <li>Tracks the multiple model files during parallel execution automatically; for the user, there is no difference between serial (using single processor) and parallel modes of execution. </li>
+
+  <li>Performs automatic bookkeeping of all the model results for efficient restart and rerun of MADS jobs (e.g. if the previous job was not completed) and additional posterior analyses. </li>
+
+  <li>Allows the user to perform different types of analyses based on model results stored during previous MADS runs; for example, model runs obtained during model calibration can be utilized in posterior Monte Carlo analyses. </li>
+  <li>Provides a built-in protection against simultaneous execution of conflicting MADS runs in the same working directory. </li>
+  <li>Automatically renames the files obtained during previous MADS runs by default using unique date &amp; time information in the file names to avoid overwriting. </li>
+  <li>Object-oriented design of MADS allows for relatively easy integration with other object-oriented optimization or sampling techniques.</li>
+</ul>
+</div>
+</body>
+</html>

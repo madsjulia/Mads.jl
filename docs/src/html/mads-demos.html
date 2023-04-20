@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MADS Demonstrations</title>
+<META NAME="Description" CONTENT="MADS demonstrations of Agent-based Global Uncertainty and Sensitivity analysis (ABAGUS) and Global Optimization technique Squads coupling Particle Swarm  and Levenberg-Marquardt optimization techniques" />
+<link rel="stylesheet" type="text/css" href="css/mads.css" />
+<script>
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/jquery-1.7.min.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.fancybox-1.3.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.mousewheel-3.0.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/mads-ajax-links.js'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript" src="./js/mads.js"></script>
+</head>
+
+<body class="body">
+<div class="animatescroll" >
+<a name="demos:top" id="demos:top"></a>
+<h1><strong>MADS</strong> Demos</h1>
+<ul>
+<li><a href="#demos:ABAGUS" class="anim-links">ABAGUS</a></li>
+<li><a href="#demos:Squads" class="anim-links">Squads</a></li>
+</ul>
+<h2><a name="demos:ABAGUS" id="ABAGUS"></a><strong>ABAGUS</strong>: Agent-based Global Uncertainty and Sensitivity analysis</h2>
+<p><a href="animations/abagus-opt.gif" class="singleImg" rel="group_demo" title="ABAGUS animation"><img src="animations/abagus-opt.gif" width="640" height="480" />[click to enlarge]</a></p>
+<p>The movie above  shows an animation of the hierarchical еxploration of 2D parameter space by <strong>ABAGUS</strong> for the case of a simple parabola test model (keyword '<strong>test=1</strong>'). The acceptable parameter space solution is in the area with radius of about 14 from the global minimum at (0,0) with objective function (OF) cutoff value below  160 (keyword '<strong>cutoff=160</strong>'). The parameter space domain is [-100,100] (keyword '<strong>pardomain=200</strong>') for both model parameters. Only, [-20,20] range is shown in the figure below.</p>
+<p><strong>ABAGUS</strong> performs a series of analyses with different discretization sizes: 10, 5, 2.5, 1.25, etc. The location of the agents is shown by cyan stars (the agents explore the parameter space outside of the shown domain as well.</p>
+<p><a href="demos/parabola3d.png" class="singleImg" rel="group_demo" title="Parabola test function">Response surface of the parabola test function:<br /><img src="demos/parabola3d.png" width="445" height="299" />[click to enlarge]</a></p>
+<p><strong>ABAGUS</strong> performance is compared to <strong>MADS</strong> Monte Carlo  analysis using Improved Distributed Latin Hypercube Sampling (<strong>IDLHS</strong>).</p>
+<p><a href="demos/convergence_00.png" class="singleImg" rel="group_demo" title="ABAGUS & Montel Carlo convergence">Comparison of both methods based on the number of functional evaluations:<br /><img src="demos/convergence_00.png" width="473" height="358" />[click to enlarge]</a></p>
+<p>The results demonstrate that <strong>ABAGUS</strong> outperforms the Monte Carlo analysis using Improved Distributed Latin Hypercube Sampling (<strong>IDLHS</strong>).</p>
+<p><a href="#demos:top" class="anim-links">Back to top</a></p>
+<h2>&nbsp;</h2>
+<h2>&nbsp;</h2>
+
+
+<h2><a name="demos:Squads" id="Squads"></a><strong>Squads</strong>: Global Optimization technique coupling Particle Swarm  and Levenberg-Marquardt optimization techniques</h2>
+<p>Comparisons are performed between <strong>LM</strong> (Levenberg-Marquardt), <a href="http://clerc.maurice.free.fr/pso/" target="_blank">PSO</a> (Particle Swarm Optimization), <a href="www.particleswarm.info/Tribes_2006_Cooren.pdf" target="_blank">TRIBES</a> , <a href="http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m">hPSO</a> and <strong>Squads</strong> to solve <strong>Rosenbrock</strong> and <strong>Griewank</strong> test problem with different dimensionality (i.e. number of adjustable parameters).</p>
+<p>Figures below present boxplots for the number of function evaluations for successful runs for 2D, 5D, and 10D <strong>Rosenbrock</strong> and <strong>Griewank</strong> test functions, respectively. In the figures, the boxes represent the 25th to 75th percentile ranges, the bars inside of the boxes represent the median values, and the whiskers represent the minimum and maximum values. The fraction of successful runs out of the attempted runs are presented above the boxes. </p>
+<p> The <strong>robustness</strong> of the strategies is defined as the percentage of successful runs.</p>
+<p>The <strong>efficiency</strong> of the strategies is defined by the number of functional evaluations required to achieve the global minimum.</p>
+<p><strong>Squads</strong> is as robust or more robust than the other tested strategies (<strong>LM</strong>, <a href="http://clerc.maurice.free.fr/pso/" target="_blank">PSO</a>, <a href="www.particleswarm.info/Tribes_2006_Cooren.pdf" target="_blank">TRIBES</a>, and <a href="http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m">hPSO</a>) in all cases. </p>
+<p><strong>Squads</strong> is more efficient than <a href="http://clerc.maurice.free.fr/pso/" target="_blank">PSO</a>, <a href="www.particleswarm.info/Tribes_2006_Cooren.pdf" target="_blank">TRIBES</a>,  and <a href="http://www.mathworks.com/matlabcentral/fileexchange/6497-hybrid-particle-swarm-optimization/content/hPSOoptions.m">hPSO</a> in all cases.</p>
+<p>For the  2D, 5D, and 10D <strong>Rosenbrock</strong> test functions, <strong>Squads</strong> has comparable efficiency to <strong>LM</strong>.<br />
+  However, in these cases, the robustness of <strong>Squads</strong> (<strong>100%</strong>) is considerably better than the robustness of <strong>LM</strong> (less than <strong>36%</strong>).</p>
+<p>For the 2D, 5D, and 10D <strong>Griewank</strong> test functions, <strong>Squads</strong> is less efficient than <strong>LM</strong> but depending on the initial guesses may converge for the same number of functional evaluations as <strong>LM</strong>.<br />
+  However, in these cases, the robustness of <strong>Squads</strong> (grater than <strong>80%</strong>) is considerably better than the robustness of <strong>LM</strong> (less than <strong>11%</strong>).</p>
+<p><strong>Squads</strong> is observed to have the best performance when both robustness and efficiency are taken into consideration than the other strategies.</p>
+<p><a href="#demos:top" class="anim-links">Back to top</a></p>
+<div width="100%" style="float:left">
+<h3>&nbsp;</h3>
+<h2><strong>Rosenbrock</strong> function</h2>
+<div width="50%" style="float:left">
+<a href="demos/comb_runs_box_r.png" class="singleImg" rel="group_demo" title="Rosenbrock test of robustness and efficiency"><img src="demos/comb_runs_box_r.png" width="490" height="906" /></a>
+<p><a href="#demos:top" class="anim-links">Back to top</a></p>
+<h3>&nbsp;</h3>
+</div>
+<div width="50%" style="float:left">
+<a href="demos/rosen3d-close.png" class="singleImg" rel="group_demo" title="Rosenbrock function"><img src="demos/rosen3d-close.png" width="443" height="275" /></a>
+</div>
+</div>
+<div width="100%" style="float:left">
+<h2><strong>Griewank</strong> function</h2>
+<div width="50%" style="float:left">
+<a href="demos/comb_runs_box_g.png" class="singleImg" rel="group_demo" title="Griewank test of robustness and efficiency"><img src="demos/comb_runs_box_g.png" width="490" height="906" /></a>
+<p><a href="#demos:top" class="anim-links">Back to top</a></p>
+<h3>&nbsp;</h3>
+</div>
+<div width="50%" style="float:left">
+<a href="demos/griew3d-close.png" class="singleImg" rel="group_demo" title="Griewank function"><img src="demos/griew3d-close.png" width="443" height="266" /></a>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+<SCRIPT TYPE="text/javascript">
+<!-- hide from old browsers
+// if( window.top.location.href == window.self.location.href )
+	// location.replace("http://mads.lanl.gov/index.html?download");
+// end hide -->
+</SCRIPT>

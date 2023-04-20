@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MADS Overview</title>
+<META NAME="Description" CONTENT="MADS informaion: Model Analysis and Decision Support -- parameter estimation, sensitivity analysis, uncertainty quantification, risk assessment, experiment design, cost estimation, data-worth analysis, value of information, source identification, expert knowledge, multi-objective optimization, monitoring network design, hydrology, hydrogeology, groundwater aquifer vadose zone Monte Carlo SQUADS ABAGUS MPI POSIX PEST parallelization parallel Velimir Vesselinov monty" />
+<link rel="stylesheet" type="text/css" href="./css/mads.css" />
+<script type="text/javascript" src="./js/mads.js"></script>
+</head>
+
+<body class="body">
+<div class="animatescroll" >
+<a name="info:top" id="info:top"></a>
+<h1><strong>MADS</strong> Overview</h1>
+
+<p><strong>MADS</strong> (Model Analysis &amp; Decision Support) is an open-source code designed as an integrated high performance computational framework executing a wide range of model-based analyses.</p>
+
+<p><strong>MADS</strong> is designed to be a user-friendly code utilizing adaptive rules and techniques which allows the model analyses to be performed with minimum user input. However, if needed, user can have full control on <strong>MADS</strong> performance by providing various keywords and control parameters.</p>
+
+<p><strong>MADS</strong> can be executed under different computational modes, which include:</p>
+<ul>
+<li> Sensitivity Analysis (<strong>SA</strong>)</li>
+<li> Parameter Estimation (<strong>PE</strong>), Model Inversion and Calibration</li>
+<li> Uncertainty Quantification (<strong>UQ</strong>)</li>
+<li> Model Selection</li>
+<li> Model Averaging</li>
+<li> Decision Support (<strong>DS</strong>)</li>
+</ul>
+
+<p><strong>MADS</strong> allows for coupled model parameters and regularization terms that are internally computed based on user-defined mathematical expressions (utilizing GNU library <a href="http://www.gnu.org/software/libmatheval" target="_new">libmatheval</a>).</p>
+
+<p><strong>MADS</strong> can be externally coupled with any existing model simulator through integrated modules that generate input files required by the model simulator and parse output files generated  by the model simulator. This is performed using a set of template and instruction files.</p>
+
+<p><strong>MADS</strong> analyses can be performed directly using existing control (*.pst), template (*.tpl) and instruction (*.ins) files developed for the code <a href="http://www.pesthomepage.org" target="_blank">PEST</a> without any modifications or adjustments (<a href="#comparisons" class="ajax-links">example</a>).</p>
+
+<p><strong>MADS</strong> provides internal coupling with a series of <a href="#methods:simulators" class="ajax-links">analytical simulators of contaminant transport in aquifers</a> built in the code.</p>
+
+<p><strong>MADS</strong> can internally coupled with any other simulators using object-oriented programming.</p>
+
+<p><strong>MADS</strong> includes a series of <a href="#methods:functions" class="ajax-links">test functions</a> built in the code for performance (robustness and efficiency) analysis of existing model-analyses techniques.</p>
+
+<p><strong>MADS</strong> automatically detects and utilizes the available parallel resources; for the user, there is no difference between serial (using single processor) and parallel mode of execution. The automatic parallelization is performed using external system calls, MPI or POSIX threading.</p>
+
+<p><strong>MADS</strong> performs automatic bookkeeping of all the model results for efficient restart and rerun of previous jobs; for example, if the previous jobs were not completed.</p>
+
+<p><strong>MADS</strong> can perform different types of analyses based on model results accumulated and stored during previous <strong>MADS</strong> runs; for example, model runs obtained during model calibration can be utilized in  Monte Carlo analyses.</p>
+
+<p><strong>MADS</strong> includes a wide range of techniques for model-based analyses:</p>
+<ul>
+<li>local and global sensitivity and uncertainty techniques, including Monte-Carlo Methods, <a href="http://www.mlmatrix.com/uploadfile/200712418203522.pdf" target="_blank">Sobol's global sensitivity indices</a>, and <a href="papers/Harp &amp; Vesselinov ABAGUS 2011.pdf" target="_blank">ABAGUS</a></li>
+<li>advanced <a href="#methods:sampling" class="ajax-links">Latin-Hypercube sampling techniques</a>, including <a href="http://people.sc.fsu.edu/~jburkardt/datasets/ihs/ihs.html" target="_blank">Improved Distributed Hypercube Sampling (IDHS)</a></li>
+<li>alternative implementations of the Levenberg-Marquardt optimization technique including <a href="http://www.gnu.org/s/gsl/" target="_blank">GSL</a>, <a href="http://www.roguewave.com/products/imsl-numerical-libraries.aspx" target="_blank">IMSL</a>, <a href="http://www.ics.forth.gr/~lourakis/levmar/" target="_blank">LevMar</a> libraries and the acceleration and delayed gratification approaches proposed by <a href="http://link.aps.org/doi/10.1103/PhysRevE.83.036701" target="_blank">Transtrum et al 2011</a> (<a href="presentations/Leif_LM_presentation_m.pdf">presentation</a>)</li>
+<li>highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called <a href="http://www.pesthomepage.org/Highly-parameterized_inversion.php">SVD-assist</a> in <a href="http://www.pesthomepage.org" target="_blank">PEST</a></li>
+<li>advanced local, global, and hybrid single- and multi-objective optimization techniques, including Multi-Start Levenberg-Marquardt (<strong>MSLM</strong>), Particle Swarm Optimization (<a href="http://clerc.maurice.free.fr/pso/" target="_blank">PSO</a>), <a href="www.particleswarm.info/Tribes_2006_Cooren.pdf" target="_blank">TRIBES</a>, <a href="papers/squads_v04.pdf" target="_blank">SQUADS</a></li> 
+<li>Bayesian and non-Bayesian uncertainty analyses related to decision support, including <a href="http://www.biometris.wur.nl/UK/Staff/Cajo+ter+Braak/Software+and+Data/DE-MC+and+DREAM+software+page/" target="_blank">DREAM</a>, <a href="papers/Harp &amp; Vesselinov infogap source 2011.pdf" target="_blank">info-gap</a> analyses</li>
+</ul>
+
+<p><strong>MADS</strong> is build using a well-designed object-oriented programing style that allows for easy integration of new techniques for model-based analyses; code changes and developments are welcome, and after testing, they will be integrated in future <strong>MADS</strong> releases.</p>
+
+<p><strong>MADS</strong> is a unix-style code with command-line interface. All the analyses are performed by a single executable code; model analyses and their options are selected by command-line keywords (<a href="#examples:top" class="ajax-links">MADS execution examples</a>).</p>
+
+<p><strong>MADS</strong> is an open-source object-oriented code written in C/C++ and tested on various platforms (Unix, <a href="https://www.linux.com/" target="_blank">Linux</a>, <a href="http://www.apple.com/macosx/">Mac OS X</a>, <a href="http://windows.microsoft.com/en-US/windows/home">Microsoft Windows</a> using <a href="http://www.cygwin.com/">Cygwin</a>).</p>
+
+<p><strong>MADS</strong> supports scientifically defensible decision making and risk management based on model predictions. </p>
+
+<p><strong>MADS</strong> has been successfully applied to perform various model analyses related to environmental management of contamination sites. Examples include solutions of source identification problems, quantification of uncertainty, model calibration, and optimization of monitoring networks (see the lists of  <a href="#research:top" class="ajax-links">publications</a>, <a href="#research:presentations" class="ajax-links">presentations</a>, <a href="#research:reports" class="ajax-links">reports</a>, and <a href="#research:projects" class="ajax-links">projects</a>).</p>
+
+<p><strong>MADS</strong> release includes a series of verification and test example problems.</p>
+
+<p><strong>MADS</strong> current stable version (v 1.1) has been released in January 2013 (<a href="#download" class="ajax-links">download</a>).</p>
+
+<p>Professional software &amp; codes with somewhat similar but not equivalent capabilities:</p>
+<ul>
+<li><a href="http://dakota.sandia.gov/index.html" target="_blank" >DAKOTA</a></li>          
+<li><a href="http://igwmc.mines.edu/freeware/ucode/" target="_blank" >UCODE</a></li>
+<li><a href="http://www.pesthomepage.org" target="_blank">PEST</a></li>
+<li><a href="http://www.ees.lanl.gov/staff/monty/codes/mpest" target="_blank">MPEST/MPRUN</a></li>
+<li><a href="http://www.ascemdoe.org" target="_blank">ASCEM/Agni</a></li>
+</ul>
+
+<p><strong>MADS</strong> website: LA-UR-11-11967</p>
+
+<p><strong>MADS</strong> code: LA-CC-10-055, LA-CC-11-035</p>
+
+</div>
+</body>
+</html>

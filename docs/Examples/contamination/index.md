@@ -1,1 +1,0 @@
-../../../examples/contamination/contamination.md
