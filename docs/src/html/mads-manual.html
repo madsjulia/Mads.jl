@@ -1,0 +1,602 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>MADS Manual</title>
+<META NAME="Description" CONTENT="MADS manual: execution, file format, compilation, verification and examples" />
+<script>
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/jquery-1.7.min.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.fancybox-1.3.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./fancybox/jquery.mousewheel-3.0.4.pack.js'%3E%3C/script%3E"));
+    !window.jQuery && document.write(unescape("%3C<script type='text/javascript' src='./js/mads-ajax-links.js'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript" src="./js/mads.js"></script>
+<link rel="stylesheet" type="text/css" href="./fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="./css/mads.css" />
+<style type="text/css">
+table p {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+table p em {
+	font-size-adjust:+3px;
+	font-style:normal;
+	font-style:underline;
+	color:#F00;
+}
+table.keywords {
+	border: thin;
+	cellspacing: 0;
+	cellpadding: 5px;
+	width: 100%;
+	vertical-align:central;
+}
+td.keywordsleft {
+	border: 1px solid #FB7A31;
+	border-style:ridge;
+	border-width:5px;
+	width: 23%;
+	alignment-adjust:middle;
+	alignment-baseline:central;
+	vertical-align:central;
+	font-style:italic;
+	background: #FFC;
+}
+td.keywordsright {
+	width: 76%;
+	alignment-adjust:middle;
+	alignment-baseline:central;
+	vertical-align:central;
+	background: #CCC;
+}
+</style>
+</head>
+
+<body class="body">
+<div class="animatescroll" >
+<a name="manual:top" id="manual:top"></a><h1><strong>MADS</strong> Manual</h1>
+<ul>
+<li><a href="#manual:overview" class="anim-links">Overview and Features</a></li>
+<li><a href="#manual:execution" class="anim-links">Execution</a></li>
+<li><a href="#manual:keywords" class="anim-links">Command-line keywords and options</a></li>
+<li><a href="#manual:files" class="anim-links">Input and output files</a></li>
+<li><a href="#manual:format" class="anim-links">Format of MADS input files</a></li>
+<li><a href="#manual:compilation" class="anim-links">Compilation</a></li>
+<li><a href="#manual:verification" class="anim-links">Verification</a></li>
+<li><a href="#manual:examples" class="anim-links">Test examples</a></li>
+</ul>
+
+<a name="manual:overview" id="manual:overview"></a>
+<p><strong>MADS</strong> (Model Analyses &amp; Decision Support) is an object-oriented code that is capable of performing various types of model analyses, and supporting model-based decision making. The code can be executed under different computational modes, which include (1) sensitivity analysis, (2) model calibration (parameter estimation), (3) uncertainty quantification, (4) model selection, (5) model averaging, and (6) decision analysis.</p>
+<p><strong>MADS</strong> can be externally coupled with any existing model simulator through integrated modules that read/write input and output files using a set of template and instruction files. <strong>MADS</strong> can also work with existing control, template and instruction files developed for the code <a href="http://www.pesthomepage.org/Home.php">PEST (Doherty 2009)</a>.</p>
+<p><strong>MADS</strong> is internally coupled with a series of built-in analytical simulators (currently the analytical solutions are for contaminant transport in aquifer only). In addition, <strong>MADS</strong> can be used as a library (toolbox) for internal coupling with any existing object-oriented simulator using object-oriented programming.
+</p>
+<p><strong>MADS</strong> provides (1) efficient parallelization, (2) runtime control, restart, and preemptive termination, (3) advanced Latin-Hypercube sampling techniques (including <a href="http://people.sc.fsu.edu/~jburkardt/f_src/ihs/ihs.html">Improved Distributed Sampling</a>), (4) several gradient-based Levenberg-Marquardt optimization methods (including <a href="http://www.ics.forth.gr/~lourakis/levmar/">LevMar</a>), (5) advanced single- and multi-objective global optimization methods (including Particle Swarm Optimization, <a href="http://www.particleswarm.info/">PSO</a>, <a href="http://clerc.maurice.free.fr/pso/Tribes/Tribes_MO/Tribes_MO.html">TRIBES</a>, and SQUADS), and (6) local and global sensitivity and uncertainty analyses (including ABAGUS), and (7) information gap remediation decision analyses (under development).</p>
+<p><strong>MADS</strong> is written in C/C++ and tested on various Unix platforms (Linux, Mac OS X, Cygwin MS Windows). The <strong>MADS</strong> simulations are performed using command-line execution. A graphic user interface (GUI) using Java/Eclipse is currently under development as well. </p>
+<p><strong>MADS</strong> is characterized by several unique features: </p>
+<ul>
+  <li>Provides an integrated computational framework for a wide range of model-based analyses, and supports model-based decision making. </li>
+  <li><strong>MADS</strong> is designed to be capable to work in an adaptive mode with minimum input from the user.<br />
+  For example, &lsquo;<strong>mads s01</strong>&rsquo; is sufficient to perform calibration of problem &lsquo;<strong>s01</strong>&rsquo; and &lsquo;<strong>mads montecarlo s01</strong>&rsquo; is sufficient to perform uncertainty analysis of problem &lsquo;<strong>s01</strong>&rsquo;. All the parameters controlling the performance of these analyses are estimated internally by <strong>MADS</strong>.<br />
+  Nevertheless, if needed, the user has the flexibility to specify a wide range of options. </li>
+  <li>The same problem input file<strong> </strong>(in the previous case, &lsquo;<strong>s01.mads</strong>&rsquo;)<strong> </strong>is sufficient and can be applied to perform all the possible model analyses supported by <strong>MADS</strong>.<br />
+  Different analyses can be invoked using different command-line keywords and options.<br />
+  If preferred, the keywords can be provided on the first line of the problem input file as well.</li>
+  <li>Most of the model analysis can be performed using a discretized parameter space (e.g. <strong>PPSD</strong>, <strong>IGPD</strong>, <strong>ABAGUS</strong>).<br />
+  This can substantially reduce the computational effort to perform various model analyses (e.g. calibration, uncertainty quantification, and sensitivity analysis, performance assessment). </li>
+  <li>Highly-parameterized inversion where the number of model parameters is substantially greater than the number of model constraints (calibration targets or model observations); a similar approach is called <a href="http://www.pesthomepage.org/Highly-parameterized_inversion.php">SVD-assist</a> in <a href="http://www.pesthomepage.org" target="_blank">PEST</a>.</li>
+  <li>Permits the use of 'acceptable' calibration ranges for each optimization target.<br />
+  In this way, the model solutions can be constrained to produce predictions within acceptable calibration ranges.<br />
+  This feature is implemented using the keyword &lsquo;<strong><u><a href="#manual:terminate" class="anim-links">obsrange</a></u></strong>&rsquo;. </li>
+  <li>Allows the use of an acceptable calibration range for the objective function.<br />
+  In this way, acceptable model solutions can be identified as those producing objective functions below a predefined cutoff value. Once the objective function is decreased below the cutoff value, the optimization is terminated. This feature is implemented using the keyword &lsquo;<strong><u><a href="#manual:terminate" class="anim-links">cutoff</a></u></strong>&rsquo;. </li>
+  <li>Implements a series of alternative objective functions (OF).</li>
+  <li>By default, all the model parameters are internally normalized and transformed in a manner that substantially improves the optimization process. </li>
+  <li>Provides the option to perform a series of optimizations with random initial guesses for optimization parameters. </li>
+  <li>Provides the option to automatically retry the optimization process using a series of random initial guesses for optimization parameters until an acceptable calibration is achieved (keyword &lsquo;<strong><a href="#manual:caliboptions" class="anim-links">retry</a></strong>&rsquo;). </li>
+  <li>Automatically detects and utilizes multi-processor resources for parallel execution. </li>
+  <li>Analyzes the runtime performance of the available parallel hosts (processors); hosts not capable of performing the requested parallel jobs are dynamically ignored. </li>
+  <li>Tracks the multiple model files during parallel execution automatically; for the user, there is no difference between serial (using single processor) and parallel modes of execution. </li>
+  <li>Performs automatic bookkeeping of all the model results for efficient restart and rerun of <strong>MADS</strong> jobs (e.g. if the previous job was not completed) and additional posterior analyses. </li>
+  <li>Allows the user to perform different types of analyses based on model results stored during previous <strong>MADS</strong> runs; for example, model runs obtained during model calibration can be utilized in posterior Monte Carlo analyses. </li>
+  <li>Provides a built-in protection against simultaneous execution of conflicting <strong>MADS</strong> runs in the same working directory. </li>
+  <li>Automatically renames the files obtained during previous <strong>MADS</strong> runs by default using unique date &amp; time information in the file names to avoid overwriting. </li>
+  <li>Object-oriented design of <strong>MADS</strong> allows for relatively easy integration with other object-oriented optimization or sampling techniques.</li>
+</ul>
+<a href="#manual:top" class="anim-links">Back to top</a> 
+<h1><a name="manual:execution" id="manual:execution"></a><strong>MADS</strong> Execution:</h1>
+<div class="console"><p><strong>mads [ problem_name | input_file_name ] [ keywords | options ]</strong></p></div>
+<p><strong>MADS</strong> execution requires at minimum either a <strong>problem name (<em>problem_name</em>)</strong> or <strong>problem input file (<em>input_file_name</em>)</strong>.</p>
+<p><strong>problem name (<em>problem_name</em>)</strong>: Problem root name defines the file names of various <strong>MADS</strong> input and outputs files. A problem input file named <strong><em>problem_name</em>.mads</strong> is expected to exist. </p>
+<p><strong>problem input file (<em>input_file_name</em>)</strong>: an input file that can completely define the simulated problem. The file follows a predefined <strong>MADS</strong> format. It includes information about the simulation type, model parameters, and model observations (calibration targets).</p>
+<p>The root of the input file defines the <strong><em>problem_name</em></strong> used to specify file names of various files associated with simulation outputs. For example, the file named <strong><em>problem_name</em>.results</strong> contains the model results, and the file named <strong><em>problem_name</em>-rerun.mads</strong> contains information that allows the last simulation to be restarted with the previous runs calibration results. All the possible model analyses can be performed using the same problem input file<strong> (<em>input_file_name</em>)</strong>. </p>
+<p><strong>MADS</strong> is compatible to work with <a href="http://www.pesthomepage.org/Home.php">PEST</a> control, template and instruction files. To work with <a href="http://www.pesthomepage.org/Home.php">PEST</a> files, <strong>input_file_name</strong> should be a <a href="http://www.pesthomepage.org/Home.php">PEST</a> control file <strong><em>problem_name</em>.pst</strong>. </p>
+<p> After the <strong><em>problem_name</em></strong> or the <strong><em>input_file_name</em></strong> a series of keywords and options can be provided (all optional). All the keywords are case insensitive. If there are no keywords or options, model calibration will be performed by default. The keywords and options can be provided to <strong>MADS</strong> either on the command-line or on the first line of the problem input file (<strong><em>problem_name</em>.mads</strong>).</p>
+<p>The keywords and options can be specified in any order; if there are contradictions (for example both &lsquo;<strong><u>montecarlo</u></strong>&rsquo; and &lsquo;<strong><u>calibrate</u></strong>&rsquo; are provided), the priorities are defined by the keyword order in the problem input file followed by the command-line queue (e.g. the last command-line keyword can overwrite any previous definitions).</p>
+<p>Executing <strong>MADS</strong> without any arguments (&lsquo;<strong>mads</strong>&rsquo;) produces screen output describing <strong>MADS</strong> keywords and options for quick reference.</p>
+<a href="#manual:top" class="anim-links">Back to top</a>
+<h1><a name="manual:keywords" id="manual:keywords"></a><strong>MADS</strong> Command-line keywords and options:</h1>
+
+<h2>Problem type keywords (all the keywords and options are case insensitive):</h2>
+
+<p><a name="manual:forward" id="manual:forward"></a><strong><u>forward</u></strong>: Perform a single forward model simulation based on the model parameters provided in the input problem file. The results are stored in a file named <strong><em>problem_name</em>.results</strong>. </p>
+
+<p><a name="manual:create" id="manual:create"></a><strong><u>create</u></strong>: Create a <strong>MADS</strong> input file with calibration targets based on current model parameters. If the keyword is specified, <strong>MADS</strong> will perform a single forward model simulation based on the model parameters provided in the input problem file. A file named <strong><em>problem_name</em>-truth.mads</strong> is created with the simulated values inserted as calibration target values. The simulation results are stored in a file named <strong><em>problem_name</em>.results</strong>. </p>
+
+<p><a name="manual:calibrate" id="manual:calibrate"></a><strong><u>calibrate</u></strong>: Perform a calibration run where the model parameters are calibrated against the calibration targets. This process can also be called model inversion or parameter estimation. This is the default <strong>MADS</strong> problem type (if no other problem type keywords are specified). The calibration results are stored in a file named <strong><em>problem_name</em>.results</strong>. Calibration can be performed using various optimization techniques (global and local), objective functions, weighting schemes, and optimization constraints. The analyses can be performed using various schemes for computing the initial guesses for optimization parameters. The calibrations can be performed in parallel (available resources are automatically detected) and automatically restarted. </p>
+
+<p><a name="manual:montecarlo" id="manual:montecarlo"></a><strong><u>montecarlo</u></strong>: Perform an uncertainty analysis using Monte Carlo sampling. The sampling results are stored in files named (1) <strong><em>problem_name</em>.mcrnd*</strong> (including all the Monte Carlo runs), and (2) <strong><em>problem_name</em>.results</strong> (representing the result with the lowest objective function). Various alternative sampling techniques can be selected using the keyword &lsquo;<strong><u>smp</u></strong>&rsquo;. The sample runs can be performed in parallel (available resources are automatically detected) and automatically restarted. </p>
+
+<p><a name="manual:gsens" id="manual:gsens"></a><strong><u>gsens:</u></strong><strong> </strong>Perform a global sensitivity analysis. Currently, the <u>Sobol Non-linear Sensitivity method (Sobol. IM, 1993 </u><a href="http://linkinghub.elsevier.com/retrieve/pii/S0378475400002706">Global sensitivity indices for nonlinear mathematical models and their Monte Carlo estimates</a><u>)</u> is implemented. <strong>MADS</strong> uses Monte Carlo estimation of the Sobol indices, requiring 2 independent random samples with equal dimensions. The number of model evaluations is <em>n</em> * (<em>N</em> + 1) where <em>n</em> is the size of the samples and <em>N</em> is the number of Sobol indices (model parameters). The global sensitivity analysis results are stored in files named<strong> <em>problem_name</em>.gsens*</strong>.<strong> </strong></p>
+
+<p><a name="manual:lsens" id="manual:lsens"></a><strong><u>lsens</u></strong><u>:</u> Perform a local sensitivity analysis computing the Jacobian matrix either for the initial values provided in the input file or for the final calibration results (depending on the combination of keywords). The local sensitivity analysis results are stored in files named <strong><em>problem_name</em>.sensitivity</strong>. </p>
+
+<p><a name="manual:eigen" id="manual:eigen"></a><strong><u>eigen</u></strong><u>:</u> Perform an eigen analysis of the Jacobian matrix either for the initial values provided in the input file or for the final calibration results (depending on the combination of keywords). The eigen analysis results are stored in files named <strong><em>problem_name</em>.eigen</strong>. </p>
+
+<p><a name="manual:abagus" id="manual:abagus"></a><strong><u>abagus</u></strong>: Perform an Agent-Based Global Uncertainty &amp; Sensitivity Analysis (<strong>ABAGUS</strong>). The <strong>ABAGUS</strong> run identifies optimization parameter sets producing objective function values below a predefined cutoff value (keyword '<strong>cutoff'</strong>) or within predefined calibration ranges for each target (keyword <strong>'<a href="#manual:terminate" id="anim-links2">obsrange</a></strong>') on a discretized parameter space. The ABAGUS results, including optimization parameter values and their associated objective function value are stored in files named <strong><em>problem_name</em>.pssa</strong>. </p>
+
+<p><a name="manual:postpua" id="manual:postpua"></a><strong><u>postpua</u></strong>: Perform an analysis of predictive uncertainties (currently processing <strong>ABAGUS</strong> outputs only; the Monte Carlo outputs will be added in the future). Desired predictions are identified as &ldquo;<strong>observations</strong>&rdquo; with weight&gt;0. </p>
+
+<p><a name="manual:infogap" id="manual:infogap"></a><strong><u>infogap</u></strong>: Perform an information gap decision analysis. Results are stored in files named <strong><em>problem_name-pred</em></strong>k<strong><em>.igap</em></strong>, where k is the index of the performance metric prediction (one file is generated for each performance metric prediction). Performance metric predictions are identified in <strong><em>problem_name.mads</em></strong> as &ldquo;<strong>observations</strong>&rdquo; with weight=-1.</p>
+
+<p>Examples for executing different types of model-based analyses with<strong> MADS</strong> are presented in <a href="#examples" class="ajax-links">Examples</a>, <a href="#demos" class="ajax-links">Demos</a>, <a href="#screenshots" class="ajax-links">Screenshots</a>, and <a href="#comparisons.html" class="ajax-links">Comparisons</a> sections. </p>
+<a href="#manual:top" class="anim-links">Back to top</a>
+<h2>Calibration method keywords:</h2>
+    <table class="keywords" >
+      <tr>
+        <td class="keywordsleft" ><p>single</p></td>
+        <td class="keywordsright"><p><em>single calibration using initial guesses provided in the input file</em>;<br />
+        this type of calibration is performed by default; the keyword does not need to be provided</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>igrnd</p></td>
+        <td class="keywordsright"><p><em>sequential multi-start (multi-try) calibrations using a set of random initial values</em>;<br />
+        the number of initial guess realizations is defined   by <strong>real</strong>=X</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>igpd</p></td>
+        <td class="keywordsright"><p><em>sequential multi-start (multi-try) calibrations using a set of discretized initial values</em>;<br />
+        the parameter space discretization is defined in the <strong>MADS </strong>input file</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>ppsd</p></td>
+        <td class="keywordsright"><p><em>sequential multi-start (multi-try) calibrations using Partial Parameter Space Discretization (<strong>PPSD</strong>) method;<br />
+        </em>in this case, the discretized model parameters are kept fixed during each multi-start (multi-try) calibration; <br />
+        the parameter space discretization is defined in the <strong>MADS </strong>input file.</p></td>
+      </tr>
+    </table>
+    <h2><a name="manual:terminate" id="manual:terminate"></a>Calibration termination criteria:</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>eval=[integer]</p></td>
+        <td class="keywordsright"><p>terminate calibration if the <em>number of functional evaluations exceeds a predefined value</em> [default eval=5000]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>cutoff=[real]</p></td>
+        <td class="keywordsright"><p>terminate   calibration (or collect solution in the case of <strong>abagus</strong>) if the <em>objective function is below the cutoff value</em> [default cutoff=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>parerror=[real]</p></td>
+        <td class="keywordsright"><p>terminate calibration (or collect solution in the   case of <strong>abagus</strong>) if the <em>estimated   model parameters are within a predefined absolute error</em> range from their known true values<br />
+          applied in the case of test functions with known solution<br />
+          [default parerror=0; i.e. termination   criteria is not applied]</p></td>
+      </tr>
+       <tr>
+        <td class="keywordsleft"><p>obsrange</p></td>
+        <td class="keywordsright"><p>terminate   calibration (or collect solution in the case of <strong>abagus</strong>) if <em>model predictions are within predefined calibration   ranges</em></p></td>
+      </tr>
+     <tr>
+        <td class="keywordsleft"><p>obserror=[real]</p></td>
+        <td class="keywordsright"><p>terminate   calibration (or collect solution in the case of <strong>abagus</strong>) if <em>model predictions are within  <em>within a predefined absolute error</em> range from their observed values<br />
+        </em>[default obserror=0; i.e. termination   criteria is not applied]</p></td>
+      </tr>
+    </table>
+    <h2><a name="manual:caliboptions" id="manual:caliboptions"></a>Calibration options:</h2>
+<table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>retry=[integer]</p></td>
+        <td class="keywordsright"><p>number of  retries in the case of multi-try (multi-start) model analyses [default retry=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>iter=[integer]</p></td>
+        <td class="keywordsright"><p>number   of Levenberg-Marquardt iterations [default iter=50]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>particles=[integer]</p></td>
+        <td class="keywordsright"><p>number of initial particles or tribes [default particles=10+2*sqrt(Number_of_parameters)]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>lmfactor=[double]</p></td>
+        <td class="keywordsright"><p>multiplier applied to compute when to initiate LM searches within <strong>SQUADS</strong> algorithm [default lmfactor=1]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>leigen OR eigen</p></td>
+        <td class="keywordsright"><p>eigen   analysis of the final optimized solution</p></td>
+      </tr>
+    </table>
+    <a href="#manual:top" class="anim-links">Back to top</a>
+    <h2>Optimization method (<strong>opt=</strong>[string]; various combinations are possible, e.g. pso_std_lm_gsl):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>opt=lm</p></td>
+        <td class="keywordsright"><p>Local Levenberg-Marquardt optimization [default]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=lm_levmar</p></td>
+        <td class="keywordsright"><p>Local   Levenberg-Marquardt optimization using <strong>LevMar</strong> library</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=lm_gsl</p></td>
+        <td class="keywordsright"><p>Local Levenberg-Marquardt optimization using <strong>GSL</strong> library</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=pso</p></td>
+        <td class="keywordsright"><p>Global   Particle Swarm optimization (default Standard2006)</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=apso</p></td>
+        <td class="keywordsright"><p>Global Adaptive Particle Swarm optimization (default   <strong>TRIBES</strong>)</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=swarm</p></td>
+        <td class="keywordsright"><p>Global   Particle Swarm optimization Standard2006 (also opt=pso_std) </p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=tribes</p></td>
+        <td class="keywordsright"><p>Global Particle Swarm optimization <strong>TRIBES</strong> (also   opt=pso_tribes)</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>opt=squads</p></td>
+        <td class="keywordsright"><p><strong>SQUADS</strong>:   Adaptive hybrid optimization using coupled local and global optimization   techniques</p></td>
+      </tr>
+    </table>
+    <h2>Sampling method (<strong>smp=</strong>[string] OR <strong>mslm=</strong>[string] for Multi-Start  Levenberg-Marquardt (<strong>MSLM</strong>) analysis using multiple retries with different random initial guesses for unknown model parameters):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>smp=olh</p></td>
+        <td class="keywordsright"><p>Optimal Latin   Hypercube Sampling  [default] (if real =   1 <strong>RANDOM</strong>; if real &gt; <strong>IDLHS</strong>; if real &gt; 500 <strong>LHS</strong>)<br />
+          Sampling is performed using internally computed or user provided seed.</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=lhs</p></td>
+        <td class="keywordsright"><p>Latin   Hypercube Sampling (<strong>LHS</strong>) [default smp=lhs_random]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=lhs_random</p></td>
+        <td class="keywordsright"><p>Latin   Hypercube Sampling  (<strong>LHS</strong>) with random placement of the particles within hypercube cells</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=lhs_center</p></td>
+        <td class="keywordsright"><p>Latin   Hypercube Sampling  (<strong>LHS</strong>) with particle  placement at the center of the   hypercube cells</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=lhs_edge</p></td>
+        <td class="keywordsright"><p>Latin   Hypercube Sampling  (<strong>LHS</strong>) with particle  placement at the edges of the   hypercube cells</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=idlhs</p></td>
+        <td class="keywordsright"><p>Improved   Distributed Latin   Hypercube Sampling  (<strong>IDLHS</strong>; aka <strong>IHS</strong>)</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>smp=random</p></td>
+        <td class="keywordsright"><p>Random sampling</p></td>
+      </tr>
+    </table>
+    <h2>Sampling options:</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>real=[integer]</p></td>
+        <td class="keywordsright"><p>number of random realizations (samples) [default   real=100]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>case=[integer]</p></td>
+        <td class="keywordsright"><p>execute   a single case from all the realizations (samples) (applied in <strong>PPSD</strong>, <strong>IGPD</strong>, <strong>IGRND</strong>, <strong>MONTECARLO</strong> model-based analyses)</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>seed=[integer]</p></td>
+        <td class="keywordsright"><p>random seed value [randomly generated by default]</p></td>
+      </tr>
+    </table>
+    <h2>Objective function options:</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>ssr</p></td>
+        <td class="keywordsright"><p>sum of the squared residuals [default]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>ssd0</p></td>
+        <td class="keywordsright"><p>sum   of the squared discrepancies</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>ssda</p></td>
+        <td class="keywordsright"><p>sum of the squared discrepancies and absolute residuals</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>ssdr</p></td>
+        <td class="keywordsright"><p>sum   of the squared discrepancies and squared residuals</p></td>
+      </tr>
+    </table>
+    <a href="#manual:top" class="anim-links">Back to top</a>
+    <h2>Transformation of parameter space and observations (calibration targets):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>nosin</p></td>
+        <td class="keywordsright"><p>Sin transformation of optimized parameters is not   applied [parameters are sin transformed by default]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>plog=[-1,0,1]</p></td>
+        <td class="keywordsright"><p>All   (plog=1) or no (plog=0) optimization parameters are log-transformed [default:   log transformation is designated for each parameter in the input file   (plog=-1)]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>olog=[-1,0,1]</p></td>
+        <td class="keywordsright"><p>All (olog=1) or no (olog=0) observations (simulated and   measured) are log-transformed [default: log transformation is designated for   each observation in the input file (olog=-1)]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>oweight=[-1,0,1,2]</p></td>
+        <td class="keywordsright"><p>Weights   for all the observation residuals in <strong><em>problem_name.mads</em></strong> are overwritten:   0 = zero weight, 1 = unit weight, 2 = weight inversely proportional to   observation [default: designated weights in <strong><em>problem_name.mads</em></strong> are   used (oweight=-1)]</p></td>
+      </tr>
+    </table>
+    <h2>Parallelization:</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>np=[integer] </p></td>
+        <td class="keywordsright"><p>number of requested parallel jobs [optional]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>rstfile=[string] </p></td>
+        <td class="keywordsright"><p>name   of existing zip restart file to be used (created by previous Parallel <strong>MADS</strong>   run) [optional]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>restart=[integer] </p></td>
+        <td class="keywordsright"><p>restart=1 (default; automatic restart if possible);   restart=0 (force no restart); restart=2 (force restart); by default the   analyses will be restarted automatically (restart=1)</p></td>
+      </tr>
+    </table>
+    <h2><strong>ABAGUS</strong> (Agent-Based Global Uncertainty &amp; Sensitivity Analysis) options (<strong>abagus</strong>):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>infile=[string]</p></td>
+        <td class="keywordsright"><p>name of previous <strong>ABAGUS</strong> results file to be used to   initialize KD-tree [default=NULL]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>energy=[integer]</p></td>
+        <td class="keywordsright"><p>initial   energy for swarm [default energy=10000]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>cutoff=[real]</p></td>
+        <td class="keywordsright"><p>maximum objective function value for acceptable   solutions to be collected</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>obsrange</p></td>
+        <td class="keywordsright"><p>collect   solutions that produce simulations within predefined calibration ranges for   each target</p></td>
+      </tr>
+    </table>
+    <h2>Information gap decision analysis options (<strong>infogap</strong>):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>infile=[string]</p></td>
+        <td class="keywordsright"><p>name of  <strong>ABAGUS</strong> results file to perform   information gap decision analysis</p></td>
+      </tr>
+    </table>
+    <h2>Predictive uncertainty analysis options (<strong>postpua</strong>):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>infile=[string]</p></td>
+        <td class="keywordsright"><p>name of  <strong>ABAGUS</strong> results file to perform   predictive uncertainty analysis</p></td>
+      </tr>
+    </table>
+    <a href="#manual:top" class="anim-links">Back to top</a>
+    <h2>Build-in analytical solutions:</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>point</p></td>
+        <td class="keywordsright"><p>point contaminant source in 3D flow domain</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>plane</p></td>
+        <td class="keywordsright"><p>areal   contaminant source in 3D flow domain</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>box</p></td>
+        <td class="keywordsright"><p>block contaminant source in 3D flow domain</p></td>
+      </tr>
+    </table>
+    <h2>Built-in test problems for global optimization / uncertainty-quantification techniques (local techniques will not work):</h2>
+    <table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>test=[integer] </p></td>
+        <td class="keywordsright"><p>test problem ID [default=1]:<br />
+          1: Parabola<br />
+          2: Griewank<br />
+          3: Rosenbrock<br />
+          4: De Jong's Function #4<br />
+          5: Step<br />
+          6: Alpine function (Clerc's Function #1)<br />
+7: Rastrigin<br />
+8: Krishna Kumar<br />
+9: 2D Tripod function<br />
+10: Shekel's Foxholes 2D<br />
+11: Shekel's Foxholes 5D<br />
+12: Shekel's Foxholes 10D<br />
+20: Shekel's Foxholes 2D (alternative; global methods only)
+<br />
+          21: Polynomial fitting (global methods only)<br />
+          22: Ackley (global methods only)<br />
+          23: Eason 2D (global methods only)<br />
+          31: Rosenbrock (simplified)          <br />
+          32: 
+          Griewank (alternative)<br />
+          33: Rosenbrock (alternative)<br />
+          34: Powell's Quadratic<br />
+          35: Booth<br />
+          36: Beale<br />
+        37: Parsopoulos</p>
+          <p>Curve-fitting test functions:<br />
+            40: 
+            Sin/Cos data fitting  (2 parameters)<br />
+            41: Sin/Cos data fitting  (4 parameters)<br />
+            42: Sin/Cos data fitting  (2 parameters; simplified)<br />
+            43: Exp data fitting  I (5 parameters)<br />
+        44: Exp data fitting II (11 parameters)        </p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>dim=[integer] </p></td>
+        <td class="keywordsright"><p>dimensionality   of parameter space for the test problem (fixed for some of the problems)   [default=2]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>npar=[integer]</p></td>
+        <td class="keywordsright"><p>number of model parameters for the data fitting (fixed for some of the problems) [default=2]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>nobs=[integer] </p></td>
+        <td class="keywordsright"><p>number of observations for the data fitting test problem (fixed for some of the problems) [default=2]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>pardomain=[float] </p></td>
+        <td class="keywordsright"><p> parameter space domain size [default pardomain=100]</p></td>
+      </tr>
+    </table>
+    <h2>Debugging / verbose levels:</h2>
+<table class="keywords">
+      <tr>
+        <td class="keywordsleft"><p>debug=[0-5] </p></td>
+        <td class="keywordsright"><p>general debugging [default debug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>fdebug=[0-5] </p></td>
+        <td class="keywordsright"><p>model   evaluation debugging [default fdebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>ldebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Levenberg-Marquardt (<strong>LM</strong>) optimization debugging [default   ldebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>pdebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Particle   Swarm optimization debugging [default pdebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>mdebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Random sampling debugging [default mdebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>odebug=[0-1] </p></td>
+        <td class="keywordsright"><p>Objective   function progress [default odebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>tpldebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Debug the writing of external files [default   tpldebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>insdebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Debug   the reading of external files [default insdebug=0]</p></td>
+      </tr>
+      <tr>
+        <td class="keywordsleft"><p>pardebug=[0-3] </p></td>
+        <td class="keywordsright"><p>Debug the parallel execution [default pardebug=0]</p></td>
+      </tr>
+    </table>
+
+
+<h1><a name="manual:files" id="manual:files"></a><strong>MADS</strong> Input and output files</h1>
+<p><strong><em>problem_name</em></strong><strong>.mads</strong>: an input file that can completely define the analyzed problem. The file follows a predefined <strong>MADS</strong> input format. It includes information about the simulation type, model parameters, and model observations. <br />
+<strong><em>problem_name</em></strong><strong>.results</strong>: an output file containing the <strong>MADS</strong> results <br />
+<strong><em>problem_name</em></strong><strong>.residuals</strong>: an output file containing the residuals between model predictions and calibration targets (if applicable)<br />
+<strong><em>problem_name</em></strong><strong>.jacobian</strong>: an output file containing the Jacobian (local sensitivity) matrix <br />
+<strong><em>problem_name</em></strong><strong>.covariance</strong>: an output file containing the covariance matrix <br />
+<strong><em>problem_name</em></strong><strong>.correlation</strong>: an output file containing the correlation matrix <br />
+<strong><em>problem_name</em></strong><strong>.eigen</strong>: an output file containing the eigen matrix and eigen values <br />
+<strong><em>problem_name</em></strong><strong>.phi</strong>: an output file containing information about the final objective function <br />
+<strong><em>problem_name</em></strong><strong>.ofe</strong>: an output file containing information about the objective function minimization progress as a function of model evaluations <br />
+<strong><em>problem_name</em></strong><strong>.mcrnd*</strong>: output files containing Monte Carlo (<strong>MC</strong>) analysis results <br />
+<strong><em>problem_name</em></strong><strong>.igrnd*</strong>: output files containing Random Initial Guesses (<strong>IGRND</strong>) results <br />
+<strong><em>problem_name</em></strong><strong>.igpd*</strong>: output files containing Partially Discretized Initial Guesses (<strong>IGPD</strong>) results <br />
+<strong><em>problem_name</em></strong><strong>.ppsd*</strong>: output files containing Partial Parameter Space Discretization (<strong>PPSD</strong>) results <br />
+<strong><em>problem_name</em></strong><strong>-rerun.mads</strong>: an output file that can be used as a <strong>MADS</strong> input file. It contains all the information needed to restart the last calibration. The model parameters are modified to represent the current best estimates. The file follows a predefined <strong>MADS</strong> input format.<br />
+<strong><em>problem_name.igap</em></strong>: output files containing remediation information gap (<strong>infogap</strong>) results<br />
+<strong><em>problem_name.pssa</em></strong>: output files containing <strong>ABAGUS</strong> results<br />
+<strong><em>problem_name.pua</em></strong>: output files containing predictive uncertainty analysis (<strong>postpua</strong>) results</p>
+<a href="#manual:top" class="anim-links">Back to top</a>
+
+
+<h1><a name="manual:format" id="manual:format"></a>Format of <strong>MADS</strong> input files</h1>
+
+<h2><strong>MADS</strong> Problem files (<strong>*.mads</strong>)</h2>
+
+<p>The <strong>MADS</strong> input problem files provide information about the model parameters needed to execute the model simulator and the model observations (calibration targets) that will be applied to evaluate the model performance. The input file typically has the following format (this example file called <strong>w01.mads</strong> is located in directory <strong>example/wells-short</strong>):</p>
+
+<p><a href="manual_images/mads-file-format.jpg" class="singleImg" rel="group_manual" title="MADS File Format"><img src="manual_images/mads-file-format.jpg" alt="" width="720" height="380" />[click to enlarge]</a></p>
+
+<p>The key data blocks in the <strong>MADS</strong> problem file are defined above.</p>
+<p>The format associated with model parameters and observations is defined below.</p>
+
+<p><a href="manual_images/mads-file-format2.jpg" class="singleImg" rel="group_manual" title="MADS File Format: Model parameters"><img src="manual_images/mads-file-format2.jpg" alt="" width="572" height="210" />[click to enlarge]</a></p>
+
+<p><a href="manual_images/mads-file-format3.jpg" class="singleImg" rel="group_manual" title="MADS File Format: Model observations"><img src="manual_images/mads-file-format3.jpg" alt="" width="572" height="212" />[click to enlarge]</a></p>
+
+<p>Instead of <strong>MADS</strong> problem file, <strong>MADS</strong> can also read and work with the standard <a href="http://www.pesthomepage.org/Home.php">PEST</a> control (problem) files (&lsquo;<strong>*.pst</strong>&rsquo;) without any conversion.</p>
+
+<h2><strong>MADS</strong> Template files (<strong>*.tpl</strong>)</h2>
+
+<p>The <strong>MADS</strong> template files provide the current values of the model parameters to the external simulator. In this case, the file &lsquo;<strong>w01.tpl</strong>&rsquo; is applied to create the model input file &lsquo;<strong>w01.wells</strong>&rsquo;. The file &lsquo;<strong>w01.tpl</strong>&rsquo; is located in directory &lsquo;<strong>example/wells-short</strong>&rsquo;. The template input file typically has the following format:</p>
+
+<p><a href="manual_images/mads-file-format4.jpg" class="singleImg" rel="group_manual" title="MADS File Format: Template file"><img src="manual_images/mads-file-format4.jpg" alt="" width="570" height="218" />[click to enlarge]</a></p>
+
+<p>In this case, the template file is based on the <strong>WELLS</strong> (<a href="http://wells.lanl.gov">wells.lanl.gov</a>) input file where two of the input model parameters (&lsquo;<strong>Permeability</strong>&rsquo; and &lsquo;<strong>Storage coefficient</strong>&rsquo;) will be replaced by <strong>MADS</strong> with the current values associated with these model parameters. The model parameters are defined in the <strong>MADS</strong> problem file &lsquo;<strong>w01.mads</strong>&rsquo; and labeled as &ldquo;<strong>k</strong>&rdquo; and &ldquo;<strong>S</strong>&rdquo;. The first line with the keyword &lsquo;<strong>template</strong>&rsquo; is optional. In this case, it defines the special variable symbol &ldquo;<strong>%</strong>&rdquo; that is going to be applied to define the fields where model parameters will be placed. If the first line is missing, the special variable symbol &ldquo;<strong>#</strong>&rdquo; is assumed by default. More than one template files can be applied to generate a series of model input files. Each model parameter can appear multiple times in the template files.</p>
+
+<p>The easiest way to create a template file is to take an existing model input file and replace the model parameters provided to <strong>MADS</strong> for analysis with the name of model parameters as defined in the <strong>MADS</strong> problem file. The model parameter names should be surrounded with the special variable symbol.</p>
+<p>The <strong>MADS</strong> template file format is similar to the format implemented in the code <a href="http://www.pesthomepage.org/Home.php">PEST</a>. In fact, <strong>MADS</strong> can use the standard <a href="http://www.pesthomepage.org/Home.php">PEST</a> template files as well without any conversion.</p>
+
+<p>The template files can be debugged using the keyword &lsquo;<strong>tpldebug</strong>&rsquo; (for example:&lsquo;<strong>mads w01 tbldebug</strong>&rsquo;).</p>
+
+
+<h2><strong>MADS</strong> Instruction files (<strong>*.inst</strong>)</h2>
+
+<p>The <strong>MADS</strong> instruction files are applied to read the current model observations (predictions) obtained from the external simulator based on the current model parameters. In this case, the file &lsquo;<strong>w01.inst</strong>&rsquo; is applied to read the model output file &lsquo;<strong>w01.s_point</strong>&rsquo;. There are several alternative versions of the instruction file (&lsquo;<strong>w01-v*.inst</strong>&rsquo;) provided in directory  &lsquo;<strong>example/wells-short</strong>&rsquo;. The instruction files typically have the following format:</p>
+ 
+<p><a href="manual_images/mads-file-format5.jpg" class="singleImg" rel="group_manual" title="MADS File Format: Instruction file"><img src="manual_images/mads-file-format5.jpg" alt="" width="574" height="228" />[click to enlarge]</a></p>
+
+<p>The observation names are shown in &lsquo;<strong>red</strong>&rsquo; and are specified in the <strong>MADS</strong> control file. All the instruction files presented above are equivalent in terms that all of them are extracting the same information from the model output file &lsquo;<strong>w01.s_point</strong>&rsquo;. The file format is somewhat similar to the format implemented in the code <a href="http://www.pesthomepage.org/Home.php">PEST</a>. In fact, <strong>MADS</strong> can use the standard <a href="http://www.pesthomepage.org/Home.php">PEST</a> instruction files as well without any conversion.</p>
+
+<p>The first line with the keyword &lsquo;<strong>instruction</strong>&rsquo; is optional. In the case of &lsquo;<strong>w01-v1.inst</strong>&rsquo;, it defines that the special search symbol &ldquo;<strong>%</strong>&rdquo; is going to be applied to search for numeric or character patterns in the model output file, the special observation symbol &ldquo;<strong>!</strong>&rdquo; is going to be applied to define the location of the observations within the model output file. If the first line is missing as in the case of &lsquo;<strong>w01-v4.inst</strong>&rsquo;, the symbols &ldquo;<strong>@</strong>&rdquo; and &ldquo;<strong>!</strong>&rdquo; are assumed by default for the search and observation tokens, respectively. Each consecutive instruction line in the instruction file starts with either (1) the letter &ldquo;<strong>l</strong>&rdquo; or (2) the special search symbol. In the case of  &ldquo;<strong>l</strong>&rdquo;, the following number defines how many lines to be skipped (for example, &ldquo;<strong>l1</strong>&rdquo; means go to the next line; &ldquo;<strong>l2</strong>&rdquo; means skip one line). In the case of search symbol, the content of the model output file is skipped until search phrase is found. The letter &ldquo;<strong>w</strong>&rdquo; forces skipping of white-character spaces. The keyword &ldquo;<strong>dum</strong>&rdquo; defines dummy observations that are ignored.</p>
+
+<p>Note that the search phrase &ldquo;<strong>@0@</strong>&rdquo; in files &lsquo;<strong>w01-v3.inst</strong>&rsquo; and &lsquo;<strong>w01-v4.inst</strong>&rsquo; can be dangerous since the digit &ldquo;<strong>0</strong>&rdquo; can occur in many locations in the model output file.</p>
+
+<p>Comparing &lsquo;<strong>w01-v3.inst</strong>&rsquo; and &lsquo;<strong>w01-v4.inst</strong>&rsquo; it is clear that the search pattern does not need to include the entire number of characters that are expected to be in the model output file. The search pattern also does not need to be at the beginning of the line.</p>
+
+<p>The instruction files can be debugged using the keyword &lsquo;<strong>insdebug</strong>&rsquo; (for example: &lsquo;<strong>mads w01 insdebug</strong>&rsquo;).</p>
+
+<h1><a name="manual:compilation" id="manual:compilation"></a><strong>MADS</strong> Compilation</h1>
+
+<p>To compile, extract the provided <strong>mads.tgz</strong> file (<strong>tar xvf mads.tgz</strong>) and execute '<strong>make</strong>'. GSL, LAPACK and BLAS libraries are expected to be available.</p>
+    <ul>
+      <li><a href="ftp://ftp.gnu.org/gnu/gsl/">GSL</a>:                     ftp://ftp.gnu.org/gnu/gsl/</li>
+      <li><a href="http://www.netlib.org/lapack/">LAPACK</a>:              http://www.netlib.org/lapack/</li>
+      <li><a href="http://www.netlib.org/blas/">BLAS</a>:                   http://www.netlib.org/blas/</li>
+    </ul>
+
+<p>If <strong>macports</strong> is installed (<a href="http://www.macports.org">www.macports.org</a>), these packages can be installed on MAC OS X machines using the following commands (requiring administrative privileges):<br />
+  <ul>
+      <li>sudo port install blas</li>
+      <li>sudo port install lapack</li>
+      <li>sudo port install gsl</li>
+  </ul>
+<a href="#manual:top" class="anim-links">Back to top</a>    
+
+<h1><a name="manual:verification" id="manual:verification"></a><strong>MADS</strong> Verification</h1>
+<p>To verify that <strong>MADS</strong> is running properly, execute '<strong>make verify</strong>'.</p>
+    
+<h1><a name="manual:examples" id="manual:examples"></a><strong>MADS</strong> Test Examples</h1>
+<p>To run some of the available <strong>MADS</strong> examples, execute '<strong>make examples</strong>'.</p>
+<a href="#manual:top" class="anim-links">Back to top</a>
+<p>&nbsp;</p>
+</div>
+</body>
+</html>
+
+<SCRIPT TYPE="text/javascript">
+<!-- hide from old browsers
+// if( window.top.location.href == window.self.location.href )
+	// location.replace("http://mads.lanl.gov/index.html?info");
+// end hide -->
+</SCRIPT>
