@@ -1,5 +1,7 @@
+ENV["MADS_NO_PYTHON"] = ""
+ENV["MADS_NO_PLOT"] = ""
+
 import Mads
-import Documenter
 
 Mads.documentation_create()
 Mads.documentation_deploy()
