@@ -17,7 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.6.4' # Replace this with the minimum Julia version that your package supports.
+          - '1.8.5'
+          - '1'
           - 'nightly'
         os:
           - ubuntu-latest
@@ -25,21 +26,48 @@ jobs:
           - windows-latest
         arch:
           - x64
+        include:
+          - os: ubuntu-latest
+            version: '1'
+            arch: x86
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-      - uses: actions/cache@v1
-        env:
-          cache-name: cache-artifacts
-        with:
-          path: ~/.julia/artifacts
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ hashFiles('**/Project.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-test-${{ env.cache-name }}-
-            ${{ runner.os }}-test-
-            ${{ runner.os }}-
+          show-versioninfo: true
+      - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
+      - uses: julia-actions/julia-processcoverage@v1
+      - uses: codecov/codecov-action@v3
+        with:
+          file: lcov.info
+      - name: Submit coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: lcov.info
+
+  docs:
+    name: 'Documentation: ${{ matrix.format }}'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        format:
+          - html
+    steps:
+      - uses: actions/checkout@v3
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.8.5'
+      - uses: julia-actions/cache@v1
+      - name: Build the manual
+        env:
+          MADS_NO_PYTHON: ""
+          MADS_NO_PLOT: ""
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+        run: julia --color=yes --project=docs/ docs/make.jl ${{ matrix.format }}
