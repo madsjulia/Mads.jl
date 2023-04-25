@@ -37,10 +37,6 @@ Mads.functions(r"parame")
 Mads.functions(Mads, "loadmadsfile");
 Mads.functions(Mads, r"is.*par");
 
-Mads.stdouterrcaptureon();
-
-Mads.printerrormsg("a")
-
 quiet_status = Mads.quiet
 Mads.quietoff()
 
@@ -56,12 +52,15 @@ try
 	rm("test-create-symbolic-link")
 catch
 	if Sys.iswindows()
-		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows require to execute julia as administrator.")
+		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows may require to execute julia as administrator.")
 	else
 		Mads.madscritical("Symbolic links cannot be created!")
 	end
 end
 
+Mads.stdouterrcaptureon()
+
+Mads.printerrormsg("a")
 Mads.madsoutput("a")
 Mads.madsdebug("a")
 Mads.madsinfo("Testing ...")
@@ -87,7 +86,9 @@ if isdefined(Mads, :runcmd)
 		Mads.runcmd("ls $(Mads.dir)"; waittime=10.)
 	end
 end
-Mads.transposevector(["a";"b"])
+Mads.stdouterrcaptureoff()
+
+Mads.transposevector(["a"; "b"])
 Mads.transposematrix(["a" "b"])
 
 if !haskey(ENV, "MADS_NO_GADFLY")
@@ -121,8 +122,6 @@ Mads.deletekeyword!(Dict("Problem"=>["ssdr2","paranoid"]), "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr2"=>true)), "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>Dict("ssdr"=>true)), "Problem", "ssdr")
 Mads.deletekeyword!(Dict("Problem"=>["ssdr","paranoid"]), "Problem", "ssdr")
-
-Mads.stdouterrcaptureoff();
 
 # Mads.pkgversion_old("ModuleThatDoesNotExist") # this captures output
 

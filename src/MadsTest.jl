@@ -36,12 +36,10 @@ argtext=Dict("testname"=>"name of the test to execute; module or example"),
 keytext=Dict("madstest"=>"test Mads [default=`true`]")))
 """
 function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=true)
-	@show testname
 	if !plotting
 		ENV["MADS_NO_GADFLY"] = ""
 		ENV["MADS_NO_PLOT"] = ""
 	end
-	@show "a"
 	graphoff()
 	orig_dir = pwd()
 	d = Mads.dir

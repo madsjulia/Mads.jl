@@ -1370,7 +1370,7 @@ function rmfile(filename::AbstractString; path::AbstractString=".")
 	if path != "" && path != "."
 		filename = joinpath(path, filename)
 	end
-	if isfile(filename)
+	if isfile(filename) || islink(filename)
 		rm(filename)
 	end
 end

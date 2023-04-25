@@ -33,7 +33,7 @@ Produce MADS help information
 $(DocumentFunction.documentfunction(help))
 """
 function help()
-	Markdown.parse_file(joinpath(Mads.dir, "GETTING_STARTED.md"))
+	Markdown.parse_file(joinpath(Mads.dir, "docs", "src", "Getting_Started.md"))
 end
 
 """
@@ -42,7 +42,7 @@ Produce MADS copyright information
 $(DocumentFunction.documentfunction(copyright))
 """
 function copyright()
-	Markdown.parse_file(joinpath(Mads.dir, "COPYING.md"))
+	Markdown.parse_file(joinpath(Mads.dir, "LICENSE"))
 end
 
 function functions(re::Regex; shortoutput::Bool=false, quiet::Bool=false)
