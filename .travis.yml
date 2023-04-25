@@ -34,7 +34,7 @@ notifications:
   # - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then sudo pip install matplotlib pyyaml; fi
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'import Pkg; Pkg.clone(pwd());'
+  # - julia -e 'import Pkg; Pkg.clone(pwd());'
   - julia -e 'ENV["MADS_TRAVIS"]=""; ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; import Pkg; Pkg.build("Mads"; verbose=true);' # Pkg.test("Mads"; coverage=true)
   - julia --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.instantiate()'
   - julia --project=docs/ docs/make.jl
