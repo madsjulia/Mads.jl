@@ -2,15 +2,27 @@
 
 After starting Julia, execute:
 
-
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
 
+to access the latest released version.
+
+To utilize the latest updates (commits) use:
+
+```julia
+import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
+```
+
 ## Installation without PYTHON
 
-MADS uses PyYAML and matplotlib.
-To avoid using these modules, set the following environmental variable:
+Python is not required.
+
+MADS uses Python to create matplotlib plots.
+
+These are optional.
+
+To avoid using these modules, set the following environmental variable before building MADS:
 
 (bash)
 ```bash
