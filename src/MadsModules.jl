@@ -7,6 +7,7 @@ import ReusableFunctions
 import RobustPmap
 import SVR
 import DocumentFunction
+import GeostatInversion
 
 function pin()
 	Pkg.pin("RobustPmap", v"1.0.2")
@@ -23,7 +24,7 @@ end
 """
 Mads Modules: $madsmodulesdoc
 """
-global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, Kriging, BIGUQ, ReusableFunctions, RobustPmap, MetaProgTools, SVR, DocumentFunction]
+global madsmodulesdoc = [Mads, Anasol, AffineInvariantMCMC, GeostatInversion, Kriging, BIGUQ, ReusableFunctions, RobustPmap, MetaProgTools, SVR, DocumentFunction]
 
 """
 Mads Modules: $madsmodules

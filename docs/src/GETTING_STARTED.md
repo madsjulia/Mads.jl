@@ -1,8 +1,14 @@
 # Getting Started
 
-Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`import Pkg; Pkg.add("Mads")`) using the installation instruction in the `README.md` ([see also](https://github.com/madsjulia/Mads.jl)).
+Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`import Pkg; Pkg.add("Mads")`).
 
-If you are not familiar with Julia, checkout [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/), [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/), [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)).
+You can also follow the installation instruction on [GitHub](https://github.com/madsjulia/Mads.jl)).
+
+If you are not familiar with Julia, checkout:
+- [Get Started with Julia](https://julialang.org/learning/)
+- [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/)
+- [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/)
+- [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf).
 
 You can also explore Julia examples provided in Mads: `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
 
@@ -88,7 +94,7 @@ in the `examples/getting_started` subdirectory of the `Mads.jl` repository ([git
 
 # MADS Documentation
 
-All the available MADS modules and functions are described at [github](http://madsjulia.github.io/Mads.jl) and [readthedocs](`http://madsjl.readthedocs.org/en/latest/`)
+All the available MADS modules and functions are described at [github](http://madsjulia.github.io/Mads.jl) and [readthedocs](http://madsjl.readthedocs.org/en/latest)
 
 # MADS Licensing & Copyright
 
