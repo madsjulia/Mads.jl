@@ -1,6 +1,8 @@
+# Examples
+
 ## Information Gap Analysis
 
-All the figures below are generated using `examples/model_analysis/infogap.jl`.
+All the figures below are generated using [`examples/model_analysis/infogap.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_analysis/infogap.jl).
 
 ### Setup
 

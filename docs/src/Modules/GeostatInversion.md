@@ -8,7 +8,7 @@ The other utilizes a Randomized Geostatistical Approach (RGA) that builds on PCG
 Randomized Geostatistical Approach (RGA) references:
 
 - [O'Malley, D., Le, E., Vesselinov, V.V., Fast Geostatistical Inversion using Randomized Matrix Decompositions and Sketchings for Heterogeneous Aquifer Characterization, AGU Fall Meeting, San Francisco, CA, December 14–18, 2015.](http://adsabs.harvard.edu/abs/2015AGUFM.T31E..03O)
-- [Lin, Y, Le, E.B, O'Malley, D., Vesselinov, V.V., Bui-Thanh, T., Large-Scale Inverse Model Analyses Employing Fast Randomized Data Reduction, 2016.](submitted)
+- [Lin, Y, Le, E.B, O'Malley, D., Vesselinov, V.V., Bui-Thanh, T., Large-Scale Inverse Model Analyses Employing Fast Randomized Data Reduction, 2016.](https://doi.org/10.1002/2016WR020299)
 
 Two versions of PCGA are implemented in this package
 
