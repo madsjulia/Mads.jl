@@ -7,13 +7,13 @@ macro stdoutcapture(block)
 	if quiet
 		quote
 			if ccall(:jl_generating_output, Cint, ()) == 0
-				outputoriginal = stdout;
-				(outR, outW) = redirect_stdout();
-				outputreader = @async read(outR, String);
+				outputoriginal = stdout
+				(outR, outW) = redirect_stdout()
+				outputreader = @async read(outR, String)
 				evalvalue = $(esc(block))
-				redirect_stdout(outputoriginal);
-				close(outW);
-				close(outR);
+				redirect_stdout(outputoriginal)
+				close(outW)
+				close(outR)
 				return evalvalue
 			end
 		end
@@ -31,13 +31,13 @@ macro stderrcapture(block)
 	if quiet
 		quote
 			if ccall(:jl_generating_output, Cint, ()) == 0
-				errororiginal = stderr;
-				(errR, errW) = redirect_stderr();
-				errorreader = @async read(errR, String);
+				errororiginal = stderr
+				(errR, errW) = redirect_stderr()
+				errorreader = @async read(errR, String)
 				evalvalue = $(esc(block))
-				redirect_stderr(errororiginal);
-				close(errW);
-				close(errR);
+				redirect_stderr(errororiginal)
+				close(errW)
+				close(errR)
 				return evalvalue
 			end
 		end
@@ -55,19 +55,19 @@ macro stdouterrcapture(block)
 	if quiet
 		quote
 			if ccall(:jl_generating_output, Cint, ()) == 0
-				outputoriginal = stdout;
-				(outR, outW) = redirect_stdout();
-				outputreader = @async read(outR, String);
-				errororiginal = stderr;
-				(errR, errW) = redirect_stderr();
-				errorreader = @async read(errR, String);
+				outputoriginal = stdout
+				(outR, outW) = redirect_stdout()
+				outputreader = @async read(outR, String)
+				errororiginal = stderr
+				(errR, errW) = redirect_stderr()
+				errorreader = @async read(errR, String)
 				evalvalue = $(esc(block))
-				redirect_stdout(outputoriginal);
-				close(outW);
-				close(outR);
-				redirect_stderr(errororiginal);
-				close(errW);
-				close(errR);
+				redirect_stdout(outputoriginal)
+				close(outW)
+				close(outR)
+				redirect_stderr(errororiginal)
+				close(errW)
+				close(errR)
 				return evalvalue
 			end
 		end
@@ -85,11 +85,11 @@ $(DocumentFunction.documentfunction(stdoutcaptureon))
 """
 function stdoutcaptureon()
 	if capture
-		global outputoriginal = stdout;
-		(outR, outW) = redirect_stdout();
-		global outputread = outR;
-		global outputwrite = outW;
-		global outputreader = @async read(outputread, String);
+		global outputoriginal = stdout
+		(outR, outW) = redirect_stdout()
+		global outputread = outR
+		global outputwrite = outW
+		global outputreader = @async read(outputread, String)
 	end
 end
 
@@ -104,10 +104,10 @@ Returns:
 """
 function stdoutcaptureoff()
 	if capture
-		redirect_stdout(outputoriginal);
-		close(outputwrite);
-		output = fetch(outputreader);
-		close(outputread);
+		redirect_stdout(outputoriginal)
+		close(outputwrite)
+		output = fetch(outputreader)
+		close(outputread)
 		return output
 	end
 end
@@ -119,11 +119,11 @@ $(DocumentFunction.documentfunction(stderrcaptureon))
 """
 function stderrcaptureon()
 	if capture
-		global errororiginal = stderr;
-		(errR, errW) = redirect_stderr();
-		global errorread = errR;
-		global errorwrite = errW;
-		global errorreader = @async read(errorread, String);
+		global errororiginal = stderr
+		(errR, errW) = redirect_stderr()
+		global errorread = errR
+		global errorwrite = errW
+		global errorreader = @async read(errorread, String)
 	end
 end
 
@@ -138,10 +138,10 @@ Returns:
 """
 function stderrcaptureoff()
 	if capture
-		redirect_stderr(errororiginal);
-		close(errorwrite);
+		redirect_stderr(errororiginal)
+		close(errorwrite)
 		erroro = fetch(errorreader)
-		close(errorread);
+		close(errorread)
 		return erroro
 	end
 end

@@ -36,7 +36,7 @@ script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'import Pkg; Pkg.clone(pwd());'
   - julia -e 'ENV["MADS_TRAVIS"]=""; ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; import Pkg; Pkg.build("Mads"; verbose=true);' # Pkg.test("Mads"; coverage=true)
-  - julia --project=docs/ -e 'import Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
+  - julia --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.instantiate()'
   - julia --project=docs/ docs/make.jl
 after_success:
   - julia -e 'import Pkg; import Mads; cd(joinpath(dirname(pathof(Mads)))); Pkg.add("Coverage"); import Coverage; Coveralls.submit(Coveralls.process_folder()); Codecov.submit(Codecov.process_folder())'
