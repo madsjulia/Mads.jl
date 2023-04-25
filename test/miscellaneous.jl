@@ -26,7 +26,7 @@ end
 Mads.setdebuglevel(1)
 Mads.resetmodelruns()
 
-Mads.functions(quiet=true)
+Mads.functions(; quiet=true)
 
 Mads.loadmadsproblem("unknown");
 Mads.loadmadsproblem("polynomial");

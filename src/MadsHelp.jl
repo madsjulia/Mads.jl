@@ -58,7 +58,7 @@ function functions(string::AbstractString=""; shortoutput::Bool=false, quiet::Bo
 	n = 0
 	for i in madsmodules
 		Core.eval(Mads, :(@tryimport $(Symbol(i))))
-		n += functions(Symbol(i), string; shortoutput=shortoutput, quiet=quiet)
+		n += length(functions(Symbol(i), string; shortoutput=shortoutput, quiet=quiet))
 	end
 	n > 0 && string == "" && @info("Total number of functions: $n")
 	return
