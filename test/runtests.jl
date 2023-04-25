@@ -31,7 +31,7 @@ end
 
 @info("Running MADS tests:")
 
-printstyled("* miscellaneous ...\n"; color=:cyan)
+printstyled("* miscellansfdfeous ...\n"; color=:cyan)
 @elapsed include("miscellaneous.jl")
 
 printstyled("* io ...\n"; color=:cyan)
