@@ -4,6 +4,7 @@
 
 [action-img]: https://github.com/madsjulia/Mads.jl/workflows/CI/badge.svg
 [action-url]: https://github.com/madsjulia/Mads.jl/actions
+
 [![coveralls.io](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 [![codecov.io](http://codecov.io/github/madsjulia/Mads.jl/coverage.svg?branch=master)](http://codecov.io/github/madsjulia/Mads.jl?branch=master)
 
