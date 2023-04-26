@@ -18,7 +18,6 @@
 * Uncertainty Quantification
 * Model Selection and Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
 
 [MADS](http://madsjulia.github.io/Mads.jl) has been tested and verified extensively.
@@ -31,23 +30,24 @@
 
 ## Documentation
 
-Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
+[MADS](http://madsjulia.github.io/Mads.jl) documentation, including description of all modules, functions, and variables, is available at:
+- [GitHub](http://madsjulia.github.io/Mads.jl)
+- [ReadtheDocs](https://mads.readthedocs.io) (outdated)
+- [LANL](https://madsjulia.lanl.gov) (outdated).
 
-See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+[MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
-Detailed model diagnostics problem is demonstrated [here](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
+Detailed demontrative data ananlysis and model diagnostics problems are availble as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
 
 ## Installation
 
-After starting Julia, execute in the REPL:
+In [Julia](https://julialang.org/downloads) REPL, execute:
 
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
 
-to access the latest released version.
-
-To utilize the latest updates (commits) use:
+To utilize the latest code updates (commits) use:
 
 ```julia
 import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
@@ -73,7 +73,7 @@ or
 import Pkg; Pkg.test("Mads")
 ```
 
-## Examples
+## Getting started
 
 To explore getting-started instructions, execute:
 
@@ -81,21 +81,49 @@ To explore getting-started instructions, execute:
 import Mads; Mads.help()
 ```
 
+## Examples
+
 Various examples located in the `examples` directory of the `Mads` repository.
 
-To run some of these examples, execute:
+A list of all the examples is provided by:
 
 ```julia
-include(Mads.dir * "/../examples/contamination/contamination.jl")
+Mads.examples()
 ```
 
-to perform various example analyses related to groundwater contaminant transport, or execute
+A specific can be executed using:
 
 ```julia
-include(Mads.dir * "/../examples/bigdt/bigdt.jl")
+Mads.examples("contamination")
 ```
 
-to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
+or
+
+```julia
+include(joinpath(Mads.dir, "examples", "contamination", "contamination.jl"))
+```
+
+This example will demonstrate various  analyses related to groundwater contaminant transport.
+
+To perform Bayesian Information Gap Decision Theory (BIG-DT) analysis, execute:
+
+```julia
+Mads.examples("bigdt")
+```
+
+or
+
+```julia
+include(joinpath(Mads.dir, "examples", "bigdt", "bigdt.jl"))
+```
+
+## Notebooks
+
+To explore evailable notebooks, execute:
+
+```julia
+Mads.notebooks()
+```
 
 ## Installation behind a firewall
 
