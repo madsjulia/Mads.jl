@@ -28,7 +28,7 @@ Create web documentation
 
 $(DocumentFunction.documentfunction(documentation_deploy))
 """
-function documentation_deploy()
-	Documenter.deploydocs(; root=joinpath(Mads.dir, "docs"), push_preview=true, repo="github.com/madsjulia/Mads.jl")
+function documentation_deploy(; deploy_config=Documenter.auto_detect_deploy_system())
+	Documenter.deploydocs(; root=joinpath(Mads.dir, "docs"), repo="github.com/madsjulia/Mads.jl.git", devbranch="master", target="build", deploy_config=deploy_config, push_preview=true)
 	return nothing
 end
