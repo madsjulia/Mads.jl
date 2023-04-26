@@ -20,24 +20,24 @@
 * Model Reduction and Surrogate Modeling
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) has been tested and verified extensively.
-
-[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
-
 [MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
 
 [MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
 
+[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
+
+[MADS](http://madsjulia.github.io/Mads.jl) has been extensively tested and verified.
+
 ## Documentation
 
 [MADS](http://madsjulia.github.io/Mads.jl) documentation, including description of all modules, functions, and variables, is available at:
-- [GitHub](http://madsjulia.github.io/Mads.jl)
+- [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
 - [ReadtheDocs](https://mads.readthedocs.io) (outdated)
 - [LANL](https://madsjulia.lanl.gov) (outdated).
 
 [MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
-Detailed demontrative data ananlysis and model diagnostics problems are availble as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
+Detailed demontrative data ananlysis and model diagnostics problems are availble as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics). See also below.
 
 ## Installation
 
@@ -47,16 +47,10 @@ In [Julia](https://julialang.org/downloads) REPL, execute:
 import Pkg; Pkg.add("Mads")
 ```
 
-To utilize the latest code updates (commits) use:
+To utilize the latest code updates use:
 
 ```julia
 import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
-```
-
-## Docker
-
-```bash
-docker run --interactive --tty montyvesselinov/madsjulia
 ```
 
 ## Testing
@@ -125,66 +119,10 @@ To explore evailable notebooks, execute:
 Mads.notebooks()
 ```
 
-## Installation behind a firewall
-
-Set proxies executing the following lines in the bash command-line environment:
+## Docker
 
 ```bash
-export ftp_proxy=http://proxyout.<your_site>:8080
-export rsync_proxy=http://proxyout.<your_site>:8080
-export http_proxy=http://proxyout.<your_site>:8080
-export https_proxy=http://proxyout.<your_site>:8080
-export no_proxy=.<your_site>
-```
-
-For example, at LANL, you will need to execute the following lines in the bash command-line environment:
-
-```bash
-export ftp_proxy=http://proxyout.lanl.gov:8080
-export rsync_proxy=http://proxyout.lanl.gov:8080
-export http_proxy=http://proxyout.lanl.gov:8080
-export https_proxy=http://proxyout.lanl.gov:8080
-export no_proxy=.lanl.gov
-```
-
-Proxies can be setup directly in the Julia REPL as well:
-
-```julia
-ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
-ENV["rsync_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["http_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["no_proxy"] = ".lanl.gov"
-```
-
-Julia uses git for package management.
-
-On Windows, you may beed to execute:
-
-```bash
-git config --global credential.helper manager
-```
-
-In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
-
-```
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "git@gitlab.com:"]
-    insteadOf = https://gitlab.com/
-[url "https://"]
-    insteadOf = git://
-[url "http://"]
-    insteadOf = git://
-```
-
-or execute:
-
-```bash
-git config --global url."https://".insteadOf git://
-git config --global url."http://".insteadOf git://
-git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
-git config --global url."git@github.com:".insteadOf https://github.com/
+docker run --interactive --tty montyvesselinov/madsjulia
 ```
 
 ## Related Julia Packages
