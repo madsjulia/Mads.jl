@@ -1,5 +1,4 @@
 import RobustPmap
-import DocumentFunction
 
 """
 Bayesian sampling with EMCEE: Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler

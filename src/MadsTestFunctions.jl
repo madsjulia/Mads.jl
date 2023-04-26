@@ -1,5 +1,3 @@
-import DocumentFunction
-
 """
 Rosenbrock test function (more difficult to solve)
 

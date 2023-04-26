@@ -1,5 +1,4 @@
 import OrderedCollections
-import DocumentFunction
 
 # NLopt is too much of a pain to install at this point
 """

@@ -1,5 +1,4 @@
 import OrderedCollections
-import DocumentFunction
 
 """
 Read observations using C MADS dynamic library

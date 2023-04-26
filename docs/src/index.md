@@ -4,7 +4,9 @@ Model Analyses and Decision Support
 
 ![](logos/mads_black_swan_logo_big_text_new_3inch.png)
 
-[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
+[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance/cloud-computing framework for data/model/decision analyses.
+
+[MADS](http://madsjulia.github.io/Mads.jl) can be coupled with any existing numerical model or simulator, including machine learning algorithms and models.
 
 [MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
 
@@ -14,5 +16,6 @@ Model Analyses and Decision Support
 * Uncertainty Quantification
 * Model Selection and Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
+
+[MADS](http://madsjulia.github.io/Mads.jl) analyses utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.

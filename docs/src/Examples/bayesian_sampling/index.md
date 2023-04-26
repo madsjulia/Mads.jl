@@ -1,20 +1,21 @@
 # Examples
 
-## Bayesian Sampling
+## Uncertainty Quantification using Bayesian Sampling
 
-All the figures below are generated using `examples/bayesian_sampling/bayesian_sampling.jl`.
+All the figures below are generated using [examples/bayesian_sampling/bayesian_sampling.jl](https://github.com/madsjulia/Mads.jl/blob/master/examples/bayesian_sampling/bayesian_sampling.jl).
 
 ### Model setup
 
-![](w01-problemsetup.svg)
-
-* Contaminant source (orange rectangle)
+In this case, there are:
 
 * 3 monitoring wells
+* Contaminant source (orange rectangle)
+
+![](w01-problemsetup.svg)
 
 ### Prior spaghetti plots
 
-Spaghetti plots of 100 model runs representing the prior model prediction uncertainties at the 3 monitoring wells.
+Below we show joint and individual spaghetti plots of 100 model runs representing the prior model prediction uncertainties at the 3 monitoring wells.
 
 #### Joint spaghetti plots
 

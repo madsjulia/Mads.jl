@@ -2,18 +2,20 @@
 
 ## Analysis of an Ordinary Differential Equation (ODE)
 
-All the figures below are generated using `examples/ode/ode.jl`.
+All the figures below are generated using [examples/ode/ode.jl](https://github.com/madsjulia/Mads.jl/blob/master/examples/ode/ode.jl).
 
 ### ODE
 
-$$x''(t) = -\omega^2 * x(t) - k * x'(t)$$
+Analyzed ODE looks like this:
 
-#### Unknown ODE parameters
+$x''(t) = -\omega^2 * x(t) - k * x'(t)$
+
+Unknown ODE parameters:
 
 * k
 * $\omega$
 
-#### Example ODE solution
+Example ODE solution:
 
 ![](ode-solution.svg)
 
@@ -41,7 +43,7 @@ Probabilistic distributions of the prior parameter uncertainties are:
 
 #### Observations
 
-Synthetic observations are applied to constrain the ODE parameters
+Synthetic observations are applied to constrain the ODE parameters:
 
 ![](ode-match.png)
 

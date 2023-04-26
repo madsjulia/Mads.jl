@@ -1,5 +1,4 @@
 import OrderedCollections
-import DocumentFunction
 
 """
 Parse Amanzi output provided in an external file (`filename`)

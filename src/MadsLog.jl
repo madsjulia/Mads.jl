@@ -1,5 +1,3 @@
-import DocumentFunction
-
 """
 MADS output (controlled by `quiet` and `verbositylevel`)
 

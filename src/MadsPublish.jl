@@ -1,6 +1,5 @@
 import Documenter
 import DocumenterMarkdown
-import DocumentFunction
 
 """
 Create web documentation

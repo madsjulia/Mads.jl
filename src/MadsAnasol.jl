@@ -1,7 +1,6 @@
 import Anasol
 import OrderedCollections
 import ProgressMeter
-import DocumentFunction
 
 anasolarguments = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az", "H"]
 anasolparametersrequired = ["n", "lambda", "theta", "vx", "vy", "vz", "ax", "ay", "az"]

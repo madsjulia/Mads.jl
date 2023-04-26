@@ -1,5 +1,4 @@
 import OrderedCollections
-import DocumentFunction
 import Distributed
 import SharedArrays
 import Statistics

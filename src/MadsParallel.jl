@@ -1,7 +1,6 @@
 import Distributed
 import LinearAlgebra
 import Printf
-import DocumentFunction
 
 if isdefined(Core, :Mads) && !isdefined(Mads, :sprintf)
 	"Convert `@Printf.sprintf` macro into `sprintf` function"

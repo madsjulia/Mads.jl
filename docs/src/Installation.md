@@ -24,21 +24,18 @@ These are optional.
 
 To avoid using these modules, set the following environmental variable before building MADS:
 
-(bash)
 ```bash
 export MADS_NO_PYTHON=""
 ```
 
 or
 
-(tcsh)
 ```tcsh
 setenv MADS_NO_PYTHON ""
 ```
 
 or
 
-(julia)
 ```julia
 ENV["MADS_NO_PYTHON"] = ""
 ```
@@ -48,21 +45,18 @@ ENV["MADS_NO_PYTHON"] = ""
 MADS uses Gadfly and matplotlib for plotting.
 To avoid using these modules, set the following environmental variable:
 
-(bash)
 ```bash
 export MADS_NO_PLOT=""
 ```
 
 or
 
-(tcsh)
 ```tcsh
 setenv MADS_NO_PLOT ""
 ```
 
 or
 
-(julia)
 ```julia
 ENV["MADS_NO_PLOT"] = ""
 ```
@@ -88,7 +82,8 @@ export http_proxy=http://proxyout.lanl.gov:8080
 export https_proxy=http://proxyout.lanl.gov:8080
 export no_proxy=.lanl.gov
 ```
-Proxies can be also set up directly in the Julia REPL as well:
+
+Proxies can be setup directly in the Julia REPL as well:
 
 ```julia
 ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
@@ -98,10 +93,32 @@ ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
 ENV["no_proxy"] = ".lanl.gov"
 ```
 
-## Docker
+Julia uses git for package management.
 
-Mads is also available @ Docker:
+To avoid potential git management issues, on Windows, you may need to execute:
 
 ```bash
-docker run --interactive --tty montyvesselinov/madsjulia
+git config --global credential.helper manager
+```
+
+In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
+
+```
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@gitlab.com:"]
+    insteadOf = https://gitlab.com/
+[url "https://"]
+    insteadOf = git://
+[url "http://"]
+    insteadOf = git://
+```
+
+or execute:
+
+```bash
+git config --global url."https://".insteadOf git://
+git config --global url."http://".insteadOf git://
+git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
+git config --global url."git@github.com:".insteadOf https://github.com/
 ```
