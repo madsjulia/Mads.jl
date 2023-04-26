@@ -1,5 +1,4 @@
 import PyPlot
-import DocumentFunction
 
 function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	if !haskey(madsdata, "Grid")

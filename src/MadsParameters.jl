@@ -1,6 +1,5 @@
 import Distributions
 import OrderedCollections
-import DocumentFunction
 
 """
 Check if a dictionary containing all the Mads model parameters

@@ -1,5 +1,3 @@
-import DocumentFunction
-
 function checknodedir(node::AbstractString, dir::AbstractString, waittime::Float64=10.) # 10 seconds
 	proc = run(`ssh -t $node ls $dir`; wait=false)
 	timedwait(() -> process_exited(proc), waittime)

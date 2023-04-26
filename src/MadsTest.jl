@@ -1,4 +1,3 @@
-import DocumentFunction
 
 """
 Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)

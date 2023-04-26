@@ -15,7 +15,7 @@ Recently we have performed a series of analyses related to contaminant source id
 
 ### Presentations
 
-- Vesselinov, V.V., Alexandrov, B.A, Model-free Source Identification, AGU Fall Meeting, San Francisco, CA, 2014. [PDF](http://monty.gitlab.io/presentations/vesselinov bss-agu2014-LA-UR-14-29163.pdf)>
+- Vesselinov, V.V., Alexandrov, B.A, Model-free Source Identification, AGU Fall Meeting, San Francisco, CA, 2014. [PDF](http://monty.gitlab.io/presentations/vesselinov bss-agu2014-LA-UR-14-29163.pdf)
 
 
 

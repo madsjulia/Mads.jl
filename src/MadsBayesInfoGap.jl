@@ -3,7 +3,6 @@ import ProgressMeter
 import OrderedCollections
 import DataFrames
 import BlackBoxOptim
-import DocumentFunction
 
 """
 Setup Bayesian Information Gap Decision Theory (BIG-DT) problem

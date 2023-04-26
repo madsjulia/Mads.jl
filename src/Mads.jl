@@ -10,6 +10,7 @@ Licensing: GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 module Mads
 
 import Pkg
+import DocumentFunction
 import OrderedCollections
 import Printf
 import Distributed
@@ -104,6 +105,7 @@ end
 
 include("MadsHelp.jl")
 Mads.welcome()
+include("MadsExamples.jl")
 include("MadsCapture.jl")
 include("MadsLog.jl")
 include("MadsFunc.jl")

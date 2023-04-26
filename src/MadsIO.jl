@@ -776,6 +776,11 @@ function checkmodeloutputdirs(madsdata::AbstractDict)
 			push!(directories, getdir(filename))
 		end
 	end
+	if haskey(madsdata, "JLD2Predictions")
+		for filename in vcat(madsdata["JLD2Predictions"])
+			push!(directories, getdir(filename))
+		end
+	end
 	if haskey(madsdata, "JSONPredictions")
 		for filename in vcat(madsdata["JSONPredictions"])
 			push!(directories, getdir(filename))
@@ -848,6 +853,17 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 			Mads.rmfile(filename, path=path)
 		end
 	end
+	if haskey(madsdata, "JLD2Parameters")
+		for filename in vcat(madsdata["JLD2Parameters"])
+			Mads.rmfile(filename, path=path)
+		end
+		FileIO.save(madsdata["JLD2Parameters"], parameters)
+	end
+	if haskey(madsdata, "JLD2Predictions")
+		for filename in vcat(madsdata["JLD2Predictions"])
+			Mads.rmfile(filename, path=path)
+		end
+	end
 	if haskey(madsdata, "JSONParameters")
 		for filename in vcat(madsdata["JSONParameters"])
 			Mads.rmfile(filename, path=path)
@@ -898,6 +914,11 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 	end
 	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
+			results = merge(results, FileIO.load(filename))
+		end
+	end
+	if haskey(madsdata, "JLD2Predictions")
+		for filename in vcat(madsdata["JLD2Predictions"])
 			results = merge(results, FileIO.load(filename))
 		end
 	end
@@ -1670,4 +1691,21 @@ function parsevars(variable_names::Vector{String}, variable_values::Vector{Float
 		end
 	end
 	return (s...,)
+end
+
+function fixlinks()
+	files = readdir()
+	for f in files
+		if isfile(f)
+			l = readlines(f)
+			if length(l) == 1
+				fn = l[1]
+				if isfile(fn) || islink(fn)
+					@info("Linking $(f) to $(fn)")
+					rm(f)
+					symlink(fn, f)
+				end
+			end
+		end
+	end
 end

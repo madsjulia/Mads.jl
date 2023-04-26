@@ -56,19 +56,58 @@ In this case, there are two parameters, `a` and `b`, defining a linear model, `f
 
 The Julia file `internal-linear.jl` is specified under `Model` in the MADS problem dictionary above.
 
+`internal-linear.jl` looks like this:
+
+```julia
+import OrderedCollections
+
+function madsmodelrun(parameters::AbstractDict) # model run
+	f(t) = parameters["a"] * t - parameters["b"] # a * t - b
+	times = 1:4
+	predictions = OrderedCollections.OrderedDict{String, Float64}(zip(map(i -> string("o", i), times), map(f, times)))
+	return predictions
+end
+```
+
+The analyzed models can be not only Julia functions. They can be complex external numerical simulators. In this case, MADS provides various approaches for [Model Coupling](https://madsjulia.github.io/Mads.jl/dev/Model_Coupling.html).
+
 Execute:
 
-`Mads.showallparameters(madsdata)` to show all the parameters.
+- List parameters and associated information:
 
-`Mads.showobservations(madsdata)` to list all the observations.
+```julia
+Mads.showallparameters(madsdata)
+```
 
-MADS can perform various types of analyses:
+- List observations  and associated information:
 
-- `Mads.forward(madsdata)` will execute forward model simulation based on the initial parameter values.
-- `saresults = Mads.efast(madsdata)` will perform eFAST sensitivity analysis of the model parameters against the model observations as defined in the MADS problem dictionary.
-- `optparam, iaresults = Mads.calibrate(madsdata)` will perform calibration (inverse analysis) of the model parameters to reproduce the model observations as defined in the MADS problem dictionary; in this case, the calibration uses Levenberg-Marquardt optimization.
-- `Mads.forward(madsdata, optparam)` will perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
+```julia
+Mads.showobservations(madsdata)
+```
 
-More complicated analyses will require additional information to be provided in the MADS problem dictionary.
+- Execute forward model simulation based on the initial parameter values:
 
-Examples are given in the `examples` subdirectories of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples)).)
+```julia
+forward_results = Mads.forward(madsdata)
+```
+
+- Perform eFAST sensitivity analysis of the model parameters against the model observations:
+
+```julia
+efast_results = Mads.efast(madsdata)
+```
+- Perform calibration (inverse analysis) of the model parameters to reproduce the model observations using Levenberg-Marquardt optimization:
+
+```julia
+optparam, iaresults = Mads.calibrate(madsdata)
+```
+
+- Perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.
+
+```julia
+calibrated_results = Mads.forward(madsdata, optparam)
+```
+
+More complicated analyses may require additional information to be provided in the MADS problem dictionary.
+
+Examples are given in the `examples` subdirectories of the `Mads.jl` repository [github](https://github.com/madsjulia/Mads.jl/tree/master/examples).

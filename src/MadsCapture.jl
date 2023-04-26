@@ -1,5 +1,3 @@
-import DocumentFunction
-
 """
 Capture stdout of a block
 """

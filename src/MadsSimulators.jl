@@ -1,5 +1,3 @@
-import DocumentFunction
-
 """
 Execute Amanzi external groundwater flow and transport simulator
 

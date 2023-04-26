@@ -1,6 +1,5 @@
 import OrderedCollections
 import DelimitedFiles
-import DocumentFunction
 
 """
 Load a predefined Mads problem

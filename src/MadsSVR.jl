@@ -1,6 +1,5 @@
 import SVR
 import OrderedCollections
-import DocumentFunction
 
 function svrtraining(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
 	numberofsamples = size(paramarray, 1)

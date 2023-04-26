@@ -1,5 +1,4 @@
 import Gadfly
-import DocumentFunction
 
 """
 Plot BIG-DT robustness curves

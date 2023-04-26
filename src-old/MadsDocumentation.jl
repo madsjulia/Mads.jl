@@ -1,4 +1,3 @@
-import DocumentFunction
 
 function getfunctionargumentsold(f::Function)
 	getfunctionarguments(f, methods(f))

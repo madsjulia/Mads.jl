@@ -1,5 +1,3 @@
-import DocumentFunction
-
 function asinetransform(madsdata::AbstractDict, params::AbstractVector)
 	paramkeys = getoptparamkeys(madsdata)
 	lowerbounds = Mads.getparamsmin(madsdata, paramkeys)
