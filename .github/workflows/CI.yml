@@ -64,8 +64,19 @@ jobs:
         with:
           version: '1.8'
       - uses: julia-actions/cache@v1
-      - name: Build the manual
-        run: julia --color=yes --project=docs/ docs/make.jl ${{ matrix.format }}
+      - uses: julia-actions/julia-buildpkg@v1
+      - name: Build package
+        run: julia -e 'ENV["MADS_TRAVIS"]=""; ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; import Pkg; Pkg.build("Mads"; verbose=true);
+        env:
+          MADS_NO_PYTHON: ""
+          MADS_NO_PLOT: ""
+      - name: Instrantiate package
+        run: julia --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.instantiate()'
+        env:
+          MADS_NO_PYTHON: ""
+          MADS_NO_PLOT: ""        
+      - name: Build the documentaiton
+        run: julia --color=yes --project=docs/ docs/make.jl
         env:
           MADS_NO_PYTHON: ""
           MADS_NO_PLOT: ""
