@@ -1693,19 +1693,30 @@ function parsevars(variable_names::Vector{String}, variable_values::Vector{Float
 	return (s...,)
 end
 
-function fixlinks()
+function fixlinks(dir::AbstractString="."; test::Bool=true)
+	ccd = pwd()
+	cd(dir)
 	files = readdir()
 	for f in files
 		if isfile(f)
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
-				if isfile(fn) || islink(fn)
-					@info("Linking $(f) to $(fn)")
-					rm(f)
-					symlink(fn, f)
+				if length(fn) < 260 && (isfile(fn) || islink(fn))
+					if !test
+						@info("Linking $(f) to $(fn)")
+						rm(f)
+						symlink(fn, f)
+					else
+						@info("TEST: Linking $(f) to $(fn)")
+					end
 				end
 			end
+		elseif isdir(f)
+			@info("Directory $(f) ...")
+			fixlinks(f; test=test)
 		end
 	end
+	cd(ccd)
+	return nothing
 end
