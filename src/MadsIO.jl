@@ -1702,7 +1702,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
-				if length(fn) < 260 && (isfile(fn) || islink(fn))
+				if length(fn) < 260 && isascii(fn) && (isfile(fn) || islink(fn))
 					if !test
 						@info("Linking $(f) to $(fn)")
 						rm(f)
@@ -1712,7 +1712,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 					end
 				end
 			end
-		elseif isdir(f)
+		elseif isdir(f) && f != ".git"
 			@info("Directory $(f) ...")
 			fixlinks(f; test=test)
 		end
