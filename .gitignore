@@ -124,6 +124,9 @@ wells
 *.rst
 *.sen
 *.seo
+*.initialresults
+*.iterationresults
+*.finalresults
 svrmodels
 *.svr
 *madsjl_cmdline_hist*
