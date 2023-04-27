@@ -18,45 +18,39 @@
 * Uncertainty Quantification
 * Model Selection and Averaging
 * Model Reduction and Surrogate Modeling
-* Machine Learning (e.g., Blind Source Separation, Source Identification, Feature Extraction, Matrix / Tensor Factorization, etc.)
 * Decision Analysis and Support
-
-[MADS](http://madsjulia.github.io/Mads.jl) has been tested and verified extensively.
-
-[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
 
 [MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
 
 [MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
 
+[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
+
+[MADS](http://madsjulia.github.io/Mads.jl) has been extensively tested and verified.
+
 ## Documentation
 
-Detailed documentation including description of all MADS modules and functions is available at [GitHub](http://madsjulia.github.io/Mads.jl), [ReadtheDocs](https://mads.readthedocs.io) and [LANL](https://madsjulia.lanl.gov) sites.
+[MADS](http://madsjulia.github.io/Mads.jl) documentation, including description of all modules, functions, and variables, is available at:
+- [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
+- [ReadtheDocs](https://mads.readthedocs.io) (outdated)
+- [LANL](https://madsjulia.lanl.gov) (outdated).
 
-See also [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+[MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
-Detailed model diagnostics problem is demonstrated [here](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics)
+Detailed demontrative data ananlysis and model diagnostics problems are availble as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics). See also below.
 
 ## Installation
 
-After starting Julia, execute in the REPL:
+In [Julia](https://julialang.org/downloads) REPL, execute:
 
 ```julia
 import Pkg; Pkg.add("Mads")
 ```
 
-to access the latest released version.
-
-To utilize the latest updates (commits) use:
+To utilize the latest code updates use:
 
 ```julia
 import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
-```
-
-## Docker
-
-```bash
-docker run --interactive --tty montyvesselinov/madsjulia
 ```
 
 ## Testing
@@ -73,7 +67,7 @@ or
 import Pkg; Pkg.test("Mads")
 ```
 
-## Examples
+## Getting started
 
 To explore getting-started instructions, execute:
 
@@ -81,82 +75,54 @@ To explore getting-started instructions, execute:
 import Mads; Mads.help()
 ```
 
+## Examples
+
 Various examples located in the `examples` directory of the `Mads` repository.
 
-To run some of these examples, execute:
+A list of all the examples is provided by:
 
 ```julia
-include(Mads.dir * "/../examples/contamination/contamination.jl")
+Mads.examples()
 ```
 
-to perform various example analyses related to groundwater contaminant transport, or execute
+A specific can be executed using:
 
 ```julia
-include(Mads.dir * "/../examples/bigdt/bigdt.jl")
+Mads.examples("contamination")
 ```
 
-to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
-
-## Installation behind a firewall
-
-Set proxies executing the following lines in the bash command-line environment:
-
-```bash
-export ftp_proxy=http://proxyout.<your_site>:8080
-export rsync_proxy=http://proxyout.<your_site>:8080
-export http_proxy=http://proxyout.<your_site>:8080
-export https_proxy=http://proxyout.<your_site>:8080
-export no_proxy=.<your_site>
-```
-
-For example, at LANL, you will need to execute the following lines in the bash command-line environment:
-
-```bash
-export ftp_proxy=http://proxyout.lanl.gov:8080
-export rsync_proxy=http://proxyout.lanl.gov:8080
-export http_proxy=http://proxyout.lanl.gov:8080
-export https_proxy=http://proxyout.lanl.gov:8080
-export no_proxy=.lanl.gov
-```
-
-Proxies can be setup directly in the Julia REPL as well:
+or
 
 ```julia
-ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
-ENV["rsync_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["http_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["no_proxy"] = ".lanl.gov"
+include(joinpath(Mads.dir, "examples", "contamination", "contamination.jl"))
 ```
 
-Julia uses git for package management.
+This example will demonstrate various  analyses related to groundwater contaminant transport.
 
-On Windows, you may beed to execute:
+To perform Bayesian Information Gap Decision Theory (BIG-DT) analysis, execute:
+
+```julia
+Mads.examples("bigdt")
+```
+
+or
+
+```julia
+include(joinpath(Mads.dir, "examples", "bigdt", "bigdt.jl"))
+```
+
+## Notebooks
+
+To explore evailable notebooks, execute:
+
+```julia
+Mads.notebooks()
+```
+
+## Docker
 
 ```bash
-git config --global credential.helper manager
-```
-
-In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
-
-```
-[url "git@github.com:"]
-    insteadOf = https://github.com/
-[url "git@gitlab.com:"]
-    insteadOf = https://gitlab.com/
-[url "https://"]
-    insteadOf = git://
-[url "http://"]
-    insteadOf = git://
-```
-
-or execute:
-
-```bash
-git config --global url."https://".insteadOf git://
-git config --global url."http://".insteadOf git://
-git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
-git config --global url."git@github.com:".insteadOf https://github.com/
+docker run --interactive --tty montyvesselinov/madsjulia
 ```
 
 ## Related Julia Packages
