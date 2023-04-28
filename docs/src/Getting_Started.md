@@ -1,24 +1,35 @@
 # Getting Started
 
-Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl) (`import Pkg; Pkg.add("Mads")`).
+Install [Julia](http://julialang.org) and [MADS](http://github.com/madsjulia/Mads.jl).
+
+```julia
+import Pkg
+Pkg.add("Mads")
+```
 
 You can also follow the installation instruction on [GitHub](https://github.com/madsjulia/Mads.jl)).
 
 If you are not familiar with Julia, checkout:
 - [Get Started with Julia](https://julialang.org/learning/)
 - [Julia By Example](http://samuelcolvin.github.io/JuliaByExample/)
-- [learn X in Y minutes](https://learnxinyminutes.com/docs/julia/)
+- [Learn X in Y minutes](https://learnxinyminutes.com/docs/julia/)
 - [Julia Express](http://bogumilkaminski.pl/files/julia_express.pdf)
 
-You can also explore Julia examples provided in Mads: `examples/learn_julia` directory of the `Mads.jl` repository ([github](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia)).
+You can also explore Julia examples provided in Mads: [examples/learn_julia](https://github.com/madsjulia/Mads.jl/tree/master/examples/learn_julia) directory of the `Mads.jl` repository.
 
-To start using MADS, initiate the Julia REPL and execute `import Mads` to load MADS modules.
+To start using MADS, initiate the Julia REPL and execute:
+
+```julia
+import Mads
+```
+
+## Setup
 
 All the MADS analyses are based on a MADS problem dictionary that defines the problem.
 
 The MADS problem dictionary is typically loaded from a YAML MADS input file.
 
-The loading of a MADS file can be executed as follows:
+To load a MADS input file, executed:
 
 ```julia
 madsdata = Mads.loadmadsfile("<input_file_name>.mads")
@@ -30,12 +41,12 @@ For example, you can execute:
 madsdata = Mads.loadmadsfile(joinpath(Mads.dir, "examples", "getting_started", "internal-linear.mads"))
 ```
 
-The file `internal-linear.mads` is located in `examples/getting_started` directory of the `Mads.jl` repository.
+The file `internal-linear.mads` is located in [examples/getting_started](https://github.com/madsjulia/Mads.jl/tree/master/examples/getting_started) directory of the `Mads.jl` repository.
 
 Typically, the MADS problem dictionary includes several classes:
 
-- `Parameters` : lists of model parameters
-- `Observations` : lists of model observations
+- `Parameters` : lists of model parameters (inputs)
+- `Observations` : lists of model observations (outputs)
 - `Model` : defines a model to predict the model observations using the model parameters
 
 The file `internal-linear.mads` looks like this:
@@ -69,9 +80,11 @@ function madsmodelrun(parameters::AbstractDict) # model run
 end
 ```
 
-The analyzed models can be not only Julia functions. They can be complex external numerical simulators. In this case, MADS provides various approaches for [Model Coupling](https://madsjulia.github.io/Mads.jl/dev/Model_Coupling.html).
+The analyzed models can be much more complex. Yhey do not need to be Julia functions. They can be complex external numerical simulators. In this case, MADS provides various approaches for [Model Coupling](https://madsjulia.github.io/Mads.jl/dev/Model_Coupling.html).
 
-Execute:
+## Execution
+
+Once the MADS problem dictionary is loaded, you can execute various MADS funcions:
 
 - List parameters and associated information:
 
@@ -79,7 +92,7 @@ Execute:
 Mads.showallparameters(madsdata)
 ```
 
-- List observations  and associated information:
+- List observations and associated information:
 
 ```julia
 Mads.showobservations(madsdata)
@@ -110,4 +123,4 @@ calibrated_results = Mads.forward(madsdata, optparam)
 
 More complicated analyses may require additional information to be provided in the MADS problem dictionary.
 
-Examples are given in the `examples` subdirectories of the `Mads.jl` repository [github](https://github.com/madsjulia/Mads.jl/tree/master/examples).
+Examples are given in the [examples](https://github.com/madsjulia/Mads.jl/tree/master/examples) subdirectories of the `Mads.jl` repository.
