@@ -16,9 +16,9 @@ function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(m
         "Installation" => "Installation.md",
         "Model Coupling" => "Model_Coupling.md",
 		"Examples" => "Examples/index.md",
-		"Testing" => "Testing.md",
-		"Modules/MADS" => "Modules/Mads.md",
-		"Modules/AffineInvariantMCMC" => "Modules/AffineInvariantMCMC.md"
+		"Notebooks" => "Notebooks.md",
+		"Modules" => "Modules.md",
+		"Testing" => "Testing.md"
     ]
 	Documenter.makedocs(; root=joinpath(Mads.dir, "docs"), sitename="Mads", authors="Velimir (monty) Vesselinov", pages=pages, repo="https://github.com/madsjulia/Mads.jl/blob/{commit}{path}#{line}", format=Documenter.Writers.HTMLWriter.HTML(; prettyurls=false, canonical="https://madsjulia.github.io/Mads.jl", sidebar_sitename=false, assets=["assets/favicon.ico"]), doctest=true, modules=modules_doc, clean=true)
 	return nothing

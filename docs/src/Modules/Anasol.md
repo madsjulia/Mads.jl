@@ -1,7 +1,8 @@
 # Anasol.jl
 
-Module Anasol.jl provides a series of analytical solutions for groundwater contaminant transport in 1, 2, and 3 dimensions.
-The provided solutions have:
+Anasol.jl provides a series of analytical solutions for groundwater contaminant transport in 1, 2, and 3 dimensions.
+
+The analytical solutions can have:
 
 * different source types
 	- instantaneous contaminant release
@@ -18,7 +19,7 @@ The provided solutions have:
 	- reflecting
 	- absorbing
 
-Functions have the following arguments:
+Anasol.jl functions have the following arguments:
 
 - `t`: time to compute the concentration
 - `x`: spatial coordinates of the point to compute the concentration
@@ -32,7 +33,7 @@ Functions have the following arguments:
 - `H1`/`H2`/`H3`: Hurst coefficients in the case of fractional Brownian dispersion
 - `xb1`/`xb2`/`xb3`: locations of the domain boundaries
 
-Anasol.jl module functions:
+Anasol.jl functions:
 
 ```@autodocs
 Modules = [Anasol]

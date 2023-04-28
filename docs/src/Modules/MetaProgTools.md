@@ -1,8 +1,8 @@
 # MetaProgTools.jl
 
-Module with Meta Programming Tools.
+Meta Programming Tools.
 
-MetaProgTools.jl module functions:
+MetaProgTools.jl functions:
 
 ```@autodocs
 Modules = [MetaProgTools]

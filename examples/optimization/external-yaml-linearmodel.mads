@@ -1,0 +1,13 @@
+Parameters:
+- a : { longname: "parameter a", init:  1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+- b : { longname: "parameter b", init: -1, type: opt, log: no, step: 0.1, min: -10, max: 10 }
+- c : { longname: "parameter b", init: -1, type: null, log: no, step: 0.1, min: -10, max: 10 }
+Observations:
+- o1: { longname: "observation 1", log: false, max: 20, min: -20, target: -3, weight: 1}
+- o2: { longname: "observation 2", log: false, max: 20, min: -20, target:  1, weight: 1}
+- o3: { longname: "observation 3", log: false, max: 20, min: -20, target:  5, weight: 1}
+- o4: { longname: "observation 4", log: false, max: 20, min: -20, target:  9, weight: 1}
+Command: "julia external-linearmodel-yaml.jl"
+YAMLParameters: parameters.yaml
+YAMLPredictions:
+- predictions.yaml
