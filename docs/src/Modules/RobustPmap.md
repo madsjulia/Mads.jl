@@ -1,8 +1,8 @@
 # RobustPmap.jl
 
-Module RobustPmap provides robust pmap calls for efficient parallelization and high-performance computing in Julia.
+RobustPmap.jl perfroms robust pmap (parallel map) calls for efficient parallelization and high-performance computing.
 
-RobustPmap.jl module functions:
+RobustPmap.jl functions:
 
 ```@autodocs
 Modules = [RobustPmap]

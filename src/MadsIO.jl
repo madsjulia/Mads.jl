@@ -1702,18 +1702,23 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
-				if length(fn) < 260 && isascii(fn) && (isfile(fn) || islink(fn))
-					if !test
-						@info("Linking $(f) to $(fn)")
-						rm(f)
-						symlink(fn, f)
+				if length(fn) < 260 && isascii(fn)
+					if (isfile(fn) || islink(fn))
+						if !test
+							@info("Linking $(f) to $(fn)")
+							rm(f)
+							symlink(fn, f)
+						else
+							@info("TEST: Linking $(f) to $(fn)")
+						end
 					else
-						@info("TEST: Linking $(f) to $(fn)")
+						@info("Linking of `$(f)` fails! `$(fn)` does not exist!")
+						# println("ln -sf $(fn) $(f)")
 					end
 				end
 			end
-		elseif isdir(f) && f != ".git"
-			@info("Directory $(f) ...")
+		elseif isdir(f) && f != ".git" && f != "build"
+			@info("Directory $(joinpath(pwd(), f)) ...")
 			fixlinks(f; test=test)
 		end
 	end
