@@ -13,12 +13,9 @@ Returns:
 
 - data in the yaml input file
 """
-function loadyamlfile(filename::AbstractString) # load YAML file
-	yamldata = OrderedCollections.OrderedDict()
-	f = open(filename)
-	yamldata = YAML.load(f) # works better; delimiters are well defined and "1e6" correctly interpreted as a number
-	close(f)
-	return yamldata # this is not OrderedDict()
+function loadyamlfile(filename::AbstractString)
+	yamldata = YAML.load_file(filename)
+	return yamldata
 end
 
 """
