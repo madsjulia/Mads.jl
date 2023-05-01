@@ -10,7 +10,7 @@
 - [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/contamination/contamination.ipynb)
 - [Html](Notebooks/contamination.html)
 
-## Blind Source Separation
+## Blind Source Separation (Unsupervised Machine Learning)
 
 - [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/blind_source_separation/blind_source_separation.ipynb)
 - [Html](Notebooks/blind_source_separation.html)
