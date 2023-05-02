@@ -116,7 +116,7 @@ Analytical solution of groundwater contaminant transport assuming Fickian disper
 The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
-The analysis took about 5 minutes in a serial mode using the Julia version of Mads.
+The analysis took about 5 minutes in a serial mode using the Julia version of MADS.
 The runs are independent and can be computed efficiently in parallel.
 
 ## References
