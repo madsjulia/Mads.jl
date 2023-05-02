@@ -1725,3 +1725,15 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 	cd(ccd)
 	return nothing
 end
+
+function lslinks(dir::AbstractString=".")
+	files = readdir(dir; join=true)
+	for f in files
+		if islink(f)
+			@info("Link: $(f)")
+		elseif isdir(f) && f != ".git"
+			lslinks(f)
+		end
+	end
+	return nothing
+end

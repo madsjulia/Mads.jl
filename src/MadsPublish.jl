@@ -14,6 +14,7 @@ function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(m
         "MADS" => "index.md",
         "Getting Started" => "Getting_Started.md",
         "Installation" => "Installation.md",
+		"Model Diagnostics" => "Examples/model_diagnostics/model_diagnostics.md",
         "Model Coupling" => "Model_Coupling.md",
 		"Examples" => "Examples/index.md",
 		"Notebooks" => "Notebooks.md",

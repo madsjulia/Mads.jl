@@ -1,20 +1,9 @@
 # Notebooks:
 
-## Model Diagnostics
+## [Model Diagnostics](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/model_diagnostics/model_diagnostics.ipynb)
 
-- [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/model_diagnostics/model_diagnostics.ipynb)
-- [Html](Notebooks/model_diagnostics.html)
+## [Contaminant transport](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/contamination/contamination.ipynb)
 
-## Contaminant transport
+## [Blind Source Separation (Unsupervised Machine Learning)](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/blind_source_separation/blind_source_separation.ipynb)
 
-- [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/contamination/contamination.ipynb)
-- [Html](Notebooks/contamination.html)
-
-## Blind Source Separation (Unsupervised Machine Learning)
-
-- [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/blind_source_separation/blind_source_separation.ipynb)
-- [Html](Notebooks/blind_source_separation.html)
-
-## Calibration of the DVM-DOS-TEM arctic model
-
-- [Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/arctic/arctic.ipynb)
+## [Calibration of the DVM-DOS-TEM arctic model](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/arctic/arctic.ipynb)

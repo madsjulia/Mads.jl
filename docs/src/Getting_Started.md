@@ -124,3 +124,11 @@ calibrated_results = Mads.forward(madsdata, optparam)
 More complicated analyses may require additional information to be provided in the MADS problem dictionary.
 
 Examples are given in the [examples](https://github.com/madsjulia/Mads.jl/tree/master/examples) subdirectories of the `Mads.jl` repository.
+
+See also [Examples](Examples/index.md)
+
+To explore getting-started instructions, ypu can also execute:
+
+```julia
+Mads.help()
+```
