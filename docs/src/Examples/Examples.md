@@ -17,7 +17,7 @@
 
 ***
 
-Many other examples located in the [examples](https://github.com/madsjulia/Mads.jl/tree/master/examples) directory of the `Mads` repository.
+Many other examples located in the [examples](https://github.com/madsjulia/Mads.jl/tree/master/examples) directory of the `MADS` repository.
 
 For example, execute
 

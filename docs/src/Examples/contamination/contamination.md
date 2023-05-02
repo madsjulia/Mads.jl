@@ -13,7 +13,7 @@ See also the related [Jupyter notebook](https://github.com/madsjulia/Mads.jl/blo
 There are 20 monitoring wells.
 Each well has 2 measurement ports: shallow (3 m below the water table labeled `a`) and deep (33 m below the water table labeled `b`).
 Contaminant concentrations are observed for 50 years at each well.
-The contaminant transport is solved using the `Anasol` package in Mads.
+The contaminant transport is solved using the `Anasol` package in MADS.
 
 ## Unknown model parameters
 

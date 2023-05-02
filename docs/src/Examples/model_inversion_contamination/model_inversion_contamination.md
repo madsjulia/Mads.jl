@@ -49,7 +49,7 @@ Each well has 2 measurement ports:
 
 Contaminant concentrations are observed for 50 years at each well.
 
-The contaminant transport is solved using the [`Anasol`](https://github.com/madsjulia/Anasol.jl) package in Mads.
+The contaminant transport is solved using the [`Anasol`](https://github.com/madsjulia/Anasol.jl) package in MADS.
 
 ### Unknown model parameters
 
