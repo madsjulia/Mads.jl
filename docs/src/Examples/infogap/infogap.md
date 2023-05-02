@@ -1,10 +1,10 @@
-# Examples
+# Information Gap Decision Analysis
 
-## Information Gap Analysis
+[MADS](http://madsjulia.github.io/Mads.jl is applied to execute Information Gap Decision Analysis.
 
-All the figures below are generated using [`examples/model_analysis/infogap.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_analysis/infogap.jl).
+The analyses below are performed using [`examples/model_analysis/infogap.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_analysis/infogap.jl).
 
-### Setup
+## Setup
 
 ![](model_setup.png)
 
@@ -28,7 +28,9 @@ All the figures below are generated using [`examples/model_analysis/infogap.jl`]
 
 * Below we explore infogap of each model for different `h` values.
 
-### Infogap in model `y(t) = a * t + c`
+## Infogap in Model 1
+
+Model: `y(t) = a * t + c`
 
 * `h = 0.001`
 
@@ -62,7 +64,9 @@ All the figures below are generated using [`examples/model_analysis/infogap.jl`]
 
 ![](model_1_h_1.0.png)
 
-### Infogap in model `y(t) = a * t^(1.1) + b * t + c`
+## Infogap in Model 2
+
+Model: `y(t) = a * t^(1.1) + b * t + c`
 
 * `h = 0.001`
 
@@ -96,7 +100,9 @@ All the figures below are generated using [`examples/model_analysis/infogap.jl`]
 
 ![](model_2_h_1.0.png)
 
-### Infogap in model `y(t) = a * t^n + b * t + c`
+## Infogap in Model 3
+
+Model: `y(t) = a * t^n + b * t + c`
 
 * `h = 0.001`
 
@@ -130,7 +136,9 @@ All the figures below are generated using [`examples/model_analysis/infogap.jl`]
 
 ![](model_3_h_1.0.png)
 
-### Infogap in model `y(t) = a * exp(t * n) + b * t + c`
+## Infogap in Model 4
+
+Model: `y(t) = a * exp(t * n) + b * t + c`
 
 * `h = 0.001`
 
@@ -164,7 +172,7 @@ All the figures below are generated using [`examples/model_analysis/infogap.jl`]
 
 ![](model_4_h_1.0.png)
 
-### Opportuneness and Robustness of the 4 models
+## Opportuneness and Robustness
 
 ![](opportuneness_vs_robustness.png)
 
