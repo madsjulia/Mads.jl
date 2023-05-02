@@ -127,7 +127,7 @@ Examples are given in the [examples](https://github.com/madsjulia/Mads.jl/tree/m
 
 See also [Examples](Examples/index.md)
 
-To explore getting-started instructions, ypu can also execute:
+To explore getting-started instructions, you can also execute:
 
 ```julia
 Mads.help()
