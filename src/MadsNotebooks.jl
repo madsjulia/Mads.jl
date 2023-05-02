@@ -19,7 +19,7 @@ $(DocumentFunction.documentfunction(notebook;
 """
 function notebook(rootname::AbstractString; script::Bool=false, notebook_directory=joinpath(Mads.dir, "notebooks"), check::Bool=true)
 	if check
-		f = check_notebook(rootname; notebook_directory=notebook_directory)
+		f = notebook_check(rootname; notebook_directory=notebook_directory)
 		if f === nothing
 			return
 		end
@@ -44,7 +44,7 @@ function notebook(rootname::AbstractString; script::Bool=false, notebook_directo
 end
 
 """
-Execute Jupyter notebook in IJulia or as a script
+Open Jupyter in the Mads notebook directory
 
 $(DocumentFunction.documentfunction(notebooks;
 	keytext=Dict("notebook_directory"=>"notebook directory")))
@@ -58,41 +58,47 @@ function notebooks(; notebook_directory=joinpath(Mads.dir, "notebooks"))
 end
 
 """
-Process Jupyter notebook to generate html, markdown, latex, and script versions
+Export Jupyter notebook in html, markdown, latex, and script versions
 
-$(DocumentFunction.documentfunction(process_notebook;
+$(DocumentFunction.documentfunction(notebook_export;
 	argtext=Dict("rootname"=>"notebook root name"),
 	keytext=Dict("notebook_directory"=>"notebook directory")))
 """
-function process_notebook(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
-	f = check_notebook(rootname; notebook_directory=notebook_directory)
+function notebook_export(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
+	f = notebook_check(rootname; notebook_directory=notebook_directory)
 	if f === nothing
 		return
 	end
 	d, p = f
-	r = splitext(p)[1]
+	r = first(splitext(p))
+	@info("Processing $(f) in directory $(d) ...")
 	c = pwd()
 	cd(d)
-	Mads.runcmd("python3 ~/system/notebook-clean.py $(r).ipynb")
+	Mads.runcmd("python3 ~/system/notebook-clean.py $(r).ipynb"; quiet=false, pipe=false)
 	Mads.runcmd("rm -fR $(r)_files")
-	Mads.runcmd("jupyter-nbconvert --to script $(r).ipynb")
-	Mads.runcmd("jupyter-nbconvert --to html $(r).ipynb")
-	Mads.runcmd("jupyter-nbconvert --to markdown $(r).ipynb")
-	Mads.runcmd("jq -j '.cells | map( select(.cell_type != \"code\") | .source + [\"\n\n\"] ) | .[][]' $(r).ipynb > $(r).txt")
-	Mads.runcmd("jupyter-nbconvert --to latex $(r).ipynb")
+	Mads.runcmd("python3 -m nbconvert --to script $(r).ipynb")
+	@info("Julia script file created: $(r).jl")
+	Mads.runcmd("python3 -m nbconvert --to html $(r).ipynb")
+	@info("HTML file created: $(r).html")
+	Mads.runcmd("python3 -m nbconvert --to markdown $(r).ipynb")
+	@info("Markdown file created: $(r).md")
+	# Mads.runcmd("jq -j '.cells | map( select(.cell_type != \"code\") | .source + [\"\n\n\"] ) | .[][]' $(r).ipynb > $(r).txt") # this does not work
+	# @info("Text file created: $(r).txt")
+	Mads.runcmd("python3 -m nbconvert --to latex $(r).ipynb")
 	Mads.runcmd("xelatex $(r) --quiet")
-	Mads.runcmd("rm -f $(r).log $(r).aux $(r).out texput.log")
+	@info("LaTeX file created: $(r).tex")
+	Mads.runcmd("rm $(r).log $(r).aux $(r).out texput.log")
 	cd(c)
 end
 
 """
 Check is Jupyter notebook exists
 
-$(DocumentFunction.documentfunction(check_notebook;
+$(DocumentFunction.documentfunction(notebook_check;
 	argtext=Dict("rootname"=>"notebook root name"),
 	keytext=Dict("notebook_directory"=>"notebook directory")))
 """
-function check_notebook(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
+function notebook_check(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
 	if isfile("$rootname.ipynb")
 		f = "$rootname.ipynb"
 	elseif isfile(joinpath(notebook_directory, "$rootname.ipynb"))

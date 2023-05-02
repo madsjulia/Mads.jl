@@ -125,10 +125,130 @@ More complicated analyses may require additional information to be provided in t
 
 Examples are given in the [examples](https://github.com/madsjulia/Mads.jl/tree/master/examples) subdirectories of the `Mads.jl` repository.
 
-See also [Examples](Examples/index.md)
+See also [Examples](Examples/Examples.md)
 
 To explore getting-started instructions, you can also execute:
 
 ```julia
 Mads.help()
+```
+
+## Installation (special cases)
+
+To install the latest released version, use:
+
+```julia
+import Pkg; Pkg.add("Mads")
+```
+
+To utilize the latest updates (commits), use:
+
+```julia
+import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
+```
+
+### Installation without plotting modules
+
+MADS uses Gadfly and matplotlib for plotting.
+To avoid using these modules, set the following environmental variable:
+
+```bash
+export MADS_NO_PLOT=""
+```
+
+or
+
+```tcsh
+setenv MADS_NO_PLOT ""
+```
+
+or
+
+```julia
+ENV["MADS_NO_PLOT"] = ""
+```
+
+### Installation without `matplotlib`
+
+MADS can use `matplotlib` to create plots.
+However, they are optional.
+
+To avoid using `matplotlib`, set the following environmental variable before building MADS:
+
+```bash
+export MADS_NO_PYTHON="" # bash
+```
+
+or
+
+```tcsh
+setenv MADS_NO_PYTHON "" # tcsh
+```
+
+or
+
+```julia
+ENV["MADS_NO_PYTHON"] = "" # julia
+```
+
+### Installation behind a firewall
+
+Set proxies executing the following lines in the bash command-line environment:
+
+```bash
+export ftp_proxy=http://proxyout.<your_site>:8080
+export rsync_proxy=http://proxyout.<your_site>:8080
+export http_proxy=http://proxyout.<your_site>:8080
+export https_proxy=http://proxyout.<your_site>:8080
+export no_proxy=.<your_site>
+```
+
+For example, at LANL, you will need to execute the following lines in the bash command-line environment:
+
+```bash
+export ftp_proxy=http://proxyout.lanl.gov:8080
+export rsync_proxy=http://proxyout.lanl.gov:8080
+export http_proxy=http://proxyout.lanl.gov:8080
+export https_proxy=http://proxyout.lanl.gov:8080
+export no_proxy=.lanl.gov
+```
+
+Proxies can be setup directly in the Julia REPL as well:
+
+```julia
+ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
+ENV["rsync_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["http_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
+ENV["no_proxy"] = ".lanl.gov"
+```
+
+Julia uses git for package management.
+
+To avoid potential git management issues, on Windows, you may need to execute:
+
+```bash
+git config --global credential.helper manager
+```
+
+In some cases, you may need to add in the `.gitconfig` file in your home directory the following lines to support git behind a firewall:
+
+```
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+[url "git@gitlab.com:"]
+    insteadOf = https://gitlab.com/
+[url "https://"]
+    insteadOf = git://
+[url "http://"]
+    insteadOf = git://
+```
+
+or execute:
+
+```bash
+git config --global url."https://".insteadOf git://
+git config --global url."http://".insteadOf git://
+git config --global url."git@gitlab.com:".insteadOf https://gitlab.com/
+git config --global url."git@github.com:".insteadOf https://github.com/
 ```

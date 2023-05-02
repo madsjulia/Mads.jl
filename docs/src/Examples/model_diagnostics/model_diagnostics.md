@@ -1,6 +1,10 @@
 # Model diagnostics
 
-Here, we demonstrated how [MADS](http://madsjulia.github.io/Mads.jl) can be applied to solve a general model diagnostic problem.
+[MADS](http://madsjulia.github.io/Mads.jl) is applied to solve a general model diagnostic problem.
+
+By performing model diagnostics, we want to better understand:
+- how the model inputs impact model outputs?
+- how observed data related to the model outputs can be applied to learn more about the model inputs?
 
 A Jupyter notebook of this problem is also available ([Jupyter](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/model_diagnostics/model_diagnostics.ipynb))
 
