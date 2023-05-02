@@ -1,6 +1,6 @@
 # Information Gap Decision Analysis
 
-[MADS](http://madsjulia.github.io/Mads.jl is applied to execute Information Gap Decision Analysis.
+[MADS](http://madsjulia.github.io/Mads.jl) is applied to execute Information Gap Decision Analysis.
 
 The analyses below are performed using [`examples/model_analysis/infogap.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_analysis/infogap.jl).
 

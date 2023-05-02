@@ -3,6 +3,7 @@
 - [Model Diagnostics](model_diagnostics/model_diagnostics.md)
 - [Model Calibration](model_inversion_contamination/model_inversion_contamination.md)
 - [Uncertainty Quantification](bayesian_sampling/bayesian_sampling.md)
+- [Sensitivity Analysis](ode/ode.md),
 - [Decision Analysis](bigdt/source_termination/source_termination.md)
 - [Information Gap Decision Analysis](infogap/infogap.md)
 - [Machine Learning](machine_learning/machine_learning.md)
