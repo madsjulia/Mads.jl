@@ -1,6 +1,6 @@
 # Decision Analysis: Contaminant Source Remediation
 
-[MADS](http://madsjulia.github.io/Mads.jl is applied to perform Decision Analysis related to remediation of a contaminant source.
+[MADS](http://madsjulia.github.io/Mads.jl) is applied to perform Decision Analysis related to remediation of a contaminant source.
 
 The analyses below are performed using [`examples/bigdt/source_termination.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/bigdt/source_termination.jl).
 

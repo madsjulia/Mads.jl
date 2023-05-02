@@ -1,6 +1,6 @@
 # Analysis of contaminant transport in an aquifer
 
-[MADS](http://madsjulia.github.io/Mads.jl is analyze groundwater contaminant transport.
+[MADS](http://madsjulia.github.io/Mads.jl) is analyze groundwater contaminant transport.
 
 The analyses below are performed using [`examples/contamination/contamination.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/contamination/contamination.jl).
 
