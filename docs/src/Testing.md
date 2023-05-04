@@ -15,5 +15,5 @@ import Mads; Mads.test()
 or
 
 ```julia
-import Pkg; Pkg.test("Pkg")
+import Pkg; Pkg.test("Mads")
 ```
