@@ -118,7 +118,7 @@ function createobservations!(md::AbstractDict, obs::Union{AbstractVector,Abstrac
 	return nothing
 end
 
-function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=key, plotname::AbstractVector=key, type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=[], max::AbstractVector=[], minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
+function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=[], plotname::AbstractVector=[], type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=[], max::AbstractVector=[], minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
 	mdp = OrderedCollections.OrderedDict()
 	mde = OrderedCollections.OrderedDict()
 	global mapping_expression = falses(length(param))
@@ -149,10 +149,10 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 		if maxorig != max
 			push!(d, "maxorig"=>maxorig[i])
 		end
-		if key[i] != name[i]
+		if length(key) == length(name)
 			push!(d, "longname"=>name[i])
 		end
-		if key[i] != plotname[i]
+		if length(key) == length(plotname)
 			push!(d, "plotname"=>plotname[i])
 		end
 		mdp[key[i]] = d
