@@ -13,9 +13,6 @@ function p10_p50_p90(x::Matrix)
 	nt, ns = size(x)
 	n10 = Int(floor(ns * 0.1))
 	n90 = Int(ceil(ns * 0.9))
-	@show ns
-	@show n10
-	@show n90
 	for i = 1:nt
 		is = sortperm(x[i,:])
 		p10[i] = x[i,is][n10]
