@@ -6,6 +6,24 @@ import DocumentFunction
 import BlackBoxOptim
 import Random
 
+function p10_p50_p90(x::Matrix)
+	xmean = Statistics.mean(x; dims=2)
+	p10 = similar(xmean)
+	p90 = similar(xmean)
+	nt, ns = size(x)
+	n10 = Int(floor(ns * 0.1))
+	n90 = Int(ceil(ns * 0.9))
+	@show ns
+	@show n10
+	@show n90
+	for i = 1:nt
+		is = sortperm(x[i,:])
+		p10[i] = x[i,is][n10]
+		p90[i] = x[i,is][n90]
+	end
+	return p10, xmean, p90
+end
+
 function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng=nothing, kw...)
 	if numwalkers <= 1
 		numwalkers = 2
