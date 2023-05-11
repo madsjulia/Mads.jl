@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="304.8mm" viewBox="0 0 152.4 304.8"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot xscalable yscalable" id="img-3e878302-1">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-2">
+    <text x="82.49" y="294.01" text-anchor="middle" dy="0.6em">time</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-3">
+    <text x="19.58" y="287.96" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="82.49" y="287.96" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="287.96" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-3e878302-4)">
+  <g id="img-3e878302-5">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-3e878302-6">
+      <rect x="17.58" y="212.96" width="129.82" height="73.99"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-7">
+      <path fill="none" d="M17.58,284.96 L 147.4 284.96"/>
+      <path fill="none" d="M17.58,267.46 L 147.4 267.46"/>
+      <path fill="none" d="M17.58,249.96 L 147.4 249.96"/>
+      <path fill="none" d="M17.58,232.46 L 147.4 232.46"/>
+      <path fill="none" d="M17.58,214.96 L 147.4 214.96"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-8">
+      <path fill="none" d="M19.58,212.96 L 19.58 286.96"/>
+      <path fill="none" d="M82.49,212.96 L 82.49 286.96"/>
+      <path fill="none" d="M145.4,212.96 L 145.4 286.96"/>
+    </g>
+    <g class="plotpanel" id="img-3e878302-9">
+      <g stroke-width="0.71" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-3e878302-10">
+        <path fill="none" d="M32.16,267.45 L 44.74 262.42 57.33 257.3 69.91 252.31 82.49 247.62 95.07 243.38 107.65 239.7 120.24 236.62 132.82 234.2 145.4 232.42"/>
+      </g>
+      <g class="geometry" id="img-3e878302-11">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke-width="0.3" id="img-3e878302-12">
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-13">
+            <use xlink:href="#img-3e878302-14" x="145.4" y="225.97"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-15">
+            <use xlink:href="#img-3e878302-16" x="132.82" y="231.15"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-17">
+            <use xlink:href="#img-3e878302-18" x="120.24" y="236.35"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-19">
+            <use xlink:href="#img-3e878302-20" x="107.65" y="241.49"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-21">
+            <use xlink:href="#img-3e878302-22" x="95.07" y="246.51"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-23">
+            <use xlink:href="#img-3e878302-24" x="82.49" y="251.34"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-25">
+            <use xlink:href="#img-3e878302-26" x="69.91" y="255.92"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-27">
+            <use xlink:href="#img-3e878302-28" x="57.33" y="260.19"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-29">
+            <use xlink:href="#img-3e878302-30" x="44.74" y="264.13"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-31">
+            <use xlink:href="#img-3e878302-32" x="32.16" y="267.69"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-33">
+    <text x="16.58" y="284.96" text-anchor="end" dy="0.35em">0</text>
+    <text x="16.58" y="267.46" text-anchor="end" dy="0.35em">100</text>
+    <text x="16.58" y="249.96" text-anchor="end" dy="0.35em">200</text>
+    <text x="16.58" y="232.46" text-anchor="end" dy="0.35em">300</text>
+    <text x="16.58" y="214.96" text-anchor="end" dy="0.35em">400</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-34">
+    <text x="8.73" y="249.96" text-anchor="end" dy="0.35em">y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-35">
+    <text x="82.49" y="208.2" text-anchor="middle" dy="0.6em">w3</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-3e878302-36">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-37">
+    <text x="83.26" y="192.41" text-anchor="middle" dy="0.6em">time</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-38">
+    <text x="21.13" y="186.36" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="83.26" y="186.36" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="186.36" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-3e878302-39)">
+  <g id="img-3e878302-40">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-3e878302-41">
+      <rect x="19.13" y="111.41" width="128.27" height="73.95"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-42">
+      <path fill="none" d="M19.13,183.36 L 147.4 183.36"/>
+      <path fill="none" d="M19.13,165.87 L 147.4 165.87"/>
+      <path fill="none" d="M19.13,148.38 L 147.4 148.38"/>
+      <path fill="none" d="M19.13,130.89 L 147.4 130.89"/>
+      <path fill="none" d="M19.13,113.41 L 147.4 113.41"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-43">
+      <path fill="none" d="M21.13,111.41 L 21.13 185.36"/>
+      <path fill="none" d="M83.26,111.41 L 83.26 185.36"/>
+      <path fill="none" d="M145.4,111.41 L 145.4 185.36"/>
+    </g>
+    <g class="plotpanel" id="img-3e878302-44">
+      <g stroke-width="0.71" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-3e878302-45">
+        <path fill="none" d="M33.55,166.63 L 45.98 160.63 58.41 154.23 70.84 147.69 83.26 141.28 95.69 135.21 108.12 129.65 120.55 124.73 132.97 120.54 145.4 117.13"/>
+      </g>
+      <g class="geometry" id="img-3e878302-46">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke-width="0.3" id="img-3e878302-47">
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-48">
+            <use xlink:href="#img-3e878302-49" x="145.4" y="114.96"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-50">
+            <use xlink:href="#img-3e878302-51" x="132.97" y="120.63"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-52">
+            <use xlink:href="#img-3e878302-53" x="120.55" y="126.37"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-54">
+            <use xlink:href="#img-3e878302-55" x="108.12" y="132.09"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-56">
+            <use xlink:href="#img-3e878302-57" x="95.69" y="137.71"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-58">
+            <use xlink:href="#img-3e878302-59" x="83.26" y="143.15"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-60">
+            <use xlink:href="#img-3e878302-61" x="70.84" y="148.35"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-62">
+            <use xlink:href="#img-3e878302-63" x="58.41" y="153.25"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-64">
+            <use xlink:href="#img-3e878302-65" x="45.98" y="157.8"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-66">
+            <use xlink:href="#img-3e878302-67" x="33.55" y="161.96"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-68">
+    <text x="18.13" y="183.36" text-anchor="end" dy="0.35em">0</text>
+    <text x="18.13" y="165.87" text-anchor="end" dy="0.35em">500</text>
+    <text x="18.13" y="148.38" text-anchor="end" dy="0.35em">1000</text>
+    <text x="18.13" y="130.89" text-anchor="end" dy="0.35em">1500</text>
+    <text x="18.13" y="113.41" text-anchor="end" dy="0.35em">2000</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-69">
+    <text x="8.73" y="148.38" text-anchor="end" dy="0.35em">y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-70">
+    <text x="83.26" y="106.6" text-anchor="middle" dy="0.6em">w2</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-3e878302-71">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-72">
+    <text x="81.59" y="90.81" text-anchor="middle" dy="0.6em">time</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-73">
+    <text x="17.77" y="84.76" text-anchor="middle" dy="0.6em">2010</text>
+    <text x="81.59" y="84.76" text-anchor="middle" dy="0.6em">2015</text>
+    <text x="145.4" y="84.76" text-anchor="middle" dy="0.6em">2020</text>
+  </g>
+<g clip-path="url(#img-3e878302-74)">
+  <g id="img-3e878302-75">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-3e878302-76">
+      <rect x="15.77" y="9.81" width="131.63" height="73.95"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-77">
+      <path fill="none" d="M15.77,81.76 L 147.4 81.76"/>
+      <path fill="none" d="M15.77,64.27 L 147.4 64.27"/>
+      <path fill="none" d="M15.77,46.78 L 147.4 46.78"/>
+      <path fill="none" d="M15.77,29.29 L 147.4 29.29"/>
+      <path fill="none" d="M15.77,11.81 L 147.4 11.81"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-3e878302-78">
+      <path fill="none" d="M17.77,9.81 L 17.77 83.76"/>
+      <path fill="none" d="M81.59,9.81 L 81.59 83.76"/>
+      <path fill="none" d="M145.4,9.81 L 145.4 83.76"/>
+    </g>
+    <g class="plotpanel" id="img-3e878302-79">
+      <g stroke-width="0.71" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#0000FF" id="img-3e878302-80">
+        <path fill="none" d="M30.54,79.35 L 43.3 77.23 56.06 74.1 68.82 69.84 81.59 64.45 94.35 57.99 107.11 50.6 119.87 42.51 132.64 33.95 145.4 25.2"/>
+      </g>
+      <g class="geometry" id="img-3e878302-81">
+        <g class="color_RGBA{Float32}(1.0f0,0.0f0,0.0f0,1.0f0)" stroke-width="0.3" id="img-3e878302-82">
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-83">
+            <use xlink:href="#img-3e878302-84" x="145.4" y="29.7"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-85">
+            <use xlink:href="#img-3e878302-86" x="132.64" y="37.53"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-87">
+            <use xlink:href="#img-3e878302-88" x="119.87" y="44.64"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-89">
+            <use xlink:href="#img-3e878302-90" x="107.11" y="51.02"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-91">
+            <use xlink:href="#img-3e878302-92" x="94.35" y="56.65"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-93">
+            <use xlink:href="#img-3e878302-94" x="81.59" y="61.56"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-95">
+            <use xlink:href="#img-3e878302-96" x="68.82" y="65.77"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-97">
+            <use xlink:href="#img-3e878302-98" x="56.06" y="69.32"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-99">
+            <use xlink:href="#img-3e878302-100" x="43.3" y="72.26"/>
+          </g>
+          <g stroke="#FFFFFF" fill="#FF0000" id="img-3e878302-101">
+            <use xlink:href="#img-3e878302-102" x="30.54" y="74.65"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-3e878302-103">
+    <text x="14.77" y="81.76" text-anchor="end" dy="0.35em">0</text>
+    <text x="14.77" y="64.27" text-anchor="end" dy="0.35em">5</text>
+    <text x="14.77" y="46.78" text-anchor="end" dy="0.35em">10</text>
+    <text x="14.77" y="29.29" text-anchor="end" dy="0.35em">15</text>
+    <text x="14.77" y="11.81" text-anchor="end" dy="0.35em">20</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-104">
+    <text x="8.73" y="46.78" text-anchor="end" dy="0.35em">y</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-3e878302-105">
+    <text x="81.59" y="5" text-anchor="middle" dy="0.6em">w1</text>
+  </g>
+</g>
+<defs>
+  <clipPath id="img-3e878302-4">
+  <path d="M17.58,212.96 L 147.4 212.96 147.4 286.96 17.58 286.96" />
+</clipPath>
+  <clipPath id="img-3e878302-74">
+  <path d="M15.77,9.81 L 147.4 9.81 147.4 83.76 15.77 83.76" />
+</clipPath>
+  <clipPath id="img-3e878302-39">
+  <path d="M19.13,111.41 L 147.4 111.41 147.4 185.36 19.13 185.36" />
+</clipPath>
+  <g id="img-3e878302-14">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-16">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-18">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-20">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-22">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-24">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-26">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-28">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-30">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-32">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-49">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-51">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-53">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-55">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-57">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-59">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-61">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-63">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-65">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-67">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-84">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-86">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-88">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-90">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-92">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-94">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-96">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-98">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-100">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+  <g id="img-3e878302-102">
+    <circle cx="0" cy="0" r="1.41"/>
+  </g>
+</defs>
+</svg>
