@@ -582,7 +582,7 @@ function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.
 end
 function showallparameters(madsdata::AbstractDict, result::AbstractDict)
 	md = deepcopy(madsdata)
-	map(i->(md["Parameters"][i]["init"]=result[i]), Mads.getoptparamkeys(md))
+	map(i->(md["Parameters"][i]["init"]=result[i]), collect(keys(result)))
 	showallparameters(md)
 end
 @doc """
