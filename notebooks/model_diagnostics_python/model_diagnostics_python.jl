@@ -86,11 +86,11 @@ Mads.scatterplotsamples(md, permutedims(chain), "model_diagnostics-emcee_scatter
 
 Mads.display("model_diagnostics-emcee_scatter.png")
 
-saltelli_results = Mads.saltelli(md, N=10000, seed=2016)
+saltelli_results = Mads.saltelli(md; N=10000, seed=2016)
 
 Mads.plotobsSAresults(md, saltelli_results)
 
-efastresult = Mads.efast(md, N=1000, seed=2016)
+efast_results = Mads.efast(md; N=1000, seed=2016)
 Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle = "Time [-]", ytitle = "Observation [-]")
 
 h = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]

@@ -100,14 +100,14 @@ Mads.wellon!(md_new, "w13a") # use well w13a
 Mads.calibraterandom(md_new, 10, seed=20151001) # calibrate 10 times with random initial guesses
 
 # Global sensitivity analysis using Saltelli's method
-saltelliresult = Mads.saltelli(md, N=1000, seed=2016)
+saltelli_results = Mads.saltelli(md; N=1000, seed=2016)
 Mads.plotobsSAresults(md, saltelliresult, filter=r"w13a", filename="w13a-saltelli.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]")
 Mads.display("w13a-saltelli.svg")
 Mads.plotobsSAresults(md, saltelliresult, filter=r"w20a", filename="w20a-saltelli.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]")
 Mads.display("w20a-saltelli.svg")
 
 # Global sensitivity analysis using Saltelli's eFAST method
-efastresult = Mads.efast(md, N=1000, seed=2016)
+efast_results = Mads.efast(md; N=1000, seed=2016)
 Mads.plotobsSAresults(md, efastresult, filter=r"w13a", filename="w13a-efast.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]")
 Mads.display("w13a-efast.svg")
 Mads.plotobsSAresults(md, efastresult, filter=r"w20a", filename="w20a-efast.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]")

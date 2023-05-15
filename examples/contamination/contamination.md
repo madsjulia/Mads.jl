@@ -17,7 +17,7 @@ The contaminant transport is solved using the `Anasol` package in Mads.
 * End time of contaminant release $t_1$
 * Advective pore velocity $v$
 
-### Reduced model setup 
+### Reduced model setup
 
 Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
 
@@ -29,7 +29,7 @@ Analysis of the data from only 2 monitoring locations: `w13a` and `w20a`.
 
 Model parameter values:
 
-* $t_0 = 4$ 
+* $t_0 = 4$
 * $t_1 = 15$
 * $v = 40$
 
@@ -70,7 +70,7 @@ The observation data are plotted as red dots.
 
 ### eFAST global sensitivity analysis
 
-eFAST has proven to be one of the most reliable methods among the existing variance-based techniques for quantification of parameter sensitivity (Saltelli, 2004; Saltelli & Bolado, 1998; Saltelli et al., 2000; Saltelli et al., 1999). 
+eFAST has proven to be one of the most reliable methods among the existing variance-based techniques for quantification of parameter sensitivity (Saltelli, 2004; Saltelli & Bolado, 1998; Saltelli et al., 2000; Saltelli et al., 1999).
 
 Total and main sensitivity indices over time for monitoring wells w13a and w20a:
 
@@ -92,4 +92,5 @@ Total and main sensitivity indices over time for monitoring wells w13a and w20a:
 ![](w20a-saltelli-main_effect.svg)
 ![](w20a-saltelli-total_effect.svg)
 
-There are differences between eFAST & Saltelli estimates. The eFAST results should be considered more reliable.
+There are differences between eFAST & Saltelli estimates.
+The eFAST results should be considered more reliable.

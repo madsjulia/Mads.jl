@@ -42,11 +42,11 @@ Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png
 mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value))
 
 @info("Posterior (Bayesian) spaghetti plots ...")
-Mads.spaghettiplots(md, mcmcvalues; keyword="posterior", format="PNG", xtitle="Time", ytitle="Concentration [ppb]")
-Mads.spaghettiplot(md, mcmcvalues; keyword="posterior", format="PNG", xtitle="Time", ytitle="Concentration [ppb]")
+Mads.spaghettiplots(md, mcmcvalues; keyword="posterior", format="PNG", xtitle="Time", ytitle = "Concentration [ppb]")
+Mads.spaghettiplot(md, mcmcvalues; keyword="posterior", format="PNG", xtitle="Time", ytitle = "Concentration [ppb]")
 
 @info("Prior spaghetti plots ...")
-Mads.spaghettiplots(md, 100; keyword="prior", format="PNG", xtitle="Time", ytitle="Concentration [ppb]")
-Mads.spaghettiplot(md, 100; keyword="prior", format="PNG", xtitle="Time", ytitle="Concentration [ppb]")
+Mads.spaghettiplots(md, 100; keyword="prior", format="PNG", xtitle="Time", ytitle = "Concentration [ppb]")
+Mads.spaghettiplot(md, 100; keyword="prior", format="PNG", xtitle="Time", ytitle = "Concentration [ppb]")
 
 return

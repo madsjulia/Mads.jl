@@ -88,7 +88,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 		Mads.rmfile(filesinadir, path=s[1])
 	end
 
-	sa_results = Mads.saltelli(md, N=5, seed=2015)
+	sa_results = Mads.saltelli(md; N=5, seed=2015)
 	Mads.plotwellSAresults(md, sa_results)
 	Mads.plotobsSAresults(md, sa_results)
 	Mads.plotobsSAresults(md, sa_results, separate_files=true)

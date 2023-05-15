@@ -636,17 +636,17 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		mes = mes .- minmes
 	end
 	mes ./=  maximumnan(mes)
-	tesmags = sortperm(vec(maximum(tes; dims=1)); rev=true)
+	smags = sortperm(vec(maximum(mes; dims=1)); rev=true)
 	pp = Array{Any}(undef, 0)
 	if ytitle != ""
 		pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, returnplot=true, colorkey=false, kw...)
 		push!(pp, pd)
 	end
-	ptes = Mads.plotseries(tes[:,tesmags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle="Total Effect", returnplot=true, names=plotlabels[tesmags[select]], kw...)
+	ptes = Mads.plotseries(tes[:,smags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle = "Total Effect", returnplot=true, names=plotlabels[smags[select]], kw...)
 	push!(pp, ptes)
-	pmes = Mads.plotseries(mes[:,tesmags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle="Main Effect", returnplot=true, names=plotlabels[tesmags[select]], kw...)
+	pmes = Mads.plotseries(mes[:,smags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle = "Main Effect", returnplot=true, names=plotlabels[smags[select]], kw...)
 	push!(pp, pmes)
-	pvar = Mads.plotseries(var[:,tesmags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle="Variance", returnplot=true, names=plotlabels[tesmags[select]], kw...)
+	pvar = Mads.plotseries(var[:,smags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle = "Variance", returnplot=true, names=plotlabels[smags[select]], kw...)
 	push!(pp, pvar)
 
 	if filename == ""
@@ -817,8 +817,8 @@ Dumps:
 Example:
 
 ```julia
-Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplots(madsdata, paramdictarray; format="", keyword="", xtitle="X", ytitle = "Y", obs_plot_dots=true)
+Mads.spaghettiplots(madsdata, number_of_samples; format="", keyword="", xtitle="X", ytitle = "Y", obs_plot_dots=true)
 ```
 """ spaghettiplots
 
@@ -1014,9 +1014,9 @@ Dumps:
 Example:
 
 ```julia
-Mads.spaghettiplot(madsdata, dictarray; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplot(madsdata, array; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
-Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle="Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, dictarray; filename="", keyword = "", format="", xtitle="X", ytitle = "Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, array; filename="", keyword = "", format="", xtitle="X", ytitle = "Y", obs_plot_dots=true)
+Mads.spaghettiplot(madsdata, number_of_samples; filename="", keyword = "", format="", xtitle="X", ytitle = "Y", obs_plot_dots=true)
 ```
 """ spaghettiplot
 
