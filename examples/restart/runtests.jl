@@ -86,16 +86,16 @@ cd(workdir)
 	Mads.madsinfo("... no restart ...")
 	ReusableFunctions.resetrestarts()
 	ReusableFunctions.resetcomputes()
-	no_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	no_restart_results = Mads.saltelli(md; N=5, seed=2016)
 	@Test.test Mads.getrestarts() == 0
 	@Test.test Mads.getcomputes() == 0
 	md["Restart"] = true
 	Mads.madsinfo("... create restart ...")
-	create_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	create_restart_results = Mads.saltelli(md; N=5, seed=2016)
 	@Test.test Mads.getrestarts() == 0
 	@Test.test Mads.getcomputes() == 20
 	Mads.madsinfo("... use restart ...")
-	use_restart_results = Mads.saltelli(md, N=5, seed=2016)
+	use_restart_results = Mads.saltelli(md; N=5, seed=2016)
 	@Test.test Mads.getrestarts() == 20
 	@Test.test Mads.getcomputes() == 20
 

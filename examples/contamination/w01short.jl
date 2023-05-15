@@ -66,7 +66,7 @@ Mads.spaghettiplots(md, paramvalues, keyword="w1a")
 result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
-saltelliresultm = Mads.saltelli(md,N=500)
+saltelliresultm = Mads.saltelli(md;N=500)
 Mads.plotwellSAresults(md,saltelliresultm,"w1a")
 saltelliresultb = Mads.saltellibrute(md,N=500)
 Mads.plotwellSAresults(md,saltelliresultb,"w1a")

@@ -179,7 +179,6 @@ Mads.showobservations(md)
     o6         target =               5 weight =               0
     Number of observations is 6
 
-
 ## Forward model simulation
 
 A single forward model run based on the initial model parameter values can be executed as follows:
@@ -512,18 +511,18 @@ Based on the cross-plots, the plausible values for `n` can be within the entire 
 
 The plausible values for `n` are close to 1 if (1) `a` is very different from 0 and (2) `b` is very different from 1.
 
-### Saltelli (Sobol) and EFAST global sensitivity analyses
+### Saltelli (Sobol) and eFAST global sensitivity analyses
 
-Both Saltelli (Sobol) and EFAST methods are producing similar results.
+Both Saltelli (Sobol) and eFAST methods are producing similar results.
 
 Both methods are designed to perform global sensitivity analyses.
 
-EFAST is computationally more efficient.
+eFAST is computationally more efficient.
 
 The Saltelli (Sobol) results are obtained as follows:
 
 ```julia
-saltelli_results = Mads.saltelli(md, N=10000, seed=2016)
+saltelli_results = Mads.saltelli(md; N=10000, seed=2016)
 ```
 
     Dict{String, Any} with 6 entries:
@@ -548,11 +547,11 @@ Mads.plotobsSAresults(md, saltelli_results)
 
 ![png](model_diagnostics_files/model_diagnostics_76_6.png)
 
-The EFAST results are obtained as follows:
+The eFAST results are obtained as follows:
 
 ```julia
-efastresult = Mads.efast(md, N=1000, seed=2016)
-Mads.plotobsSAresults(md, efastresult, filename="sensitivity_efast.png", xtitle = "Time [-]", ytitle = "Observation [-]")
+efast_results = Mads.efast(md; N=1000, seed=2016)
+Mads.plotobsSAresults(md, efast_results; filename="sensitivity_efast.png", xtitle = "Time [-]", ytitle = "Observation [-]")
 ```
 
 ![png](model_diagnostics_files/model_diagnostics_78_0.png)

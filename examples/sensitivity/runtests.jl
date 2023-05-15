@@ -33,7 +33,7 @@ sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true)
 sa_results = Mads.saltellibruteparallel(md, 2; N=5, seed=2015)
 sa_results = Mads.saltelliparallel(md, 2; N=5, seed=2015)
 # sa_results = Mads.saltellibrute(md, N=10, seed=2015)
-# sa_results = Mads.saltelli(md, N=10, seed=2015)
+# sa_results = Mads.saltelli(md; N=10, seed=2015)
 
 Mads.stdoutcaptureon();
 
