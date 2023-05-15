@@ -595,7 +595,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput, select::Union{AbstractVector,AbstractRange,Colon}=Colon(), kw...)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput, order::Bool=true, select::Union{AbstractVector,AbstractRange,Colon}=Colon(), kw...)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -636,7 +636,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		mes = mes .- minmes
 	end
 	mes ./=  maximumnan(mes)
-	smags = sortperm(vec(maximum(mes; dims=1)); rev=true)
+	smags = order ? sortperm(vec(sum(tes; dims=1)); rev=true) : collect(1:nP)
 	pp = Array{Any}(undef, 0)
 	if ytitle != ""
 		pd = Mads.plotseries(d[2,:]; xaxis=d[1,:], xtitle=xtitle, ytitle=ytitle, returnplot=true, colorkey=false, kw...)
@@ -648,6 +648,13 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	push!(pp, pmes)
 	pvar = Mads.plotseries(var[:,smags[select]]; xaxis=d[1,:], xtitle=xtitle, ytitle = "Variance", returnplot=true, names=plotlabels[smags[select]], kw...)
 	push!(pp, pvar)
+
+	if !order
+		smags = sortperm(vec(sum(tes; dims=1)); rev=true)
+	end
+
+	@info("Paramter ranking (labels/keys)")
+	display([paramkeys plotlabels][smags[select],:])
 
 	if filename == ""
 		method = result["method"]

@@ -641,7 +641,17 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
+	if load
+		rootname = Mads.getmadsrootname(madsdata)
+		filename = "$(rootname)-saltelli-$(N).jld2"
+		if isfile(filename)
+			return JLD2.load(filename, "saltelli_results")
+		else
+			@error("File $(filename) is missing!")
+			throw("ERROR")
+		end
+	end
 	Mads.setseed(seed; rng=rng)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
@@ -835,7 +845,16 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=
 			Mads.madswarn("There are $(maxnnans) NaN's")
 		end
 	end
-	Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
+	results = Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
+	if save
+		rootname = Mads.getmadsrootname(madsdata)
+		filename = "$(rootname)-saltelli-$(N).jld2"
+		if isfile(filename)
+			@warn("File $(filename) is overwritten!")
+		end
+		JLD2.save(filename, "saltelli_results", results)
+	end
+	return results
 end
 
 """
@@ -1114,7 +1133,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1495,6 +1514,17 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	Nr, Wi, Ns, Ns_total = eFAST_optimalSearch(Ns_total, M, gamma)
 
+	if load
+		rootname = Mads.getmadsrootname(md)
+		filename = "$(rootname)-efast-$(Ns_total).jld2"
+		if isfile(filename)
+			return JLD2.load(filename, "efast_results")
+		else
+			@error("File $(filename) is missing!")
+			throw("ERROR")
+		end
+	end
+
 	## For debugging and/or graphs
 	# step  = (M*Wi - 1)/Ns
 	# omega = 1 : step : M*Wi - step  # Frequency domain, can be used to plot power spectrum
@@ -1597,5 +1627,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			mes[obskeys[j]][paramkeys[k]] = Si[j,k]
 		end
 	end
-	return Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
+	result = Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
+	if save
+		rootname = Mads.getmadsrootname(md)
+		filename = "$(rootname)-efast-$(Ns_total).jld2"
+		if isfile(filename)
+			@warn("File $(filename) is overwritten!")
+		end
+		JLD2.save(filename, "efast_results", results)
+	end
+	return result
 end
