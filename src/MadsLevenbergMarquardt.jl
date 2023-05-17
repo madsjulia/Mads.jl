@@ -354,7 +354,7 @@ keytext=Dict("root"=>"Mads problem root name",
 			"callbackjacobian"=>"call back function for each Jacobian [default=`(x::AbstractVector, J::AbstractMatrix)->nothing`]",
 			"callbackfinal"=>"final call back function [default=`(best_x::AbstractVector, of::Number, lambda::Number)->nothing`]")))
 """
-function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, parallel_execution::Bool=parallel_optimization, center_provided::Bool=true)
+function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)[1]; root::AbstractString="", tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1001, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=eps(Float32), lambda_scale::Number=1e-3, lambda_mu::Number=10.0, lambda_nu::Number=2, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, callbackinitial::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackiteration::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, callbackjacobian::Function=(x::AbstractVector, J::AbstractMatrix)->nothing, callbackfinal::Function=(best_x::AbstractVector, of::Number, lambda::Number)->nothing, parallel_execution::Bool=parallel_optimization, center_provided::Bool=true)
 	MAX_LAMBDA = 1e16 # minimum trust region radius
 	MIN_LAMBDA = 1e-16 # maximum trust region radius
 	MIN_STEP_QUALITY = 1e-3
@@ -384,11 +384,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 	# Maintain a trace of the system
 	tr = LsqFit.OptimizationTrace{typeof(LsqFit.LevenbergMarquardt())}()
-	if !Mads.quiet && show_trace
+	if show_trace
 		d = Dict("lambda" => lambda)
-		os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
+		os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, best_residual, NaN, d)
 		push!(tr, os)
 		println(os)
+	end
+	if !quiet
+		println("OF: $(best_residual) (initial)")
 	end
 
 	delta_xp = Array{Float64}(undef, (np_lambda, length(x)))
@@ -568,12 +571,15 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			end
 		end
 
-		if !Mads.quiet && show_trace
+		if show_trace
 			gradnorm = LinearAlgebra.norm(J' * fcur, Inf)
 			d = Dict("g(x)" => gradnorm, "dx" => delta_x, "lambda" => lambda)
 			os = LsqFit.OptimizationState{typeof(LsqFit.LevenbergMarquardt())}(g_calls, o(fcur), NaN, d)
 			push!(tr, os)
 			println(os)
+		end
+		if !quiet
+			println("OF: $(o(fcur)) Lambda: $(lambda)")
 		end
 		callbackiteration(best_x, best_residual, lambda)
 
@@ -607,6 +613,9 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madsinfo("Maximum number of Forward evaluations have been reached: $f_calls < $maxEval")
 		end
 		converged = g_converged | x_converged | of_converged
+	end
+	if !quiet
+		println("OF: $(best_residual) (final)")
 	end
 	callbackfinal(best_x, best_residual, NaN)
 	LsqFit.MultivariateOptimizationResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, float(tolX), 0.0, of_converged, float(tolOF), 0.0, g_converged, float(tolG), 0.0, false, tr, f_calls, g_calls, 0)

@@ -53,8 +53,8 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	local bestresult
 	bestphi = Inf
 	for i in 1:numberofsamples
-		if !quiet && i == 1 && first_init
-			@info("Using initial values for the first run!")
+		if i == 1 && first_init
+			!quiet && @info("Using initial values for the first run!")
 		else
 			for paramkey in keys(paramoptvalues)
 				paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
@@ -125,8 +125,8 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allconverged = SharedArrays.SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArrays.SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
 	@sync @Distributed.distributed for i in 1:numberofsamples
-		if !quiet && i == 1 && first_init
-			@info("Using initial values for the first run!")
+		if i == 1 && first_init
+			!quiet && @info("Using initial values for the first run!")
 		else
 			for paramkey in keys(paramoptvalues)
 				paramsoptdict[paramkey] = paramoptvalues[paramkey][i]
@@ -192,7 +192,7 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata; parallel_gradients=parallel_optimization)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -261,7 +261,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	elseif usenaive == :lmlin
 		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->interationcallback(best_x, of, lambda))
 	else
-		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, callbackinitial=initialcallback, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback, parallel_execution=parallel_optimization)
+		results = Mads.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; root=rootname, tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, quiet=quiet, callbackinitial=initialcallback, callbackiteration=interationcallback, callbackjacobian=jacobiancallback, callbackfinal=finalcallback, parallel_execution=parallel_optimization)
 	end
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
