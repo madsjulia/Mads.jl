@@ -7,7 +7,7 @@ import Pkg
 Pkg.add("Mads")
 ```
 
-You can also follow the installation instruction on [GitHub](https://github.com/madsjulia/Mads.jl)).
+You can also follow the installation instruction on [GitHub](https://github.com/madsjulia/Mads.jl).
 
 If you are not familiar with Julia, checkout:
 - [Get Started with Julia](https://julialang.org/learning/)
