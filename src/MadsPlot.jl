@@ -653,14 +653,16 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		smags = sortperm(vec(sum(tes; dims=1)); rev=true)
 	end
 
+	ranking = [paramkeys plotlabels][smags[select],:]
 	@info("Paramter ranking (labels/keys)")
-	display([paramkeys plotlabels][smags[select],:])
+	display(ranking)
 
 	if filename == ""
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
 	end
+	DelimitedFiles.writedlm(filename * ".csv", ranking, `,`)
 	if !separate_files
 		p = Gadfly.vstack(pp...)
 		plotfileformat(p, filename, 12Gadfly.inch, 16Gadfly.inch; format=format, dpi=imagedpi)
@@ -675,7 +677,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		filename = filename_root * "-variance." * filename_ext
 		plotfileformat(pvar, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 	end
-	return nothing
+	return [paramkeys plotlabels][smags[select],:]
 end
 
 function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed::Integer=-1, rng=nothing, kw...)
