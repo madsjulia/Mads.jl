@@ -1520,8 +1520,8 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if isfile(filename)
 			return JLD2.load(filename, "efast_results")
 		else
-			@error("File $(filename) is missing!")
-			throw("ERROR")
+			@warn("File $(filename) is missing!")
+			@info("eFAST analyses will be executed!")
 		end
 	end
 
