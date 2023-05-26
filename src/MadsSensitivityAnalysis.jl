@@ -1634,7 +1634,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if isfile(filename)
 			@warn("File $(filename) is overwritten!")
 		end
-		JLD2.save(filename, "efast_results", results)
+		JLD2.save(filename, "efast_results", result)
 	end
 	return result
 end
