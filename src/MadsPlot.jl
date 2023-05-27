@@ -662,7 +662,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
 	end
-	DelimitedFiles.writedlm(filename * ".csv", ranking, `,`)
+	DelimitedFiles.writedlm(filename * ".txt", ranking)
 	if !separate_files
 		p = Gadfly.vstack(pp...)
 		plotfileformat(p, filename, 12Gadfly.inch, 16Gadfly.inch; format=format, dpi=imagedpi)
