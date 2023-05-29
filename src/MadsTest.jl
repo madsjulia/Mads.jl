@@ -1,3 +1,4 @@
+import Test
 
 """
 Execute Mads tests using Julia Pkg.test (the default Pkg.test in Julia is executed in serial)
@@ -88,4 +89,30 @@ function testmodule(testname::AbstractString="")
 		end
 	end
 	return nothing
+end
+
+function test_vector(result::AbstractVector, gold::AbstractVector; param=AbstractString="", atol::Number=0.01)
+	fail_i = falses(length(gold))
+	fail_result = 0.
+	fail_gold = 0.
+	fail_diff = 0.
+	for i = eachindex(result)
+		it = isapprox(result[i], gold[i]; atol=atol)
+		if !it
+			fail_i[i] = true
+			d = abs(result[i] - gold[i])
+			if fail_diff < d
+				fail_gold = gold[i]
+				fail_result = result[i]
+				fail_diff = d
+			end
+		else
+			@Test.test it
+		end
+	end
+	if any(fail_i .== true)
+		text = param == "" ? "Test failed" : "Test of $(param) failed"
+		@info("$(text) ($(sum(fail_i)) out of $(length(gold)); max discrepency $(fail_result) vs $(fail_gold))!")
+	end
+	return fail_i
 end
