@@ -460,7 +460,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda)
 			u, s, v = LinearAlgebra.svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
-			for i=1:length(s)
+			for i = eachindex(s)
 				if abs(s[i]) > eps(Float64)
 					is[i] = 1 / s[i]
 				else
@@ -507,7 +507,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		phi = []
 		delta_xs = []
-		for i=1:length(phisanddelta_xs)
+		for i = eachindex(phisanddelta_xs)
 			if length(phisanddelta_xs[i][2]) > 0
 				push!(phi, phisanddelta_xs[i][1])
 				push!(delta_xs, phisanddelta_xs[i][2])

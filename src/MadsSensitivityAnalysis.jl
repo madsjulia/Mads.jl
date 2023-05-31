@@ -466,7 +466,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	results = Array{OrderedCollections.OrderedDict}(undef, numsamples)
 	paramdict = Mads.getparamdict(madsdata)
 	for i = 1:numsamples
-		for j in 1:length(paramkeys)
+		for j = eachindex(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(Mads.rng, distributions[paramkeys[j]]) # TODO use parametersample
 		end
 		results[i] = f(paramdict) # this got to be slow to process
@@ -1111,7 +1111,7 @@ function maxtofloatmax!(df::DataFrames.DataFrame)
 	limit = floatmax(Float32)
 	for i in 1:size(df, 2)
 		if typeof(df[!, i][1]) <: Number
-			for j in 1:length(df[!, i])
+			for j = eachindex(df[!, i])
 				if df[!, i][j] > limit
 					df[!, i][j] = limit
 				end
