@@ -278,7 +278,7 @@ Returns:
 function paramarray2dict(madsdata::AbstractDict, array::Array)
 	paramkeys = getoptparamkeys(madsdata)
 	dict = OrderedCollections.OrderedDict()
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		dict[paramkeys[i]] = array[:,i]
 	end
 	return dict

@@ -1322,7 +1322,7 @@ function dumpwelldata(madsdata::AbstractDict, filename::AbstractString)
 			z0 = madsdata["Wells"]["$n"]["z0"]
 			z1 = madsdata["Wells"]["$n"]["z1"]
 			o = madsdata["Wells"]["$n"]["obs"]
-			for i in 1:length(o)
+			for i = eachindex(o)
 				c = o[i]["c"]
 				t = o[i]["t"]
 				write(outfile, "$n, $x, $y, $z0, $t, $c\n")

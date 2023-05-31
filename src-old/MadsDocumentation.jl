@@ -11,7 +11,7 @@ function getfunctionargumentsold(f::Function, m::Base.MethodList, l::Integer=get
 		catch
 			fargs = Array{Symbol}(undef, 0)
 		end
-		for j in 1:length(fargs)
+		for j = eachindex(fargs)
 			if !occursin("...", string(fargs[j]))
 				push!(mp, fargs[j])
 			end
@@ -46,7 +46,7 @@ function getfunctionkeywordsold(f::Function, m::Base.MethodList, l::Integer=getm
 		catch
 			kwargs = Array{Symbol}(undef, 0)
 		end
-		for j in 1:length(kwargs)
+		for j = eachindex(kwargs)
 			if !occursin("...", string(kwargs[j]))
 				push!(mp, kwargs[j])
 			end

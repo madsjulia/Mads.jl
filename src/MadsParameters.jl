@@ -109,7 +109,7 @@ for i = eachindex(getparamsnames)
 		"""
 		function $(Symbol(string("getparams", paramname)))(madsdata::AbstractDict, paramkeys::AbstractVector) # create a function to get each parameter name with 2 arguments
 			paramvalue = Array{$(paramtype)}(undef, length(paramkeys))
-			for i in 1:length(paramkeys)
+			for i = eachindex(paramkeys)
 				if haskey(madsdata["Parameters"][paramkeys[i]], $paramname)
 					v = madsdata["Parameters"][paramkeys[i]][$paramname]
 					v = ( v == "nothing" || v == "null"|| v == "false" || v == "fixed" || v == "none" ) ? nothing : v
@@ -160,7 +160,7 @@ Returns:
 """
 function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "min")
 			paramvalue[i] = p["min"]
@@ -194,7 +194,7 @@ Returns:
 """
 function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "max")
 			paramvalue[i] = p["max"]
@@ -228,7 +228,7 @@ Returns:
 """
 function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "init_min")
 			paramvalue[i] = p["init_min"]
@@ -274,7 +274,7 @@ Returns:
 """
 function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector=getparamkeys(madsdata))
 	paramvalue = Array{Float64}(undef, length(paramkeys))
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if haskey(p, "init_max")
 			paramvalue[i] = p["init_max"]
@@ -696,7 +696,7 @@ Returns:
 function getparamdistributions(madsdata::AbstractDict; init_dist::Bool=false)
 	paramkeys = getoptparamkeys(madsdata)
 	distributions = OrderedCollections.OrderedDict()
-	for i in 1:length(paramkeys)
+	for i = eachindex(paramkeys)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if init_dist
 			if haskey(p, "init_dist")

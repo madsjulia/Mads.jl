@@ -68,7 +68,7 @@ function functions(m::Union{Symbol, Module}, re::Regex; shortoutput::Bool=false,
 	try
 		f = names(Core.eval(Mads, m); all=true)
 		functions = Array{String}(undef, 0)
-		for i in 1:length(f)
+		for i = eachindex(f)
 			functionname = "$(f[i])"
 			if occursin("eval", functionname) || occursin("#", functionname) || occursin("__", functionname) || functionname == "$m"
 				continue

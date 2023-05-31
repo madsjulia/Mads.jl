@@ -95,7 +95,7 @@ for i = eachindex(getobsnames)
 		"""
 		function $(Symbol(string("getobs", obsname)))(madsdata::AbstractDict, obskeys)
 			obsvalue = Array{$(obstype)}(undef, length(obskeys))
-			for i in 1:length(obskeys)
+			for i = eachindex(obskeys)
 				if haskey(madsdata["Observations"][obskeys[i]], $obsname)
 					obsvalue[i] = madsdata["Observations"][obskeys[i]][$obsname]
 				elseif haskey(madsdata["Observations"][obskeys[i]], $obsaltname)
@@ -248,7 +248,7 @@ function settarget!(o::AbstractDict, target::Number)
 end
 
 function setobstime!(madsdata::AbstractDict, separator::AbstractString="_", obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		s = split(obskeys[i], separator)
 		if length(s) != 2
 			madswarn("String `$(split)` cannot split $(obskeys[i])")
@@ -258,7 +258,7 @@ function setobstime!(madsdata::AbstractDict, separator::AbstractString="_", obsk
 	end
 end
 function setobstime!(madsdata::AbstractDict, rx::Regex, obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		m = match(rx, obskeys[i])
 		if typeof(m) == Nothing || length(m.captures) != 1
 			madswarn("Regular expression `$(rx)` cannot match $(obskeys[i])")
@@ -285,12 +285,12 @@ Mads.setobstime!(madsdata, r"[A-x]*_t([0-9,.]+)")
 """ setobstime!
 
 function setobsweights!(madsdata::AbstractDict, value::Number, obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], value)
 	end
 end
 function setobsweights!(madsdata::AbstractDict, v::AbstractVector, obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], v[i])
 	end
 end
@@ -312,7 +312,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "value"=>"value for modifing observation weights")))
 """
 function modobsweights!(madsdata::AbstractDict, value::Number, obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		setweight!(madsdata["Observations"][obskeys[i]], getweight(madsdata["Observations"][obskeys[i]]) * value)
 	end
 end
@@ -325,7 +325,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "multiplier"=>"weight multiplier")))
 """
 function invobsweights!(madsdata::AbstractDict, multiplier::Number=1, obskeys::AbstractVector=getobskeys(madsdata))
-	for i in 1:length(obskeys)
+	for i = eachindex(obskeys)
 		t = gettarget(madsdata["Observations"][obskeys[i]])
 		if getweight(madsdata["Observations"][obskeys[i]]) > 0 && t > 0
 			setweight!(madsdata["Observations"][obskeys[i]], (1. / t) * multiplier)
@@ -341,9 +341,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "value"=>"value for well weights")))
 """
 function setwellweights!(madsdata::AbstractDict, value::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
-	for i in 1:length(wellkeys)
+	for i = eachindex(wellkeys)
 		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
-			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
 			end
 		end
@@ -359,9 +359,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "value"=>"value for well weights")))
 """
 function modwellweights!(madsdata::AbstractDict, value::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
-	for i in 1:length(wellkeys)
+	for i = eachindex(wellkeys)
 		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
-			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
 			end
 		end
@@ -377,9 +377,9 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "multiplier"=>"weight multiplier")))
 """
 function invwellweights!(madsdata::AbstractDict, multiplier::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
-	for i in 1:length(wellkeys)
+	for i = eachindex(wellkeys)
 		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
-			for k in 1:length(madsdata["Wells"][wellkeys[i]]["obs"])
+			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
 				if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
 					setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], (1. / t) * multiplier)
@@ -669,7 +669,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function deletetimes!(madsdata::AbstractDict, deletetimes)
     for wellkey in keys(madsdata["Wells"])
         delete_pos = [] # position of times to be deleted.
-        for obs_num in 1:length(madsdata["Wells"][wellkey]["obs"])
+        for obs_num = eachindex(madsdata["Wells"][wellkey]["obs"])
             if madsdata["Wells"][wellkey]["obs"][obs_num]["t"] in deletetimes
                 delete_pos = append!(delete_pos, obs_num)
             end
@@ -689,7 +689,7 @@ function wells2observations!(madsdata::AbstractDict)
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] !== nothing
-				for i in 1:length(madsdata["Wells"][wellkey]["obs"])
+				for i = eachindex(madsdata["Wells"][wellkey]["obs"])
 					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
 					obskey = wellkey * "_" * string(t)
 					data = OrderedCollections.OrderedDict()
