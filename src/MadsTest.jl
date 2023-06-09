@@ -105,6 +105,10 @@ function test_vector(result::AbstractVector, gold::AbstractVector; param=Abstrac
 				fail_gold = gold[i]
 				fail_result = result[i]
 				fail_diff = d
+			elseif isnan(d)
+				fail_gold = gold[i]
+				fail_result = result[i]
+				fail_diff = d
 			end
 		else
 			@Test.test it
@@ -112,7 +116,7 @@ function test_vector(result::AbstractVector, gold::AbstractVector; param=Abstrac
 	end
 	if any(fail_i .== true)
 		text = param == "" ? "Test failed" : "Test of $(param) failed"
-		@warn("$(text) ($(sum(fail_i)) out of $(length(gold)); max discrepency $(fail_result) vs $(fail_gold))!", _group=_group, _id=_id, _module=_module, _file=_file, _line=_line)
+		@warn("$(text) ($(sum(fail_i)) out of $(length(gold)); max discrepency $(fail_diff): $(fail_result) vs $(fail_gold))!", _group=_group, _id=_id, _module=_module, _file=_file, _line=_line)
 	end
 	return fail_i
 end
