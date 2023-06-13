@@ -232,7 +232,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 						else
 							out = madsdatacommandfunction(md)
 						end
-						results = convert(OrderedCollections.OrderedDict{Any,Float64}, out)
+						results = convert(OrderedCollections.OrderedDict{String,Float64}, out)
 						trying = false
 					catch errmsg
 						if !latest
