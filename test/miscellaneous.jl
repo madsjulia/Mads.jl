@@ -33,7 +33,7 @@ Mads.loadmadsproblem("polynomial");
 
 Mads.functions(:ModuleThatDoesNotExist)
 Mads.functions("createmadsproblem");
-Mads.functions(r"parame")
+Mads.functions(r"parameter")
 Mads.functions(Mads, "loadmadsfile");
 Mads.functions(Mads, r"is.*par");
 
@@ -177,5 +177,7 @@ if isdefined(Mads, :display)
 end
 Mads.rmfile("test.png")
 Mads.graphon()
+
+deleteat!(ARGS, 1)
 
 :passed
