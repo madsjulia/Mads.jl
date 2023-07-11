@@ -1068,7 +1068,7 @@ function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; separ
 		plotseries(m, filename; names=names, kw...)
 	end
 end
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, firstred::Bool=false, lastred::Bool=false, nextgray::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
+function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, nextgray::Bool=false, lastcolored::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
@@ -1139,7 +1139,11 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 		if !gall || code
 			if nextgray
 				cs = []
-				default_colors = [Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity); [Colors.RGBA(parse(Colors.Colorant, "gray"), opacity) for i in 2:nS]]
+				if lastcolored
+					default_colors = [[Colors.RGBA(parse(Colors.Colorant, "gray"), opacity) for i in 2:nS]; Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity)]
+				else
+					default_colors = [Colors.RGBA(parse(Colors.Colorant, colors[1]), opacity); [Colors.RGBA(parse(Colors.Colorant, "gray"), opacity) for i in 2:nS]]
+				end
 			else
 				if nS <= ncolors
 					cs = colorkey ? [Gadfly.Guide.manual_color_key(keytitle, names, [colors[i] for i in 1:nS])] : []
@@ -1165,38 +1169,24 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 			pS = Gadfly.plot(c...)
 		else
 			cs = colorkey ? [Gadfly.Guide.ColorKey(title=keytitle)] : []
-			if firstred || lastred
-				if nextgray
-					palette = Gadfly.parse_colorant(["gray"])
-				else
-					if length(colors) > 1
-						palette = Gadfly.parse_colorant(colors[2:end])
-					else
-						palette = Gadfly.parse_colorant(colors)
-					end
-				end
+			if nextgray
+				palette = Gadfly.parse_colorant(["gray"])
 			else
-				palette = Gadfly.parse_colorant(colors)
+				if length(colors) > 1
+					palette = Gadfly.parse_colorant(colors[1:end])
+				else
+					palette = Gadfly.parse_colorant(colors)
+				end
 			end
 			colormap =
-				if firstred
-					if nextgray
+				if nextgray
+					if lastcolored
 						function(nc)
-							[Gadfly.parse_colorant(["red"]); repeat(palette, inner=nc-1)]
+							[palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]; Gadfly.parse_colorant(["red"])]
 						end
 					else
 						function(nc)
 							[Gadfly.parse_colorant(["red"]); palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]]
-						end
-					end
-				elseif lastred
-					if nextgray
-						function(nc)
-							[repeat(palette, inner=nc-1); Gadfly.parse_colorant(["red"])]
-						end
-					else
-						function(nc)
-							[palette[rem.((1:(nc-1)) .- 1, length(palette)) .+ 1]; Gadfly.parse_colorant(["red"])]
 						end
 					end
 				else
@@ -1220,7 +1210,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 				cs...,
 				Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
 				gm...
-				)
+			)
 			c = nothing
 		end
 	else
