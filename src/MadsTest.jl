@@ -91,7 +91,7 @@ function testmodule(testname::AbstractString="")
 	return nothing
 end
 
-function test_vector(result::AbstractVector, gold::AbstractVector; param=AbstractString="", atol::Number=0.01, _group="", _id="", _module="", _file="", _line="")
+function test_vector(result::AbstractVector, gold::AbstractVector; param=AbstractString="", show::Bool=false, atol::Number=0.01, _group="", _id="", _module="", _file="", _line="")
 	fail_i = falses(length(gold))
 	fail_result = 0.
 	fail_gold = 0.
@@ -117,6 +117,9 @@ function test_vector(result::AbstractVector, gold::AbstractVector; param=Abstrac
 	if any(fail_i .== true)
 		text = param == "" ? "Test failed" : "Test of $(param) failed"
 		@warn("$(text) ($(sum(fail_i)) out of $(length(gold)); max discrepency $(fail_diff): $(fail_result) vs $(fail_gold))!", _group=_group, _id=_id, _module=_module, _file=_file, _line=_line)
+		if show
+			display([result[fail_i] gold[fail_i]])
+		end
 	end
 	return fail_i
 end
