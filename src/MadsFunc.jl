@@ -86,7 +86,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::Array{Strin
 			!quiet && @info("Using the function provided in the Mads dictionary ...")
 		elseif typeof(madsdata["Julia function"]) <: Symbol
 			fn = madsdata["Julia function"]
-		elseif typeof(madsdata["Julia function"]) <: String
+		elseif typeof(madsdata["Julia function"]) <: AbstractString
 			fn = Symbol(madsdata["Julia function"])
 		else
 			madscritical("Julia function $(madsdata["Julia function"]) is not properly defined!")
