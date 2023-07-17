@@ -20,7 +20,7 @@ $(DocumentFunction.documentfunction(notebook;
 function notebook(rootname::AbstractString; script::Bool=false, notebook_directory=joinpath(Mads.dir, "notebooks"), check::Bool=true)
 	if check
 		f = notebook_check(rootname; notebook_directory=notebook_directory)
-		if f === nothing
+		if isnothing(f)
 			return
 		end
 		d, p = f
@@ -66,7 +66,7 @@ $(DocumentFunction.documentfunction(notebook_export;
 """
 function notebook_export(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
 	f = notebook_check(rootname; notebook_directory=notebook_directory)
-	if f === nothing
+	if isnothing(f)
 		return
 	end
 	d, p = f

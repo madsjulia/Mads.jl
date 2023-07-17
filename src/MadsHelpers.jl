@@ -26,7 +26,7 @@ function rmsenan(t::AbstractVector, o::AbstractVector)
 end
 
 function sumnan(X; dims=nothing, kw...)
-	if dims === nothing
+	if isnothing(dims)
 		return sum(X[.!isnan.(X)]; kw...)
 	else
 		count = .*(size(X)[vec(collect(dims))]...)
@@ -502,7 +502,7 @@ function getseed()
 end
 
 function seedrng(f=nothing)
-	if f === nothing
+	if isnothing(f)
 		if isdefined(Random, :TaskLocalRNG)
 			f = Random.TaskLocalRNG
 		else
@@ -517,7 +517,7 @@ function seedrng(f=nothing)
 end
 
 function seed!(s, f=nothing)
-	if f === nothing
+	if isnothing(f)
 		if isdefined(Random, :TaskLocalRNG)
 			f = Random.TaskLocalRNG
 		else
@@ -597,7 +597,7 @@ function pkginstalled(modulename::AbstractString)
 	deps = Pkg.dependencies()
 	for (uuid, dep) in deps
 		dep.is_direct_dep || continue
-		dep.version === nothing && continue
+		isnothing(dep.version) && continue
 		if dep.name == modulename
 			found = true
 			break
@@ -611,7 +611,7 @@ function pkginstalled()
 	installs = Dict{String, VersionNumber}()
 	for (uuid, dep) in deps
 		dep.is_direct_dep || continue
-		dep.version === nothing && continue
+		isnothing(dep.version) && continue
 		installs[dep.name] = dep.version
 	end
 	return installs

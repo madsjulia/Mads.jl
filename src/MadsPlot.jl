@@ -71,7 +71,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 end
 
 function plotfileformat(p, filename::AbstractString, hsize, vsize; format=uppercase(getextension(filename)), dpi=imagedpi)
-	if typeof(p) === nothing
+	if isnothing(p)
 		madswarn("Plotting nothing!")
 		return
 	end
@@ -357,7 +357,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 			Gadfly.Theme(highlight_width=0Gadfly.pt),
 			gmk...)
 	end
-	if pl === nothing
+	if isnothing(pl)
 		Mads.madswarn("There is nothing to plot!")
 		return nothing
 	end
@@ -603,7 +603,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	nsample = result["samplesize"]
 	obsdict = madsdata["Observations"]
 	paramkeys = getoptparamkeys(madsdata)
-	if plotlabels === nothing
+	if isnothing(plotlabels)
 		plotlabels = getparamlabels(madsdata, paramkeys)
 	end
 	nP = length(paramkeys)
@@ -1079,10 +1079,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
-		if xmin === nothing
+		if isnothing(xmin)
 			xmin = log10(minimumnan(xaxis[xaxis .!= 0.]))
 		end
-		if xmax === nothing
+		if isnothing(xmax)
 			xmax = log10(maximumnan(xaxis))
 		end
 	end
@@ -1090,10 +1090,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 		push!(glog, Gadfly.Scale.y_log10)
 		ixzero = X .<= 0
 		X[ixzero] .= NaN
-		if ymin === nothing
+		if isnothing(ymin)
 			ymin = log10(minimumnan(X[X .!= 0.]))
 		end
-		if ymax === nothing
+		if isnothing(ymax)
 			ymax = log10(maximumnan(X))
 			if ymin !== nothing
 				dy = (ymax - ymin)/10
