@@ -70,8 +70,8 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 			if gw !== nothing && gh !== nothing
 				gwod = Compose.default_graphic_width
 				ghod = Compose.default_graphic_height
-				gwo = gwo === nothing ? gwod : gwo
-				gho = gho === nothing ? ghod : gho
+				gwo = isnothing(gwo) ? gwod : gwo
+				gho = isnothing(gho) ? ghod : gho
 				r = gw / gh
 				if r > 1
 					gwon = gho * r
@@ -103,8 +103,8 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 			if gw !== nothing && gh !== nothing
 				gwod = Compose.default_graphic_width
 				ghod = Compose.default_graphic_height
-				gwo = gwo === nothing ? gwod : gwo
-				gho = gho === nothing ? ghod : gho
+				gwo = isnothing(gwo) ? gwod : gwo
+				gho = isnothing(gho) ? ghod : gho
 				r = gw / gh
 				if r > 1
 					gwon = gho * r

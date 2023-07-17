@@ -142,7 +142,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
-	if !bigfile || madsdata === nothing
+	if !bigfile || isnothing(madsdata)
 		if format == "yaml"
 			madsdata = loadyamlfile(filename)
 		elseif format == "json"
@@ -1114,7 +1114,7 @@ function instline2regexs(instline::AbstractString)
 	getparamhere = Bool[]
 	while offset <= length(instline) && occursin(regex, instline; offset=offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
-		if m === nothing
+		if isnothing(m)
 			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
 		end
 		offset = m.offset + length(m.match)
@@ -1181,7 +1181,7 @@ function regexs2obs(obsline::AbstractString, regexs::Vector{Regex}, obsnames::Ve
 	obsdict = Dict{String, Float64}()
 	for i = eachindex(regexs)
 		m = match(regexs[i], obsline, offset)
-		if m === nothing
+		if isnothing(m)
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
 		else
 			if getparamhere[i]
