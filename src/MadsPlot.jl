@@ -260,7 +260,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				tc = Vector{Float64}(undef, 0)
 				d = Vector{Float64}(undef, 0)
 				td = Vector{Float64}(undef, 0)
-				if haskey(madsdata["Wells"][wellname], "obs") && madsdata["Wells"][wellname]["obs"] !== nothing
+				if haskey(madsdata["Wells"][wellname], "obs") && !isnothing(madsdata["Wells"][wellname]["obs"])
 					o = madsdata["Wells"][wellname]["obs"]
 					nT = length(o)
 					for i in 1:nT
@@ -1095,7 +1095,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 		end
 		if isnothing(ymax)
 			ymax = log10(maximumnan(X))
-			if ymin !== nothing
+			if !isnothing(ymin)
 				dy = (ymax - ymin)/10
 				ymin -= dy
 				ymax += dy
@@ -1231,10 +1231,10 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
-		ixzero !== nothing && (X[ixzero] .= 0)
+		!isnothing(ixzero) && (X[ixzero] .= 0)
 		return false
 	end
-	ixzero !== nothing && (X[ixzero] .= 0)
+	!isnothing(ixzero) && (X[ixzero] .= 0)
 	if returnplot
 		return pS
 	elseif code

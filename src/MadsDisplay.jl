@@ -67,7 +67,7 @@ end
 if !haskey(ENV, "MADS_NO_GADFLY")
 	function display(p::Gadfly.Plot; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
-			if gw !== nothing && gh !== nothing
+			if !isnothing(gw) && !isnothing(gh)
 				gwod = Compose.default_graphic_width
 				ghod = Compose.default_graphic_height
 				gwo = isnothing(gwo) ? gwod : gwo
@@ -86,13 +86,13 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 				Gadfly.draw(Gadfly.PNG(), p)
 				print("\r")
 			catch errmsg
-				if gw !== nothing && gh !== nothing
+				if !isnothing(gw) && !isnothing(gh)
 					Compose.set_default_graphic_size(gwod, ghod)
 				end
 				printerrormsg(errmsg)
 				@warn("Gadfly failed!")
 			end
-			if gw !== nothing && gh !== nothing
+			if !isnothing(gw) && !isnothing(gh)
 				Compose.set_default_graphic_size(gwod, ghod)
 			end
 		end
@@ -100,7 +100,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 
 	function display(p::Compose.Context; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		if graphoutput
-			if gw !== nothing && gh !== nothing
+			if !isnothing(gw) && !isnothing(gh)
 				gwod = Compose.default_graphic_width
 				ghod = Compose.default_graphic_height
 				gwo = isnothing(gwo) ? gwod : gwo
@@ -119,13 +119,13 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 				Compose.draw(Compose.PNG(), p)
 				print("\r")
 			catch errmsg
-				if gw !== nothing && gh !== nothing
+				if !isnothing(gw) && !isnothing(gh)
 					Compose.set_default_graphic_size(gwod, ghod)
 				end
 				printerrormsg(errmsg)
 				@warn("Compose failed!")
 			end
-			if gw !== nothing && gh !== nothing
+			if !isnothing(gw) && !isnothing(gh)
 				Compose.set_default_graphic_size(gwod, ghod)
 			end
 		end

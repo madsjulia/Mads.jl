@@ -59,7 +59,7 @@ end
 
 function plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	s = forwardgrid(madsdata, parameters)
-	if typeof(s) != Nothing
+	if !isnothing(s)
 		plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 	end
 end

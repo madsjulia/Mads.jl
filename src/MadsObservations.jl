@@ -260,7 +260,7 @@ end
 function setobstime!(madsdata::AbstractDict, rx::Regex, obskeys::AbstractVector=getobskeys(madsdata))
 	for i = eachindex(obskeys)
 		m = match(rx, obskeys[i])
-		if typeof(m) == Nothing || length(m.captures) != 1
+		if isnothing(m) || length(m.captures) != 1
 			madswarn("Regular expression `$(rx)` cannot match $(obskeys[i])")
 		else
 			settime!(madsdata["Observations"][obskeys[i]], Base.parse(Float64, m.captures[1]))
@@ -342,7 +342,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function setwellweights!(madsdata::AbstractDict, value::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
 	for i = eachindex(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && !isnothing(madsdata["Wells"][wellkeys[i]]["obs"])
 			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], value)
 			end
@@ -360,7 +360,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function modwellweights!(madsdata::AbstractDict, value::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
 	for i = eachindex(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && !isnothing(madsdata["Wells"][wellkeys[i]]["obs"])
 			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				setweight!(madsdata["Wells"][wellkeys[i]]["obs"][k], getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) * value)
 			end
@@ -378,7 +378,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function invwellweights!(madsdata::AbstractDict, multiplier::Number, wellkeys::AbstractVector=getwellkeys(madsdata))
 	for i = eachindex(wellkeys)
-		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && madsdata["Wells"][wellkeys[i]]["obs"] !== nothing
+		if haskey(madsdata["Wells"][wellkeys[i]], "obs") && !isnothing(madsdata["Wells"][wellkeys[i]]["obs"])
 			for k = eachindex(madsdata["Wells"][wellkeys[i]]["obs"])
 				t = gettarget(madsdata["Wells"][wellkeys[i]]["obs"][k])
 				if getweight(madsdata["Wells"][wellkeys[i]]["obs"][k]) > 0 && t > 0
@@ -597,7 +597,7 @@ function wellon!(madsdata::AbstractDict, rx::Regex)
 	error = true
 	for wellkey in keys(madsdata["Wells"])
 		m = match(rx, wellkey)
-		if typeof(m) != Nothing
+		if isnothing(m)
 			madsdata["Wells"][wellkey]["on"] = true
 			error = false
 		end
@@ -688,7 +688,7 @@ function wells2observations!(madsdata::AbstractDict)
 	observations = OrderedCollections.OrderedDict()
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
-			if haskey(madsdata["Wells"][wellkey], "obs") && madsdata["Wells"][wellkey]["obs"] !== nothing
+			if haskey(madsdata["Wells"][wellkey], "obs") && !isnothing(madsdata["Wells"][wellkey]["obs"])
 				for i = eachindex(madsdata["Wells"][wellkey]["obs"])
 					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
 					obskey = wellkey * "_" * string(t)
