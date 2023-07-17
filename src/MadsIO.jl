@@ -236,7 +236,7 @@ function loadbigyamlfile(filename::AbstractString)
 		badlines = Array{Int}(undef, 0)
 		for i in readindeces
 			mc = match(r"^- (\S*):.*", lines[i])
-			if mc !== nothing
+			if !isnothing(mc)
 				kw = mc.captures[1]
 			else
 				push!(badlines, i)
@@ -250,19 +250,19 @@ function loadbigyamlfile(filename::AbstractString)
 			end
 			obsdict[kw] = OrderedCollections.OrderedDict{String,Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc !== nothing
+			if !isnothing(mc)
 				obsdict[kw]["target"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*weight[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc !== nothing
+			if !isnothing(mc)
 				obsdict[kw]["weight"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*min[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc !== nothing
+			if !isnothing(mc)
 				obsdict[kw]["min"] = parse(Float64, mc.captures[1])
 			end
 			mc = match(r"^.*max[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
-			if mc !== nothing
+			if !isnothing(mc)
 				obsdict[kw]["max"] = parse(Float64, mc.captures[1])
 			end
 		end
@@ -356,7 +356,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 			for key in keys(dictnew)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
-				if haskey(wells[key], "obs") && wells[key]["obs"] !== nothing
+				if haskey(wells[key], "obs") && !isnothing(wells[key]["obs"])
 					for i = eachindex(wells[key]["obs"])
 						for k in keys(wells[key]["obs"][i])
 							wells[key]["obs"][i] = wells[key]["obs"][i][k]
@@ -615,7 +615,7 @@ Returns:
 """
 function getproblemdir()
 	source_path = Base.source_path()
-	if typeof(source_path) == Nothing
+	if isnothing(source_path)
 		problemdir = "."
 	else
 		problemdir = getdir(source_path)
@@ -1246,7 +1246,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 			continue
 		end
 		gotmatch = false
-		while !gotmatch && iter_result !== nothing
+		while !gotmatch && !isnothing(iter_result)
 			obsline, state = iter_result
 			if obslineoccursin(obsline, regexs)
 				merge!(obsdict, regexs2obs(obsline, regexs, obsnames, getparamhere))
@@ -1683,7 +1683,7 @@ function parsevars(variable_names::Vector{String}, variable_values::Vector{Float
 	for sc in [scalar_names; vector_names; matrix_names]
 		if select
 			ii = first(indexin([sc], vars))
-			if ii !== nothing
+			if !isnothing(ii)
 				s[ii] = eval(:($(sc)))
 			end
 		else

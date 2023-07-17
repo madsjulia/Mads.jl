@@ -63,7 +63,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 		if sizeof(center) == 0
 			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center !== nothing) && length(center) == nO
+			center_computed = (!isnothing(center)) && length(center) == nO
 			if !center_computed
 				push!(p, arrayparameters)
 			end
@@ -876,9 +876,9 @@ function computeparametersensitities(madsdata::AbstractDict, saresults::Abstract
 	for i = eachindex(paramkeys)
 		pv = pm = pt = 0
 		for j = eachindex(obskeys)
-			m = typeof(saresults["mes"][obskeys[j]][paramkeys[i]]) == Nothing ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
-			t = typeof(saresults["tes"][obskeys[j]][paramkeys[i]]) == Nothing ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
-			v = typeof(saresults["var"][obskeys[j]][paramkeys[i]]) == Nothing ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
+			m = isnothing(saresults["mes"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
+			t = isnothing(saresults["tes"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
+			v = isnothing(saresults["var"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
 			pv += isnan.(v) ? 0 : v
 			pm += isnan.(m) ? 0 : m
 			pt += isnan.(t) ? 0 : t
@@ -1069,12 +1069,12 @@ function void2nan!(dict::AbstractDict) # TODO generalize using while loop and re
 	for i in keys(dict)
 		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedCollections.OrderedDict
 			for j in keys(dict[i])
-				if typeof(dict[i][j]) == Nothing
+				if isnothing(dict[i][j])
 					dict[i][j] = NaN
 				end
 				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedCollections.OrderedDict
 					for k = keys(dict[i][j])
-						if typeof(dict[i][j][k]) == Nothing
+						if isnothing(dict[i][j][k])
 							dict[i][j][k] = NaN
 						end
 					end

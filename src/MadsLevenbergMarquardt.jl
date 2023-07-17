@@ -194,7 +194,7 @@ function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parall
 		if sizeof(center) == 0
 			filename = ReusableFunctions.gethashfilename(restartdir, arrayparameters)
 			center = ReusableFunctions.loadresultfile(filename)
-			center_computed = (center !== nothing) && length(center) == nO
+			center_computed = (!isnothing(center)) && length(center) == nO
 			if !center_computed
 				push!(p, arrayparameters)
 			end
