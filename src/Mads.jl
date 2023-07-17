@@ -89,7 +89,7 @@ global long_tests = false # execute long tests
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global nprocs_per_task_default = 1
 global parallel_optimization = false
-const dir = first(splitdir(first(splitdir(pathof(Mads)))))
+const dir = Base.pkgdir(Mads)
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	global long_tests = true

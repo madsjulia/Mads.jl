@@ -3,6 +3,9 @@ import Test
 
 # Test array values against a dictionary loaded from two files
 problemdir = string((dirname(Base.source_path())))
+if problemdir == "."
+	problemdir = joinpath(Mads.dir, "examples", "reading_instructions")
+end
 
 instructionfilename = joinpath(problemdir, "pm1.inst")
 inputfilename = joinpath(problemdir, "pm1.obs")

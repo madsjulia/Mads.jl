@@ -22,7 +22,7 @@ burnin = 100
 		means = 1 .+ 5 .* rand(Mads.rng, numdims)
 		llhood = x->begin
 			retval = 0.
-			for i in 1:length(x)
+			for i = eachindex(x)
 				retval -= .5 * ((x[i] - means[i]) / stds[i]) ^ 2
 			end
 			return retval

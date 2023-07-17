@@ -618,7 +618,7 @@ function getproblemdir()
 	if isnothing(source_path)
 		problemdir = "."
 	else
-		problemdir = getdir(source_path)
+		problemdir = Base.pkgdir(Mads)
 		madsinfo("Problem directory: $(problemdir)")
 	end
 	return problemdir

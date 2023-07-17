@@ -1067,12 +1067,12 @@ argtext=Dict("dict"=>"dictionary")))
 """
 function void2nan!(dict::AbstractDict) # TODO generalize using while loop and recursive calls ....
 	for i in keys(dict)
-		if typeof(dict[i]) <: Dict || typeof(dict[i]) <: OrderedCollections.OrderedDict
+		if typeof(dict[i]) <: AbstractDict
 			for j in keys(dict[i])
 				if isnothing(dict[i][j])
 					dict[i][j] = NaN
 				end
-				if typeof(dict[i][j]) <: Dict || typeof(dict[i][j]) <: OrderedCollections.OrderedDict
+				if typeof(dict[i][j]) <: AbstractDict
 					for k = keys(dict[i][j])
 						if isnothing(dict[i][j][k])
 							dict[i][j][k] = NaN
