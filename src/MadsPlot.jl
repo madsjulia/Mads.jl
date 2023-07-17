@@ -368,7 +368,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		if filename != ""
 			plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
 		end
-		if typeof(pl) == Gadfly.Plot || typeof(pl) == Compose.Context
+		if typeof(pl) === Gadfly.Plot || typeof(pl) === Compose.Context
 			display && Mads.display(pl; gw=hsize, gh=vsize)
 		else
 			display && Mads.display(filename)
@@ -1124,7 +1124,7 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 		end
 	else
 		geometry = repeat([geometry], nS)
-		linestylea = typeof(linestyle) == Symbol ? repeat([linestyle], nS) : linestyle
+		linestylea = typeof(linestyle) === Symbol ? repeat([linestyle], nS) : linestyle
 		linewidthea = repeat([linewidth], nS)
 	end
 	if !colorkey || nS == 1 || nextgray

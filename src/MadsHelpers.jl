@@ -275,7 +275,7 @@ end
 function haskeyword(madsdata::AbstractDict, class::AbstractString, keyword::AbstractString)
 	if typeof(madsdata[class]) <: AbstractDict
 		return haskey(madsdata[class], keyword) ? true : false
-	elseif typeof(madsdata[class]) <: String
+	elseif typeof(madsdata[class]) <: AbstractString
 		return madsdata[class] == keyword
 	elseif typeof(madsdata[class]) <: Vector{String}
 		for i in madsdata[class]
@@ -318,7 +318,7 @@ function addkeyword!(madsdata::AbstractDict, class::AbstractString, keyword::Abs
 	end
 	if typeof(madsdata[class]) <: AbstractDict
 		push!(madsdata[class], keyword=>true)
-	elseif typeof(madsdata[class]) <: String
+	elseif typeof(madsdata[class]) <: AbstractString
 		madsdata[class] = [keyword, madsdata[class]]
 	elseif typeof(madsdata[class]) <: Vector{String}
 		push!(madsdata[class], keyword)
@@ -344,7 +344,7 @@ function deletekeyword!(madsdata::AbstractDict, class::AbstractString, keyword::
 	if haskeyword(madsdata, class, keyword)
 		if typeof(madsdata[class]) <: AbstractDict && haskey(madsdata[class], keyword)
 			delete!(madsdata[class], keyword)
-		elseif typeof(madsdata[class]) <: String
+		elseif typeof(madsdata[class]) <: AbstractString
 			madsdata[class] = ""
 		elseif typeof(madsdata[class]) <: Vector{String}
 			v = madsdata[class]
@@ -376,7 +376,7 @@ function getsindx(madsdata::AbstractDict)
 	sindx = sindxdefault
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
-		if typeof(sindx) == String
+		if typeof(sindx) <= AbstractString
 			sindx = parse(Float64, sindx)
 		end
 	end
