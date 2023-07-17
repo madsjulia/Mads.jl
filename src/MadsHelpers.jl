@@ -376,7 +376,7 @@ function getsindx(madsdata::AbstractDict)
 	sindx = sindxdefault
 	if Mads.haskeyword(madsdata, "sindx")
 		sindx = madsdata["Problem"]["sindx"]
-		if typeof(sindx) <= AbstractString
+		if typeof(sindx) <: AbstractString
 			sindx = parse(Float64, sindx)
 		end
 	end

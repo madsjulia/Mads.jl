@@ -65,7 +65,7 @@ localsaresult = Mads.localsa(md, format="PNG")
 stddev = localsaresult["stddev"]
 Mads.madsinfo("Posterior parameter uncertainty ranges (centered at the initial paramter estimates) ...")
 f = open("$rootname-localsa-paramranges.dat", "w")
-for i in 1:length(paramkeys)
+for i = eachindex(paramkeys)
 	println(f, md["Parameters"][paramkeys[i]]["init"]-3*stddev[i]," < ",md["Parameters"][paramkeys[i]]["longname"], " < ", md["Parameters"][paramkeys[i]]["init"]+3*stddev[i])
 end
 close(f)

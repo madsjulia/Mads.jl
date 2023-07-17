@@ -6,7 +6,7 @@ Mads.veryquieton()
 
 Mads.madsinfo("Restarting ...")
 cwd = pwd()
-workdir = string((dirname(Base.source_path()))) * "/"
+workdir = string(dirname(Base.source_path()))
 if workdir == "."
 	workdir = joinpath(Mads.dir, "examples", "restart")
 end

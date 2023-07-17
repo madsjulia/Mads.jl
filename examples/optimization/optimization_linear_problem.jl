@@ -3,6 +3,9 @@ import Test
 
 Mads.madsinfo("Levenberg-Marquardt optimization of an internal problem:")
 problemdir = dirname(Base.source_path())
+if problemdir == "."
+	problemdir = joinpath(Mads.dir, "examples", "optimization")
+end
 
 md = Mads.loadmadsfile(joinpath(problemdir, "internal-linearmodel.mads"))
 results = Mads.calibrate(md, maxEval=2, maxJacobians=1, np_lambda=1)
