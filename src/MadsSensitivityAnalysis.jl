@@ -1128,8 +1128,8 @@ argtext=Dict("md"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
             "M"=>"maximum number of harmonics [default=`6`]",
             "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
-             "seed"=>"random seed [default=`0`]",
-             "checkpointfrequency"=>"check point frequency [default=`N`]",
+            "seed"=>"random seed [default=`0`]",
+            "checkpointfrequency"=>"check point frequency [default=`N`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
