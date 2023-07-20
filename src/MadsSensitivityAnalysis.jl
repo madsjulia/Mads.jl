@@ -1133,7 +1133,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1210,7 +1210,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	function eFAST_optimalSearch(Ns_total, M, gamma)
 		# Iterate through different integer values of Nr (# of resamples)
-		# If loop finishes, script will adjust Ns upwards to obtain an optimal
+		# If the loop finishes, the code will adjust Ns upwards to obtain an optimal
 		for Nr_ = 1:50
 			global Nr = Nr_
 			Wi = (Ns_total / Nr - 1) / (gamma * M)        # Based on Nyquist Freq
@@ -1227,7 +1227,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			end
 		end
 		# If the loop above could not find optimal Wi/Nr pairing based on given Ns & M
-		# If script reaches this point, this loop adjusts Ns (upwards) to obtain
+		# If the code reaches this point, this loop adjusts Ns (upwards) to obtain
 		# optimal Nr/Wi pairing.
 		Ns0 = Ns_total # Freezing original Ns value given
 		for Nr_ = 1:100
@@ -1248,7 +1248,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 				end
 			end
 		end
-		# If script reaches this section of code, adjustments must be made to Ns boundaries
+		# If the code reaches this section of code, adjustments must be made to Ns boundaries
 		madserror("ERROR! Change bounds in eFAST_optimalSearch or choose different Ns/M")
 	end
 
@@ -1257,7 +1257,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		# dist provides all necessary information on distribution (type, min, max, mean, std)
 		(name, dist) = (InputData[:,1], InputData[:,2])
 		for k = 1:nprime
-			# If parameter is one we are analyzing then we will assign numbers according to its probability dist
+			# If the parameter is one we are analyzing then we will assign numbers according to its probability dist
 			# Otherwise, we will simply set it at a constant (i.e. its initial value)
 			# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
 			if typeof(InputData[k,2]) <: Distributions.Distribution
@@ -1400,7 +1400,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# Storing results in a vector format
 			resultvec = [AV AVi AVci]
 		elseif ny > 1
-			## If system is dynamic, we must add an extra dimension to calculate sensitivity indices for each point
+			## If the analyzed system is dynamic, we must add an extra dimension to calculate sensitivity indices for each point
 			# These will be the sums of variances over all resamplings (Nr loops)
 			AV   = zeros(ny,1)                   # Initializing Variances to 0
 			AVi  = zeros(ny,1)
@@ -1445,7 +1445,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	# Saltelli 1999 suggests gamma = 2 or 4; higher gammas typically give more accurate results and are even *sometmies* faster.
 
 	# Are we reading from a .mads file or are we running this as a standalone (input: .csv, output: .exe)?
-	# 1 for MADS, 0 for standalone. Basically determines IO of script.
+	# 1 for MADS, 0 for standalone. Basically determines IO of the code.
 	ismads         = 1
 	# 1 if we are reading model output directly (e.g. from .csv), 0 if we are using some sort of script to calculate model output
 	directOutput   = 0
@@ -1464,16 +1464,16 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	#(ismads, directOutput, issvr, plotresults, truncateRanges) = (0,0,0,0,0)
 
 	# Number of processors (for parallel computing)
-	# Different values of P will determine how program is parallelized
+	# Different values of P will determine how the code is parallelized
 	# If P > 1 -> Program will parallelize resamplings & parameters
-	# If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the amount of processors necessary to fully parallelize all resamplings over
+	# If P > Nr*nprime + 1 -> (Nr*nprime + 1) is the number of processors necessary to fully parallelize all resamplings over
 	# every parameter (including +1 for the master).  If P is larger than this extra cores will be allocated to computing
 	# the model output quicker.
 	P = Distributed.nworkers()
 	madsoutput("Number of processors is $P\n")
 
 	paramallkeys  = getparamkeys(md)
-	# Values of this dictionary are intial values
+	# Values of this dictionary are the intial values
 	paramalldict  = OrderedCollections.OrderedDict{String,Float64}(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
 	# Only the parameters we wish to analyze
 	paramkeys     = getoptparamkeys(md)
@@ -1498,7 +1498,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	n      = length(paramallkeys)
 	# Number of parameters we are analyzing
 	nprime = length(paramkeys)
-	# ny > 1 means system is dynamic (model output is a vector)
+	# ny > 1 means the system is dynamic (model output is a vector)
 	ny     = length(obskeys)
 
 	# This is here to delete parameters of interest from paramalldict
@@ -1517,8 +1517,52 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	if load
 		rootname = Mads.getmadsrootname(md)
 		filename = "$(rootname)-efast-$(Ns_total).jld2"
+		@show filename
 		if isfile(filename)
-			return JLD2.load(filename, "efast_results")
+			flag_bad_data = false
+			efast_results = JLD2.load(filename, "efast_results")
+			if length(md(["Observations"])) != length(efast_results["mes"])
+				@warn("Different number of observations(Mads $(length(md(["Observations"]))) Input $(length(efast_results["mes"])))!")
+				flag_bad_data = true
+			end
+			first_observation = first(first(efast_results["mes"]))
+			if length(md(["Parameters"])) != length(efast_results["mes"][first_observation])
+				@warn("Different number of parameters (Mads $(length(md(["Parameters"]))) Input $( length(efast_results["mes"][first_observation]))!")
+				flag_bad_data = true
+			end
+			missing_observations = Vector{String}(undef, 0)
+			missing_parameters = Vector{String}(undef, 0)
+			if !flag_bad_data
+
+				for o in keys(md(["Observations"]))
+					if !haskey(efast_results["mes"], k)
+						flag_bad_data = true
+						push!(missing_observations, o)
+					end
+				end
+				for p in keys(md(["Parameters"]))
+					if !haskey(efast_results["mes"][first_observation], p)
+						flag_bad_data = true
+						push!(missing_parameters, p)
+					end
+				end
+			end
+			if flag_bad_data
+				@warn("Loaded data is not compatible with the solved problem!")
+				if length(missing_observations) > 0
+					@info("Missing observations: $(missing_observations)")
+				end
+				if length(missing_parameters) > 0
+					@info("Missing parameters: $(missing_parameters)")
+				end
+				if execute
+					@info("eFAST analyses will be executed!")
+				else
+					return nothing
+				end
+			else
+				return efast_results
+			end
 		else
 			@warn("File $(filename) is missing!")
 			@info("eFAST analyses will be executed!")
@@ -1536,15 +1580,15 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	## If our output is read directly from some sort of data file rather than using a model function
 
-	# svrtruncate is simply a boolean to truncate output .csv file (NOT INPUT RANGES)!! (For some reason model output is listed in second column)
-	# Do NOT set this boolean to 1 unless if output is from surrogate model
+	# svrtruncate is simply a boolean to truncate output .csv file (NOT INPUT RANGES)!! (For some reason model output is listed in the second column)
+	# Do NOT set this boolean to 1 unless the output is from a surrogate model
 	svrtruncate = 0
 
 	## Begin eFAST analysis:
 
 	madsinfo("Begin eFAST analysis ... ")
 
-	# This script determines complementary frequencies
+	# This code determines complementary frequencies
 	(W_comp, Wcmax) = eFAST_getCompFreq(Wi, nprime, M)
 
 	# New domain [-pi pi] spaced by Ns points
@@ -1611,7 +1655,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		Sti[:,k] = 1 .- Vci ./ V
 	end
 
-	# Save results as dictionary
+	# Save results as a dictionary
 	tes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	mes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	var = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
