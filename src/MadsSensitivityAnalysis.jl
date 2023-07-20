@@ -1521,13 +1521,13 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if isfile(filename)
 			flag_bad_data = false
 			efast_results = JLD2.load(filename, "efast_results")
-			if length(md(["Observations"])) != length(efast_results["mes"])
-				@warn("Different number of observations(Mads $(length(md(["Observations"]))) Input $(length(efast_results["mes"])))!")
+			if length(md["Observations"]) != length(efast_results["mes"])
+				@warn("Different number of observations(Mads $(length(md["Observations"])) Input $(length(efast_results["mes"])))!")
 				flag_bad_data = true
 			end
 			first_observation = first(first(efast_results["mes"]))
-			if length(md(["Parameters"])) != length(efast_results["mes"][first_observation])
-				@warn("Different number of parameters (Mads $(length(md(["Parameters"]))) Input $( length(efast_results["mes"][first_observation]))!")
+			if length(md["Parameters"]) != length(efast_results["mes"][first_observation])
+				@warn("Different number of parameters (Mads $(length(md["Parameters"])) Input $( length(efast_results["mes"][first_observation])))!")
 				flag_bad_data = true
 			end
 			missing_observations = Vector{String}(undef, 0)
