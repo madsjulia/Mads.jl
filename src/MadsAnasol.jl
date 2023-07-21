@@ -14,7 +14,7 @@ $(DocumentFunction.documentfunction(addsource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"sourceid"=>"source id [default=`0`]")))
 """
-function addsource!(madsdata::AbstractDict, sourceid::Int=0; dict::AbstractDict=Dict())
+function addsource!(madsdata::AbstractDict, sourceid::Integer=0; dict::AbstractDict=Dict())
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		if sourceid <= 0
@@ -46,7 +46,7 @@ $(DocumentFunction.documentfunction(removesource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"sourceid"=>"source id [default=`0`]")))
 """
-function removesource!(madsdata::AbstractDict, sourceid::Int=0)
+function removesource!(madsdata::AbstractDict, sourceid::Integer=0)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		if sourceid <= 0

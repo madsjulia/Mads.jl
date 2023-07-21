@@ -1,6 +1,6 @@
 import PyPlot
 
-function plotgrid(madsdata::AbstractDict, s::Array{Float64}; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
+function plotgrid(madsdata::AbstractDict, s::AbstractArray{Float64}; addtitle::Bool=true, title::AbstractString="", filename::AbstractString="", format::AbstractString="")
 	if !haskey(madsdata, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return

@@ -22,7 +22,7 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
-function createobservations(nrow::Int, ncol::Int=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
+function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
 	dump = filename != "" ? true : false
 	dump && (f = open(filename, "w"))
 	dump && write(f, pretext)

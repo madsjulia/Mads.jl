@@ -118,7 +118,7 @@ Returns:
 
 - dictionary with BIG-DT results
 """
-function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, maxHorizon::Real=3., numlikelihoods::Int=25)
+function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integer=100, maxHorizon::Real=3., numlikelihoods::Integer=25)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
 	modelparams = Array{Float64}(undef, length(parametersamples), nummodelruns)
@@ -130,7 +130,7 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Int; numhorizons::Int=100, 
 	getfailureprobs = BIGUQ.makegetfailureprobabilities_mc(modelparams)
 	maxfailureprobs = Array{Float64}(undef, numhorizons, length(madsdata["Choices"]))
 	local horizons::Vector{Float64}
-	local likelihoodparams::Array{Float64, 2} = zeros(0, 0)
+	local likelihoodparams::Matrix{Float64} = zeros(0, 0)
 	Mads.madsinfo("Choices:")
 	for i = eachindex(madsdata["Choices"])
 		Mads.madsinfo("Choice #$i: $(madsdata["Choices"][i]["name"])")

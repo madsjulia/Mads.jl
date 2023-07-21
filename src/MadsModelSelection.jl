@@ -8,7 +8,7 @@ $(DocumentFunction.documentfunction(modelinformationcriteria;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "par"=>"parameter array")))
 """
-function modelinformationcriteria(madsdata::AbstractDict, par::Array{Float64}=Vector{Float64}(undef, 0))
+function modelinformationcriteria(madsdata::AbstractDict, par::AbstractVector{Float64}=Vector{Float64}(undef, 0))
 	f = Mads.forward(madsdata, par)
 	l = Mads.localsa(madsdata; datafiles=false, imagefiles=false, par=par, obs=collect(values(f)))
 	if isnothing(l)
