@@ -236,7 +236,7 @@ Set MADS debug level
 $(DocumentFunction.documentfunction(setdebuglevel;
 argtext=Dict("level"=>"debug level")))
 """
-function setdebuglevel(level::Int)
+function setdebuglevel(level::Integer)
 	global debuglevel = level
 end
 
@@ -246,7 +246,7 @@ Set MADS verbosity level
 $(DocumentFunction.documentfunction(setverbositylevel;
 argtext=Dict("level"=>"debug level")))
 """
-function setverbositylevel(level::Int)
+function setverbositylevel(level::Integer)
 	global verbositylevel = level
 end
 
@@ -477,7 +477,7 @@ $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
 			"quiet"=>"[default=`true`]")))
 """
-function setseed(seed::Integer=-1, quiet::Bool=true; rng=nothing)
+function setseed(seed::Integer=-1, quiet::Bool=true; rng::Union{Nothing,Random.AbstractRNG}=nothing)
 	if seed >= 0
 		Mads.seed!(seed, rng)
 		!quiet && @info("New seed: $seed")

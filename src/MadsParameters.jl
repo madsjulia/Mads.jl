@@ -316,7 +316,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdictarray"=>"dictionary of arrays with initial model parameter values",
             "idx"=>"index of the dictionary of arrays with initial model parameter values")))
 """
-function setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int=1)
+function setparamsinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Integer=1)
 	paramkeys = getparamkeys(madsdata)
 	for k in paramkeys
 		if haskey(paramdict, k)
@@ -339,7 +339,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "paramdictarray"=>"dictionary of arrays with initial model parameter values",
             "idx"=>"index of the dictionary of arrays with initial model parameter values")))
 """
-function setsourceinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Int=1)
+function setsourceinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::Integer=1)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
 		paramkeys = getparamkeys(madsdata)
@@ -361,7 +361,7 @@ function setsourceinit!(madsdata::AbstractDict, paramdict::AbstractDict, idx::In
 	end
 end
 
-function getoptparams(madsdata::AbstractDict, parameterarray::Array=getparamsinit(madsdata), optparameterkey::Array=getoptparamkeys(madsdata))
+function getoptparams(madsdata::AbstractDict, parameterarray::AbstractArray=getparamsinit(madsdata), optparameterkey::AbstractArray=getoptparamkeys(madsdata))
 	if length(optparameterkey) == 0
 		optparameterkey = getoptparamkeys(madsdata)
 	end

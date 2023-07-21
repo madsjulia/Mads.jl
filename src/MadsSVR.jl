@@ -89,7 +89,7 @@ function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float6
 	return y
 end
 =#
-function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Array{Float64, 2})
+function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Matrix{Float64})
 	npred = length(svrmodel)
 	y = Array{Float64}(undef, 0, size(paramarray, 1))
 	for i=1:npred
@@ -133,7 +133,7 @@ argtext=Dict("svrmodel"=>"array of SVR models",
 			"rootname"=>"root name",
 			"numberofsamples"=>"number of samples")))
 """
-function svrdump(svrmodel::Vector{SVR.svmmodel}, rootname::AbstractString, numberofsamples::Int)
+function svrdump(svrmodel::Vector{SVR.svmmodel}, rootname::AbstractString, numberofsamples::Integer)
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
 	for i=1:npred
@@ -156,7 +156,7 @@ Returns:
 
 - Array of SVR models for each model prediction
 """
-function svrload(npred::Int, rootname::AbstractString, numberofsamples::Int)
+function svrload(npred::Integer, rootname::AbstractString, numberofsamples::Integer)
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	for i=1:npred
 		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")

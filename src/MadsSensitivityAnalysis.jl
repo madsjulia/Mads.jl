@@ -277,7 +277,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::AbstractVector, J::Array, numsamples::Number; seed::Integer=-1, rng=nothing, scale::Number=1)
+function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, scale::Number=1)
 	u, d, v = LinearAlgebra.svd(J' * J)
 	done = false
 	vo = copy(v)
@@ -328,7 +328,7 @@ Returns:
 
 - vector of log-likelihoods after reweighing
 """
-function reweighsamples(madsdata::AbstractDict, predictions::Array, oldllhoods::AbstractVector)
+function reweighsamples(madsdata::AbstractDict, predictions::AbstractArray, oldllhoods::AbstractVector)
 	obskeys = getobskeys(madsdata)
 	weights = getobsweight(madsdata)
 	targets = getobstarget(madsdata)
@@ -354,7 +354,7 @@ Returns:
 
 - array of important samples
 """
-function getimportantsamples(samples::Array, llhoods::AbstractVector)
+function getimportantsamples(samples::AbstractArray, llhoods::AbstractVector)
 	sortedlhoods = sort(exp.(llhoods), rev=true)
 	sortedprobs = sortedlhoods / sum(sortedlhoods)
 	cumprob = 0.
@@ -385,7 +385,7 @@ Returns:
 - vector of sample means
 - vector of sample variances
 """
-function weightedstats(samples::Array, llhoods::AbstractVector)
+function weightedstats(samples::AbstractArray, llhoods::AbstractVector)
 	wv = StatsBase.Weights(exp.(llhoods))
 	return Statistics.mean(samples, wv, 1), Statistics.var(samples, wv, 1; corrected=false)
 end
@@ -453,7 +453,7 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed; rng=rng)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -601,7 +601,7 @@ Returns:
 
 - `true` when successfully loaded, `false` when it is not
 """
-function loadsaltellirestart!(evalmat::Array, matname::AbstractString, restartdir::AbstractString)
+function loadsaltellirestart!(evalmat::AbstractArray, matname::AbstractString, restartdir::AbstractString)
 	if restartdir == ""
 		return false
 	end
@@ -622,7 +622,7 @@ argtext=Dict("evalmat"=>"saved array",
 "matname"=>"matrix (array) name (defines the name of the loaded file)",
 "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function savesaltellirestart(evalmat::Array, matname::AbstractString, restartdir::AbstractString)
+function savesaltellirestart(evalmat::AbstractArray, matname::AbstractString, restartdir::AbstractString)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
 		FileIO.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
@@ -641,7 +641,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
@@ -899,7 +899,7 @@ for mi = eachindex(saltelli_functions)
 		"""
 		Parallel version of $(saltelli_functions[index])
 		"""
-		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng=nothing, restartdir::AbstractString="")
+		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="")
 			Mads.setseed(seed; rng=rng)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -1133,7 +1133,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1533,7 +1533,6 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			missing_observations = Vector{String}(undef, 0)
 			missing_parameters = Vector{String}(undef, 0)
 			if !flag_bad_data
-
 				for o in keys(md(["Observations"]))
 					if !haskey(efast_results["mes"], k)
 						flag_bad_data = true

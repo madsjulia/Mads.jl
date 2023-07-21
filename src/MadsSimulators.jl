@@ -9,7 +9,7 @@ argtext=Dict("filename"=>"amanzi input file name",
             "setup"=>"bash script to setup Amanzi environmental variables [default=`\"source-amanzi-setup\"`]"),
 keytext=Dict("amanzi_exe"=>"full path to the Amanzi executable")))
 """
-function amanzi(filename::AbstractString, nproc::Int=Mads.nprocs_per_task_default, quiet::Bool=Mads.quiet, observation_filename::AbstractString="observations.out", setup::AbstractString="source-amanzi-setup"; amanzi_exe::AbstractString="")
+function amanzi(filename::AbstractString, nproc::Integer=Mads.nprocs_per_task_default, quiet::Bool=Mads.quiet, observation_filename::AbstractString="observations.out", setup::AbstractString="source-amanzi-setup"; amanzi_exe::AbstractString="")
 	if quiet
 		quiet_string = "&> /dev/null"
 	else

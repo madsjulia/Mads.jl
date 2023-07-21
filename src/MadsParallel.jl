@@ -336,7 +336,7 @@ argtext=Dict("first"=>"first [default=`0`]", "last"=>"last [default=`18`]")))
 Returns
 - array string of mads servers
 """
-function setmadsservers(first::Int=0, last::Int=18)
+function setmadsservers(first::Integer=0, last::Integer=18)
 	map(i->(@Printf.sprintf "mads%02d" i), first:last)
 end
 

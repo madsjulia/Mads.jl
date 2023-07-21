@@ -15,7 +15,7 @@ Dumps:
 
 - image file with name `filename` and in specified `format`
 """
-function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Dict; filename::AbstractString="", format::AbstractString="", maxprob::Number=1.0, maxhoriz::Number=Inf)
+function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::AbstractDict; filename::AbstractString="", format::AbstractString="", maxprob::Number=1.0, maxhoriz::Number=Inf)
 	maxfailureprobs = bigdtresults["maxfailureprobs"]
 	horizons = bigdtresults["horizons"]
 	if filename == ""

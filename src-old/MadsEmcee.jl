@@ -22,7 +22,7 @@ Example:
 Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
 ```
 """
-function emcee(llhood::Function, numwalkers::Int, x0::Array, numsamples_perwalker::Int, thinning::Int, a=2.)
+function emcee(llhood::Function, numwalkers::Integer, x0::AbstractArray, numsamples_perwalker::Integer, thinning::Integer, a::Number=2.)
 	@assert length(size(x0)) == 2
 	x = copy(x0)
 	chain = Array{Float64}(undef, size(x0, 1), numwalkers, div(numsamples_perwalker, thinning))
@@ -70,7 +70,7 @@ Returns:
 - new MCMC chain
 - log likelihoods of the samples in the new chain
 """
-function flattenmcmcarray(chain::Array, llhoodvals::Array)
+function flattenmcmcarray(chain::AbstractArray, llhoodvals::AbstractArray)
 	numdims, numwalkers, numsteps = size(chain)
 	newchain = Array{Float64}(undef, numdims, numwalkers * numsteps)
 	for j = 1:numsteps

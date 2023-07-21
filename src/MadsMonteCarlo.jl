@@ -21,7 +21,64 @@ function p10_p50_p90(x::Matrix)
 	return p10, xmean, p90
 end
 
-function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng=nothing, kw...)
+function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
+	if isfile(filename)
+		@info("Load AffineInvariantMCMC results from $(filename) ...")
+		chain, llhoods, observations, params, obs = JLD2.load(f_emcee_parameters_jld, "chain",  "llhoods", "observations", "params", "obs")
+		@info("AffineInvariantMCMC results loaded: number of parameters = $(size(chain, 1)); number of realizations = $(size(chain, 2))")
+		flag_bad_data = false
+		if length(observations) != length(madsdata["Observations"])
+			@warn("Different number of observations (Mads $(length(madsdata["Observations"])) vs Input $(size(observations, 1))!")
+			flag_bad_data = true
+		end
+		if size(chain, 1) != length(madsdata["Parameters"])
+			@warn("Different number of parameters (Mads $(length(madsdata["Parameters"])) vs Input $(size(chain, 1)))!")
+			flag_bad_data = true
+		end
+		missing_observations = Vector{String}(undef, 0)
+		missing_parameters = Vector{String}(undef, 0)
+		if !flag_bad_data
+			for o in keys(madsdata(["Observations"]))
+				if !(o in obs)
+					flag_bad_data = true
+					push!(missing_observations, o)
+				end
+			end
+			for p in keys(madsdata(["Parameters"]))
+				if !(p in params)
+					flag_bad_data = true
+					push!(missing_parameters, p)
+				end
+			end
+		end
+		if flag_bad_data
+			@warn("Loaded data is not compatible with the solved problem!")
+			if length(missing_observations) > 0
+				@info("Missing observations: $(missing_observations)")
+			end
+			if length(missing_parameters) > 0
+				@info("Missing parameters: $(missing_parameters)")
+			end
+			return nothing, nothing, nothing
+		else
+			return chain, llhoods, observations
+		end
+	end
+end
+
+function emceesampling(madsdata::AbstractDict; filename::AbstractString, load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, kw...)
+	if load
+		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
+		if isnothing(chain)
+			if execute
+				@info("AffineInvariantMCMC will be executed!")
+			else
+				return nothing, nothing, nothing
+			end
+		else
+			return chain, llhoods, observations
+		end
+	end
 	if numwalkers <= 1
 		numwalkers = 2
 	end
@@ -42,10 +99,26 @@ function emceesampling(madsdata::AbstractDict; numwalkers::Integer=10, sigma::Nu
 			p0[i, j] = pmin[i] + rand(Mads.rng, d) * (pmax[i] - pmin[i])
 		end
 	end
-	return emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, kw...)
+	chain, llhoods, observations = emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, save=false, kw...)
+	if save && filename != ""
+		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations)
+	end
+	return chain, llhoods, observations
 end
-function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng=nothing, distributed_function::Bool=false)
-	@assert length(size(p0)) == 2
+
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString, load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG}=nothing, distributed_function::Bool=false)
+	if load
+		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
+		if isnothing(chain)
+			if execute
+				@info("AffineInvariantMCMC will be executed!")
+			else
+				return nothing, nothing, nothing
+			end
+		else
+			return chain, llhoods, observations
+		end
+	end
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -57,13 +130,18 @@ function emceesampling(madsdata::AbstractDict, p0::Array; numwalkers::Integer=10
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; rng=Mads.rng)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; rng=Mads.rng, save=false)
 	newnsteps = div(nsteps, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; rng=Mads.rng)
-	return AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; rng=Mads.rng, save=false)
+	chain, llhoods =  AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
+	observations = Mads.forward(madsdata, permutedims(chain))
+	if save && filename != ""
+		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations)
+	end
+	return chain, llhoods, observations
 end
 
 @doc """
@@ -83,7 +161,7 @@ keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the nu
 Returns:
 
 - MCMC chain
-- log likelihoods of the final samples in the chain
+- log-likelihoods of the final samples in the chain
 
 Examples:
 
@@ -95,7 +173,7 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 
 if isdefined(Mads, :Klara)
 	# && isdefined(Klara, :BasicContMuvParameter)
-	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng=nothing)
+	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing)
 		Mads.setseed(seed; rng=rng)
 		madsloglikelihood = makemadsloglikelihood(madsdata)
 		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -160,7 +238,7 @@ Dumps:
 
 - the file containing MCMC chain
 """
-function savemcmcresults(chain::Array, filename::AbstractString)
+function savemcmcresults(chain::AbstractArray, filename::AbstractString)
 	f = open(filename, "w")
 	print(f, "Min: ")
 	JSON.print(f, minimum(chain, 1)[:])
@@ -275,7 +353,7 @@ Returns:
 
 - a parameter dictionary of arrays
 """
-function paramarray2dict(madsdata::AbstractDict, array::Array)
+function paramarray2dict(madsdata::AbstractDict, array::AbstractArray)
 	paramkeys = getoptparamkeys(madsdata)
 	dict = OrderedCollections.OrderedDict()
 	for i = eachindex(paramkeys)
