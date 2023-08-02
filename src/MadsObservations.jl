@@ -456,10 +456,10 @@ function createobservations!(madsdata::AbstractDict, time::AbstractVector, obser
 	nT = length(time)
 	@assert nT == length(observation)
 	if !haskey(madsdata, "Wells")
-		observationsdict = OrderedCollections.OrderedDict()
+		observationsdict = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 		for i in 1:nT
 			obskey = string("o", time[i])
-			data = OrderedCollections.OrderedDict()
+			data = OrderedCollections.OrderedDict{String,Any}()
 			data["target"] = observation[i]
 			if weight_type == "constant"
 				data["weight"] = weight
@@ -477,7 +477,7 @@ function createobservations!(madsdata::AbstractDict, time::AbstractVector, obser
 		for wellname in keys(madsdata["Wells"])
 			observationsarray = Array{Dict{Any,Any}}(undef, nT)
 			for i in 1:nT
-				data = OrderedCollections.OrderedDict()
+				data = OrderedCollections.OrderedDict{String,Any}()
 				data["c"] = observation[i]
 				if weight_type == "constant"
 					data["weight"] = weight
@@ -497,9 +497,9 @@ function createobservations!(madsdata::AbstractDict, time::AbstractVector, obser
 	nothing
 end
 function createobservations!(madsdata::AbstractDict, observation::AbstractDict; logtransform::Bool=false, weight_type::AbstractString="constant", weight::Number=1)
-	observationsdict = OrderedCollections.OrderedDict()
+	observationsdict = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for k in keys(observation)
-		data = OrderedCollections.OrderedDict()
+		data = OrderedCollections.OrderedDict{String,Any}()
 		data["target"] = observation[k]
 		if weight_type == "constant"
 			if weight != 1
@@ -685,14 +685,14 @@ $(DocumentFunction.documentfunction(wells2observations!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function wells2observations!(madsdata::AbstractDict)
-	observations = OrderedCollections.OrderedDict()
+	observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for wellkey in keys(madsdata["Wells"])
 		if madsdata["Wells"][wellkey]["on"]
 			if haskey(madsdata["Wells"][wellkey], "obs") && !isnothing(madsdata["Wells"][wellkey]["obs"])
 				for i = eachindex(madsdata["Wells"][wellkey]["obs"])
 					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
 					obskey = wellkey * "_" * string(t)
-					data = OrderedCollections.OrderedDict()
+					data = OrderedCollections.OrderedDict{String,Any}()
 					data["well"] = wellkey
 					data["time"] = t
 					data["index"] = i

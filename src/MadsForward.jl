@@ -172,7 +172,7 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 	end
 
 	x = xmin
-	dictwells = OrderedCollections.OrderedDict()
+	dictwells = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for i in 1:nx
 		x += dx
 		y = ymin
@@ -182,14 +182,14 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 			for k in 1:nz
 				z += dz
 				wellname = "w_$(i)_$(j)_$(k)"
-				dictwells[wellname] = OrderedCollections.OrderedDict()
+				dictwells[wellname] = OrderedCollections.OrderedDict{String,Any}()
 				dictwells[wellname]["x"] = x
 				dictwells[wellname]["y"] = y
 				dictwells[wellname]["z0"] = z
 				dictwells[wellname]["z1"] = z
 				dictwells[wellname]["on"] = true
 				arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
-				dictobs = OrderedCollections.OrderedDict()
+				dictobs = OrderedCollections.OrderedDict{String,Any}()
 				dictobs["t"] = time
 				dictobs["c"] = 0
 				dictobs["weight"] = 1

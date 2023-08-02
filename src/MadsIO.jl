@@ -908,7 +908,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobskeys(madsdata))
-	results = OrderedCollections.OrderedDict()
+	results = OrderedCollections.OrderedDict{String,Number}()
 	if haskey(madsdata, "Instructions")
 		results = readobservations(madsdata, obskeys)
 	end

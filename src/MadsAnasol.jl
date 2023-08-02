@@ -74,7 +74,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function addsourceparameters!(madsdata::AbstractDict)
 	if haskey(madsdata, "Sources")
 		if !haskey(madsdata, "Parameters")
-			madsdata["Parameters"] = OrderedCollections.OrderedDict()
+			madsdata["Parameters"] = OrderedCollections.OrderedDict{String,Any}()
 		end
 		for i = eachindex(madsdata["Sources"])
 			sourcetype = collect(keys(madsdata["Sources"][i]))[1]
@@ -92,7 +92,7 @@ function addsourceparameters!(madsdata::AbstractDict)
 					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = OrderedCollections.OrderedDict()
+						madsdata["Expressions"] = OrderedCollections.OrderedDict{String,Any}()
 					end
 					madsdata["Expressions"][string("source", i, "_", sourceparam)] = OrderedCollections.OrderedDict{String,Any}()
 					for pf in keys(madsdata["Sources"][i][sourcetype][sourceparam])

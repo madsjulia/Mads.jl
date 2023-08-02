@@ -67,7 +67,7 @@ Returns:
 """
 function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVector{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true, quiet::Bool=true) # make MADS command function
 	# remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing Distributed.pmaps -- they aren't used here are they can require a lot of communication
-	madsdata = Dict()
+	madsdata = Dict{String,Any}()
 	if !haskey(madsdata_in, "Sources")
 		for k in keys(madsdata_in)
 			if k != "Observations" || k != "Wells"
@@ -109,7 +109,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		"MADS command function based on a Julia function '$(madsdata["Julia function"])'"
 		function madscommandfunctionvector(parameters::AbstractDict)
 			o = jf(collect(values(parameters)))
-			return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
+			return OrderedCollections.OrderedDict{String,Number}(zip(Mads.getobskeys(madsdata), o))
 		end
 		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
@@ -163,7 +163,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 				"MADS command function"
 				function madscommandfunctionexternal(parameters::AbstractVector)
 					o = madsdata["Julia function"](parameters)
-					return OrderedCollections.OrderedDict(zip(Mads.getobskeys(madsdata), o))
+					return OrderedCollections.OrderedDict{String,Number}(zip(Mads.getobskeys(madsdata), o))
 				end
 				madsdatacommandfunction = madscommandfunctionexternal
 			else
