@@ -557,17 +557,21 @@ for i = eachindex(getfunction)
 	Core.eval(Mads, q)
 end
 
-function showparameters(madsdata::AbstractDict, result::AbstractDict)
+function showparameters(madsdata::AbstractDict, result::AbstractDict; kw...)
 	md = deepcopy(madsdata)
 	map(i->(md["Parameters"][i]["init"]=result[i]), Mads.getoptparamkeys(md))
-	showparameters(md)
+	showparameters(md; kw...)
 end
-function showparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), all::Bool=false)
+function showparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata); all::Bool=false, rescale::Bool=true)
 	if all
 		parkeys = Mads.getparamkeys(madsdata)
 	end
-	printparameters(madsdata, parkeys, false)
-	println("Number of optimizable parameters: $(length(parkeys))")
+	printparameters(madsdata, parkeys, false; rescale=rescale)
+	if parkeys == Mads.getoptparamkeys(madsdata)
+		println("Number of optimizable parameters: $(length(parkeys))")
+	else
+		println("Number of parameters: $(length(parkeys))")
+	end
 end
 @doc """
 Show parameters in the MADS problem dictionary
@@ -576,14 +580,14 @@ $(DocumentFunction.documentfunction(showparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """ showparameters
 
-function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getparamkeys(madsdata))
-	printparameters(madsdata, parkeys, true)
+function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getparamkeys(madsdata); rescale::Bool=true)
+	printparameters(madsdata, parkeys, true; rescale=rescale)
 	println("Number of parameters: $(length(parkeys))")
 end
-function showallparameters(madsdata::AbstractDict, result::AbstractDict)
+function showallparameters(madsdata::AbstractDict, result::AbstractDict; kw...)
 	md = deepcopy(madsdata)
 	map(i->(md["Parameters"][i]["init"]=result[i]), collect(keys(result)))
-	showallparameters(md)
+	showallparameters(md; kw...)
 end
 @doc """
 Show all parameters in the MADS problem dictionary
@@ -594,7 +598,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 showparameterestimates = showparameters
 
-function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), showtype::Bool=true)
+function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), showtype::Bool=true, rescale::Bool=true)
 	pardict = madsdata["Parameters"]
 	maxl = 0
 	maxk = 0
@@ -620,7 +624,7 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 			@warn("No initial value or expression for parameter $(parkey)")
 			continue
 		end
-		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
+		if rescale && haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
 			bmin = pardict[parkey]["minorig"]
 			bmax = pardict[parkey]["maxorig"]
 			v = v * (bmax - bmin) + bmin
@@ -663,6 +667,12 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		end
 		if haskey(pardict[parkey], "dist")
 			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
+		end
+		if !rescale && haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
+			s *= @Printf.sprintf "minorig = %15g " pardict[parkey]["minorig"]
+			s *= @Printf.sprintf "maxorig = %15g " pardict[parkey]["maxorig"]
+		else
+			s *= " <- rescaled"
 		end
 		s *= "\n"
 		push!(p, s)

@@ -396,7 +396,7 @@ Show observations in the MADS problem dictionary
 $(DocumentFunction.documentfunction(showobservations;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata))
+function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata); rescale::Bool=true)
 	min = Mads.getobsmin(madsdata)
 	max = Mads.getobsmax(madsdata)
 	dist = Mads.getobsdist(madsdata)
@@ -406,7 +406,7 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 		w = getweight(obsdict[obskey])
 		t = gettarget(obsdict[obskey])
 		o = gettime(obsdict[obskey])
-		if haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
+		if rescale && haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
 			bmin = obsdict[obskey]["minorig"]
 			bmax = obsdict[obskey]["maxorig"]
 			t = t * (bmax - bmin) + bmin
@@ -423,6 +423,12 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 		elseif haskey(obsdict[obskey], "min") && haskey(obsdict[obskey], "max")
 			s *= @Printf.sprintf " min = %15g" min[i]
 			s *= @Printf.sprintf " max = %15g" max[i]
+		end
+		if !rescale && haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
+			s *= @Printf.sprintf " minorig = %15g" obsdict[obskey]["minorig"]
+			s *= @Printf.sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]
+		else
+			s *= " <- rescaled"
 		end
 		s *= "\n"
 		push!(p, s)
