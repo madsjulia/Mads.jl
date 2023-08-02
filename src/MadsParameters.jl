@@ -566,7 +566,7 @@ function showparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.get
 	if all
 		parkeys = Mads.getparamkeys(madsdata)
 	end
-	printparameters(madsdata, parkeys, false; rescale=rescale)
+	printparameters(madsdata, parkeys; showtype=false, rescale=rescale)
 	if parkeys == Mads.getoptparamkeys(madsdata)
 		println("Number of optimizable parameters: $(length(parkeys))")
 	else
@@ -581,7 +581,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """ showparameters
 
 function showallparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getparamkeys(madsdata); rescale::Bool=true)
-	printparameters(madsdata, parkeys, true; rescale=rescale)
+	printparameters(madsdata, parkeys; showtype=true, rescale=rescale)
 	println("Number of parameters: $(length(parkeys))")
 end
 function showallparameters(madsdata::AbstractDict, result::AbstractDict; kw...)
@@ -598,7 +598,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 showparameterestimates = showparameters
 
-function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata), showtype::Bool=true, rescale::Bool=true)
+function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata); showtype::Bool=true, rescale::Bool=true)
 	pardict = madsdata["Parameters"]
 	maxl = 0
 	maxk = 0
