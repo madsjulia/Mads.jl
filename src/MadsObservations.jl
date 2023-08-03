@@ -424,11 +424,13 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 			s *= @Printf.sprintf " min = %15g" min[i]
 			s *= @Printf.sprintf " max = %15g" max[i]
 		end
-		if !rescale && haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
-			s *= @Printf.sprintf " minorig = %15g" obsdict[obskey]["minorig"]
-			s *= @Printf.sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]
-		else
-			s *= " <- rescaled"
+		if haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
+			if rescale
+				s *= " <- rescaled"
+			else
+				s *= @Printf.sprintf " minorig = %15g" obsdict[obskey]["minorig"]
+				s *= @Printf.sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]
+			end
 		end
 		s *= "\n"
 		push!(p, s)
