@@ -24,7 +24,7 @@ function welcome()
 	println("$(d1)  |__|        |__| $(d2) /__/     |___| $(d3) |____________\\ $(d4)  \\__________/$(tx)")
 	println("")
 	println("$(bl)MADS$(tx) is an integrated high-performance computational framework for data- and model-based analyses.")
-	println("$(bl)MADS$(tx) can perform: Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.")
+	println("$(bl)MADS$(tx) performs Sensitivity Analysis, Parameter Estimation, Model Inversion and Calibration, Uncertainty Quantification, Model Selection and Model Averaging, Model Reduction and Surrogate Modeling, Machine Learning, Decision Analysis and Support.")
 end
 
 """
