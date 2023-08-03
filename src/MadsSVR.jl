@@ -1,7 +1,7 @@
 import SVR
 import OrderedCollections
 
-function svrtraining(madsdata::AbstractDict, paramarray::Array{Float64,2}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
+function svrtraining(madsdata::AbstractDict, paramarray::AbstractMatrix{Float64}; check::Bool=false, savesvr::Bool=false, addminmax::Bool=true, svm_type::Int32=SVR.EPSILON_SVR, kernel_type::Int32=SVR.RBF, degree::Integer=3, gamma::Float64=1/numberofsamples, coef0::Float64=0.0, C::Float64=1000.0, nu::Float64=0.5, cache_size::Float64=100.0, epsilon::Float64=0.1, shrinking::Bool=true, probability::Bool=false, verbose::Bool=false, tol::Float64=0.001)
 	numberofsamples = size(paramarray, 1)
 	predictions = Mads.forward(madsdata, permutedims(paramarray))
 
@@ -89,7 +89,7 @@ function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Vector{Float6
 	return y
 end
 =#
-function svrprediction(svrmodel::Vector{SVR.svmmodel}, paramarray::Matrix{Float64})
+function svrprediction(svrmodel::AbstractVector{SVR.svmmodel}, paramarray::AbstractMatrix{Float64})
 	npred = length(svrmodel)
 	y = Array{Float64}(undef, 0, size(paramarray, 1))
 	for i=1:npred
@@ -115,7 +115,7 @@ Free SVR
 $(DocumentFunction.documentfunction(svrfree;
 argtext=Dict("svrmodel"=>"array of SVR models")))
 """
-function svrfree(svrmodel::Vector{SVR.svmmodel})
+function svrfree(svrmodel::AbstractVector{SVR.svmmodel})
 	npred = length(svrmodel)
 	for i=1:npred
 		if isassigned(svrmodel, i)
@@ -133,7 +133,7 @@ argtext=Dict("svrmodel"=>"array of SVR models",
 			"rootname"=>"root name",
 			"numberofsamples"=>"number of samples")))
 """
-function svrdump(svrmodel::Vector{SVR.svmmodel}, rootname::AbstractString, numberofsamples::Integer)
+function svrdump(svrmodel::AbstractVector{SVR.svmmodel}, rootname::AbstractString, numberofsamples::Integer)
 	npred = length(svrmodel)
 	Mads.mkdir("svrmodels")
 	for i=1:npred
@@ -206,12 +206,12 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	optnames = Mads.getoptparamkeys(madsdata)
 	obsnames = Mads.getobskeys(madsdata)
 	npreds = length(obsnames)
-	function svrexec(paramarray::Union{Vector{Float64}, Array{Float64, 2}})
+	function svrexec(paramarray::Union{AbstractVector{Float64},AbstractMatrix{Float64}})
 		return svrprediction(svrmodel, paramarray)
 	end
 	function svrexec(paramdict::AbstractDict)
 		if length(paramdict[optnames[1]]) == 1
-			d = OrderedCollections.OrderedDict{String, Float64}()
+			d = OrderedCollections.OrderedDict{String,Float64}()
 			for k in optnames
 				d[k] = paramdict[k]
 			end

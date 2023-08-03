@@ -19,10 +19,10 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 		elseif haskey(madsdata_c, "Observations")
 			setobsweights!(madsdata_c, 1)
 		end
-		f = makemadscommandfunction(madsdata_c)
 	else
-		f = makemadscommandfunction(madsdata)
+		madsdata_c = madsdata
 	end
+	f = makemadscommandfunction(madsdata_c)
 	kk = collect(keys(paramdict))
 	l = length(paramdict[kk[1]])
 	for k = kk[2:end]
@@ -32,15 +32,18 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 	paraminitdict = Mads.getparamdict(madsdata)
 	if l == 1
 		p = merge(paraminitdict, paramdict)
-		return convert(OrderedCollections.OrderedDict{String,Float64}, f(p))
+		# @show p
+		r = convert(OrderedCollections.OrderedDict{String,Float64}, f(p))
+		# @show r
+		return r
 	else
-		optkeys = Mads.getoptparamkeys(madsdata)
+		optkeys = Mads.getoptparamkeys(madsdata_c)
 		if length(optkeys) == length(kk)
 			paramarray = permutedims(hcat(map(i->collect(paramdict[i]), optkeys)...))
 		else
 			@warn("Something is wrong!")
 		end
-		return forward(madsdata, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
+		return forward(madsdata_c, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
 function forward(madsdata::AbstractDict, paramarray::AbstractArray; all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
@@ -79,14 +82,14 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; all::Bool=fa
 		elseif haskey(madsdata_c, "Observations")
 			setobsweights!(madsdata_c, 1)
 		end
-		f = makearrayfunction(madsdata_c)
 	else
-		f = makearrayfunction(madsdata)
+		madsdata_c = madsdata
 	end
+	f = makearrayfunction(madsdata_c)
 	local r
 	if length(s) == 2
 		local rv
-		restartdir = getrestartdir(madsdata)
+		restartdir = getrestartdir(madsdata_c)
 		if checkpointfrequency != 0 && restartdir != ""
 			if s[2] == np
 				rv = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)

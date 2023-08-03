@@ -6,7 +6,7 @@ import DocumentFunction
 import BlackBoxOptim
 import Random
 
-function p10_p50_p90(x::Matrix)
+function p10_p50_p90(x::AbstractMatrix{Number})
 	xmean = Statistics.mean(x; dims=2)
 	p10 = similar(xmean)
 	p90 = similar(xmean)

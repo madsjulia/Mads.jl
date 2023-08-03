@@ -33,7 +33,7 @@ function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractSt
 		for j in uniquecolumns
 			obsname = string(obstring, j, i)
 			dump && write(f, string(" !", obsname, "!"))
-			observationdict[obsname] = Dict{String,Number}("target"=>0)
+			observationdict[obsname] = Dict{String,Float64}("target"=>0.)
 		end
 		dump && write(f, string(poststring, "\n"))
 	end
@@ -266,25 +266,25 @@ function createproblem(madsdata::AbstractDict, outfilename::AbstractString)
 	return nothing
 end
 function createproblem(madsdata::AbstractDict, predictions::AbstractDict, outfilename::AbstractString)
-	newmadsdata = createproblem(madsdata, predictions)
-	Mads.dumpyamlmadsfile(newmadsdata, outfilename)
+	madsdata_new = createproblem(madsdata, predictions)
+	Mads.dumpyamlmadsfile(madsdata_new, outfilename)
 	return nothing
 end
 function createproblem(madsdata::AbstractDict, predictions::AbstractDict)
-	newmadsdata = deepcopy(madsdata)
-	observationsdict = newmadsdata["Observations"]
-	if haskey(newmadsdata, "Wells")
-		wellsdict = newmadsdata["Wells"]
+	madsdata_c = deepcopy(madsdata)
+	observationsdict = madsdata_c["Observations"]
+	if haskey(madsdata_c, "Wells")
+		wellsdict = madsdata_c["Wells"]
 	end
 	for k in keys(predictions)
 		observationsdict[k]["target"] = predictions[k]
-		if haskey( observationsdict[k], "well" )
+		if haskey(observationsdict[k], "well")
 			well = observationsdict[k]["well"]
 			i = observationsdict[k]["index"]
 			wellsdict[well]["obs"][i]["c"] = predictions[k]
 		end
 	end
-	return newmadsdata
+	return madsdata_c
 end
 
 @doc """

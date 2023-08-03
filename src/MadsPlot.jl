@@ -198,6 +198,11 @@ function plotmatches(madsdata::AbstractDict, rx::Union{AbstractString,Regex}=r""
 		plotmatches(madsdata, r; kw...)
 	end
 end
+function plotmatches(madsdata::AbstractDict, params::AbstractVector, arg...; kw...)
+	params_dict = OrderedCollections.OrderedDict(zip(Mads.getparamkeys(madsdata), params))
+	results = Mads.forward(madsdata, params_dict)
+	plotmatches(madsdata, results, arg...; kw...)
+end
 function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{AbstractString,Regex}; title::AbstractString="", notitle::Bool=false, kw...)
 	newobs = empty(madsdata["Observations"])
 	newresult = empty(result)
@@ -215,12 +220,12 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{Abs
 			!notitle && (title = typeof(rx) == Regex ? rx.pattern : rx)
 		end
 	end
-	newmadsdata = copy(madsdata)
-	newmadsdata["Observations"] = newobs
-	if haskey(newmadsdata, "Wells")
-		delete!(newmadsdata, "Wells")
+	madsdata_c = copy(madsdata)
+	madsdata_c["Observations"] = newobs
+	if haskey(madsdata_c, "Wells")
+		delete!(madsdata_c, "Wells")
 	end
-	plotmatches(newmadsdata, newresult; title=title, notitle=notitle, kw...)
+	plotmatches(madsdata_c, newresult; title=title, notitle=notitle, kw...)
 end
 function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bool=true, filename::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="Time", ytitle::AbstractString="Observation", ymin=nothing, ymax=nothing,  xmin=nothing, xmax=nothing, separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=4Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, obs_plot_dots::Bool=true, noise::Number=0, dpi::Number=Mads.imagedpi, colors::Vector{String}=Mads.colors, display::Bool=true, notitle::Bool=false, truthtitle::AbstractString="Truth", predictiontitle::AbstractString="Prediction", gmk=[Gadfly.Guide.manual_color_key("", [truthtitle, predictiontitle], ["red", "blue"]; shape=[Gadfly.Shape.circle, Gadfly.Shape.hline], size=[pointsize * 1.3; linewidth * 3])])
 	obs_flag = isobs(madsdata, dict_in)

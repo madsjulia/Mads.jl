@@ -49,7 +49,7 @@ function getparamkeys(madsdata::AbstractDict; filter::AbstractString="")
 end
 
 """
-Get dictionary with all parameters and their respective initial values
+Get a dictionary with all parameters and their respective initial values
 
 $(DocumentFunction.documentfunction(getparamdict;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
@@ -63,6 +63,9 @@ function getparamdict(madsdata::AbstractDict)
 		paramkeys = Mads.getparamkeys(madsdata)
 		paramdict = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		return paramdict
+	else
+		@warn("Input Dictionary does not contain parameters!")
+		return Dict()
 	end
 end
 

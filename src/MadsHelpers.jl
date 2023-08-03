@@ -608,7 +608,7 @@ end
 
 function pkginstalled()
 	deps = Pkg.dependencies()
-	installs = Dict{String, VersionNumber}()
+	installs = Dict{String,VersionNumber}()
 	for (uuid, dep) in deps
 		dep.is_direct_dep || continue
 		isnothing(dep.version) && continue
