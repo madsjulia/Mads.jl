@@ -190,7 +190,7 @@ function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bo
 		return vec(E)
 	end
 
-	function mf_g_lm(x::AbstractVector; dx=nothing, center=nothing)
+	function mf_g_lm(x::AbstractVector; dx::Union{Nothing,Number}=nothing, center::Union{Nothing,Number}=nothing)
 		W, H = mf_reshape(x)
 		Wb = zeros(nP, nk)
 		Hb = zeros(nk, nC)

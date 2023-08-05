@@ -25,7 +25,7 @@ function rmsenan(t::AbstractVector, o::AbstractVector)
 	return sqrt( sum( (t[ii] .- o[ii]) .^ 2.) ./ sum(ii) )
 end
 
-function sumnan(X; dims=nothing, kw...)
+function sumnan(X; dims::Union{Nothing,Integer}=nothing, kw...)
 	if isnothing(dims)
 		return sum(X[.!isnan.(X)]; kw...)
 	else
