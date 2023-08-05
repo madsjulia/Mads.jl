@@ -1042,7 +1042,7 @@ function plotseries(dict::AbstractDict, filename::AbstractString=""; separate_fi
 		for (i, k) in enumerate(keys(dict))
 			fn = filename == "" ? filename : f * "_" * "$(names[i])" * e
 			v = normalize ? dict[k] ./ maximum(dict[k]) : dict[k]
-			plotseries(v, fn; title=names[i], kw...)
+			plotseriesengine(v, fn; title=names[i], kw...)
 		end
 	else
 		m = Matrix{Float64}(undef, length(dict[first(keys(dict))]), length(keys(dict)))
@@ -1052,28 +1052,78 @@ function plotseries(dict::AbstractDict, filename::AbstractString=""; separate_fi
 		if normalize
 			m ./= maximum(m; dims=1)
 		end
-		plotseries(m, filename; names=names, kw...)
+		plotseriesengine(m, filename; names=names, kw...)
 	end
 end
-
-function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; separate_files::Bool=false, normalize::Bool=false, names=string.(names(df)), kw...)
+function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; names=string.(names(df)), kw...)
 	m = Matrix(df)
+	plotseriesengine(m, filename; kw...)
+end
+function plotseries(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nS::Integer=size(X, 2), separate_files::Bool=false, normalize::Bool=false, name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], kw...)
 	if normalize
-		m ./= maximum(m; dims=1)
+		m = X ./ maximum(m; dims=1)
+	else
+		m = X
 	end
-	if separate_files
+	if nS > 1 && separate_files
 		if filename != ""
 			f, e = splitext(filename)
 		end
-		for i = 1:size(m, 2)
+		for i = 1:nS
 			fn = filename == "" ? filename : f * "_" * names[i] * e
-			plotseries(m[:, i], fn; title=names[i], kw...)
+			plotseriesengine(m[:, i], fn; title=names[i], kw...)
 		end
 	else
-		plotseries(m, filename; names=names, kw...)
+		plotseriesengine(m, filename; names=names, kw...)
 	end
 end
-function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, nextgray::Bool=false, lastcolored::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
+
+@doc """
+Create plots of data series
+
+$(DocumentFunction.documentfunction(plotseries;
+argtext=Dict("X"=>"matrix with the series data",
+            "filename"=>"output file name"),
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
+            "xtitle"=>"x-axis title [default=`X`]",
+            "ytitle"=>"y-axis title [default=`Y`]",
+            "title"=>"plot title [default=`Sources`]",
+            "name"=>"series name [default=`Sources`]",
+            "combined"=>"combine plots [default=`true`]",
+            "hsize"=>"horizontal size [default=`8Gadfly.inch`]",
+            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
+            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
+            "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
+            "colors"=>"colors to use in plots")))
+
+Dumps:
+
+- Plots of data series
+""" plotseries
+
+"""
+Engine to create plots of data series
+
+$(DocumentFunction.documentfunction(plotseriesengine;
+argtext=Dict("X"=>"matrix with the series data",
+            "filename"=>"output file name"),
+keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
+            "xtitle"=>"x-axis title [default=`X`]",
+            "ytitle"=>"y-axis title [default=`Y`]",
+            "title"=>"plot title [default=`Sources`]",
+            "name"=>"series name [default=`Sources`]",
+            "combined"=>"combine plots [default=`true`]",
+            "hsize"=>"horizontal size [default=`8Gadfly.inch`]",
+            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
+            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
+            "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
+            "colors"=>"colors to use in plots")))
+
+Dumps:
+
+- Plots of data series
+"""
+function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin=nothing, xmax=nothing, ymin=nothing, ymax=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, nextgray::Bool=false, lastcolored::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
@@ -1248,28 +1298,6 @@ function plotseries(X::AbstractArray, filename::AbstractString=""; nT::Integer=s
 		return nothing
 	end
 end
-@doc """
-Create plots of data series
-
-$(DocumentFunction.documentfunction(plotseries;
-argtext=Dict("X"=>"matrix with the series data",
-            "filename"=>"output file name"),
-keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.graphbackend`]",
-            "xtitle"=>"x-axis title [default=`X`]",
-            "ytitle"=>"y-axis title [default=`Y`]",
-            "title"=>"plot title [default=`Sources`]",
-            "name"=>"series name [default=`Sources`]",
-            "combined"=>"combine plots [default=`true`]",
-            "hsize"=>"horizontal size [default=`8Gadfly.inch`]",
-            "vsize"=>"vertical size [default=`4Gadfly.inch`]",
-            "linewidth"=>"width of the lines in plot  [default=`2Gadfly.pt`]",
-            "dpi"=>"graph resolution [default=`Mads.imagedpi`]",
-            "colors"=>"colors to use in plots")))
-
-Dumps:
-
-- Plots of data series
-""" plotseries
 
 """
 Plot local sensitivity analysis results
