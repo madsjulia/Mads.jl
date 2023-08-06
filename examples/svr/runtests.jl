@@ -1,6 +1,6 @@
 import Mads
 import Test
-import FileIO
+
 import JLD2
 import DataStructures
 import OrderedCollections
@@ -37,10 +37,10 @@ svrpredictions = svrexec(paramarray)
 if Mads.create_tests
 	d = joinpath(savedir, "test_results")
 	Mads.mkdir(d)
-	FileIO.save(joinpath(d, "svrpredictions.jld2"), "svrpredictions", svrpredictions)
+	JLD2.save(joinpath(d, "svrpredictions.jld2"), "svrpredictions", svrpredictions)
 end
 
-good_svrpredictions = FileIO.load(joinpath(savedir, "test_results", "svrpredictions.jld2"), "svrpredictions")
+good_svrpredictions = JLD2.load(joinpath(savedir, "test_results", "svrpredictions.jld2"), "svrpredictions")
 
 mdsvr = deepcopy(md)
 mdsvr["Julia model"] = svrexec
@@ -53,10 +53,10 @@ sasvr_var = hcat(map(i->collect(i), values.(collect(values(sasvr["var"]))))...)
 if Mads.create_tests
 	d = joinpath(savedir, "test_results")
 	Mads.mkdir(d)
-	FileIO.save(joinpath(d, goodresultsfile), "sasvr", sasvr)
+	JLD2.save(joinpath(d, goodresultsfile), "sasvr", sasvr)
 end
 
-good_sasvr = FileIO.load(joinpath(savedir, "test_results", goodresultsfile), "sasvr")
+good_sasvr = JLD2.load(joinpath(savedir, "test_results", goodresultsfile), "sasvr")
 
 good_sasvr_mes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["mes"]))))...)
 good_sasvr_tes = hcat(map(i->collect(i), values.(collect(values(good_sasvr["tes"]))))...)

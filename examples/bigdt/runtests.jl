@@ -1,6 +1,6 @@
 import Mads
 import JLD2
-import FileIO
+
 import Test
 import PyCall
 
@@ -29,10 +29,10 @@ else
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		FileIO.save(joinpath(d, "bigdt_results.jld2"), "bigdt_results", bigdt_results)
+		JLD2.save(joinpath(d, "bigdt_results.jld2"), "bigdt_results", bigdt_results)
 	end
 
-	good_bigdt_results = FileIO.load(joinpath(workdir, "test_results", "bigdt_results.jld2"), "bigdt_results")
+	good_bigdt_results = JLD2.load(joinpath(workdir, "test_results", "bigdt_results.jld2"), "bigdt_results")
 
 	# Testing for bigdt
 	@Test.testset "Bigdt" begin

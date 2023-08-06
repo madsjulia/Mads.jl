@@ -1,6 +1,6 @@
 import Mads
 import JLD2
-import FileIO
+
 import Test
 import Suppressor
 import Random
@@ -38,10 +38,10 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "rand$(suffix).jld2"), "Wipopt", Wipopt)
+			JLD2.save(joinpath(d, "rand$(suffix).jld2"), "Wipopt", Wipopt)
 		end
 
-		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "rand$(suffix).jld2"), "Wipopt")
+		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "rand$(suffix).jld2"), "Wipopt")
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 
 		# @Mads.stderrcapture function reconstruct_sin.(R, nk)
@@ -61,12 +61,12 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "sin_1$(suffix).jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "sin_1$(suffix).jld2"), "Wipopt", Wipopt)
+			JLD2.save(joinpath(d, "sin_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
-		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "sin_2$(suffix).jld2"), "Hipopt")
+		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_1$(suffix).jld2"), "Wipopt")
+		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_2$(suffix).jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
@@ -88,12 +88,12 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "sin_rand_1$(suffix).jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "sin_rand_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "sin_rand_1$(suffix).jld2"), "Wipopt", Wipopt)
+			JLD2.save(joinpath(d, "sin_rand_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
-		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "sin_rand_2$(suffix).jld2"), "Hipopt")
+		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_1$(suffix).jld2"), "Wipopt")
+		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_2$(suffix).jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
@@ -117,12 +117,12 @@ else
 
 		if Mads.create_tests
 			Mads.mkdir(d)
-			FileIO.save(joinpath(d, "disturb_1$(suffix).jld2"), "Wipopt", Wipopt)
-			FileIO.save(joinpath(d, "disturb_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "disturb_1$(suffix).jld2"), "Wipopt", Wipopt)
+			JLD2.save(joinpath(d, "disturb_2$(suffix).jld2"), "Hipopt", Hipopt)
 		end
 
-		good_Wipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = FileIO.load(joinpath(workdir, "test_results", "disturb_2$(suffix).jld2"), "Hipopt")
+		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_1$(suffix).jld2"), "Wipopt")
+		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_2$(suffix).jld2"), "Hipopt")
 
 		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)

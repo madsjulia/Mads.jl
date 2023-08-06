@@ -65,8 +65,10 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 			if isfile(file)
 				printstyled(:cyan, "* $testname testing ...\n"; color=:cyan)
 				@elapsed include(file)
-			else
+			elseif Mads.pkginstalled(testname)
 				testmodule(testname)
+			else
+				@warn("Unknown module or test $(testname)!")
 			end
 		end
 	end

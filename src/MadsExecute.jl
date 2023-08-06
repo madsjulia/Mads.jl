@@ -37,16 +37,19 @@ Returns:
 """ checknodedir
 
 function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
+	# if Sys.iswindows() && !contains(string(cmd), "cmd /C")
+	# 	return runcmd(replace(string(cmd), "`"=>""); quiet=quiet, pipe=pipe, waittime=waittime)
+	# end
 	if pipe
 		cmdin = Pipe()
 		cmdout = Pipe()
 		cmderr = Pipe()
-		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=false)
+		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=true)
 	else
 		if quiet
-			cmdproc = run(pipeline(cmd, stdout=devnull, stderr=devnull); wait=false)
+			cmdproc = run(pipeline(cmd; stdout=devnull, stderr=devnull); wait=true)
 		else
-			cmdproc = run(cmd; wait=false)
+			cmdproc = run(cmd; wait=true)
 		end
 	end
 	if waittime > 0
@@ -97,7 +100,7 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 end
 function runcmd(cmdstring::AbstractString; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Float64=executionwaittime)
 	if Sys.iswindows()
-		r = runcmd(`cmd /C $(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
+		r = runcmd(`$(cmdstring)`; quiet=quiet, pipe=pipe, waittime=waittime)
 	elseif Mads.madsbash
 		r = runcmd(`bash -c "$(cmdstring)"`; quiet=quiet, pipe=pipe, waittime=waittime)
 	else

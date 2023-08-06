@@ -277,7 +277,7 @@ Returns:
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, scale::Number=1)
+function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, scale::Number=1)
 	u, d, v = LinearAlgebra.svd(J' * J)
 	done = false
 	vo = copy(v)
@@ -453,7 +453,7 @@ keytext=Dict("N"=>"number of samples [default=`1000`]",
             "seed"=>"random seed [default=`0`]",
             "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed; rng=rng)
 	numsamples = round(Int,sqrt(N))
 	numoneparamsamples = numsamples
@@ -641,7 +641,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
@@ -850,7 +850,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
 		if isfile(filename)
-			@warn("File $(filename) is overwritten!")
+			madsinfo("File $(filename) will be overwritten!")
 		end
 		JLD2.save(filename, "saltelli_results", results)
 	end
@@ -899,7 +899,7 @@ for mi = eachindex(saltelli_functions)
 		"""
 		Parallel version of $(saltelli_functions[index])
 		"""
-		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, restartdir::AbstractString="")
+		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="")
 			Mads.setseed(seed; rng=rng)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
@@ -1133,7 +1133,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG}=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.

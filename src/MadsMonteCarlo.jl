@@ -66,8 +66,8 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 	end
 end
 
-function emceesampling(madsdata::AbstractDict; filename::AbstractString, load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, kw...)
-	if load
+function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
+	if load && filename != ""
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
@@ -106,8 +106,8 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString, load::B
 	return chain, llhoods, observations
 end
 
-function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString, load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG}=nothing, distributed_function::Bool=false)
-	if load
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+	if load && filename != ""
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
@@ -130,12 +130,12 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; rng=Mads.rng, save=false)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; filename="", rng=Mads.rng, save=false)
 	newnsteps = div(nsteps, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
 	end
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; rng=Mads.rng, save=false)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; filename="", rng=Mads.rng, save=false)
 	chain, llhoods =  AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 	observations = Mads.forward(madsdata, permutedims(chain))
 	if save && filename != ""
@@ -173,7 +173,7 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 
 if isdefined(Mads, :Klara)
 	# && isdefined(Klara, :BasicContMuvParameter)
-	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing)
+	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 		Mads.setseed(seed; rng=rng)
 		madsloglikelihood = makemadsloglikelihood(madsdata)
 		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)

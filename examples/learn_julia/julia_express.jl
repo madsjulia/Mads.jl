@@ -394,7 +394,7 @@ eps(Float32) # distance from 1.0 to next representable Float32
 nextfloat(2.0) # next float representable, similarly provided prevfloat
 
 isequal(NaN, NaN) # true
-isnan(NaN)  # true	
+isnan(NaN)  # true
 NaN == NaN # false
 
 isequal(1, 1.0) # false
@@ -565,14 +565,14 @@ methods(t)
 
 ## saving data
 import JLD2
-import FileIO
+
 
 A = collect(1:10)
 B = rand(10)
-FileIO.save("deletedata.jld2", "randA", A, "randB", B)
+JLD2.save("deletedata.jld2", "randA", A, "randB", B)
 @JLD2.load("deletedata.jld2")
 display(randA)
 display(randB)
-A = FileIO.load("deletedata.jld2", "randA")
-newnameB = FileIO.load("deletedata.jld2", "randB")
+A = JLD2.load("deletedata.jld2", "randA")
+newnameB = JLD2.load("deletedata.jld2", "randB")
 rm("deletedata.jld2")

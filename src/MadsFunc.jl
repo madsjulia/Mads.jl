@@ -179,23 +179,21 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 			else
 				cwd = currentdir
 			end
-			@info("Current working directory: $(cwd)")
+			madsinfo("Current working directory: $(cwd)")
 			local results
 			attempt = 0
 			trying = true
 			tempdirname = ""
 			while trying
 				tempstring = "$(getpid())_$(Libc.strftime("%Y%m%d%H%M", time()))_$(Mads.modelruns)_$(Random.randstring(6))"
-				# @info("Content of directory $(cwd): $(readdir(cwd))")
 				tempdirname = joinpath("..", "$(splitdir(cwd)[2])_$(tempstring)")
 				Mads.createtempdir(tempdirname)
 				if linkdir
-					@info("Linking directories: $(cwd) -> $(tempdirname)")
+					madsinfo("Linking directories: $(cwd) -> $(tempdirname)")
 					Mads.linktempdir(cwd, tempdirname)
 				end
 				cd(tempdirname)
-				@info("Current working directory: $(tempdirname)")
-				# @info("Content of directory $(tempdirname): $(readdir("."))")
+				madsinfo("Current working directory: $(tempdirname)")
 				Mads.setmodelinputs(madsdata, parameters)
 				execattempt = 0
 				while (trying = !checknodedir(tempstring))

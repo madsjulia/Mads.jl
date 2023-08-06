@@ -755,7 +755,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
 function checkparameterranges(madsdata::AbstractDict)
 	if !haskey(madsdata, "Parameters")
-		madswarn("No parameters in the provided dictionary")
+		madsinfo("No parameters in the provided dictionary!")
 		return
 	end
 	paramkeys = Mads.getparamkeys(madsdata)

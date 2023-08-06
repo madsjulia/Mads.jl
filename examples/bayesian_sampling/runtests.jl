@@ -1,6 +1,5 @@
 import Mads
 import JLD2
-import FileIO
 import Test
 import Distributed
 import Random
@@ -23,7 +22,7 @@ mcmcchains_emcee = Mads.emceesampling(md; numwalkers=2, nsteps=10, burnin=2, thi
 if Mads.create_tests
 	d = joinpath(workdir, "test_results")
 	Mads.mkdir(d)
-	FileIO.save(joinpath(d, "mcmcchains_emcee.jld2"), "mcmcchains_emcee", mcmcchains_emcee)
+	JLD2.save(joinpath(d, "mcmcchains_emcee.jld2"), "mcmcchains_emcee", mcmcchains_emcee)
 end
 
 if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
@@ -57,13 +56,13 @@ if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, 
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		FileIO.save(joinpath(d, "mcmcvalues.jld2"), "mcmcvalues", mcmcvalues)
+		JLD2.save(joinpath(d, "mcmcvalues.jld2"), "mcmcvalues", mcmcvalues)
 	end
-	good_mcmcvalues = FileIO.load(joinpath(workdir, "test_results", "mcmcvalues.jld2"), "mcmcvalues")
+	good_mcmcvalues = JLD2.load(joinpath(workdir, "test_results", "mcmcvalues.jld2"), "mcmcvalues")
 	good_mcmcvalues_array = hcat(vcat(map(i->collect(good_mcmcvalues[i]), keys(good_mcmcvalues)))...)
 end
 
-good_mcmcchains_emcee = FileIO.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld2"), "mcmcchains_emcee")
+good_mcmcchains_emcee = JLD2.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld2"), "mcmcchains_emcee")
 
 @Test.testset "Bayesian" begin
 	@Test.testset "bayes" begin

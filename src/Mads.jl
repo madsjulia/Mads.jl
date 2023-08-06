@@ -129,8 +129,15 @@ include("MadsAnasol.jl")
 include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 include("MadsBayesInfoGap.jl")
-
 include("MadsMonteCarlo.jl")
+
+try
+	testlinks()
+	global createlinks = true
+catch
+	@info("Symbolic links cannot be created! Microsoft Windows may require to execute julia as an administrator or in a windows developers mode.")
+	global createlinks = false
+end
 
 if haskey(ENV, "MADS_TRAVIS")
 	@info("Travis testing environment")

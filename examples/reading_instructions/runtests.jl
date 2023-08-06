@@ -2,7 +2,7 @@ import Mads
 import Test
 
 # Test array values against a dictionary loaded from two files
-problemdir = string((dirname(Base.source_path())))
+problemdir = Mads.getproblemdir()
 if problemdir == "."
 	problemdir = joinpath(Mads.dir, "examples", "reading_instructions")
 end

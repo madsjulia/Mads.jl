@@ -3,15 +3,12 @@ import PyCall
 import Test
 import OrderedCollections
 import JSON
-# import JLD
 import JLD2
-import FileIO
+import JLD
 
-if Sys.iswindows()
-	@warn("Links cannot be created on Windows if not executed with admin privileges!")
-	@warn("This test will be skipped!")
+if !Mads.createlinks
+	@warn("Links cannot be created on Windows if not executed with admin privileges or in a developers mode!")
 else
-
 	@Mads.tryimportmain OrderedCollections
 	@Mads.tryimportmain JSON
 	@Mads.tryimportmain JLD2
@@ -109,10 +106,9 @@ else
 	Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"))
 	Mads.readasciipredictions(joinpath(workdir, "readasciipredictions.dat"))
 
-	# JLD fails on Windows and other systems; HDF5 is hard to build
-	# Mads.madsinfo("External coupling using `Command` and JLD ...")
-	# md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
-	# jfor = Mads.forward(md)
+	Mads.madsinfo("External coupling using `Command` and JLD ...")
+	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld.mads"))
+	jfor = Mads.forward(md)
 
 	Mads.madsinfo("External coupling using `Command` and JLD2 ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld2.mads"))

@@ -1,7 +1,7 @@
 import Mads
 import Test
 import JLD2
-import FileIO
+
 import Statistics
 import OrderedCollections
 import Random
@@ -38,7 +38,7 @@ param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
 localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=init_parameters_vector, obs=forward_predictions_vector)
 jacobian = localsa_results["jacobian"]
-samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, rng=Random.MersenneTwister, scale=0.5) # sampling for local uncertainty analysis
+samples, llhoods = Mads.sampling(param_values, jacobian, 10; seed=2016, scale=0.5) # sampling for local uncertainty analysis
 
 obs_samples = Mads.forward(md, samples)
 newllhoods = Mads.reweighsamples(md, obs_samples, llhoods) # Use importance sampling to the 95% of the solutions, keeping the most likely solutions
@@ -59,13 +59,13 @@ welldata_time = Mads.getwelldata(md; time=true)
 wt = Mads.getwelltargets(md)
 
 if Mads.create_tests
-	FileIO.save(joinpath(testdir, "forward_predictions.jld2"), "forward_predictions", forward_predictions_vector)
-	FileIO.save(joinpath(testdir, "jacobian.jld2"), "jacobian", jacobian)
-	FileIO.save(joinpath(testdir, "welldata_time.jld2"), "welldata_time", welldata_time)
-	FileIO.save(joinpath(testdir, "inverse_predictions.jld2"), "inverse_predictions", inverse_predictions)
-	FileIO.save(joinpath(testdir, "samples.jld2"), "samples", samples)
-	FileIO.save(joinpath(testdir, "llhoods.jld2"), "llhoods", llhoods)
-	FileIO.save(joinpath(testdir, "newllhoods.jld2"), "newllhoods", newllhoods)
+	JLD2.save(joinpath(testdir, "forward_predictions.jld2"), "forward_predictions", forward_predictions_vector)
+	JLD2.save(joinpath(testdir, "jacobian.jld2"), "jacobian", jacobian)
+	JLD2.save(joinpath(testdir, "welldata_time.jld2"), "welldata_time", welldata_time)
+	JLD2.save(joinpath(testdir, "inverse_predictions.jld2"), "inverse_predictions", inverse_predictions)
+	JLD2.save(joinpath(testdir, "samples.jld2"), "samples", samples)
+	JLD2.save(joinpath(testdir, "llhoods.jld2"), "llhoods", llhoods)
+	JLD2.save(joinpath(testdir, "newllhoods.jld2"), "newllhoods", newllhoods)
 end
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
@@ -100,11 +100,11 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-w20a-saltelli-5.svg"))
 end
 
-good_forward_predictions = FileIO.load(joinpath(testdir, "forward_predictions.jld2"), "forward_predictions")
-good_jacobian = FileIO.load(joinpath(testdir, "jacobian.jld2"), "jacobian")
-good_samples = FileIO.load(joinpath(testdir, "samples.jld2"), "samples")
-good_llhoods = FileIO.load(joinpath(testdir, "llhoods.jld2"), "llhoods")
-good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
+good_forward_predictions = JLD2.load(joinpath(testdir, "forward_predictions.jld2"), "forward_predictions")
+good_jacobian = JLD2.load(joinpath(testdir, "jacobian.jld2"), "jacobian")
+good_samples = JLD2.load(joinpath(testdir, "samples.jld2"), "samples")
+good_llhoods = JLD2.load(joinpath(testdir, "llhoods.jld2"), "llhoods")
+good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
 @Test.testset "Contamination" begin
 	@Test.test forward_predictions_source == forward_predictions
@@ -124,20 +124,16 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 	if t
 		@Test.test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	else
+		@show good_llhoods
 		@show llhoods
 	end
 
-	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
-	if t
-		@Test.test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
-	else
-		@show llhoods
-	end
 
 	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	if t
 		@Test.test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	else
+		@show good_newllhoods
 		@show newllhoods
 	end
 
@@ -155,8 +151,8 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 		@show Mads.computemass(md)
 	end
 
-	good_welldata_time = FileIO.load(joinpath(workdir, "test_results", "welldata_time.jld2"), "welldata_time")
-	good_inverse_preds = FileIO.load(joinpath(workdir, "test_results", "inverse_predictions.jld2"), "inverse_predictions")
+	good_welldata_time = JLD2.load(joinpath(workdir, "test_results", "welldata_time.jld2"), "welldata_time")
+	good_inverse_preds = JLD2.load(joinpath(workdir, "test_results", "inverse_predictions.jld2"), "inverse_predictions")
 
 	# Testing time-based well data against itself
 	ssr = 0.
@@ -170,6 +166,8 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 	if t
 		@Test.test isapprox(ssr, 0., atol=1e-8)
 	else
+		@show welldata_time
+		@show good_welldata_time
 		@show ssr
 	end
 
@@ -183,6 +181,8 @@ good_newllhoods = FileIO.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods"
 	if t
 		@Test.test isapprox(ssr, 0., atol=1e-8)
 	else
+		@show inverse_predictions
+		@show good_inverse_preds
 		@show ssr
 	end
 end

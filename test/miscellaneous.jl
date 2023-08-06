@@ -41,18 +41,20 @@ quiet_status = Mads.quiet
 Mads.quietoff()
 
 try
-	# run(`julia -h`)
+	# Mads.runcmd(`julia -h`; quiet=true)
 catch
-	Mads.madscritical("Julia executable needs to be in the executable search path!")
+	Mads.madswarn("Julia executable needs to be in the executable search path! Some of the test may fail!")
 end
 
 try
-	Mads.rmfile("test-create-symbolic-link")
-	symlink(Mads.dir, "test-create-symbolic-link")
-	rm("test-create-symbolic-link")
+	target = joinpath(Mads.dir, "Profile.toml")
+	link = joinpath(Mads.dir, "Profile-link.toml")
+	Mads.rmfile(link)
+	symlink(target, link)
+	rm(link)
 catch
 	if Sys.iswindows()
-		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows may require to execute julia as administrator.")
+		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows may require to execute julia as an administrator or in a windows developers mode.")
 	else
 		Mads.madscritical("Symbolic links cannot be created!")
 	end
@@ -162,7 +164,7 @@ Mads.setmodel!(md, exp)
 Mads.getsindx(Dict("Problem"=>Dict("sindx"=>"0.001")))
 Mads.setsindx!(Dict("Problem"=>Dict("sindx"=>0.001)), 0.1)
 
-Mads.status()
+# Mads.status()
 Mads.set_nprocs_per_task(1)
 Mads.setdir()
 Mads.setprocs(; veryquiet=true)

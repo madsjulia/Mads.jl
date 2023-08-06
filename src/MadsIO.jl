@@ -68,9 +68,9 @@ end
 
 function save_data(df::DataFrames.DataFrame, filename::AbstractString)::Nothing
 	if isfile(filename)
-		@warn("File $(filename) does exist! It will be overwritten!")
+		madsinfo("File $(filename) does exist! It will be overwritten!")
 	else
-		@info("Save output data: $(filename)")
+		madsinfo("Save output data: $(filename)")
 	end
 	e = lowercase(last(splitext(filename)))
 	if e == ".csv"
@@ -617,10 +617,13 @@ function getproblemdir()
 	source_path = Base.source_path()
 	if isnothing(source_path)
 		problemdir = "."
-	else
+	elseif source_path == ""
 		problemdir = Base.pkgdir(Mads)
-		madsinfo("Problem directory: $(problemdir)")
+
+	else
+		problemdir = first(splitdir(source_path))
 	end
+	madsinfo("Problem directory: $(problemdir)")
 	return problemdir
 end
 
@@ -1359,6 +1362,10 @@ argtext=Dict("filename"=>"file name",
 """
 function symlinkdir(filename::AbstractString, dirtarget::AbstractString, dirsource::AbstractString)
 	filenametarget = joinpath(dirtarget, filename)
+	# @show filename
+	# @show islink(filenametarget)
+	# @show isdir(filenametarget)
+	# @show isfile(filenametarget)
 	if !islink(filenametarget) && !isdir(filenametarget) && !isfile(filenametarget)
 		symlink(joinpath(dirsource, filename), filenametarget)
 	end
@@ -1699,6 +1706,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 	files = readdir()
 	for f in files
 		if isfile(f)
+			@show f
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
@@ -1717,6 +1725,20 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 					end
 				end
 			end
+		elseif islink(f)
+			link = readlink(f)
+			@show link
+			link_win = replace(link, "/"=>"\\")
+			@show link_win
+			if isfile(link_win)
+				rm(f)
+				if !test
+					@info("Linking $(link_win) to $(f)")
+					symlink(link_win, f)
+				else
+					@info("TEST: Linking $(link_win) to $(f)")
+				end
+			end
 		elseif isdir(f) && f != ".git" && f != "build"
 			@info("Directory $(joinpath(pwd(), f)) ...")
 			fixlinks(f; test=test)
@@ -1730,10 +1752,18 @@ function lslinks(dir::AbstractString=".")
 	files = readdir(dir; join=true)
 	for f in files
 		if islink(f)
-			@info("Link: $(f)")
+			@info("Link: $(f) $(readlink(f))")
 		elseif isdir(f) && f != ".git"
 			lslinks(f)
 		end
 	end
 	return nothing
+end
+
+function testlinks()
+	target = joinpath(Mads.dir, "Profile.toml")
+	link = joinpath(Mads.dir, "Profile-link.toml")
+	Mads.rmfile(link)
+	symlink(target, link)
+	rm(link)
 end

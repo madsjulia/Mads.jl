@@ -31,9 +31,9 @@ end
 	include(joinpath(workdir, "optimization_callback.jl")) # good?
 	include(joinpath(workdir, "optimization_linear_problem.jl")) # fix
 	# include(joinpath(workdir, "optimization_linear_problem_nlopt.jl")) # requires NLopt
-	if Sys.iswindows()
-		@warn("Links cannot be created on Windows if not executed with admin privileges!")
-		@warn("This test will be skipped!")
+	if !Mads.createlinks
+		@warn("Links cannot be created on Windows if not executed with admin privileges or under a development mode!")
+		@warn("The optimization_linear_problem+template.jl test will be skipped!")
 	else
 		include(joinpath(workdir, "optimization_linear_problem+template.jl")) # fix
 	end

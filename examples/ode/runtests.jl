@@ -1,6 +1,6 @@
 import Mads
 import JLD2
-import FileIO
+
 import Test
 import OrdinaryDiffEq
 
@@ -54,12 +54,12 @@ paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameter
 		dirt = joinpath(workdir, "test_results")
 		Mads.mkdir(dirt)
 
-		FileIO.save(joinpath(dirt, "ode_solver_t.jld2"), "t", t)
-		FileIO.save(joinpath(dirt, "ode_solver_y.jld2"), "ys", ys)
+		JLD2.save(joinpath(dirt, "ode_solver_t.jld2"), "t", t)
+		JLD2.save(joinpath(dirt, "ode_solver_y.jld2"), "ys", ys)
 	end
 
-	good_ode_t = FileIO.load(joinpath(workdir, "test_results", "ode_solver_t.jld2"), "t")
-	good_ode_ys = FileIO.load(joinpath(workdir, "test_results", "ode_solver_y.jld2"), "ys")
+	good_ode_t = JLD2.load(joinpath(workdir, "test_results", "ode_solver_t.jld2"), "t")
+	good_ode_ys = JLD2.load(joinpath(workdir, "test_results", "ode_solver_y.jld2"), "ys")
 
 	@Test.test isapprox(t, good_ode_t, atol=1e-6)
 	@Test.test isapprox(ys, good_ode_ys, atol=1e-6)

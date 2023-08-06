@@ -91,12 +91,12 @@ PyPlot.close("all")
 
 ## saving data
 import JLD2
-import FileIO
 
-FileIO.save("deletedata.jld2", "randA", A, "randB", B)
+
+JLD2.save("deletedata.jld2", "randA", A, "randB", B)
 @JLD2.load("deletedata.jld2")
 display(randA)
 display(randB)
-A = FileIO.load("deletedata.jld2", "randA")
-newnameB = FileIO.load("deletedata.jld2", "randB")
+A = JLD2.load("deletedata.jld2", "randA")
+newnameB = JLD2.load("deletedata.jld2", "randB")
 rm("deletedata.jld2")

@@ -477,7 +477,7 @@ $(DocumentFunction.documentfunction(setseed;
 argtext=Dict("seed"=>"random seed",
 			"quiet"=>"[default=`true`]")))
 """
-function setseed(seed::Integer=-1, quiet::Bool=true; rng::Union{Nothing,Random.AbstractRNG}=nothing)
+function setseed(seed::Integer=-1, quiet::Bool=true; rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	if seed >= 0
 		Mads.seed!(seed, rng)
 		!quiet && @info("New seed: $seed")

@@ -298,7 +298,7 @@ keytext=Dict("horizons"=>"info-gap horizons of uncertainty [default=`[0.05, 0.1,
             "seed"=>"random seed [default=`0`]",
             "pinit"=>"vector with initial parameters")))
 """
-function infogap_moi_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG}=nothing, pinit::AbstractVector=[])
+function infogap_moi_polynomial(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0.05, 0.1, 0.2, 0.5], retries::Integer=1, random::Bool=false, maxiter::Integer=3000, verbosity::Integer=0, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, pinit::AbstractVector=[])
 	setseed(seed, quiet)
 
 	p = [0.,1.,0.,1.]

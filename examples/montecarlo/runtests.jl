@@ -1,7 +1,7 @@
 import Mads
 import Test
 import JLD2
-import FileIO
+
 import Random
 import DataStructures
 import OrderedCollections
@@ -27,14 +27,14 @@ end
 	if Mads.create_tests
 		d = joinpath(workdir, "test_results")
 		Mads.mkdir(d)
-		FileIO.save(joinpath(d, "montecarlo.jld2"), "results", results)
+		JLD2.save(joinpath(d, "montecarlo.jld2"), "results", results)
 	end
 	return results
 end
 
 @Test.testset "Monte Carlo" begin
 	resultsmcmc = run_monte_carlo()
-	good_results = FileIO.load(joinpath(workdir, "test_results", "montecarlo.jld2"), "results")
+	good_results = JLD2.load(joinpath(workdir, "test_results", "montecarlo.jld2"), "results")
 	@Test.test size(resultsmcmc) == size(good_results)
 end
 
