@@ -169,7 +169,7 @@ function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			paramvalue[i] = p["min"]
 			continue
 		elseif haskey(p, "dist")
-			distribution = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
@@ -203,7 +203,7 @@ function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			paramvalue[i] = p["max"]
 			continue
 		elseif haskey(p, "dist")
-			distribution = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
@@ -238,7 +238,7 @@ function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			continue
 		end
 		if haskey(p, "init_dist")
-			distribution = Mads.getdistribution(p["init_dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["init_dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
@@ -249,7 +249,7 @@ function getparamsinit_min(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			continue
 		end
 		if haskey(p, "dist")
-			distribution = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.a
 				continue
@@ -284,7 +284,7 @@ function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			continue
 		end
 		if haskey(p, "init_dist")
-			distribution = Mads.getdistribution(p["init_dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["init_dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
@@ -295,7 +295,7 @@ function getparamsinit_max(madsdata::AbstractDict, paramkeys::AbstractVector=get
 			continue
 		end
 		if haskey(p, "dist")
-			distribution = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+			distribution = Mads.getdistribution(p["dist"], "parameter")
 			if typeof(distribution) <: Distributions.Uniform
 				paramvalue[i] = distribution.b
 				continue
@@ -715,10 +715,10 @@ function getparamdistributions(madsdata::AbstractDict; init_dist::Bool=false)
 		p = madsdata["Parameters"][paramkeys[i]]
 		if init_dist
 			if haskey(p, "init_dist")
-				distributions[paramkeys[i]] = Mads.getdistribution(p["init_dist"], paramkeys[i], "parameter")
+				distributions[paramkeys[i]] = Mads.getdistribution(p["init_dist"], "parameter")
 				continue
 			elseif haskey(p, "dist")
-				distributions[paramkeys[i]] = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+				distributions[paramkeys[i]] = Mads.getdistribution(p["dist"], "parameter")
 				continue
 			else
 				minkey = haskey(p, "init_min") ? "init_dist" : "min"
@@ -726,7 +726,7 @@ function getparamdistributions(madsdata::AbstractDict; init_dist::Bool=false)
 			end
 		else
 			if haskey(p, "dist")
-				distributions[paramkeys[i]] = Mads.getdistribution(p["dist"], paramkeys[i], "parameter")
+				distributions[paramkeys[i]] = Mads.getdistribution(p["dist"], "parameter")
 				continue
 			else
 				minkey = "min"

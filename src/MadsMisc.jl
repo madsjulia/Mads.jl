@@ -197,14 +197,13 @@ Parse parameter distribution from a string
 
 $(DocumentFunction.documentfunction(getdistribution;
 argtext=Dict("dist"=>"parameter distribution",
-            "inputname"=>"input name (name of a parameter or observation)",
             "inputtype"=>"input type (parameter or observation)")))
 
 Returns:
 
 - distribution
 """
-function getdistribution(dist::AbstractString, i::AbstractString, inputtype::AbstractString)
+function getdistribution(dist::AbstractString, inputtype::AbstractString="parameter")
 	distribution = nothing
 	try
 		distribution = Distributions.eval(Meta.parse(dist))
