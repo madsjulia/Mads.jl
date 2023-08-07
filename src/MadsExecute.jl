@@ -44,10 +44,10 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		cmdin = Pipe()
 		cmdout = Pipe()
 		cmderr = Pipe()
-		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=true)
+		cmdproc = run(cmd, (cmdin, cmdout, cmderr); wait=false)
 	else
 		if quiet
-			cmdproc = run(pipeline(cmd; stdout=devnull, stderr=devnull); wait=true)
+			cmdproc = run(pipeline(cmd; stdout=devnull, stderr=devnull); wait=false)
 		else
 			cmdproc = run(cmd; wait=true)
 		end
@@ -70,8 +70,9 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 		if !quiet && cmdproc.exitcode != 0
 			erroutput = readlines(cmderr)
 			if length(erroutput) > 0
+				printstyled("Error output:\n"; color=:yellow)
 				for i in erroutput
-					Mads.madswarn("$(strip(i))")
+					printstyled("$(strip(i))\n"; color=:yellow)
 				end
 			end
 		end
@@ -80,10 +81,12 @@ function runcmd(cmd::Cmd; quiet::Bool=Mads.quiet, pipe::Bool=false, waittime::Fl
 			l = length(output)
 			if l > 0
 				s = (l < 100) ? 1 : l - 100
+				println("Output:")
 				for i in output[s:end]
-					println("$(strip(i))")
-					if occursin(r"error"i, i)
-						madswarn("$(strip(i))")
+					if occursin(r"error", i)
+						println("$(strip(i))"; color=:red)
+					else
+						printstyled("$(strip(i))\n")
 					end
 				end
 			end
