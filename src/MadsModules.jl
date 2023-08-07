@@ -284,32 +284,38 @@ function status(; git::Bool=true, gitmore::Bool=false)
 end
 function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=false)
 	if git
-		cwd = pwd()
 		@info("Git status $(madsmodule) ...")
 		d = joinpath(dirname(pathof(Core.eval(Mads, Symbol(madsmodule)))), "..")
-		if isdir(d)
-			cd(d)
-		else
+		if !isdir(d)
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
-		@show pwd()
-		if Mads.madsgit
-			cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s``; quiet=true, pipe=true)
-			if cmdproc.exitcode != 0
-				@info("Module $(madsmodule) is not under development; if needed, execute `Pkg.develop(\"$(madsmodule)\")`")
-			elseif gitmore
-				@info("Git ID HEAD   $(madsmodule) ...")
-				run(`git rev-parse --verify HEAD`)
-				@info("Git ID master $(madsmodule) ...")
-				run(`git rev-parse --verify master`)
-			else
+		if Sys.iswindows()
+			if contains(d, "\\dev\\")
 				println("$(madsmodule) is in a development mode.")
+			else
+				@info("Module $(madsmodule) is not under development; if needed, execute `import Pkg; Pkg.develop(\"$(madsmodule)\")`")
 			end
 		else
-			@info("Module $(madsmodule) git status cannot be tested.")
+			if Mads.madsgit
+				cwd = pwd()
+				cd(d)
+				cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true)
+				cd(cwd)
+				if cmdproc.exitcode != 0
+					@info("Module $(madsmodule) is not under development; if needed, execute `import Pkg; Pkg.develop(\"$(madsmodule)\")`")
+				elseif gitmore
+					@info("Git ID HEAD   $(madsmodule) ...")
+					run(`git rev-parse --verify HEAD`)
+					@info("Git ID master $(madsmodule) ...")
+					run(`git rev-parse --verify master`)
+				else
+					println("$(madsmodule) is in a development mode.")
+				end
+			else
+				@info("Module $(madsmodule) git status cannot be tested.")
+			end
 		end
-		cd(cwd)
 	else
 		tag_flag = false
 		o = ""

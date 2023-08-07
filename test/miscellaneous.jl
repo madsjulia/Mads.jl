@@ -77,17 +77,16 @@ end
 # rm("madsjl.cmdline_hist")
 
 Mads.setexecutionwaittime(0.)
-if isdefined(Mads, :runcmd)
-	if Sys.iswindows()
-		Mads.runcmd("dir $(Mads.dir)")
-		Mads.runcmd("dir $(Mads.dir)"; pipe=true)
-		Mads.runcmd("dir $(Mads.dir)"; waittime=10.)
-	else
-		Mads.runcmd("ls $(Mads.dir)")
-		Mads.runcmd("ls $(Mads.dir)"; pipe=true)
-		Mads.runcmd("ls $(Mads.dir)"; waittime=10.)
-	end
+if Sys.iswindows()
+	Mads.runcmd("dir $(Mads.dir)")
+	Mads.runcmd("dir $(Mads.dir)"; pipe=true)
+	Mads.runcmd("dir $(Mads.dir)"; waittime=10.)
+else
+	Mads.runcmd("ls $(Mads.dir)")
+	Mads.runcmd("ls $(Mads.dir)"; pipe=true)
+	Mads.runcmd("ls $(Mads.dir)"; waittime=10.)
 end
+
 Mads.stdouterrcaptureoff()
 
 Mads.transposevector(["a"; "b"])
