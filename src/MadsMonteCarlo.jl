@@ -63,6 +63,8 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 		else
 			return chain, llhoods, observations
 		end
+	else
+		return nothing, nothing, nothing
 	end
 end
 
