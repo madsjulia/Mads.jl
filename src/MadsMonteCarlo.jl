@@ -6,7 +6,7 @@ import DocumentFunction
 import BlackBoxOptim
 import Random
 
-function p10_p50_p90(x::AbstractMatrix{Number})
+function p10_p50_p90(x::AbstractMatrix)
 	xmean = Statistics.mean(x; dims=2)
 	p10 = similar(xmean)
 	p90 = similar(xmean)
@@ -24,27 +24,27 @@ end
 function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 	if isfile(filename)
 		@info("Load AffineInvariantMCMC results from $(filename) ...")
-		chain, llhoods, observations, params, obs = JLD2.load(f_emcee_parameters_jld, "chain",  "llhoods", "observations", "params", "obs")
+		chain, llhoods, observations, params, obs = JLD2.load(filename, "chain",  "llhoods", "observations", "params", "obs")
 		@info("AffineInvariantMCMC results loaded: number of parameters = $(size(chain, 1)); number of realizations = $(size(chain, 2))")
 		flag_bad_data = false
-		if length(observations) != length(madsdata["Observations"])
-			@warn("Different number of observations (Mads $(length(madsdata["Observations"])) vs Input $(size(observations, 1))!")
+		if  size(observations, 1) != length(Mads.getobskeys(madsdata))
+			@warn("Different number of observations (Mads $(length(Mads.getobskeys(madsdata))) vs Input $(size(observations, 1)))!")
 			flag_bad_data = true
 		end
-		if size(chain, 1) != length(madsdata["Parameters"])
-			@warn("Different number of parameters (Mads $(length(madsdata["Parameters"])) vs Input $(size(chain, 1)))!")
+		if size(chain, 1) != length(Mads.getoptparamkeys(madsdata))
+			@warn("Different number of parameters (Mads $(length(Mads.getoptparamkeys(madsdata))) vs Input $(size(chain, 1)))!")
 			flag_bad_data = true
 		end
 		missing_observations = Vector{String}(undef, 0)
 		missing_parameters = Vector{String}(undef, 0)
 		if !flag_bad_data
-			for o in keys(madsdata(["Observations"]))
+			for o in Mads.getobskeys(madsdata)
 				if !(o in obs)
 					flag_bad_data = true
 					push!(missing_observations, o)
 				end
 			end
-			for p in keys(madsdata(["Parameters"]))
+			for p in Mads.getoptparamkeys(madsdata)
 				if !(p in params)
 					flag_bad_data = true
 					push!(missing_parameters, p)
@@ -103,7 +103,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 	end
 	chain, llhoods, observations = emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, save=false, kw...)
 	if save && filename != ""
-		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations)
+		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations, "params", Mads.getoptparamkeys(madsdata), "obs", Mads.getobskeys(madsdata))
 	end
 	return chain, llhoods, observations
 end
