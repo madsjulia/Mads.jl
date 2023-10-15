@@ -43,7 +43,7 @@ function checkhash(DATA::DATA)::Bool
 	end
 end
 
-function load_data(filename::AbstractString)::DataFrames.DataFrame
+function load_data(filename::AbstractString, sheet::AbstractString="Sheet1")::DataFrames.DataFrame
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -54,7 +54,7 @@ function load_data(filename::AbstractString)::DataFrames.DataFrame
 	if e == ".csv"
 		c = CSV.read(filename, DataFrames.DataFrame)
 	elseif e == ".xlsx"
-		c = DataFrames.DataFrame(XLSX.readtable(filename, "Sheet1"; stop_in_empty_row=false, header=true))
+		c = DataFrames.DataFrame(XLSX.readtable(filename, sheet; stop_in_empty_row=false, header=true))
 	elseif e == ".jld"
 		c = JLD.load(filename, "data")
 	elseif e == ".jld2"
