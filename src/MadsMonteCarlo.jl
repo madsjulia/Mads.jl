@@ -4,6 +4,7 @@ import JSON
 import AffineInvariantMCMC
 import DocumentFunction
 import BlackBoxOptim
+import ProgressMeter
 import Random
 
 function p10_p50_p90(x::AbstractMatrix)
@@ -113,11 +114,13 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
-				@info("AffineInvariantMCMC will be executed!")
+				@info("AffineInvariantMCMC will be executed! No preexisting data to load ...")
 			else
+				@warn("No preexisting data to load! AffineInvariantMCMC will be not executed!")
 				return nothing, nothing, nothing
 			end
 		else
+			@info("AffineInvariantMCMC preexisting data loaded!")
 			return chain, llhoods, observations
 		end
 	end
@@ -132,11 +135,13 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	if newnsteps < 2
 		newnsteps = 2
 	end
+	@info("AffineInvariantMCMC burning stage ...")
 	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; filename="", rng=Mads.rng, save=false)
 	newnsteps = div(nsteps, numwalkers)
 	if newnsteps < 2
 		newnsteps = 2
 	end
+	@info("AffineInvariantMCMC exploration stage ...")
 	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; filename="", rng=Mads.rng, save=false)
 	chain, llhoods =  AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 	observations = Mads.forward(madsdata, permutedims(chain))

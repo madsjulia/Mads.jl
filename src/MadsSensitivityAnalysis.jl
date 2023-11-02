@@ -505,7 +505,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	for i = eachindex(paramkeys)
 		madsinfo("Parameter : $(paramkeys[i])")
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, numoneparamsamples)
-		@ProgressMeter.showprogress 1 "Computing ... "  for j = 1:numoneparamsamples
+		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:numoneparamsamples
 			cond_means[j] = OrderedCollections.OrderedDict()
 			for k = eachindex(obskeys)
 				cond_means[j][obskeys[k]] = 0.
