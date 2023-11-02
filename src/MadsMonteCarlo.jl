@@ -4,7 +4,6 @@ import JSON
 import AffineInvariantMCMC
 import DocumentFunction
 import BlackBoxOptim
-import ProgressMeter
 import Random
 
 function p10_p50_p90(x::AbstractMatrix)
@@ -74,11 +73,13 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
-				@info("AffineInvariantMCMC will be executed!")
+				@info("AffineInvariantMCMC will be executed! No preexisting data to load ...")
 			else
+				@warn("No preexisting data to load! AffineInvariantMCMC will be not executed!")
 				return nothing, nothing, nothing
 			end
 		else
+			@info("AffineInvariantMCMC preexisting data loaded!")
 			return chain, llhoods, observations
 		end
 	end
