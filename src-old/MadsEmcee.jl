@@ -1,3 +1,4 @@
+import ProgressMeter
 import RobustPmap
 
 """
@@ -33,7 +34,7 @@ function emcee(llhood::Function, numwalkers::Integer, x0::AbstractArray, numsamp
 	batch1 = 1:div(numwalkers, 2)
 	batch2 = div(numwalkers, 2) + 1:numwalkers
 	divisions = [(batch1, batch2), (batch2, batch1)]
-	for i = 1:numsamples_perwalker
+	@ProgressMeter.showprogress 4 for i = 1:numsamples_perwalker
 		for ensembles in divisions
 			active, inactive = ensembles
 			zs = map(u->((a - 1) * u + 1)^2 / a, rand(Mads.rng, length(active)))

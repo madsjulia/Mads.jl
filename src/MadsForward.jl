@@ -101,12 +101,12 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; all::Bool=fa
 			rv = Array{Array{Float64}}(undef, nr)
 			if s[2] == np
 				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
-				for i = 1:nr
+				@ProgressMeter.showprogress 4 for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[i, :]))))
 				end
 			else
 				# r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
-				for i = 1:nr
+				@ProgressMeter.showprogress 4 for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[:, i]))))
 				end
 			end
