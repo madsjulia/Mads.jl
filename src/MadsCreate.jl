@@ -40,9 +40,10 @@ function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractSt
 	dump && close(f)
 	return observationdict
 end
-function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::AbstractVector=[], min::Union{Number,AbstractVector}=[], max::Union{Number,AbstractVector}=[],  minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=[], distribution::Bool=false)
+function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=repeat([1.0], size(obs, 1)), time::AbstractVector=[], min::Union{Number,AbstractVector}=[], max::Union{Number,AbstractVector}=[], minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=[], distribution::Bool=false)
 	md = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	@assert length(obs) == length(key)
+	@show length(obs), length(weight)
 	@assert length(obs) == length(weight)
 	if length(time) > 0
 		@assert length(obs) == length(time)
