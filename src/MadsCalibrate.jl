@@ -3,6 +3,7 @@ import Distributed
 import SharedArrays
 import Statistics
 import Optim
+import ProgressMeter
 
 """
 Calibrate with random initial guesses
@@ -52,7 +53,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	local bestparameters
 	local bestresult
 	bestphi = Inf
-	for i in 1:numberofsamples
+	@ProgressMeter.showprogress 5 "Calibrating ..." for i in 1:numberofsamples
 		if i == 1 && first_init
 			!quiet && @info("Using initial values for the first run!")
 		else
