@@ -1,6 +1,6 @@
 name = "Mads"
 uuid = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
-version = "1.5.3"
+version = "1.5.4"
 
 [deps]
 AffineInvariantMCMC = "a0f608ac-68d0-5108-ad9a-0cdca73324f3"
@@ -66,7 +66,7 @@ YAML = "ddb6d928-2868-570f-bddf-ab3f9cf99eb6"
 XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
 
 [compat]
-AffineInvariantMCMC = "1"
+AffineInvariantMCMC = "1.2.2, 2"
 Anasol = "1"
 BIGUQ = "1"
 BlackBoxOptim = "0.5, 0.6, 0.7"
