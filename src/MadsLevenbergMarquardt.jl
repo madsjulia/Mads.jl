@@ -324,7 +324,6 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::AbstractVector{
 			break
 		end
 	end
-	LsqFit.LMResults(LsqFit.LevenbergMarquardt, x0, best_x, best_residual, g_calls, !converged, x_converged, g_converged, float(tolG), tr, f_calls, g_calls)
 	return LsqFit.LMResults(LsqFit.LevenbergMarquardt(), x0, currentx, currentsse, maxIter, true, true, true, 0.0, LsqFit.LMTrace{LsqFit.LevenbergMarquardt}(), nEval, maxIter)
 end
 
@@ -386,7 +385,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	tr = LsqFit.LMTrace{LsqFit.LevenbergMarquardt}()
 	if show_trace
 		d = Dict("lambda" => lambda)
-		os = LsqFit.LMTrace{LsqFit.LevenbergMarquardt}(g_calls, best_residual, NaN, d)
+		os = LsqFit.LMState{LsqFit.LevenbergMarquardt}(g_calls, best_residual, NaN, d)
 		push!(tr, os)
 		println(os)
 	end
@@ -618,5 +617,5 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		println("OF: $(best_residual) (final)")
 	end
 	callbackfinal(best_x, best_residual, NaN)
-	LsqFit.LMResults(LsqFit.LevenbergMarquardt, x0, best_x, best_residual, g_calls, !converged, x_converged, g_converged, float(tolG), tr, f_calls, g_calls)
+	LsqFit.LMResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, g_converged, float(tolG), tr, f_calls, g_calls)
 end

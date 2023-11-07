@@ -63,7 +63,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		end
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
 		phi = results.minimum
-		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		converged = results.x_converged | results.g_converged # f_converged => of_conferged
 		!quiet && @info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
 		if phi < bestphi || i == 1
 			bestparameters = parameters
@@ -135,7 +135,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		end
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa, parallel_optimization=false)
 		phi = results.minimum
-		converged = results.x_converged | results.g_converged | results.f_converged # f_converged => of_conferged
+		converged = results.x_converged | results.g_converged # f_converged => of_conferged
 		if !quiet
 			if i == 1 && first_init
 				@info("First run using initial values #$(i): OF = $(phi) (converged=$(converged))")
