@@ -1,8 +1,10 @@
 import Dash
 import CSV
+import JSON
+import JSONTables
 import DataFrames
 
-df = DataFrames.DataFrame(label=["Cats", "Dogs", "Horses"], lat=[1.3, 2.1, 5.5], lon=[2.3, 1.1, 2.5], height=[20., 50., 200.])
+df = DataFrames.DataFrame(label=["Cats", "Dogs", "Horses"], lat=[1.3, 2.1, 5.5], lon=[2.3, 1.1, 2.5], height=[30.1, 50.1, 200.1], width=[10.1, 10.1, 10.1])
 app = Dash.dash()
 
 app.layout = Dash.html_div([
@@ -55,7 +57,11 @@ Dash.callback!(app,
 	if derived_virtual_selected_rows isa Nothing
 		derived_virtual_selected_rows = []
 	end
-	dff = (rows isa Nothing) ? df : DataFrames.DataFrame(rows)
+	# jtable = JSONTables.jsontable(rows)
+	# display(jtable)
+	# dff = (rows isa Nothing) ? df : DataFrames.DataFrame(jtable)
+	# @show dff
+	dff = df
 	colors = [(i in derived_virtual_selected_rows ? "#7FDBFF" : "#0074D9") for i in 1:DataFrames.nrow(dff)]
 	return [
 		if column in names(dff)
@@ -90,3 +96,4 @@ Dash.callback!(app,
 end
 
 Dash.run_server(app, "127.0.0.1"; debug=true)
+
