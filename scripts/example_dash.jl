@@ -55,7 +55,8 @@ Dash.callback!(app,
 	if derived_virtual_selected_rows isa Nothing
 		derived_virtual_selected_rows = []
 	end
-	dff = (rows isa Nothing) ? df : DataFrames.DataFrame(rows)
+	@show rows
+	dff = (rows isa Nothing) ? df : DataFrames.DataFrame(rows, :auto)
 	colors = [(i in derived_virtual_selected_rows ? "#7FDBFF" : "#0074D9") for i in 1:DataFrames.nrow(dff)]
 	return [
 		if column in names(dff)
