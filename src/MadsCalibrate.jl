@@ -54,7 +54,6 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	allconverged = Vector{Bool}(undef, numberofsamples)
 	allparameters = Matrix{Float64}(undef, numberofsamples, length(keys(paramoptvalues)))
 	local bestparameters
-	local bestresult
 	bestphi = Inf
 	@ProgressMeter.showprogress 5 "Calibrating ..." for i in 1:numberofsamples
 		if i == 1 && first_init
@@ -71,7 +70,6 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		!quiet && @info("Random initial guess #$(i): OF = $(allphi[i]) (converged=$(allconverged[i]))")
 		if allphi[i] < bestphi || i == 1
 			bestparameters = parameters
-			bestresult = results
 			bestphi = allphi[i]
 		end
 		if all_results
@@ -79,9 +77,10 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		end
 	end
 	if save_results
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "allconverged", converged, "allparameters", parameters)
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", converged, "parameters", parameters)
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
+	bestresult = Mads.forward(madsdata, bestparameters)
 	if all_results
 		return bestparameters, bestresult, allphi, allparameters
 	else
@@ -157,7 +156,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		@warn("Something is very wrong! All the objective function estimates are NaN!")
 	end
 	if save_results
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "allphi", allphi, "allconverged", allconverged, "allparameters", allparameters)
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", converged, "parameters", parameters)
 	end
 	ibest = first(sortperm(allphi))
 	for (j, paramkey) in enumerate(keys(paramoptvalues))
