@@ -32,9 +32,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 	paraminitdict = Mads.getparamdict(madsdata)
 	if l == 1
 		p = merge(paraminitdict, paramdict)
-		# @show p
 		r = convert(OrderedCollections.OrderedDict{String,Float64}, f(p))
-		# @show r
 		return r
 	else
 		optkeys = Mads.getoptparamkeys(madsdata_c)

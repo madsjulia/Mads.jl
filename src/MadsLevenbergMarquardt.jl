@@ -324,7 +324,7 @@ function naive_levenberg_marquardt(f::Function, g::Function, x0::AbstractVector{
 			break
 		end
 	end
-	return LsqFit.LMResults(LsqFit.LevenbergMarquardt(), x0, currentx, currentsse, maxIter, true, true, true, 0.0, LsqFit.LMTrace{LsqFit.LevenbergMarquardt}(), nEval, maxIter)
+	return LsqFit.LMResults(LsqFit.LevenbergMarquardt(), currentf, currentx, currentsse, maxIter, true, true, true, 0.0, LsqFit.LMTrace{LsqFit.LevenbergMarquardt}(), nEval, maxIter)
 end
 
 """
@@ -372,25 +372,25 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
-		Mads.madsoutput("Parallel lambda search; number of parallel lambdas = $np_lambda\n");
+		Mads.madsoutput("Parallel lambda search; number of parallel lambdas = $(np_lambda)\n");
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
 	f_calls += 1
-	best_f = fcur
-	best_residual = residual = o(fcur)
-	Mads.madsoutput("Initial OF: $residual\n");
-	callbackinitial(x, residual, NaN)
+	best_residuals = fcur
+	best_of = current_of = o(fcur)
+	Mads.madsoutput("Initial OF: $(current_of)\n");
+	callbackinitial(x, current_of, NaN)
 
 	tr = LsqFit.LMTrace{LsqFit.LevenbergMarquardt}()
 	if show_trace
 		d = Dict("lambda" => lambda)
-		os = LsqFit.LMState{LsqFit.LevenbergMarquardt}(g_calls, best_residual, NaN, d)
+		os = LsqFit.LMState{LsqFit.LevenbergMarquardt}(g_calls, best_of, NaN, d)
 		push!(tr, os)
 		println(os)
 	end
 	if !quiet
-		println("OF: $(best_residual) (initial)")
+		println("OF: $(best_of) (initial)")
 	end
 
 	delta_xp = Array{Float64}(undef, (np_lambda, length(x)))
@@ -417,11 +417,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			end
 			f_calls += length(x)
 			g_calls += 1
-			Mads.madsoutput("Jacobian #$g_calls\n")
+			Mads.madsoutput("Jacobian #$(g_calls)\n")
 			callbackjacobian(x, J)
 			compute_jacobian = false
 		end
-		Mads.madsoutput("Current Best OF: $best_residual\n");
+		Mads.madsoutput("Current Best OF: $(best_of)\n");
 		# Solve for:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
@@ -454,7 +454,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		function getphianddelta_x(npl)
 			lambda = lambda_p[npl]
-			predicted_residual = []
+			predicted_of = []
 			delta_x = []
 			Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda)
 			u, s, v = LinearAlgebra.svd(JpJ + lambda * DtDidentity)
@@ -473,18 +473,18 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			# s = map(i->max(eps(Float32), i), s)
 			delta_x = (v * SparseArrays.sparse(LinearAlgebra.Diagonal(is)) * u') * -J' * fcur
 			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
-			predicted_residual = o(J * delta_x + fcur)
+			predicted_of = o(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			Mads.madsoutput("$(@Printf.sprintf "#%02d OF (est): %f" npl predicted_residual)", 3);
-			if predicted_residual > residual + 2max(eps(predicted_residual), eps(residual))
+			Mads.madsoutput("$(@Printf.sprintf "#%02d OF (est): %f" npl predicted_of)", 3);
+			if predicted_of > current_of + 2max(eps(predicted_of), eps(current_of))
 				Mads.madsoutput(" -> not good", 1);
 				if npl == 1
-					Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $predicted_residual (predicted_residual) > $residual (residual) + $(eps(predicted_residual)) (eps)", 2);
+					Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $(predicted_of) (predicted_of) > $(current_of) (current_of) + $(eps(predicted_of)) (eps)", 2);
 				end
 			else
 				Mads.madsoutput(" -> ok", 1);
 			end
-			return predicted_residual, delta_x
+			return predicted_of, delta_x
 		end
 		# phisanddelta_xs = []
 		# for i = collect(1:np_lambda)
@@ -518,44 +518,44 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		end
 
 		if parallel_execution
-			local trial_fs
+			local trial_residuals
 			try
-				trial_fs = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
+				trial_residuals = RobustPmap.rpmap(f, map(dx->x + dx, delta_xs))
 			catch errmsg
 				@show Base.stacktrace()
 				printerrormsg(errmsg)
 				Mads.madscritical("RobustPmap LM execution of the forward models fails!")
 			end
 		else
-			trial_fs = map(f, map(dx->x + dx, delta_xs))
+			trial_residuals = map(f, map(dx->x + dx, delta_xs))
 		end
 
 		f_calls += np_lambda
-		objfuncevals = map(o, trial_fs)
+		trial_ofs = map(o, trial_residuals)
 
-		npl_best = argmin(objfuncevals)
-		npl_worst = argmax(objfuncevals)
-		Mads.madsoutput(@Printf.sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" objfuncevals[npl_best] objfuncevals[npl_worst]);
+		npl_best = argmin(trial_ofs)
+		npl_worst = argmax(trial_ofs)
+		Mads.madsoutput(@Printf.sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" trial_ofs[npl_best] trial_ofs[npl_worst]);
 		Mads.madsoutput(@Printf.sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
-		trial_f = vec(trial_fs[npl_best])
-		trial_residual = objfuncevals[npl_best]
-		predicted_residual = o(J * delta_x + fcur)
+		trial_f = vec(trial_residuals[npl_best])
+		trial_residual = trial_ofs[npl_best]
+		predicted_of = o(J * delta_x + fcur)
 
-		push!(residuals, objfuncevals[npl_best])
-		if objfuncevals[npl_best] < best_residual
-			best_residual = trial_residual
+		push!(residuals, trial_ofs[npl_best])
+		if trial_ofs[npl_best] < best_of
+			best_of = trial_residual
 			best_x = x + delta_x
-			best_f = trial_f
+			best_residuals = trial_f
 		end
 
-		# step quality = residual change / predicted residual change
-		rho = (trial_residual - residual) / (predicted_residual - residual)
+		# step quality = current_of change / predicted current_of change
+		rho = (trial_residual - current_of) / (predicted_of - current_of)
 		if rho > MIN_STEP_QUALITY
 			x += delta_x
 			fcur = trial_f
-			residual = trial_residual
+			current_of = trial_residual
 			if rho > GOOD_STEP_QUALITY
 				lambda = max(lambda / lambda_mu, MIN_LAMBDA) # increase trust region radius
 			end
@@ -565,7 +565,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			if np_lambda > 1
 				x += delta_x
 				fcur = trial_f
-				residual = trial_residual
+				current_of = trial_residual
 				compute_jacobian = true
 			end
 		end
@@ -580,7 +580,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		if !quiet
 			println("OF: $(o(fcur)) Lambda: $(lambda)")
 		end
-		callbackiteration(best_x, best_residual, lambda)
+		callbackiteration(best_x, best_of, lambda)
 
 		# check convergence criteria:
 		nx = LinearAlgebra.norm(delta_x)
@@ -601,8 +601,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 				of_converged = true
 			end
 		end
-		if best_residual < minOF
-			Mads.madsinfo("Objective function less than $minOF (tolOF): $best_residual < $minOF")
+		if best_of < minOF
+			Mads.madsinfo("Objective function less than $minOF (tolOF): $best_of < $minOF")
 			of_converged = true
 		end
 		if g_calls >= maxJacobians
@@ -614,8 +614,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		converged = g_converged | x_converged | of_converged
 	end
 	if !quiet
-		println("OF: $(best_residual) (final)")
+		println("OF: $(best_of) (final)")
 	end
-	callbackfinal(best_x, best_residual, NaN)
-	LsqFit.LMResults(LsqFit.LevenbergMarquardt(), x0, best_x, best_residual, g_calls, !converged, x_converged, g_converged, float(tolG), tr, f_calls, g_calls)
+	callbackfinal(best_x, best_of, NaN)
+	LsqFit.LMResults(LsqFit.LevenbergMarquardt(), best_residuals, best_x, best_of, g_calls, !converged, x_converged, g_converged, float(tolG), tr, f_calls, g_calls)
 end

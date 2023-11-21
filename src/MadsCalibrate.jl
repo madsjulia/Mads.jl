@@ -41,7 +41,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, store_optimization_progress::Bool=true, first_init::Bool=true)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, store_optimization_progress::Bool=true, save_results::Bool=false, first_init::Bool=true)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -77,6 +77,9 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		if all_results
 			allparameters[i,:] = [parameters[paramkey] for paramkey in keys(paramoptvalues)]
 		end
+	end
+	if save_results
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "allconverged", converged, "allparameters", parameters)
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	if all_results
@@ -116,7 +119,7 @@ Returns:
 - boolean vector (converged/not converged)
 - array with estimate model parameters
 """
-function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, store_optimization_progress::Bool=true, first_init::Bool=true, localsa::Bool=false, all_results::Bool=true)
+function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, store_optimization_progress::Bool=true, save_results::Bool=false, first_init::Bool=true, localsa::Bool=false, all_results::Bool=true)
 	Mads.setseed(seed; rng=rng)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
@@ -152,6 +155,9 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	if all(isnan.(allphi))
 		@warn("Something is very wrong! All the objective function estimates are NaN!")
+	end
+	if save_results
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "allphi", allphi, "allconverged", allconverged, "allparameters", allparameters)
 	end
 	ibest = first(sortperm(allphi))
 	for (j, paramkey) in enumerate(keys(paramoptvalues))
