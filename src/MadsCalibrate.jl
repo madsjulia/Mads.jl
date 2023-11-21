@@ -26,7 +26,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
 			"seed"=>"random seed [default=`0`]",
 			"quiet"=>"[default=`true`]",
-			"all"=>"all model results are returned [default=`false`]",
+			"all_results"=>"all model results are returned [default=`false`]",
 			"save_results"=>"save intermediate results [default=`true`]")))
 
 Returns:
@@ -41,7 +41,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all::Bool=false, save_results::Bool=true, first_init::Bool=true)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, save_results::Bool=true, first_init::Bool=true)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -49,7 +49,10 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
 	paramoptvalues = Mads.getparamrandom(madsdata, numberofsamples; init_dist=Mads.haskeyword(madsdata, "init_dist"))
-	allresults = Vector{Float64}(undef, 0)
+
+	allphi = Vector{Float64}(undef, numberofsamples)
+	allconverged = Vector{Bool}(undef, numberofsamples)
+	allparameters = Matrix{Float64}(undef, numberofsamples, length(keys(paramoptvalues)))
 	local bestparameters
 	local bestresult
 	bestphi = Inf
@@ -63,25 +66,21 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
 		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
-		phi = results.minimum
-		converged = results.x_converged | results.g_converged # f_converged => of_conferged
-		!quiet && @info("Random initial guess #$(i): OF = $(phi) (converged=$(converged))")
-		if phi < bestphi || i == 1
+		allphi[i] = results.minimum
+		allconverged[i] = results.x_converged | results.g_converged # f_converged => of_conferged
+		!quiet && @info("Random initial guess #$(i): OF = $(allphi[i]) (converged=$(allconverged[i]))")
+		if allphi[i] < bestphi || i == 1
 			bestparameters = parameters
 			bestresult = results
-			bestphi = phi
+			bestphi = allphi[i]
 		end
-		if all
-			if sizeof(allresults) == 0
-				allresults = [phi converged parameters]
-			else
-				allresults = [allresults; phi converged parameters]
-			end
+		if all_results
+			allparameters[i,:] = [parameters[paramkey] for paramkey in keys(paramoptvalues)]
 		end
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
-	if all
-		return allresults
+	if all_results
+		return bestparameters, bestresult, allphi, allparameters
 	else
 		return bestparameters, bestresult
 	end
@@ -152,16 +151,17 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	if all(isnan.(allphi))
-		@warn("Something is wrong! All the objective function estimates are NaN!")
+		@warn("Something is very wrong! All the objective function estimates are NaN!")
 	end
+	ibest = first(sortperm(allphi))
+	for (j, paramkey) in enumerate(keys(paramoptvalues))
+		paramdict[paramkey] = allparameters[ibest, j]
+	end
+	bestresult = Mads.forward(madsdata, paramdict)
 	if all_results
-		return allphi, allconverged, allparameters
+		return paramdict, bestresult, allphi, allparameters
 	else
-		isort = sortperm(allphi)
-		for (j, paramkey) in enumerate(keys(paramoptvalues))
-			paramdict[paramkey] = allparameters[isort[1],j]
-		end
-		return paramdict
+		return paramdict, bestresult
 	end
 end
 
