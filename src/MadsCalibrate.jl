@@ -27,7 +27,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"seed"=>"random seed [default=`0`]",
 			"quiet"=>"[default=`true`]",
 			"all_results"=>"all model results are returned [default=`false`]",
-			"save_results"=>"save intermediate results [default=`true`]")))
+			"store_optimization_progress"=>"save intermediate results [default=`true`]")))
 
 Returns:
 
@@ -41,7 +41,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, save_results::Bool=true, first_init::Bool=true)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, store_optimization_progress::Bool=true, first_init::Bool=true)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -65,7 +65,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 			end
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, store_optimization_progress=store_optimization_progress)
 		allphi[i] = results.minimum
 		allconverged[i] = results.x_converged | results.g_converged # f_converged => of_conferged
 		!quiet && @info("Random initial guess #$(i): OF = $(allphi[i]) (converged=$(allconverged[i]))")
@@ -107,7 +107,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
 			"seed"=>"random seed [default=`0`]",
 			"quiet"=>"suppress output [default=`true`]",
-			"save_results"=>"save intermediate results [default=`true`]",
+			"store_optimization_progress"=>"save intermediate results [default=`true`]",
 			"localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
@@ -116,7 +116,7 @@ Returns:
 - boolean vector (converged/not converged)
 - array with estimate model parameters
 """
-function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, save_results::Bool=true, first_init::Bool=true, localsa::Bool=false, all_results::Bool=true)
+function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, store_optimization_progress::Bool=true, first_init::Bool=true, localsa::Bool=false, all_results::Bool=true)
 	Mads.setseed(seed; rng=rng)
 	paramdict = Mads.getparamdict(madsdata)
 	paramsoptdict = copy(paramdict)
@@ -133,7 +133,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 			end
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, save_results=save_results, localsa=localsa, parallel_optimization=false)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, store_optimization_progress=store_optimization_progress, localsa=localsa, parallel_optimization=false)
 		phi = results.minimum
 		converged = results.x_converged | results.g_converged # f_converged => of_conferged
 		if !quiet
@@ -185,7 +185,7 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
 			"show_trace"=>"shows solution trace [default=`false`]",
 			"usenaive"=>"use naive Levenberg-Marquardt solver [default=`false`]",
-			"save_results"=>"save intermediate results [default=`true`]",
+			"store_optimization_progress"=>"save intermediate results [default=`true`]",
 			"localsa"=>"perform local sensitivity analysis [default=`false`]")))
 
 Returns:
@@ -193,7 +193,7 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, save_results::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, store_optimization_progress::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
 	rootname = Mads.getmadsrootname(madsdata)
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata; parallel_gradients=parallel_optimization)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
@@ -208,7 +208,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	f_lm_sin = Mads.sinetransformfunction(f_lm, lowerbounds, upperbounds, indexlogtransformed)
 	g_lm_sin = Mads.sinetransformgradient(g_lm, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
 	restart_flag = Mads.getrestart(madsdata)
-	if save_results && rootname != ""
+	if store_optimization_progress && rootname != ""
 		if isfile("$rootname.initialresults")
 			rmfile("$rootname.initialresults")
 		end
