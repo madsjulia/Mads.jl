@@ -78,7 +78,8 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		end
 	end
 	if save_results
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", converged, "parameters", parameters)
+		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2")) ...")
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	bestresult = Mads.forward(madsdata, bestparameters)
@@ -157,7 +158,8 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		@warn("Something is very wrong! All the objective function estimates are NaN!")
 	end
 	if save_results
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", converged, "parameters", parameters)
+		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2")) ...")
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results.jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
 	end
 	ibest = first(sortperm(allphi))
 	for (j, paramkey) in enumerate(keys(paramoptvalues))
@@ -201,6 +203,10 @@ Returns:
 """
 function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, store_optimization_progress::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
 	rootname = Mads.getmadsrootname(madsdata)
+	madsdir = Mads.getmadsproblemdir(madsdata)
+	if !isdir(madsdir)
+		mkdir(madsdir)
+	end
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata; parallel_gradients=parallel_optimization)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
 	initparams = Mads.getparamsinit(madsdata, optparamkeys)
