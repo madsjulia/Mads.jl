@@ -877,7 +877,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], gm::AbstractVector=[])
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], plot_nontargets::Bool=false, gm::AbstractVector=[])
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -898,10 +898,10 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 	if plotdata
 		if obs_plot_dots
 			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize, highlight_width=0Gadfly.pt))
-			push!(obs_plot, Gadfly.Geom.point)
+			push!(obs_plot, Gadfly.Geom.point())
 		else
 			push!(obs_plot, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "black"), line_width=linewidth))
-			push!(obs_plot, Gadfly.Geom.line)
+			push!(obs_plot, Gadfly.Geom.line())
 		end
 	end
 	pa = Any[]
@@ -915,8 +915,14 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 			t = getobstime(madsdata)
 			d = getobstarget(madsdata)
 			w = getobsweight(madsdata)
-			d[w .== 0] .= NaN
-			push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
+			inontargets = w .== 0
+			if plot_nontargets
+				push!(pa, Gadfly.layer(x=t[.!inontargets], y=d[.!inontargets], obs_plot...))
+				push!(pa, Gadfly.layer(x=t[inontargets], y=d[inontargets], Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "orange"), point_size=pointsize, highlight_width=0Gadfly.pt)), Gadfly.Geom.point())
+			else
+				d[inontargets] .= NaN
+				push!(pa, Gadfly.layer(x=t, y=d, obs_plot...))
+			end
 		end
 		colindex = Gadfly.Col.index(1:numberofsamples...)
 		colormap =
