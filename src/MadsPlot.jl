@@ -891,7 +891,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		Y = permutedims(matrix)
 		numberofsamples = s[1]
 	else
-		madswarn("Incorrect matrix size: size(matrix) = $(s)")
+		madswarn("Incorrect matrix size: Matrix size ($(s)) does not match the number of observations ($nT)!")
 		return
 	end
 	obs_plot = Any[]
