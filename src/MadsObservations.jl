@@ -3,6 +3,13 @@ import OrderedCollections
 import DocumentFunction
 import JSON
 
+function addobs!(madsdata::AbstractDict, obskey::AbstractString, obs::AbstractDict)
+	if !haskey(madsdata, "Observations")
+		madsdata["Observations"] = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+	end
+	madsdata["Observations"][obskey] = obs
+end
+
 """
 Is a dictionary containing all the observations
 

@@ -208,7 +208,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	rootname = Mads.getmadsrootname(madsdata)
 	madsdir = Mads.getmadsproblemdir(madsdata)
 	if !isdir(madsdir)
-		mkdir(madsdir)
+		Mads.recursivemkdir(madsdir)
 	end
 	f_lm, g_lm, o_lm = Mads.makelmfunctions(madsdata; parallel_gradients=parallel_optimization)
 	optparamkeys = Mads.getoptparamkeys(madsdata)
