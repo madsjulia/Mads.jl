@@ -10,17 +10,19 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 
 Returns:
 
-- `true` if the dictionary containing all the parameters, `false` otherwise
+- `true` if the dictionary contains all the parameters, `false` otherwise
 """
 function isparam(madsdata::AbstractDict, dict::AbstractDict)
 	if haskey(madsdata, "Parameters")
 		par = getparamkeys(madsdata)
+		type = getparamstype(madsdata)
 	else
 		par = collect(keys(madsdata))
 	end
 	flag = true
 	for i in par
-		if !haskey(dict, i)
+		if !haskey(dict, i) && type == "opt"
+			@warn("Parameter $(i) is missing!")
 			flag = false
 			break
 		end

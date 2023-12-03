@@ -62,6 +62,19 @@ function of(madsdata::AbstractDict, d::AbstractDict; filter::Union{AbstractVecto
 		@warn "Unknown input dictionary!"
 	end
 end
+function of(madsdata::AbstractDict, M::AbstractMatrix; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
+	optkeys = Mads.getoptparamkeys(madsdata)
+	if length(optkeys) != size(M, 2)
+		@warn "Number of columns in M does not match the number of optimization parameters!"
+	end
+	ofv = Vector{Float64}(undef, size(M, 1))
+	for i in 1:size(M, 1)
+		d = OrderedCollections.OrderedDict(zip(optkeys, M[i, :]))
+		resultdict = Mads.forward(madsdata, d)
+		ofv[i] = of(madsdata, collect(values(resultdict)); filter=filter)
+	end
+	return ofv
+end
 function of(madsdata::AbstractDict; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
 	resultdict = Mads.forward(madsdata)
 	of(madsdata, collect(values(resultdict)); filter=filter)
