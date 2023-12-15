@@ -18,9 +18,10 @@
 * Uncertainty Quantification
 * Model Selection and Averaging
 * Model Reduction and Surrogate Modeling
+* Risk Assessment
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
+[MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques that allow the analyses to be performed efficiently with minimum user input.
 
 [MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
 
@@ -30,14 +31,14 @@
 
 ## Documentation
 
-[MADS](http://madsjulia.github.io/Mads.jl) documentation, including description of all modules, functions, and variables, is available at:
+[MADS](http://madsjulia.github.io/Mads.jl) documentation, including descriptions of all modules, functions, and variables, is available at:
 - [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
 - [ReadtheDocs](https://mads.readthedocs.io) (outdated)
 - [LANL](https://madsjulia.lanl.gov) (outdated).
 
 [MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
-Detailed demontrative data ananlysis and model diagnostics problems are availble as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics). See also below.
+Detailed demontrative data analysis and model diagnostics problems are available as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics). See also below.
 
 ## Installation
 
@@ -47,7 +48,7 @@ In [Julia](https://julialang.org/downloads) REPL, execute:
 import Pkg; Pkg.add("Mads")
 ```
 
-To utilize the latest code updates use:
+To utilize the latest code updates, use:
 
 ```julia
 import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
@@ -77,7 +78,7 @@ import Mads; Mads.help()
 
 ## Examples
 
-Various examples located in the `examples` directory of the `Mads` repository.
+Various examples are located in the `examples` directory of the `Mads` repository.
 
 A list of all the examples is provided by:
 
@@ -113,7 +114,7 @@ include(joinpath(Mads.dir, "examples", "bigdt", "bigdt.jl"))
 
 ## Notebooks
 
-To explore evailable notebooks, execute:
+To explore available notebooks, please execute:
 
 ```julia
 Mads.notebooks()
