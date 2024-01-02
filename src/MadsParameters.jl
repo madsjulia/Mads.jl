@@ -15,13 +15,14 @@ Returns:
 function isparam(madsdata::AbstractDict, dict::AbstractDict)
 	if haskey(madsdata, "Parameters")
 		par = getparamkeys(madsdata)
-		type = getparamstype(madsdata)
+		partype = getparamstype(madsdata)
 	else
 		par = collect(keys(madsdata))
+		partype = ""
 	end
 	flag = true
 	for i in par
-		if !haskey(dict, i) && type == "opt"
+		if !haskey(dict, i) && partype == "opt"
 			@warn("Parameter $(i) is missing!")
 			flag = false
 			break
