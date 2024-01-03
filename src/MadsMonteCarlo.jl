@@ -128,7 +128,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
-	sleep(1) # rest to avoid method too new error
+	sleep(1) # rest to avoid a "method too new" error
 	if distributed_function
 		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
 		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)

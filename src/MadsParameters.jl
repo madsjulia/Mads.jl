@@ -18,7 +18,7 @@ function isparam(madsdata::AbstractDict, dict::AbstractDict)
 		partype = getparamstype(madsdata)
 	else
 		par = collect(keys(madsdata))
-		partype = ""
+		partype = "opt"
 	end
 	flag = true
 	for i in par
