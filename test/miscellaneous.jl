@@ -53,10 +53,11 @@ try
 	symlink(target, link)
 	rm(link)
 catch
+	Mads.madswarn("Symbolic links cannot be created!")
 	if Sys.iswindows()
-		Mads.madscritical("Symbolic links cannot be created! Microsoft Windows may require to execute julia as an administrator or in a windows developers mode.")
+		Mads.madswarn("Microsoft Windows requires to execute julia as an administrator or in a windows developers mode to be able to create links.")
 	else
-		Mads.madscritical("Symbolic links cannot be created!")
+		Mads.madswarn("If you are using a network drive, symbolic links may not be supported.")
 	end
 end
 
