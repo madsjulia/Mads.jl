@@ -1,5 +1,4 @@
 import Dash
-import Plotly
 import PlotlyJS
 import DataFrames
 import Statistics
@@ -433,7 +432,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 			name = "Sources",
 			hoverinfo = "text",
 			text = df_source[!, :label],
-			marker = Plotly.attr(; size=10, color="red")
+			marker = PlotlyJS.attr(; size=10, color="red")
 		)
 		lon = vcat(lon, df_source[!, :lon])
 		lat = vcat(lat, df_source[!, :lat])
@@ -446,7 +445,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 			name = "Sinks",
 			hoverinfo = "text",
 			text = df_sink[!, :label],
-			marker = Plotly.attr(; size=10, color="orange")
+			marker = PlotlyJS.attr(; size=10, color="orange")
 		)
 		lon = vcat(lon, df_sink[!, :lon])
 		lat = vcat(lat, df_sink[!, :lat])
@@ -462,7 +461,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 			hoverinfo = "text",
 			visible = visibility,
 			text = df_network[!, :label],
-			marker = Plotly.attr(; size=10, color="purple")
+			marker = PlotlyJS.attr(; size=10, color="purple")
 		)
 		lon = vcat(lon, collect(skipmissing(df_network[!, :lon])))
 		lat = vcat(lat, collect(skipmissing(df_network[!, :lat])))
@@ -478,7 +477,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 			hoverinfo = "text",
 			visible = visibility,
 			text = df_delaunay[!, :label],
-			marker = Plotly.attr(; size=10, color="green")
+			marker = PlotlyJS.attr(; size=10, color="green")
 		)
 		lon = vcat(lon, collect(skipmissing(df_delaunay[!, :lon])))
 		lat = vcat(lat, collect(skipmissing(df_delaunay[!, :lat])))
@@ -493,7 +492,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 			connectgaps = false,
 			hoverinfo = "text",
 			text = df_solution[!, :label],
-			marker = Plotly.attr(; size=10, color="green")
+			marker = PlotlyJS.attr(; size=10, color="green")
 		)
 		lon = vcat(lon, collect(skipmissing(df_solution[!, :lon])))
 		lat = vcat(lat, collect(skipmissing(df_solution[!, :lat])))
@@ -511,7 +510,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 	zoom = dx > 20 ? 3 : 4
 	layout = PlotlyJS.Layout(;
 		plot_bgcolor = "#fff",
-		mapbox = Plotly.attr(; style="stamen-terrain", zoom=zoom, center=Plotly.attr(; lon=lonc, lat=latc)),
+		mapbox = PlotlyJS.attr(; style="stamen-terrain", zoom=zoom, center=PlotlyJS.attr(; lon=lonc, lat=latc)),
 		showlegend = true)
 	p = PlotlyJS.plot(convert(Array{typeof(traces[1])}, traces), layout)
 	if filename != ""
@@ -568,7 +567,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 	layout = PlotlyJS.Layout(;
 		plot_bgcolor = "#fff",
 		height = 800,
-		mapbox = Plotly.attr(; style="stamen-terrain", zoom=zoom, center=Plotly.attr(; lon=lonc, lat=latc)),
+		mapbox = PlotlyJS.attr(; style="stamen-terrain", zoom=zoom, center=PlotlyJS.attr(; lon=lonc, lat=latc)),
 		showlegend = true)
 	app = Dash.dash(; suppress_callback_exceptions=true)
 	app.layout = Dash.html_div([
@@ -621,7 +620,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 					mode = "lines",
 					hoverinfo = "none",
 					showlegend = false,
-					line = Plotly.attr(color=colorl; width=2)
+					line = PlotlyJS.attr(color=colorl; width=2)
 				))
 			end
 			for i in 1:DataFrames.nrow(dff)
@@ -642,7 +641,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 					hoverinfo = "text",
 					text = [r.id],
 					showlegend = false,
-					marker = Plotly.attr(; size=9, color=colorp)
+					marker = PlotlyJS.attr(; size=9, color=colorp)
 				))
 			end
 			p = convert(Array{typeof(traces[1])}, traces)
@@ -656,8 +655,8 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 				connectgaps = false,
 				hoverinfo = "text",
 				text = dff[!, :id],
-				line = Plotly.attr(color=colors),
-				marker = Plotly.attr(; size=10, color=colors)
+				line = PlotlyJS.attr(color=colors),
+				marker = PlotlyJS.attr(; size=10, color=colors)
 			)
 		end
 		return [Dash.dcc_graph(id="interactive-plot", figure=PlotlyJS.plot(p, layout))]

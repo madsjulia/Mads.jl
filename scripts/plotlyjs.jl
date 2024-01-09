@@ -1,4 +1,3 @@
-import Plotly
 import PlotlyJS
 import CSV
 import DataFrames
