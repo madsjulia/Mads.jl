@@ -89,21 +89,29 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; all::Bool=fa
 		local rv
 		restartdir = getrestartdir(madsdata_c)
 		if checkpointfrequency != 0 && restartdir != ""
+			@info("RobustPmap for parallel execution of forward runs ...")
 			if s[2] == np
 				rv = RobustPmap.crpmap(i->f(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			else
 				rv = RobustPmap.crpmap(i->f(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:nr)
 			end
-			r = hcat(collect(rv)...)
+			r = hcat(collect.(values.(rv))...)
+		elseif Distributed.nprocs() > 1
+			@info("Distributed.pmap for parallel execution of forward runs ...")
+			if s[2] == np
+				rv = Distributed.pmap(i->f(vec(paramarray[i, :])), 1:nr)
+			else
+				rv = Distributed.pmap(i->f(vec(paramarray[:, i])), 1:nr)
+			end
+			r = hcat(collect.(values.(rv))...)
 		else
+			@info("Serial execution of forward runs ...")
 			rv = Array{Array{Float64}}(undef, nr)
 			if s[2] == np
-				# r = RobustPmap.rpmap(i->f(vec(paramarray[i, :])), 1:nr)
 				@ProgressMeter.showprogress 4 for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[i, :]))))
 				end
 			else
-				# r = RobustPmap.rpmap(i->f(vec(paramarray[:, i])), 1:nr)
 				@ProgressMeter.showprogress 4 for i = 1:nr
 					rv[i] = collect(values(f(vec(paramarray[:, i]))))
 				end
