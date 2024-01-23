@@ -877,7 +877,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], plot_nontargets::Bool=false, gm::AbstractVector=[])
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, alpha::Number=0.3, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], plot_nontargets::Bool=false, gm::AbstractVector=[])
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -928,7 +928,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		colormap =
 			if grayscale
 				function(nc)
-					[Gadfly.parse_colorant(["red"]); repeat(Gadfly.parse_colorant(["gray"]), inner=nc-1)]
+					repeat(Gadfly.parse_colorant(["gray"]); inner=nc)
 				end
 			else
 				palette = Gadfly.parse_colorant(colors)
@@ -939,7 +939,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		pl = Gadfly.plot(pa..., Gadfly.layer(Y, x=repeat(t; inner=numberofsamples), y=Gadfly.Col.value(1:numberofsamples...),
 			color=colindex, group=colindex, Gadfly.Geom.line()),
 			Gadfly.Scale.color_discrete(colormap),
-			Gadfly.Theme(key_position=:none, line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing),
+			Gadfly.Theme(key_position=:none, line_width=linewidth, point_size=pointsize, highlight_width=0Gadfly.pt, discrete_highlight_color=c->nothing, alphas=[alpha]),
 			Gadfly.Guide.title(title),
 			Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 			gm...)
@@ -1259,7 +1259,7 @@ function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::Abs
 			geometry = (plotline) ? [Gadfly.Geom.line()] : [Gadfly.Geom.point()]
 			geometry = (plotdots) ? [Gadfly.Geom.point()] : [Gadfly.Geom.line()]
 			geometry = (plotline && plotdots) ? [Gadfly.Geom.line(), Gadfly.Geom.point()] : geometry
-			pS = Gadfly.plot(X, x=repeat(xaxis, inner=nS), y=Gadfly.Col.value(1:nS...),
+			pS = Gadfly.plot(X, x=repeat(xaxis; inner=nS), y=Gadfly.Col.value(1:nS...),
 				color=colindex, group=colindex,
 				Gadfly.Scale.color_discrete(colormap),
 				geometry...,

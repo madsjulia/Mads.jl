@@ -1767,3 +1767,9 @@ function testlinks()
 	symlink(target, link)
 	rm(link)
 end
+
+function jld2append(fname, varname, data)
+	JLD2.jldopen(fname, "a+") do file
+		file[varname] = data
+	end
+end
