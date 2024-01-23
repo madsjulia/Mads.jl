@@ -43,7 +43,7 @@ Mads.quietoff()
 try
 	# Mads.runcmd(`julia -h`; quiet=true)
 catch
-	Mads.madswarn("Julia executable needs to be in the executable search path! Some of the test may fail!")
+	Mads.madswarn("Julia executable needs to be in the executable search path! Some of the tests may fail!")
 end
 
 try
@@ -55,7 +55,7 @@ try
 catch
 	Mads.madswarn("Symbolic links cannot be created!")
 	if Sys.iswindows()
-		Mads.madswarn("Microsoft Windows requires to execute julia as an administrator or in a windows developers mode to be able to create links.")
+		Mads.madswarn("Microsoft Windows requires to execute Julia as an administrator or in a Windows developers mode to be able to create links.")
 	else
 		Mads.madswarn("If you are using a network drive, symbolic links may not be supported.")
 	end
