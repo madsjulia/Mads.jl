@@ -1768,8 +1768,38 @@ function testlinks()
 	rm(link)
 end
 
-function jld2append(fname, varname, data)
+function jldappend(fname::AbstractString, varname::AbstractString, data::Any)
+	JLD.jldopen(fname, true, true, true, false, true) do file
+		file[varname] = data
+	end
+end
+
+function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
 	JLD2.jldopen(fname, "a+") do file
 		file[varname] = data
 	end
+end
+
+function jld2haskey(fname::AbstractString, varnames...)
+	flag = true
+	JLD2.jldopen(fname, "r") do file
+		for varname in varnames
+			if !haskey(file, varname)
+				flag = false
+			end
+		end
+	end
+	return flag
+end
+
+function jldhaskey(fname::AbstractString, varnames...)
+	flag = true
+	JLD.jldopen(fname, "r") do file
+		for varname in varnames
+			if !haskey(file, varname)
+				flag = false
+			end
+		end
+	end
+	return flag
 end
