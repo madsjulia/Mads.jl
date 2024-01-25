@@ -1780,6 +1780,18 @@ function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
 	end
 end
 
+function jldkeys(fname::AbstractString)
+	JLD.jldopen(fname, "r") do file
+		return keys(file)
+	end
+end
+
+function jld2keys(fname::AbstractString)
+	JLD2.jldopen(fname, "r") do file
+		return keys(file)
+	end
+end
+
 function jld2haskey(fname::AbstractString, varnames...)
 	flag = true
 	JLD2.jldopen(fname, "r") do file

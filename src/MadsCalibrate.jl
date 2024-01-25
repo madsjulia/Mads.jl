@@ -79,8 +79,8 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 		end
 	end
 	if save_results
-		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results_$(nparam)_$(nobs)_$(numberofsamples).jld2")) ...")
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results_$(nparam)_$(nobs)_$(numberofsamples).jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
+		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibrate_random_results_$(nparam)_$(nobs)_$(numberofsamples).jld2")) ...")
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibrate_random_results_$(nparam)_$(nobs)_$(numberofsamples).jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
 	end
 	Mads.setparamsinit!(madsdata, paramdict) # restore the original initial values
 	bestresult = Mads.forward(madsdata, bestparameters)
@@ -161,8 +161,8 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 		@warn("Something is very wrong! All the objective function estimates are NaN!")
 	end
 	if save_results
-		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results_$(nparam)_$(nobs)_$(numberofsamples).jld2")) ...")
-		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibraterandom_results_$(nparam)_$(nobs)_$(numberofsamples).jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
+		@info("Saving results to $(joinpath(Mads.getmadsproblemdir(madsdata), "calibrate_random_results_$(nparam)_$(nobs)_$(numberofsamples).jld2")) ...")
+		JLD2.save(joinpath(Mads.getmadsproblemdir(madsdata), "calibrate_random_results_$(nparam)_$(nobs)_$(numberofsamples).jld2"), "phi", allphi, "converged", allconverged, "parameters", allparameters)
 	end
 	ibest = first(sortperm(allphi))
 	for (j, paramkey) in enumerate(keys(paramoptvalues))
