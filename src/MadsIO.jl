@@ -1792,11 +1792,12 @@ function jld2keys(fname::AbstractString)
 	end
 end
 
-function jld2haskey(fname::AbstractString, varnames...)
+function jld2haskey(fname::AbstractString, varnames...; quiet::Bool=true)
 	flag = true
 	JLD2.jldopen(fname, "r") do file
 		for varname in varnames
 			if !haskey(file, varname)
+				!quiet && @info("$(varname) is missing in $(fname)")
 				flag = false
 			end
 		end
@@ -1804,11 +1805,12 @@ function jld2haskey(fname::AbstractString, varnames...)
 	return flag
 end
 
-function jldhaskey(fname::AbstractString, varnames...)
+function jldhaskey(fname::AbstractString, varnames...; quiet::Bool=true)
 	flag = true
 	JLD.jldopen(fname, "r") do file
 		for varname in varnames
 			if !haskey(file, varname)
+				!quiet && @info("$(varname) is missing in $(fname)")
 				flag = false
 			end
 		end

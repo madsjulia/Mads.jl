@@ -24,8 +24,17 @@ end
 function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 	if isfile(filename)
 		@info("Load AffineInvariantMCMC results from $(filename) ...")
-		chain, llhoods, observations, params, obs = JLD2.load(filename, "chain",  "llhoods", "observations", "params", "obs")
+		if Mads.jld2haskey(filename, ["chain", "llhoods"]; quiet=false)
+			@warn("$(filename) does not contain AffineInvariantMCMC results!")
+			return nothing, nothing, nothing
+		end
+		chain, llhoods, params, obs = JLD2.load(filename, "chain",  "llhoods", "params", "obs")
 		@info("AffineInvariantMCMC results loaded: number of parameters = $(size(chain, 1)); number of realizations = $(size(chain, 2))")
+		if Mads.jld2haskey(filename, ["observations", "params", "obs"]; quiet=false)
+			@warn("$(filename) does not contain AffineInvariantMCMC observation results!")
+			return chain, llhoods, nothing
+		end
+		observations, params, obs = JLD2.load(filename, "observations", "params", "obs")
 		flag_bad_data = false
 		if  size(observations, 1) != length(Mads.getobskeys(madsdata))
 			@warn("Different number of observations (Mads $(length(Mads.getobskeys(madsdata))) vs Input $(size(observations, 1)))!")
@@ -103,10 +112,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 			p0[i, j] = pmin[i] + rand(Mads.rng, d) * (pmax[i] - pmin[i])
 		end
 	end
-	chain, llhoods, observations = emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, save=false, kw...)
-	if save && filename != ""
-		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations, "params", Mads.getoptparamkeys(madsdata), "obs", Mads.getobskeys(madsdata))
-	end
+	chain, llhoods, observations = emceesampling(madsdata, p0; numwalkers=numwalkers, seed=seed, rng=rng, kw...)
 	return chain, llhoods, observations
 end
 
@@ -125,6 +131,8 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 			return chain, llhoods, observations
 		end
 	end
+	@info("Test a forward run ...")
+	Mads.forward(madsdata, [length(Mads.getoptparamkeys(madsdata)), 2])
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
@@ -133,22 +141,23 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
 		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)
 	end
-	newnsteps = div(burnin, numwalkers)
-	if newnsteps < 2
-		newnsteps = 2
-	end
 	@info("AffineInvariantMCMC burning stage ...")
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, newnsteps, 1; filename="", rng=Mads.rng, save=false)
-	newnsteps = div(nsteps, numwalkers)
-	if newnsteps < 2
-		newnsteps = 2
-	end
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, div(burnin, numwalkers), 1; filename="", rng=Mads.rng, save=false)
 	@info("AffineInvariantMCMC exploration stage ...")
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], newnsteps, thinning; filename="", rng=Mads.rng, save=false)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], div(nsteps, numwalkers), thinning; filename="", rng=Mads.rng, save=false)
 	chain, llhoods =  AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
-	observations = Mads.forward(madsdata, permutedims(chain))
 	if save && filename != ""
-		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "observations", observations)
+		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "params", Mads.getoptparamkeys(madsdata), "obs", Mads.getobskeys(madsdata))
+	end
+	local observations
+	try
+		observations = Mads.forward(madsdata, permutedims(chain))
+	catch e
+		@warn("AffineInvariantMCMC observations cannot be computed!")
+		observations = nothing
+	end
+	if !isnothing(observations) && save && filename != ""
+		Mads.jld2append(filename, "observations", observations)
 	end
 	return chain, llhoods, observations
 end
