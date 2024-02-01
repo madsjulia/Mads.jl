@@ -10,11 +10,11 @@ iii = 50
 @Distributed.everywhere import CSV
 @Distributed.everywhere @show @isdefined CSV
 
-@Distributed.everywhere f(x) = (sleep(2); println(x^2))
-@Distributed.everywhere @show @isdefined f
+@Distributed.everywhere function_test(x) = (sleep(1); y = x^2; println(y); return y)
+@Distributed.everywhere @show @isdefined function_test
 
-@time map(f, 1:4)
-@time Distributed.pmap(f, 1:4)
+@time map(function_test, 1:4)
+@time Distributed.pmap(function_test, 1:4)
 @time @sync @Distributed.distributed for i = 1:4
-	f(4)
+	function_test(4)
 end
