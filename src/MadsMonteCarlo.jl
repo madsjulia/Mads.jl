@@ -128,8 +128,6 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 			return chain, llhoods, observations
 		end
 	end
-	@info("Test a forward run ...")
-	Mads.forward(madsdata, [length(Mads.getoptparamkeys(madsdata)), 2])
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
