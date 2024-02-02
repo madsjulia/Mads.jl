@@ -15,5 +15,5 @@ sol .= 0
 @Distributed.everywhere function_test(x) = rand(8) .+ sum(x)
 
 @sync @Distributed.distributed for i = 1:5
-	so[i, :] .= function_test(sil[i, :])
+	so[i, :] .= function_test(allparameters[i, :])
 end
