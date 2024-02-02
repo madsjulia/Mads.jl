@@ -126,7 +126,7 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			r = hcat(rv...)
 		end
 	else
-		r = f(paramarray)
+		r = func_forward(paramarray)
 	end
 	return r
 end
