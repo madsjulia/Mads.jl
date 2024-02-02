@@ -16,9 +16,11 @@ function makearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makema
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
 	function arrayfunction_merge(arrayparameters::AbstractVector)
+		@assert length(arrayparameters) == length(optparamkeys)
 		return f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 	end
 	function arrayfunction(arrayparameters::AbstractVector)
+		@assert length(arrayparameters) == length(optparamkeys)
 		return f(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)))
 	end
 	if length(initparams) == length(optparamkeys)
@@ -106,6 +108,7 @@ function makearrayconditionalloglikelihood(madsdata::AbstractDict, conditionallo
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
 	function arrayconditionalloglikelihood(arrayparameters::AbstractVector)
+		@assert length(arrayparameters) == length(optparamkeys)
 		predictions = f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
@@ -130,12 +133,14 @@ function makearrayloglikelihood(madsdata::AbstractDict, loglikelihood)
 	initparams = Mads.getparamdict(madsdata)
 	function arrayloglikelihood(arrayparameters::AbstractVector)
 		predictions = OrderedCollections.OrderedDict()
+		@assert length(arrayparameters) == length(optparamkeys)
+		d = OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))
 		try
-			predictions = f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
+			predictions = f(merge(initparams, d))
 		catch
 			return -Inf
 		end
-		loglikelihood(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)), predictions, madsdata["Observations"])
+		loglikelihood(d, predictions, madsdata["Observations"])
 	end
 	return arrayloglikelihood
 end
