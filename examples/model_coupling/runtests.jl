@@ -60,11 +60,11 @@ else
 
 	Mads.madsinfo("Internal coupling with `LogLikelihood` ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-loglikelihood.mads"))
-	chain, llhoods = Mads.emceesampling(md; numwalkers=1, nsteps=1, burnin=1, thinning=1, seed=2018, sigma=0.01)
+	chain, llhoods = Mads.emceesampling(md; numwalkers=5, nsteps=5, burnin=1, thinning=1, seed=2018, sigma=0.01)
 
 	Mads.madsinfo("Internal coupling with `ConditionalLogLikelihood` ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-loglikelihood-conditional.mads"))
-	chain, llhoods = Mads.emceesampling(md; numwalkers=1, nsteps=1, burnin=1, thinning=1, seed=2018, sigma=0.01)
+	chain, llhoods = Mads.emceesampling(md; numwalkers=5, nsteps=5, burnin=1, thinning=1, seed=2018, sigma=0.01)
 
 	Mads.madsinfo("External coupling using `MADS model`, `Templates` and `Instructions` ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-madsmodel.mads"))

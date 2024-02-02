@@ -95,13 +95,12 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			r = hcat(collect.(values.(rv))...)
 		elseif parallel && Distributed.nprocs() > 1
 			@info("Parallel execution of forward runs ...")
-
-			psa = SharedArrays.SharedArray{Float64}(ncases, np)
 			if s[2] == np
 				rv1 = collect(values(func_forward(vec(paramarray[1, :]))))
-				psa .= collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
+				psa = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
 			else
 				rv1 = collect(values(func_forward(vec(paramarray[:, 1]))))
+				psa = Array{Float64}(undef, ncases, np)
 				psa .= permutedims(collect(paramarray)) # collect to avoid issues if paramarray is a SharedArray
 			end
 			r = SharedArrays.SharedArray{Float64}(length(rv1), ncases)
@@ -134,9 +133,9 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			r = hcat(rv...)
 		end
 	else
-		r = func_forward(paramarray)
+		r = values(func_forward(paramarray))
 	end
-	return r
+	return collect(r)
 end
 
 @doc """
