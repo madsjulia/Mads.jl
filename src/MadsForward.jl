@@ -45,7 +45,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 		return forward(madsdata_c, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
-function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bool=true, pmap::Bool=false, all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
+function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bool=true, robustpmap::Bool=false, all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
 	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
@@ -99,12 +99,12 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			end
 			r = hcat(collect.(values.(rv))...)
 		elseif parallel && Distributed.nprocs() > 1
-			if pmap
+			if robustpmap
 				@info("RobustPmap for parallel execution of forward runs ...")
 				if s[2] == np
-					rv = RobustPmap.pmap(func_forward, collect(paramarray))
+					rv = RobustPmap.rpmap(func_forward, collect(paramarray))
 				else
-					rv = RobustPmap.pmap(func_forward, permutedims(collect(paramarray)))
+					rv = RobustPmap.rpmap(func_forward, permutedims(collect(paramarray)))
 				end
 				r = hcat(collect.(values.(rv))...)
 			else
