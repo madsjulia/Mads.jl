@@ -45,7 +45,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 		return forward(madsdata_c, paramarray; all=all, checkpointfrequency=checkpointfrequency, checkpointfilename=checkpointfilename)
 	end
 end
-function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bool=true, all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
+function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bool=true, pmap::Bool=false, all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
 	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
@@ -80,13 +80,18 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 	else
 		madsdata_c = madsdata
 	end
+	if s[2] == np
+		Mads.forward(madsdata_c, collect(paramarray[1:2, :]); parallel=false)
+	else
+		Mads.forward(madsdata_c, collect(paramarray[:, 1:2]); parallel=false)
+	end
 	func_forward = Mads.makearrayfunction(madsdata_c)
 	local r
 	if length(s) == 2
 		local rv
 		restartdir = getrestartdir(madsdata_c)
 		if checkpointfrequency != 0 && restartdir != ""
-			@info("RobustPmap for parallel execution of forward runs ...")
+			@info("RobustPmap for parallel execution of forward runs with checkpoint frequency...")
 			if s[2] == np
 				rv = RobustPmap.crpmap(i->func_forward(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:ncases)
 			else
@@ -94,30 +99,39 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			end
 			r = hcat(collect.(values.(rv))...)
 		elseif parallel && Distributed.nprocs() > 1
-			@info("Parallel execution of forward runs ...")
-			if s[2] == np
-				rv1 = collect(values(func_forward(vec(paramarray[1, :]))))
-				psa = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
+			if pmap
+				@info("RobustPmap for parallel execution of forward runs ...")
+				if s[2] == np
+					rv = RobustPmap.pmap(func_forward, collect(paramarray))
+				else
+					rv = RobustPmap.pmap(func_forward, permutedims(collect(paramarray)))
+				end
+				r = hcat(collect.(values.(rv))...)
 			else
-				rv1 = collect(values(func_forward(vec(paramarray[:, 1]))))
-				psa = Array{Float64}(undef, ncases, np)
-				psa .= permutedims(collect(paramarray)) # collect to avoid issues if paramarray is a SharedArray
+				@info("Parallel execution of forward runs ...")
+				if s[2] == np
+					rv1 = collect(values(func_forward(vec(paramarray[1, :]))))
+					psa = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
+				else
+					rv1 = collect(values(func_forward(vec(paramarray[:, 1]))))
+					psa = permutedims(collect(paramarray)) # collect to avoid issues if paramarray is a SharedArray
+				end
+				r = SharedArrays.SharedArray{Float64}(length(rv1), ncases)
+				r[:, 1] = rv1
+				Distributed.@everywhere madsdata_c = $madsdata_c
+				@sync @Distributed.distributed for i = 2:ncases
+					func_forward = Mads.makearrayfunction(madsdata_c) # this is needed to avoid issues with the closure
+					r[:, i] = collect(values(func_forward(vec(psa[i, :]))))
+				end
+				# @info("Distributed.pmap for parallel execution of forward runs ...") # this fails! func_forward is not defined on workers
+				# p = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
+				# if s[2] == np
+				# 	rv = Distributed.pmap(i->func_forward(vec(p[i, :])), 1:ncases)
+				# else
+				# 	rv = Distributed.pmap(i->func_forward(vec(p[:, i])), 1:ncases)
+				# end
+				# r = hcat(collect.(values.(rv))...)
 			end
-			r = SharedArrays.SharedArray{Float64}(length(rv1), ncases)
-			r[:, 1] = rv1
-			Distributed.@everywhere madsdata_c = $madsdata_c
-			@sync @Distributed.distributed for i = 2:ncases
-				func_forward = Mads.makearrayfunction(madsdata_c) # this is needed to avoid issues with the closure
-				r[:, i] = collect(values(func_forward(vec(psa[i, :]))))
-			end
-			# @info("Distributed.pmap for parallel execution of forward runs ...") # this fails! func_forward is not defined on workers
-			# p = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
-			# if s[2] == np
-			# 	rv = Distributed.pmap(i->func_forward(vec(p[i, :])), 1:ncases)
-			# else
-			# 	rv = Distributed.pmap(i->func_forward(vec(p[:, i])), 1:ncases)
-			# end
-			# r = hcat(collect.(values.(rv))...)
 		else
 			@info("Serial execution of forward runs ...")
 			rv = Array{Array{Float64}}(undef, ncases)

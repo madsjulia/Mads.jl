@@ -170,7 +170,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	end
 	bestresult = Mads.forward(madsdata, paramdict)
 	if all_results
-		return paramdict, bestresult, allphi, allparameters
+		return paramdict, bestresult, collect(allphi), collect(allparameters)
 	else
 		return paramdict, bestresult
 	end
