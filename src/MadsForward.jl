@@ -46,7 +46,6 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 	end
 end
 function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bool=true, robustpmap::Bool=false, all::Bool=false, checkpointfrequency::Integer=0, checkpointfilename::AbstractString="checkpoint_forward")
-	paramdict = Mads.getparamdict(madsdata)
 	if sizeof(paramarray) == 0
 		return forward(madsdata; all=all)
 	end
