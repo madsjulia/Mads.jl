@@ -79,11 +79,6 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 	else
 		madsdata_c = madsdata
 	end
-	if s[2] == np
-		Mads.forward(madsdata_c, collect(paramarray[1:2, :]); parallel=false)
-	else
-		Mads.forward(madsdata_c, collect(paramarray[:, 1:2]); parallel=false)
-	end
 	func_forward = Mads.makearrayfunction(madsdata_c)
 	local r
 	if length(s) == 2
