@@ -2,7 +2,10 @@ import Pkg
 import DocumentFunction
 import Random
 
-function subset_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Integer=0)
+function subsample_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Integer=0)
+	if overall == 0 && best_worst == 0
+		return trues(size(m, 2))
+	end
 	if overall >= size(m, 2) || best_worst >= size(m, 2)
 		return trues(size(m, 2))
 	end
