@@ -2,6 +2,24 @@ import Pkg
 import DocumentFunction
 import Random
 
+function subset_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Integer=0)
+	if overall >= size(m, 2) || best_worst >= size(m, 2)
+		return trues(size(m, 2))
+	end
+	ix = falses(size(m, 2))
+	for i = 1:size(m, 1)
+		rs = sortperm(m[i, :])
+		ix[rs[1:best_worst]] .= true
+		ix[rs[end-best_worst+1:end]] .= true
+	end
+	if sum(ix) < overall
+		ir = Random.randperm(size(m, 2)-sum(ix))[1:overall-sum(ix)]
+		ia = findall(i->!(i .> 0), ix)[ir]
+		ix[ia] .= true
+	end
+	return ix
+end
+
 function maximumnan(X, c...; kw...)
 	maximum(X[.!isnan.(X)], c...; kw...)
 end
