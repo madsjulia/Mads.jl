@@ -436,34 +436,55 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi)
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi, separate_files::Bool=false)
 	@assert np == size(samples, 2)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamlabels(madsdata, paramkeys)
-	cs = Array{Compose.Context}(undef, np, np)
+	if separate_files
+		hsize = 6Gadfly.inch
+		vsize = 6Gadfly.inch
+		filename_root, filename_ext = splitext(filename)
+	else
+		hsize = (6 * np)Gadfly.inch
+		vsize = (6 * np)Gadfly.inch
+		cs = Array{Compose.Context}(undef, np, np)
+	end
+	nz = convert(Int64, ceil(log10(np))) + 1
 	for i in 1:np
 		for j in 1:np
 			if i == j
-				cs[i, j] = Gadfly.render(Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
+				p = Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
 					Gadfly.Guide.XLabel(plotlabels[i]),
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size)
-					))
+				)
+				if separate_files
+					fn = filename_root * "_histogram_" * "$(lpad(i, nz, '0'))_" * plotlabels[i] * "." * filename_ext
+					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+				else
+					cs[j, i] = Gadfly.render(p)
+				end
 			else
-				cs[j, i] = Gadfly.render(Gadfly.plot(x=samples[:, i], y=samples[:, j],
+				p = Gadfly.plot(x=samples[:, i], y=samples[:, j],
 					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size, point_size=pointsize, highlight_width=highlight_width)
-					))
+				)
+				if separate_files
+					fn = filename_root * "_scatter_" * "$(lpad(i, nz, '0'))_" * "$(lpad(j, nz, '0'))_" * plotlabels[i] * "_" * plotlabels[j] * "." * filename_ext
+					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+				else
+					cs[j, i] = Gadfly.render(p)
+				end
 			end
 		end
 	end
-	hsize = (6 * np)Gadfly.inch
-	vsize = (6 * np)Gadfly.inch
-	try
-		pl = Compose.gridstack(cs)
-		plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
-	catch errmsg
-		printerrormsg(errmsg)
-		Mads.madswarn("Scatterplotsamples: Gadfly fails!")
+	if !separate_files
+		try
+			pl = Compose.gridstack(cs)
+			plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
+		catch errmsg
+			printerrormsg(errmsg)
+			Mads.madswarn("Scatterplotsamples: Gadfly fails!")
+		end
 	end
 	return nothing
 end
