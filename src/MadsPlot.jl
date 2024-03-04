@@ -458,7 +458,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size)
 				)
 				if separate_files
-					fn = filename_root * "_histogram_" * "$(lpad(i, nz, '0'))_" * plotlabels[i] * "." * filename_ext
+					fn = filename_root * "_histogram_" * "$(lpad(i, nz, '0'))_" * plotlabels[i] * filename_ext
 					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
 				else
 					cs[j, i] = Gadfly.render(p)
@@ -469,7 +469,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size, point_size=pointsize, highlight_width=highlight_width)
 				)
 				if separate_files
-					fn = filename_root * "_scatter_" * "$(lpad(i, nz, '0'))_" * "$(lpad(j, nz, '0'))_" * plotlabels[i] * "_" * plotlabels[j] * "." * filename_ext
+					fn = filename_root * "_scatter_" * "$(lpad(i, nz, '0'))_" * "$(lpad(j, nz, '0'))_" * plotlabels[i] * "_" * plotlabels[j] * filename_ext
 					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
 				else
 					cs[j, i] = Gadfly.render(p)
