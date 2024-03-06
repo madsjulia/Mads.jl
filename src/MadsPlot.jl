@@ -436,13 +436,15 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi, separate_files::Bool=false)
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi, separate_files::Bool=false, plottypes::AbstractVector=[:histogram, :scatter])
 	@assert np == size(samples, 2)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamlabels(madsdata, paramkeys)
 	if separate_files
 		hsize = 6Gadfly.inch
 		vsize = 6Gadfly.inch
+		major_label_font_size /= np / 4
+		minor_label_font_size /= np / 4
 		filename_root, filename_ext = splitext(filename)
 	else
 		hsize = (6 * np)Gadfly.inch
@@ -450,7 +452,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 		cs = Array{Compose.Context}(undef, np, np)
 	end
 	nz = convert(Int64, ceil(log10(np))) + 1
-	for i in 1:np
+	@ProgressMeter.showprogress 1 "Ploting histogram and scatter plots ..." for i in 1:np
 		for j in 1:np
 			if i == j
 				p = Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
@@ -458,19 +460,23 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size)
 				)
 				if separate_files
-					fn = filename_root * "_histogram_" * "$(lpad(i, nz, '0'))_" * plotlabels[i] * filename_ext
-					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+					if :histogram in plottypes
+						fn = filename_root * "_histogram_" * "$(lpad(i, nz, '0'))_" * plotlabels[i] * filename_ext
+						plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+					end
 				else
 					cs[j, i] = Gadfly.render(p)
 				end
-			else
+			else i != j
 				p = Gadfly.plot(x=samples[:, i], y=samples[:, j],
 					Gadfly.Guide.XLabel(plotlabels[i]), Gadfly.Guide.YLabel(plotlabels[j]),
 					Gadfly.Theme(major_label_font_size=major_label_font_size, minor_label_font_size=minor_label_font_size, point_size=pointsize, highlight_width=highlight_width)
 				)
 				if separate_files
-					fn = filename_root * "_scatter_" * "$(lpad(i, nz, '0'))_" * "$(lpad(j, nz, '0'))_" * plotlabels[i] * "_" * plotlabels[j] * filename_ext
-					plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+					if :scatter in plottypes
+						fn = filename_root * "_scatter_" * "$(lpad(i, nz, '0'))_" * "$(lpad(j, nz, '0'))_" * plotlabels[i] * "_" * plotlabels[j] * filename_ext
+						plotfileformat(p, fn, hsize, vsize; format=format, dpi=dpi)
+					end
 				else
 					cs[j, i] = Gadfly.render(p)
 				end
@@ -751,7 +757,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 	for paramkey in paramoptkeys
 		Mads.madsoutput("Parameter: $paramkey ...\n")
 		Y = Array{Float64}(undef, nT, numberofsamples)
-		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
+		@ProgressMeter.showprogress 4 "Computing predictions ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
 			paramdict[paramkey] = paramdictarray[paramkey][i]
 			result = func(paramdict)
@@ -879,7 +885,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	if flag_params
 		numberofsamples = length(dictarray[paramoptkeys[1]])
 		Y = Array{Float64}(undef, nT, numberofsamples)
-		@ProgressMeter.showprogress 4 "Computing ..." for i in 1:numberofsamples
+		@ProgressMeter.showprogress 4 "Computing predictions ..." for i in 1:numberofsamples
 			for paramkey in paramoptkeys
 				paramdict[paramkey] = dictarray[paramkey][i]
 			end
