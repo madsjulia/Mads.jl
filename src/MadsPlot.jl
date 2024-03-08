@@ -450,6 +450,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 		hsize = (6 * np)Gadfly.inch
 		vsize = (6 * np)Gadfly.inch
 		cs = Array{Compose.Context}(undef, np, np)
+		plottypes = [:histogram, :scatter]
 	end
 	nz = convert(Int64, ceil(log10(np))) + 1
 	@ProgressMeter.showprogress 1 "Ploting histogram and scatter plots ..." for i in 1:np
@@ -485,7 +486,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 			plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
 		catch errmsg
 			printerrormsg(errmsg)
-			Mads.madswarn("Scatterplotsamples: Gadfly fails!")
+			madswarn("Scatterplotsamples: Gadfly fails!")
 		end
 	end
 	return nothing
