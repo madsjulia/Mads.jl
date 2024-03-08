@@ -150,6 +150,7 @@ if !haskey(ENV, "MADS_NO_PLOT")
 		end
 	end
 	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
+		@Mads.tryimport Conda
 		@Mads.tryimport PyCall
 		@Mads.tryimport PyPlot
 		if !isdefined(Mads, :PyPlot)
