@@ -11,8 +11,11 @@ function p10_p50_p90(x::AbstractMatrix)
 	p10 = similar(xmean)
 	p90 = similar(xmean)
 	nt, ns = size(x)
-	n10 = Int(floor(ns * 0.01 + 1))
-	n90 = Int(ceil(ns * 0.99))
+	n10 = Int(floor(1 + ns * 0.1))
+	n90 = Int(ceil(1 + ns * 0.9))
+	if n90 > ns
+		n90 = ns
+	end
 	for i = 1:nt
 		is = sortperm(x[i,:])
 		p10[i] = x[i,is][n10]
