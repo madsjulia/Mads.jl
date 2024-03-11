@@ -1517,7 +1517,6 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	if load
 		rootname = Mads.getmadsrootname(md)
 		filename = "$(rootname)-efast-$(Ns_total).jld2"
-		@show filename
 		if isfile(filename)
 			flag_bad_data = false
 			efast_results = JLD2.load(filename, "efast_results")

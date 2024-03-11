@@ -1,7 +1,7 @@
 import Stipple
 
 @Stipple.vars Name begin
-	name::R{String} = "World!"
+	name::Stipple.R{String} = "World!"
 end
 
 function ui()
@@ -19,10 +19,12 @@ function ui()
 end
 
 Stipple.route("/") do
-	global model
-	model = Name
-	Stipple.init(model)
-	Stipple.html(Stipple.page(model, ui()))
+	# global model
+	# model = Stipple.init(Name)
+	# Stipple.html(Stipple.page(model, ui()))
+	# model = Name |> Stipple.init
+	# Stipple.page(model, ui()) |> Stipple.html
+	Stipple.html(Stipple.page(Stipple.init(Name), ui()))
 end
 
-up()
+Stipple.up()
