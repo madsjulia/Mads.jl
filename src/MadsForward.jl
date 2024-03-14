@@ -86,33 +86,38 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 		restartdir = getrestartdir(madsdata_c)
 		if checkpointfrequency != 0 && restartdir != ""
 			@info("RobustPmap for parallel execution of forward runs with checkpoint frequency...")
-			if s[2] == np
-				rv = RobustPmap.crpmap(i->func_forward(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:ncases)
-			else
+			if s[1] == np
 				rv = RobustPmap.crpmap(i->func_forward(vec(paramarray[:, i])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:ncases)
+			else
+				rv = RobustPmap.crpmap(i->func_forward(vec(paramarray[i, :])), checkpointfrequency, joinpath(restartdir, checkpointfilename), 1:ncases)
 			end
 			r = hcat(collect.(values.(rv))...)
 		elseif parallel && Distributed.nprocs() > 1
 			if robustpmap
 				@info("RobustPmap for parallel execution of forward runs ...")
-				if s[2] == np
-					rv = RobustPmap.rpmap(func_forward, collect(paramarray))
-				else
+				if s[1] == np
+					# @show paramarray[:, 1]
+					# @show collect(values(func_forward(vec(paramarray[:, 1]))))
 					rv = RobustPmap.rpmap(func_forward, permutedims(collect(paramarray)))
+				else
+					# @show paramarray[1, :]
+					# @show collect(values(func_forward(vec(paramarray[1, :]))))
+					rv = RobustPmap.rpmap(func_forward, collect(paramarray))
 				end
 				r = hcat(collect.(values.(rv))...)
 			else
 				@info("Parallel execution of forward runs ...")
-				if s[2] == np
-					rv1 = collect(values(func_forward(vec(paramarray[1, :]))))
-					psa = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
-				else
+				if s[1] == np
 					rv1 = collect(values(func_forward(vec(paramarray[:, 1]))))
 					psa = permutedims(collect(paramarray)) # collect to avoid issues if paramarray is a SharedArray
+
+				else
+					rv1 = collect(values(func_forward(vec(paramarray[1, :]))))
+					psa = collect(paramarray) # collect to avoid issues if paramarray is a SharedArray
 				end
 				r = SharedArrays.SharedArray{Float64}(length(rv1), ncases)
 				r[:, 1] = rv1
-				Distributed.@everywhere madsdata_c = $madsdata_c
+				@Distributed.everywhere madsdata_c = $madsdata_c
 				@sync @Distributed.distributed for i = 2:ncases
 					func_forward = Mads.makearrayfunction(madsdata_c) # this is needed to avoid issues with the closure
 					r[:, i] = collect(values(func_forward(vec(psa[i, :]))))

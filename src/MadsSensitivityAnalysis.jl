@@ -1133,7 +1133,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=true, robustpmap::Bool=false, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1357,12 +1357,29 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		else
 			=#
 			# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-			Mads.madsoutput("Compute model output in parallel ... $(P) > $(Nr*nprime+(Nr+1)) ...\n")
-			Mads.madsoutput("Computing models in parallel - Parameter k = $k ($(paramkeys[k])) ...\n")
-			if restart
-				Y = hcat(RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))...)'
-			else
-				Y = hcat(RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))...)'
+			Mads.madsoutput("Compute model outputs ... $(P) > $(Nr*nprime+(Nr+1)) ...\n")
+			Mads.madsoutput("Computing model for Parameter k = $k ($(paramkeys[k])) ...\n")
+			if robustpmap
+				if restart
+					@info("RobustPmap for parallel execution of forward runs with restart ...")
+					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
+
+				else
+					@info("RobustPmap for parallel execution of forward runs without restart ...")
+					m = RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
+				end
+				Y = permutedims(hcat(m...))
+			elseif parallel && Distributed.nprocs() > 1
+				rv1 = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[1, :]))))))
+				psa = collect(X) # collect to avoid issues if paramarray is a SharedArray
+				r = SharedArrays.SharedArray{Float64}(length(rv1), size(X, 1))
+				r[:, 1] = rv1
+				@Distributed.everywhere md = $md
+				@sync @Distributed.distributed for i = 2:size(X, 1)
+					func_forward = Mads.makemadscommandfunction(md) # this is needed to avoid issues with the closure
+					r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :]))))))
+				end
+				Y = permutedims(collect(r))
 			end
 		#end #End if (processors)
 
