@@ -18,9 +18,10 @@ import StipplePlotly
 	]
 	layout::StipplePlotly.PlotLayout = StipplePlotly.PlotLayout(
 		mapbox = StipplePlotly.PlotLayoutMapbox(; style="stamen-terrain", zoom=5, center=StipplePlotly.MCenter(-73, 46)),
-		showlegend= false,
-		height= 450,
-		width= 600
+		paper_bgcolor="#000",
+		showlegend= true,
+		height=450,
+		width=600
 	)
 	config::StipplePlotly.PlotConfig = StipplePlotly.PlotConfig()
 end
