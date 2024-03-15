@@ -1,7 +1,7 @@
 import Stipple
 
 @Stipple.vars Name begin
-	name::Stipple.R{String} = "World!"
+	name::String = "World!"
 end
 
 function ui()
@@ -10,7 +10,6 @@ function ui()
 			"Hello "
 			Stipple.span("", @Stipple.text(:name))
 		])
-
 		Stipple.p([
 			"What is your name? "
 			Stipple.input("", placeholder="Type your name", @Stipple.bind(:name))
