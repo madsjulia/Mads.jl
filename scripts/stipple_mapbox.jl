@@ -1,7 +1,7 @@
 import Stipple
 import StipplePlotly
 
-@Stipple.vars UIModelMap begin
+@Stipple.vars UIMapBox begin
 	data::Vector{StipplePlotly.PlotData} = [
 		StipplePlotly.PlotData(
 			plot = StipplePlotly.Charts.PLOT_TYPE_SCATTERMAPBOX,
@@ -19,27 +19,25 @@ import StipplePlotly
 	layout::StipplePlotly.PlotLayout = StipplePlotly.PlotLayout(
 		mapbox = StipplePlotly.PlotLayoutMapbox(; style="stamen-terrain", zoom=5, center=StipplePlotly.MCenter(-73, 46)),
 		paper_bgcolor="#000",
-		showlegend= true,
-		height=450,
-		width=600
+		showlegend= true
 	)
 	config::StipplePlotly.PlotConfig = StipplePlotly.PlotConfig()
 end
 
-ui_model_map = UIModelMap |> Stipple.init
+ui_model_map = UIMapBox |> Stipple.init
 
-ui_model_map = Stipple.init(UIModelMap)
+ui_model_map = Stipple.init(UIMapBox)
 
 function ui_map(ui_model_map)
-	Stipple.page(
-		ui_model_map,
-		class = "container",
+	Stipple.page(ui_model_map, class = "container", [
+		Stipple.header("Mapbox")
 		StipplePlotly.plot(:data; layout=:layout, config="{displaylogo:false, scrollzoom:true}")
-	)
+		Stipple.footer("Footer")
+	])
 end
 
 Stipple.route("/") do
-	Stipple.init(UIModelMap) |> ui_map |> Stipple.html
+	Stipple.init(UIMapBox) |> ui_map |> Stipple.html
 end
 
 Stipple.down()
