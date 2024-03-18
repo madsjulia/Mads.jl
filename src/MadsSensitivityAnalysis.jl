@@ -1549,13 +1549,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			missing_observations = Vector{String}(undef, 0)
 			missing_parameters = Vector{String}(undef, 0)
 			if !flag_bad_data
-				for o in keys(md(["Observations"]))
-					if !haskey(efast_results["mes"], k)
+				for o in keys(md["Observations"])
+					if !haskey(efast_results["mes"], o)
 						flag_bad_data = true
 						push!(missing_observations, o)
 					end
 				end
-				for p in keys(md(["Parameters"]))
+				for p in keys(md["Parameters"])
+					@show p
 					if !haskey(efast_results["mes"][first_observation], p)
 						flag_bad_data = true
 						push!(missing_parameters, p)

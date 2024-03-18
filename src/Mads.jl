@@ -35,27 +35,25 @@ function julia_main()::Cint
 	else
 		@warn "Arguments should be provided on the command line!"
 	end
-
 	md = Mads.loadmadsfile(filename)
 	Mads.calibrate(md)
-
 	return 0
 end
 
 include("MadsModules.jl")
 
 try
-	run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
-	global madsbash = true
-catch
-	global madsbash = false
-end
-
-try
 	run(pipeline(`git help`; stdout=devnull, stderr=devnull))
 	global madsgit = true
 catch
 	global madsgit = false
+end
+
+try
+	run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
+	global madsbash = true
+catch
+	global madsbash = false
 end
 
 try
@@ -102,7 +100,8 @@ if haskey(ENV, "MADS_NOT_QUIET")
 end
 
 include("MadsHelp.jl")
-Mads.welcome()
+# Mads.welcome()
+poop
 include("MadsExamples.jl")
 include("MadsCapture.jl")
 include("MadsLog.jl")
