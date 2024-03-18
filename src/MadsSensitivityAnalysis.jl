@@ -1556,7 +1556,6 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 					end
 				end
 				for p in keys(md["Parameters"])
-					@show p
 					if !haskey(efast_results["mes"][first_observation], p)
 						flag_bad_data = true
 						push!(missing_parameters, p)
