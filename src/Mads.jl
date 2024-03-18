@@ -101,7 +101,6 @@ end
 
 include("MadsHelp.jl")
 # Mads.welcome()
-poop
 include("MadsExamples.jl")
 include("MadsCapture.jl")
 include("MadsLog.jl")
