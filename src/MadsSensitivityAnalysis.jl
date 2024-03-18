@@ -1542,7 +1542,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 				flag_bad_data = true
 			end
 			first_observation = first(first(efast_results["mes"]))
-			if length(md["Parameters"]) != length(efast_results["mes"][first_observation])
+			if length(Mads.getoptparams(md)) != length(efast_results["mes"][first_observation])
 				@warn("Different number of parameters (Mads $(length(md["Parameters"])) Input $( length(efast_results["mes"][first_observation])))!")
 				flag_bad_data = true
 			end
