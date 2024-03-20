@@ -118,8 +118,20 @@ end
 
 function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
 	if load && filename != ""
+		bad_data = false
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
+			bad_data = true
+		else
+			if size(chain, 2) != numwalkers * nsteps
+				@warn("Preexisting data does not match the number of walkers and steps!")
+				bad_data = true
+			elseif size(chain,12) != length(Mads.getoptparamkeys(madsdata))
+				@warn("Preexisting data does not match the number of parameters!")
+				bad_data = true
+			end
+		end
+		if bad_data
 			if execute
 				@info("AffineInvariantMCMC will be executed! No preexisting data to load ...")
 			else
