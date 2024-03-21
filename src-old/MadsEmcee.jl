@@ -23,7 +23,7 @@ Example:
 Mads.emcee(llhood, numwalkers=10, numsamples_perwalker=100, thinning=1)
 ```
 """
-function sample(llhood::Function, numwalkers::Integer, x0::AbstractMatrix, numsamples_perwalker::Integer, thinning::Integer, a::Number=2.; filename::AbstractString="", load::Bool=true, save::Bool=true, rng::Random.AbstractRNG=Random.GLOBAL_RNG)
+function sample(llhood::Function, numwalkers::Integer, x0::AbstractMatrix, numsamples_perwalker::Integer, thinning::Integer=numwalkers, a::Number=2.; filename::AbstractString="", load::Bool=true, save::Bool=true, rng::Random.AbstractRNG=Random.GLOBAL_RNG)
 	if filename != "" && isfile(filename) && load
 		chain, llhoodvals = JLD2.load(filename, "chain", "llhoods")
 	end

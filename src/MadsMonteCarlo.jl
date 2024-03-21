@@ -76,6 +76,7 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 			return chain, llhoods, observations
 		end
 	else
+		@warn("AffineInvariantMCMC results file $(filename) is missing!")
 		return nothing, nothing, nothing
 	end
 end
@@ -116,17 +117,20 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 	return chain, llhoods, observations
 end
 
-function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nsteps::Integer=100, burnin::Integer=10, thinning::Integer=1, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=10, thinning::Integer=numwalkers, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+	numsamples_perwalker = div(nexecutions, numwalkers)
 	if load && filename != ""
 		bad_data = false
+		@info("AffineInvariantMCMC preexisting data loading $(filename) ...")
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
+			@warn("Empty!")
 			bad_data = true
 		else
-			if size(chain, 2) != numwalkers * nsteps
+			if size(chain, 2) != div(numsamples_perwalker, thinning) * numwalkers
 				@warn("Preexisting data does not match the number of walkers and steps!")
 				bad_data = true
-			elseif size(chain,12) != length(Mads.getoptparamkeys(madsdata))
+			elseif size(chain, 1) != length(Mads.getoptparamkeys(madsdata))
 				@warn("Preexisting data does not match the number of parameters!")
 				bad_data = true
 			end
@@ -151,10 +155,13 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
 		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)
 	end
-	@info("AffineInvariantMCMC burning stage ...")
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, div(burnin, numwalkers), 1; filename="", rng=Mads.rng, save=false)
-	@info("AffineInvariantMCMC exploration stage ...")
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], div(nsteps, numwalkers), thinning; filename="", rng=Mads.rng, save=false)
+	numsamples_perwalker_burnin = div(burnin, numwalkers)
+	numsamples = numsamples_perwalker_burnin * numwalkers
+	@info("AffineInvariantMCMC burning stage (total number of executions $(numsamples), final burning chain size $(numsamples_perwalker_burnin * numwalkers))...")
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, numsamples_perwalker_burnin, 1; filename="", load=false, save=false, rng=Mads.rng)
+	numsamples = numsamples_perwalker * numwalkers
+	@info("AffineInvariantMCMC exploration stage (total number of executions $(numsamples), final chain size $(div(numsamples_perwalker, thinning) * numwalkers))...")
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], numsamples_perwalker, thinning; filename="", load=false, save=false, rng=Mads.rng,)
 	chain, llhoods =  AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 	if save && filename != ""
 		JLD2.save(filename, "chain", chain, "llhoods", llhoods, "params", Mads.getoptparamkeys(madsdata), "obs", Mads.getobskeys(madsdata))
