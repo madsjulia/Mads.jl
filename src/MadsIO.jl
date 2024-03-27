@@ -52,16 +52,36 @@ function load_data(filename::AbstractString; sheet::AbstractString="Sheet1", fir
 	end
 	e = lowercase(last(splitext(filename)))
 	if e == ".csv"
-		c = CSV.read(filename, DataFrames.DataFrame)
+		try
+			c = CSV.read(filename, DataFrames.DataFrame)
+		catch
+			@error("CSV error reading $(filename)!")
+			c = DataFrames.DataFrame()
+		end
 	elseif e == ".xlsx"
-		c = DataFrames.DataFrame(XLSX.readtable(filename, sheet; stop_in_empty_row=false, header=true, first_row=first_row))
+		try
+			c = DataFrames.DataFrame(XLSX.readtable(filename, sheet; stop_in_empty_row=false, header=true, first_row=first_row))
+		catch
+			@error("Sheet $(sheet) does not exist in $(filename)!")
+			c = DataFrames.DataFrame()
+		end
 	elseif e == ".jld"
-		c = JLD.load(filename, "data")
+		try
+			c = JLD.load(filename, "data")
+		catch
+			@error("Label \"data\" does not exist in $(filename)!")
+			c = DataFrames.DataFrame()
+		end
 	elseif e == ".jld2"
-		c = JLD2.load(filename, "data")
+		try
+			c = JLD2.load(filename, "data")
+		catch
+			@error("Label \"data\" does not exist in $(filename)!")
+			c = DataFrames.DataFrame()
+		end
 	else
 		@error("Unknown file type with extension $(e)!")
-		return DataFrames.DataFrame()
+		c = DataFrames.DataFrame()
 	end
 	return c
 end
