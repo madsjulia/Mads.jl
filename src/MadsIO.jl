@@ -43,6 +43,29 @@ function checkhash(DATA::DATA)::Bool
 	end
 end
 
+function get_datasets(filename::AbstractString)
+	if !isfile(filename)
+		@error("File $(filename) does not exist!")
+		return []
+	end
+	datasets = [""]
+	e = lowercase(last(splitext(filename)))
+	if ((e == ".jld") || (e == ".jld2"))
+		if e == ".jld"
+			ds = JLD.load(filename)
+		else
+			ds = JLD2.load(filename)
+		end
+		datasets = collect(keys(ds))
+		println("Available datasets: $(datasets)")
+	elseif e == ".xlsx"
+		xb = XLSX.readxlsx(filename)
+		datasets = collect(XLSX.sheetnames(xb))
+		println("Available XLSX sheets: $(datasets)")
+	end
+	return datasets
+end
+
 function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::DataFrames.DataFrame
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
@@ -61,7 +84,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 	elseif e == ".xlsx"
 		try
 			xb = XLSX.readxlsx(filename)
-			datasets = XLSX.sheetnames(xb)
+			datasets = collect(XLSX.sheetnames(xb))
 			println("Available XLSX sheets: $(datasets)")
 			if dataset in datasets
 				@info("Dataset $(dataset) loaded from $(filename) ...")
@@ -81,7 +104,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 			else
 				ds = JLD2.load(filename)
 			end
-			datasets = keys(ds)
+			datasets = collect(keys(ds))
 			println("Available datasets: $(datasets)")
 			if dataset in datasets
 				@info("Dataset $(dataset) loaded from $(filename) ...")
