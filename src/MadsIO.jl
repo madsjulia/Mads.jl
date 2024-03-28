@@ -43,7 +43,7 @@ function checkhash(DATA::DATA)::Bool
 	end
 end
 
-function load_data(filename::AbstractString; sheet::AbstractString="Sheet1", first_row::Union{Nothing,Int}=nothing)::DataFrames.DataFrame
+function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::DataFrames.DataFrame
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -60,23 +60,38 @@ function load_data(filename::AbstractString; sheet::AbstractString="Sheet1", fir
 		end
 	elseif e == ".xlsx"
 		try
-			c = DataFrames.DataFrame(XLSX.readtable(filename, sheet; stop_in_empty_row=false, header=true, first_row=first_row))
+			xb = XLSX.readxlsx(filename)
+			datasets = XLSX.sheetnames(xb)
+			println("Available XLSX sheets: $(datasets)")
+			if dataset in datasets
+				@info("Dataset $(dataset) loaded from $(filename) ...")
+				c = DataFrames.DataFrame(XLSX.readtable(filename, dataset; stop_in_empty_row=false, header=true, first_row=first_row))
+			else
+				@info("Dataset $(datasets[1]) loaded from $(filename) ...")
+				c = DataFrames.DataFrame(XLSX.readtable(filename, datasets[1]; stop_in_empty_row=false, header=true, first_row=first_row))
+			end
 		catch
-			@error("Sheet $(sheet) does not exist in $(filename)!")
+			@error("File $(filename) cannot be opened!")
 			c = DataFrames.DataFrame()
 		end
-	elseif e == ".jld"
+	elseif ((e == ".jld") || (e == ".jld2"))
 		try
-			c = JLD.load(filename, "data")
+			if e == ".jld"
+				ds = JLD.load(filename)
+			else
+				ds = JLD2.load(filename)
+			end
+			datasets = keys(ds)
+			println("Available datasets: $(datasets)")
+			if dataset in datasets
+				@info("Dataset $(dataset) loaded from $(filename) ...")
+				c = ds[dataset]
+			else
+				@info("Dataset $(datasets[1]) loaded from $(filename) ...")
+				c = ds[datasets[1]]
+			end
 		catch
-			@error("Label \"data\" does not exist in $(filename)!")
-			c = DataFrames.DataFrame()
-		end
-	elseif e == ".jld2"
-		try
-			c = JLD2.load(filename, "data")
-		catch
-			@error("Label \"data\" does not exist in $(filename)!")
+			@error("File $(filename) cannot be opened!")
 			c = DataFrames.DataFrame()
 		end
 	else
