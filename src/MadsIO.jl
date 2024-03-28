@@ -57,11 +57,11 @@ function get_datasets(filename::AbstractString)
 			ds = JLD2.load(filename)
 		end
 		datasets = collect(keys(ds))
-		println("Available datasets: $(datasets)")
+		@info("File $(filename) datasets: $(datasets)")
 	elseif e == ".xlsx"
 		xb = XLSX.readxlsx(filename)
 		datasets = collect(XLSX.sheetnames(xb))
-		println("Available XLSX sheets: $(datasets)")
+		@info("File $(filename) sheets: $(datasets)")
 	end
 	return datasets
 end
@@ -85,7 +85,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 		try
 			xb = XLSX.readxlsx(filename)
 			datasets = collect(XLSX.sheetnames(xb))
-			println("Available XLSX sheets: $(datasets)")
+			@info("File  $(filename) sheets: $(datasets)")
 			if dataset in datasets
 				@info("Dataset $(dataset) loaded from $(filename) ...")
 				c = DataFrames.DataFrame(XLSX.readtable(filename, dataset; stop_in_empty_row=false, header=true, first_row=first_row))
@@ -105,7 +105,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 				ds = JLD2.load(filename)
 			end
 			datasets = collect(keys(ds))
-			println("Available datasets: $(datasets)")
+			@info("File $(filename) datasets: $(datasets)")
 			if dataset in datasets
 				@info("Dataset $(dataset) loaded from $(filename) ...")
 				c = ds[dataset]
