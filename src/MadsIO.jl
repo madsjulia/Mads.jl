@@ -66,7 +66,7 @@ function get_datasets(filename::AbstractString)
 	return datasets
 end
 
-function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::DataFrames.DataFrame
+function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::Union{DataFrames.DataFrame,AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -94,7 +94,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 				c = DataFrames.DataFrame(XLSX.readtable(filename, datasets[1]; stop_in_empty_row=false, header=true, first_row=first_row))
 			end
 		catch
-			@error("File $(filename) cannot be opened!")
+			@error("Data from File $(filename) cannot be opened!")
 			c = DataFrames.DataFrame()
 		end
 	elseif ((e == ".jld") || (e == ".jld2"))
@@ -113,8 +113,15 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 				@info("Dataset $(datasets[1]) loaded from $(filename) ...")
 				c = ds[datasets[1]]
 			end
+			if typeof(c) <: DataFrames.DataFrame
+				c = c
+			elseif length(size(c)) == 2
+				c = DataFrames.DataFrame(c, :auto)
+			else
+				c = c
+			end
 		catch
-			@error("File $(filename) cannot be opened!")
+			@error("Data from File $(filename) cannot be opened!")
 			c = DataFrames.DataFrame()
 		end
 	else
