@@ -410,7 +410,7 @@ Returns:
 """ getoptparams
 
 """
-Is parameter with key `parameterkey` optimizable?
+Is a parameter with key `parameterkey` optimizable?
 
 $(DocumentFunction.documentfunction(isopt;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
