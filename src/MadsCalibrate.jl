@@ -2,7 +2,6 @@ import OrderedCollections
 import Distributed
 import SharedArrays
 import Statistics
-import Optim
 import ProgressMeter
 import JLD2
 

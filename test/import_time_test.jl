@@ -25,7 +25,6 @@
 @time import OrdinaryDiffEq
 @time import NMF
 @time import BlackBoxOptim
-@time import Optim
 @time import StatsBase
 @time import JuMP
 @time import MathOptInterface
