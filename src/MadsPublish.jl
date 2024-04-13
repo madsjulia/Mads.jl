@@ -1,5 +1,4 @@
 import Documenter
-import DocumenterMarkdown
 
 """
 Create web documentation
