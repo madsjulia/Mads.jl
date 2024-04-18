@@ -2,8 +2,8 @@ import Mads
 import JLD2
 
 import Test
-import OrdinaryDiffEq
 
+@Mads.tryimportmain OrdinaryDiffEq
 @Mads.tryimportmain OrderedCollections
 
 Mads.veryquieton()
