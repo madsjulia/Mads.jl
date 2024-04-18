@@ -1,7 +1,6 @@
 import JSON
 import OrderedCollections
 import DocumentFunction
-import Mmap
 
 """
 Load a JSON file
@@ -14,13 +13,7 @@ Returns:
 - data from the JSON file
 """
 function loadjsonfile(filename::AbstractString)
-	sz = filesize(filename)
-	f = open(filename, "r")
-	a = Mmap.mmap(f, Vector{UInt8}, sz)
-	s = String(a) # ASCIIString is needed!
-	data = JSON.parse(s; dicttype=OrderedCollections.OrderedDict)
-	finalize(a)
-	close(f)
+	data = JSON.parsefile(filename; dicttype=OrderedCollections.OrderedDict)
 	return data
 end
 
