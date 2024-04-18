@@ -6,7 +6,6 @@ import DataFrames
 import StatsBase
 import JSON
 import JLD2
-import FileIO
 import Random
 import Distributed
 import LinearAlgebra
@@ -609,7 +608,7 @@ function loadsaltellirestart!(evalmat::AbstractArray, matname::AbstractString, r
 	if !isfile(filename)
 		return false
 	end
-	mat = FileIO.load(filename, "mat")
+	mat = JLD.load(filename, "mat")
 	copy!(evalmat, mat)
 	return true
 end
@@ -625,7 +624,7 @@ argtext=Dict("evalmat"=>"saved array",
 function savesaltellirestart(evalmat::AbstractArray, matname::AbstractString, restartdir::AbstractString)
 	if restartdir != ""
 		Mads.mkdir(restartdir)
-		FileIO.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
+		JLD2.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
 	end
 	return nothing
 end

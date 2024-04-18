@@ -1,7 +1,6 @@
 import OrderedCollections
 import JLD
 import JLD2
-import FileIO
 import XLSX
 import CSV
 import SHA
@@ -914,7 +913,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for filename in vcat(madsdata["JLDParameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		FileIO.save(madsdata["JLDParameters"], parameters)
+		JLD.save(madsdata["JLDParameters"], parameters)
 	end
 	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
@@ -925,7 +924,7 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for filename in vcat(madsdata["JLD2Parameters"])
 			Mads.rmfile(filename, path=path)
 		end
-		FileIO.save(madsdata["JLD2Parameters"], parameters)
+		JLD2.save(madsdata["JLD2Parameters"], parameters)
 	end
 	if haskey(madsdata, "JLD2Predictions")
 		for filename in vcat(madsdata["JLD2Predictions"])
@@ -982,12 +981,12 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 	end
 	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
-			results = merge(results, FileIO.load(filename))
+			results = merge(results, JLD.load(filename))
 		end
 	end
 	if haskey(madsdata, "JLD2Predictions")
 		for filename in vcat(madsdata["JLD2Predictions"])
-			results = merge(results, FileIO.load(filename))
+			results = merge(results, JLD2.load(filename))
 		end
 	end
 	if haskey(madsdata, "JSONPredictions")
