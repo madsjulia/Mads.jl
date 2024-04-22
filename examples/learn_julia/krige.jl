@@ -6,7 +6,7 @@ PyPlot.svg(true)
 
 dim = 2
 nobs = 20
-X = rand(dim, nobs); # random observation locations
+X = rand(dim, nobs) # random observation locations
 z = rand(nobs) # random observations
 
 n = 101

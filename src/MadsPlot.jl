@@ -34,7 +34,7 @@ function getdefaultplotformat()
 end
 
 """
-Set image file `format` based on the `filename` extension, or sets the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
+Set image file `format` based on the `filename` extension, or set the `filename` extension based on the requested `format`. The default `format` is `SVG`. `PNG`, `PDF`, `ESP`, and `PS` are also supported.
 
 $(DocumentFunction.documentfunction(setplotfileformat;
 argtext=Dict("filename"=>"output file name",
