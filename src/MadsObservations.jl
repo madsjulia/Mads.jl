@@ -793,10 +793,10 @@ end
 function mergetimes(t1::AbstractVector, t2::AbstractVector)
 	t = unique(sort(vcat(t1, t2)))
 	ii = indexin(t, t1)
-	ii[ii .== nothing] .= 0
+	ii[ii .=== nothing] .= 0
 	i1 = convert.(Int64, ii)
 	ii = indexin(t, t2)
-	ii[ii .== nothing] .= 0
+	ii[ii .=== nothing] .= 0
 	i2 = convert.(Int64, ii)
 	return t, i1, i2
 end
