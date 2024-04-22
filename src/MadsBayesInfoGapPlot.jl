@@ -25,7 +25,7 @@ function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::AbstractDict
 	#layers = Array{Any}(undef, size(maxfailureprobs, 2))
 	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])
 	maxhoriz = min(maxhoriz, max(horizons...))
-	for i = 1:size(maxfailureprobs, 2)
+	for i in axes(maxfailureprobs, 2)
 		df = vcat(df, DataFrames.DataFrame(horizon=horizons, maxfailureprob=maxfailureprobs[:, i], Choices=madsdata["Choices"][i]["name"]))
 		#layers[i] = Gadfly.layer(x=horizons, y=maxfailureprobs[:, i], Gadfly.Geom.line)
 	end

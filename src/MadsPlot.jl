@@ -144,7 +144,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
-			for i = 1:size(dfw)[1]
+			for i in axes(dfw)[1]
 				if dfw[!, 1][i] == x && dfw[!, 2][i] == y
 					match = true
 					break

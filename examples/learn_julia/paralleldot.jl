@@ -29,14 +29,14 @@ Xt = X'
 end
 
 function run1!(Z, Y, Xt)
-	for j = 1:size(Xt, 2)
+	for j in axes(Xt, 2)
 		Z[j] = dotcol(Y, Xt, j)
 	end
 	Z
 end
 
 function runp!(Z, Y, Xt)
-	@sync @Distributed.distributed for j = 1:size(Xt, 2)
+	@sync @Distributed.distributed for j in axes(Xt, 2)
 		Z[j] = dotcol(Y, Xt, j)
 	end
 	Z

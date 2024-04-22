@@ -309,7 +309,7 @@ function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; s
 	else
 		samples = gooddsamples
 	end
-	for i = 1:size(samples, 2)
+	for i in axes(samples, 2)
 		samples[:, i] += param
 	end
 	return samples, llhoods

@@ -79,8 +79,8 @@ end
 
 function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=collect(1:size(obs, 2)))
 	md = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for i = 1:size(obs, 1)
-		for j = 1:size(obs, 2)
+	for i in axes(obs, 1)
+		for j in axes(obs, 2)
 			d = OrderedCollections.OrderedDict{String,Number}("target"=>obs[i], "weight"=>weight[i])
 			if length(time) > 0
 				push!(d, "time"=>time[j])

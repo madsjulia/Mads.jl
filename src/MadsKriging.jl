@@ -135,11 +135,11 @@ function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::AbstractVector, covf
 	bigmatpinv = LinearAlgebra.pinv(bigmat)
 	covvec = Array{Float64}(undef, size(X, 2))
 	x = Array{Float64}(undef, size(X, 2) + 1)
-	for i = 1:size(x0mat, 2)
+	for i in axes(x0mat, 2)
 		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, covfn)
 		bigvec[end] = 1
 		LinearAlgebra.mul!(x, bigmatpinv, bigvec)
-		for j = 1:size(X, 2)
+		for j in axes(X, 2)
 			result[i] += Z[j] * x[j]
 		end
 	end
@@ -160,7 +160,7 @@ Returns:
 function getcovmat(X::AbstractMatrix, covfunction::Function)
 	covmat = Array{Float64}(undef, size(X, 2), size(X, 2))
 	cov0 = covfunction(0)
-	for i = 1:size(X, 2)
+	for i in axes(X, 2)
 		covmat[i, i] = cov0
 		for j = i + 1:size(X, 2)
 			covmat[i, j] = covfunction(LinearAlgebra.norm(X[:, i] .- X[:, j]))
@@ -184,9 +184,9 @@ Returns:
 - spatial covariance vector
 """
 function getcovvec!(covvec::AbstractVector, x0::AbstractVector, X::AbstractMatrix, covfn::Function)
-	for i = 1:size(X, 2)
+	for i in axes(X, 2)
 		d = 0.
-		for j = 1:size(X, 1)
+		for j in axes(X, 1)
 			d += (X[j, i] - x0[j]) ^ 2
 		end
 		d = sqrt.(d)

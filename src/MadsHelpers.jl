@@ -10,7 +10,7 @@ function subsample_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Int
 		return trues(size(m, 2))
 	end
 	ix = falses(size(m, 2))
-	for i = 1:size(m, 1)
+	for i in axes(m, 1)
 		rs = sortperm(m[i, :])
 		ix[rs[1:best_worst]] .= true
 		ix[rs[end-best_worst+1:end]] .= true

@@ -105,7 +105,7 @@ function sinetransformgradient(g::Function, lowerbounds::AbstractVector, upperbo
 		result = g(params; dx=lineardx, center=center)
 		if !isnothing(result)
 			lineardx ./= sindx
-			for i = 1:size(result, 1)
+			for i in axes(result, 1)
 				result[i, :] .*= lineardx
 			end
 		end
