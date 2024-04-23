@@ -134,11 +134,6 @@ catch
 	global createlinks = false
 end
 
-if haskey(ENV, "MADS_TRAVIS")
-	@info("Travis testing environment")
-	ENV["MADS_NO_PYPLOT"] = ""
-end
-
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		@Mads.tryimport Gadfly
@@ -146,18 +141,8 @@ if !haskey(ENV, "MADS_NO_PLOT")
 			ENV["MADS_NO_GADFLY"] = ""
 		end
 	end
-	if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-		@Mads.tryimport Conda
-		@Mads.tryimport PyCall
-		@Mads.tryimport PyPlot
-		if !isdefined(Mads, :PyPlot)
-			ENV["MADS_NO_PYPLOT"] = ""
-			@warn("PyPlot is not available")
-		end
-	end
 else
 	ENV["MADS_NO_GADFLY"] = ""
-	ENV["MADS_NO_PYPLOT"] = ""
 	ENV["MADS_NO_DISPLAY"] = ""
 	global graphoutput = false
 	@warn("Mads plotting is disabled")
@@ -185,10 +170,6 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsAnasolPlot.jl")
 	include("MadsBayesInfoGapPlot.jl")
 	include("MadsPlot.jl")
-end
-
-if !haskey(ENV, "MADS_NO_PYTHON") && !haskey(ENV, "MADS_NO_PYPLOT")
-	include("MadsPlotPy.jl")
 end
 
 Mads.seedrng()
