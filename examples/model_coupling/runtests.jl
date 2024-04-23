@@ -12,7 +12,6 @@ else
 	@Mads.tryimportmain OrderedCollections
 	@Mads.tryimportmain JSON
 	@Mads.tryimportmain JLD2
-	@Mads.tryimportmain FileIO
 	@Mads.tryimportmain YAML
 
 	workdir = Mads.getproblemdir() # get the directory where the problem is executed
