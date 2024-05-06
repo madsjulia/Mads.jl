@@ -113,7 +113,7 @@ function test_vector(result::AbstractVector, gold::AbstractVector; param=Abstrac
 				fail_diff = d
 			end
 		else
-			@Test.test it
+			Test.@test it
 		end
 	end
 	if any(fail_i .== true)

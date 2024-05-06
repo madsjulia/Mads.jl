@@ -3,14 +3,14 @@ import JLD2
 
 import Test
 
-@Mads.tryimportmain OrdinaryDiffEq
-@Mads.tryimportmain OrderedCollections
+Mads.@tryimportmain OrdinaryDiffEq
+Mads.@tryimportmain OrderedCollections
 
 Mads.veryquieton()
 Mads.graphoff()
 
 # function to create a function for the ODE solver
-@Mads.stderrcapture function makefunc(parameterdict::OrderedCollections.OrderedDict)
+Mads.@stderrcapture function makefunc(parameterdict::OrderedCollections.OrderedDict)
 	# ODE parameters
 	omega = parameterdict["omega"]
 	k = parameterdict["k"]
@@ -39,7 +39,7 @@ paramkeys = Mads.getparamkeys(md)
 # create parameter dictionary
 paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
 
-@Test.testset "ODE Solver" begin
+Test.@testset "ODE Solver" begin
 	# create a function for the ODE solver
 	funcosc = makefunc(paramdict)
 	Mads.madsinfo("Solve ODE ...")
@@ -61,8 +61,8 @@ paramdict = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameter
 	good_ode_t = JLD2.load(joinpath(workdir, "test_results", "ode_solver_t.jld2"), "t")
 	good_ode_ys = JLD2.load(joinpath(workdir, "test_results", "ode_solver_y.jld2"), "ys")
 
-	@Test.test isapprox(t, good_ode_t, atol=1e-6)
-	@Test.test isapprox(ys, good_ode_ys, atol=1e-6)
+	Test.@test isapprox(t, good_ode_t, atol=1e-6)
+	Test.@test isapprox(ys, good_ode_ys, atol=1e-6)
 
 	# create an observation dictionary in the MADS problem dictionary
 	Mads.madsinfo("Create MADS Observations ...")

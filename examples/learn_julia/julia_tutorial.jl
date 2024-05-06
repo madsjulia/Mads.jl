@@ -94,7 +94,7 @@ import JLD2
 
 
 JLD2.save("deletedata.jld2", "randA", A, "randB", B)
-@JLD2.load("deletedata.jld2")
+JLD2.@load("deletedata.jld2")
 display(randA)
 display(randB)
 A = JLD2.load("deletedata.jld2", "randA")

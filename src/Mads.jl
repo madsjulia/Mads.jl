@@ -136,7 +136,7 @@ end
 
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
-		@Mads.tryimport Gadfly
+		Mads.@tryimport Gadfly
 		if !isdefined(Mads, :Gadfly)
 			ENV["MADS_NO_GADFLY"] = ""
 		end

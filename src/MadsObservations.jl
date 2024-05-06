@@ -418,25 +418,25 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 			bmax = obsdict[obskey]["maxorig"]
 			t = t * (bmax - bmin) + bmin
 		end
-		s = @Printf.sprintf "%-10s target = %15g" obskey t
+		s = Printf.@sprintf "%-10s target = %15g" obskey t
 		if !isnan(w)
-			s *= @Printf.sprintf " weight = %15g" w
+			s *= Printf.@sprintf " weight = %15g" w
 		end
 		if !isnan(o)
-			s *= @Printf.sprintf " time = %15g" o
+			s *= Printf.@sprintf " time = %15g" o
 		end
 		if haskey(obsdict[obskey], "dist")
-			s *= @Printf.sprintf " dist = %25s" dist[i]
+			s *= Printf.@sprintf " dist = %25s" dist[i]
 		elseif haskey(obsdict[obskey], "min") && haskey(obsdict[obskey], "max")
-			s *= @Printf.sprintf " min = %15g" min[i]
-			s *= @Printf.sprintf " max = %15g" max[i]
+			s *= Printf.@sprintf " min = %15g" min[i]
+			s *= Printf.@sprintf " max = %15g" max[i]
 		end
 		if haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
 			if rescale
 				s *= " <- rescaled"
 			else
-				s *= @Printf.sprintf " minorig = %15g" obsdict[obskey]["minorig"]
-				s *= @Printf.sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]
+				s *= Printf.@sprintf " minorig = %15g" obsdict[obskey]["minorig"]
+				s *= Printf.@sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]
 			end
 		end
 		s *= "\n"

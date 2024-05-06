@@ -38,8 +38,8 @@ md = Mads.loadmadsfile(madsdirname * "internal-linearmodel.mads")
 flinearmodel = Mads.makemadscommandfunction(md)
 f2(x) = flinearmodel(Dict("a"=>0., "b"=>x))["o1"]
 area, err = gsl_integration_qag(f2, 0, 1)
-@Test.test area == -0.5
+Test.@test area == -0.5
 area, err = gsl_integration_qag(f2, 0, 2)
-@Test.test area == -2
+Test.@test area == -2
 area, err = gsl_integration_qag(f2, 0, 3)
-@Test.test area == -4.5
+Test.@test area == -4.5

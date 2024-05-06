@@ -1,7 +1,7 @@
 import Stipple
 import StipplePlotly
 
-@Stipple.vars UIMapBox begin
+Stipple.@vars UIMapBox begin
 	data::Vector{StipplePlotly.PlotData} = [
 		StipplePlotly.PlotData(
 			plot = StipplePlotly.Charts.PLOT_TYPE_SCATTERMAPBOX,

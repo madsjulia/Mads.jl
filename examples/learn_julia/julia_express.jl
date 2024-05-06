@@ -536,9 +536,9 @@ PyPlot.gcf()
 @assert 1 == 2 "ERROR" # 2 macro arguments; error raised
 
 import Test # load Base.Test module
-@Test.test 1 == 2 # similar to assert; error
-@Test.test 1 ≈ 1.1 # error
-@Test.test 1 ≈ 1.1 atol=0.2 # no error
+Test.@test 1 == 2 # similar to assert; error
+Test.@test 1 ≈ 1.1 # error
+Test.@test 1 ≈ 1.1 atol=0.2 # no error
 
 # Function vectorization:
 t(x::Float64, y::Float64 = 1.0) = x * y
@@ -570,7 +570,7 @@ import JLD2
 A = collect(1:10)
 B = rand(10)
 JLD2.save("deletedata.jld2", "randA", A, "randB", B)
-@JLD2.load("deletedata.jld2")
+JLD2.@load("deletedata.jld2")
 display(randA)
 display(randB)
 A = JLD2.load("deletedata.jld2", "randA")

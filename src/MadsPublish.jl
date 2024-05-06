@@ -7,7 +7,7 @@ $(DocumentFunction.documentfunction(documentation_create))
 """
 function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(madsmodules))
 	for i in modules_load
-		Core.eval(Main, :(@Mads.tryimportmain $(Symbol(i))))
+		Core.eval(Main, :(Mads.@tryimportmain $(Symbol(i))))
 	end
 	pages=[
         "MADS" => "index.md",

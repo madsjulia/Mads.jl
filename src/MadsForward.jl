@@ -117,8 +117,8 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 				end
 				r = SharedArrays.SharedArray{Float64}(length(rv1), ncases)
 				r[:, 1] = rv1
-				@Distributed.everywhere madsdata_c = $madsdata_c
-				@sync @Distributed.distributed for i = 2:ncases
+				Distributed.@everywhere madsdata_c = $madsdata_c
+				@sync Distributed.@distributed for i = 2:ncases
 					func_forward = Mads.makearrayfunction(madsdata_c) # this is needed to avoid issues with the closure
 					r[:, i] = collect(values(func_forward(vec(psa[i, :]))))
 				end
@@ -135,11 +135,11 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 			@info("Serial execution of forward runs ...")
 			rv = Array{Array{Float64}}(undef, ncases)
 			if s[2] == np
-				@ProgressMeter.showprogress 4 for i = 1:ncases
+				ProgressMeter.@showprogress 4 for i = 1:ncases
 					rv[i] = collect(values(func_forward(vec(paramarray[i, :]))))
 				end
 			else
-				@ProgressMeter.showprogress 4 for i = 1:ncases
+				ProgressMeter.@showprogress 4 for i = 1:ncases
 					rv[i] = collect(values(func_forward(vec(paramarray[:, i]))))
 				end
 			end

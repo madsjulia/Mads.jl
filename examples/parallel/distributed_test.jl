@@ -13,9 +13,9 @@ sol = Array{Float64,2}(undef, 5, 8)
 sol .= 0
 
 function_test(x) = rand(8) .+ sum(x)
-@Distributed.everywhere function_test(x) = rand(8) .+ sum(x)
+Distributed.@everywhere function_test(x) = rand(8) .+ sum(x)
 
-@sync @Distributed.distributed for i = 1:5
+@sync Distributed.@distributed for i = 1:5
 	so[i, :] .= function_test(allparameters[i, :])
 end
 

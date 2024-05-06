@@ -16,8 +16,8 @@ thinning = 10
 numsamples_perwalker = 1000
 burnin = 100
 
-@Test.testset "Emcee" begin
-	@ProgressMeter.showprogress 1 "Computing Affine Invariant MCMC ..." for _ in 1:3
+Test.@testset "Emcee" begin
+	ProgressMeter.@showprogress 1 "Computing Affine Invariant MCMC ..." for _ in 1:3
 		stds = exp.(5 .* randn(Mads.rng, numdims))
 		means = 1 .+ 5 .* rand(Mads.rng, numdims)
 		llhood = x->begin
@@ -32,8 +32,8 @@ burnin = 100
 		chain, llhoodvals = AffineInvariantMCMC.sample(llhood, numwalkers, chain[:, :, end], numsamples_perwalker, thinning)
 		flatchain, flatllhoodvals = AffineInvariantMCMC.flattenmcmcarray(chain, llhoodvals)
 		for i = 1:numdims
-			@Test.test isapprox(Statistics.mean(flatchain[i, :]), means[i], atol=(0.5 * stds[i]))
-			@Test.test isapprox(Statistics.std(flatchain[i, :]), stds[i], atol=(5 * stds[i]))
+			Test.@test isapprox(Statistics.mean(flatchain[i, :]), means[i], atol=(0.5 * stds[i]))
+			Test.@test isapprox(Statistics.std(flatchain[i, :]), stds[i], atol=(5 * stds[i]))
 		end
 	end
 end

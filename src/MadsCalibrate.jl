@@ -56,7 +56,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 	allparameters = Matrix{Float64}(undef, numberofsamples, length(keys(paramoptvalues)))
 	local bestparameters
 	bestphi = Inf
-	@ProgressMeter.showprogress 5 "Calibrating ..." for i in 1:numberofsamples
+	ProgressMeter.@showprogress 5 "Calibrating ..." for i in 1:numberofsamples
 		if i == 1 && first_init
 			!quiet && @info("Using initial values for the first run!")
 		else
@@ -130,7 +130,7 @@ function calibraterandom_parallel(madsdata::AbstractDict, numberofsamples::Integ
 	allphi = SharedArrays.SharedArray{Float64}(numberofsamples)
 	allconverged = SharedArrays.SharedArray{Bool}(numberofsamples)
 	allparameters = SharedArrays.SharedArray{Float64}(numberofsamples, length(keys(paramoptvalues)))
-	@sync @Distributed.distributed for i in 1:numberofsamples
+	@sync Distributed.@distributed for i in 1:numberofsamples
 		if i == 1 && first_init
 			!quiet && @info("Using initial values for the first run!")
 		else

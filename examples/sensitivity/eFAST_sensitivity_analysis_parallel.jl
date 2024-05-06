@@ -9,17 +9,17 @@ import Mads
 import JSON
 
 ## Necessary modules (no matter if we are reading from mads or using as a standalone)
-@Distributed.everywhere include("/home/jlaughli/Julia Code/eFAST_distributeX.jl");
+Distributed.@everywhere include("/home/jlaughli/Julia Code/eFAST_distributeX.jl");
 #include("/Users/jlaughli/Desktop/Julia Code/eFAST_getCompFreq.jl");
 #include("/Users/jlaughli/Desktop/Julia Code/eFAST_optimalSearch.jl");
-@Distributed.everywhere include("/home/jlaughli/Julia Code/eFAST_Parallel_kL.jl")
+Distributed.@everywhere include("/home/jlaughli/Julia Code/eFAST_Parallel_kL.jl")
 
 # Saltelli senstivity analysis tests
 # FOR SOME REASON USING MADS WON'T LOAD THESE (for me)!
 #include("/Users/jlaughli/codes/mads.jl/src/MadsAnasol.jl");
 #include("/Users/jlaughli/codes/mads.jl/src/MadsIO.jl")
 #include("/Users/jlaughli/codes/mads.jl/src/MadsYAML_noPyYAML.jl")
-#@Distributed.everywhere include("/Users/jlaughli/codes/mads.jl/src/MadsLog.jl")
+#Distributed.@everywhere include("/Users/jlaughli/codes/mads.jl/src/MadsLog.jl")
 
 Mads.madsinfo("TEST eFAST senstivity analysis:")
 

@@ -1,14 +1,14 @@
 import Distributed
 Distributed.addprocs(4)
 
-@Distributed.everywhere import Mads
-@Distributed.everywhere import PyCall
+Distributed.@everywhere import Mads
+Distributed.@everywhere import PyCall
 
-@Distributed.everywhere cd(@__DIR__)
+Distributed.@everywhere cd(@__DIR__)
 
-@Distributed.everywhere @show pwd()
+Distributed.@everywhere @show pwd()
 
-@Distributed.everywhere PyCall.py"""
+Distributed.@everywhere PyCall.py"""
 import numpy as np
 import os
 
@@ -25,7 +25,7 @@ def my_model(theta, x):
 
 PyCall.py"my_model"([3, 2], [1, 2, 3])
 
-@Distributed.everywhere function my_model_pycall(args...)
+Distributed.@everywhere function my_model_pycall(args...)
 	@show args
 	@show pwd()
 	predictions = PyCall.py"my_model"(args..., [1, 2, 3])

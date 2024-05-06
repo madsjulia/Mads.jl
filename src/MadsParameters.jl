@@ -663,23 +663,23 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 			end
 		end
 		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
-			s *= @Printf.sprintf "log-transformed "
+			s *= Printf.@sprintf "log-transformed "
 		end
 		if haskey(pardict[parkey], "min")
-			s *= @Printf.sprintf "min = %15g " vmin
+			s *= Printf.@sprintf "min = %15g " vmin
 		end
 		if haskey(pardict[parkey], "max")
-			s *= @Printf.sprintf "max = %15g " vmax
+			s *= Printf.@sprintf "max = %15g " vmax
 		end
 		if haskey(pardict[parkey], "dist")
-			s *= @Printf.sprintf "distribution = %s " pardict[parkey]["dist"]
+			s *= Printf.@sprintf "distribution = %s " pardict[parkey]["dist"]
 		end
 		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
 			if rescale
 				s *= " <- rescaled"
 			else
-				s *= @Printf.sprintf "minorig = %15g " pardict[parkey]["minorig"]
-				s *= @Printf.sprintf "maxorig = %15g " pardict[parkey]["maxorig"]
+				s *= Printf.@sprintf "minorig = %15g " pardict[parkey]["minorig"]
+				s *= Printf.@sprintf "maxorig = %15g " pardict[parkey]["maxorig"]
 			end
 		end
 		s *= "\n"

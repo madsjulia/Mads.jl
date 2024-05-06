@@ -26,9 +26,9 @@ pmean = map(i->mean(p[:,i]), 1:np)
 pstd = map(i->std(p[:,i]), 1:np)
 
 @info("Statistics of the model parameter estimates:")
-@Printf.printf "Name\tMean\tMin\tMad\tStdDev\n"
+Printf.@printf "Name\tMean\tMin\tMad\tStdDev\n"
 for i = 1:np
-	@Printf.printf "%s\t%f\t%f\t%f\t%f\n" pnames[i] pmean[i] pmin[i] pmax[i] pstd[i]
+	Printf.@printf "%s\t%f\t%f\t%f\t%f\n" pnames[i] pmean[i] pmin[i] pmax[i] pstd[i]
 end
 @info("Identify 3 different global optima with different model parameter estimates:")
 println("$(collect(size(findall((abs(p[:,1]) .< 0.1) .== true)))) calibrations have a ~= 0")

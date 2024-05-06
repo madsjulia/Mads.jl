@@ -9,10 +9,10 @@ import JLD
 if !Mads.createlinks
 	@warn("Links cannot be created on Windows if not executed with admin privileges or in a developers mode!")
 else
-	@Mads.tryimportmain OrderedCollections
-	@Mads.tryimportmain JSON
-	@Mads.tryimportmain JLD2
-	@Mads.tryimportmain YAML
+	Mads.@tryimportmain OrderedCollections
+	Mads.@tryimportmain JSON
+	Mads.@tryimportmain JLD2
+	Mads.@tryimportmain YAML
 
 	workdir = Mads.getproblemdir() # get the directory where the problem is executed
 	if workdir == "."
@@ -91,15 +91,15 @@ else
 	Mads.rmfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 	pfor = Mads.forward(md)
 
-	@Test.testset "Internal" begin
-		@Test.test ifor == ffor
-		@Test.test ifor == sfor
-		@Test.test ifor == bfor
-		@Test.test ifor == tifor
-		@Test.test ifor == mfor
-		@Test.test ifor == tefor
-		@Test.test ifor == teforl1
-		@Test.test ifor == pfor
+	Test.@testset "Internal" begin
+		Test.@test ifor == ffor
+		Test.@test ifor == sfor
+		Test.@test ifor == bfor
+		Test.@test ifor == tifor
+		Test.@test ifor == mfor
+		Test.@test ifor == tefor
+		Test.@test ifor == teforl1
+		Test.@test ifor == pfor
 	end
 
 	Mads.readyamlpredictions(joinpath(workdir, "internal-linearmodel-madsmodel.mads"))
@@ -113,7 +113,7 @@ else
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld2.mads"))
 	j2for = Mads.forward(md)
 	Mads.set_nprocs_per_task(2)
-	@Mads.stdouterrcapture Mads.forward(md)
+	Mads.@stdouterrcapture Mads.forward(md)
 	Mads.set_nprocs_per_task(1)
 
 	Mads.madsinfo("External coupling using `Command` and JSON ...")
@@ -127,7 +127,7 @@ else
 	Mads.madsinfo("External coupling using `Command` and YAML ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-yaml.mads"))
 	yfor = Mads.forward(md)
-	@Test.test yfor == j2for
+	Test.@test yfor == j2for
 
 	Mads.madsinfo("External coupling using ASCII ...")
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-ascii.mads"))
@@ -144,13 +144,13 @@ else
 	Mads.rmfile("external-linearmodel-matrix.inst")
 	cd(cwd)
 
-	@Test.testset "External" begin
-		@Test.test afor == sfor
-		@Test.test j2for == sfor
-		# @Test.test j2for == jfor
-		@Test.test efor == sfor
-		@Test.test j2for == ifor
-		@Test.test ro1 == ro2
+	Test.@testset "External" begin
+		Test.@test afor == sfor
+		Test.@test j2for == sfor
+		# Test.@test j2for == jfor
+		Test.@test efor == sfor
+		Test.@test j2for == ifor
+		Test.@test ro1 == ro2
 	end
 
 	Mads.rmdir(joinpath(workdir, "external-jld_restart"))

@@ -145,13 +145,13 @@ else
 	Mads.graphoff()
 end
 
-@Test.test Mads.haskeyword(Dict("Problem"=>"ssdr"),"ssdr") == true
-@Test.test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
-@Test.test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
-@Test.test Mads.haskeyword(Dict("Problem"=>0.1), "Problem", "ssdr") == false
+Test.@test Mads.haskeyword(Dict("Problem"=>"ssdr"),"ssdr") == true
+Test.@test Mads.haskeyword(Dict("Problem"=>Dict("ssdr"=>true)), "ssdr") == true
+Test.@test Mads.haskeyword(Dict("Problem"=>["ssdr","paranoid"]), "ssdr") == true
+Test.@test Mads.haskeyword(Dict("Problem"=>0.1), "Problem", "ssdr") == false
 
-@Test.test Mads.getdir("a.mads") == "."
-@Test.test Mads.getdir("test/a.mads") == "test"
+Test.@test Mads.getdir("a.mads") == "."
+Test.@test Mads.getdir("test/a.mads") == "test"
 
 Mads.createobservations(4, 2; filename="a.inst")
 Mads.rmfile("a.inst")

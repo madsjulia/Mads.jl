@@ -504,7 +504,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	for i = eachindex(paramkeys)
 		madsinfo("Parameter : $(paramkeys[i])")
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, numoneparamsamples)
-		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:numoneparamsamples
+		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:numoneparamsamples
 			cond_means[j] = OrderedCollections.OrderedDict()
 			for k = eachindex(obskeys)
 				cond_means[j][obskeys[k]] = 0.
@@ -544,7 +544,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 		madsinfo("Parameter : $(paramkeys[i])")
 		cond_vars = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
-		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
+		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
 			cond_vars[j] = OrderedCollections.OrderedDict{String,Float64}()
 			cond_means[j] = OrderedCollections.OrderedDict{String,Float64}()
 			for m = eachindex(obskeys)
@@ -992,7 +992,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 		sum = 0
 		for paramkey in paramkeys
 			sum += mes[obskey][paramkey]
-			print("\t$(@Printf.sprintf("%f",mes[obskey][paramkey]))")
+			print("\t$(Printf.@sprintf("%f",mes[obskey][paramkey]))")
 		end
 		print("\t$(sum)")
 		print("\n")
@@ -1009,7 +1009,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 		sum = 0
 		for paramkey in paramkeys
 			sum += tes[obskey][paramkey]
-			print("\t$(@Printf.sprintf("%f",tes[obskey][paramkey]))")
+			print("\t$(Printf.@sprintf("%f",tes[obskey][paramkey]))")
 		end
 		print("\t$(sum)")
 		print("\n")
@@ -1373,8 +1373,8 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 				psa = collect(X) # collect to avoid issues if paramarray is a SharedArray
 				r = SharedArrays.SharedArray{Float64}(length(rv1), size(X, 1))
 				r[:, 1] = rv1
-				@Distributed.everywhere md = $md
-				@sync @Distributed.distributed for i = 2:size(X, 1)
+				Distributed.@everywhere md = $md
+				@sync Distributed.@distributed for i = 2:size(X, 1)
 					func_forward = Mads.makemadscommandfunction(md) # this is needed to avoid issues with the closure
 					r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :]))))))
 				end
@@ -1423,7 +1423,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			AVci = zeros(ny,1)
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Looping over each point in time
-			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
+			ProgressMeter.@showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
 				Y[:,i] = permutedims((Y[:,i] .- Statistics.mean(Y[:,i])))
 				## Calculating Fourier coefficients associated with MAIN INDICES
@@ -1636,7 +1636,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	function sendto(p; args...)
 		for i in p
 			for (nm, val) in args
-				@Distributed.spawnat(i, Core.eval(Main, Expr(:(=), nm, val)))
+				Distributed.@spawnat(i, Core.eval(Main, Expr(:(=), nm, val)))
 			end
 		end
 	end

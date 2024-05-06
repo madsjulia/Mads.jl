@@ -11,4 +11,4 @@ end
 result1 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 result2 = Mads.efast(md, seed=20151001; N=1000, restartdir="odecheckpoints", checkpointfrequency=100, restart=true)
 rm("odecheckpoints"; recursive=true)
-@Test.test isequal(result1, result2)
+Test.@test isequal(result1, result2)

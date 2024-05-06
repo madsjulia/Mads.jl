@@ -33,7 +33,7 @@ println("c ...")
 @time fcsqrt(2)
 println("julia ...")
 @time sqrt(2)
-@Test.test fcsqrt(2) ≈ sqrt(2) atol=0.2
+Test.@test fcsqrt(2) ≈ sqrt(2) atol=0.2
 
 # function example #1
 @info("func #1 ...")
@@ -41,7 +41,7 @@ println("c ...")
 @time fcfunc_ex1(100, 6.4)
 println("julia ...")
 @time fjfunc_ex1(100, 6.4)
-@Test.test fcfunc_ex1(100, 6.4) ≈ fjfunc_ex1(100, 6.4) atol=0.2
+Test.@test fcfunc_ex1(100, 6.4) ≈ fjfunc_ex1(100, 6.4) atol=0.2
 
 nP = 100
 nO = 1000000
@@ -55,7 +55,7 @@ println("c ...")
 @time fcfunc_ex2(nP, x, nO, o_c)
 println("julia ...")
 @time fjfunc_ex2(x, o_j)
-@Test.test maximum(abs(o_c - o_j)) ≈ 0 atol=0.2
+Test.@test maximum(abs(o_c - o_j)) ≈ 0 atol=0.2
 
 M = ones(nO, nP)
 M[:,end] = 100000
@@ -67,4 +67,4 @@ println("c ...")
 @time fcmxv(nP, x, M, nO, o_c)
 println("julia ...")
 @time o_julia = fjmxv(M, x)
-@Test.test maximum( o_c - o_julia ) ≈ 0 atol=0.2
+Test.@test maximum( o_c - o_julia ) ≈ 0 atol=0.2

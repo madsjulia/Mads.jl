@@ -43,15 +43,15 @@ elseif isfile(string(madscommand, ".jl"))
 	quit()
 end
 
-@Distributed.everywhere import Mads
-@Distributed.everywhere import JLD2
+Distributed.@everywhere import Mads
+Distributed.@everywhere import JLD2
 
 madsfile = ARGS[1]
 if isfile(madsfile)
 	@info("Reading $madsfile ...")
-	@Distributed.everywhere md = Mads.loadmadsfile(madsfile)
-	@Distributed.everywhere dir = Mads.getmadsproblemdir(md)
-	@Distributed.everywhere root = Mads.getmadsrootname(md)
+	Distributed.@everywhere md = Mads.loadmadsfile(madsfile)
+	Distributed.@everywhere dir = Mads.getmadsproblemdir(md)
+	Distributed.@everywhere root = Mads.getmadsrootname(md)
 elseif ARGS[1] == "help"
 	madsjl_help()
 	quit()

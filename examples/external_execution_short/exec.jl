@@ -14,11 +14,11 @@ import Mads
 Mads.quietoff()
 
 @info("Set the correct working directory on all the processors ...")
-@Distributed.everywhere Mads.setdir()
-@Distributed.everywhere @show pwd()
+Distributed.@everywhere Mads.setdir()
+Distributed.@everywhere @show pwd()
 
 Mads.madsinfo("Load Mads problem ...")
-@Distributed.everywhere md = Mads.loadmadsfile("exec.mads")
+Distributed.@everywhere md = Mads.loadmadsfile("exec.mads")
 
 Mads.madsinfo("eFast sensitivity analysis ...")
 efast_results = Mads.efast(md; N=30, seed=2015)

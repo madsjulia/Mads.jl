@@ -4,9 +4,9 @@ import LsqFit
 import Test
 import Distributed
 
-@Distributed.everywhere fr = Mads.rosenbrock
-@Distributed.everywhere g! = Mads.rosenbrock_gradient!
-@Distributed.everywhere h! = Mads.rosenbrock_hessian!
+Distributed.@everywhere fr = Mads.rosenbrock
+Distributed.@everywhere g! = Mads.rosenbrock_gradient!
+Distributed.@everywhere h! = Mads.rosenbrock_hessian!
 
 Mads.madsinfo("Optimization of Rosenbrock function ...")
 

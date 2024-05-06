@@ -5,7 +5,7 @@ import Test
 import Random
 import OrderedCollections
 
-@Mads.tryimportmain OrderedCollections
+Mads.@tryimportmain OrderedCollections
 
 Mads.seed!(2017, Random.MersenneTwister)
 
@@ -55,8 +55,8 @@ if isdefined(Mads, :plotgrid)
 		Mads.plotgrid(md; title="Grid")
 		global s = Mads.forwardgrid(md)
 		delete!(md, "Grid")
-		@Mads.stdouterrcapture Mads.plotgrid(md, s)
-		@Mads.stdouterrcapture Mads.plotgrid(md)
+		Mads.@stdouterrcapture Mads.plotgrid(md, s)
+		Mads.@stdouterrcapture Mads.plotgrid(md)
 		Mads.graphon()
 	catch errmsg
 		Mads.printerrormsg(errmsg)
@@ -104,17 +104,17 @@ Mads.rmfile(joinpath(workdir, "w01shortexp-rerun.mads"))
 Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
 
-@Test.testset "Observations" begin
-	@Test.test isapprox(rp, rp2)
-	@Test.test Mads.gettime(md["Observations"][tk[1]]) == 1
-	@Test.test Mads.getweight(md["Observations"][tk[1]]) == 1
+Test.@testset "Observations" begin
+	Test.@test isapprox(rp, rp2)
+	Test.@test Mads.gettime(md["Observations"][tk[1]]) == 1
+	Test.@test Mads.getweight(md["Observations"][tk[1]]) == 1
 
-	@Test.test o1 == o2
+	Test.@test o1 == o2
 
-	@Test.test Mads.getmadsinputfile() == "test.mads"
-	@Test.test Mads.getextension("test.mads") == "mads"
+	Test.@test Mads.getmadsinputfile() == "test.mads"
+	Test.@test Mads.getextension("test.mads") == "mads"
 
-	@Test.test Mads.getrootname("w01short3-rerun.mads"; version=true) == "w01short3"
+	Test.@test Mads.getrootname("w01short3-rerun.mads"; version=true) == "w01short3"
 end
 
 Mads.stdoutcaptureon()
@@ -161,22 +161,22 @@ good_params_init_min = JLD2.load(joinpath(d, "params_init_min.jld2"), "m3")
 good_params_init_max = JLD2.load(joinpath(d, "params_init_max.jld2"), "m4")
 good_targetkeys = JLD2.load(joinpath(d, "targetkeys.jld2"), "tk")
 
-@Test.testset "Anasol" begin
+Test.@testset "Anasol" begin
 	# Test Mads.forward(md, all=true)
 	ssr = 0.
 	for obskey in union(Set(keys(forward_results)), Set(keys(good_forward_results)))
 		ssr += (forward_results[obskey] - good_forward_results[obskey])^2
 	end
-	@Test.test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0., atol=1e-8)
 
 	# Test Mads.getparamrandom(md, 5, init_dist=true)
 	for obskey in union(Set(keys(paramrandom_true)), Set(keys(good_paramrandom_true)))
-		@Test.test isapprox(paramrandom_true[obskey], good_paramrandom_true[obskey], atol=1e-8)
+		Test.@test isapprox(paramrandom_true[obskey], good_paramrandom_true[obskey], atol=1e-8)
 	end
 
 	# Test Mads.getparamrandom(md, 5, init_dist=false)
 	for obskey in union(Set(keys(paramrandom_false)), Set(keys(good_paramrandom_false)))
-		@Test.test isapprox(paramrandom_false[obskey], good_paramrandom_false[obskey], atol=1e-8)
+		Test.@test isapprox(paramrandom_false[obskey], good_paramrandom_false[obskey], atol=1e-8)
 	end
 
 	# Test Mads.getparamdict(md)
@@ -184,32 +184,32 @@ good_targetkeys = JLD2.load(joinpath(d, "targetkeys.jld2"), "tk")
 	for obskey in union(Set(keys(pd)), Set(keys(good_pd)))
 		ssr += (pd[obskey] - good_pd[obskey])^2
 	end
-	@Test.test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0., atol=1e-8)
 
 	# Test computeconcentrations(paramdict)
 	ssr = 0.
 	for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
 		ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
 	end
-	@Test.test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0., atol=1e-8)
 
 	# Test Mads.of(md)
-	@Test.test isapprox(madsOf, 628963.6972820368, atol=1e-8) #test
+	Test.@test isapprox(madsOf, 628963.6972820368, atol=1e-8) #test
 
 	# Test Mads.residuals(md)
-	@Test.test isapprox(good_residuals, residuals_results, atol=1e-8)
+	Test.@test isapprox(good_residuals, residuals_results, atol=1e-8)
 
 	# Test Mads.getsourcekeys(md)
-	@Test.test sk == ["Source1_dz", "Source1_f", "Source1_t0", "Source1_x", "Source1_dy", "Source1_dx", "Source1_z", "Source1_t1", "Source1_y"]
+	Test.@test sk == ["Source1_dz", "Source1_f", "Source1_t0", "Source1_x", "Source1_dy", "Source1_dx", "Source1_z", "Source1_t1", "Source1_y"]
 
 	# Test Mads.getparamsmin(md), getparamsmax, getparamsinit_min, getparamsinit_max
-	@Test.test isapprox(m1, good_params_min, atol=1e-8)
-	@Test.test isapprox(m2, good_params_max, atol=1e-8)
-	@Test.test isapprox(m3, good_params_init_min, atol=1e-8)
-	@Test.test isapprox(m4, good_params_init_max, atol=1e-8)
+	Test.@test isapprox(m1, good_params_min, atol=1e-8)
+	Test.@test isapprox(m2, good_params_max, atol=1e-8)
+	Test.@test isapprox(m3, good_params_init_min, atol=1e-8)
+	Test.@test isapprox(m4, good_params_init_max, atol=1e-8)
 
 	# Test Mads.gettargetkeys(md)
-	@Test.test tk == good_targetkeys
+	Test.@test tk == good_targetkeys
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
@@ -220,7 +220,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.plotlocalsa("w01shortexp")
 	Mads.graphon()
 end
-@Mads.stdouterrcapture Mads.calibrate(md; localsa=true, show_trace=true)
+Mads.@stdouterrcapture Mads.calibrate(md; localsa=true, show_trace=true)
 Mads.rmfiles_ext("initialresults"; path=workdir)
 Mads.rmfiles_ext("svg"; path=workdir)
 Mads.rmfiles_ext("dat"; path=workdir)

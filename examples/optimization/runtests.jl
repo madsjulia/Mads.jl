@@ -11,7 +11,7 @@ if workdir == "."
 	workdir = joinpath(Mads.dir, "examples", "optimization")
 end
 
-@Mads.stderrcapture function clean_directory()
+Mads.@stderrcapture function clean_directory()
 	files = Mads.searchdir(r"y.*\.jld", path = workdir)
 	for i in files
 		Mads.rmfile(joinpath(workdir, i))
@@ -25,7 +25,7 @@ end
 	Mads.rmdir(joinpath(workdir, "..", "model_coupling", "internal-linearmodel_restart"))
 end
 
-@Mads.stderrcapture function run_optimization_tests()
+Mads.@stderrcapture function run_optimization_tests()
 	include(joinpath(workdir, "optimization-lm.jl")) # good
 	include(joinpath(workdir, "optimization_rosenbrock.jl")) # good
 	include(joinpath(workdir, "optimization_callback.jl")) # good?
@@ -39,7 +39,7 @@ end
 	end
 end
 
-@Test.testset "Optimization" begin
+Test.@testset "Optimization" begin
 	run_optimization_tests()
 
 	if Mads.long_tests
@@ -51,7 +51,7 @@ end
 
 		global md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
 		yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
-		@Test.test yparam == jparam
+		Test.@test yparam == jparam
 	end
 
 end

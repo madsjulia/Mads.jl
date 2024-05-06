@@ -5,17 +5,17 @@ setprocs()
 
 import Mads
 Mads.setprocs()
-@Distributed.everywhere import Mads
+Distributed.@everywhere import Mads
 
-@Distributed.everywhere nt = 2
-@Distributed.everywhere np = Distributed.nworkers()
+Distributed.@everywhere nt = 2
+Distributed.@everywhere np = Distributed.nworkers()
 
-@Distributed.everywhere function fp(i::Integer, j::Integer)
+Distributed.@everywhere function fp(i::Integer, j::Integer)
 	sleep(j)
 	println("fp $i $j done")
 end
 
-@Distributed.everywhere function Distributed.pmaping(i::Integer)
+Distributed.@everywhere function Distributed.pmaping(i::Integer)
 	println("Distributed.pmaping $i ...")
 	Distributed.pmap(j->(fp(i, j)), 1:nt)
 end

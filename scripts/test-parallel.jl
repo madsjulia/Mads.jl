@@ -6,7 +6,7 @@ setprocs(ntasks_per_node=1)
 
 @info("Import MADS ...")
 import Mads
-@Distributed.everywhere Mads.quietoff()
+Distributed.@everywhere Mads.quietoff()
 
 @info("Test MADS ... ")
 Mads.test()

@@ -11,7 +11,7 @@ Mads.graphoff()
 suffix = Sys.iswindows() ? "-win" : ""
 suffix = Sys.islinux() ? "-linux" : suffix
 
-@Mads.tryimport Ipopt
+Mads.@tryimport Ipopt
 
 if !isdefined(Mads, :Ipopt) || !isdefined(Mads, :NMFipopt)
 	@warn("Ipopt not available; blind source separation test (BSS) skipped!")
@@ -22,8 +22,8 @@ else
 	R = 1
 	nk = 3
 
-	@Test.testset "BSS" begin
-		# @Mads.stderrcapture function reconstruct_rand(R, nk)
+	Test.@testset "BSS" begin
+		# Mads.@stderrcapture function reconstruct_rand(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
 
 		s1 = rand(Mads.rng, 100)
@@ -34,7 +34,7 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		@Suppressor.suppress Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
+		Suppressor.@suppress Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
 
 		if Mads.create_tests
 			Mads.mkdir(d)
@@ -42,9 +42,9 @@ else
 		end
 
 		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "rand$(suffix).jld2"), "Wipopt")
-		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
 
-		# @Mads.stderrcapture function reconstruct_sin.(R, nk)
+		# Mads.@stderrcapture function reconstruct_sin.(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
 		s2 = (sin.(0.3:0.3:30) .+ 1) ./ 2
@@ -68,10 +68,10 @@ else
 		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_1$(suffix).jld2"), "Wipopt")
 		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_2$(suffix).jld2"), "Hipopt")
 
-		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 
-		# @Mads.stderrcapture function reconstruct_sin_rand(R, nk)
+		# Mads.@stderrcapture function reconstruct_sin_rand(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
 
 		s1 = (sin.(0.05:0.05:5) .+ 1) ./ 2
@@ -95,10 +95,10 @@ else
 		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_1$(suffix).jld2"), "Wipopt")
 		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_2$(suffix).jld2"), "Hipopt")
 
-		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 
-		# @Mads.stderrcapture function reconstruct_disturbance(R, nk)
+		# Mads.@stderrcapture function reconstruct_disturbance(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
 
 		s1 = (sin.(0.3:0.3:30) .+ 1) ./ 2
@@ -124,8 +124,8 @@ else
 		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_1$(suffix).jld2"), "Wipopt")
 		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_2$(suffix).jld2"), "Hipopt")
 
-		@Test.test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		@Test.test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
 	end
 end
 

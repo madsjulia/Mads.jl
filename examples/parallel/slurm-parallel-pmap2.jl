@@ -7,12 +7,12 @@ Distributed.addprocs()
 
 import Mads
 Mads.setprocs()
-@Distributed.everywhere import Mads
+Distributed.@everywhere import Mads
 
-@Distributed.everywhere nt = 10000
-@Distributed.everywhere np = Distributed.nworkers()
+Distributed.@everywhere nt = 10000
+Distributed.@everywhere np = Distributed.nworkers()
 
-@Distributed.everywhere function fp(i::Integer, j::Integer)
+Distributed.@everywhere function fp(i::Integer, j::Integer)
 	# println("fp $i $j done")
 	return [[1, i * j] [2, i^j]]
 end

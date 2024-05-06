@@ -4,7 +4,7 @@ cwd = pwd()
 workdir = joinpath(Mads.dir, "examples", "embed_c")
 cd(workdir)
 
-@Mads.stderrcapture if Sys.isapple()
+Mads.@stderrcapture if Sys.isapple()
 	const embed_c_mylib = joinpath(workdir, "libmy.dylib")
 elseif Sys.islinux()
 	const embed_c_mylib = joinpath(workdir, "libmy.so")
@@ -20,7 +20,7 @@ else
 		run(`make`)
 	end
 
-	@Test.testset "Calling C" begin
+	Test.@testset "Calling C" begin
 		if isfile(joinpath(workdir, embed_c_mylib))
 			global d = 4.
 			n = 5
@@ -28,7 +28,7 @@ else
 				ccall( (:my_c_sqrt, embed_c_mylib), Float64, (Float64,), d )
 			end
 
-			@Test.test fcsqrt(d) ≈ sqrt(d)
+			Test.@test fcsqrt(d) ≈ sqrt(d)
 
 			function fcfunc_ex1(n, d)
 				ccall( (:my_c_func_ex1, embed_c_mylib), Float64, (Int64, Float64), n, d )
@@ -39,7 +39,7 @@ else
 				r += i / d
 			end
 
-			@Test.test fcfunc_ex1(n,d) ≈ r
+			Test.@test fcfunc_ex1(n,d) ≈ r
 		else
 			@warn("C library does not exist!")
 		end

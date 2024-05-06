@@ -14,12 +14,12 @@ X = convert(SharedArrays.SharedArray, x)
 Y = convert(SharedArrays.SharedArray, y)
 Z = convert(SharedArrays.SharedArray, z)
 
-@Printf.printf("Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
-@Printf.printf("Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
+Printf.@printf("Size of matrix X is %d MB\n", sizeof(X) ÷ (1048576))
+Printf.@printf("Size of matrix x is %d MB\n", sizeof(x) ÷ (1048576))
 
 Xt = X'
 
-@Distributed.everywhere function dotcol(a, B, j)
+Distributed.@everywhere function dotcol(a, B, j)
 	length(a) == size(B,1) || throw(DimensionMismatch("a and B must have the same number of rows"))
 	s = 0.0
 	@inbounds @simd for i = eachindex(a)
@@ -36,7 +36,7 @@ function run1!(Z, Y, Xt)
 end
 
 function runp!(Z, Y, Xt)
-	@sync @Distributed.distributed for j in axes(Xt, 2)
+	@sync Distributed.@distributed for j in axes(Xt, 2)
 		Z[j] = dotcol(Y, Xt, j)
 	end
 	Z

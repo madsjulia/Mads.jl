@@ -443,7 +443,7 @@ function importeverywhere(filename::AbstractString)
 	end
 	functionname = strip(split(split(code, "function")[2],"(")[1])
 	extracode = quiet ? "" : "else Mads.madswarn(\"$functionname already defined\")"
-	fullcode = "import Distributed; @Distributed.everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
+	fullcode = "import Distributed; Distributed.@everywhere begin if !isdefined(Mads, :$functionname) $code $extracode end end"
 	q = Meta.parse(fullcode)
 	Core.eval(Main, q)
 	functionsymbol = Symbol(functionname)

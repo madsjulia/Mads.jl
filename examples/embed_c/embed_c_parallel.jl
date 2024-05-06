@@ -3,18 +3,18 @@ import Distributed
 
 Distributed.addprocs(4)
 
-@Distributed.everywhere fcmxv_bad(n_x, x, M, n_o, o) = ccall( (:my_c_mxv_bad, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
-@Distributed.everywhere fcmxv(n_x, x, M, n_o, o) = ccall( (:my_c_mxv, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
-@Distributed.everywhere fjmxv(M, x) = M * x
+Distributed.@everywhere fcmxv_bad(n_x, x, M, n_o, o) = ccall( (:my_c_mxv_bad, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
+Distributed.@everywhere fcmxv(n_x, x, M, n_o, o) = ccall( (:my_c_mxv, "libmy.dylib"), Int32, (Int64, Ptr{Float64}, Ptr{Float64}, Int64, Ptr{Float64}), n_x, x, M, n_o, o )
+Distributed.@everywhere fjmxv(M, x) = M * x
 
-@Distributed.everywhere nP = 100
-@Distributed.everywhere nO = 1000000
-@Distributed.everywhere x = rand(nP)
-@Distributed.everywhere o_c = Array{Float64}(undef, nO)
-@Distributed.everywhere o_j = Array{Float64}(undef, nO)
+Distributed.@everywhere nP = 100
+Distributed.@everywhere nO = 1000000
+Distributed.@everywhere x = rand(nP)
+Distributed.@everywhere o_c = Array{Float64}(undef, nO)
+Distributed.@everywhere o_j = Array{Float64}(undef, nO)
 
-@Distributed.everywhere M = ones(nO, nP)
-@Distributed.everywhere M[:,end] = 100000
+Distributed.@everywhere M = ones(nO, nP)
+Distributed.@everywhere M[:,end] = 100000
 
 @info("Matrix vector multiplication in parallel ...")
 println("C (bad) ...")

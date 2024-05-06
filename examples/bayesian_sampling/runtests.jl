@@ -64,12 +64,12 @@ end
 
 good_mcmcchains_emcee = JLD2.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld2"), "mcmcchains_emcee")
 
-@Test.testset "Bayesian" begin
-	@Test.testset "bayes" begin
-		isdefined(Mads, :mcmcvalues_array) && @Test.test isapprox(good_mcmcvalues_array, mcmcvalues_array, atol=1e-8)
+Test.@testset "Bayesian" begin
+	Test.@testset "bayes" begin
+		isdefined(Mads, :mcmcvalues_array) && Test.@test isapprox(good_mcmcvalues_array, mcmcvalues_array, atol=1e-8)
 	end
-	@Test.testset "emcee" begin
-		@Test.test good_mcmcchains_emcee == mcmcchains_emcee
+	Test.@testset "emcee" begin
+		Test.@test good_mcmcchains_emcee == mcmcchains_emcee
 	end
 
 end

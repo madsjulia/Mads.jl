@@ -3,17 +3,17 @@ import Test
 import Random
 import Distributed
 
-@Mads.stderrcapture function parallel_findpi(n)
+Mads.@stderrcapture function parallel_findpi(n)
 	# Simple Monte Carlo to estimate pi
 	Random.seed!(2017)
-	inside = @Distributed.distributed (+) for i = 1:n
+	inside = Distributed.@distributed (+) for i = 1:n
 		x, y = rand(2)
 		x^2 + y^2 <= 1 ? 1 : 0
 	end
 	isapprox((4 * inside / n), 3.14, atol=1e-1)
 end
 
-@Mads.stderrcapture function time_dilation()
+Mads.@stderrcapture function time_dilation()
 	# Einstein Special Relativity: time dilation
 	# t' = t / sqrt(1 - v^2 / c^2)
 
@@ -24,7 +24,7 @@ end
 	t / sqrt(1 - v^2 / c^2) < 500
 end
 
-@Mads.stderrcapture function eulers_equation()
+Mads.@stderrcapture function eulers_equation()
 	# Euler's equation on the nature of spheres
 	# V - E + F = 2
 
@@ -35,7 +35,7 @@ end
 	(V - E + F) == 2
 end
 
-@Mads.stderrcapture function schrodinger()
+Mads.@stderrcapture function schrodinger()
 	# Schrodinger's equation in a 1D box:
 	#  ψ(x) = sqrt(2/L)*sin.(nπx/L)
 
@@ -49,11 +49,11 @@ end
 
 # Distributed.addprocs(2)
 
-@Test.testset "Parallel" begin
-	@Test.test parallel_findpi(100000)
-	@Test.test time_dilation()
-	@Test.test eulers_equation()
-	@Test.test schrodinger()
+Test.@testset "Parallel" begin
+	Test.@test parallel_findpi(100000)
+	Test.@test time_dilation()
+	Test.@test eulers_equation()
+	Test.@test schrodinger()
 end
 
 :passed

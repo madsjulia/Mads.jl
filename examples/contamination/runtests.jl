@@ -10,9 +10,9 @@ using SharedArrays
 Mads.veryquieton()
 Mads.graphoff()
 
-@Mads.tryimportmain JLD2
-@Mads.tryimportmain OrderedCollections
-@Mads.tryimportmain DataStructures
+Mads.@tryimportmain JLD2
+Mads.@tryimportmain OrderedCollections
+Mads.@tryimportmain DataStructures
 
 workdir = (Mads.getproblemdir() == ".") ? joinpath(Mads.dir, "examples", "contamination") : Mads.getproblemdir()
 testdir = joinpath(workdir, "test_results")
@@ -32,7 +32,7 @@ forward_predictions_vector = collect(values(forward_predictions))
 param_values = Mads.getoptparams(md) # Initial parameter values
 objfunc = Mads.partialof(md, forward_predictions, r".*")
 inverse_parameters, inverse_results = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1) # perform model calibration
-@Mads.stdouterrcapture Mads.modelinformationcriteria(md)
+Mads.@stdouterrcapture Mads.modelinformationcriteria(md)
 param_values = Mads.getoptparams(md, collect(values(inverse_parameters)))
 
 localsa_results = Mads.localsa(md; datafiles=false, imagefiles=false, par=init_parameters_vector, obs=forward_predictions_vector)
@@ -105,23 +105,23 @@ good_samples = JLD2.load(joinpath(testdir, "samples.jld2"), "samples")
 good_llhoods = JLD2.load(joinpath(testdir, "llhoods.jld2"), "llhoods")
 good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
-@Test.testset "Contamination" begin
-	@Test.test forward_predictions_source == forward_predictions
-	@Test.test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
-	@Test.test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
-	@Test.test isapprox(Statistics.mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
-	@Test.test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
+Test.@testset "Contamination" begin
+	Test.@test forward_predictions_source == forward_predictions
+	Test.@test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
+	Test.@test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
+	Test.@test isapprox(Statistics.mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
+	Test.@test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
 
 	t = isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	if t
-		@Test.test isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
+		Test.@test isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
 	else
 		@show samples
 	end
 
 	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	if t
-		@Test.test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
+		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	else
 		@show good_llhoods
 		@show llhoods
@@ -130,7 +130,7 @@ good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
 	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	if t
-		@Test.test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
+		Test.@test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
 	else
 		@show good_newllhoods
 		@show newllhoods
@@ -138,14 +138,14 @@ good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
 	t = isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Test.test isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md; time=50.0)
 	end
 
 	t = isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	if t
-		@Test.test isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md)
 	end
@@ -163,7 +163,7 @@ good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
 	t = isapprox(ssr, 0., atol=1e-8)
 	if t
-		@Test.test isapprox(ssr, 0., atol=1e-8)
+		Test.@test isapprox(ssr, 0., atol=1e-8)
 	else
 		@show welldata_time
 		@show good_welldata_time
@@ -178,7 +178,7 @@ good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 
 	t = isapprox(ssr, 0., atol=1e-8)
 	if t
-		@Test.test isapprox(ssr, 0., atol=1e-8)
+		Test.@test isapprox(ssr, 0., atol=1e-8)
 	else
 		@show inverse_predictions
 		@show good_inverse_preds
@@ -186,8 +186,8 @@ good_newllhoods = JLD2.load(joinpath(testdir, "newllhoods.jld2"), "newllhoods")
 	end
 end
 
-@Mads.stdouterrcapture Mads.addsource!(md)
-@Mads.stdouterrcapture Mads.removesource!(md)
+Mads.@stdouterrcapture Mads.addsource!(md)
+Mads.@stdouterrcapture Mads.removesource!(md)
 
 Mads.rmdir("w01-w13a_w20a_restart")
 

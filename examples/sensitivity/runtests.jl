@@ -8,7 +8,7 @@ import Distributed
 cwd = pwd()
 workdir = Mads.getproblemdir()
 if workdir == "."
-	@Distributed.everywhere workdir = joinpath(Mads.dir, "examples", "sensitivity")
+	Distributed.@everywhere workdir = joinpath(Mads.dir, "examples", "sensitivity")
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))
@@ -24,9 +24,9 @@ if Mads.create_tests
 end
 
 sa_results_correct = JSON.parsefile(filename_correct; dicttype=OrderedCollections.OrderedDict, use_mmap=true)
-@Test.testset "Sensitivity" begin
-	@Test.test !in(Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false)
-	@Test.test !in(Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false)
+Test.@testset "Sensitivity" begin
+	Test.@test !in(Base.collect(Base.values(sa_results_correct["mes"]["of"])) - Base.collect(Base.values(sa_results["mes"]["of"])) .< 1e-6, false)
+	Test.@test !in(Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false)
 end
 
 sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true)

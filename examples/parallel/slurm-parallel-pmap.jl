@@ -7,12 +7,12 @@ Distributed.addprocs()
 
 import Mads
 Mads.setprocs()
-@Distributed.everywhere import Mads
+Distributed.@everywhere import Mads
 
-@Distributed.everywhere nt = 2
-@Distributed.everywhere np = Distributed.nprocs()
+Distributed.@everywhere nt = 2
+Distributed.@everywhere np = Distributed.nprocs()
 
-@Distributed.everywhere function fp(i::Integer, j::Integer)
+Distributed.@everywhere function fp(i::Integer, j::Integer)
 	sleep(j)
 	println("fp $i $j done")
 	return i * j
