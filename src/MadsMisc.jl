@@ -195,7 +195,7 @@ function evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDic
 end
 
 "Convert `Printf.@sprintf` macro into `sprintf` function"
-sprintf(args...) = Core.eval(Mads, :Printf.@sprintf($(args...)))
+sprintf(args...) = Core.eval(Mads, :@Printf.sprintf($(args...)))
 
 """
 Parse parameter distribution from a string

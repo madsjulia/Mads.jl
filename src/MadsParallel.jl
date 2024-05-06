@@ -4,7 +4,7 @@ import Printf
 
 if isdefined(Core, :Mads) && !isdefined(Mads, :sprintf)
 	"Convert `Printf.@sprintf` macro into `sprintf` function"
-	sprintf(args...) = Base.eval(:Printf.@sprintf($(args...)))
+	sprintf(args...) = Base.eval(:@Printf.sprintf($(args...)))
 end
 
 quietdefault = true
