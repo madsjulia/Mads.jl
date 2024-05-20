@@ -15,11 +15,11 @@ function set_xlsx_formats(wb::XLSX.Workbook, dec_digits::Integer, exp_digits::In
 	return numfmt_style_dec, numfmt_style_exp
 end
 
-function apply_xlsx_format(df::DataFrames.DataFrame, cols::AbstractVector, format::XLSX.CellDataFormat)
+function apply_xlsx_format(df::DataFrames.DataFrame, format::XLSX.CellDataFormat, cols::AbstractVector=names(df))
 	DataFrames.select(df, DataFrames.All(), cols .=> DataFrames.ByRow(x -> XLSX.CellValue(x, format)) .=> cols)
 end
 
-function apply_xlsx_format(ws::XLSX.Worksheet, cols::AbstractVector, format::XLSX.CellDataFormat)
+function apply_xlsx_format(ws::XLSX.Worksheet, format::XLSX.CellDataFormat, cols::AbstractVector=Symbol.(vec(ws[1, :])))
 	for j in axes(ws, 2)
 		if Symbol(ws[1, j]) in cols
 			for i in axes(ws, 1)
