@@ -27,20 +27,32 @@ function createhash!(DATA::DATA)
 	end
 end
 
-function checkhash(DATA::DATA)::Bool
+function checkhash(excel_file::AbstractString, target_hash::AbstractString, throw_error::Bool=false)::Bool
 	local hash
-	open(DATA.filename) do f
+	open(excel_file) do f
 		hash = SHA.bytes2hex(SHA.sha2_256(f))
 	end
-	if hash != DATA.filehash
-		@error "File hash for $(DATA.filename) does not match!"
-		throw("Error")
-		return false
+	check = hash == target_hash
+	if !check
+		@info("Current  hash: $(hash)")
+		@info("Expected hash: $(target_hash)")
+		if throw_error
+			@error "File hash for $(excel_file) does not match!"
+			throw("Error")
+		end
 	else
-		@info "File hash for $(DATA.filename) matches!"
-		return true
+		@info "File hash for $(excel_file) matches!"
 	end
+	return check
 end
+function checkhash(DATA::DATA, throw_error::Bool=true)::Bool
+	checkhash(DATA.filename, DATA.filehash, throw_error)
+end
+@doc """
+Check hash of a file
+
+$(DocumentFunction.documentfunction(checkhash))
+""" checkhash
 
 function get_datasets(filename::AbstractString)
 	if !isfile(filename)
@@ -65,6 +77,54 @@ function get_datasets(filename::AbstractString)
 	return datasets
 end
 
+function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::Vector{Int}, col_range::Vector{String}, mapping::Dict=Dict(), datatype::DataType=Float64)
+	@assert length(row_range) == 2
+	@assert length(col_range) == 2
+	get_excel_data(excel_file, sheet_name, header_row, tuple(row_range...), tuple(col_range...), mapping, datatype)
+end
+function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::NTuple{2, Int}, col_range::NTuple{2, String}, mapping::Dict=Dict(), datatype::DataType=Float64)
+	@assert datatype <: Number
+	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{Float64}}()
+	XLSX.openxlsx(excel_file, mode="r") do xf
+		params = xf[sheet_name]["$(col_range[1])$(header_row):$(col_range[2])$(header_row)"]
+		data = xf[sheet_name]["$(col_range[1])$(row_range[1]):$(col_range[2])$(row_range[2])"]
+		data = data[.!all.(ismissing, eachrow(data)), :] # skip rows with all missing values
+		@assert length(params) == size(data, 2)
+		for (i, param) in enumerate(params)
+			if !ismissing(param)
+				if length(mapping) > 0
+					param_symbol = Symbol()
+					for key in keys(mapping)
+						if param == mapping[key]
+							param_symbol = Symbol(key)
+							break
+						end
+					end
+					if param_symbol == Symbol()
+						@warn("$(param) is not found in the mapping!")
+						param_symbol = Symbol(param)
+					end
+				else
+					param_symbol = Symbol(replace(lowercase(param), " " => "_", "-" => "_"))
+				end
+				v = data[:,i]
+				if !all(ismissing.(v))
+					v[ismissing.(v)] .= datatype(NaN)
+					data_dict[param_symbol] = convert(Vector{datatype}, v)
+				else
+					@warn("$(param) is missing!")
+				end
+			end
+		end
+	end
+	return data_dict
+end
+@doc """
+Get data from an EXCEL file
+
+$(DocumentFunction.documentfunction(get_excel_data))
+""" get_excel_data
+
 function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::Union{DataFrames.DataFrame,AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
@@ -84,7 +144,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 		try
 			xb = XLSX.readxlsx(filename)
 			datasets = collect(XLSX.sheetnames(xb))
-			@info("File  $(filename) sheets: $(datasets)")
+			@info("File $(filename) sheets: $(datasets)")
 			if dataset in datasets
 				@info("Dataset $(dataset) loaded from $(filename) ...")
 				c = DataFrames.DataFrame(XLSX.readtable(filename, dataset; stop_in_empty_row=false, header=true, first_row=first_row))
@@ -543,7 +603,6 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 		dumpyamlmadsfile(madsdata2, filename)
 	end
 end
-
 @doc """
 Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
