@@ -92,8 +92,8 @@ function get_excel_data(excel_file::String, sheet_name::String, header_row::Int,
 		@assert length(params) == size(data, 2)
 		for (i, param) in enumerate(params)
 			if !ismissing(param)
+				param_symbol = Symbol()
 				if length(mapping) > 0
-					param_symbol = Symbol()
 					for key in keys(mapping)
 						if param == mapping[key]
 							param_symbol = Symbol(key)
@@ -102,10 +102,10 @@ function get_excel_data(excel_file::String, sheet_name::String, header_row::Int,
 					end
 					if param_symbol == Symbol()
 						@warn("$(param) is not found in the mapping!")
-						param_symbol = Symbol(param)
 					end
-				else
-					param_symbol = Symbol(replace(lowercase(param), " " => "_", "-" => "_"))
+				end
+				if param_symbol == Symbol()
+					param_symbol = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
 				end
 				v = data[:,i]
 				if !all(ismissing.(v))
