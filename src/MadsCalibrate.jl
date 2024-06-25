@@ -206,6 +206,9 @@ Returns:
 function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3,  maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, store_optimization_progress::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
 	rootname = Mads.getmadsrootname(madsdata)
 	madsdir = Mads.getmadsproblemdir(madsdata)
+	if !isdir(dirname(rootname))
+		Mads.recursivemkdir(dirname(rootname))
+	end
 	if !isdir(madsdir)
 		Mads.recursivemkdir(madsdir)
 	end
