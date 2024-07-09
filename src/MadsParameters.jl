@@ -662,9 +662,6 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 				s *= "<- optimizable "
 			end
 		end
-		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
-			s *= Printf.@sprintf "log-transformed "
-		end
 		if haskey(pardict[parkey], "min")
 			s *= Printf.@sprintf "min = %15g " vmin
 		end
@@ -676,11 +673,14 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		end
 		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
 			if rescale
-				s *= " <- rescaled"
+				s *= " <- rescaled "
 			else
 				s *= Printf.@sprintf "minorig = %15g " pardict[parkey]["minorig"]
 				s *= Printf.@sprintf "maxorig = %15g " pardict[parkey]["maxorig"]
 			end
+		end
+		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
+			s *= Printf.@sprintf "<- log-transformed "
 		end
 		s *= "\n"
 		push!(p, s)
