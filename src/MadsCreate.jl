@@ -121,6 +121,9 @@ end
 function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for i=1:length(param)], name::AbstractVector=[], plotname::AbstractVector=[], type::AbstractVector=["opt" for i=1:length(param)], min::AbstractVector=[], max::AbstractVector=[], minorig::AbstractVector=min, maxorig::AbstractVector=max, dist::AbstractVector=[], expressions::AbstractVector=["" for i=1:length(param)], log::AbstractVector=falses(length(param)), distribution::Bool=false)
 	mdp = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	mde = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+	@assert length(param) == length(key)
+	@assert length(param) == length(type)
+	@assert length(param) == length(log)
 	global mapping_expression = falses(length(param))
 	for i = eachindex(param)
 		if typeof(type[i]) === Bool
@@ -133,7 +136,7 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 			mapping_expression[i] = true
 			continue
 		else
-			d = OrderedCollections.OrderedDict{String,Any}("init"=>param[i], "type"=>t, "log"=>log[i])
+			d = OrderedCollections.OrderedDict{String,Any}("init"=>param[i], "type"=>t)
 			if length(dist) == length(param) && dist[i] != ""
 				push!(d, "dist"=>dist[i])
 			elseif (distribution && length(dist) == 0)
@@ -143,11 +146,17 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 				push!(d, "max"=>max[i])
 			end
 		end
-		if minorig != min
+		flag_original = false
+		if minorig != min && maxorig != max
 			push!(d, "minorig"=>minorig[i])
-		end
-		if maxorig != max
 			push!(d, "maxorig"=>maxorig[i])
+			flag_original = true
+		end
+		if flag_original && log[i]
+			push!(d, "logorig"=>true)
+			push!(d, "log"=>false)
+		else
+			push!(d, "log"=>log[i])
 		end
 		if length(key) == length(name)
 			push!(d, "longname"=>name[i])
@@ -224,7 +233,7 @@ function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractStri
 	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
 	return nothing
 end
-function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Symbol,Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramname, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], paramlog::AbstractVector=falses(length(param)), obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=ones(length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Symbol,Function,AbstractString}; problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramname, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramlog::AbstractVector=falses(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=ones(length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict{String,Any}()
 	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, distribution=distribution, expressions=expressions, log=paramlog)
 	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist, distribution=distribution)
