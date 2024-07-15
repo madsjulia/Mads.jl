@@ -433,7 +433,7 @@ function showobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobs
 		end
 		if haskey(obsdict[obskey], "minorig") && haskey(obsdict[obskey], "maxorig")
 			if rescale
-				s *= " <- rescaled"
+				s *= "$(Base.text_colors[:magenta]) <- rescaled $(Base.text_colors[:normal])"
 			else
 				s *= Printf.@sprintf " minorig = %15g" obsdict[obskey]["minorig"]
 				s *= Printf.@sprintf " maxorig = %15g" obsdict[obskey]["maxorig"]

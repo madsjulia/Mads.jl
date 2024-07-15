@@ -604,7 +604,29 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 
 showparameterestimates = showparameters
 
-function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata); showtype::Bool=true, rescale::Bool=true)
+function scale_up(v::Number, vmin::Number, vmax::Number, vlog::Bool=false)
+	if vlog
+		vminl = log10(vmin)
+		vmaxl = log10(vmax)
+		vl = 10 ^ (v * (vmaxl - vminl) + vminl)
+	else
+		vl = v * (vmax - vmin) + vmin
+	end
+	return vl
+end
+
+function scale_down(v::Number, vmin::Number, vmax::Number, vlog::Bool=false)
+	if vlog
+		vminl = log10(vmin)
+		vmaxl = log10(vmax)
+		vl = (log10(v) - vminl) / (vmaxl - vminl)
+	else
+		vl = (v - vmin) / (vmax - vmin)
+	end
+	return vl
+end
+
+function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata); parset::AbstractDict=Dict(), showtype::Bool=true, rescale::Bool=true)
 	pardict = madsdata["Parameters"]
 	maxl = 0
 	maxk = 0
@@ -624,23 +646,24 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 			s = ""
 		end
 		s *= Mads.sprintf("%-$(maxk)s = ", parkey)
-		if haskey(pardict[parkey], "init")
+		if haskey(parset, parkey)
+			v = parset[parkey]
+		elseif haskey(pardict[parkey], "init")
 			v = pardict[parkey]["init"]
 		else
 			@warn("No initial value or expression for parameter $(parkey)")
 			continue
 		end
+		logorig = haskey(pardict[parkey], "logorig") ? pardict[parkey]["logorig"] : false
 		if rescale && haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
-			bmin = pardict[parkey]["minorig"]
-			bmax = pardict[parkey]["maxorig"]
-			v = v * (bmax - bmin) + bmin
+			minorig = pardict[parkey]["minorig"]
+			maxorig = pardict[parkey]["maxorig"]
+			v = scale_up(v, minorig, maxorig, logorig)
 			if haskey(pardict[parkey], "min")
-				vmin = pardict[parkey]["min"]
-				vmin = vmin * (bmax - bmin) + bmin
+				vmin = scale_up(pardict[parkey]["min"], minorig, maxorig, logorig)
 			end
 			if haskey(pardict[parkey], "max")
-				vmax = pardict[parkey]["max"]
-				vmax = vmax * (bmax - bmin) + bmin
+				vmax = scale_up(pardict[parkey]["max"], minorig, maxorig, logorig)
 			end
 		else
 			if haskey(pardict[parkey], "min")
@@ -654,12 +677,12 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		if showtype
 			if haskey(pardict[parkey], "type")
 				if pardict[parkey]["type"] == "opt"
-					s *= "<- optimizable "
+					s *= "$(Base.text_colors[:yellow])<- optimizable $(Base.text_colors[:normal])"
 				else
-					s *= "<- fixed       "
+					s *= "$(Base.text_colors[:blue])<- fixed       $(Base.text_colors[:normal])"
 				end
 			else
-				s *= "<- optimizable "
+				s *= "$(Base.text_colors[:yellow])<- optimizable $(Base.text_colors[:normal])"
 			end
 		end
 		if haskey(pardict[parkey], "min")
@@ -673,14 +696,17 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 		end
 		if haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig")
 			if rescale
-				s *= " <- rescaled "
+				s *= "$(Base.text_colors[:magenta]) <- rescaled $(Base.text_colors[:normal])"
 			else
 				s *= Printf.@sprintf "minorig = %15g " pardict[parkey]["minorig"]
 				s *= Printf.@sprintf "maxorig = %15g " pardict[parkey]["maxorig"]
 			end
 		end
 		if haskey(pardict[parkey], "log" ) && pardict[parkey]["log"] == true
-			s *= Printf.@sprintf "<- log-transformed "
+			s *= "$(Base.text_colors[:red]) <- log-transformed $(Base.text_colors[:normal])"
+		end
+		if rescale && haskey(pardict[parkey], "minorig") && haskey(pardict[parkey], "maxorig") && logorig
+			s *= "$(Base.text_colors[:red]) <- scale log-transformed $(Base.text_colors[:normal])"
 		end
 		s *= "\n"
 		push!(p, s)
