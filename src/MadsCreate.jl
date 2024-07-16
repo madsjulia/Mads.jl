@@ -150,9 +150,14 @@ function createparameters(param::AbstractVector; key::AbstractVector=["p$i" for 
 			push!(d, "maxorig"=>maxorig[i])
 			flag_original = true
 		end
-		if flag_original && log[i]
-			push!(d, "logorig"=>true)
-			push!(d, "log"=>false)
+		if flag_original
+			if log[i]
+				push!(d, "logorig"=>true)
+				push!(d, "log"=>false)
+			else
+				push!(d, "logorig"=>false)
+				push!(d, "log"=>false)
+			end
 		else
 			push!(d, "log"=>log[i])
 		end

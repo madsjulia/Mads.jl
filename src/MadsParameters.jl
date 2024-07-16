@@ -645,6 +645,11 @@ function scale_up(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVector,
 		end
 		vv[i] = vl
 	end
+	if any(isnan.(vv))
+		@show v
+		@warn("NaN values in scaled vector!")
+		throw()
+	end
 	return vv
 end
 
@@ -669,20 +674,25 @@ function scale_down(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVecto
 		end
 		vv[i] = vl
 	end
+	if any(isnan.(vv))
+		@show v
+		@warn("NaN values in scaled vector!")
+		throw()
+	end
 	return vv
 end
 
 function scale_up(madsdata::AbstractDict, v::AbstractVector)
 	vmin = getparamskey(madsdata, "minorig")
 	vmax = getparamskey(madsdata, "maxorig")
-	vlog = Bool.(getparamskey(madsdata, "log"))
+	vlog = Bool.(getparamskey(madsdata, "logorig"))
 	return scale_up(v, vmin, vmax, vlog)
 end
 
 function scale_down(madsdata::AbstractDict, v::AbstractVector)
 	vmin = getparamskey(madsdata, "minorig")
 	vmax = getparamskey(madsdata, "maxorig")
-	vlog = Bool.(getparamskey(madsdata, "log"))
+	vlog = Bool.(getparamskey(madsdata, "logorig"))
 	return scale_down(v, vmin, vmax, vlog)
 end
 
