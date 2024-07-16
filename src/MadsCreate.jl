@@ -66,10 +66,8 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for 
 			push!(d, "min"=>min[i])
 			push!(d, "max"=>max[i])
 		end
-		if minorig != min
+		if minorig != min && maxorig != max
 			push!(d, "minorig"=>minorig[i])
-		end
-		if maxorig != max
 			push!(d, "maxorig"=>maxorig[i])
 		end
 		md[key[i]] = d

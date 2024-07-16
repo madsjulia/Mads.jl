@@ -83,11 +83,11 @@ function getwellkeys(madsdata::AbstractDict)
 end
 
 # Make functions to get MADS observation variable names
-getobsnames = ["min", "max", "log", "weight", "target", "time", "dist"]
-getobsaltnames = ["min", "max", "log", "w", "c", "t", "dist"]
-getobstypes = [Float64, Float64, Any, Float64, Float64, Float64, String]
-getobsdefault = [-Inf, Inf, nothing, 1, NaN, NaN, "Uniform(-Inf, Inf)"]
-getobslogdefault = [eps(Float64), Inf, nothing, 1, NaN, NaN, "Uniform($(eps(Float64)), Inf)"]
+getobsnames = ["min", "max", "minorig", "maxorig", "log", "weight", "target", "time", "dist"]
+getobsaltnames = ["min", "max", "minorig", "maxorig", "log", "w", "c", "t", "dist"]
+getobstypes = [Float64, Float64, Float64, Float64, Any, Float64, Float64, Float64, String]
+getobsdefault = [-Inf, Inf, -Inf, Inf, nothing, 1, NaN, NaN, "Uniform(-Inf, Inf)"]
+getobslogdefault = [eps(Float64), Inf, eps(Float64), Inf, nothing, 1, NaN, NaN, "Uniform($(eps(Float64)), Inf)"]
 global index = 0
 for i = eachindex(getobsnames)
 	global index = i

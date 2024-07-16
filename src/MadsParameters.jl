@@ -184,7 +184,7 @@ function getparamsmin(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			paramvalue[i] = -Inf
 		end
 	end
-	return paramvalue # returns the parameter values
+	return paramvalue
 end
 
 """
@@ -218,7 +218,7 @@ function getparamsmax(madsdata::AbstractDict, paramkeys::AbstractVector=getparam
 			paramvalue[i] = Inf
 		end
 	end
-	return paramvalue # returns the parameter values
+	return paramvalue
 end
 
 """
@@ -624,6 +624,75 @@ function scale_down(v::Number, vmin::Number, vmax::Number, vlog::Bool=false)
 		vl = (v - vmin) / (vmax - vmin)
 	end
 	return vl
+end
+
+function scale_up(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVector,  vlog::AbstractVector=falses(legnth(v)))
+	vv = similar(v)
+	for i = eachindex(v)
+		if v[i] < 0
+			vl = 0
+		elseif v[i] > 1
+			vl = 1
+		else
+			vl = v[i]
+		end
+		if vlog[i]
+			vminl = log10(vmin[i])
+			vmaxl = log10(vmax[i])
+			vl = 10 ^ (vl * (vmaxl - vminl) + vminl)
+		else
+			vl = vl * (vmax[i] - vmin[i]) + vmin[i]
+		end
+		vv[i] = vl
+	end
+	return vv
+end
+
+function scale_down(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVector, vlog::AbstractVector=falses(legnth(v)))
+	vv = similar(v)
+	for i = eachindex(v)
+		if vlog[i]
+			vminl = log10(vmin[i])
+			vmaxl = log10(vmax[i])
+			dx = (vmaxl - vminl)
+			vl = dx == 0 ? 1 : (log10(v[i]) - vminl) / dx
+		else
+			dx = (vmax[i] - vmin[i])
+			vl = dx == 0 ? 1 : (v[i] - vmin[i]) / dx
+		end
+		if vl < 0
+			vl = 0
+		elseif vl > 1
+			vl = 1
+		else
+			vl = v
+		end
+		vv[i] = vl
+	end
+	return vv
+end
+
+function scale_up(madsdata::AbstractDict, v::AbstractVector)
+	vmin = getparamskey(madsdata, "minorig")
+	vmax = getparamskey(madsdata, "maxorig")
+	vlog = Bool.(getparamskey(madsdata, "log"))
+	return scale_up(v, vmin, vmax, vlog)
+end
+
+function scale_down(madsdata::AbstractDict, v::AbstractVector)
+	vmin = getparamskey(madsdata, "minorig")
+	vmax = getparamskey(madsdata, "maxorig")
+	vlog = Bool.(getparamskey(madsdata, "log"))
+	return scale_down(v, vmin, vmax, vlog)
+end
+
+function getparamskey(madsdata::AbstractDict, paramkey::AbstractString="init")
+	paramkeys = getparamkeys(madsdata)
+	paramvalue = Array{Float64}(undef, length(paramkeys))
+	for i = eachindex(paramkeys)
+		paramvalue[i] = madsdata["Parameters"][paramkeys[i]][paramkey]
+	end
+	return paramvalue
 end
 
 function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.getoptparamkeys(madsdata); parset::AbstractDict=Dict(), showtype::Bool=true, rescale::Bool=true)
