@@ -42,7 +42,7 @@ Mads.madsinfo("Solve ODE ...")
 times = collect(0:.1:100)
 initialconditions = [1.,0.]
 prob = OrdinaryDiffEq.ODEProblem(funcosc, initialconditions, (0.0,100.0))
-sol = OrdinaryDiffEq.solve(prob,Tsit5(), saveat=times)
+sol = OrdinaryDiffEq.solve(prob, Tsit5(); saveat=times)
 ys = convert(Array,sol)
 
 # draw initial solution
