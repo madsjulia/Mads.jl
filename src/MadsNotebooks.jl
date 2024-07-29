@@ -74,8 +74,11 @@ function notebook_export(rootname::AbstractString; notebook_directory=joinpath(M
 	@info("Processing $(f) in directory $(d) ...")
 	c = pwd()
 	cd(d)
-	Mads.runcmd("python3 ~/system/notebook-clean.py $(r).ipynb"; quiet=false, pipe=false)
-	Mads.runcmd("rm -fR $(r)_files")
+	nb_clean = joinpath(ENV["HOMEPATH"], "system", "notebook-clean.py")
+	if isfile(nb_clean)
+		Mads.runcmd("python3 $(nb_clean) $(r).ipynb"; quiet=false, pipe=false)
+		Mads.runcmd("rm -fR $(r)_files")
+	end
 	Mads.runcmd("python3 -m nbconvert --to script $(r).ipynb")
 	@info("Julia script file created: $(r).jl")
 	Mads.runcmd("python3 -m nbconvert --to html $(r).ipynb")
