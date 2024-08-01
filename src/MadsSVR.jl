@@ -219,7 +219,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 			n = length(parvector)
 			parvector = reshape(parvector, 1, n)
 			p = svrprediction(svrmodel, parvector)
-			d = OrderedCollections.OrderedDict{String, Float64}(zip(obsnames, p))
+			d = OrderedCollections.OrderedDict{String,Float64}(zip(obsnames, p))
 		else
 			paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 			d = svrprediction(svrmodel, paramarray)

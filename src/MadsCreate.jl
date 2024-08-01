@@ -74,7 +74,6 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$i" for 
 	end
 	return md
 end
-
 function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$i" for i=1:size(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=collect(1:size(obs, 2)))
 	md = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for i in axes(obs, 1)
@@ -236,7 +235,7 @@ function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractStri
 	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
 	return nothing
 end
-function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Symbol,Function,AbstractString}; modeltype::AbstractString="Julia function", problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=paramkey, paramplotname::AbstractVector=paramname, paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramlog::AbstractVector=falses(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=ones(length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
+function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Symbol,Function,AbstractString}; modeltype::AbstractString="Julia function", problemname::AbstractString="", paramkey::AbstractVector=["p$i" for i=1:length(param)], paramname::AbstractVector=string.(paramkey), paramplotname::AbstractVector=string.(paramname), paramtype::AbstractVector=["opt" for i=1:length(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramlog::AbstractVector=falses(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=1:length(param)], obskey::AbstractVector=["o$i" for i=1:length(obs)], obsweight::AbstractVector=ones(length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict{String,Any}()
 	createparameters!(md, param; key=paramkey, name=paramname, plotname=paramplotname, type=paramtype, min=parammin, max=parammax, minorig=paramminorig, maxorig=parammaxorig, dist=paramdist, distribution=distribution, expressions=expressions, log=paramlog)
 	createobservations!(md, obs; key=obskey, weight=obsweight, time=obstime, min=obsmin, max=obsmax, minorig=obsminorig, maxorig=obsmaxorig, dist=obsdist, distribution=distribution)

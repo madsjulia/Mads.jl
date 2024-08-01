@@ -1349,7 +1349,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 	obslineitr = eachline(obsfile)
 	iter_result = iterate(obslineitr)
 	obsline, state = iter_result
-	obsdict = OrderedCollections.OrderedDict{String, Float64}()
+	obsdict = OrderedCollections.OrderedDict{String,Float64}()
 	for instline in eachline(instfile)
 		if length(instline) == 0
 			iter_result = iterate(obslineitr, state)

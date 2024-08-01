@@ -135,6 +135,9 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	if keyword != ""
 		rootname = string(rootname, "-", keyword)
 	end
+	if rootname == ""
+		rootname = "mads_local_sensitivity_analysis"
+	end
 	paramkeys = getoptparamkeys(madsdata)
 	nPall = length(getparamkeys(madsdata))
 	obskeys = getobskeys(madsdata)
@@ -178,12 +181,12 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	bad_params = vec(sum(abs.(J); dims=1) .<= eps(eltype(J)))
 	if sum(bad_params) > 0
 		Mads.madswarn("Parameters without any impact on the observations:")
-		!Mads.quiet && println.(paramkeys[bad_params])
+		println.(paramkeys[bad_params])
 	end
 	bad_observations = vec(sum(abs.(J); dims=2) .<= eps(eltype(J)))
 	if sum(bad_observations) > 0
-		Mads.madswarn("Observations that are not imppacted by changes in the parameter values:")
-		!Mads.quiet && println.(obskeys[bad_observations])
+		Mads.madswarn("Observations that are not imppacted by any changes in the parameter values:")
+		println.(obskeys[bad_observations])
 	end
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)
 		Mads.madscritical("Jacobian matrix size does not match the problem: J $(size(J))")
@@ -666,13 +669,13 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	A = Array{Float64}(undef, N, 0)
 	B = Array{Float64}(undef, N, 0)
 	C = Array{Float64}(undef, N, nP)
-	variance = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{String, Float64}}() # variance
-	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{String, Float64}}() # main effect (first order) sensitivities
-	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{String, Float64}}()	# total effect sensitivities
+	variance = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}() # variance
+	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}() # main effect (first order) sensitivities
+	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}()	# total effect sensitivities
 	for i = 1:nO
-		variance[obskeys[i]] = OrderedCollections.OrderedDict{String, Float64}()
-		mes[obskeys[i]] = OrderedCollections.OrderedDict{String, Float64}()
-		tes[obskeys[i]] = OrderedCollections.OrderedDict{String, Float64}()
+		variance[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		mes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		tes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	end
 	for key in paramoptkeys
 		delete!(paramalldict, key)
@@ -715,7 +718,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	else
 		if !loadsaltellirestart!(yA, "yA", restartdir)
 			for i = 1:N
-				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramoptkeys, A[i, :]))))
+				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, A[i, :]))))
 				for j = eachindex(obskeys)
 					yA[i, j] = feval[obskeys[j]]
 				end
@@ -845,8 +848,11 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		end
 	end
 	results = Dict("mes" => mes, "tes" => tes, "var" => variance, "samplesize" => N, "seed" => seed, "method" => "saltelli")
+	rootname = Mads.getmadsrootname(madsdata)
+	if rootname == ""
+		rootname = "mads_saltelli_sensitivity_analysis"
+	end
 	if save
-		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
 		if isfile(filename)
 			madsinfo("File $(filename) will be overwritten!")
@@ -869,9 +875,9 @@ function computeparametersensitities(madsdata::AbstractDict, saresults::Abstract
 	mes = saresults["mes"]
 	tes = saresults["tes"]
 	var = saresults["var"]
-	pvar = OrderedCollections.OrderedDict{String, Float64}() # parameter variance
-	pmes = OrderedCollections.OrderedDict{String, Float64}() # parameter main effect (first order) sensitivities
-	ptes = OrderedCollections.OrderedDict{String, Float64}()	# parameter total effect sensitivities
+	pvar = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter variance
+	pmes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter main effect (first order) sensitivities
+	ptes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()	# parameter total effect sensitivities
 	for i = eachindex(paramkeys)
 		pv = pm = pt = 0
 		for j = eachindex(obskeys)
@@ -1132,7 +1138,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
             "restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=true, robustpmap::Bool=false, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=false, robustpmap::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1350,33 +1356,33 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 			# If # of processors is <= Nr*nprime+(Nr+1) compute model output in serial
 			Mads.madsoutput("""Compute model output in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
-			@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
+			@showprogress 1 "Computing models in serial - Parameter k = $k ($(string(paramkeys[k]))) ... " for i = 1:Ns
 				Y[i, :] = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[i, :]))))))
 			end
 		else
 			=#
 			# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
 			Mads.madsoutput("Compute model outputs ... $(P) > $(Nr*nprime+(Nr+1)) ...\n")
-			Mads.madsoutput("Computing model for Parameter k = $k ($(paramkeys[k])) ...\n")
+			Mads.madsoutput("Computing model for Parameter k = $k ($(string(paramkeys[k]))) ...\n")
 			if robustpmap
 				if restart
 					@info("RobustPmap for parallel execution of forward runs with restart ...")
-					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
+					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
 
 				else
 					@info("RobustPmap for parallel execution of forward runs without restart ...")
-					m = RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
+					m = RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
 				end
 				Y = permutedims(hcat(m...))
 			elseif parallel && Distributed.nprocs() > 1
-				rv1 = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[1, :]))))))
+				rv1 = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[1, :]))))))
 				psa = collect(X) # collect to avoid issues if paramarray is a SharedArray
 				r = SharedArrays.SharedArray{Float64}(length(rv1), size(X, 1))
 				r[:, 1] = rv1
 				Distributed.@everywhere md = $md
 				@sync Distributed.@distributed for i = 2:size(X, 1)
 					func_forward = Mads.makemadscommandfunction(md) # this is needed to avoid issues with the closure
-					r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{String, Float64}(zip(paramkeys, X[i, :]))))))
+					r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[i, :]))))))
 				end
 				Y = permutedims(collect(r))
 			end
@@ -1687,7 +1693,10 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	end
 	result = Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
 	rootname = Mads.getmadsrootname(md)
-	if save && rootname != ""
+	if rootname == ""
+		rootname = "mads_efast_sensitivity_analysis"
+	end
+	if save
 		filename = "$(rootname)-efast-$(Ns_total).jld2"
 		if isfile(filename)
 			@warn("File $(filename) is overwritten!")
