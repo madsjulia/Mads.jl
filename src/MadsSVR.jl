@@ -211,7 +211,7 @@ function makesvrmodel(madsdata::AbstractDict, numberofsamples::Integer=100; chec
 	end
 	function svrexec(paramdict::AbstractDict)
 		if length(paramdict[optnames[1]]) == 1
-			d = OrderedCollections.OrderedDict{String,Float64}()
+			d = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 			for k in optnames
 				d[k] = paramdict[k]
 			end

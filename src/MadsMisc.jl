@@ -17,11 +17,11 @@ function makearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makema
 	initparams = Mads.getparamdict(madsdata)
 	function arrayfunction_merge(arrayparameters::AbstractVector)
 		@assert length(arrayparameters) == length(optparamkeys)
-		return f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
+		return f(merge(initparams, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, arrayparameters))))
 	end
 	function arrayfunction(arrayparameters::AbstractVector)
 		@assert length(arrayparameters) == length(optparamkeys)
-		return f(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters)))
+		return f(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, arrayparameters)))
 	end
 	if length(initparams) == length(optparamkeys)
 		return arrayfunction
@@ -109,7 +109,7 @@ function makearrayconditionalloglikelihood(madsdata::AbstractDict, conditionallo
 	initparams = Mads.getparamdict(madsdata)
 	function arrayconditionalloglikelihood(arrayparameters::AbstractVector)
 		@assert length(arrayparameters) == length(optparamkeys)
-		predictions = f(merge(initparams, OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))))
+		predictions = f(merge(initparams, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, arrayparameters))))
 		cll = conditionalloglikelihood(predictions, madsdata["Observations"])
 		return cll
 	end
@@ -134,7 +134,7 @@ function makearrayloglikelihood(madsdata::AbstractDict, loglikelihood)
 	function arrayloglikelihood(arrayparameters::AbstractVector)
 		predictions = OrderedCollections.OrderedDict()
 		@assert length(arrayparameters) == length(optparamkeys)
-		d = OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, arrayparameters))
+		d = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, arrayparameters))
 		try
 			predictions = f(merge(initparams, d))
 		catch
@@ -184,7 +184,7 @@ function evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDic
 		end
 	end
 	if haskey(madsdata, "Order")
-		parameters_ordered = OrderedCollections.OrderedDict{String,Float64}()
+		parameters_ordered = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 		for k in madsdata["Order"]
 			parameters_ordered[k] = parameters[k]
 		end

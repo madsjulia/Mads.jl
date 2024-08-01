@@ -1034,7 +1034,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobskeys(madsdata))
-	results = OrderedCollections.OrderedDict{String,Float64}()
+	results = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	if haskey(madsdata, "Instructions")
 		results = readobservations(madsdata, obskeys)
 	end
@@ -1062,7 +1062,7 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
 		obsid=[convert(String,k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
-		results = merge(results, OrderedCollections.OrderedDict{String,Float64}(zip(obsid, predictions)))
+		results = merge(results, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(obsid, predictions)))
 	end
 	missingkeys = Array{String}(undef, 0)
 	validtargets = (Mads.getobsweight(madsdata) .> 0) .& .!isnan.(Mads.getobstarget(madsdata))
@@ -1075,7 +1075,7 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
 		madscritical("Missing observation keys: $(missingkeys)")
 	end
-	return convert(OrderedCollections.OrderedDict{String,Float64}, results)
+	return convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, results)
 end
 
 searchdir(key::Regex; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
@@ -1402,7 +1402,7 @@ Returns:
 """
 function readobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata))
 	dictelements = zip(obskeys, zeros(Int, length(obskeys)))
-	observations = OrderedCollections.OrderedDict{String,Float64}(dictelements)
+	observations = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(dictelements)
 	obscount = OrderedCollections.OrderedDict{String,Int}()
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])

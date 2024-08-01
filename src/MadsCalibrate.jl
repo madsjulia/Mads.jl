@@ -238,7 +238,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			outfile = open("$rootname.initialresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_init_real)), "\n"))
+			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_init_real)), "\n"))
 			close(outfile)
 		end
 		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
@@ -246,7 +246,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			outfile = open("$rootname.iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
+			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
 		function jacobiancallback(x::AbstractVector, J::AbstractMatrix)
@@ -263,7 +263,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			outfile = open("$rootname.finalresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
-			write(outfile, string(OrderedCollections.OrderedDict{String,Float64}(zip(optparamkeys, x_best_real)), "\n"))
+			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_best_real)), "\n"))
 			close(outfile)
 		end
 	else
@@ -281,7 +281,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	end
 	global modelruns += results.f_calls
 	minimizer = Mads.sinetransform(results.minimizer, lowerbounds, upperbounds, indexlogtransformed)
-	minimumdict = OrderedCollections.OrderedDict{String,Float64}(zip(getparamkeys(madsdata), Mads.getparamsinit(madsdata)))
+	minimumdict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(getparamkeys(madsdata), getparamsinit(madsdata)))
 	for i = eachindex(optparamkeys)
 		minimumdict[optparamkeys[i]] = minimizer[i]
 	end

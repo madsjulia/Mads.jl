@@ -37,6 +37,6 @@ function amanzi_output_parser(filename::AbstractString="observations.out")
 	for i = 1:no
 		obs_name[i] = w[i] * "$(flag[i])" * "_" * "$(Printf.@sprintf("%.1f", time[i]))"
 	end
-	dict = OrderedCollections.OrderedDict{String,Float64}(zip(obs_name, obs))
+	dict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(obs_name, obs))
 	return dict
 end

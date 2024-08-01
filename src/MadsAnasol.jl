@@ -392,7 +392,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 			end
 		end
 		global modelruns += 1
-		return OrderedCollections.OrderedDict{String,Float64}(zip(wellkeys, vcat(wellc...)))
+		return OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(wellkeys, vcat(wellc...)))
 	end
 	return computeconcentrations
 end

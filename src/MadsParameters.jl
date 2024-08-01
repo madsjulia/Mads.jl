@@ -64,7 +64,7 @@ Returns:
 function getparamdict(madsdata::AbstractDict)
 	if haskey(madsdata, "Parameters")
 		paramkeys = Mads.getparamkeys(madsdata)
-		paramdict = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
+		paramdict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, map(key->madsdata["Parameters"][key]["init"], paramkeys)))
 		return paramdict
 	else
 		@warn("Input Dictionary does not contain parameters!")
@@ -420,7 +420,7 @@ Returns:
 
 - `true` if optimizable, `false` if not
 """
-function isopt(madsdata::AbstractDict, parameterkey::AbstractString)
+function isopt(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString})
 	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey) &&
 		(!haskey(madsdata["Parameters"][parameterkey], "type") || haskey(madsdata["Parameters"][parameterkey], "type") && madsdata["Parameters"][parameterkey]["type"] == "opt")
 		return true
@@ -440,7 +440,7 @@ Returns:
 
 - `true` if log-transformed, `false` otherwise
 """
-function islog(madsdata::AbstractDict, parameterkey::AbstractString)
+function islog(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString})
 	if haskey(madsdata["Parameters"][parameterkey], "log") && madsdata["Parameters"][parameterkey]["log"] == true
 		return true
 	else
@@ -483,7 +483,7 @@ $(DocumentFunction.documentfunction(setparamon!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
-function setparamon!(madsdata::AbstractDict, parameterkey::AbstractString)
+function setparamon!(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString})
 	madsdata["Parameters"][parameterkey]["type"] = "opt";
 end
 
@@ -494,7 +494,7 @@ $(DocumentFunction.documentfunction(setparamoff!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
             "parameterkey"=>"parameter key")))
 """
-function setparamoff!(madsdata::AbstractDict, parameterkey::AbstractString)
+function setparamoff!(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString})
 	madsdata["Parameters"][parameterkey]["type"] = nothing
 end
 
@@ -696,7 +696,7 @@ function scale_down(madsdata::AbstractDict, v::AbstractVector)
 	return scale_down(v, vmin, vmax, vlog)
 end
 
-function getparamskey(madsdata::AbstractDict, paramkey::AbstractString="init")
+function getparamskey(madsdata::AbstractDict, paramkey::Union{Symbol,AbstractString}="init")
 	paramkeys = getparamkeys(madsdata)
 	paramvalue = Array{Float64}(undef, length(paramkeys))
 	for i = eachindex(paramkeys)
@@ -710,27 +710,28 @@ function printparameters(madsdata::AbstractDict, parkeys::AbstractVector=Mads.ge
 	maxl = 0
 	maxk = 0
 	for parkey in parkeys
-		l = length(parkey)
+		l = length(String(parkey))
 		maxk = (maxk > l) ? maxk : l
 		if haskey(pardict[parkey], "longname")
-			l = length(pardict[parkey]["longname"])
+			l = length(String(pardict[parkey]["longname"]))
 			maxl = (maxl > l) ? maxl : l
 		end
 	end
 	p = Array{String}(undef, 0)
 	for parkey in parkeys
-		if haskey(pardict[parkey], "longname")
-			s = Mads.sprintf("%-$(maxl)s : ", pardict[parkey]["longname"])
+		sparkey = String(parkey)
+		if haskey(pardict[parkey], "longname") && String(pardict[parkey]["longname"]) != sparkey
+			s = Mads.sprintf("%-$(maxl)s : ", String(pardict[parkey]["longname"]))
 		else
 			s = ""
 		end
-		s *= Mads.sprintf("%-$(maxk)s = ", parkey)
+		s *= Mads.sprintf("%-$(maxk)s = ", sparkey)
 		if haskey(parset, parkey)
 			v = parset[parkey]
 		elseif haskey(pardict[parkey], "init")
 			v = pardict[parkey]["init"]
 		else
-			@warn("No initial value or expression for parameter $(parkey)")
+			@warn("No initial value or expression for parameter $(sparkey)")
 			continue
 		end
 		logorig = haskey(pardict[parkey], "logorig") ? pardict[parkey]["logorig"] : false
@@ -845,11 +846,11 @@ function getparamdistributions(madsdata::AbstractDict; init_dist::Bool=false)
 			min = p[minkey]
 			max = p[maxkey]
 			if(min > max)
-				madserror("Min/max for parameter `$(paramkeys[i])` are messed up (min = $min; max = $max)!")
+				madserror("Min/max for parameter `$(string(paramkeys[i]))` are messed up (min = $min; max = $max)!")
 			end
 			distributions[paramkeys[i]] = Distributions.Uniform(min, max)
 		else
-			madserror("""Probabilistic distribution of parameter `$(paramkeys[i])` is not defined; "dist" or "min"/"max" are missing!""")
+			madserror("""Probabilistic distribution of parameter `$(string(paramkeys[i]))` is not defined; "dist" or "min"/"max" are missing!""")
 		end
 	end
 	return distributions
@@ -877,7 +878,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	d = init - min .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` initial value is less than the minimum (init = $(init[i]); min = $(min[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` initial value is less than the minimum (init = $(init[i]); min = $(min[i]))!")
 			if findfirst(optparamkeys, paramkeys[i]) > 0
 				flag_error = true
 			end
@@ -886,7 +887,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	d = max - init .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` initial value is greater than the maximum (init = $(init[i]); max = $(max[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` initial value is greater than the maximum (init = $(init[i]); max = $(max[i]))!")
 			if findfirst(optparamkeys, paramkeys[i]) > 0
 				flag_error = true
 			end
@@ -895,7 +896,7 @@ function checkparameterranges(madsdata::AbstractDict)
 	d = max - min .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` maximum is less than the minimum (max = $(max[i]); min = $(min[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` maximum is less than the minimum (max = $(max[i]); min = $(min[i]))!")
 			if findfirst(optparamkeys, paramkeys[i]) > 0
 				flag_error = true
 			end
@@ -904,19 +905,19 @@ function checkparameterranges(madsdata::AbstractDict)
 	d = init_max - init_min .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` initialization maximum is less than the initialization minimum (init_max = $(init_max[i]); init_min = $(init_min[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` initialization maximum is less than the initialization minimum (init_max = $(init_max[i]); init_min = $(init_min[i]))!")
 		end
 	end
 	d = init_min - min .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` initialization minimum is less than the minimum (init_min = $(init_min[i]); min = $(min[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` initialization minimum is less than the minimum (init_min = $(init_min[i]); min = $(min[i]))!")
 		end
 	end
 	d = max - init_max .< 0
 	if any(d)
 		for i in findall(d)
-			madswarn("Parameter `$(paramkeys[i])` initialization maximum is greater than the maximum (init_max = $(init_max[i]); max = $(min[i]))!")
+			madswarn("Parameter `$(string(paramkeys[i]))` initialization maximum is greater than the maximum (init_max = $(init_max[i]); max = $(min[i]))!")
 		end
 	end
 	if flag_error

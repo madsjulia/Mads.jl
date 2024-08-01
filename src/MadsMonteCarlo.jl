@@ -343,14 +343,14 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 				end
 			end
 		end
-		paramdicts[i] = OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, params))
+		paramdicts[i] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, params))
 	end
 	if compute
 		f = makemadscommandfunction(madsdata)
 		results = RobustPmap.rpmap(f, paramdicts)
 		outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 		for i = 1:N
-			outputdicts[i] = OrderedCollections.OrderedDict()
+			outputdicts[i] = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 			outputdicts[i]["Parameters"] = paramdicts[i]
 			outputdicts[i]["Results"] = results[i]
 		end

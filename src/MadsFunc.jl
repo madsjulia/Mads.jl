@@ -109,7 +109,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		"MADS command function based on a Julia function '$(madsdata["Julia function"])'"
 		function madscommandfunctionvector(parameters::AbstractDict)
 			o = jf(collect(values(parameters)))
-			return OrderedCollections.OrderedDict{String,Float64}(zip(Mads.getobskeys(madsdata), o))
+			return OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(Mads.getobskeys(madsdata), o))
 		end
 		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
@@ -163,7 +163,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 				"MADS command function"
 				function madscommandfunctionexternal(parameters::AbstractVector)
 					o = madsdata["Julia function"](parameters)
-					return OrderedCollections.OrderedDict{String,Float64}(zip(Mads.getobskeys(madsdata), o))
+					return OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(Mads.getobskeys(madsdata), o))
 				end
 				madsdatacommandfunction = madscommandfunctionexternal
 			else
@@ -230,7 +230,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 						else
 							out = madsdatacommandfunction(md)
 						end
-						results = convert(OrderedCollections.OrderedDict{String,Float64}, out)
+						results = convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, out)
 						trying = false
 					catch errmsg
 						if !latest

@@ -228,7 +228,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		DelimitedFiles.writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
 		for i in 1:nP
-			write(f, "$(paramkeys[i]) $(param[i]) $(stddev_full[i])\n")
+			write(f, "$(string(paramkeys[i])) $(param[i]) $(stddev_full[i])\n")
 		end
 		close(f)
 	end
@@ -389,7 +389,7 @@ function weightedstats(samples::AbstractArray, llhoods::AbstractVector)
 	return Statistics.mean(samples, wv, 1), Statistics.var(samples, wv, 1; corrected=false)
 end
 
-function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::AbstractString=""; init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::Union{Symbol,AbstractString}=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
 	else
@@ -406,7 +406,7 @@ function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameter
 		return sample
 	end
 end
-function getparamrandom(madsdata::AbstractDict, parameterkey::AbstractString; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString}; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
 	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata; init_dist=init_dist)
@@ -471,7 +471,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 		results[i] = f(paramdict) # this got to be slow to process
 	end
 	obskeys = getobskeys(madsdata)
-	sum = OrderedCollections.OrderedDict{String,Float64}()
+	sum = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	for i = eachindex(obskeys)
 		sum[obskeys[i]] = 0.
 	end
@@ -480,7 +480,7 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			sum[obskeys[i]] += results[j][obskeys[i]]
 		end
 	end
-	mean = OrderedCollections.OrderedDict{String,Float64}()
+	mean = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	for i = eachindex(obskeys)
 		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
 	end
@@ -492,17 +492,17 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
 		end
 	end
-	variance = OrderedCollections.OrderedDict{String,Float64}()
+	variance = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	for i = eachindex(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
 	madsinfo("Compute the main effect (first order) sensitivities (indices)")
 	mes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for k = eachindex(obskeys)
-		mes[obskeys[k]] = OrderedCollections.OrderedDict{String,Float64}()
+		mes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	end
 	for i = eachindex(paramkeys)
-		madsinfo("Parameter : $(paramkeys[i])")
+		madsinfo("Parameter : $(string(paramkeys[i]))")
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, numoneparamsamples)
 		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:numoneparamsamples
 			cond_means[j] = OrderedCollections.OrderedDict()
@@ -537,16 +537,16 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	tes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	var = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for k = eachindex(obskeys)
-		tes[obskeys[k]] = OrderedCollections.OrderedDict{String,Float64}()
-		var[obskeys[k]] = OrderedCollections.OrderedDict{String,Float64}()
+		tes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		var[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	end
 	for i = eachindex(paramkeys)
-		madsinfo("Parameter : $(paramkeys[i])")
+		madsinfo("Parameter : $(string(paramkeys[i]))")
 		cond_vars = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
 		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
-			cond_vars[j] = OrderedCollections.OrderedDict{String,Float64}()
-			cond_means[j] = OrderedCollections.OrderedDict{String,Float64}()
+			cond_vars[j] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+			cond_means[j] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 			for m = eachindex(obskeys)
 				cond_means[j][obskeys[m]] = 0.
 				cond_vars[j][obskeys[m]] = 0.
@@ -654,7 +654,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	Mads.setseed(seed; rng=rng)
 	Mads.madsoutput("Number of samples: $N\n");
 	paramallkeys = Mads.getparamkeys(madsdata)
-	paramalldict = OrderedCollections.OrderedDict{String,Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
+	paramalldict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
 	paramoptkeys = Mads.getoptparamkeys(madsdata)
 	nP = length(paramoptkeys)
 	Mads.madsoutput("Number of model paramters to be analyzed: $(nP) \n");
@@ -685,7 +685,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	end
 	Mads.madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample A ...\n" );
 	function farray(Ai)
-		feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String,Float64}(zip(paramoptkeys, Ai))))
+		feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, Ai))))
 		result = Array{Float64}(undef, length(obskeys))
 		for i = eachindex(obskeys)
 			result[i] = feval[obskeys[i]]
@@ -743,7 +743,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	else
 		if !loadsaltellirestart!(yB, "yB", restartdir)
 			for i = 1:N
-				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String,Float64}(zip(paramoptkeys, B[i, :]))))
+				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, B[i, :]))))
 				for j = eachindex(obskeys)
 					yB[i, j] = feval[obskeys[j]]
 				end
@@ -761,7 +761,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 				end
 			end
 		end
-		Mads.madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(paramoptkeys[i])\n" );
+		Mads.madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(string(paramoptkeys[i]))\n" );
 		yC = Array{Float64}(undef, N, length(obskeys))
 		if parallel
 			Cvecs = Array{Vector{Float64}}(undef, size(C, 1))
@@ -781,7 +781,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		else
 			if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
 				for j = 1:N
-					feval = f(merge(paramalldict, OrderedCollections.OrderedDict{String,Float64}(zip(paramoptkeys, C[j, :]))))
+					feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, C[j, :]))))
 					for k = eachindex(obskeys)
 						yC[j, k] = feval[obskeys[k]]
 					end
@@ -952,7 +952,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		madsoutput("\t$(string(paramkey))")
 	end
 	madsoutput("\n")
 	for obskey in obskeys
@@ -967,7 +967,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getparamkeys(madsdata)
 	for paramkey in paramkeys
-		madsoutput("\t$(paramkey)")
+		madsoutput("\t$(string(paramkey))")
 	end
 	madsoutput("\n")
 	for obskey in obskeys
@@ -983,7 +983,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		print("\t$(string(paramkey))")
 	end
 	print("\tSum")
 	print("\n")
@@ -1000,7 +1000,7 @@ function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	print("\nTotal Effect Indices\n")
 	print("obs")
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		print("\t$(string(paramkey))")
 	end
 	print("\tSum")
 	print("\n")
@@ -1033,7 +1033,7 @@ function printSAresults2(madsdata::AbstractDict, results::AbstractDict)
 	obskeys = getobskeys(madsdata)
 	paramkeys = getoptparamkeys(madsdata)
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		print("\t$(string(paramkey))")
 	end
 	print("\n")
 	for obskey in obskeys
@@ -1046,7 +1046,7 @@ function printSAresults2(madsdata::AbstractDict, results::AbstractDict)
 	print("\nTotal Effect Indices")
 	print("\t")
 	for paramkey in paramkeys
-		print("\t$(paramkey)")
+		print("\t$(string(paramkey))")
 	end
 	print("\n")
 	for obskey in obskeys
@@ -1351,7 +1351,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# If # of processors is <= Nr*nprime+(Nr+1) compute model output in serial
 			Mads.madsoutput("""Compute model output in serial ... $(P) <= $(Nr*nprime+(Nr+1)) ...\n""")
 			@showprogress 1 "Computing models in serial - Parameter k = $k ($(paramkeys[k])) ... " for i = 1:Ns
-				Y[i, :] = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{String,Float64}(zip(paramkeys, X[i, :]))))))
+				Y[i, :] = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[i, :]))))))
 			end
 		else
 			=#
@@ -1490,7 +1490,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	paramallkeys  = getparamkeys(md)
 	# Values of this dictionary are the intial values
-	paramalldict  = OrderedCollections.OrderedDict{String,Float64}(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
+	paramalldict  = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
 	# Only the parameters we wish to analyze
 	paramkeys     = getoptparamkeys(md)
 	# All the observation sites and time points we will analyze them at
@@ -1674,9 +1674,9 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	mes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	var = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for j = eachindex(obskeys)
-		tes[obskeys[j]] = OrderedCollections.OrderedDict{String,Float64}()
-		mes[obskeys[j]] = OrderedCollections.OrderedDict{String,Float64}()
-		var[obskeys[j]] = OrderedCollections.OrderedDict{String,Float64}()
+		tes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		mes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		var[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
 	end
 	for k = eachindex(paramkeys)
 		for j = eachindex(obskeys)
@@ -1686,8 +1686,8 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		end
 	end
 	result = Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
-	if save
-		rootname = Mads.getmadsrootname(md)
+	rootname = Mads.getmadsrootname(md)
+	if save && rootname != ""
 		filename = "$(rootname)-efast-$(Ns_total).jld2"
 		if isfile(filename)
 			@warn("File $(filename) is overwritten!")
