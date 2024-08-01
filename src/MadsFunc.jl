@@ -317,7 +317,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 	"MADS command function with expressions"
 	function madscommandfunctionwithexpressions(paramsnoexpressions::AbstractDict)
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
-		local out
+		local out = nothing
 		try
 			out = madscommandfunction(parameterswithexpressions)
 		catch errmsg
