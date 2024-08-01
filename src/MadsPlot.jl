@@ -541,7 +541,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	df = Array{Any}(undef, nP)
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(tes[j,:]), parameter="$(paramkey)")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -553,7 +553,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(mes[j,:]), parameter="$(paramkey)")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -565,7 +565,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	end
 	j = 1
 	for paramkey in paramkeys
-		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$paramkey")
+		df[j] = DataFrames.DataFrame(x=collect(d[1,:]), y=collect(var[j,:]), parameter="$(paramkey)")
 		deleteNaN!(df[j])
 		j += 1
 	end
@@ -642,11 +642,14 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	mes = Array{Float64}(undef, nT, nP)
 	tes = Array{Float64}(undef, nT, nP)
 	var = Array{Float64}(undef, nT, nP)
+	no_time_field = false
 	for (i, obskey) in enumerate(obskeys)
 		if haskey(obsdict[obskey], "time")
 			d[1,i] = obsdict[obskey]["time"]
 		else
-			madserror("Observation dictionary does not have `time` field!")
+			d[1,i] = i
+			no_time_field = true
+
 		end
 		d[2,i] = haskey(obsdict[obskey], "target") ? obsdict[obskey]["target"] : NaN
 		for (j, paramkey) in enumerate(paramkeys)
@@ -654,6 +657,9 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 			tes[i,j] = result["tes"][obskey][paramkey]
 			var[i,j] = result["var"][obskey][paramkey]
 		end
+	end
+	if no_time_field
+		Mads.madswarn("Some observations do not have `time` field specified!")
 	end
 	mintes = minimumnan(tes)
 	if mintes < 0
@@ -752,7 +758,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 	vsize = 0Gadfly.inch
 	Mads.madsoutput("Spaghetti plots for each selected model parameter (type != null) ...\n")
 	for paramkey in paramoptkeys
-		Mads.madsoutput("Parameter: $paramkey ...\n")
+		Mads.madsoutput("Parameter: $(paramkey) ...\n")
 		Y = Array{Float64}(undef, nT, numberofsamples)
 		ProgressMeter.@showprogress 4 "Computing predictions ..." for i in 1:numberofsamples
 			original = paramdict[paramkey]
@@ -825,7 +831,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 			end
 			pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 		end
-		filename = keyword == "" ? string("$rootname-$paramkey-$numberofsamples-spaghetti") : string("$rootname-$keyword-$paramkey-$numberofsamples-spaghetti")
+		filename = keyword == "" ? string("$(rootname)-$(paramkey)-$(numberofsamples)-spaghetti") : string("$(rootname)-$(keyword)-$(paramkey)-$(numberofsamples)-spaghetti")
 		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
 		!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	end
@@ -1407,12 +1413,12 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
-			# eigenval = plot(x=1:length(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
+			# eigenval = plot(x=eachindex(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 			filename = "$(rootname)-eigenmatrix" * ext
 			plotfileformat(eigenmat, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP; format=format, dpi=imagedpi)
 			Mads.madsinfo("Eigen matrix plot saved in $filename")
 			if sizeof(sortedeigenv) > 0
-				eigenval = Gadfly.plot(x=1:length(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
+				eigenval = Gadfly.plot(x=eachindex(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 							Gadfly.Geom.bar,
 							Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 							Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))

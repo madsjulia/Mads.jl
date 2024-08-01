@@ -37,7 +37,7 @@ argtext=Dict("message"=>"information/status message",
 """
 function madsinfo(message::AbstractString, level::Integer=0)
 	if !quiet && level < verbositylevel
-		println("$(Base.text_colors[:cyan])$(Base.text_colors[:bold])Info: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr)
+		println("$(Base.text_colors[:cyan])$(Base.text_colors[:bold])[ Info: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr)
 	end
 end
 
@@ -48,7 +48,7 @@ $(DocumentFunction.documentfunction(madswarn;
 argtext=Dict("message"=>"warning message")))
 """
 function madswarn(message::AbstractString)
-	!veryquiet && (println("$(Base.text_colors[:yellow])$(Base.text_colors[:bold])Warning: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr))
+	!veryquiet && (println("$(Base.text_colors[:yellow])$(Base.text_colors[:bold])[ Warning: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr))
 end
 
 """
@@ -58,7 +58,7 @@ $(DocumentFunction.documentfunction(madserror;
 argtext=Dict("message"=>"error message")))
 """
 function madserror(message::AbstractString)
-	println("$(Base.text_colors[:red])$(Base.text_colors[:bold])Error: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr)
+	println("$(Base.text_colors[:red])$(Base.text_colors[:bold])[ Error: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr)
 end
 
 """

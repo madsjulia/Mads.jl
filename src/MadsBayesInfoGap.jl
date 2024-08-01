@@ -34,11 +34,11 @@ function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 	Mads.madsinfo("Decision parameters:")
 	for paramname in keys(choice["Parameters"])
 		if Mads.isopt(madsdata, paramname)
-			Mads.madscritical("Decision parameter, $paramname, is also an adjustable (type = \"opt\") parameter.")
+			Mads.madscritical("Decision parameter, $(paramname), is also an adjustable (type = \"opt\") parameter.")
 		end
 		c = choice["Parameters"][paramname]
 		madsdata["Parameters"][paramname]["init"] = c
-		Mads.madsinfo("Decision parameter $paramname set to $c.")
+		Mads.madsinfo("Decision parameter $(paramname) set to $c.")
 	end
 	makeloglikelihood = makearrayconditionalloglikelihood(madsdata)
 	logprior = makearrayfunction(madsdata, makelogprior(madsdata))

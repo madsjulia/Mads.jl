@@ -40,7 +40,7 @@ function sample(llhood::Function, numwalkers::Integer, x0::AbstractMatrix, numsa
 		for ensembles in divisions
 			active, inactive = ensembles
 			zs = map(u->((a - 1) * u + 1)^2 / a, rand(rng, length(active)))
-			proposals = map(i->zs[i] * x[:, active[i]] + (1 - zs[i]) * x[:, rand(rng, inactive)], 1:length(active))
+			proposals = map(i->zs[i] * x[:, active[i]] + (1 - zs[i]) * x[:, rand(rng, inactive)], eachindex(active))
 			newllhoods = RobustPmap.rpmap(llhood, proposals)
 			for (j, walkernum) in enumerate(active)
 				z = zs[j]

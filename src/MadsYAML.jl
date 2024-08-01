@@ -79,7 +79,7 @@ function dumpyamlmadsfile(madsdata::AbstractDict, filename::AbstractString) # lo
 		if haskey(yamldata, tplorins)
 			a = Array{Any}(undef, length(yamldata[tplorins]))
 			i = 1
-			keys = map(string, 1:length(yamldata[tplorins]))
+			keys = map(string, eachindex(yamldata[tplorins]))
 			for key in keys
 				a[i] = OrderedCollections.OrderedDict(key=>yamldata[tplorins][i])
 				i += 1

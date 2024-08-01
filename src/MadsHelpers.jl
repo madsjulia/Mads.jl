@@ -663,7 +663,7 @@ function nonunique_mask(x::AbstractVector)
 end
 
 function nonunique_indices(x::AbstractVector)
-	nunique_indices = collect(1:length(x))
+	nunique_indices = collect(eachindex(x))
 	return nunique_indices[.!unique_mask(x)]
 end
 

@@ -66,7 +66,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0
 				obs_best = JuMP.value.(o)
 			end
 		end
-		println("Max h = $h OF = $(phi_best) par = $par_best")
+		println("Max h = $(h) OF = $(phi_best) par = $(par_best)")
 		#=
 		pinit = [0.,1.,0.,1.]
 		phi_best = Inf
@@ -101,7 +101,7 @@ function infogap_jump(madsdata::AbstractDict=Dict(); horizons::AbstractVector=[0
 				obs_best = JuMP.value.(o)
 			end
 		end
-		println("Min h = $h OF = $(phi_best) par = $par_best")
+		println("Min h = $(h) OF = $(phi_best) par = $(par_best)")
 		=#
 	end
 end
@@ -262,7 +262,7 @@ function infogap_jump_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstra
 					end
 				end
 			end
-			!quiet && println("$(mm) h = $h OF = $(phi_best) par = $par_best")
+			!quiet && println("$(mm) h = $(h) OF = $(phi_best) par = $(par_best)")
 			if mm == "Min"
 				push!(hmin, phi_best)
 				ymin = map(t->fo(t, par_best), plotrange)
@@ -418,7 +418,7 @@ function infogap_moi_polynomial(madsdata::AbstractDict=Dict(); horizons::Abstrac
 			# println("Optimal observations: $g")
 			# f = Mads.forward(madsdata, par_best)
 			# @show f
-			println("$mm h = $h OF = $(phi_best) par = $par_best")
+			println("$(mm) h = $(h) OF = $(phi_best) par = $(par_best)")
 		end
 	end
 end
@@ -533,7 +533,7 @@ function infogap_moi_lin(madsdata::AbstractDict=Dict(); horizons::AbstractVector
 			# println("Optimal observations: $g")
 			# f = Mads.forward(madsdata, par_best)
 			# @show f
-			println("$mm h = $h OF = $(phi_best) par = $par_best")
+			println("$(mm) h = $(h) OF = $(phi_best) par = $(par_best)")
 		end
 	end
 end
