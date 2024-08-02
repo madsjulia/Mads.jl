@@ -385,14 +385,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 	f_calls = 0
 	g_calls = 0
 	if np_lambda > 1
-		Mads.madsoutput("Parallel lambda search; number of parallel lambdas = $(np_lambda)\n");
+		madsoutput("Parallel lambda search; number of parallel lambdas = $(np_lambda)\n");
 	end
 
 	fcur = f(x) # TODO execute the initial estimate in parallel with the first_lambda jacobian
 	f_calls += 1
 	best_residuals = fcur
 	best_of = current_of = o(fcur)
-	Mads.madsoutput("Initial OF: $(current_of)\n");
+	madsoutput("Initial OF: $(current_of)\n");
 	callbackinitial(x, current_of, NaN)
 
 	tr = LsqFit.LMTrace{LsqFit.LevenbergMarquardt}()
@@ -430,11 +430,11 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			end
 			f_calls += length(x)
 			g_calls += 1
-			Mads.madsoutput("Jacobian #$(g_calls)\n")
+			madsoutput("Jacobian #$(g_calls)\n")
 			callbackjacobian(x, J)
 			compute_jacobian = false
 		end
-		Mads.madsoutput("Current Best OF: $(best_of)\n");
+		madsoutput("Current Best OF: $(best_of)\n");
 		# Solve for:
 		#    argmin 0.5*||J(x)*delta_x + f(x)||^2 + lambda*||diagm(J'*J)*delta_x||^2
 		# Solving for the minimum gives:
@@ -452,7 +452,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		Mads.madsinfo(Printf.@sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
+		Mads.madsinfo(@Printf.sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
 		for npl = 1:np_lambda
 			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
@@ -469,7 +469,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			lambda = lambda_p[npl]
 			predicted_of = []
 			delta_x = []
-			Mads.madsinfo(Printf.@sprintf "#%02d lambda: %e" npl lambda)
+			Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda)
 			u, s, v = LinearAlgebra.svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
 			for i = eachindex(s)
@@ -488,14 +488,14 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_of = o(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			Mads.madsoutput("$(Printf.@sprintf "#%02d OF (est): %f" npl predicted_of)", 3);
+			madsoutput("$(@Printf.sprintf "#%02d OF (est): %f" npl predicted_of)", 3);
 			if predicted_of > current_of + 2max(eps(predicted_of), eps(current_of))
-				Mads.madsoutput(" -> not good", 1);
+				madsoutput(" -> not good", 1);
 				if npl == 1
-					Mads.madsoutput("Problem solving for delta_x: predicted residual increase. $(predicted_of) (predicted_of) > $(current_of) (current_of) + $(eps(predicted_of)) (eps)", 2);
+					madsoutput("Problem solving for delta_x: predicted residual increase. $(predicted_of) (predicted_of) > $(current_of) (current_of) + $(eps(predicted_of)) (eps)", 2);
 				end
 			else
-				Mads.madsoutput(" -> ok", 1);
+				madsoutput(" -> ok", 1);
 			end
 			return predicted_of, delta_x
 		end
@@ -548,8 +548,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		npl_best = argmin(trial_ofs)
 		npl_worst = argmax(trial_ofs)
-		Mads.madsoutput(Printf.@sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" trial_ofs[npl_best] trial_ofs[npl_worst]);
-		Mads.madsoutput(Printf.@sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
+		madsoutput(@Printf.sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" trial_ofs[npl_best] trial_ofs[npl_worst]);
+		madsoutput(@Printf.sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst]);
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_residuals[npl_best])

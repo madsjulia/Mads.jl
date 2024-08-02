@@ -194,7 +194,7 @@ function evaluatemadsexpressions(madsdata::AbstractDict, parameters::AbstractDic
 	return parameters
 end
 
-"Convert `Printf.@sprintf` macro into `sprintf` function"
+"Convert `@Printf.sprintf` macro into `sprintf` function"
 sprintf(args...) = Core.eval(Mads, :@Printf.sprintf($(args...)))
 
 """

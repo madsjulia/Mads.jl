@@ -6,7 +6,7 @@ argtext=Dict("message"=>"output message",
             "level"=>"output verbosity level [default=`0`]")))
 """
 function madsoutput(message::AbstractString, level::Integer=0)
-	if !quiet && level < verbositylevel
+	if !veryquiet && level < verbositylevel
 		print(stderr, message)
 		flush(stdout)
 		flush(stderr)
@@ -36,7 +36,7 @@ argtext=Dict("message"=>"information/status message",
             "level"=>"output verbosity level [default=`0`]")))
 """
 function madsinfo(message::AbstractString, level::Integer=0)
-	if !quiet && level < verbositylevel
+	if !veryquiet && level < verbositylevel
 		println("$(Base.text_colors[:cyan])$(Base.text_colors[:bold])[ Info: $(Base.text_colors[:normal])" * Libc.strftime("%Y-%m-%d %H:%M:%S", time()) * " " * message); flush(stdout); flush(stderr)
 	end
 end

@@ -1,7 +1,7 @@
 import Stipple
 import StippleUI
 
-Stipple.@vars Inverter begin
+@Stipple.vars Inverter begin
 	process::Bool = false
 	input::String = ""
 	output::String

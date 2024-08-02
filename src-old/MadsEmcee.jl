@@ -36,7 +36,7 @@ function sample(llhood::Function, numwalkers::Integer, x0::AbstractMatrix, numsa
 	batch1 = 1:div(numwalkers, 2)
 	batch2 = div(numwalkers, 2) + 1:numwalkers
 	divisions = [(batch1, batch2), (batch2, batch1)]
-	ProgressMeter.@showprogress 1 for i = 1:numsamples_perwalker
+	@ProgressMeter.showprogress 1 for i = 1:numsamples_perwalker
 		for ensembles in divisions
 			active, inactive = ensembles
 			zs = map(u->((a - 1) * u + 1)^2 / a, rand(rng, length(active)))

@@ -7,7 +7,7 @@ mutable struct Test
 	Test() = new(0, "")
 end
 
-Stipple.@reactive! mutable struct UIModelCheckBox <: Stipple.ReactiveModel
+@Stipple.reactive! mutable struct UIModelCheckBox <: Stipple.ReactiveModel
 	click::Stipple.R{Int64} = 0
 	test::Test = Test()
 	test2::Stipple.R{Test} = Test()
@@ -17,25 +17,25 @@ end
 function ui(ui_model_check_box)
 	Stipple.page(ui_model_check_box, class="container", [
 		Stipple.cell(class="st-module", [
-			Stipple.button("Click", StippleUI.@click("click += 1"))
+			Stipple.button("Click", @StippleUI.click("click += 1"))
 		]),
 		StippleUI.separator(),
 		Stipple.h5("Clicks: {{this.checks.length}}"),
 		Stipple.p([
 			"Clicks: "
-			Stipple.span(ui_model_check_box.click, Stipple.@text(:click))
+			Stipple.span(ui_model_check_box.click, @Stipple.text(:click))
 		  ]),
 		Stipple.h5("Test: $(ui_model_check_box.test)"),
 		Stipple.h5("Test: $(ui_model_check_box.test2[])"),
 		Stipple.p([
 			"Value: "
-			Stipple.span(ui_model_check_box.test2.a, Stipple.@text(:(test2.a)))
+			Stipple.span(ui_model_check_box.test2.a, @Stipple.text(:(test2.a)))
 		  ]),
 		Stipple.h5("Test: {{this.test.a}}"),
 		Stipple.h5("Test2: {{this.test2.a}}"),
 		Stipple.Html.div(
 			StippleUI.quasar(:checkbox, label = Stipple.R"'checkbox ' + index", fieldname = Stipple.R"checks[index]"),
-			Stipple.@recur("(item, index) in checks")
+			@Stipple.recur("(item, index) in checks")
 		)
 	])
 end

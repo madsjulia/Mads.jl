@@ -3,15 +3,15 @@ import LinearAlgebra
 import Printf
 
 if isdefined(Core, :Mads) && !isdefined(Mads, :sprintf)
-	"Convert `Printf.@sprintf` macro into `sprintf` function"
+	"Convert `@Printf.sprintf` macro into `sprintf` function"
 	sprintf(args...) = Base.eval(:@Printf.sprintf($(args...)))
 end
 
 quietdefault = true
 nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madszem", "madskil", "madsart", "madsend"] # madsdam is out
-madsservers2 = vec(["madsmin"; map(i->(Printf.@sprintf "mads%02d" i), 1:18)])
-madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(Printf.@sprintf "mads%02d" i), 1:18)]) # madsdam is out
+madsservers2 = vec(["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)])
+madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)]) # madsdam is out
 if isdefined(Main, :Mads)
 	quietdefault = Mads.quiet
 	nprocs_per_task_default = Mads.nprocs_per_task_default
@@ -239,9 +239,9 @@ $(DocumentFunction.documentfunction(noplot))
 function noplot()
 	if Distributed.myid() == 1
 		for i in Distributed.workers()
-			Distributed.@spawnat i ENV["MADS_NO_PLOT"]=""
-			Distributed.@spawnat i ENV["MADS_NO_PYPLOT"]=""
-			Distributed.@spawnat i ENV["MADS_NO_GADFLY"]=""
+			@Distributed.spawnat i ENV["MADS_NO_PLOT"]=""
+			@Distributed.spawnat i ENV["MADS_NO_PYPLOT"]=""
+			@Distributed.spawnat i ENV["MADS_NO_GADFLY"]=""
 		end
 	end
 end
@@ -265,8 +265,8 @@ argtext=Dict("dir"=>"directory")))
 Example:
 
 ```julia
-Distributed.@everywhere Mads.setdir()
-Distributed.@everywhere Mads.setdir("/home/monty")
+@Distributed.everywhere Mads.setdir()
+@Distributed.everywhere Mads.setdir("/home/monty")
 ```
 """ setdir
 
@@ -337,7 +337,7 @@ Returns
 - array string of mads servers
 """
 function setmadsservers(first::Integer=0, last::Integer=18)
-	map(i->(Printf.@sprintf "mads%02d" i), first:last)
+	map(i->(@Printf.sprintf "mads%02d" i), first:last)
 end
 
 :loaded

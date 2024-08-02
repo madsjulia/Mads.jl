@@ -1,8 +1,8 @@
 if !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.@tryimport Gadfly
-	Mads.@tryimport Compose
+	@Mads.tryimport Gadfly
+	@Mads.tryimport Compose
 end
-Mads.@tryimport Images
+@Mads.tryimport Images
 
 function display(filename::AbstractString, open::Bool=false)
 	if !graphoutput

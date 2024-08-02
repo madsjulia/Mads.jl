@@ -27,6 +27,6 @@ end
 "Try to import a module in Main"
 macro tryimportmain(s::Symbol)
 	quote
-		Mads.@tryimport $(s) Main
+		@Mads.tryimport $(s) Main
 	end
 end

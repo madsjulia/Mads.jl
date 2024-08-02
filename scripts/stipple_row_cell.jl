@@ -1,7 +1,7 @@
 import Stipple
 import StippleUI
 
-Stipple.@vars Name begin
+@Stipple.vars Name begin
 	name::String = "World!"
 end
 

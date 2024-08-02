@@ -152,7 +152,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
 	sleep(1) # rest to avoid a "method too new" error
 	if distributed_function
-		Distributed.@everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
+		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
 		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)
 	end
 	numsamples_perwalker_burnin = div(burnin, numwalkers)

@@ -73,21 +73,21 @@ function NMFipopt(X::AbstractMatrix, nk::Integer, retries::Integer=1; random::Bo
 		JuMP.set_optimizer_attributes(m, "max_iter" => maxiter, "print_level" => verbosity)
 		# IMPORTANT the order at which parameters are defined is very important
 		if r == 1 && sizeof(initW) != 0
-			JuMP.@variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
+			@JuMP.variable(m, W[i=1:nP, k=1:nk] >= 0., start=initW[i, k])
 		elseif r > 1 || random
-			JuMP.@variable(m, W[1:nP, 1:nk] >= 0., start=rand(Mads.rng))
+			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=rand(Mads.rng))
 		else
-			JuMP.@variable(m, W[1:nP, 1:nk] >= 0., start=0.5)
+			@JuMP.variable(m, W[1:nP, 1:nk] >= 0., start=0.5)
 		end
 		if r == 1 && sizeof(initH) != 0
-			JuMP.@variable(m, H[k=1:nk, j=1:nC] >= 0., start=initH[k, j])
+			@JuMP.variable(m, H[k=1:nk, j=1:nC] >= 0., start=initH[k, j])
 		elseif r > 1 || random
-			JuMP.@variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand(Mads.rng))
+			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess * rand(Mads.rng))
 		else
-			JuMP.@variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
+			@JuMP.variable(m, H[1:nk, 1:nC] >= 0., start=maxguess / 2)
 		end
-		JuMP.@constraint(m, W .<= 1) # this is very important constraint to make optimization faster
-		JuMP.@NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
+		@JuMP.constraint(m, W .<= 1) # this is very important constraint to make optimization faster
+		@JuMP.NLobjective(m, Min, sum(sum(weights[i, j] * (sum(W[i, k] * H[k, j] for k=1:nk) - Xc[i, j])^2 for i=1:nP) for j=1:nC))
 		JuMP.optimize!(m)
 		phi = JuMP.objective_value(m)
 		!quiet && println("OF = $(phi)")
@@ -242,6 +242,6 @@ function MFlm(X::AbstractMatrix{T}, nk::Integer; method::Symbol=:mads, log_W::Bo
 			Wbest, Hbest = mf_reshape(x_best)
 		end
 	end
-	println("Signals: $(Printf.@sprintf("%2d", nk)) Fit: $(Printf.@sprintf("%12.7g", phi_best))")
+	println("Signals: $(@Printf.sprintf("%2d", nk)) Fit: $(@Printf.sprintf("%12.7g", phi_best))")
 	return Wbest, Hbest, phi_best
 end
