@@ -66,7 +66,7 @@ Mads.stdouterrcaptureon()
 Mads.printerrormsg("a")
 madsoutput("a")
 Mads.madsdebug("a")
-Mads.madsinfo("Testing ...")
+madsinfo("Testing ...")
 Mads.help()
 Mads.copyright()
 if length(ARGS) < 1

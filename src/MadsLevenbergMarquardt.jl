@@ -452,7 +452,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			first_lambda = false
 		end
 		lambda_current = lambda_down = lambda_up = lambda
-		Mads.madsinfo(@Printf.sprintf "Iteration %02d: Starting lambda: %e" g_calls lambda_current)
+		madsinfo(@Printf.sprintf("Iteration %02d: Starting lambda: %e", g_calls, lambda_current), 2)
 		for npl = 1:np_lambda
 			if npl == 1 # first lambda
 				lambda_current = lambda_p[npl] = lambda
@@ -469,7 +469,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			lambda = lambda_p[npl]
 			predicted_of = []
 			delta_x = []
-			Mads.madsinfo(@Printf.sprintf "#%02d lambda: %e" npl lambda, 2)
+			madsinfo(@Printf.sprintf("#%02d lambda: %e", npl, lambda), 2)
 			u, s, v = LinearAlgebra.svd(JpJ + lambda * DtDidentity)
 			is = similar(s)
 			for i = eachindex(s)
@@ -488,7 +488,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 			# delta_x = (JpJ + lambda * DtDidentity) \ -J' * fcur # TODO replace with SVD
 			predicted_of = o(J * delta_x + fcur)
 			# check for numerical problems in solving for delta_x by ensuring that the predicted residual is smaller than the current residual
-			madsoutput("$(@Printf.sprintf "#%02d OF (est): %f" npl predicted_of)", 3);
+			madsoutput(@Printf.sprintf("#%02d OF (est): %f", npl, predicted_of), 3);
 			if predicted_of > current_of + 2max(eps(predicted_of), eps(current_of))
 				madsoutput(" -> not good", 3);
 				if npl == 1
@@ -548,8 +548,8 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		npl_best = argmin(trial_ofs)
 		npl_worst = argmax(trial_ofs)
-		madsoutput(@Printf.sprintf "OF     range in the parallel lambda search: min  %e max   %e\n" trial_ofs[npl_best] trial_ofs[npl_worst], 2)
-		madsoutput(@Printf.sprintf "Lambda range in the parallel lambda search: best %e worst %e\n" lambda_p[npl_best] lambda_p[npl_worst], 2)
+		madsoutput(@Printf.sprintf("OF     range in the parallel lambda search: min  %e max   %e\n", trial_ofs[npl_best], trial_ofs[npl_worst]), 2)
+		madsoutput(@Printf.sprintf("Lambda range in the parallel lambda search: best %e worst %e\n", lambda_p[npl_best], lambda_p[npl_worst]), 2)
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])
 		trial_f = vec(trial_residuals[npl_best])
@@ -598,31 +598,31 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		# check convergence criteria:
 		nx = LinearAlgebra.norm(delta_x)
 		if nx < tolX * (tolX + LinearAlgebra.norm(x))
-			Mads.madsinfo("Small parameter step size: $nx < $tolX (tolX)")
+			madsinfo("Small parameter step size: $nx < $tolX (tolX)", 2)
 			x_converged = true
 		end
 		ng = LinearAlgebra.norm(J' * fcur, Inf)
 		if ng < tolG
-			Mads.madsinfo("Small gradient: $ng < $tolG (LinearAlgebra.norm(J^T * fcur) < tolG)")
+			madsinfo("Small gradient: $ng < $tolG (LinearAlgebra.norm(J^T * fcur) < tolG)", 2)
 			g_converged = true
 		end
 		if length(residuals) > tolOFcount
 			is = sortperm(residuals)
 			changeOF = residuals[is][tolOFcount] - residuals[is][1]
 			if changeOF < tolOF
-				Mads.madsinfo("Small objective function changes (less than $tolOF tolOF): $changeOF < $tolOF")
+				madsinfo("Small objective function changes (less than $tolOF tolOF): $changeOF < $tolOF", 2)
 				of_converged = true
 			end
 		end
 		if best_of < minOF
-			Mads.madsinfo("Objective function less than $minOF (tolOF): $best_of < $minOF")
+			madsinfo("Objective function less than $minOF (tolOF): $best_of < $minOF", 2)
 			of_converged = true
 		end
 		if g_calls >= maxJacobians
-			Mads.madsinfo("Maximum number of Jacobian evaluations have been reached: $g_calls < $maxJacobians")
+			madsinfo("Maximum number of Jacobian evaluations have been reached: $g_calls < $maxJacobians", 2)
 		end
 		if f_calls >= maxEval
-			Mads.madsinfo("Maximum number of Forward evaluations have been reached: $f_calls < $maxEval")
+			madsinfo("Maximum number of Forward evaluations have been reached: $f_calls < $maxEval", 2)
 		end
 		converged = g_converged | x_converged | of_converged
 	end

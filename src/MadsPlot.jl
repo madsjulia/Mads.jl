@@ -1379,7 +1379,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
 			filename = "$(rootname)-jacobian" * ext
 			plotfileformat(jacmat, filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO; format=format, dpi=imagedpi)
-			Mads.madsinfo("Jacobian matrix plot saved in $filename")
+			madsinfo("Jacobian matrix plot saved in $filename")
 		end
 	end
 	filename = "$(filenameroot)-covariance.dat"
@@ -1416,7 +1416,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 			# eigenval = plot(x=eachindex(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 			filename = "$(rootname)-eigenmatrix" * ext
 			plotfileformat(eigenmat, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP; format=format, dpi=imagedpi)
-			Mads.madsinfo("Eigen matrix plot saved in $filename")
+			madsinfo("Eigen matrix plot saved in $filename")
 			if sizeof(sortedeigenv) > 0
 				eigenval = Gadfly.plot(x=eachindex(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
 							Gadfly.Geom.bar,
@@ -1424,7 +1424,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 							Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 				filename = "$(rootname)-eigenvalues" * ext
 				plotfileformat(eigenval, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch; format=format, dpi=imagedpi)
-				Mads.madsinfo("Eigen values plot saved in $filename")
+				madsinfo("Eigen values plot saved in $filename")
 			end
 		end
 	end

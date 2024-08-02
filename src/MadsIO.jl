@@ -1583,7 +1583,7 @@ function createtempdir(tempdirname::AbstractString)
 		try
 			attempt += 1
 			Mads.mkdir(tempdirname)
-			Mads.madsinfo("Created temporary directory: $(tempdirname)", 1)
+			madsinfo("Created temporary directory: $(tempdirname)", 1)
 			trying = false
 		catch errmsg
 			sleep(attempt * 0.5)
@@ -1609,7 +1609,7 @@ function linktempdir(madsproblemdir::AbstractString, tempdirname::AbstractString
 		try
 			attempt += 1
 			Mads.symlinkdirfiles(madsproblemdir, tempdirname)
-			Mads.madsinfo("Links created in temporary directory: $(tempdirname)", 1)
+			madsinfo("Links created in temporary directory: $(tempdirname)", 1)
 			trying = false
 		catch errmsg
 			Mads.rmdir(tempdirname)
