@@ -105,7 +105,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 				madscritical("Julia function $(fn) is not defined!")
 			end
 		end
-		madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""")
+		madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])'""", 2)
 		"MADS command function based on a Julia function '$(madsdata["Julia function"])'"
 		function madscommandfunctionvector(parameters::AbstractDict)
 			o = jf(collect(values(parameters)))
@@ -113,11 +113,11 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		end
 		madscommandfunction = madscommandfunctionvector
 	elseif haskey(madsdata, "Julia model")
-		madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""")
+		madsinfo("""Model setup: Julia model -> Internal model evaluation of Julia function '$(madsdata["Julia model"])'""", 2)
 		madscommandfunction = madsdata["Julia model"]
 	elseif haskey(madsdata, "MADS model")
 		filename = joinpath(madsproblemdir, madsdata["MADS model"])
-		madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'")
+		madsinfo("Model setup: MADS model -> Internal MADS model evaluation a Julia script in file '$(filename)'", 2)
 		madsdatacommandfunction = importeverywhere(filename)
 		local madscommandfunction
 		try
@@ -129,7 +129,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		madscommandfunction = Base.invokelatest(madsdatacommandfunction, madsdata)
 	elseif haskey(madsdata, "Model")
 		filename = joinpath(madsproblemdir, madsdata["Model"])
-		madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'")
+		madsinfo("Model setup: Model -> Internal model evaluation a Julia script in file '$(filename)'", 2)
 		madscommandfunction = importeverywhere(filename)
 	elseif haskey(madsdata, "Command") || haskey(madsdata, "Julia command") || ( haskey(madsdata, "Julia function") && haskey(madsdata, "Linked directory") )
 		linkdir = true
@@ -151,15 +151,15 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 				madsdata["Command"] = replace(madsdata["Command"], "julia" => "$(first(Base.julia_cmd().exec)) --startup-file=no")
 				madsinfo("Mads Command has been updated to account for the location of julia: $(madsdata["Command"])")
 			end
-			madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""")
+			madsinfo("""Model setup: Command -> External model evaluation of command '$(madsdata["Command"])'""", 2)
 		end
 		if haskey(madsdata, "Julia command")
 			filename = joinpath(madsproblemdir, madsdata["Julia command"])
-			madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'")
+			madsinfo("Model setup: Julia command -> Model evaluation using a Julia script in file '$(filename)'", 2)
 			madsdatacommandfunction = importeverywhere(filename)
 		elseif haskey(madsdata, "Julia function") && haskey(madsdata, "Linked directory") && madsdata["Linked directory"] == true
 			if typeof(madsdata["Julia function"]) <: Function
-				madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])' in dedicated linked directory""")
+				madsinfo("""Model setup: Julia function -> Internal model evaluation of Julia function '$(madsdata["Julia function"])' in dedicated linked directory""", 2)
 				"MADS command function"
 				function madscommandfunctionexternal(parameters::AbstractVector)
 					o = madsdata["Julia function"](parameters)

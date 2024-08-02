@@ -7,13 +7,10 @@ if isdefined(Core, :Mads) && !isdefined(Mads, :sprintf)
 	sprintf(args...) = Base.eval(:@Printf.sprintf($(args...)))
 end
 
-quietdefault = true
-nprocs_per_task_default = 1
 madsservers = ["madsmax", "madsmen", "madszem", "madskil", "madsart", "madsend"] # madsdam is out
 madsservers2 = vec(["madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)])
 madsserversall = vec(["madsmax"; "madsmen"; "madszem"; "madskil"; "madsart"; "madsend"; "madsmin"; map(i->(@Printf.sprintf "mads%02d" i), 1:18)]) # madsdam is out
 if isdefined(Main, :Mads)
-	quietdefault = Mads.quiet
 	nprocs_per_task_default = Mads.nprocs_per_task_default
 	madsservers = Mads.madsservers
 	madsservers2 = Mads.madsservers2
@@ -44,7 +41,7 @@ end
 function setprocs(np::Integer)
 	setprocs(np, np)
 end
-function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Vector{String}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=quietdefault, veryquiet::Bool=false, dir::AbstractString=pwd(), exename::AbstractString=Base.julia_cmd().exec[1])
+function setprocs(; ntasks_per_node::Integer=0, nprocs_per_task::Integer=nprocs_per_task_default, nodenames::Union{String,Vector{String}}=Array{String}(undef, 0), mads_servers::Bool=false, test::Bool=false, quiet::Bool=Mads.quiet, veryquiet::Bool=false, dir::AbstractString=pwd(), exename::AbstractString=Base.julia_cmd().exec[1])
 	if isdefined(Core, :Mads) && isdefined(Mads, :set_nprocs_per_task)
 		set_nprocs_per_task(nprocs_per_task)
 	end

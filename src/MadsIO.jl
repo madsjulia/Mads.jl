@@ -262,7 +262,7 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=false)
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=Mads.quiet)
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
