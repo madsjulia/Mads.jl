@@ -1247,8 +1247,8 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 						Ns += 1
 						Ns_total = Ns * Nr
 					end
-					madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!\n");
-					madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns\n");
+					madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!\n", 2);
+					madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns\n", 2);
 					return Nr, Wi, Ns, Ns_total
 				end
 			end
@@ -1362,15 +1362,13 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		else
 			=#
 			# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-			madsoutput("Compute model outputs ... $(P) > $(Nr*nprime+(Nr+1)) ...\n")
-			madsoutput("Computing model for Parameter k = $k ($(string(paramkeys[k]))) ...\n")
-			if robustpmap
+			if robutpmap
 				if restart
-					@info("RobustPmap for parallel execution of forward runs with restart ...")
+					madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
 					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
 
 				else
-					@info("RobustPmap for parallel execution of forward runs without restart ...")
+					madsinfo("RobustPmap of forward runs without restart for parameter $(string(paramkeys[k])) ...")
 					m = RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
 				end
 				Y = permutedims(hcat(m...))
@@ -1397,7 +1395,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			# These will be the sums of variances over all resamplings (Nr loops)
 			AVi = AVci = AV = 0                     # Initializing Variances to 0
 
-			madsoutput("Calculating Fourier coefficients for observations ...\n")
+			madsoutput("Calculating Fourier coefficients for observations ...\n", 2)
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Subtract the average value from Y
 			Y = permutedims(Y .- Statistics.mean(Y))
@@ -1606,7 +1604,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	## Begin eFAST analysis:
 
-	madsinfo("Begin eFAST analysis ... ")
+	madsinfo("Begin eFAST analysis with $(Ns_total) runs ... ")
 
 	# This code determines complementary frequencies
 	(W_comp, Wcmax) = eFAST_getCompFreq(Wi, nprime, M)
