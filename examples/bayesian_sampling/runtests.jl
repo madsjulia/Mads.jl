@@ -25,42 +25,8 @@ if Mads.create_tests
 	JLD2.save(joinpath(d, "mcmcchains_emcee.jld2"), "mcmcchains_emcee", mcmcchains_emcee)
 end
 
-if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
-	Mads.bayessampling(md, 1; nsteps=1, burnin=1, thinning=1)
-	mcmcchains_bayes = Mads.bayessampling(md, 2; nsteps=10, burnin=1, thinning=1, seed=2016)
-	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-	Mads.savemcmcresults(permutedims(mcmcchain.value), rootname * "-test-mcmcchain1.json")
-	rm(rootname * "-test-mcmcchain1.json")
-	Mads.forward(md, mcmcchain.value; all=true)
-end
-
 md = Mads.loadmadsfile(joinpath(workdir, "w01.mads"))
 rootname = Mads.getmadsrootname(md)
-if !haskey(ENV, "MADS_NO_KLARA") && isdefined(Mads, :Klara) && isdefined(Klara, :BasicContMuvParameter)
-	mcmcchain = Mads.bayessampling(md; nsteps=10, burnin=1, thinning=1, seed=2016)
-	mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value)) # convert the parameters in the chain to a parameter dictionary of arrays
-	mcmcvalues_array = hcat(vcat(map(i->collect(mcmcvalues[i]), keys(mcmcvalues)))...)
-	Mads.forward(md, mcmcchain.value)
-	if !haskey(ENV, "MADS_NO_GADFLY")
-		Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-test-bayes-results.svg")
-		Mads.rmfile(rootname * "-test-bayes-results.svg")
-		Mads.spaghettiplots(md, mcmcvalues; keyword="", obs_plot_dots=false)
-		Mads.spaghettiplot(md, mcmcvalues; keyword="test")
-		Mads.spaghettiplots(md, 3; keyword="test", grayscale=true)
-		Mads.spaghettiplot(md, 3; keyword="test", grayscale=true)
-		s = splitdir(rootname)
-		for filesinadir in Mads.searchdir(Regex(string(s[2], "-", "[.]*", "spaghetti.svg")), path=s[1])
-			Mads.rmfile(filesinadir, path=s[1])
-		end
-	end
-	if Mads.create_tests
-		d = joinpath(workdir, "test_results")
-		Mads.mkdir(d)
-		JLD2.save(joinpath(d, "mcmcvalues.jld2"), "mcmcvalues", mcmcvalues)
-	end
-	good_mcmcvalues = JLD2.load(joinpath(workdir, "test_results", "mcmcvalues.jld2"), "mcmcvalues")
-	good_mcmcvalues_array = hcat(vcat(map(i->collect(good_mcmcvalues[i]), keys(good_mcmcvalues)))...)
-end
 
 good_mcmcchains_emcee = JLD2.load(joinpath(workdir, "test_results", "mcmcchains_emcee.jld2"), "mcmcchains_emcee")
 

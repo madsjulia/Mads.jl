@@ -82,7 +82,16 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 end
 
 function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
-	if load && filename != ""
+	if filename != ""
+		load = save = true
+	end
+	if (load || save) && filename == ""
+		np = length(Mads.getoptparams(madsdata))
+		no = length(Mads.getobskeys(madsdata))
+		filename = joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_results_$(np)_$(no)_$(numwalkers)_$(nexecutions)_$(burnin)_$(thinning).jld2")
+		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
+	end
+	if load
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
@@ -113,13 +122,21 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 			p0[i, j] = pmin[i] + rand(Mads.rng, d) * (pmax[i] - pmin[i])
 		end
 	end
-	chain, llhoods, observations = emceesampling(madsdata, p0; filename=filename, numwalkers=numwalkers, seed=seed, rng=rng, kw...)
+	chain, llhoods, observations = emceesampling(madsdata, p0; filename=filename, load=load, save=save, execute=execute, numwalkers=numwalkers, seed=seed, rng=rng, kw...)
 	return chain, llhoods, observations
 end
-
-function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+	if filename != ""
+		load = save = true
+	end
+	np = length(Mads.getoptparams(madsdata))
+	no = length(Mads.getobskeys(madsdata))
+	if (load || save) && filename == ""
+		filename = joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_results_$(np)_$(no)_$(numwalkers)_$(nexecutions)_$(burnin)_$(thinning).jld2")
+		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
+	end
 	numsamples_perwalker = div(nexecutions, numwalkers)
-	if load && filename != ""
+	if load
 		bad_data = false
 		@info("AffineInvariantMCMC preexisting data loading $(filename) ...")
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
@@ -130,7 +147,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 			if size(chain, 2) != div(numsamples_perwalker, thinning) * numwalkers
 				@warn("Preexisting data does not match the number of walkers and steps!")
 				bad_data = true
-			elseif size(chain, 1) != length(Mads.getoptparamkeys(madsdata))
+			elseif size(chain, 1) != no
 				@warn("Preexisting data does not match the number of parameters!")
 				bad_data = true
 			end
@@ -146,10 +163,6 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 			@info("AffineInvariantMCMC preexisting data loaded!")
 			return chain, llhoods, observations
 		end
-	end
-	if save && filename == ""
-		filename = joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_results_$(numwalkers)_$(nexecutions)_$(burnin)_$(thinning).jld2")
-		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
 	end
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
@@ -178,7 +191,6 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	end
 	return chain, llhoods, observations
 end
-
 @doc """
 Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee)
 
@@ -206,62 +218,6 @@ Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=
 ```
 """ emceesampling
 
-if isdefined(Mads, :Klara)
-	# && isdefined(Klara, :BasicContMuvParameter)
-	function bayessampling(madsdata::AbstractDict; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
-		Mads.setseed(seed; rng=rng)
-		madsloglikelihood = makemadsloglikelihood(madsdata)
-		arrayloglikelihood = makearrayloglikelihood(madsdata, madsloglikelihood)
-		optparamkeys = getoptparamkeys(madsdata)
-		initvals = Array{Float64}(undef, length(optparamkeys))
-		for i = eachindex(optparamkeys)
-			initvals[i] = madsdata["Parameters"][optparamkeys[i]]["init"]
-		end
-		# mcparams = Klara.BasicContMuvParameter(:p, logtarget=arrayloglikelihood)
-		# model = Klara.likelihood_model(mcparams, false)
-		# # sampler = Klara.MH(fill(1e-1, length(initvals)))
-		# sampler = Klara.RAM(fill(1e-1, length(initvals)))
-		# mcrange = Klara.BasicMCRange(nsteps=nsteps + burnin, burnin=burnin, thinning=thinning)
-		# mcparams0 = Dict(:p=>initvals)
-		# outopts = Dict{Symbol, Any}(:monitor=>[:value, :logtarget, :loglikelihood], :diagnostics=>[:accept])
-		# job = Klara.BasicMCJob(model, sampler, mcrange, mcparams0, outopts=outopts, tuner=Klara.VanillaMCTuner())
-		# Klara.run(job)
-		# chain = Klara.output(job)
-		# return chain
-	end
-	function bayessampling(madsdata::AbstractDict, numsequences::Integer; nsteps::Integer=1000, burnin::Integer=100, thinning::Integer=1, seed::Integer=-1)
-		if seed != 0
-			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning, seed=seed+i), 1:numsequences)
-		else
-			mcmcchains = RobustPmap.rpmap(i->bayessampling(madsdata; nsteps=nsteps, burnin=burnin, thinning=thinning), 1:numsequences)
-		end
-		return mcmcchains
-	end
-
-	@doc """
-	Bayesian Sampling
-
-	$(DocumentFunction.documentfunction(bayessampling;
-	argtext=Dict("madsdata"=>"MADS problem dictionary",
-	            "numsequences"=>"number of sequences executed in parallel"),
-	keytext=Dict("nsteps"=>"number of final realizations in the chain [default=`1000`]",
-	            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`100`]",
-	            "thinning"=>"removal of any `thinning` realization [default=`1`]",
-	            "seed"=>"random seed [default=`0`]")))
-
-	Returns:
-
-	- MCMC chain
-
-	Examples:
-
-	```julia
-	Mads.bayessampling(madsdata; nsteps=1000, burnin=100, thinning=1, seed=2016)
-	Mads.bayessampling(madsdata, numsequences; nsteps=1000, burnin=100, thinning=1, seed=2016)
-	```
-	""" bayessampling
-end
-
 """
 Save MCMC chain in a file
 
@@ -286,13 +242,6 @@ function savemcmcresults(chain::AbstractArray, filename::AbstractString)
 	println(f, "")
 	print(f, "Variance: ")
 	JSON.print(f, Statistics.var(chain; dims=1)[:])
-	#println(f, "")
-	#print(f, "MCse: ")
-	#JSON.print(f, Klara.mcse(chain))
-	#println(f, "")
-	#print(f, "MCvar: ")
-	#JSON.print(f, Klara.mcvar(chain))
-	#println(f, "")
 	close(f)
 end
 
