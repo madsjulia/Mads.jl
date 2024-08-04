@@ -81,7 +81,7 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 	end
 end
 
-function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=true, save::Bool=true, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
+function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
 	if filename != ""
 		load = save = true
 	end
