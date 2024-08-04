@@ -643,7 +643,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
             "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
             "checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=true)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
@@ -1362,7 +1362,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		else
 			=#
 			# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-			if robutpmap
+			if robustpmap
 				if restart
 					madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
 					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
