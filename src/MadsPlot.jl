@@ -436,7 +436,7 @@ Dumps:
 
 - histogram/scatter plots of model parameter samples
 """
-function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString; np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi, separate_files::Bool=false, plottypes::AbstractVector=[:histogram, :scatter])
+function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, filename::AbstractString=joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_scatter.png"); np=size(samples, 2), format::AbstractString="", pointsize::Measures.AbsoluteLength=3Gadfly.pt * 4 / np, major_label_font_size::Measures.AbsoluteLength=24Gadfly.pt * 4 / np, minor_label_font_size::Measures.AbsoluteLength=12Gadfly.pt * 4 / np, highlight_width=1Gadfly.pt * 4 / np, dpi=Mads.imagedpi, separate_files::Bool=false, plottypes::AbstractVector=[:histogram, :scatter])
 	@assert np == size(samples, 2)
 	paramkeys = getoptparamkeys(madsdata)
 	plotlabels = getparamlabels(madsdata, paramkeys)
