@@ -83,7 +83,7 @@ end
 
 function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
 	if filename != ""
-		load = save = true
+		save = true
 	end
 	if (load || save) && filename == ""
 		np = length(Mads.getoptparams(madsdata))
@@ -91,7 +91,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 		filename = joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_results_$(np)_$(no)_$(numwalkers)_$(nexecutions)_$(burnin)_$(thinning).jld2")
 		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
 	end
-	if load
+	if load && filename == ""
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
