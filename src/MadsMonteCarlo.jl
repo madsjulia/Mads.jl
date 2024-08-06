@@ -91,7 +91,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 		filename = joinpath(Mads.getmadsproblemdir(madsdata), Mads.getmadsrootname(madsdata) * "_emcee_results_$(np)_$(no)_$(numwalkers)_$(nexecutions)_$(burnin)_$(thinning).jld2")
 		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
 	end
-	if load && filename == ""
+	if load && filename != ""
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
 		if isnothing(chain)
 			if execute
@@ -127,7 +127,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 end
 function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
 	if filename != ""
-		load = save = true
+		save = true
 	end
 	np = length(Mads.getoptparams(madsdata))
 	no = length(Mads.getobskeys(madsdata))
@@ -136,7 +136,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
 	end
 	numsamples_perwalker = div(nexecutions, numwalkers)
-	if load
+	if load && filename != ""
 		bad_data = false
 		@info("AffineInvariantMCMC preexisting data loading $(filename) ...")
 		chain, llhoods, observations = loadecmeeresults(madsdata, filename)
