@@ -797,32 +797,32 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 			end
 			nnonnans = N - nnans
 			# f0T = Statistics.mean(yT)
-			# f0A = Statistics.mean( yA[nonan,j] )
-			# f0B = Statistics.mean( yB[nonan,j] )
-			# f0C = Statistics.mean( yC[nonan,j] )
+			# f0A = Statistics.mean(yA[nonan, j])
+			f0B = Statistics.mean(yB[nonan, j])
+			f0C = Statistics.mean(yC[nonan, j])
 			varT = Statistics.var(yT)
-			# varA = abs( ( LinearAlgebra.dot(  yA[nonan,j], yA[nonan,j] ) - f0A^2 * nnonnans ) / ( nnonnans - 1 ) )
-			# varA = Statistics.var( yA[nonan,j] ) # this is faster
-			# varB = abs( ( LinearAlgebra.dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
-			# varB = Statistics.var( yB[nonan,j] ) # this is faster
-			varC = Statistics.var(yC[nonan, j])
-			# varP = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
-			# varP2 = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
+			# varA = abs((LinearAlgebra.dot(yA[nonan, j], yA[nonan, j]) - f0A^2 * nnonnans) / (nnonnans - 1))
+			varA = Statistics.var(yA[nonan, j]) # this is faster
+			# varB = abs((LinearAlgebra.dot(yB[nonan, j], yB[nonan, j]) - f0B^2 * nnonnans) / (nnonnans - 1))
+			varB = Statistics.var(yB[nonan, j]) # this is faster
+			# varC = Statistics.var(yC[nonan, j])
+			# varP = abs((LinearAlgebra.dot(yB[nonan, j], yC[nonan, j]) / nnonnans - f0B * f0C)) # Orignial
+			# varP2 = abs((LinearAlgebra.dot(yB[nonan, j], yC[nonan, j]) - f0B * f0C * nnonnans) / (nnonnans - 1)) # Imporved
 			varP3 = abs(Statistics.mean(yB[nonan, j] .* (yC[nonan, j] - yA[nonan, j]))) # Recommended
-			# varP4 = Statistics.mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
+			# varP4 = Statistics.mean((yB[nonan, j] - yC[nonan, j]) .^ 2) / 2 # Mads.c; very different from all the other estimates
 			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
-			# varPnot = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
-			# varPnot2 = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
-			# varPnot3 = Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
-			expPnot = Statistics.mean((yA[nonan, j] - yC[nonan, j]) .^ 2) / 2
+			variance[obskeys[j]][paramoptkeys[i]] = varP3
+			# varPnot = abs((LinearAlgebra.dot(yA[nonan, j], yC[nonan, j]) / nnonnans - f0A * f0C)) # Orignial
+			# varPnot2 = abs((LinearAlgebra.dot(yA[nonan, j], yC[nonan, j]) - f0A * f0C * nnonnans) / (nnonnans - 1)) # Imporved
+			# varPnot3 = Statistics.mean((yA[nonan, j] - yC[nonan, j]) .^ 2) / 2 # Recommended; also used in Mads.c
 			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
-			variance[obskeys[j]][paramoptkeys[i]] = varC
-			# 			if varA < eps(Float64) && varP < eps(Float64)
-			# 				tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
-			# 			else
-			# 				mes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, varP / varA ) ) # varT or varA? i think it should be varA
-			# 				tes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, 1 - varPnot / varB) ) # varT or varA; i think it should be varA; i do not think should be varB?
-			# 			end
+			expPnot = Statistics.mean((yA[nonan, j] - yC[nonan, j]) .^ 2) / 2
+			# if varA < eps(Float64) && varP < eps(Float64)
+			#	tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
+			# else
+			#	mes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, varP / varA ) ) # varT or varA? i think it should be varA
+			# 	tes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, 1 - varPnot / varB) ) # varT or varA; i think it should be varA; i do not think should be varB?
+			# end
 			# mes[obskeys[j]][paramoptkeys[i]] = varP / varT
 			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varT
 			# varianceA[obskeys[j]][paramoptkeys[i]] = varT
