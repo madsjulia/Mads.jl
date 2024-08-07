@@ -409,8 +409,7 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 		end
 	end
 	if restartdir == ""
-		root = splitdir(getmadsrootname(madsdata, version=true))[end]
-		restartdir = root * "_restart"
+		restartdir = getmadsrootname(madsdata; version=true) * "_restart"
 		if !isdir(restartdir)
 			try
 				recursivemkdir(restartdir; filename=false)

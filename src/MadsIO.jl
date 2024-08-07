@@ -742,7 +742,6 @@ function getproblemdir()
 		problemdir = "."
 	elseif source_path == ""
 		problemdir = Base.pkgdir(Mads)
-
 	else
 		problemdir = first(splitdir(source_path))
 	end
@@ -751,7 +750,7 @@ function getproblemdir()
 end
 
 """
-Get file name root
+Get the filename root
 
 $(DocumentFunction.documentfunction(getrootname;
 argtext=Dict("filename"=>"file name"),
