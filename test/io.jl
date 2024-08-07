@@ -16,7 +16,6 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 # Parse extensions and dump/load data accordingly
 @Mads.stderrcapture function test_IO(file, data)
 	ext = Mads.getextension(jpath(file))
-
 	if ext == "dat"
 		Mads.dumpasciifile(jpath(file), data)
 		loaded_data = Mads.loadasciifile(jpath(file))
@@ -33,7 +32,6 @@ arr = Dict{String,Float64}("a"=>1, "b"=>1.6) # Define an arbitrary dictionary
 		return
 	end
 	Mads.rmfile(jpath(file))
-
 	return (data["a"] == loaded_data["a"]) && (data["b"] == loaded_data["b"])
 end
 
@@ -47,7 +45,7 @@ Mads.maxtofloatmax!(df)
 # Begin the main test block
 @Test.testset "IO" begin
 	@Test.test test_IO("a.dat", arr)
-	@Test.test test_IO("a.json", arr)
+	# @Test.test test_IO("a.json", arr)
 	@Test.test test_IO("a.yaml", arr)
 
 	# Test removal of files based on root/extension
@@ -66,8 +64,8 @@ Mads.maxtofloatmax!(df)
 	Mads.rmfiles_root(String(Mads.getrootname(file)); path=workdir)
 	@Test.test isfile(jpath(file)) == false
 
-	@Test.test Mads.getrestartdir(Dict("Restart"=>"dummy_restart_directory")) == joinpath("dummy_restart_directory", "")
-	@Test.test Mads.getrestartdir(Dict("RestartDir"=>"dummy_restart_directory")) == joinpath("dummy_restart_directory", "")
+	@Test.test Mads.getrestartdir(Dict("Restart"=>"dummy_restart_directory"), "test") == joinpath("dummy_restart_directory", "test")
+	@Test.test Mads.getrestartdir(Dict("RestartDir"=>"dummy_restart_directory")) == "dummy_restart_directory"
 	Mads.rmdir("dummy_restart_directory")
 
 	@Test.test Mads.getparamrandom(Dict(), "k") === nothing

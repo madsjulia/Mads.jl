@@ -12,7 +12,6 @@ Mads.graphoff()
 
 Mads.@tryimportmain JLD2
 Mads.@tryimportmain OrderedCollections
-Mads.@tryimportmain DataStructures
 
 workdir = (Mads.getproblemdir() == ".") ? joinpath(Mads.dir, "examples", "contamination") : Mads.getproblemdir()
 testdir = joinpath(workdir, "test_results")

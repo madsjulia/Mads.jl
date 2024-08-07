@@ -20,7 +20,7 @@ function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::AbstractDict
 	horizons = bigdtresults["horizons"]
 	if filename == ""
 		rootname = Mads.getmadsrootname(madsdata)
-		filename =  rootname * "-robustness"
+		filename =  rootname * "_robustness"
 	end
 	#layers = Array{Any}(undef, size(maxfailureprobs, 2))
 	df = DataFrames.DataFrame(horizon=[], maxfailureprob=[], Choices=[])

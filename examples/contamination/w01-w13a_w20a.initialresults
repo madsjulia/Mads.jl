@@ -1,3 +1,3 @@
 OF: 1.690343089455085e7
 lambda: NaN
-OrderedCollections.OrderedDict("vx" => 35.96220220262771, "source1_t0" => 9.038310530327282, "source1_t1" => 37.76819701889558)
+OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}("vx" => 35.96220220262771, "source1_t0" => 9.038310530327282, "source1_t1" => 37.76819701889558)

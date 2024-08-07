@@ -282,13 +282,13 @@ function runremote(cmd::AbstractString, nodenames::Vector{String}=madsservers)
 	output = Array{String}(undef, 0)
 	for i in nodenames
 		try
-			o = readstring(`ssh -t $i $cmd`)
+			o = readstring(`ssh -t $(i) $cmd`)
 			push!(output, strip(o))
-			println("$i: $o")
+			println("$(i): $o")
 		catch errmsg
 			println(strip(errmsg.msg))
 			push!(output, "")
-			@warn("$i is not accessible or command failed")
+			@warn("$(i) is not accessible or command failed")
 		end
 	end
 	return output;

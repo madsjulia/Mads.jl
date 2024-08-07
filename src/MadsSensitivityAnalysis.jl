@@ -636,7 +636,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
 			"parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
 			"checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restart::Bool=false, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=true)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restart::Bool=false, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)_saltelli_$(N).jld2"
@@ -764,7 +764,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 				Cvecs[j] = vec(C[j, :])
 			end
 			if restart
-				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Vector{Float64})
+				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$(i)"), Cvecs; t=Vector{Float64})
 			else
 				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Vector{Float64})
 			end

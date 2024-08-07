@@ -2,7 +2,6 @@ import Mads
 import JLD2
 
 import Test
-import PyCall
 
 if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :bigdt)
 	@info("BIGUQ cannot be tested!")
@@ -17,9 +16,9 @@ else
 	bigdt_results = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=2)
 
 	if !haskey(ENV, "MADS_NO_GADFLY")
-		filenameroot = joinpath(problemdir, "source_termination-robustness-$nsample")
+		filenameroot = joinpath(problemdir, "source_termination_robustness_$(nsample)")
 		Mads.plotrobustnesscurves(md, bigdt_results; filename=filenameroot)
-		Mads.rmfile(joinpath(problemdir, "source_termination-robustness-10.svg"))
+		Mads.rmfile(joinpath(problemdir, "source_termination_robustness_10.svg"))
 		Mads.plotrobustnesscurves(md, bigdt_results)
 		Mads.rmfile(joinpath(problemdir, "source_termination-robustness.svg"))
 		Mads.rmfile(joinpath(problemdir, "source_termination_json-robustness.svg"))

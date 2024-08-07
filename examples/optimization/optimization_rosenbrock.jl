@@ -1,5 +1,4 @@
 import Mads
-import Optim
 import LsqFit
 import Test
 import Distributed

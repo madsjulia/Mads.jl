@@ -136,6 +136,10 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 		madsinfo("Filename not provided! AffineInvariantMCMC results will be saved in $(filename) ...")
 	end
 	numsamples_perwalker = div(nexecutions, numwalkers)
+	if numsamples_perwalker == 0
+		numsamples_perwalker = 10
+		nexecutions = numsamples_perwalker * numwalkers
+	end
 	if load && filename != ""
 		bad_data = false
 		@info("AffineInvariantMCMC preexisting data loading $(filename) ...")

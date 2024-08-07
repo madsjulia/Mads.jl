@@ -2,14 +2,12 @@ import Mads
 import Test
 
 import JLD2
-import DataStructures
 import OrderedCollections
 import Distributed
 import Random
 
 Mads.@tryimportmain JLD2
 Mads.@tryimportmain OrderedCollections
-Mads.@tryimportmain DataStructures
 
 Mads.veryquieton()
 Mads.graphoff()

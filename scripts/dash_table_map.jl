@@ -23,7 +23,7 @@ function load_dataframes(gdata::Data; execute::Bool=false, edges::Bool=false)
 			lat[i] = gdata.sources[i].lat
 			lon[i] = gdata.sources[i].lon
 			label[i] = string(gdata.sources[i].label)
-			name[i] = "Source $i"
+			name[i] = "Source $(i)"
 			id[i] = string(gdata.sources[i].label)
 		end
 		df_source = DataFrames.DataFrame(; id=id, label=label, name=name, lat=lat, lon=lon)
@@ -43,7 +43,7 @@ function load_dataframes(gdata::Data; execute::Bool=false, edges::Bool=false)
 			lat[i] = gdata.sinks[i].lat
 			lon[i] = gdata.sinks[i].lon
 			label[i] = string(gdata.sinks[i].label)
-			name[i] = "Sink $i"
+			name[i] = "Sink $(i)"
 			id[i] = string(gdata.sinks[i].label)
 		end
 		df_sink = DataFrames.DataFrame(; id=id, label=label, name=name, lat=lat, lon=lon)
@@ -616,7 +616,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 				push!(traces, PlotlyJS.scattermapbox(;
 					lon = r.lon,
 					lat = r.lat,
-					name = name * " line $i",
+					name = name * " line $(i)",
 					mode = "lines",
 					hoverinfo = "none",
 					showlegend = false,
@@ -636,7 +636,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 				push!(traces, PlotlyJS.scattermapbox(;
 					lon = lon,
 					lat = lat,
-					name = name * " point $i",
+					name = name * " point $(i)",
 					mode = "markers",
 					hoverinfo = "text",
 					text = [r.id],

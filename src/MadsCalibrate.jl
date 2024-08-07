@@ -224,18 +224,18 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 	restart_flag = Mads.getrestart(madsdata)
 	if store_optimization_progress && rootname != ""
 		Mads.recursivemkdir(rootname)
-		if isfile("$rootname.initialresults")
-			rmfile("$rootname.initialresults")
+		if isfile("$(rootname).initialresults")
+			rmfile("$(rootname).initialresults")
 		end
-		if isfile("$rootname.iterationresults")
-			rmfile("$rootname.iterationresults")
+		if isfile("$(rootname).iterationresults")
+			rmfile("$(rootname).iterationresults")
 		end
-		if isfile("$rootname.finalresults")
-			rmfile("$rootname.finalresults")
+		if isfile("$(rootname).finalresults")
+			rmfile("$(rootname).finalresults")
 		end
 		function initialcallback(x_init::AbstractVector, of::Number, lambda::Number)
 			x_init_real = sinetransform(x_init, lowerbounds, upperbounds, indexlogtransformed)
-			outfile = open("$rootname.initialresults", "a+")
+			outfile = open("$(rootname).initialresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
 			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_init_real)), "\n"))
@@ -243,7 +243,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 		end
 		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
-			outfile = open("$rootname.iterationresults", "a+")
+			outfile = open("$(rootname).iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
 			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_best_real)), "\n"))
@@ -260,7 +260,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			if localsa || restart_flag
 				Mads.localsa(madsdata; par=x_best_real, keyword="best")
 			end
-			outfile = open("$rootname.finalresults", "a+")
+			outfile = open("$(rootname).finalresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
 			write(outfile, string("lambda: ", lambda, "\n"))
 			write(outfile, string(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(optparamkeys, x_best_real)), "\n"))

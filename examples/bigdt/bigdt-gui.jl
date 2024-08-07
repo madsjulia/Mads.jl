@@ -12,7 +12,7 @@ function execute_bigdt(input::Dict, waiting, status, resultbox)
 		md = Mads.loadmadsfile(problemdir * filename)
 		nsample = input[:nsample]
 		bigdtresults = Mads.bigdt(md, nsample; maxHorizon=0.8, numlikelihoods=5)
-		Mads.plotrobustnesscurves(md, bigdtresults; filename=joinpath(problemdir, filename * "-robustness-$nsample.svg"))
+		Mads.plotrobustnesscurves(md, bigdtresults; filename=joinpath(problemdir, filename * "_robustness_$(nsample).svg"))
 		push!(waiting, false)
 	end
 end
@@ -43,7 +43,7 @@ function main(window)
 	hbox(
 		map(inp) do dict
 			if haskey(dict, :name)
-				filename = dict[:dir] * dict[:name] * "-robustness-$(dict[:nsample]).svg"
+				filename = dict[:dir] * dict[:name] * "_robustness_$(dict[:nsample]).svg"
 				if isfile(filename)
 					resultbox = Escher.vbox(Escher.plaintext("Robustness curve"), Escher.Elem(:div, innerHTML="$(readall(filename))"))
 				else

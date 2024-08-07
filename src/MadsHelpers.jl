@@ -334,7 +334,7 @@ function addkeyword!(madsdata::AbstractDict, keyword::AbstractString)
 end
 function addkeyword!(madsdata::AbstractDict, class::AbstractString, keyword::AbstractString)
 	if haskeyword(madsdata, class, keyword)
-		madswarn("Keyword `$keyword` already exists")
+		madswarn("Keyword `$(keyword)` already exists")
 		return
 	end
 	if typeof(madsdata[class]) <: AbstractDict

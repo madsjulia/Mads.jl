@@ -3,11 +3,9 @@ import Test
 import JLD2
 
 import Random
-import DataStructures
 import OrderedCollections
 
 Mads.@tryimportmain JLD2
-Mads.@tryimportmain DataStructures
 Mads.@tryimportmain OrderedCollections
 
 Mads.veryquieton()

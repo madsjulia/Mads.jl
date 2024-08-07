@@ -17,20 +17,20 @@ function svrtraining(madsdata::AbstractDict, paramarray::AbstractMatrix{Float64}
 		end
 		if savesvr
 			Mads.mkdir("svrmodels")
-			SVR.savemodel(sm, joinpath("svrmodels", "$r-$i-$numberofsamples.svr"))
+			SVR.savemodel(sm, joinpath("svrmodels", "$r_$(i)_$(numberofsamples).svr"))
 		end
 	end
 	if check
 		rootname = Mads.getmadsrootname(madsdata)
 		Mads.spaghettiplot(madsdata, predictions, keyword="svr-training", format="SVG")
-		Mads.display("$rootname-svr-training-$numberofsamples-spaghetti.svg")
+		Mads.display("$(rootname)_svr_training_$(numberofsamples)_spaghetti.svg")
 		@info("SVR discrepancy $(maximum(abs.(svrpredictions2 .- predictions)))")
 		Mads.spaghettiplot(madsdata, svrpredictions2, keyword="svr-prediction2", format="SVG")
-		Mads.display("$rootname-svr-prediction2-$numberofsamples-spaghetti.svg")
+		Mads.display("$(rootname)_svr_prediction2_$(numberofsamples)_spaghetti.svg")
 		svrpredictions = svrprediction(svrmodel, paramarray)
 		@info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
 		Mads.spaghettiplot(madsdata, svrpredictions, keyword="svr-prediction", format="SVG")
-		Mads.display("$rootname-svr-prediction-$numberofsamples-spaghetti.svg")
+		Mads.display("$(rootname)_svr_prediction_$(numberofsamples)_spaghetti.svg")
 	end
 	return svrmodel
 end
@@ -138,7 +138,7 @@ function svrdump(svrmodel::AbstractVector{SVR.svmmodel}, rootname::AbstractStrin
 	Mads.mkdir("svrmodels")
 	for i=1:npred
 		if isassigned(svrmodel, i)
-			SVR.savemodel(svrmodel[i], joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr"))
+			SVR.savemodel(svrmodel[i], joinpath("svrmodels", "$(rootname)_$(i)_$(numberofsamples).svr"))
 		end
 	end
 	nothing
@@ -159,7 +159,7 @@ Returns:
 function svrload(npred::Integer, rootname::AbstractString, numberofsamples::Integer)
 	svrmodel = Array{SVR.svmmodel}(undef, npred)
 	for i=1:npred
-		filename = joinpath("svrmodels", "$rootname-$i-$numberofsamples.svr")
+		filename = joinpath("svrmodels", "$(rootname)_$(i)_$(numberofsamples).svr")
 		if isfile(filename)
 			svrmodel[i] = SVR.loadmodel(filename)
 		else

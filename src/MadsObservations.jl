@@ -595,7 +595,7 @@ function wellon!(madsdata::AbstractDict, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.madswarn("""Well name $wellname does not match existing well names!""")
+		Mads.madswarn("""Well name $(wellname) does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end
@@ -653,7 +653,7 @@ function welloff!(madsdata::AbstractDict, wellname::AbstractString)
 		end
 	end
 	if error
-		Mads.madswarn("""Well name $wellname does not match existing well names!""")
+		Mads.madswarn("""Well name $(wellname) does not match existing well names!""")
 	else
 		wells2observations!(madsdata)
 	end

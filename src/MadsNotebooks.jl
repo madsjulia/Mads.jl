@@ -102,18 +102,18 @@ $(DocumentFunction.documentfunction(notebook_check;
 	keytext=Dict("notebook_directory"=>"notebook directory")))
 """
 function notebook_check(rootname::AbstractString; notebook_directory=joinpath(Mads.dir, "notebooks"))
-	if isfile("$rootname.ipynb")
-		f = "$rootname.ipynb"
-	elseif isfile(joinpath(notebook_directory, "$rootname.ipynb"))
-		f = joinpath(notebook_directory, "$rootname.ipynb")
-	elseif isfile(joinpath(Mads.dir, "notebooks", notebook_directory, "$rootname.ipynb"))
-		f = joinpath(Mads.dir, "notebooks", notebook_directory, "$rootname.ipynb")
-	elseif isfile(joinpath(Mads.dir, notebook_directory, rootname, "$rootname.ipynb"))
-		f = joinpath(Mads.dir, notebook_directory, rootname, "$rootname.ipynb")
-	elseif isfile(joinpath(Mads.dir, "$rootname.ipynb"))
-		f = joinpath(Mads.dir, "$rootname.ipynb")
+	if isfile("$(rootname).ipynb")
+		f = "$(rootname).ipynb"
+	elseif isfile(joinpath(notebook_directory, "$(rootname).ipynb"))
+		f = joinpath(notebook_directory, "$(rootname).ipynb")
+	elseif isfile(joinpath(Mads.dir, "notebooks", notebook_directory, "$(rootname).ipynb"))
+		f = joinpath(Mads.dir, "notebooks", notebook_directory, "$(rootname).ipynb")
+	elseif isfile(joinpath(Mads.dir, notebook_directory, rootname, "$(rootname).ipynb"))
+		f = joinpath(Mads.dir, notebook_directory, rootname, "$(rootname).ipynb")
+	elseif isfile(joinpath(Mads.dir, "$(rootname).ipynb"))
+		f = joinpath(Mads.dir, "$(rootname).ipynb")
 	else
-		madswarn("Notebook with rootname $rootname is missing (searched directories: ., $(Mads.dir), $(joinpath(Mads.dir, notebook_directory)), $(joinpath(Mads.dir, notebook_directory, rootname)), $(joinpath(Mads.dir, "notebooks", notebook_directory))")
+		madswarn("Notebook with rootname $(rootname) is missing (searched directories: ., $(Mads.dir), $(joinpath(Mads.dir, notebook_directory)), $(joinpath(Mads.dir, notebook_directory, rootname)), $(joinpath(Mads.dir, "notebooks", notebook_directory))")
 		return nothing
 	end
 	return splitdirdot(f)

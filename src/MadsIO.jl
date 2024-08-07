@@ -1522,7 +1522,7 @@ function rmfile(filename::AbstractString; path::AbstractString=".")
 		filename = joinpath(path, filename)
 	end
 	if isfile(filename) || islink(filename)
-		rm(filename)
+		rm(filename; force=true)
 	end
 end
 

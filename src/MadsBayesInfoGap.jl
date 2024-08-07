@@ -133,7 +133,7 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integ
 	local likelihoodparams::Matrix{Float64} = zeros(0, 0)
 	madsinfo("Choices:")
 	for i = eachindex(madsdata["Choices"])
-		madsinfo("Choice #$i: $(madsdata["Choices"][i]["name"])")
+		madsinfo("Choice #$(i): $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
 		if length(likelihoodparams) == 0
 			minlikelihoodparams = bigdt.likelihoodparamsmin(maxHorizon)

@@ -130,7 +130,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 				rectangle[4] = madsdata["Sources"][i][sourcetype]["dy"]["init"]
 				rectangles = vcat(rectangles, rectangle')
 			end
-			push!(dfw, (x, y, "  S$i", "Sources"))
+			push!(dfw, (x, y, "  S$(i)", "Sources"))
 		end
 	end
 	if sizeof(rectangles) > 0
@@ -178,10 +178,10 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 		Gadfly.Theme(highlight_width=0Gadfly.pt, key_position=:none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
-		filename = "$rootname-problemsetup"
+		filename = "$(rootname)-problemsetup"
 	end
 	if keyword != ""
-		filename = "$rootname-$keyword-problemsetup"
+		filename = "$(rootname)_$(keyword)-problemsetup"
 	end
 	if filename != ""
 		plotfileformat(p, filename, hsize, vsize; format=format)
@@ -288,7 +288,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				end
 				npp = length(c)
 				if npp == 0
-					Mads.madswarn("Well $wellname: no observations to plot!")
+					Mads.madswarn("Well $(wellname): no observations to plot!")
 					continue
 				end
 				plot_args = Any[]
@@ -309,11 +309,11 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt), gmk...)
 				if separate_files
 					if filename == ""
-						filename_w = "$rootname-match-$wellname"
+						filename_w = "$(rootname)_match_$(wellname)"
 					else
 						extension = getextension(filename)
-						rootfile = getrootname(filename)
-						filename_w = "$rootfile-$wellname.$extension"
+						rootname = getrootname(filename)
+						filename_w = "$(rootname)_$(wellname).$extension"
 					end
 					plotfileformat(p, filename_w, hsize, vsize; format=format, dpi=dpi)
 					display && Mads.display(p; gw=hsize, gh=vsize)
@@ -368,7 +368,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 	end
 	if !separate_files
 		if filename == "" && rootname != ""
-			filename = "$rootname-match"
+			filename = "$(rootname)_match"
 		end
 		if filename != ""
 			plotfileformat(pl, filename, hsize, vsize; format=format, dpi=dpi)
@@ -509,7 +509,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 		return
 	end
 	if !haskey(madsdata["Wells"], wellname)
-		Mads.madswarn("There is no well with name $wellname in 'Wells' class of the MADS input dataset")
+		Mads.madswarn("There is no well with name $(wellname) in 'Wells' class of the MADS input dataset")
 		return
 	end
 	o = madsdata["Wells"][wellname]["obs"]
@@ -579,7 +579,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	rootname = getmadsrootname(madsdata)
 	method = result["method"]
 	if filename == ""
-		filename = "$rootname-$wellname-$method-$nsample"
+		filename = "$(rootname)_$(wellname)_$(method)_$(nsample)"
 	end
 	plotfileformat(p, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
 	!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
@@ -694,7 +694,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	if filename == ""
 		method = result["method"]
 		rootname = Mads.getmadsrootname(madsdata)
-		filename = keyword != "" ? "$rootname-$method-$keyword-$nsample" : "$rootname-$method-$nsample"
+		filename = keyword != "" ? "$(rootname)_$(method)_$(keyword)_$(nsample)" : "$(rootname)_$(method)_$(nsample)"
 	end
 	DelimitedFiles.writedlm(filename * ".txt", ranking)
 	if !separate_files
@@ -830,7 +830,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 			end
 			pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 		end
-		filename = keyword == "" ? string("$(rootname)-$(paramkey)-$(numberofsamples)-spaghetti") : string("$(rootname)-$(keyword)-$(paramkey)-$(numberofsamples)-spaghetti")
+		filename = keyword == "" ? string("$(rootname)_$(paramkey)_$(numberofsamples)_spaghetti") : string("$(rootname)_$(keyword)_$(paramkey)_$(numberofsamples)_spaghetti")
 		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
 		!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	end
@@ -855,7 +855,7 @@ keytext=Dict("format"=>"output plot format (`png`, `pdf`, etc.) [default=`Mads.g
 
 Dumps:
 
-- A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>-spaghetti.<default_image_extension>`)
+- A series of image files with spaghetti plots for each `selected` (`type != null`) model parameter (`<mads_rootname>-<keyword>-<param_key>-<number_of_samples>_spaghetti.<default_image_extension>`)
 
 Example:
 
@@ -1027,7 +1027,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 	end
 	if filename == "" && rootname != ""
-		filename = keyword == "" ?  "$rootname-$numberofsamples-spaghetti" : "$rootname-$keyword-$numberofsamples-spaghetti"
+		filename = keyword == "" ?  "$(rootname)_$(numberofsamples)_spaghetti" : "$(rootname)_$(keyword)_$(numberofsamples)_spaghetti"
 	end
 	if filename != ""
 		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
@@ -1058,7 +1058,7 @@ keytext=Dict("plotdata"=>"plot data (if `false` model predictions are plotted on
 
 Dumps:
 
-- Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>-spaghetti.<default_image_extension>`)
+- Image file with a spaghetti plot (`<mads_rootname>-<keyword>-<number_of_samples>_spaghetti.<default_image_extension>`)
 
 Example:
 
@@ -1094,7 +1094,7 @@ function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; names
 	m = Matrix(df)
 	plotseriesengine(m, filename; kw...)
 end
-function plotseries(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nS::Integer=size(X, 2), separate_files::Bool=false, normalize::Bool=false, name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], kw...)
+function plotseries(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nS::Integer=size(X, 2), separate_files::Bool=false, normalize::Bool=false, name::AbstractString="Signal", names::Vector{String}=["$name $(i)" for i in 1:nS], kw...)
 	if normalize
 		m = X ./ maximum(m; dims=1)
 	else
@@ -1158,7 +1158,7 @@ Dumps:
 
 - Plots of data series
 """
-function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $i" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, nextgray::Bool=false, lastcolored::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
+function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nT::Integer=size(X, 1), nS::Integer=size(X, 2), format::AbstractString="", xtitle::AbstractString = "", ytitle::AbstractString = "", title::AbstractString="", logx::Bool=false, logy::Bool=false, keytitle::AbstractString="", name::AbstractString="Signal", names::Vector{String}=["$name $(i)" for i in 1:nS], combined::Bool=true, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, linewidth::Measures.AbsoluteLength=2Gadfly.pt, linestyle::Union{Symbol,AbstractVector}=:solid, pointsize::Measures.AbsoluteLength=2Gadfly.pt, key_position::Symbol=:right, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, dpi::Integer=Mads.imagedpi, colors::Vector{String}=Mads.colors, opacity::Number=1.0, xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, xaxis=1:nT, plotline::Bool=true, plotdots::Bool=!plotline, nextgray::Bool=false, lastcolored::Bool=false, code::Bool=false, returnplot::Bool=false, colorkey::Bool=(nS>ncolors) ? false : true, background_color=nothing, gm::Any=[], gl::Any=[], quiet::Bool=!Mads.graphoutput, truth::Bool=false, gall::Bool=false)
 	if nT == 0 || nS == 0
 		@warn "Input is empty $(size(X)); a matrix or a vector is needed!"
 		return
