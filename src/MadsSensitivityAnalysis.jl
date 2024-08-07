@@ -33,7 +33,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 	initparams = Mads.getparamdict(madsdata)
 	function f_sa(arrayparameters::AbstractVector)
 		parameters = copy(initparams)
-		for i = eachindex(arrayparameters)
+		for i in eachindex(arrayparameters)
 			parameters[optparamkeys[i]] = arrayparameters[i]
 		end
 		resultdict = f(parameters)
@@ -54,7 +54,7 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 			dx = lineardx
 		end
 		p = Vector{Float64}[]
-		for i in 1:nP
+		for i = 1:nP
 			a = copy(arrayparameters)
 			a[i] += dx[i]
 			push!(p, a)
@@ -78,14 +78,14 @@ function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bo
 			return nothing
 		end
 		if !center_computed
-			center = fevals[nP+1]
+			center = fevals[nP + 1]
 			if restartdir != ""
 				ReusableFunctions.saveresultfile(restartdir, center, arrayparameters)
 			end
 		end
 		jacobian = Array{Float64}(undef, nO, nP)
-		for j in 1:nO
-			for i in 1:nP
+		for j = 1:nO
+			for i = 1:nP
 				jacobian[j, i] = (fevals[i][j] - center[j]) / dx[i]
 			end
 		end
@@ -107,14 +107,14 @@ Local sensitivity analysis based on eigen analysis of the parameter covariance m
 $(DocumentFunction.documentfunction(localsa;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("sinspace"=>"apply sin transformation [default=`true`]",
-            "keyword"=>"keyword to be added in the filename root",
-            "filename"=>"output file name",
-            "format"=>"output plot format (`png`, `pdf`, etc.)",
-            "datafiles"=>"flag to write data files [default=`true`]",
-            "imagefiles"=>"flag to create image files [default=`Mads.graphoutput`]",
-            "par"=>"parameter set",
-            "obs"=>"observations for the parameter set",
-            "J"=>"Jacobian matrix")))
+			"keyword"=>"keyword to be added in the filename root",
+			"filename"=>"output file name",
+			"format"=>"output plot format (`png`, `pdf`, etc.)",
+			"datafiles"=>"flag to write data files [default=`true`]",
+			"imagefiles"=>"flag to create image files [default=`Mads.graphoutput`]",
+			"par"=>"parameter set",
+			"obs"=>"observations for the parameter set",
+			"J"=>"Jacobian matrix")))
 
 Dumps:
 
@@ -165,9 +165,9 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 			sinparam = asinetransform(param, lowerbounds, upperbounds, indexlogtransformed)
 			sindx = Mads.getsindx(madsdata)
 			g_sa_sin = Mads.sinetransformgradient(g_sa, lowerbounds, upperbounds, indexlogtransformed; sindx=sindx)
-			J = g_sa_sin(sinparam, center=obs)
+			J = g_sa_sin(sinparam; center=obs)
 		else
-			J = g_sa(param, center=obs)
+			J = g_sa(param; center=obs)
 		end
 	end
 	if isnothing(J)
@@ -196,18 +196,15 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	datafiles && DelimitedFiles.writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 	if imagefiles
-		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(labels = i->plotlabels[i]), Gadfly.Scale.y_discrete(labels = i->obskeys[i]),
-					Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
+		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(; labels=i -> plotlabels[i]), Gadfly.Scale.y_discrete(; labels=i -> obskeys[i]), Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")); minvalue=-mscale, maxvalue=mscale))
 		filename = "$(rootname)-jacobian" * ext
-		plotfileformat(jacmat, filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO; format=format, dpi=imagedpi)
+		plotfileformat(jacmat, filename, 3Gadfly.inch + 0.25Gadfly.inch * nP, 3Gadfly.inch + 0.25Gadfly.inch * nO; format=format, dpi=imagedpi)
 		madsinfo("Jacobian matrix plot saved in $filename")
 	end
 	if sum(bad_params) == 0
 		JpJ = J' * J
 	else
-		JpJ = J[:,.!bad_params]' * J[:,.!bad_params]
+		JpJ = J[:, .!bad_params]' * J[:, .!bad_params]
 	end
 	local covar
 	try
@@ -230,7 +227,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	if datafiles
 		DelimitedFiles.writedlm("$(rootname)-covariance.dat", covar)
 		f = open("$(rootname)-stddev.dat", "w")
-		for i in 1:nP
+		for i = 1:nP
 			write(f, "$(string(paramkeys[i])) $(param[i]) $(stddev_full[i])\n")
 		end
 		close(f)
@@ -243,43 +240,37 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	eigenv = abs.(eigenv)
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
-	sortedeigenm = real(eigenm[:,index])
+	sortedeigenm = real(eigenm[:, index])
 	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenmatrix.dat", [paramkeys[.!bad_params] sortedeigenm])
 	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
 	if imagefiles
-		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(labels = i->plotlabels[.!bad_params][i]), Gadfly.Scale.x_discrete,
-					Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"),
-					Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
+		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(; labels=i -> plotlabels[.!bad_params][i]), Gadfly.Scale.x_discrete, Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
 		# eigenval = plot(x=eachindex(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenmatrix" * ext
-		plotfileformat(eigenmat, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP; format=format, dpi=imagedpi)
+		plotfileformat(eigenmat, filename, 4Gadfly.inch + 0.25Gadfly.inch * nP, 4Gadfly.inch + 0.25Gadfly.inch * nP; format=format, dpi=imagedpi)
 		madsinfo("Eigen matrix plot saved in $filename")
-		eigenval = Gadfly.plot(x=eachindex(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10,
-					Gadfly.Geom.line(),
-					Gadfly.Theme(line_width=4Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
-					Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
+		eigenval = Gadfly.plot(; x=eachindex(sortedeigenv), y=sortedeigenv, Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10, Gadfly.Geom.line(), Gadfly.Theme(; line_width=4Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
 		filename = "$(rootname)-eigenvalues" * ext
-		plotfileformat(eigenval, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch; format=format, dpi=imagedpi)
+		plotfileformat(eigenval, filename, 4Gadfly.inch + 0.25Gadfly.inch * nP, 4Gadfly.inch; format=format, dpi=imagedpi)
 		madsinfo("Eigen values plot saved in $filename")
 	end
-	Dict("of"=>ofval, "jacobian"=>J, "covar"=>covar, "stddev"=>stddev_full, "eigenmatrix"=>sortedeigenm, "eigenvalues"=>sortedeigenv)
+	Dict("of" => ofval, "jacobian" => J, "covar" => covar, "stddev" => stddev_full, "eigenmatrix" => sortedeigenm, "eigenvalues" => sortedeigenv)
 end
 
 """
 $(DocumentFunction.documentfunction(sampling;
 argtext=Dict("param"=>"Parameter vector",
-            "J"=>"Jacobian matrix",
-            "numsamples"=>"Number of samples"),
+			"J"=>"Jacobian matrix",
+			"numsamples"=>"Number of samples"),
 keytext=Dict("seed"=>"random esee [default=`0`]",
-             "scale"=>"data scaling [default=`1`]")))
+			 "scale"=>"data scaling [default=`1`]")))
 
 Returns:
 
 - generated samples (vector or array)
 - vector of log-likelihoods
 """
-function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, scale::Number=1)
+function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, scale::Number=1)
 	u, d, v = LinearAlgebra.svd(J' * J)
 	done = false
 	vo = copy(v)
@@ -306,7 +297,7 @@ function sampling(param::AbstractVector, J::AbstractArray, numsamples::Number; s
 	madsinfo("Reduction in sampling directions ... (from $(numdirections) to $(numgooddirections))")
 	Mads.setseed(seed; rng=rng)
 	gooddsamples = Distributions.rand(Mads.rng, dist, numsamples)
-	llhoods = map(i->Distributions.loglikelihood(dist, gooddsamples[:, i:i]), 1:numsamples)
+	llhoods = map(i -> Distributions.loglikelihood(dist, gooddsamples[:, i:i]), 1:numsamples)
 	if numdirections > numgooddirections
 		samples = gooddirections * gooddsamples
 	else
@@ -323,8 +314,8 @@ Reweigh samples using importance sampling -- returns a vector of log-likelihoods
 
 $(DocumentFunction.documentfunction(reweighsamples;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "predictions"=>"the model predictions for each of the samples",
-            "oldllhoods"=>"the log likelihoods of the parameters in the old distribution")))
+			"predictions"=>"the model predictions for each of the samples",
+			"oldllhoods"=>"the log likelihoods of the parameters in the old distribution")))
 
 Returns:
 
@@ -338,7 +329,7 @@ function reweighsamples(madsdata::AbstractDict, predictions::AbstractArray, oldl
 	j = 1
 	for okey in obskeys
 		if haskey(madsdata["Observations"][okey], "weight")
-			newllhoods -= .5 * (weights[j] * (predictions[j, :] .- targets[j])) .^ 2
+			newllhoods -= 0.5 * (weights[j] * (predictions[j, :] .- targets[j])) .^ 2
 		end
 		j += 1
 	end
@@ -350,24 +341,24 @@ Get important samples
 
 $(DocumentFunction.documentfunction(getimportantsamples;
 argtext=Dict("samples"=>"array of samples",
-            "llhoods"=>"vector of log-likelihoods")))
+			"llhoods"=>"vector of log-likelihoods")))
 
 Returns:
 
 - array of important samples
 """
 function getimportantsamples(samples::AbstractArray, llhoods::AbstractVector)
-	sortedlhoods = sort(exp.(llhoods), rev=true)
+	sortedlhoods = sort(exp.(llhoods); rev=true)
 	sortedprobs = sortedlhoods / sum(sortedlhoods)
-	cumprob = 0.
+	cumprob = 0.0
 	i = 1
-	while cumprob < .95
+	while cumprob < 0.95
 		cumprob += sortedprobs[i]
 		i += 1
 	end
 	thresholdllhood = log(sortedlhoods[i - 1])
 	imp_samples = Array{Float64}(undef, size(samples, 2), 0)
-	for i = eachindex(llhoods)
+	for i in eachindex(llhoods)
 		if llhoods[i] > thresholdllhood
 			imp_samples = hcat(imp_samples, vec(samples[i, :]))
 		end
@@ -380,7 +371,7 @@ Get weighted mean and variance samples
 
 $(DocumentFunction.documentfunction(weightedstats;
 argtext=Dict("samples"=>"array of samples",
-            "llhoods"=>"vector of log-likelihoods")))
+			"llhoods"=>"vector of log-likelihoods")))
 
 Returns:
 
@@ -392,7 +383,7 @@ function weightedstats(samples::AbstractArray, llhoods::AbstractVector)
 	return Statistics.mean(samples, wv, 1), Statistics.var(samples, wv, 1; corrected=false)
 end
 
-function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::Union{Symbol,AbstractString}=""; init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameterkey::Union{Symbol, AbstractString}=""; init_dist::Bool=false)
 	if parameterkey != ""
 		return getparamrandom(madsdata, parameterkey; numsamples=numsamples, init_dist=init_dist)
 	else
@@ -409,7 +400,7 @@ function getparamrandom(madsdata::AbstractDict, numsamples::Integer=1, parameter
 		return sample
 	end
 end
-function getparamrandom(madsdata::AbstractDict, parameterkey::Union{Symbol,AbstractString}; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
+function getparamrandom(madsdata::AbstractDict, parameterkey::Union{Symbol, AbstractString}; numsamples::Integer=1, paramdist::AbstractDict=Dict(), init_dist::Bool=false)
 	if haskey(madsdata, "Parameters") && haskey(madsdata["Parameters"], parameterkey)
 		if length(paramdist) == 0
 			paramdist = getparamdistributions(madsdata; init_dist=init_dist)
@@ -419,10 +410,10 @@ function getparamrandom(madsdata::AbstractDict, parameterkey::Union{Symbol,Abstr
 			if typeof(dist) <: Distributions.Uniform
 				a = log10(dist.a)
 				b = log10(dist.b)
-				return 10. .^(a .+ (b .- a) .* Distributions.rand(Mads.rng, numsamples))
+				return 10.0 .^ (a .+ (b .- a) .* Distributions.rand(Mads.rng, numsamples))
 			elseif typeof(dist) <: Distributions.Normal
 				μ = log10(dist.μ)
-				return 10. .^(μ .+ dist.σ .* Distributions.randn(Mads.rng, numsamples))
+				return 10.0 .^ (μ .+ dist.σ .* Distributions.randn(Mads.rng, numsamples))
 			end
 		end
 		return Distributions.rand(Mads.rng, paramdist[parameterkey], numsamples)
@@ -435,11 +426,11 @@ Get independent sampling of model parameters defined in the MADS problem diction
 
 $(DocumentFunction.documentfunction(getparamrandom;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameterkey"=>"model parameter key",
-            "numsamples"=>"number of samples,  [default=`1`]"),
+			"parameterkey"=>"model parameter key",
+			"numsamples"=>"number of samples,  [default=`1`]"),
 keytext=Dict("init_dist"=>"if `true` use the distribution set for initialization in the MADS problem dictionary (defined using `init_dist` parameter field); if `false` (default) use the regular distribution set in the MADS problem dictionary (defined using `dist` parameter field)",
-            "numsamples"=>"number of samples",
-            "paramdist"=>"dictionary of parameter distributions")))
+			"numsamples"=>"number of samples",
+			"paramdist"=>"dictionary of parameter distributions")))
 
 Returns:
 
@@ -452,12 +443,12 @@ Saltelli sensitivity analysis (brute force)
 $(DocumentFunction.documentfunction(saltellibrute;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`1000`]",
-            "seed"=>"random seed [default=`0`]",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
+			"seed"=>"random seed [default=`0`]",
+			"restartdir"=>"directory where files will be stored containing model results for fast simulation restarts")))
 """
-function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
+function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restartdir::AbstractString="") # TODO Saltelli (brute force) does not seem to work; not sure
 	Mads.setseed(seed; rng=rng)
-	numsamples = round(Int,sqrt(N))
+	numsamples = round(Int, sqrt(N))
 	numoneparamsamples = numsamples
 	nummanyparamsamples = numsamples
 	# convert the distribution strings into actual distributions
@@ -468,93 +459,93 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 	results = Array{OrderedCollections.OrderedDict}(undef, numsamples)
 	paramdict = Mads.getparamdict(madsdata)
 	for i = 1:numsamples
-		for j = eachindex(paramkeys)
+		for j in eachindex(paramkeys)
 			paramdict[paramkeys[j]] = Distributions.rand(Mads.rng, distributions[paramkeys[j]]) # TODO use parametersample
 		end
 		results[i] = f(paramdict) # this got to be slow to process
 	end
 	obskeys = getobskeys(madsdata)
-	sum = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-	for i = eachindex(obskeys)
-		sum[obskeys[i]] = 0.
+	sum = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+	for i in eachindex(obskeys)
+		sum[obskeys[i]] = 0.0
 	end
 	for j = 1:numsamples
-		for i = eachindex(obskeys)
+		for i in eachindex(obskeys)
 			sum[obskeys[i]] += results[j][obskeys[i]]
 		end
 	end
-	mean = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-	for i = eachindex(obskeys)
+	mean = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+	for i in eachindex(obskeys)
 		mean[obskeys[i]] = sum[obskeys[i]] / numsamples
 	end
-	for i = eachindex(paramkeys)
-		sum[paramkeys[i]] = 0.
+	for i in eachindex(paramkeys)
+		sum[paramkeys[i]] = 0.0
 	end
 	for j = 1:numsamples
-		for i = eachindex(obskeys)
-			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]]) ^ 2
+		for i in eachindex(obskeys)
+			sum[obskeys[i]] += (results[j][obskeys[i]] - mean[obskeys[i]])^2
 		end
 	end
-	variance = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-	for i = eachindex(obskeys)
+	variance = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+	for i in eachindex(obskeys)
 		variance[obskeys[i]] = sum[obskeys[i]] / (numsamples - 1)
 	end
 	madsinfo("Compute the main effect (first order) sensitivities (indices)")
-	mes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for k = eachindex(obskeys)
-		mes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	for k in eachindex(obskeys)
+		mes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
 	end
-	for i = eachindex(paramkeys)
+	for i in eachindex(paramkeys)
 		madsinfo("Parameter : $(string(paramkeys[i]))")
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, numoneparamsamples)
-		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:numoneparamsamples
+		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:numoneparamsamples
 			cond_means[j] = OrderedCollections.OrderedDict()
-			for k = eachindex(obskeys)
-				cond_means[j][obskeys[k]] = 0.
+			for k in eachindex(obskeys)
+				cond_means[j][obskeys[k]] = 0.0
 			end
 			paramdict[paramkeys[i]] = Distributions.rand(Mads.rng, distributions[paramkeys[i]]) # TODO use parametersample
 			for k = 1:nummanyparamsamples
-				for m = eachindex(paramkeys)
+				for m in eachindex(paramkeys)
 					if m != i
 						paramdict[paramkeys[m]] = Distributions.rand(Mads.rng, distributions[paramkeys[m]]) # TODO use parametersample
 					end
 				end
 				results = f(paramdict)
-				for k = eachindex(obskeys)
+				for k in eachindex(obskeys)
 					cond_means[j][obskeys[k]] += results[obskeys[k]]
 				end
 			end
-			for k = eachindex(obskeys)
+			for k in eachindex(obskeys)
 				cond_means[j][obskeys[k]] /= nummanyparamsamples
 			end
 		end
 		v = Array{Float64}(undef, numoneparamsamples)
-		for k = eachindex(obskeys)
+		for k in eachindex(obskeys)
 			for j = 1:numoneparamsamples
 				v[j] = cond_means[j][obskeys[k]]
 			end
-			mes[obskeys[k]][paramkeys[i]] = Statistics.std(v) ^ 2 / variance[obskeys[k]]
+			mes[obskeys[k]][paramkeys[i]] = Statistics.std(v)^2 / variance[obskeys[k]]
 		end
 	end
 	madsinfo("Compute the total effect sensitivities (indices)") # TODO we should use the same samples for total and main effect
-	tes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	var = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for k = eachindex(obskeys)
-		tes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-		var[obskeys[k]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	var = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	for k in eachindex(obskeys)
+		tes[obskeys[k]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+		var[obskeys[k]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
 	end
-	for i = eachindex(paramkeys)
+	for i in eachindex(paramkeys)
 		madsinfo("Parameter : $(string(paramkeys[i]))")
 		cond_vars = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
 		cond_means = Array{OrderedCollections.OrderedDict}(undef, nummanyparamsamples)
-		@ProgressMeter.showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
-			cond_vars[j] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-			cond_means[j] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-			for m = eachindex(obskeys)
-				cond_means[j][obskeys[m]] = 0.
-				cond_vars[j][obskeys[m]] = 0.
+		ProgressMeter.@showprogress 1 "Computing ... " for j = 1:nummanyparamsamples
+			cond_vars[j] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+			cond_means[j] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+			for m in eachindex(obskeys)
+				cond_means[j][obskeys[m]] = 0.0
+				cond_vars[j][obskeys[m]] = 0.0
 			end
-			for m = eachindex(paramkeys)
+			for m in eachindex(paramkeys)
 				if m != i
 					paramdict[paramkeys[m]] = Distributions.rand(Mads.rng, distributions[paramkeys[m]]) # TODO use parametersample
 				end
@@ -563,24 +554,24 @@ function saltellibrute(madsdata::AbstractDict; N::Integer=1000, seed::Integer=-1
 			for k = 1:numoneparamsamples
 				paramdict[paramkeys[i]] = Distributions.rand(Mads.rng, distributions[paramkeys[i]]) # TODO use parametersample
 				results[k] = f(paramdict)
-				for m = eachindex(obskeys)
+				for m in eachindex(obskeys)
 					cond_means[j][obskeys[m]] += results[k][obskeys[m]]
 				end
 			end
-			for m = eachindex(obskeys)
+			for m in eachindex(obskeys)
 				cond_means[j][obskeys[m]] /= numoneparamsamples
 			end
 			for k = 1:numoneparamsamples
-				for m = eachindex(obskeys)
-					cond_vars[j][obskeys[m]] += (results[k][obskeys[m]] - cond_means[j][obskeys[m]]) ^ 2
+				for m in eachindex(obskeys)
+					cond_vars[j][obskeys[m]] += (results[k][obskeys[m]] - cond_means[j][obskeys[m]])^2
 				end
 			end
-			for m = eachindex(obskeys)
+			for m in eachindex(obskeys)
 				cond_vars[j][obskeys[m]] /= numoneparamsamples - 1
 			end
 		end
-		for j = eachindex(obskeys)
-			runningsum = 0.
+		for j in eachindex(obskeys)
+			runningsum = 0.0
 			for m = 1:nummanyparamsamples
 				runningsum += cond_vars[m][obskeys[j]]
 			end
@@ -638,12 +629,12 @@ Saltelli sensitivity analysis
 $(DocumentFunction.documentfunction(saltelli;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
-            "seed"=>"random seed [default=`0`]",
-            "restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
-            "parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
-            "checkpointfrequency"=>"check point frequency [default=`N`]")))
+			"seed"=>"random seed [default=`0`]",
+			"restartdir"=>"directory where files will be stored containing model results for fast simulation restarts",
+			"parallel"=>"set to true if the model runs should be performed in parallel [default=`false`]",
+			"checkpointfrequency"=>"check point frequency [default=`N`]")))
 """
-function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=true)
+function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restart::Bool=false, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=true)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
 		filename = "$(rootname)-saltelli-$(N).jld2"
@@ -655,13 +646,13 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		end
 	end
 	Mads.setseed(seed; rng=rng)
-	madsoutput("Number of samples: $N\n");
+	madsoutput("Number of samples: $N\n")
 	paramallkeys = Mads.getparamkeys(madsdata)
-	paramalldict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
+	paramalldict = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramallkeys, Mads.getparamsinit(madsdata)))
 	paramoptkeys = Mads.getoptparamkeys(madsdata)
 	nP = length(paramoptkeys)
-	madsoutput("Number of model paramters to be analyzed: $(nP) \n");
-	madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n");
+	madsoutput("Number of model paramters to be analyzed: $(nP) \n")
+	madsoutput("Number of model evaluations to be perforemed: $(N * 2 + N * nP) \n")
 	obskeys = Mads.getobskeys(madsdata)
 	nO = length(obskeys)
 	distributions = Mads.getparamdistributions(madsdata)
@@ -669,13 +660,13 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	A = Array{Float64}(undef, N, 0)
 	B = Array{Float64}(undef, N, 0)
 	C = Array{Float64}(undef, N, nP)
-	variance = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}() # variance
-	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}() # main effect (first order) sensitivities
-	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}}()	# total effect sensitivities
+	variance = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}}() # variance
+	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}}() # main effect (first order) sensitivities
+	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}}()# total effect sensitivities
 	for i = 1:nO
-		variance[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-		mes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-		tes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+		variance[obskeys[i]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+		mes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+		tes[obskeys[i]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
 	end
 	for key in paramoptkeys
 		delete!(paramalldict, key)
@@ -686,68 +677,67 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		A = [A s1]
 		B = [B s2]
 	end
-	madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample A ...\n" );
+	madsoutput("Computing model outputs to calculate total output mean and variance ... Sample A ...\n")
 	function farray(Ai)
-		feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, Ai))))
+		feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, Ai))))
 		result = Array{Float64}(undef, length(obskeys))
-		for i = eachindex(obskeys)
+		for i in eachindex(obskeys)
 			result[i] = feval[obskeys[i]]
 		end
 		return result
 	end
 	yA = Array{Float64}(undef, N, length(obskeys))
-	if restartdir == ""
+	if restart && restartdir == ""
 		restartdir = getrestartdir(madsdata)
 	end
-	flagrestart = restartdir != ""
 	if parallel
 		Avecs = Array{Vector{Float64}}(undef, size(A, 1))
 		for i = 1:N
 			Avecs[i] = vec(A[i, :])
 		end
-		if flagrestart
+		if restart
 			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yA"), Avecs; t=Vector{Float64})
 		else
 			pmapresult = RobustPmap.rpmap(farray, Avecs; t=Vector{Float64})
 		end
 		for i = 1:N
-			for j = eachindex(obskeys)
+			for j in eachindex(obskeys)
 				yA[i, j] = pmapresult[i][j]
 			end
 		end
 	else
 		if !loadsaltellirestart!(yA, "yA", restartdir)
-			@ProgressMeter.showprogress 1 "Executing Saltelli Sensitivity Analysis ... Sample A ..." for i = 1:N
-				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, A[i, :]))))
-				for j = eachindex(obskeys)
+			ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... Sample A ..." for i = 1:N
+				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, A[i, :]))))
+				for j in eachindex(obskeys)
 					yA[i, j] = feval[obskeys[j]]
 				end
 			end
 			savesaltellirestart(yA, "yA", restartdir)
 		end
 	end
-	madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample B ...\n" );
+	madsoutput("Computing model outputs to calculate total output mean and variance ... Sample B ...\n")
 	yB = Array{Float64}(undef, N, length(obskeys))
 	if parallel
 		Bvecs = Array{Vector{Float64}}(undef, size(B, 1))
 		for i = 1:N
 			Bvecs[i] = vec(B[i, :])
 		end
-		if flagrestart
+		if restart
 			pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yB"), Bvecs; t=Vector{Float64})
 		else
 			pmapresult = RobustPmap.rpmap(farray, Bvecs; t=Vector{Float64})
 		end
 		for i = 1:N
-			for j = eachindex(obskeys)
+			for j in eachindex(obskeys)
 				yB[i, j] = pmapresult[i][j]
 			end
 		end
 	else
 		if !loadsaltellirestart!(yB, "yB", restartdir)
-			@ProgressMeter.showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for i = 1:N
-				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, B[i, :]))))
-				for j = eachindex(obskeys)
+			ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for i = 1:N
+				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, B[i, :]))))
+				for j in eachindex(obskeys)
 					yB[i, j] = feval[obskeys[j]]
 				end
 			end
@@ -764,28 +754,28 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 				end
 			end
 		end
-		madsoutput( "Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(string(paramoptkeys[i]))\n" );
+		madsoutput("Computing model outputs to calculate total output mean and variance ... Sample C ... Parameter $(string(paramoptkeys[i]))\n")
 		yC = Array{Float64}(undef, N, length(obskeys))
 		if parallel
 			Cvecs = Array{Vector{Float64}}(undef, size(C, 1))
 			for j = 1:N
 				Cvecs[j] = vec(C[j, :])
 			end
-			if flagrestart
+			if restart
 				pmapresult = RobustPmap.crpmap(farray, checkpointfrequency, joinpath(restartdir, "yC$i"), Cvecs; t=Vector{Float64})
 			else
 				pmapresult = RobustPmap.rpmap(farray, Cvecs; t=Vector{Float64})
 			end
 			for j = 1:N
-				for k = eachindex(obskeys)
+				for k in eachindex(obskeys)
 					yC[j, k] = pmapresult[j][k]
 				end
 			end
 		else
 			if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
-				@ProgressMeter.showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for j = 1:N
-					feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramoptkeys, C[j, :]))))
-					for k = eachindex(obskeys)
+				ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for j = 1:N
+					feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, C[j, :]))))
+					for k in eachindex(obskeys)
 						yC[j, k] = feval[obskeys[k]]
 					end
 				end
@@ -794,11 +784,11 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		end
 		maxnnans = 0
 		for j = 1:nO
-			yAnonan = isnan.(yA[:,j])
-			yBnonan = isnan.(yB[:,j])
-			yCnonan = isnan.(yC[:,j])
-			nonan = ( yAnonan .+ yBnonan .+ yCnonan ) .== 0
-			yT = vcat( yA[nonan,j], yB[nonan,j] ) # this should not include C
+			yAnonan = isnan.(yA[:, j])
+			yBnonan = isnan.(yB[:, j])
+			yCnonan = isnan.(yC[:, j])
+			nonan = (yAnonan .+ yBnonan .+ yCnonan) .== 0
+			yT = vcat(yA[nonan, j], yB[nonan, j]) # this should not include C
 			nanindices = findall(map(~, nonan))
 			# println("$nanindices")
 			nnans = length(nanindices)
@@ -815,24 +805,24 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 			# varA = Statistics.var( yA[nonan,j] ) # this is faster
 			# varB = abs( ( LinearAlgebra.dot( yB[nonan,j], yB[nonan,j] ) - f0B^2 * nnonnans ) / ( nnonnans - 1 ) )
 			# varB = Statistics.var( yB[nonan,j] ) # this is faster
-			varC = Statistics.var(yC[nonan,j])
+			varC = Statistics.var(yC[nonan, j])
 			# varP = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) / nnonnans - f0B * f0C ) ) # Orignial
 			# varP2 = abs( ( LinearAlgebra.dot( yB[nonan, j], yC[nonan, j] ) - f0B * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
-			varP3 = abs( Statistics.mean( yB[nonan,j] .* ( yC[nonan, j] - yA[nonan,j] ) ) ) # Recommended
+			varP3 = abs(Statistics.mean(yB[nonan, j] .* (yC[nonan, j] - yA[nonan, j]))) # Recommended
 			# varP4 = Statistics.mean( ( yB[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Mads.c; very different from all the other estimates
 			# println("varP $varP varP2 $varP2 varP3 $varP3 varP4 $varP4")
 			# varPnot = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) / nnonnans - f0A * f0C ) ) # Orignial
 			# varPnot2 = abs( ( LinearAlgebra.dot( yA[nonan, j], yC[nonan, j] ) - f0A * f0C * nnonnans ) / ( nnonnans - 1 ) ) # Imporved
 			# varPnot3 = Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2 # Recommended; also used in Mads.c
-			expPnot =  Statistics.mean( ( yA[nonan,j] - yC[nonan, j] ).^2 ) / 2
+			expPnot = Statistics.mean((yA[nonan, j] - yC[nonan, j]) .^ 2) / 2
 			# println("varPnot $varPnot varPnot2 $varPnot2 varPnot3 $varPnot3")
 			variance[obskeys[j]][paramoptkeys[i]] = varC
-# 			if varA < eps(Float64) && varP < eps(Float64)
-# 				tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
-# 			else
-# 				mes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, varP / varA ) ) # varT or varA? i think it should be varA
-# 				tes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, 1 - varPnot / varB) ) # varT or varA; i think it should be varA; i do not think should be varB?
-# 			end
+			# 			if varA < eps(Float64) && varP < eps(Float64)
+			# 				tes[obskeys[j]][paramoptkeys[i]] = mes[obskeys[j]][paramoptkeys[i]] = NaN
+			# 			else
+			# 				mes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, varP / varA ) ) # varT or varA? i think it should be varA
+			# 				tes[obskeys[j]][paramoptkeys[i]] = min( 1, max( 0, 1 - varPnot / varB) ) # varT or varA; i think it should be varA; i do not think should be varB?
+			# 			end
 			# mes[obskeys[j]][paramoptkeys[i]] = varP / varT
 			# tes[obskeys[j]][paramoptkeys[i]] = 1 - varPnot / varT
 			# varianceA[obskeys[j]][paramoptkeys[i]] = varT
@@ -867,7 +857,7 @@ Compute sensitivities for each model parameter; averaging the sensitivity indice
 
 $(DocumentFunction.documentfunction(computeparametersensitities;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "saresults"=>"dictionary with sensitivity analysis results")))
+			"saresults"=>"dictionary with sensitivity analysis results")))
 """
 function computeparametersensitities(madsdata::AbstractDict, saresults::AbstractDict)
 	paramkeys = getoptparamkeys(madsdata)
@@ -875,12 +865,12 @@ function computeparametersensitities(madsdata::AbstractDict, saresults::Abstract
 	mes = saresults["mes"]
 	tes = saresults["tes"]
 	var = saresults["var"]
-	pvar = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter variance
-	pmes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter main effect (first order) sensitivities
-	ptes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter total effect sensitivities
-	for i = eachindex(paramkeys)
+	pvar = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}() # parameter variance
+	pmes = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}() # parameter main effect (first order) sensitivities
+	ptes = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}() # parameter total effect sensitivities
+	for i in eachindex(paramkeys)
 		pv = pm = pt = 0
-		for j = eachindex(obskeys)
+		for j in eachindex(obskeys)
 			m = isnothing(saresults["mes"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["mes"][obskeys[j]][paramkeys[i]]
 			t = isnothing(saresults["tes"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["tes"][obskeys[j]][paramkeys[i]]
 			v = isnothing(saresults["var"][obskeys[j]][paramkeys[i]]) ? 0 : saresults["var"][obskeys[j]][paramkeys[i]]
@@ -898,19 +888,19 @@ end
 # Parallelization of Saltelli functions
 saltelli_functions = ["saltelli", "saltellibrute"]
 global index = 0
-for mi = eachindex(saltelli_functions)
+for mi in eachindex(saltelli_functions)
 	global index = mi
 	q = quote
 		"""
 		Parallel version of $(saltelli_functions[index])
 		"""
-		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, restartdir::AbstractString="")
+		function $(Symbol(string(saltelli_functions[index], "parallel")))(madsdata::AbstractDict, numsaltellis::Integer; N::Integer=100, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restartdir::AbstractString="")
 			Mads.setseed(seed; rng=rng)
 			if numsaltellis < 1
 				madserror("Number of parallel sensitivity runs must be > 0 ($numsaltellis < 1)")
 				return
 			end
-			results = RobustPmap.rpmap(i->$(Symbol(saltelli_functions[index]))(madsdata; N=N, seed=seed+i, restartdir=restartdir), 1:numsaltellis)
+			results = RobustPmap.rpmap(i -> $(Symbol(saltelli_functions[index]))(madsdata; N=N, seed=seed + i, restartdir=restartdir), 1:numsaltellis)
 			mesall = results[1]["mes"]
 			tesall = results[1]["tes"]
 			varall = results[1]["var"]
@@ -935,7 +925,7 @@ for mi = eachindex(saltelli_functions)
 					varall[obskey][paramkey] /= numsaltellis
 				end
 			end
-			Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[index])*"_parallel")
+			Dict("mes" => mesall, "tes" => tesall, "var" => varall, "samplesize" => N * numsaltellis, "seed" => seed, "method" => $(saltelli_functions[index]) * "_parallel")
 		end # end function
 	end # end quote
 	Core.eval(Mads, q)
@@ -946,7 +936,7 @@ Print sensitivity analysis results
 
 $(DocumentFunction.documentfunction(printSAresults;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "results"=>"dictionary with sensitivity analysis results")))
+			"results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	mes = results["mes"]
@@ -1027,7 +1017,7 @@ Print sensitivity analysis results (method 2)
 
 $(DocumentFunction.documentfunction(printSAresults2;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "results"=>"dictionary with sensitivity analysis results")))
+			"results"=>"dictionary with sensitivity analysis results")))
 """
 function printSAresults2(madsdata::AbstractDict, results::AbstractDict)
 	mes = results["mes"]
@@ -1076,7 +1066,7 @@ function void2nan!(dict::AbstractDict) # TODO generalize using while loop and re
 					dict[i][j] = NaN
 				end
 				if typeof(dict[i][j]) <: AbstractDict
-					for k = keys(dict[i][j])
+					for k in keys(dict[i][j])
 						if isnothing(dict[i][j][k])
 							dict[i][j][k] = NaN
 						end
@@ -1094,7 +1084,7 @@ $(DocumentFunction.documentfunction(deleteNaN!;
 argtext=Dict("df"=>"dataframe")))
 """
 function deleteNaN!(df::DataFrames.DataFrame)
-	for i in 1:size(df, 2)
+	for i = 1:size(df, 2)
 		if typeof(df[!, i][1]) <: Number
 			delete!(df, findall(isnan.(df[!, i][:])))
 			if size(df, 1) == 0
@@ -1112,9 +1102,9 @@ argtext=Dict("df"=>"dataframe")))
 """
 function maxtofloatmax!(df::DataFrames.DataFrame)
 	limit = floatmax(Float32)
-	for i in 1:size(df, 2)
+	for i = 1:size(df, 2)
 		if typeof(df[!, i][1]) <: Number
-			for j = eachindex(df[!, i])
+			for j in eachindex(df[!, i])
 				if df[!, i][j] > limit
 					df[!, i][j] = limit
 				end
@@ -1129,14 +1119,14 @@ Sensitivity analysis using Saltelli's extended Fourier Amplitude Sensitivity Tes
 $(DocumentFunction.documentfunction(efast;
 argtext=Dict("md"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
-            "M"=>"maximum number of harmonics [default=`6`]",
-            "gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
-            "seed"=>"random seed [default=`0`]",
-            "checkpointfrequency"=>"check point frequency [default=`N`]",
-            "restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
-            "restart"=>"save restart information [default=`false`]")))
+			"M"=>"maximum number of harmonics [default=`6`]",
+			"gamma"=>"multiplication factor (Saltelli 1999 recommends gamma = 2 or 4) [default=`4`]",
+			"seed"=>"random seed [default=`0`]",
+			"checkpointfrequency"=>"check point frequency [default=`N`]",
+			"restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
+			"restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=false, robustpmap::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=false, robustpmap::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1196,17 +1186,17 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if Wi <= nprime - 1 # CASE 1: Very small Wcmax (W_comp is all ones)
 			W_comp = ones(1, nprime - 1)
 		elseif Wcmax < nprime - 1 # CASE 2: Wcmax < nprime - 1
-			step   = 1
-			loops  = ceil((nprime - 1) / Wcmax) #loops rounded up
+			step = 1
+			loops = ceil((nprime - 1) / Wcmax) #loops rounded up
 			# W_comp has a step size of 1, might need to repeat W_comp frequencies to avoid going over Wcmax
 			W_comp = []
 			for i = 1:loops
 				W_comp = [W_comp; collect(1:step:Wcmax)]
 			end
 			W_comp = W_comp[1:(nprime - 1)] # Reducing W_comp to a vector of size nprime
-		elseif Wcmax >= nprime-1 # CASE 3: wcmax >= nprime -1 Most typical case
-			step   = round(Wcmax / (nprime - 1))
-			W_comp = 1 : step : step * (nprime - 1)
+		elseif Wcmax >= nprime - 1 # CASE 3: wcmax >= nprime -1 Most typical case
+			step = round(Wcmax / (nprime - 1))
+			W_comp = 1:step:(step * (nprime - 1))
 		end
 		return W_comp, Wcmax
 	end
@@ -1219,7 +1209,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			Wi = (Ns_total / Nr - 1) / (gamma * M)        # Based on Nyquist Freq
 			# Based on (Saltelli 1999), Wi/Nr should be between 16-64
 			# ceil(Wi) == floor(Wi) checks if Wi is an integer frequency
-			if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
+			if 16 <= Wi / Nr && Wi / Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
 				Wi = Int(Wi)
 				Ns = Int(Ns_total / Nr)
 				if iseven(Ns)
@@ -1235,18 +1225,18 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		Ns0 = Ns_total # Freezing original Ns value given
 		for Nr_ = 1:100
 			global Nr = Nr_
-			for Ns_total_ = Ns0 + 1:1:Ns0 + 5000
+			for Ns_total_ = (Ns0 + 1):1:(Ns0 + 5000)
 				Ns_total = Ns_total_
-				Wi = (Ns_total / Nr - 1) / ( gamma * M)
-				if 16 <= Wi/Nr && Wi/Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
+				Wi = (Ns_total / Nr - 1) / (gamma * M)
+				if 16 <= Wi / Nr && Wi / Nr <= 64 && ceil(Wi - eps(Float32)) == floor(Wi + eps(Float32))
 					Wi = round(Int, Wi)
 					Ns = round(Int, Ns_total / Nr)
 					if iseven(Ns)
 						Ns += 1
 						Ns_total = Ns * Nr
 					end
-					madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!\n", 2);
-					madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns\n", 2);
+					madsoutput("Ns_total has been adjusted (upwards) to obtain optimal Nr/Wi pairing!\n", 2)
+					madsoutput("Ns_total = $(Ns_total) ... Nr = $Nr ... Wi = $Wi ... Ns = $Ns\n", 2)
 					return Nr, Wi, Ns, Ns_total
 				end
 			end
@@ -1258,14 +1248,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	function eFAST_distributeX(X, nprime, InputData)
 		# Attributing data matrix to vectors
 		# dist provides all necessary information on distribution (type, min, max, mean, std)
-		(name, dist) = (InputData[:,1], InputData[:,2])
+		(name, dist) = (InputData[:, 1], InputData[:, 2])
 		for k = 1:nprime
 			# If the parameter is one we are analyzing then we will assign numbers according to its probability dist
 			# Otherwise, we will simply set it at a constant (i.e. its initial value)
 			# This returns true if the parameter k is a distribution (i.e. it IS a parameter we are interested in)
-			if typeof(InputData[k,2]) <: Distributions.Distribution
+			if typeof(InputData[k, 2]) <: Distributions.Distribution
 				# dist contains all data about distribution so this will apply any necessary distributions to X
-				X[:,k] = Statistics.quantile.(dist[k], X[:,k])
+				X[:, k] = Statistics.quantile.(dist[k], X[:, k])
 			else
 				madscritical("eFAST error in assigning input data!")
 			end # End if
@@ -1277,29 +1267,29 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		# 0 -> We are removing the phase shift FOR SVR
 		phase = 1
 		## Redistributing constCell
-		(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp,S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed) = constCell
+		(ismads, P, nprime, ny, Nr, Ns, M, Wi, W_comp, S_vec, InputData, paramalldict, paramkeys, issvr, directOutput, f, seed) = constCell
 
 		# If we want to use a seed for our random phis
 		# +kL because we want to have the same string of seeds for any initial seed
-		Mads.setseed(seed+kL; rng=rng)
+		Mads.setseed(seed + kL; rng=rng)
 
 		# Determining which parameter we are on
-		k = Int(ceil(kL/Nr))
+		k = Int(ceil(kL / Nr))
 
 		# Initializing
-		W_vec   = zeros(1,nprime) 	   # W_vec (Frequencies)
-		phi_mat = zeros(nprime,Ns)    # Phi matrix (phase shift corresponding to each resample)
+		W_vec = zeros(1, nprime)    # W_vec (Frequencies)
+		phi_mat = zeros(nprime, Ns)    # Phi matrix (phase shift corresponding to each resample)
 
 		## Creating W_vec (kth element is Wi)
 		W_vec[k] = Wi
 		## Edge cases
 		# As long as nprime!=1 our W_vec will have complementary frequencies
-		if nprime !=1
+		if nprime != 1
 			if k != 1
-				W_vec[1:(k-1)] = W_comp[1:(k-1)]
+				W_vec[1:(k - 1)] = W_comp[1:(k - 1)]
 			end
 			if k != nprime
-				W_vec[(k+1):nprime] = W_comp[k:(nprime-1)]
+				W_vec[(k + 1):nprime] = W_comp[k:(nprime - 1)]
 			end
 		end
 
@@ -1307,14 +1297,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		# Random Phase Shift
 		phi = rand(Mads.rng, 1, nprime) * 2 * pi
 		for j = 1:Ns
-			phi_mat[:,j] = phi'
+			phi_mat[:, j] = phi'
 		end
 
 		## Preallocate/Initialize
-		A     = 0
-		B     = 0                          # Fourier coefficients
-		Wi 	  = maximumnan(W_vec)				# Maximum frequency (i.e. the frequency for our parameter of interest)
-		Wcmax = maximumnan(W_comp)				# Maximum frequency in complementary set
+		A = 0
+		B = 0                          # Fourier coefficients
+		Wi = maximumnan(W_vec)# Maximum frequency (i.e. the frequency for our parameter of interest)
+		Wcmax = maximumnan(W_comp)# Maximum frequency in complementary set
 
 		# Adding on the random phase shift
 		alpha = W_vec' .* S_vec' .+ phi_mat    # W*S + phi
@@ -1322,7 +1312,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if phase == 0
 			alpha = W_vec' .* S_vec'
 		end
-		X = .5 .+ asin.(sin.(alpha'))/pi # Transformation function Saltelli suggests
+		X = 0.5 .+ asin.(sin.(alpha')) / pi # Transformation function Saltelli suggests
 
 		# In this function we assign probability distributions to parameters we are analyzing
 		# and set parameters that we aren't analyzing to constants.
@@ -1359,29 +1349,29 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			end
 		else
 			=#
-			# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
-			if robustpmap
-				if restart
-					madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
-					m = RobustPmap.crpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
+		# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
+		if robustpmap
+			if restart
+				madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
+				m = RobustPmap.crpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
 
-				else
-					madsinfo("RobustPmap of forward runs without restart for parameter $(string(paramkeys[k])) ...")
-					m = RobustPmap.rpmap(i->collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol,String},Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
-				end
-				Y = permutedims(hcat(m...))
-			elseif parallel && Distributed.nprocs() > 1
-				rv1 = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[1, :]))))))
-				psa = collect(X) # collect to avoid issues if paramarray is a SharedArray
-				r = SharedArrays.SharedArray{Float64}(length(rv1), size(X, 1))
-				r[:, 1] = rv1
-				@Distributed.everywhere md = $md
-				@sync @Distributed.distributed for i = 2:size(X, 1)
-					func_forward = Mads.makemadscommandfunction(md) # this is needed to avoid issues with the closure
-					r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, X[i, :]))))))
-				end
-				Y = permutedims(collect(r))
+			else
+				madsinfo("RobustPmap of forward runs without restart for parameter $(string(paramkeys[k])) ...")
+				m = RobustPmap.rpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
 			end
+			Y = permutedims(hcat(m...))
+		elseif parallel && Distributed.nprocs() > 1
+			rv1 = collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramkeys, X[1, :]))))))
+			psa = collect(X) # collect to avoid issues if paramarray is a SharedArray
+			r = SharedArrays.SharedArray{Float64}(length(rv1), size(X, 1))
+			r[:, 1] = rv1
+			Distributed.@everywhere md = $md
+			@sync Distributed.@distributed for i = 2:size(X, 1)
+				func_forward = Mads.makemadscommandfunction(md) # this is needed to avoid issues with the closure
+				r[:, i] = collect(values(func_forward(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramkeys, X[i, :]))))))
+			end
+			Y = permutedims(collect(r))
+		end
 		#end #End if (processors)
 
 		## CALCULATING MODEL OUTPUT (Standalone)
@@ -1400,14 +1390,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 			## Calculating Fourier coefficients associated with MAIN INDICES
 			# p corresponds to the harmonics of Wi
 			for p = 1:M
-				A = LinearAlgebra.dot(Y[:], cos.(Wi*p*S_vec))
-				B = LinearAlgebra.dot(Y[:], sin.(Wi*p*S_vec))
+				A = LinearAlgebra.dot(Y[:], cos.(Wi * p * S_vec))
+				B = LinearAlgebra.dot(Y[:], sin.(Wi * p * S_vec))
 				AVi += A^2 + B^2
 			end
 			# 1/Ns taken out of both A and B for optimization!
 			AVi = AVi / Ns^2
 			## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
-			for j = 1:Wcmax * M
+			for j = 1:(Wcmax * M)
 				A = LinearAlgebra.dot(Y[:], cos.(j * S_vec))
 				B = LinearAlgebra.dot(Y[:], sin.(j * S_vec))
 				AVci = AVci + A^2 + B^2
@@ -1420,32 +1410,32 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		elseif ny > 1
 			## If the analyzed system is dynamic, we must add an extra dimension to calculate sensitivity indices for each point
 			# These will be the sums of variances over all resamplings (Nr loops)
-			AV   = zeros(ny,1)                   # Initializing Variances to 0
-			AVi  = zeros(ny,1)
-			AVci = zeros(ny,1)
+			AV = zeros(ny, 1)                   # Initializing Variances to 0
+			AVi = zeros(ny, 1)
+			AVci = zeros(ny, 1)
 			## Calculating Si and Sti (main and total sensitivity indices)
 			# Looping over each point in time
-			@ProgressMeter.showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
+			ProgressMeter.@showprogress 1 "Calculating Fourier coefficients for observations ... " for i = 1:ny
 				# Subtract the average value from Y
-				Y[:,i] = permutedims((Y[:,i] .- Statistics.mean(Y[:,i])))
+				Y[:, i] = permutedims((Y[:, i] .- Statistics.mean(Y[:, i])))
 				## Calculating Fourier coefficients associated with MAIN INDICES
 				# p corresponds to the harmonics of Wi
 				for p = 1:M
-					A = LinearAlgebra.dot(Y[:,i], cos.(Wi * p * S_vec))
-					B = LinearAlgebra.dot(Y[:,i], sin.(Wi * p * S_vec))
-					AVi[i]  = AVi[i] + A^2 + B^2
+					A = LinearAlgebra.dot(Y[:, i], cos.(Wi * p * S_vec))
+					B = LinearAlgebra.dot(Y[:, i], sin.(Wi * p * S_vec))
+					AVi[i] = AVi[i] + A^2 + B^2
 				end
 				# 1/Ns taken out of both A and B for optimization!
 				AVi[i] = AVi[i] / Ns^2
 				## Calculating Fourier coefficients associated with COMPLEMENTARY FREQUENCIES
-				for j = 1:Wcmax * M
-					A = LinearAlgebra.dot(Y[:,i], cos.(j * S_vec))
-					B = LinearAlgebra.dot(Y[:,i], sin.(j * S_vec))
+				for j = 1:(Wcmax * M)
+					A = LinearAlgebra.dot(Y[:, i], cos.(j * S_vec))
+					B = LinearAlgebra.dot(Y[:, i], sin.(j * S_vec))
 					AVci[i] = AVci[i] + A^2 + B^2
 				end
 				AVci[i] = AVci[i] / Ns^2
 				## Total Variance By definition of variance: V(Y) = (Y - mean(Y))^2
-				AV[i] = LinearAlgebra.dot(Y[:,i], Y[:,i]) / Ns
+				AV[i] = LinearAlgebra.dot(Y[:, i], Y[:, i]) / Ns
 			end #END for i = 1:ny
 			# Storing results in matrix format
 			resultvec = hcat(AV, AVi, AVci)
@@ -1464,9 +1454,9 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	# Are we reading from a .mads file or are we running this as a standalone (input: .csv, output: .exe)?
 	# 1 for MADS, 0 for standalone. Basically determines IO of the code.
-	ismads         = 1
+	ismads = 1
 	# 1 if we are reading model output directly (e.g. from .csv), 0 if we are using some sort of script to calculate model output
-	directOutput   = 0
+	directOutput = 0
 	# 1 if we are using svr model function (svrobj) to calculate Y
 	#issvr          = 1 #defined in function
 	# Plot results as .svg file
@@ -1490,13 +1480,13 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	P = Distributed.nworkers()
 	madsoutput("Number of processors is $P\n")
 
-	paramallkeys  = getparamkeys(md)
+	paramallkeys = getparamkeys(md)
 	# Values of this dictionary are the intial values
-	paramalldict  = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramallkeys, map(key->md["Parameters"][key]["init"], paramallkeys)))
+	paramalldict = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramallkeys, map(key -> md["Parameters"][key]["init"], paramallkeys)))
 	# Only the parameters we wish to analyze
-	paramkeys     = getoptparamkeys(md)
+	paramkeys = getoptparamkeys(md)
 	# All the observation sites and time points we will analyze them at
-	obskeys       = getobskeys(md)
+	obskeys = getobskeys(md)
 	# Get distributions for the parameters we will be performing SA on
 	distributions = getparamdistributions(md)
 
@@ -1507,17 +1497,17 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	InputData = Array{Any}(undef, length(paramkeys), 2)
 
 	### InputData will hold PROBABILITY DISTRIBUTIONS for the parameters we are analyzing (Other parameters stored in paramalldict)
-	for i = eachindex(paramkeys)
-		InputData[i,1] = paramkeys[i]
-		InputData[i,2] = distributions[paramkeys[i]]
+	for i in eachindex(paramkeys)
+		InputData[i, 1] = paramkeys[i]
+		InputData[i, 2] = distributions[paramkeys[i]]
 	end
 
 	# Total number of parameters
-	n      = length(paramallkeys)
+	n = length(paramallkeys)
 	# Number of parameters we are analyzing
 	nprime = length(paramkeys)
 	# ny > 1 means the system is dynamic (model output is a vector)
-	ny     = length(obskeys)
+	ny = length(obskeys)
 
 	# This is here to delete parameters of interest from paramalldict
 	# The parameters of interest will be calculated by eFAST_distributeX
@@ -1608,14 +1598,14 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	(W_comp, Wcmax) = eFAST_getCompFreq(Wi, nprime, M)
 
 	# New domain [-pi pi] spaced by Ns points
-	S_vec = range(-pi, stop=pi, length=Ns)
+	S_vec = range(-pi; stop=pi, length=Ns)
 
 	## Preallocation
-	resultmat = zeros(nprime,3,Nr)   # Matrix holding all results (decomposed variance)
-	Var       = zeros(ny,nprime)     # Output variance
-	Si        = zeros(ny,nprime)     # Main sensitivity indices
-	Sti       = zeros(ny,nprime)     # Total sensitivity indices
-	W_vec     = zeros(1,nprime)      # W_vec (Frequencies)
+	resultmat = zeros(nprime, 3, Nr)   # Matrix holding all results (decomposed variance)
+	Var = zeros(ny, nprime)     # Output variance
+	Si = zeros(ny, nprime)     # Main sensitivity indices
+	Sti = zeros(ny, nprime)     # Total sensitivity indices
+	W_vec = zeros(1, nprime)      # W_vec (Frequencies)
 
 	########## DIFFERENT CASES DEPENDING ON # OF PROCESSORS
 	#if P <= nprime*Nr + 1
@@ -1624,10 +1614,10 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	#if P > nprime*Nr + 1
 	# Distributed.nworkers() is quite high, we choose to parallelize over n, Nr, AND also model output
 
-	if P>1
-		madsinfo("Parallelizing of resampling & parameters");
+	if P > 1
+		madsinfo("Parallelizing of resampling & parameters")
 	else
-		madsinfo("No Parallelization!");
+		madsinfo("No Parallelization!")
 	end
 
 	## Storing constants inside of a cell
@@ -1638,7 +1628,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	function sendto(p; args...)
 		for i in p
 			for (nm, val) in args
-				@Distributed.spawnat(i, Core.eval(Main, Expr(:(=), nm, val)))
+				Distributed.@spawnat(i, Core.eval(Main, Expr(:(=), nm, val)))
 			end
 		end
 	end
@@ -1646,45 +1636,45 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	## Sends all variables stored in constCell to workers dedicated to parallelization across parameters and resamplings
 	if P > Nr * nprime + 1
 		# We still may need to send f to workers only calculating model output??
-		sendto(Distributed.workers(), constCell = constCell)
+		sendto(Distributed.workers(); constCell=constCell)
 	elseif P > 1
 		# If there are less workers than resamplings * parameters, we send to all workers available
-		sendto(Distributed.workers(), constCell = constCell)
+		sendto(Distributed.workers(); constCell=constCell)
 	end
 
 	### Calculating decomposed variances in parallel ###
-	allresults = map((kL)->eFAST_Parallel_kL(kL), 1:nprime*Nr)
+	allresults = map((kL) -> eFAST_Parallel_kL(kL), 1:(nprime * Nr))
 
 	## Summing & normalizing decomposed variances to obtain sensitivity indices
 	for k = 1:nprime
 		# Sum of variances across all resamples
-		resultvec = sum(allresults[(1:Nr) .+ Nr * ( k - 1 )])
+		resultvec = sum(allresults[(1:Nr) .+ Nr * (k - 1)])
 
 		## Calculating Sensitivity indices (main and total)
-		V        = resultvec[:,1] ./ Nr
-		Vi       = 2 * resultvec[:,2] ./ Nr
-		Vci      = 2 * resultvec[:,3] ./ Nr
+		V = resultvec[:, 1] ./ Nr
+		Vi = 2 * resultvec[:, 2] ./ Nr
+		Vci = 2 * resultvec[:, 3] ./ Nr
 		# Main effect indices (i.e. decomposed variance, before normalization)
-		Var[:,k] = Vi
+		Var[:, k] = Vi
 		# Normalizing vs mean over loops
-		Si[:,k]  = Vi ./ V
-		Sti[:,k] = 1 .- Vci ./ V
+		Si[:, k] = Vi ./ V
+		Sti[:, k] = 1 .- Vci ./ V
 	end
 
 	# Save results as a dictionary
-	tes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	mes = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	var = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for j = eachindex(obskeys)
-		tes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-		mes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
-		var[obskeys[j]] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+	tes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	mes = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	var = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
+	for j in eachindex(obskeys)
+		tes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+		mes[obskeys[j]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
+		var[obskeys[j]] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
 	end
-	for k = eachindex(paramkeys)
-		for j = eachindex(obskeys)
-			var[obskeys[j]][paramkeys[k]] = Var[j,k]
-			tes[obskeys[j]][paramkeys[k]] = Sti[j,k]
-			mes[obskeys[j]][paramkeys[k]] = Si[j,k]
+	for k in eachindex(paramkeys)
+		for j in eachindex(obskeys)
+			var[obskeys[j]][paramkeys[k]] = Var[j, k]
+			tes[obskeys[j]][paramkeys[k]] = Sti[j, k]
+			mes[obskeys[j]][paramkeys[k]] = Si[j, k]
 		end
 	end
 	result = Dict("mes" => mes, "tes" => tes, "var" => var, "samplesize" => Ns_total, "method" => "efast", "seed" => seed)
