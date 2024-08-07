@@ -1392,7 +1392,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		plotlabels = paramkeys
 		nP = length(paramkeys)
 	end
-	filename = "$(filenameroot)-eigenmatrix.dat"
+	filename = "$(filenameroot)_eigenmatrix.dat"
 	Ein = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Ein = DelimitedFiles.readdlm(filename)
@@ -1402,7 +1402,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		plotlabels = paramkeys
 		nP = length(paramkeys)
 		sortedeigenm = Ein[1:end, 2:end]
-		filename = "$(filenameroot)-eigenvalues.dat"
+		filename = "$(filenameroot)_eigenvalues.dat"
 		sortedeigenv = Vector{Float64}(undef, 0)
 		if isfile(filename)
 			sortedeigenv = DelimitedFiles.readdlm(filename)
@@ -1413,7 +1413,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
 			# eigenval = plot(x=eachindex(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-			filename = "$(rootname)-eigenmatrix" * ext
+			filename = "$(rootname)_eigenmatrix" * ext
 			plotfileformat(eigenmat, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch+0.25Gadfly.inch*nP; format=format, dpi=imagedpi)
 			madsinfo("Eigen matrix plot saved in $filename")
 			if sizeof(sortedeigenv) > 0
@@ -1421,7 +1421,7 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 							Gadfly.Geom.bar,
 							Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 							Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"))
-				filename = "$(rootname)-eigenvalues" * ext
+				filename = "$(rootname)_eigenvalues" * ext
 				plotfileformat(eigenval, filename, 4Gadfly.inch+0.25Gadfly.inch*nP, 4Gadfly.inch; format=format, dpi=imagedpi)
 				madsinfo("Eigen values plot saved in $filename")
 			end

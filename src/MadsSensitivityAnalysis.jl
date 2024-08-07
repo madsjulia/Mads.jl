@@ -241,16 +241,16 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	index = sortperm(eigenv)
 	sortedeigenv = eigenv[index]
 	sortedeigenm = real(eigenm[:, index])
-	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenmatrix.dat", [paramkeys[.!bad_params] sortedeigenm])
-	datafiles && DelimitedFiles.writedlm("$(rootname)-eigenvalues.dat", sortedeigenv)
+	datafiles && DelimitedFiles.writedlm("$(rootname)_eigenmatrix.dat", [paramkeys[.!bad_params] sortedeigenm])
+	datafiles && DelimitedFiles.writedlm("$(rootname)_eigenvalues.dat", sortedeigenv)
 	if imagefiles
 		eigenmat = Gadfly.spy(sortedeigenm, Gadfly.Scale.y_discrete(; labels=i -> plotlabels[.!bad_params][i]), Gadfly.Scale.x_discrete, Gadfly.Guide.YLabel("Parameters"), Gadfly.Guide.XLabel("Eigenvectors"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red"))))
 		# eigenval = plot(x=eachindex(sortedeigenv), y=sortedeigenv, Scale.x_discrete, Scale.y_log10, Geom.bar, Guide.YLabel("Eigenvalues"), Guide.XLabel("Eigenvectors"))
-		filename = "$(rootname)-eigenmatrix" * ext
+		filename = "$(rootname)_eigenmatrix" * ext
 		plotfileformat(eigenmat, filename, 4Gadfly.inch + 0.25Gadfly.inch * nP, 4Gadfly.inch + 0.25Gadfly.inch * nP; format=format, dpi=imagedpi)
 		madsinfo("Eigen matrix plot saved in $filename")
 		eigenval = Gadfly.plot(Gadfly.Scale.x_discrete, Gadfly.Scale.y_log10, Gadfly.Geom.line(), Gadfly.Theme(; line_width=4Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Guide.YLabel("Eigenvalues"), Gadfly.Guide.XLabel("Eigenvectors"); x=eachindex(sortedeigenv), y=sortedeigenv)
-		filename = "$(rootname)-eigenvalues" * ext
+		filename = "$(rootname)_eigenvalues" * ext
 		plotfileformat(eigenval, filename, 4Gadfly.inch + 0.25Gadfly.inch * nP, 4Gadfly.inch; format=format, dpi=imagedpi)
 		madsinfo("Eigen values plot saved in $filename")
 	end
@@ -598,12 +598,14 @@ function loadsaltellirestart!(evalmat::AbstractArray, matname::AbstractString, r
 	if restartdir == ""
 		return false
 	end
-	filename = joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld"))
+	filename = joinpath(restartdir, string(matname, ".jld2"))
 	if !isfile(filename)
+		@warn("File $(filename) is missing!")
 		return false
+	else
+		@info("File $(filename) is loaded!")
+		copy!(evalmat, JLD2.load(filename, "mat"))
 	end
-	mat = JLD.load(filename, "mat")
-	copy!(evalmat, mat)
 	return true
 end
 
@@ -617,8 +619,8 @@ argtext=Dict("evalmat"=>"saved array",
 """
 function savesaltellirestart(evalmat::AbstractArray, matname::AbstractString, restartdir::AbstractString)
 	if restartdir != ""
-		Mads.mkdir(restartdir)
-		JLD2.save(joinpath(restartdir, string(matname, "_", Distributed.myid(), ".jld2")), "mat", evalmat)
+		Mads.recursivemkdir(restartdir; filename=false)
+		JLD2.save(joinpath(restartdir, string(matname, ".jld2")), "mat", evalmat)
 	end
 	return nothing
 end
@@ -637,7 +639,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
 function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, restart::Bool=false, restartdir::AbstractString="", parallel::Bool=false, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=true)
 	if load
 		rootname = Mads.getmadsrootname(madsdata)
-		filename = "$(rootname)-saltelli-$(N).jld2"
+		filename = "$(rootname)_saltelli_$(N).jld2"
 		if isfile(filename)
 			return JLD2.load(filename, "saltelli_results")
 		else
@@ -688,7 +690,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	end
 	yA = Array{Float64}(undef, N, length(obskeys))
 	if restart && restartdir == ""
-		restartdir = getrestartdir(madsdata, "saltelli")
+		restartdir = getrestartdir(madsdata, "saltelli_$(N)")
 	end
 	if parallel
 		Avecs = Array{Vector{Float64}}(undef, size(A, 1))
@@ -706,14 +708,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 			end
 		end
 	else
-		if !loadsaltellirestart!(yA, "yA", restartdir)
+		if !loadsaltellirestart!(yA, "saltelli_A", restartdir)
 			ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... Sample A ..." for i = 1:N
 				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, A[i, :]))))
 				for j in eachindex(obskeys)
 					yA[i, j] = feval[obskeys[j]]
 				end
 			end
-			savesaltellirestart(yA, "yA", restartdir)
+			savesaltellirestart(yA, "saltelli_A", restartdir)
 		end
 	end
 	madsoutput("Computing model outputs to calculate total output mean and variance ... Sample B ...\n")
@@ -734,14 +736,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 			end
 		end
 	else
-		if !loadsaltellirestart!(yB, "yB", restartdir)
+		if !loadsaltellirestart!(yB, "saltelli_B", restartdir)
 			ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for i = 1:N
 				feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, B[i, :]))))
 				for j in eachindex(obskeys)
 					yB[i, j] = feval[obskeys[j]]
 				end
 			end
-			savesaltellirestart(yB, "yB", restartdir)
+			savesaltellirestart(yB, "saltelli_B", restartdir)
 		end
 	end
 	for i = 1:nP
@@ -772,14 +774,14 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 				end
 			end
 		else
-			if !loadsaltellirestart!(yC, "yC$(i)", restartdir)
+			if !loadsaltellirestart!(yC, "saltelli_C_$(i)", restartdir)
 				ProgressMeter.@showprogress 1 "Executing Saltelli Sensitivity Analysis ... " for j = 1:N
 					feval = f(merge(paramalldict, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramoptkeys, C[j, :]))))
 					for k in eachindex(obskeys)
 						yC[j, k] = feval[obskeys[k]]
 					end
 				end
-				savesaltellirestart(yC, "yC$(i)", restartdir)
+				savesaltellirestart(yC, "saltelli_C_$(i)", restartdir)
 			end
 		end
 		maxnnans = 0
@@ -843,7 +845,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 		rootname = "mads_saltelli_sensitivity_analysis"
 	end
 	if save
-		filename = "$(rootname)-saltelli-$(N).jld2"
+		filename = "$(rootname)_saltelli_$(N).jld2"
 		if isfile(filename)
 			madsinfo("File $(filename) will be overwritten!")
 		end
@@ -1126,7 +1128,7 @@ keytext=Dict("N"=>"number of samples [default=`100`]",
 			"restartdir"=>"directory where files will be stored containing model results for the efast simulation restarts [default=`\"efastcheckpoints\"`]",
 			"restart"=>"save restart information [default=`false`]")))
 """
-function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=false, robustpmap::Bool=true, restartdir::AbstractString="efastcheckpoints", restart::Bool=false, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing)
+function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, seed::Integer=-1, checkpointfrequency::Integer=N, save::Bool=true, load::Bool=false, execute::Bool=true, parallel::Bool=false, robustpmap::Bool=true, restartdir::AbstractString="", restart::Bool=false, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing)
 	issvr = false
 	# a:         Sensitivity of each Sobol parameter (low: very sensitive, high; not sensitive)
 	# A and B:   Real & Imaginary components of Fourier coefficients, respectively. Used to calculate sensitivty.
@@ -1158,7 +1160,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	#            but holds all results for every parameter.
 	# Si:        "Main effect" sensitivity index for parameter i
 	# Sti:       "Total effect" sensitivity index for parameter i
-	# Wi:        Maximum frequency, corresponds to parameter we are attempting to analyze
+	# Wi:        Maximum frequency, corresponds to the analyzed parameter
 	#            (So to calculate all indices, each parameter will be assigned Wi at some point)
 	# W_comp:    Vector of complementary frequencies
 	# W_vec:     Vector of all frequencies including Wi and complementary frequencies.
@@ -1166,9 +1168,6 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	# Y:         2-d array of model output (Ns x Nr) (Or higher dimension if we are running mads or user defines dynamic system)
 	#
 	##
-	if restart
-		restartdir = getrestartdir(md, "efast")
-	end
 
 	Mads.setseed(seed; rng=rng)
 
@@ -1350,10 +1349,13 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		else
 			=#
 		# If # of processors is > Nr*nprime+(Nr+1) compute model output in parallel
+		if restart && restartdir == ""
+			restartdir = getrestartdir(md, "efast_$(Ns_total)")
+		end
 		if robustpmap
 			if restart
 				madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
-				m = RobustPmap.crpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(kL)_$k"), 1:size(X, 1))
+				m = RobustPmap.crpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(k)_$(string(paramkeys[k]))"), 1:size(X, 1))
 
 			else
 				madsinfo("RobustPmap of forward runs without restart for parameter $(string(paramkeys[k])) ...")
@@ -1524,7 +1526,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 
 	if load
 		rootname = Mads.getmadsrootname(md)
-		filename = "$(rootname)-efast-$(Ns_total).jld2"
+		filename = "$(rootname)_efast_$(Ns_total).jld2"
 		if isfile(filename)
 			flag_bad_data = false
 			efast_results = JLD2.load(filename, "efast_results")
@@ -1683,7 +1685,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		rootname = "mads_efast_sensitivity_analysis"
 	end
 	if save
-		filename = "$(rootname)-efast-$(Ns_total).jld2"
+		filename = "$(rootname)_efast_$(Ns_total).jld2"
 		if isfile(filename)
 			@warn("File $(filename) is overwritten!")
 		end
