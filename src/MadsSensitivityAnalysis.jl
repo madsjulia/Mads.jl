@@ -877,7 +877,7 @@ function computeparametersensitities(madsdata::AbstractDict, saresults::Abstract
 	var = saresults["var"]
 	pvar = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter variance
 	pmes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter main effect (first order) sensitivities
-	ptes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()	# parameter total effect sensitivities
+	ptes = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}() # parameter total effect sensitivities
 	for i = eachindex(paramkeys)
 		pv = pm = pt = 0
 		for j = eachindex(obskeys)
@@ -951,7 +951,6 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function printSAresults(madsdata::AbstractDict, results::AbstractDict)
 	mes = results["mes"]
 	tes = results["tes"]
-	N = results["samplesize"]
 	#=
 	madsoutput("Mean\n")
 	madsoutput("\t")
@@ -1033,7 +1032,6 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 function printSAresults2(madsdata::AbstractDict, results::AbstractDict)
 	mes = results["mes"]
 	tes = results["tes"]
-	N = results["samplesize"]
 	print("Main Effect Indices")
 	print("\t")
 	obskeys = getobskeys(madsdata)

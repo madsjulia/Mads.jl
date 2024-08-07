@@ -440,7 +440,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 		# Solving for the minimum gives:
 		#    (J'*J + lambda*DtD) * delta_x == -J^T * f(x), where DtD = diagm(sum(J.^2,1))
 		# Where we use the equivalence: diagm(J'*J) = diagm(sum(J.^2, 1))
-		# It is additionally useful to bound the elements of DtD below to help prevent "parameter evaporation".
+		# It is additionally useful to bind the elements of DtD below to help prevent "parameter evaporation".
 		# DtD = diagm(Float64[max(x, MIN_DIAGONAL) for x in sum( J.^2, 1 )])
 		# DtDidentity used instead; seems to work better; LM in Mads.c uses DtDidentity
 		JpJ = J' * J

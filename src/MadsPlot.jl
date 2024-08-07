@@ -649,7 +649,6 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		else
 			d[1,i] = i
 			no_time_field = true
-
 		end
 		d[2,i] = haskey(obsdict[obskey], "target") ? obsdict[obskey]["target"] : NaN
 		for (j, paramkey) in enumerate(paramkeys)
@@ -665,12 +664,12 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	if mintes < 0
 		tes = tes .- mintes
 	end
-	tes ./=  maximumnan(tes)
+	tes ./= maximumnan(tes)
 	minmes = minimumnan(mes)
 	if minmes < 0
 		mes = mes .- minmes
 	end
-	mes ./=  maximumnan(mes)
+	mes ./= maximumnan(mes)
 	smags = order ? sortperm(vec(sum(tes; dims=1)); rev=true) : collect(1:nP)
 	pp = Array{Any}(undef, 0)
 	if ytitle != ""
