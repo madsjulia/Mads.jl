@@ -147,7 +147,7 @@ function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parall
 		end
 	end
 	f = makemadscommandfunction(madsdata)
-	restartdir = getrestartdir(madsdata)
+	restartdir = getrestartdir(madsdata, "levenberg_marquardt")
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
 	o_lm(x::AbstractVector) = sar ? sum.(abs.(x)) : LinearAlgebra.dot(x, x)

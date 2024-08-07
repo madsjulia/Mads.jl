@@ -388,7 +388,7 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 		restartdir = madsdata["RestartDir"]
 		if !isdir(restartdir)
 			try
-				mkdir(restartdir)
+				recursivemkdir(restartdir; filename=false)
 			catch errmsg
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory specified under 'RestartDir' ($restartdir) cannot be created!")
@@ -401,26 +401,30 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 		restartdir = madsdata["Restart"]
 		if !isdir(restartdir)
 			try
-				mkdir(restartdir)
+				recursivemkdir(restartdir; filename=false)
 			catch errmsg
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory specified under 'Restart' ($restartdir) cannot be created!")
 			end
 		end
 	end
-	if restartdir == "" && (Mads.restart || haskey(madsdata, "Restart"))
+	if restartdir == ""
 		root = splitdir(getmadsrootname(madsdata, version=true))[end]
 		restartdir = root * "_restart"
 		if !isdir(restartdir)
 			try
-				mkdir(restartdir)
+				recursivemkdir(restartdir; filename=false)
 			catch errmsg
 				printerrormsg(errmsg)
 				madscritical("$(errmsg)\nDirectory ($restartdir) cannot be created!")
 			end
 		end
 	end
-	return joinpath(restartdir, suffix)
+	if suffix != ""
+		restartdir = joinpath(restartdir, suffix)
+		recursivemkdir(restartdir; filename=false)
+	end
+	return restartdir
 end
 
 """

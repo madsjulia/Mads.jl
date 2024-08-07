@@ -21,9 +21,9 @@ Returns:
 
 - gradient function
 """
-function makelocalsafunction(madsdata::AbstractDict; multiplycenterbyweights::Bool=true)
+function makelocalsafunction(madsdata::AbstractDict; restart::Bool=false, multiplycenterbyweights::Bool=true)
 	f = makemadscommandfunction(madsdata)
-	restartdir = getrestartdir(madsdata)
+	restartdir = restart ? getrestartdir(madsdata, "local_sensitivity_analysis") : ""
 	obskeys = Mads.getobskeys(madsdata)
 	weights = Mads.getobsweight(madsdata, obskeys)
 	nO = length(obskeys)
@@ -120,8 +120,8 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Vector{Float64}(undef, 0), obs::AbstractVector=Vector{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
-	f_sa, g_sa = Mads.makelocalsafunction(madsdata)
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, restart::Bool=false, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Vector{Float64}(undef, 0), obs::AbstractVector=Vector{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
+	f_sa, g_sa = Mads.makelocalsafunction(madsdata; restart=restart)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
 	end
@@ -688,7 +688,7 @@ function saltelli(madsdata::AbstractDict; N::Integer=100, seed::Integer=-1, rng:
 	end
 	yA = Array{Float64}(undef, N, length(obskeys))
 	if restart && restartdir == ""
-		restartdir = getrestartdir(madsdata)
+		restartdir = getrestartdir(madsdata, "saltelli")
 	end
 	if parallel
 		Avecs = Array{Vector{Float64}}(undef, size(A, 1))
@@ -1167,7 +1167,7 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 	#
 	##
 	if restart
-		restartdir = getrestartdir(md)
+		restartdir = getrestartdir(md, "efast")
 	end
 
 	Mads.setseed(seed; rng=rng)
