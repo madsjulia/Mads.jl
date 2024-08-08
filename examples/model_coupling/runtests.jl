@@ -17,6 +17,8 @@ else
 	if workdir == "."
 		workdir = joinpath(Mads.dir, "examples", "model_coupling")
 	end
+	cwd = pwd()
+	cd(workdir)
 
 	Mads.madsinfo("Internal coupling using `Model` ...")
 	mdof = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel-observations-filename.mads"))
@@ -41,9 +43,13 @@ else
 		Mads.graphoff()
 		Mads.spaghettiplots(md, pdict)
 		Mads.spaghettiplot(md, forwardpredresults)
-		Mads.rmfile(joinpath(workdir, "internal-linearmodel-5-spaghetti.svg"))
-		Mads.rmfile(joinpath(workdir, "internal-linearmodel-a-5-spaghetti.svg"))
-		Mads.rmfile(joinpath(workdir, "internal-linearmodel-b-5-spaghetti.svg"))
+		Mads.rmfile(joinpath(workdir, "..", "models", "internal-linear-model", "internal-linearmodel.finalresults"))
+		Mads.rmfile(joinpath(workdir, "..", "models", "internal-linear-model", "internal-linearmodel.initialresults"))
+		Mads.rmfile(joinpath(workdir, "..", "models", "internal-linear-model", "internal-linearmodel.iterationresults"))
+		Mads.rmfiles_ext("jld2"; path=joinpath(workdir, "..", "models", "internal-linear-model"))
+		Mads.rmfiles_ext("svg"; path=joinpath(workdir, "..", "models", "internal-linear-model"))
+		Mads.rmdir(joinpath(workdir, "..", "models", "internal-linear-model", "internal-linearmodel_restart"))
+		Mads.rmfiles_ext("svg"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 		Mads.graphon()
 	end
 
@@ -77,9 +83,6 @@ else
 	Mads.writeparameters(md)
 	tefor = Mads.forward(md)
 
-	cwd = pwd()
-	cd(workdir)
-
 	md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"))
 	Mads.forward(md)
 	Mads.localsa(md, par=[1.,2.])
@@ -112,7 +115,7 @@ else
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-jld2.mads"))
 	j2for = Mads.forward(md)
 	Mads.set_nprocs_per_task(2)
-	Mads.@stdouterrcapture Mads.forward(md)
+	Mads.forward(md)
 	Mads.set_nprocs_per_task(1)
 
 	Mads.madsinfo("External coupling using `Command` and JSON ...")
@@ -133,7 +136,6 @@ else
 	afor = Mads.forward(md)
 	# aparam, aresults = Mads.calibrate(md; maxEval=1, np_lambda=1, maxJacobians=1)
 
-	cd(workdir)
 	md = Mads.loadmadsfile(joinpath(workdir, "external-linearmodel-matrix.mads"))
 	md["Instructions"] = [Dict("ins"=>"external-linearmodel-matrix.inst", "read"=>"model_coupling_matrix.dat")]
 	md["Observations"] = Mads.createobservations(10, 2, pretext="l4\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
@@ -141,7 +143,6 @@ else
 	md["Observations"] = Mads.createobservations(10, 2, pretext="\n\n\n\n", prestring="!dum! !dum!", filename=joinpath(workdir, "external-linearmodel-matrix.inst"))
 	ro2 = Mads.readobservations(md)
 	Mads.rmfile("external-linearmodel-matrix.inst")
-	cd(cwd)
 
 	Test.@testset "External" begin
 		Test.@test afor == sfor
@@ -151,20 +152,6 @@ else
 		Test.@test j2for == ifor
 		Test.@test ro1 == ro2
 	end
-
-	Mads.rmdir(joinpath(workdir, "external-jld_restart"))
-	Mads.rmdir(joinpath(workdir, "external-json-exp_restart"))
-	Mads.rmdir(joinpath(workdir, "external-json_restart"))
-	Mads.rmdir(joinpath(workdir, "external-linearmodel+template+instruction+path_restart"))
-	Mads.rmdir(joinpath(workdir, "internal-linearmodel+template_restart"))
-	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
-	Mads.rmdir("external-linearmodel+template+instruction_restart")
-	Mads.rmdir("internal-linearmodel+template_restart")
-	Mads.rmdir("internal-linearmodel-mads_restart")
-	Mads.rmdir("internal-linearmodel_restart")
-	Mads.rmfiles_ext("svg"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
-	Mads.rmfiles_ext("dat"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
-	Mads.rmfiles_ext("iterationresults"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 
 	function juliafunction(parameters::AbstractVector)
 		f(t) = parameters[1] * t - parameters[2] # a * t - b
@@ -184,6 +171,23 @@ else
 		Mads.calibrate(md)
 	end
 
-end # not windows
+	@info("Deleting files and directories created during the tests...")
+	Mads.rmdir(joinpath(workdir, "external-jld_restart"))
+	Mads.rmdir(joinpath(workdir, "external-json-exp_restart"))
+	Mads.rmdir(joinpath(workdir, "external-json_restart"))
+	Mads.rmdir(joinpath(workdir, "external-linearmodel+template+instruction+path_restart"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel+template_restart"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+	Mads.rmdir(joinpath(workdir, "external-linearmodel+template+instruction_restart"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel+template_restart"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel-mads_restart"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+	Mads.rmfiles_ext("svg"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+	Mads.rmfiles_ext("dat"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+	Mads.rmfiles_ext("iterationresults"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
+	Mads.rmfiles_ext("jld2"; path=joinpath(workdir, "..", "models", "internal-polynomial-model"))
+	@info("Model coupling tests done!")
+	cd(cwd)
+end
 
 :done
