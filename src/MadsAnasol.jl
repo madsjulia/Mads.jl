@@ -385,7 +385,7 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 				global w = w_
 				if wellscreen[w]
 					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
-										   contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
+										contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
 				else
 					wellc[w][wellp[w]] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
 				end

@@ -548,7 +548,7 @@ function levenberg_marquardt(f::Function, g::Function, x0, o::Function=x->(x'*x)
 
 		npl_best = argmin(trial_ofs)
 		npl_worst = argmax(trial_ofs)
-		madsoutput(@Printf.sprintf("OF     range in the parallel lambda search: min  %e max   %e\n", trial_ofs[npl_best], trial_ofs[npl_worst]), 2)
+		madsoutput(@Printf.sprintf("OF     range in the parallel lambda search: min %e max %e\n", trial_ofs[npl_best], trial_ofs[npl_worst]), 2)
 		madsoutput(@Printf.sprintf("Lambda range in the parallel lambda search: best %e worst %e\n", lambda_p[npl_best], lambda_p[npl_worst]), 2)
 		lambda = lambda_p[npl_best] # Set lambda to the best value
 		delta_x = vec(delta_xs[npl_best])

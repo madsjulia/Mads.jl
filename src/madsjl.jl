@@ -75,10 +75,11 @@ for i = 2:length(ARGS)
 	else
 		@info("Executing Mads command $madscommand (Mads.$madscommand) ...")
 		result = Core.eval(Mads, Meta.parse("Mads.$(madscommand)(md)"))
-		JLD2.save("$(dir)/$(root)_$(madscommand)-results.jld2", result)
+		f = "$(dir)/$(root)_$(madscommand)_results.jld2"
+		JLD2.savef(f, result)
 		Base.display(result)
 		println("")
-		@info("Results are saved in $(dir)/$(root)_$(madscommand)-results.jld!")
+		@info("Results are saved in $(f)!")
 	end
 	@info("done.")
 end

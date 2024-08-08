@@ -178,10 +178,10 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 		Gadfly.Theme(highlight_width=0Gadfly.pt, key_position=:none))
 	if filename == ""
 		rootname = getmadsrootname(madsdata)
-		filename = "$(rootname)-problemsetup"
+		filename = "$(rootname)_problemsetup"
 	end
 	if keyword != ""
-		filename = "$(rootname)_$(keyword)-problemsetup"
+		filename = "$(rootname)_$(keyword)_problemsetup"
 	end
 	if filename != ""
 		plotfileformat(p, filename, hsize, vsize; format=format)
@@ -704,11 +704,11 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 	else
 		filename_root = Mads.getrootname(filename)
 		filename_ext = Mads.getextension(filename)
-		filename = filename_root * "-total_effect." * filename_ext
+		filename = filename_root * "_total_effect." * filename_ext
 		plotfileformat(ptes, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
-		filename = filename_root * "-main_effect." * filename_ext
+		filename = filename_root * "_main_effect." * filename_ext
 		plotfileformat(pmes, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
-		filename = filename_root * "-variance." * filename_ext
+		filename = filename_root * "_variance." * filename_ext
 		plotfileformat(pvar, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 	end
 	return [paramkeys plotlabels][smags[select],:]
@@ -1356,9 +1356,9 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		ext = "." * Mads.getextension(filename)
 	end
 	if keyword != ""
-		rootname = string(rootname, "-", keyword)
+		rootname = string(rootname, "_", keyword)
 	end
-	filename = "$(filenameroot)-jacobian.dat"
+	filename = "$(filenameroot)_jacobian.dat"
 	Jin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Jin = DelimitedFiles.readdlm(filename)
@@ -1376,12 +1376,12 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 						Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"),
 						Gadfly.Theme(point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt),
 						Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")), minvalue = -mscale, maxvalue = mscale))
-			filename = "$(rootname)-jacobian" * ext
+			filename = "$(rootname)_jacobian" * ext
 			plotfileformat(jacmat, filename, 3Gadfly.inch+0.25Gadfly.inch*nP, 3Gadfly.inch+0.25Gadfly.inch*nO; format=format, dpi=imagedpi)
 			madsinfo("Jacobian matrix plot saved in $filename")
 		end
 	end
-	filename = "$(filenameroot)-covariance.dat"
+	filename = "$(filenameroot)_covariance.dat"
 	Cin = Array{Float64}(undef, 0, 0)
 	if isfile(filename)
 		Cin = DelimitedFiles.readdlm(filename)

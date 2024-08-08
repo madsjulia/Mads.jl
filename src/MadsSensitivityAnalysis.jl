@@ -133,7 +133,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		ext = "." * Mads.getextension(filename)
 	end
 	if keyword != ""
-		rootname = string(rootname, "-", keyword)
+		rootname = string(rootname, "_", keyword)
 	end
 	if rootname == ""
 		rootname = "mads_local_sensitivity_analysis"
@@ -193,11 +193,11 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	end
 	f = Mads.forward(madsdata, param)
 	ofval = Mads.of(madsdata, f)
-	datafiles && DelimitedFiles.writedlm("$(rootname)-jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
+	datafiles && DelimitedFiles.writedlm("$(rootname)_jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 	if imagefiles
 		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(; labels=i -> plotlabels[i]), Gadfly.Scale.y_discrete(; labels=i -> obskeys[i]), Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")); minvalue=-mscale, maxvalue=mscale))
-		filename = "$(rootname)-jacobian" * ext
+		filename = "$(rootname)_jacobian" * ext
 		plotfileformat(jacmat, filename, 3Gadfly.inch + 0.25Gadfly.inch * nP, 3Gadfly.inch + 0.25Gadfly.inch * nO; format=format, dpi=imagedpi)
 		madsinfo("Jacobian matrix plot saved in $filename")
 	end
@@ -225,15 +225,15 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	stddev_full[.!bad_params] .= stddev
 	stddev_full[bad_params] .= Inf
 	if datafiles
-		DelimitedFiles.writedlm("$(rootname)-covariance.dat", covar)
-		f = open("$(rootname)-stddev.dat", "w")
+		DelimitedFiles.writedlm("$(rootname)_covariance.dat", covar)
+		f = open("$(rootname)_stddev.dat", "w")
 		for i = 1:nP
 			write(f, "$(string(paramkeys[i])) $(param[i]) $(stddev_full[i])\n")
 		end
 		close(f)
 	end
 	correl = covar ./ LinearAlgebra.diag(covar)
-	datafiles && DelimitedFiles.writedlm("$(rootname)-correlation.dat", correl)
+	datafiles && DelimitedFiles.writedlm("$(rootname)_correlation.dat", correl)
 	z = LinearAlgebra.eigen(covar)
 	eigenv = z.values
 	eigenm = z.vectors

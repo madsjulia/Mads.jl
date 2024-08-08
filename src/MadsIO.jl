@@ -553,7 +553,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 	end
 end
 
-function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "-observations.yaml")
+function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; observations_separate::Bool=false, filenameobs=getrootname(filename; version=true) * "_observations.yaml")
 	if filename == ""
 		filename = setnewmadsfilename(madsdata)
 	end
@@ -587,7 +587,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 			end
 		end
 		if observations_separate
-			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			filenameobs = getrootname(filename; version=true) * "_observations.yaml"
 			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end
@@ -596,7 +596,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 		madsdata2 = deepcopy(madsdata)
 		setparamsinit!(madsdata2, parameters)
 		if observations_separate
-			filenameobs = getrootname(filename; version=true) * "-observations.yaml"
+			filenameobs = getrootname(filename; version=true) * "_observations.yaml"
 			printobservations(madsdata, filenameobs)
 			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
 		end

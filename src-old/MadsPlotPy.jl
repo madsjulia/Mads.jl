@@ -30,7 +30,7 @@ function plotgrid(madsdata::AbstractDict, s::AbstractArray{Float64}; addtitle::B
 	PyPlot.subplot(111, aspect=1)
 	# PyPlot.imshow(log10(s[:,:,1]'), origin="lower", extent=[xmin, xmax, ymin, ymax], origin="lower", vmin=log10(50), cmap="jet")
 	levels = [10,30,100,300,1000,3000,10000,30000,100000]
-	PyPlot.contourf(permutedims(s[:,:,1]), cmap="jet", levels=levels, locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax]) # set_under="w",   set_aspect="equal",  removed
+	PyPlot.contourf(permutedims(s[:,:,1]), cmap="jet", levels=levels, locator=mt.LogLocator(), origin="lower", extent=[xmin, xmax, ymin, ymax]) # set_under="w", set_aspect="equal", removed
 	# PyPlot.colorbar(shrink=0.5, cmap="jet")
 	PyPlot.colorbar(shrink=0.5)
 	if addtitle

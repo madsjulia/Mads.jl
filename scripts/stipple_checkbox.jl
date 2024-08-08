@@ -24,13 +24,13 @@ function ui(ui_model_check_box)
 		Stipple.p([
 			"Clicks: "
 			Stipple.span(ui_model_check_box.click, @Stipple.text(:click))
-		  ]),
+		]),
 		Stipple.h5("Test: $(ui_model_check_box.test)"),
 		Stipple.h5("Test: $(ui_model_check_box.test2[])"),
 		Stipple.p([
 			"Value: "
 			Stipple.span(ui_model_check_box.test2.a, @Stipple.text(:(test2.a)))
-		  ]),
+		]),
 		Stipple.h5("Test: {{this.test.a}}"),
 		Stipple.h5("Test2: {{this.test2.a}}"),
 		Stipple.Html.div(
