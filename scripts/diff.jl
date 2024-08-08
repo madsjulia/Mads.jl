@@ -1,4 +1,5 @@
 import YAML
+import OrderedCollections
 
 if length(ARGS) != 3
 	println("Usage: madsjl.jl diff file1.mads file2.mads")
@@ -60,7 +61,7 @@ function printdiff(prefix, thing1, thing2, depth)
 	end
 end
 
-f1 = YAML.load_file(ARGS[2])
-f2 = YAML.load_file(ARGS[3])
+f1 = YAML.load_file(ARGS[2]; dicttype=OrderedCollections.OrderedDict{String,Any})
+f2 = YAML.load_file(ARGS[3]; dicttype=OrderedCollections.OrderedDict{String,Any})
 
 printdiff("", f1, f2, 6)

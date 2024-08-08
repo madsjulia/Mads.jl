@@ -393,7 +393,7 @@ function loadbigyamlfile(filename::AbstractString)
 	end
 	if yamlflag
 		io = IOBuffer(join(lines[parseindeces], '\n'))
-		madsdata = YAML.load(io)
+		madsdata = YAML.load(io; dicttype=OrderedCollections.OrderedDict{String,Any})
 	else
 		madsdata = OrderedCollections.OrderedDict{String,Any}()
 	end

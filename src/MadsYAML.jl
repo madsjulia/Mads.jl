@@ -14,7 +14,7 @@ Returns:
 - data in the yaml input file
 """
 function loadyamlfile(filename::AbstractString)
-	yamldata = YAML.load_file(filename)
+	yamldata = YAML.load_file(filename; dicttype=OrderedCollections.OrderedDict{String,Any})
 	return yamldata
 end
 
