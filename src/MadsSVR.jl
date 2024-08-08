@@ -48,7 +48,6 @@ function svrtraining(madsdata::AbstractDict, numberofsamples::Integer=100; addmi
 	end
 	svrtraining(madsdata, paramarray; kw...)
 end
-
 @doc """
 Train SVR
 

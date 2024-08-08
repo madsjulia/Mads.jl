@@ -22,7 +22,6 @@ function checknodedir(dir::AbstractString, waittime::Float64=10.) # 10 seconds
 	end
 	return true
 end
-
 @doc """
 Check if a directory is readable
 
@@ -111,7 +110,6 @@ function runcmd(cmdstring::AbstractString; quiet::Bool=Mads.quiet, pipe::Bool=fa
 	end
 	return r
 end
-
 @doc """
 Run external command and pipe stdout and stderr
 

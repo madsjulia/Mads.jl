@@ -808,7 +808,6 @@ function setnewmadsfilename(filename::AbstractString)
 	end
 	return joinpath(dir, filename)
 end
-
 @doc """
 Set new mads file name
 
@@ -1079,7 +1078,6 @@ end
 
 searchdir(key::Regex; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
 searchdir(key::AbstractString; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
-
 @doc """
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
@@ -1102,7 +1100,6 @@ Examples:
 
 filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
 filterkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
-
 @doc """
 Filter dictionary keys based on a string or regular expression
 
@@ -1113,7 +1110,6 @@ argtext=Dict("dict"=>"dictionary",
 
 indexkeys(dict::AbstractDict, key::Regex) = key == r"" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
 indexkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
-
 @doc """
 Find indexes for dictionary keys based on a string or regular expression
 
@@ -1124,7 +1120,6 @@ argtext=Dict("dict"=>"dictionary",
 
 getdictvalues(dict::AbstractDict, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
 getdictvalues(dict::AbstractDict, key::AbstractString = "") = map(y->(y, dict[y]), filterkeys(dict, key))
-
 @doc """
 Get dictionary values for keys based on a string or regular expression
 

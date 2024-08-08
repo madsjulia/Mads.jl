@@ -252,7 +252,6 @@ function setdir()
 	dir = Distributed.remotecall_fetch(()->pwd(), 1)
 	setdir(dir)
 end
-
 @doc """
 Set the working directory (for parallel environments)
 

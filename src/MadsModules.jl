@@ -379,7 +379,6 @@ function tag(madsmodule::AbstractString, versionsym::Symbol=:patch)
 		@warn("$(madsmodule) cannot be tagged!")
 	end
 end
-
 @doc """
 Tag Mads modules with a default argument `:patch`
 

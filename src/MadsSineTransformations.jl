@@ -14,7 +14,6 @@ function asinetransform(params::AbstractVector, lowerbounds::AbstractVector, upp
 	sineparams = asin.((sineparams .- lowerbounds) ./ (upperbounds .- lowerbounds) .* 2 .- 1)
 	return sineparams
 end
-
 @doc """
 Arcsine transformation of model parameters
 
@@ -45,7 +44,6 @@ function sinetransform(sineparams::AbstractVector, lowerbounds::AbstractVector, 
 	params[indexlogtransformed] = 10 .^ params[indexlogtransformed]
 	return params
 end
-
 @doc """
 Sine transformation of model parameters
 

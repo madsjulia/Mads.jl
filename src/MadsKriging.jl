@@ -205,7 +205,6 @@ end
 function estimationerror(w::AbstractVector, covmat::AbstractMatrix, covvec::AbstractVector, cov0::Number)
 	return cov0 + LinearAlgebra.dot(w, covmat * w) - 2 * LinearAlgebra.dot(w, covvec)
 end
-
 @doc """
 Estimate kriging error
 

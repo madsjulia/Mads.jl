@@ -274,7 +274,6 @@ function setobstime!(madsdata::AbstractDict, rx::Regex, obskeys::AbstractVector=
 		end
 	end
 end
-
 @doc """
 Set observation time based on the observation name in the MADS problem dictionary
 
@@ -301,7 +300,6 @@ function setobsweights!(madsdata::AbstractDict, v::AbstractVector, obskeys::Abst
 		setweight!(madsdata["Observations"][obskeys[i]], v[i])
 	end
 end
-
 @doc """
 Set observation weights in the MADS problem dictionary
 
@@ -530,7 +528,6 @@ function createobservations!(madsdata::AbstractDict, observation::AbstractDict; 
 	end
 	madsdata["Observations"] = observationsdict
 end
-
 @doc """
 Create observations in the MADS problem dictionary based on `time` and `observation` vectors
 

@@ -352,7 +352,6 @@ function makemadsreusablefunction(paramkeys::AbstractVector, obskeys::AbstractVe
 		return madscommandfunction
 	end
 end
-
 @doc """
 Make Reusable Mads function to execute a forward model simulation (automatically restarts if restart data exists)
 
@@ -382,8 +381,7 @@ Returns:
 
 - restart directory where reusable model results will be stored
 """
-function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
-	restartdir = ""
+function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="", restartdir::AbstractString="")
 	if haskey(madsdata, "RestartDir")
 		restartdir = madsdata["RestartDir"]
 		if !isdir(restartdir)
@@ -409,7 +407,11 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 		end
 	end
 	if restartdir == ""
-		restartdir = getmadsrootname(madsdata; version=true) * "_restart"
+		rdir = getmadsrootname(madsdata; version=true)
+		if rdir == ""
+			return rdir
+		end
+		restartdir = rdir * "_restart"
 		if !isdir(restartdir)
 			try
 				recursivemkdir(restartdir; filename=false)
@@ -419,7 +421,7 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="")
 			end
 		end
 	end
-	if suffix != ""
+	if suffix != "" && restartdir != ""
 		restartdir = joinpath(restartdir, suffix)
 		recursivemkdir(restartdir; filename=false)
 	end

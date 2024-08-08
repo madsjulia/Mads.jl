@@ -33,7 +33,6 @@ function residuals(madsdata::AbstractDict)
 	resultdict = Mads.forward(madsdata)
 	residuals(madsdata, collect(values(resultdict)))
 end
-
 @doc """
 Compute residuals
 
@@ -79,7 +78,6 @@ function of(madsdata::AbstractDict; filter::Union{AbstractVector,AbstractRange,C
 	resultdict = Mads.forward(madsdata)
 	of(madsdata, collect(values(resultdict)); filter=filter)
 end
-
 @doc """
 Compute objective function
 
@@ -249,7 +247,6 @@ function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parall
 	end
 	return f_lm, g_lm, o_lm
 end
-
 @doc """
 Make forward model, gradient, objective functions needed for Levenberg-Marquardt optimization
 

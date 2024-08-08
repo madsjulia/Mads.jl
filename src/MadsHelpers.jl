@@ -309,7 +309,6 @@ function haskeyword(madsdata::AbstractDict, class::AbstractString, keyword::Abst
 		return false
 	end
 end
-
 @doc """
 Check for a `keyword` in a `class` within the Mads dictionary `madsdata`
 
@@ -345,7 +344,6 @@ function addkeyword!(madsdata::AbstractDict, class::AbstractString, keyword::Abs
 		push!(madsdata[class], keyword)
 	end
 end
-
 @doc """
 Add a `keyword` in a `class` within the Mads dictionary `madsdata`
 
@@ -373,7 +371,6 @@ function deletekeyword!(madsdata::AbstractDict, class::AbstractString, keyword::
 		end
 	end
 end
-
 @doc """
 Delete a `keyword` in a `class` within the Mads dictionary `madsdata`
 

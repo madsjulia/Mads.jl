@@ -19,7 +19,6 @@ function getfunctionargumentsold(f::Function, m::Base.MethodList, l::Integer=get
 	end
 	return sort(unique(mp))
 end
-
 @doc """
 Get function arguments
 
@@ -54,7 +53,6 @@ function getfunctionkeywordsold(f::Function, m::Base.MethodList, l::Integer=getm
 	end
 	return sort(unique(mp))
 end
-
 @doc """
 Get function keywords
 

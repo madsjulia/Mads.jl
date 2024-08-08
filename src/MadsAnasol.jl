@@ -507,7 +507,6 @@ function computemass(madsfiles::Union{Regex,String}; time::Number=0, path::Abstr
 	end
 	return lambda, mass_injected, mass_reduced
 end
-
 @doc """
 Compute injected/reduced contaminant mass (for a given set of mads input files when "path" is provided)
 

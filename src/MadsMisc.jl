@@ -3,16 +3,18 @@ import OrderedCollections
 import DocumentFunction
 import Printf
 
-#=
-function makearrayfunction_vector(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
-	function arrayfunction(arrayparameters::AbstractVector)
-		return f(arrayparameters)
-	end
-	return arrayfunction
-end
-=#
+"""
+Make a version of the function `f` that accepts an array containing the optimal parameter values
 
-function makearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
+$(DocumentFunction.documentfunction(makearrayfunction;
+argtext=Dict("madsdata"=>"MADS problem dictionary",
+            "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
+
+Returns:
+
+- function accepting an array containing the optimal parameter values
+"""
+function makearrayfunction(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
 	optparamkeys = getoptparamkeys(madsdata)
 	initparams = Mads.getparamdict(madsdata)
 	function arrayfunction_merge(arrayparameters::AbstractVector)
@@ -30,25 +32,8 @@ function makearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makema
 	end
 end
 
-function makearrayfunction(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
-	# arrayfunction = vectorflag ? makearrayfunction_vector(madsdata, f) : makearrayfunction_dictionary(madsdata, f)
-	makearrayfunction_dictionary(madsdata, f)
-end
-
-@doc """
-Make a version of the function `f` that accepts an array containing the optimal parameter values
-
-$(DocumentFunction.documentfunction(makearrayfunction;
-argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "f"=>"function [default=`makemadscommandfunction(madsdata)`]")))
-
-Returns:
-
-- function accepting an array containing the optimal parameter values
-""" makearrayfunction
-
 function makedoublearrayfunction_vector(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
-	arrayfunction = makearrayfunction(madsdata, f)
+	arrayfunction = Mads.makearrayfunction(madsdata, f)
 	function doublearrayfunction(arrayparameters::AbstractMatrix)
 		nr = size(arrayparameters, 2)
 		vectorresult = Array{Float64}(undef, nr)
@@ -61,7 +46,7 @@ function makedoublearrayfunction_vector(madsdata::AbstractDict, f::Function=make
 end
 
 function makedoublearrayfunction_dictionary(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
-	arrayfunction = makearrayfunction(madsdata, f)
+	arrayfunction = Mads.makearrayfunction(madsdata, f)
 	obskeys = getobskeys(madsdata)
 	function doublearrayfunction(arrayparameters::AbstractVector)
 		dictresult = arrayfunction(arrayparameters)
@@ -75,11 +60,9 @@ function makedoublearrayfunction_dictionary(madsdata::AbstractDict, f::Function=
 	end
 	return doublearrayfunction
 end
-
 function makedoublearrayfunction(madsdata::AbstractDict, f::Function=makemadscommandfunction(madsdata))
 	doublearrayfunction = vectorflag ? makedoublearrayfunction_vector(madsdata, f) : makedoublearrayfunction_dictionary(madsdata, f)
 end
-
 @doc """
 Make a version of the function `f` that accepts an array containing the optimal parameter values, and returns an array of observations
 

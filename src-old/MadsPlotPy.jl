@@ -63,7 +63,6 @@ function plotgrid(madsdata::AbstractDict, parameters::AbstractDict; addtitle::Bo
 		plotgrid(madsdata, s; addtitle=addtitle, title=title, filename=filename, format=format)
 	end
 end
-
 @doc """
 Plot a 3D grid solution based on model predictions in array `s`, initial parameters, or user provided parameter values
 

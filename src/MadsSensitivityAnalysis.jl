@@ -420,7 +420,6 @@ function getparamrandom(madsdata::AbstractDict, parameterkey::Union{Symbol, Abst
 	end
 	return nothing
 end
-
 @doc """
 Get independent sampling of model parameters defined in the MADS problem dictionary
 

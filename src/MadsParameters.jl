@@ -395,7 +395,6 @@ function getoptparams(madsdata::AbstractDict, parameterarray::AbstractArray=getp
 		return parameterarray
 	end
 end
-
 @doc """
 Get optimizable parameters
 
@@ -954,7 +953,6 @@ function boundparameters!(madsdata::AbstractDict, pardict::AbstractDict)
 	end
 	return nothing
 end
-
 @doc """
 Bound model parameters based on their ranges
 

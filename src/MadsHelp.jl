@@ -128,7 +128,6 @@ function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortout
 	n > 0 && string == "" && @info("Number of functions in module $m: $n")
 	return functions
 end
-
 @doc """
 List available functions in the MADS modules:
 

@@ -381,7 +381,6 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 	end
 	return nothing
 end
-
 @doc """
 Plot the matches between model predictions and observations
 
@@ -585,7 +584,6 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict, wellnam
 	!quiet && Mads.display(p; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
-
 @doc """
 Plot the sensitivity analysis results for all the wells in the MADS problem dictionary (wells class expected)
 
@@ -836,7 +834,6 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 	end
 	return nothing
 end
-
 @doc """
 Generate separate spaghetti plots for each `selected` (`type != null`) model parameter
 
@@ -1035,7 +1032,6 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 	!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
-
 @doc """
 Generate a combined spaghetti plot for the `selected` (`type != null`) model parameter
 
@@ -1112,7 +1108,6 @@ function plotseries(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractS
 		plotseriesengine(m, filename; names=names, kw...)
 	end
 end
-
 @doc """
 Create plots of data series
 

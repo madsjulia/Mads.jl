@@ -137,7 +137,6 @@ function display(o; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		print("\r")
 	end
 end
-
 @doc """
 Display image file
 
