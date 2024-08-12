@@ -1,5 +1,5 @@
 """
-MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2019
+MADS: Model Analysis & Decision Support in Julia (Mads.jl v1.0) 2024
 
 https://github.com/madsjulia
 
