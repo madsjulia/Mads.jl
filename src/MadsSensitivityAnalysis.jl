@@ -197,12 +197,13 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	datafiles && DelimitedFiles.writedlm("$(rootname)_jacobian.dat", [transposevector(["Obs"; paramkeys]); obskeys J])
 	mscale = max(abs(minimumnan(J)), abs(maximumnan(J)))
 	if imagefiles
-		jacmat = Gadfly.spy(J, Gadfly.Scale.x_discrete(; labels=i->plotlabels[i]), Gadfly.Scale.y_discrete(; labels=i->obskeys[i]), Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")); minvalue=-mscale, maxvalue=mscale))
+		jacmat = Gadfly.spy(J ./ mscale, Gadfly.Scale.x_discrete(; labels=i->plotlabels[i]), Gadfly.Scale.y_discrete(; labels=i->obskeys[i]), Gadfly.Guide.YLabel("Observations"), Gadfly.Guide.XLabel("Parameters"), Gadfly.Theme(; point_size=20Gadfly.pt, major_label_font_size=14Gadfly.pt, minor_label_font_size=12Gadfly.pt, key_title_font_size=16Gadfly.pt, key_label_font_size=12Gadfly.pt), Gadfly.Scale.ContinuousColorScale(Gadfly.Scale.lab_gradient(Base.parse(Colors.Colorant, "green"), Base.parse(Colors.Colorant, "yellow"), Base.parse(Colors.Colorant, "red")); minvalue=-1, maxvalue=1))
 		filename = "$(rootname)_jacobian" * ext
 		plotfileformat(jacmat, filename, 3Gadfly.inch + 0.25Gadfly.inch * nP, 3Gadfly.inch + 0.25Gadfly.inch * nO; format=format, dpi=imagedpi)
 		madsinfo("Jacobian matrix plot saved in $filename")
 		filename = "$(rootname)_jacobian_series" * ext
-		Mads.plotseries(J ./ mscale; names=plotlabels, xaxis=times, dpi=imagedpi)
+		Mads.plotseries(J ./ mscale, filename; names=plotlabels, xaxis=times, format=format, dpi=imagedpi)
+		@show filename
 		madsinfo("Jacobian matrix series plot saved in $filename")
 	end
 	if sum(bad_params) == 0
