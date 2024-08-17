@@ -203,7 +203,6 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		madsinfo("Jacobian matrix plot saved in $filename")
 		filename = "$(rootname)_jacobian_series" * ext
 		Mads.plotseries(J ./ mscale, filename; names=plotlabels, xaxis=times, xtitle=xtitle, ytitle=ytitle, format=format, dpi=imagedpi)
-		@show filename
 		madsinfo("Jacobian matrix series plot saved in $filename")
 	end
 	if sum(bad_params) == 0
