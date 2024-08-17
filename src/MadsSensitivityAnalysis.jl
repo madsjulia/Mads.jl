@@ -120,7 +120,7 @@ Dumps:
 
 - `filename` : output plot file
 """
-function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", datafiles::Bool=true, restart::Bool=false, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Vector{Float64}(undef, 0), obs::AbstractVector=Vector{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
+function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="Relative local sensitivity", datafiles::Bool=true, restart::Bool=false, imagefiles::Bool=Mads.graphoutput, par::AbstractVector=Vector{Float64}(undef, 0), obs::AbstractVector=Vector{Float64}(undef, 0), J::AbstractMatrix=Array{Float64}(undef, 0, 0))
 	f_sa, g_sa = Mads.makelocalsafunction(madsdata; restart=restart)
 	if haskey(ENV, "MADS_NO_PLOT") || haskey(ENV, "MADS_NO_GADFLY") || !isdefined(Mads, :Gadfly)
 		imagefiles = false
@@ -202,7 +202,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 		plotfileformat(jacmat, filename, 3Gadfly.inch + 0.25Gadfly.inch * nP, 3Gadfly.inch + 0.25Gadfly.inch * nO; format=format, dpi=imagedpi)
 		madsinfo("Jacobian matrix plot saved in $filename")
 		filename = "$(rootname)_jacobian_series" * ext
-		Mads.plotseries(J ./ mscale, filename; names=plotlabels, xaxis=times, format=format, dpi=imagedpi)
+		Mads.plotseries(J ./ mscale, filename; names=plotlabels, xaxis=times, xtitle=xtitle, ytitle=ytitle, format=format, dpi=imagedpi)
 		@show filename
 		madsinfo("Jacobian matrix series plot saved in $filename")
 	end
