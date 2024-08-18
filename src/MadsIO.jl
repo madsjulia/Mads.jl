@@ -262,13 +262,13 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=Mads.quiet)
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=Mads.quiet, dicttype=OrderedCollections.OrderedDict{Any,Any})
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
 	if !bigfile || isnothing(madsdata)
 		if format == "yaml"
-			madsdata = loadyamlfile(filename)
+			madsdata = loadyamlfile(filename; dicttype=dicttype)
 		elseif format == "json"
 			madsdata = loadjsonfile(filename)
 		end
@@ -276,7 +276,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 	while typeof(madsdata) <: AbstractString # Windows links fix
 		filename = joinpath(splitdir(filename)[1], madsdata)
 		if format == "yaml"
-			madsdata = loadyamlfile(filename)
+			madsdata = loadyamlfile(filename; dicttype=dicttype)
 		elseif format == "json"
 			madsdata = loadjsonfile(filename)
 		end

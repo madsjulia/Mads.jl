@@ -1,3 +1,0 @@
-OF: 46.0
-lambda: NaN
-OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}("a" => 1.0, "b" => -1.0)

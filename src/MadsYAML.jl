@@ -13,8 +13,8 @@ Returns:
 
 - data in the yaml input file
 """
-function loadyamlfile(filename::AbstractString)
-	yamldata = YAML.load_file(filename; dicttype=OrderedCollections.OrderedDict{String,Any})
+function loadyamlfile(filename::AbstractString; dicttype=OrderedCollections.OrderedDict{Any,Any})
+	yamldata = YAML.load_file(filename; dicttype=dicttype)
 	return yamldata
 end
 

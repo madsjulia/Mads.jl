@@ -200,7 +200,7 @@ Test.@testset "Anasol" begin
 	Test.@test isapprox(good_residuals, residuals_results, atol=1e-8)
 
 	# Test Mads.getsourcekeys(md)
-	Test.@test sk == ["Source1_dz", "Source1_f", "Source1_t0", "Source1_x", "Source1_dy", "Source1_dx", "Source1_z", "Source1_t1", "Source1_y"]
+	Test.@test sk == ["Source1_x", "Source1_y", "Source1_z", "Source1_dx", "Source1_dy", "Source1_dz", "Source1_f", "Source1_t0", "Source1_t1"]
 
 	# Test Mads.getparamsmin(md), getparamsmax, getparamsinit_min, getparamsinit_max
 	Test.@test isapprox(m1, good_params_min, atol=1e-8)

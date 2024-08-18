@@ -188,7 +188,9 @@ end
 Mads.@stdouterrcapture Mads.addsource!(md)
 Mads.@stdouterrcapture Mads.removesource!(md)
 
-Mads.rmdir("w01-w13a_w20a_restart")
+Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
+Mads.rmfile(joinpath(workdir,"w01-w13a_w20a.initialresults"))
+Mads.rmfile(joinpath(workdir,"w01-w13a_w20a_saltelli_5.jld2"))
 
 Mads.veryquietoff()
 Mads.graphon()
