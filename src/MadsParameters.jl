@@ -668,8 +668,6 @@ function scale_down(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVecto
 			vl = 0
 		elseif vl > 1
 			vl = 1
-		else
-			vl = v
 		end
 		vv[i] = vl
 	end
