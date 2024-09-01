@@ -646,6 +646,7 @@ function scale_up(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVector,
 	end
 	if any(isnan.(vv))
 		@show v
+		@show vv
 		@warn("NaN values in scaled vector!")
 		throw()
 	end
@@ -673,6 +674,7 @@ function scale_down(v::AbstractVector, vmin::AbstractVector, vmax::AbstractVecto
 	end
 	if any(isnan.(vv))
 		@show v
+		@show vv
 		@warn("NaN values in scaled vector!")
 		throw()
 	end
