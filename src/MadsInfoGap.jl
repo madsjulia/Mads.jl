@@ -2,10 +2,10 @@ import DocumentFunction
 import JuMP
 import MathOptInterface
 import Colors
+import Ipopt
 
-@Mads.tryimport Ipopt
 if !haskey(ENV, "MADS_NO_GADFLY")
-	@Mads.tryimport Gadfly
+	import Gadfly
 end
 
 """
