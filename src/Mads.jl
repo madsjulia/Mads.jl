@@ -31,11 +31,13 @@ import Ipopt
 function julia_main()::Cint
 	if length(ARGS) > 0
 		filename = ARGS[1]
+		@info("Loading information from $(filename) ...")
+		md = Mads.loadmadsfile(filename)
+		@info("Executing calibration ...")
+		Mads.calibrate(md)
 	else
-		@warn "Arguments should be provided on the command line!"
+		@warn("Arguments should be provided on the command line!")
 	end
-	md = Mads.loadmadsfile(filename)
-	Mads.calibrate(md)
 	return 0
 end
 
