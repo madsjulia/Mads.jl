@@ -1,4 +1,4 @@
-if !haskey(ENV, "MADS_NO_GADFLY")
+if !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_DISPLAY")
 	import Gadfly
 	import Compose
 end
