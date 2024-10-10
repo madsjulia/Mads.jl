@@ -76,8 +76,8 @@ Test.@testset "Restarting" begin
 	Mads.rmdir("w01_restart")
 	Mads.rmfile(joinpath(workdir, "w01-v01.iterationresults"))
 	Mads.rmfile(joinpath(workdir, "w01-v02.mads"))
-	Mads.rmfiles_ext("svg")
-	Mads.rmfiles_ext("dat")
+	Mads.rmfiles_ext("svg"; path=workdir)
+	Mads.rmfiles_ext("dat"; path=workdir)
 
 	ReusableFunctions.quieton()
 	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
