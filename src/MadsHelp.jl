@@ -116,10 +116,13 @@ function functions(m::Union{Symbol, Module}, string::AbstractString=""; shortout
 			!quiet && @info("$(m) functions$suffix:")
 			sort!(functions)
 			n = length(functions)
-			if shortoutput
-				!quiet && Base.display(TextDisplay(stdout), functions)
-			else
-				!quiet && (Base.display(functions); println())
+			if !quiet
+				if shortoutput
+					Base.display(TextDisplay(stdout), functions)
+				else
+					Base.display(functions)
+					println()
+				end
 			end
 		end
 	catch

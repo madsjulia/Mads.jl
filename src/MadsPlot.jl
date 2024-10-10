@@ -1320,10 +1320,14 @@ function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::Abs
 	catch errmsg
 		printerrormsg(errmsg)
 		Mads.madswarn("Mads.plotseries: Gadfly fails!")
-		!isnothing(ixzero) && (X[ixzero] .= 0)
+		if !isnothing(ixzero)
+			X[ixzero] .= 0
+		end
 		return false
 	end
-	!isnothing(ixzero) && (X[ixzero] .= 0)
+	if !isnothing(ixzero)
+		X[ixzero] .= 0
+	end
 	if returnplot
 		return pS
 	elseif code
