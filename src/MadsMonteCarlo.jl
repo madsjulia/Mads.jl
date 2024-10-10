@@ -189,6 +189,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	end
 	numsamples = numsamples_perwalker_burnin * numwalkers
 	@info("AffineInvariantMCMC burning stage (total number of executions $(numsamples), final burning chain size $(numsamples_perwalker_burnin * numwalkers))...")
+	sleep(5)
 	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, numsamples_perwalker_burnin, 1; filename="", load=false, save=false, rng=Mads.rng)
 	numsamples = numsamples_perwalker * numwalkers
 	@info("AffineInvariantMCMC exploration stage (total number of executions $(numsamples), final chain size $(div(numsamples_perwalker, thinning) * numwalkers))...")

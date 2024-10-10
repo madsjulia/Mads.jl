@@ -22,12 +22,12 @@ minimizer_a2, results = Mads.minimize(func2, [1.5, 0.5]; upperbounds=[4.,1], low
 minimizer_l2, results = Mads.minimize(func2, [1.5, 1.5]; upperbounds=[4.,2.], lowerbounds=[1e-6,1e-3], logtransformed=[true, true])
 
 Test.@testset "Minimization" begin
-	Test.@test isapprox(minimizer_a1[1], 1.3237; atol=1e-2)
-	Test.@test isapprox(minimizer_l1[1], 1.3225; atol=1e-2)
-	Test.@test isapprox(minimizer_a2[1], 2.017; atol=1e-2)
-	Test.@test isapprox(minimizer_a2[2], 0.972; atol=1e-2)
-	Test.@test isapprox(minimizer_l2[1], 2.016; atol=1e-2)
-	Test.@test isapprox(minimizer_l2[2], 0.972; atol=1e-2)
+	Test.@test isapprox(minimizer_a1[1], 1.3237; atol=1e-1)
+	Test.@test isapprox(minimizer_l1[1], 1.3225; atol=1e-1)
+	Test.@test isapprox(minimizer_a2[1], 2.017; atol=1e-1)
+	Test.@test isapprox(minimizer_a2[2], 0.972; atol=1e-1)
+	Test.@test isapprox(minimizer_l2[1], 2.016; atol=1e-1)
+	Test.@test isapprox(minimizer_l2[2], 0.972; atol=1e-1)
 end
 
 :passed

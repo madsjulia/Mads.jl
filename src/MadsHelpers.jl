@@ -512,11 +512,7 @@ Get and return current random seed.
 $(DocumentFunction.documentfunction(getseed))
 """
 function getseed()
-	if isdefined(Random, :GLOBAL_SEED)
-		return Random.GLOBAL_SEED[1]
-	else
-		return Int(Random.default_rng().seed[1])
-	end
+	return Random.GLOBAL_SEED.s0
 end
 
 function seedrng(f=nothing)

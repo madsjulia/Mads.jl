@@ -33,7 +33,12 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 	paraminitdict = Mads.getparamdict(madsdata)
 	if l == 1
 		p = merge(paraminitdict, paramdict)
-		r = convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, f(p))
+		r = f(p)
+		if !isnothing(r)
+			r = convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, f(p))
+		else
+			@warn("Forward run did not return any results!")
+		end
 		return r
 	else
 		optkeys = Mads.getoptparamkeys(madsdata_c)

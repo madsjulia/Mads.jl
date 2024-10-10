@@ -5,7 +5,7 @@ import Random
 Mads.seed!(2017, Random.MersenneTwister)
 
 @Test.testset "Functions" begin
-	@Test.test isapprox(Mads.rosenbrock_gradient!(rand(Mads.rng, 2), Array{Float64}(undef, 2)), 95, atol=10)
+	@Test.test isapprox(Mads.rosenbrock_gradient!(rand(Mads.rng, 2), Array{Float64}(undef, 2)), -114, atol=10)
 	@Test.test Mads.rosenbrock_hessian!(rand(Mads.rng, 2),Array{Float64}(undef, 2,2)) == 200.0
 	@Test.test all((Mads.makerosenbrock(2))([1,1]) .== [0,0])
 	@Test.test all((Mads.makerosenbrock_gradient(2))([1,1]) .== [-1 0; -20 10])

@@ -24,8 +24,10 @@ end
 
 function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
 	dump = filename != "" ? true : false
-	dump && (f = open(filename, "w"))
-	dump && write(f, pretext)
+	if dump
+		f = open(filename, "w")
+		write(f, pretext)
+	end
 	uniquecolumns = map(i->string(Char(65 + (i-1)%26))^Int(ceil(i/26)), 1:ncol)
 	observationdict = OrderedCollections.OrderedDict{String,Dict}()
 	for i = 1:nrow

@@ -217,7 +217,9 @@ function plotmatches(madsdata::AbstractDict, result::AbstractDict, rx::Union{Abs
 			else
 				newresult[k] = result[k]
 			end
-			!notitle && (title = typeof(rx) == Regex ? rx.pattern : rx)
+			if !notitle
+				title = typeof(rx) == Regex ? rx.pattern : rx
+			end
 		end
 	end
 	madsdata_c = copy(madsdata)

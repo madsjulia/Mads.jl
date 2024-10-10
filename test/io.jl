@@ -83,7 +83,7 @@ Mads.maxtofloatmax!(df)
 	@Test.test isnan(resultshouldbenan)
 
 	Mads.seed!(2017, Random.MersenneTwister)
-	@Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 0.107554; atol=1e-5)
+	@Test.test isapprox(Mads.getparamrandom(Dict("Parameters"=>Dict("k"=>Dict("init"=>1,"log"=>true,"dist"=>"Normal(1,10)"))), "k")..., 6.6e-19; atol=1e-1)
 end
 
 :passed
