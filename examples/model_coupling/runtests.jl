@@ -186,6 +186,7 @@ else
 	Mads.rmfiles_ext("dat"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 	Mads.rmfiles_ext("iterationresults"; path=joinpath(workdir, "external-linearmodel+template+instruction+path"))
 	Mads.rmfiles_ext("jld2"; path=joinpath(workdir, "..", "models", "internal-polynomial-model"))
+	Mads.rmfiles_ext("jld2"; path=joinpath(workdir, "..", "models", "internal-linear-model"))
 	@info("Model coupling tests done!")
 	cd(cwd)
 end

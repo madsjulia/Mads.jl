@@ -53,7 +53,7 @@ Mads.display("w01-w13a_w20a-calib-match.svg")
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 Mads.madsinfo("Prior spaghetti plot ...")
-paramvalues=Mads.getparamrandom(md, 100)
+paramvalues = Mads.getparamrandom(md, 100)
 Mads.spaghettiplot(md, paramvalues, keyword="w13a_w20a-prior", xtitle = "Time [a]", ytitle = "Concentration [ppb]")
 Mads.display("w01-w13a_w20a-prior-100-spaghetti.svg")
 
