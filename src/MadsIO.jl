@@ -27,9 +27,9 @@ function createhash!(DATA::DATA)
 	end
 end
 
-function checkhash(excel_file::AbstractString, target_hash::AbstractString, throw_error::Bool=false)::Bool
+function checkhash(input_file::AbstractString, target_hash::AbstractString, throw_error::Bool=false)::Bool
 	local hash
-	open(excel_file) do f
+	open(input_file) do f
 		hash = SHA.bytes2hex(SHA.sha2_256(f))
 	end
 	check = hash == target_hash
@@ -37,11 +37,11 @@ function checkhash(excel_file::AbstractString, target_hash::AbstractString, thro
 		@info("Current  hash: $(hash)")
 		@info("Expected hash: $(target_hash)")
 		if throw_error
-			@error "File hash for $(excel_file) does not match!"
+			@error "File hash for $(input_file) does not match!"
 			throw("Error")
 		end
 	else
-		@info "File hash for $(excel_file) matches!"
+		@info "File hash for $(input_file) matches!"
 	end
 	return check
 end
