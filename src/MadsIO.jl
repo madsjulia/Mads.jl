@@ -77,14 +77,13 @@ function get_datasets(filename::AbstractString)
 	return datasets
 end
 
-function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::Vector{Int}, col_range::Vector{String}, mapping::Dict=Dict(), datatype::DataType=Float64)
+function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::Vector{Int}, col_range::Vector{String}, datatype::DataType=Float64, mapping::Dict=Dict())
 	@assert length(row_range) == 2
 	@assert length(col_range) == 2
 	get_excel_data(excel_file, sheet_name, header_row, tuple(row_range...), tuple(col_range...), mapping, datatype)
 end
-function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::NTuple{2, Int}, col_range::NTuple{2, String}, mapping::Dict=Dict(), datatype::DataType=Float64)
-	@assert datatype <: Number
-	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{Float64}}()
+function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::NTuple{2, Int}, col_range::NTuple{2, String}, datatype::DataType=Float64, mapping::Dict=Dict())
+	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{datatype}}()
 	XLSX.openxlsx(excel_file, mode="r") do xf
 		params = xf[sheet_name]["$(col_range[1])$(header_row):$(col_range[2])$(header_row)"]
 		data = xf[sheet_name]["$(col_range[1])$(row_range[1]):$(col_range[2])$(row_range[2])"]
@@ -109,7 +108,9 @@ function get_excel_data(excel_file::String, sheet_name::String, header_row::Int,
 				end
 				v = data[:,i]
 				if !all(ismissing.(v))
-					v[ismissing.(v)] .= datatype(NaN)
+					if datatype <: Real
+						v[ismissing.(v)] .= datatype(NaN)
+					end
 					data_dict[param_symbol] = convert(Vector{datatype}, v)
 				else
 					@warn("$(param) is missing!")

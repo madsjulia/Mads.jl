@@ -1,4 +1,4 @@
-#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
+C:/Users/monty/.julia/dev/Mads/#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 paramfile = open("parameters.dat")
 parameters = Meta.parse.(readlines(paramfile))
 close(paramfile)
@@ -9,6 +9,6 @@ predictions = map(f, times)
 
 predicfile = open("predictions.dat", "w")
 for prediction in predictions
-	write(predicfile, string(prediction, "\n"))
+	write(predicfile, string(prediction, "/n"))
 end
 close(predicfile)
