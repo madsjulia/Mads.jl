@@ -82,10 +82,10 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Int=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), datatype::DataType=Float64, mapping::Dict=Dict())
+function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Union{Int, Vector{Int}, NTuple{2, Int}}=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), keytype::DataType=String, datatype::DataType=Float64, mapping::Dict=Dict())
 	@assert length(row_range) == 2
 	@assert length(col_range) == 2
-	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{Any}}()
+	data_dict = OrderedCollections.OrderedDict{keytype, Vector{Any}}()
 	if !isfile(excel_file)
 		@error("File $(excel_file) does not exist!")
 		return data_dict
@@ -95,41 +95,66 @@ function get_excel_data(excel_file::String, sheet_name::String=""; header_row::I
 			sheet_name = xf[1]
 			@warn("Sheet name is not provided! Using the first sheet: $(sheet_name)")
 		end
-		if row_range == (0, 0)
-			row_range = (xf[sheet_name].dimension.start.row_number, xf[sheet_name].dimension.stop.row_number)
-		end
 		if col_range == (0, 0)
 			col_range = (xf[sheet_name].dimension.start.column_number, xf[sheet_name].dimension.stop.column_number)
 		end
-		params = xf[sheet_name][header_row:header_row, col_range[1]:col_range[2]]
+		if length(header_row) == 2
+			@assert length(header_row) == 2
+			params = Vector{String}()
+			for c in axes(xf[sheet_name], 2)
+				v = xf[sheet_name][header_row[1]:header_row[2],c]
+				v[ismissing.(v)] .= ""
+				push!(params, strip(.*((string.(v) .* " ")...)))
+			end
+			if row_range == (0, 0)
+				row_range = (header_row[2] + 1, xf[sheet_name].dimension.stop.row_number)
+			end
+		elseif length(header_row) == 1 && header_row > 0
+			params = xf[sheet_name][header_row:header_row, col_range[1]:col_range[2]]
+			if row_range == (0, 0)
+				row_range = (header_row + 1, xf[sheet_name].dimension.stop.row_number)
+			end
+		elseif header_row == 0
+			if row_range == (0, 0)
+				row_range = (xf[sheet_name].dimension.start.row_number, xf[sheet_name].dimension.stop.row_number)
+			end
+		else
+			@error("Invalid header row ranges!")
+			return data_dict
+		end
+
 		data = xf[sheet_name][row_range[1]:row_range[2], col_range[1]:col_range[2]]
 
 		data = data[.!all.(ismissing, eachrow(data)), :] # skip rows with all missing values
 
 		for (i, param) in enumerate(params)
 			if !ismissing(param)
-				param_symbol = Symbol()
+				param_name = ""
 				if length(mapping) > 0
 					for key in keys(mapping)
 						if param == mapping[key]
-							param_symbol = Symbol(key)
+							param_name = key
 							break
 						end
 					end
-					if param_symbol == Symbol()
+					if param_name == ""
 						@warn("$(param) is not found in the mapping!")
 					end
 				end
-				if param_symbol == Symbol()
-					param_symbol = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
+				if param_name == ""
+					if keytype <: AbstractString
+						param_name = convert(keytype, param)
+					elseif keytype <: Symbol
+						param_name = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
+					end
 				end
 				v = data[:,i]
 				if !all(ismissing.(v))
 					if datatype <: Number && eltype(v) <: Number
 						v[ismissing.(v)] .= datatype(NaN)
-						data_dict[param_symbol] = convert(Vector{datatype}, v)
+						data_dict[param_name] = convert(Vector{datatype}, v)
 					else
-						data_dict[param_symbol] = v
+						data_dict[param_name] = v
 					end
 				else
 					@warn("$(param) is missing!")
