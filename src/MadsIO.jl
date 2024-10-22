@@ -77,18 +77,35 @@ function get_datasets(filename::AbstractString)
 	return datasets
 end
 
-function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::Vector{Int}, col_range::Vector{String}, datatype::DataType=Float64, mapping::Dict=Dict())
+"""
+Get data from an EXCEL file
+
+$(DocumentFunction.documentfunction(get_excel_data))
+"""
+function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Int=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), datatype::DataType=Float64, mapping::Dict=Dict())
 	@assert length(row_range) == 2
 	@assert length(col_range) == 2
-	get_excel_data(excel_file, sheet_name, header_row, tuple(row_range...), tuple(col_range...), mapping, datatype)
-end
-function get_excel_data(excel_file::String, sheet_name::String, header_row::Int, row_range::NTuple{2, Int}, col_range::NTuple{2, String}, datatype::DataType=Float64, mapping::Dict=Dict())
-	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{datatype}}()
+	data_dict = OrderedCollections.OrderedDict{Symbol, Vector{Any}}()
+	if !isfile(excel_file)
+		@error("File $(excel_file) does not exist!")
+		return data_dict
+	end
 	XLSX.openxlsx(excel_file, mode="r") do xf
-		params = xf[sheet_name]["$(col_range[1])$(header_row):$(col_range[2])$(header_row)"]
-		data = xf[sheet_name]["$(col_range[1])$(row_range[1]):$(col_range[2])$(row_range[2])"]
+		if sheet_name == ""
+			sheet_name = xf[1]
+			@warn("Sheet name is not provided! Using the first sheet: $(sheet_name)")
+		end
+		if row_range == (0, 0)
+			row_range = (xf[sheet_name].dimension.start.row_number, xf[sheet_name].dimension.stop.row_number)
+		end
+		if col_range == (0, 0)
+			col_range = (xf[sheet_name].dimension.start.column_number, xf[sheet_name].dimension.stop.column_number)
+		end
+		params = xf[sheet_name][header_row:header_row, col_range[1]:col_range[2]]
+		data = xf[sheet_name][row_range[1]:row_range[2], col_range[1]:col_range[2]]
+
 		data = data[.!all.(ismissing, eachrow(data)), :] # skip rows with all missing values
-		@assert length(params) == size(data, 2)
+
 		for (i, param) in enumerate(params)
 			if !ismissing(param)
 				param_symbol = Symbol()
@@ -108,10 +125,12 @@ function get_excel_data(excel_file::String, sheet_name::String, header_row::Int,
 				end
 				v = data[:,i]
 				if !all(ismissing.(v))
-					if datatype <: Real
+					if datatype <: Number && eltype(v) <: Number
 						v[ismissing.(v)] .= datatype(NaN)
+						data_dict[param_symbol] = convert(Vector{datatype}, v)
+					else
+						data_dict[param_symbol] = v
 					end
-					data_dict[param_symbol] = convert(Vector{datatype}, v)
 				else
 					@warn("$(param) is missing!")
 				end
@@ -120,11 +139,6 @@ function get_excel_data(excel_file::String, sheet_name::String, header_row::Int,
 	end
 	return data_dict
 end
-@doc """
-Get data from an EXCEL file
-
-$(DocumentFunction.documentfunction(get_excel_data))
-""" get_excel_data
 
 function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::Union{DataFrames.DataFrame,AbstractArray}
 	if !isfile(filename)
