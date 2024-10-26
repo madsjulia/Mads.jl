@@ -82,13 +82,18 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Union{Int, Vector{Int}, NTuple{2, Int}}=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), keytype::DataType=String, datatype::DataType=Float64, mapping::Dict=Dict())
+function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Union{Int, Vector{Int}, NTuple{2, Int}}=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict{Any, Vector{Any}}, DataFrames.DataFrame}
+	@assert numbertype <: Real
 	@assert length(row_range) == 2
 	@assert length(col_range) == 2
-	data_dict = OrderedCollections.OrderedDict{keytype, Vector{Any}}()
+	if dataframe
+		df = DataFrames.DataFrame()
+	else
+		df = OrderedCollections.OrderedDict{keytype, Vector{Any}}()
+	end
 	if !isfile(excel_file)
 		@error("File $(excel_file) does not exist!")
-		return data_dict
+		return df
 	end
 	XLSX.openxlsx(excel_file, mode="r") do xf
 		if sheet_name == ""
@@ -120,7 +125,7 @@ function get_excel_data(excel_file::String, sheet_name::String=""; header_row::U
 			end
 		else
 			@error("Invalid header row ranges!")
-			return data_dict
+			return df
 		end
 
 		data = xf[sheet_name][row_range[1]:row_range[2], col_range[1]:col_range[2]]
@@ -150,19 +155,27 @@ function get_excel_data(excel_file::String, sheet_name::String=""; header_row::U
 				end
 				v = data[:,i]
 				if !all(ismissing.(v))
-					if datatype <: Number && eltype(v) <: Number
-						v[ismissing.(v)] .= datatype(NaN)
-						data_dict[param_name] = convert(Vector{datatype}, v)
+					if all(typeof.(v) .<: Union{Missing,Number})
+						v[ismissing.(v)] .= numbertype(NaN)
+						v = convert(Vector{numbertype}, v)
+					elseif all(typeof.(v) .<: Union{Missing,AbstractString})
+						v[ismissing.(v)] .= ""
+						v = convert(Vector{String}, v)
 					else
-						data_dict[param_name] = v
+						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 					end
 				else
 					@warn("$(param) is missing!")
 				end
+				if dataframe
+					df[!, param_name] = v
+				else
+					df[param_name] = v
+				end
 			end
 		end
 	end
-	return data_dict
+	return df
 end
 
 function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::Union{DataFrames.DataFrame,AbstractArray}
