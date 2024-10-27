@@ -82,10 +82,8 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::String, sheet_name::String=""; header_row::Union{Int, Vector{Int}, NTuple{2, Int}}=1, row_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), col_range::Union{Vector{Int}, NTuple{2, Int}}=(0,0), keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict{Any, Vector{Any}}, DataFrames.DataFrame}
+function get_excel_data(excel_file::String, sheet_name::String=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert numbertype <: Real
-	@assert length(row_range) == 2
-	@assert length(col_range) == 2
 	if dataframe
 		df = DataFrames.DataFrame()
 	else
@@ -95,83 +93,107 @@ function get_excel_data(excel_file::String, sheet_name::String=""; header_row::U
 		@error("File $(excel_file) does not exist!")
 		return df
 	end
+	if rows != 0 && minimum(rows) <= maximum(header)
+		@error("Header rows and data rows overlap!")
+		return df
+	end
 	XLSX.openxlsx(excel_file, mode="r") do xf
 		if sheet_name == ""
-			sheet_name = xf[1]
+			sheet_name = xf[1].name
 			@warn("Sheet name is not provided! Using the first sheet: $(sheet_name)")
 		end
-		if col_range == (0, 0)
-			col_range = (xf[sheet_name].dimension.start.column_number, xf[sheet_name].dimension.stop.column_number)
+		if cols == 0 # all columns
+			col_range = xf[sheet_name].dimension.start.column_number:xf[sheet_name].dimension.stop.column_number
+			col_vector = collect(col_range)
+		else # Vector{Int} or UnitRange{Int}
+			col_vector = collect(cols)
+			col_range = minimum(cols):maximum(cols)
 		end
-		if length(header_row) == 2
-			@assert length(header_row) == 2
+		if header != 0
+			header_vector = collect(header)
+			header_range = minimum(header):maximum(header)
+		end
+		row_vector = collect(rows)
+		row_range = minimum(rows):maximum(rows)
+		if length(header) > 1 # multiple header rows
 			params = Vector{String}()
-			for c in axes(xf[sheet_name], 2)
-				v = xf[sheet_name][header_row[1]:header_row[2],c]
+			for c in col_vector
+				v = xf[sheet_name][header_range,c][header_vector .- minimum(header_range) .+ 1]
 				v[ismissing.(v)] .= ""
-				push!(params, strip(.*((string.(v) .* " ")...)))
+				p = strip(.*((string.(v) .* " ")...))
+				p = p == "" ? "Column $c" : p
+				push!(params, p)
 			end
-			if row_range == (0, 0)
-				row_range = (header_row[2] + 1, xf[sheet_name].dimension.stop.row_number)
+			if rows == 0
+				row_range = (maximum(header) + 1):xf[sheet_name].dimension.stop.row_number
+				row_vector = collect(row_range)
 			end
-		elseif length(header_row) == 1 && header_row > 0
-			params = xf[sheet_name][header_row:header_row, col_range[1]:col_range[2]]
-			if row_range == (0, 0)
-				row_range = (header_row + 1, xf[sheet_name].dimension.stop.row_number)
+		elseif length(header) == 1 && maximum(header) > 0 # single header row
+			params = xf[sheet_name][header, col_range][col_vector .- minimum(col_range) .+ 1]
+			for (i, c) in enumerate(col_vector) # replace missing values with column number
+				p = params[i]
+				if ismissing(p) || p == ""
+					params[i] = "Column $(c)"
+				end
 			end
-		elseif header_row == 0
-			if row_range == (0, 0)
-				row_range = (xf[sheet_name].dimension.start.row_number, xf[sheet_name].dimension.stop.row_number)
+			if rows == 0
+				row_range = (maximum(header) + 1):xf[sheet_name].dimension.stop.row_number
+				row_vector = collect(row_range)
+			end
+		elseif header == 0 # no header row
+			params = ["Column $i" for i in col_vector]
+			if rows == 0
+				row_range = xf[sheet_name].dimension.start.row_number:xf[sheet_name].dimension.stop.row_number
+				row_vector = collect(row_range)
 			end
 		else
 			@error("Invalid header row ranges!")
 			return df
 		end
 
-		data = xf[sheet_name][row_range[1]:row_range[2], col_range[1]:col_range[2]]
+		# NOTE: xf[sheet_name][row_vector, col_vector] is not working; that is why we use the following
+		data = xf[sheet_name][row_range, col_range][row_vector .- minimum(row_range) .+ 1,col_vector .- minimum(col_range) .+ 1]
 
 		data = data[.!all.(ismissing, eachrow(data)), :] # skip rows with all missing values
 
 		for (i, param) in enumerate(params)
-			if !ismissing(param)
-				param_name = ""
-				if length(mapping) > 0
-					for key in keys(mapping)
-						if param == mapping[key]
-							param_name = key
-							break
-						end
-					end
-					if param_name == ""
-						@warn("$(param) is not found in the mapping!")
+			param_name = ""
+			if length(mapping) > 0
+				for key in keys(mapping)
+					if param == mapping[key]
+						param_name = key
+						break
 					end
 				end
 				if param_name == ""
-					if keytype <: AbstractString
-						param_name = convert(keytype, param)
-					elseif keytype <: Symbol
-						param_name = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
-					end
+					@warn("$(param) is not found in the mapping!")
 				end
-				v = data[:,i]
-				if !all(ismissing.(v))
-					if all(typeof.(v) .<: Union{Missing,Number})
-						v[ismissing.(v)] .= numbertype(NaN)
-						v = convert(Vector{numbertype}, v)
-					elseif all(typeof.(v) .<: Union{Missing,AbstractString})
-						v[ismissing.(v)] .= ""
-						v = convert(Vector{String}, v)
-					else
-						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
-					end
+			end
+			if param_name == ""
+				if keytype <: AbstractString
+					param_name = convert(keytype, param)
+				elseif keytype <: Symbol
+					param_name = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
+				end
+			end
+			v = data[:,i]
+			if !all(ismissing.(v))
+				if all(typeof.(v) .<: Union{Missing,Number})
+					v[ismissing.(v)] .= numbertype(NaN)
+					v = convert(Vector{numbertype}, v)
+				elseif all(typeof.(v) .<: Union{Missing,AbstractString})
+					v[ismissing.(v)] .= ""
+					v = convert(Vector{String}, v)
 				else
-					@warn("$(param) is missing!")
+					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				end
 				if dataframe
 					df[!, param_name] = v
 				else
 					df[param_name] = v
 				end
+			else
+				@warn("All values for parameter/column \"$(param)\" are missing!")
 			end
 		end
 	end
