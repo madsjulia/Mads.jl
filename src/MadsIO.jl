@@ -1152,7 +1152,7 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 end
 
 """
-Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
+Get files in the current directory or in a directory defined by `path` and a matching pattern `key`, which can be a string or regular expression
 
 $(DocumentFunction.documentfunction(searchdir;
 argtext=Dict("key"=>"matching pattern (string or regular expression accepted)"),
