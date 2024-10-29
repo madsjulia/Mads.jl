@@ -1151,14 +1151,12 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 	return convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, results)
 end
 
-searchdir(key::Regex; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
-searchdir(key::AbstractString; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
-@doc """
+"""
 Get files in the current directory or in a directory defined by `path` matching pattern `key` which can be a string or regular expression
 
 $(DocumentFunction.documentfunction(searchdir;
-argtext=Dict("key"=>"matching pattern for Mads input files (string or regular expression accepted)"),
-keytext=Dict("path"=>"search directory for the mads input files [default=`.`]")))
+argtext=Dict("key"=>"matching pattern (string or regular expression accepted)"),
+keytext=Dict("path"=>"search directory [default=`.`]")))
 
 Returns:
 
@@ -1171,7 +1169,8 @@ Examples:
 - `Mads.searchdir(r"[A-B]"; path = ".")`
 - `Mads.searchdir(r".*.cov"; path = ".")`
 ```
-""" searchdir
+"""
+searchdir(key::Union{Regex,AbstractString}; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
 
 filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
 filterkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
