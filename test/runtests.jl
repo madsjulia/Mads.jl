@@ -3,8 +3,8 @@ if lowercase(get(ENV, "CI", "false")) == "true"
 		setup_code = Base.load_path_setup_code()
 		path = joinpath(@__DIR__, "..", "ci", "before_script.jl")
 		code = """
-		$setup_code
-		include("$(escape_string(path))")
+			$setup_code
+			include("$(escape_string(path))")
 		"""
 		run(`$(Base.julia_cmd()) -e $code`)
 	end
@@ -12,11 +12,6 @@ end
 
 import Mads
 import Test
-
-# madstest = "svr"
-# file = joinpath(Mads.dir, "examples", madstest, "runtests.jl")
-# include(file)
-# poop
 
 Mads.veryquieton()
 Mads.graphoff()
@@ -31,7 +26,7 @@ end
 
 @info("Running MADS tests:")
 
-printstyled("* miscellansfdfeous ...\n"; color=:cyan)
+printstyled("* miscellaneous ...\n"; color=:cyan)
 @elapsed include("miscellaneous.jl")
 
 printstyled("* io ...\n"; color=:cyan)

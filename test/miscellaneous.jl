@@ -182,4 +182,13 @@ Mads.graphon()
 
 deleteat!(ARGS, 1)
 
+@Test.testset "Unique/Nonunique functions" begin
+	@Test.test Mads.unique_indices([1,2,3,3]) == [1,2,3]
+	@Test.test Mads.nonunique_indices([1,2,3,3]) == [4]
+	@Test.test Mads.unique_mask([1,2,3,3]) == [true, true, true, false]
+	@Test.test Mads.nonunique_mask([1,2,3,3]) == [false, false, false, true]
+	@Test.test Mads.unique([1,2,3,3]) == [1,2,3]
+	@Test.test Mads.nonunique([1,2,3,3]) == [3]
+end
+
 :passed

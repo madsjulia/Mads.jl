@@ -82,7 +82,7 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::String, sheet_name::String=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert numbertype <: Real
 	if dataframe
 		df = DataFrames.DataFrame()
@@ -123,6 +123,10 @@ function get_excel_data(excel_file::String, sheet_name::String=""; header::Union
 				p = strip(.*((string.(v) .* " ")...))
 				p = p == "" ? "Column $c" : p
 				push!(params, p)
+			end
+			ni = Mads.nonunique_indices(params)
+			for i in ni
+				params[i] = "$(params[i]) C$(i)"
 			end
 			if rows == 0
 				row_range = (maximum(header) + 1):xf[sheet_name].dimension.stop.row_number

@@ -644,11 +644,9 @@ function merge_dictionaries(a::AbstractDict, b::AbstractDict)
 	return m
 end
 
-function nonunique(x::AbstractVector{T}) where T
-	iu = unique_indices(x::AbstractVector)
-	iunique = trues(length(x))
-
-	return iunique
+function nonunique(x::AbstractVector)
+	iu = nonunique_indices(x)
+	return x[iu]
 end
 
 function nonunique_mask(x::AbstractVector)

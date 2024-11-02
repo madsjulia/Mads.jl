@@ -63,7 +63,7 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 		else
 			file = joinpath(d, "test", "$testname.jl")
 			if isfile(file)
-				printstyled(:cyan, "* $testname testing ...\n"; color=:cyan)
+				printstyled("* $testname testing ...\n"; color=:cyan)
 				@elapsed include(file)
 			elseif Mads.pkginstalled(testname)
 				testmodule(testname)
