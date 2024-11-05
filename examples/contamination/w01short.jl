@@ -42,7 +42,7 @@ paramkeys = Mads.getparamkeys(md)
 optparamkeys = Mads.getoptparamkeys(md)
 
 # get all the parameter initial values
-paramdict_init = OrderedCollections.OrderedDict(zip(paramkeys, map(key->md["Parameters"][key]["init"], paramkeys)))
+paramdict_init = OrderedCollections.OrderedDict(zip(paramkeys, map(key -> md["Parameters"][key]["init"], paramkeys)))
 
 # create a function to compute concentrations
 computeconcentrations = Mads.makecomputeconcentrations(md)
@@ -57,7 +57,7 @@ forward_preds2 = Mads.forward(md)
 
 Mads.madsinfo("Manual sensitivity analysis ...")
 numberofsamples = 10
-paramvalues=Mads.getparamrandom(md, numberofsamples)
+paramvalues = Mads.getparamrandom(md, numberofsamples)
 Mads.allwellsoff!(md)
 Mads.wellon!(md, "w1a")
 Mads.spaghettiplots(md, paramvalues; keyword="w1a")
@@ -66,10 +66,10 @@ Mads.spaghettiplots(md, paramvalues; keyword="w1a")
 result = Mads.calibrate(md; show_trace=true)
 
 # perform global SA analysis (saltelli)
-saltelliresultm = Mads.saltelli(md;N=500)
-Mads.plotwellSAresults(md,saltelliresultm,"w1a")
-saltelliresultb = Mads.saltellibrute(md,N=500)
-Mads.plotwellSAresults(md,saltelliresultb,"w1a")
+saltelliresultm = Mads.saltelli(md; N=500)
+Mads.plotwellSAresults(md, saltelliresultm, "w1a")
+saltelliresultb = Mads.saltellibrute(md; N=500)
+Mads.plotwellSAresults(md, saltelliresultb, "w1a")
 
 # save saltelli results
 f = open("$rootname-SA-results.json", "w")
@@ -83,23 +83,23 @@ saltelliresult = JSON.parsefile("$rootname-SA-results.json"; ordered=true, use_m
 Mads.printSAresults(md, result)
 
 # plot global SA results for a given observation point
-Mads.plotwellSAresults(md,result,"w1a")
+Mads.plotwellSAresults(md, result, "w1a")
 
 # parameter space exploration
 Mads.madsinfo("Parameter space exploration ...")
 numberofsamples = 100
-paramvalues=Mads.getparamrandom(md, numberofsamples)
-Y = Array{Float64}(undef, length(md["Observations"]),numberofsamples * length(paramvalues))
+paramvalues = Mads.getparamrandom(md, numberofsamples)
+Y = Array{Float64}(undef, length(md["Observations"]), numberofsamples * length(paramvalues))
 k = 0
 for paramkey in keys(paramvalues)
-	for i in 1:numberofsamples
+	for i = 1:numberofsamples
 		original = paramdict[paramkey]
 		paramdict[paramkey] = paramvalues[paramkey][i] # set the value for each parameter
 		forward_preds = computeconcentrations(paramdict)
 		paramdict[paramkey] = original
 		j = 1
 		for obskey in keys(forward_preds)
-			Y[j,i + k] = forward_preds[obskey]
+			Y[j, i + k] = forward_preds[obskey]
 			j += 1
 		end
 	end

@@ -82,8 +82,8 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, paramvalues; keyword="w13a_w20a")
 	Mads.spaghettiplot(md, paramvalues; keyword="w13a_w20a")
 	s = splitdir(rootname)
-	for filesinadir in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "[.]*", "spaghetti.svg")), path=s[1])
-		Mads.rmfile(filesinadir, path=s[1])
+	for filesinadir in Mads.searchdir(Regex(string(s[2], "-w13a_w20a", "[.]*", "spaghetti.svg")); path=s[1])
+		Mads.rmfile(filesinadir; path=s[1])
 	end
 
 	sa_results = Mads.saltelli(md; N=5, seed=2015)
@@ -108,43 +108,42 @@ Test.@testset "Contamination" begin
 	Test.@test forward_predictions_source == forward_predictions
 	Test.@test isapprox(sum(abs.(forward_predictions_vector .- good_forward_predictions)), 0, atol=1e-4)
 	Test.@test isapprox(sum(abs.(jacobian .- good_jacobian)), 0, atol=1e-4)
-	Test.@test isapprox(Statistics.mean([abs.(param_values[i] - [40.0,4.0,15.0][i]) for i=1:3]), 0, atol=1e-4)
+	Test.@test isapprox(Statistics.mean([abs.(param_values[i] - [40.0, 4.0, 15.0][i]) for i = 1:3]), 0, atol=1e-4)
 	Test.@test all(Mads.getwelldata(md) .== [1608.0 2113.0; 1491.0 1479.0; 3.0 3.0])
 
-	t = isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
+	t = isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i = 1:(size(good_samples)[1] + 20)]), 0; atol=1e-4)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i=1:size(good_samples)[1]+20]), 0, atol=1e-4)
+		Test.@test isapprox(Statistics.mean([abs.(samples[i] - good_samples[i]) for i = 1:(size(good_samples)[1] + 20)]), 0, atol=1e-4)
 	else
 		@show samples
 	end
 
-	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
+	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = 1:size(good_llhoods)[1]]), 0; atol=1e-4)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i=1:size(good_llhoods)[1]]), 0, atol=1e-4)
+		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = 1:size(good_llhoods)[1]]), 0, atol=1e-4)
 	else
 		@show good_llhoods
 		@show llhoods
 	end
 
-
-	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
+	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = 1:size(newllhoods)[1]]), 0; atol=1e-3)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i=1:size(newllhoods)[1]]), 0, atol=1e-3)
+		Test.@test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = 1:size(newllhoods)[1]]), 0, atol=1e-3)
 	else
 		@show good_newllhoods
 		@show newllhoods
 	end
 
-	t = isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+	t = isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0, 0)[i]) for i = 1:2]), 0; atol=1e-5)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md; time=50.0)[i] - (550.0, 0)[i]) for i = 1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md; time=50.0)
 	end
 
-	t = isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+	t = isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0, 0)[i]) for i = 1:2]), 0; atol=1e-5)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0,0)[i]) for i=1:2]), 0, atol=1e-5)
+		Test.@test isapprox(Statistics.mean([abs.(Mads.computemass(md)[i] - (550.0, 0)[i]) for i = 1:2]), 0, atol=1e-5)
 	else
 		@show Mads.computemass(md)
 	end
@@ -153,16 +152,16 @@ Test.@testset "Contamination" begin
 	good_inverse_preds = JLD2.load(joinpath(workdir, "test_results", "inverse_predictions.jld2"), "inverse_predictions")
 
 	# Testing time-based well data against itself
-	ssr = 0.
-	for i=1:size(good_welldata_time)[1]
-		for j=1:size(good_welldata_time)[2]
-			ssr += (welldata_time[i*j] - good_welldata_time[i*j])^2
+	ssr = 0.0
+	for i = 1:size(good_welldata_time)[1]
+		for j = 1:size(good_welldata_time)[2]
+			ssr += (welldata_time[i * j] - good_welldata_time[i * j])^2
 		end
 	end
 
-	t = isapprox(ssr, 0., atol=1e-8)
+	t = isapprox(ssr, 0.0; atol=1e-8)
 	if t
-		Test.@test isapprox(ssr, 0., atol=1e-8)
+		Test.@test isapprox(ssr, 0.0, atol=1e-8)
 	else
 		@show welldata_time
 		@show good_welldata_time
@@ -170,14 +169,14 @@ Test.@testset "Contamination" begin
 	end
 
 	# Testing inverse predictions against itself
-	ssr = 0.
+	ssr = 0.0
 	for obskey in union(Set(keys(inverse_predictions)), Set(keys(good_inverse_preds)))
 		ssr += (inverse_predictions[obskey] - good_inverse_preds[obskey])^2
 	end
 
-	t = isapprox(ssr, 0., atol=1e-8)
+	t = isapprox(ssr, 0.0; atol=1e-8)
 	if t
-		Test.@test isapprox(ssr, 0., atol=1e-8)
+		Test.@test isapprox(ssr, 0.0, atol=1e-8)
 	else
 		@show inverse_predictions
 		@show good_inverse_preds
@@ -189,8 +188,8 @@ Mads.@stdouterrcapture Mads.addsource!(md)
 Mads.@stdouterrcapture Mads.removesource!(md)
 
 Mads.rmfile(joinpath(workdir, "w01-w13a_w20a-match.svg"))
-Mads.rmfile(joinpath(workdir,"w01-w13a_w20a.initialresults"))
-Mads.rmfile(joinpath(workdir,"w01-w13a_w20a_saltelli_5.jld2"))
+Mads.rmfile(joinpath(workdir, "w01-w13a_w20a.initialresults"))
+Mads.rmfile(joinpath(workdir, "w01-w13a_w20a_saltelli_5.jld2"))
 
 Mads.veryquietoff()
 Mads.graphon()

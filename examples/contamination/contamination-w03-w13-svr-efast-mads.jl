@@ -11,7 +11,7 @@ svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 1000)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)
-paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+paramarray = hcat(map(i -> collect(paramdict[i]), keys(paramdict))...)
 @time predictions = Mads.forward(md, paramdict)'
 
 Mads.madsinfo("Model predictions ...")
@@ -34,7 +34,7 @@ mdsvr["Julia model"] = svrexec
 mdsvr["Filename"] = "$rootname-svr.mads"
 
 sasvr = Mads.efast(mdsvr)
-Mads.plotobsSAresults(mdsvr, sasvr, format="PNG")
+Mads.plotobsSAresults(mdsvr, sasvr; format="PNG")
 Mads.display("$rootname-svr-efast-385.png")
 
 svrsave()

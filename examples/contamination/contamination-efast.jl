@@ -11,5 +11,5 @@ Mads.wellon!(md, "w20a") # use well w20a
 if !isdefined(Mads, :efastresult)
 	efast_results = Mads.efast(md; N=1000, seed=2016)
 end
-Mads.plotobsSAresults(md, efastresult; filter=r"w13a", filename="w13a-efast.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]", separate_files=true)
-Mads.plotobsSAresults(md, efastresult; filter=r"w20a", filename="w20a-efast.svg", xtitle = "Time [a]", ytitle = "Concentration [ppb]", separate_files=true)
+Mads.plotobsSAresults(md, efastresult; filter=r"w13a", filename="w13a-efast.svg", xtitle="Time [a]", ytitle="Concentration [ppb]", separate_files=true)
+Mads.plotobsSAresults(md, efastresult; filter=r"w20a", filename="w20a-efast.svg", xtitle="Time [a]", ytitle="Concentration [ppb]", separate_files=true)

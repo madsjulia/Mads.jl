@@ -11,18 +11,18 @@ svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)
-paramarray = hcat(map(i->collect(paramdict[i]), keys(paramdict))...)
+paramarray = hcat(map(i -> collect(paramdict[i]), keys(paramdict))...)
 @time predictions = Mads.forward(md, paramdict)'
 
 Mads.madsinfo("Model predictions ...")
-Mads.spaghettiplot(md, predictions, keyword="w13a-model", format="PNG")
+Mads.spaghettiplot(md, predictions; keyword="w13a-model", format="PNG")
 Mads.display("$rootname-w13a-model-$numberofsamples-spaghetti.png")
 
 @time svrpredictions = svrexec(paramarray)
 @info("SVR discrepancy $(maximum(abs.(svrpredictions .- predictions)))")
 
 Mads.madsinfo("SVR predictions ...")
-Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")
+Mads.spaghettiplot(md, svrpredictions; keyword="w13a-svr", format="PNG")
 Mads.display("$rootname-w13a-svr-$numberofsamples-spaghetti.png")
 
 sa = Mads.efast(md)
@@ -34,7 +34,7 @@ mdsvr["Julia model"] = svrexec
 mdsvr["Filename"] = "$rootname-svr.mads"
 
 sasvr = Mads.efast(mdsvr)
-Mads.plotobsSAresults(mdsvr, sasvr, format="PNG")
+Mads.plotobsSAresults(mdsvr, sasvr; format="PNG")
 Mads.display("$rootname-svr-efast-385.png")
 
 svrsave()
