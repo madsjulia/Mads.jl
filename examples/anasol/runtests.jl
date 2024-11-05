@@ -41,7 +41,7 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.spaghettiplots(md, 2)
 	Mads.rmfile(joinpath(workdir, "w01short-ax-2-spaghetti.svg"))
 	Mads.rmfile(joinpath(workdir, "w01short-vx-2-spaghetti.svg"))
-	Mads.plotmass([1.,2.],[10.,20.],[5.,10.], joinpath(workdir, "plotmass-test.svg"))
+	Mads.plotmass([1.0, 2.0], [10.0, 20.0], [5.0, 10.0], joinpath(workdir, "plotmass-test.svg"))
 	Mads.rmfile(joinpath(workdir, "plotmass-test.svg"))
 	Mads.graphon()
 end
@@ -99,7 +99,7 @@ Mads.wellon!(md, "w1a")
 Mads.savemadsfile(md, joinpath(workdir, "test.mads"))
 Mads.savemadsfile(md, Mads.getparamdict(md))
 Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"))
-Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"), explicit=true)
+Mads.savemadsfile(md, Mads.getparamdict(md), joinpath(workdir, "test.mads"); explicit=true)
 Mads.rmfile(joinpath(workdir, "w01shortexp-rerun.mads"))
 Mads.rmfile(joinpath(workdir, "test.mads"))
 Mads.setmadsinputfile("test.mads")
@@ -128,7 +128,7 @@ mdbad = deepcopy(md)
 Mads.setparamsdistnormal!(mdbad, fill(1, length(m1)), fill(2, length(m1)))
 Mads.setparamsdistuniform!(mdbad, fill(1, length(m1)), fill(2, length(m1)))
 
-Mads.computemass("w01lambda", time=50, path=workdir)
+Mads.computemass("w01lambda"; time=50, path=workdir)
 Mads.rmdir(joinpath(workdir, "mass_reduced.svg"))
 
 d = joinpath(workdir, "test_results")
@@ -163,35 +163,35 @@ good_targetkeys = JLD2.load(joinpath(d, "targetkeys.jld2"), "tk")
 
 Test.@testset "Anasol" begin
 	# Test Mads.forward(md; all=true)
-	ssr = 0.
+	ssr = 0.0
 	for obskey in union(Set(keys(forward_results)), Set(keys(good_forward_results)))
 		ssr += (forward_results[obskey] - good_forward_results[obskey])^2
 	end
-	Test.@test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0.0, atol=1e-8)
 
-	# Test Mads.getparamrandom(md, 5, init_dist=true)
+	# Test Mads.getparamrandom(md, 5; init_dist=true)
 	for obskey in union(Set(keys(paramrandom_true)), Set(keys(good_paramrandom_true)))
 		Test.@test isapprox(paramrandom_true[obskey], good_paramrandom_true[obskey], atol=1e-8)
 	end
 
-	# Test Mads.getparamrandom(md, 5, init_dist=false)
+	# Test Mads.getparamrandom(md, 5; init_dist=false)
 	for obskey in union(Set(keys(paramrandom_false)), Set(keys(good_paramrandom_false)))
 		Test.@test isapprox(paramrandom_false[obskey], good_paramrandom_false[obskey], atol=1e-8)
 	end
 
 	# Test Mads.getparamdict(md)
-	ssr = 0.
+	ssr = 0.0
 	for obskey in union(Set(keys(pd)), Set(keys(good_pd)))
 		ssr += (pd[obskey] - good_pd[obskey])^2
 	end
-	Test.@test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0.0, atol=1e-8)
 
 	# Test computeconcentrations(paramdict)
-	ssr = 0.
+	ssr = 0.0
 	for obskey in union(Set(keys(forward_preds)), Set(keys(good_forward_preds)))
 		ssr += (forward_preds[obskey] - good_forward_preds[obskey])^2
 	end
-	Test.@test isapprox(ssr, 0., atol=1e-8)
+	Test.@test isapprox(ssr, 0.0, atol=1e-8)
 
 	# Test Mads.of(md)
 	Test.@test isapprox(madsOf, 628963.6972820368, atol=1e-8) #test
