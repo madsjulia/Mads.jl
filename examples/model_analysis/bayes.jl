@@ -9,5 +9,5 @@ mcmcchain = Mads.bayessampling(md; nsteps=1000000, burnin=1000, thinning=1000, s
 Mads.scatterplotsamples(md, permutedims(mcmcchain.value), joinpath("bayes_results", "bayes_scatter.png"))
 Mads.display(joinpath("bayes_results", "bayes_scatter.png"))
 o = Mads.forward(md, mcmcchain.value)
-Mads.spaghettiplot(md, o, filename=joinpath("bayes_results" "bayes_spaghetti.png"))
+Mads.spaghettiplot(md, o, filename=joinpath("bayes_results", "bayes_spaghetti.png"))
 Mads.display(joinpath("bayes_results", "bayes_spaghetti.png"))
