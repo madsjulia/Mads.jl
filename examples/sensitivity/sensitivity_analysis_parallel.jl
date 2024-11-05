@@ -8,12 +8,12 @@ end
 
 @info("Parallel Saltelli sensitivity analysis: Sobol test ...")
 mdsobol = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))
-results = Mads.saltelliparallel(mdsobol, N=500, 2)
+results = Mads.saltelliparallel(mdsobol, 2; N=500)
 Mads.printSAresults(mdsobol, results)
 
 @info("Parallel Saltelli sensitivity analysis: Linear problem ...")
 mdsaltelli = Mads.loadmadsfile(joinpath(workdir, "saltelli.mads"))
-results = Mads.saltelliparallel(mdsaltelli, N=500, 2)
+results = Mads.saltelliparallel(mdsaltelli, 2; N=500)
 Mads.printSAresults(mdsaltelli, results)
 
 if isdir("saltellirestart")

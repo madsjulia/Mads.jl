@@ -120,7 +120,6 @@ for i = eachindex(getparamsnames)
 					v = madsdata["Parameters"][paramkeys[i]][$paramname]
 					v = ( v == "nothing" || v == "null"|| v == "false" || v == "fixed" || v == "none" ) ? nothing : v
 					paramvalue[i] = v
-					madsdata["Parameters"][paramkeys[i]][$paramname] = v
 				else
 					if Mads.islog(madsdata, paramkeys[i])
 						paramvalue[i] = $(paramlogdefault)

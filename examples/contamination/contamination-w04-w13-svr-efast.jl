@@ -15,7 +15,7 @@ if !isdefined(Mads, :predictions) || size(predictions) != numberofsamples
 end
 
 Mads.madsinfo("Training set spaghetti plot ...")
-Mads.spaghettiplot(md, predictions, keyword="w13a-training-set", format="PNG")
+Mads.spaghettiplot(md, predictions; keyword="w13a-training-set", format="PNG")
 Mads.display("$rootname-w13a-training-set-$numberofsamples-spaghetti.png")
 
 svrpredictions = Array{Float64}(undef, 0, numberofsamples)
@@ -28,5 +28,5 @@ end
 @show maximum(abs.(svrpredictions .- predictions))
 
 Mads.madsinfo("SVR predictions ...")
-Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")
+Mads.spaghettiplot(md, svrpredictions; keyword="w13a-svr", format="PNG")
 Mads.display("$rootname-w13a-svr-$numberofsamples-spaghetti.png")

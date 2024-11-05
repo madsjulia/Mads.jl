@@ -5,7 +5,7 @@ Mads.mkdir("sensitivity_results")
 
 n = 100
 @info("Calibration using $n random initial guesses for model parameters")
-calib_random_results = Mads.calibraterandom(md, n, all=true, seed=2016, save_results=false)
+calib_random_results = Mads.calibraterandom(md, n; all=true, seed=2016, save_results=false)
 pnames = collect(keys(r[1,3]))
 calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:n)...)
 np = length(pnames)
@@ -30,10 +30,10 @@ end
 @info("Local sensitivity analysis for the 3 different global optima")
 for i = 1:3
 	Mads.setparamsinit!(md, r[v[i],3])
-	Mads.localsa(md, filename="sensitivity_results/sensitivity_local_$(optnames[i]).png", datafiles=false)
+	Mads.localsa(md; filename="sensitivity_results/sensitivity_local_$(optnames[i]).png", datafiles=false)
 end
 Mads.setparamsinit!(md, pinit)
 
 @info("Global sensitivity analysis")
 efast_results = Mads.efast(md; N=1000, seed=2016)
-Mads.plotobsSAresults(md, efastresult, filename="sensitivity_results/sensitivity_global.png", xtitle = "x", ytitle = "y")
+Mads.plotobsSAresults(md, efastresult; filename="sensitivity_results/sensitivity_global.png", xtitle = "x", ytitle = "y")

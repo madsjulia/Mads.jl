@@ -60,7 +60,7 @@ numberofsamples = 10
 paramvalues=Mads.getparamrandom(md, numberofsamples)
 Mads.allwellsoff!(md)
 Mads.wellon!(md, "w1a")
-Mads.spaghettiplots(md, paramvalues, keyword="w1a")
+Mads.spaghettiplots(md, paramvalues; keyword="w1a")
 
 # solve the inverse problem
 result = Mads.calibrate(md; show_trace=true)

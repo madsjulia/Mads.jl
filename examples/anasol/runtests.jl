@@ -162,7 +162,7 @@ good_params_init_max = JLD2.load(joinpath(d, "params_init_max.jld2"), "m4")
 good_targetkeys = JLD2.load(joinpath(d, "targetkeys.jld2"), "tk")
 
 Test.@testset "Anasol" begin
-	# Test Mads.forward(md, all=true)
+	# Test Mads.forward(md; all=true)
 	ssr = 0.
 	for obskey in union(Set(keys(forward_results)), Set(keys(good_forward_results)))
 		ssr += (forward_results[obskey] - good_forward_results[obskey])^2
@@ -214,7 +214,7 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true
-Mads.localsa(md, filename="w01shortexp.mads", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
+Mads.localsa(md; filename="w01shortexp.png", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
 if !haskey(ENV, "MADS_NO_GADFLY")
 	Mads.graphoff()
 	Mads.plotlocalsa("w01shortexp")

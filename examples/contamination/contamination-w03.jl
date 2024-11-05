@@ -3,7 +3,7 @@ import Mads
 md = Mads.loadmadsfile("w03.mads") # load Mads input file into Julia Dictionary
 rootname = Mads.getmadsrootname(md) # get problem rootname
 
-Mads.plotmadsproblem(md, keyword="all_wells") # display the well locations and the initial source location
+Mads.plotmadsproblem(md; keyword="all_wells") # display the well locations and the initial source location
 Mads.plotmatches(md) # plot initial matches
 
 Mads.allwellsoff!(md) # turn off all wells
@@ -24,14 +24,14 @@ wd = Mads.getwelldata(md, time=true)'
 
 # Sensitivity analysis: spaghetti plots based on prior parameter uncertainty ranges
 Mads.madsinfo("Prior spaghetti plot ...")
-Mads.spaghettiplot(md, predictions, keyword="w13a_w20a-prior")
+Mads.spaghettiplot(md, predictions; keyword="w13a_w20a-prior")
 
 Mads.madsinfo("Bayesian sampling ...")
-mcmcchain = Mads.bayessampling(md, seed=20151001)
+mcmcchain = Mads.bayessampling(md; seed=20151001)
 
 Mads.madsinfo("Bayesian scatter plots ...")
 Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
 
 posterior_predictions = Mads.forward(md, permutedims(mcmcchain.value))
 Mads.madsinfo("Posterior (Bayesian) spaghetti plot ...")
-Mads.spaghettiplot(md, posterior_predictions, keyword="w13a_w20a-posterior", format="PNG")
+Mads.spaghettiplot(md, posterior_predictions; keyword="w13a_w20a-posterior", format="PNG")

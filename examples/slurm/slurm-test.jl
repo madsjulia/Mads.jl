@@ -22,7 +22,7 @@ md["Restart"]= true
 Mads.forward(md)
 @show ReusableFunctions.restarts
 @info("local SA")
-lsa_results = Mads.localsa(md, datafiles=true, imagefiles=true)
+lsa_results = Mads.localsa(md; datafiles=true, imagefiles=true)
 @show ReusableFunctions.restarts
 JLD2.save("lsa_results.jld2", "lsa_results", lsa_results)
 @info("calibrate")

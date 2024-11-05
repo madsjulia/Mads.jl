@@ -46,11 +46,11 @@ Test.@testset "Optimization" begin
 		Mads.madsinfo("External optimization ...")
 
 		global md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
-		jparam, jresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
+		jparam, jresults = Mads.calibrate(md; maxEval=2, np_lambda=1, maxJacobians=1)
 
 
 		global md = Mads.loadmadsfile(joinpath(workdir, "external-yaml.mads"))
-		yparam, yresults = Mads.calibrate(md, maxEval=2, np_lambda=1, maxJacobians=1)
+		yparam, yresults = Mads.calibrate(md; maxEval=2, np_lambda=1, maxJacobians=1)
 		Test.@test yparam == jparam
 	end
 

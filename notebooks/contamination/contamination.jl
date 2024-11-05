@@ -4,7 +4,7 @@ cd(joinpath(Mads.dir, "examples", "contamination"))
 
 md = Mads.loadmadsfile("w01.mads")
 
-Mads.plotmadsproblem(md, keyword="all_wells")
+Mads.plotmadsproblem(md; keyword="all_wells")
 
 Mads.allwellsoff!(md) # turn off all wells
 Mads.wellon!(md, "w13a") # use well w13a

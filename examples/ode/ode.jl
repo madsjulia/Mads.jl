@@ -61,7 +61,7 @@ Mads.madsinfo("Forward run ...")
 Mads.plotmatches(md)
 
 Mads.madsinfo("Local sensitivity analysis ...")
-localsaresult = Mads.localsa(md, format="PNG")
+localsaresult = Mads.localsa(md; format="PNG")
 stddev = localsaresult["stddev"]
 Mads.madsinfo("Posterior parameter uncertainty ranges (centered at the initial paramter estimates) ...")
 f = open("$rootname-localsa-paramranges.dat", "w")
@@ -71,7 +71,7 @@ end
 close(f)
 
 Mads.madsinfo("Global sensitivity analysis ...")
-saltelliresult = Mads.efast(md, seed=20151001)
+saltelliresult = Mads.efast(md; seed=20151001)
 
 Mads.plotobsSAresults(md, saltelliresult; xtitle = "Time", ytitle = "State variable")
 
@@ -80,7 +80,7 @@ Mads.spaghettiplot(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001,
 Mads.spaghettiplots(md, 100; obs_plot_dots=false, keyword="prior", seed=20151001, format="PNG")
 
 Mads.madsinfo("Bayesian sampling ...")
-mcmcchain = Mads.bayessampling(md, seed=20151001)
+mcmcchain = Mads.bayessampling(md; seed=20151001)
 
 Mads.madsinfo("Bayesian scatter plots ...")
 Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png")
@@ -89,5 +89,5 @@ Mads.scatterplotsamples(md, permutedims(mcmcchain.value), rootname * "-bayes.png
 mcmcvalues = Mads.paramarray2dict(md, permutedims(mcmcchain.value))
 
 Mads.madsinfo("Posterior (Bayesian) spaghetti plots ...")
-Mads.spaghettiplots(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")
-Mads.spaghettiplot(md, mcmcvalues, keyword="posterior", obs_plot_dots=false, format="PNG")
+Mads.spaghettiplots(md, mcmcvalues; keyword="posterior", obs_plot_dots=false, format="PNG")
+Mads.spaghettiplot(md, mcmcvalues; keyword="posterior", obs_plot_dots=false, format="PNG")

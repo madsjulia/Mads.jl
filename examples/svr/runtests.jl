@@ -21,7 +21,7 @@ Mads.seed!(2017, Random.MersenneTwister)
 numberofsamples = 1000
 
 Mads.@stdouterrcapture md = Mads.loadmadsfile(joinpath(workdir, "..", "models", "internal-polynomial-model", "internal-polynomial.mads"))
-paramdict = Mads.getparamrandom(md, numberofsamples, init_dist=true)
+paramdict = Mads.getparamrandom(md, numberofsamples; init_dist=true)
 paramarray = hcat(map(i->collect(paramdict[i]), collect(keys(paramdict)))...)
 paramdict1 = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 

@@ -66,10 +66,10 @@ Test.@testset "ODE Solver" begin
 
 	# create an observation dictionary in the MADS problem dictionary
 	Mads.madsinfo("Create MADS Observations ...")
-	Mads.createobservations!(md, t, ys[:,1], weight = 10)
-	Mads.createobservations!(md, t, ys[:,1], weight_type = "inverse", logtransform=true)
-	Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight = 10)
-	Mads.createobservations!(md, Dict("a"=>1,"c"=>1), weight_type = "inverse", logtransform=true)
+	Mads.createobservations!(md, t, ys[:,1]; weight = 10)
+	Mads.createobservations!(md, t, ys[:,1]; weight_type = "inverse", logtransform=true)
+	Mads.createobservations!(md, Dict("a"=>1,"c"=>1); weight = 10)
+	Mads.createobservations!(md, Dict("a"=>1,"c"=>1); weight_type = "inverse", logtransform=true)
 	Mads.createobservations!(md, t, ys[:,1])
 	# Mads.madsinfo("Show MADS Observations ...")
 	# Mads.showobservations(md)

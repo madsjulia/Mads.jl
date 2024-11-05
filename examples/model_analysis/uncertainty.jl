@@ -50,10 +50,10 @@ display(s_var)
 # JLD2.save("uncertainty_results/variance-important-sampling.jld2", "goodoprime", goodoprime)
 
 @info("Spaghetti plot of posterior predictions")
-Mads.spaghettiplot(md, o, filename="uncertainty_results/spaghetti-$(problem).png")
+Mads.spaghettiplot(md, o; filename="uncertainty_results/spaghetti-$(problem).png")
 
 @info("Spaghetti plot of posterior predictions using importance sampling")
-Mads.spaghettiplot(md, goodoprime', filename="uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
+Mads.spaghettiplot(md, goodoprime'; filename="uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
 Mads.display("uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
 
 @info("Histogram of `o5` predictions")
@@ -68,7 +68,7 @@ Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-importance-samp
 Mads.setparamsinit!(md, p)
 mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
 ob = Mads.forward(md, mcmcchain.value)
-Mads.spaghettiplot(md, ob, filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
+Mads.spaghettiplot(md, ob; filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
 Mads.display("uncertainty_results/spaghetti-$(problem)-bayes.png")
 
 @info("Histogram of `o5` predictions using Bayesian analysis")

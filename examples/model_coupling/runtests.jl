@@ -85,8 +85,8 @@ else
 
 	md = Mads.loadmadsfile(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"))
 	Mads.forward(md)
-	Mads.localsa(md, par=[1.,2.])
-	# Mads.calibrate(md, maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
+	Mads.localsa(md; par=[1.,2.])
+	# Mads.calibrate(md; maxEval=1, maxJacobians=1, np_lambda=1, localsa=true)
 	Mads.savemadsfile(md, joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))
 
 	Mads.createproblem(joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path.mads"), joinpath("external-linearmodel+template+instruction+path", "external-linearmodel+template+instruction+path2.mads"))

@@ -26,7 +26,7 @@ Mads.spaghettiplot(md, svrpredictions, keyword="w13a-svr", format="PNG")
 Mads.display("$rootname-w13a-svr-$numberofsamples-spaghetti.png")
 
 sa = Mads.efast(md)
-Mads.plotobsSAresults(md, sa, format="PNG")
+Mads.plotobsSAresults(md, sa; format="PNG")
 Mads.display("$rootname-efast-385.png")
 
 mdsvr = deepcopy(md)
