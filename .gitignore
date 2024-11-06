@@ -132,7 +132,7 @@ svrmodels
 *madsjl_cmdline_hist*
 examples/anasol/test.mads
 examples/model_coupling_*
-examples/contamination/w01-w13a_w20a-w13a_w20a*.svg
+examples/contamination/*.svg
 examples/sensitivity/*.jld2
 examples/*.svg
 examples/*/*.svg
