@@ -82,7 +82,7 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert numbertype <: Real
 	if dataframe
 		df = DataFrames.DataFrame()
@@ -119,7 +119,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			params = Vector{String}()
 			for c in col_vector
 				v = xf[sheet_name][header_range,c][header_vector .- minimum(header_range) .+ 1]
-				v[ismissing.(v)] .= ""
+				v[ismissing.(v) .| isnothing.(v)] .= ""
 				p = strip(.*((string.(v) .* " ")...))
 				p = p == "" ? "Column $c" : p
 				push!(params, p)
@@ -136,7 +136,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			params = xf[sheet_name][header, col_range][col_vector .- minimum(col_range) .+ 1]
 			for (i, c) in enumerate(col_vector) # replace missing values with column number
 				p = params[i]
-				if ismissing(p) || p == ""
+				if ismissing(p) || isnothing(p) || p == "" || occursin(r"^-*$", p)
 					params[i] = "Column $(c)"
 				end
 			end
@@ -183,8 +183,14 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			v = data[:,i]
 			if !all(ismissing.(v))
 				if all(typeof.(v) .<: Union{Missing,Number})
-					v[ismissing.(v)] .= numbertype(NaN)
-					v = convert(Vector{numbertype}, v)
+					mask_missing = isnulltype.(v)
+					if usenans
+						v[mask_missing] .= numbertype(NaN)
+						v = convert(Vector{numbertype}, v)
+					else
+						v[mask_missing] .= missing
+						v = convert(Vector{Union{Missing,numbertype}}, v)
+					end
 				elseif all(typeof.(v) .<: Union{Missing,AbstractString})
 					v[ismissing.(v)] .= ""
 					v = convert(Vector{String}, v)
@@ -204,7 +210,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 	return df
 end
 
-function load_data(filename::AbstractString; dataset="", first_row::Union{Nothing,Int}=nothing)::Union{DataFrames.DataFrame,AbstractArray}
+function load_data(filename::AbstractString; dataset="", kw...)::Union{DataFrames.DataFrame,AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -220,21 +226,7 @@ function load_data(filename::AbstractString; dataset="", first_row::Union{Nothin
 			c = DataFrames.DataFrame()
 		end
 	elseif e == ".xlsx"
-		try
-			xb = XLSX.readxlsx(filename)
-			datasets = collect(XLSX.sheetnames(xb))
-			@info("File $(filename) sheets: $(datasets)")
-			if dataset in datasets
-				@info("Dataset $(dataset) loaded from $(filename) ...")
-				c = DataFrames.DataFrame(XLSX.readtable(filename, dataset; stop_in_empty_row=false, header=true, first_row=first_row))
-			else
-				@info("Dataset $(datasets[1]) loaded from $(filename) ...")
-				c = DataFrames.DataFrame(XLSX.readtable(filename, datasets[1]; stop_in_empty_row=false, header=true, first_row=first_row))
-			end
-		catch
-			@error("Data from File $(filename) cannot be opened!")
-			c = DataFrames.DataFrame()
-		end
+		c = Mads.get_excel_data(filename, dataset; dataframe=true, kw...)
 	elseif ((e == ".jld") || (e == ".jld2"))
 		try
 			if e == ".jld"

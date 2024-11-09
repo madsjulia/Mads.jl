@@ -668,3 +668,19 @@ function unique_mask(x::AbstractVector)
 	nunique_mask[iunique] .= true
 	return nunique_mask
 end
+
+function isnulltype(x::Any)
+	return false
+end
+function isnulltype(x::Nothing)
+	return true
+end
+function isnulltype(x::Missing)
+	return true
+end
+function isnulltype(x::Real)
+	return isnan(x)
+end
+function isnulltype(x::AbstractString)
+	return x == "" || x == "NaN" || x == "N/A" || x == "-" || occursin(r"^-+$", x)
+end
