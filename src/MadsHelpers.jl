@@ -669,18 +669,37 @@ function unique_mask(x::AbstractVector)
 	return nunique_mask
 end
 
-function isnulltype(x::Any)
+function isnull(x::Any)
 	return false
 end
-function isnulltype(x::Nothing)
+function isnull(x::Nothing)
 	return true
 end
-function isnulltype(x::Missing)
+function isnull(x::Missing)
 	return true
 end
-function isnulltype(x::Real)
+function isnull(x::Real)
 	return isnan(x)
 end
-function isnulltype(x::AbstractString)
-	return x == "" || x == "NaN" || x == "N/A" || x == "-" || occursin(r"^-+$", x)
+function isnull(x::AbstractString)
+	if x == "" || x == "-" || occursin(r"^-+$", x)
+		return true
+	else
+		l = lowercase(x)
+		if l == "nan" || l == "null" || l == "n/a"
+			return true
+		else
+			return false
+		end
+	end
 end
+@doc """
+Check if input value is nulltype
+
+$(DocumentFunction.documentfunction(isnull;
+argtext=Dict("x"=>"input value")))
+
+Returns:
+
+- `true` if the input value does not contain information; `false` otherwise
+""" isnull

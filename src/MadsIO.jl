@@ -183,7 +183,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			v = data[:,i]
 			if !all(ismissing.(v))
 				if all(typeof.(v) .<: Union{Missing,Number})
-					mask_missing = isnulltype.(v)
+					mask_missing = isnull.(v)
 					if usenans
 						v[mask_missing] .= numbertype(NaN)
 						v = convert(Vector{numbertype}, v)
