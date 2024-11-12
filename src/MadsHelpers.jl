@@ -515,36 +515,25 @@ function getseed()
 	return Random.GLOBAL_SEED.s0
 end
 
-function seedrng(f=nothing)
+function seedrng(f::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	if isnothing(f)
-		if isdefined(Random, :TaskLocalRNG)
-			f = Random.TaskLocalRNG
-		else
-			f = Random.MersenneTwister
-		end
+		f = Random.TaskLocalRNG
 	end
-	if isdefined(Random, :TaskLocalRNG) && f == Random.TaskLocalRNG
-		global rng = f()
-	else
-		global rng = f()
-	end
+	global rng = f()
+	return nothing
 end
 
-function seed!(s, f=nothing)
+function seed!(s, f::Union{Nothing,Random.AbstractRNG,DataType}=nothing)
 	if isnothing(f)
-		if isdefined(Random, :TaskLocalRNG)
-			f = Random.TaskLocalRNG
-		else
-			f = Random.MersenneTwister
-		end
+		f = Random.TaskLocalRNG
 	end
-	if isdefined(Random, :TaskLocalRNG) && f == Random.TaskLocalRNG
+	if f == Random.MersenneTwister
+		global rng = f(s)
+	else # Random.TaskLocalRNG
 		global rng = f()
 		Random.seed!(s)
-	else
-		isdefined(Random, :set_global_seed!) && Random.set_global_seed!(s)
-		global rng = f(s)
 	end
+	return nothing
 end
 
 """
