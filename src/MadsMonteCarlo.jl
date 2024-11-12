@@ -17,9 +17,9 @@ function p10_p50_p90(x::AbstractMatrix)
 		n90 = ns
 	end
 	for i = 1:nt
-		is = sortperm(x[i,:])
-		p10[i] = x[i,is][n10]
-		p90[i] = x[i,is][n90]
+		is = sortperm(x[i, :])
+		p10[i] = x[i, is][n10]
+		p90[i] = x[i, is][n90]
 	end
 	return p10, xmean, p90
 end
@@ -31,7 +31,7 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 			@warn("$(filename) does not contain AffineInvariantMCMC results!")
 			return nothing, nothing, nothing
 		end
-		chain, llhoods, params, obs = JLD2.load(filename, "chain",  "llhoods", "params", "obs")
+		chain, llhoods, params, obs = JLD2.load(filename, "chain", "llhoods", "params", "obs")
 		@info("AffineInvariantMCMC results loaded: number of parameters = $(size(chain, 1)); number of observation = $(size(obs, 1)); number of realizations = $(size(chain, 2))")
 		if !Mads.jld2haskey(filename, "observations", "params", "obs"; quiet=false)
 			@warn("$(filename) does not contain AffineInvariantMCMC observation results!")
@@ -81,7 +81,7 @@ function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
 	end
 end
 
-function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
+function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, sigma::Number=0.01, seed::Integer=-1, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, kw...)
 	if filename != ""
 		save = true
 	end
@@ -111,10 +111,10 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 	pinit = getparamsinit(madsdata, optparamkeys)
 	pmin = getparamsmin(madsdata, optparamkeys)
 	pmax = getparamsmax(madsdata, optparamkeys)
-	for i = eachindex(optparamkeys)
+	for i in eachindex(optparamkeys)
 		mu = (pinit[i] - pmin[i]) / (pmax[i] - pmin[i])
 		mu = min(1 - 1e-3, max(mu, 1e-3))
-		alpha = (1 - sigma ^ 2 - sigma ^ 2 * ((1 - mu) / mu) - mu) / (sigma ^ 2 + 2 * sigma ^ 2 * ((1 - mu) / mu) + sigma ^ 2 * ((1 - mu) / mu) ^ 2)
+		alpha = (1 - sigma^2 - sigma^2 * ((1 - mu) / mu) - mu) / (sigma^2 + 2 * sigma^2 * ((1 - mu) / mu) + sigma^2 * ((1 - mu) / mu)^2)
 		beta = alpha * ((1 - mu) / mu)
 		d = Distributions.Beta(alpha, beta)
 		p0[i, 1] = pinit[i]
@@ -125,7 +125,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 	chain, llhoods, observations = emceesampling(madsdata, p0; filename=filename, load=load, save=save, execute=execute, numwalkers=numwalkers, nexecutions=nexecutions, burnin=burnin, thinning=thinning, seed=seed, rng=rng, kw...)
 	return chain, llhoods, observations
 end
-function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, distributed_function::Bool=false)
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, distributed_function::Bool=false)
 	if filename != ""
 		save = true
 	end
@@ -180,8 +180,8 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
 	sleep(1) # rest to avoid a "method too new" error
 	if distributed_function
-		@Distributed.everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
-		arrayloglikelihood = (x)->Core.eval(Main, :arrayloglikelihood_distributed)(x)
+		Distributed.@everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
+		arrayloglikelihood = (x) -> Core.eval(Main, :arrayloglikelihood_distributed)(x)
 	end
 	numsamples_perwalker_burnin = div(burnin, numwalkers)
 	if numsamples_perwalker_burnin == 0
@@ -193,7 +193,7 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, numsamples_perwalker_burnin, 1; filename="", load=false, save=false, rng=Mads.rng)
 	numsamples = numsamples_perwalker * numwalkers
 	@info("AffineInvariantMCMC exploration stage (total number of executions $(numsamples), final chain size $(div(numsamples_perwalker, thinning) * numwalkers))...")
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], numsamples_perwalker, thinning; filename="", load=false, save=false, rng=Mads.rng,)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], numsamples_perwalker, thinning; filename="", load=false, save=false, rng=Mads.rng)
 	chain, llhoods = AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 	if save
 		madsinfo("Saving AffineInvariantMCMC results in $(filename) ...")
@@ -211,14 +211,14 @@ Bayesian sampling with Goodman & Weare's Affine Invariant Markov chain Monte Car
 
 $(DocumentFunction.documentfunction(emceesampling;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
+			"p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
 keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors; in general, the higher the number of walkers, the better the results and computational time [default=`10`]",
-            "nsteps"=>"number of final realizations in the chain [default=`100`]",
-            "burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
-            "thinning"=>"removal of any `thinning` realization [default=`1`]",
-            "sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
-            "seed"=>"random seed [default=`0`]",
-            "weightfactor"=>"weight factor [default=`1.0`]")))
+			"nsteps"=>"number of final realizations in the chain [default=`100`]",
+			"burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
+			"thinning"=>"removal of any `thinning` realization [default=`1`]",
+			"sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
+			"seed"=>"random seed [default=`0`]",
+			"weightfactor"=>"weight factor [default=`1.0`]")))
 
 Returns:
 
@@ -238,7 +238,7 @@ Save MCMC chain in a file
 
 $(DocumentFunction.documentfunction(savemcmcresults;
 argtext=Dict("chain"=>"MCMC chain",
-            "filename"=>"file name")))
+			"filename"=>"file name")))
 
 Dumps:
 
@@ -266,7 +266,7 @@ Monte Carlo analysis
 $(DocumentFunction.documentfunction(montecarlo;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("N"=>"number of samples [default=`100`]",
-            "filename"=>"file name to save Monte-Carlo results")))
+			"filename"=>"file name to save Monte-Carlo results")))
 
 Returns:
 
@@ -302,10 +302,10 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 	for i = 1:N
 		klog = 1
 		knonlog = 1
-		for j = eachindex(params)
+		for j in eachindex(params)
 			if paramtypes[j] == "opt"
 				if paramlogs[j] == true || paramlogs[j] == "yes"
-					params[j] = 10 ^ logoptparams[klog, i]
+					params[j] = 10^logoptparams[klog, i]
 					klog += 1
 				else
 					params[j] = nonlogoptparams[knonlog, i]
@@ -313,14 +313,14 @@ function montecarlo(madsdata::AbstractDict; compute::Bool=true, N::Integer=100, 
 				end
 			end
 		end
-		paramdicts[i] = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, params))
+		paramdicts[i] = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(paramkeys, params))
 	end
 	if compute
 		f = makemadscommandfunction(madsdata)
 		results = RobustPmap.rpmap(f, paramdicts)
 		outputdicts = Array{OrderedCollections.OrderedDict}(undef, N)
 		for i = 1:N
-			outputdicts[i] = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+			outputdicts[i] = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
 			outputdicts[i]["Parameters"] = paramdicts[i]
 			outputdicts[i]["Results"] = results[i]
 		end
@@ -346,7 +346,7 @@ Convert a parameter array to a parameter dictionary of arrays
 
 $(DocumentFunction.documentfunction(paramarray2dict;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "array"=>"parameter array")))
+			"array"=>"parameter array")))
 
 Returns:
 
@@ -355,8 +355,8 @@ Returns:
 function paramarray2dict(madsdata::AbstractDict, array::AbstractArray)
 	paramkeys = getoptparamkeys(madsdata)
 	dict = OrderedCollections.OrderedDict()
-	for i = eachindex(paramkeys)
-		dict[paramkeys[i]] = array[:,i]
+	for i in eachindex(paramkeys)
+		dict[paramkeys[i]] = array[:, i]
 	end
 	return dict
 end
@@ -372,5 +372,5 @@ Returns:
 - a parameter array
 """
 function paramdict2array(dict::AbstractDict)
-	return permutedims(hcat(map(i->collect(dict[i]), collect(keys(dict)))...))
+	return permutedims(hcat(map(i -> collect(dict[i]), collect(keys(dict)))...))
 end
