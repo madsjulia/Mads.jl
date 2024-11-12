@@ -17,7 +17,7 @@ opt_param, opt_results = Mads.calibrate(md)
 Mads.setparamsinit!(md, opt_param)
 
 Mads.madsinfo("Bayesian sampling of contaminant transport problem ...")
-chain, llhoods = Mads.emcee(md)
+chain, llhoods = Mads.emceesampling(md)
 
 Mads.madsinfo("Bayesian scatter plots ...")
 Mads.scatterplotsamples(md, chain', rootname * "-emcee-results.svg")
