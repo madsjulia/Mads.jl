@@ -319,15 +319,13 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		parameterswithexpressions = evaluatemadsexpressions(madsdata, paramsnoexpressions)
 		local out = nothing
 		try
-			out = madscommandfunction(parameterswithexpressions)
+			out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
 		catch errmsg
-			try
-				out = Base.invokelatest(madscommandfunction, parameterswithexpressions)
-			catch errmsg
-				printerrormsg(errmsg)
-				Mads.madswarn("Failed Dir: $(pwd())")
-				Mads.madserror("madscommandfunction in madscommandfunctionwithexpressions cannot be executed!")
+			printerrormsg(errmsg)
+			if pwd() != Mads.dir
+				Mads.madswarn("Execution failed in directory: $(pwd())")
 			end
+			Mads.madserror("madscommandfunction cannot be executed!")
 		end
 		return out
 	end

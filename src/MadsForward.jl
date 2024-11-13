@@ -153,7 +153,13 @@ function forward(madsdata::AbstractDict, paramarray::AbstractArray; parallel::Bo
 	else
 		r = values(func_forward(paramarray))
 	end
-	return collect(r)
+	if isnothing(r)
+		@error("Model run failed! Check for errors in the model function and in the output above!")
+		throw(ErrorException("Model run failed!"))
+		return nothing
+	else
+		return collect(r)
+	end
 end
 
 @doc """

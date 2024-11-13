@@ -125,7 +125,7 @@ function emceesampling(madsdata::AbstractDict; filename::AbstractString="", load
 	chain, llhoods, observations = emceesampling(madsdata, p0; filename=filename, load=load, save=save, execute=execute, numwalkers=numwalkers, nexecutions=nexecutions, burnin=burnin, thinning=thinning, seed=seed, rng=rng, kw...)
 	return chain, llhoods, observations
 end
-function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, distributed_function::Bool=false)
+function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::AbstractString="", load::Bool=false, save::Bool=false, execute::Bool=true, numwalkers::Integer=10, nexecutions::Integer=100, burnin::Integer=numwalkers, thinning::Integer=10, seed::Integer=-1, weightfactor::Number=1.0, rng::Union{Nothing, Random.AbstractRNG, DataType}=nothing, distributed_function::Bool=false, type::DataType=Float64, checkoutputs::Bool=true)
 	if filename != ""
 		save = true
 	end
@@ -178,7 +178,6 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	Mads.setseed(seed; rng=rng)
 	madsloglikelihood = makemadsloglikelihood(madsdata; weightfactor=weightfactor)
 	arrayloglikelihood = Mads.makearrayloglikelihood(madsdata, madsloglikelihood)
-	sleep(1) # rest to avoid a "method too new" error
 	if distributed_function
 		Distributed.@everywhere arrayloglikelihood_distributed = Mads.makearrayloglikelihood($madsdata, $madsloglikelihood)
 		arrayloglikelihood = (x) -> Core.eval(Main, :arrayloglikelihood_distributed)(x)
@@ -189,11 +188,10 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 	end
 	numsamples = numsamples_perwalker_burnin * numwalkers
 	@info("AffineInvariantMCMC burning stage (total number of executions $(numsamples), final burning chain size $(numsamples_perwalker_burnin * numwalkers))...")
-	sleep(5)
-	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, numsamples_perwalker_burnin, 1; filename="", load=false, save=false, rng=Mads.rng)
+	burninchain, _ = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, p0, numsamples_perwalker_burnin, 1; filename="", load=false, save=false, rng=Mads.rng, type=type, checkoutputs=checkoutputs)
 	numsamples = numsamples_perwalker * numwalkers
 	@info("AffineInvariantMCMC exploration stage (total number of executions $(numsamples), final chain size $(div(numsamples_perwalker, thinning) * numwalkers))...")
-	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], numsamples_perwalker, thinning; filename="", load=false, save=false, rng=Mads.rng)
+	chain, llhoods = AffineInvariantMCMC.sample(arrayloglikelihood, numwalkers, burninchain[:, :, end], numsamples_perwalker, thinning; filename="", load=false, save=false, rng=Mads.rng, type=type, checkoutputs=checkoutputs)
 	chain, llhoods = AffineInvariantMCMC.flattenmcmcarray(chain, llhoods)
 	if save
 		madsinfo("Saving AffineInvariantMCMC results in $(filename) ...")
