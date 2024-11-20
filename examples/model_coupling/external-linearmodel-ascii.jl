@@ -1,4 +1,4 @@
-C:/Users/monty/.julia/dev/Mads/#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
+# TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 paramfile = open("parameters.dat")
 parameters = Meta.parse.(readlines(paramfile))
 close(paramfile)
