@@ -1897,7 +1897,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true)
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
-				if length(fn) < 260 && isascii(fn)
+				if length(fn) < 256 && isascii(fn)
 					if (isfile(fn) || islink(fn))
 						if !test
 							@info("Linking $(f) to $(fn)")
