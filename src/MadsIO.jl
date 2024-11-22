@@ -1895,18 +1895,21 @@ function fixlinks(dir::AbstractString="."; test::Bool=true, verbose::Bool=false)
 		if islink(f)
 			verbose && println("Checking Link: $(f)")
 			link = readlink(f)
-			if length(link) < 256 && isascii(link) && isfile(link)
+			if length(link) > 255
+				printstyled("Link `$(f)` needs to be fixed: it is too long!\n"; color=:red)
+				println(link)
+			elseif isfile(link)
 				printstyled("Link of `$(f)` to `$(link)` is OK\n"; color=:green)
 			else
 				printstyled("Link `$(f)` needs to be fixed: `$(link)` does not exist!\n"; color=:red)
 				link_win = Sys.iswindows() ? replace(fn, "/"=>"\\") : link
-				if isfile(link_win)
+				if length(link) < 256 && isascii(link) && isfile(link_win)
 					if !test
-						printstyled("Fixing Link: `$(link_win)` to `$(fn)`\n"; color=:yellow)
+						printstyled("Fixing Link: `$(f)` to `$(link_win)`\n"; color=:yellow)
 						rm(f)
 						symlink(link_win, f)
 					else
-						printstyled("Link needs to be fixed: `$(link_win)` to `$(fn)`\n"; color=:yellow)
+						printstyled("Link needs to be fixed: `$(f)` to `$(fn)`\n"; color=:yellow)
 					end
 				end
 			end
