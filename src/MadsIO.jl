@@ -1898,6 +1898,27 @@ function fixlinks(dir::AbstractString="."; test::Bool=true, verbose::Bool=false)
 			if length(link) > 255
 				printstyled("Link `$(f)` needs to be fixed: it is too long!\n"; color=:red)
 				println(link)
+				r, e = splitext(f)
+				fn = joinpath("..", "..", "models", "$(r)-models", "$(r).$(e)")
+				if isfile(fn)
+					if !test
+						printstyled("Fixing Link: `$(f)` to `$(link_win)`\n"; color=:yellow)
+						rm(f)
+						symlink(link_win, f)
+					else
+						printstyled("Link can be fixed: `$(f)` to `$(fn)`\n"; color=:yellow)
+					end
+				end
+				fn = joinpath("..", "models", "$(r)-models", "$(r).$(e)")
+				if isfile(fn)
+					if !test
+						printstyled("Fixing Link: `$(f)` to `$(link_win)`\n"; color=:yellow)
+						rm(f)
+						symlink(link_win, f)
+					else
+						printstyled("Link can be fixed: `$(f)` to `$(fn)`\n"; color=:yellow)
+					end
+				end
 			elseif isfile(link)
 				printstyled("Link of `$(f)` to `$(link)` is OK\n"; color=:green)
 			else
