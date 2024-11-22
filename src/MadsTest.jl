@@ -49,6 +49,9 @@ function test(testname::AbstractString=""; madstest::Bool=true, plotting::Bool=t
 		d = Mads.dir
 		@info("Testing Mads in $d")
 	end
+	if Sys.iswindows()
+		Mads.fixlinks(joinpath(d, "examples"); test=false)
+	end
 	if testname == ""
 		madstest && include(joinpath(d, "test", "runtests.jl"))
 		@info("Mads modules testing:")

@@ -1887,48 +1887,52 @@ function parsevars(variable_names::Vector{String}, variable_values::Vector{Float
 	return (s...,)
 end
 
-function fixlinks(dir::AbstractString="."; test::Bool=true)
+function fixlinks(dir::AbstractString="."; test::Bool=true, verbose::Bool=false)
 	ccd = pwd()
 	cd(dir)
 	files = readdir()
 	for f in files
-		if isfile(f)
-			@show f
+		if islink(f)
+			verbose && println("Checking Link: $(f)")
+			link = readlink(f)
+			if !isfile(link)
+				printstyled("Link `$(f)` needs to be fixed: `$(link)` does not exist!\n"; color=:red)
+				link_win = Sys.iswindows() ? replace(fn, "/"=>"\\") : link
+				if isfile(link_win)
+					if !test
+						printstyled("Fixing Link: `$(link_win)` to `$(fn)`\n"; color=:yellow)
+						rm(f)
+						symlink(link_win, f)
+					else
+						printstyled("Link needs to be fixed: `$(link_win)` to `$(fn)`\n"; color=:yellow)
+					end
+				end
+			else
+				printstyled("Link of `$(f)` to `$(link)` is OK\n"; color=:green)
+			end
+		elseif isfile(f)
+			verbose && println("Checking File: $(f)")
 			l = readlines(f)
 			if length(l) == 1
 				fn = l[1]
 				if length(fn) < 256 && isascii(fn)
 					if (isfile(fn) || islink(fn))
 						if !test
-							@info("Linking $(f) to $(fn)")
+							printstyled("Fixing Link: `$(f)` to `$(fn)`\n"; color=:yellow)
 							rm(f)
-							symlink(fn, f)
+							link_win = Sys.iswindows() ? replace(fn, "/"=>"\\") : fn
+							symlink(link_win, f)
 						else
-							@info("TEST: Linking $(f) to $(fn)")
+							printstyled("Link needs to be fixed: `$(f)` to `$(fn)`\n"; color=:yellow)
 						end
 					else
-						@info("Linking of `$(f)` fails! `$(fn)` does not exist!")
-						# println("ln -sf $(fn) $(f)")
+						printstyled("Link `$(f)` cannot be fixed: `$(fn)` does not exist!\n"; color=:red)
 					end
-				end
-			end
-		elseif islink(f)
-			link = readlink(f)
-			@show link
-			link_win = replace(link, "/"=>"\\")
-			@show link_win
-			if isfile(link_win)
-				rm(f)
-				if !test
-					@info("Linking $(link_win) to $(f)")
-					symlink(link_win, f)
-				else
-					@info("TEST: Linking $(link_win) to $(f)")
 				end
 			end
 		elseif isdir(f) && f != ".git" && f != "build"
 			@info("Directory $(joinpath(pwd(), f)) ...")
-			fixlinks(f; test=test)
+			fixlinks(f; test=test, verbose=verbose)
 		end
 	end
 	cd(ccd)
