@@ -82,7 +82,7 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert numbertype <: Real
 	if dataframe
 		df = DataFrames.DataFrame()
@@ -105,9 +105,13 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 		if cols == 0 # all columns
 			col_range = xf[sheet_name].dimension.start.column_number:xf[sheet_name].dimension.stop.column_number
 			col_vector = collect(col_range)
-		else # Vector{Int} or UnitRange{Int}
+		elseif eltype(cols) <: Integer # Vector{Int} or UnitRange{Int}
 			col_vector = collect(cols)
 			col_range = minimum(cols):maximum(cols)
+		else # Vector{String}
+			xlsx_col_range = convert(XLSX.ColumnRange, "$(cols[1]):$(cols[end])")
+			col_range = xlsx_col_range.start:xlsx_col_range.stop
+			col_vector = collect(col_range)
 		end
 		if header != 0
 			header_vector = collect(header)
@@ -166,11 +170,16 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				for key in keys(mapping)
 					if param == mapping[key]
 						param_name = key
+						if keytype <: AbstractString
+							param_name = string(param_name)
+						elseif keytype <: Symbol
+							param_name = Symbol(param_name)
+						end
 						break
 					end
 				end
 				if param_name == ""
-					@warn("$(param) is not found in the mapping!")
+					@warn("Parameter named `$(param)` is not found in the mapping!")
 				end
 			end
 			if param_name == ""
