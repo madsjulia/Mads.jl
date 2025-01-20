@@ -658,6 +658,31 @@ function unique_mask(x::AbstractVector)
 	return nunique_mask
 end
 
+function nonunique(x::AbstractMatrix)
+	iu = nonunique_indices(x)
+	return x[iu, :]
+end
+
+function nonunique_mask(x::AbstractMatrix)
+	return .!unique_mask(x)
+end
+
+function nonunique_indices(x::AbstractMatrix)
+	nunique_indices = collect(axes(x, 1))
+	return nunique_indices[.!unique_mask(x)]
+end
+
+function unique_indices(x::AbstractMatrix)
+	return unique(i->x[i, :], axes(x, 1))
+end
+
+function unique_mask(x::AbstractMatrix)
+	iunique = unique_indices(x)
+	nunique_mask = falses(size(x, 1))
+	nunique_mask[iunique] .= true
+	return nunique_mask
+end
+
 function isnull(x::Any)
 	return false
 end
