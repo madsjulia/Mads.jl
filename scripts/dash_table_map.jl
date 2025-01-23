@@ -422,7 +422,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 	else
 		visibility = ""
 	end
-	traces = []
+	traces = Vector{PlotlyJS.GenericTrace{Dict{Symbol, Any}}}(undef, 0)
 	lon = Vector{Float64}(undef, 0)
 	lat = Vector{Float64}(undef, 0)
 	if size(df_source, 1) > 0
@@ -512,7 +512,7 @@ function map(; df_source::DataFrames.DataFrame=DataFrames.DataFrame(), df_sink::
 		plot_bgcolor = "#fff",
 		mapbox = PlotlyJS.attr(; style="stamen-terrain", zoom=zoom, center=PlotlyJS.attr(; lon=lonc, lat=latc)),
 		showlegend = true)
-	p = PlotlyJS.plot(convert(Array{typeof(traces[1])}, traces), layout)
+	p = PlotlyJS.plot(traces, layout)
 	if filename != ""
 		fn = joinpathcheck(figuredir, filename)
 		recursivemkdir(fn)
@@ -609,7 +609,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 			derived_virtual_selected_rows = derived_virtual_selected_rows .+ 1
 		end
 		if edges
-			traces = []
+			traces = Vector{PlotlyJS.GenericTrace{Dict{Symbol, Any}}}(undef, 0)
 			for i in 1:DataFrames.nrow(dff)
 				r = dff[i, :]
 				colorl = i in derived_virtual_selected_rows ? color_selected : color
@@ -644,7 +644,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 					marker = PlotlyJS.attr(; size=9, color=colorp)
 				))
 			end
-			p = convert(Array{typeof(traces[1])}, traces)
+			p = traces
 		else
 			colors = [(i in derived_virtual_selected_rows ? color_selected : color) for i in 1:DataFrames.nrow(dff)]
 			p = PlotlyJS.scattermapbox(;
