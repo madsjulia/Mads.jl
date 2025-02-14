@@ -1089,8 +1089,7 @@ function plotseries(dict::AbstractDict, filename::AbstractString=""; separate_fi
 	end
 end
 function plotseries(df::DataFrames.DataFrame, filename::AbstractString=""; names=string.(names(df)), kw...)
-	m = Matrix(df)
-	plotseriesengine(m, filename; kw...)
+	plotseriesengine(permutedims(Matrix(df)), filename; names=names, kw...)
 end
 function plotseries(X::Union{AbstractMatrix,AbstractVector}, filename::AbstractString=""; nS::Integer=size(X, 2), separate_files::Bool=false, normalize::Bool=false, name::AbstractString="Signal", names::Vector{String}=["$name $(i)" for i in 1:nS], kw...)
 	if normalize
