@@ -1089,7 +1089,7 @@ $(DocumentFunction.documentfunction(deleteNaN!;
 argtext=Dict("df"=>"dataframe")))
 """
 function deleteNaN!(df::DataFrames.DataFrame)
-	for i = 1:size(df, 2)
+	for i = axes(df, 2)
 		if typeof(df[!, i][1]) <: Number
 			delete!(df, findall(isnan.(df[!, i][:])))
 			if size(df, 1) == 0
@@ -1107,7 +1107,7 @@ argtext=Dict("df"=>"dataframe")))
 """
 function maxtofloatmax!(df::DataFrames.DataFrame)
 	limit = floatmax(Float32)
-	for i = 1:size(df, 2)
+	for i = axes(df, 2)
 		if typeof(df[!, i][1]) <: Number
 			for j in eachindex(df[!, i])
 				if df[!, i][j] > limit
