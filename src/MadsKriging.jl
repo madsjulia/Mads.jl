@@ -136,7 +136,7 @@ function krige(x0mat::AbstractMatrix, X::AbstractMatrix, Z::AbstractVector, covf
 	covvec = Array{Float64}(undef, size(X, 2))
 	x = Array{Float64}(undef, size(X, 2) + 1)
 	for i in axes(x0mat, 2)
-		bigvec[1:end-1] = getcovvec!(covvec, x0mat[:, i], X, covfn)
+		bigvec[begin:end-1] = getcovvec!(covvec, x0mat[:, i], X, covfn)
 		bigvec[end] = 1
 		LinearAlgebra.mul!(x, bigmatpinv, bigvec)
 		for j in axes(X, 2)
@@ -162,7 +162,7 @@ function getcovmat(X::AbstractMatrix, covfunction::Function)
 	cov0 = covfunction(0)
 	for i in axes(X, 2)
 		covmat[i, i] = cov0
-		for j = i + 1:size(X, 2)
+		for j = i + axes(X, 2)
 			covmat[i, j] = covfunction(LinearAlgebra.norm(X[:, i] .- X[:, j]))
 			covmat[j, i] = covmat[i, j]
 		end

@@ -573,7 +573,7 @@ function map_data(df::DataFrames.DataFrame; port::Integer=8050, ip=string(Socket
 	app.layout = Dash.html_div([
 		Dash.dash_datatable(
 			id="interactive-table",
-			columns=[Dict("name"=>i, "id"=>i, "deletable"=>true, "selectable"=>true) for i in names(df)[1:end-2]],
+			columns=[Dict("name"=>i, "id"=>i, "deletable"=>true, "selectable"=>true) for i in names(df)[begin:end-2]],
 			data=Dict.(pairs.(eachrow(df))),
 			editable=true,
 			filter_action="native",

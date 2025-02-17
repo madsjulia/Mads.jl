@@ -26,7 +26,7 @@ function forward(madsdata::AbstractDict, paramdict::AbstractDict; all::Bool=fals
 	f = makemadscommandfunction(madsdata_c)
 	kk = collect(keys(paramdict))
 	l = length(paramdict[kk[1]])
-	for k = kk[2:end]
+	for k = kk[begin+1:end]
 		l2 = length(paramdict[k])
 		@assert l == l2
 	end

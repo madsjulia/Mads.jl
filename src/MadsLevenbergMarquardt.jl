@@ -46,11 +46,11 @@ Returns:
 -
 """ residuals
 
-function of(madsdata::AbstractDict, resultvec::AbstractVector; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
+function of(madsdata::AbstractDict, resultvec::AbstractVector; filter::Union{AbstractVector,AbstractUnitRange,Colon}=Colon())
 	r = residuals(madsdata, resultvec)
 	sum(r[filter] .^ 2)
 end
-function of(madsdata::AbstractDict, d::AbstractDict; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
+function of(madsdata::AbstractDict, d::AbstractDict; filter::Union{AbstractVector,AbstractUnitRange,Colon}=Colon())
 	v = collect(values(d))
 	if isobs(madsdata, d)
 		of(madsdata, v; filter=filter)
@@ -61,7 +61,7 @@ function of(madsdata::AbstractDict, d::AbstractDict; filter::Union{AbstractVecto
 		@warn "Unknown input dictionary!"
 	end
 end
-function of(madsdata::AbstractDict, M::AbstractMatrix; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
+function of(madsdata::AbstractDict, M::AbstractMatrix; filter::Union{AbstractVector,AbstractUnitRange,Colon}=Colon())
 	optkeys = Mads.getoptparamkeys(madsdata)
 	if length(optkeys) != size(M, 2)
 		@warn "Number of columns in M does not match the number of optimization parameters!"
@@ -74,7 +74,7 @@ function of(madsdata::AbstractDict, M::AbstractMatrix; filter::Union{AbstractVec
 	end
 	return ofv
 end
-function of(madsdata::AbstractDict; filter::Union{AbstractVector,AbstractRange,Colon}=Colon())
+function of(madsdata::AbstractDict; filter::Union{AbstractVector,AbstractUnitRange,Colon}=Colon())
 	resultdict = Mads.forward(madsdata)
 	of(madsdata, collect(values(resultdict)); filter=filter)
 end

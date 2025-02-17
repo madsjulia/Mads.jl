@@ -118,17 +118,17 @@ Test.@testset "Contamination" begin
 		@show samples
 	end
 
-	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = 1:size(good_llhoods)[1]]), 0; atol=1e-4)
+	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = axes(good_llhoods, 1]), 0; atol=1e-4)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = 1:size(good_llhoods)[1]]), 0, atol=1e-4)
+		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = axes(good_llhoods, 1)]), 0, atol=1e-4)
 	else
 		@show good_llhoods
 		@show llhoods
 	end
 
-	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = 1:size(newllhoods)[1]]), 0; atol=1e-3)
+	t = isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = axes(newllhoods, 1)]), 0; atol=1e-3)
 	if t
-		Test.@test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = 1:size(newllhoods)[1]]), 0, atol=1e-3)
+		Test.@test isapprox(Statistics.mean([abs.(newllhoods[i] - good_newllhoods[i]) for i = axes(newllhoods, 1)]), 0, atol=1e-3)
 	else
 		@show good_newllhoods
 		@show newllhoods
@@ -153,8 +153,8 @@ Test.@testset "Contamination" begin
 
 	# Testing time-based well data against itself
 	ssr = 0.0
-	for i = 1:size(good_welldata_time)[1]
-		for j = 1:size(good_welldata_time)[2]
+	for i = axes(good_welldata_time, 1)
+		for j = axes(good_welldata_time, 2)
 			ssr += (welldata_time[i * j] - good_welldata_time[i * j])^2
 		end
 	end

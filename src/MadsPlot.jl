@@ -624,7 +624,7 @@ Dumps:
 
 - plot of the sensitivity analysis results for the observations
 """
-function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput, order::Bool=true, select::Union{AbstractVector,AbstractRange,Colon}=Colon(), kw...)
+function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::Union{String,Regex}="", keyword::AbstractString="", filename::AbstractString="", format::AbstractString="", separate_files::Bool=true, xtitle::AbstractString="Time", ytitle::AbstractString="", plotlabels::Union{AbstractVector,Nothing}=nothing, quiet::Bool=!Mads.graphoutput, order::Bool=true, select::Union{AbstractVector,AbstractUnitRange,Colon}=Colon(), kw...)
 	if !haskey(madsdata, "Observations")
 		Mads.madswarn("There is no 'Observations' class in the MADS input dataset")
 		return
@@ -1160,7 +1160,7 @@ function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::Abs
 		return
 	end
 	if name == ""
-		names = ["" for i in 1:size(X,2)]
+		names = ["" for i in axes(X,2)]
 	end
 	glog = []
 	if logx
@@ -1261,7 +1261,7 @@ function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::Abs
 				palette = Gadfly.parse_colorant(["gray"])
 			else
 				if length(colors) > 1
-					palette = Gadfly.parse_colorant(colors[1:end])
+					palette = Gadfly.parse_colorant(colors[begin:end])
 				else
 					palette = Gadfly.parse_colorant(colors)
 				end
@@ -1400,10 +1400,10 @@ function plotlocalsa(filenameroot::AbstractString; keyword::AbstractString="", f
 		Ein = DelimitedFiles.readdlm(filename)
 	end
 	if sizeof(Ein) > 0
-		paramkeys = Ein[1:end, 1]
+		paramkeys = Ein[begin:end, 1]
 		plotlabels = paramkeys
 		nP = length(paramkeys)
-		sortedeigenm = Ein[1:end, 2:end]
+		sortedeigenm = Ein[begin:end, 2:end]
 		filename = "$(filenameroot)_eigenvalues.dat"
 		sortedeigenv = Vector{Float64}(undef, 0)
 		if isfile(filename)

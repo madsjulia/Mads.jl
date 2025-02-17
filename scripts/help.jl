@@ -8,6 +8,6 @@ filenames = readdir(joinpath(Mads.dir, "scripts"))
 @info("Some available commands:")
 for filename in filenames
 	if filename[end-2:end] == ".jl"
-		println(filename[1:end-3])
+		println(filename[begin:end-3])
 	end
 end

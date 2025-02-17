@@ -62,7 +62,7 @@ else
 	madsjl_help()
 	quit()
 end
-for i = 2:length(ARGS)
+for i = eachindex(ARGS)[begin+1:end]
 	madscommand = ARGS[i]
 	madsscript = joinpath(Mads.dir, "scripts", string(madscommand, ".jl"))
 	if isfile(madsscript)

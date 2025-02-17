@@ -1358,11 +1358,11 @@ function efast(md::AbstractDict; N::Integer=100, M::Integer=6, gamma::Number=4, 
 		if robustpmap
 			if restart
 				madsinfo("RobustPmap of forward runs with restart for parameter $(string(paramkeys[k])) ...")
-				m = RobustPmap.crpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(k)_$(string(paramkeys[k]))"), 1:size(X, 1))
+				m = RobustPmap.crpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), checkpointfrequency, joinpath(restartdir, "efast_$(k)_$(string(paramkeys[k]))"), axes(X, 1))
 
 			else
 				madsinfo("RobustPmap of forward runs without restart for parameter $(string(paramkeys[k])) ...")
-				m = RobustPmap.rpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), 1:size(X, 1))
+				m = RobustPmap.rpmap(i -> collect(values(f(merge(paramalldict, OrderedCollections.OrderedDict{Union{Symbol, String}, Float64}(zip(paramkeys, X[i, :])))))), axes(X, 1))
 			end
 			Y = permutedims(hcat(m...))
 		elseif parallel && Distributed.nprocs() > 1

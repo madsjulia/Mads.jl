@@ -42,7 +42,7 @@ function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractSt
 	dump && close(f)
 	return observationdict
 end
-function createobservations(obs::AbstractVector; key::AbstractVector=["o$(i)" for i=1:size(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=[], min::Union{Number,AbstractVector}=[], max::Union{Number,AbstractVector}=[], minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=[], distribution::Bool=false)
+function createobservations(obs::AbstractVector; key::AbstractVector=["o$(i)" for i=axes(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=[], min::Union{Number,AbstractVector}=[], max::Union{Number,AbstractVector}=[], minorig::Union{Number,AbstractVector}=min, maxorig::Union{Number,AbstractVector}=max, dist::AbstractVector=[], distribution::Bool=false)
 	md = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	@assert length(obs) == length(key)
 	@assert length(obs) == length(weight)
@@ -76,7 +76,7 @@ function createobservations(obs::AbstractVector; key::AbstractVector=["o$(i)" fo
 	end
 	return md
 end
-function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$(i)" for i=1:size(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=collect(1:size(obs, 2)))
+function createobservations(obs::AbstractMatrix; key::AbstractVector=["o$(i)" for i=axes(obs, 1)], weight::AbstractVector=ones(size(obs, 1)), time::AbstractVector=collect(axes(obs, 2)))
 	md = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for i in axes(obs, 1)
 		for j in axes(obs, 2)

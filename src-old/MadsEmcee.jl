@@ -29,7 +29,7 @@ function sample(llhood::Function, numwalkers::Integer, x0::AbstractMatrix, numsa
 	end
 	x = copy(x0)
 	chain = Array{Float64}(undef, size(x0, 1), numwalkers, div(numsamples_perwalker, thinning))
-	lastllhoodvals = RobustPmap.rpmap(llhood, map(i->x[:, i], 1:size(x, 2)))
+	lastllhoodvals = RobustPmap.rpmap(llhood, map(i->x[:, i], axes(x, 2)))
 	llhoodvals = Array{Float64}(undef, numwalkers, div(numsamples_perwalker, thinning))
 	llhoodvals[:, 1] = lastllhoodvals
 	chain[:, :, 1] = x0
@@ -84,5 +84,5 @@ function flattenmcmcarray(chain::AbstractArray, llhoodvals::AbstractArray)
 			newchain[:, i + (j - 1) * numwalkers] = chain[:, i, j]
 		end
 	end
-	return newchain, llhoodvals[1:end]
+	return newchain, llhoodvals[begin:end]
 end

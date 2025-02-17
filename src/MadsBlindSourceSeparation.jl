@@ -100,7 +100,7 @@ function NMFipopt(X::AbstractMatrix, nk::Integer, retries::Integer=1; random::Bo
 	return Wbest, Hbest, phi_best
 end
 
-function MFlm(X::AbstractMatrix{T}, range::AbstractRange{Int}; kw...) where {T <: Number}
+function MFlm(X::AbstractMatrix{T}, range::AbstractUnitRange{Int}; kw...) where {T <: Number}
 	maxsources = maximum(collect(range))
 	W = Array{Array{T, 2}}(undef, maxsources)
 	H = Array{Array{T, 2}}(undef, maxsources)

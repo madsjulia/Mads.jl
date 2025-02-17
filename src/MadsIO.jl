@@ -82,7 +82,7 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, UnitRange{Int}}=1, rows::Union{Int, Vector{Int}, UnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, UnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert numbertype <: Real
 	if dataframe
 		df = DataFrames.DataFrame()
@@ -105,7 +105,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 		if cols == 0 # all columns
 			col_range = xf[sheet_name].dimension.start.column_number:xf[sheet_name].dimension.stop.column_number
 			col_vector = collect(col_range)
-		elseif eltype(cols) <: Integer # Vector{Int} or UnitRange{Int}
+		elseif eltype(cols) <: Integer # Vector{Int} or AbstractUnitRange{Int}
 			col_vector = collect(cols)
 			col_range = minimum(cols):maximum(cols)
 		else # Vector{String}
@@ -852,7 +852,7 @@ function getrootname(filename::AbstractString; first::Bool=true, version::Bool=f
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if !first && length(s) > 1
-		r = join(s[1:end-1], ".")
+		r = join(s[begin:end-1], ".")
 	else
 		r = s[1]
 	end
@@ -1319,15 +1319,15 @@ function instline2regexs(instline::AbstractString)
 		offset = m.offset + length(m.match)
 		if m.match[1] == '@'
 			if isspace(m.match[end - 1])
-				push!(regexs, Regex(string("\\h*", m.match[2:end - 1])))
+				push!(regexs, Regex(string("\\h*", m.match[begin+1:end - 1])))
 			else
-				push!(regexs, Regex(string("\\h*", m.match[2:end - 1], "[^\\s]*")))
+				push!(regexs, Regex(string("\\h*", m.match[begin+1:end - 1], "[^\\s]*")))
 			end
 			push!(getparamhere, false)
 		elseif m.match[1] == '!'
 			push!(regexs, floatregex)
-			if m.match[2:end - 1] != "dum"
-				push!(obsnames, m.match[2:end - 1])
+			if m.match[begin+1:end - 1] != "dum"
+				push!(obsnames, m.match[begin+1:end - 1])
 				push!(getparamhere, true)
 			else
 				push!(getparamhere, false)
@@ -1431,7 +1431,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 		elseif instline[1] == 'l'
 			l = 1
 			try
-				l = Base.parse(Int, instline[2:end])
+				l = Base.parse(Int, instline[begin+1:end])
 			catch
 			end
 			for i = 1:l
