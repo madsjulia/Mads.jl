@@ -203,6 +203,26 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				elseif all(typeof.(v) .<: Union{Missing,AbstractString})
 					v[ismissing.(v)] .= ""
 					v = convert(Vector{String}, v)
+				elseif all(typeof.(v) .<: Union{Number,AbstractString})
+					v[v .== ""] .= NaN
+					parsingerror = false
+					for i in eachindex(v)
+						if typeof(v[i]) <: AbstractString
+							if occursin(r"^-*$", v[i])
+								v[i] = NaN
+							else
+								try
+									v[i] = parse(numbertype, v[i])
+								catch
+									parsingerror = true
+								end
+							end
+						end
+					end
+					if parsingerror
+						@warn("Some values for parameter/column \"$(param)\" could not be parsed!")
+					end
+					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				else
 					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				end
