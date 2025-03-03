@@ -14,17 +14,23 @@ mutable struct DATA
 end
 
 function createhash!(DATA::DATA)
-	println("File: $(DATA.filename)")
-	open(DATA.filename) do f
+	hash = gethash(DATA.filename)
+	if DATA.filehash == hash
+		@info("Hash did not change!")
+	else
+		@warn("Hash changed!")
+		DATA.filehash = hash
+	end
+end
+
+function gethash(filename)
+	@info("File: $(filename)")
+	local hash
+	open(filename) do f
 		hash = SHA.bytes2hex(SHA.sha2_256(f))
 		@info("Hash: $(hash)")
-		if DATA.filehash == hash
-			@info("Hash did not change!")
-		else
-			@warn("Hash changed!")
-			DATA.filehash = hash
-		end
 	end
+	return hash
 end
 
 function checkhash(input_file::AbstractString, target_hash::AbstractString, throw_error::Bool=false)::Bool
