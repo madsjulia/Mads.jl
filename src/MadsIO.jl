@@ -2030,6 +2030,21 @@ function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
 	end
 end
 
+function jld2append(fname::AbstractString, aw...)
+	@assert length(aw) % 2 == 0
+	JLD2.jldopen(fname, "a+") do file
+		for i = 1:2:length(aw)
+			file[aw[i]] = aw[i + 1]
+		end
+	end
+end
+
+function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
+	JLD2.jldopen(fname, "a+") do file
+		file[varname] = data
+	end
+end
+
 function jldkeys(fname::AbstractString)
 	JLD.jldopen(fname, "r") do file
 		return keys(file)
