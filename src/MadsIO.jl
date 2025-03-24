@@ -2032,9 +2032,12 @@ end
 
 function jldappend(fname::AbstractString, aw...)
 	@assert length(aw) % 2 == 0
-	JLD.jldopen(fname, "a+") do file
+	JLD.open(fname, "r+") do file
 		for i = 1:2:length(aw)
-			file[aw[i]] = aw[i + 1]
+			if haskey(file, aw[i])
+				delete!(file, aw[i])
+			end
+			write(file, aw[i], aw[i + 1])
 		end
 	end
 end
@@ -2043,6 +2046,9 @@ function jld2append(fname::AbstractString, aw...)
 	@assert length(aw) % 2 == 0
 	JLD2.jldopen(fname, "a+") do file
 		for i = 1:2:length(aw)
+			if haskey(file, aw[i])
+				delete!(file, aw[i])
+			end
 			file[aw[i]] = aw[i + 1]
 		end
 	end
