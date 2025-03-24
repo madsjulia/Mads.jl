@@ -2030,11 +2030,13 @@ function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
 	end
 end
 
-function jldappend(fname::AbstractString, aw...)
+function jldappend(fname::AbstractString, aw...; overwrite::Bool=true)
 	@assert length(aw) % 2 == 0
-	JLD.open(fname, "r+") do file
+	keys = jldkeys(fname)
+	JLD.jldopen(fname, "r+") do file
 		for i = 1:2:length(aw)
-			if haskey(file, aw[i])
+			if overwrite && aw[i] in keys
+				@warn("$(aw[i]) is already in $(fname)! It will be replaced!")
 				delete!(file, aw[i])
 			end
 			write(file, aw[i], aw[i + 1])
@@ -2042,11 +2044,12 @@ function jldappend(fname::AbstractString, aw...)
 	end
 end
 
-function jld2append(fname::AbstractString, aw...)
+function jld2append(fname::AbstractString, aw...; overwrite::Bool=true)
 	@assert length(aw) % 2 == 0
 	JLD2.jldopen(fname, "a+") do file
 		for i = 1:2:length(aw)
-			if haskey(file, aw[i])
+			if overwrite && haskey(file, aw[i])
+				@warn("$(aw[i]) is already in $(fname)! It will be replaced!")
 				delete!(file, aw[i])
 			end
 			file[aw[i]] = aw[i + 1]
