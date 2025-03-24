@@ -151,7 +151,6 @@ function emceesampling(madsdata::AbstractDict, p0::AbstractMatrix; filename::Abs
 			if size(chain, 2) != div(nexecutions, thinning)
 				@warn("Preexisting data does not match the number of walkers and steps!")
 				bad_data = true
-				poop
 			elseif size(chain, 1) != np
 				@warn("Preexisting data does not match the number of parameters!")
 				bad_data = true
