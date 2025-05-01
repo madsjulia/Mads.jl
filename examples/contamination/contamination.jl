@@ -1,4 +1,4 @@
-using Mads: Mads
+import Mads
 
 currentdir = pwd()
 
