@@ -118,7 +118,7 @@ Test.@testset "Contamination" begin
 		@show samples
 	end
 
-	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = axes(good_llhoods, 1]), 0; atol=1e-4)
+	t = isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = axes(good_llhoods, 1)]), 0; atol=1e-4)
 	if t
 		Test.@test isapprox(Statistics.mean([abs.(llhoods[i] - good_llhoods[i]) for i = axes(good_llhoods, 1)]), 0, atol=1e-4)
 	else
