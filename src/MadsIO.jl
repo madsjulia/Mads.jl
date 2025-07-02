@@ -36,7 +36,7 @@ end
 function checkhash(input_file::AbstractString, target_hash::AbstractString, throw_error::Bool=false)::Bool
 	local hash
 	open(input_file) do f
-		hash = SHA.bytes2hex(SHA.sha2_256(f))
+		return hash = SHA.bytes2hex(SHA.sha2_256(f))
 	end
 	check = hash == target_hash
 	if !check
@@ -52,7 +52,7 @@ function checkhash(input_file::AbstractString, target_hash::AbstractString, thro
 	return check
 end
 function checkhash(DATA::DATA, throw_error::Bool=true)::Bool
-	checkhash(DATA.filename, DATA.filehash, throw_error)
+	return checkhash(DATA.filename, DATA.filehash, throw_error)
 end
 @doc """
 Check hash of a file
@@ -88,8 +88,8 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, numbertype::DataType=Float64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
-	@assert numbertype <: Real
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, floattype::DataType=Float64, inttype::DataType=Int64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+	@assert floattype <: AbstractFloat
 	if dataframe
 		df = DataFrames.DataFrame()
 	else
@@ -103,20 +103,20 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 		@error("Header rows and data rows overlap!")
 		return df
 	end
-	XLSX.openxlsx(excel_file, mode="r") do xf
+	XLSX.openxlsx(excel_file; mode="r") do xf
 		if sheet_name == ""
 			sheet_name = xf[1].name
 			@warn("Sheet name is not provided! Using the first sheet: $(sheet_name)")
 		end
 		if cols == 0 # all columns
-			col_range = xf[sheet_name].dimension.start.column_number:xf[sheet_name].dimension.stop.column_number
+			col_range = (xf[sheet_name].dimension.start.column_number):(xf[sheet_name].dimension.stop.column_number)
 			col_vector = collect(col_range)
 		elseif eltype(cols) <: Integer # Vector{Int} or AbstractUnitRange{Int}
 			col_vector = collect(cols)
 			col_range = minimum(cols):maximum(cols)
 		else # Vector{String}
 			xlsx_col_range = convert(XLSX.ColumnRange, "$(cols[1]):$(cols[end])")
-			col_range = xlsx_col_range.start:xlsx_col_range.stop
+			col_range = (xlsx_col_range.start):(xlsx_col_range.stop)
 			col_vector = collect(col_range)
 		end
 		if header != 0
@@ -128,7 +128,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 		if length(header) > 1 # multiple header rows
 			params = Vector{String}()
 			for c in col_vector
-				v = xf[sheet_name][header_range,c][header_vector .- minimum(header_range) .+ 1]
+				v = xf[sheet_name][header_range, c][header_vector .- minimum(header_range) .+ 1]
 				v[ismissing.(v) .| isnothing.(v)] .= ""
 				p = strip(.*((string.(v) .* " ")...))
 				p = p == "" ? "Column $c" : p
@@ -139,7 +139,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				params[i] = "$(params[i]) C$(i)"
 			end
 			if rows == 0
-				row_range = (maximum(header) + 1):xf[sheet_name].dimension.stop.row_number
+				row_range = (maximum(header) + 1):(xf[sheet_name].dimension.stop.row_number)
 				row_vector = collect(row_range)
 			end
 		elseif length(header) == 1 && maximum(header) > 0 # single header row
@@ -151,13 +151,13 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				end
 			end
 			if rows == 0
-				row_range = (maximum(header) + 1):xf[sheet_name].dimension.stop.row_number
+				row_range = (maximum(header) + 1):(xf[sheet_name].dimension.stop.row_number)
 				row_vector = collect(row_range)
 			end
 		elseif header == 0 # no header row
 			params = ["Column $i" for i in col_vector]
 			if rows == 0
-				row_range = xf[sheet_name].dimension.start.row_number:xf[sheet_name].dimension.stop.row_number
+				row_range = (xf[sheet_name].dimension.start.row_number):(xf[sheet_name].dimension.stop.row_number)
 				row_vector = collect(row_range)
 			end
 		else
@@ -166,7 +166,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 		end
 
 		# NOTE: xf[sheet_name][row_vector, col_vector] is not working; that is why we use the following
-		data = xf[sheet_name][row_range, col_range][row_vector .- minimum(row_range) .+ 1,col_vector .- minimum(col_range) .+ 1]
+		data = xf[sheet_name][row_range, col_range][row_vector .- minimum(row_range) .+ 1, col_vector .- minimum(col_range) .+ 1]
 
 		data = data[.!all.(ismissing, eachrow(data)), :] # skip rows with all missing values
 
@@ -192,24 +192,52 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				if keytype <: AbstractString
 					param_name = convert(keytype, param)
 				elseif keytype <: Symbol
-					param_name = Symbol(replace(strip(lowercase(param)), r"\s+"=> "_", "-" => "_"))
+					param_name = Symbol(replace(strip(lowercase(param)), r"\s+" => "_", "-" => "_"))
 				end
 			end
-			v = data[:,i]
+			v = data[:, i]
 			if !all(ismissing.(v))
-				if all(typeof.(v) .<: Union{Missing,Number})
+				unique_types = unique(typeof.(v))
+				if all(unique_types .<: Union{Missing, AbstractFloat})
 					mask_missing = isnull.(v)
 					if usenans
-						v[mask_missing] .= numbertype(NaN)
-						v = convert(Vector{numbertype}, v)
+						v[mask_missing] .= floattype(NaN)
+						v = convert(Vector{floattype}, v)
 					else
 						v[mask_missing] .= missing
-						v = convert(Vector{Union{Missing,numbertype}}, v)
+						v = convert(Vector{Union{Missing, floattype}}, v)
 					end
-				elseif all(typeof.(v) .<: Union{Missing,AbstractString})
-					v[ismissing.(v)] .= ""
+				elseif all(unique_types .<: Union{Missing, Integer})
+					mask_missing = isnull.(v)
+					v[mask_missing] .= missing
+					v = convert(Vector{Union{Missing, inttype}}, v)
+				elseif all(unique_types .<: Union{Missing, AbstractString})
+					v[isnull.(v)] .= ""
 					v = convert(Vector{String}, v)
-				elseif all(typeof.(v) .<: Union{Number,AbstractString})
+				elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
+					v[isnull.(v)] .= ""
+					parsingerror = false
+					for i in eachindex(v)
+						if typeof(v[i]) <: AbstractString
+							if occursin(r"^-*$", v[i])
+								v[i] = ""
+							elseif v[i] != ""
+								try
+									v[i] = parse(inttype, v[i])
+								catch
+									parsingerror = true
+								end
+							end
+						end
+					end
+					if parsingerror
+						println("Some values for parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+					else
+						v = convert(Vector{inttype}, v)
+					end
+				elseif all(unique_types .<: Union{Missing, AbstractFloat, AbstractString})
+					v[isnull.(v)] .= NaN
 					v[v .== ""] .= NaN
 					parsingerror = false
 					for i in eachindex(v)
@@ -218,7 +246,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 								v[i] = NaN
 							else
 								try
-									v[i] = parse(numbertype, v[i])
+									v[i] = parse(floattype, v[i])
 								catch
 									parsingerror = true
 								end
@@ -226,10 +254,13 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 						end
 					end
 					if parsingerror
-						@warn("Some values for parameter/column \"$(param)\" could not be parsed!")
+						println("Some values for parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+					else
+						v = convert(Vector{floattype}, v)
 					end
-					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				else
+					println("Parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
 					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				end
 				if dataframe
@@ -238,14 +269,14 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 					df[param_name] = v
 				end
 			else
-				@warn("All values for parameter/column \"$(param)\" are missing!")
+				println("All values for parameter/column \"$(param)\" are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
 			end
 		end
 	end
 	return df
 end
 
-function load_data(filename::AbstractString; dataset="", kw...)::Union{DataFrames.DataFrame,AbstractArray}
+function load_data(filename::AbstractString; dataset="", kw...)::Union{DataFrames.DataFrame, AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -331,7 +362,7 @@ Get file names by expanding wildcards
 $(DocumentFunction.documentfunction(getfilenames))
 """
 function getfilenames(cmdstring::AbstractString)
-	readlines(runcmd("ls " * cmdstring; quiet=true, pipe=true)[2])
+	return readlines(runcmd("ls " * cmdstring; quiet=true, pipe=true)[2])
 end
 
 """
@@ -356,7 +387,7 @@ Load MADS input file defining a MADS problem dictionary
 $(DocumentFunction.documentfunction(loadmadsfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true`, force using `julia` parsing functions; if `false` (default), use `python` parsing functions",
-             "format"=>"acceptable formats are `yaml` and `json` [default=`yaml`]")))
+			 "format"=>"acceptable formats are `yaml` and `json` [default=`yaml`]")))
 
 Returns:
 
@@ -368,7 +399,7 @@ Example:
 md = Mads.loadmadsfile("input_file_name.mads")
 ```
 """
-function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=Mads.quiet, dicttype=OrderedCollections.OrderedDict{Any,Any})
+function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::AbstractString="yaml", quiet::Bool=Mads.quiet, dicttype=OrderedCollections.OrderedDict{Any, Any})
 	if bigfile
 		madsdata = loadbigyamlfile(filename)
 	end
@@ -393,7 +424,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 		t = getobstarget(madsdata)
 		isn = isnan.(t)
 		if any(isn) && !quiet
-			l = length(isn[isn.==true])
+			l = length(isn[isn .== true])
 			if l == 1
 				Mads.madswarn("There is 1 observation with a missing target!")
 			else
@@ -413,7 +444,7 @@ function loadmadsfile(filename::AbstractString; bigfile::Bool=false, format::Abs
 			madswarn("Julia function $(fn) is not defined!")
 		end
 	end
-	return convert(Dict{String,Any}, madsdata)
+	return convert(Dict{String, Any}, madsdata)
 end
 
 """
@@ -429,7 +460,7 @@ Returns:
 function loadbigyamlfile(filename::AbstractString)
 	lines = readlines(filename)
 	nlines = length(lines)
-	keyln = findall((in)(true), map(i->(match(r"^[A-Z]", lines[i]) !== nothing), 1:nlines))
+	keyln = findall((in)(true), map(i -> (match(r"^[A-Z]", lines[i]) !== nothing), 1:nlines))
 	if length(keyln) == 0
 		return nothing
 	end
@@ -443,14 +474,14 @@ function loadbigyamlfile(filename::AbstractString)
 	readflag = true
 	yamlflag = true
 	if obsln != 1 && obsln != nlines && obsi < length(keyln)
-		parseindeces = vcat(collect(1:obsln-1), collect(keyln[obsi+1]:nlines))
-		readindeces = obsln+1:keyln[obsi+1]-1
+		parseindeces = vcat(collect(1:(obsln - 1)), collect(keyln[obsi + 1]:nlines))
+		readindeces = (obsln + 1):(keyln[obsi + 1] - 1)
 	elseif obsln == 1 && obsi < length(keyln)
-		parseindeces = keyln[obsi+1]:nlines
-		readindeces = 2:keyln[obsi+1]-1
+		parseindeces = keyln[obsi + 1]:nlines
+		readindeces = 2:(keyln[obsi + 1] - 1)
 	elseif obsln == nlines
-		parseindeces = 1:obsln-1
-		readindeces = obsln+1:nlines
+		parseindeces = 1:(obsln - 1)
+		readindeces = (obsln + 1):nlines
 	elseif length(keyln) == 1
 		parseindeces = 0:0
 		yamlflag = false
@@ -461,7 +492,7 @@ function loadbigyamlfile(filename::AbstractString)
 		readflag = false
 	end
 	if readflag
-		obsdict = OrderedCollections.OrderedDict{String,Any}()
+		obsdict = OrderedCollections.OrderedDict{String, Any}()
 		t = []
 		badlines = Array{Int}(undef, 0)
 		for i in readindeces
@@ -478,7 +509,7 @@ function loadbigyamlfile(filename::AbstractString)
 				parseindeces = 1:nlines
 				break
 			end
-			obsdict[kw] = OrderedCollections.OrderedDict{String,Any}()
+			obsdict[kw] = OrderedCollections.OrderedDict{String, Any}()
 			mc = match(r"^.*target[\"]?:[\s]*?([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?).*", lines[i])
 			if !isnothing(mc)
 				obsdict[kw]["target"] = parse(Float64, mc.captures[1])
@@ -499,9 +530,9 @@ function loadbigyamlfile(filename::AbstractString)
 	end
 	if yamlflag
 		io = IOBuffer(join(lines[parseindeces], '\n'))
-		madsdata = YAML.load(io; dicttype=OrderedCollections.OrderedDict{String,Any})
+		madsdata = YAML.load(io; dicttype=OrderedCollections.OrderedDict{String, Any})
 	else
-		madsdata = OrderedCollections.OrderedDict{String,Any}()
+		madsdata = OrderedCollections.OrderedDict{String, Any}()
 	end
 	if readflag
 		madsdata["Observations"] = obsdict
@@ -518,19 +549,19 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function parsemadsdata!(madsdata::AbstractDict)
 	madsproblemdir = Mads.getmadsproblemdir(madsdata)
 	if haskey(madsdata, "Parameters")
-		parameters = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+		parameters = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
 		for dict in madsdata["Parameters"]
 			for key in keys(dict)
 				if !haskey(dict[key], "exp") # it is a real parameter, not an expression
-					parameters[key] = OrderedCollections.OrderedDict{String,Any}()
+					parameters[key] = OrderedCollections.OrderedDict{String, Any}()
 					for pf in keys(dict[key])
 						parameters[key][pf] = dict[key][pf]
 					end
 				else
 					if !haskey(madsdata, "Expressions")
-						madsdata["Expressions"] = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+						madsdata["Expressions"] = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
 					end
-					madsdata["Expressions"][key] = OrderedCollections.OrderedDict{String,Any}()
+					madsdata["Expressions"][key] = OrderedCollections.OrderedDict{String, Any}()
 					for pf in keys(dict[key])
 						madsdata["Expressions"][key][pf] = dict[key][pf]
 					end
@@ -574,10 +605,10 @@ function parsemadsdata!(madsdata::AbstractDict)
 	end
 	checkparameterranges(madsdata)
 	if haskey(madsdata, "Wells")
-		wells = OrderedCollections.OrderedDict{String,Any}()
+		wells = OrderedCollections.OrderedDict{String, Any}()
 		for dict in madsdata["Wells"]
 			if collect(keys(dict))[1] == "filename"
-				dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]), bigfile=true)["Wells"]
+				dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]); bigfile=true)["Wells"]
 			elseif collect(keys(dict))[1] == "script"
 				dictnew = include(collect(values(dict))[1])
 			else
@@ -587,7 +618,7 @@ function parsemadsdata!(madsdata::AbstractDict)
 				wells[key] = dict[key]
 				wells[key]["on"] = true
 				if haskey(wells[key], "obs") && !isnothing(wells[key]["obs"])
-					for i = eachindex(wells[key]["obs"])
+					for i in eachindex(wells[key]["obs"])
 						for k in keys(wells[key]["obs"][i])
 							wells[key]["obs"][i] = wells[key]["obs"][i][k]
 						end
@@ -599,17 +630,17 @@ function parsemadsdata!(madsdata::AbstractDict)
 		Mads.wells2observations!(madsdata)
 	elseif haskey(madsdata, "Observations") # TODO drop zero weight observations
 		if typeof(madsdata["Observations"]) <: Array
-			observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+			observations = OrderedCollections.OrderedDict{String, OrderedCollections.OrderedDict}()
 			for dict in madsdata["Observations"]
 				if collect(keys(dict))[1] == "filename"
-					dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]), bigfile=true)["Observations"]
+					dictnew = loadmadsfile(joinpath(madsproblemdir, collect(values(dict))[1]); bigfile=true)["Observations"]
 				elseif collect(keys(dict))[1] == "script"
 					dictnew = include(collect(values(dict))[1])
 				else
 					dictnew = dict
 				end
 				for key in keys(dictnew)
-					observations[key] = OrderedCollections.OrderedDict{String,Any}()
+					observations[key] = OrderedCollections.OrderedDict{String, Any}()
 					for of in keys(dictnew[key])
 						observations[key][of] = dictnew[key][of]
 					end
@@ -670,11 +701,11 @@ function savemadsfile(madsdata::AbstractDict, filename::AbstractString=""; obser
 		else
 			Mads.madswarn("External observation file already exist ($(filenameobs)); delete if needed!")
 		end
-		madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+		madsdata2["Observations"] = Dict{String, String}("filename" => filenameobs)
 	else
 		madsdata2 = madsdata
 	end
-	dumpyamlmadsfile(madsdata2, filename)
+	return dumpyamlmadsfile(madsdata2, filename)
 end
 function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename::AbstractString=""; explicit::Bool=false, observations_separate::Bool=false)
 	if filename == ""
@@ -682,7 +713,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 	end
 	if explicit
 		madsdata2 = loadyamlfile(madsdata["Filename"])
-		for i = eachindex(madsdata2["Parameters"])
+		for i in eachindex(madsdata2["Parameters"])
 			pdict = madsdata2["Parameters"][i]
 			paramname = collect(keys(pdict))[1]
 			realparam = pdict[paramname]
@@ -695,7 +726,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 		if observations_separate
 			filenameobs = getrootname(filename; version=true) * "_observations.yaml"
 			printobservations(madsdata, filenameobs)
-			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+			madsdata2["Observations"] = Dict{String, String}("filename" => filenameobs)
 		end
 		dumpyamlfile(filename, madsdata2)
 	else
@@ -704,7 +735,7 @@ function savemadsfile(madsdata::AbstractDict, parameters::AbstractDict, filename
 		if observations_separate
 			filenameobs = getrootname(filename; version=true) * "_observations.yaml"
 			printobservations(madsdata, filenameobs)
-			madsdata2["Observations"] = Dict{String,String}("filename"=>filenameobs)
+			madsdata2["Observations"] = Dict{String, String}("filename" => filenameobs)
 		end
 		dumpyamlmadsfile(madsdata2, filename)
 	end
@@ -714,10 +745,10 @@ Save MADS problem dictionary `madsdata` in MADS input file `filename`
 
 $(DocumentFunction.documentfunction(savemadsfile;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameters"=>"Dictionary with parameters (optional)",
-            "filename"=>"input file name (e.g. `input_file_name.mads`)"),
+			"parameters"=>"Dictionary with parameters (optional)",
+			"filename"=>"input file name (e.g. `input_file_name.mads`)"),
 keytext=Dict("julia"=>"if `true` use Julia JSON module to save [default=`false`]",
-            "explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file [default=`false`]")))
+			"explicit"=>"if `true` ignores MADS YAML file modifications and rereads the original input file [default=`false`]")))
 
 Example:
 
@@ -736,7 +767,7 @@ $(DocumentFunction.documentfunction(setmadsinputfile;
 argtext=Dict("filename"=>"input file name (e.g. `input_file_name.mads`)")))
 """
 function setmadsinputfile(filename::AbstractString)
-	global madsinputfile = filename
+	return global madsinputfile = filename
 end
 
 """
@@ -758,7 +789,7 @@ Get the MADS problem root name
 $(DocumentFunction.documentfunction(getmadsrootname;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
-            "version"=>"delete version information from filename for the returned rootname [default=`false`]")))
+			"version"=>"delete version information from filename for the returned rootname [default=`false`]")))
 
 Example:
 
@@ -861,7 +892,7 @@ Get the filename root
 $(DocumentFunction.documentfunction(getrootname;
 argtext=Dict("filename"=>"file name"),
 keytext=Dict("first"=>"use the first . in filename as the seperator between root name and extention [default=`true`]",
-            "version"=>"delete version information from filename for the returned rootname [default=`false`]")))
+			"version"=>"delete version information from filename for the returned rootname [default=`false`]")))
 
 Returns:
 
@@ -878,17 +909,17 @@ function getrootname(filename::AbstractString; first::Bool=true, version::Bool=f
 	d = splitdir(filename)
 	s = split(d[2], ".")
 	if !first && length(s) > 1
-		r = join(s[begin:end-1], ".")
+		r = join(s[begin:(end - 1)], ".")
 	else
 		r = s[1]
 	end
 	if version
 		if occursin(r"-v[0-9].$", r)
 			rm = match(r"-v[0-9].$", r)
-			r = r[1:rm.offset-1]
+			r = r[1:(rm.offset - 1)]
 		elseif occursin(r"-rerun$", r)
 			rm = match(r"-rerun$", r)
-			r = r[1:rm.offset-1]
+			r = r[1:(rm.offset - 1)]
 		end
 	end
 	if length(d) > 1
@@ -898,7 +929,7 @@ function getrootname(filename::AbstractString; first::Bool=true, version::Bool=f
 end
 
 function setnewmadsfilename(madsdata::AbstractDict)
-	setnewmadsfilename(madsdata["Filename"])
+	return setnewmadsfilename(madsdata["Filename"])
 end
 function setnewmadsfilename(filename::AbstractString)
 	dir = getdir(filename)
@@ -919,7 +950,7 @@ Set new mads file name
 
 $(DocumentFunction.documentfunction(setnewmadsfilename;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "filename"=>"file name")))
+			"filename"=>"file name")))
 
 Returns:
 
@@ -1026,8 +1057,11 @@ function checkmodeloutputdirs(madsdata::AbstractDict)
 			push!(directories, getdir(filename))
 		end
 	end
-	if haskey(madsdata, "Linked directory
-		") && madsdata["Linked directory"] == true
+	if haskey(
+		madsdata,
+		"Linked directory
+"
+	) && madsdata["Linked directory"] == true
 		push!(directories, ".")
 	end
 	d = unique(directories)
@@ -1046,7 +1080,7 @@ Set model input files; delete files where model output should be saved for MADS
 
 $(DocumentFunction.documentfunction(setmodelinputs;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameters"=>"parameters"),
+			"parameters"=>"parameters"),
 keytext=Dict("path"=>"path for the files [default=`.`]")))
 """
 function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); path::AbstractString=".")
@@ -1056,78 +1090,80 @@ function setmodelinputs(madsdata::AbstractDict, parameters::AbstractDict=Mads.ge
 		for instruction in madsdata["Instructions"]
 			filename = instruction["ins"]
 			if !isfile(filename)
-				Mads.madswarn("Instruction file $filename is missing!"); errorflag = true
+				Mads.madswarn("Instruction file $filename is missing!")
+				errorflag = true
 			end
-			Mads.rmfile(instruction["read"], path=path)
+			Mads.rmfile(instruction["read"]; path=path)
 		end
 	end
 	if haskey(madsdata, "Templates")
 		for template in madsdata["Templates"]
 			filename = template["tpl"]
 			if !isfile(filename)
-				Mads.madswarn("Template file $filename is missing!"); errorflag = true
+				Mads.madswarn("Template file $filename is missing!")
+				errorflag = true
 			end
-			Mads.rmfile(template["write"], path=path)
+			Mads.rmfile(template["write"]; path=path)
 		end
 		writeparameters(madsdata, parameters)
 	end
 	#TODO move the writing into the "writeparameters" function
 	if haskey(madsdata, "JLDParameters")
 		for filename in vcat(madsdata["JLDParameters"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 		JLD.save(madsdata["JLDParameters"], parameters)
 	end
 	if haskey(madsdata, "JLDPredictions")
 		for filename in vcat(madsdata["JLDPredictions"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 	end
 	if haskey(madsdata, "JLD2Parameters")
 		for filename in vcat(madsdata["JLD2Parameters"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 		JLD2.save(madsdata["JLD2Parameters"], parameters)
 	end
 	if haskey(madsdata, "JLD2Predictions")
 		for filename in vcat(madsdata["JLD2Predictions"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 	end
 	if haskey(madsdata, "JSONParameters")
 		for filename in vcat(madsdata["JSONParameters"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 		dumpjsonfile(madsdata["JSONParameters"], parameters)
 	end
 	if haskey(madsdata, "JSONPredictions")
 		for filename in vcat(madsdata["JSONPredictions"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 	end
 	if haskey(madsdata, "YAMLParameters")
 		for filename in vcat(madsdata["YAMLParameters"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 		dumpyamlfile(joinpath(path, madsdata["YAMLParameters"]), parameters)
 	end
 	if haskey(madsdata, "YAMLPredictions")
 		for filename in vcat(madsdata["YAMLPredictions"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 	end
 	if haskey(madsdata, "ASCIIParameters")
 		filename = madsdata["ASCIIParameters"]
-		Mads.rmfile(filename, path=path)
+		Mads.rmfile(filename; path=path)
 		#TODO this does NOT work; `parameters` are not required to be Ordered Dictionary
 		dumpasciifile(joinpath(path, filename), values(parameters))
 	end
 	if haskey(madsdata, "ASCIIPredictions")
 		for filename in vcat(madsdata["ASCIIPredictions"])
-			Mads.rmfile(filename, path=path)
+			Mads.rmfile(filename; path=path)
 		end
 	end
-	errorflag && madscritical("There are missing files!")
+	return errorflag && madscritical("There are missing files!")
 end
 
 """
@@ -1138,7 +1174,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary"),
 keytext=Dict("obskeys"=>"observation keys [default=getobskeys(madsdata)]")))
 """
 function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobskeys(madsdata))
-	results = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}()
+	results = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}()
 	if haskey(madsdata, "Instructions")
 		results = readobservations(madsdata, obskeys)
 	end
@@ -1164,9 +1200,9 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 	end
 	if haskey(madsdata, "ASCIIPredictions")
 		predictions = loadasciifile(madsdata["ASCIIPredictions"])
-		obsid=[convert(String,k) for k in obskeys]
+		obsid = [convert(String, k) for k in obskeys]
 		@assert length(obskeys) == length(predictions)
-		results = merge(results, OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(obsid, predictions)))
+		results = merge(results, OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(zip(obsid, predictions)))
 	end
 	missingkeys = Array{String}(undef, 0)
 	validtargets = (Mads.getobsweight(madsdata) .> 0) .& .!isnan.(Mads.getobstarget(madsdata))
@@ -1179,7 +1215,7 @@ function readmodeloutput(madsdata::AbstractDict; obskeys::AbstractVector=getobsk
 		madswarn("Observations are missing (total count = $(length(missingkeys)))!")
 		madscritical("Missing observation keys: $(missingkeys)")
 	end
-	return convert(OrderedCollections.OrderedDict{Union{String,Symbol},Float64}, results)
+	return convert(OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}, results)
 end
 
 """
@@ -1201,36 +1237,36 @@ Examples:
 - `Mads.searchdir(r".*.cov"; path = ".")`
 ```
 """
-searchdir(key::Union{Regex,AbstractString}; path::AbstractString = ".") = filter(x->occursin(key, x), readdir(path))
+searchdir(key::Union{Regex, AbstractString}; path::AbstractString=".") = filter(x -> occursin(key, x), readdir(path))
 
-filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
-filterkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? collect(keys(dict)) : filter(x->occursin(key, x), collect(keys(dict)))
+filterkeys(dict::AbstractDict, key::Regex) = key == r"" ? collect(keys(dict)) : filter(x -> occursin(key, x), collect(keys(dict)))
+filterkeys(dict::AbstractDict, key::AbstractString="") = key == "" ? collect(keys(dict)) : filter(x -> occursin(key, x), collect(keys(dict)))
 @doc """
 Filter dictionary keys based on a string or regular expression
 
 $(DocumentFunction.documentfunction(filterkeys;
 argtext=Dict("dict"=>"dictionary",
-            "key"=>"the regular expression or string used to filter dictionary keys")))
+			"key"=>"the regular expression or string used to filter dictionary keys")))
 """ filterkeys
 
-indexkeys(dict::AbstractDict, key::Regex) = key == r"" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
-indexkeys(dict::AbstractDict, key::AbstractString = "") = key == "" ? findall(collect(keys(dict))) : findall(x->occursin(key, x), collect(keys(dict)))
+indexkeys(dict::AbstractDict, key::Regex) = key == r"" ? findall(collect(keys(dict))) : findall(x -> occursin(key, x), collect(keys(dict)))
+indexkeys(dict::AbstractDict, key::AbstractString="") = key == "" ? findall(collect(keys(dict))) : findall(x -> occursin(key, x), collect(keys(dict)))
 @doc """
 Find indexes for dictionary keys based on a string or regular expression
 
 $(DocumentFunction.documentfunction(indexkeys;
 argtext=Dict("dict"=>"dictionary",
-            "key"=>"the key to find index for")))
+			"key"=>"the key to find index for")))
 """ indexkeys
 
-getdictvalues(dict::AbstractDict, key::Regex) = map(y->(y, dict[y]), filterkeys(dict, key))
-getdictvalues(dict::AbstractDict, key::AbstractString = "") = map(y->(y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::AbstractDict, key::Regex) = map(y -> (y, dict[y]), filterkeys(dict, key))
+getdictvalues(dict::AbstractDict, key::AbstractString="") = map(y -> (y, dict[y]), filterkeys(dict, key))
 @doc """
 Get dictionary values for keys based on a string or regular expression
 
 $(DocumentFunction.documentfunction(getdictvalues;
 argtext=Dict("dict"=>"dictionary",
-             "key"=>"the key to find value for")))
+			 "key"=>"the key to find value for")))
 """ getdictvalues
 
 """
@@ -1238,8 +1274,8 @@ Write `parameters` via MADS template (`templatefilename`) to an output file (`ou
 
 $(DocumentFunction.documentfunction(writeparametersviatemplate;
 argtext=Dict("parameters"=>"parameters",
-            "templatefilename"=>"tmplate file name",
-            "outputfilename"=>"output file name"),
+			"templatefilename"=>"tmplate file name",
+			"outputfilename"=>"output file name"),
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparametersviatemplate(parameters, templatefilename, outputfilename; respect_space::Bool=false)
@@ -1269,7 +1305,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 		elseif length(splitline) == 1
 			emptyline += 1
 		end
-		for i = 1:div(length(splitline)-1, 2)
+		for i = 1:div(length(splitline) - 1, 2)
 			write(outfile, splitline[2 * i - 1]) # write the text before the parameter separator
 			varname = strip(splitline[2 * i])
 			if respect_space
@@ -1295,7 +1331,7 @@ Write model `parameters`
 
 $(DocumentFunction.documentfunction(writeparameters;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "parameters"=>"parameters"),
+			"parameters"=>"parameters"),
 keytext=Dict("respect_space"=>"respect provided space in the template file to fit model parameters [default=`false`]")))
 """
 function writeparameters(madsdata::AbstractDict, parameters::AbstractDict=Mads.getparamdict(madsdata); respect_space=false)
@@ -1345,15 +1381,15 @@ function instline2regexs(instline::AbstractString)
 		offset = m.offset + length(m.match)
 		if m.match[1] == '@'
 			if isspace(m.match[end - 1])
-				push!(regexs, Regex(string("\\h*", m.match[begin+1:end - 1])))
+				push!(regexs, Regex(string("\\h*", m.match[(begin + 1):(end - 1)])))
 			else
-				push!(regexs, Regex(string("\\h*", m.match[begin+1:end - 1], "[^\\s]*")))
+				push!(regexs, Regex(string("\\h*", m.match[(begin + 1):(end - 1)], "[^\\s]*")))
 			end
 			push!(getparamhere, false)
 		elseif m.match[1] == '!'
 			push!(regexs, floatregex)
-			if m.match[begin+1:end - 1] != "dum"
-				push!(obsnames, m.match[begin+1:end - 1])
+			if m.match[(begin + 1):(end - 1)] != "dum"
+				push!(obsnames, m.match[(begin + 1):(end - 1)])
 				push!(getparamhere, true)
 			else
 				push!(getparamhere, false)
@@ -1373,7 +1409,7 @@ Match an instruction line in the Mads instruction file with model input file
 
 $(DocumentFunction.documentfunction(obslineoccursin;
 argtext=Dict("obsline"=>"instruction line",
-            "regexs"=>"regular expressions")))
+			"regexs"=>"regular expressions")))
 
 Returns:
 
@@ -1383,7 +1419,7 @@ function obslineoccursin(obsline::AbstractString, regexs::Vector{Regex})
 	if length(regexs) == 0
 		return false
 	end
-	bigregex = Regex(string(map(x->x.pattern, regexs)...))
+	bigregex = Regex(string(map(x -> x.pattern, regexs)...))
 	return occursin(bigregex, obsline)
 end
 
@@ -1392,9 +1428,9 @@ Get observations for a set of regular expressions
 
 $(DocumentFunction.documentfunction(regexs2obs;
 argtext=Dict("obsline"=>"observation line",
-            "regexs"=>"regular expressions",
-            "obsnames"=>"observation names",
-            "getparamhere"=>"parameters")))
+			"regexs"=>"regular expressions",
+			"obsnames"=>"observation names",
+			"getparamhere"=>"parameters")))
 
 Returns:
 
@@ -1404,7 +1440,7 @@ function regexs2obs(obsline::AbstractString, regexs::Vector{Regex}, obsnames::Ve
 	offset = 1
 	obsnameindex = 1
 	obsdict = Dict{String, Float64}()
-	for i = eachindex(regexs)
+	for i in eachindex(regexs)
 		m = match(regexs[i], obsline, offset)
 		if isnothing(m)
 			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
@@ -1424,7 +1460,7 @@ Apply Mads instruction file `instructionfilename` to read model output file `mod
 
 $(DocumentFunction.documentfunction(ins_obs;
 argtext=Dict("instructionfilename"=>"instruction file name",
-            "modeloutputfilename"=>"model output file name")))
+			"modeloutputfilename"=>"model output file name")))
 
 Returns:
 
@@ -1448,7 +1484,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 	obslineitr = eachline(obsfile)
 	iter_result = iterate(obslineitr)
 	obsline, state = iter_result
-	obsdict = OrderedCollections.OrderedDict{String,Float64}()
+	obsdict = OrderedCollections.OrderedDict{String, Float64}()
 	for instline in eachline(instfile)
 		if length(instline) == 0
 			iter_result = iterate(obslineitr, state)
@@ -1457,7 +1493,7 @@ function ins_obs(instructionfilename::AbstractString, modeloutputfilename::Abstr
 		elseif instline[1] == 'l'
 			l = 1
 			try
-				l = Base.parse(Int, instline[begin+1:end])
+				l = Base.parse(Int, instline[(begin + 1):end])
 			catch
 			end
 			for i = 1:l
@@ -1493,7 +1529,7 @@ Read observations
 
 $(DocumentFunction.documentfunction(readobservations;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "obskeys"=>"observation keys [default=`getobskeys(madsdata)`]")))
+			"obskeys"=>"observation keys [default=`getobskeys(madsdata)`]")))
 
 Returns:
 
@@ -1501,8 +1537,8 @@ Returns:
 """
 function readobservations(madsdata::AbstractDict, obskeys::AbstractVector=getobskeys(madsdata))
 	dictelements = zip(obskeys, zeros(Int, length(obskeys)))
-	observations = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(dictelements)
-	obscount = OrderedCollections.OrderedDict{String,Int}()
+	observations = OrderedCollections.OrderedDict{Union{String, Symbol}, Float64}(dictelements)
+	obscount = OrderedCollections.OrderedDict{String, Int}()
 	for instruction in madsdata["Instructions"]
 		obs = ins_obs(instruction["ins"], instruction["read"])
 		for k in keys(obs)
@@ -1531,7 +1567,7 @@ Dump well data from MADS problem dictionary into a ASCII file
 
 $(DocumentFunction.documentfunction(dumpwelldata;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
-            "filename"=>"output file name")))
+			"filename"=>"output file name")))
 
 Dumps:
 
@@ -1547,7 +1583,7 @@ function dumpwelldata(madsdata::AbstractDict, filename::AbstractString)
 			z0 = madsdata["Wells"]["$n"]["z0"]
 			z1 = madsdata["Wells"]["$n"]["z1"]
 			o = madsdata["Wells"]["$n"]["obs"]
-			for i = eachindex(o)
+			for i in eachindex(o)
 				c = o[i]["c"]
 				t = o[i]["t"]
 				write(outfile, "$n, $x, $y, $z0, $t, $c\n")
@@ -1562,7 +1598,7 @@ Create a symbolic link of all the files in a directory `dirsource` in a director
 
 $(DocumentFunction.documentfunction(symlinkdirfiles;
 argtext=Dict("dirsource"=>"source directory",
-            "dirtarget"=>"target directory")))
+			"dirtarget"=>"target directory")))
 """
 function symlinkdirfiles(dirsource::AbstractString, dirtarget::AbstractString)
 	for f in readdir(dirsource)
@@ -1580,7 +1616,7 @@ Create a symbolic link of a file `filename` in a directory `dirtarget`
 
 $(DocumentFunction.documentfunction(symlinkdir;
 argtext=Dict("filename"=>"file name",
-            "dirtarget"=>"target directory")))
+			"dirtarget"=>"target directory")))
 """
 function symlinkdir(filename::AbstractString, dirtarget::AbstractString, dirsource::AbstractString)
 	filenametarget = joinpath(dirtarget, filename)
@@ -1605,7 +1641,7 @@ function rmdir(dir::AbstractString; path::AbstractString=".")
 		dir = joinpath(path, dir)
 	end
 	if isdir(dir)
-		rm(dir, recursive=true)
+		rm(dir; recursive=true)
 	end
 end
 
@@ -1699,7 +1735,7 @@ Link files in a temporary directory
 
 $(DocumentFunction.documentfunction(linktempdir;
 argtext=Dict("madsproblemdir"=>"Mads problem directory",
-            "tempdirname"=>"temporary directory name")))
+			"tempdirname"=>"temporary directory name")))
 """
 function linktempdir(madsproblemdir::AbstractString, tempdirname::AbstractString)
 	attempt = 0
@@ -1786,20 +1822,20 @@ $(DocumentFunction.documentfunction(recursivermdir;
 argtext=Dict("dirname"=>"directory")))
 """
 function recursivermdir(s::AbstractString; filename=true)
-	d = Vector{String}(undef, )
+	d = Vector{String}(undef)
 	sc = deepcopy(s)
-	if !filename && sc!= ""
+	if !filename && sc != ""
 		push!(d, sc)
 	end
 	while true
 		sd = splitdir(sc)
 		sc = sd[1]
 		if sc == ""
-			break;
+			break
 		end
 		push!(d, sc)
 	end
-	for i = eachindex(d)
+	for i in eachindex(d)
 		sc = d[i]
 		if isdir(sc)
 			rm(sc; force=true)
@@ -1810,7 +1846,7 @@ end
 import LightXML
 
 function parsexml(filename::AbstractString, args...; elementnode::AbstractString="variables")
-	parsexml(filename, [args...]; elementnode=elementnode)
+	return parsexml(filename, [args...]; elementnode=elementnode)
 end
 
 function parsexml(filename::AbstractString, vars::Vector{Symbol}=Vector{Symbol}(undef, 0); elementnode::AbstractString="variables")
@@ -1958,7 +1994,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true, verbose::Bool=false)
 				printstyled("Link of `$(f)` to `$(link)` is OK\n"; color=:green)
 			else
 				printstyled("Link `$(f)` needs to be fixed: `$(link)` does not exist!\n"; color=:red)
-				link_win = Sys.iswindows() ? replace(fn, "/"=>"\\") : link
+				link_win = Sys.iswindows() ? replace(fn, "/" => "\\") : link
 				if length(link) < 256 && isascii(link) && isfile(link_win)
 					if !test
 						printstyled("Fixing Link: `$(f)` to `$(link_win)`\n"; color=:yellow)
@@ -1979,7 +2015,7 @@ function fixlinks(dir::AbstractString="."; test::Bool=true, verbose::Bool=false)
 						if !test
 							printstyled("Fixing Link: `$(f)` to `$(fn)`\n"; color=:yellow)
 							rm(f)
-							link_win = Sys.iswindows() ? replace(fn, "/"=>"\\") : fn
+							link_win = Sys.iswindows() ? replace(fn, "/" => "\\") : fn
 							symlink(link_win, f)
 						else
 							printstyled("Link needs to be fixed: `$(f)` to `$(fn)`\n"; color=:yellow)
@@ -2015,18 +2051,18 @@ function testlinks()
 	link = joinpath(Mads.dir, "Profile-link.toml")
 	Mads.rmfile(link)
 	symlink(target, link)
-	rm(link)
+	return rm(link)
 end
 
 function jldappend(fname::AbstractString, varname::AbstractString, data::Any)
 	JLD.jldopen(fname, true, true, true, false, true) do file
-		file[varname] = data
+		return file[varname] = data
 	end
 end
 
 function jld2append(fname::AbstractString, varname::AbstractString, data::Any)
 	JLD2.jldopen(fname, "a+") do file
-		file[varname] = data
+		return file[varname] = data
 	end
 end
 
