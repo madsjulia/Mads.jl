@@ -199,7 +199,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			if !all(ismissing.(v))
 				unique_types = unique(typeof.(v))
 				if all(unique_types .<: Union{Missing, AbstractFloat})
-					mask_missing = isnull.(v)
+					mask_missing = ismissing.(v)
 					if usenans
 						v[mask_missing] .= floattype(NaN)
 						v = convert(Vector{floattype}, v)
@@ -208,9 +208,13 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 						v = convert(Vector{Union{Missing, floattype}}, v)
 					end
 				elseif all(unique_types .<: Union{Missing, Integer})
-					mask_missing = isnull.(v)
+					mask_missing = ismissing.(v)
 					v[mask_missing] .= missing
 					v = convert(Vector{Union{Missing, inttype}}, v)
+				elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
+					mask_missing = ismissing.(v)
+					v[mask_missing] .= NaN
+					v = convert.(floattype, v)
 				elseif all(unique_types .<: Union{Missing, AbstractString})
 					v[isnull.(v)] .= ""
 					v = convert(Vector{String}, v)
