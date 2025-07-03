@@ -196,7 +196,9 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				end
 			end
 			v = data[:, i]
-			if !all(ismissing.(v))
+			if all(ismissing.(v))
+				println("All values for parameter/column \"$(param)\" are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
+			else
 				unique_types = unique(typeof.(v))
 				if all(unique_types .<: Union{Missing, AbstractFloat})
 					mask_missing = ismissing.(v)
@@ -210,26 +212,27 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				elseif all(unique_types .<: Union{Missing, Integer})
 					mask_missing = ismissing.(v)
 					if convertintegers
-						v[mask_missing] .= NaN
+						v[mask_missing] .= floattype(NaN)
 						v = convert(Vector{floattype}, v)
 					else
 						v[mask_missing] .= missing
 						v = convert(Vector{Union{Missing, inttype}}, v)
 					end
 				elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
-					v[ismissing.(v)] .= NaN
+					v[ismissing.(v)] .= floattype(NaN)
 					v = convert.(floattype, v)
 				elseif all(unique_types .<: Union{Missing, AbstractString})
 					v[isnull.(v)] .= ""
 					v = convert(Vector{String}, v)
 				elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
-					v[isnull.(v)] .= ""
+					convertype = convertintegers ? inttype : floattype
+					mask_null = isnull.(v)
 					parsingerror = false
 					for i in eachindex(v)
 						if typeof(v[i]) <: AbstractString
-							if v[i] != ""
+							if !mask_null[i]
 								try
-									v[i] = parse(inttype, v[i])
+									v[i] = parse(convertype, v[i])
 								catch
 									parsingerror = true
 								end
@@ -238,16 +241,22 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 					end
 					if parsingerror
 						println("Some values for parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+						v[mask_null] .= ""
 						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 					else
-						v = convert(Vector{inttype}, v)
+						if convertintegers
+							v[mask_null] .= floattype(NaN)
+						else
+							v[mask_null] .= ""
+						end
+						v = convert(Vector{convertype}, v)
 					end
 				elseif all(unique_types .<: Union{Missing, AbstractFloat, AbstractString})
-					v[isnull.(v)] .= NaN
-					v[v .== ""] .= NaN
+					mask_null = isnull.(v)
+					v[mask_null] .= floattype(NaN)
 					parsingerror = false
 					for i in eachindex(v)
-						if typeof(v[i]) <: AbstractString
+						if typeof(v[i]) <: AbstractString && !mask_null[i]
 							try
 								v[i] = parse(floattype, v[i])
 							catch
@@ -270,8 +279,6 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 				else
 					df[param_name] = v
 				end
-			else
-				println("All values for parameter/column \"$(param)\" are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
 			end
 		end
 	end
