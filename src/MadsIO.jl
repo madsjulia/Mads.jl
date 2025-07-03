@@ -88,7 +88,7 @@ Get data from an EXCEL file
 
 $(DocumentFunction.documentfunction(get_excel_data))
 """
-function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, floattype::DataType=Float64, inttype::DataType=Int64, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
+function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, floattype::DataType=Float64, inttype::DataType=Int64, convertintegers::Bool=true, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
 	@assert floattype <: AbstractFloat
 	if dataframe
 		df = DataFrames.DataFrame()
@@ -209,11 +209,15 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 					end
 				elseif all(unique_types .<: Union{Missing, Integer})
 					mask_missing = ismissing.(v)
-					v[mask_missing] .= missing
-					v = convert(Vector{Union{Missing, inttype}}, v)
+					if convertintegers
+						v[mask_missing] .= NaN
+						v = convert(Vector{floattype}, v)
+					else
+						v[mask_missing] .= missing
+						v = convert(Vector{Union{Missing, inttype}}, v)
+					end
 				elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
-					mask_missing = ismissing.(v)
-					v[mask_missing] .= NaN
+					v[ismissing.(v)] .= NaN
 					v = convert.(floattype, v)
 				elseif all(unique_types .<: Union{Missing, AbstractString})
 					v[isnull.(v)] .= ""
@@ -223,9 +227,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 					parsingerror = false
 					for i in eachindex(v)
 						if typeof(v[i]) <: AbstractString
-							if occursin(r"^-*$", v[i])
-								v[i] = ""
-							elseif v[i] != ""
+							if v[i] != ""
 								try
 									v[i] = parse(inttype, v[i])
 								catch
@@ -246,14 +248,10 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 					parsingerror = false
 					for i in eachindex(v)
 						if typeof(v[i]) <: AbstractString
-							if occursin(r"^-*$", v[i])
-								v[i] = NaN
-							else
-								try
-									v[i] = parse(floattype, v[i])
-								catch
-									parsingerror = true
-								end
+							try
+								v[i] = parse(floattype, v[i])
+							catch
+								parsingerror = true
 							end
 						end
 					end
