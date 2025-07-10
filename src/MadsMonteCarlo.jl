@@ -13,7 +13,7 @@ function p10_p50_p90(x::AbstractMatrix)
 	p90 = similar(p10)
 	nt, ns = size(x)
 	n10 = Int(floor(1 + ns * 0.1))
-	n50 = Int(floor(1 + ns * 0.5))
+	n50 = Int(round(1 + ns * 0.5))
 	n90 = Int(ceil(1 + ns * 0.9))
 	if n90 > ns
 		n90 = ns
