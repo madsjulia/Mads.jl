@@ -7,11 +7,13 @@ import BlackBoxOptim
 import Random
 
 function p10_p50_p90(x::AbstractMatrix)
-	xmean = Statistics.mean(x; dims=2)
-	p10 = similar(xmean)
-	p90 = similar(xmean)
+	# xmean = Statistics.mean(x; dims=2)
+	p10 = similar(x[:, 1])
+	p50 = similar(p10)
+	p90 = similar(p10)
 	nt, ns = size(x)
 	n10 = Int(floor(1 + ns * 0.1))
+	n50 = Int(floor(1 + ns * 0.5))
 	n90 = Int(ceil(1 + ns * 0.9))
 	if n90 > ns
 		n90 = ns
@@ -19,9 +21,10 @@ function p10_p50_p90(x::AbstractMatrix)
 	for i = 1:nt
 		is = sortperm(x[i, :])
 		p10[i] = x[i, is][n10]
+		p50[i] = x[i, is][n50]
 		p90[i] = x[i, is][n90]
 	end
-	return p10, xmean, p90
+	return p10, p50, p90
 end
 
 function loadecmeeresults(madsdata::AbstractDict, filename::AbstractString)
