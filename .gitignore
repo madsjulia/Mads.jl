@@ -140,3 +140,4 @@ examples/*/*.svg
 *.aux
 *.fls
 *.fdb_latexmk
+.theme
