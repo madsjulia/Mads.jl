@@ -128,6 +128,7 @@ include("MadsTestFunctions.jl")
 include("MadsSVR.jl")
 include("MadsBayesInfoGap.jl")
 include("MadsMonteCarlo.jl")
+include("MadsCoordinates.jl")
 
 try
 	testlinks()
