@@ -1162,6 +1162,7 @@ function plotseriesengine(X::Union{AbstractMatrix,AbstractVector}, filename::Abs
 	if name == ""
 		names = ["" for i in axes(X,2)]
 	end
+	@assert nT == length(xaxis) "Length of xaxis ($(length(xaxis))) must match number of rows of X ($(nT))"
 	glog = []
 	if logx
 		push!(glog, Gadfly.Scale.x_log10)
