@@ -454,7 +454,7 @@ function scatterplotsamples(madsdata::AbstractDict, samples::AbstractMatrix, fil
 		plottypes = [:histogram, :scatter]
 	end
 	nz = convert(Int64, ceil(log10(np))) + 1
-	@ProgressMeter.showprogress 1 "Ploting histogram and scatter plots ..." for i in 1:np
+	@ProgressMeter.showprogress 1 "Plotting histogram and scatter plots ..." for i in 1:np
 		for j in 1:np
 			if i == j && :histogram in plottypes
 				p = Gadfly.plot(x=samples[:, i], Gadfly.Geom.histogram,
