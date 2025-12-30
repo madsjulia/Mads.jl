@@ -3,6 +3,7 @@ if !haskey(ENV, "MADS_NO_GADFLY") && !haskey(ENV, "MADS_NO_DISPLAY")
 	import Compose
 end
 import Images
+import ImageMagick
 
 function display(filename::AbstractString, open::Bool=false)
 	if !graphoutput
@@ -21,18 +22,12 @@ function display(filename::AbstractString, open::Bool=false)
 					display("image/svg+xml", read(f, String))
 				end
 			else
-				root = Mads.getrootname(filename)
-				filename2 = root * ".png"
 				try
-					run(`convert -density 90 -background none $filename $filename2`)
-					img = Images.load(filename2)
+					img = _load_svg_as_image(filename)
 					Base.display(img)
 					println("")
 				catch
 					trytoopen = true
-				end
-				if isfile(filename2)
-					rm(filename2)
 				end
 			end
 		else
@@ -136,6 +131,11 @@ function display(o; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 		Base.display(o)
 		print("\r")
 	end
+end
+
+function _load_svg_as_image(filename::AbstractString)
+	# Use ImageMagick to rasterize SVGs without shelling out to `convert`.
+	return ImageMagick.load(filename)
 end
 @doc """
 Display image file
