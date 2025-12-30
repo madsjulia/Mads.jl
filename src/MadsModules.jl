@@ -8,6 +8,7 @@ import RobustPmap
 import SVR
 import DocumentFunction
 import GeostatInversion
+import LibGit2
 
 function pin()
 	Pkg.pin("RobustPmap", v"1.0.2")
@@ -128,25 +129,15 @@ function checkout(modulename::AbstractString=""; git::Bool=true, master::Bool=fa
 	for i in modulenames
 		if git
 			@info("Checking out $(i) ...")
-			cwd = pwd()
-			d = joinpath(dirname(pathof(eval(Symbol(i)))), "..")
-			if isdir(d)
-				cd(d)
-			else
-				@warn("Package $(i) is not installed")
-				return
-			end
-			if master
-				if force
-					run(`git checkout -f master`)
-				else
-					run(`git checkout master`)
+			executed = _with_module_repo(i) do repo, _
+				if master
+					_git_checkout_branch!(repo, "master"; force=force)
+				end
+				if pull
+					_git_pull!(repo)
 				end
 			end
-			if pull
-				run(`git pull`)
-			end
-			cd(cwd)
+			executed || return
 		else
 			try
 				Pkg.checkout(i)
@@ -171,21 +162,15 @@ function push(modulename::AbstractString="")
 	end
 	for i in modulenames
 		@info("Pushing $(i) ...")
-		cwd = pwd()
-		d = joinpath(dirname(pathof(eval(Symbol(i)))), "..")
-		if isdir(d)
-			cd(d)
-		else
-			@warn("Package $(i) is not installed")
-			return
+		executed = _with_module_repo(i) do repo, _
+			try
+				_git_push!(repo)
+			catch errmsg
+				printerrormsg(errmsg)
+				@warn("$(i) cannot be pushed!")
+			end
 		end
-		try
-			run(`git push`)
-		catch errmsg
-			printerrormsg(errmsg)
-			@warn("$(i) cannot be pushed!")
-		end
-		cd(cwd)
+		executed || return
 	end
 end
 
@@ -202,21 +187,15 @@ function diff(modulename::AbstractString="")
 		modulenames = madsmodules
 	end
 	for i in modulenames
-		cwd = pwd()
-		d = joinpath(dirname(pathof(eval(Symbol(i)))), "..")
-		if isdir(d)
-			cd(d)
-		else
-			@warn("Package $(i) is not installed")
-			return
+		executed = _with_module_repo(i) do repo, _
+			try
+				_git_show_diff(repo)
+			catch errmsg
+				printerrormsg(errmsg)
+				@warn("$(i) cannot be diffed!")
+			end
 		end
-		try
-			run(`git diff --word-diff "*.jl"`)
-		catch errmsg
-			printerrormsg(errmsg)
-			@warn("$(i) cannot be diffed!")
-		end
-		cd(cwd)
+		executed || return
 	end
 end
 
@@ -260,20 +239,12 @@ function commit(commitmsg::AbstractString, modulename::AbstractString="")
 	end
 	for i in modulenames
 		@info("Commiting changes in $(i) ...")
-		cwd = pwd()
-		d = joinpath(dirname(pathof(eval(Symbol(i)))), "..")
-		if isdir(d)
-			cd(d)
-		else
-			@warn("Package $(i) is not installed")
-			return
+		executed = _with_module_repo(i) do repo, _
+			if !_git_commit(repo, commitmsg)
+				@warn("Nothing to commit in $(i).")
+			end
 		end
-		try
-			run(`git commit -a -m $(commitmsg)`)
-		catch
-			@warn("Nothing to commit in $(i).")
-		end
-		cd(cwd)
+		executed || return
 	end
 end
 
@@ -285,8 +256,8 @@ end
 function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=false)
 	if git
 		@info("Git status $(madsmodule) ...")
-		d = joinpath(dirname(pathof(Core.eval(Mads, Symbol(madsmodule)))), "..")
-		if !isdir(d)
+		d = _module_repo_dir(madsmodule)
+		if isnothing(d) || !isdir(d)
 			@warn("Package $(madsmodule) is not installed")
 			return
 		end
@@ -298,20 +269,27 @@ function status(madsmodule::AbstractString; git::Bool=madsgit, gitmore::Bool=fal
 			end
 		else
 			if Mads.madsgit
-				cwd = pwd()
-				cd(d)
-				cmdproc, cmdout, cmderr = Mads.runcmd(`git status -s`; quiet=true, pipe=true)
-				cd(cwd)
-				if cmdproc.exitcode != 0
-					@info("Module $(madsmodule) is not under development; if needed, execute `import Pkg; Pkg.develop(\"$(madsmodule)\")`")
-				elseif gitmore
-					@info("Git ID HEAD   $(madsmodule) ...")
-					run(`git rev-parse --verify HEAD`)
-					@info("Git ID master $(madsmodule) ...")
-					run(`git rev-parse --verify master`)
-				else
-					println("$(madsmodule) is in a development mode.")
+				success = _with_repo_path(d, madsmodule) do repo, _
+					if gitmore
+						head_id = _git_rev_parse(repo, "HEAD")
+						if !isnothing(head_id)
+							@info("Git ID HEAD   $(madsmodule) ...")
+							println(head_id)
+						else
+							@warn("Cannot resolve HEAD for $(madsmodule)")
+						end
+						master_id = _git_rev_parse(repo, "master")
+						if !isnothing(master_id)
+							@info("Git ID master $(madsmodule) ...")
+							println(master_id)
+						else
+							@warn("Cannot resolve master for $(madsmodule)")
+						end
+					else
+						println("$(madsmodule) is in a development mode.")
+					end
 				end
+				success || return
 			else
 				@info("Module $(madsmodule) git status cannot be tested.")
 			end
@@ -395,21 +373,122 @@ argtext=Dict("madsmodule"=>"mads module name",
             "version"=>"version")))
 """
 function untag(madsmodule::AbstractString, version::AbstractString)
-	cwd = pwd()
 	@info("Git untag $(madsmodule) ...")
-	d = joinpath(dirname(pathof(eval(Symbol(madsmodule)))), "..")
-	if isdir(d)
-		cd(d)
+	executed = _with_module_repo(madsmodule) do repo, _
+		_git_delete_tag(repo, version)
+	end
+	executed || return
+end
+
+function _module_repo_dir(modulename::AbstractString)
+	try
+		return abspath(joinpath(dirname(pathof(eval(Symbol(modulename)))), ".."))
+	catch
+		return nothing
+	end
+end
+
+function _with_module_repo(modulename::AbstractString, f::Function)
+	d = _module_repo_dir(modulename)
+	if isnothing(d)
+		@warn("Package $(modulename) is not installed")
+		return false
+	end
+	return _with_repo_path(d, modulename, f)
+end
+
+function _with_repo_path(path::AbstractString, modulename::AbstractString, f::Function)
+	if !isdir(path)
+		@warn("Package $(modulename) is not installed")
+		return false
+	end
+	if !LibGit2.isrepo(path)
+		@info("Module $(modulename) is not under development; if needed, execute `import Pkg; Pkg.develop(\"$(modulename)\")`")
+		return false
+	end
+	repo = LibGit2.GitRepo(path)
+	try
+		f(repo, path)
+		return true
+	finally
+		LibGit2.free!(repo)
+	end
+end
+
+function _git_checkout_branch!(repo::LibGit2.GitRepo, branch::AbstractString; force::Bool=false)
+	LibGit2.checkout!(repo, branch; force=force)
+	return
+end
+
+function _git_pull!(repo::LibGit2.GitRepo; remote::AbstractString="origin", branch::AbstractString=_git_head_branch(repo))
+	LibGit2.fetch(repo, remote)
+	upstream = string(remote, "/", branch)
+	try
+		LibGit2.merge!(repo, upstream; fastforward=true)
+	catch errmsg
+		@warn("Git pull for $(upstream) failed: $(errmsg)")
+	end
+	return
+end
+
+function _git_push!(repo::LibGit2.GitRepo; remote::AbstractString="origin", branch::AbstractString=_git_head_branch(repo))
+	refspec = string("refs/heads/", branch)
+	LibGit2.push(repo, remote, [string(refspec, ":", refspec)])
+	return
+end
+
+function _git_show_diff(repo::LibGit2.GitRepo; paths_glob::Vector{String}=["*.jl"])
+	diff = LibGit2.diff(repo; paths=paths_glob)
+	buf = IOBuffer()
+	show(buf, diff)
+	output = String(take!(buf))
+	if isempty(strip(output))
+		println("No differences.")
 	else
-		@warn("Package $(madsmodule) is not installed")
+		print(output)
+	end
+	return
+end
+
+function _git_commit(repo::LibGit2.GitRepo, message::AbstractString)
+	if !LibGit2.isdirty(repo)
+		return false
+	end
+	LibGit2.add!(repo, ".")
+	if !LibGit2.isdirty(repo)
+		return false
+	end
+	signature = LibGit2.default_signature(repo)
+	LibGit2.commit(repo, message; author=signature, committer=signature)
+	return true
+end
+
+function _git_delete_tag(repo::LibGit2.GitRepo, version::AbstractString)
+	tag_ref = string("refs/tags/", version)
+	try
+		LibGit2.lookup_reference(repo, tag_ref)
+	catch
+		@warn("Tag $(version) does not exist")
 		return
 	end
-	try
-		run(`git tag -d $version`)
-		run(`git push origin :refs/tags/$version`)
-	catch errmsg
-		printerrormsg(errmsg)
-		@warn("Untag of $(madsmodule) failed!")
+	LibGit2.delete_reference(repo, tag_ref)
+	LibGit2.push(repo, "origin", [string(":", tag_ref)])
+	return
+end
+
+function _git_head_branch(repo::LibGit2.GitRepo)
+	head_name = LibGit2.headname(repo)
+	if head_name === nothing
+		return "master"
 	end
-	cd(cwd)
+	parts = split(head_name, "/")
+	return isempty(parts) ? "master" : parts[end]
+end
+
+function _git_rev_parse(repo::LibGit2.GitRepo, refname::AbstractString)
+	try
+		return string(LibGit2.revparseid(repo, refname))
+	catch
+		return nothing
+	end
 end

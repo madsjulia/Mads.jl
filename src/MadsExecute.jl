@@ -11,7 +11,7 @@ function checknodedir(dir::AbstractString, waittime::Float64=10.) # 10 seconds
 	if Sys.iswindows()
 		proc = run(`cmd /C dir $dir`; wait=false)
 	elseif Mads.madsbash
-		proc = run(`bash -c "ls $dir; julia --startup-file=no -e '@show pwd()' > julia-test.out"`; wait=false)
+		proc = run(`bash -c "ls $dir;"`; wait=false)
 	else
 		proc = run(`sh -c "ls $dir"`; wait=false)
 	end
