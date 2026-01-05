@@ -227,58 +227,50 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict; transi
 	end
 
 	dictwells = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for (l, t) in enumerate(time)
-		x = xmin
-		for i in 1:nx
-			x += dx
-			y = ymin
-			for j in 1:ny
-				y += dy
-				z = zmin
-				for k in 1:nz
-					z += dz
-					wellname = "w_$(i)_$(j)_$(k)_$(l)"
-					dictwells[wellname] = OrderedCollections.OrderedDict{String,Any}()
-					dictwells[wellname]["x"] = x
-					dictwells[wellname]["y"] = y
-					dictwells[wellname]["z0"] = z
-					dictwells[wellname]["z1"] = z
-					dictwells[wellname]["on"] = true
-					arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
+	x = xmin
+	for i in 1:nx
+		x += dx
+		y = ymin
+		for j in 1:ny
+			y += dy
+			z = zmin
+			for k in 1:nz
+				z += dz
+				wellname = "w_$(i)_$(j)_$(k)"
+				dictwells[wellname] = OrderedCollections.OrderedDict{String,Any}()
+				dictwells[wellname]["x"] = x
+				dictwells[wellname]["y"] = y
+				dictwells[wellname]["z0"] = z
+				dictwells[wellname]["z1"] = z
+				dictwells[wellname]["on"] = true
+				arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
+				for t in time
 					dictobs = OrderedCollections.OrderedDict{String,Any}()
 					dictobs["t"] = t
 					dictobs["c"] = 0
 					dictobs["weight"] = 1
 					push!(arrayobs, dictobs)
-					dictwells[wellname]["obs"] = arrayobs
 				end
+				dictwells[wellname]["obs"] = arrayobs
 			end
 		end
 	end
-	resetdict = false
-	if haskey(madsdata, "Wells")
-		dictwells_orig = madsdata["Wells"]
-		resetdict = true
-	end
+
 	madsdata["Wells"] = dictwells
 	Mads.wells2observations!(madsdata)
 	f = Mads.makemadscommandfunction(madsdata)
 	forward_results = f(paramvalues)
+
 	s = Array{Float64}(undef, nx, ny, nz, length(time))
-	for l in eachindex(time)
+	for (l, t) in enumerate(time)
 		for i in 1:nx
 			for j in 1:ny
 				for k in 1:nz
-					obsname = "w_$(i)_$(j)_$(k)_$(l)"
+					obsname = "w_$(i)_$(j)_$(k)_$(t)"
 					s[i, j, k, l] = forward_results[obsname]
 				end
 			end
 		end
-	end
-	if resetdict
-		madsdata["Wells"] = dictwells_orig
-	else
-		delete!(madsdata, "Wells")
 	end
 	return s
 end

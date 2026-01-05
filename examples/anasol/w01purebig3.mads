@@ -96,4 +96,4 @@ Grid: { time: 100,
 xcount: 256, ycount: 256, zcount: 1,
 xmin: 0, ymin: 0, zmin: 0,
 xmax: 255, ymax: 255, zmax: 1 }
-Time: { start: 1, end: 100, step: 10 }
+Time: { start: 1, end: 100, step: 20 }
