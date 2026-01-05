@@ -88,7 +88,7 @@ function getsourcekeys(madsdata::AbstractDict)
 		for i = eachindex(madsdata["Sources"])
 			for k = keys(madsdata["Sources"][1])
 				sk = collect(String, keys(madsdata["Sources"][i][k]))
-				b = fill("Source1_", length(sk))
+				b = fill("Source$(i)_", length(sk))
 				s = b .* sk
 				sourcekeys = [sourcekeys; s]
 			end

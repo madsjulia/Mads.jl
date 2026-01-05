@@ -178,12 +178,12 @@ Returns:
 - dictionary of model predictions
 """ forward
 
-function forwardgrid(madsdata::AbstractDict)
+function forwardgrid(madsdata::AbstractDict; kw...)
 	paramvalues = Mads.getparamdict(madsdata)
-	forwardgrid(madsdata, paramvalues)
+	forwardgrid(madsdata, paramvalues; kw...)
 end
 
-function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
+function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict; transient::Bool=true)
 	if !haskey(madsdatain, "Grid")
 		madswarn("Grid properties are not defined in the Mads dictionary")
 		return
@@ -192,10 +192,11 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 	xmin = madsdata["Grid"]["xmin"]
 	ymin = madsdata["Grid"]["ymin"]
 	zmin = madsdata["Grid"]["zmin"]
+
 	xmax = madsdata["Grid"]["xmax"]
 	ymax = madsdata["Grid"]["ymax"]
 	zmax = madsdata["Grid"]["zmax"]
-	time = madsdata["Grid"]["time"]
+
 	if haskey(madsdata["Grid"], "dx")
 		dx = madsdata["Grid"]["dx"]
 		nx = convert(Int64, floor((xmax - xmin) / dx)) + 1
@@ -217,31 +218,40 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 		nz = madsdata["Grid"]["zcount"]
 		dz = nz == 1 ? 0 : dz = ( zmax - zmin ) / ( nz - 1 )
 	end
+	time = madsdata["Grid"]["time"]
+	if transient && haskey(madsdata, "Time")
+		time_start = madsdata["Time"]["start"]
+		time_end = madsdata["Time"]["end"]
+		time_step = madsdata["Time"]["step"]
+		time = collect(time_start:time_step:time_end)
+	end
 
-	x = xmin
 	dictwells = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for i in 1:nx
-		x += dx
-		y = ymin
-		for j in 1:ny
-			y += dy
-			z = zmin
-			for k in 1:nz
-				z += dz
-				wellname = "w_$(i)_$(j)_$(k)"
-				dictwells[wellname] = OrderedCollections.OrderedDict{String,Any}()
-				dictwells[wellname]["x"] = x
-				dictwells[wellname]["y"] = y
-				dictwells[wellname]["z0"] = z
-				dictwells[wellname]["z1"] = z
-				dictwells[wellname]["on"] = true
-				arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
-				dictobs = OrderedCollections.OrderedDict{String,Any}()
-				dictobs["t"] = time
-				dictobs["c"] = 0
-				dictobs["weight"] = 1
-				push!(arrayobs, dictobs)
-				dictwells[wellname]["obs"] = arrayobs
+	for (l, t) in enumerate(time)
+		x = xmin
+		for i in 1:nx
+			x += dx
+			y = ymin
+			for j in 1:ny
+				y += dy
+				z = zmin
+				for k in 1:nz
+					z += dz
+					wellname = "w_$(i)_$(j)_$(k)_$(l)"
+					dictwells[wellname] = OrderedCollections.OrderedDict{String,Any}()
+					dictwells[wellname]["x"] = x
+					dictwells[wellname]["y"] = y
+					dictwells[wellname]["z0"] = z
+					dictwells[wellname]["z1"] = z
+					dictwells[wellname]["on"] = true
+					arrayobs = Array{OrderedCollections.OrderedDict}(undef, 0)
+					dictobs = OrderedCollections.OrderedDict{String,Any}()
+					dictobs["t"] = t
+					dictobs["c"] = 0
+					dictobs["weight"] = 1
+					push!(arrayobs, dictobs)
+					dictwells[wellname]["obs"] = arrayobs
+				end
 			end
 		end
 	end
@@ -254,12 +264,14 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict)
 	Mads.wells2observations!(madsdata)
 	f = Mads.makemadscommandfunction(madsdata)
 	forward_results = f(paramvalues)
-	s = Array{Float64}(undef, nx, ny, nz)
-	for i in 1:nx
-		for j in 1:ny
-			for k in 1:nz
-				obsname = "w_$(i)_$(j)_$(k)_$(time)"
-				s[i, j, k] = forward_results[obsname]
+	s = Array{Float64}(undef, nx, ny, nz, length(time))
+	for l in eachindex(time)
+		for i in 1:nx
+			for j in 1:ny
+				for k in 1:nz
+					obsname = "w_$(i)_$(j)_$(k)_$(l)"
+					s[i, j, k, l] = forward_results[obsname]
+				end
 			end
 		end
 	end
