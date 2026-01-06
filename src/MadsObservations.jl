@@ -699,7 +699,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary")))
 function wells2observations!(madsdata::AbstractDict)
 	observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
 	for wellkey in keys(madsdata["Wells"])
-		if madsdata["Wells"][wellkey]["on"]
+		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
 			if haskey(madsdata["Wells"][wellkey], "obs") && !isnothing(madsdata["Wells"][wellkey]["obs"])
 				for i = eachindex(madsdata["Wells"][wellkey]["obs"])
 					t = gettime(madsdata["Wells"][wellkey]["obs"][i])

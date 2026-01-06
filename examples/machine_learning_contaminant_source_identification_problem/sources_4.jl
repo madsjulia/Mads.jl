@@ -79,9 +79,11 @@ end
 # Create smaller data tensors for testing within the entire domain
 nx = 8
 ny = 5
+grid_x = NMFk.uniform_points(nx, size(data_tensor, 1))
+grid_y = NMFk.uniform_points(ny, size(data_tensor, 2))
 data_tensor_small = zeros(Float64, nx, ny, size(data_tensor, 3), length(species))
 for i in eachindex(species)
-	data_tensor_small[:, :, :, i] .= reshape(data_tensor[NMFk.uniform_points(nx, size(data_tensor, 1)), NMFk.uniform_points(ny, size(data_tensor, 2)), :, i], nx, ny, size(data_tensor, 3), 1)
+	data_tensor_small[:, :, :, i] .= reshape(data_tensor[grid_x, grid_y, :, i], nx, ny, size(data_tensor, 3), 1)
 end
 @assert all(.!isnan.(data_tensor_small))
 @assert all(data_tensor_small .>= 0.0)
@@ -91,10 +93,7 @@ for (i, s) in enumerate(species)
 end
 
 # Plot data for each species with purple dots indicating sampled locations
-dots = hcat(
-	repeat(NMFk.uniform_points(nx, size(data_tensor, 1)), inner=(ny,)),
-	repeat(NMFk.uniform_points(ny, size(data_tensor, 2)), outer=(nx,))
-)
+dots = hcat(repeat(grid_x, inner=(ny,)), repeat(grid_y, outer=(nx,)))
 for (i, s) in enumerate(species)
 	@info "Data species $(s) max value $(maximum(data_tensor[:,:,:,i]))"
 	NMFk.plotmatrix(data_tensor[:,:,:,i]; permute=true, dots=dots)
@@ -103,7 +102,7 @@ end
 # Reshape smaller data tensor into 2D matrix, normalize it and execute NMFk analysis
 X = reshape(data_tensor_small, size(data_tensor_small, 1) * size(data_tensor_small, 2) * size(data_tensor_small, 3), size(data_tensor_small, 4))
 Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
-W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; save=false)
+W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
 
 # Create diagonal data tensor downgradient from the source location areas
 # As expected, this smaller domain makes the problem more challenging and leads to incorrect source identification
@@ -133,4 +132,29 @@ end
 # Reshape smaller data tensor into 2D matrix, normalize it and execute NMFk analysis
 X = reshape(data_tensor_small, size(data_tensor_small, 1) * size(data_tensor_small, 2) * size(data_tensor_small, 3), size(data_tensor_small, 4))
 Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
-W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; save=false)
+W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
+
+# Create a random data sample of locations within the entire domain
+np = 40
+p = NMFk.latin_hypercube_points(np, [size(data_tensor, 1), size(data_tensor, 2)], [1, 1])
+data_tensor_lhs = zeros(Float64, np, size(data_tensor, 3), length(species))
+data_tensor_lhs .= NaN
+for i in eachindex(species)
+	for j in 1:np
+		data_tensor_lhs[j, :, i] .= reshape(data_tensor[p[j,1], p[j,2], :, i], size(data_tensor, 3), 1)
+	end
+end
+@assert all(.!isnan.(data_tensor_lhs))
+@assert all(data_tensor_lhs .>= 0.0)
+# Plot data for each species with purple dots indicating sampled locations
+for (i, s) in enumerate(species)
+	@info "Data species $(s) max value $(maximum(data_tensor[:,:,:,i]))"
+	NMFk.plotmatrix(data_tensor[:,:,:,i]; permute=true, dots=p)
+end
+
+# Reshape smaller data tensor into 2D matrix, normalize it and execute NMFk analysis
+X = reshape(data_tensor_lhs, size(data_tensor_lhs, 1) * size(data_tensor_lhs, 2), size(data_tensor_lhs, 3))
+Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
+W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
+
+Mads.createwells!(md, p, data_tensor_lhs[:, :, 1], 1.1:0.1:1.5)

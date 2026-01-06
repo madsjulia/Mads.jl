@@ -22,6 +22,45 @@ function loadmadsproblem(name::AbstractString)
 	return madsdata
 end
 
+function createwells!(md::AbstractDict, arg...; kw...)
+	md["Wells"] = createwells(arg...; kw...)
+	Mads.wells2observations!(md)
+	return nothing
+end
+
+function createwells(coordinates::AbstractMatrix, observations::AbstractMatrix, times::Union{AbstractVector,AbstractMatrix}, weights=ones(size(observations)); minimums::AbstractMatrix=zeros(size(observations)), maximums::AbstractMatrix=ones(size(observations)) * 1e6, logs::AbstractMatrix{Bool}=falses(size(observations)), wellstring::AbstractString="W")
+	nwell = size(coordinates, 1)
+	@assert size(coordinates, 2) >= 2 "Coordinates matrix must have at least two columns (x and y)"
+	@assert size(observations, 1) == nwell "Number of wells in coordinates must match number of observations per well"
+	nobs = size(observations, 2)
+	if size(times, 2) == 1
+		times = permutedims(repeat(times, inner=(1, nwell)))
+	end
+	@assert size(times) == size(observations) "Times and observations arrays must have the same sizes"
+	welldict = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
+	for i = 1:nwell
+		wellname = string(wellstring, i)
+		w = OrderedCollections.OrderedDict{String,Any}()
+		w["x"] = coordinates[i, 1]
+		w["y"] = coordinates[i, 2]
+		w["z"] = size(coordinates, 2) >= 3 ? coordinates[i, 3] : 0.0
+		obs = OrderedCollections.OrderedDict{String,Any}()
+		for j = 1:nobs
+			o = OrderedCollections.OrderedDict{String,Any}()
+			o["t"] = times[i, j]
+			o["c"] = observations[i, j]
+			o["weight"] = weights[i, j]
+			o["log"] = logs[i, j] ? "yes" : "no"
+			o["min"] = minimums[i, j]
+			o["max"] = maximums[i, j]
+			push!(obs, string(j)=>o)
+		end
+		w["obs"] = obs
+		welldict[wellname] = w
+	end
+	return welldict
+end
+
 function createobservations(nrow::Integer, ncol::Integer=1; obstring::AbstractString="", pretext::AbstractString="", prestring::AbstractString="", poststring::AbstractString="", filename::AbstractString="")
 	dump = filename != "" ? true : false
 	if dump
