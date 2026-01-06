@@ -1,6 +1,7 @@
 import Mads
 import NMFk
 import JLD2
+import LinearAlgebra
 
 workdir = @__DIR__
 # Load MADS file and generate forward model
