@@ -46,18 +46,35 @@ $(DocumentFunction.documentfunction(removesource!;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"sourceid"=>"source id [default=`0`]")))
 """
-function removesource!(madsdata::AbstractDict, sourceid::Integer=0)
+function removesource!(madsdata::AbstractDict, sourceindex::Integer=0)
 	if haskey(madsdata, "Sources")
 		ns = length(madsdata["Sources"])
-		if sourceid <= 0
-			sourceid = ns
+		if sourceindex <= 0
+			sourceindex = ns
 		end
-		if sourceid <= ns
+		if sourceindex <= ns
 			removesourceparameters!(madsdata)
-			deleteat!(madsdata["Sources"], sourceid)
+			deleteat!(madsdata["Sources"], sourceindex)
 			addsourceparameters!(madsdata)
 		else
 			madserror("There are only $(ns) sources in the Mads dictionary!")
+		end
+	else
+		madserror("There are no sources in the Mads dictionary!")
+	end
+	Mads.madswarn("There are $(length(madsdata["Sources"])) sources now!")
+end
+function removesources!(madsdata::AbstractDict, sourceindices::Vector{Int}=Int[])
+	if haskey(madsdata, "Sources")
+		ns = length(madsdata["Sources"])
+		for sourceindex in sort(sourceindices; rev=true)
+			if sourceindex <= ns && sourceindex > 0
+				removesourceparameters!(madsdata)
+				deleteat!(madsdata["Sources"], sourceindex)
+				addsourceparameters!(madsdata)
+			else
+				madserror("The sourceindex $(sourceindex) is out of range; there are only $(ns) sources in the Mads dictionary!")
+			end
 		end
 	else
 		madserror("There are no sources in the Mads dictionary!")

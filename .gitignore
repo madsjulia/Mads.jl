@@ -141,3 +141,4 @@ examples/*/*.svg
 *.fls
 *.fdb_latexmk
 .theme
+examples/anasol/machine_learning_test_problem/*.jld2
