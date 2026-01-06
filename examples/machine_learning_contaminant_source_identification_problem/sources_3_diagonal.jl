@@ -28,17 +28,17 @@ for i = sources
 	mc = Mads.forwardgrid(mdc)
 	mc = mc ./ max_value
 	# NMFk.plotmatrix(mc[:,:,1,:])
-	JLD2.save(joinpath(workdir, "forward_run_source_$(i).jld2"), "mc", mc)
+	JLD2.save(joinpath(workdir, "sources_3", "forward_run_source_$(i).jld2"), "mc", mc)
 end
 
 # Compute forward model predictions for each species from each source
 for i = sources
-	mc = JLD2.load(joinpath(workdir, "forward_run_source_$(i).jld2"), "mc")
+	mc = JLD2.load(joinpath(workdir, "sources_3", "forward_run_source_$(i).jld2"), "mc")
 	species_concentrations = source_species_concentrations[i]
 	for (j, s) in enumerate(species)
 		@info "Processing source $(i) species $(s) with concentration $(species_concentrations[j])"
 		mcc = mc * species_concentrations[j]
-		JLD2.save(joinpath(workdir, "forward_run_source_$(i)_species_$(s).jld2"), "mc", mcc)
+		JLD2.save(joinpath(workdir, "sources_3", "forward_run_source_$(i)_species_$(s).jld2"), "mc", mcc)
 		@info "Max value for source $(i) species $(s): $(maximum(mcc))"
 	end
 end
@@ -47,19 +47,19 @@ end
 for s in species
 	data = zeros(Float64, size(m))
 	for j in sources
-		filename = joinpath(workdir, "forward_run_source_$(j)_species_$(s).jld2")
+		filename = joinpath(workdir, "sources_3", "forward_run_source_$(j)_species_$(s).jld2")
 		mc = JLD2.load(filename, "mc")
 		@info "Adding source $(j) species $(s) to data max value $(maximum(mc))"
 		data += mc
 	end
 	@info "Final data for species $(s) max value $(maximum(data))"
-	JLD2.save(joinpath(workdir, "forward_run_species_$(s).jld2"), "data", data)
+	JLD2.save(joinpath(workdir, "sources_3", "forward_run_species_$(s).jld2"), "data", data)
 end
 
 # Load data for all species into a tensor
 data_tensor = zeros(Float64, 256, 256, 10, 4)
 for (i, s) in enumerate(species)
-	filename = joinpath(workdir, "forward_run_species_$(s).jld2")
+	filename = joinpath(workdir, "sources_3", "forward_run_species_$(s).jld2")
 	data = JLD2.load(filename, "data")
 	@info "Loading data for species $(s) with max value $(maximum(data))"
 	data_tensor[:, :, :, i] .= data[:, :, 1, 2:11]
