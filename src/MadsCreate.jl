@@ -44,7 +44,7 @@ function createwells(coordinates::AbstractMatrix, observations::AbstractMatrix, 
 		w["x"] = coordinates[i, 1]
 		w["y"] = coordinates[i, 2]
 		w["z"] = size(coordinates, 2) >= 3 ? coordinates[i, 3] : 0.0
-		obs = OrderedCollections.OrderedDict{String,Any}()
+		obs = OrderedCollections.OrderedDict{Integer,Any}()
 		for j = 1:nobs
 			o = OrderedCollections.OrderedDict{String,Any}()
 			o["t"] = times[i, j]
@@ -53,7 +53,7 @@ function createwells(coordinates::AbstractMatrix, observations::AbstractMatrix, 
 			o["log"] = logs[i, j] ? "yes" : "no"
 			o["min"] = minimums[i, j]
 			o["max"] = maximums[i, j]
-			push!(obs, string(j)=>o)
+			push!(obs, j=>o)
 		end
 		w["obs"] = obs
 		welldict[wellname] = w

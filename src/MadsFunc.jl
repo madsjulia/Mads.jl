@@ -14,8 +14,8 @@ Make MADS function to execute the model defined in the input MADS problem dictio
 
 $(DocumentFunction.documentfunction(makemadscommandfunction;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("calczeroweightobs"=>"Calculate zero weight observations [default=`false`]",
-             "calcpredictions"=>"Calculate predictions [default=`true`]")))
+keytext=Dict("calc_zero_weight_obs"=>"Calculate zero weight observations [default=`false`]",
+             "calc_predictions"=>"Calculate predictions [default=`true`]")))
 
 Example:
 
@@ -65,7 +65,7 @@ Returns:
 
 - Mads function to execute a forward model simulation
 """
-function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVector{String}=getobskeys(madsdata_in), calczeroweightobs::Bool=false, calcpredictions::Bool=true, quiet::Bool=true) # make MADS command function
+function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVector{String}=getobskeys(madsdata_in), calc_zero_weight_obs::Bool=false, calc_predictions::Bool=true, quiet::Bool=true) # make MADS command function
 	# remove the obs (as long as it isn't anasol) from madsdata so they don't get sent when doing Distributed.pmaps -- they aren't used here are they can require a lot of communication
 	madsdata = Dict{String,Any}()
 	if !haskey(madsdata_in, "Sources")
@@ -309,7 +309,7 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		madscommandfunction = madscommandfunctionrerun
 	elseif haskey(madsdata, "Sources") && !haskey(madsdata, "Julia model") && !haskey(madsdata, "Julia function") # we may still use "Wells" instead of "Observations"
 		madsinfo("MADS internal Anasol model evaluation for contaminant transport ...\n")
-		return makecomputeconcentrations(madsdata; calczeroweightobs=calczeroweightobs, calcpredictions=calcpredictions)
+		return makecomputeconcentrations(madsdata; calc_zero_weight_obs=calc_zero_weight_obs, calc_predictions=calc_predictions)
 	else
 		Mads.madswarn("Cannot create a function to call model without an entry in the MADS problem dictionary!")
 		Mads.madscritical("Use `Model`, `MADS model`, `Julia model`, `Command` or `Julia command`.")

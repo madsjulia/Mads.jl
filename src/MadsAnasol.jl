@@ -170,13 +170,23 @@ function removesourceparameters!(madsdata::AbstractDict)
 	end
 end
 
+separate_sources = false
+
+function separate_sources_on()
+	global separate_sources = true
+end
+
+function separate_sources_off()
+	global separate_sources = false
+end
+
 """
 Create a function to compute concentrations for all the observation points using Anasol
 
 $(DocumentFunction.documentfunction(makecomputeconcentrations;
 argtext=Dict("madsdata"=>"MADS problem dictionary"),
-keytext=Dict("calczeroweightobs"=>"calculate zero weight observations[default=`false`]",
-			"calcpredictions"=>"calculate zero weight predictions [default=`true`]")))
+keytext=Dict("calc_zero_weight_obs"=>"calculate zero weight observations[default=`false`]",
+			"calc_predictions"=>"calculate zero weight predictions [default=`true`]")))
 
 Returns:
 
@@ -191,7 +201,7 @@ paramdict = OrderedDict(zip(paramkeys, map(key->madsdata["Parameters"][key]["ini
 forward_preds = computeconcentrations(paramdict)
 ```
 """
-function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bool=false, calcpredictions::Bool=true)
+function makecomputeconcentrations(madsdata::AbstractDict; calc_zero_weight_obs::Bool=false, calc_predictions::Bool=true, source_label::Bool=separate_sources)
 	disp_tied = Mads.haskeyword(madsdata, "disp_tied")
 	background = haskeyword(madsdata, "background") ? madsdata["Problem"]["background"] : 0.0
 	parametersnoexpressions = Mads.getparamdict(madsdata)
@@ -241,55 +251,75 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 	end
 	nW = 0
 	for wellkey in Mads.getwellkeys(madsdata)
-		if madsdata["Wells"][wellkey]["on"]
+		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
 			nW += 1
 		end
 	end
-	wellx = Array{Float64}(undef, nW)
-	welly = Array{Float64}(undef, nW)
-	wellz0 = Array{Float64}(undef, nW)
-	wellz1 = Array{Float64}(undef, nW)
-	wellscreen = Array{Bool}(undef, nW)
-	wellnO = Array{Int}(undef, nW)
-	wellt = Array{Array{Float64}}(undef, nW)
-	wellp = Array{Array{Bool}}(undef, nW)
-	wellc = Array{Array{Float64}}(undef, nW)
-	wellkeys = Array{String}(undef, 0)
+	well_x = Vector{Float64}(undef, nW)
+	well_y = Vector{Float64}(undef, nW)
+	well_z0 = Vector{Float64}(undef, nW)
+	well_z1 = Vector{Float64}(undef, nW)
+	well_screen = Vector{Bool}(undef, nW)
+	well_time = Vector{Vector{Float64}}(undef, nW)
+	well_mask_compute = Vector{Vector{Bool}}(undef, nW)
+	if source_label
+		well_conc = Array{Vector{Float64}}(undef, nW, numberofsources)
+	else
+		well_conc = Vector{Vector{Float64}}(undef, nW)
+	end
+	well_keys = Vector{String}(undef, 0)
 	w = 0
 	for wellkey in Mads.getwellkeys(madsdata)
-		if madsdata["Wells"][wellkey]["on"]
+		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
 			w += 1
-			wellx[w] = madsdata["Wells"][wellkey]["x"]
-			welly[w] = madsdata["Wells"][wellkey]["y"]
-			wellz0[w] = madsdata["Wells"][wellkey]["z0"]
-			wellz1[w] = madsdata["Wells"][wellkey]["z1"]
-			if abs(wellz1[w] - wellz0[w]) > 0.1
-				wellscreen[w] = true
+			well_x[w] = madsdata["Wells"][wellkey]["x"]
+			well_y[w] = madsdata["Wells"][wellkey]["y"]
+			if haskey(madsdata["Wells"][wellkey], "z")
+				well_z0[w] = madsdata["Wells"][wellkey]["z"]
+				well_z1[w] = madsdata["Wells"][wellkey]["z"]
+				well_screen[w] = false
 			else
-				wellz0[w] = (wellz1[w] + wellz0[w]) / 2
-				wellscreen[w] = false
+				well_z0[w] = madsdata["Wells"][wellkey]["z0"]
+				well_z1[w] = madsdata["Wells"][wellkey]["z1"]
 			end
-			obst = Vector{Float64}(undef, 0)
-			obsp = Array{Int}(undef, 0)
+			if abs(well_z1[w] - well_z0[w]) > 0.1
+				well_screen[w] = true
+			else
+				well_z0[w] = (well_z1[w] + well_z0[w]) / 2
+				well_screen[w] = false
+			end
 			if haskey(madsdata["Wells"][wellkey], "obs") && !isnothing(madsdata["Wells"][wellkey]["obs"])
 				nO = length(madsdata["Wells"][wellkey]["obs"])
 			else
 				nO = 0
 			end
-			wellc[w] = Array{Float64}(undef, nO)
-			wellp[w] = Array{Bool}(undef, nO)
+			if source_label
+				for i = 1:numberofsources
+					well_conc[w,i] = Vector{Float64}(undef, nO)
+				end
+			else
+				well_conc[w] = Vector{Float64}(undef, nO)
+			end
+			well_mask_compute[w] = Vector{Bool}(undef, nO)
+			obst = Vector{Float64}(undef, 0)
 			for o in 1:nO
 				t = madsdata["Wells"][wellkey]["obs"][o]["t"]
-				if calczeroweightobs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calcpredictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
+				if calc_zero_weight_obs || (haskey(madsdata["Wells"][wellkey]["obs"][o], "weight") && madsdata["Wells"][wellkey]["obs"][o]["weight"] > 0) || (calc_predictions && haskey(madsdata["Wells"][wellkey]["obs"][o], "type") && madsdata["Wells"][wellkey]["obs"][o]["type"] == "prediction")
 					push!(obst, t)
-					wellp[w][o] = true
+					well_mask_compute[w][o] = true
 				else
-					wellp[w][o] = false
+					well_mask_compute[w][o] = false
 				end
-				push!(wellkeys, string(wellkey, "_", t))
+				push!(well_keys, string(wellkey, "_", t))
 			end
-			wellt[w] = obst
-			wellc[w][.!wellp[w]] .= 0
+			well_time[w] = obst
+			if source_label
+				for i = 1:numberofsources
+					well_conc[w,i][.!well_mask_compute[w]] .= 0.0 # NaN?!
+				end
+			else
+				well_conc[w][.!well_mask_compute[w]] .= 0.0 # NaN?!
+			end
 		end
 	end
 	classical = haskey(madsdata["Parameters"], "vx")
@@ -354,9 +384,14 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 				H = 0.5
 			end
 		end
-		for w_ in 1:nW
-			global w = w_
-			wellc[w] .= background
+		for w in 1:nW
+			if source_label
+				for i in 1:numberofsources
+					well_conc[w,i][well_mask_compute[w]] .= background
+				end
+			else
+				well_conc[w][well_mask_compute[w]] .= background
+			end
 		end
 		for i = 1:numberofsources
 			ss = string("source", i, "_")
@@ -398,18 +433,32 @@ function makecomputeconcentrations(madsdata::AbstractDict; calczeroweightobs::Bo
 					H = 0.5
 				end
 			end
-			for w_ in 1:nW
-				global w = w_
-				if wellscreen[w]
-					wellc[w][wellp[w]] += (contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i]) +
-										contamination(wellx[w], welly[w], wellz1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])) * 0.5
+			for w in 1:nW
+				if well_screen[w]
+					c = (contamination(well_x[w], well_y[w], well_z0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, well_time[w], anasolfunctions[i]) +
+						contamination(well_x[w], well_y[w], well_z1[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, well_time[w], anasolfunctions[i])) * 0.5
 				else
-					wellc[w][wellp[w]] += contamination(wellx[w], welly[w], wellz0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, wellt[w], anasolfunctions[i])
+					c = contamination(well_x[w], well_y[w], well_z0[w], porosity, lambda, theta, vx, vy, vz, ax, ay, az, H, x, y, z, dx, dy, dz, f, t0, t1, well_time[w], anasolfunctions[i])
+				end
+				if source_label
+					well_conc[w,i][well_mask_compute[w]] += c
+				else
+					well_conc[w][well_mask_compute[w]] += c
 				end
 			end
 		end
 		global modelruns += 1
-		return OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(wellkeys, vcat(wellc...)))
+		if source_label
+			source_well_keys = Vector{String}(undef, length(well_keys) * numberofsources)
+			for i in 1:numberofsources
+				k = "S$(i)_" .* well_keys
+				source_well_keys[((i-1)*length(well_keys)+1):(i*length(well_keys))] = k
+			end
+			d = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(source_well_keys, vcat(well_conc...)))
+		else
+			d = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(well_keys, vcat(well_conc...)))
+		end
+		return d
 	end
 	return computeconcentrations
 end

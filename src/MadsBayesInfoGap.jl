@@ -43,7 +43,7 @@ function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 	makeloglikelihood = makearrayconditionalloglikelihood(madsdata)
 	logprior = Mads.makearrayfunction(madsdata, makelogprior(madsdata))
 	nominalparams = getparamsinit(madsdata)
-	f = makemadscommandfunction(madsdata; calczeroweightobs=true, calcpredictions=true)
+	f = makemadscommandfunction(madsdata; calc_zero_weight_obs=true, calc_predictions=true)
 	function likelihoodparamsmax(horizon::Real)
 		return [horizon]
 	end

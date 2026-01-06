@@ -158,3 +158,4 @@ Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
 W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
 
 Mads.createwells!(md, p, data_tensor_lhs[:, :, 1], 1.1:0.1:1.5)
+a = Mads.forward(md)

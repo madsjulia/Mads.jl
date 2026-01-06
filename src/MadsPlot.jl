@@ -722,7 +722,7 @@ end
 function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollections.OrderedDict; format::AbstractString="", keyword::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", obs_plot_dots::Bool=true, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, quiet::Bool=!Mads.graphoutput)
 	Mads.setseed(seed; rng=rng)
 	rootname = getmadsrootname(madsdata)
-	func = makemadscommandfunction(madsdata; calczeroweightobs=true)
+	func = makemadscommandfunction(madsdata; calc_zero_weight_obs=true)
 	paramkeys = getparamkeys(madsdata)
 	paramdict = OrderedCollections.OrderedDict{Union{String,Symbol},Float64}(zip(paramkeys, getparamsinit(madsdata)))
 	paramoptkeys = getoptparamkeys(madsdata)
