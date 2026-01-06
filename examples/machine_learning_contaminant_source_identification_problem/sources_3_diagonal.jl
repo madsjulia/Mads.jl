@@ -2,9 +2,9 @@ import Mads
 import NMFk
 import JLD2
 
-workdir = joinpath(Mads.dir, "examples", "anasol", "machine_learning_test_problem")
+workdir = @__DIR__
 # Load MADS file and generate forward model
-md = Mads.loadmadsfile(joinpath(workdir, "sources.mads"))
+md = Mads.loadmadsfile(joinpath(workdir, "sources_3.mads"))
 # Generate forward model predictions
 m = Mads.forwardgrid(md)
 # Normalizing factor
