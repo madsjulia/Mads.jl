@@ -162,7 +162,20 @@ W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
 md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))
 Mads.separate_sources_on()
 np = 120
-p = NMFk.latin_hypercube_points(np, [size(data_tensor, 1), size(data_tensor, 2)], [1, 1])
+p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0])
+times = 1.1:0.1:1.5
+nt = length(times)
+Mads.createwells!(md, p, rand(np, nt), times)
+f = Mads.forward(md)
+Mads.createproblem!(md, f)
+Mads.showparameters(md)
+calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false)
+Mads.showparameters(md, calibration_param)
+
+md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))
+Mads.separate_sources_off()
+np = 120
+p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0])
 times = 1.1:0.1:1.5
 nt = length(times)
 Mads.createwells!(md, p, rand(np, nt), times)
