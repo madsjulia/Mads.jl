@@ -24,7 +24,7 @@ for i = sources
 	mc = Mads.forwardgrid(mdc)
 	@info "Max value for source $(i): $(maximum(mc))"
 	mc = mc ./ max_value
-	# NMFk.plotmatrix(mc[:,:,1,:])
+	NMFk.plotmatrix(mc[:,:,1,:]; permute=true)
 	JLD2.save(joinpath(workdir, "sources_4", "source_$(i).jld2"), "mc", mc)
 end
 
@@ -157,30 +157,62 @@ X = reshape(data_tensor_lhs, size(data_tensor_lhs, 1) * size(data_tensor_lhs, 2)
 Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
 W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
 
+# Execute Mads inversion analyses
+# First, execute mads using source separation on; concentrations from each source are used as separate targets
+# In this case, we have more calibration targets which someone expect to the problem easier
+# However, this also caused issues because of zeros in Jacobian matrix from sources not contributing to the observations to other sources
+# So at the end, the perform is worst than source separation off case below because of numerical issues in the optimization
+md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads")) # Load MADS file defining the source parameters
+Mads.separate_sources_on() # turn on source separation
+np = 20 # number of wells
+p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0]) # well locations
+times = 1.1:0.1:1.5 # sampling times
+nt = length(times) # number of sampling times
+Mads.createwells!(md, p, rand(np, nt), times) # create wells with random observed concentrations
+f = Mads.forward(md) # generate forward model for mads targets
+Mads.createproblem!(md, f) # set forward estimates as mads observations to calibrate against
+Mads.showparameters(md) # show parameters to calibrate
+calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false) # calibrate using Levenberg-Marquardt
+Mads.showparameters(md, calibration_param) # show calibrated parameters
 
+# Execute mads using source separation off; concentrations from each source each are mixed
 # Load MADS file and generate forward model
-md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))
-Mads.separate_sources_on()
-np = 120
-p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0])
-times = 1.1:0.1:1.5
-nt = length(times)
-Mads.createwells!(md, p, rand(np, nt), times)
-f = Mads.forward(md)
-Mads.createproblem!(md, f)
-Mads.showparameters(md)
-calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false)
-Mads.showparameters(md, calibration_param)
+md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))  # Load MADS file defining the source parameters
+Mads.separate_sources_off() # turn off source separation
+np = 20 # number of wells
+p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0]) # well locations
+times = 1.1:0.1:1.5 # sampling times
+nt = length(times) # number of sampling times
+Mads.createwells!(md, p, rand(np, nt), times) # create wells with random observed concentrations
+f = Mads.forward(md) # generate forward model for mads targets
+Mads.createproblem!(md, f) # set forward estimates as mads observations to calibrate against
+Mads.showparameters(md) # show parameters to calibrate
+calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false) # calibrate using Levenberg-Marquardt
+Mads.showparameters(md, calibration_param) # show calibrated parameters
 
-md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))
-Mads.separate_sources_off()
-np = 120
-p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0])
-times = 1.1:0.1:1.5
-nt = length(times)
-Mads.createwells!(md, p, rand(np, nt), times)
-f = Mads.forward(md)
-Mads.createproblem!(md, f)
-Mads.showparameters(md)
-calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false)
-Mads.showparameters(md, calibration_param)
+# Execute MCMC sampling to estimate parameter uncertainties
+chain, llhoods = Mads.emceesampling(md; numwalkers=32, nexecutions=10000)
+Mads.scatterplotsamples(md, chain', joinpath(workdir, "sources4_figures", "emcee_scatter_$(np)_$(size(chain, 1))_$(size(chain, 2)).png")) # Generate scatter plots of MCMC samples
+o = Mads.forward(md, chain') # Generate forward model predictions for MCMC samples
+Mads.spaghettiplot(md, o; format="PNG", separate_files=true, filename=joinpath(workdir, "sources4_figures", "emcee_spaghetti_$(np)_$(size(chain, 1))_$(size(chain, 2))")) # Generate spaghetti plots of MCMC forward model predictions
+
+# Execute mads using source separation off; concentrations from each source each are mixed
+# Load MADS file and generate forward model
+md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))  # Load MADS file defining the source parameters
+Mads.separate_sources_off() # turn off source separation
+np = 5 # number of wells
+p = NMFk.latin_hypercube_points(np, [50.0, 25.0], [-30.0, -25.0]) # well locations
+times = 1.1:0.1:1.5 # sampling times
+nt = length(times) # number of sampling times
+Mads.createwells!(md, p, rand(np, nt), times) # create wells with random observed concentrations
+f = Mads.forward(md) # generate forward model for mads targets
+Mads.createproblem!(md, f) # set forward estimates as mads observations to calibrate against
+Mads.showparameters(md) # show parameters to calibrate
+calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false) # calibrate using Levenberg-Marquardt
+Mads.showparameters(md, calibration_param) # show calibrated parameters
+
+# Execute MCMC sampling to estimate parameter uncertainties
+chain, llhoods = Mads.emceesampling(md; numwalkers=32, nexecutions=10000)
+Mads.scatterplotsamples(md, chain', joinpath(workdir, "sources_4_figures", "emcee_scatter_$(np)_$(size(chain, 1))_$(size(chain, 2)).png")) # Generate scatter plots of MCMC samples
+o = Mads.forward(md, chain') # Generate forward model predictions for MCMC samples
+Mads.spaghettiplot(md, o; format="PNG", separate_files=true, filename=joinpath(workdir, "sources_4_figures", "emcee_spaghetti_$(np)_$(size(chain, 1))_$(size(chain, 2))")) # Generate spaghetti plots of MCMC forward model predictions

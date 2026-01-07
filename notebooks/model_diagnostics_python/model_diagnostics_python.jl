@@ -76,7 +76,7 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 
 Mads.display("model_diagnostics-eigenvalues.png")
 
-chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=10000, thinning=10, seed=2016, sigma=0.01)
+chain, llhoods = Mads.emceesampling(md; numwalkers=10, nexecutions=100000, burnin=10000, thinning=10, seed=2016, sigma=0.01)
 
 f = Mads.forward(md, chain)
 

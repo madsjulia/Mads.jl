@@ -904,7 +904,7 @@ function spaghettiplot(madsdata::AbstractDict, dictarray::AbstractDict; seed::In
 	end
 	spaghettiplot(madsdata::AbstractDict, Y; kw...)
 end
-function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, alpha::Number=0.2, alphas::AbstractVector=[alpha], xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], plot_nontargets::Bool=false, gm::AbstractVector=[])
+function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata::Bool=true, filename::AbstractString="", keyword::AbstractString="", format::AbstractString="", title::AbstractString="", xtitle::AbstractString="", ytitle::AbstractString="", yfit::Bool=false, obs_plot_dots::Bool=true, linewidth::Measures.AbsoluteLength=2Gadfly.pt, pointsize::Measures.AbsoluteLength=4Gadfly.pt, grayscale::Bool=false, alpha::Number=0.2, alphas::AbstractVector=[alpha], xmin::Any=nothing, xmax::Any=nothing, ymin::Any=nothing, ymax::Any=nothing, quiet::Bool=!Mads.graphoutput, colors::AbstractVector=["red", "blue", "green", "cyan", "magenta", "yellow"], plot_nontargets::Bool=false, gm::AbstractVector=[], separate_files::Bool=false, hsize::Measures.AbsoluteLength=8Gadfly.inch, vsize::Measures.AbsoluteLength=4Gadfly.inch, dpi::Integer=Mads.imagedpi)
 	madsinfo("Spaghetti plots for all the selected model parameter (type != null) ...\n")
 	rootname = getmadsrootname(madsdata)
 	obskeys = Mads.getobskeys(madsdata)
@@ -970,15 +970,14 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 			Gadfly.Guide.title(title),
 			Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical),
 			gm...)
-		vsize = 4Gadfly.inch
 	else
 		pp = Array{Gadfly.Plot}(undef, 0)
 		p = Gadfly.Plot
-		vsize = 0Gadfly.inch
+		vsize_big = 0Gadfly.inch
 		startj = 1
 		endj  = 0
 		for wellname in keys(madsdata["Wells"])
-			if madsdata["Wells"][wellname]["on"]
+			if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]
 				o = madsdata["Wells"][wellname]["obs"]
 				nTw = length(o)
 				if plotdata
@@ -1014,8 +1013,18 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 						Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[i%6+1])))
 						for i in 1:numberofsamples]..., gm...)
 				end
-				push!(pp, p)
-				vsize += 4Gadfly.inch
+				if separate_files
+					if filename == ""
+						fname = keyword == "" ? "$(rootname)_$(wellname)_$(numberofsamples)_spaghetti" : "$(rootname)_$(keyword)_$(wellname)_spaghetti"
+					else
+						fname = "$(filename)_$(wellname)_spaghetti"
+					end
+					plotfileformat(p, fname, hsize, vsize; format=format, dpi=imagedpi)
+					!quiet && display(p)
+				else
+					push!(pp, p)
+					vsize_big += vsize
+				end
 				startj = endj + 1
 				if plotdata
 					deleteat!(pa, length(pa))
@@ -1024,13 +1033,15 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 		end
 		pl = length(pp) > 1 ? Gadfly.vstack(pp...) : p
 	end
-	if filename == "" && rootname != ""
-		filename = keyword == "" ?  "$(rootname)_$(numberofsamples)_spaghetti" : "$(rootname)_$(keyword)_$(numberofsamples)_spaghetti"
+	if !separate_files
+		if filename == "" && rootname != ""
+			filename = keyword == "" ?  "$(rootname)_$(numberofsamples)_spaghetti" : "$(rootname)_$(keyword)_$(numberofsamples)_spaghetti"
+		end
+		if filename != ""
+			plotfileformat(pl, filename, hsize, vsize_big; format=format, dpi=imagedpi)
+		end
+		!quiet && Mads.display(pl; gw=hsize, gh=vsize_big)
 	end
-	if filename != ""
-		plotfileformat(pl, filename, 8Gadfly.inch, vsize; format=format, dpi=imagedpi)
-	end
-	!quiet && Mads.display(pl; gw=8Gadfly.inch, gh=vsize)
 	return nothing
 end
 @doc """
