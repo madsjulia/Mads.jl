@@ -263,32 +263,31 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		for iw = 1:nW
 			wellname = wk[iw]
 			if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]
-				c = Vector{Float64}(undef, 0)
-				tc = Vector{Float64}(undef, 0)
-				d = Vector{Float64}(undef, 0)
-				td = Vector{Float64}(undef, 0)
+				est_val = Vector{Float64}(undef, 0)
+				est_time = Vector{Float64}(undef, 0)
+				target_val = Vector{Float64}(undef, 0)
+				target_time = Vector{Float64}(undef, 0)
 				if haskey(madsdata["Wells"][wellname], "obs") && !isnothing(madsdata["Wells"][wellname]["obs"])
 					o = madsdata["Wells"][wellname]["obs"]
 					nT = length(o)
 					for i in 1:nT
 						time = gettime(o[i])
-						t = gettarget(o[i])
 						w = getweight(o[i])
 						if !isnan(w) || w > 0
-							push!(td, time)
-							push!(d, t)
+							push!(target_time, time)
+							push!(target_val, gettarget(o[i]))
 						end
 						obskey = wellname * "_" * string(time)
 						if haskey(result, obskey)
-							push!(tc, time)
-							push!(c, result[obskey])
+							push!(est_time, time)
+							push!(est_val, result[obskey])
 						end
 					end
 				end
 				if noise != 0
-					c = c .+ (rand(Mads.rng, nT) .* noise)
+					est_val = est_val .+ (rand(Mads.rng, nT) .* noise)
 				end
-				npp = length(c)
+				npp = length(est_val)
 				if npp == 0
 					Mads.madswarn("Well $(wellname): no observations to plot!")
 					continue
@@ -297,15 +296,15 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				!notitle && push!(plot_args, Gadfly.Guide.title(wellname))
 				if plotdata
 					if obs_plot_dots
-						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize)))
+						push!(plot_args, Gadfly.layer(x=target_time, y=target_val, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), point_size=pointsize)))
 					else
-						push!(plot_args, Gadfly.layer(x=td, y=d, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), line_width=linewidth)))
+						push!(plot_args, Gadfly.layer(x=target_time, y=target_val, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, "red"), line_width=linewidth)))
 					end
 				end
 				if npp > 1
-					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), line_width=linewidth)))
+					push!(plot_args, Gadfly.layer(x=est_time, y=est_val, Gadfly.Geom.line, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), line_width=linewidth)))
 				else
-					push!(plot_args, Gadfly.layer(x=tc, y=c, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
+					push!(plot_args, Gadfly.layer(x=est_time, y=est_val, Gadfly.Geom.point, Gadfly.Theme(default_color=Base.parse(Colors.Colorant, colors[iw]), point_size=pointsize)))
 				end
 				push!(plot_args, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 				p = Gadfly.plot(Gadfly.Guide.XLabel(xtitle; orientation=:horizontal), Gadfly.Guide.YLabel(ytitle; orientation=:vertical), plot_args..., Gadfly.Theme(highlight_width=0Gadfly.pt), gmk...)
