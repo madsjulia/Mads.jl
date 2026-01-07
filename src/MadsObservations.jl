@@ -665,7 +665,7 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
 """
 function deleteoffwells!(madsdata::AbstractDict)
     for wellkey in keys(madsdata["Wells"])
-        if madsdata["Wells"][wellkey]["on"] == false
+        if haskey(madsdata["Wells"][wellkey], "on") && !madsdata["Wells"][wellkey]["on"]
             delete!(madsdata["Wells"], wellkey)
         end
     end
@@ -696,28 +696,43 @@ Convert `Wells` class to `Observations` class in the MADS problem dictionary
 $(DocumentFunction.documentfunction(wells2observations!;
 argtext=Dict("madsdata"=>"MADS problem dictionary")))
 """
-function wells2observations!(madsdata::AbstractDict)
+function wells2observations!(madsdata::AbstractDict; separate_sources::Bool=separate_sources)
 	observations = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
-	for wellkey in keys(madsdata["Wells"])
-		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
-			if haskey(madsdata["Wells"][wellkey], "obs") && !isnothing(madsdata["Wells"][wellkey]["obs"])
-				for i = eachindex(madsdata["Wells"][wellkey]["obs"])
-					t = gettime(madsdata["Wells"][wellkey]["obs"][i])
-					obskey = wellkey * "_" * string(t)
-					data = OrderedCollections.OrderedDict{String,Any}()
-					data["well"] = wellkey
-					data["time"] = t
-					data["index"] = i
-					target = gettarget(madsdata["Wells"][wellkey]["obs"][i])
+	if separate_sources && haskey(madsdata, "Sources")
+		numberofsources = length(madsdata["Sources"])
+	else
+		numberofsources = 0
+	end
+	wellsdict = madsdata["Wells"]
+	for wellkey in keys(wellsdict)
+		if !haskey(wellsdict[wellkey], "on") || wellsdict[wellkey]["on"]
+			if haskey(wellsdict[wellkey], "obs") && !isnothing(wellsdict[wellkey]["obs"])
+				obs = wellsdict[wellkey]["obs"]
+				for i = eachindex(obs)
+					obs_dict = OrderedCollections.OrderedDict{String,Any}()
+					time = gettime(obs[i])
+					obs_dict["well"] = wellkey
+					obs_dict["time"] = time
+					obs_dict["index"] = i
+					target = gettarget(obs[i])
 					if !isnan(target)
-						data["target"] = target
+						obs_dict["target"] = target
 					end
-					for datakey in keys(madsdata["Wells"][wellkey]["obs"][i])
-						if datakey != "c" && datakey != "t"
-							data[datakey] = madsdata["Wells"][wellkey]["obs"][i][datakey]
+					for k in keys(obs[i])
+						if k != "c" && k != "t" && k[1] != 'c'
+							# add other observation fields such as weight, min, max, log, dist, etc.
+							obs_dict[k] = obs[i][k]
 						end
 					end
-					observations[obskey] = data
+					if numberofsources > 0
+						for i in 1:numberofsources
+							longobskey = "S$(i)_" * wellkey * "_$(time)"
+							observations[longobskey] = obs_dict
+						end
+					else
+						longobskey = wellkey * "_$(time)"
+						observations[longobskey] = obs_dict
+					end
 				end
 			end
 		end
@@ -743,7 +758,7 @@ function getwelldata(madsdata::AbstractDict; time::Bool=false)
 		a = Array{Float64}(undef, 3, 0)
 	end
 	for wellkey in keys(madsdata["Wells"])
-		if madsdata["Wells"][wellkey]["on"]
+		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
 			z = (madsdata["Wells"][wellkey]["z0"] + madsdata["Wells"][wellkey]["z1"])/2

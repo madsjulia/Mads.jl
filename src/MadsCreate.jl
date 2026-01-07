@@ -322,20 +322,36 @@ function createproblem(madsdata::AbstractDict, predictions::AbstractDict, outfil
 	Mads.dumpyamlmadsfile(madsdata_new, outfilename)
 	return nothing
 end
-function createproblem(madsdata::AbstractDict, predictions::AbstractDict)
-	madsdata_c = deepcopy(madsdata)
-	observationsdict = madsdata_c["Observations"]
-	if haskey(madsdata_c, "Wells")
-		wellsdict = madsdata_c["Wells"]
+function createproblem!(madsdata::AbstractDict, predictions::AbstractDict; separate_sources::Bool=separate_sources)
+	if separate_sources && haskey(madsdata, "Sources")
+		numberofsources = length(madsdata["Sources"])
+	else
+		numberofsources = 0
+	end
+	observationsdict = madsdata["Observations"]
+	if haskey(madsdata, "Wells")
+		wellsdict = madsdata["Wells"]
 	end
 	for k in keys(predictions)
 		observationsdict[k]["target"] = predictions[k]
 		if haskey(observationsdict[k], "well")
 			well = observationsdict[k]["well"]
 			i = observationsdict[k]["index"]
-			wellsdict[well]["obs"][i]["c"] = predictions[k]
+			if numberofsources > 0
+				if haskey(wellsdict[well]["obs"][i], "c")
+					delete!(wellsdict[well]["obs"][i], "c")
+				end
+				s = lowercase(split(k, "_")[1])
+				wellsdict[well]["obs"][i]["c_$(s)"] = predictions[k]
+			else
+				wellsdict[well]["obs"][i]["c"] = predictions[k]
+			end
 		end
 	end
+end
+function createproblem(madsdata::AbstractDict, args...; kw...)
+	madsdata_c = deepcopy(madsdata)
+	createproblem!(madsdata_c, args...; kw...)
 	return madsdata_c
 end
 @doc """

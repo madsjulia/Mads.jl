@@ -157,5 +157,17 @@ X = reshape(data_tensor_lhs, size(data_tensor_lhs, 1) * size(data_tensor_lhs, 2)
 Xn, xmin, xmax, xlog = NMFk.normalizematrix(X, 2)
 W, H, fit, robustness, aic = NMFk.execute(Xn, 2:5, 64; load=false, save=false)
 
-Mads.createwells!(md, p, data_tensor_lhs[:, :, 1], 1.1:0.1:1.5)
-a = Mads.forward(md)
+
+# Load MADS file and generate forward model
+md = Mads.loadmadsfile(joinpath(workdir, "sources_4.mads"))
+Mads.separate_sources_on()
+np = 120
+p = NMFk.latin_hypercube_points(np, [size(data_tensor, 1), size(data_tensor, 2)], [1, 1])
+times = 1.1:0.1:1.5
+nt = length(times)
+Mads.createwells!(md, p, rand(np, nt), times)
+f = Mads.forward(md)
+Mads.createproblem!(md, f)
+Mads.showparameters(md)
+calibration_param, calibration_obs = Mads.calibraterandom(md, 10; first_init=false)
+Mads.showparameters(md, calibration_param)

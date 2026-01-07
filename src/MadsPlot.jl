@@ -140,7 +140,7 @@ function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", file
 			Compose.stroke(Base.parse(Colors.Colorant, "red"))))
 	end
 	for wellkey in keys(madsdata["Wells"])
-		if madsdata["Wells"][wellkey]["on"]
+		if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellkey]["on"]
 			match = false
 			x = madsdata["Wells"][wellkey]["x"]
 			y = madsdata["Wells"][wellkey]["y"]
@@ -262,7 +262,7 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 		end
 		for iw = 1:nW
 			wellname = wk[iw]
-			if madsdata["Wells"][wellname]["on"]
+			if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]
 				c = Vector{Float64}(undef, 0)
 				tc = Vector{Float64}(undef, 0)
 				d = Vector{Float64}(undef, 0)
@@ -498,7 +498,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle:
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 	else
 		for wellname in keys(madsdata["Wells"])
-			if madsdata["Wells"][wellname]["on"]
+			if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellname]["on"]
 				plotwellSAresults(madsdata, result, wellname; xtitle=xtitle, ytitle=ytitle, filename=filename, format=format, quiet=quiet)
 			end
 		end
@@ -790,7 +790,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 			startj = 1
 			endj  = 0
 			for wellname in keys(madsdata["Wells"])
-				if madsdata["Wells"][wellname]["on"]
+				if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellname]["on"]
 					o = madsdata["Wells"][wellname]["obs"]
 					nTw = length(o)
 					t = Array{Float64}(undef, nTw)

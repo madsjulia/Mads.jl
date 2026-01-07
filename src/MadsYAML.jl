@@ -57,7 +57,9 @@ function dumpyamlmadsfile(madsdata::AbstractDict, filename::AbstractString) # lo
 			delete!(yamldata, "Observations")
 		end
 		for well in keys(yamldata["Wells"])
-			delete!(yamldata["Wells"][well], "on" )
+			if haskey(madsdata["Wells"][well], "on")
+				delete!(yamldata["Wells"][well], "on")
+			end
 			for i = eachindex(yamldata["Wells"][well]["obs"])
 				dict = OrderedCollections.OrderedDict(i=>yamldata["Wells"][well]["obs"][i])
 				yamldata["Wells"][well]["obs"][i] = dict
