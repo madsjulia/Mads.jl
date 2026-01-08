@@ -11,7 +11,7 @@ svrexec, svrread, svrsave, svrclean = Mads.makesvrmodel(md, 100)
 
 numberofsamples = 100
 paramdict = Mads.getparamrandom(md, numberofsamples)
-paramarray = hcat(map(i -> collect(paramdict[i]), keys(paramdict))...)
+paramarray = permutedims(hcat(collect(values(paramdict))...))
 @time predictions = Mads.forward(md, paramdict)'
 
 Mads.madsinfo("Model predictions ...")

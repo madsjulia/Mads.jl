@@ -23,7 +23,7 @@ n = 100
 @info("Calibration using $n random initial guesses for model parameters")
 r = Mads.calibraterandom(md, n; all=true, seed=2016, save_results=false)
 pnames = collect(keys(r[1, 3]))
-p = hcat(map(i -> collect(values(r[i, 3])), 1:n)...)'
+p = permutedims(hcat(collect(values(r[i, 3])) for i in 1:n)...)
 np = length(pnames)
 @info("Identify the 3 different global optima with different model parameter estimates")
 

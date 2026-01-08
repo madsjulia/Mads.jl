@@ -10,7 +10,7 @@ Mads.wellon!(md, "w13a") # use well w13a
 numberofsamples = 100
 if !isdefined(Mads, :predictions) || size(predictions) != numberofsamples
 	paramdict = Mads.getparamrandom(md, numberofsamples)
-	paramarray = hcat(map(i -> collect(paramdict[i]), keys(paramdict))...)
+	paramarray = permutedims(hcat(collect(values(paramdict))...))
 	predictions = Mads.forward(md, paramdict)'
 end
 

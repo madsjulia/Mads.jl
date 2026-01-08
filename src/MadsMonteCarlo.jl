@@ -372,5 +372,5 @@ Returns:
 - a parameter array
 """
 function paramdict2array(dict::AbstractDict)
-	return permutedims(hcat(map(i -> collect(dict[i]), collect(keys(dict)))...))
+	return permutedims(hcat(collect(values(dict))...))
 end

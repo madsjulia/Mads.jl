@@ -7,7 +7,7 @@ workdir = joinpath(Mads.dir, "examples", "anasol")
 md = Mads.loadmadsfile(joinpath(workdir, "w01purebig.mads"))
 ns = 100
 rsetdict = Mads.getparamrandom(md, ns)
-rsetarray = hcat(map(i -> rsetdict[i], keys(rsetdict))...)'
+rsetarray = permutedims(hcat(collect(values(rsetdict))...))
 
 @info("Mads")
 @time rf = Mads.forward(md, rsetarray);
