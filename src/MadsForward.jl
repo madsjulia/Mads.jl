@@ -220,10 +220,14 @@ function forwardgrid(madsdatain::AbstractDict, paramvalues::AbstractDict; transi
 	end
 	time = madsdata["Grid"]["time"]
 	if transient && haskey(madsdata, "Time")
-		time_start = madsdata["Time"]["start"]
-		time_end = madsdata["Time"]["end"]
-		time_step = madsdata["Time"]["step"]
-		time = collect(time_start:time_step:time_end)
+		if typeof(madsdata["Time"]) <: AbstractDict && haskey(madsdata["Time"], "start")
+			time_start = madsdata["Time"]["start"]
+			time_end = madsdata["Time"]["end"]
+			time_step = madsdata["Time"]["step"]
+			time = collect(time_start:time_step:time_end)
+		else
+			time = madsdata["Time"]
+		end
 	end
 
 	dictwells = OrderedCollections.OrderedDict{String,OrderedCollections.OrderedDict}()
