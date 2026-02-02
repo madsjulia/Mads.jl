@@ -262,6 +262,9 @@ function plotmatches(madsdata::AbstractDict, dict_in::AbstractDict; plotdata::Bo
 				colors[iw] = "blue"
 			end
 		end
+		if nW > 10 && !separate_files
+			madswarn("Number of wells ($nW) is greater than 10; since `separate_files=false` this may not work propery")
+		end
 		for iw = 1:nW
 			wellname = wk[iw]
 			if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]

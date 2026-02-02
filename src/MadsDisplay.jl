@@ -10,22 +10,22 @@ function display(filename::AbstractString, open::Bool=false)
 		return
 	end
 	if !isfile(filename)
-		@warn("File `$filename` is missing!")
+		@warn("File `$(filename)` does not exist!")
 		return
 	end
 	trytoopen = open
 	ext = lowercase(Mads.getextension(filename))
 	if !open || isdefined(Main, :TerminalExtensions) || isdefined(Main, :VSCodeServer) || (isdefined(Main, :IJulia) && Main.IJulia.inited)
 		if ext == "svg"
-			if isdefined(Main, :IJulia) && Main.IJulia.inited
-				open(filename) do f
-					display("image/svg+xml", read(f, String))
+			if (isdefined(Main, :IJulia) && Main.IJulia.inited) || isdefined(Main, :VSCodeServer)
+				Base.open(filename) do f
+					Base.display(MIME"image/svg+xml"(), read(f, String))
 				end
 			else
 				try
-					img = _load_svg_as_image(filename)
+					img = load_svg_as_image(filename)
 					Base.display(img)
-					println("")
+					isdefined(Main, :TerminalExtensions) && println("")
 				catch
 					trytoopen = true
 				end
@@ -34,7 +34,7 @@ function display(filename::AbstractString, open::Bool=false)
 			try
 				img = Images.load(filename)
 				Base.display(img)
-				println("")
+				isdefined(Main, :TerminalExtensions) && println("")
 			catch
 				trytoopen = true
 			end
@@ -44,17 +44,21 @@ function display(filename::AbstractString, open::Bool=false)
 	end
 	if trytoopen
 		if ext == "txt"
-			a = println.(readlines(filename))
+			println.(readlines(filename))
 			return nothing
 		end
 		try
-			run(`open $filename`)
-		catch
-			try
+			if Sys.iswindows()
+				run(Cmd(["cmd", "/c", "start", "", abspath(filename)])) # Use default application registered for the file type
+			elseif Sys.isapple()
+				run(`open $filename`)
+			elseif Sys.islinux()
 				run(`xdg-open $filename`)
-			catch
-				@warn("Do not know how to open `$filename`")
+			else
+				madswarn("Do not know how to open `$(filename)`!")
 			end
+		catch
+			madswarn("Opening `$(filename)` failed")
 		end
 	end
 end
@@ -133,9 +137,33 @@ function display(o; gwo=nothing, gho=nothing, gw=gwo, gh=gho)
 	end
 end
 
-function _load_svg_as_image(filename::AbstractString)
-	# Use ImageMagick to rasterize SVGs without shelling out to `convert`.
-	return ImageMagick.load(filename)
+function load_svg_as_image(filename::AbstractString)
+	svg_data = read(filename, String)
+	svg_io = IOBuffer(svg_data)
+	try
+		img = ImageMagick.load(svg_io, format="SVG")
+		return img
+	catch
+		madswarn("Failed to load SVG image from `$filename` using ImageMagick.")
+	end
+	return nothing
+end
+
+function convert_svg_to_png(svg_filename::AbstractString; png_filename::AbstractString="", dpi::Integer=imagedpi)
+	if png_filename == ""
+		png_filename = Mads.getrootname(svg_filename) * ".png"
+	end
+	outdir = dirname(png_filename)
+	if !(outdir == "." || isempty(outdir))
+		mkpath(outdir)
+	end
+	img = load_svg_as_image(svg_filename)
+	try
+		Images.save(png_filename, img; dpi=dpi)
+	catch
+		Images.save(png_filename, img)
+	end
+	return png_filename
 end
 @doc """
 Display image file
