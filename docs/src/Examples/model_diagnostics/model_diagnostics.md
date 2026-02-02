@@ -274,7 +274,7 @@ Mads.showparameterestimates(md, calib_param)
 The model inversion can also be performed for a set of random initial guesses for model parameters.
 
 ```julia
-calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
+calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all_results=true)
 ```
 
     100×3 Matrix{Any}:

@@ -7,7 +7,7 @@ Mads.mkdir("calibration_results")
 
 n = 100
 @info("Calibration using $n random initial guesses for model parameters")
-r = Mads.calibraterandom(md, n, all=true, seed=2016, save_results=false)
+r = Mads.calibraterandom(md, n, all_results=true, seed=2016, save_results=false)
 println("Worst objective function estimate $(max(r[:,1]...))")
 println("Best objective function estimate $(min(r[:,1]...))")
 println("$(collect(size(findall(r[:,2] .== false)))) calibrations failed")

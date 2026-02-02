@@ -5,7 +5,7 @@ Mads.mkdir("sensitivity_results")
 
 n = 100
 @info("Calibration using $n random initial guesses for model parameters")
-calib_random_results = Mads.calibraterandom(md, n; all=true, seed=2016, save_results=false)
+calib_random_results = Mads.calibraterandom(md, n; all_results=true, seed=2016, save_results=false)
 pnames = collect(keys(r[1,3]))
 calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:n)...)
 np = length(pnames)

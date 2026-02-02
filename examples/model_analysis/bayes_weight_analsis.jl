@@ -21,7 +21,7 @@ pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
 
 n = 100
 @info("Calibration using $n random initial guesses for model parameters")
-r = Mads.calibraterandom(md, n; all=true, seed=2016, save_results=false)
+r = Mads.calibraterandom(md, n; all_results=true, seed=2016, save_results=false)
 pnames = collect(keys(r[1, 3]))
 p = p = permutedims(hcat(collect(values(r[i, 3])) for i in 1:n)...)
 np = length(pnames)

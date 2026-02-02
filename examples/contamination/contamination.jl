@@ -98,7 +98,7 @@ Mads.dumpyamlmadsfile(md_new, "w01-new-problem.mads") # write out a new mads inp
 # Calibrate with random initial guesses
 Mads.allwellsoff!(md_new) # turn off all wells
 Mads.wellon!(md_new, "w13a") # use well w13a
-Mads.calibraterandom(md_new, 10; seed=20151001) # calibrate 10 times with random initial guesses
+Mads.calibraterandom(md_new, 10; seed=20151001, all_results=true) # calibrate 10 times with random initial guesses
 
 # Global sensitivity analysis using Saltelli's method
 saltelli_results = Mads.saltelli(md; N=1000, seed=2016)

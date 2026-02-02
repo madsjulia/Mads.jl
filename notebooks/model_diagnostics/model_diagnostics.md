@@ -376,7 +376,7 @@ The model inversion can also be performed for a set of random initial guesses fo
 
 
 ```julia
-calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all=true)
+calib_random_results = Mads.calibraterandom(md, 100; seed=2021, all_results=true)
 ```
 
 
