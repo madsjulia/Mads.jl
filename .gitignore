@@ -141,5 +141,8 @@ examples/*/*.svg
 *.fls
 *.fdb_latexmk
 .theme
-examples/machine_learning_contaminant_source_identification_problem/*/*.jld2
-examples/machine_learning_contaminant_source_identification_problem/*/*.png
+examples/*/*/*.jld2
+examples/*/*/*.png
+examples/contamination/*.jld2
+examples/contamination/*.png
+examples/contamination/*.svg

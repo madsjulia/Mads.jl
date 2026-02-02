@@ -70,7 +70,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 	return filename, Symbol(format)
 end
 
-function plotfileformat(p, filename::AbstractString, hsize, vsize; format=uppercase(getextension(filename)), dpi=imagedpi)
+function plotfileformat(p, filename::AbstractString, hsize::Measures.Length, vsize::Measures.Length; format::AbstractString=uppercase(getextension(filename)), dpi::Integer=imagedpi)
 	if isnothing(p)
 		madswarn("Plotting nothing!")
 		return
@@ -81,10 +81,12 @@ function plotfileformat(p, filename::AbstractString, hsize, vsize; format=upperc
 		hsize *= maxsize.value / m.value
 		vsize *= maxsize.value / m.value
 	elseif vsize > maxsize
-		hsize /= vsize / maxsize.value
+		scale = maxsize.value / vsize.value
+		hsize *= scale
 		vsize = maxsize
 	elseif hsize > maxsize
-		vsize /= hsize / maxsize.value
+		scale = maxsize.value / hsize.value
+		vsize *= scale
 		hsize = maxsize
 	end
 	filename, format = setplotfileformat(filename, format)
@@ -113,7 +115,7 @@ Dumps:
 
 - plot of contaminant sources and wells
 """
-function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", filename::AbstractString="", keyword::AbstractString="", hsize=8Gadfly.inch, vsize=4Gadfly.inch, quiet::Bool=!Mads.graphoutput, gm::AbstractVector=[])
+function plotmadsproblem(madsdata::AbstractDict; format::AbstractString="", filename::AbstractString="", keyword::AbstractString="", hsize::Measures.Length=8Gadfly.inch, vsize::Measures.Length=4Gadfly.inch, quiet::Bool=!Mads.graphoutput, gm::AbstractVector=[])
 	rectangles = Array{Float64}(undef, 0, 4)
 	gadfly_source = Gadfly.Guide.annotation(Compose.compose(Compose.context()))
 	dfw = DataFrames.DataFrame(x = Float64[], y = Float64[], label = AbstractString[], category = AbstractString[])
@@ -688,7 +690,9 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 
 	ranking = [paramkeys plotlabels][smags[select],:]
 	madsinfo("Paramter ranking (labels/keys)")
-	display(ranking)
+	for i in 1:size(ranking, 1)
+		println("$(i): $(ranking[i,2]) / $(ranking[i,1])")
+	end
 
 	if filename == ""
 		method = result["method"]
@@ -710,7 +714,7 @@ function plotobsSAresults(madsdata::AbstractDict, result::AbstractDict; filter::
 		filename = filename_root * "_variance." * filename_ext
 		plotfileformat(pvar, filename, 8Gadfly.inch, 4Gadfly.inch; format=format, dpi=imagedpi)
 	end
-	return [paramkeys plotlabels][smags[select],:]
+	return paramkeys
 end
 
 function spaghettiplots(madsdata::AbstractDict, number_of_samples::Integer; seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, kw...)
