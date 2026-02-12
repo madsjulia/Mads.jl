@@ -285,7 +285,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 	return df
 end
 
-function load_data(filename::AbstractString; dataset="", kw...)::Union{DataFrames.DataFrame, AbstractArray}
+function load_data(filename::AbstractString; dataset::AbstractString="", load_first::Bool=true, kw...)::Union{DataFrames.DataFrame, AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
 		return DataFrames.DataFrame()
@@ -310,13 +310,21 @@ function load_data(filename::AbstractString; dataset="", kw...)::Union{DataFrame
 				ds = JLD2.load(filename)
 			end
 			datasets = collect(keys(ds))
-			@info("File $(filename) datasets: $(datasets)")
+			@info("File '$(filename)' datasets: $(datasets)")
 			if dataset in datasets
-				@info("Dataset $(dataset) loaded from $(filename) ...")
+				@info("Dataset '$(dataset)' loaded from '$(filename)' ...")
 				c = ds[dataset]
-			else
-				@info("Dataset $(datasets[1]) loaded from $(filename) ...")
+			elseif dataset == ""
+				@warn("Dataset is not provided! The first dataset '$(datasets[1])' will be loaded instead ...")
+				@info("First dataset ('$(datasets[1])') loaded from '$(filename)' ...")
 				c = ds[datasets[1]]
+			elseif load_first
+				@warn("Dataset '$(dataset)' not found in '$(filename)'! The first dataset '$(datasets[1])' will be loaded instead ...")
+				@info("First dataset ('$(datasets[1])') loaded from '$(filename)' ...")
+				c = ds[datasets[1]]
+			else
+				@error("Dataset '$(dataset)' not found in '$(filename)'!")
+				c = DataFrames.DataFrame()
 			end
 			if typeof(c) <: DataFrames.DataFrame
 				c = c
