@@ -34,7 +34,7 @@ function makebigdt!(madsdata::AbstractDict, choice::AbstractDict)
 	madsinfo("Decision parameters:")
 	for paramname in keys(choice["Parameters"])
 		if Mads.isopt(madsdata, paramname)
-			Mads.madscritical("Decision parameter, $(paramname), is also an adjustable (type = \"opt\") parameter.")
+			Mads.madscritical("Decision parameter, $(paramname), is also an adjustable (type = 'opt') parameter.")
 		end
 		c = choice["Parameters"][paramname]
 		madsdata["Parameters"][paramname]["init"] = c

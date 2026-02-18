@@ -197,7 +197,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			end
 			v = data[:, i]
 			if all(ismissing.(v))
-				println("All values for parameter/column \"$(param)\" are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
+				println("All values for parameter/column '$(param)' are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
 			else
 				unique_types = unique(typeof.(v))
 				if all(unique_types .<: Union{Missing, AbstractFloat})
@@ -240,7 +240,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 						end
 					end
 					if parsingerror
-						println("Some values for parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+						println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
 						v[mask_null] .= ""
 						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 					else
@@ -265,13 +265,13 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 						end
 					end
 					if parsingerror
-						println("Some values for parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+						println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
 						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 					else
 						v = convert(Vector{floattype}, v)
 					end
 				else
-					println("Parameter/column \"$(param)\" cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
+					println("Parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
 					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 				end
 				if dataframe
@@ -1318,7 +1318,7 @@ function writeparametersviatemplate(parameters, templatefilename, outputfilename
 	for line in lines
 		splitline = split(line, separator) # two separators are needed for each parameter
 		if rem(length(splitline), 2) != 1
-			error("The number of separators (\"$separator\") is not even in template file $templatefilename on line:\n$line")
+			error("The number of separators ('$separator') is not even in template file $templatefilename on line:\n$line")
 		elseif length(splitline) == 1
 			emptyline += 1
 		end
@@ -1393,7 +1393,7 @@ function instline2regexs(instline::AbstractString)
 	while offset <= length(instline) && occursin(regex, instline; offset=offset - 1) # this may be a julia bug -- offset for ismatch and match seem to be based on zero vs. one indexing
 		m = match(regex, instline, offset)
 		if isnothing(m)
-			Mads.madserror("match not found for instruction line:\n$instline\nnear \"$(instline[offset:end])\"")
+			Mads.madserror("match not found for instruction line:\n$instline\nnear '$(instline[offset:end])'")
 		end
 		offset = m.offset + length(m.match)
 		if m.match[1] == '@'
@@ -1460,7 +1460,7 @@ function regexs2obs(obsline::AbstractString, regexs::Vector{Regex}, obsnames::Ve
 	for i in eachindex(regexs)
 		m = match(regexs[i], obsline, offset)
 		if isnothing(m)
-			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) (\"$(strip(obsline[offset:end]))\")")
+			Mads.madserror("match not found for $(regexs[i]) in observation line: $(strip(obsline)) ('$(strip(obsline[offset:end]))')")
 		else
 			if getparamhere[i]
 				obsdict[obsnames[obsnameindex]] = Base.parse(Float64, m.match)
