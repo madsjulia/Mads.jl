@@ -315,7 +315,7 @@ function load_data(filename::AbstractString; dataset::AbstractString="", load_fi
 				@info("Dataset '$(dataset)' loaded from '$(filename)' ...")
 				c = ds[dataset]
 			elseif dataset == ""
-				@warn("Dataset is not provided! The first dataset '$(datasets[1])' will be loaded instead ...")
+				@warn("Dataset name is not provided! The first dataset named '$(datasets[1])' will be loaded instead ...")
 				@info("First dataset ('$(datasets[1])') loaded from '$(filename)' ...")
 				c = ds[datasets[1]]
 			elseif load_first
@@ -323,7 +323,7 @@ function load_data(filename::AbstractString; dataset::AbstractString="", load_fi
 				@info("First dataset ('$(datasets[1])') loaded from '$(filename)' ...")
 				c = ds[datasets[1]]
 			else
-				@error("Dataset '$(dataset)' not found in '$(filename)'!")
+				@warn("Dataset '$(dataset)' not found in '$(filename)'!")
 				c = DataFrames.DataFrame()
 			end
 			if typeof(c) <: DataFrames.DataFrame
