@@ -43,26 +43,11 @@ end
 
 include("MadsModules.jl")
 
-try
-	run(pipeline(`git help`; stdout=devnull, stderr=devnull))
-	global madsgit = true
-catch
-	global madsgit = false
-end
+_cmd_exists(cmd::AbstractString) = Sys.which(cmd) !== nothing
 
-try
-	run(pipeline(`bash --help`; stdout=devnull, stderr=devnull))
-	global madsbash = true
-catch
-	global madsbash = false
-end
-
-try
-	run(pipeline(`python --help`; stdout=devnull, stderr=devnull))
-	global madspython = true
-catch
-	global madspython = false
-end
+madsgit::Bool = _cmd_exists("git")
+madsbash::Bool = _cmd_exists("bash")
+madspython::Bool = _cmd_exists("python")
 
 include("MadsHelpers.jl")
 include("MadsTryImport.jl")
@@ -83,6 +68,8 @@ global executionwaittime = 0.0
 global sindxdefault = 0.1
 global create_tests = false # dangerous if true
 global long_tests = false # execute long tests
+global createlinks::Bool = !Sys.iswindows()
+global rng::Random.AbstractRNG = Random.TaskLocalRNG()
 global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global nprocs_per_task_default = 1
 global parallel_optimization = false
@@ -130,14 +117,6 @@ include("MadsBayesInfoGap.jl")
 include("MadsMonteCarlo.jl")
 include("MadsCoordinates.jl")
 
-try
-	testlinks()
-	global createlinks = true
-catch
-	@info("Symbolic links cannot be created! Microsoft Windows may require to execute julia as an administrator or in a windows developers mode.")
-	global createlinks = false
-end
-
 if !haskey(ENV, "MADS_NO_PLOT")
 	if !haskey(ENV, "MADS_NO_GADFLY")
 		import Gadfly
@@ -152,7 +131,31 @@ end
 
 include("MadsPublish.jl")
 include("MadsParallel.jl")
-include("MadsTest.jl")
+
+const _mads_test_loaded = Ref(false)
+function _ensure_mads_test_loaded()::Nothing
+	if !_mads_test_loaded[]
+		Base.include(@__MODULE__, joinpath(@__DIR__, "MadsTest.jl"))
+		_mads_test_loaded[] = true
+	end
+	return nothing
+end
+
+function test(args...; kw...)
+	_ensure_mads_test_loaded()
+	return Base.invokelatest(getfield(Mads, :test), args...; kw...)
+end
+
+function testj(args...; kw...)
+	_ensure_mads_test_loaded()
+	return Base.invokelatest(getfield(Mads, :testj), args...; kw...)
+end
+
+function cleancoverage(args...; kw...)
+	_ensure_mads_test_loaded()
+	return Base.invokelatest(getfield(Mads, :cleancoverage), args...; kw...)
+end
+
 if !haskey(ENV, "MADS_NO_DISPLAY")
 	include("MadsDisplay.jl")
 end
@@ -173,7 +176,5 @@ if !haskey(ENV, "MADS_NO_GADFLY")
 	include("MadsBayesInfoGapPlot.jl")
 	include("MadsPlot.jl")
 end
-
-Mads.seedrng()
 
 end
