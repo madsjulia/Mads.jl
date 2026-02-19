@@ -66,7 +66,9 @@ global sindxdefault = 0.1
 global create_tests = false # dangerous if true
 global long_tests = false # execute long tests
 global createlinks::Bool = !Sys.iswindows()
-global rng::Random.AbstractRNG = Random.TaskLocalRNG()
+if !isdefined(@__MODULE__, :rng)
+	global rng = Random.TaskLocalRNG()
+end
 global madsservers = [] # ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global nprocs_per_task_default = 1
 global parallel_optimization = false
