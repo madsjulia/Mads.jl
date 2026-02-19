@@ -49,9 +49,6 @@ madsgit::Bool = _cmd_exists("git")
 madsbash::Bool = _cmd_exists("bash")
 madspython::Bool = _cmd_exists("python")
 
-include("MadsHelpers.jl")
-include("MadsTryImport.jl")
-
 global vectorflag = false
 global quiet = true
 global veryquiet = false
@@ -70,10 +67,13 @@ global create_tests = false # dangerous if true
 global long_tests = false # execute long tests
 global createlinks::Bool = !Sys.iswindows()
 global rng::Random.AbstractRNG = Random.TaskLocalRNG()
-global madsservers = ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
+global madsservers = [] # ["madsmax", "madsmen", "madsdam", "madszem", "madskil", "madsart", "madsend"]
 global nprocs_per_task_default = 1
 global parallel_optimization = false
 const dir = Base.pkgdir(Mads)
+
+include("MadsHelpers.jl")
+include("MadsTryImport.jl")
 
 if haskey(ENV, "MADS_LONG_TESTS")
 	global long_tests = true
