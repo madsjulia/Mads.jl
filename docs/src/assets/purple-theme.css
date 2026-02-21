@@ -1,0 +1,30 @@
+/*
+Purple background overrides for Documenter.
+
+Documenter 0.27 uses a primary (light) theme that is always enabled, and a dark
+theme which is enabled by adding `theme--documenter-dark` to the <html> element.
+
+We scope light rules to "not dark" and dark rules to the dark class.
+*/
+
+/* Light mode (default) */
+html:not(.theme--documenter-dark) body,
+html:not(.theme--documenter-dark) #documenter {
+	background-color: #c6b6f1 !important;
+}
+
+html:not(.theme--documenter-dark) #documenter .docs-sidebar,
+html:not(.theme--documenter-dark) #documenter .docs-navbar {
+	background-color: #bda7f4 !important;
+}
+
+/* Dark mode */
+html.theme--documenter-dark body,
+html.theme--documenter-dark #documenter {
+	background-color: #3b076f !important;
+}
+
+html.theme--documenter-dark #documenter .docs-sidebar,
+html.theme--documenter-dark #documenter .docs-navbar {
+	background-color: #451571 !important;
+}
