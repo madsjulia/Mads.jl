@@ -53,9 +53,9 @@ The contaminant transport is solved using the [`Anasol`](https://github.com/mads
 
 ### Unknown model parameters
 
-* Start time of contaminant release $t_0$
-* End time of contaminant release $t_1$
-* Advective pore velocity $v$
+* Start time of contaminant release \(t_0\)
+* End time of contaminant release \(t_1\)
+* Advective pore velocity \(v\)
 
 ### Reduced model setup
 

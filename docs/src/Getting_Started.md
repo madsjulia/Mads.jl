@@ -191,38 +191,6 @@ or
 ENV["MADS_NO_PYTHON"] = "" # julia
 ```
 
-### Installation behind a firewall
-
-Set proxies executing the following lines in the bash command-line environment:
-
-```bash
-export ftp_proxy=http://proxyout.<your_site>:8080
-export rsync_proxy=http://proxyout.<your_site>:8080
-export http_proxy=http://proxyout.<your_site>:8080
-export https_proxy=http://proxyout.<your_site>:8080
-export no_proxy=.<your_site>
-```
-
-For example, at LANL, you will need to execute the following lines in the bash command-line environment:
-
-```bash
-export ftp_proxy=http://proxyout.lanl.gov:8080
-export rsync_proxy=http://proxyout.lanl.gov:8080
-export http_proxy=http://proxyout.lanl.gov:8080
-export https_proxy=http://proxyout.lanl.gov:8080
-export no_proxy=.lanl.gov
-```
-
-Proxies can be setup directly in the Julia REPL as well:
-
-```julia
-ENV["ftp_proxy"] =  "http://proxyout.lanl.gov:8080"
-ENV["rsync_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["http_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["https_proxy"] = "http://proxyout.lanl.gov:8080"
-ENV["no_proxy"] = ".lanl.gov"
-```
-
 Julia uses git for package management.
 
 To avoid potential git management issues, on Windows, you may need to execute:

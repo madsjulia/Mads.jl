@@ -18,7 +18,9 @@ The method reveals the temporal and spatial footprints of the extracted features
 A novel unsupervised Machine Learning based on Tensor Decomposition coupled with sparsity and nonnegativity constraints has been applied to extract the temporal and spatial footprints of the features in multi-dimensional datasets in the form of multi-way arrays or tensors.
 The decomposition (factorization) of a given tensor \\(X\\) is typically performed by minimization of the Frobenius norm:
 
-$$ \frac{1}{2} ||X-G \otimes_1 A_1 \otimes_2 A_2 \ldots \otimes_n A_n ||_F^2 $$
+```math
+\frac{1}{2}\lVert X-G \otimes_1 A_1 \otimes_2 A_2 \cdots \otimes_n A_n \rVert_F^2
+```
 
 where:
 
@@ -78,7 +80,7 @@ Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decompo
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
-Research papers are also available at [Google Scholar](http://scholar.google.com/citations?user=sIFHVvwAAAAJ&hl=en), [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov) and [Academia.edu](https://lanl.academia.edu/monty)
+Research papers are also available at [Google Scholar](http://scholar.google.com/citations?user=sIFHVvwAAAAJ&hl=en) and [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov)
 
 ### Presentations
 
@@ -89,7 +91,7 @@ Research papers are also available at [Google Scholar](http://scholar.google.com
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
-Presentations are also available at [slideshare.net](https://www.slideshare.net/VelimirmontyVesselin), [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov) and [Academia.edu](https://lanl.academia.edu/monty)
+Presentations are also available at [slideshare.net](https://www.slideshare.net/VelimirmontyVesselin) and [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov).
 
 ### Videos
 

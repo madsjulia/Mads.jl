@@ -1,6 +1,14 @@
 import Documenter
 import Dates
 
+function _documenter_version()
+	if isdefined(Documenter, :DOCUMENTER_VERSION)
+		return getproperty(Documenter, :DOCUMENTER_VERSION)
+	end
+	# Fallback: assume pre-1.0 behavior
+	return v"0.0.0"
+end
+
 function _run_git(args::Vector{String}; dir::AbstractString)
 	cmd = Cmd(["git"; args])
 	return run(Cmd(cmd; dir=dir))
@@ -11,6 +19,10 @@ function _run_git(args::AbstractString...; dir::AbstractString)
 end
 
 function _mads_html_format(; footer)
+	# Newer Documenter versions support `repolink` (used for navbar GitHub link).
+	# Older Documenter (e.g. 0.27) does not.
+	repolink_kwargs = _documenter_version() >= v"1.0.0" ? (repolink="https://github.com/madsjulia/Mads.jl",) : ()
+
 	common_kwargs = (
 		prettyurls=false,
 		canonical="https://madsjulia.github.io/Mads.jl",
@@ -24,11 +36,19 @@ function _mads_html_format(; footer)
 		footer=footer,
 	)
 	try
-		return Documenter.Writers.HTMLWriter.HTML(; common_kwargs..., size_threshold_warn=512 * 1024, size_threshold=1024 * 1024)
+		return Documenter.Writers.HTMLWriter.HTML(; common_kwargs..., repolink_kwargs..., size_threshold_warn=512 * 1024, size_threshold=1024 * 1024)
 	catch err
 		# Older Documenter versions do not support size_threshold_* keywords.
 		if err isa MethodError
-			return Documenter.Writers.HTMLWriter.HTML(; common_kwargs...)
+			# Older Documenter versions may also not support `repolink`.
+			try
+				return Documenter.Writers.HTMLWriter.HTML(; common_kwargs..., repolink_kwargs...)
+			catch err2
+				if err2 isa MethodError
+					return Documenter.Writers.HTMLWriter.HTML(; common_kwargs...)
+				end
+				rethrow()
+			end
 		end
 		rethrow()
 	end
@@ -84,7 +104,21 @@ Create web documentation
 $(DocumentFunction.documentfunction(documentation_deploy))
 """
 function documentation_deploy(; deploy_config=Documenter.auto_detect_deploy_system())
-	Documenter.deploydocs(; root=joinpath(Mads.dir, "docs"), repo="github.com/madsjulia/Mads.jl.git", devbranch="master", target="build", deploy_config=deploy_config, push_preview=true)
+	Documenter.deploydocs(
+		; root=joinpath(Mads.dir, "docs"),
+		repo="github.com/madsjulia/Mads.jl.git",
+		branch="gh-pages",
+		devbranch="master",
+		devurl="dev",
+		versions=[
+			"stable" => "v^",
+			"v#.#",
+			"dev" => "dev",
+		],
+		target="build",
+		deploy_config=deploy_config,
+		push_preview=true,
+	)
 	return nothing
 end
 

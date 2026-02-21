@@ -11,3 +11,7 @@ MetaProgTools = "b1909ce5-9a67-5ea4-ba1b-9d85528f5779"
 ReusableFunctions = "afbf81f7-602f-5a4a-9a77-738a1b1188fe"
 RobustPmap = "27aeedcb-f738-516b-a0b8-3211cf1146e5"
 SVR = "22bb73d7-edb2-5785-ba1e-7d60d6824784"
+
+[compat]
+Documenter = "1"
+julia = "1.10"

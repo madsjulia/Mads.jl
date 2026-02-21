@@ -4,12 +4,14 @@ All the figures below are generated using `examples/ode/ode.jl`.
 
 ### ODE
 
-$$x''(t) = -\omega^2 * x(t) - k * x'(t)$$
+```math
+x''(t) = -\omega^2 x(t) - k x'(t)
+```
 
 #### Unknown ODE parameters
 
 * k
-* $\omega$
+* \\(\omega\\)
 
 #### Example ODE solution
 

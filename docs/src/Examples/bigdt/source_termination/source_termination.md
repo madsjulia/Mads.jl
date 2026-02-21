@@ -69,9 +69,11 @@ The likelihood functions differ in the variance.
 The set of possible concentrations at W2 is the set of concentrations whose relative error with respect to the model is less than the horizon of uncertainty.
 The set of variances is
 
-$ σ^2: \frac{σ^2_0}{10^h} ≤ σ^2 ≤ 10^h σ^2_0 $
+```math
+\{\sigma^2 : \frac{\sigma_0^2}{10^h} \le \sigma^2 \le 10^h \sigma_0^2\}
+```
 
-where $σ^2_0$ is the nominal variance (500; the nominal standard deviation $σ^2_0$ is ~22) and $h$ is the horizon of uncertainty.
+where \(\sigma_0^2\) is the nominal variance (500; the nominal standard deviation \(\sigma_0\) is ~22) and \(h\) is the horizon of uncertainty.
 As the index increases, these sets become bigger, allowing for more possibilities.
 
 ## Robustness
@@ -113,7 +115,7 @@ Their decision can also rely on
 ## Model
 
 Analytical solution of groundwater contaminant transport assuming Fickian dispersion (coded in Mads.jl).
-The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the $x$ and $y$ axes; the contaminant is released in 1985.
+The contaminant source is assumed to have a Gaussian shape in space; the rectangle sides in the figure at the beginning represent the standard deviation along the \(x\) and \(y\) axes; the contaminant is released in 1985.
 
 The presented analyses required ~4,000 forward model runs (~1,000 per scenario).
 The analysis took about 5 minutes in a serial mode using the Julia version of MADS.

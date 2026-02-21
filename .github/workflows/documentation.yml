@@ -6,6 +6,7 @@ on:
       - master # update to match your development branch (master, main, dev, trunk, ...)
     tags: '*'
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,10 +14,10 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.8'
+          version: '1.11'
       - name: Install dependencies
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: Build and deploy

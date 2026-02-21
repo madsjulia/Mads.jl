@@ -34,7 +34,6 @@
 [MADS](http://madsjulia.github.io/Mads.jl) documentation, including descriptions of all modules, functions, and variables, is available at:
 - [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
 - [ReadtheDocs](https://mads.readthedocs.io) (outdated)
-- [LANL](https://madsjulia.lanl.gov) (outdated).
 
 [MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
@@ -137,10 +136,7 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 
 * [mads @ GitLab](http://mads.gitlab.io)
 * [mads @ GitHub](http://madsjulia.github.io)
-* [mads @ LANL](http://mads.lanl.gov)
 * [SmartTensors.com](https://smarttensors.com)
 * [SmartTensors @ GitHub](https://smarttensors.github.io)
-* [SmartTensors @ LANL](https://smarttensors.lanl.gov)
 * [monty @ GitLab](http://monty.gitlab.io)
 * [monty @ GitHub](http://montyvesselinov.github.io)
-* [monty @ LANL](https://www.lanl.gov/orgs/ees/staff/monty)

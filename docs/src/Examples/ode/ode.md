@@ -8,12 +8,14 @@ The analyses below are performed using [examples/ode/ode.jl](https://github.com/
 
 Analyzed ODE looks like this:
 
-$x''(t) = -\omega^2 * x(t) - k * x'(t)$
+```math
+x''(t) = -\omega^2 x(t) - k x'(t)
+```
 
 Unknown ODE parameters:
 
 * k
-* $\omega$
+* omega ($\omega$)
 
 Example ODE solution:
 
@@ -22,7 +24,7 @@ Example ODE solution:
 For model parameters:
 
 * k = 0.1
-* $\omega$ = 0.2
+* omega ($\omega$) = 0.2
 
 ## Local sensitivity analysis
 
@@ -37,7 +39,7 @@ For model parameters:
 Probabilistic distributions of the prior parameter uncertainties are:
 
 * k = LogUniform(0.01, 0.1)
-* $\omega$ = Uniform(0.1, 0.3)
+* omega ($\omega$) = Uniform(0.1, 0.3)
 
 ## Bayesian sensitivity analysis
 
@@ -55,7 +57,7 @@ Observation errors are equal for all the sample locations with standard deviatio
 
 ![](ode-prior-k-100-spaghetti.png)
 
-#### *$\omega$* only
+#### omega ($\omega$) only
 
 ![](ode-prior-omega-100-spaghetti.png)
 
@@ -77,7 +79,7 @@ Note that now the parameter uncertainties are constrained by the observation dat
 
 ![](ode-posterior-k-1000-spaghetti.png)
 
-#### *$\omega$* only
+#### omega ($\omega$) only
 
 ![](ode-posterior-omega-1000-spaghetti.png)
 

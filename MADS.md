@@ -23,9 +23,7 @@
 
 * [mads.gitlab.io](http://mads.gitlab.io)
 * [madsjulia.github.io](http://madsjulia.github.io)
-* [mads.lanl.gov](http://mads.lanl.gov)
 * [monty.gitlab.io](http://monty.gitlab.io)
-* [ees.lanl.gov/monty](http://ees.lanl.gov/monty)
 
 ## Related Julia Packages
 
@@ -36,13 +34,9 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 
 ## Additional information:
 
-* web:
-    - [mads.lanl.gov](http://mads.lanl.gov) (Julia version of MADS)
-    - [madsc.lanl.gov](http://madsc.lanl.gov) (C version of MADS)
 * documentation:
     - [github](`http://madsjulia.github.io/Mads.jl`) (recommended)
     - [readthedocs](`http://mads.readthedocs.org`)
-    - [madsjulia.lanl.gov](http://madsjulia.lanl.gov) (might not be up-to-date)
 * repos:
     - [github](http://github.com/madsjulia/Mads.jl) (recommended)
     - [gitlab](http://gitlab.com/mads/Mads.jl) (might not be up-to-date)
@@ -51,4 +45,4 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
     - `git clone git@gitlab.com:mads/Mads.jl` (might not be up-to-date)
 * docker:
     - `docker run --interactive --tty montyvesselinov/madsjulia`
-* email: [mads@lanl.gov](mailto:mads@lanl.gov)
+* email: [info@envirtace.com](mailto:info@envirtace.com)

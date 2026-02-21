@@ -18,33 +18,35 @@ The method reveals the temporal and spatial footprints of the extracted features
 ### Tensor Decomposition
 
 A novel unsupervised Machine Learning based on Tensor Decomposition coupled with sparsity and nonnegativity constraints has been applied to extract the temporal and spatial footprints of the features in multi-dimensional datasets in the form of multi-way arrays or tensors.
-The decomposition (factorization) of a given tensor \\(X\\) is typically performed by minimization of the Frobenius norm:
+The decomposition (factorization) of a given tensor \(X\) is typically performed by minimization of the Frobenius norm:
 
-$$ \frac{1}{2} ||X-G \otimes_1 A_1 \otimes_2 A_2 \ldots \otimes_n A_n ||_F^2 $$
+```math
+\frac{1}{2}\lVert X-G \otimes_1 A_1 \otimes_2 A_2 \cdots \otimes_n A_n \rVert_F^2
+```
 
 where:
 
-* \\(n\\) is the dimensionality of the tensor \\(X\\)
-* \\(G\\) is a "mixing" core tensor
-* \\(A_1,A_2,\ldots,A_n\\) are "feature” factors (in the form of vectors or matrices)
-* \\(\otimes\\) is a tensor product applied to fold-in factors \\(A_1,A_2,\ldots,A_n\\)  in each of the tensor dimensions
+* \(n\) is the dimensionality of the tensor \(X\)
+* \(G\) is a "mixing" core tensor
+* \(A_1,A_2,\ldots,A_n\) are "feature” factors (in the form of vectors or matrices)
+* \(\otimes\) is a tensor product applied to fold-in factors \(A_1,A_2,\ldots,A_n\)  in each of the tensor dimensions
 
 <div style="text-align: center">
     <img src="../../figures/tucker-paper.png" alt="tucker" height="320"/>
 </div>
 
-The product \\(G \otimes_1 A_1 \otimes_2 A_2 \ldots \otimes_n A_n\\) is an estimate of \\(X\\) (\\(X_{est}\\)).
+The product \(G \otimes_1 A_1 \otimes_2 A_2 \ldots \otimes_n A_n\) is an estimate of \(X\) (\(X_{est}\)).
 
-The reconstruction error \\(X - X_{est}\\) is expected to be random uncorrelated noise.
+The reconstruction error \(X - X_{est}\) is expected to be random uncorrelated noise.
 
-\\(G\\) is a \\(n\\)-dimensional tensor with a size and a rank lower than the size and the rank of \\(X\\).
-The size of tensor \\(G\\) defines the number of extracted features (signals) in each of the tensor dimensions.
+\(G\) is a \(n\)-dimensional tensor with a size and a rank lower than the size and the rank of \(X\).
+The size of tensor \(G\) defines the number of extracted features (signals) in each of the tensor dimensions.
 
-The factor matrices \\(A_1,A_2,\ldots,A_n\\) represent the extracted features (signals) in each of the tensor dimensions.
+The factor matrices \(A_1,A_2,\ldots,A_n\) represent the extracted features (signals) in each of the tensor dimensions.
 The number of matrix columns equals the number of features in the respective tensor dimensions (if there is only 1 column, the particular factor is a vector).
-The number of matrix rows in each factor (matrix) \\(A_i\\) equals the size of tensor X in the respective dimensions.
+The number of matrix rows in each factor (matrix) \(A_i\) equals the size of tensor X in the respective dimensions.
 
-The elements of tensor \\(G\\) define how the features along each dimension (\\(A_1,A_2,\ldots,A_n\\)) are mixed to represent the original tensor \\(X\\).
+The elements of tensor \(G\) define how the features along each dimension (\(A_1,A_2,\ldots,A_n\)) are mixed to represent the original tensor \(X\).
 
 The Tensor Decomposition is commonly performed using [Candecomp/Parafac (CP)](https://en.wikipedia.org/wiki/Tensor_rank_decomposition) or [Tucker](https://en.wikipedia.org/wiki/Tucker_decomposition) decomposition models.
 
@@ -52,7 +54,7 @@ Some of the decomposition models can theoretically lead to unique solutions unde
 When these conditions are not satisfied, additional minimization constraints can assist the factorization.
 
 A popular approach is to add sparsity and nonnegative constraints. Sparsity constraints on the elements of G reduce the number of features and their mixing (by having as many zero entries as possible).
-Nonnegativity enforces parts-based representation of the original data which also allows the Tensor Decomposition results for \\(G\\) and \\(A_1,A_2,\ldots,A_n\\) to be easily interrelated [Cichocki et al, 2009](https://books.google.com/books?hl=en&lr=&id=KaxssMiWgswC&oi=fnd&pg=PR5&ots=Lta2adM6LV&sig=jNPDxjKlON1U3l46tZAYH92mvAE#v=onepage&q&f=false).
+Nonnegativity enforces parts-based representation of the original data which also allows the Tensor Decomposition results for \(G\) and \(A_1,A_2,\ldots,A_n\) to be easily interrelated [Cichocki et al, 2009](https://books.google.com/books?hl=en&lr=&id=KaxssMiWgswC&oi=fnd&pg=PR5&ots=Lta2adM6LV&sig=jNPDxjKlON1U3l46tZAYH92mvAE#v=onepage&q&f=false).
 
 Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decomposition) coupled with sparsity and nonnegativity constraints custom k-means clustering has been developed in [Julia](http://julialang.org)
 
@@ -80,7 +82,7 @@ Algorithms called **NMFk** and **NTFk** for Matrix/Tensor Factorization (Decompo
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
-Research papers are also available at [Google Scholar](http://scholar.google.com/citations?user=sIFHVvwAAAAJ&hl=en), [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov) and [Academia.edu](https://lanl.academia.edu/monty)
+Research papers are also available at [Google Scholar](http://scholar.google.com/citations?user=sIFHVvwAAAAJ&hl=en) and [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov)
 
 ### Presentations
 
@@ -91,7 +93,7 @@ Research papers are also available at [Google Scholar](http://scholar.google.com
 
 For more information, visit [monty.gitlab.io](http://monty.gitlab.io)
 
-Presentations are also available at [slideshare.net](https://www.slideshare.net/VelimirmontyVesselin), [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov) and [Academia.edu](https://lanl.academia.edu/monty)
+Presentations are also available at [slideshare.net](https://www.slideshare.net/VelimirmontyVesselin) and [ResearchGate](https://www.researchgate.net/profile/Velimir_Vesselinov)
 
 ### Videos
 
