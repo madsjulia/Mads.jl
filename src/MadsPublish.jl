@@ -9,6 +9,7 @@ function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(m
 	for i in modules_load
 		Core.eval(Main, :(@Mads.tryimportmain $(Symbol(i))))
 	end
+	footer = "[![EnviTrace](/Mads.jl/dev/assets/Envitrace-Logo-Color-gray.svg)](https://envitrace.com/) Maintained and supported by EnviTrace LLC, Santa Fe, New Mexico, USA. Powered by [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl) and the [Julia Programming Language](https://julialang.org/)."
 	pages=[
         "MADS" => "index.md",
         "Getting Started" => "Getting_Started.md",
@@ -27,7 +28,7 @@ function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(m
 		"Modules" => "Modules.md",
 		"Testing" => "Testing.md"
     ]
-	Documenter.makedocs(; root=joinpath(Mads.dir, "docs"), sitename="Mads", authors="Velimir (monty) Vesselinov", pages=pages, repo="https://github.com/madsjulia/Mads.jl/blob/{commit}{path}#{line}", format=Documenter.Writers.HTMLWriter.HTML(; prettyurls=false, canonical="https://madsjulia.github.io/Mads.jl", sidebar_sitename=false, assets=["assets/favicon.ico"], size_threshold_warn=512 * 1024, size_threshold=1024 * 1024), doctest=true, modules=modules_doc, clean=true, warnonly=[:missing_docs])
+	Documenter.makedocs(; root=joinpath(Mads.dir, "docs"), sitename="Mads", authors="Velimir (monty) Vesselinov", pages=pages, repo="https://github.com/madsjulia/Mads.jl/blob/{commit}{path}#{line}", format=Documenter.Writers.HTMLWriter.HTML(; prettyurls=false, canonical="https://madsjulia.github.io/Mads.jl", sidebar_sitename=false, assets=["assets/favicon.ico", Documenter.HTMLWriter.RawHTMLHeadContent("<link rel=\"icon\" type=\"image/svg+xml\" href=\"/Mads.jl/dev/assets/logo.svg\">")], footer=footer, size_threshold_warn=512 * 1024, size_threshold=1024 * 1024), doctest=true, modules=modules_doc, clean=true, warnonly=[:missing_docs])
 	return nothing
 end
 
