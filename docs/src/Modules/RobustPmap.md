@@ -1,6 +1,6 @@
 # RobustPmap.jl
 
-RobustPmap.jl perfroms robust pmap (parallel map) calls for efficient parallelization and high-performance computing.
+RobustPmap.jl performs robust pmap (parallel map) calls for efficient parallelization and high-performance computing.
 
 RobustPmap.jl functions:
 

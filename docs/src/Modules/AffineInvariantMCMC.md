@@ -1,6 +1,6 @@
 # AffineInvariantMCMC.jl
 
-AffineInvariantMCMC.jl perfroms Bayesian sampling using Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee).
+AffineInvariantMCMC.jl performs Bayesian sampling using Affine Invariant Markov chain Monte Carlo (MCMC) Ensemble sampler (aka Emcee).
 
 AffineInvariantMCMC.jl functions:
 

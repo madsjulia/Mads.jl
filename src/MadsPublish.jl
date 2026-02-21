@@ -156,6 +156,13 @@ function documentation_deploy_local(; build::Bool=true, remote::AbstractString="
 		_run_git("worktree", "add", worktree_dir, "$remote/$branch"; dir=root)
 	end
 
+	# Ensure the worktree is synced to the current remote tip.
+	# This prevents recurring non-fast-forward push rejections when the remote
+	# gh-pages branch has moved since the last local deploy.
+	_run_git("fetch", remote, branch; dir=worktree_dir)
+	_run_git("reset", "--hard", "$remote/$branch"; dir=worktree_dir)
+	_run_git("clean", "-fdx"; dir=worktree_dir)
+
 	# Mirror build output into gh-pages/<target_subdir>
 	target_dir = joinpath(worktree_dir, target_subdir)
 	if isdir(target_dir)

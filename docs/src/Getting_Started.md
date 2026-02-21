@@ -80,11 +80,11 @@ function madsmodelrun(parameters::AbstractDict) # model run
 end
 ```
 
-The analyzed models can be much more complex. Yhey do not need to be Julia functions. They can be complex external numerical simulators. In this case, MADS provides various approaches for [Model Coupling](https://madsjulia.github.io/Mads.jl/dev/Model_Coupling.html).
+The analyzed models can be much more complex. They do not need to be Julia functions. They can be complex external numerical simulators. In this case, MADS provides various approaches for [Model Coupling](https://madsjulia.github.io/Mads.jl/dev/Model_Coupling.html).
 
 ## Execution
 
-Once the MADS problem dictionary is loaded, you can execute various MADS funcions:
+Once the MADS problem dictionary is loaded, you can execute various MADS functions:
 
 - List parameters and associated information:
 
@@ -112,7 +112,7 @@ efast_results = Mads.efast(madsdata)
 - Perform calibration (inverse analysis) of the model parameters to reproduce the model observations using Levenberg-Marquardt optimization:
 
 ```julia
-optparam, iaresults = Mads.calibrate(madsdata)
+optparam, results = Mads.calibrate(madsdata)
 ```
 
 - Perform forward model simulation based on the parameter values `optparam` estimated by the inverse analyses above.

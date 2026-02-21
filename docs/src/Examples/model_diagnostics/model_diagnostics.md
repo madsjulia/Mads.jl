@@ -69,7 +69,7 @@ They can be also called calibration targets.
 
 For each observation (calibration target), we specify observation weight (i.e., the inverse of measurement standard deviations).
 
-Zero observation weight implies that the observation is unknown (potentially occuring in the future) and will be estimated (predicted) by the developed model.
+Zero observation weight implies that the observation is unknown (potentially occurring in the future) and will be estimated (predicted) by the developed model.
 
 Acceptable ranges are defined for each observation representing observation uncertainties.
 
@@ -458,7 +458,7 @@ chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=100
 
 The results above capture 10,000 equally likely parameter combinations.
 
-The parameter combintations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
+The parameter combinations represent the global sensitivity and uncertainty of the model parameters and associated predictions.
 
 A forward run based on this set (`chain`) is executed below:
 
