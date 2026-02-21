@@ -1,3 +1,13 @@
 [deps]
+AffineInvariantMCMC = "a0f608ac-68d0-5108-ad9a-0cdca73324f3"
+Anasol = "fd9e7046-df80-5870-8bf6-b6b2342464ec"
+BIGUQ = "7f9c7709-75fb-5397-acba-f980073965f6"
+DocumentFunction = "e1f3b4f0-2dc4-57d3-83f7-d4b7faf3b05b"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+GeostatInversion = "acd30bff-8734-59b1-86d1-c3ef2efb63d6"
+Kriging = "6133562b-a8e8-5ea3-954b-37642b766dad"
 Mads = "d6bdc55b-bd94-5012-933c-1f73fc2ee992"
+MetaProgTools = "b1909ce5-9a67-5ea4-ba1b-9d85528f5779"
+ReusableFunctions = "afbf81f7-602f-5a4a-9a77-738a1b1188fe"
+RobustPmap = "27aeedcb-f738-516b-a0b8-3211cf1146e5"
+SVR = "22bb73d7-edb2-5785-ba1e-7d60d6824784"

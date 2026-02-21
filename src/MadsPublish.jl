@@ -27,7 +27,7 @@ function documentation_create(modules_doc=madsmodulesdoc, modules_load=string.(m
 		"Modules" => "Modules.md",
 		"Testing" => "Testing.md"
     ]
-	Documenter.makedocs(; root=joinpath(Mads.dir, "docs"), sitename="Mads", authors="Velimir (monty) Vesselinov", pages=pages, repo="https://github.com/madsjulia/Mads.jl/blob/{commit}{path}#{line}", format=Documenter.Writers.HTMLWriter.HTML(; prettyurls=false, canonical="https://madsjulia.github.io/Mads.jl", sidebar_sitename=false, assets=["assets/favicon.ico"]), doctest=true, modules=modules_doc, clean=true)
+	Documenter.makedocs(; root=joinpath(Mads.dir, "docs"), sitename="Mads", authors="Velimir (monty) Vesselinov", pages=pages, repo="https://github.com/madsjulia/Mads.jl/blob/{commit}{path}#{line}", format=Documenter.Writers.HTMLWriter.HTML(; prettyurls=false, canonical="https://madsjulia.github.io/Mads.jl", sidebar_sitename=false, assets=["assets/favicon.ico"], size_threshold_warn=512 * 1024, size_threshold=1024 * 1024), doctest=true, modules=modules_doc, clean=true, warnonly=[:missing_docs])
 	return nothing
 end
 
