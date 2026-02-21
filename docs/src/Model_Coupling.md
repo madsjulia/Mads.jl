@@ -28,8 +28,8 @@ The available options for writing model inputs and reading model outputs are as 
 
 ## Options for writing model inputs:
 
-- `Templates` : template files for writing model input files as defined [here](https://https://madsjulia.github.io/Mads.jl/#manual)
-- `ASCIIParameters` : model parameters written in a ASCII file
+- `Templates` : template files for writing model input files as defined [here](https://madsjulia.github.io/Mads.jl/manual)
+- `ASCIIParameters` : model parameters written in an ASCII file
 - `JLDParameters` : model parameters written in a JLD file
 - `JLD2Parameters` : model parameters written in a JLD2 file
 - `YAMLParameters` : model parameters written in a YAML file
@@ -38,7 +38,7 @@ The available options for writing model inputs and reading model outputs are as 
 ## Options for reading model outputs:
 
 - `Instructions` : instruction files for reading model output files as defined [here](https://madsjulia.github.io/Mads.jl/manual)
-- `ASCIIPredictions` : model predictions read from a ASCII file
+- `ASCIIPredictions` : model predictions read from an ASCII file
 - `JLDPredictions` : model predictions read from a JLD file
 - `JLD2Predictions` : model predictions read from a JLD2 file
 - `YAMLPredictions` : model predictions read from a YAML file

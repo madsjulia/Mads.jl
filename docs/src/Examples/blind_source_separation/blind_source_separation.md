@@ -1,27 +1,27 @@
 # Blind Source Separation using Unsupervised Machine Learning
 
-[MADS](http://madsjulia.github.io/Mads.jl) is applied to perform Unsupervised Machine Learning and extract (separate) mixed signals (signautes) present in synthetic datasets.
+[MADS](http://madsjulia.github.io/Mads.jl) is used to perform unsupervised machine learning and extract (separate) mixed signals (signatures) present in synthetic datasets.
 
-Frequently, there are several different physical phenomena, processes, or mechanisms that may can cause different transients in the observed data. There transients may have different spatiotemporal patterns.
+Frequently, several different physical phenomena, processes, or mechanisms can cause transients in the observed data. These transients may have different spatiotemporal patterns.
 
-The discovery of the hidden (latent) signatures (sources/signals) caused by the underlaying physical processes can be challenging.
+The discovery of the hidden (latent) signatures (sources/signals) caused by the underlying physical processes can be challenging.
 
 For example, in the case of water-level (hydraulic pressure) data, these might be barometric pressure fluctuations, tidal effects, pumping effects, etc.
 In the case of geochemical contamination problems, these may represent a mixture of different groundwater types (contaminant sources) with different initial geochemical compositions.
 
-The separation of the different signals observed in the data is important for many tasks including site characterization, model conceptualization and setup.
+The separation of the different signals observed in the data is important for many tasks, including site characterization, model conceptualization, and setup.
 
-Below a series of synthetic examples are presented how transient data can be used to identify (separate/unmix) the original signals.
+Below, we present a series of synthetic examples showing how transient data can be used to identify (separate/unmix) the original signals.
 
 More complicated Blind Source Separation (BSS) analyses can be found in our papers (see references below).
 
-All the analyses presented below using [`examples/blind_source_separation.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/blind_source_separation/blind_source_separation.jl).
+All the analyses presented below are performed using [`examples/blind_source_separation.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/blind_source_separation/blind_source_separation.jl).
 
 See also the related [Jupyter notebook](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/blind_source_separation/blind_source_separation.ipynb).
 
 ## Synthetic Sources (Case 1)
 
-Here, synthetic sources are generated using sine functions and random noise
+Here, synthetic sources are generated using sine functions and random noise.
 
 ### Original signals (assumed unknown)
 
@@ -33,7 +33,7 @@ Let us assume the transients (signals) associated with these 3 unknown sources l
 ### Mixed signals observed at 4 different monitoring locations (representing 4 different observation streams)
 
 Let us assume that the transients of the original unknown sources are observed as a mixture at 4 different monitoring locations (observation points).
-Let us assume that the mixtures looks like this:
+Let us assume that the mixtures look like this:
 
 ![](sig_mixed_observations.svg)
 

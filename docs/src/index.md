@@ -16,4 +16,4 @@
 * Model Reduction and Surrogate Modeling
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) analyses utilizes adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
+[MADS](http://madsjulia.github.io/Mads.jl) analyses utilize adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.

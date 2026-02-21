@@ -2,7 +2,7 @@
 
 [MADS](http://madsjulia.github.io/Mads.jl) is applied to solve a general groundwater contamination problem using model inversion.
 
-[MADS](http://madsjulia.github.io/Mads.jl) includes analytical solver called [Anasol.jl](http://madsjulia.github.io/Anasol.jl) to solve the groundwater contamination transport in a aquifer.
+[MADS](http://madsjulia.github.io/Mads.jl) includes an analytical solver called [Anasol.jl](http://madsjulia.github.io/Anasol.jl) to solve the groundwater contamination transport in an aquifer.
 
 ## Problem setup
 
