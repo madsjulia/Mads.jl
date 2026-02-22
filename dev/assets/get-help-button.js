@@ -31,10 +31,19 @@
 		var helpUrl = versionRoot.replace(/\/$/, "") + "/index.html#Getting-help";
 
 		var a = document.createElement("a");
-		a.className = "button is-link is-rounded docs-help-fab";
+		a.className = "button is-rounded docs-help-fab";
 		a.href = helpUrl;
 		a.setAttribute("aria-label", "Get help");
+		a.setAttribute("title", "Get help");
 		a.textContent = "Get help";
+
+		// Inline positioning so it stays on the right even if CSS is overridden
+		// or a stale build is missing the stylesheet.
+		a.style.position = "fixed";
+		a.style.right = "1rem";
+		a.style.left = "auto";
+		a.style.bottom = "1rem";
+		a.style.zIndex = "1000";
 
 		document.body.appendChild(a);
 	}
