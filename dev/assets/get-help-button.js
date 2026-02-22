@@ -31,7 +31,7 @@
 		var helpUrl = versionRoot.replace(/\/$/, "") + "/index.html#Getting-help";
 
 		var a = document.createElement("a");
-		a.className = "button is-rounded docs-help-fab";
+		a.className = "button is-success is-rounded docs-help-fab";
 		a.href = helpUrl;
 		a.setAttribute("aria-label", "Get help");
 		a.setAttribute("title", "Get help");
@@ -40,7 +40,8 @@
 		// Inline positioning so it stays on the right even if CSS is overridden
 		// or a stale build is missing the stylesheet.
 		a.style.position = "fixed";
-		a.style.right = "1rem";
+		// Negative right value intentionally creates the "clipped" edge look.
+		a.style.right = "-0.75rem";
 		a.style.left = "auto";
 		a.style.bottom = "1rem";
 		a.style.zIndex = "1000";

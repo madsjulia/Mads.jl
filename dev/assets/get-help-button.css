@@ -6,7 +6,8 @@ No color tokens here: we rely on Documenter's existing button styling.
 a.docs-help-fab {
 	position: fixed;
 	left: auto !important;
-	right: 1rem !important;
+	/* Negative right value intentionally creates the "clipped" edge look. */
+	right: -0.75rem !important;
 	bottom: 1rem;
 	z-index: 1000;
 	text-decoration: none;
