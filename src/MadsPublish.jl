@@ -165,6 +165,9 @@ function documentation_deploy_local(; build::Bool=true, remote::AbstractString="
 
 	# Mirror build output into gh-pages/<target_subdir>
 	target_dir = joinpath(worktree_dir, target_subdir)
+	if ispath(target_dir) && !isdir(target_dir)
+		rm(target_dir; force=true)
+	end
 	if isdir(target_dir)
 		rm(target_dir; recursive=true, force=true)
 	end
