@@ -26,18 +26,18 @@ html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuc
 
 html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar,
 html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-navbar {
-	background-color: #260545 !important;
+	background-color: #b9a9c9 !important;
 }
 
 /* Dark mode */
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) body,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter {
-	background-color: #1f0934 !important;
+	background-color: #130124 !important;
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-navbar {
-	background-color: #260545 !important;
+	background-color: #160326 !important;
 }
 
 /* Sidebar "control panel" accordion (collapsible menu items) */
@@ -125,14 +125,14 @@ html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuc
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-background {
-	background-color: rgba(106, 1, 163, 0.55) !important;
+	background-color: rgba(20, 1, 30, 0.55) !important;
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-head,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-body,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-foot {
-	background-color: #974ae0 !important;
+	background-color: #150029 !important;
 }
 
 /* Sidebar logo label */
