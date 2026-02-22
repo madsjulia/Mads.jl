@@ -41,7 +41,7 @@
 		// or a stale build is missing the stylesheet.
 		a.style.position = "fixed";
 		// Negative right value intentionally creates the "clipped" edge look.
-		a.style.right = "-0.95rem";
+		a.style.right = "-5rem";
 		a.style.left = "auto";
 		a.style.bottom = "1rem";
 		a.style.zIndex = "1000";
