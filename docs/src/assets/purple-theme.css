@@ -158,3 +158,10 @@ html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-m
 	font-weight: 600;
 	opacity: 0.95;
 }
+
+/* Make the sidebar logo a bit smaller */
+#documenter .docs-sidebar a.docs-logo img {
+	max-height: 56px;
+	width: auto;
+	height: auto;
+}

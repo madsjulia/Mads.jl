@@ -29,6 +29,8 @@ function _mads_html_format(; footer)
 		sidebar_sitename=false,
 		assets=[
 			"assets/favicon.ico",
+			"assets/get-help-button.css",
+			"assets/get-help-button.js",
 			"assets/envitrace-footer.css",
 			"assets/purple-theme.css",
 			"assets/accordion-toggle.js",
