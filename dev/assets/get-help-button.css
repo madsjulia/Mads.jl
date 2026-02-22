@@ -7,7 +7,7 @@ a.docs-help-fab {
 	position: fixed;
 	left: auto !important;
 	/* Negative right value intentionally creates the "clipped" edge look. */
-	right: -5rem !important;
+	right: -1rem !important;
 	bottom: 1rem;
 	z-index: 1000;
 	text-decoration: none;
