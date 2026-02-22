@@ -1,0 +1,19 @@
+/* Floating "Get help" button.
+
+No color tokens here: we rely on Documenter's existing button styling.
+*/
+
+a.docs-help-fab {
+	position: fixed;
+	left: auto !important;
+	right: 1rem !important;
+	bottom: 1rem;
+	z-index: 1000;
+	text-decoration: none;
+}
+
+/* Keep it accessible with focus visible. */
+a.docs-help-fab:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
