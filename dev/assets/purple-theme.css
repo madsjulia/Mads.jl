@@ -37,7 +37,7 @@ html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-m
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-navbar {
-	background-color: #130123 !important;
+	background-color: #0b0114 !important;
 }
 
 /* Sidebar "control panel" accordion (collapsible menu items) */
