@@ -1,0 +1,160 @@
+/*
+Purple background overrides for Documenter.
+
+Documenter 0.27 uses a primary (light) theme that is always enabled, and a dark
+theme which is enabled by adding `theme--documenter-dark` to the <html> element.
+
+We scope light rules to "not dark" and dark rules to the dark class.
+*/
+
+/*
+Theme scoping note:
+
+Documenter uses `theme--<theme-name>` on the <html> element only for non-primary
+themes. The primary theme (usually `documenter-light`) results in an empty
+className, so `html.theme--documenter-light` generally does not match.
+
+To stay compatible if other teams pick different themes, we treat this set as
+"dark": documenter-dark + the Catppuccin dark variants.
+*/
+
+/* Light mode (default) */
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) body,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter {
+	background-color: #c6b6f1 !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-navbar {
+	background-color: #260545 !important;
+}
+
+/* Dark mode */
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) body,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter {
+	background-color: #1f0934 !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-navbar {
+	background-color: #260545 !important;
+}
+
+/* Sidebar "control panel" accordion (collapsible menu items) */
+
+/* Light mode */
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu {
+	border-top-color: rgba(31, 9, 52, 0.18) !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu .tocitem,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu .tocitem:hover {
+	background-color: transparent !important;
+	color: #fff !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu a.tocitem:hover,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu label.tocitem:hover {
+	background-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu li.is-active {
+	background-color: rgba(0, 0, 0, 0.18) !important;
+	border-top-color: rgba(31, 9, 52, 0.18) !important;
+	border-bottom-color: rgba(31, 9, 52, 0.18) !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover {
+	background-color: transparent !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu ul.internal {
+	border-top-color: rgba(31, 9, 52, 0.18) !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter .docs-sidebar ul.docs-menu>li li {
+	border-left-color: rgba(31, 9, 52, 0.18) !important;
+}
+
+/* Dark mode */
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu {
+	border-top-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu .tocitem,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu .tocitem:hover {
+	background-color: transparent !important;
+	color: #fff !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu a.tocitem:hover,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu label.tocitem:hover {
+	background-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu li.is-active {
+	background-color: rgba(0, 0, 0, 0.18) !important;
+	border-top-color: rgba(255, 255, 255, 0.14) !important;
+	border-bottom-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu li.is-active .tocitem:hover {
+	background-color: transparent !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu ul.internal {
+	border-top-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar ul.docs-menu>li li {
+	border-left-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Settings "control panel" (modal) */
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter-settings .modal-background {
+	background-color: rgba(174, 154, 193, 0.35) !important;
+}
+
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter-settings .modal-card,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter-settings .modal-card-head,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter-settings .modal-card-body,
+html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha)) #documenter-settings .modal-card-foot {
+	background-color: #f1ecff !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-background {
+	background-color: rgba(106, 1, 163, 0.55) !important;
+}
+
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-head,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-body,
+html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card-foot {
+	background-color: #974ae0 !important;
+}
+
+/* Sidebar logo label */
+
+#documenter .docs-sidebar a.docs-logo {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+/* Hide the default single-line site name so we can render a 2-line label */
+#documenter .docs-sidebar a.docs-logo > span {
+	display: none;
+}
+
+#documenter .docs-sidebar a.docs-logo::after {
+	content: "MADS\A Model Analyses and Decision Support";
+	white-space: pre-line;
+	color: #fff;
+	line-height: 1.15;
+	font-size: 0.9rem;
+	font-weight: 600;
+	opacity: 0.95;
+}
