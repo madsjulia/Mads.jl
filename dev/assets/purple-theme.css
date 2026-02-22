@@ -32,12 +32,12 @@ html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuc
 /* Dark mode */
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) body,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter {
-	background-color: #130124 !important;
+	background-color: #10011e !important;
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-sidebar,
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter .docs-navbar {
-	background-color: #160326 !important;
+	background-color: #130123 !important;
 }
 
 /* Sidebar "control panel" accordion (collapsible menu items) */
@@ -125,7 +125,7 @@ html:not(:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuc
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-background {
-	background-color: rgba(20, 1, 30, 0.55) !important;
+	background-color: rgba(22, 1, 33, 0.732) !important;
 }
 
 html:is(.theme--documenter-dark, .theme--catppuccin-frappe, .theme--catppuccin-macchiato, .theme--catppuccin-mocha) #documenter-settings .modal-card,
