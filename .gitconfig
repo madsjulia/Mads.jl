@@ -1,10 +1,3 @@
-[core]
-	bare = false
-	repositoryformatversion = 0
-	filemode = true
-	ignorecase = true
-	precomposeunicode = true
-	logallrefupdates = true
 [remote "gl"]
 	url = https://gitlab.com/mads/Mads.jl.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
@@ -20,5 +13,3 @@
 [branch "master"]
 	remote = origin
 	merge = refs/heads/master
-[pull]
-	rebase = false

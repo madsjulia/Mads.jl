@@ -35,8 +35,8 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 ## Additional information:
 
 * documentation:
-    - [github](`http://madsjulia.github.io/Mads.jl`) (recommended)
-    - [readthedocs](`http://mads.readthedocs.org`)
+    - [github](http://madsjulia.github.io/Mads.jl) (recommended)
+    - [readthedocs](https://mads.readthedocs.io)
 * repos:
     - [github](http://github.com/madsjulia/Mads.jl) (recommended)
     - [gitlab](http://gitlab.com/mads/Mads.jl) (might not be up-to-date)

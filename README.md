@@ -33,7 +33,7 @@
 
 [MADS](http://madsjulia.github.io/Mads.jl) documentation, including descriptions of all modules, functions, and variables, is available at:
 - [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
-- [ReadtheDocs](https://mads.readthedocs.io) (outdated)
+- [ReadtheDocs](https://mads.readthedocs.io)
 
 [MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
 
