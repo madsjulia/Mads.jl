@@ -1,5 +1,5 @@
 [codespell]
 quiet-level = 3
 check-hidden =
-skip = *.svg,*.png,*.jpg,*.jpeg,*.gif,*.ico,*.pdf,*.jld2,*.jls,*.jld,*.zip,*.tar,*.gz,docs/_gh-pages/*,docs/build/*,Manifest.toml
+skip = *.svg,*.png,*.jpg,*.jpeg,*.gif,*.ico,*.pdf,*.jld2,*.jls,*.jld,*.zip,*.tar,*.gz, docs/_gh-pages/*,docs/build/*,Manifest.toml
 ignore-words-list = burnin

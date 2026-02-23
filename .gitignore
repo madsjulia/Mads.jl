@@ -4,6 +4,7 @@ syntax: glob
 Manifest.toml
 config
 docs/build
+docs/_gh-pages/
 site
 public
 *.log
