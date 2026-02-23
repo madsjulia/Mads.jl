@@ -31,6 +31,7 @@
 
 - [GitHub Discussions](https://github.com/madsjulia/Mads.jl/discussions) (questions, support)
 - [GitHub Issues](https://github.com/madsjulia/Mads.jl/issues) (bugs, feature requests)
+- Support email: <a class="js-obfuscated-email" data-u="support" data-d="envitrace.com" href="#" rel="nofollow">support [at] envitrace [dot] com</a>
 
 ## Developers
 

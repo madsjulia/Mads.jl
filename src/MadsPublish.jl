@@ -31,6 +31,7 @@ function _mads_html_format(; footer)
 			"assets/favicon.ico",
 			"assets/get-help-button.css",
 			"assets/get-help-button.js",
+			"assets/support-email.js",
 			"assets/envitrace-footer.css",
 			"assets/purple-theme.css",
 			"assets/accordion-toggle.js",
