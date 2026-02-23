@@ -10,15 +10,15 @@ build:
     install:
       # Install Julia using 'jill' (Python).
       - python -m pip install --user --upgrade pip jill
-      - python -m jill install 1.10.7 --confirm
-      - ~/.local/bin/julia --version
+      - python -m jill install 1.10.7 --confirm --install_dir $HOME/julia
+      - $HOME/julia/julia-1.10.7/bin/julia --version
 
       # Instantiate the docs environment.
-      - ~/.local/bin/julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+      - $HOME/julia/julia-1.10.7/bin/julia --project=docs -e 'using Pkg; Pkg.instantiate()'
     build:
       html:
         # Build docs (no deployment).
-        - ~/.local/bin/julia --project=docs docs/make-rtd.jl
+        - $HOME/julia/julia-1.10.7/bin/julia --project=docs docs/make-rtd.jl
 
         # Publish to the location RTD expects.
         - mkdir -p $READTHEDOCS_OUTPUT/html/
