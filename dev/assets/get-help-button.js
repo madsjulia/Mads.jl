@@ -58,13 +58,36 @@
 		return parts.slice(0, versionIndex + 1).join("/") || "/";
 	}
 
+	function getDocumenterBaseURL() {
+		// Documenter defines `documenterBaseURL` on every page.
+		// It is the relative path from the current page to the docs root.
+		// This is robust for both GitHub Pages and local file:// viewing.
+		try {
+			if (typeof documenterBaseURL === "string" && documenterBaseURL.length > 0) {
+				return documenterBaseURL;
+			}
+		} catch (e) {
+			// ignore
+		}
+		return null;
+	}
+
+	function getHelpUrl() {
+		var base = getDocumenterBaseURL();
+		if (base) {
+			return base.replace(/\/$/, "") + "/index.html#Getting-help";
+		}
+		// Fallback: try to guess based on version root.
+		var versionRoot = findVersionRootPathname();
+		return versionRoot.replace(/\/$/, "") + "/index.html#Getting-help";
+	}
+
 	function ensureHelpButton() {
 		if (!document || !document.body) return;
 		if (document.querySelector("a.docs-help-fab")) return;
 
-		var versionRoot = findVersionRootPathname();
 		// Documenter keeps capitalization in heading ids (e.g. "Getting-help").
-		var helpUrl = versionRoot.replace(/\/$/, "") + "/index.html#Getting-help";
+		var helpUrl = getHelpUrl();
 
 		var a = document.createElement("a");
 		a.className = "button is-success is-rounded docs-help-fab";
@@ -83,17 +106,11 @@
 		a.style.zIndex = "1000";
 
 		a.addEventListener("click", function (ev) {
-			// If we're already on index.html, a normal anchor navigation may not scroll
-			// (e.g. hash already set). Force it.
-			var pathname = window.location && window.location.pathname ? window.location.pathname : "";
-			var onIndex = /\/index\.html$/.test(pathname) || /\/(dev|stable|v\d[^\/]*)\/?$/.test(pathname);
-			if (!onIndex) return;
-
-			var id = findFirstExistingId(HELP_IDS) || "Getting-help";
+			// If the section exists on the current page, force-scroll.
+			var id = findFirstExistingId(HELP_IDS);
+			if (!id) return;
 			ev.preventDefault();
-			if (window.location.hash !== "#" + id) {
-				window.location.hash = "#" + id;
-			}
+			if (window.location.hash !== "#" + id) window.location.hash = "#" + id;
 			scrollToId(id);
 		});
 
