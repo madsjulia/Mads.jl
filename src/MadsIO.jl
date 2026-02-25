@@ -199,81 +199,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			if all(ismissing.(v))
 				println("All values for parameter/column '$(param)' are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
 			else
-				unique_types = unique(typeof.(v))
-				if all(unique_types .<: Union{Missing, AbstractFloat})
-					mask_missing = ismissing.(v)
-					if usenans
-						v[mask_missing] .= floattype(NaN)
-						v = convert(Vector{floattype}, v)
-					else
-						v[mask_missing] .= missing
-						v = convert(Vector{Union{Missing, floattype}}, v)
-					end
-				elseif all(unique_types .<: Union{Missing, Integer})
-					mask_missing = ismissing.(v)
-					if convertintegers
-						v[mask_missing] .= floattype(NaN)
-						v = convert(Vector{floattype}, v)
-					else
-						v[mask_missing] .= missing
-						v = convert(Vector{Union{Missing, inttype}}, v)
-					end
-				elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
-					v[ismissing.(v)] .= floattype(NaN)
-					v = convert.(floattype, v)
-				elseif all(unique_types .<: Union{Missing, AbstractString})
-					v[isnull.(v)] .= ""
-					v = convert(Vector{String}, v)
-				elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
-					convertype = convertintegers ? inttype : floattype
-					mask_null = isnull.(v)
-					parsingerror = false
-					for i in eachindex(v)
-						if typeof(v[i]) <: AbstractString
-							if !mask_null[i]
-								try
-									v[i] = parse(convertype, v[i])
-								catch
-									parsingerror = true
-								end
-							end
-						end
-					end
-					if parsingerror
-						println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
-						v[mask_null] .= ""
-						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
-					else
-						if convertintegers
-							v[mask_null] .= floattype(NaN)
-						else
-							v[mask_null] .= ""
-						end
-						v = convert(Vector{convertype}, v)
-					end
-				elseif all(unique_types .<: Union{Missing, AbstractFloat, AbstractString})
-					mask_null = isnull.(v)
-					v[mask_null] .= floattype(NaN)
-					parsingerror = false
-					for i in eachindex(v)
-						if typeof(v[i]) <: AbstractString && !mask_null[i]
-							try
-								v[i] = parse(floattype, v[i])
-							catch
-								parsingerror = true
-							end
-						end
-					end
-					if parsingerror
-						println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
-						v = convert(Vector{Union{unique(typeof.(v))...}}, v)
-					else
-						v = convert(Vector{floattype}, v)
-					end
-				else
-					println("Parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
-					v = convert(Vector{Union{unique(typeof.(v))...}}, v)
-				end
+				v = check_vector(v, param, floattype, inttype, convertintegers, usenans)
 				if dataframe
 					df[!, param_name] = v
 				else
@@ -285,6 +211,95 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 	return df
 end
 
+function check_vector(v::AbstractVector, param::AbstractString, floattype::DataType, inttype::DataType, convertintegers::Bool, usenans::Bool)::Vector
+	if all(ismissing.(v))
+		println("All values for parameter/column '$(param)' are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
+		v .= NaN
+		v = convert(Vector{floattype}, v)
+	elseif all(isnothing.(v))
+		println("All values for parameter/column '$(param)' are $(Base.text_colors[:yellow])nothing$(Base.text_colors[:normal])!")
+		v .= NaN
+		v = convert(Vector{floattype}, v)
+	else
+		unique_types = unique(typeof.(v))
+		if all(unique_types .<: Union{Missing, AbstractFloat})
+			mask_missing = ismissing.(v)
+			if usenans
+				v[mask_missing] .= floattype(NaN)
+				v = convert(Vector{floattype}, v)
+			else
+				v[mask_missing] .= missing
+				v = convert(Vector{Union{Missing, floattype}}, v)
+			end
+		elseif all(unique_types .<: Union{Missing, Integer})
+			mask_missing = ismissing.(v)
+			if convertintegers
+				v[mask_missing] .= floattype(NaN)
+				v = convert(Vector{floattype}, v)
+			else
+				v[mask_missing] .= missing
+				v = convert(Vector{Union{Missing, inttype}}, v)
+			end
+		elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
+			v[ismissing.(v)] .= floattype(NaN)
+			v = convert.(floattype, v)
+		elseif all(unique_types .<: Union{Missing, AbstractString})
+			v[isnull.(v)] .= ""
+			v = convert(Vector{String}, v)
+		elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
+			convertype = convertintegers ? inttype : floattype
+			mask_null = isnull.(v)
+			parsingerror = false
+			for i in eachindex(v)
+				if typeof(v[i]) <: AbstractString
+					if !mask_null[i]
+						try
+							v[i] = parse(convertype, v[i])
+						catch
+							parsingerror = true
+						end
+					end
+				end
+			end
+			if parsingerror
+				println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+				v[mask_null] .= ""
+				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+			else
+				if convertintegers
+					v[mask_null] .= floattype(NaN)
+				else
+					v[mask_null] .= ""
+				end
+				v = convert(Vector{convertype}, v)
+			end
+		elseif all(unique_types .<: Union{Missing, AbstractFloat, AbstractString})
+			mask_null = isnull.(v)
+			v[mask_null] .= floattype(NaN)
+			parsingerror = false
+			for i in eachindex(v)
+				if typeof(v[i]) <: AbstractString && !mask_null[i]
+					try
+						v[i] = parse(floattype, v[i])
+					catch
+						parsingerror = true
+					end
+				end
+			end
+			if parsingerror
+				println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+			else
+				v = convert(Vector{floattype}, v)
+			end
+		else
+			println("Parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
+			v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+		end
+	end
+	return v
+end
+
 function load_data(filename::AbstractString; dataset::AbstractString="", load_first::Bool=true, kw...)::Union{DataFrames.DataFrame, AbstractArray}
 	if !isfile(filename)
 		@warn("File $(filename) does not exist!")
@@ -294,10 +309,13 @@ function load_data(filename::AbstractString; dataset::AbstractString="", load_fi
 	end
 	e = lowercase(last(splitext(filename)))
 	if e == ".csv"
-		try
+		if dataset == ""
 			c = CSV.read(filename, DataFrames.DataFrame)
-		catch
-			@error("CSV error reading $(filename)!")
+			for col in names(c)
+				c[!, col] .= check_vector(c[!, col], col, Float64, Int64, true, true)
+			end
+		else
+			@warn("CSV files do not support multiple datasets! Dataset name '$(dataset)' cannot be loaded from '$(filename)'!")
 			c = DataFrames.DataFrame()
 		end
 	elseif e == ".xlsx"
