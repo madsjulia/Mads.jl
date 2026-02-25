@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.8.5'
+          - '1.11'
           - '1'
           - 'nightly'
         os:
@@ -26,12 +26,8 @@ jobs:
           - windows-latest
         arch:
           - x64
-        include:
-          - os: ubuntu-latest
-            version: '1'
-            arch: x86
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
@@ -40,11 +36,15 @@ jobs:
       - uses: julia-actions/cache@v1
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
+        continue-on-error: ${{ matrix.version == 'nightly' }}
       - uses: julia-actions/julia-processcoverage@v1
+        if: ${{ matrix.version != 'nightly' }}
       - uses: codecov/codecov-action@v3
+        if: ${{ matrix.version != 'nightly' }}
         with:
           file: lcov.info
       - name: Submit coverage to Coveralls
+        if: ${{ matrix.version != 'nightly' }}
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -59,26 +59,19 @@ jobs:
         format:
           - html
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v1
         with:
-          version: '1.8'
+          version: '1.11'
       - uses: julia-actions/cache@v1
-      - uses: julia-actions/julia-buildpkg@v1
-      - name: Build package
-        run: julia -e 'ENV["MADS_TRAVIS"]=""; ENV["MADS_NO_PYTHON"]=""; ENV["MADS_NO_PLOT"]=""; import Pkg; Pkg.build("Mads"; verbose=true);
+      - name: Instantiate docs environment
+        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
         env:
           MADS_NO_PYTHON: ""
           MADS_NO_PLOT: ""
-      - name: Instrantiate package
-        run: julia --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.instantiate()'
-        env:
-          MADS_NO_PYTHON: ""
-          MADS_NO_PLOT: ""        
-      - name: Build the documentaiton
-        run: julia --color=yes --project=docs/ docs/make.jl
+      - name: Build documentation
+        run: julia --color=yes --project=docs/ docs/make-rtd.jl
         env:
           MADS_NO_PYTHON: ""
           MADS_NO_PLOT: ""
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+

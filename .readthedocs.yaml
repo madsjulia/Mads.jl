@@ -3,22 +3,22 @@ version: 2
 # This project uses Julia + Documenter.jl (not Sphinx/MkDocs).
 # We run a custom build and copy the generated HTML to $READTHEDOCS_OUTPUT.
 build:
-  os: ubuntu-24.04
+  os: ubuntu-22.04
   tools:
-    python: "3.12"
+    python: "3.11"
   jobs:
     install:
       # Install Julia using 'jill' (Python).
       - python -m pip install --user --upgrade pip jill
-      - python -m jill install 1.10.7 --confirm --install_dir $HOME/julia
-      - $HOME/julia/julia-1.10.7/bin/julia --version
+      - python -m jill install 1.11 --confirm --install_dir $HOME/julia --symlink_dir $HOME/.local/bin
+      - $HOME/.local/bin/julia --version
 
       # Instantiate the docs environment.
-      - $HOME/julia/julia-1.10.7/bin/julia --project=docs -e 'using Pkg; Pkg.instantiate()'
+      - $HOME/.local/bin/julia --project=docs -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
     build:
       html:
         # Build docs (no deployment).
-        - $HOME/julia/julia-1.10.7/bin/julia --project=docs docs/make-rtd.jl
+        - $HOME/.local/bin/julia --project=docs docs/make-rtd.jl
 
         # Publish to the location RTD expects.
         - mkdir -p $READTHEDOCS_OUTPUT/html/
