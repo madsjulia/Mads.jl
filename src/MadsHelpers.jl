@@ -16,6 +16,19 @@ function leftjoin_preserve_order(df1::DataFrames.DataFrame, df2::DataFrames.Data
 	return df_merge
 end
 
+function innerjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; on::Union{<:DataFrames.OnType, AbstractVector}=Symbol[], makeunique::Bool=false, source::Union{Nothing, Symbol, AbstractString}=nothing, matchmissing::Symbol=:error)
+	df1.IDRow = collect(1:size(df1, 1))
+	DataFrames.innerjoin!(df1, df2; on=on, makeunique=makeunique, source=source, matchmissing=matchmissing)
+	DataFrames.sort!(df1, :IDRow)
+	DataFrames.select!(df1, DataFrames.Not(:IDRow))
+end
+
+function innerjoin_preserve_order(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; kw...)
+	df_merge = copy(df1)
+	innerjoin_preserve_order!(df_merge, df2; kw...)
+	return df_merge
+end
+
 function subsample_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Integer=0)
 	if overall == 0 && best_worst == 0
 		return trues(size(m, 2))
