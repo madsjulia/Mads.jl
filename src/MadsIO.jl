@@ -309,14 +309,9 @@ function load_data(filename::AbstractString; dataset::AbstractString="", load_fi
 	end
 	e = lowercase(last(splitext(filename)))
 	if e == ".csv"
-		if dataset == ""
-			c = CSV.read(filename, DataFrames.DataFrame)
-			for col in names(c)
-				c[!, col] .= check_vector(c[!, col], col, Float64, Int64, true, true)
-			end
-		else
-			@warn("CSV files do not support multiple datasets! Dataset name '$(dataset)' cannot be loaded from '$(filename)'!")
-			c = DataFrames.DataFrame()
+		c = CSV.read(filename, DataFrames.DataFrame)
+		for col in names(c)
+			c[!, col] .= check_vector(c[!, col], col, Float64, Int64, true, true)
 		end
 	elseif e == ".xlsx"
 		c = Mads.get_excel_data(filename, dataset; dataframe=true, kw...)
