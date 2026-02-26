@@ -3,9 +3,9 @@ import DocumentFunction
 import Random
 import DataFrames
 
-function leftjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; on::Union{<:DataFrames.OnType, AbstractVector}=Symbol[], makeunique::Bool=false, source::Union{Nothing, Symbol, AbstractString}=nothing, matchmissing::Symbol=:error)
+function leftjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; kw...)
 	df1.IDRow = collect(1:size(df1, 1))
-	DataFrames.leftjoin!(df1, df2; on=on, makeunique=makeunique, source=source, matchmissing=matchmissing)
+	DataFrames.leftjoin!(df1, df2; kw...)
 	DataFrames.sort!(df1, :IDRow)
 	DataFrames.select!(df1, DataFrames.Not(:IDRow))
 end
@@ -16,9 +16,9 @@ function leftjoin_preserve_order(df1::DataFrames.DataFrame, df2::DataFrames.Data
 	return df_merge
 end
 
-function innerjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; on::Union{<:DataFrames.OnType, AbstractVector}=Symbol[], makeunique::Bool=false, source::Union{Nothing, Symbol, AbstractString}=nothing, matchmissing::Symbol=:error)
+function innerjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; kw...)
 	df1.IDRow = collect(1:size(df1, 1))
-	DataFrames.innerjoin!(df1, df2; on=on, makeunique=makeunique, source=source, matchmissing=matchmissing)
+	DataFrames.innerjoin!(df1, df2; kw...)
 	DataFrames.sort!(df1, :IDRow)
 	DataFrames.select!(df1, DataFrames.Not(:IDRow))
 end
