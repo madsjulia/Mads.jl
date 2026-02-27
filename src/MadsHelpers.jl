@@ -16,16 +16,12 @@ function leftjoin_preserve_order(df1::DataFrames.DataFrame, df2::DataFrames.Data
 	return df_merge
 end
 
-function innerjoin_preserve_order!(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; kw...)
-	df1.IDRow = collect(1:size(df1, 1))
-	DataFrames.innerjoin!(df1, df2; kw...)
-	DataFrames.sort!(df1, :IDRow)
-	DataFrames.select!(df1, DataFrames.Not(:IDRow))
-end
-
 function innerjoin_preserve_order(df1::DataFrames.DataFrame, df2::DataFrames.DataFrame; kw...)
 	df_merge = copy(df1)
-	innerjoin_preserve_order!(df_merge, df2; kw...)
+	df_merge.IDRow = collect(1:size(df1, 1))
+	df_merge = DataFrames.innerjoin(df_merge, df2; kw...)
+	DataFrames.sort!(df_merge, :IDRow)
+	DataFrames.select!(df_merge, DataFrames.Not(:IDRow))
 	return df_merge
 end
 
