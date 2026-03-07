@@ -89,7 +89,7 @@ Get data from an EXCEL file
 $(DocumentFunction.documentfunction(get_excel_data))
 """
 function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString=""; header::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=1, rows::Union{Int, Vector{Int}, AbstractUnitRange{Int}}=0, cols::Union{Int, Vector{Int}, Vector{String}, AbstractUnitRange{Int}}=0, keytype::DataType=String, floattype::DataType=Float64, inttype::DataType=Int64, convertintegers::Bool=true, mapping::Dict=Dict(), usenans::Bool=true, dataframe::Bool=true)::Union{OrderedCollections.OrderedDict, DataFrames.DataFrame}
-	@assert floattype <: AbstractFloat
+	@assert floattype <: Real
 	if dataframe
 		df = DataFrames.DataFrame()
 	else
@@ -222,7 +222,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		v = convert(Vector{floattype}, v)
 	else
 		unique_types = unique(typeof.(v))
-		if all(unique_types .<: Union{Missing, AbstractFloat})
+		if all(unique_types .<: Union{Missing, Real})
 			mask_missing = ismissing.(v)
 			if usenans
 				v[mask_missing] .= floattype(NaN)
@@ -240,7 +240,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				v[mask_missing] .= missing
 				v = convert(Vector{Union{Missing, inttype}}, v)
 			end
-		elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
+		elseif all(unique_types .<: Union{Missing, Real})
 			v[ismissing.(v)] .= floattype(NaN)
 			v = convert.(floattype, v)
 		elseif all(unique_types .<: Union{Missing, AbstractString})
@@ -273,7 +273,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				end
 				v = convert(Vector{convertype}, v)
 			end
-		elseif all(unique_types .<: Union{Missing, AbstractFloat, AbstractString})
+		elseif all(unique_types .<: Union{Missing, Real, AbstractString})
 			mask_null = isnull.(v)
 			v[mask_null] .= floattype(NaN)
 			parsingerror = false

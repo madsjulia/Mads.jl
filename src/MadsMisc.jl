@@ -202,7 +202,7 @@ function getdistribution(dist::AbstractString, inputtype::AbstractString="parame
 	return distribution
 end
 
-function decimal_year(dyear::AbstractFloat, period::Type{<:Dates.Period}=Dates.Nanosecond)
+function decimal_year(dyear::Real, period::Type{<:Dates.Period}=Dates.Nanosecond)
 	year, reminder = divrem(dyear, 1)
 	year_start = Dates.DateTime(year)
 	@show typeof(year_start)
@@ -213,13 +213,13 @@ function decimal_year(dyear::AbstractFloat, period::Type{<:Dates.Period}=Dates.N
 	return year_start + partial
 end
 
-function decimal_day(dday::AbstractFloat, date_start::Dates.DateTime=Dates.now(), period::Type{<:Dates.Period}=Dates.Nanosecond)
+function decimal_day(dday::Real, date_start::Dates.DateTime=Dates.now(), period::Type{<:Dates.Period}=Dates.Nanosecond)
 	day, reminder = divrem(dday, 1)
 	nanoseconds_day = period(Dates.Day(1))
 	partial = period(round(Dates.value(nanoseconds_day) * reminder))
 	return date_start + Dates.Day(day) + partial
 end
 
-function decimal_day(dday::AbstractFloat, date_start::Dates.Date, period::Type{<:Dates.Period}=Dates.Nanosecond)
+function decimal_day(dday::Real, date_start::Dates.Date, period::Type{<:Dates.Period}=Dates.Nanosecond)
 	decimal_day(dday, Dates.DateTime.(date_start), period)
 end
