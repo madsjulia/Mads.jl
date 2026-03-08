@@ -147,3 +147,4 @@ examples/*/*/*.png
 examples/contamination/*.jld2
 examples/contamination/*.png
 examples/contamination/*.svg
+gmt.conf
