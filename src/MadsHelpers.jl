@@ -47,11 +47,11 @@ function subsample_matrix(m::AbstractMatrix, best_worst::Integer=1, overall::Int
 end
 
 function maximumnan(X, c...; kw...)
-	maximum(X[.!isnan.(X)], c...; kw...)
+	maximum(X[.!isnull.(X)], c...; kw...) # isnull is used instead of isnan to handle missing values and other null types
 end
 
 function minimumnan(X, c...; kw...)
-	minimum(X[.!isnan.(X)], c...; kw...)
+	minimum(X[.!isnull.(X)], c...; kw...) # isnull is used instead of isnan to handle missing values and other null types
 end
 
 function maximuminf(X, c...; kw...)

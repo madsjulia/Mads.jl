@@ -245,7 +245,16 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			v = convert.(floattype, v)
 		elseif all(unique_types .<: Union{Missing, AbstractString})
 			v[isnull.(v)] .= ""
+			v[ismissing.(v)] .= ""
 			v = convert(Vector{String}, v)
+		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.Date})
+			v[isnull.(v)] .= missing
+			mask_missing = ismissing.(v)
+			v[.!mask_missing] = convert.(Dates.Date, v[.!mask_missing])
+		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.DateTime})
+			v[isnull.(v)] .= missing
+			mask_missing = ismissing.(v)
+			v[.!mask_missing] = convert.(Dates.DateTime, v[.!mask_missing])
 		elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
 			convertype = convertintegers ? inttype : floattype
 			mask_null = isnull.(v)
@@ -262,16 +271,24 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				end
 			end
 			if parsingerror
-				println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed$(Base.text_colors[:normal])! unique types: $(unique_types)")
+				for t in unique_types
+					uv = unique(v[typeof.(v) .== t])
+					if length(uv) > 10
+						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
+					else
+						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : unique values = $(uv)")
+					end
+				end
 				v[mask_null] .= ""
 				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 			else
 				if convertintegers
 					v[mask_null] .= floattype(NaN)
+					v = convert(Vector{floattype}, v)
 				else
 					v[mask_null] .= ""
 				end
-				v = convert(Vector{convertype}, v)
 			end
 		elseif all(unique_types .<: Union{Missing, Real, AbstractString})
 			mask_null = isnull.(v)
@@ -287,13 +304,29 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				end
 			end
 			if parsingerror
-				println("Some values for parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])parsed$(Base.text_colors[:normal])!")
+				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed$(Base.text_colors[:normal])! unique types: $(unique_types)")
+				for t in unique_types
+					uv = unique(v[typeof.(v) .== t])
+					if length(uv) > 10
+						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
+					else
+						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : unique values = $(uv)")
+					end
+				end
 				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 			else
 				v = convert(Vector{floattype}, v)
 			end
 		else
-			println("Parameter/column '$(param)' cannot be $(Base.text_colors[:yellow])converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
+			println("$(Base.text_colors[:red])Parameter/column '$(param)' cannot be converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
+			for t in unique_types
+				uv = unique(v[typeof.(v) .== t])
+				if length(uv) > 10
+					println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
+				else
+					println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : unique values = $(uv)")
+				end
+			end
 			v = convert(Vector{Union{unique(typeof.(v))...}}, v)
 		end
 	end
