@@ -199,6 +199,9 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			if all(ismissing.(v))
 				println("All values for parameter/column '$(param)' are $(Base.text_colors[:yellow])missing$(Base.text_colors[:normal])!")
 			else
+				# @show param
+				# @show param_name
+				# @show unique(typeof.(v))
 				v = check_vector(v, param, floattype, inttype, convertintegers, usenans)
 				if dataframe
 					df[!, param_name] = v
@@ -222,7 +225,15 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		v = convert(Vector{floattype}, v)
 	else
 		unique_types = unique(typeof.(v))
-		if all(unique_types .<: Union{Missing, Real})
+		if all(unique_types .<: AbstractFloat)
+			if usenans
+				v[.!isnull.(v)] .= floattype(NaN)
+				v = convert(Vector{floattype}, v)
+			else
+				v[.!isnull.(v)] .= missing
+				v = convert(Vector{Union{Missing, floattype}}, v)
+			end
+		elseif all(unique_types .<: Union{Missing, AbstractFloat})
 			mask_missing = ismissing.(v)
 			if usenans
 				v[mask_missing] .= floattype(NaN)
@@ -230,6 +241,12 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			else
 				v[mask_missing] .= missing
 				v = convert(Vector{Union{Missing, floattype}}, v)
+			end
+		elseif all(unique_types .<: Integer)
+			if convertintegers
+				v = convert(Vector{floattype}, v)
+			else
+				v = convert(Vector{inttype}, v)
 			end
 		elseif all(unique_types .<: Union{Missing, Integer})
 			mask_missing = ismissing.(v)
