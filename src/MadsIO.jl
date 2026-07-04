@@ -227,19 +227,20 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		unique_types = unique(typeof.(v))
 		if all(unique_types .<: AbstractFloat)
 			if usenans
-				v[.!isnull.(v)] .= floattype(NaN)
+				v[isnull.(v)] .= floattype(NaN)
 				v = convert(Vector{floattype}, v)
 			else
-				v[.!isnull.(v)] .= missing
+				v[isnull.(v)] .= missing
 				v = convert(Vector{Union{Missing, floattype}}, v)
 			end
 		elseif all(unique_types .<: Union{Missing, AbstractFloat})
 			mask_missing = ismissing.(v)
 			if usenans
 				v[mask_missing] .= floattype(NaN)
+				v[isnull.(v)] .= floattype(NaN)
 				v = convert(Vector{floattype}, v)
 			else
-				v[mask_missing] .= missing
+				v[isnull.(v)] .= missing
 				v = convert(Vector{Union{Missing, floattype}}, v)
 			end
 		elseif all(unique_types .<: Integer)
@@ -254,10 +255,19 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				v[mask_missing] .= floattype(NaN)
 				v = convert(Vector{floattype}, v)
 			else
-				v[mask_missing] .= missing
 				v = convert(Vector{Union{Missing, inttype}}, v)
 			end
-		elseif all(unique_types .<: Union{Missing, Real})
+		elseif all(unique_types .<: Union{Missing, Integer, AbstractFloat})
+			mask_missing = ismissing.(v)
+			if usenans
+				v[mask_missing] .= floattype(NaN)
+				v[isnull.(v)] .= floattype(NaN)
+				v = convert(Vector{floattype}, v)
+			else
+				v[mask_missing] .= missing
+				v[isnull.(v)] .= missing
+				v = convert(Vector{Union{Missing, floattype}}, v)
+			end
 			v[ismissing.(v)] .= floattype(NaN)
 			v = convert.(floattype, v)
 		elseif all(unique_types .<: Union{Missing, AbstractString})
@@ -272,7 +282,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
 			v[.!mask_missing] = convert.(Dates.DateTime, v[.!mask_missing])
-		elseif all(unique_types .<: Union{Missing, Integer, AbstractString})
+		elseif all(unique_types .<: Union{Missing, AbstractString, Integer})
 			convertype = convertintegers ? inttype : floattype
 			mask_null = isnull.(v)
 			parsingerror = false
@@ -288,7 +298,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				end
 			end
 			if parsingerror
-				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed$(Base.text_colors[:normal])! unique types: $(unique_types)")
+				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed from string to integer $(Base.text_colors[:normal])! unique types: $(unique_types)")
 				for t in unique_types
 					uv = unique(v[typeof.(v) .== t])
 					if length(uv) > 10
@@ -307,7 +317,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 					v[mask_null] .= ""
 				end
 			end
-		elseif all(unique_types .<: Union{Missing, Real, AbstractString})
+		elseif all(unique_types .<: Union{Missing, AbstractString, Real})
 			mask_null = isnull.(v)
 			v[mask_null] .= floattype(NaN)
 			parsingerror = false
@@ -321,7 +331,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				end
 			end
 			if parsingerror
-				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed$(Base.text_colors[:normal])! unique types: $(unique_types)")
+				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed from string to float $(Base.text_colors[:normal])! unique types: $(unique_types)")
 				for t in unique_types
 					uv = unique(v[typeof.(v) .== t])
 					if length(uv) > 10
@@ -335,7 +345,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				v = convert(Vector{floattype}, v)
 			end
 		else
-			println("$(Base.text_colors[:red])Parameter/column '$(param)' cannot be converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v)))!")
+			println("$(Base.text_colors[:red])Parameter/column '$(param)' cannot be converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v))); it is something unexpected!")
 			for t in unique_types
 				uv = unique(v[typeof.(v) .== t])
 				if length(uv) > 10
