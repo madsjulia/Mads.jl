@@ -361,7 +361,6 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 				v[mask_integer] .= convert.(floattype, v[mask_integer])
 				v[mask_null] .= usenans ? floattype(NaN) : missing
 			else
-				@show "string"
 				convert_type = String
 				v[mask_null] .= ""
 			end
@@ -374,7 +373,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 						catch
 							parsingerror = true
 						end
-					elseif convert_type == String && typeof(v[i]) <: AbstractFloat
+					elseif convert_type == String && typeof(v[i]) <: Real
 						try
 							v[i] = string(v[i])
 						catch
