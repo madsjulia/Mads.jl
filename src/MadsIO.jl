@@ -201,7 +201,7 @@ function get_excel_data(excel_file::AbstractString, sheet_name::AbstractString="
 			else
 				# @show param
 				# @show param_name
-				# @show unique(typeof.(v))
+				# @show unique(v_types)
 				v = check_vector(v, param, floattype, inttype, convertintegers, usenans)
 				if dataframe
 					df[!, param_name] = v
@@ -224,7 +224,8 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		v .= NaN
 		v = convert(Vector{floattype}, v)
 	else
-		unique_types = unique(typeof.(v))
+		v_types = typeof.(v)
+		unique_types = unique(v_types)
 		if all(unique_types .<: AbstractFloat)
 			if usenans
 				v[isnull.(v)] .= floattype(NaN)
@@ -273,24 +274,40 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		elseif all(unique_types .<: Union{Missing, AbstractString})
 			v[isnull.(v)] .= ""
 			v[ismissing.(v)] .= ""
+			v = strip.(v)
 			v = convert(Vector{String}, v)
-		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.Date})
+		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.Date, Dates.DateTime})
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
-			v[.!mask_missing] = convert.(Dates.Date, v[.!mask_missing])
+			v[.!mask_missing] = convert.(Dates.DateTime, v[.!mask_missing])
 		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.DateTime})
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
 			v[.!mask_missing] = convert.(Dates.DateTime, v[.!mask_missing])
 		elseif all(unique_types .<: Union{Missing, AbstractString, Integer})
-			convertype = convertintegers ? inttype : floattype
+			mask_integer = v_types .<: Integer
+			mask_string = v_types .<: AbstractString
+			v[mask_string] .= strip.(v[mask_string])
 			mask_null = isnull.(v)
+			if sum(mask_integer) > sum(mask_string)
+				convert_type = convertintegers ? inttype : floattype
+				v[mask_null] .= convertintegers ? floattype(NaN) : missing
+			else
+				convert_type = String
+				v[mask_null] .= ""
+			end
 			parsingerror = false
 			for i in eachindex(v)
-				if typeof(v[i]) <: AbstractString
-					if !mask_null[i]
+				if !mask_null[i]
+					if convert_type != String && typeof(v[i]) <: AbstractString
 						try
-							v[i] = parse(convertype, v[i])
+							v[i] = parse(convert_type, v[i])
+						catch
+							parsingerror = true
+						end
+					elseif convert_type == String && typeof(v[i]) <: Integer
+						try
+							v[i] = string(v[i])
 						catch
 							parsingerror = true
 						end
@@ -300,7 +317,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			if parsingerror
 				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed from string to integer $(Base.text_colors[:normal])! unique types: $(unique_types)")
 				for t in unique_types
-					uv = unique(v[typeof.(v) .== t])
+					uv = unique(v[v_types .== t])
 					if length(uv) > 10
 						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
 					else
@@ -308,53 +325,79 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 					end
 				end
 				v[mask_null] .= ""
-				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+				v = convert(Vector{Union{unique(v_types)...}}, v)
 			else
-				if convertintegers
-					v[mask_null] .= floattype(NaN)
-					v = convert(Vector{floattype}, v)
-				else
+				if convert_type != String
+					if convertintegers
+						v[mask_null] .= floattype(NaN)
+						v = convert(Vector{floattype}, v)
+					else
+						v[mask_null] .= missing
+						v = convert(Vector{Union{Missing, convert_type}}, v)
+					end
+				elseif convert_type == String
 					v[mask_null] .= ""
+					v = convert(Vector{convert_type}, v)
 				end
 			end
 		elseif all(unique_types .<: Union{Missing, AbstractString, Real})
+			mask_float = v_types .<: AbstractFloat
+			mask_integer = v_types .<: Integer
+			mask_string = v_types .<: AbstractString
+			v[mask_string] .= strip.(v[mask_string])
 			mask_null = isnull.(v)
-			v[mask_null] .= floattype(NaN)
+			if sum(mask_float) > sum(mask_string)
+				convert_type = floattype
+				v[mask_integer] .= convert.(floattype, v[mask_integer])
+				v[mask_null] .= usenans ? floattype(NaN) : missing
+			else
+				@show "string"
+				convert_type = String
+				v[mask_null] .= ""
+			end
 			parsingerror = false
 			for i in eachindex(v)
-				if typeof(v[i]) <: AbstractString && !mask_null[i]
-					try
-						v[i] = parse(floattype, v[i])
-					catch
-						parsingerror = true
+				if !mask_null[i]
+					if convert_type == floattype && typeof(v[i]) <: AbstractString
+						try
+							v[i] = parse(floattype, v[i])
+						catch
+							parsingerror = true
+						end
+					elseif convert_type == String && typeof(v[i]) <: AbstractFloat
+						try
+							v[i] = string(v[i])
+						catch
+							parsingerror = true
+						end
 					end
 				end
 			end
 			if parsingerror
 				println("$(Base.text_colors[:red])Parameter/column '$(param)' values (some) cannot be parsed from string to float $(Base.text_colors[:normal])! unique types: $(unique_types)")
 				for t in unique_types
-					uv = unique(v[typeof.(v) .== t])
+					uv = unique(v[v_types .== t])
 					if length(uv) > 10
 						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
 					else
 						println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : unique values = $(uv)")
 					end
 				end
-				v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+				v = convert(Vector{Union{unique(v_types)...}}, v)
 			else
-				v = convert(Vector{floattype}, v)
+				v = convert(Vector{convert_type}, v)
 			end
 		else
-			println("$(Base.text_colors[:red])Parameter/column '$(param)' cannot be converted$(Base.text_colors[:normal]) to a known type $(unique(typeof.(v))); it is something unexpected!")
+			println("$(Base.text_colors[:red])Parameter/column '$(param)' cannot be converted$(Base.text_colors[:normal]) to a known type $(unique(v_types)); it is something unexpected!")
 			for t in unique_types
-				uv = unique(v[typeof.(v) .== t])
+				uv = unique(v[v_types .== t])
 				if length(uv) > 10
 					println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : too many unique values! min=$(minimumnan(uv)) max=$(maximumnan(uv))")
 				else
 					println("$(Base.text_colors[:yellow])$(t)$(Base.text_colors[:normal]) : unique values = $(uv)")
 				end
 			end
-			v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+			v = convert(Vector{Union{unique(v_types)...}}, v)
 		end
 	end
 	return v
