@@ -224,6 +224,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		v .= NaN
 		v = convert(Vector{floattype}, v)
 	else
+		v[isnothing.(v)] .= missing
 		v_types = typeof.(v)
 		unique_types = unique(v_types)
 		if all(unique_types .<: AbstractFloat)
