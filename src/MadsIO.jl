@@ -279,7 +279,17 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.Date, Dates.DateTime})
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
-			v[.!mask_missing] = convert.(Dates.DateTime, v[.!mask_missing])
+			mask_dates = v_types .== Dates.Date
+			mask_datestime = v_types .== Dates.DateTime
+			v_datestime = Dates.DateTime.(Dates.Date.(v[mask_datestime]))
+			if v_datestime != v[mask_datestime]
+				convert_type = Dates.DateTime
+				v[mask_dates] .= Dates.DateTime.(v[mask_dates])
+			else
+				convert_type = Dates.Date
+				v[mask_datestime] .= Dates.Date.(v[mask_datestime])
+			end
+			v[.!mask_missing] = convert.(convert_type, v[.!mask_missing])
 		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.DateTime})
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
