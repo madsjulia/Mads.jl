@@ -70,7 +70,7 @@ function setplotfileformat(filename::AbstractString, format::AbstractString)
 	return filename, Symbol(format)
 end
 
-function plotfileformat(p, filename::AbstractString, hsize::Measures.Length, vsize::Measures.Length; format::AbstractString=uppercase(getextension(filename)), dpi::Integer=imagedpi)
+function plotfileformat(p, filename::AbstractString, hsize::Measures.Length=8Gadfly.inch, vsize::Measures.Length=4Gadfly.inch; format::AbstractString=uppercase(getextension(filename)), dpi::Integer=imagedpi)
 	if isnothing(p)
 		madswarn("Plotting nothing!")
 		return
