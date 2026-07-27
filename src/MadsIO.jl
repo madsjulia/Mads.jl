@@ -224,7 +224,12 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		v .= NaN
 		v = convert(Vector{floattype}, v)
 	else
-		v[isnothing.(v)] .= missing
+		mask_nothing = isnothing.(v)
+		if any(mask_nothing)
+			v = convert(Vector{Union{Missing, unique(typeof.(v))...}}, v)
+			v[mask_nothing] .= missing
+			v = convert(Vector{Union{unique(typeof.(v))...}}, v)
+		end
 		v_types = typeof.(v)
 		unique_types = unique(v_types)
 		if all(unique_types .<: AbstractFloat)
@@ -424,7 +429,7 @@ function load_data(filename::AbstractString; dataset::AbstractString="", load_fi
 	if e == ".csv"
 		c = CSV.read(filename, DataFrames.DataFrame)
 		for col in names(c)
-			c[!, col] .= check_vector(c[!, col], col, Float64, Int64, true, true)
+			c[!, col] = check_vector(c[!, col], col, Float64, Int64, true, true)
 		end
 	elseif e == ".xlsx"
 		c = Mads.get_excel_data(filename, dataset; dataframe=true, kw...)
