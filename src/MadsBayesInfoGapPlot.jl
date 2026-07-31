@@ -39,3 +39,5 @@ function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::AbstractDict
 		p
 	end
 end
+
+_bigdt_plot_implementation_loaded[] = true

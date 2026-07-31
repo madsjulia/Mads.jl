@@ -27,7 +27,8 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"seed"=>"random seed [default=`0`]",
 			"quiet"=>"[default=`true`]",
 			"all_results"=>"all model results are returned [default=`false`]",
-			"store_optimization_progress"=>"save intermediate results [default=`true`]")))
+			"store_optimization_progress"=>"save intermediate results [default=`true`]",
+			"callbackiteration"=>"callback invoked after each optimization iteration")))
 
 Returns:
 
@@ -41,7 +42,7 @@ Mads.calibraterandom(madsdata; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, 
 Mads.calibraterandom(madsdata, numberofsamples; tolX=1e-3, tolG=1e-6, maxEval=1000, maxIter=100, maxJacobians=100, lambda=100.0, lambda_mu=10.0, np_lambda=10, show_trace=false, usenaive=false)
 ```
 """
-function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, store_optimization_progress::Bool=true, save_results::Bool=false, first_init::Bool=true)
+function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, usenaive::Bool=false, seed::Integer=-1, rng::Union{Nothing,Random.AbstractRNG,DataType}=nothing, quiet::Bool=true, all_results::Bool=false, store_optimization_progress::Bool=true, save_results::Bool=false, first_init::Bool=true, callbackiteration::Function=(best_x::AbstractVector, of::Number, current_lambda::Number)->nothing)
 	if numberofsamples < 1
 		numberofsamples = 1
 	end
@@ -65,7 +66,7 @@ function calibraterandom(madsdata::AbstractDict, numberofsamples::Integer=1; tol
 			end
 			Mads.setparamsinit!(madsdata, paramsoptdict)
 		end
-		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, store_optimization_progress=store_optimization_progress)
+		parameters, results = Mads.calibrate(madsdata; tolX=tolX, tolG=tolG, tolOF=tolOF, tolOFcount=tolOFcount, minOF=minOF, maxEval=maxEval, maxIter=maxIter, maxJacobians=maxJacobians, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, show_trace=show_trace, usenaive=usenaive, store_optimization_progress=store_optimization_progress, callbackiteration=callbackiteration)
 		allphi[i] = results.minimum
 		allconverged[i] = results.x_converged | results.g_converged # f_converged => of_conferged
 		!quiet && @info("Random initial guess #$(i): OF = $(allphi[i]) (converged=$(allconverged[i]))")
@@ -112,7 +113,8 @@ keytext=Dict("tolX"=>"parameter space tolerance [default=`1e-4`]",
 			"seed"=>"random seed [default=`0`]",
 			"quiet"=>"suppress output [default=`true`]",
 			"store_optimization_progress"=>"save intermediate results [default=`true`]",
-			"localsa"=>"perform local sensitivity analysis [default=`false`]")))
+			"localsa"=>"perform local sensitivity analysis [default=`false`]",
+			"callbackiteration"=>"callback invoked after each optimization iteration")))
 
 Returns:
 
@@ -203,7 +205,7 @@ Returns:
 - model parameter dictionary with the optimal values at the minimum
 - optimization algorithm results (e.g. results.minimizer)
 """
-function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, store_optimization_progress::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization)
+function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6, tolOF::Number=1e-3, tolOFcount::Integer=5, minOF::Number=1e-3, maxEval::Integer=1000, maxIter::Integer=100, maxJacobians::Integer=100, lambda::Number=100.0, lambda_mu::Number=10.0, np_lambda::Integer=10, show_trace::Bool=false, quiet::Bool=Mads.quiet, usenaive::Bool=false, store_optimization_progress::Bool=true, localsa::Bool=false, parallel_optimization::Bool=parallel_optimization, callbackiteration::Function=(best_x::AbstractVector, of::Number, current_lambda::Number)->nothing)
 	rootname = Mads.getmadsrootname(madsdata)
 	madsdir = Mads.getmadsproblemdir(madsdata)
 	if !isdir(madsdir)
@@ -242,6 +244,7 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 			close(outfile)
 		end
 		function interationcallback(x_best::AbstractVector, of::Number, lambda::Number)
+			callbackiteration(x_best, of, lambda)
 			x_best_real = sinetransform(x_best, lowerbounds, upperbounds, indexlogtransformed)
 			outfile = open("$(rootname).iterationresults", "a+")
 			write(outfile, string("OF: ", of, "\n"))
@@ -268,12 +271,12 @@ function calibrate(madsdata::AbstractDict; tolX::Number=1e-4, tolG::Number=1e-6,
 		end
 	else
 		initialcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
-		interationcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
+		interationcallback = callbackiteration
 		jacobiancallback = (x::AbstractVector, J::AbstractMatrix)->nothing
 		finalcallback = (x_best::AbstractVector, of::Number, lambda::Number)->nothing
 	end
 	if usenaive == true
-		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda)
+		results = Mads.naive_levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed), o_lm; maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, callbackiteration=interationcallback)
 	elseif usenaive == :lmlin
 		results = LMLin.levenberg_marquardt(f_lm_sin, g_lm_sin, asinetransform(initparams, lowerbounds, upperbounds, indexlogtransformed); tolX=tolX, tolG=tolG, tolOF=tolOF, maxEval=maxEval, maxIter=maxIter, lambda=lambda, lambda_mu=lambda_mu, np_lambda=np_lambda, maxJacobians=maxJacobians, show_trace=show_trace, callback=(best_x, x, of, lambda)->interationcallback(best_x, of, lambda))
 	else

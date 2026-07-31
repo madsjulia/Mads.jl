@@ -2,19 +2,18 @@ import Mads
 
 cd(joinpath(Mads.dir, "notebooks", "model_diagnostics"))
 
-function polynomial(parameters::AbstractVector)
-	f(t) = parameters[1] * (t ^ parameters[4]) + parameters[2] * t + parameters[3] # a * t^n + b * t + c
-	predictions = map(f, 0:5)
+function polynomial(parameters::AbstractVector{<:Real})::Vector{Float64}
+	predictions::Vector{Float64} = [
+		Float64(parameters[1] * t^parameters[4] + parameters[2] * t + parameters[3]) for t in 0:5
+	]
 	return predictions
 end
 
 polynomial([3, 2, 3, 4])
 
-md_bad = Mads.createproblem([1,1,1,1,1], [0,1.1,1.9,3.1,3.9,5], polynomial; paramkey=["a", "b", "c", "n", "p"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)", "Uniform(0, 2)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
+md::Dict{String,Any} = Mads.createproblem([1,1,1,1], [0,1.1,1.9,3.1,3.9,5], polynomial; paramkey=["a", "b", "c", "n"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
 
-md = Mads.createproblem([1,1,1,1], [0,1.1,1.9,3.1,3.9,5], polynomial; paramkey=["a", "b", "c", "n"], paramdist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"], obsweight=[100,100,100,100,10,0], obstime=[0,1,2,3,4,5], obsdist=["Uniform(0, 1)", "Uniform(0, 2)", "Uniform(1, 3)", "Uniform(2, 4)", "Uniform(3, 5)", "Uniform(4, 6)"], problemname="model_diagnostics")
-
-md = Dict()
+md = Dict{String,Any}()
 
 md["Parameters"], _, _ = Mads.createparameters([1,1,1,1]; key=["a", "b", "c", "n"], dist=["Uniform(-10, 10)", "Uniform(-10, 10)", "Uniform(-5, 5)", "Uniform(0, 3)"])
 
@@ -36,40 +35,43 @@ polynomial(Mads.getparamsinit(md))
 
 Mads.plotmatches(md)
 
-calib_param, calib_information = Mads.calibrate(md)
+calibration_result::Tuple = Mads.calibrate(md; store_optimization_progress=false)
+calibrated_parameters::AbstractDict = calibration_result[1]
 
-Mads.plotmatches(md, calib_param)
+Mads.plotmatches(md, calibrated_parameters)
 
 Mads.showparameterestimates(md)
 
-Mads.showparameterestimates(md, calib_param)
+Mads.showparameterestimates(md, calibrated_parameters)
 
-calib_random_results = Mads.calibraterandom(md, 100; seed=2023, all_results=true)
+random_calibration_result::Tuple = Mads.calibraterandom(md, 100; seed=2021, all_results=true, save_results=false, store_optimization_progress=false)
+calibration_objectives::Vector{Float64} = random_calibration_result[3]
+calibration_parameters::Matrix{Float64} = random_calibration_result[4]
 
-calib_random_estimates = hcat(map(i->collect(values(calib_random_results[i,3])), 1:100)...)
-
-forward_predictions = Mads.forward(md, calib_random_estimates)
+forward_predictions::Matrix{Float64} = Mads.forward(md, calibration_parameters)
 Mads.spaghettiplot(md, forward_predictions)
 
-ind_n0 = abs.(calib_random_estimates[4,:]) .< 0.1
-in0 = findall(ind_n0 .== true)[1]
-ind_n1 = abs.(calib_random_estimates[4,:] .- 1) .< 0.1
-in1 = findall(ind_n1 .== true)[1]
-ind_n3 = .!(ind_n0 .| ind_n1)
-in3 = findall(ind_n3 .== true)[1]
-pinit = Dict(zip(Mads.getparamkeys(md), Mads.getparamsinit(md)))
-optnames = ["n=0", "n=1", "n=3"]
-v = [in0, in1, in3]
+parameter_names::Vector{String} = string.(Mads.getoptparamkeys(md))
+n_values::Vector{Float64} = calibration_parameters[:, 4]
+representative_indices::Vector{Int} = [
+	argmin(abs.(n_values)),
+	argmin(abs.(n_values .- 1.0)),
+	argmin(abs.(n_values .- 3.0)),
+]
+solution_names::Vector{String} = ["closest to n=0", "closest to n=1", "closest to n=3"]
+representative_parameters::Vector{Dict{String,Float64}} = [
+	Dict{String,Float64}(zip(parameter_names, calibration_parameters[index, :])) for index in representative_indices
+]
 
-for i = 1:3
-	println("Solution for $(optnames[i])")
-	Mads.showparameters(md, calib_random_results[v[i],3])
-	Mads.plotmatches(md, calib_random_results[v[i],3]; title=optnames[i])
+for solution_index in eachindex(solution_names)
+	println("Solution $(solution_names[solution_index])")
+	Mads.showparameters(md, representative_parameters[solution_index])
+	Mads.plotmatches(md, calibration_parameters[representative_indices[solution_index], :]; title=solution_names[solution_index])
 end
 
-localsa = Mads.localsa(md; filename="model_diagnostics.png", par=collect(values(calib_param)))
+local_sensitivity::AbstractDict = Mads.localsa(md; filename="model_diagnostics.png", par=Float64.(collect(values(calibrated_parameters))), datafiles=false)
 
-[Mads.getparamlabels(md) localsa["stddev"]]
+[Mads.getparamlabels(md) local_sensitivity["stddev"]]
 
 Mads.display("model_diagnostics-jacobian.png")
 
@@ -77,38 +79,39 @@ Mads.display("model_diagnostics-eigenmatrix.png")
 
 Mads.display("model_diagnostics-eigenvalues.png")
 
-chain, llhoods = Mads.emceesampling(md; numwalkers=10, nsteps=100000, burnin=10000, thinning=10, seed=2016, sigma=0.01)
+mcmc_result::Tuple = Mads.emceesampling(md; numwalkers=10, nexecutions=100000, burnin=10000, thinning=10, seed=2016, sigma=0.01, save=false)
+mcmc_chain::Matrix{Float64} = mcmc_result[1]
 
-f = Mads.forward(md, chain)
+mcmc_predictions::Matrix{Float64} = mcmc_result[3]
 
-Mads.spaghettiplot(md, f)
+Mads.spaghettiplot(md, mcmc_predictions)
 
-Mads.scatterplotsamples(md, permutedims(chain), "model_diagnostics-emcee_scatter.png")
+Mads.scatterplotsamples(md, permutedims(mcmc_chain), "model_diagnostics-emcee_scatter.png")
 
 Mads.display("model_diagnostics-emcee_scatter.png")
 
-saltelli_results = Mads.saltelli(md; N=10000, seed=2016)
+saltelli_results::AbstractDict = Mads.saltelli(md; N=10000, seed=2016, save=false)
 
 Mads.plotobsSAresults(md, saltelli_results)
 
-efast_results = Mads.efast(md; N=1000, seed=2016)
-Mads.plotobsSAresults(md, efastresult; filename="sensitivity_efast.png", xtitle = "Time [-]", ytitle = "Observation [-]")
+efast_results::AbstractDict = Mads.efast(md; N=1000, seed=2016, save=false)
+Mads.plotobsSAresults(md, efast_results; filename="sensitivity_efast.png", xtitle="Time [-]", ytitle="Observation [-]")
 
-h = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]
+horizons::Vector{Float64} = [0.001, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1]
 
-models = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = a * exp(t * n) + b * t + c"]
+model_names::Vector{String} = ["y = a * t + c", "y = a * t^(1.1) + b * t + c", "y = a * t^n + b * t + c", "y = a * exp(t * n) + b * t + c"]
 
 import Gadfly
 import Colors
-lmin = Vector{Any}(undef, 4)
-lmax = Vector{Any}(undef, 4)
-colors = ["blue", "red", "green", "orange"]
-for i = 1:4
-	min, max = Mads.infogap_jump_polynomial(model=i, plot=true, horizons=h, retries=10, maxiter=1000, verbosity=0, seed=2015)
-	lmin[i] = Gadfly.layer(x=min, y=h, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:dash], default_color=Base.parse(Colors.Colorant, colors[i])))
-	lmax[i] = Gadfly.layer(x=max, y=h, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:solid], default_color=Base.parse(Colors.Colorant, colors[i])))
+minimum_layers::Vector{Any} = Vector{Any}(undef, 4)
+maximum_layers::Vector{Any} = Vector{Any}(undef, 4)
+colors::Vector{String} = ["blue", "red", "green", "orange"]
+for model_index in 1:4
+	minimum_predictions::Vector{Float64}, maximum_predictions::Vector{Float64} = Mads.infogap_jump_polynomial(model=model_index, plot=true, horizons=horizons, retries=10, maxiter=1000, verbosity=0, seed=2015)
+	minimum_layers[model_index] = Gadfly.layer(x=minimum_predictions, y=horizons, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:dash], default_color=Base.parse(Colors.Colorant, colors[model_index])))
+	maximum_layers[model_index] = Gadfly.layer(x=maximum_predictions, y=horizons, Gadfly.Geom.line, Gadfly.Theme(line_width=2Gadfly.pt, line_style=[:solid], default_color=Base.parse(Colors.Colorant, colors[model_index])))
 end
-f = Gadfly.plot(lmin..., lmax..., Gadfly.Guide.xlabel("o5"), Gadfly.Guide.ylabel("Horizon of uncertainty"), Gadfly.Guide.title("Opportuneness vs. Robustness"), Gadfly.Theme(highlight_width=0Gadfly.pt), Gadfly.Guide.manual_color_key("Models", models, colors))
-Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 4Gadfly.inch), f)
+figure::Gadfly.Plot = Gadfly.plot(minimum_layers..., maximum_layers..., Gadfly.Guide.xlabel("o5"), Gadfly.Guide.ylabel("Horizon of uncertainty"), Gadfly.Guide.title("Opportuneness vs. Robustness"), Gadfly.Theme(highlight_width=0Gadfly.pt), Gadfly.Guide.manual_color_key("Models", model_names, colors))
+Gadfly.draw(Gadfly.PNG("infogap_opportuneness_vs_robustness.png", 6Gadfly.inch, 4Gadfly.inch), figure)
 
 Mads.display("infogap_opportuneness_vs_robustness.png")

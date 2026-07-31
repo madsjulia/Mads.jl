@@ -145,7 +145,7 @@ function makelmfunctions(madsdata::AbstractDict; parallel_gradients::Bool=parall
 		end
 	end
 	f = makemadscommandfunction(madsdata)
-	restartdir = getrestartdir(madsdata, "levenberg_marquardt")
+	restartdir::String = _getrestartdir_if_enabled(madsdata, "levenberg_marquardt")
 	ssdr = Mads.haskeyword(madsdata, "ssdr")
 	sar = Mads.haskeyword(madsdata, "sar")
 	o_lm(x::AbstractVector) = sar ? sum.(abs.(x)) : LinearAlgebra.dot(x, x)
@@ -315,20 +315,22 @@ keytext=Dict("maxIter"=>"maximum number of optimization iterations [default=`10`
 			"maxEval"=>"maximum number of model evaluations [default=`101`]",
 			"lambda"=>"initial Levenberg-Marquardt lambda [default=`100`]",
 			"lambda_mu"=>"lambda multiplication factor μ [default=`10`]",
-			"np_lambda"=>"number of parallel lambda solves [default=`10`]")))
+			"np_lambda"=>"number of parallel lambda solves [default=`10`]",
+			"callbackiteration"=>"callback invoked after each optimization iteration")))
 
 Returns:
 
 -
 """
-function naive_levenberg_marquardt(f::Function, g::Function, x0::AbstractVector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10)
+function naive_levenberg_marquardt(f::Function, g::Function, x0::AbstractVector{Float64}, o::Function=x->(x'*x)[1]; maxIter::Integer=10, maxEval::Integer=101, lambda::Number=100., lambda_mu::Number=10., np_lambda::Integer=10, callbackiteration::Function=(best_x::AbstractVector, of::Number, current_lambda::Number)->nothing)
 	lambdas = 10. .^ range(log10(lambda / (lambda_mu ^ (.5 * (np_lambda - 1)))), stop=log10(lambda * (lambda_mu ^ (.5 * (np_lambda - 1)))), length=np_lambda)
 	currentx = x0
 	currentf = f(x0)
 	currentsse = Inf
 	nEval = 1
-	for iternum = 1:maxIter
+	for iteration::Int in 1:maxIter
 		currentx, currentsse, currentf = naive_lm_iteration(f, g, o, currentx, currentf, lambdas)
+		callbackiteration(currentx, currentsse, NaN)
 		nEval += np_lambda * maxIter
 		if maxEval < nEval
 			break

@@ -260,21 +260,21 @@ function setmodel!(md::AbstractDict, f::AbstractString, key::AbstractString="Jul
 	return nothing
 end
 
-function createproblem(paramfile::AbstractString, obsfile::AbstractString, f::Union{Function,AbstractString}; kw...)
-	pd, _ = DelimitedFiles.readdlm(paramfile, ' '; header=true, quotes=true)
-	od, _ = DelimitedFiles.readdlm(obsfile, ' '; header=true, quotes=true)
-	paramkey = pd[:, 1]
-	param = float.(pd[:, 2])
-	paramdist = pd[:,3]
-	obs = float.(od[:, 1])
-	obsweight = float.(od[:, 2])
-	obsdist = od[:,3]
-	createproblem(param, obs, f; paramkey=paramkey, paramdist=paramdist, obsweight=obsweight, obsdist=obsdist, kw...)
-	return nothing
+function createproblem(paramfile::AbstractString, obsfile::AbstractString, f::Union{Function,AbstractString}; kw...)::Dict{String,Any}
+	pd::Matrix{Any}, _ = DelimitedFiles.readdlm(paramfile, ' '; header=true, quotes=true)
+	od::Matrix{Any}, _ = DelimitedFiles.readdlm(obsfile, ' '; header=true, quotes=true)
+	paramkey::Vector{String} = string.(pd[:, 1])
+	param::Vector{Float64} = float.(pd[:, 2])
+	paramdist::Vector{String} = string.(pd[:, 3])
+	obs::Vector{Float64} = float.(od[:, 1])
+	obsweight::Vector{Float64} = float.(od[:, 2])
+	obsdist::Vector{String} = string.(od[:, 3])
+	madsdata::Dict{String,Any} = createproblem(param, obs, f; paramkey=paramkey, paramdist=paramdist, obsweight=obsweight, obsdist=obsdist, kw...)
+	return madsdata
 end
-function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)
-	createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
-	return nothing
+function createproblem(in::Integer, out::Integer, f::Union{Function,AbstractString}; kw...)::Dict{String,Any}
+	madsdata::Dict{String,Any} = createproblem(rand(Mads.rng, in), rand(Mads.rng, out), f; kw...)
+	return madsdata
 end
 function createproblem(param::AbstractVector, obs::Union{AbstractVector,AbstractMatrix}, f::Union{Symbol,Function,AbstractString}; modeltype::AbstractString="Julia function", problemname::AbstractString="", paramkey::AbstractVector=["p$(i)" for i=eachindex(param)], paramname::AbstractVector=string.(paramkey), paramplotname::AbstractVector=string.(paramname), paramtype::AbstractVector=["opt" for i=eachindex(param)], parammin::AbstractVector=[], parammax::AbstractVector=[], paramlog::AbstractVector=falses(length(param)), paramminorig::AbstractVector=parammin, parammaxorig::AbstractVector=parammax, paramdist::AbstractVector=[], distribution::Bool=false, expressions::AbstractVector=["" for i=eachindex(param)], obskey::AbstractVector=["o$(i)" for i=eachindex(obs)], obsweight::AbstractVector=ones(length(obs)), obstime::AbstractVector=[], obsmin::Union{Number,AbstractVector}=[], obsmax::Union{Number,AbstractVector}=[], obsminorig::Union{Number,AbstractVector}=obsmin, obsmaxorig::Union{Number,AbstractVector}=obsmax, obsdist::AbstractVector=[])
 	md = Dict{String,Any}()

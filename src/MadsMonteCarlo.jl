@@ -213,7 +213,7 @@ $(DocumentFunction.documentfunction(emceesampling;
 argtext=Dict("madsdata"=>"MADS problem dictionary",
 			"p0"=>"initial parameters (matrix of size (number of parameters, number of walkers) or (length(Mads.getoptparamkeys(madsdata)), numwalkers))"),
 keytext=Dict("numwalkers"=>"number of walkers (if in parallel this can be the number of available processors; in general, the higher the number of walkers, the better the results and computational time [default=`10`]",
-			"nsteps"=>"number of final realizations in the chain [default=`100`]",
+			"nexecutions"=>"total number of exploration-stage model executions [default=`100`]",
 			"burnin"=>"number of initial realizations before the MCMC are recorded [default=`10`]",
 			"thinning"=>"removal of any `thinning` realization [default=`1`]",
 			"sigma"=>"a standard deviation parameter used to initialize the walkers [default=`0.01`]",
@@ -228,8 +228,8 @@ Returns:
 Examples:
 
 ```julia
-Mads.emceesampling(madsdata; numwalkers=10, nsteps=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
-Mads.emceesampling(madsdata, p0; numwalkers=10, nsteps=100, burnin=10, thinning=1, seed=2016)
+Mads.emceesampling(madsdata; numwalkers=10, nexecutions=100, burnin=100, thinning=1, seed=2016, sigma=0.01)
+Mads.emceesampling(madsdata, p0; numwalkers=10, nexecutions=100, burnin=10, thinning=1, seed=2016)
 ```
 """ emceesampling
 

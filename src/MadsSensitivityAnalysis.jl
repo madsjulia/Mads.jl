@@ -186,7 +186,7 @@ function localsa(madsdata::AbstractDict; sinspace::Bool=true, keyword::AbstractS
 	end
 	bad_observations = vec(sum(abs.(J); dims=2) .<= eps(eltype(J)))
 	if sum(bad_observations) > 0 && !veryquiet
-		Mads.madswarn("Observations that are not imppacted by any changes in the parameter values:")
+		Mads.madswarn("Observations that are not impacted by any changes in the parameter values:")
 		println.(obskeys[bad_observations])
 	end
 	if length(obskeys) != size(J, 1) && length(paramkeys) != size(J, 2)

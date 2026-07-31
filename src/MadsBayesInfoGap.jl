@@ -112,13 +112,14 @@ argtext=Dict("madsdata"=>"MADS problem dictionary",
             "nummodelruns"=>"number of model runs"),
 keytext=Dict("numhorizons"=>"number of info-gap horizons of uncertainty [default=`100`]",
             "maxHorizon"=>"maximum info-gap horizons of uncertainty [default=`3`]",
-            "numlikelihoods"=>"number of Bayesian likelihoods [default=`25`]")))
+            "numlikelihoods"=>"number of Bayesian likelihoods [default=`25`]",
+            "progress_callback"=>"optional callback invoked with `(completed_choices, total_choices)` before the first choice and after each completed choice [default=`nothing`]")))
 
 Returns:
 
 - dictionary with BIG-DT results
 """
-function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integer=100, maxHorizon::Real=3., numlikelihoods::Integer=25)
+function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integer=100, maxHorizon::Real=3., numlikelihoods::Integer=25, progress_callback::Union{Nothing,Function}=nothing)
 	parametersamples = getparamrandom(madsdata, nummodelruns)
 	optparamkeys = getoptparamkeys(madsdata)
 	modelparams = Array{Float64}(undef, length(parametersamples), nummodelruns)
@@ -132,6 +133,10 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integ
 	local horizons::Vector{Float64}
 	local likelihoodparams::Matrix{Float64} = zeros(0, 0)
 	madsinfo("Choices:")
+	number_of_choices::Int = length(madsdata["Choices"])
+	if !isnothing(progress_callback)
+		progress_callback(0, number_of_choices)
+	end
 	for i = eachindex(madsdata["Choices"])
 		madsinfo("Choice #$(i): $(madsdata["Choices"][i]["name"])")
 		bigdt = makebigdt(madsdata, madsdata["Choices"][i])
@@ -141,8 +146,36 @@ function bigdt(madsdata::AbstractDict, nummodelruns::Integer; numhorizons::Integ
 			likelihoodparams = BlackBoxOptim.Utils.latin_hypercube_sampling(minlikelihoodparams, maxlikelihoodparams, numlikelihoods)
 		end
 		maxfailureprobs[:, i], horizons, badlikelihoodparams = BIGUQ.getrobustnesscurve(bigdt, maxHorizon, numlikelihoods; getfailureprobfnct=getfailureprobs, numhorizons=numhorizons, likelihoodparams=likelihoodparams)
+		if !isnothing(progress_callback)
+			progress_callback(Int(i), number_of_choices)
+		end
 	end
 	return Dict("maxfailureprobs" => maxfailureprobs, "horizons" => horizons)
+end
+
+const _bigdt_plot_load_lock::ReentrantLock = ReentrantLock()
+const _bigdt_plot_implementation_loaded::Base.RefValue{Bool} = Ref(false)
+
+function _ensure_bigdt_plotting_loaded()::Nothing
+	if haskey(ENV, "MADS_NO_GADFLY") || haskey(ENV, "MADS_NO_PLOT")
+		error("BIG-DT plotting is disabled in this Julia process.")
+	end
+	lock(_bigdt_plot_load_lock) do
+		if !_bigdt_plot_implementation_loaded[]
+			Base.include(@__MODULE__, joinpath(@__DIR__, "MadsPlot.jl"))
+			Base.include(@__MODULE__, joinpath(@__DIR__, "MadsBayesInfoGapPlot.jl"))
+		end
+	end
+	return nothing
+end
+
+# Keep the plotting API available when a no-Gadfly precompile cache is reused by
+# a later plotting-enabled process. The more-specific implementation loaded from
+# MadsBayesInfoGapPlot.jl handles valid result dictionaries after this fallback.
+function plotrobustnesscurves(madsdata::AbstractDict, bigdtresults::Any; filename::AbstractString="", format::AbstractString="", maxprob::Number=1.0, maxhoriz::Number=Inf)
+	bigdtresults isa AbstractDict || throw(ArgumentError("BIG-DT results must be a dictionary."))
+	_ensure_bigdt_plotting_loaded()
+	return Base.invokelatest(plotrobustnesscurves, madsdata, bigdtresults; filename=filename, format=format, maxprob=maxprob, maxhoriz=maxhoriz)
 end
 
 """

@@ -21,19 +21,19 @@ Test.@testset "Restarting" begin
 		Mads.rmdir(joinpath(workdir, "external-jld_restart_test"))
 
 		Mads.madsinfo("Restarting external calibration problem ...")
-		global md = Mads.loadmadsfile(joinpath(workdir, "external-jld.mads"))
-		md["Restart"] = true
-		md["RestartDir"] = joinpath(workdir, "external-jld_restart_test")
+		external_madsdata::AbstractDict = Mads.loadmadsfile(joinpath(Mads.dir, "examples", "model_coupling", "external-linearmodel-jld.mads"))
+		external_madsdata["Restart"] = true
+		external_madsdata["RestartDir"] = joinpath(workdir, "external-jld_restart_test")
 		Mads.madsinfo("... create restart ...")
-		create_restart_results = Mads.calibrate(md; np_lambda=2, maxJacobians=2, maxIter=2)
+		external_create_restart_results::Tuple = Mads.calibrate(external_madsdata; np_lambda=2, maxJacobians=2, maxIter=2)
 		Test.@test Mads.getrestarts() == 12
 		Test.@test Mads.getcomputes() == 11
 		Mads.madsinfo("... use restart ...")
-		use_restart_results = Mads.calibrate(md; np_lambda=2, maxJacobians=2, maxIter=2)
+		external_use_restart_results::Tuple = Mads.calibrate(external_madsdata; np_lambda=2, maxJacobians=2, maxIter=2)
 		Test.@test Mads.getrestarts() == 27
 		Test.@test Mads.getcomputes() == 11
 
-		Test.@test create_restart_results[1] == use_restart_results[1]
+		Test.@test external_create_restart_results[1] == external_use_restart_results[1]
 
 		Mads.rmdir(joinpath(workdir, "external-jld_restart"))
 		Mads.rmdir(joinpath(workdir, "external-jld_restart_test"))
@@ -44,12 +44,20 @@ Test.@testset "Restarting" begin
 	ReusableFunctions.resetrestarts()
 	ReusableFunctions.resetcomputes()
 
-	Mads.rmdir(joinpath(workdir, "w01_restart"))
-	Mads.rmdir("w01_restart")
-	md = Mads.loadmadsfile(joinpath(workdir, "w01-v01.mads"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+	Mads.rmdir("internal-linearmodel_restart")
+	md = Mads.loadmadsfile(joinpath(workdir, "internal-linearmodel.mads"))
 	Mads.madsinfo("... no restart ...")
-	no_restart_results = Mads.calibrate(md; np_lambda=1, maxEval=10, maxJacobians=2)
+	no_restart_calibration_results::Tuple = Mads.calibrate(
+		md;
+		np_lambda=1,
+		maxEval=10,
+		maxJacobians=2,
+		store_optimization_progress=false,
+	)
+	restart_directory::String = joinpath(workdir, "internal-linearmodel_restart")
 	Test.@test Mads.getrestarts() == 0
+	Test.@test !isdir(restart_directory)
 	# @show Mads.getrestarts()
 	# @show Mads.getcomputes()
 
@@ -61,7 +69,7 @@ Test.@testset "Restarting" begin
 	Mads.madsinfo("... use restart ...")
 	use_restart_results = Mads.calibrate(md; np_lambda=1, maxEval=10, maxJacobians=2)
 	Test.@test Mads.getrestarts() == 13
-	Test.@test no_restart_results[1] == create_restart_results[1]
+	Test.@test no_restart_calibration_results[1] == create_restart_results[1]
 	Test.@test create_restart_results[1] == use_restart_results[1]
 
 	Mads.localsa(md; imagefiles=false, datafiles=false)
@@ -72,10 +80,10 @@ Test.@testset "Restarting" begin
 	Test.@test Mads.getrestarts() == 19
 	Mads.savemadsfile(md)
 
-	Mads.rmdir(joinpath(workdir, "w01_restart"))
-	Mads.rmdir("w01_restart")
-	Mads.rmfile(joinpath(workdir, "w01-v01.iterationresults"))
-	Mads.rmfile(joinpath(workdir, "w01-v02.mads"))
+	Mads.rmdir(joinpath(workdir, "internal-linearmodel_restart"))
+	Mads.rmdir("internal-linearmodel_restart")
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel.iterationresults"))
+	Mads.rmfile(joinpath(workdir, "internal-linearmodel-rerun.mads"))
 	Mads.rmfiles_ext("svg"; path=workdir)
 	Mads.rmfiles_ext("dat"; path=workdir)
 

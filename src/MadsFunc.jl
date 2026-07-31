@@ -329,11 +329,15 @@ function makemadscommandfunction(madsdata_in::AbstractDict; obskeys::AbstractVec
 		end
 		return out
 	end
-	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, getrestart(madsdata), madscommandfunctionwithexpressions, getrestartdir(madsdata))
+	restart_setting::Union{String,Bool} = getrestart(madsdata)
+	restartdir::String = _getrestartdir_if_enabled(madsdata)
+	return makemadsreusablefunction(getparamkeys(madsdata), obskeys, restart_setting, madscommandfunctionwithexpressions, restartdir)
 end
 
 function makemadsreusablefunction(madsdata::AbstractDict, madscommandfunction::Function, suffix::AbstractString=""; usedict::Bool=true)
-	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), getrestart(madsdata), madscommandfunction, getrestartdir(madsdata, suffix); usedict=usedict)
+	restart_setting::Union{String,Bool} = getrestart(madsdata)
+	restartdir::String = _getrestartdir_if_enabled(madsdata, suffix)
+	return makemadsreusablefunction(getparamkeys(madsdata), getobskeys(madsdata), restart_setting, madscommandfunction, restartdir; usedict=usedict)
 end
 function makemadsreusablefunction(paramkeys::AbstractVector, obskeys::AbstractVector, madsdatarestart::Union{String,Bool}, madscommandfunction::Function, restartdir::AbstractString; usedict::Bool=true)
 	if madsdatarestart == "memory" # this is not very cool
@@ -424,6 +428,15 @@ function getrestartdir(madsdata::AbstractDict, suffix::AbstractString="", restar
 		recursivemkdir(restartdir; filename=false)
 	end
 	return restartdir
+end
+
+function _getrestartdir_if_enabled(
+	madsdata::AbstractDict,
+	suffix::AbstractString="",
+)::String
+	restart_setting::Union{String,Bool} = getrestart(madsdata)
+	restart_setting === false && return ""
+	return getrestartdir(madsdata, suffix)
 end
 
 """

@@ -38,6 +38,9 @@ printstyled("* file naming ...\n"; color=:cyan)
 printstyled("* test functions ...\n"; color=:cyan)
 @elapsed include("test_functions.jl")
 
+printstyled("* create problem ...\n"; color=:cyan)
+@elapsed include("createproblem.jl")
+
 printstyled("* parameters ...\n"; color=:cyan)
 @elapsed include("parameters.jl")
 

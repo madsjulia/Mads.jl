@@ -45,7 +45,7 @@ the Information-gap decision approach allows for (1) deviations from the assumpt
 Goal
 ~~~~
 
-Future concentrations at monitoring well w2 (from 2016 till 2025) are less than MCL of 2500 ppb
+Keep modeled concentrations at monitoring well w2 below the example's site concentration performance goal of 8,000 ppb from 2016 through 2035.
 
 Scenarios:
 ~~~~~~~~~~
@@ -58,7 +58,7 @@ Scenarios:
 Task:
 ~~~~~
 
-Evaluate the robustness of future concentrations at w2 being below 2500 ppb with respect to the uncertainties in the model and the statistical methods.
+Evaluate how robustly each source-termination scenario keeps future concentrations at w2 below the 8,000 ppb decision threshold under model and statistical uncertainty.
 
 Method:
 ~~~~~~~
@@ -104,7 +104,7 @@ Figures representing robustness of model predictions:
 Discussion of the results:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below 2500ppb.
+We nominally expect that terminating the source at any of these dates (2015, 2020, 2025 or 2030) will probably ensure that future concentrations at w2 remain below the 8,000 ppb site performance goal through 2035.
 This is because the maximum probability of failure is almost zero when the horizon of uncertainty is zero.
 The zero-horizon of uncertainty estimate also corresponds to the result obtained using a Bayesian decision analysis that does not account for non-probabilistic (information gap) uncertainties.
 

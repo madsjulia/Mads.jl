@@ -1,10 +1,14 @@
+import Gadfly
+import LinearAlgebra
 import Mads
-#md = Mads.loadmadsfile("models/internal-linear.mads")
-#md = Mads.loadmadsfile("models/internal-exp-polynomial.mads")
-md = Mads.loadmadsfile("models/internal-polynomial3.mads")
-#md = Mads.loadmadsfile("models/internal-polynomial.mads")
+import Statistics
 
-problem = split(Mads.getmadsrootname(md),"-")[2]
+# md = Mads.loadmadsfile("models/internal-linear.mads")
+# md = Mads.loadmadsfile("models/internal-exp-polynomial.mads")
+md::AbstractDict = Mads.loadmadsfile("models/internal-polynomial3.mads")
+# md = Mads.loadmadsfile("models/internal-polynomial.mads")
+
+problem::String = String(split(Mads.getmadsrootname(md), "-")[2])
 
 @info("Problem: $(problem)")
 
@@ -13,67 +17,68 @@ Mads.mkdir("uncertainty_results")
 @info("Local uncertainty analysis")
 
 @info("Model calibration")
-p, c = Mads.calibrate(md, save_results=false)
-# selected_index = Mads.indexkeys(md["Observations"], r"o[1-3]")
-pv = Mads.getoptparams(md, collect(values(p)))
-f = Mads.forward(md, p)
-var_scale = .5
+calibration_result::Tuple = Mads.calibrate(md; store_optimization_progress=false)
+calibrated_parameters::AbstractDict = calibration_result[1]
+calibrated_predictions::AbstractDict = Mads.forward(md, calibrated_parameters)
+parameter_values::Vector{Float64} = Float64.(Mads.getoptparams(md, collect(values(calibrated_parameters))))
+variance_scale::Float64 = 0.5
 
 @info("Local sensitivity analysis")
-lsa_results = Mads.localsa(md, datafiles=false, imagefiles=false, par=pv, obs=collect(values(f)))
+local_sensitivity::AbstractDict = Mads.localsa(md; datafiles=false, imagefiles=false, par=parameter_values, obs=Float64.(collect(values(calibrated_predictions))))
 
 @info("Model parameter sampling")
-samples, llhoods = Mads.sampling(pv, lsa_results["jacobian"], 1000, seed=2016, scale=var_scale)
+sampling_result::Tuple = Mads.sampling(parameter_values, local_sensitivity["jacobian"], 1000; seed=2016, scale=variance_scale)
+parameter_samples::Matrix{Float64} = sampling_result[1]
+sample_log_likelihoods::Vector{Float64} = sampling_result[2]
 
 @info("Model forward runs")
-o = Mads.forward(md, samples)
+prediction_samples::Matrix{Float64} = Mads.forward(md, parameter_samples)
 
-@info("Use importance sampling to the 95% of the solutions, keeping the most likely solutions")
-newllhoods = Mads.reweighsamples(md, o, llhoods)
-goodoprime = Mads.getimportantsamples(o, newllhoods)
-s_mean, s_var = Mads.weightedstats(o, newllhoods)
+@info("Use importance sampling to keep the solutions containing 95% of the probability mass")
+reweighted_log_likelihoods::Vector{Float64} = Mads.reweighsamples(md, prediction_samples, sample_log_likelihoods)
+important_predictions::Matrix{Float64} = Mads.getimportantsamples(permutedims(prediction_samples), reweighted_log_likelihoods)
+weighted_statistics::Tuple = Mads.weightedstats(permutedims(prediction_samples), reweighted_log_likelihoods)
+weighted_prediction_mean::Matrix{Float64} = weighted_statistics[1]
+weighted_prediction_variance::Matrix{Float64} = weighted_statistics[2]
 
-@info("Variance of posterior predictions (wrong)")
-display(diag(lsa_results["jacobian"] * lsa_results["covar"] * lsa_results["jacobian"]')')
+@info("Linearized variance of posterior predictions")
+display(LinearAlgebra.diag(local_sensitivity["jacobian"] * local_sensitivity["covar"] * local_sensitivity["jacobian"]'))
 
 @info("Variance of posterior predictions using all samples")
-display(var(o, 1))
-# display(var(o_s, 1))
+display(Statistics.var(prediction_samples; dims=2))
 
 @info("Variance of posterior predictions using importance sampling")
-display(var(goodoprime, 2)')
+display(Statistics.var(important_predictions; dims=2))
 
-@info("Variance of weighted posterior predictions using importance sampling")
-display(s_var)
-
-# display(var(goodoprime[selected_index,:], 2)')
-# JLD2.save("uncertainty_results/variance-important-sampling.jld2", "goodoprime", goodoprime)
+@info("Weighted mean and variance of posterior predictions using importance sampling")
+display(weighted_prediction_mean)
+display(weighted_prediction_variance)
 
 @info("Spaghetti plot of posterior predictions")
-Mads.spaghettiplot(md, o; filename="uncertainty_results/spaghetti-$(problem).png")
+Mads.spaghettiplot(md, prediction_samples; filename="uncertainty_results/spaghetti-$(problem).png")
 
 @info("Spaghetti plot of posterior predictions using importance sampling")
-Mads.spaghettiplot(md, goodoprime'; filename="uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
+Mads.spaghettiplot(md, important_predictions; filename="uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
 Mads.display("uncertainty_results/spaghetti-$(problem)-importance-sampling.png")
 
 @info("Histogram of `o5` predictions")
-fig = Gadfly.plot(x=o[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem).png", 6Gadfly.inch, 4Gadfly.inch), fig)
+figure::Gadfly.Plot = Gadfly.plot(x=prediction_samples[5, :], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
+Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem).png", 6Gadfly.inch, 4Gadfly.inch), figure)
 
 @info("Histogram of `o5` predictions using importance sampling")
-fig = Gadfly.plot(x=goodoprime'[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-importance-sampling.png", 6Gadfly.inch, 4Gadfly.inch), fig)
+figure = Gadfly.plot(x=important_predictions[5, :], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
+Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-importance-sampling.png", 6Gadfly.inch, 4Gadfly.inch), figure)
 
 @info("Spaghetti plot of posterior predictions using Bayesian analysis")
-Mads.setparamsinit!(md, p)
-mcmcchain = Mads.bayessampling(md; nsteps=10000, burnin=1000, thinning=1, seed=2016)
-ob = Mads.forward(md, mcmcchain.value)
-Mads.spaghettiplot(md, ob; filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
+Mads.setparamsinit!(md, calibrated_parameters)
+mcmc_result::Tuple = Mads.emceesampling(md; numwalkers=10, nexecutions=10000, burnin=1000, thinning=1, seed=2016, save=false)
+posterior_predictions::Matrix{Float64} = mcmc_result[3]
+Mads.spaghettiplot(md, posterior_predictions; filename="uncertainty_results/spaghetti-$(problem)-bayes.png")
 Mads.display("uncertainty_results/spaghetti-$(problem)-bayes.png")
 
 @info("Histogram of `o5` predictions using Bayesian analysis")
-fig = Gadfly.plot(x=ob[:,5], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
-Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-bayes.png", 6Gadfly.inch, 4Gadfly.inch), fig)
+figure = Gadfly.plot(x=posterior_predictions[5, :], Gadfly.Guide.xlabel("o5"), Gadfly.Geom.histogram())
+Gadfly.draw(Gadfly.PNG("uncertainty_results/histogram-$(problem)-bayes.png", 6Gadfly.inch, 4Gadfly.inch), figure)
 
 @info("Variance of posterior predictions using Bayesian analysis")
-display(var(ob, 1))
+display(Statistics.var(posterior_predictions; dims=2))
