@@ -26,10 +26,14 @@ For example, execute
 include(joinpath(Mads.dir, "examples", "contamination", "contamination.jl"))
 ```
 
-to perform various example analyses related to groundwater contaminant transport, or execute
+to perform various example analyses related to groundwater contaminant transport.
+
+To perform Bayesian Information Gap Decision Theory (BIG-DT) analysis, execute
 
 ```julia
-include(joinpath(Mads.dir, "examples", "bigdt", "bigdt.jl"))
+import Mads
+include(joinpath(Mads.dir, "examples", "bigdt", "source_termination.jl"))
+results::AbstractDict = run_source_termination()
 ```
 
-to perform Bayesian Information Gap Decision Theory (BIG-DT) analysis.
+The [contaminant source-termination documentation](bigdt/source_termination/source_termination.md) explains the decision scenarios and robustness results.

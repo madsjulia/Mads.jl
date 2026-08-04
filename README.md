@@ -85,10 +85,10 @@ A list of all the examples is provided by:
 Mads.examples()
 ```
 
-A specific can be executed using:
+A specific example can be executed using:
 
 ```julia
-Mads.examples("contamination")
+Mads.example("contamination")
 ```
 
 or
@@ -99,16 +99,18 @@ include(joinpath(Mads.dir, "examples", "contamination", "contamination.jl"))
 
 This example will demonstrate various  analyses related to groundwater contaminant transport.
 
-To perform Bayesian Information Gap Decision Theory (BIG-DT) analysis, execute:
+To run the focused Bayesian Information Gap Decision Theory (BIG-DT) example test, execute:
 
 ```julia
-Mads.examples("bigdt")
+Mads.example("bigdt")
 ```
 
-or
+To run the complete source-termination analysis, execute:
 
 ```julia
-include(joinpath(Mads.dir, "examples", "bigdt", "bigdt.jl"))
+import Mads
+include(joinpath(Mads.dir, "examples", "bigdt", "source_termination.jl"))
+results::AbstractDict = run_source_termination()
 ```
 
 ## Notebooks
