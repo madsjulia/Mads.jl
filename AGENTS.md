@@ -96,3 +96,24 @@ After changes, run:
 git diff --check
 git status --short
 ```
+
+## Architecture and dependency boundaries
+
+`src/Mads.jl` is the composition root.
+Keep problem parsing and serialized input semantics in the `MadsIO`, `MadsYAML`, `MadsJSON`, `MadsParameters`, and `MadsObservations` layers.
+Keep external-model execution, working-directory behavior, restart handling, and command construction in `MadsForward`, `MadsExecute`, and `MadsSimulators` rather than embedding them in analysis algorithms.
+Calibration, minimization, sensitivity, model-selection, Monte Carlo, and information-gap code consume those problem and execution contracts; they must not reinterpret parameter bounds, observation weights, or restart state independently.
+
+Mads is intentionally usable in headless and reduced-feature environments.
+Preserve the `MADS_NO_PLOT`, `MADS_NO_GADFLY`, and `MADS_NO_DISPLAY` gates, and do not make core parsing, execution, or analysis depend on a plotting backend.
+Treat `SVR` and the other solver packages in `Project.toml` as coordinated public dependencies; review downstream compatibility and the checked-in manifest whenever their compat ranges change.
+
+## Test and artifact boundaries
+
+Use the focused files under `test/` for changes to coordinates, problem creation, filenames, I/O, observations, or parameters.
+The root `test/runtests.jl` also discovers and runs example `runtests.jl` files, so a full suite is an integration and example-workflow run rather than only a unit suite.
+External executables, distributed workers, optimization solvers, display backends, and long examples must be reported as separate environmental boundaries when unavailable.
+
+Treat problem files, restart directories, calibration results, model outputs, and example result trees as user-owned scientific artifacts.
+Documentation sources live under `docs/src/`; `html/`, generated figures, notebook outputs, and files under `work/` are derived artifacts and must not be hand-edited or refreshed incidentally.
+When an artifact must be regenerated, use its owning example or documentation command and review the scientific and serialized diff separately from source changes.
