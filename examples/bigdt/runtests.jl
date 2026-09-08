@@ -6,7 +6,7 @@ import Test
 if haskey(ENV, "MADS_NO_BIGUQ") || !isdefined(Mads, :bigdt)
     @info("BIGUQ cannot be tested!")
 else
-    workdir::String = joinpath(Mads.dir, "examples", "bigdt")
+    let workdir::String = joinpath(Mads.dir, "examples", "bigdt")
     include(joinpath(workdir, "source_termination.jl"))
 
     md::AbstractDict = Mads.loadmadsfile(joinpath(workdir, "source_termination.mads"); quiet=true)
@@ -112,5 +112,6 @@ else
         Test.@test isnothing(synthetic_decision_summary[1].robustness_horizon)
         Test.@test !synthetic_decision_summary[1].threshold_reached
         Test.@test synthetic_decision_summary[1].rank == 1
+    end
     end
 end

@@ -237,7 +237,6 @@ function noplot()
 	if Distributed.myid() == 1
 		for i in Distributed.workers()
 			@Distributed.spawnat i ENV["MADS_NO_PLOT"]=""
-			@Distributed.spawnat i ENV["MADS_NO_PYPLOT"]=""
 			@Distributed.spawnat i ENV["MADS_NO_GADFLY"]=""
 		end
 	end

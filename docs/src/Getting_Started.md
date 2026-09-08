@@ -149,7 +149,7 @@ import Pkg; Pkg.add(Pkg.PackageSpec(name="Mads", rev="master"))
 
 ### Installation without plotting modules
 
-MADS uses Gadfly and matplotlib for plotting.
+MADS uses Gadfly and Compose for its built-in plotting functions.
 To avoid using these modules, set the following environmental variable:
 
 ```bash
@@ -168,28 +168,21 @@ or
 ENV["MADS_NO_PLOT"] = ""
 ```
 
-### Installation without `matplotlib`
+### Optional rendering backends
 
-MADS can use `matplotlib` to create plots.
-However, they are optional.
-
-To avoid using `matplotlib`, set the following environmental variable before building MADS:
-
-```bash
-export MADS_NO_PYTHON="" # bash
-```
-
-or
-
-```tcsh
-setenv MADS_NO_PYTHON "" # tcsh
-```
-
-or
+MADS produces SVG plots without Cairo or Fontconfig.
+PNG, PDF, and PostScript formats require Cairo and Fontconfig to be installed and loaded by the caller:
 
 ```julia
-ENV["MADS_NO_PYTHON"] = "" # julia
+import Pkg
+Pkg.add(["Cairo", "Fontconfig"])
+import Cairo
+import Fontconfig
+import Mads
 ```
+
+Python-backed examples similarly require the caller to install PyCall or PyPlot explicitly.
+MADS itself does not depend on or build either Python package.
 
 Julia uses git for package management.
 

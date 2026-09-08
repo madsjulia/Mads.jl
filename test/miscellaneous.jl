@@ -64,9 +64,9 @@ end
 Mads.stdouterrcaptureon()
 
 Mads.printerrormsg("a")
-madsoutput("a")
+Mads.madsoutput("a")
 Mads.madsdebug("a")
-madsinfo("Testing ...")
+Mads.madsinfo("Testing ...")
 Mads.help()
 Mads.copyright()
 if length(ARGS) < 1
@@ -172,12 +172,12 @@ Mads.setprocs(1)
 Mads.parsenodenames("wc[096-157,160,175]")
 
 Mads.graphoff()
-Mads.plotseries(rand(4,5), "test.png"; combined=false)
-Mads.plotseries(rand(4,5), "test.png")
+Mads.plotseries(rand(4,5), "test.svg"; combined=false)
+Mads.plotseries(rand(4,5), "test.svg")
 if isdefined(Mads, :display)
-	Mads.display("test.png")
+	Mads.display("test.svg")
 end
-Mads.rmfile("test.png")
+Mads.rmfile("test.svg")
 Mads.graphon()
 
 deleteat!(ARGS, 1)

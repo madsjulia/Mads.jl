@@ -12,7 +12,7 @@ if workdir == "."
 end
 
 md = Mads.loadmadsfile(joinpath(workdir, "sobol.mads"))
-sa_results = Mads.efast(md; N=385, seed=2015)
+sa_results = Mads.efast(md; N=385, seed=2015, save=false)
 Mads.computeparametersensitities(md, sa_results)
 
 filename_correct = joinpath(workdir, "sobol-efast-results_correct.json")
@@ -29,9 +29,20 @@ Test.@testset "Sensitivity" begin
 	Test.@test !in(Base.collect(Base.values(sa_results_correct["tes"]["of"])) - Base.collect(Base.values(sa_results["tes"]["of"])) .< 1e-6, false)
 end
 
-sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true)
-sa_results = Mads.saltellibruteparallel(md, 2; N=5, seed=2015)
-sa_results = Mads.saltelliparallel(md, 2; N=5, seed=2015)
+sa_results = Mads.saltelli(md; N=5, seed=2015, parallel=true, save=false)
+sa_results = mktempdir() do output_dir::String
+	cd(output_dir) do
+		temporary_md::AbstractDict = deepcopy(md)
+		temporary_md["Model"] = joinpath(dirname(String(md["Filename"])), String(md["Model"]))
+		temporary_md["Filename"] = joinpath(output_dir, basename(md["Filename"]))
+		Mads.saltellibruteparallel(temporary_md, 2; N=5, seed=2015)
+		parallel_results::AbstractDict = Mads.saltelliparallel(temporary_md, 2; N=5, seed=2015)
+		A::Matrix{Int} = [[1,2] [2,3]]
+		Mads.savesaltellirestart(A, "A", output_dir)
+		Mads.loadsaltellirestart!(A, "A", output_dir)
+		return parallel_results
+	end
+end
 # sa_results = Mads.saltellibrute(md; N=10, seed=2015)
 # sa_results = Mads.saltelli(md; N=10, seed=2015)
 
@@ -42,10 +53,6 @@ Mads.printSAresults2(md, sa_results)
 
 Mads.stdoutcaptureoff();
 
-A=[[1,2] [2,3]]
-Mads.savesaltellirestart(A, "A", workdir)
-Mads.loadsaltellirestart!(A, "A", workdir)
-Mads.rmfile(joinpath(workdir, "A_1.jld2"))
 Mads.rmdir(joinpath(cwd, "sobol_restart"))
 
 :passed

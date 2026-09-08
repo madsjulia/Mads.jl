@@ -59,10 +59,8 @@ jobs:
       - name: Instantiate docs environment
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
         env:
-          MADS_NO_PYTHON: ""
           MADS_NO_PLOT: ""
       - name: Build documentation
         run: julia --color=yes --project=docs/ docs/make-rtd.jl
         env:
-          MADS_NO_PYTHON: ""
           MADS_NO_PLOT: ""

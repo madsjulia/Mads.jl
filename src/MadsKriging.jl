@@ -162,7 +162,7 @@ function getcovmat(X::AbstractMatrix, covfunction::Function)
 	cov0 = covfunction(0)
 	for i in axes(X, 2)
 		covmat[i, i] = cov0
-		for j = i + axes(X, 2)
+		for j = (i + 1):last(axes(X, 2))
 			covmat[i, j] = covfunction(LinearAlgebra.norm(X[:, i] .- X[:, j]))
 			covmat[j, i] = covmat[i, j]
 		end

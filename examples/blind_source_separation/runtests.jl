@@ -2,7 +2,6 @@ import Mads
 import JLD2
 
 import Test
-import Suppressor
 import Random
 
 Mads.veryquieton()
@@ -34,7 +33,9 @@ else
 		H = [[1,1,1] [0,2,1] [1,0,2] [1,2,0]]
 		X = S * H
 
-		Suppressor.@suppress Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
+		Wipopt, Hipopt, pipopt = Base.redirect_stdio(stdout=Base.devnull, stderr=Base.devnull) do
+			Mads.NMFipopt(X, nk, R; quiet=true)
+		end
 
 		if Mads.create_tests
 			Mads.mkdir(d)

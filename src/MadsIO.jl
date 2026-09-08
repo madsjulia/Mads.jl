@@ -287,15 +287,25 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			mask_missing = ismissing.(v)
 			mask_dates = v_types .== Dates.Date
 			mask_datestime = v_types .== Dates.DateTime
+			mask_strings = (v_types .<: AbstractString) .& .!mask_missing
 			v_datestime = Dates.DateTime.(Dates.Date.(v[mask_datestime]))
 			if v_datestime != v[mask_datestime]
 				convert_type = Dates.DateTime
-				v[mask_dates] .= Dates.DateTime.(v[mask_dates])
 			else
 				convert_type = Dates.Date
-				v[mask_datestime] .= Dates.Date.(v[mask_datestime])
 			end
-			v[.!mask_missing] = convert.(convert_type, v[.!mask_missing])
+			parsed_strings = tryparse.(convert_type, strip.(v[mask_strings]))
+			if any(isnothing, parsed_strings)
+				v = convert(Vector{Union{Missing, unique(typeof.(v))...}}, v)
+			else
+				v[mask_strings] .= something.(parsed_strings)
+				if convert_type == Dates.DateTime
+					v[mask_dates] .= Dates.DateTime.(v[mask_dates])
+				else
+					v[mask_datestime] .= Dates.Date.(v[mask_datestime])
+				end
+				v = convert(Vector{Union{Missing, convert_type}}, v)
+			end
 		elseif all(unique_types .<: Union{Missing, AbstractString, Dates.DateTime})
 			v[isnull.(v)] .= missing
 			mask_missing = ismissing.(v)
@@ -303,7 +313,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 		elseif all(unique_types .<: Union{Missing, AbstractString, Integer})
 			mask_integer = v_types .<: Integer
 			mask_string = v_types .<: AbstractString
-			v[mask_string] .= strip.(v[mask_string])
+			v[mask_string] .= String.(strip.(v[mask_string]))
 			mask_null = isnull.(v)
 			if sum(mask_integer) > sum(mask_string)
 				convert_type = convertintegers ? inttype : floattype
@@ -360,7 +370,7 @@ function check_vector(v::AbstractVector, param::AbstractString, floattype::DataT
 			mask_float = v_types .<: AbstractFloat
 			mask_integer = v_types .<: Integer
 			mask_string = v_types .<: AbstractString
-			v[mask_string] .= strip.(v[mask_string])
+			v[mask_string] .= String.(strip.(v[mask_string]))
 			mask_null = isnull.(v)
 			if sum(mask_float) > sum(mask_string)
 				convert_type = floattype

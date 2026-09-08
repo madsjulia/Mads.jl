@@ -1,27 +1,16 @@
-if lowercase(get(ENV, "CI", "false")) == "true"
-	let
-		setup_code = Base.load_path_setup_code()
-		path = joinpath(@__DIR__, "..", "ci", "before_script.jl")
-		code = """
-			$setup_code
-			include("$(escape_string(path))")
-		"""
-		run(`$(Base.julia_cmd()) -e $code`)
-	end
-end
-
 import Mads
 import Test
+import Gadfly
 
 Mads.veryquieton()
 Mads.graphoff()
 
-try
-	Gadfly.draw(Gadfly.PNG("test.png", 2Gadfly.inch, 1Gadfly.inch, dpi=100), Gadfly.plot(x=rand(10), Gadfly.Geom.histogram()))
-	Mads.rmfile("test.png")
-catch
-	ENV["MADS_NO_GADFLY"] = ""
-	@warn("Gadfly plotting is disabled; Gadfly fails!")
+Test.@testset "SVG plotting" begin
+	mktempdir() do output_dir::String
+		output_file::String = joinpath(output_dir, "mads-test.svg")
+		Gadfly.draw(Gadfly.SVG(output_file, 2Gadfly.inch, 1Gadfly.inch), Gadfly.plot(x=[1.0, 2.0], y=[1.0, 4.0], Gadfly.Geom.line))
+		Test.@test filesize(output_file) > 0
+	end
 end
 
 @info("Running MADS tests:")
@@ -51,6 +40,7 @@ for madstest in Mads.examples()
 	if !occursin(r"_[1-9]", madstest) # skip restarts
 		file = joinpath(Mads.dir, "examples", madstest, "runtests.jl")
 		if isfile(file)
+			Mads.graphoff()
 			printstyled("* $(madstest) ...\n"; color=:cyan)
 			@elapsed include(file)
 		end

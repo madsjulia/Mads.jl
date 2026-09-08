@@ -1,7 +1,6 @@
 import Mads
 import Test
 import Printf
-import Suppressor
 import DataFrames
 import Random
 
@@ -39,8 +38,12 @@ df = DataFrames.DataFrame()
 df[!, :Values] = Random.rand(10) .* floatmax(Float64)
 Mads.maxtofloatmax!(df)
 
-@Suppressor.suppress Mads.gettime(Dict("o1"=>Dict("c"=>1)))
-@Suppressor.suppress global resultshouldbenan = Mads.getweight(Dict("ww"=>10))
+Base.redirect_stdio(stdout=Base.devnull, stderr=Base.devnull) do
+	Mads.gettime(Dict("o1"=>Dict("c"=>1)))
+end
+global resultshouldbenan::Float64 = Base.redirect_stdio(stdout=Base.devnull, stderr=Base.devnull) do
+	Mads.getweight(Dict("ww"=>10))
+end
 
 # Begin the main test block
 @Test.testset "IO" begin

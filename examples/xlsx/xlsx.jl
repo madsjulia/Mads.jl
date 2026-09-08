@@ -17,7 +17,7 @@ df5 = Mads.get_excel_data(xlsxfile, "Sheet1"; header=1:1, rows=3:102, cols=1:6)
 
 df6 = Mads.get_excel_data(xlsxfile, "Sheet1"; header=1:1, rows=3:102, cols=[1,3,7,5])
 
-df7 = Mads.get_excel_data(xlsxfile, "Sheet1"; header=1:1, rows=3:102, cols=[1,3,7,5], numbertype=Float32)
+df7 = Mads.get_excel_data(xlsxfile, "Sheet1"; header=1:1, rows=3:102, cols=[1,3,7,5], floattype=Float32)
 
 dd1 = Mads.get_excel_data(xlsxfile, "Sheet1"; header=1:1, rows=3:102, cols=[1,3,7,5], dataframe=false)
 

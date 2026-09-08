@@ -502,7 +502,7 @@ function plotwellSAresults(madsdata::AbstractDict, result::AbstractDict; xtitle:
 		Mads.madswarn("There is no 'Wells' data in the MADS input dataset")
 	else
 		for wellname in keys(madsdata["Wells"])
-			if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellname]["on"]
+			if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]
 				plotwellSAresults(madsdata, result, wellname; xtitle=xtitle, ytitle=ytitle, filename=filename, format=format, quiet=quiet)
 			end
 		end
@@ -796,7 +796,7 @@ function spaghettiplots(madsdata::AbstractDict, paramdictarray::OrderedCollectio
 			startj = 1
 			endj  = 0
 			for wellname in keys(madsdata["Wells"])
-				if !haskey(madsdata["Wells"][wellkey], "on") || madsdata["Wells"][wellname]["on"]
+				if !haskey(madsdata["Wells"][wellname], "on") || madsdata["Wells"][wellname]["on"]
 					o = madsdata["Wells"][wellname]["obs"]
 					nTw = length(o)
 					t = Array{Float64}(undef, nTw)

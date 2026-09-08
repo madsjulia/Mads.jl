@@ -8,9 +8,6 @@
 @time import SVR
 @time import DocumentFunction
 @time import Documenter
-@time import Conda
-@time import PyCall
-@time import PyPlot
 @time import Gadfly
 @time import Compose
 @time import Measures

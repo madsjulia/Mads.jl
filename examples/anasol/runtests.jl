@@ -60,7 +60,7 @@ if isdefined(Mads, :plotgrid)
 		Mads.graphon()
 	catch errmsg
 		Mads.printerrormsg(errmsg)
-		@warn("PyPlot problem!")
+		@warn("Plotting problem!")
 	end
 end
 madsOf = Mads.of(md)
@@ -214,12 +214,12 @@ end
 
 md = Mads.loadmadsfile(joinpath(workdir, "w01shortexp.mads"))
 md["Restart"] = true
-Mads.localsa(md; filename="w01shortexp.png", par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
+Mads.graphoff()
+Mads.localsa(md; filename="w01shortexp.svg", imagefiles=true, par=Mads.getparamsinit(md, Mads.getoptparamkeys(md)))
 if !haskey(ENV, "MADS_NO_GADFLY")
-	Mads.graphoff()
 	Mads.plotlocalsa("w01shortexp")
-	Mads.graphon()
 end
+Mads.graphon()
 Mads.@stdouterrcapture Mads.calibrate(md; localsa=true, show_trace=true)
 Mads.rmfiles_ext("initialresults"; path=workdir)
 Mads.rmfiles_ext("svg"; path=workdir)
