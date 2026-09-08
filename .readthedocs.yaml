@@ -10,7 +10,7 @@ build:
     install:
       # Install Julia using 'jill' (Python).
       - python -m pip install --user --upgrade pip jill
-      - python -m jill install 1.11 --confirm --install_dir $HOME/julia --symlink_dir $HOME/.local/bin
+      - python -m jill install 1.12 --confirm --install_dir $HOME/julia --symlink_dir $HOME/.local/bin
       - $HOME/.local/bin/julia --version
 
       # Instantiate the docs environment.

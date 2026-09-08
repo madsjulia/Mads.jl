@@ -8,7 +8,7 @@ RUN set -eux; apt-get update;apt-get install -y --no-install-recommends \
         curl tar ca-certificates ;
 ENV JULIA_PATH=/usr/local/julia
 ENV PATH $JULIA_PATH/bin:/bin:$PATH
-ENV JULIA_DOWNLOAD_URL=https://julialang-s3.julialang.org/bin/linux/x64/1.1/julia-1.1.0-linux-x86_64.tar.gz
+ENV JULIA_DOWNLOAD_URL=https://julialang-s3.julialang.org/bin/linux/x64/1.12/julia-1.12.7-linux-x86_64.tar.gz
 RUN mkdir ${JULIA_PATH} && \
     cd /tmp && \
     curl -fL -o julia.tar.gz ${JULIA_DOWNLOAD_URL} && \

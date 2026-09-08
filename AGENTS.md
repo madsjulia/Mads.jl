@@ -19,12 +19,12 @@ Follow more specific instructions if a nested `AGENTS.md` is added later.
 
 ## Julia environment
 
-Use Julia 1.11 unless a task explicitly targets another version.
+Use Julia 1.12 unless a task explicitly targets another version.
 
 Run Julia without user startup-file customizations:
 
 ```powershell
-julia +1.11 --startup-file=no --project=.
+julia +1.12 --startup-file=no --project=.
 ```
 
 Respect the checked-in `Project.toml` and `Manifest.toml`.
@@ -52,13 +52,13 @@ Start with the narrowest test that covers the change.
 For a focused Mads test:
 
 ```powershell
-julia +1.11 --startup-file=no --project=. -e 'import Mads; Mads.test("test_name"; madstest=false, plotting=false)'
+julia +1.12 --startup-file=no --project=. -e 'import Mads; Mads.test("test_name"; madstest=false, plotting=false)'
 ```
 
 For the complete package test suite:
 
 ```powershell
-julia +1.11 --startup-file=no --project=. -e 'import Pkg; Pkg.test()'
+julia +1.12 --startup-file=no --project=. -e 'import Pkg; Pkg.test()'
 ```
 
 The complete suite runs many example workflows and may be expensive.

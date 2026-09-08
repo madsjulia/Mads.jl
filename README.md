@@ -41,6 +41,8 @@ Detailed demontrative data analysis and model diagnostics problems are available
 
 ## Installation
 
+Mads requires Julia 1.12 or later.
+
 In [Julia](https://julialang.org/downloads) REPL, execute:
 
 ```julia
