@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:gadfly="http://www.gadflyjl.org/ns"
+     version="1.2"
+     width="152.4mm" height="304.8mm" viewBox="0 0 152.4 304.8"
+     stroke="none"
+     fill="#000000"
+     stroke-width="0.3"
+     font-size="3.88"
+>
+<g class="plotroot xscalable yscalable" id="img-01af78e4-1">
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-2">
+    <text x="74.93" y="292.17" text-anchor="middle" dy="0.6em">Time [a]</text>
+  </g>
+  <g class="guide xlabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-3">
+    <text x="28.69" y="285.09" text-anchor="middle" dy="0.6em">0</text>
+    <text x="47.19" y="285.09" text-anchor="middle" dy="0.6em">10</text>
+    <text x="65.68" y="285.09" text-anchor="middle" dy="0.6em">20</text>
+    <text x="84.18" y="285.09" text-anchor="middle" dy="0.6em">30</text>
+    <text x="102.67" y="285.09" text-anchor="middle" dy="0.6em">40</text>
+    <text x="121.17" y="285.09" text-anchor="middle" dy="0.6em">50</text>
+  </g>
+  <g class="guide colorkey" id="img-01af78e4-4">
+    <g fill="#4C404B" font-size="4.23" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-01af78e4-5">
+      <text x="127.87" y="256.15" dy="0.35em" id="img-01af78e4-6" class="color_v">v</text>
+      <text x="127.87" y="261.55" dy="0.35em" id="img-01af78e4-7" class="color_t0">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">0</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+      <text x="127.87" y="266.94" dy="0.35em" id="img-01af78e4-8" class="color_t1">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">1</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+    </g>
+    <g stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-9">
+      <rect x="124.17" y="254.8" width="2.7" height="2.7" id="img-01af78e4-10" class="color_v" fill="#00BFFF"/>
+      <rect x="124.17" y="260.2" width="2.7" height="2.7" id="img-01af78e4-11" class="color_t0" fill="#D4CA3A"/>
+      <rect x="124.17" y="265.59" width="2.7" height="2.7" id="img-01af78e4-12" class="color_t1" fill="#FF6DAE"/>
+    </g>
+    <g fill="#362A35" font-size="5.64" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-13">
+      <text x="124.17" y="251.07" id="img-01af78e4-14">parameter</text>
+    </g>
+  </g>
+<g clip-path="url(#img-01af78e4-15)">
+  <g id="img-01af78e4-16">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-01af78e4-17">
+      <rect x="26.69" y="233.6" width="96.48" height="50.49" id="img-01af78e4-18"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-19">
+      <path fill="none" d="M26.69,282.09 L 123.17 282.09" id="img-01af78e4-20"/>
+      <path fill="none" d="M26.69,266.6 L 123.17 266.6" id="img-01af78e4-21"/>
+      <path fill="none" d="M26.69,251.1 L 123.17 251.1" id="img-01af78e4-22"/>
+      <path fill="none" d="M26.69,235.6 L 123.17 235.6" id="img-01af78e4-23"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-24">
+      <path fill="none" d="M28.69,233.6 L 28.69 284.09" id="img-01af78e4-25"/>
+      <path fill="none" d="M47.19,233.6 L 47.19 284.09" id="img-01af78e4-26"/>
+      <path fill="none" d="M65.68,233.6 L 65.68 284.09" id="img-01af78e4-27"/>
+      <path fill="none" d="M84.18,233.6 L 84.18 284.09" id="img-01af78e4-28"/>
+      <path fill="none" d="M102.67,233.6 L 102.67 284.09" id="img-01af78e4-29"/>
+      <path fill="none" d="M121.17,233.6 L 121.17 284.09" id="img-01af78e4-30"/>
+    </g>
+    <g class="plotpanel" id="img-01af78e4-31">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" stroke-dasharray="none" id="img-01af78e4-32">
+        <path fill="none" d="M30.54,282.09 L 32.39 282.09 34.24 282.09 36.09 282.09 37.94 282.09 39.79 282.06 41.64 281.99 43.49 281.87 45.34 281.68 47.19 281.41 49.04 281.06 50.89 280.62 52.74 280.12 54.59 279.56 56.44 278.91 58.29 278.19 60.13 277.4 61.98 276.58 63.83 275.72 65.68 274.85 67.53 273.95 69.38 273.02 71.23 272.06 73.08 271.03 74.93 269.92 76.78 268.74 78.63 267.51 80.48 266.23 82.33 264.9 84.18 263.54 86.03 262.17 87.88 260.79 89.73 259.4 91.58 258 93.43 256.58 95.28 255.16 97.12 253.76 98.97 252.42 100.82 251.14 102.67 249.91 104.52 248.7 106.37 247.48 108.22 246.24 110.07 244.99 111.92 243.76 113.77 242.56 115.62 241.43 117.47 240.36 119.32 239.36 121.17 238.43" id="img-01af78e4-33" class="geometry color_v" stroke="#00BFFF"/>
+        <path fill="none" d="M30.54,282.09 L 32.39 282.09 34.24 282.09 36.09 282.09 37.94 282.09 39.79 282.07 41.64 282.01 43.49 281.91 45.34 281.74 47.19 281.51 49.04 281.2 50.89 280.81 52.74 280.31 54.59 279.71 56.44 279.02 58.29 278.25 60.13 277.45 61.98 276.63 63.83 275.82 65.68 275 67.53 274.19 69.38 273.37 71.23 272.55 73.08 271.72 74.93 270.86 76.78 269.96 78.63 269 80.48 267.99 82.33 266.94 84.18 265.91 86.03 264.91 87.88 263.93 89.73 262.96 91.58 262 93.43 261.05 95.28 260.11 97.12 259.17 98.97 258.22 100.82 257.27 102.67 256.31 104.52 255.33 106.37 254.32 108.22 253.26 110.07 252.18 111.92 251.1 113.77 250.03 115.62 248.98 117.47 247.95 119.32 246.96 121.17 246" id="img-01af78e4-34" class="geometry color_t0" stroke="#D4CA3A"/>
+        <path fill="none" d="M30.54,282.09 L 32.39 282.09 34.24 282.09 36.09 282.09 37.94 282.09 39.79 282.07 41.64 282.02 43.49 281.91 45.34 281.74 47.19 281.52 49.04 281.21 50.89 280.8 52.74 280.27 54.59 279.65 56.44 278.93 58.29 278.13 60.13 277.25 61.98 276.33 63.83 275.37 65.68 274.39 67.53 273.38 69.38 272.37 71.23 271.34 73.08 270.32 74.93 269.3 76.78 268.27 78.63 267.19 80.48 266.05 82.33 264.89 84.18 263.72 86.03 262.59 87.88 261.47 89.73 260.37 91.58 259.28 93.43 258.23 95.28 257.18 97.12 256.13 98.97 255.07 100.82 254 102.67 252.93 104.52 251.87 106.37 250.83 108.22 249.85 110.07 248.95 111.92 248.15 113.77 247.46 115.62 246.87 117.47 246.35 119.32 245.88 121.17 245.44" id="img-01af78e4-35" class="geometry color_t1" stroke="#FF6DAE"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-36">
+    <text x="25.69" y="282.09" text-anchor="end" dy="0.35em" id="img-01af78e4-37">0</text>
+    <text x="25.69" y="266.6" text-anchor="end" dy="0.35em" id="img-01af78e4-38">1×10⁴</text>
+    <text x="25.69" y="251.1" text-anchor="end" dy="0.35em" id="img-01af78e4-39">2×10⁴</text>
+    <text x="25.69" y="235.6" text-anchor="end" dy="0.35em" id="img-01af78e4-40">3×10⁴</text>
+  </g>
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-41">
+    <text x="9.25" y="256.85" text-anchor="middle" dy="0.35em" transform="rotate(-90, 9.25, 258.85)" id="img-01af78e4-42">Output Variance</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-01af78e4-43">
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-44">
+    <text x="71.7" y="215.97" text-anchor="middle" dy="0.6em" id="img-01af78e4-45">Time [a]</text>
+  </g>
+  <g class="guide xlabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-46">
+    <text x="22.22" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-47">0</text>
+    <text x="42.01" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-48">10</text>
+    <text x="61.8" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-49">20</text>
+    <text x="81.59" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-50">30</text>
+    <text x="101.38" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-51">40</text>
+    <text x="121.17" y="208.89" text-anchor="middle" dy="0.6em" id="img-01af78e4-52">50</text>
+  </g>
+  <g class="guide colorkey" id="img-01af78e4-53">
+    <g fill="#4C404B" font-size="4.23" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-01af78e4-54">
+      <text x="127.87" y="179.95" dy="0.35em" id="img-01af78e4-55" class="color_v">v</text>
+      <text x="127.87" y="185.35" dy="0.35em" id="img-01af78e4-56" class="color_t0">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">0</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+      <text x="127.87" y="190.74" dy="0.35em" id="img-01af78e4-57" class="color_t1">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">1</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+    </g>
+    <g stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-58">
+      <rect x="124.17" y="178.6" width="2.7" height="2.7" id="img-01af78e4-59" class="color_v" fill="#00BFFF"/>
+      <rect x="124.17" y="184" width="2.7" height="2.7" id="img-01af78e4-60" class="color_t0" fill="#D4CA3A"/>
+      <rect x="124.17" y="189.39" width="2.7" height="2.7" id="img-01af78e4-61" class="color_t1" fill="#FF6DAE"/>
+    </g>
+    <g fill="#362A35" font-size="5.64" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-62">
+      <text x="124.17" y="174.87" id="img-01af78e4-63">parameter</text>
+    </g>
+  </g>
+<g clip-path="url(#img-01af78e4-64)">
+  <g id="img-01af78e4-65">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-01af78e4-66">
+      <rect x="20.22" y="157.4" width="102.94" height="50.49" id="img-01af78e4-67"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-68">
+      <path fill="none" d="M20.22,205.89 L 123.17 205.89" id="img-01af78e4-69"/>
+      <path fill="none" d="M20.22,182.65 L 123.17 182.65" id="img-01af78e4-70"/>
+      <path fill="none" d="M20.22,159.4 L 123.17 159.4" id="img-01af78e4-71"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-72">
+      <path fill="none" d="M22.22,157.4 L 22.22 207.89" id="img-01af78e4-73"/>
+      <path fill="none" d="M42.01,157.4 L 42.01 207.89" id="img-01af78e4-74"/>
+      <path fill="none" d="M61.8,157.4 L 61.8 207.89" id="img-01af78e4-75"/>
+      <path fill="none" d="M81.59,157.4 L 81.59 207.89" id="img-01af78e4-76"/>
+      <path fill="none" d="M101.38,157.4 L 101.38 207.89" id="img-01af78e4-77"/>
+      <path fill="none" d="M121.17,157.4 L 121.17 207.89" id="img-01af78e4-78"/>
+    </g>
+    <g class="plotpanel" id="img-01af78e4-79">
+      <g stroke-width="0.71" fill="#000000" fill-opacity="0.000" stroke-dasharray="none" id="img-01af78e4-80">
+        <path fill="none" d="M24.2,204.28 L 26.18 149.24 28.16 130.03 30.14 140.07 32.12 165.67 34.1 184.59 36.08 192.98 38.06 193.66 40.03 190.42 42.01 186.21 43.99 182.47 45.97 179.55 47.95 177.32 49.93 175.52 51.91 174.04 53.89 172.83 55.87 171.92 57.84 171.31 59.82 170.91 61.8 170.64 63.78 170.49 65.76 170.44 67.74 170.49 69.72 170.59 71.7 170.66 73.68 170.68 75.65 170.63 77.63 170.51 79.61 170.3 81.59 169.98 83.57 169.59 85.55 169.14 87.53 168.7 89.51 168.28 91.49 167.91 93.46 167.59 95.44 167.31 97.42 167.11 99.4 166.96 101.38 166.87 103.36 166.83 105.34 166.86 107.32 166.93 109.3 167.05 111.27 167.18 113.25 167.32 115.23 167.49 117.21 167.67 119.19 167.87 121.17 168.1" id="img-01af78e4-81" class="geometry color_v" stroke="#00BFFF"/>
+        <path fill="none" d="M24.2,205.89 L 26.18 205.89 28.16 205.69 30.14 203.51 32.12 200.5 34.1 200.08 36.08 200.92 38.06 201.24 40.03 200.97 42.01 200.68 43.99 200.68 45.97 200.97 47.95 201.41 49.93 201.94 51.91 202.52 53.89 203.09 55.87 203.62 57.84 204.08 59.82 204.45 61.8 204.73 63.78 204.91 65.76 205.03 67.74 205.11 69.72 205.17 71.7 205.22 73.68 205.26 75.65 205.31 77.63 205.38 79.61 205.45 81.59 205.53 83.57 205.6 85.55 205.68 87.53 205.75 89.51 205.8 91.49 205.85 93.46 205.88 95.44 205.89 97.42 205.89 99.4 205.88 101.38 205.87 103.36 205.86 105.34 205.86 107.32 205.85 109.3 205.85 111.27 205.85 113.25 205.85 115.23 205.85 117.21 205.85 119.19 205.85 121.17 205.85" id="img-01af78e4-82" class="geometry color_t0" stroke="#D4CA3A"/>
+        <path fill="none" d="M24.2,205.89 L 26.18 205.89 28.16 205.89 30.14 205.89 32.12 205.89 34.1 205.89 36.08 205.89 38.06 205.89 40.03 205.89 42.01 205.88 43.99 205.85 45.97 205.85 47.95 205.89 49.93 205.76 51.91 205.55 53.89 205.27 55.87 204.97 57.84 204.69 59.82 204.42 61.8 204.14 63.78 203.89 65.76 203.71 67.74 203.61 69.72 203.58 71.7 203.59 73.68 203.61 75.65 203.61 77.63 203.57 79.61 203.47 81.59 203.35 83.57 203.2 85.55 203.07 87.53 202.97 89.51 202.91 91.49 202.87 93.46 202.85 95.44 202.84 97.42 202.84 99.4 202.86 101.38 202.88 103.36 202.92 105.34 203 107.32 203.1 109.3 203.25 111.27 203.41 113.25 203.58 115.23 203.75 117.21 203.89 119.19 204 121.17 204.1" id="img-01af78e4-83" class="geometry color_t1" stroke="#FF6DAE"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-84">
+    <text x="19.22" y="205.89" text-anchor="end" dy="0.35em" id="img-01af78e4-85">0.0</text>
+    <text x="19.22" y="182.65" text-anchor="end" dy="0.35em" id="img-01af78e4-86">0.5</text>
+    <text x="19.22" y="159.4" text-anchor="end" dy="0.35em" id="img-01af78e4-87">1.0</text>
+  </g>
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-88">
+    <text x="8.78" y="180.65" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.78, 182.65)" id="img-01af78e4-89">Main Effect</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-01af78e4-90">
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-91">
+    <text x="71.69" y="139.77" text-anchor="middle" dy="0.6em" id="img-01af78e4-92">Time [a]</text>
+  </g>
+  <g class="guide xlabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-93">
+    <text x="22.21" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-94">0</text>
+    <text x="42.01" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-95">10</text>
+    <text x="61.8" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-96">20</text>
+    <text x="81.59" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-97">30</text>
+    <text x="101.38" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-98">40</text>
+    <text x="121.17" y="132.69" text-anchor="middle" dy="0.6em" id="img-01af78e4-99">50</text>
+  </g>
+  <g class="guide colorkey" id="img-01af78e4-100">
+    <g fill="#4C404B" font-size="4.23" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" id="img-01af78e4-101">
+      <text x="127.87" y="103.75" dy="0.35em" id="img-01af78e4-102" class="color_v">v</text>
+      <text x="127.87" y="109.15" dy="0.35em" id="img-01af78e4-103" class="color_t0">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">0</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+      <text x="127.87" y="114.54" dy="0.35em" id="img-01af78e4-104" class="color_t1">t<tspan style="dominant-baseline:inherit" dy="1.7225" font-size="83.3333%">1</tspan><tspan style="dominant-baseline:inherit" dy="-1.4355"></tspan></text>
+    </g>
+    <g stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-105">
+      <rect x="124.17" y="102.4" width="2.7" height="2.7" id="img-01af78e4-106" class="color_v" fill="#00BFFF"/>
+      <rect x="124.17" y="107.8" width="2.7" height="2.7" id="img-01af78e4-107" class="color_t0" fill="#D4CA3A"/>
+      <rect x="124.17" y="113.19" width="2.7" height="2.7" id="img-01af78e4-108" class="color_t1" fill="#FF6DAE"/>
+    </g>
+    <g fill="#362A35" font-size="5.64" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-109">
+      <text x="124.17" y="98.67" id="img-01af78e4-110">parameter</text>
+    </g>
+  </g>
+<g clip-path="url(#img-01af78e4-111)">
+  <g id="img-01af78e4-112">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-01af78e4-113">
+      <rect x="20.21" y="81.2" width="102.95" height="50.49" id="img-01af78e4-114"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-115">
+      <path fill="none" d="M20.21,129.69 L 123.17 129.69" id="img-01af78e4-116"/>
+      <path fill="none" d="M20.21,106.45 L 123.17 106.45" id="img-01af78e4-117"/>
+      <path fill="none" d="M20.21,83.2 L 123.17 83.2" id="img-01af78e4-118"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-119">
+      <path fill="none" d="M22.21,81.2 L 22.21 131.69" id="img-01af78e4-120"/>
+      <path fill="none" d="M42.01,81.2 L 42.01 131.69" id="img-01af78e4-121"/>
+      <path fill="none" d="M61.8,81.2 L 61.8 131.69" id="img-01af78e4-122"/>
+      <path fill="none" d="M81.59,81.2 L 81.59 131.69" id="img-01af78e4-123"/>
+      <path fill="none" d="M101.38,81.2 L 101.38 131.69" id="img-01af78e4-124"/>
+      <path fill="none" d="M121.17,81.2 L 121.17 131.69" id="img-01af78e4-125"/>
+    </g>
+    <g class="plotpanel" id="img-01af78e4-126">
+      <g stroke-width="0.71" fill="#000000" fill-opacity="0.000" stroke-dasharray="none" id="img-01af78e4-127">
+        <path fill="none" d="M24.19,83.2 L 26.17 128.59 28.15 127.46 30.13 126.75 32.11 126.45 34.09 126.42 36.07 126.54 38.05 126.69 40.03 126.82 42.01 126.92 43.98 126.98 45.96 127.03 47.94 127.06 49.92 127.1 51.9 127.11 53.88 127.11 55.86 127.1 57.84 127.08 59.82 127.06 61.8 127.02 63.78 126.99 65.75 126.96 67.73 126.93 69.71 126.91 71.69 126.89 73.67 126.87 75.65 126.85 77.63 126.84 79.61 126.84 81.59 126.83 83.57 126.83 85.55 126.83 87.52 126.83 89.5 126.84 91.48 126.84 93.46 126.85 95.44 126.85 97.42 126.86 99.4 126.87 101.38 126.88 103.36 126.89 105.34 126.9 107.32 126.9 109.29 126.91 111.27 126.92 113.25 126.92 115.23 126.93 117.21 126.94 119.19 126.95 121.17 126.96" id="img-01af78e4-128" class="geometry color_v" stroke="#00BFFF"/>
+        <path fill="none" d="M24.19,129.69 L 26.17 129.69 28.15 129.47 30.13 128.29 32.11 127.2 34.09 126.96 36.07 127.06 38.05 127.22 40.03 127.45 42.01 127.75 43.98 128.06 45.96 128.32 47.94 128.53 49.92 128.72 51.9 128.87 53.88 129.01 55.86 129.12 57.84 129.21 59.82 129.27 61.8 129.32 63.78 129.36 65.75 129.39 67.73 129.42 69.71 129.44 71.69 129.46 73.67 129.48 75.65 129.5 77.63 129.52 79.61 129.54 81.59 129.55 83.57 129.56 85.55 129.57 87.52 129.58 89.5 129.59 91.48 129.59 93.46 129.6 95.44 129.6 97.42 129.61 99.4 129.61 101.38 129.61 103.36 129.62 105.34 129.62 107.32 129.62 109.29 129.63 111.27 129.63 113.25 129.63 115.23 129.63 117.21 129.63 119.19 129.63 121.17 129.63" id="img-01af78e4-129" class="geometry color_t0" stroke="#D4CA3A"/>
+        <path fill="none" d="M24.19,129.69 L 26.17 129.69 28.15 129.69 30.13 129.69 32.11 129.69 34.09 129.69 36.07 129.69 38.05 129.69 40.03 129.69 42.01 129.69 43.98 129.68 45.96 129.66 47.94 129.64 49.92 129.63 51.9 129.61 53.88 129.59 55.86 129.56 57.84 129.54 59.82 129.52 61.8 129.49 63.78 129.46 65.75 129.42 67.73 129.38 69.71 129.35 71.69 129.32 73.67 129.29 75.65 129.26 77.63 129.24 79.61 129.23 81.59 129.21 83.57 129.2 85.55 129.18 87.52 129.16 89.5 129.14 91.48 129.12 93.46 129.1 95.44 129.07 97.42 129.04 99.4 129.02 101.38 128.99 103.36 128.97 105.34 128.95 107.32 128.94 109.29 128.92 111.27 128.91 113.25 128.91 115.23 128.91 117.21 128.92 119.19 128.92 121.17 128.93" id="img-01af78e4-130" class="geometry color_t1" stroke="#FF6DAE"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="4.23" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-131">
+    <text x="19.21" y="129.69" text-anchor="end" dy="0.35em" id="img-01af78e4-132">0.0</text>
+    <text x="19.21" y="106.45" text-anchor="end" dy="0.35em" id="img-01af78e4-133">0.5</text>
+    <text x="19.21" y="83.2" text-anchor="end" dy="0.35em" id="img-01af78e4-134">1.0</text>
+  </g>
+  <g font-size="4.94" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-135">
+    <text x="8.77" y="104.45" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.77, 106.45)" id="img-01af78e4-136">Total Effect</text>
+  </g>
+</g>
+<g class="plotroot xscalable yscalable" id="img-01af78e4-137">
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-138">
+    <text x="83.45" y="64.56" text-anchor="middle" dy="0.6em" id="img-01af78e4-139">Time [a]</text>
+  </g>
+  <g class="guide xlabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-140">
+    <text x="21.51" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-141">0</text>
+    <text x="46.29" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-142">10</text>
+    <text x="71.07" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-143">20</text>
+    <text x="95.84" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-144">30</text>
+    <text x="120.62" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-145">40</text>
+    <text x="145.4" y="58.51" text-anchor="middle" dy="0.6em" id="img-01af78e4-146">50</text>
+  </g>
+<g clip-path="url(#img-01af78e4-147)">
+  <g id="img-01af78e4-148">
+    <g pointer-events="visible" opacity="1" fill="#000000" fill-opacity="0.000" stroke="#000000" stroke-opacity="0.000" class="guide background" id="img-01af78e4-149">
+      <rect x="19.51" y="5" width="127.89" height="52.51" id="img-01af78e4-150"/>
+    </g>
+    <g class="guide ygridlines xfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-151">
+      <path fill="none" d="M19.51,55.51 L 147.4 55.51" id="img-01af78e4-152"/>
+      <path fill="none" d="M19.51,43.38 L 147.4 43.38" id="img-01af78e4-153"/>
+      <path fill="none" d="M19.51,31.26 L 147.4 31.26" id="img-01af78e4-154"/>
+      <path fill="none" d="M19.51,19.13 L 147.4 19.13" id="img-01af78e4-155"/>
+      <path fill="none" d="M19.51,7 L 147.4 7" id="img-01af78e4-156"/>
+    </g>
+    <g class="guide xgridlines yfixed" stroke-dasharray="0.5,0.5" stroke-width="0.2" stroke="#D0D0E0" id="img-01af78e4-157">
+      <path fill="none" d="M21.51,5 L 21.51 57.51" id="img-01af78e4-158"/>
+      <path fill="none" d="M46.29,5 L 46.29 57.51" id="img-01af78e4-159"/>
+      <path fill="none" d="M71.07,5 L 71.07 57.51" id="img-01af78e4-160"/>
+      <path fill="none" d="M95.84,5 L 95.84 57.51" id="img-01af78e4-161"/>
+      <path fill="none" d="M120.62,5 L 120.62 57.51" id="img-01af78e4-162"/>
+      <path fill="none" d="M145.4,5 L 145.4 57.51" id="img-01af78e4-163"/>
+    </g>
+    <g class="plotpanel" id="img-01af78e4-164">
+      <g stroke-width="0.3" fill="#000000" fill-opacity="0.000" class="geometry" stroke-dasharray="none" stroke="#00BFFF" id="img-01af78e4-165">
+        <path fill="none" d="M23.99,55.51 L 26.47 55.51 28.94 55.51 31.42 55.51 33.9 55.51 36.38 55.51 38.85 55.51 41.33 55.51 43.81 55.51 46.29 55.51 48.77 55.51 51.24 55.51 53.72 55.51 56.2 55.51 58.68 55.5 61.15 55.48 63.63 55.43 66.11 55.32 68.59 55.1 71.07 54.73 73.54 54.15 76.02 53.3 78.5 52.13 80.98 50.61 83.45 48.71 85.93 46.43 88.41 43.79 90.89 40.83 93.37 37.63 95.84 34.27 98.32 30.85 100.8 27.47 103.28 24.24 105.76 21.23 108.23 18.53 110.71 16.19 113.19 14.24 115.67 12.72 118.14 11.61 120.62 10.93 123.1 10.64 125.58 10.72 128.06 11.14 130.53 11.85 133.01 12.82 135.49 14.02 137.97 15.39 140.44 16.91 142.92 18.53 145.4 20.24" id="img-01af78e4-166"/>
+      </g>
+    </g>
+  </g>
+</g>
+  <g class="guide ylabels" font-size="2.82" font-family="'PT Sans Caption','Helvetica Neue','Helvetica',sans-serif" fill="#6C606B" id="img-01af78e4-167">
+    <text x="18.51" y="55.51" text-anchor="end" dy="0.35em" id="img-01af78e4-168">0</text>
+    <text x="18.51" y="43.38" text-anchor="end" dy="0.35em" id="img-01af78e4-169">100</text>
+    <text x="18.51" y="31.26" text-anchor="end" dy="0.35em" id="img-01af78e4-170">200</text>
+    <text x="18.51" y="19.13" text-anchor="end" dy="0.35em" id="img-01af78e4-171">300</text>
+    <text x="18.51" y="7" text-anchor="end" dy="0.35em" id="img-01af78e4-172">400</text>
+  </g>
+  <g font-size="3.88" font-family="'PT Sans','Helvetica Neue','Helvetica',sans-serif" fill="#564A55" stroke="#000000" stroke-opacity="0.000" id="img-01af78e4-173">
+    <text x="8.83" y="29.26" text-anchor="middle" dy="0.35em" transform="rotate(-90, 8.83, 31.26)" id="img-01af78e4-174">Concentration [ppb]</text>
+  </g>
+</g>
+<defs>
+  <clipPath id="img-01af78e4-147">
+  <path d="M19.51,5 L 147.4 5 147.4 57.51 19.51 57.51" />
+</clipPath>
+  <clipPath id="img-01af78e4-64">
+  <path d="M20.22,157.4 L 123.17 157.4 123.17 207.89 20.22 207.89" />
+</clipPath>
+  <clipPath id="img-01af78e4-111">
+  <path d="M20.21,81.2 L 123.17 81.2 123.17 131.69 20.21 131.69" />
+</clipPath>
+  <clipPath id="img-01af78e4-15">
+  <path d="M26.69,233.6 L 123.17 233.6 123.17 284.09 26.69 284.09" />
+</clipPath>
+</defs>
+</svg>
