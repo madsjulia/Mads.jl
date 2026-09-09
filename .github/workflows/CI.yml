@@ -29,6 +29,7 @@ jobs:
         with:
           version: '1.12'
           arch: ${{ matrix.arch }}
+          force-arch: true
           show-versioninfo: true
       - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-buildpkg@v1
