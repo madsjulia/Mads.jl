@@ -21,9 +21,8 @@
 
 ## Publications, Presentations, Projects
 
-* [mads.gitlab.io](http://mads.gitlab.io)
-* [madsjulia.github.io](http://madsjulia.github.io)
-* [monty.gitlab.io](http://monty.gitlab.io)
+* [Mads documentation](https://madsjulia.github.io/Mads.jl/stable/)
+* [monty @ GitHub](https://montyvesselinov.github.io)
 
 ## Related Julia Packages
 
@@ -35,14 +34,12 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 ## Additional information:
 
 * documentation:
-    - [github](http://madsjulia.github.io/Mads.jl) (recommended)
-    - [readthedocs](https://mads.readthedocs.io)
-* repos:
-    - [github](http://github.com/madsjulia/Mads.jl) (recommended)
-    - [gitlab](http://gitlab.com/mads/Mads.jl) (might not be up-to-date)
+    - [stable](https://madsjulia.github.io/Mads.jl/stable/)
+    - [development](https://madsjulia.github.io/Mads.jl/dev/)
+* repository:
+    - [GitHub](https://github.com/madsjulia/Mads.jl)
 * git:
-    - `git clone git@github.com:madsjulia/Mads.jl` (recommended)
-    - `git clone git@gitlab.com:mads/Mads.jl` (might not be up-to-date)
+    - `git clone git@github.com:madsjulia/Mads.jl`
 * docker:
     - `docker run --interactive --tty montyvesselinov/madsjulia`
-* email: [info@envirtace.com](mailto:info@envirtace.com)
+* email: [info@envitrace.com](mailto:info@envitrace.com)

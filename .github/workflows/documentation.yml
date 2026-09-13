@@ -18,11 +18,13 @@ jobs:
       - uses: julia-actions/setup-julia@v3
         with:
           version: '1.12'
+      - uses: julia-actions/cache@v3
+      # Return DocumentFunction to registry resolution after General contains version 1.6.
       - name: Install dependencies
-        run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
+        run: julia --startup-file=no --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.add(Pkg.PackageSpec(url="https://github.com/madsjulia/DocumentFunction.jl", rev="v1.6.0")); Pkg.instantiate()'
       - name: Build and deploy
         env:
           MADS_NO_PLOT: ""
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # If authenticating with GitHub Actions token
           DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }} # If authenticating with SSH deploy key
-        run: julia --project=docs/ docs/make.jl
+        run: julia --startup-file=no --project=docs/ docs/make.jl

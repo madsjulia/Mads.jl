@@ -4,8 +4,8 @@ BIGUQ.jl implements Bayesian Information Gap Decision Theory (BIGDT) for Uncerta
 
 Relevant examples:
 
-- [Information Gap Analysis](http://madsjulia.github.io/Mads.jl/Examples/infogap)
-- [Decision Analysis](http://madsjulia.github.io/Mads.jl/Examples/bigdt/source_termination)
+- [Information Gap Analysis](../Examples/infogap/infogap.md)
+- [Decision Analysis](../Examples/bigdt/source_termination/source_termination.md)
 - [Model Diagnostics](https://github.com/madsjulia/Mads.jl/blob/master/notebooks/model_diagnostics/model_diagnostics.ipynb)
 
 BIGUQ.jl functions:

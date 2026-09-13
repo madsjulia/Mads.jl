@@ -1,6 +1,6 @@
 # Blind Source Separation using Unsupervised Machine Learning
 
-[MADS](http://madsjulia.github.io/Mads.jl) is used to perform unsupervised machine learning and extract (separate) mixed signals (signatures) present in synthetic datasets.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is used to perform unsupervised machine learning and extract (separate) mixed signals (signatures) present in synthetic datasets.
 
 Frequently, several different physical phenomena, processes, or mechanisms can cause transients in the observed data. These transients may have different spatiotemporal patterns.
 

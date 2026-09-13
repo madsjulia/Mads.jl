@@ -2,11 +2,11 @@
 
 ![](logos/mads_black_swan_logo_big_text_new_3inch.png)
 
-[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance/cloud-computing framework for data/model/decision analyses.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is an integrated high-performance/cloud-computing framework for data/model/decision analyses.
 
-[MADS](http://madsjulia.github.io/Mads.jl) can be coupled with any existing numerical model or simulator, including machine learning algorithms and models.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) can be coupled with any existing numerical model or simulator, including machine learning algorithms and models.
 
-[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) can be applied to perform:
 
 * Parameter Estimation
 * Model Inversion and Calibration
@@ -17,7 +17,7 @@
 * Risk Assessment
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) analyses utilize adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) analyses utilize adaptive rules and techniques which allow the analyses to be performed efficiently with minimum user input.
 
 ## Start here
 

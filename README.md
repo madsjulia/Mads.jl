@@ -8,9 +8,9 @@
 [![coveralls.io](https://coveralls.io/repos/madsjulia/Mads.jl/badge.svg?branch=master)](https://coveralls.io/r/madsjulia/Mads.jl?branch=master)
 <!-- [![codecov.io](http://codecov.io/github/madsjulia/Mads.jl/coverage.svg?branch=master)](http://codecov.io/github/madsjulia/Mads.jl?branch=master) -->
 
-[MADS](http://madsjulia.github.io/Mads.jl) is an integrated high-performance computational framework for data/model/decision analyses.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is an integrated high-performance computational framework for data/model/decision analyses.
 
-[MADS](http://madsjulia.github.io/Mads.jl) can be applied to perform:
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) can be applied to perform:
 
 * Sensitivity Analysis
 * Parameter Estimation
@@ -21,21 +21,20 @@
 * Risk Assessment
 * Decision Analysis and Support
 
-[MADS](http://madsjulia.github.io/Mads.jl) utilizes adaptive rules and techniques that allow the analyses to be performed efficiently with minimum user input.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) utilizes adaptive rules and techniques that allow the analyses to be performed efficiently with minimum user input.
 
-[MADS](http://madsjulia.github.io/Mads.jl) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) provides a series of alternative algorithms to execute various types of data-based and model-based analyses.
 
-[MADS](http://madsjulia.github.io/Mads.jl) can efficiently utilize available computational resources.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) can efficiently utilize available computational resources.
 
-[MADS](http://madsjulia.github.io/Mads.jl) has been extensively tested and verified.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) has been extensively tested and verified.
 
 ## Documentation
 
-[MADS](http://madsjulia.github.io/Mads.jl) documentation, including descriptions of all modules, functions, and variables, is available at:
-- [GitHub](http://madsjulia.github.io/Mads.jl) (always up-to-date)
-- [ReadtheDocs](https://mads.readthedocs.io)
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) documentation, including descriptions of modules, functions, and variables, is available on GitHub Pages:
 
-[MADS](http://madsjulia.github.io/Mads.jl) information is also available at [mads.gitlab.io](http://mads.gitlab.io) and [madsjulia.github.io](http://madsjulia.github.io/Mads.jl)
+- [Stable documentation](https://madsjulia.github.io/Mads.jl/stable/) for the latest tagged release.
+- [Development documentation](https://madsjulia.github.io/Mads.jl/dev/) for the latest `master` build.
 
 Detailed demontrative data analysis and model diagnostics problems are available as [Julia scripts](https://github.com/madsjulia/Mads.jl/tree/master/examples) and [Jupyter notebooks](https://github.com/madsjulia/Mads.jl/tree/master/notebooks/model_diagnostics). See also below.
 
@@ -138,9 +137,7 @@ Unsupervised and Physics-Informed Machine Learning based on Matrix/Tensor Factor
 
 ## Publications, Presentations, Projects
 
-* [mads @ GitLab](http://mads.gitlab.io)
-* [mads @ GitHub](http://madsjulia.github.io)
+* [mads @ GitHub](https://madsjulia.github.io/Mads.jl/stable/)
 * [SmartTensors.com](https://smarttensors.com)
 * [SmartTensors @ GitHub](https://smarttensors.github.io)
-* [monty @ GitLab](http://monty.gitlab.io)
-* [monty @ GitHub](http://montyvesselinov.github.io)
+* [monty @ GitHub](https://montyvesselinov.github.io)

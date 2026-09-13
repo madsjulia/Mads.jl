@@ -1,6 +1,6 @@
 # Model diagnostics
 
-[MADS](http://madsjulia.github.io/Mads.jl) is applied to solve a general model diagnostic problem.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is applied to solve a general model diagnostic problem.
 
 By performing model diagnostics, we want to better understand:
 - how the model inputs impact model outputs?

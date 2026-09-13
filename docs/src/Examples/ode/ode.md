@@ -1,6 +1,6 @@
 # Sensitivity Analysis of an Ordinary Differential Equation (ODE)
 
-[MADS](http://madsjulia.github.io/Mads.jl) is applied to perform sensitivity analysis of an Ordinary Differential Equation (ODE).
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is applied to perform sensitivity analysis of an Ordinary Differential Equation (ODE).
 
 The analyses below are performed using [examples/ode/ode.jl](https://github.com/madsjulia/Mads.jl/blob/master/examples/ode/ode.jl).
 

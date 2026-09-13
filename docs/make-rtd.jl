@@ -1,5 +1,0 @@
-ENV["MADS_NO_PLOT"] = ""
-
-import Mads
-
-Mads.documentation_create()

@@ -16,10 +16,6 @@ The keywords in the MADS problem dictionary that can be used to define the model
 
 Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
 
-Only `Command` uses different approaches to get back the model outputs. The script defined under `Julia command` parses the model outputs using Julia.
-
-Both `Command` and `Julia command` can use different approaches to pass model parameters to the external model.
-
 Only `Command` uses different approaches to get back the model outputs.
 
 The script defined under `Julia command` parses the model outputs using Julia.
@@ -28,7 +24,7 @@ The available options for writing model inputs and reading model outputs are as 
 
 ## Options for writing model inputs:
 
-- `Templates` : template files for writing model input files as defined [here](https://madsjulia.github.io/Mads.jl/manual)
+- `Templates` : template files for writing model input files, such as [`internal-linearmodel-parameters.tpl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_coupling/internal-linearmodel-parameters.tpl)
 - `ASCIIParameters` : model parameters written in an ASCII file
 - `JLDParameters` : model parameters written in a JLD file
 - `JLD2Parameters` : model parameters written in a JLD2 file
@@ -37,7 +33,7 @@ The available options for writing model inputs and reading model outputs are as 
 
 ## Options for reading model outputs:
 
-- `Instructions` : instruction files for reading model output files as defined [here](https://madsjulia.github.io/Mads.jl/manual)
+- `Instructions` : instruction files for reading model output files, such as [`internal-linearmodel-parameters.inst`](https://github.com/madsjulia/Mads.jl/blob/master/examples/model_coupling/internal-linearmodel-parameters.inst)
 - `ASCIIPredictions` : model predictions read from an ASCII file
 - `JLDPredictions` : model predictions read from a JLD file
 - `JLD2Predictions` : model predictions read from a JLD2 file

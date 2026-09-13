@@ -1,6 +1,6 @@
 # Uncertainty Quantification
 
-[MADS](http://madsjulia.github.io/Mads.jl) is used to perform uncertainty quantification using Bayesian sampling.
+[MADS](https://madsjulia.github.io/Mads.jl/stable/) is used to perform uncertainty quantification using Bayesian sampling.
 
 The analyses below are performed using [`examples/bayesian_sampling/bayesian_sampling.jl`](https://github.com/madsjulia/Mads.jl/blob/master/examples/bayesian_sampling/bayesian_sampling.jl).
 
