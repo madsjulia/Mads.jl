@@ -13,6 +13,16 @@ Test.@testset "SVG plotting" begin
 	end
 end
 
+Test.@testset "Spaghetti plot without wells" begin
+	mktempdir() do output_dir::String
+		output_file::String = joinpath(output_dir, "spaghetti.svg")
+		madsdata::Dict{String,Any} = Mads.createproblem(Float64[1.0, 2.0], Float64[1.0, 2.0], identity; obstime=Float64[1.0, 2.0])
+		predictions::Matrix{Float64} = Float64[1.0 1.1; 2.0 1.9]
+		Mads.spaghettiplot(madsdata, predictions; filename=output_file, format="SVG", quiet=true, hsize=2Gadfly.inch, vsize=1Gadfly.inch)
+		Test.@test filesize(output_file) > 0
+	end
+end
+
 @info("Running MADS tests:")
 
 printstyled("* miscellaneous ...\n"; color=:cyan)

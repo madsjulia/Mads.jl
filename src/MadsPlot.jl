@@ -945,6 +945,7 @@ function spaghettiplot(madsdata::AbstractDict, matrix::AbstractMatrix; plotdata:
 	end
 	push!(pa, Gadfly.Coord.Cartesian(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax))
 	if !haskey(madsdata, "Wells")
+		vsize_big::Measures.AbsoluteLength = vsize
 		if plotdata
 			t = getobstime(madsdata)
 			d = getobstarget(madsdata)
