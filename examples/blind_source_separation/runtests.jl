@@ -36,14 +36,15 @@ else
 		Wipopt, Hipopt, pipopt = Base.redirect_stdio(stdout=Base.devnull, stderr=Base.devnull) do
 			Mads.NMFipopt(X, nk, R; quiet=true)
 		end
+		reconstructed_X::Matrix{Float64} = Wipopt * Hipopt
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			JLD2.save(joinpath(d, "rand$(suffix).jld2"), "Wipopt", Wipopt)
 		end
 
-		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "rand$(suffix).jld2"), "Wipopt")
-		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
+		# NMF factors may be permuted or rescaled while preserving their product.
+		Test.@test isapprox(reconstructed_X, X; atol=1e-5, rtol=0)
 
 		# Mads.@stderrcapture function reconstruct_sin.(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
@@ -58,19 +59,15 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, R; quiet=true)
 
-		Hipopt = (Wipopt*Hipopt)
+		reconstructed_X = Wipopt * Hipopt
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			JLD2.save(joinpath(d, "sin_1$(suffix).jld2"), "Wipopt", Wipopt)
-			JLD2.save(joinpath(d, "sin_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "sin_2$(suffix).jld2"), "Hipopt", reconstructed_X)
 		end
 
-		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_2$(suffix).jld2"), "Hipopt")
-
-		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(reconstructed_X, X; atol=1e-5, rtol=0)
 
 		# Mads.@stderrcapture function reconstruct_sin_rand(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
@@ -85,19 +82,15 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
-		Hipopt = (Wipopt*Hipopt)
+		reconstructed_X = Wipopt * Hipopt
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			JLD2.save(joinpath(d, "sin_rand_1$(suffix).jld2"), "Wipopt", Wipopt)
-			JLD2.save(joinpath(d, "sin_rand_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "sin_rand_2$(suffix).jld2"), "Hipopt", reconstructed_X)
 		end
 
-		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "sin_rand_2$(suffix).jld2"), "Hipopt")
-
-		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(reconstructed_X, X; atol=1e-5, rtol=0)
 
 		# Mads.@stderrcapture function reconstruct_disturbance(R, nk)
 		Mads.seed!(2015, Random.MersenneTwister)
@@ -114,19 +107,15 @@ else
 
 		Wipopt, Hipopt, pipopt = Mads.NMFipopt(X, nk, 1; quiet=true)
 
-		Hipopt = (Wipopt*Hipopt)
+		reconstructed_X = Wipopt * Hipopt
 
 		if Mads.create_tests
 			Mads.mkdir(d)
 			JLD2.save(joinpath(d, "disturb_1$(suffix).jld2"), "Wipopt", Wipopt)
-			JLD2.save(joinpath(d, "disturb_2$(suffix).jld2"), "Hipopt", Hipopt)
+			JLD2.save(joinpath(d, "disturb_2$(suffix).jld2"), "Hipopt", reconstructed_X)
 		end
 
-		good_Wipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_1$(suffix).jld2"), "Wipopt")
-		good_Hipopt = JLD2.load(joinpath(workdir, "test_results", "disturb_2$(suffix).jld2"), "Hipopt")
-
-		Test.@test isapprox(Wipopt, good_Wipopt, atol=1e-5)
-		Test.@test isapprox(Hipopt, good_Hipopt, atol=1e-5)
+		Test.@test isapprox(reconstructed_X, X; atol=1e-5, rtol=0)
 	end
 end
 
