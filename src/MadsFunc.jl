@@ -464,8 +464,11 @@ function importeverywhere(filename::AbstractString)
 	Core.eval(Main, q)
 	functionsymbol = Symbol(functionname)
 	q = Expr(:., :Main, Meta.quot(functionsymbol))
-	commandfunction = Core.eval(Mads, q)
-	return commandfunction
+	commandfunction::Function = Core.eval(Mads, q)
+	function invokelatestcommandfunction(args::Vararg{Any}; kwargs...)::Any
+		return Base.invokelatest(commandfunction, args...; kwargs...)
+	end
+	return invokelatestcommandfunction
 end
 
 """

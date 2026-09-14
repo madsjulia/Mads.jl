@@ -1,6 +1,7 @@
 import Mads
 import Test
 import Gadfly
+import Distributed
 
 Mads.veryquieton()
 Mads.graphoff()
@@ -20,6 +21,17 @@ Test.@testset "Spaghetti plot without wells" begin
 		predictions::Matrix{Float64} = Float64[1.0 1.1; 2.0 1.9]
 		Mads.spaghettiplot(madsdata, predictions; filename=output_file, format="SVG", quiet=true, hsize=2Gadfly.inch, vsize=1Gadfly.inch)
 		Test.@test filesize(output_file) > 0
+	end
+end
+
+Test.@testset "Dynamically imported functions" begin
+	mktempdir() do source_directory::String
+		source_file::String = joinpath(source_directory, "dynamic_function.jl")
+		write(source_file, "function mads_importeverywhere_test(value::Int; offset::Int=1)::Int\n\treturn value + offset\nend\n")
+		dynamic_function::Function = Mads.importeverywhere(source_file)
+		Test.@test dynamic_function isa Function
+		Test.@test dynamic_function(1; offset=2) == 3
+		Test.@test Distributed.pmap(dynamic_function, Int[1, 2]) == Int[2, 3]
 	end
 end
 
