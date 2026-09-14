@@ -19,9 +19,8 @@ jobs:
         with:
           version: '1.12'
       - uses: julia-actions/cache@v3
-      # Return DocumentFunction to registry resolution after General contains version 1.6.
       - name: Install dependencies
-        run: julia --startup-file=no --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.add(Pkg.PackageSpec(url="https://github.com/madsjulia/DocumentFunction.jl", rev="v1.6.0")); Pkg.instantiate()'
+        run: julia --startup-file=no --project=docs/ -e 'import Pkg; Pkg.develop(Pkg.PackageSpec(path=pwd())); Pkg.instantiate()'
       - name: Build and deploy
         env:
           MADS_NO_PLOT: ""
