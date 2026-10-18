@@ -16,12 +16,12 @@ function set_xlsx_formats(wb::XLSX.Workbook, dec_digits::Integer=4, exp_digits::
 end
 
 function apply_xlsx_format!(wf::XLSX.XLSXFile, format::XLSX.CellDataFormat=first(set_xlsx_formats(wf.workbook)))
-	apply_xlsx_format(ws.workbook, format)
+	apply_xlsx_format!(wf.workbook, format)
 end
 
 function apply_xlsx_format!(wb::XLSX.Workbook, format::XLSX.CellDataFormat=first(set_xlsx_formats(wb)))
 	for ws in wb.sheets
-		apply_xlsx_format(ws, format)
+		apply_xlsx_format!(ws, format)
 	end
 end
 
